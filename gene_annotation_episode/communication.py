@@ -96,19 +96,9 @@ def _compiled_schema_content(content):
     _compile_closed_schema(json.loads(content))
 
 
-def complete_top_level_form(schema):
-    """Supply the closed transport envelope around parent-chosen fields."""
-    schema = plain(schema)
-    if isinstance(schema, dict) and isinstance(schema.get('properties'), dict):
-        schema.setdefault('type', 'object')
-        schema.setdefault('required', list(schema['properties']))
-        schema.setdefault('additionalProperties', False)
-    return schema
-
-
 def validate_closed_schema(schema):
     """Compile a parent-chosen form and return its current detached tree."""
-    schema = complete_top_level_form(schema)
+    schema = plain(schema)
     try:
         content = (json.dumps(schema, separators=(",", ":"), allow_nan=False).encode("utf-8")
                    if _schema_cacheable(schema) else None)

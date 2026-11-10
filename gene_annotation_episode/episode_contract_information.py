@@ -9,7 +9,7 @@ from collections.abc import Mapping
 import re
 
 from .boundary_validation import parse_json_object
-from .communication import ReportBoundaryError, complete_top_level_form, validate_closed_schema
+from .communication import ReportBoundaryError, validate_closed_schema
 from .schema_information_text import (SchemaInformationError, _copy_json,
                                       render_schema_information, schema_fingerprint)
 from .schema_support import _schema_nodes
@@ -140,7 +140,7 @@ def _submitted(text):
     if type(text) is not str:
         raise ContractInformationError('submitted_schema_text_required', 'submitted_schema_json')
     try:
-        schema = complete_top_level_form(parse_json_object(text))
+        schema = parse_json_object(text)
     except (ValueError, TypeError, OverflowError, RecursionError) as error:
         raise ContractInformationError('invalid_submitted_schema_json', 'submitted_schema_json') from error
     if schema.get('type') != 'object' or not isinstance(schema.get('properties'), dict):

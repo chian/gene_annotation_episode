@@ -1962,8 +1962,10 @@ class DecisionSource:
                 self.feedback['contract_error'] = {'code': error.code, 'field': error.field}
                 if error.code == 'closed_top_level_form_required':
                     self.feedback['repair'] = (
-                        'Name the information fields in a properties object. The runtime supplies '
-                        'the outer closed-form structure; remove any conflicting outer type.')
+                        'schema_json must encode a JSON Schema object with the explicit top-level '
+                        'field "type": "object" and a properties object. Keep the intended properties, '
+                        'declare every field in required, and set additionalProperties to false. '
+                        'A properties object alone does not declare the required outer type.')
                 if isinstance(error.__cause__, ReportBoundaryError):
                     self.feedback['schema_reason'] = str(error.__cause__)
             if (isinstance(error, ContractError)
@@ -3241,12 +3243,11 @@ class Workflow:
             permitted_child_roles=roles, action_schema=schema)
 
     def root_child_return_sources(self, source, role):
-        """The combined root receives the scientific child's declared facts."""
-        if (not restricted_root(self, source) or role != 'scientific_process'
-                or not getattr(self.project_credit, 'task_credit', False)):
+        """Ask this root's own binding what it needs from its child."""
+        if not restricted_root(self, source):
             return ()
-        binding = self.episode_bindings.for_role(role)
-        return tuple(binding.required_return_sources(self.binding_context(source), role))
+        bound = getattr(self.project_credit, 'child_return_sources', None)
+        return tuple(bound(self.binding_context(source), role)) if bound is not None else ()
 
     def child_form_input(self, source, selection, role):
         if 'schema_json' in selection:
@@ -3254,7 +3255,7 @@ class Workflow:
         sources = self.root_child_return_sources(source, role)
         if not sources:
             raise ContractError('child_return_form_required')
-        return _json(_object({name: {'$ref': 'episode-fact:' + name} for name in sources}))
+        return _json(self.project_credit.child_return_form(self.binding_context(source), role))
 
     def child_initial_report_input(self, source, selection, role):
         if 'initial_report_json' in selection:
@@ -5050,9 +5051,9 @@ class Workflow:
             (result.get('description'), REASONING_COMMIT_REQUIREMENT) if value)}
 
     def action_schema(self, source):
-        # API documentation only. A parent chooses information fields when
-        # needed; the runtime owns their closed transport envelope. These
-        # examples are never selected or installed by the runtime.
+        # API documentation only. The parent still supplies its own contract
+        # and initial values; this example is never selected or installed by
+        # the runtime, and has no scientific/controller effect.
         form_example = _object({
             "changed_annotation_refs": {"type": "array", "items": {
                 "type": "string", "format": "reference", "x-reference-namespace": "annotation"},
@@ -5121,7 +5122,7 @@ class Workflow:
             "goal": {"type": "string", "description": "A substantive improvement the child can pursue iteratively and revise from outcomes. A fully specified one-off lookup/calculation belongs to an ordinary tool. Numerical yield controls the child's continuation."},
             "scope": scope_schema,
             "purpose": {"type": "string", "description": "Explain what information you need for your later scientific decision and what your selected form fields mean."},
-            "schema_json": {"type": "string", "description": "JSON object with properties naming the information you need back from this child. The runtime supplies the outer closed-form structure. Describe each chosen field's value type; strings need declared codes or semantic formats, and arrays need item types. A reference can declare format reference and x-reference-namespace. Top-level x-source selectors bind recorded facts named in available_report_facts; do not invent facts. These examples show only the fields you choose. Fact-only example: " + _json({'properties': form_example['properties']}) + " Interpretive example, selecting actual assessment records rather than a findings paragraph: " + _json({'properties': interpretive_example['properties']})},
+            "schema_json": {"type": "string", "description": "JSON encoding of your parent-defined closed return form: explicit required fields, additionalProperties false, typed arrays, and strings restricted to enum codes or declared semantic formats. A reference can declare format reference and x-reference-namespace. Optional top-level x-source selectors bind recorded facts named in available_report_facts; do not ask a model to invent those facts. These examples are optional API guidance; choose fields and meanings for your actual later decision. Fact-only example: " + _json(form_example) + " Interpretive example, selecting actual assessment records rather than a findings paragraph: " + _json(interpretive_example)},
             "initial_report_json": {"type": "string", "description": "JSON containing exactly the interpretation fields you chose (those without x-source), with parent-supplied initial values. Use {} for the fact-only example; for the interpretive example use {\"interpreted_assessment_refs\":[],\"unresolved_hypothesis_refs\":[]}. Those initial arrays are not new child judgments. If you request other interpreted fields, define their allowed meanings and initialize them explicitly. The runtime does not choose fields or unknown values for you."}})
         if not self.is_job_source(source):
             explicit_roles = (None if self.annotation_child_roles is None

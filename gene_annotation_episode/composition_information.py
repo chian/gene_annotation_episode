@@ -175,10 +175,9 @@ def child_options(workflow, source, role=None):
         text += ('Child return facts supplied by the bound episode; choose the scientific work '
                  'and assignment, with no return form to write: ' + '; '.join(automatic) + '.\n\n')
     if requirements:
-        text += ('Information this child must return (name each once under properties): '
-                 + '; '.join(requirements) + '. Use a separate '
-                '{"$ref":"episode-fact:<source>"} field for each source; the runtime supplies '
-                'the outer form.\n\n')
+        text += ('Required child return facts (each exactly once as a top-level field in '
+                'schema_json): ' + '; '.join(requirements) + '. In contract lookup mode, '
+                'use a separate {"$ref":"episode-fact:<source>"} field for each source.\n\n')
     text += _table(('Child', 'Construction', 'Required assignment fields', 'Return facts'), rows)
     return {'status': 'completed', 'text': text + '\n'.join(details)}
 

@@ -130,28 +130,6 @@ def test_mixed_form_expansion_preserves_literal_fields_and_records_original_sele
     assert facts['literature']['measured_values']['report_schema']['items']['type'] == 'number'
 
 
-def test_parent_can_name_return_fields_without_outer_schema_bookkeeping():
-    facts, _ = fixture()
-    submitted = encode({'properties': {
-        'my_numbers': {'$ref': 'episode-fact:measured_values'},
-        'qualification': {'type': 'string', 'enum': ['unknown', 'supported']}}})
-    result = expand_fact_form(submitted, child_role='literature', facts_by_role=facts,
-        permitted_child_roles=['literature'])
-    schema = result['expanded_schema']
-    assert schema['type'] == 'object'
-    assert schema['additionalProperties'] is False
-    assert set(schema['required']) == set(schema['properties'])
-    assert validate(submitted, result) == schema
-    for conflicting in ({'type': 'array'}, {'additionalProperties': True},
-                        {'required': ['qualification']}):
-        with pytest.raises(ContractInformationError):
-            expand_fact_form(encode({'properties': {'my_numbers': {
-                '$ref': 'episode-fact:measured_values'}, 'qualification': {
-                'type': 'string', 'enum': ['unknown', 'supported']}}, **conflicting}),
-                child_role='literature', facts_by_role=facts,
-                permitted_child_roles=['literature'])
-
-
 def test_two_parent_named_fields_for_one_source_are_distinct_detached_copies():
     facts, _ = fixture()
     submitted = encode(obj({'first': {'$ref': 'episode-fact:measured_values'}, 'second': {'$ref': 'episode-fact:measured_values'}}))

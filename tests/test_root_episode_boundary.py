@@ -19,6 +19,7 @@ from gene_annotation_episode.episode_contract_information import validate_saved_
 from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.signed_evidence_root import SignedEvidenceRootSupport
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController
@@ -103,7 +104,7 @@ def test_combined_root_child_form_comes_from_declared_facts(tmp_path):
             required_return_sources=lambda _parent, _role: sources,
             child_assignment_schema=lambda _parent, _role: {'type': 'object',
                 'properties': {}, 'required': [], 'additionalProperties': False})
-        workflow.project_credit = SimpleNamespace(task_credit=True)
+        workflow.project_credit = SignedEvidenceRootSupport(task_credit=True)
         workflow.annotation_child_roles = ('scientific_process',)
         workflow.episode_bindings = SimpleNamespace(roles={'scientific_process'},
             for_role=lambda _role: owner, entry_roles=('scientific_process',))

@@ -5,20 +5,6 @@ This is the central progress record for evidence axes. Individual implementation
 documents and dated run reports supply detail; they do not independently set an
 axis's current status.
 
-## 2026-11-10 child-return form envelope correction
-
-The parent-selected information fields now pass through the shared closed-form
-compiler, which supplies the top-level object, full required-field list and
-closed-property marker when omitted. The same normalization applies to
-registered fact forms and literal child return forms, including nested child
-commissions and later redelivery. An explicitly conflicting outer form remains
-invalid. The parent-facing child-action example and missing-form feedback no
-longer instruct a parent to write the outer object declaration. The original
-submitted text and expanded declaration remain linked for saved replay.
-Focused representation and contract tests: 159 passed under
-`runs/automatic_child_form_envelope_20261110`. This is a communication
-correction; no fresh autonomous genome run or new axis result is claimed.
-
 ## 2026-11-10 combined-root child return contract correction
 
 The NC_001560.1 combined retry was manually interrupted after 496 seconds and
@@ -30,13 +16,16 @@ evidence-axis child. Earlier parent-role and BLAST-monitor fixes did not address
 this form-construction failure.
 
 For the combined root's scientific-process child, the action schema now asks
-only for the scientific assignment, goal, scope and purpose. The runtime builds
-the closed return form from that child binding's declared
-`scientific_process_results` and `committed_record_refs` sources; old saved
-selections with their own form remain replayable. Focused tests validate the
-offered action schema, expanded recorded-fact form and saved declaration, with
-21 targeted tests passing. A fresh autonomous genome run has not yet verified
-the revised contract or any axis return. Full-genome annotation remains open.
+only for the scientific assignment, goal, scope and purpose. The root's own
+binding selects `scientific_process_results` and `committed_record_refs` and
+builds its closed return form; old saved selections with their own form remain
+replayable. A later shared envelope implementation was removed because it
+imposed one form rule across unrelated episode tasks. Other parent episodes
+still use their existing parent-selected forms and need separate return
+bindings. Focused root, original-credit, communication and contract tests:
+157 passed under `runs/private_root_return_correction_20261110`. A fresh
+autonomous genome run has not yet verified the revised contract or any axis
+return. Full-genome annotation remains open.
 
 ## 2026-11-10 combined-genome BLAST scheduling update
 
