@@ -13,7 +13,6 @@ import hashlib
 import json
 import os
 from pathlib import Path
-import signal
 import subprocess
 import time
 
@@ -64,7 +63,7 @@ def run(manifest_path, expected_sha):
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     if status_path.exists():
         raise RuntimeError('allocation_already_started; inspect_original_intents')
-    started, clock = time.time(), time.monotonic()
+    started = time.time()
     state = {'version': 'hpc_allocation_status_v1', 'manifest_sha256': expected_sha,
         'plan_id': manifest['plan_id'], 'job_id': os.environ['PBS_JOBID'],
         'started_at': started, 'updated_at': started, 'state': 'running', 'units': [],
@@ -86,10 +85,6 @@ def run(manifest_path, expected_sha):
         if not pending:
             break
         unit = units[pending[0]]
-        remaining = manifest['wall_seconds']-(time.monotonic()-clock)-manifest['shutdown_margin_seconds']
-        if remaining < unit['minimum_seconds']:
-            state['stop_reason'] = 'remaining_allocation_below_next_unit_minimum'
-            break
         unit_directory = confined(root, root/'units'/unit['unit_id'])
         unit_directory.mkdir(parents=True, exist_ok=False)
         environment = dict(os.environ)
@@ -108,28 +103,20 @@ def run(manifest_path, expected_sha):
         state['units'].append(intent)
         state.update(current_unit_id=unit['unit_id'], updated_at=time.time())
         publish(status_path, state)
-        timeout = min(remaining, unit['maximum_seconds'])
         code, reason = 127, None
         with (unit_directory/'stdout').open('wb') as stdout, (unit_directory/'stderr').open('wb') as stderr:
             try:
                 child = subprocess.Popen(unit['argv'], cwd=unit_directory, env=environment,
                                          stdout=stdout, stderr=stderr, start_new_session=True)
-                try:
-                    code = child.wait(timeout=timeout)
-                except subprocess.TimeoutExpired:
-                    os.killpg(child.pid, signal.SIGTERM)
-                    try:
-                        child.wait(timeout=min(10, manifest['shutdown_margin_seconds']))
-                    except subprocess.TimeoutExpired:
-                        os.killpg(child.pid, signal.SIGKILL)
-                        child.wait()
-                    code, reason = 124, 'unit_time_budget_exhausted'
+                code = child.wait()
             except OSError as error:
                 reason = type(error).__name__
         intent.update(state='complete' if code == 0 else 'failed', returncode=code,
                       failure=reason, finished_at=time.time())
         result_path = confined(root, unit_directory/'result.json')
-        if code == 0 and result_path.is_file() and result_path.stat().st_size <= manifest['result_limit_bytes']:
+        # Retain compact failure/partial-result bytes too. Their custody is
+        # evidence, while failed execution still cannot earn acceptance credit.
+        if result_path.is_file() and result_path.stat().st_size <= manifest['result_limit_bytes']:
             payload = result_path.read_bytes()
             intent.update(result_path=str(result_path), result_sha256=hashlib.sha256(payload).hexdigest(),
                           result_bytes=len(payload))

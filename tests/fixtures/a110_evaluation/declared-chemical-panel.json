@@ -1,0 +1,72 @@
+{
+  "version": "a110_chemical_panel_v1",
+  "dataset_id": "synthetic-chemical-panel-01",
+  "origin": "synthetic",
+  "species": [
+    {"id": "a", "entity_id": null, "compartment": "declared_c", "kind": "chemical", "formula": "C3H5O6P", "charge": -2, "source_locator": "synthetic://chemical-panel-01/species/0"},
+    {"id": "b", "entity_id": null, "compartment": "declared_c", "kind": "chemical", "formula": "C3H5O6P", "charge": -2, "source_locator": "synthetic://chemical-panel-01/species/1"},
+    {"id": "c", "entity_id": null, "compartment": "declared_c", "kind": "chemical", "formula": "C3H5O5P", "charge": -2, "source_locator": "synthetic://chemical-panel-01/species/2"},
+    {"id": "u", "entity_id": null, "compartment": null, "kind": "unknown", "formula": null, "charge": null, "source_locator": "synthetic://chemical-panel-01/species/3"},
+    {"id": "e", "entity_id": null, "compartment": "declared_c", "kind": "electron", "formula": null, "charge": -1, "source_locator": "synthetic://chemical-panel-01/species/4"}
+  ],
+  "reactions": [
+    {
+      "id": "r01", "entity_id": null,
+      "participants": [
+        {"species_id": "a", "coefficient": "-1", "source_locator": "synthetic://chemical-panel-01/reactions/0/participants/0"},
+        {"species_id": "b", "coefficient": "1", "source_locator": "synthetic://chemical-panel-01/reactions/0/participants/1"}
+      ],
+      "source_locator": "synthetic://chemical-panel-01/reactions/0",
+      "standard_gibbs": {"value_kj_per_mol": 2.5, "convention": "chemical", "conditions": {"key": "c1", "temperature_kelvin": 298.15, "description": "Declared common chemical standard-state condition; synthetic observations", "source_locator": "synthetic://chemical-panel-01/conditions/c1"}, "source_locator": "synthetic://chemical-panel-01/reactions/0/standard_gibbs"},
+      "conditions": {"key": "c1", "temperature_kelvin": 298.15, "description": "Declared common chemical standard-state condition; synthetic observations", "source_locator": "synthetic://chemical-panel-01/conditions/c1"},
+      "activities": [
+        {"species_id": "a", "value": 1, "unit": "dimensionless_activity", "source_locator": "synthetic://chemical-panel-01/reactions/0/activities/0"},
+        {"species_id": "b", "value": 1, "unit": "dimensionless_activity", "source_locator": "synthetic://chemical-panel-01/reactions/0/activities/1"}
+      ]
+    },
+    {
+      "id": "r02", "entity_id": null,
+      "participants": [
+        {"species_id": "b", "coefficient": "-1", "source_locator": "synthetic://chemical-panel-01/reactions/1/participants/0"},
+        {"species_id": "c", "coefficient": "1", "source_locator": "synthetic://chemical-panel-01/reactions/1/participants/1"}
+      ],
+      "source_locator": "synthetic://chemical-panel-01/reactions/1",
+      "standard_gibbs": {"value_kj_per_mol": -1.5, "convention": "chemical", "conditions": {"key": "c1", "temperature_kelvin": 298.15, "description": "Declared common chemical standard-state condition; synthetic observations", "source_locator": "synthetic://chemical-panel-01/conditions/c1"}, "source_locator": "synthetic://chemical-panel-01/reactions/1/standard_gibbs"},
+      "conditions": {"key": "c1", "temperature_kelvin": 298.15, "description": "Declared common chemical standard-state condition; synthetic observations", "source_locator": "synthetic://chemical-panel-01/conditions/c1"},
+      "activities": [
+        {"species_id": "b", "value": 1, "unit": "dimensionless_activity", "source_locator": "synthetic://chemical-panel-01/reactions/1/activities/0"},
+        {"species_id": "c", "value": 1, "unit": "dimensionless_activity", "source_locator": "synthetic://chemical-panel-01/reactions/1/activities/1"}
+      ]
+    },
+    {
+      "id": "r03", "entity_id": null,
+      "participants": [
+        {"species_id": "c", "coefficient": "-1", "source_locator": "synthetic://chemical-panel-01/reactions/2/participants/0"},
+        {"species_id": "u", "coefficient": "1", "source_locator": "synthetic://chemical-panel-01/reactions/2/participants/1"}
+      ],
+      "source_locator": "synthetic://chemical-panel-01/reactions/2",
+      "standard_gibbs": null, "conditions": null, "activities": []
+    },
+    {
+      "id": "r04", "entity_id": null,
+      "participants": [
+        {"species_id": "a", "coefficient": "-1", "source_locator": "synthetic://chemical-panel-01/reactions/3/participants/0"},
+        {"species_id": "b", "coefficient": "1", "source_locator": "synthetic://chemical-panel-01/reactions/3/participants/1"},
+        {"species_id": "e", "coefficient": "1", "source_locator": "synthetic://chemical-panel-01/reactions/3/participants/2"}
+      ],
+      "source_locator": "synthetic://chemical-panel-01/reactions/3",
+      "standard_gibbs": null, "conditions": null, "activities": []
+    }
+  ],
+  "pathway": [
+    {"reaction_id": "r01", "multiplier": "1", "source_locator": "synthetic://chemical-panel-01/pathway/0"},
+    {"reaction_id": "r02", "multiplier": "1", "source_locator": "synthetic://chemical-panel-01/pathway/1"}
+  ],
+  "carrier_pools": [
+    {"id": "pool_ab", "members": [
+      {"species_id": "a", "carrier_units": "1", "source_locator": "synthetic://chemical-panel-01/pools/0/members/0"},
+      {"species_id": "b", "carrier_units": "1", "source_locator": "synthetic://chemical-panel-01/pools/0/members/1"}
+    ], "members_complete": true, "source_locator": "synthetic://chemical-panel-01/pools/0"}
+  ],
+  "reported_constraints": null
+}

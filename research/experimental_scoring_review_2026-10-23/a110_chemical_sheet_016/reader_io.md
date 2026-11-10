@@ -2,7 +2,7 @@
 
 These are future IO contracts for populating the proposed numerical sheet, not installed tools or a generic extraction framework. There is no reader implementation in this workload. Publication text and datasets must fill the same quantity cells; deterministic calculation follows extraction. Model judgment, if needed to identify a claim, reaction or experimental unit in prose, must retain its source and uncertainty and cannot substitute a number for missing measurements.
 
-The investigation prompt is separate and is not defined here. Host references and provenance are not proposed model-facing prompt content. A reference to an existing A105/A106/A107/A108 measurement preserves dependence; it is not a new measurement or duplicated score.
+The investigation prompt is separate and is not defined here. Host references and provenance are not proposed model-facing prompt content. A reference to an existing A105/A106/A107 measurement preserves dependence; it is not a new measurement or duplicated score.
 
 ## Shared typed records
 

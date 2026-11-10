@@ -222,7 +222,7 @@ class NativeBLASTDatabaseResults:
                         raise ContractError('native_blast_database_return_unauthorized')
                     prepared = prepare_native_blast_database_grading(self.store, context=context, target=target,
                         capture=None, selector=selector, directory=directory / 'grading',
-                        policy=LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None), original_body=original)
+                        policy=LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3), original_body=original)
                     body['preparation'] = prepared
                     publication = publish_selected_native_blast_database_rows(self.store, context=context,
                         preparation=prepared, selector=selector, directory=directory / 'publication')
@@ -245,7 +245,7 @@ class NativeBLASTDatabaseResults:
                     try:
                         prepared = prepare_native_blast_database_grading(self.store, context=context, target=target,
                             capture=capture, selector=selector, directory=directory / 'grading',
-                            policy=LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None))
+                            policy=LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3))
                         body['preparation'] = prepared
                         publication = publish_selected_native_blast_database_rows(self.store, context=context,
                             preparation=prepared, selector=selector, directory=directory / 'publication')

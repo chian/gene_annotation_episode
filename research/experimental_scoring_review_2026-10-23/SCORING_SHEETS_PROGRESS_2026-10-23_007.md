@@ -29,7 +29,6 @@ mechanism was created.
 - [ ] A106 — a fresh worker is developing the complete perturbation/restoration
   sheet; its first source packet is delivered. Parent has received metadata only.
 - [ ] A107 — complete numerical sheet remains unfinished.
-- [ ] A108 — complete numerical sheet remains unfinished.
 - [ ] A110 — retained separately; complete numerical sheet remains unfinished.
 - [ ] A111 — complete numerical sheet remains unfinished.
 

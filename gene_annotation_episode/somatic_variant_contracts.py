@@ -40,7 +40,7 @@ OUTPUTS = (
     ("tumor_header", "tumor.header.sam", "sam_header_text"),
     ("normal_header", "normal.header.sam", "sam_header_text"),
 )
-POLICY = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 PACKET_VERSION = "ordinary_somatic_variant_values_v1"
 SOURCE_VERSION = "ordinary_somatic_variant_result_v1"
 CONTEXT_VERSION = "somatic_variant_context_v1"

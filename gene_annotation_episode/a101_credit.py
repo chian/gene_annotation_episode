@@ -37,6 +37,64 @@ class A101SequenceCredit:
     """One deterministic projection for normal actions, details and parents."""
     requires_episode_receipts = True
     requires_known_record_refs = True
+    yield_method = 'bounded_quality'
+    native_score_maximum = 1.
+
+    def _annotation_measurements(self, store, known, annotation, target, scope):
+        from .component_assessment_dependencies import annotation_assessments
+        from .evidence_geometry import _merge
+        from .tool_grading_artifacts import source_tool_grading_entries
+        links, selected, selected_assessments = [], {}, {}
+        for row in annotation_assessments(store, known, annotation, target, scope):
+            observation = row['observation']
+            source = store.get(observation['source_ref']) if observation['source_ref'] in known else None
+            native_sequence = source is not None and observation['origin'] == 'tool' and (
+                'native_blast' in observation or source.get('provider') in {'ncbi_blast', 'native.phmmer.alignment'}
+                or any((entry['grading'].get('sheet') or {}).get('schema', '').startswith('blast_')
+                    or (entry['grading'].get('sheet') or {}).get('schema') == 'hmmer_search_sheet_v1'
+                    for entry in source_tool_grading_entries(store, source['id'])))
+            references = [observation['id']] if native_sequence else []
+            if not references:
+                continue
+            links.append(row)
+            if row['transfer_status'] != 'established' or row['relation'] != 'strengthens':
+                continue
+            for reference in references:
+                selected[reference] = _merge([*selected.get(reference, ()), *row['regions']])
+                selected_assessments.setdefault(reference, set()).add(row['assessment_ref'])
+        return links, selected, selected_assessments
+
+    def annotation_contribution(self, store, context, *, target, annotation, scope,
+                                comparison_ref=None, selection=None, details_limit=0, details_offset=0):
+        """Identify and score this axis's received evidence for one proposed annotation."""
+        from .component_assessment_dependencies import assessment_transfer, assessment_details
+        from .root_axis_scalars import _result, correspondence_scalar, require_attribution, bind_contribution
+        known = set(context.received_record_refs)
+        links, selected, selected_assessments = self._annotation_measurements(store, known, annotation, target, scope)
+        details, count, measured = [], 0, False
+        if not selected:
+            reason = ('no_received_applicable_supporting_assessment' if not links else
+                'assessed_observation_has_no_received_applicable_supporting_measurement')
+            scalar = _result('A101', None, formula='received_current_axis_result_required', inputs={}, reasons=[reason])
+        else:
+            native = self.read_details(store, scope, known_record_refs=known, subjects=(target,),
+                evidence_regions=selected, details_limit=details_limit, details_offset=details_offset)
+            measured = bool(native['a101_sheet']['targets'][target]['profile'])
+            scalar = correspondence_scalar('A101', native['credit'], measured=measured)
+            if native.get('target_sheets', {}).get(target, {}).get('status') == 'unresolved_attribution':
+                scalar = require_attribution(scalar, missing=['unresolved_native_attribution'])
+            count = native['detail_pages']['source_contributions_total']
+            for item in native['source_contributions']:
+                refs = selected_assessments.get(item.get('observation_ref'), set())
+                details.append({**item, 'assessment_refs': sorted(refs),
+                    'assessment_qualifications': assessment_details(links, refs)})
+        refs = {reference for group in selected_assessments.values() for reference in group}
+        scalar.update(assessment_refs=sorted(refs), assessment_qualifications=assessment_details(links, refs),
+            question={'assertion_ref': annotation['id']}, source_contribution_count=count)
+        scalar = bind_contribution(scalar, annotation=annotation, subject=target, scope=scope,
+            transfer=assessment_transfer(links, missing=scalar['missing_inputs']),
+            source_refs=sorted({row['observation']['source_ref'] for row in links}))
+        return scalar, details
 
     def as_record(self):
         return {'kind': 'a101_native_sequence_correspondence', 'version': VERSION,
@@ -56,7 +114,8 @@ class A101SequenceCredit:
             details_limit=0, details_offset=0)
 
     def read_details(self, store, scope, *, known_record_refs, details_limit,
-                     details_offset, assignment=None, episode_id=None, run_id=None):
+                     details_offset, assignment=None, episode_id=None, run_id=None,
+                     subjects=None, evidence_regions=None):
         if (type(details_limit) is not int or details_limit < 0
                 or type(details_offset) is not int or details_offset < 0):
             raise ValueError('a101_nonnegative_detail_page_required')
@@ -65,7 +124,16 @@ class A101SequenceCredit:
             scope = store.validate_scope(scope)
             if assignment is not None and store.validate_scope(assignment['scope']) != scope:
                 raise ValueError('a101_credit_scope_differs_from_original_commission')
-            targets = {ref: _regions(store,scope,ref) for ref in scope['subject_refs']}
+            from .evidence_geometry import native_subject_regions, _intersection
+            from .component_assessment_dependencies import assigned_annotation
+            annotation = assigned_annotation(store, known, assignment)
+            if annotation is not None:
+                subjects, evidence_regions = annotation['subject_refs'], {}
+                for subject in subjects:
+                    _, selected, _ = self._annotation_measurements(store, known, annotation, subject, scope)
+                    evidence_regions.update(selected)
+            targets = (native_subject_regions(store, scope, subjects) if subjects is not None else
+                {ref: _regions(store,scope,ref) for ref in scope['subject_refs']})
             targets = {ref:regions for ref,regions in targets.items() if regions}
             rows = {ref: [] for ref in targets}
             profiles = {ref:set() for ref in targets}
@@ -76,6 +144,8 @@ class A101SequenceCredit:
             # Producer identities and original tool operands establish this;
             # no model flag or score-maximizing profile selection is involved.
             for reference in known:
+                if evidence_regions is not None:
+                    continue  # An unassessed complete source does not establish an annotation's profile.
                 source = store.get(reference)
                 if source['record_type'] != 'source' or source['origin'] not in {'tool','external'}:
                     continue
@@ -94,6 +164,8 @@ class A101SequenceCredit:
                         if query in targets:
                             profiles[query].add('blast')
             for reference in known:
+                if evidence_regions is not None and reference not in evidence_regions:
+                    continue
                 observed = store.get(reference)
                 if observed['record_type'] != 'observation' or observed['kind'] not in {'alignment','comparison'}:
                     continue
@@ -164,6 +236,12 @@ class A101SequenceCredit:
                             raise A101ScoringUnavailable('a101_target_sequence_conflict',observation_ref=reference)
                         row.pop('residue_pairs',None)  # retained in the native grader for specific attachment consumers
                         row['target_intervals'] = intervals(row['target_intervals'],length=length)
+                        if evidence_regions is not None:
+                            row['native_target_intervals'] = row['target_intervals']
+                            row['target_intervals'] = _intersection(row['target_intervals'],
+                                intervals(evidence_regions[reference], length=length))
+                            if not row['target_intervals']:
+                                continue
                         row.update(observation_ref=reference, source_ref=source['id'],
                             grading_artifact_ref=entry['artifact_ref'], target_ref=target)
                         rows[target].append(row)

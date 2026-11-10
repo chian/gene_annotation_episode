@@ -8,7 +8,7 @@ from .scientific_tool_library import ScientificToolLibrary
 
 def prepare_scientific_binding(*, run_directory, source_directory, tool_catalog, child_roles,
                                tool_retrieval=None, resource_catalogs=None,
-                               contract_information_profile=None):
+                               contract_information_profile=None, yield_bindings=None):
     library = ScientificProcessLibrary.freeze(
         Path(run_directory) / "scientific-process-library", source=source_directory)
     tools = ScientificToolLibrary.freeze(
@@ -18,7 +18,8 @@ def prepare_scientific_binding(*, run_directory, source_directory, tool_catalog,
     # preparation intentionally owns no executable workflow or model connection.
     return ScientificProcessEpisodes(None, library=library, tool_library=tools,
         child_roles=child_roles, tool_retrieval=tool_retrieval,
-        contract_information_profile=contract_information_profile).as_record()
+        contract_information_profile=contract_information_profile,
+        yield_bindings=yield_bindings).as_record()
 
 
 __all__ = ["prepare_scientific_binding"]

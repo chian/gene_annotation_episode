@@ -41,7 +41,7 @@ def test_reservation_does_not_dispatch_and_preserves_original_policy(tmp_path, m
     plan = local_infernal_preparation_plan(state.assignment, str(handle.path))
     assert plan["requested_job"] == state.assignment["requested_job"]
     assert plan["identity"]["run_id"] == state.run_id and plan["identity"]["episode_id"] == state.episode_id
-    assert plan["policy"] == {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+    assert plan["policy"] == {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
     invoke = json.loads((root / "invoke.json").read_bytes())
     assert invoke == {"cwd": plan["attempt_directory"], "argv": state.assignment["requested_job"]["argv"],
         "environment": state.assignment["requested_job"]["environment"],
@@ -107,7 +107,7 @@ def test_original_policy_cannot_be_replaced_on_repeated_preparation(tmp_path):
     prepare_local_infernal_preparation(state, operation, root=root, policy=POLICY)
     with pytest.raises(ValueError, match="immutable_record_conflict"):
         prepare_local_infernal_preparation(state, operation, root=root,
-            policy=LocalJobPolicy(POLICY.memory_bytes // 2, POLICY.scratch_bytes, None))
+            policy=LocalJobPolicy(POLICY.memory_bytes // 2, POLICY.scratch_bytes))
 
 
 @pytest.mark.parametrize("attempt_exists", [False, True])
@@ -148,7 +148,7 @@ def test_actual_reservation_dispatch_and_cli_bundle_through_existing_lifecycle(t
         "stdout_path": str(result.stdout_path), "stderr_path": str(result.stderr_path), "metadata": result.metadata}, indent=2) + "\n")
     assert result.returncode == (1 if case == "calibration_failure" else 0), result.stderr_path.read_text()
     assert result.metadata["verified_cgroup"]["memory_max"] == POLICY.memory_bytes
-    assert result.metadata["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in result.metadata["verified_cgroup"]
     plan = local_infernal_preparation_plan(state.assignment, str(handle.path))
     (tmp_path / "assignment.json").write_text(json.dumps(state.assignment, indent=2) + "\n")
     identity = plan["identity"]

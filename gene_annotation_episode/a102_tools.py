@@ -33,11 +33,24 @@ TEXT={'type':'string','minLength':1}
 INTEGER={'type':'integer','minimum':0}
 NAMES=('structure.bind','structure.inspect','structure.align','structure.discover',
     'structure.feature_geometry','structure.contrast','structure.reported_comparison','structure.model_request',
-    'structure.reference_align','structure.reference_traits','structure.interface_geometry')
+    'structure.reference_align','structure.reference_traits','structure.interface_geometry',
+    'structure.request_hpc_comparison')
 
 
 def catalog():
     entries={
+        'structure.request_hpc_comparison': {'description': 'Freeze a structural comparison from actually received '
+            'model bindings and publish an exact commission for the configured HPC parent, including its '
+            'prediction and execution sisters. This operation executes no algorithm and earns no B. '
+            'The original collected result is automatically graded when received. A reference-only measured '
+            'model requires the explicit target attribution operands; source geometry alone does not transfer.',
+            'input_schema': obj({'target_binding_ref': REF,
+                'reference_binding_refs': {**REFS, 'minItems': 1, 'maxItems': 32},
+                'algorithm': {'enum': ['US-align', 'Foldseek']}, 'primary': {'type': 'boolean'},
+                'resource_id': TEXT, 'attribution': {'anyOf': [{'type': 'null'}, obj({
+                    'target_ref': REF, 'target_regions': {'type': 'array', 'minItems': 1,
+                        'items': {'type': 'array', 'minItems': 2, 'maxItems': 2, 'items': INTEGER}},
+                    'sequence_alignment_ref': {'anyOf': [REF, {'type': 'null'}]}})]}})},
         'structure.bind':{'description':'Bind one explicitly received PDB/mmCIF chain/model to its represented sequence and, for the target, the actual supplied sequence. Retain construct mutations, missing coordinates, native residue identities, model origin and uncertainty. Coordinate mapping performs no sequence-homology investigation. Ambiguous mapping is unavailable; no best chain is silently selected.',
             'input_schema':obj({'file_source_ref':REF,'target_ref':{'anyOf':[REF,{'type':'null'}]},
                 'format':{'enum':['pdb_3x_text','pdbx_mmcif_text']},'chain_id':{'type':'string','maxLength':32},
@@ -111,10 +124,10 @@ class A102ToolRegistry(ToolRegistry):
         self.a102_directory=Path(a102_work_directory).resolve()
         require('runs' in self.a102_directory.parts,'a102_disposable_output_requires_runs_directory')
         self.a102_directory.mkdir(parents=True,exist_ok=True)
+        self.a102_execution_resources=None
         self.a102_software={'US-align':_software(usalign_executable,'US-align'),
             'Foldseek':_software(foldseek_executable,'Foldseek')}
-        self.a102_policy=LocalJobPolicy(min(2*1024**3,self.local_job_policy.memory_bytes),
-            min(1024**3,self.local_job_policy.scratch_bytes),self.local_job_policy.wall_seconds or 300)
+        self.a102_policy=LocalJobPolicy(min(2 * 1024 ** 3, self.local_job_policy.memory_bytes), min(1024 ** 3, self.local_job_policy.scratch_bytes))
         for sql in [
             'CREATE TABLE IF NOT EXISTS a102_structure_bindings (source_ref TEXT PRIMARY KEY,body TEXT NOT NULL)',
             'CREATE TABLE IF NOT EXISTS a102_tool_operations (operation_key TEXT PRIMARY KEY,request TEXT NOT NULL,result TEXT NOT NULL)',
@@ -123,14 +136,27 @@ class A102ToolRegistry(ToolRegistry):
 
     def as_record(self):
         from .a102_attachments import VERSION as attribution_version
-        return {**super().as_record(),'a102_tools':{'version':VERSION,'tool_attribution_version':attribution_version,'software':deepcopy(self.a102_software),
+        from .a102_structural_bridge import VERSION as bridge_version
+        return {**super().as_record(),'a102_tools':{'version':VERSION,'tool_attribution_version':attribution_version,
+            'saved_comparison_bridge_version':bridge_version,
+            **({'hpc_resources':deepcopy(self.a102_execution_resources)} if self.a102_execution_resources is not None else {}),
+            'software':deepcopy(self.a102_software),
             'directory':str(self.a102_directory),'policy':self.a102_policy.to_dict(),'cpu_threads':1,
             'foldseek_database':'explicit_received_panel_at_most_32','novel_prediction':'shared_parent_explicit_remote_binding_required'}}
 
     def catalog(self,scope=None):
         entries=super().catalog(scope=scope)
         require(not set(entries)&set(NAMES),'a102_tool_operation_owner_conflict')
-        return {**entries,**catalog()}
+        structural=catalog()
+        if self.a102_execution_resources is None:structural.pop('structure.request_hpc_comparison')
+        return {**entries,**structural}
+
+    def configure_a102_hpc(self,resources):
+        selected=plain(resources)
+        require(any(row.get('kind')=='pbs_ssh' for row in selected.values()),'a102_configured_hpc_resource_required')
+        require(self.a102_execution_resources is None or self.a102_execution_resources==selected,
+            'a102_hpc_resource_configuration_changed')
+        self.a102_execution_resources=selected
 
     def operation_resource_limits(self):
         return {'a102_native':{'tool_names':['structure.bind','structure.align','structure.discover','structure.reference_align'],
@@ -143,6 +169,16 @@ class A102ToolRegistry(ToolRegistry):
         if context.role=='scientific_process' and context.assignment.get('selection',{}).get('evidence_axis',{}).get('option_id')!='A102':
             return [],[]
         return refresh(self.store,known,plain(context.scope))
+
+    def received_structural_attributions(self,context,known,*,input_authority,hpc_result_reader):
+        from .a102_structural_bridge import publish_received_comparisons
+        if context.role=='scientific_process' and context.assignment.get('selection',{}).get('evidence_axis',{}).get('option_id')!='A102':
+            return [],[]
+        from .a102_hpc import receive_results
+        generated,hpc_needs=receive_results(self.store,context,known,read_result=hpc_result_reader)
+        comparisons,needs=publish_received_comparisons(self.store,context,input_authority=input_authority,
+            known_record_refs=set(known)|set(generated))
+        return list(dict.fromkeys([*generated,*comparisons])),[*hpc_needs,*needs]
 
     def _reference_request(self,args,comparison_ref):
         from .a102_attachments import request
@@ -247,8 +283,8 @@ class A102ToolRegistry(ToolRegistry):
             from .episode_return_records import EpisodeReturnRecords
             context=invocation[0]
             EpisodeReturnRecords(self.store,context.run_id,failure_prefix='a102_').authenticate(context)
-            require(permitted_record_refs is not None,'a102_explicit_received_inputs_required')
-            known=set(permitted_record_refs)
+            known=set(context.received_record_refs if permitted_record_refs is None else permitted_record_refs)
+            require(known<=set(context.received_record_refs),'a102_explicit_received_inputs_required')
             request=canonical({'name':name,'arguments':args,'scope':scope,'run_id':context.run_id,
                 'episode_id':context.episode_id,'software':self.a102_software,
                 'policy':self.a102_policy.to_dict()})
@@ -258,14 +294,62 @@ class A102ToolRegistry(ToolRegistry):
                 return json.loads(old['result'])
             previous=self.store.db.execute('SELECT result FROM a102_tool_operations WHERE request=? LIMIT 1',
                 (request,)).fetchone()
-            if previous is not None:
+            if previous is not None and name!='structure.request_hpc_comparison':
                 result=json.loads(previous['result'])
                 result['result']['reused_existing_result']=True
                 self.store.db.execute('INSERT INTO a102_tool_operations VALUES(?,?,?)',(operation_key,request,canonical(result)))
                 return result
             directory=self.work_directory(context,name,args,scope)
             records=[];native_metadata=None
-            if name=='structure.bind':
+            if name=='structure.request_hpc_comparison':
+                from .a102_hpc import prepare_request,request_body,result_body,commission
+                require(self.a102_execution_resources is not None and args['resource_id'] in self.a102_execution_resources,
+                    'a102_configured_hpc_resource_required')
+                request_ref=prepare_request(self.store,args,context=context,known=known)
+                body=request_body(self.store,request_ref)
+                native=body['request']['native_request']
+                panel=([native['reference']] if native['operation']=='usalign'
+                    else [row['binding'] for row in native['references']])
+                groups={comparison_identity(native['target'],item) for item in panel}
+                reusable={};primary_conflicts=[]
+                for reference in sorted(known):
+                    prior=received_grade(self.store,reference)
+                    if prior is None:continue
+                    grade=prior['grade']
+                    if grade['primary'] and grade['comparison_group'] in groups:primary_conflicts.append(reference)
+                    if (grade['producer']==args['algorithm']
+                            and (grade.get('software') or {}).get('version')==body['request']['software_pin']['version']
+                            and grade.get('target_binding_ref')==args['target_binding_ref']
+                            and grade['reference_ref'] in args['reference_binding_refs']
+                            and grade['primary']==args['primary']):
+                        reusable.setdefault(grade['reference_ref'],reference)
+                retained=[(ref,admission) for ref in known if (admission:=result_body(self.store,ref)) is not None
+                    and admission['request_ref']==request_ref and admission['completed']]
+                if set(reusable)==set(args['reference_binding_refs']):
+                    records=[request_ref,*[reusable[ref] for ref in args['reference_binding_refs']]]
+                    result={'request_ref':request_ref,'execution_status':'qualified_comparisons_already_received',
+                        'new_execution_requested':False,'scientific_credit':0.}
+                elif retained:
+                    records=list(dict.fromkeys([request_ref,*[ref for ref,_ in retained],
+                        *[ref for _,body in retained for ref in body['comparison_refs']]]))
+                    result={'request_ref':request_ref,'execution_status':'already_completed_and_received',
+                        'new_execution_requested':False,'scientific_credit':0.}
+                else:
+                    require(not (args['primary'] and primary_conflicts),'a102_comparison_primary_already_declared',
+                        existing_comparison_source_refs=sorted(primary_conflicts),
+                        correction='Reuse the received comparisons and request only the remaining references, '
+                            'or declare primary=false for a deliberate crosscheck.')
+                    from .hpc_commission_sources import publish as publish_commission
+                    body=request_body(self.store,request_ref)
+                    work=commission(self.store,request_ref,self.a102_execution_resources)
+                    commission_ref=publish_commission(self.store,work,scope=scope,resources=self.a102_execution_resources)
+                    records=[request_ref,commission_ref]
+                    result={'request_ref':request_ref,'commission_source_ref':commission_ref,
+                        'hpc_assignment':{'commission_source_ref':commission_ref},
+                        'execution_owner':'shared_hpc_parent_with_prediction_and_execution_sisters',
+                        'scientific_credit':0.,'new_execution_requested':True,
+                        'request_sha256':body['request_sha256']}
+            elif name=='structure.bind':
                 for ref in args['origin_witness_refs']:self._received(ref,known)
                 target=args['target_ref'];sequence=None
                 if target is not None:

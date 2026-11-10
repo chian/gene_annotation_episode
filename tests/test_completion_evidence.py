@@ -13,6 +13,7 @@ from method_loop.identities import UnitRef
 
 from gene_annotation_episode.completion_evidence import (
     CompletionEvidence, VERSION, validate_completion_evidence)
+from gene_annotation_episode.episode_completion import observes_action_outcome
 from gene_annotation_episode.episode_journal import Journal
 from gene_annotation_episode.episode_monitoring import FIELDS, read_progress
 from gene_annotation_episode.local_return_history import LocalReturnHistory
@@ -45,7 +46,7 @@ def own(case, index, *, result=None, selection=None, credit=1.25, stage=True):
     case.journal.save("runtime_actions", {"episode_id": case.parent, "decision_index": index,
         "action": canonical(selection), "result": canonical(result), "credit": credit})
     body = {"credit": credit, "estimation_action_index": index}
-    if stage and result["status"] in {"completed", "partial"}:
+    if stage and observes_action_outcome(selection["kind"], result["status"]):
         return case.ledger.stage(case.parent, index, label="own:" + str(index),
             kind="own_action", controller_input=Value(body), child_return=None)
 
@@ -128,13 +129,14 @@ def test_single_return_api_is_scoped_and_does_not_link_waits(case, monkeypatch):
             reader.read_return(case.parent, index)
 
 
-def test_own_partial_and_repeated_progress_are_delivery_facts(case, monkeypatch):
+@pytest.mark.parametrize("status", ["partial", "failed", "unavailable"])
+def test_own_retained_and_repeated_progress_are_delivery_facts(case, monkeypatch, status):
     child = case.child(8, progress=True)
     snapshot = case.progress.read_progress(child[2]["report"]["updates"][0]["ref"],
         case.base["child"]["scope"])
     reference = snapshot["progress_ref"]
     source = case.base["input_versions"][0]["reference"]
-    outcome = {"status": "partial", "record_refs": [source], "changed_record_refs": [],
+    outcome = {"status": status, "record_refs": [source], "changed_record_refs": [],
         "progress_refs": [reference, reference], "feedback": {"code": "retained_partial"}}
     for index in (10, 12):
         own(case, index, result=outcome)
@@ -237,11 +239,11 @@ def test_failed_form_is_completed_action_with_empty_received_information(case, m
 
 
 @pytest.mark.parametrize("child_failure", [False, True])
-def test_failed_execution_has_no_completion_packet(case, monkeypatch, child_failure):
+def test_unobserved_child_failure_or_rejected_request_has_no_completion_packet(case, monkeypatch, child_failure):
     if child_failure:
         case.child(3, state="execution_failed")
     else:
-        own(case, 3, result={"status": "failed", "record_refs": [], "changed_record_refs": []}, stage=False)
+        own(case, 3, result={"status": "invalid", "record_refs": [], "changed_record_refs": []}, stage=False)
     guards(case, monkeypatch)
     with pytest.raises(ValueError, match="requires_completed_outcome_and_credit"):
         capture(case, 3, body={"credit": 0, "estimation_action_index": 3})

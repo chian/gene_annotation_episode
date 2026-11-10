@@ -32,7 +32,7 @@ def test_actual_worker_is_bounded_frozen_and_replays_after_original_sources_remo
         capture = prepare_atac_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY))
         execution = json.loads(retained_native_file(store, capture['execution_receipt_file']).read_bytes())
         assert execution['returncode'] == 0 and execution['terminal'] and execution['quiescent']
-        assert execution['metadata']['verified_cgroup'] == dict(memory_max=21474836480, memory_swap_max=0, runtime_max='infinity', kill_mode='control-group', oom_policy='kill')
+        assert execution['metadata']['verified_cgroup'] == dict(memory_max=21474836480, memory_swap_max=0, kill_mode='control-group', oom_policy='kill')
         assert capture['result']['state'] == 'produced'
         assert all(r['capture']['outcome'] == 'verified' for r in capture['outputs'])
         assert {r['distribution'] for r in execution['intent']['dependencies']} >= {'jsonschema', 'attrs', 'referencing', 'rpds-py', 'jsonschema-specifications'}
@@ -59,7 +59,7 @@ def test_saved_preparation_requires_exact_policy_before_any_native_start(tmp_pat
         plan = retained_plan(tmp_path, store)
         monkeypatch.setattr(native, 'prepare_job', lambda *a, **k: pytest.fail('invalid allocation reached native dispatch'))
         with pytest.raises(ValueError, match='policy_mismatch'):
-            prepare_atac_result_worker(store, plan=plan, policy=LocalJobPolicy(memory_bytes=1024, scratch_bytes=4294967296, wall_seconds=None))
+            prepare_atac_result_worker(store, plan=plan, policy=LocalJobPolicy(memory_bytes=1024, scratch_bytes=4294967296))
 
 
 def test_missing_and_changed_saved_tables_reach_finite_worker_and_drain_remaining_streams(tmp_path):

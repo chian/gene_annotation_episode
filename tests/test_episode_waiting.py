@@ -310,8 +310,7 @@ def test_unknown_probability_is_not_fabricated_from_real_duration_mean(tmp_path)
     reader.close()
     history.close()
     resource = {"resource_id": "host:local", "kind": "local", "capability_binding_ref": "capability:bound",
-        "allocation": {"cpu": 2, "memory_bytes": 20 * 2**30, "scratch_bytes": 4 * 2**30,
-                       "wall_seconds": None}}
+        "allocation": {'cpu': 2, 'memory_bytes': 20 * 2 ** 30, 'scratch_bytes': 4 * 2 ** 30}}
     work = pending("child:a", expectation_refs=[ref], resource=resource)
     selection = condition("child:a", reconsider_at=DEADLINE)
     progress = [{"version": "progress_snapshot_v1", "target_handle": "child:a",

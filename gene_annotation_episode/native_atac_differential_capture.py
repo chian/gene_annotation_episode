@@ -1,6 +1,6 @@
 """Byte custody of every original ATAC output occurrence after writer closure.
 
-The caller authenticates the original practical action and terminal/quiescent
+The caller authenticates the original selected action and terminal/quiescent
 writer. This function does not poll, launch, calculate, or confer return access.
 """
 from __future__ import annotations
@@ -9,6 +9,7 @@ from copy import deepcopy
 from pathlib import Path
 
 from . import native_file_capture as capture
+from .terminal_native_file_capture import capture_execution_file, capture_execution_declarations
 from .native_atac_differential_contracts import (
     STEP_KEYS, canonical, failure, path_value, require, unique_failures,
     validate_atac_record, validate_atac_run_plan, validate_atac_command_seal, validate_atac_native_bundle,
@@ -25,10 +26,10 @@ def _problem(spec, index, code, *, artifact_ref=None, requirement="complete_nati
         field_path=f"/files/{index}", requirement=requirement)
 
 
-def _undeclared(store, plan, spec):
+def _undeclared(store, plan, spec, command_proof=None):
     try:
-        value = capture.capture_native_file(store, directory=plan["attempt_directory"],
-            relative_path=spec["relative_path"], format=spec["format"])
+        value = capture_execution_file(store, directory=plan["attempt_directory"],
+            relative_path=spec["relative_path"], format=spec["format"], command_proof=command_proof)
     except capture.NativeFileCaptureError as error:
         if error.code != "capture_file_unavailable":
             raise
@@ -88,7 +89,7 @@ def validate_atac_native_capture(value, *, original_plan):
 
 
 def capture_atac_native_files(store, *, original_plan, source_action_receipt_ref,
-        writer_closure_receipt_ref, driver_started):
+        writer_closure_receipt_ref, driver_started, command_proof=None):
     """Capture one caller-qualified closed attempt, including absent roles.
 
     A missing marker never establishes not-run. Only the caller's affirmative
@@ -109,7 +110,7 @@ def capture_atac_native_files(store, *, original_plan, source_action_receipt_ref
         for i, spec in enumerate(specs):
             result["failures"].append(_problem(spec, i, "native_output_unavailable"))
         return validate_atac_native_capture(result, original_plan=plan)
-    bundle_retained = _undeclared(store, plan, specs[-1])
+    bundle_retained = _undeclared(store, plan, specs[-1], command_proof)
     bundle = None
     try:
         bundle = _control(bundle_retained, lambda value: validate_atac_native_bundle(value, plan=plan))
@@ -136,7 +137,7 @@ def capture_atac_native_files(store, *, original_plan, source_action_receipt_ref
     for step_key in STEP_KEYS:
         index = next(i for i,spec in enumerate(specs) if spec["file_key"] == step_key + ".seal")
         spec = specs[index]
-        retained = _undeclared(store, plan, spec)
+        retained = _undeclared(store, plan, spec, command_proof)
         rows[index]["retained"] = retained
         try:
             seal = _control(retained, lambda value: validate_atac_command_seal(value, plan=plan, step_key=step_key))
@@ -167,7 +168,8 @@ def capture_atac_native_files(store, *, original_plan, source_action_receipt_ref
         declaration = declared.get(key)
         row["declared"] = declaration
         if declaration is not None:
-            observed = capture.capture_declared_native_files(store, directory=plan["attempt_directory"], declarations=[declaration])[0]
+            observed = capture_execution_declarations(store, directory=plan["attempt_directory"],
+                declarations=[declaration], command_proof=command_proof)[0]
             row["retained"] = _retained(store, observed["observed"]) if observed["observed"] is not None else None
             row["outcome"] = observed["outcome"]
             if row["outcome"] in ("digest_mismatch", "unavailable"):
@@ -177,7 +179,7 @@ def capture_atac_native_files(store, *, original_plan, source_action_receipt_ref
             row["producer_outcome"] = producer
             row["supplied_extent"] = extent if row["outcome"] == "verified" else "unknown"
         else:
-            retained = bundle_retained if key == "bundle" else row["retained"] or _undeclared(store, plan, spec)
+            retained = bundle_retained if key == "bundle" else row["retained"] or _undeclared(store, plan, spec, command_proof)
             row.update(retained=retained, outcome="unsealed" if retained is not None else "unavailable",
                 supplied_extent="partial" if retained is not None else "unknown")
             result["failures"].append(_problem(spec, i, "native_output_unavailable",

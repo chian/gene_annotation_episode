@@ -1,0 +1,15 @@
+{
+  "base_url": "https://rest.uniprot.org",
+  "path": "uniprotkb/search",
+  "params": {
+    "query": "gene_exact:fomA AND protein_name:kinase AND length:[180 TO 450] AND fragment:false",
+    "fields": "accession,id,protein_name,gene_names,organism_id,organism_name,sequence,length",
+    "size": 12,
+    "format": "json"
+  },
+  "record_path": "results",
+  "max_items": 1,
+  "max_depth": 2,
+  "save_raw": true,
+  "raw_output_path": "/home/chia/repos/gene_annotation_episode/runs/a104_20261104_181336/acquired/ipk-specific/family-foma.json"
+}

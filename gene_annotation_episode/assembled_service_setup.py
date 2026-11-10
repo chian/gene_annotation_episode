@@ -46,6 +46,9 @@ def bind_assembled_services(
     protein_structure_environments=(),
     flux_balance_environments=(),
     scientific_contract_information_profile=None,
+    literature_configuration=None,
+    hpc_commissions=None,
+    shared_execution_memory=None,
 ) -> EpisodeApplicationServices:
     """Bind exact caller operands without observing or selecting work.
 
@@ -55,17 +58,24 @@ def bind_assembled_services(
     """
     if not isinstance(tool_retrieval, dict):
         raise TypeError('explicit_scientific_tool_retrieval_configuration_required')
-    literature = LiteratureEpisodes(None, outcome_page_size=literature_outcome_page_size)
+    literature = LiteratureEpisodes(None, outcome_page_size=literature_outcome_page_size,
+        **({} if literature_configuration is None else literature_configuration))
     if execution_resources is not None:
         if initial_execution_information is None:
             raise ValueError('explicit_initial_execution_information_required')
         from .execution_service_setup import ExecutionServiceFactory
+        from .execution_memory import ExecutionMemory
+        if shared_execution_memory is None:
+            shared_execution_memory = ExecutionMemory.configured().as_record()
         factory = ExecutionServiceFactory(execution_resources,
             initial_execution_information, handoff_unit, acquired_record_unit,
             monitoring_information_unit, log_window_bytes, tuple(log_roles),
             monitor_outcome_page_size,
             protein_structure_environments=protein_structure_environments,
-            flux_balance_environments=flux_balance_environments)
+            flux_balance_environments=flux_balance_environments,
+            hpc_commissions=hpc_commissions, shared_execution_memory=shared_execution_memory)
+        if hpc_commissions is not None and 'hpc' not in scientific_child_roles:
+            scientific_child_roles = (*scientific_child_roles, 'hpc')
         if factory.protein_structure_environments or factory.flux_balance_environments:
             factory.configure_tool_registry(tool_registry)
             tool_catalog = tool_registry.catalog()
@@ -82,6 +92,8 @@ def bind_assembled_services(
             (scientific, literature.as_record(), *execution.episode_binding_descriptors),
             execution.role_credit_bindings, execution.job_progress_provider,
             resource_tool_catalogs=execution.resource_tool_catalogs)
+    if hpc_commissions is not None:
+        raise ValueError('hpc_commissions_require_execution_resources')
     scientific = prepare_scientific_binding(run_directory=directory,
         source_directory=source_directory, tool_catalog=tool_catalog,
         child_roles=scientific_child_roles, tool_retrieval=tool_retrieval,

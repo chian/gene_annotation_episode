@@ -37,8 +37,7 @@ ROOT = Path(__file__).resolve().parents[1]
 INPUTS = ROOT / 'tests/fixtures/native_infernal_result_worker'
 HMMER = ROOT / 'verification/tool_graders_native_hmmer_producer_2026-10-24/runs'
 PROGRAMS = ('cmsearch', 'cmscan', 'cmalign')
-POLICY = {'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3,
-          'wall_seconds': None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 
 # These are the requested receiver quantities, independently pinned here so a
 # contract regression cannot disappear by comparing a schema with its own list.

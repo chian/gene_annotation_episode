@@ -36,7 +36,7 @@ from gene_annotation_episode.state import Store
 FIXTURES = Path(__file__).resolve().parents[1] / 'verification' / 'tool_graders_blast_masking_resource_wiring_2026-10-28_618' / 'fixtures'
 MODES = [('dustmasker', 'mask'), ('segmasker', 'mask'),
          ('windowmasker', 'mask'), ('windowmasker', 'create_counts')]
-POLICY = {'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 
 
 def selector():

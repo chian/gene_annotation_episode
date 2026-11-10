@@ -70,8 +70,7 @@ keep biological explanation conditional on a demonstrated tree placement.
 The shared locus coordinates, mobility genes, repeated PCR representations and
 main text/figure descriptions are one linked mechanistic evidence block. They
 must not be multiplied as independent proofs. Sequence comparisons belong to
-A101; neighborhood resemblance to A103; induction to A107; general diet
-plausibility to A108. A104 may cite those records only for a specific explanation
+A101; neighborhood resemblance to A103; induction to A107. A104 may cite those records only for a specific explanation
 of a phylogenetic discordance, with the dependency retained.
 
 Complementary measurements are a gene tree including the target and functionally

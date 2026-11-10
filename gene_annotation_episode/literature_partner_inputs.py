@@ -25,6 +25,19 @@ LITERAL_FIELDS = ("subject", "partner", "experiment", "endpoint", "normalization
 _ARGS = ("source_ref", "data_source_ref", "source_kind", "literals", "interpretation_witnesses")
 
 
+def partner_experiment_assessment_schema():
+    from .literature_experiment_assessments import assessment_schema
+    from .literature_partner_types import EXPERIMENT_TYPES
+    schema = assessment_schema(EXPERIMENT_TYPES)
+    schema["description"] = (
+        "Optional assessment of a particular source-identified experiment. A subject or "
+        "partner literal is not experiment identity, including historical literals typed "
+        "as generic assays. When experiment identity is unknown, omit this optional block "
+        "and retain applicable native rates/comparisons and source-grounded partial or "
+        "unresolved findings. Do not replace an unknown experiment with a molecule handle.")
+    return schema
+
+
 def partner_population_schema(*, include_assessment=False):
     """Closed selected arguments; scientific numbers stay in retained sources."""
     witness = _witness_schema()
@@ -33,9 +46,7 @@ def partner_population_schema(*, include_assessment=False):
         "literals": obj({name: _nullable(deepcopy(witness)) for name in LITERAL_FIELDS}),
         "interpretation_witnesses": {"type": "array", "items": deepcopy(witness)}})
     if include_assessment:
-        from .literature_experiment_assessments import assessment_schema
-        from .literature_partner_types import EXPERIMENT_TYPES
-        schema["properties"]["experiment_assessment"] = assessment_schema(EXPERIMENT_TYPES)
+        schema["properties"]["experiment_assessment"] = partner_experiment_assessment_schema()
     return schema
 
 

@@ -124,7 +124,6 @@ class AttemptIdentity(TypedDict):
 class ProteinPolicy(TypedDict):
     memory_bytes: Literal[21474836480]
     scratch_bytes: Literal[4294967296]
-    wall_seconds: None
 
 
 class NativeProteinRunPlan(TypedDict):
@@ -250,7 +249,7 @@ BUNDLE_FILENAME = "bundle.json"
 WORKER_INPUT_FILENAME = "worker-input.json"
 OWNER_FILENAME = ".native-protein-structure-owner.json"
 STARTED_FILENAME = ".native-protein-structure-started.json"
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 NATIVE_FORMATS = {"inspect": "protein_structure_inventory_native_v1",
     "extract_sequence": "protein_structure_sequence_native_v1", "compare": "protein_structure_native_v1"}
 
@@ -649,9 +648,11 @@ def validate_protein_structure_run_plan(value: NativeProteinRunPlan) -> NativePr
     owner = value["identity"]
     execution = _path(owner["execution_id"], absolute=True)
     attempt = _path(value["attempt_directory"], absolute=True)
-    _require(execution.name == "native.json" and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME, "original_commission_mismatch")
+    from .terminal_scientific_evidence import terminal_plan_identity
+    current = terminal_plan_identity(owner, attempt_directory=str(attempt))
+    _require((current or execution.name == "native.json") and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME, "original_commission_mismatch")
     _require(owner["attempt_id"] == digest(owner["operation_key"]) and owner["requested_job_sha256"] == digest(request), "original_commission_mismatch")
-    _require(execution.parent.name == digest(owner["operation_key"]) and
+    _require(current or execution.parent.name == digest(owner["operation_key"]) and
         execution.parent.parent.name == digest({"run": owner["run_id"], "episode": owner["episode_id"]}) and
         execution.parent.parent.parent.name == ".episode-operations", "original_commission_mismatch")
     _require(type(value["policy"]["memory_bytes"]) is int and type(value["policy"]["scratch_bytes"]) is int)

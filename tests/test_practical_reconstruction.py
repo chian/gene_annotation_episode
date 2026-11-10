@@ -20,8 +20,7 @@ class BeforeModel(Exception):
 
 
 def test_factory_keeps_caller_configuration_immutable(tmp_path):
-    resources = {'local': {'kind': 'local', 'workspace': str(tmp_path), 'policy': {
-        'memory_bytes': 123, 'scratch_bytes': 456, 'wall_seconds': None}}}
+    resources = {'local': {'kind': 'local', 'workspace': str(tmp_path), 'policy': {'memory_bytes': 123, 'scratch_bytes': 456}}}
     factory = PracticalServiceFactory(resources, {})
     original = factory.as_record()
     resources['local']['workspace'] = '/changed'
@@ -38,7 +37,7 @@ def test_factory_keeps_caller_configuration_immutable(tmp_path):
 def test_configured_practical_services_reconstruct_without_discovery_or_commands(tmp_path, monkeypatch):
     directory = tmp_path/'run'
     resources = {'local': {'kind': 'local', 'workspace': str(tmp_path/'project'),
-        'policy': {'memory_bytes': 128*1024**2, 'scratch_bytes': 16*1024**2, 'wall_seconds': None}}}
+        'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 16 * 1024 ** 2}}}
     factory = PracticalServiceFactory(resources, {})
 
     def forbidden(*args, **kwargs):

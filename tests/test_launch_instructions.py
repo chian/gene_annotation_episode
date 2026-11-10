@@ -172,7 +172,7 @@ def test_default_manuals_use_typed_configuration_without_session_or_note_depende
     assert all(value in texts['software'] for value in ('requested_job', 'initial_context',
         'inventory_snapshot', 'progress_requirements', 'completion_keys'))
     assert all(value in texts['pbs'] for value in ('configuration.account', 'queue', 'resources', 'allowed_queues', 'allocation'))
-    assert all(value in texts['preparation'] for value in ('memory_bytes', 'scratch_bytes', 'wall_seconds', 'constraints'))
+    assert all(value in texts['preparation'] for value in ('memory_bytes', 'scratch_bytes', 'constraints'))
     for entry in entries:
         detail = library.entry(entry['entry_id'])['entry']
         for section in detail['sections']:

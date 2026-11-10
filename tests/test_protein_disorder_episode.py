@@ -41,7 +41,7 @@ QUESTION = ("For the explicitly supplied 76-character protein string at threshol
     "disorder response values and their original input, parsed-row, finite-score and coverage qualifications. "
     "Compare a saved calculation of that same supplied Sheet with literal retained readings; preserve "
     "unavailable responses and distinguish predictor outputs from evidence of service execution.")
-POLICY = dict(memory_bytes=20 * 1024**3, scratch_bytes=4 * 1024**3, wall_seconds=None)
+POLICY = dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 GATE = "HMMER_NATIVE_ORACLE_DISORDER_EPISODE"
 
 

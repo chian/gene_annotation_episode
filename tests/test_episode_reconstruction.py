@@ -37,6 +37,7 @@ gate = Path(str(log)+'.gate')
 if gate.exists():
     with gate.open('rb', buffering=0) as stream:
         assert stream.read(1) == b'1'
+    gate.unlink()
 def emit(value):
     print(json.dumps(value), flush=True)
 for line in sys.stdin:
@@ -170,10 +171,11 @@ def test_subprocess_reconstructs_only_selected_ordinary_child_and_original_form(
         archived = ArchivedRecord(run/'archive'/descriptor['file'], descriptor['sha256'], descriptor['index_sha256'])
         assert archived.load()
     retired = list((run/'providers').glob('*/retired-sessions/*.json'))
-    assert len(retired) == 1
-    retirement = json.loads(retired[0].read_text())
-    assert retirement['remaining_active_workers'] == 0 and retirement['local_session_removed']
-    assert retirement['episode_id'] == spec['child']['episode_id']
+    assert len(retired) == 2
+    for path in retired:
+        retirement = json.loads(path.read_text())
+        assert retirement['remaining_active_workers'] == 0 and retirement['local_session_removed']
+        assert retirement['episode_id'] == spec['child']['episode_id']
     assert backend.start(spec['handle'])['execution_identity'] == status['execution_identity']
     assert load_return(DurableExecutionStore(run/'episode-execution'), spec) == returned
 
@@ -234,7 +236,7 @@ def test_execution_failure_preserves_committed_partial_child_records(tmp_path):
             (spec['child']['episode_id'],)).fetchone()[0] == 1
         assert store.db.execute('SELECT count(*) FROM runtime_observations WHERE episode_id=?',
             (spec['parent']['episode_id'],)).fetchone()[0] == 0
-    assert len(list((run/'providers').glob('*/retired-sessions/*.json'))) == 1
+    assert len(list((run/'providers').glob('*/retired-sessions/*.json'))) == 2
 
 
 def test_direct_factory_releases_only_its_own_provider_resources_on_interruption(tmp_path):

@@ -46,10 +46,33 @@ def reaction_population_schema(*, include_assessment=False):
         "literals": obj({field: _nullable(deepcopy(witness)) for field in LITERAL_FIELDS}),
         "interpretation_witnesses": {"type": "array", "items": deepcopy(witness)},
     })
+    schema["properties"]["data_source_ref"]["description"] = (
+        "An actually received Source containing a supported retained JSON dataset: "
+        "a110_source_reaction_measurements_v1 (ratio/budget operands), "
+        "a110_source_reaction_measurements_v2 (the same operands with source-bound meanings), "
+        "or a110_source_reaction_selection_v1 (native source selectors). "
+        "The v1 dataset supplies numerical cells only. Semantic cells require the v2 "
+        "source-bound meanings or a native selection carrying those meanings; adding "
+        "literal identity bindings or repeating a v1 population does not upgrade its view. "
+        "Use the existing dataset directly when its declared version and contents match; "
+        "a new selector recipe is not required for a supported dataset. Reported, "
+        "graph-derived and synthetic origins remain explicit. Calculable conditional "
+        "components do not require established chemical identity or target correspondence. "
+        "For usable source spans without a compatible dataset, "
+        "literature.reaction.source.populate retains selectors and uses this same reader. "
+        "Null preserves unavailable measurements when neither input route is supported.")
     if include_assessment:
         from .literature_experiment_assessments import assessment_schema
         from .literature_reaction_types import EXPERIMENT_TYPES
         schema["properties"]["experiment_assessment"] = assessment_schema(EXPERIMENT_TYPES)
+        schema["properties"]["experiment_assessment"]["description"] = (
+            "Optional assessment of a particular source-identified experiment. Its received "
+            "assay reference must identify the experiment, not a subject, construct, paper "
+            "or model merely sharing that source. Historical subject/construct literals "
+            "may carry the generic assay type; that type does not make them experiments. "
+            "When experiment identity is unknown, omit this optional block and retain "
+            "the applicable numerical components and source-grounded qualified findings. "
+            "Unknown identity must not be replaced with the subject handle.")
     return schema
 
 

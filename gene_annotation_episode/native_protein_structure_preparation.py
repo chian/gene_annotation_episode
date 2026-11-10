@@ -78,7 +78,7 @@ class ValidatedProteinWorker(TypedDict):
     result: ProteinResultWorkerResult | None
 
 
-_POLICY = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+_POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 _PACKAGE_ROOT = str(Path(__file__).resolve().parents[1])
 _MODULE = "gene_annotation_episode.protein_structure_result_worker"
 _OUTPUTS = {"native_result_file": "native-result.json", "sheet_file": "sheet.json",
@@ -277,14 +277,12 @@ def _check_handle(body, request, intent):
              and same(meta.get("policy"), intent["policy"]), "original_commission_mismatch")
     enforcement = meta.get("enforcement", {})
     _require(type(enforcement) is dict and enforcement.get("memory") == "systemd_cgroup_v2_memory_max"
-             and enforcement.get("swap") == "systemd_memory_swap_max_zero"
-             and enforcement.get("wall_time") == "unset", "original_commission_mismatch")
+             and enforcement.get("swap") == "systemd_memory_swap_max_zero", "original_commission_mismatch")
     if body["stage"] == "released":
         cgroup = meta.get("verified_cgroup", {})
         _require(type(cgroup) is dict and cgroup.get("memory_max") == _POLICY["memory_bytes"]
                  and type(cgroup.get("memory_max")) is int
-                 and cgroup.get("memory_swap_max") == 0 and type(cgroup.get("memory_swap_max")) is int
-                 and cgroup.get("runtime_max") == "infinity", "original_commission_mismatch")
+                 and cgroup.get("memory_swap_max") == 0 and type(cgroup.get("memory_swap_max")) is int, "original_commission_mismatch")
     if body["stage"] == "prepared":
         _require(all(body[name] is None for name in ("started_at", "started_monotonic_ns", "boot_id")))
     else:

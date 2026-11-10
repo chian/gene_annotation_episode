@@ -16,6 +16,7 @@ from method_loop.durable import canonical, content_digest
 from method_loop.identities import EpisodeRef, UnitRef
 
 from .domain import ContractError, validate_schema
+from .episode_completion import observes_action_outcome
 from .episode_monitoring import _SNAPSHOT
 from .local_return_history import LocalReturnHistory
 from .progress_records import (RESOURCE_STATUS_VERSION, validate_job_status,
@@ -24,7 +25,7 @@ from .progress_records import (RESOURCE_STATUS_VERSION, validate_job_status,
 
 VERSION = "completed_action_evidence_v1"
 _CHILD_KINDS = {"child", "job_child", "episode_child"}
-_KINDS = {"tool", "reason", "wait", *_CHILD_KINDS}
+_KINDS = {"tool", "reason", "wait", "redeliver_report", *_CHILD_KINDS}
 _FIELDS = {"version", "run_id", "episode_id", "unit_ref", "original_decision_index",
     "action_kind", "received_record_refs", "received_progress_refs", "progress_records",
     "child_return", "unavailable_reasons"}
@@ -157,7 +158,7 @@ def validate_completion_evidence(value, *, run_id=None, episode_id=None,
         if (not isinstance(child, dict) or set(child) != _RETURN_FIELDS
                 or any(not _text(child[key]) for key in ("child_handle", "return_id", "admission_id",
                     "commission_sha256", "admission_state"))
-                or child["admission_state"] not in {"admitted", "delivery_failed"}
+                or child["admission_state"] not in {"admitted", "delivery_failed", "execution_failed"}
                 or child["report_contract_sha256"] is not None and not _text(child["report_contract_sha256"])
                 or "original_return_admission_unavailable" in value["unavailable_reasons"]):
             _invalid()
@@ -214,9 +215,11 @@ class CompletionEvidence:
         if not isinstance(controller_input, ClosedRecord):
             raise TypeError("completion_evidence_closed_controller_input_required")
         body = _copy(controller_input.as_record())
-        if (not isinstance(body, dict) or type(body.get("credit")) not in (int, float)
-                or not math.isfinite(body["credit"])):
+        if not isinstance(body, dict) or 'credit' not in body:
             raise ValueError("completion_evidence_finite_credit_required")
+        from .numerical import validate_task_credit
+        from .episode_journal import decode_credit
+        validate_task_credit(body['credit'])
         if "estimation_action_index" in body and (not _index(body["estimation_action_index"])
                 or body["estimation_action_index"] != original_decision_index):
             _conflict()
@@ -248,9 +251,13 @@ class CompletionEvidence:
                 "WHERE run_id=? AND episode_id=? AND decision_index=?",
                 (self.journal.run_id, episode_id, original_decision_index)).fetchone()
                 if "runtime_actions" in tables else None)
-            if (action is None or action["status"] not in {"completed", "partial"}
-                    or type(action["credit"]) not in (int, float) or not math.isfinite(action["credit"])):
+            if action is not None:
+                action = dict(action)
+                action['credit'] = decode_credit(action['credit'])
+            if (action is None or not observes_action_outcome(action["kind"], action["status"])
+                    or action['credit'] is None):
                 raise ValueError("completion_evidence_requires_completed_outcome_and_credit")
+            validate_task_credit(action['credit'])
             if action["kind"] not in _KINDS or action["credit"] != body["credit"]:
                 _conflict()
             refs = None if action["refs"] is None else _load(action["refs"])
@@ -285,7 +292,7 @@ class CompletionEvidence:
             sample = None if evidence is None else evidence["sample"]
             child = None
             if sample is not None:
-                if (sample["admission_state"] not in {"admitted", "delivery_failed"}
+                if (sample["admission_state"] not in {"admitted", "delivery_failed", "execution_failed"}
                         or sample["received_record_refs"] != refs
                         or canonical(sample["controller_input"]) != canonical(body)
                         or sample["completion_sequence"] is not None
@@ -297,7 +304,12 @@ class CompletionEvidence:
             elif action["kind"] in _CHILD_KINDS:
                 reasons.append("original_return_admission_unavailable")
             if slot is not None:
-                if (slot["kind"] == "child_return") != (action["kind"] in _CHILD_KINDS):
+                attempted_dispatch = (slot['kind'] == 'own_action' and action['kind'] in _CHILD_KINDS
+                    and sample is None and action['status'] == 'failed'
+                    and self.store.db.execute("SELECT json_extract(result,'$.execution_handle') "
+                        'FROM runtime_actions WHERE run_id=? AND episode_id=? AND decision_index=?',
+                        (self.journal.run_id, episode_id, original_decision_index)).fetchone()[0] is not None)
+                if not attempted_dispatch and (slot["kind"] == "child_return") != (action["kind"] in _CHILD_KINDS):
                     _conflict()
                 if (slot["kind"] == "child_return") != (sample is not None):
                     _conflict()

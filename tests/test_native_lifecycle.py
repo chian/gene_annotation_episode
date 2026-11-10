@@ -48,7 +48,7 @@ def test_detached_job_survives_submitting_process_and_has_stable_duration(tmp_pa
         assert current['state'] == 'running' and not current['terminal']
         assert current['files']['stdout']['bytes'] > 0
         assert current['metadata']['verified_cgroup']['memory_max'] == policy().memory_bytes
-        assert current['metadata']['verified_cgroup']['runtime_max'] == 'infinity'
+        assert 'runtime_max' not in current['metadata']['verified_cgroup']
         (tmp_path/'finish').touch()
         wait_for(lambda: status(handle)['terminal'])
         result = collect(handle)
@@ -128,6 +128,8 @@ def test_failed_service_submission_preserves_typed_operational_failure_without_e
     assert error.value.operational['launcher_returncode']==1
     assert error.value.operational['policy']==policy().to_dict()
     assert len(calls)==1 and calls[0][0]=='systemd-run'
+    assert '--setenv=PYTHONDONTWRITEBYTECODE=1' in calls[0]
+    assert not any('RuntimeMax' in argument for argument in calls[0])
     assert not Path(handle.read()['paths']['release']).exists()
 
 

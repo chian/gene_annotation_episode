@@ -32,7 +32,7 @@ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def execute_bounded(command,directory):
-    policy=LocalJobPolicy(1024**3,128*1024**2,180)
+    policy=LocalJobPolicy(1024 ** 3, 128 * 1024 ** 2)
     handle=prepare_job(command,cwd=directory,policy=policy,handle_path=directory/'search.handle.json',
         stdout_path=directory/'native.stdout',stderr_path=directory/'native.stderr',cpu_threads=1)
     while True:

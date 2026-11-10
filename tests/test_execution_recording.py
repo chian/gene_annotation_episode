@@ -69,7 +69,9 @@ def counts(path):
         return db.execute('SELECT count(*) FROM run_statistics').fetchone()[0]
 
 
-def test_completion_hook_survives_owner_exit_and_shares_exact_class_across_runs(tmp_path):
+def test_completion_hook_survives_owner_exit_and_shares_exact_class_across_runs(tmp_path, monkeypatch):
+    memory_path = tmp_path/'shared-memory.sqlite3'
+    monkeypatch.setenv('GENE_EPISODE_EXECUTION_MEMORY', str(memory_path))
     path = tmp_path/'global.sqlite'
     history = RunHistory(path)
     first_snapshot = history.capture(scope())
@@ -91,6 +93,9 @@ def test_completion_hook_survives_owner_exit_and_shares_exact_class_across_runs(
         assert returned.metadata['statistics_export']['state'] == 'recorded'
         # No parent process or explicit export call was needed for this record.
         assert counts(path) == 1
+        assert first.read()['execution_memory_path'] == str(memory_path)
+        with sqlite3.connect(memory_path) as db:
+            assert db.execute('SELECT count(*) FROM execution_measurements').fetchone()[0] == 1
         original = returned.metadata['statistics_export']
         for _ in range(2):
             assert publish_native_statistics(first.path) == original

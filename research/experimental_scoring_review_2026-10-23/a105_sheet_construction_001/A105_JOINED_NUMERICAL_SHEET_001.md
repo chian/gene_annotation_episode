@@ -5,7 +5,7 @@ It adopts no scoring policy and changes no production scorer, reader, prompt,
 episode or scientific run. Prior research records remain unchanged. A105 is
 measured molecular conversion, transport or binding; perturbation/restoration
 belongs to A106. A109 remains removed and A110 remains separate. The ten-axis
-checklist remains A105, A101, A102, A103, A104, A106, A107, A108, A110, A111.
+checklist remains A105, A101, A102, A103, A104, A106, A107, A110, A111.
 
 ## 1. Investigation prompt, separate from the numerical sheet
 

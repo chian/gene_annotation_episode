@@ -1,5 +1,11 @@
 # A105 experimental database integration
 
+Current axis progress is maintained in the [central evidence-axis ledger](EVIDENCE_AXIS_LEDGER.md).
+The A105 implementation, including supported assay grading, agreed aggregation
+and typed parent delivery, is complete and was confirmed in code on 2026-11-05.
+This document's dated database-run outcomes retain their original scientific
+limitations; they do not independently reopen that completed implementation.
+
 The agreed scope adds experimental database search and reading to the existing
 A105 literature workflow. Provider records are another representation of
 experimental sources. Scientific assessment remains organized by protocol and

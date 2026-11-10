@@ -1,0 +1,30 @@
+Synthetic reaction measurement and resource-model dataset
+
+This is supplied simulated data, not a biological experiment, publication or
+measurement of the anonymous input protein. It is separate from the declared
+chemical equation panel. No correspondence between that panel's species and
+the generic species here is asserted.
+
+Synthetic subject S is represented by two declared independent simulated
+preparations, synthetic-preparation-1 and synthetic-preparation-2. The endpoint
+is product A per product B, expressed in mol per mol: 0.7 and 0.9 respectively.
+The intended comparison is a conditional model predicting one product A per
+product B against the named half_product_pair_model predicting 0.5. These are
+model assumptions. They are not additional observations or target functions.
+The supplied JSON stores the individual simulated ratios; no summary statistic,
+uncertainty estimate or computed contrast is supplied.
+
+The synthetic usable-batch model declares two resources within the same single
+batch compartment and period. Resource 1 has 12 micromoles available; resource
+2 has 6 micromoles available. The declared model consumes one micromole of
+each resource per micromole of output and specifies 10 micromoles of output
+demand. Within this toy model the declared resource list is complete, resources
+do not regenerate and the declared quantities have no measurement spread.
+These assumptions do not establish actual usable biological resources,
+physiological capacity, steady-state flux or conditional reaction energetics.
+
+The JSON and this protocol describe the same synthetic dataset. Reusing them
+or asking another question about them does not create an independent dataset.
+Unknown chemical identities, calibration and connection to the supplied protein
+remain unknown. The original reaction reader determines which supported
+components can be calculated from these declared operands.

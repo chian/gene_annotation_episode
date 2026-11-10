@@ -36,9 +36,6 @@ were preserved; this report and all parent changes are additive research work.
   error corrected additively. All ten public-data association rows and three
   candidate coordinates independently reproduced from retained matrix/metadata.
   Biological conventions and feedback remain; no production implementation.
-- [ ] A108 — existing environmental-compatibility branch and exact IO reviewed;
-  synthetic arithmetic independently reproduced. The missing broader organism/
-  clade-context interpretation is assigned to fresh a108_organism_context_018.
 - [ ] A110 — complete worker draft delivered. Joined chemical-account formula,
   print-ready examples and reader IO parent-reviewed, with independent rational
   arithmetic. Source-specific isotope model/packet review and human judgment
@@ -92,21 +89,6 @@ and three declared candidate coordinates. The results are .610555827945,
 include repeated per-cell comparisons and are not 341 scientific validations.
 Files: `a107_sheet_construction_001/`; the corrected equation and native example
 were printed in the conversation. No new primary article was read here.
-
-## A108: defined environmental branch, explicit remaining scope
-
-The fully defined branch scores the joint compatible fraction over paired
-sample opportunities. The synthetic 8/10 * 6/8 * 5/6 = .5 is reproduced.
-Unpaired marginal multiplication would instead give .576 without justification;
-the correct bounds from only those marginals are [.5,.8]. Measurement recovery,
-missingness, duplicate handling and the conditional sampling interval were
-also reproduced. Twenty-one research assertions passed in
-`a108_sheet_construction_001/`.
-
-This branch does not itself supply every organism/clade-plausibility argument
-allowed by the user's A108 definition. The fresh worker owns only that defined
-gap, using additional published cases if needed. No simple exposure fraction
-is silently substituted for all biological plausibility.
 
 ## A101: complete joined numerical proposal reviewed
 
@@ -166,11 +148,11 @@ formula and complete .278 example were printed for judgment.
 ## Parallel work and exact scope
 
 At the current review's start, A101/A110/A111 were active. A101 completed its
-bounded proposal and its slot went to fresh A108 organism-context work. A110
+bounded proposal. A110
 completed its draft and its slot went to fresh A106 candidate-reduction work.
 A111 continued uninterrupted. No old unrelated worker context was reused.
 
-Current workers: a108_organism_context_018, a106_candidate_reduction_019 and
+Current workers: a106_candidate_reduction_019 and
 a111_structural_evidence_sheet_017. Their source work includes actual complete
 post-paper authority rereads; the parent's work in this report consists of
 cross-case mathematical/interface reviews and retained-data calculations.
@@ -191,6 +173,6 @@ therefore remains unchecked, now at delivered/awaiting-parent-review status.
 That slot was assigned to fresh `a104_history_completion_020`, with a narrow
 outcome: complete the HGT-explanation and whole-candidate numerical gaps in
 the existing A104 parent review, preserving evolutionary and environmental
-evidence boundaries. Current active workers are A108 organism-context, A106
+evidence boundaries. Current active workers are A106
 candidate reduction and A104 history completion. A111's completed work was
 not discarded or interrupted; no unrelated old context was resumed.

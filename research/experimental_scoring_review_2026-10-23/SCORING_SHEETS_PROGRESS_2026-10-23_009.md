@@ -29,9 +29,6 @@ The goal remains active and completion remains 0/10.
 - [ ] A107 — actual expression calculation and separate source conversions are
   available; worker is assembling final sheet and contracts. Parent has only
   metadata from that workload.
-- [ ] A108 — complete worker draft, additive qualifications, exact unimplemented
-  reader IO and passing checks delivered. Parent has only metadata; review
-  of coverage and conversation presentation remain.
 - [ ] A110 — fresh a110_chemical_sheet_016 is constructing the separate chemical/
   resource account sheet. NfnAB conversion and full resets delivered; UbiUV
   primary/supplement inspection is underway. Parent has metadata only.
@@ -102,9 +99,7 @@ with parent_arithmetic_001.json.
 
 ## Parallel work
 
-Authoritative agent status confirmed A101, A107 and A108 active at turn start.
-A108 subsequently completed its bounded draft. Its slot was assigned to a fresh
-A110 worker with explicit axis boundaries, numerical outcomes and exclusive
+A fresh A110 worker was assigned with explicit axis boundaries, numerical outcomes and exclusive
 file ownership. The current three workers are A101, A107 and A110. No unrelated
 old context was resumed and no sibling was stopped.
 

@@ -2,11 +2,14 @@
 from copy import deepcopy
 import json
 import math
+from types import SimpleNamespace
 
 import pytest
 
 from gene_annotation_episode.a102_attachments import request,refresh,received_attachments
-from gene_annotation_episode.a102_credit import A102StructuralCredit
+from gene_annotation_episode.a102_credit import (A102StructuralCredit,
+    A102FeatureGeometryCredit, A102FunctionalContrastCredit,
+    A102ReferenceAttributionCredit, A102LocalTraitCredit, A102InterfaceContactCredit)
 from gene_annotation_episode.a102_native_worker import _native
 from gene_annotation_episode.a102_publication import publish_comparison
 from gene_annotation_episode.a102_structures import bind_structure,binding_summary
@@ -124,6 +127,92 @@ def test_direct_target_geometry_does_not_depend_on_sequence_axis(case):
     assert any(r['policy']=='direct_native_geometry_v1' and r['state']=='direct' for r in result['tool_attachments'])
 
 
+def test_saved_zero_feature_and_contrast_credit_their_original_annotation(case, monkeypatch):
+    store, registry, target, y, z, native, known = case
+    x, xbody = binding(registry, 'MDEAKG', target=target, shift=.2)
+    reference = json.loads(store.db.execute('SELECT body FROM a102_structure_bindings '
+        'WHERE source_ref=?', (z,)).fetchone()[0])
+    direct = comparison(registry, x, xbody, z, reference, direct=True)
+    other_reference = json.loads(store.db.execute('SELECT body FROM a102_structure_bindings '
+        'WHERE source_ref=?', (y,)).fetchone()[0])
+    direct_other = comparison(registry, x, xbody, y, other_reference, direct=True)
+    annotation = store.put('hypothesis', {'subject_refs': [target],
+        'predicate': 'biological_role', 'value': {'type': 'enum', 'value': 'unresolved'},
+        'context_refs': []}, origin='reasoning')['id']
+    other = store.put('hypothesis', {'subject_refs': [target],
+        'predicate': 'biological_role', 'value': {'type': 'enum', 'value': 'negative'},
+        'context_refs': []}, origin='reasoning')['id']
+    definition = registry._source('engineering.feature_definition',
+        {'meaning': 'Witnessed absent physical feature for this fixture.'})
+    known.update({x, direct, direct_other, annotation, other, definition})
+    scope = {'subject_refs': [target]}
+    def feature(key, comparison_ref):
+        result, delivered = registry._features({'comparison_source_ref': comparison_ref,
+            'function_ref': annotation, 'definition_source_refs': [definition],
+            'features': [{'physical_feature_key': key, 'state': 'established_absent',
+                'target_position': 0, 'reference_position': 0, 'target_atom': 'CA',
+                'reference_atom': 'CA', 'witness_refs': [definition], 'reason': 'witnessed'}]},
+            known, scope)
+        known.update(delivered)
+        return result['feature_source_ref']
+    supporting = feature('supporting-absent', direct)
+    opposing = feature('opposing-absent', direct_other)
+    assigned = {'scope': scope, 'proposed_annotation_ref': annotation}
+    features = A102FeatureGeometryCredit()
+    assert features(store, scope, known_record_refs=list(known) * 2,
+        assignment=assigned)['credit'] == 2
+    assert features(store, scope, known_record_refs=known,
+        assignment={'scope': scope, 'proposed_annotation_ref': other})['credit'] == 0
+    result, delivered = registry._contrast({'target_ref': target, 'function_ref': annotation,
+        'supporting_source_refs': [supporting], 'opposing_source_refs': [opposing],
+        'incompatibility_witness_refs': [definition]}, known, scope)
+    known.update(delivered)
+    from gene_annotation_episode.a102_attachments import refresh
+    additions, _ = refresh(store, known, scope)
+    known.update(additions)
+    contrast = A102FunctionalContrastCredit()
+    view = contrast.read_details(store, scope, known_record_refs=known, assignment=assigned,
+        details_limit=1, details_offset=0)
+    assert view['credit'] == 1
+    assert view['source_contributions'][0]['native_value'] == 0
+    assert contrast(store, scope, known_record_refs=known,
+        assignment={'scope': scope, 'proposed_annotation_ref': other})['credit'] == 0
+
+    from gene_annotation_episode.root_axis_receipts import axis_progress_from_received
+    from gene_annotation_episode.domain import canonical
+    receiver = SimpleNamespace(run_id='a102-axis-union', received_record_refs=tuple(known))
+    def returned(proposal, projector, refs, invocation):
+        return {'proposed_annotation_ref': proposal, 'scope': scope, 'axis': 'A102',
+            'credit_projector': projector, 'credit_binding_ref': invocation,
+            'record_refs': list(refs)}
+    reports = [
+        returned(annotation, features, known, 'feature-original'),
+        returned(annotation, features, known, 'feature-redelivery'),
+        returned(annotation, contrast, known, 'contrast-original'),
+        returned(other, features, known, 'other-annotation'),
+    ]
+    progress = axis_progress_from_received(store, receiver, reports)
+    assert progress[annotation, canonical(scope), 'A102']['credit'] == 3
+    assert progress[other, canonical(scope), 'A102']['credit'] == 0
+    assert progress[annotation, canonical(scope), 'A102']['task_credit_binding_refs'] == [
+        'contrast-original', 'feature-original', 'feature-redelivery']
+    from gene_annotation_episode.signed_evidence_root import SignedEvidenceRootSupport
+    from test_signed_evidence_root import registered_receiver
+    root = registered_receiver(store, receiver.run_id, 'axis-union', scope)
+    local_scope = store.validate_scope({'subject_refs': [target],
+        'segments': store.coverage(target)})
+    root_reports = [{**report, 'scope': local_scope} for report in reports]
+    monkeypatch.setattr('gene_annotation_episode.signed_evidence_root.received_axis_task_credit',
+        lambda *_: iter(root_reports))
+    combined = SignedEvidenceRootSupport(task_credit=True)(store, scope,
+        known_record_refs=known, run_id=root.run_id, episode_id=root.episode_id)
+    arms = {(row['proposed_annotation_ref'], row['axis']): row
+        for row in combined['credit']['arms']}
+    assert arms[annotation, 'A102']['credit'] == 3
+    assert arms[other, 'A102']['credit'] == 0
+    assert combined['credit']['root_score'] == 3
+
+
 def trait(key,kind,positions,definition,**changes):
     return {'physical_feature_key':key,'kind':kind,'reference_positions':positions,
         'chemical_role':None,'allowed_symbols':None,'measurement_source_ref':None,
@@ -156,6 +245,71 @@ def test_residue_chemical_motif_and_discontinuous_traits_belong_to_subparts(case
     assert all(store.get(row['subject_refs'][0])['record_type']=='feature' for row in observations)
     assert store.count('annotation')==store.count('hypothesis')==0
     assert A102StructuralCredit()(store,{'subject_refs':[target]},known_record_refs=known)['credit']==0
+
+
+def test_saved_reference_and_trait_uses_credit_the_assessed_annotation(case):
+    store, registry, target, y, z, native, known = case
+    scope = {'subject_refs': [target]}
+    annotation = store.put('hypothesis', {'subject_refs': [target],
+        'predicate': 'biological_role', 'value': {'type': 'enum', 'value': 'unresolved'},
+        'context_refs': []}, origin='reasoning')['id']
+    other = store.put('hypothesis', {'subject_refs': [target],
+        'predicate': 'biological_role', 'value': {'type': 'enum', 'value': 'negative'},
+        'context_refs': []}, origin='reasoning')['id']
+    known.update({annotation, other})
+    reference_request = fold_request(store, target, y, native)
+    links, _ = alignment(store, target, 'MDEAKG', 'MDDAKG')
+    known.update({reference_request, *links})
+    added, needs = refresh(store, known, scope)
+    known.update(added)
+    assert not needs
+    reference = next(row for row in received_attachments(store, known)
+        if row['producer_operation'] == 'structure.reference_align'
+        and row['request_ref'] == reference_request)
+    definition = registry._source('engineering.trait_definition',
+        {'meaning': 'Engineering fixture for a measured residue difference.'})
+    trait_request = request(store, {'operation': 'structure.reference_traits',
+        'target_ref': target, 'reference_binding_ref': y, 'sequence_alignment_ref': None,
+        'comparison_source_ref': None,
+        'traits': [trait('residue-difference', 'residue_identity', [2], definition)]},
+        [target, y, definition])
+    known.update({definition, trait_request})
+    added, needs = refresh(store, known, scope)
+    known.update(added)
+    assert not needs
+    local_trait = next(row for row in received_attachments(store, known)
+        if row.get('physical_feature_key') == 'residue-difference')
+    assert local_trait['score'] == 0
+
+    def assess(source, start, end, relation):
+        observed = store.put('observation', {'subject_refs': [target],
+            'source_subject_refs': [], 'kind': 'comparison', 'source_ref': source,
+            'measurements': [], 'dependencies': [], 'anchor': None,
+            'operand_intervals': [{'subject_ref': target, 'role': 'query',
+                'start': start, 'end': end, 'unit': 'aa'}]}, origin='tool')['id']
+        assessed = store.put('assessment', {'hypothesis_ref': annotation,
+            'observation_ref': observed, 'relation': relation, 'applicability': 'direct',
+            'extent_basis': 'observed_extent', 'condition_refs': [], 'assumption_refs': [],
+            'expected_revision': 0}, origin='reasoning')['id']
+        known.update({source, observed, assessed})
+        return assessed
+
+    reference_assessment = assess(reference['source_ref'], 0, 6, 'strengthens')
+    trait_assessment = assess(local_trait['source_ref'], 2, 3, 'weakens')
+    assignment = {'scope': scope, 'proposed_annotation_ref': annotation}
+    reference_credit = A102ReferenceAttributionCredit()
+    trait_credit = A102LocalTraitCredit()
+    assert reference_credit(store, scope, known_record_refs=list(known) * 2,
+        assignment=assignment)['credit'] == 1
+    trait_result = trait_credit.read_details(store, scope, known_record_refs=known,
+        assignment=assignment, details_limit=1)
+    assert trait_result['credit'] == 1
+    assert trait_result['source_contributions'][0]['native_value'] == 0
+    assert trait_result['source_contributions'][0]['assessment_refs'] == [trait_assessment]
+    assert reference_credit(store, scope, known_record_refs=known - {reference_assessment},
+        assignment=assignment)['credit'] == 0
+    assert trait_credit(store, scope, known_record_refs=known,
+        assignment={'scope': scope, 'proposed_annotation_ref': other})['credit'] == 0
 
 
 def test_missing_local_position_keeps_required_denominator_and_other_trait(case):
@@ -240,6 +394,29 @@ def test_interface_requires_both_component_attachments_and_keeps_assembly_limit(
     added,_=refresh(store,known,{'subject_refs':[target]});known.update(added)
     complete=next(r for r in received_attachments(store,known) if r.get('measurement_ref')==raw['interface_source_ref'])
     assert complete['score']==1 and 'unestablished' in complete['assembly_context']
+    annotation = store.put('hypothesis', {'subject_refs': [target],
+        'predicate': 'biological_role', 'value': {'type': 'enum', 'value': 'unresolved'},
+        'context_refs': []}, origin='reasoning')['id']
+    observed = store.put('observation', {'subject_refs': [target],
+        'source_subject_refs': [], 'kind': 'comparison', 'source_ref': complete['source_ref'],
+        'measurements': [], 'dependencies': [], 'anchor': None,
+        'operand_intervals': [{'subject_ref': target, 'role': 'query', 'start': 2,
+            'end': 3, 'unit': 'aa'}]}, origin='tool')['id']
+    assessed = store.put('assessment', {'hypothesis_ref': annotation,
+        'observation_ref': observed, 'relation': 'weakens', 'applicability': 'direct',
+        'extent_basis': 'observed_extent', 'condition_refs': [], 'assumption_refs': [],
+        'expected_revision': 0}, origin='reasoning')['id']
+    assignment = {'scope': {'subject_refs': [target]},
+        'proposed_annotation_ref': annotation}
+    contact_credit = A102InterfaceContactCredit()
+    assert contact_credit(store, assignment['scope'], known_record_refs=known | {annotation},
+        assignment=assignment)['credit'] == 0
+    known.update({annotation, observed, assessed})
+    result = contact_credit.read_details(store, assignment['scope'], known_record_refs=known,
+        assignment=assignment, details_limit=1)
+    assert result['credit'] == 1
+    assert result['source_contributions'][0]['physical_feature_key'] == 'contact'
+    assert result['source_contributions'][0]['assessment_refs'] == [assessed]
 
 
 def test_region_query_coordinates_are_lifted_before_local_trait_attribution(case):

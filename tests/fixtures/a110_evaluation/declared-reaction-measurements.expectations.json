@@ -1,0 +1,22 @@
+{
+  "version": "evaluator_expectations_v1",
+  "episode_input": false,
+  "scope": "Synthetic numerical input; independent from the chemical panel and from real biological activity.",
+  "expected_original_components": {
+    "ratio_mean": 0.8,
+    "claim_nominal_squared_error": 0.04,
+    "claim_mean_squared_error": 0.05,
+    "reaction_comparison": 0.3333333333333333,
+    "resource_capacity": 6,
+    "resource_coverage": 0.6
+  },
+  "numeric_comparison": "Use original saved numerical values with suitable floating-point comparison; do not rewrite retained values to rounded expectations.",
+  "required_limits": [
+    "Retain synthetic origin and original independent simulated preparation keys.",
+    "Conditional model predictions are not additional measurements or actual target functions.",
+    "Protocol and JSON share one dataset; repeated uses do not supply independent evidence.",
+    "Keep this resource/ratio model separate from the chemical panel's species, equations and Gibbs quantities.",
+    "The declared toy boundary does not prove physiological usable supply or operation of the anonymous target.",
+    "Original reaction components must reach and be interpreted by the actual parent, separately from the native chemical-accounting publication."
+  ]
+}

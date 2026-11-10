@@ -9,7 +9,9 @@ from __future__ import annotations
 
 from copy import deepcopy
 import hashlib
+import html
 import json
+import re
 
 from .domain import REF, obj
 from .literature_assay_inputs import (
@@ -31,7 +33,32 @@ DESIGNS = ("native_deletion_restoration", "selective_perturbation_restoration",
 MEASUREMENT_STATUSES = ("validated_ratio_scale", "qualitative_only", "unknown", "conflicting")
 ENDPOINT_SCOPES = ("yes", "no", "unknown", "conflicting")
 AMOUNT_ROLES = ("nuisance", "intended_change", "unknown")
-ENDPOINT_UNITS = ("events_per_100000_cells", "fraction", "CFU_per_mL", "minutes", "per_min")
+ENDPOINT_UNITS = ("events_per_100000_cells", "fraction", "CFU_per_mL",
+                  "CFU_per_initial_OD_per_mL", "minutes", "per_min", "per_h")
+# These are equivalent spellings, not conversions to a different time scale.
+HOURLY_RATE_UNITS = {token: "per_h" for token in ("per_h", "h^-1", "h⁻¹", "1/h")}
+HOURLY_RATE_UNITS.update({spelling: "per_h_squared" for token in tuple(HOURLY_RATE_UNITS)
+    for spelling in ("(" + token + ")^2", "(" + token + ")²")})
+HOURLY_RATE_UNITS.update({token: "per_h_squared" for token in (
+    "per_h_squared", "per_h^2", "per_h²", "h^-2", "h⁻²", "1/h^2", "1/h²")})
+# Preserve colony counts per millilitre without treating them as raw counts or
+# changing the volume scale. Squared labels square the complete density unit.
+CFU_DENSITY_UNITS = {token: "CFU_per_mL" for token in (
+    "CFU_per_mL", "CFU/mL", "CFU/ml", "CFUmL^-1", "CFUml^-1",
+    "CFUmL−1", "CFUml−1", "CFUmL⁻¹", "CFUml⁻¹")}
+# Initial optical-density normalization changes the measured endpoint. Retain
+# it explicitly; neither an ordinary CFU density nor a current-OD normalization
+# supplies a conversion to this quantity.
+CFU_DENSITY_UNITS.update({token: "CFU_per_initial_OD_per_mL" for token in (
+    "CFU_per_initial_OD_per_mL", "CFU/iOD/mL", "CFU/iOD/ml",
+    "c.f.u./iOD/mL", "c.f.u./iOD/ml")})
+CFU_DENSITY_UNITS.update({spelling: unit + "_squared" for token, unit in tuple(CFU_DENSITY_UNITS.items())
+    for spelling in (token + "_squared", "(" + token + ")^2", "(" + token + ")²")})
+CFU_DENSITY_UNITS.update({token: "CFU_per_mL_squared" for token in (
+    "CFU_per_mL_squared", "CFU_per_mL^2", "CFU_per_mL²",
+    "CFU^2/mL^2", "CFU^2/ml^2", "CFU²/mL²", "CFU²/ml²")})
+CFU_DENSITY_UNITS.update({token: "CFU_per_initial_OD_per_mL_squared" for token in (
+    "CFU^2/iOD^2/mL^2", "CFU^2/iOD^2/ml^2")})
 EXPOSURE_UNITS = ("molecules_per_cell", "normalized_signal", "fraction", "mg_per_mL")
 _INTERPRETATIONS = {"design": DESIGNS, "measurement_status": MEASUREMENT_STATUSES,
                     "same_endpoint_scope": ENDPOINT_SCOPES, "amount_role": AMOUNT_ROLES}
@@ -40,6 +67,21 @@ _ARGS = ("source_ref", "data_source_ref", "source_kind", "literals", "design",
          "interpretation_witnesses")
 _DATA_FIELDS = ("version", "endpoint_unit", "exposure_unit", "origin",
                 "uncertainty_basis", "measurements")
+
+
+def endpoint_unit_token(raw):
+    """Recognize numeric superscripts without joining unrelated XML elements.
+
+    The callers retain and validate the original witness. Only the unit lookup
+    token changes; values, scales and source coordinates remain unchanged.
+    """
+    def superscript(match):
+        exponent = html.unescape(match.group(1)).strip()
+        return ("^" + exponent.replace("−", "-")
+            if re.fullmatch(r"[+−-]?\d+", exponent) else match.group(0))
+    # Decode entities inside actual superscript tags, not escaped tag examples.
+    text = re.sub(r"<sup>([^<>]*)</sup>", superscript, raw)
+    return re.sub(r"\s+", "", html.unescape(text))
 
 
 def perturbation_population_schema():
@@ -55,6 +97,12 @@ def perturbation_population_schema():
     })
     from .literature_perturbation_assessments import assessment_schema
     schema["properties"]["experiment_assessment"] = assessment_schema()
+    from .literature_perturbation_source import source_measurements_schema
+    schema["properties"]["source_measurements"] = source_measurements_schema()
+    schema["properties"]["source_measurements"]["description"] = (
+        "Read reported arm summaries directly from source-number spans and unit witnesses. "
+        "Use with data_source_ref=null. Preserve statistical meanings; no covariance is inferred. "
+        "Missing arms remain null. Numerical values are read from retained bytes, never supplied here.")
     return schema
 
 
@@ -155,6 +203,8 @@ def read_perturbation_inputs(arguments, *, read_source):
     """
     # Assessment identity is handled by storage, never converted into a score.
     arguments = deepcopy(arguments)
+    has_source_measurements = "source_measurements" in arguments
+    source_measurements = arguments.pop("source_measurements", None)
     if "experiment_assessment" in arguments:
         from .literature_perturbation_assessments import validate_assessment
         validate_assessment(arguments.pop("experiment_assessment"))
@@ -181,8 +231,18 @@ def read_perturbation_inputs(arguments, *, read_source):
                  for i, item in enumerate(arguments["interpretation_witnesses"])]
     if (orientation is not None or any(arguments[field] != "unknown" for field in _INTERPRETATIONS)) and not witnesses:
         _fail("interpretation_witness_required", "interpretation_witnesses")
-    observations, endpoint_unit, exposure_unit, origin, uncertainty, summary = _measurements(
-        arguments["data_source_ref"], sources, arguments["measurement_status"])
+    number_sources = None
+    if not has_source_measurements:
+        observations, endpoint_unit, exposure_unit, origin, uncertainty, summary = _measurements(
+            arguments["data_source_ref"], sources, arguments["measurement_status"])
+    else:
+        if arguments["data_source_ref"] is not None:
+            _fail("choose_retained_data_or_source_measurements", "data_source_ref")
+        from .literature_perturbation_source import read_source_measurements
+        observations, endpoint_unit, exposure_unit, origin, uncertainty, summary, number_sources = read_source_measurements(
+            source_measurements, sources=sources, reference=arguments["source_ref"],
+            status=arguments["measurement_status"],
+            origin="synthetic" if arguments["source_kind"] == "synthetic_fixture" else "reported")
     result = {
         "version": VERSION, "source_ref": arguments["source_ref"],
         "source_kind": arguments["source_kind"], "data_source_ref": arguments["data_source_ref"],
@@ -198,6 +258,8 @@ def read_perturbation_inputs(arguments, *, read_source):
     }
     if summary is not None:
         result.update(version="a106_perturbation_inputs_v2", summary_data=summary)
+    if number_sources is not None:
+        result["reported_number_sources"] = number_sources
     return result
 
 

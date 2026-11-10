@@ -13,6 +13,7 @@ from .communication import plain
 from .domain import ContractError, canonical, identity, obj, validate_schema
 from .literature_rate_storage import LiteratureRateRepository
 from .literature_reaction_types import EXPERIMENT_TYPES
+from .source_display_labels import source_literal_label
 from . import literature_experiment_assessments as assessments
 from .literature_reaction_calculations import (
     COMPONENTS, CONDITIONAL_CODES, REASONS, populate_reaction_constraints,
@@ -42,6 +43,11 @@ BINDINGS = {
     "resource_context_ref": ("resource_context", "context"),
 }
 SOURCE_KINDS = ("primary_source", "retained_extraction", "graph_extraction", "synthetic_fixture")
+LITERAL_REFERENCE_TYPES = {
+    "molecule": "literature_result",  # An unsequenced source role, not an inferred protein or assay.
+    "construct": "construct",
+    "experiment": "assay",
+}
 _FIXED_METADATA = {
     "evaluation_scope": "reported_reference_reaction_constraints",
     "bound_kind": "logical_model_domain_not_confidence_interval",
@@ -49,6 +55,45 @@ _FIXED_METADATA = {
     "target_correspondence": "not_evaluated",
     "uncertainty_interpretation": "descriptive_not_confidence_interval",
 }
+
+
+def literal_reference_role(record):
+    """Recover the producer's original role, including historical assay-typed subjects.
+
+    The accession binds the selected literal field and its exact saved anchor.
+    No label interpretation, source rereading or biological identity inference
+    is involved. Caller-declared assays keep their existing authority.
+    """
+    if record.get("record_type") != "reference" or record.get("origin") != "tool":
+        return None
+    anchor = record.get("anchor")
+    if not isinstance(anchor, dict):
+        return None
+    for role in LITERAL_REFERENCE_TYPES:
+        if record.get("accession") == identity("reaction_literal", {"field": role, **anchor}):
+            return role
+    return None
+
+
+def reaction_return_view_requirements():
+    """Static contract metadata; no source lookup or scientific interpretation."""
+    return {
+        "required_sheet_versions": {
+            "literature_reaction_cells": "literature_reaction_record_v2",
+            "literature_reaction_semantic_cells": MEANINGS_RECORD_VERSION,
+        },
+        "detail": (
+            "The numerical and semantic return views require different saved sheet versions. "
+            "A legacy numerical sheet has no saved semantic bindings. Inspect the actual "
+            "sheet's Source version and select its matching recorded-fact view. A valid "
+            "numerical return may include an empty semantic companion; a lone empty wrong "
+            "view is rejected. Redelivery changes the representation of existing saved "
+            "facts and cannot create semantic bindings. Source-supported meanings require "
+            "an a110_source_reaction_measurements_v2 dataset or an "
+            "a110_source_reaction_selection_v1 calculation, rather than another population "
+            "of the same a110_source_reaction_measurements_v1 dataset."
+        ),
+    }
 
 
 def _metadata(extraction, sheet):
@@ -104,6 +149,11 @@ class LiteratureReactionRepository(LiteratureRateRepository):
     received_table = "literature_reaction_received"
     binding_fields = tuple(BINDINGS)
 
+    def _authorize_assessment(self, context, value):
+        assessments.authorize_assessment(self, context, value)
+        if literal_reference_role(self.store.get(value["experiment_ref"])) in {"molecule", "construct"}:
+            raise ContractError("literature_reaction_experiment_identity_is_subject_or_construct_literal")
+
     def semantic_projection(self):
         return LiteratureReactionSemanticProjection(self.store, self.run_id)
 
@@ -113,6 +163,10 @@ class LiteratureReactionRepository(LiteratureRateRepository):
 
     def cells_schema(self):
         return reaction_cells_schema()
+
+    def received_cells(self, context):
+        from .component_axis_cell_receipts import inherited_cells
+        return inherited_cells(self, context, super().received_cells(context))
 
     def _row_metadata(self, saved):
         return _metadata(saved["extraction"], saved["sheet"])
@@ -186,7 +240,7 @@ class LiteratureReactionRepository(LiteratureRateRepository):
 
         assessment = args.get("experiment_assessment")
         if assessment is not None:
-            assessments.authorize_assessment(self, context, assessment)
+            self._authorize_assessment(context, assessment)
         direct = _direct_references(args)
         for reference in direct:
             self._source(context, reference)
@@ -251,15 +305,16 @@ class LiteratureReactionRepository(LiteratureRateRepository):
                     "source_ref", "artifact_ref", "start", "end", "quote")}
                 common = {"source_ref": witness["source_ref"], "anchor": anchor}
                 accession = identity("reaction_literal", {"field": literal, **anchor})
+                label = source_literal_label(entry["value"])
                 if kind == "reference":
-                    record = {**common, "reference_type": "assay", "accession": accession,
-                        "label": entry["value"], "sequence_ref": None, "molecule": None,
+                    record = {**common, "reference_type": LITERAL_REFERENCE_TYPES[literal], "accession": accession,
+                        "label": label, "sequence_ref": None, "molecule": None,
                         "length": None, "term_refs": [], "context_refs": []}
                 elif kind == "term":
                     record = {**common, "namespace": "literature_reaction_" + literal,
-                        "accession": accession, "label": entry["value"], "term_type": "other"}
+                        "accession": accession, "label": label, "term_type": "other"}
                 else:
-                    record = {**common, "context_type": "assay_condition", "name": entry["value"],
+                    record = {**common, "context_type": "assay_condition", "name": label,
                         "attributes": [], "related_refs": []}
                 bindings[field] = publish(kind, record)
             if assessment is not None:
@@ -416,13 +471,23 @@ def reaction_cells_schema():
         "demand": {**nullable_number, "exclusiveMinimum": 0},
         "operand_source_kind": {"type": "string", "enum": list(SOURCE_KINDS)},
         **{field: {"type": "string", "enum": [value]} for field, value in _FIXED_METADATA.items()}}
-    return {"type": "array", "items": obj(properties), "x-source": "literature_reaction_cells"}
+    return {"type": "array", "items": obj(properties), "x-source": "literature_reaction_cells",
+        "description": (
+            "Numerical cells from literature_reaction_record_v2, including supported v1 "
+            "measurement datasets. A literature_reaction_record_v3 sheet returns its "
+            "numerical cells together with source-bound meanings through "
+            "literature_reaction_semantic_cells instead. "
+            + reaction_return_view_requirements()["detail"])}
 
 
 def reaction_semantic_cells_schema():
     """Closed named scientific view of the same15 existing numerical cells."""
     schema = deepcopy(reaction_cells_schema())
     schema["x-source"] = MEANINGS_NAMESPACE
+    schema["description"] = (
+        "Numerical cells and saved source-bound meanings from literature_reaction_record_v3. "
+        "A literature_reaction_record_v2 sheet does not provide this view. "
+        + reaction_return_view_requirements()["detail"])
     properties = schema["items"]["properties"]
     def ref(kind, nullable=True):
         return {"type": ["string", "null"] if nullable else "string", "format": "reference",

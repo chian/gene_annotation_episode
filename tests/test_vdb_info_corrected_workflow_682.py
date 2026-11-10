@@ -189,7 +189,7 @@ def verify_corrected_info_case(case):
     assert metadata["policy"] == POLICY
     assert metadata["verified_cgroup"]["memory_max"] == 20 * 1024**3
     assert metadata["verified_cgroup"]["memory_swap_max"] == 0
-    assert metadata["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in metadata["verified_cgroup"]
     assert len(list(case.directory.glob("workspace/.episode-operations/*/*/native.json"))) == 1
     closure = json.loads((case.directory / "NATIVE_CLOSURE.json").read_text())
     assert closure["returncode"] == 0

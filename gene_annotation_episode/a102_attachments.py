@@ -170,9 +170,10 @@ def _fold(store, body, known):
     return out,_dependencies(link)
 
 
-def reference_region_value(attachment,start,end):
+def reference_region_value(attachment,start,end,*,evidence_regions=None):
     """Recompute only declared cells at the receiving parent's denominator."""
-    rows=[r for r in attachment.get('mapped_geometry',[]) if start<=r[0]<end]
+    rows=[r for r in attachment.get('mapped_geometry',[]) if start<=r[0]<end
+        and (evidence_regions is None or any(a <= r[0] < b for a,b in evidence_regions))]
     if not rows or attachment['state']=='unresolved': return None
     projected=geometry([r[3] for r in rows],end-start,attachment['reference_length'])
     factor=math.fsum(r[4]*r[5] for r in rows)/len(rows)

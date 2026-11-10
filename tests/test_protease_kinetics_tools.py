@@ -35,7 +35,7 @@ from tests.test_molecular_sequence_tools_native import _controller, _credit
 from tests.test_runtime import ScriptedProvider
 
 
-POLICY = dict(memory_bytes=20 * 1024**3, scratch_bytes=4 * 1024**3, wall_seconds=None)
+POLICY = dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 TOOL = contracts.TOOL
 
 

@@ -37,6 +37,102 @@ def prepared(store):
     return context, args, final_arguments(store, args, ref), rows
 
 
+def commissioned(store, context, proposal, *, axis='A106'):
+    from gene_annotation_episode.communication import plain
+    from gene_annotation_episode.episode_journal import Journal
+    from method_loop.identities import EpisodeRef
+    path = (('scientific_process', axis + '-original-commission'),)
+    identity = EpisodeRef(context.run_id, path).episode_id
+    assignment = {'selection': {'evidence_axis': {'option_id': axis}}, 'proposed_annotation_ref': proposal}
+    Journal(store, context.run_id).save('runtime_episodes', {'episode_id': identity,
+        'path': json.dumps(path), 'request': json.dumps({'message': {
+            'scope': plain(context.scope), 'episode_assignment': assignment}}),
+        'initial_credit': 0, 'state': 'active', 'completion': None, 'archive': None})
+    return replace(context, path=(*path, *context.path),
+        assignment={**context.assignment, 'proposed_annotation_ref': proposal})
+
+
+def test_automatic_judgment_initial_revision_provenance_and_replay(tmp_path):
+    with Store(tmp_path) as store:
+        context, assessment, arguments, _ = prepared(store)
+        context = commissioned(store, context, assessment['assertion_ref'])
+        repo = LiteratureA106SubscoreRepository(store, context.run_id)
+        request, = repo.prepare_judgments(context)
+        assert 'completed_outcome' not in request
+        assert request['context']['previous_final_bindings'] == []
+        assert 'source_bodies' not in request['context']
+        outcome = repo.complete_judgment(context, request['judgment_ref'],
+            {'selection': arguments, 'unresolved_reasons': []}, provenance={'provider': 'scripted-test'})
+        final = outcome['result']['sheet_ref']
+        assert outcome['result']['cells'][0]['value'] == pytest.approx(7.5)
+        again, = repo.prepare_judgments(context)
+        assert again['completed_outcome'] == outcome
+        saved = store.db.execute(f'SELECT response,provenance FROM {repo.judgment_table}').fetchone()
+        assert json.loads(saved['response'])['selection'] == arguments
+        assert json.loads(saved['provenance']) == {'provider': 'scripted-test'}
+        revised = deepcopy(assessment)
+        revised['experiment_assessment'].update(revises_sheet_ref=arguments['experiments'][0]['sheet_ref'],
+            revision_reason='Synthetic attribution limitation')
+        revised['interpretations']['attribution_supported'] = {'status': 'unknown', 'support_refs': []}
+        context = replace(context, received_record_refs=(*context.received_record_refs, final))
+        native = LiteratureInterventionRepository(store, context.run_id)
+        change = native.populate(context, revised, 'revision-for-automatic-judgment')
+        assert repo.current_annotation_cells(context) == []
+        assert change['record_refs'] == [change['result']['sheet_ref']]
+        request2, = repo.prepare_judgments(context)
+        assert request2['judgment_ref'] != request['judgment_ref']
+        revised_selection = deepcopy(arguments)
+        revised_selection['experiments'][0]['sheet_ref'] = change['result']['sheet_ref']
+        revised_selection.update(revises_subscore_ref=final, revision_reason='Use the revised current assessment')
+        replacement = repo.complete_judgment(context, request2['judgment_ref'],
+            {'selection': revised_selection, 'unresolved_reasons': []}, provenance={'provider': 'scripted-test'})
+        assert replacement['status'] == 'completed'
+        assert replacement['result']['cells'][0]['value'] is None
+        assert replacement['result']['cells'][0]['dependence'] == arguments['dependence']
+        assert repo.read(final)['sheet']['cells'][COMPONENTS[0]]['value'] == pytest.approx(7.5)
+
+
+@pytest.mark.parametrize('failure', ['interrupted', 'invented_witness', 'unresolved'])
+def test_automatic_judgment_failure_is_unresolved_without_another_call(tmp_path, failure):
+    with Store(tmp_path) as store:
+        context, assessment, arguments, _ = prepared(store)
+        context = commissioned(store, context, assessment['assertion_ref'])
+        repo = LiteratureA106SubscoreRepository(store, context.run_id)
+        request, = repo.prepare_judgments(context)
+        if failure == 'interrupted':
+            recovered, = repo.prepare_judgments(context)
+            result = recovered['completed_outcome']
+            assert result['feedback']['code'] == 'a106_judgment_dispatch_interrupted'
+        else:
+            if failure == 'invented_witness':
+                arguments['dependence']['witnesses'] = [{'source_ref': assessment['source_ref'],
+                    'representation': 'original', 'start': 0, 'end': 4, 'quote': 'fake'}]
+                response = {'selection': arguments, 'unresolved_reasons': []}
+            else:
+                response = {'selection': None, 'unresolved_reasons': ['Biological scope is unresolved.']}
+            result = repo.complete_judgment(context, request['judgment_ref'], response,
+                provenance={'provider': 'scripted-test'})
+        assert result['status'] == 'unavailable'
+        assert repo.current_annotation_cells(context) == []
+        assert repo.prepare_judgments(context)[0]['completed_outcome'] == result
+        scalar, _ = repo.annotation_contribution(store, context, target=arguments['subject_ref'],
+            annotation=store.get(arguments['assertion_ref']), scope=context.scope)
+        assert scalar['value'] is None and result['feedback']['code'] in scalar['missing_inputs']
+        if failure == 'unresolved':
+            assert 'Biological scope is unresolved.' in scalar['transfer']['missing_inputs']
+
+
+def test_automatic_judgment_requires_original_a106_proposal_and_actual_cells(tmp_path):
+    with Store(tmp_path) as store:
+        context, assessment, _arguments, _ = prepared(store)
+        repo = LiteratureA106SubscoreRepository(store, context.run_id)
+        assert repo.prepare_judgments(context) == []
+        received = commissioned(store, replace(context, episode_id='unreceived-parent'), assessment['assertion_ref'])
+        assert repo.prepare_judgments(received) == []
+        changed = commissioned(store, context, assessment['assertion_ref'], axis='A108')
+        assert repo.prepare_judgments(changed) == []
+
+
 def test_final_score_is_the_existing_signed_ratio_and_is_not_a_probability(tmp_path):
     with Store(tmp_path) as store:
         _, _, args, rows = prepared(store)
@@ -153,7 +249,7 @@ def test_final_custody_revisions_missing_experiments_and_cold_replay(tmp_path, m
 
 
 @pytest.mark.parametrize("repair_support", [False, True])
-def test_runtime_delivers_final_a106_subscore_to_parent(tmp_path, repair_support):
+def test_runtime_rejects_score_only_a106_child_without_investigation_task(tmp_path, repair_support):
     import asyncio
     from functools import partial
     from gene_annotation_episode.communication import plain
@@ -193,14 +289,10 @@ def test_runtime_delivers_final_a106_subscore_to_parent(tmp_path, repair_support
             project_credit=credit, initial_known_record_refs=list(context.received_record_refs),
             episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True, a106_intervention=True),),
             binding_definitions={"credit":credit.as_record()}))
-        receipt = store.db.execute("SELECT cells FROM literature_a106_subscore_received").fetchone()
-        assert receipt is not None
-        assert json.loads(receipt[0])[0]["value"] == pytest.approx(7.5)
+        failures = [json.loads(row[0])['context'].get('feedback') for row in store.db.execute(
+            'SELECT request FROM runtime_model_calls ORDER BY call_index')]
+        assert any(item and item.get('detail') == 'literature_original_task_credit_required' for item in failures)
+        assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 0
+        assert not store.db.execute("SELECT 1 FROM sqlite_master WHERE name IN "
+            "('literature_intervention_grading_operations','literature_a106_subscore_received')").fetchone()
         assert result["credit"] == 0
-        if repair_support:
-            outcomes = [json.loads(row[0]) for row in store.db.execute("SELECT result FROM runtime_actions")]
-            failure = next(row["feedback"] for row in outcomes if row.get("status") == "invalid")
-            assert failure["code"] == "assay_grading_anchored_support_required"
-            assert failure["detail"]["field"] == "interpretations.measurement_identity.support_refs"
-            assert failure["detail"]["reference"] == args["source_ref"]
-            assert failure["detail"]["expected_record_type"] == "reference"

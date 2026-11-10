@@ -1,6 +1,6 @@
 # PROPOSED A110 numerical sheet: chemical and pathway account
 
-The outcome is a numerical contribution for the chemical/resource account of an emerging function: measured stoichiometry and atom origin, conservation, and resource supply relative to the account's stated demand. A110 remains separate from A108. This is a complete arithmetic proposal for feedback, with source-populated examples and explicitly missing operands; it is not adopted scoring policy, a production reader, an implemented axis or an assertion that the ten-sheet goal has advanced beyond 0/10.
+The outcome is a numerical contribution for the chemical/resource account of an emerging function: measured stoichiometry and atom origin, conservation, and resource supply relative to the account's stated demand. This is a complete arithmetic proposal for feedback, with source-populated examples and explicitly missing operands; it is not adopted scoring policy, a production reader, an implemented axis or an assertion that the ten-sheet goal has advanced beyond 0/10.
 
 The scientific investigation can begin with supplied sequence, selected file contents, a region or snippets. No initial annotation or searchable gene name is required. Once a possible chemical function emerges, this sheet records the particular account and its alternatives. The historical reference experiments below are examples for constructing the sheet, not experiments on the supplied annotation target.
 
@@ -181,7 +181,6 @@ If the requested account includes the oxygen donor, redox closure and native res
 | Shared A105 measurements | Link the activity/readout's same observation. A110 uses chemical ratios/budget consistency, not a second activity-magnitude reward |
 | Shared A106 perturbation evidence | Link causal attribution; do not count deletion/rescue as a new atom-tracing or electron-balance measurement |
 | Shared A107 partner measurements | Use identities to construct a possible reaction network; do not re-award gene-homology/coexpression scores or turn them into measured capacity |
-| A108 context | Keep sample/organism/environment plausibility there. Any measured concentration used here retains a shared-observation link and its chemical-budget role |
 | Reference-to-target relation | Preserve actual assayed subject and measured correspondence. Chemical law may transfer to an identical specified reaction, but protein identity, cofactor preference and physiological deployment do not follow from it. Unmapped relations remain unknown; no blanket applicability weight |
 
 No source inspection established measurements on the project's current annotation target. The two examples populate reference-account sheets only. Relevance can be established through more than sequence similarity, but the relevant measured relationship must be identified before a reference result is asserted for a different target.

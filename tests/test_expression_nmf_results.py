@@ -26,7 +26,7 @@ from gene_annotation_episode.state import Store
 
 REPO = Path(os.environ['NMF489_REPO'])
 NATIVE = REPO / 'verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check003'
-POLICY = LocalJobPolicy(21474836480, 4294967296, None)
+POLICY = LocalJobPolicy(21474836480, 4294967296)
 
 
 def selector(view='fit_diagnostics', saved=None, **extra):
@@ -167,7 +167,7 @@ def test_actual_finite_worker_receipt_and_replay(tmp_path, monkeypatch):
         execution = read_json(retained_native_file(store, prepared['execution_receipt_file']))
         assert execution['metadata']['verified_cgroup']['memory_max'] == 21474836480
         assert execution['metadata']['verified_cgroup']['memory_swap_max'] == 0
-        assert execution['metadata']['verified_cgroup']['runtime_max'] == 'infinity'
+        assert 'runtime_max' not in execution['metadata']['verified_cgroup']
         assert execution['intent']['source_pins'] and execution['intent']['runtime_files'] and execution['intent']['dependencies']
         def forbidden(*args, **kwargs):
             pytest.fail('Completed replay attempted native work')

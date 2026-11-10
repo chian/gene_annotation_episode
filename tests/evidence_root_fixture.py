@@ -177,8 +177,7 @@ class EvidenceRootCase:
                     'relationship': 'actual_received_sequence_hit_selects_model_from_parent_inventory',
                     'connection_credit': 'unscored'}
                 selection = {'kind': 'tool', 'tool': 'shared.resolve_information_need', 'arguments': {
-                    'need_ref': self.need, 'status': 'fulfilled', 'evidence_refs': [*self.sequence_refs, self.reference_source],
-                    'reason': 'Actual received native sequence homology supplies the homolog identity and selects an available structure model. Functional characterization remains unresolved.'}}
+                    'need_ref': self.need, 'status': 'fulfilled', 'evidence_refs': [*self.sequence_refs, self.reference_source]}}
             elif stage == 3:
                 self.disposition = state['last_local_outcome']['result']['publication_ref']
                 selection = self.a102.commission(self.store, target_ref=self.target, scope=self.scope,

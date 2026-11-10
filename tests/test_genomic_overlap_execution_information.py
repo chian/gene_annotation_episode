@@ -96,8 +96,7 @@ def test_original_description_preserves_actual_job_and_explicit_projection(kind)
     assert extractor["original_native_execution"]["options"] == ["-wo", "-sorted"]
     assert extractor["new_native_analysis"] is False
     assert extractor["scientific_annotation_score"] is False
-    assert extractor["local_job_policy"] == {"memory_bytes": 20 * 1024**3,
-        "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+    assert extractor["local_job_policy"] == {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
     assert extractor["swap_bytes"] == 0
     assert "execution.results.read" not in json.dumps(result)
 

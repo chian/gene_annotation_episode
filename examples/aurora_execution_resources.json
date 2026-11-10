@@ -1,6 +1,8 @@
 {
   "aurora": {
     "kind": "pbs_ssh",
+    "launch_prompt_entry": "launch-aurora",
+    "scheduler": {"kind": "pbs", "required_resources": ["filesystems=flare"]},
     "workspace": "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-hpc-20261104T022708Z",
     "ssh_argv": [
       "/bin/bash",

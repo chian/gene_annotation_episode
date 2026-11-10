@@ -60,8 +60,7 @@ def pin(path):
 def original_case(key):
     attempt = Path(os.environ['HMMER529_ATTEMPT'])
     request = json.loads((attempt / 'selected_request.json').read_text())
-    assert request['policy'] == {'memory_bytes': 21474836480,
-        'scratch_bytes': 4294967296, 'wall_seconds': None}
+    assert request['policy'] == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
     assert request['swap_bytes'] == 0 and not request['native_executables']
     path = Path(request['repository_root']) / PACKET_NAME / CASES[key]
     assert path.is_absolute() and path.is_dir()
@@ -285,7 +284,7 @@ def original_owner(key, database, monkeypatch):
         # The original five bindings are copied from the original requests.
         order = ('create_sequence_database', 'extract_sequences', 'info', 'metadata', 'integrity')
         bindings.sort(key=lambda row: order.index(row['mode']))
-    policy = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'wall_seconds': None}
+    policy = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
     resources = {'here': {'kind': 'local', 'workspace': str(directory / 'workspace'),
         'policy': policy, 'native_blast_utility': bindings}}
 

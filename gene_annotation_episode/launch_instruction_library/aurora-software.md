@@ -20,13 +20,12 @@ does not validate other stages, databases or present compatibility. Read the
 deployment's own `AGENTS.md`, `MEMORY.md` and relevant instructions before changes.
 Do not reinstall or recalculate simply because a new episode started.
 
-The assignment fixes `requested_job`, `workspace`, `initial_context`,
-`constraints`, `progress_requirements` and `completion_keys`. A generic
-requested job contains its exact `argv` and `environment`; registered native
-jobs instead use their own closed software and input contracts. The remote
-worker uses the configured `python_executable`. Retain the actual executable,
-source revision/hash, package versions, database release/hash and validated
-inputs needed by the assigned job.
+The assignment supplies the job, inputs, result requirements, workspace and
+constraints. Choose scripts, an environment and commands to satisfy that job.
+Preserve the scientific inputs and pinned software contracts when adapting
+execution to Aurora. Retain the actual executable, source revision/hash,
+package versions, database release/hash and validated inputs needed to identify
+the calculation that produced the requested result.
 
 Use the supplied `inventory_snapshot` and declared path/hash predicates to
 decide whether inspection, reuse, preparation or repair would be useful.
@@ -35,10 +34,10 @@ preparation command retains its actual operands and outcome. Reusing a valid
 setup does not itself satisfy requested output predicates, and repairing setup
 does not authorize a replacement for active or uncertain native work.
 
-The persistent context supplies `cwd` and `environment` for preparation work.
-A subprocess's directory or exports do not alter the next action; use
-`practical.context.set` for a selected persistent change. The requested job
-retains its original explicit environment and execution identity.
+A command's directory or exports do not alter the next action. Supply the
+working directory and environment for each selected command, or write a script
+that prepares its own environment. Preserve any explicit environment requirement
+of the scientific job and its original execution identity.
 
 Aurora's [Python guide](https://docs.alcf.anl.gov/aurora/data-science/python/)
 describes module-provided environments and extending them with a venv. Such

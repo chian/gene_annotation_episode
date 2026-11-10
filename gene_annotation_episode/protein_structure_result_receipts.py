@@ -92,10 +92,14 @@ class ProteinHandoffProof(TypedDict):
     assignment_snapshot: dict
 
 
+class TerminalProteinHandoffProof(ProteinHandoffProof):
+    start_receipt: dict
+
+
 class ProteinResultBody(TypedDict):
     version: Literal["protein_structure_result_body_v1"]
     intent: ProteinResultIntent
-    handoff_proof: ProteinHandoffProof | None
+    handoff_proof: ProteinHandoffProof | TerminalProteinHandoffProof | None
     observation: ResourceObservation | None
     observation_origin: Literal["selected_native_observation", "original_saved_observation", "not_observed"]
     original_custody: ResultCustody | None
@@ -477,7 +481,11 @@ class ProteinResultReceipts:
             _require(same(body, payload), "conflicting_identity")
         return body
 
-    def validate_handoff_proof(self, proof: ProteinHandoffProof, *, intent: ProteinResultIntent) -> None:
+    def validate_handoff_proof(self, proof: ProteinHandoffProof | TerminalProteinHandoffProof, *, intent: ProteinResultIntent) -> None:
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_handoff
+        if is_terminal_target(intent['target']):
+            validate_terminal_handoff(proof, intent, self._store, self.owner.run_id)
+            return
         _closed(proof, ProteinHandoffProof.__annotations__)
         _json(proof)
         source, body, snapshot = (proof[name] for name in ProteinHandoffProof.__annotations__)
@@ -539,7 +547,7 @@ class ProteinResultReceipts:
         _require(same(validate_target(expected), intent["target"])
                  and intent["assignment"]["handoff_ref"] == source["id"])
 
-    def read_handoff_proof(self, action, *, context, target) -> ProteinHandoffProof:
+    def read_handoff_proof(self, action, *, context, target) -> ProteinHandoffProof | TerminalProteinHandoffProof:
         fd = self._fd(action)
         _require(same(action.intent, self._intent(context, target, action.intent["tool_name"], {},
             action.intent["operation_key"])))
@@ -556,6 +564,12 @@ class ProteinResultReceipts:
                 proof = original["body"]["handoff_proof"]
                 _require(proof is not None)
             else:
+                from .terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
+                if is_terminal_target(target):
+                    proof = read_terminal_handoff(self._store, self.owner.run_id, target, context.scope)
+                    self.validate_handoff_proof(proof, intent=action.intent)
+                    _immutable(fd, 'handoff-proof.json', proof)
+                    return deepcopy(proof)
                 practical = PracticalReceiptInformation(self._store, self.owner.run_id)
                 body = practical.read(target["handle"], context.scope)
                 source = self._store.get(target["handle"])
@@ -578,6 +592,9 @@ class ProteinResultReceipts:
         observation = _json(observation)
         _require(_OBSERVATION.is_valid(observation), "invalid_schema")
         observation = validate_resource_observation(observation)
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_observation
+        if is_terminal_target(action.intent['target']):
+            validate_terminal_observation(observation, action.intent, self._store, self.owner.run_id)
         _immutable(fd, "observation.json", observation)
         return deepcopy(observation)
 
@@ -689,12 +706,10 @@ class ProteinResultReceipts:
                      and type(meta.get("service_exit")) is dict and same(meta.get("policy"), POLICY))
             enforcement = meta.get("enforcement", {})
             _require(enforcement.get("memory") == "systemd_cgroup_v2_memory_max"
-                     and enforcement.get("swap") == "systemd_memory_swap_max_zero"
-                     and enforcement.get("wall_time") == "unset")
+                     and enforcement.get("swap") == "systemd_memory_swap_max_zero")
             cgroup = meta.get("verified_cgroup", {})
             _require(type(cgroup.get("memory_max")) is int and cgroup["memory_max"] == POLICY["memory_bytes"]
-                     and type(cgroup.get("memory_swap_max")) is int and cgroup["memory_swap_max"] == 0
-                     and cgroup.get("runtime_max") == "infinity")
+                     and type(cgroup.get("memory_swap_max")) is int and cgroup["memory_swap_max"] == 0)
             _require(execution["handle_artifact_ref"] is not None)
         else:
             _require(execution["returncode"] is None and execution["metadata"] is None)
@@ -822,6 +837,9 @@ class ProteinResultReceipts:
         if observation is not None:
             _require(_OBSERVATION.is_valid(observation), "invalid_schema")
             validate_resource_observation(observation)
+            from .terminal_scientific_evidence import is_terminal_target, validate_terminal_observation
+            if is_terminal_target(intent['target']):
+                validate_terminal_observation(observation, intent, self._store, self.owner.run_id)
         _require(body["observation_origin"] in ("selected_native_observation", "original_saved_observation", "not_observed"))
         _require((observation is None) == (body["observation_origin"] == "not_observed"))
         saved = intent["assignment"]["selector"]["acquisition"] == "retained_sheet_only"
@@ -859,6 +877,12 @@ class ProteinResultReceipts:
             _require(body["capture"] is None and body["bundle"] is None and body["worker"] is None)
         if body["capture"] is not None:
             self._capture(body["capture"], body["bundle"], intent)
+            from .terminal_scientific_evidence import is_terminal_target
+            if is_terminal_target(intent['target']):
+                from .native_protein_structure_acquisition import _validate_terminal_capture_files
+                command_proof = proof['start_receipt']['outcome']['native_outcome']['scientific_command_proof']
+                _require(same(body['capture']['original_plan'], command_proof['original_plan']))
+                _validate_terminal_capture_files(body['capture'], command_proof)
         else:
             _require(body["bundle"] is None and body["worker"] is None)
         bundle = body["bundle"]
@@ -866,9 +890,14 @@ class ProteinResultReceipts:
                  and bundle["native_status"] == "complete"))
         _require(body["capture_complete"] == (body["capture"] is not None and body["capture"]["capture_complete"]))
         if bundle is not None:
-            detail = proof["body"]["receipt"]["outcome"]["native_outcome"]
-            _require(bundle["identity"]["operation_key"] == detail["attempt_operation_key"]
-                     and bundle["identity"]["attempt_id"] == detail["attempt_id"])
+            from .terminal_scientific_evidence import is_terminal_target
+            if is_terminal_target(intent['target']):
+                command_proof = proof['start_receipt']['outcome']['native_outcome']['scientific_command_proof']
+                _require(same(bundle['identity'], command_proof['original_plan']['identity']))
+            else:
+                detail = proof["body"]["receipt"]["outcome"]["native_outcome"]
+                _require(bundle["identity"]["operation_key"] == detail["attempt_operation_key"]
+                         and bundle["identity"]["attempt_id"] == detail["attempt_id"])
         if body["worker"] is not None:
             self._worker(body["worker"], body, original)
         self._qualified(body, original)

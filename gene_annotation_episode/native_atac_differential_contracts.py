@@ -21,7 +21,7 @@ from .atac_differential_contracts import (
     validate_atac_reference, validate_atac_sample,
 )
 
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 RUN_PLAN_FILENAME = "atac-plan.json"
 ATTEMPT_DIRECTORY_NAME = "atac-differential-attempt"
 OWNER_FILENAME = ".native-atac-owner.json"
@@ -380,9 +380,11 @@ def validate_atac_run_plan(value):
     identity = value["identity"]
     execution = path_value(identity["execution_id"], absolute=True)
     attempt = path_value(value["attempt_directory"], absolute=True)
-    require(execution.name == "native.json" and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME)
+    from .terminal_scientific_evidence import terminal_plan_identity
+    current = terminal_plan_identity(identity, attempt_directory=str(attempt))
+    require((current or execution.name == "native.json") and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME)
     require(identity["attempt_id"] == digest(identity["operation_key"]) and identity["requested_job_sha256"] == digest(requested))
-    require(execution.parent.name == identity["attempt_id"] and execution.parent.parent.name ==
+    require(current or execution.parent.name == identity["attempt_id"] and execution.parent.parent.name ==
         digest({"run": identity["run_id"], "episode": identity["episode_id"]}) and execution.parent.parent.parent.name == ".episode-operations")
     require(value["policy"] == POLICY and type(value["policy"]["memory_bytes"]) is int and type(value["policy"]["scratch_bytes"]) is int)
     require(value["outputs"] == atac_output_files(requested["native_atac_differential"]["request"]))

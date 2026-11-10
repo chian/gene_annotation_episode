@@ -90,7 +90,7 @@ def test_tf_distribution_identity_failure_has_no_fallback_or_native_probe(distri
 
 
 def test_unlisted_worker_operation_is_denied_before_selection_or_reservation(tmp_path, monkeypatch):
-    policy = LocalJobPolicy(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3, wall_seconds=None)
+    policy = LocalJobPolicy(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
     monkeypatch.setattr(shared, '_molecular_implementation_files', forbidden)
     monkeypatch.setattr(native_lifecycle, 'prepare_job', forbidden)
     before = sorted(tmp_path.iterdir())
@@ -106,7 +106,7 @@ def controlled_worker(tmp_path, monkeypatch):
     owned = tmp_path / 'owned'; owned.mkdir()
     selected_source = tmp_path / 'selected-implementation.py'
     selected_source.write_bytes(b'explicit engineering software identity, never imported')
-    policy = LocalJobPolicy(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3, wall_seconds=None)
+    policy = LocalJobPolicy(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
     event = threading.Event()
     calls = dict(prepare=0, resume=0, collect=0)
     observations = dict(state='prepared', terminal=False, quiescent=False)
@@ -189,7 +189,7 @@ def test_later_terminal_observation_collects_only_original_handle_and_selection(
     case.observations.update(state='returned', terminal=True, quiescent=True)
     case.selected_source.unlink()
     monkeypatch.setattr(shared, '_molecular_implementation_files', forbidden)
-    later_policy = LocalJobPolicy(memory_bytes=1024, scratch_bytes=2048, wall_seconds=1)
+    later_policy = LocalJobPolicy(memory_bytes=1024, scratch_bytes=2048)
     result, metadata_result = case.invoke(operation, selected_policy=later_policy)
     assert result == output and metadata_result == {'engineering_observation': True}
     assert case.calls == dict(prepare=1, resume=0, collect=1)

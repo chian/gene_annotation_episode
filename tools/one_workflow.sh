@@ -1,35 +1,9 @@
 #!/usr/bin/env bash
-# The supervisor and every payload Python process start inside the cap.
+# One owned workflow per window, inside machine resource bounds.
 set -euo pipefail
 task_repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
-task_profile=default
-if [[ ${1-} == --profile ]]; then
-    if [[ $# -lt 5 ]]; then
-        echo 'Usage: bash tools/one_workflow.sh [--profile NAME] runs/<unique-run> -- command arguments...' >&2
-        exit 64
-    fi
-    task_profile=$2
-    shift 2
-fi
-# Wider profiles require explicit user approval before invocation. Inherited
-# environment variables cannot select a wider startup profile.
-case "$task_profile" in
-    default)
-        task_memory=536870912
-        task_tasks=64
-        task_runtime=600
-        task_file=67108864
-        ;;
-    a108-validation)
-        task_memory=3221225472
-        task_tasks=128
-        task_runtime=infinity
-        task_file=17179869184
-        ;;
-    *) echo 'Unknown workflow budget profile.' >&2; exit 64 ;;
-esac
 if [[ $# -lt 3 || $2 != -- ]]; then
-    echo 'Usage: bash tools/one_workflow.sh [--profile NAME] runs/<unique-run> -- command arguments...' >&2
+    echo 'Usage: bash tools/one_workflow.sh runs/<unique-run> -- command arguments...' >&2
     exit 64
 fi
 task_run=$(realpath -m -- "$1")
@@ -71,19 +45,20 @@ done < <(systemctl --user list-units --all --type=service --plain --no-legend --
 systemctl --user reset-failed "$task_service" 2>/dev/null || true
 mkdir -p -- "$(dirname -- "$task_run")"
 if ! mkdir -- "$task_run"; then echo 'A fresh run directory is required.' >&2; exit 64; fi
-# The budget supervisor uses only the standard library. Never borrow a
+# The ownership supervisor uses only the standard library. Never borrow a
 # scientific run's environment to supervise unrelated work.
 task_python=$(command -v python3)
 task_status=0
+# On normal driver exit the supervisor remains active until all owned workers
+# finish. systemd-run --wait therefore keeps this window's lock for the whole
+# workload, including children whose parent episode has already yielded.
 systemd-run --user --quiet --wait --pipe --collect --service-type=exec --expand-environment=no \
     --unit="$task_service" --slice="$task_slice" \
-    --property="MemoryMax=$task_memory" --property=MemorySwapMax=0 --property=CPUQuota=100% \
-    --property="TasksMax=$task_tasks" --property="RuntimeMaxSec=$task_runtime" --property="LimitFSIZE=$task_file" \
-    --property=KillMode=control-group --property=OOMPolicy=kill --property=TimeoutStopSec=15 \
-    --property=SendSIGKILL=yes --working-directory="$task_repo" \
+    --property=CPUQuota=100% --property=MemoryMax=5368709120 \
+    --property=MemorySwapMax=0 --property=TasksMax=infinity \
+    --property=KillMode=control-group --working-directory="$task_repo" \
     --setenv="PYTHONPATH=$task_repo" --setenv=PYTHONDONTWRITEBYTECODE=1 \
     --setenv="CODEX_THREAD_ID=$task_window" \
-    --setenv="GENE_EPISODE_WORKFLOW_PROFILE=$task_profile" \
     --property="ExecStopPost=$task_python -m gene_annotation_episode.workflow_budget cleanup" \
     "$task_python" -m gene_annotation_episode.workflow_budget "$task_run" -- "$@" \
     >"$task_run/stdout.log" 2>"$task_run/stderr.log" || task_status=$?

@@ -87,9 +87,10 @@ def _documents(name, resource):
                 if name in {'practical.file.read', 'practical.job.status', 'practical.job.collect'}:
                     section_ids.add('results')
             elif entry['entry_id'] == 'launch-aurora':
-                section_ids = {'pbs'} if name.startswith('practical.job.') else {'operations'}
-                if name == 'practical.inventory.refresh':
-                    section_ids.add('software')
+                # The configured prompt is delivered automatically to its
+                # execution agent. Tool information describes general command
+                # semantics; it does not prescribe scheduler workflow steps.
+                section_ids = {'operations'}
             elif entry['entry_id'] == 'launch-api':
                 section_ids = ({'results'} if name == 'api.hmmer.result' else
                     {'operations', 'results'} if name == 'api.hmmer.status' else {'service', 'operations'})
@@ -149,7 +150,7 @@ def workflow_execution_catalogs():
     its own actual catalog. No HPC variant of a local scientific tool is added.
     """
     from types import SimpleNamespace
-    from .practical_resource_episodes import operation_catalog
+    from .terminal_execution_episodes import operation_catalog
     from .episode_monitoring import MonitorEpisodes
     from .homology_episodes import HomologyEpisodes
     from .execution_episodes import launch_operation_catalog, native_result_operation_catalog

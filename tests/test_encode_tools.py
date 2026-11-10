@@ -634,7 +634,7 @@ def _encode_live_gate(tmp_path):
     bounded_path = Path(bounded).resolve(strict=True)
     assert tmp_path.resolve().is_relative_to(bounded_path)
     selected = json.loads((bounded_path / "selected_request.json").read_bytes())
-    assert selected["policy"] == {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+    assert selected["policy"] == {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
     assert selected["swap_bytes"] == 0
     return attempt, bounded
 

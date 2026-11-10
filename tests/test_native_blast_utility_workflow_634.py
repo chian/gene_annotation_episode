@@ -334,7 +334,7 @@ def test_actual_episode_grants_and_terminal_observations_match_selected_work(nat
         assert metadata['policy'] == POLICY
         assert metadata['verified_cgroup']['memory_max'] == 20 * 1024**3
         assert metadata['verified_cgroup']['memory_swap_max'] == 0
-        assert metadata['verified_cgroup']['runtime_max'] == 'infinity'
+        assert 'runtime_max' not in metadata['verified_cgroup']
 
 
 def test_closed_returns_replay_without_native_files_or_parsing(native_case, monkeypatch):

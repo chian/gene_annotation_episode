@@ -1,0 +1,15 @@
+{
+  "base_url": "https://rest.uniprot.org",
+  "path": "uniprotkb/search",
+  "params": {
+    "query": "(organism_id:243232 OR organism_id:187420 OR organism_id:273075 OR organism_id:309800 OR organism_id:507754 OR organism_id:387340 OR organism_id:926360 OR organism_id:362976) AND (gene_exact:rplB OR gene_exact:rpl2 OR gene_exact:rplC OR gene_exact:rpl3 OR gene_exact:rpsC OR gene_exact:rps3) AND fragment:false",
+    "fields": "accession,id,protein_name,gene_names,organism_id,organism_name,sequence,length",
+    "size": 500,
+    "format": "json"
+  },
+  "record_path": "results",
+  "max_items": 1,
+  "max_depth": 2,
+  "save_raw": true,
+  "raw_output_path": "/home/chia/repos/gene_annotation_episode/runs/a104_20261104_181336/acquired/refined/mj0044-organismal-markers-refined.json"
+}

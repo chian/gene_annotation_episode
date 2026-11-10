@@ -20,7 +20,7 @@ from tests.test_molecular_sequence_execution import software_fixture, _environme
 
 
 ROOT = Path(__file__).resolve().parents[1]
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 
 
 def file_identity(path):

@@ -71,8 +71,7 @@ def test_one_retained_case_profiles_real_collect_facts_and_parent_admission(tmp_
     attempt = Path(os.environ["HMMER529_ATTEMPT"])
     assert attempt.name.startswith("check133")
     selected = json.loads((attempt / "selected_request.json").read_text())
-    assert selected["policy"] == {"memory_bytes": 21474836480,
-        "scratch_bytes": 4294967296, "wall_seconds": None}
+    assert selected["policy"] == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
     assert selected["swap_bytes"] == 0
     directory = attempt / "profile675"
     directory.mkdir(exist_ok=False)

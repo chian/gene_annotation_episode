@@ -25,7 +25,7 @@ from gene_annotation_episode.practical_execution_state import _immutable
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "tests/fixtures/native_infernal_execution"
 RETAINED = ROOT / "verification/tool_graders_infernal_native_execution_2026-10-26_222/runs"
-POLICY = LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None)
+POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
 
 
 def _file(path, role, fmt):
@@ -372,7 +372,7 @@ def test_retained_actual_native_examples_replay_offline(case, monkeypatch):
     receipt = json.loads((root / "verification-receipt.json").read_bytes())
     assert receipt["metadata"]["policy"] == POLICY.to_dict()
     assert receipt["metadata"]["verified_cgroup"]["memory_max"] == POLICY.memory_bytes
-    assert receipt["metadata"]["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in receipt["metadata"]["verified_cgroup"]
     assert bundle["returncode"] != 0 if case.endswith("failure") else bundle["returncode"] == 0
     monkeypatch.setattr("subprocess.Popen", lambda *a, **k: pytest.fail("native replay reran process"))
     monkeypatch.setattr("socket.socket", lambda *a, **k: pytest.fail("native replay acquired remote data"))

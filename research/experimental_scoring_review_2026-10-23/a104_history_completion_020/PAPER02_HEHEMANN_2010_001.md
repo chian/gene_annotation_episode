@@ -86,6 +86,4 @@ Shared-observation identities proposed for future custody are
 `hehemann2010_fig3_GH16_tree`, `hehemann2010_table1_gut_metagenomes`,
 `hehemann2010_food_route_argument`, and `hehemann2010_mobility_region_argument`.
 The food-route argument is an interpretation relying on cited earlier dietary
-sources, not an ingestion experiment conducted here. These identities differ
-from the A108 worker's inspected 2012 growth/qPCR/assay identities. A104 would
-consume only the event-route relation, never a second A108 ecological score.
+sources, not an ingestion experiment conducted here. A104 consumes only the event-route relation.

@@ -118,6 +118,10 @@ class ExpressionNMFResultReceipts:
         return value
 
     def validate_handoff(self, proof, intent):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_handoff
+        if is_terminal_target(intent['target']):
+            validate_terminal_handoff(proof, intent, self.store, self.owner.run_id)
+            return
         closed(proof, ("source_record", "body", "assignment_snapshot", "start_receipt"))
         source, body, snapshot, start = (proof[name] for name in ("source_record", "body", "assignment_snapshot", "start_receipt"))
         practical = PracticalReceiptInformation(self.store, self.owner.run_id)
@@ -170,6 +174,12 @@ class ExpressionNMFResultReceipts:
 
     def read_handoff(self, action):
         self.require_action(action)
+        from .terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
+        if is_terminal_target(action.intent['target']):
+            proof = read_terminal_handoff(self.store, self.owner.run_id,
+                action.intent['target'], action.intent['scope'])
+            immutable(action.directory / 'handoff.json', proof)
+            return deepcopy(proof)
         path = action.directory / "handoff.json"
         saved = read_control(path)
         if saved is None:
@@ -212,6 +222,11 @@ class ExpressionNMFResultReceipts:
 
     def native_snapshot(self, action, observation):
         self.require_action(action)
+        from .terminal_scientific_evidence import is_terminal_target, terminal_native_snapshot
+        if is_terminal_target(action.intent['target']):
+            value = terminal_native_snapshot(self, action, observation)
+            immutable(action.directory / 'native-snapshot.json', value)
+            return value
         path = action.directory / 'native-snapshot.json'
         value = read_control(path)
         if value is None:
@@ -241,6 +256,10 @@ class ExpressionNMFResultReceipts:
         return deepcopy(value)
 
     def validate_native(self, value, intent, observation):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_native
+        if is_terminal_target(intent['target']):
+            validate_terminal_native(value, intent, observation, self.store, self.owner.run_id)
+            return
         from .native_expression_nmf_local import _request
         from .native_lifecycle import VERSION as native_version
         closed(value, ('original_plan', 'handle', 'request', 'request_raw', 'started_marker',
@@ -419,6 +438,16 @@ class ExpressionNMFResultReceipts:
                 require(intent['tool_name'] == 'execution.results.collect' and receipt['native'] is not None
                     and receipt['observation']['native']['terminal'] and receipt['observation']['native']['quiescent'], 'nmf_writer_not_closed')
                 capture = validate_expression_nmf_native_capture(receipt['capture'], original_plan=receipt['native']['original_plan'])
+                if receipt['native'].get('version') == 'terminal_native_snapshot_v1':
+                    from .terminal_scientific_evidence import terminal_file_identity
+                    snapshots = {row['path']: row for row in receipt['native']['command_proof']['output_snapshots']}
+                    for row in capture['files']:
+                        path = str(Path(receipt['native']['original_plan']['attempt_directory']) / row['relative_path'])
+                        snapshot = snapshots.get(path)
+                        expected = (terminal_file_identity(snapshot, row['format'])
+                            if snapshot is not None and snapshot['available'] else None)
+                        actual = row['retained']['file'] if row['retained'] is not None else None
+                        require(actual == expected, 'nmf_terminal_capture_file_mismatch')
                 self.file_metadata(receipt['source_action_file'], value=receipt['handoff_proof']['start_receipt'])
                 self.file_metadata(receipt['writer_closure_file'], value=closure_value(receipt))
                 require(capture['source_action_receipt_ref'] == receipt['source_action_file']['artifact_ref']

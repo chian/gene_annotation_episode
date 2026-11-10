@@ -1,0 +1,51 @@
+{
+  "version": "a107_genomic_window_evaluation_v1",
+  "evaluator_only": true,
+  "input": "anonymous-case-02.faa",
+  "query_provenance": {
+    "retained_source": "../a103/real/bioy-uniprot.json",
+    "record_accession": "D5ARG8",
+    "source_sequence_length": 190,
+    "header_change_only": true,
+    "source_role": "reference sequence metadata, not an independent activity experiment"
+  },
+  "positive_window": {
+    "source": "../a103/real/rcapsulatus-bioy.gb",
+    "accession": "NC_014034.1",
+    "provided_original_interval_one_based_inclusive": [
+      3300000,
+      3700000
+    ],
+    "whole_genome_coverage": false,
+    "annotated_corresponding_protein": "WP_013068946.1",
+    "annotated_locus": "RCAP_RS16045",
+    "annotated_local_cds_zero_based_half_open": [
+      147967,
+      148540
+    ],
+    "strand": -1,
+    "qualification": "The annotation translation agrees with the query. Native sequence/detection work must establish the actual correspondence and preserve its real measured values. Annotation labels alone are insufficient."
+  },
+  "contrast_window": {
+    "source": "../a103/real/ecoli-window.gb",
+    "accession": "NC_000913.3",
+    "provided_original_interval_one_based_inclusive": [
+      4370000,
+      4400000
+    ],
+    "whole_genome_coverage": false,
+    "qualification": "Do not preassign a homology outcome. Preserve any actual included match and its extent/distance. A complete examined inventory with no included hit supports only scoped non-detection under that query and criterion; it does not establish whole-genome or functional-partner absence."
+  },
+  "workflow_expectations": [
+    "The episode chooses its own tasks, source selections, native operations and recovery; evaluator names, loci, coordinates and expected outcomes are not admitted.",
+    "Use the original shared HPC owner and actual authenticated detector publications; no local heavy detector fallback.",
+    "Keep A107 scientific descendants on A107 while reusing genomic tools; do not commission A103 as a scientific child.",
+    "Caller-associated genomic files do not establish the submitted molecule's organism or experimental sample genotype.",
+    "For every particular detection/absence use retain the actual query, examined CDS/extent, native measurements and unresolved competing matches.",
+    "Inspect typed delivery, the actual rendered parent input and subsequent interpretation. Receipt or a job ID alone is not proof of use.",
+    "Repeated views and reused reference sequences are not independent experimental confirmations.",
+    "New authenticated native results retain the original detector-calculated nucleotide-to-peptide witnesses for all hit-sequence-matched reference CDS candidates, including source-file identity, record-local coordinate parts and executed translation/stop handling. These are reused calculations, not an independent confirmation.",
+    "The reference witness can establish exact reference-record encoding without establishing the submitted molecule organism or sample genotype. A needed biological origin remains explicit; a known reference translation should not be requested again merely because its details were previously absent.",
+    "The reference-witness version is required by new frozen requests; historical native records without it retain their original numerical and scope meanings."
+  ]
+}

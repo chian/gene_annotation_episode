@@ -222,6 +222,12 @@ def test_selected_grader_delivers_requested_a105_scores_through_actual_loop(tmp_
     with Store(path) as store:
         store.create_problem(raw_sequence='ATGGCT', molecule='dna')
         original_context, args, _ = grading_fixture(store, assay_type)
+        # Fresh model selections use source locations. Direct repository tests
+        # above continue to exercise the full legacy quoted-input contract.
+        model_args = deepcopy(args)
+        for quantity in model_args['quantities'].values():
+            quantity['number']['witness'].pop('quote')
+            quantity['unit'].pop('quote')
         selected = ['effect_precision', 'source_log_evidence_ratio']
         template = a105_worksheet_template([{'field': 'experiment', 'source': NAMESPACE, 'components': selected}])
         assessment_context = {'version': VERSION, 'assertion_refs': [args['assertion_ref']],
@@ -232,7 +238,7 @@ def test_selected_grader_delivers_requested_a105_scores_through_actual_loop(tmp_
             'scope': store.validate_scope(), 'purpose': 'Return the requested A105 numerical evidence components.',
             'schema_json': json.dumps(template['submitted_form']),
             'initial_report_json': json.dumps({'assessment_context': assessment_context})}, 'report_update': {}}
-        action = {'selection': {'kind': 'tool', 'tool': 'literature.assay_grading.populate', 'arguments': args},
+        action = {'selection': {'kind': 'tool', 'tool': 'literature.assay_grading.populate', 'arguments': model_args},
             'report_update': {'assessment_context': assessment_context}}
         script = iter([child, action])
         contexts, controllers = [], []

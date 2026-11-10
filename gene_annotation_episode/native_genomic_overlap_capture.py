@@ -15,6 +15,7 @@ from pathlib import Path, PurePosixPath
 from .execution_contracts import digest
 from .genomic_overlap_contracts import _finite_json_copy, validate_genomic_overlap_record
 from . import native_file_capture
+from .terminal_native_file_capture import capture_execution_file, capture_execution_declarations
 from .native_genomic_overlap_contracts import (
     genomic_overlap_output_files, validate_genomic_overlap_batch,
     validate_genomic_overlap_independent_pair_manifest, validate_genomic_overlap_run_plan,
@@ -184,10 +185,11 @@ def _retain(store, identity, specification, field_path, failures):
     return {"file": deepcopy(identity), "path": str(path)}
 
 
-def _undeclared(store, plan, specification, field_path, failures):
+def _undeclared(store, plan, specification, field_path, failures, command_proof=None):
     try:
-        identity = native_file_capture.capture_native_file(store, directory=plan["attempt_directory"],
-            relative_path=specification["relative_path"], format=specification["format"])
+        identity = capture_execution_file(store, directory=plan["attempt_directory"],
+            relative_path=specification["relative_path"], format=specification["format"],
+            command_proof=command_proof)
     except native_file_capture.NativeFileCaptureError as error:
         # A storage failure before a helper returns an identity is not producer
         # absence. Propagate it, preserving the helper's typed failure boundary.
@@ -248,10 +250,10 @@ def _seal(retained, specification, field_path, failures, validate):
         return None
 
 
-def _declared_rows(store, plan, selected, source, failures):
+def _declared_rows(store, plan, selected, source, failures, command_proof=None):
     """Copy each unique declaration once and preserve every helper outcome."""
-    captures = native_file_capture.capture_declared_native_files(store, directory=plan["attempt_directory"],
-        declarations=[declaration for _, _, declaration in selected])
+    captures = capture_execution_declarations(store, directory=plan["attempt_directory"],
+        declarations=[declaration for _, _, declaration in selected], command_proof=command_proof)
     rows = {}
     for (index, specification, _), captured in zip(selected, captures):
         observed = captured["observed"]
@@ -271,7 +273,7 @@ def _declared_rows(store, plan, selected, source, failures):
 
 def capture_genomic_overlap_native_files(store, *, original_plan: dict,
         source_action_receipt_ref: str, writer_closure_receipt_ref: str,
-        driver_started: bool | None) -> dict:
+        driver_started: bool | None, command_proof=None) -> dict:
     """Retain exactly this qualified original attempt's fixed output paths.
 
     ``False`` requires caller-held evidence that the driver never started.
@@ -296,13 +298,13 @@ def capture_genomic_overlap_native_files(store, *, original_plan: dict,
                 observed=driver_started, refs=[writer_closure_receipt_ref]))
         return validate_genomic_overlap_native_capture(result, original_plan=plan)
     batch_spec = specifications[-1]
-    result["batch_file"], retained_batch = _undeclared(store, plan, batch_spec, "/batch", failures)
+    result["batch_file"], retained_batch = _undeclared(store, plan, batch_spec, "/batch", failures, command_proof)
     batch = _seal(retained_batch, batch_spec, "/batch", failures,
         lambda value: validate_genomic_overlap_batch(value, plan=plan))
     if batch is not None:
         result.update(driver_state="sealed_batch", batch=retained_batch)
         captured = _declared_rows(store, plan, [(i, row["specification"], row["declaration"])
-            for i, row in enumerate(batch["files"])], "batch", failures)
+            for i, row in enumerate(batch["files"])], "batch", failures, command_proof)
         result["files"] = [captured[i] for i in range(len(rows))]
         return validate_genomic_overlap_native_capture(result, original_plan=plan)
     # A batch cannot qualify. Retain independent seals first, then combine
@@ -312,7 +314,7 @@ def capture_genomic_overlap_native_files(store, *, original_plan: dict,
         spec = row["specification"]
         if spec["role"] != "pair_manifest":
             continue
-        _, row["retained"] = _undeclared(store, plan, spec, f"/files/{index}", failures)
+        _, row["retained"] = _undeclared(store, plan, spec, f"/files/{index}", failures, command_proof)
         comparison = next(pair for pair in request["comparisons"] if pair["comparison_key"] == spec["comparison_key"])
         manifest = _seal(row["retained"], spec, f"/files/{index}", failures,
             lambda value: validate_genomic_overlap_independent_pair_manifest(value, plan=plan, comparison=comparison))
@@ -337,8 +339,8 @@ def capture_genomic_overlap_native_files(store, *, original_plan: dict,
             for candidate in candidates:
                 failures.append(_failure(spec, f"/files/{index}/capture", code="original_attempt_mismatch", stage="parse",
                     comparison_key=candidate["comparison_key"], requirement="matching_file_identity", observed=candidates))
-        _, row["retained"] = _undeclared(store, plan, spec, f"/files/{index}", failures)
-    for index, row in _declared_rows(store, plan, selected, "pair", failures).items():
+        _, row["retained"] = _undeclared(store, plan, spec, f"/files/{index}", failures, command_proof)
+    for index, row in _declared_rows(store, plan, selected, "pair", failures, command_proof).items():
         rows[index] = row
     return validate_genomic_overlap_native_capture(result, original_plan=plan)
 

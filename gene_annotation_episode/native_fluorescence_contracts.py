@@ -22,7 +22,7 @@ ATTEMPT_DIRECTORY_NAME = 'fluorescence-attempt'
 OWNER_FILENAME = '.native-fluorescence-owner.json'
 STARTED_FILENAME = '.native-fluorescence-started.json'
 DRIVER_MODULE = 'gene_annotation_episode.native_fluorescence_driver'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'wall_seconds': None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 IMPLEMENTATION_NAMES = ('__init__.py', 'fluorescence_execution_common.py',
     'fluorescence_event_contracts.py', 'fluorescence_event_readers.py',
     'native_fluorescence_contracts.py', 'native_fluorescence_storage.py', 'native_fluorescence_driver.py')
@@ -489,11 +489,14 @@ def validate_fluorescence_run_plan(value):
         _sha(owner[name])
     execution = path_value(owner['execution_id'], absolute=True)
     attempt = path_value(value['attempt_directory'], absolute=True)
-    require(execution.name == 'native.json' and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME
-        and owner['attempt_id'] == digest(owner['operation_key']) and owner['requested_job_sha256'] == digest(request)
+    from .terminal_scientific_evidence import terminal_plan_identity
+    legacy = (execution.name == 'native.json' and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME
         and execution.parent.name == owner['attempt_id'] and execution.parent.parent.name == digest({
             'run': owner['run_id'], 'episode': owner['episode_id']})
-        and execution.parent.parent.parent.name == '.episode-operations', 'fluorescence_original_attempt_mismatch')
+        and execution.parent.parent.parent.name == '.episode-operations')
+    require((legacy or terminal_plan_identity(owner, attempt_directory=str(attempt)))
+        and owner['attempt_id'] == digest(owner['operation_key'])
+        and owner['requested_job_sha256'] == digest(request), 'fluorescence_original_attempt_mismatch')
     require(same(value['policy'], POLICY), 'fluorescence_original_allocation_mismatch')
     require(same(value['outputs'], fluorescence_output_files(request['native_fluorescence'])), 'fluorescence_output_role_mismatch')
     job = request['native_fluorescence']

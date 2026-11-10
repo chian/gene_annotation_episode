@@ -384,6 +384,9 @@ class _Context:
                 record["diagnostics"] = [_diag("source_text_encoding_unsupported", field, "reader_capability", [reference])]
                 return record
             actual = self.native.witness({k:v for k,v in selected.items() if k != "kind"}, field)
+            # The retained selection contains the authenticated literal even
+            # when its admitted input supplied only source coordinates.
+            selected["quote"] = actual["quote"]
             digest = _hash(loaded["content"])
             record.update(artifact_ref=actual["artifact_ref"], byte_sha256=digest,
                 canonical_locator={"kind": "text", "source_ref": reference, "artifact_ref": actual["artifact_ref"],

@@ -65,7 +65,7 @@ def _plan(value):
     if owner["requested_job_sha256"] != native_blast_digest(request):
         raise ContractError("native_blast_requested_job_digest_mismatch")
     _absolute(plan["attempt_directory"])
-    if type(plan["policy"]) is not dict or set(plan["policy"]) != {"memory_bytes", "scratch_bytes", "wall_seconds"}:
+    if type(plan["policy"]) is not dict or set(plan["policy"]) != {'memory_bytes', 'scratch_bytes'}:
         raise ContractError("native_blast_explicit_policy_required")
     LocalJobPolicy(**plan["policy"])
     return plan

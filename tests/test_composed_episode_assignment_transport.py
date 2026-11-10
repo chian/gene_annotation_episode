@@ -184,8 +184,7 @@ def connected(tmp_path):
         scope = {'subject_refs': scope['subject_refs']}
         provider = Provider()
         family = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id='transport458',
-            resources={'here': {'kind': 'local', 'workspace': str(workspace), 'policy': {
-                'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'wall_seconds': None}}},
+            resources={'here': {'kind': 'local', 'workspace': str(workspace), 'policy': {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}}},
             initial_information={}, tool_registry=ToolRegistry(store), handoff_unit=3,
             acquired_record_unit=2, log_window_bytes=4, log_roles=['stdout', 'stderr'])
         workflow = runtime.Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', 'transport458',

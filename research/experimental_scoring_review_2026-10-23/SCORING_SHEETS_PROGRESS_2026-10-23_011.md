@@ -41,10 +41,6 @@ does not impose a new approval prerequisite on numerical-sheet completion.
 - [ ] A107 — missing-condition correction and independently reproduced native
   data remain as recorded in progress 010. Final delivery must include that
   correction explicitly; the old invalid correlation mixture is not restored.
-- [ ] A108 — the organism-context extension, full example and reader fields
-  have been parent-reviewed. Nine independent checks passed. Final delivery
-  must combine this with the existing sample-context branch while retaining
-  their distinct numerical questions.
 - [ ] A110 — joined chemical formula, IO and conditional arithmetic remain as
   recorded in progress 010. Final source-to-cell and whole-sheet review and
   presentation remain; missing measured pathway operands are not invented.
@@ -120,7 +116,7 @@ that unrelated evidence weakens a target. No replacement pooling rule was
 quietly imported from A105 or A106. Parent files are in
 `a111_sheet_construction_001/`.
 
-## A106 and A108: new reviewed connections
+## A106: new reviewed connections
 
 A106's new proposal combines a statement's groups as sum(H*a)/max(1,sum(H)),
 then applies the candidate's actual required/sufficient min/max meaning and
@@ -131,17 +127,6 @@ are neutral. The explicit convention allows distinct weak correspondences
 to accumulate; it is not A105's pending strongest-side policy. Parent files
 `A106_CANDIDATE_REDUCTION_REVIEW_002.md` and the new check/receipt record the
 full read and fifteen passed arithmetic checks. No new paper was inspected.
-
-A108's new branch calculates whether any permitted organism state provides
-the required contextual opportunity. The existing branch calculates the
-fraction of a specified sample frame that does so. In the complete synthetic
-case, capability is 1 and sample coverage 9/12=.75. A single witness still
-establishes capability 1 while its coverage can be 1/12. Twelve negative
-observations leave capability [0,1] if permitted unexamined states remain.
-The parent read the complete numerical proposal, qualifications, example and
-exact IO and passed nine independent logical-arithmetic checks. Porphyran/Cdv
-primary inspection remains the worker's documented coverage, not a new parent
-claim. Parent files are in `a108_sheet_construction_001/` with suffix 002.
 
 ## Parallel ownership and next work
 

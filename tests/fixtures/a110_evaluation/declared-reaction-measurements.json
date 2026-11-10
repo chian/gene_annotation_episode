@@ -1,0 +1,29 @@
+{
+  "version": "a110_source_reaction_measurements_v1",
+  "ratio": {
+    "mode": "independent_units",
+    "ratio_kind": "product_pair",
+    "unit": "mol_per_mol",
+    "origin": "synthetic",
+    "observations": [
+      {"measurement_key": "synthetic-preparation-1", "value": 0.7},
+      {"measurement_key": "synthetic-preparation-2", "value": 0.9}
+    ],
+    "mean": null,
+    "sample_sd": null,
+    "independent_n": null,
+    "claim": 1,
+    "alternatives": [{"key": "half_product_pair_model", "prediction": 0.5}]
+  },
+  "budget": {
+    "basis": "usable_batch",
+    "unit": "umol",
+    "origin": "synthetic",
+    "resources_complete": true,
+    "resources": [
+      {"resource_key": "synthetic-resource-1", "value": 12, "lower": 12, "upper": 12, "coefficient": 1},
+      {"resource_key": "synthetic-resource-2", "value": 6, "lower": 6, "upper": 6, "coefficient": 1}
+    ],
+    "demand": 10
+  }
+}

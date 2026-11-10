@@ -143,14 +143,38 @@ def read_measurement(selection, *, sources, read_record, read_database_request, 
                     25: 'h*ng/mL', 26: 'cm/s', 27: 'mg/kg',
                     254: 'dimensionless'}.get(definition.get('unit'))
             value, relation, native_type = row.get(field), None, field
+            # Normalized PubChem tables declare the value, type, units and
+            # comparator in separate result columns. Authenticate those column
+            # definitions in the matching assay metadata before using the row.
+            definitions = {item.get('name'): item for item in descr.get('results', [])}
+            standard_columns = ('Standard Type', 'Standard Units', 'Standard Relation')
+            standard_result = field == 'Standard Value' and all(
+                name in definitions and name in row for name in standard_columns)
+            if standard_result:
+                if definition.get('unit') is None:
+                    unit = row['Standard Units'].strip() or None
+                native_type = row['Standard Type']
+                relation = row['Standard Relation'].strip() or None
+                qualifiers.extend(('native_parameter:' + str(native_type),
+                    'result_column_definitions:' + json.dumps(
+                        {name: definitions[name] for name in standard_columns}, ensure_ascii=False)))
             qualifiers.extend(('result_definition:' + json.dumps(definition, ensure_ascii=False),
                 'activity_outcome:' + str(row.get('PUBCHEM_ACTIVITY_OUTCOME'))))
-            # Numeric CSV cells can carry explicit comparators. A plain number
-            # remains a reported point, with the protocol's qualifications intact.
+            # Numeric CSV cells can carry explicit comparators. Normalized
+            # columns retain their declared comparator; other plain numbers
+            # remain reported points, with protocol qualifications intact.
             if value is not None:
                 match = re.fullmatch(r'\s*(<=|>=|<|>|=)?\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)\s*', str(value))
                 if match:
-                    relation, value = match[1] or '=', match[2]
+                    if match[1] is not None:
+                        if standard_result and relation is not None and relation != match[1]:
+                            relation = 'conflicting'
+                            qualifiers.append('inline_and_declared_result_relations_conflict')
+                        else:
+                            relation = match[1]
+                    elif not standard_result:
+                        relation = '='
+                    value = match[2]
             native_owner = {'provider': provider, 'aid': descr['aid']['id'],
                 'result_tag': row.get('PUBCHEM_RESULT_TAG'), 'sid': row.get('PUBCHEM_SID'),
                 'field': field}

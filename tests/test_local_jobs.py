@@ -17,8 +17,8 @@ from gene_annotation_episode.local_jobs import (
 MiB = 1024 ** 2
 
 
-def policy(*, memory=64 * MiB, scratch=4 * MiB, seconds=5):
-    return LocalJobPolicy(memory, scratch, seconds)
+def policy(*, memory=64 * MiB, scratch=4 * MiB):
+    return LocalJobPolicy(memory, scratch)
 
 
 @pytest.fixture
@@ -40,12 +40,11 @@ def test_configuration_is_caller_owned_and_closed():
     changed = LocalJobPolicy.from_config({"memory_bytes": 64 * MiB})
     assert changed.memory_bytes == 64 * MiB
     assert changed.scratch_bytes == defaults.scratch_bytes
-    assert changed.wall_seconds == defaults.wall_seconds
-    assert defaults.wall_seconds is None
-    assert changed.to_dict() == {"memory_bytes": changed.memory_bytes,
-        "scratch_bytes": changed.scratch_bytes, "wall_seconds": changed.wall_seconds}
+    assert not hasattr(changed, 'wall_seconds')
+    assert changed.to_dict() == {'memory_bytes': changed.memory_bytes, 'scratch_bytes': changed.scratch_bytes}
     for settings in ({"memory_bytes": True}, {"scratch_bytes": 0},
-                     {"wall_seconds": float("nan")}, {"wall_seconds": -1}, {"max_turns": 3}, []):
+                     {"wall_seconds": float("nan")}, {"wall_seconds": -1}, {"wall_seconds": None},
+                     {"wall_seconds": 3600}, {"max_turns": 3}, []):
         with pytest.raises(ValueError):
             LocalJobPolicy.from_config(settings)
 
@@ -74,13 +73,13 @@ def test_output_files_and_native_nonzero_are_not_reclassified(boundary):
 
 
 
-def test_unset_work_time_has_no_systemd_runtime_cap(boundary):
+def test_work_time_has_no_configuration_or_systemd_runtime_cap(boundary):
     result = run_local_job([sys.executable, "-c", "print('no work-time cap')"],
         cwd=boundary, policy=LocalJobPolicy(64 * MiB, 4 * MiB))
     assert result.returncode == 0
-    assert result.metadata["policy"]["wall_seconds"] is None
-    assert result.metadata["enforcement"]["wall_time"] == "unset"
-    assert result.metadata["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'wall_seconds' not in result.metadata['policy']
+    assert 'wall_time' not in result.metadata['enforcement']
+    assert 'runtime_max' not in result.metadata['verified_cgroup']
 
 @pytest.mark.skipif(os.environ.get("GENE_EPISODE_TEST_OOM") != "1",
     reason="Explicit opt-in: a cgroup OOM test can trigger a desktop application-stopped notification")
@@ -99,18 +98,10 @@ def test_actual_memory_limit_reports_proved_cgroup_oom(boundary):
     # Reaching this assertion is also evidence that the host survived intact.
 
 
-def test_actual_wall_limit_reaps_whole_native_tree(boundary):
-    child_pid = boundary / "child.pid"
-    script = ("import pathlib,subprocess,sys,time;"
-              "child=subprocess.Popen([sys.executable,'-c','import time;time.sleep(30)'],start_new_session=True);"
-              f"pathlib.Path({str(child_pid)!r}).write_text(str(child.pid));"
-              "time.sleep(30)")
-    started = time.monotonic()
-    with pytest.raises(AcquisitionError) as caught:
-        run_local_job([sys.executable, "-c", script], cwd=boundary, policy=policy(seconds=1))
-    assert caught.value.operational["resource"] == "wall_seconds"
-    assert time.monotonic() - started < 5
-    assert_not_executing(int(child_pid.read_text()))
+def test_elapsed_time_is_measured_without_a_termination_policy(boundary):
+    result = run_local_job(['/bin/sleep', '.15'], cwd=boundary, policy=policy())
+    assert result.returncode == 0
+    assert result.metadata['elapsed_seconds'] >= .15
 
 
 

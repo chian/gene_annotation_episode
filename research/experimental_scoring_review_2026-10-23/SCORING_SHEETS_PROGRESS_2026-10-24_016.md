@@ -21,7 +21,6 @@ errors, drafts and receipts remain unchanged.
 - [x] A104 — evolutionary history/phylogeny.
 - [x] A106 — perturbation and restoration.
 - [x] A107 — required partner presence and coexpression.
-- [x] A108 — organism and sample plausibility.
 - [x] A110 — biochemical/pathway consistency.
 - [x] A111 — experimental structural evidence and correspondence.
 
@@ -33,7 +32,7 @@ in the immutable goal attachment records its creation state; it was not edited.
 Paths are relative to this experimental-review directory. Previous progress
 records retain the full parent reading, calculation and conversation-delivery
 history. The explicit criteria2/3/6 matrix and its exact inspection limits are
-in `scoring_completion_evidence_030/CURRENT_MATRIX_AFTER_A108_031.md`, backed by
+in `scoring_completion_evidence_030/CURRENT_MATRIX_031.md`, backed by
 the original030 audit. That matrix predates the A103 repair and excludes A104;
 the last two rows below identify the actual new evidence, not a relabelled pass.
 
@@ -46,7 +45,6 @@ the last two rows below identify the actual new evidence, not a relabelled pass.
 | A104 | `a104_clade_support_completion_025/A104_CURRENT_NUMERICAL_PROPOSAL_004.md` / `EXACT_READER_FIELDS_004.md`, corrections032 and source/input/specificity033; parent `A104_NUMERICAL_RESEARCH_DELIVERY_2026-10-24_001.md` | Resolved topology, fixed-clade placement, characterized coverage and tree-distance factors; shared-sample combination. Synthetic .75/.075/.32; source-conditional TyrA C=.4/0/.5. Missing real organismal tree/query/branch inputs prohibit a complete empirical target value. |
 | A106 | `a106_complete_deliverable_028/A106_NUMERICAL_SHEET_028.md` / `READER_CROSSWALK_028.md`, including SD/SEM appendix | Explicit effect/restoration/comparability/isolation/correspondence and floor-one pooling. Contrasting YeaG variant measurements populate real operands; Cas2 selected counts remain diagnostic. Complete synthetic conservative candidate .0442385231161. |
 | A107 | `a107_complete_deliverable_024/A107_NUMERICAL_SCORING_SHEET_001.md` / `A107_EXACT_CELL_CROSSWALK_001.md` | Actual PRECISE public-data statistics give contrasting partner values .610555827945 and .5; incomplete requested expression panels remain unknown. Genomic identity and expression statistics are separate, with explicit required-set compilation. |
-| A108 | `a108_sheet_construction_001/A108_COMPLETE_NUMERICAL_SHEET_003.md`, both reader contracts and `A108_EXACT_UNCERTAINTY_FIELDS_004.md` | Defined sample-context coverage versus organism capability, source-populated logical/physical cells and synthetic .5/[.5,.6]. Numeric SD/SEM magnitudes and their sampling bases now exist for both observation types. |
 | A110 | `a110_complete_deliverable_026/A110_CURRENT_NUMERICAL_SHEET_026.md` / `READER_CROSSWALK_026.md` | Explicit corrected quantities, scalar/isotope predictions, residual contrast, resource and conservation components. Nfn source-conditional .983202458177; complete synthetic .266666666667 and .639690270. Signed contribution is explicit; no global hypervolume mapping is claimed. |
 | A111 | `a111_complete_deliverable_027/A111_NUMERICAL_SHEET_001.md` / `READER_FIELD_CROSSWALK_001.md` | Native local X-ray/EM/NMR cells, measured geometry/correspondence/control factors, current support-minus-opposition reduction; full synthetic .03575625 and other modality cases. Missing target mappings remain unknown. |
 
@@ -67,9 +65,6 @@ of actual biological data has been disguised as a finished empirical annotation.
    exact loci/aliases/strain cross-references, request manifest, corrected filled
    cells and receipts, and ran22 bounded checks. Worker28 checks and13-cell
    format validation overlap and are not added as independent evidence.
-2. Added A108's missing numeric uncertainty fields and exact sampling bases;
-   reviewed for both observation types. The score formulas and values did not
-   change, so no redundant arithmetic rerun was added.
 3. Completed A104 around the user's organismal-tree and function-conserved-clade
    definition, with HGT, mixed-function and outlier treatment. Independent
    review found the abbreviated C factoring error and two fixture-helper

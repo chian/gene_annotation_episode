@@ -1,14 +1,15 @@
 """Structured model calls through the existing authenticated Codex connection.
 
-One ephemeral conversation per Episode/role keeps histories and model settings
-separate. Models propose data; method_loop and the workflow own tool execution
-and numerical continuation. Scientific credit is not calculated here.
+Each model call uses an admitted ephemeral provider process. The runtime restores
+the Episode's authoritative scientific state and history between calls. Models
+propose data; method_loop and the workflow own tool execution and numerical
+continuation. Scientific credit is not calculated here.
 """
 
 import asyncio
 from collections import deque
 from collections.abc import Mapping
-from contextlib import closing
+from contextlib import asynccontextmanager, closing
 from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -16,11 +17,16 @@ import json
 import fcntl
 import os
 from pathlib import Path
+import re
+import shutil
 import signal
 import sqlite3
 import tomllib
 
 from .boundary_validation import parse_json_object, parse_json_value
+from .provider_authentication import (
+    ProviderAuthenticationError, authentication_policy,
+    authentication_transport, verify_authentication)
 from .decision_context import VERSION as DECISION_CONTEXT_VERSION, apply_state_frame
 from .infernal_result_presentation import infernal_receiver_context
 from .execution_prompt import is_api_launch_context, render_api_launch_prompt
@@ -29,7 +35,9 @@ from .scientific_process_prompt import (is_published_scientific_context,
 
 
 class ModelCallError(RuntimeError):
-    pass
+    def __init__(self, *args, diagnostic=None):
+        super().__init__(*args)
+        self.diagnostic = diagnostic
 
 
 class _StructuredWhitespaceStall(ModelCallError):
@@ -48,6 +56,133 @@ _NATIVE_TOOLS_DISABLED = {
     'features.daemon_auto_start':False,
     'web_search':'disabled','mcp_servers.openaiDeveloperDocs.enabled':False,
 }
+
+_THREAD_CREATION_PANIC = re.compile(
+    rb"(?:^|\n)thread '[^\r\n]+'(?: \([0-9]+\))? panicked at [^\r\n]+:\r?\n"
+    rb"failed to spawn thread:")
+
+
+def _resource_snapshot(budget):
+    """Retain observed aggregate task pressure without an admission guess."""
+    root = Path('/sys/fs/cgroup') / budget['slice_cgroup'].lstrip('/')
+    values = {'observed_at': datetime.now(timezone.utc).isoformat(),
+              'slice_cgroup': budget['slice_cgroup']}
+    for name in ('pids.current', 'pids.max', 'pids.events',
+                 'memory.current', 'memory.events'):
+        try:
+            raw = (root / name).read_text().strip()
+            values[name] = (raw if raw == 'max' else int(raw) if raw.isdecimal() else
+                           {key: int(value) for key, value in
+                            (line.split() for line in raw.splitlines())})
+        except (OSError, ValueError) as error:
+            values[name] = {'unavailable': type(error).__name__}
+    return values
+
+
+class _ProviderAdmission:
+    """FIFO ownership of one provider process across this workflow's coordinators.
+
+    The ticket lock lasts through the admitted call and native process teardown.
+    It does not span an Episode or a scientific child acquisition. A queued
+    parent therefore cannot overtake an already queued child. Lock ownership,
+    rather than elapsed time, identifies abandoned requests.
+    """
+    def __init__(self, directory, transport_directory):
+        self.directory = directory
+        self.transport_directory = transport_directory
+        self.ticket = None
+        self.ticket_path = None
+        self.record = {'requested_at': datetime.now(timezone.utc).isoformat(),
+                       'coordinator_pid': os.getpid(),
+                       'lifetime': 'one_model_call_through_provider_exit'}
+
+    @asynccontextmanager
+    async def _mutex(self):
+        with (self.directory / 'queue.lock').open('a') as mutex:
+            while True:
+                try:
+                    fcntl.flock(mutex, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    # Resource admission only: no Episode action or deadline.
+                    await asyncio.sleep(0.05)
+            try:
+                yield
+            finally:
+                fcntl.flock(mutex, fcntl.LOCK_UN)
+
+    def _save(self):
+        (self.transport_directory / 'provider-admission.json').write_text(
+            json.dumps(self.record, indent=2) + '\n')
+
+    async def acquire(self):
+        self._save()
+        try:
+            async with self._mutex():
+                counter = self.directory / 'sequence'
+                number = int(counter.read_text()) + 1 if counter.exists() else 1
+                temporary = self.directory / ('sequence-' + str(os.getpid()) + '.tmp')
+                temporary.write_text(str(number) + '\n')
+                temporary.replace(counter)
+                self.ticket_path = self.directory / (str(number) + '.request')
+                self.ticket = self.ticket_path.open('x+')
+                fcntl.flock(self.ticket, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                self.record['ticket'] = number
+                self.ticket.write(json.dumps(self.record) + '\n')
+                self.ticket.flush()
+            while True:
+                async with self._mutex():
+                    for path in sorted(self.directory.glob('*.request'),
+                                       key=lambda item: int(item.stem)):
+                        if path == self.ticket_path:
+                            self.record['admitted_at'] = datetime.now(timezone.utc).isoformat()
+                            self._save()
+                            return
+                        try:
+                            other = path.open('r+')
+                        except FileNotFoundError:
+                            continue
+                        with other:
+                            try:
+                                fcntl.flock(other, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                            except BlockingIOError:
+                                break
+                            # No coordinator or inherited provider fd owns it.
+                            path.unlink(missing_ok=True)
+                    else:
+                        raise ModelCallError('provider_admission_ticket_missing')
+                await asyncio.sleep(0.05)
+        except BaseException:
+            self.release()
+            raise
+
+    def release(self):
+        if self.ticket is not None:
+            self.ticket_path.unlink(missing_ok=True)
+            self.ticket.close()
+            self.ticket = None
+        self.record['released_at'] = datetime.now(timezone.utc).isoformat()
+        self._save()
+
+
+def _model_process_command(command, environment_bounds):
+    """Make the admitted CPU allowance visible to native thread-pool sizing.
+
+    A cgroup CPU quota limits consumed CPU time but leaves all host CPUs in
+    sched_getaffinity. Native startup can otherwise create enough threads to
+    exhaust this workflow's task allowance before any model turn begins.
+    This is a process resource bound, not a research stopping rule.
+    """
+    allowed = sorted(os.sched_getaffinity(0))
+    count = max(1, environment_bounds["cpu_percent"] // 100)
+    # Spread separate coordinators over their permitted CPUs; never select
+    # a CPU outside an inherited affinity constraint.
+    start = os.getpid() % len(allowed)
+    selected = (allowed[start:] + allowed[:start])[:count]
+    taskset = shutil.which("taskset")
+    if taskset is None:
+        raise ModelCallError("model_cpu_affinity_tool_unavailable")
+    return [taskset, "--cpu-list", ",".join(map(str, selected)), *command], selected
 
 
 def _seed_codex_index(directory):
@@ -109,6 +244,8 @@ class ModelRole:
 class _SessionConnection:
     def __init__(self, config: dict, directory: Path, cwd: Path, *, image_resolver=None):
         self.command = config["connection"]["command"]
+        self.authentication_policy = authentication_policy(config['connection'])
+        self.authentication = None
         self.roles = {name: ModelRole(**config[name]) for name in ("FAST", "REASONING")}
         self.routing = config["routing"]
         self.directory, self.cwd = directory, cwd.resolve()
@@ -116,6 +253,8 @@ class _SessionConnection:
         (directory / "configuration.json").write_text(json.dumps(config, indent=2))
         self.process = None
         self.stderr = None
+        self.stderr_reader = None
+        self.stderr_failure = None
         self.pending = deque()
         self.request_index = 0
         self.call_index = 0
@@ -128,6 +267,7 @@ class _SessionConnection:
         # New bootstrap frames replace it after restart or native compaction.
         self.scientific_prompt_states = {}
         self.provider_lease = None
+        self.admission = None
 
     def has_session(self, episode_id, role):
         return (episode_id, role) in self.sessions
@@ -142,11 +282,9 @@ class _SessionConnection:
     async def __aenter__(self):
         from .workflow_budget import active_budget
         budget=active_budget()
-        # A durable child has its own coordinator while the parent waits for
-        # its result. They share the workflow cgroup, not a model connection.
-        # A workflow-wide lease here prevents every durable child from ever
-        # obtaining its first response. Retain one provider per coordinator;
-        # the launcher owns admission and aggregate limits for the whole tree.
+        # Catch duplicate transports inside a coordinator, then join the fair
+        # run-wide queue. ModelConnection retires this transport after its call,
+        # before the runtime can await or commission further scientific work.
         leases=Path(budget['run_directory'])/'provider-locks'
         leases.mkdir(exist_ok=True)
         self.provider_lease=(leases/(str(os.getpid())+'.lock')).open('a')
@@ -156,9 +294,14 @@ class _SessionConnection:
             self.provider_lease.close();self.provider_lease=None
             raise ModelCallError('single_provider_process_already_active')
         try:
-            self.stderr = (self.directory / "transport-stderr.log").open("w")
+            self.admission = _ProviderAdmission(leases, self.directory)
+            await self.admission.acquire()
+            self.stderr = (self.directory / "transport-stderr.log").open("wb")
             command = list(self.command)
             environment = dict(os.environ)
+            command, environment = authentication_transport(
+                command, environment, self.authentication_policy)
+            cpu_affinity = None
             if Path(command[0]).name in {'codex','codex.exe'} and 'app-server' in command:
                 sqlite_directory = (self.directory/'sqlite').resolve()
                 log_directory = (self.directory/'logs').resolve()
@@ -172,18 +315,34 @@ class _SessionConnection:
                 environment['CODEX_SQLITE_HOME'] = str(sqlite_directory)
                 (self.directory/'sqlite-index-snapshot.json').write_text(json.dumps(
                     _seed_codex_index(sqlite_directory),indent=2)+'\n')
+                command, cpu_affinity = _model_process_command(command, budget['environment_bounds'])
             (self.directory/'transport-launch.json').write_text(json.dumps({
-                'command':command,'cwd':str(self.cwd)},indent=2)+'\n')
+                'command':command,'cwd':str(self.cwd),'cpu_affinity':cpu_affinity,
+                'provider_admission':dict(self.admission.record),
+                'resources_before_start':_resource_snapshot(budget)},indent=2)+'\n')
             self.process = await asyncio.create_subprocess_exec(
                 *command, cwd=self.cwd,env=environment,stdin=asyncio.subprocess.PIPE,
-                stdout=asyncio.subprocess.PIPE, stderr=self.stderr, limit=16 * 1024 * 1024,
+                stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, limit=16 * 1024 * 1024,
                 start_new_session=True,
+                # Preserve resource ownership if the coordinator dies before
+                # its provider. The ticket becomes reclaimable on actual exit.
+                pass_fds=(self.admission.ticket.fileno(),),
             )
+            (self.directory/'transport-started.json').write_text(json.dumps({
+                'provider_pid':self.process.pid,
+                'resources_after_start':_resource_snapshot(budget)},indent=2)+'\n')
+            self.stderr_failure = asyncio.get_running_loop().create_future()
+            self.stderr_reader = asyncio.create_task(self._capture_stderr())
             await self._rpc("initialize", {"clientInfo": {
                 "name": "gene_annotation_episode", "version": "0.1.0",
             }})
             await self._send({"method": "initialized", "params": {}})
+            self.authentication = await verify_authentication(self._rpc, self.authentication_policy)
+            if self.authentication is not None:
+                (self.directory/'authentication.json').write_text(
+                    json.dumps(self.authentication, indent=2)+'\n')
         except BaseException as error:
+            failure_resources = _resource_snapshot(budget)
             natural_returncode = None
             if self.process is not None:
                 try:
@@ -195,11 +354,29 @@ class _SessionConnection:
                 'error':type(error).__name__+': '+str(error),
                 'returncode_before_cleanup':natural_returncode,
                 'returncode_after_cleanup':self.process.returncode if self.process is not None else None,
+                'resources_at_failure':failure_resources,
+                'resources_after_cleanup':_resource_snapshot(budget),
             },indent=2)+'\n')
+            if isinstance(error, ProviderAuthenticationError):
+                raise ModelCallError(str(error), diagnostic={'cause_code': str(error)}) from None
             raise
         return self
 
     async def __aexit__(self, *exception):
+        # A cancellation must not release admission while the owned provider
+        # is still alive. Finish transport teardown before propagating it.
+        cleanup = asyncio.create_task(self._close_transport())
+        cancelled = False
+        while not cleanup.done():
+            try:
+                await asyncio.shield(cleanup)
+            except asyncio.CancelledError:
+                cancelled = True
+        cleanup.result()
+        if cancelled:
+            raise asyncio.CancelledError
+
+    async def _close_transport(self):
         if self.process is not None:
             try:
                 os.killpg(self.process.pid, signal.SIGTERM)
@@ -219,18 +396,59 @@ class _SessionConnection:
                     os.killpg(self.process.pid, signal.SIGKILL)
                 except ProcessLookupError:
                     pass
-        if self.stderr is not None:
-            self.stderr.close()
-        if self.provider_lease is not None:
-            self.provider_lease.close()
-            self.provider_lease=None
+        try:
+            if self.stderr_reader is not None:
+                await self.stderr_reader
+        finally:
+            if self.stderr_failure is not None and not self.stderr_failure.done():
+                self.stderr_failure.cancel()
+            if self.stderr is not None:
+                self.stderr.close()
+            if self.provider_lease is not None:
+                self.provider_lease.close()
+                self.provider_lease=None
+            if self.admission is not None:
+                self.admission.release()
+                self.admission=None
 
     async def _send(self, message):
         self.process.stdin.write((json.dumps(message, allow_nan=False) + "\n").encode())
         await self.process.stdin.drain()
 
+    async def _capture_stderr(self):
+        """Preserve native diagnostics and surface the observed startup panic.
+
+        A panicked worker can leave the app-server alive with an unanswered RPC.
+        Its explicit thread-creation failure is an execution error. Silence or
+        elapsed time does not trigger this path.
+        """
+        tail = b""
+        try:
+            while chunk := await self.process.stderr.read(8192):
+                self.stderr.write(chunk)
+                self.stderr.flush()
+                tail = (tail + chunk)[-16384:]
+                if _THREAD_CREATION_PANIC.search(tail) and not self.stderr_failure.done():
+                    self.stderr_failure.set_result(
+                        "model_provider_thread_creation_failed; see transport-stderr.log")
+        except (OSError, ValueError) as error:
+            if not self.stderr_failure.done():
+                self.stderr_failure.set_result("model_provider_stderr_capture_failed: " + str(error))
+
     async def _read(self):
-        line = await self.process.stdout.readline()
+        if self.stderr_failure is None:
+            line = await self.process.stdout.readline()
+        else:
+            reading = asyncio.create_task(self.process.stdout.readline())
+            try:
+                await asyncio.wait((reading, self.stderr_failure), return_when=asyncio.FIRST_COMPLETED)
+                if self.stderr_failure.done():
+                    raise ModelCallError(self.stderr_failure.result())
+                line = reading.result()
+            finally:
+                if not reading.done():
+                    reading.cancel()
+                await asyncio.gather(reading, return_exceptions=True)
         if not line:
             raise ModelCallError("Codex transport closed; see transport-stderr.log")
         return json.loads(line)
@@ -243,7 +461,16 @@ class _SessionConnection:
             message = await self._read()
             if message.get("id") == identity and "method" not in message:
                 if "error" in message:
-                    raise ModelCallError(f"{method}: {message['error']}")
+                    error = message['error']
+                    data = error.get('data') if isinstance(error, Mapping) else None
+                    diagnostic = None
+                    if isinstance(data, Mapping) and data.get('input_error_code') == 'input_too_large':
+                        diagnostic = {'cause_code': 'input_too_large'}
+                        for reported, shown in (('actual_chars', 'input_chars'),
+                                                ('max_chars', 'provider_max_chars')):
+                            if type(data.get(reported)) is int and data[reported] >= 0:
+                                diagnostic[shown] = data[reported]
+                    raise ModelCallError(f"{method}: {error}", diagnostic=diagnostic)
                 return message["result"]
             self.pending.append(message)
 
@@ -374,7 +601,13 @@ class _SessionConnection:
                             "".join(parts) for parts in streams.values()))
                     turn = params["turn"]
                     if turn["status"] != "completed":
-                        raise ModelCallError(f"Model turn {turn['status']}: {turn.get('error')}")
+                        error = turn.get('error')
+                        diagnostic = ({'cause_code': 'provider_output_incomplete'}
+                            if isinstance(error, Mapping) and error.get('message') ==
+                                'Incomplete response returned, reason: max_output_tokens'
+                            else None)
+                        raise ModelCallError(f"Model turn {turn['status']}: {error}",
+                            diagnostic=diagnostic)
                     return "\n".join(final_text)
 
     async def complete(self, episode_id: str, role: str, instructions: str,
@@ -438,7 +671,13 @@ class _SessionConnection:
                         "Your previous turn did not finish its structured response and was interrupted "
                         "after repeatedly emitting whitespace. No action from that turn was executed. "
                         "Return your selected response as one complete JSON value matching the supplied "
-                        "schema, including all closing delimiters, and finish the turn."}]
+                        "schema. Include every property named in each object's required list. "
+                        "A required property whose schema permits null still needs a value: use "
+                        "explicit JSON null when that field is unused. Optional tool operands can "
+                        "therefore appear as required nullable properties in this response schema. "
+                        "Complete the remaining required properties and all closing delimiters, "
+                        "then finish the turn. Choose the action and report values from the supplied "
+                        "scientific context; this is a response-format repair."}]
             (directory / "response.txt").write_text(text)
             # The decision exchange journal must retain a finite but invalid
             # envelope (including JSON null) so the runtime can give structured
@@ -459,8 +698,11 @@ class _SessionConnection:
     def _presentation(self, episode_id, role, instructions, context):
         """Render declared TASKs from reconstructed state; preserve other inputs."""
         from .hpc_prompt import is_hpc_context, render_hpc_prompt
+        from .monitor_prompt import is_monitor_context, render_monitor_prompt
         from .literature_experimental_prompt import (
-            is_literature_experimental_context, render_literature_experimental_prompt)
+            is_literature_experimental_context)
+        from .component_axis_literature_prompt import (
+            render_component_axis_literature_prompt, with_fact_contract_instructions)
         from .rna_structure_comparison_presentation import is_rna_comparison_results_context
         from .rna_structure_presentation import (
             has_rna_structure_receiver_context, is_rna_structure_results_context)
@@ -469,6 +711,7 @@ class _SessionConnection:
 
         def has_text_task(value):
             return (is_hpc_context(value) or is_published_scientific_context(value)
+                    or is_monitor_context(value)
                     or is_api_launch_context(value)
                     or is_literature_experimental_context(value)
                     or is_rna_comparison_results_context(value)
@@ -512,7 +755,7 @@ class _SessionConnection:
             if is_hpc_context(state):
                 renderer = render_hpc_prompt
             elif is_literature_experimental_context(state):
-                renderer = render_literature_experimental_prompt
+                renderer = render_component_axis_literature_prompt
             elif is_published_scientific_context(state):
                 renderer = render_scientific_process_prompt
             elif is_api_launch_context(state):
@@ -527,10 +770,16 @@ class _SessionConnection:
                     and not has_rna_structure_receiver_context(state)
                     and not _rna_comparison_receiver_context(state)):
                 renderer = render_selected_execution_prompt
+            elif (is_monitor_context(state)
+                    and not has_rna_structure_receiver_context(state)
+                    and not _rna_comparison_receiver_context(state)
+                    and not has_molecular_receiver_context(state)):
+                renderer = render_monitor_prompt
             else:
                 from .rna_structure_comparison_receiver_prompt import render_rna_comparison_receiver_prompt
                 renderer = render_rna_comparison_receiver_prompt
             rendered = renderer(state, instructions, lookup_results=lookups)
+            rendered = with_fact_contract_instructions(rendered, state)
             self.scientific_prompt_states[key] = state
             return rendered, text_instructions(instructions)
         if state is not None:
@@ -544,12 +793,14 @@ class _SessionConnection:
 
 
 class ModelConnection:
-    """One live provider per coordinator; retire it when switching episodes.
+    """One admitted provider call, retired before scientific execution resumes.
 
-    Native unsubscribe does not unload ephemeral threads. A dedicated process
-    makes retirement explicit without retaining another closed conversation.
-    Parent conversation restoration uses the visible records already on disk.
+    Native unsubscribe does not unload ephemeral threads. A process per call
+    frees the workflow's model slot for another coordinator, including a child.
+    The runtime reconstructs authoritative state/history for each fresh native
+    conversation; model settings and scientific records remain unchanged.
     """
+    session_type = _SessionConnection
 
     def __init__(self, config, directory, cwd, *, image_resolver=None):
         self.config, self.directory, self.cwd = config, Path(directory), Path(cwd)
@@ -588,17 +839,19 @@ class ModelConnection:
 
     async def _complete_serial(self, episode_id, role, instructions, context, output_schema):
         key = (episode_id, role)
-        if key not in self.workers:
-            for previous in tuple(dict.fromkeys(k[0] for k in self.workers)):
-                await self.release(previous)
-            self.session_index += 1
-            worker = _SessionConnection(self.config,
-                self.directory / f"session-{self.session_index:04}", self.cwd,
-                image_resolver=self.image_resolver)
-            await worker.__aenter__()
-            self.workers[key] = worker
-            self.maximum_active_workers = max(self.maximum_active_workers, len(self.workers))
-        return await self.workers[key].complete(episode_id, role, instructions, context, output_schema)
+        for previous in tuple(dict.fromkeys(k[0] for k in self.workers)):
+            await self.release(previous)
+        self.session_index += 1
+        worker = self.session_type(self.config,
+            self.directory / f"session-{self.session_index:04}", self.cwd,
+            image_resolver=self.image_resolver)
+        await worker.__aenter__()
+        self.workers[key] = worker
+        self.maximum_active_workers = max(self.maximum_active_workers, len(self.workers))
+        try:
+            return await worker.complete(episode_id, role, instructions, context, output_schema)
+        finally:
+            await self.release(episode_id)
 
     async def release(self, episode_id):
         for key in [key for key in self.workers if key[0] == episode_id]:

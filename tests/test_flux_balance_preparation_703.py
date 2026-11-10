@@ -108,7 +108,7 @@ def test_real_saved_worker_common_scratch_root_parameters_and_native_receipt(act
     assert execution["intent"]["execution_directory"] == str(adapter)
     assert execution["metadata"]["policy"] == POLICY
     assert execution["metadata"]["verified_cgroup"] == {"memory_max": 21474836480, "memory_swap_max": 0,
-        "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+        "kill_mode": "control-group", "oom_policy": "kill"}
     assert execution["metadata"]["enforcement"]["scratch"] == "monitored_visible_allocated_bytes_with_possible_overshoot"
     source_names = {Path(p["path"]).name for p in execution["intent"]["source_pins"]}
     assert "flux_balance_result_worker.py" in source_names

@@ -270,6 +270,10 @@ class EpisodeBindingRegistry:
             supplied.update(closed)
         return supplied
 
+    def current_report_facts(self, context):
+        """Current receipt-scoped views, separate from an archived return."""
+        return self._received_report_mapping('current_report_facts', context)
+
     def resolve_received_reference(self, context, reference, namespace):
         result = None
         for binding in self._bindings:
@@ -318,6 +322,10 @@ class EpisodeBindingRegistry:
     def received_form_references(self, context, form, schema, operation_key):
         return self._reference_hook('received_form_references', context,
                                     form, schema, operation_key)
+
+    def received_evidence_tokens(self, context):
+        """Immutable evidence actually held beyond ordinary record references."""
+        return self._reference_hook('received_evidence_tokens', context)
 
     @property
     def entry_roles(self):

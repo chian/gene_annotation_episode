@@ -735,7 +735,7 @@ def _validate_retained_protein_execution(store, execution, *, plan, control):
         and all(same(metadata.get(key), value) for key, value in meta.items()), "original_commission_mismatch")
     enforcement = meta.get("enforcement", {})
     _require(type(enforcement) is dict and enforcement.get("memory") == "systemd_cgroup_v2_memory_max"
-        and enforcement.get("swap") == "systemd_memory_swap_max_zero" and enforcement.get("wall_time") == "unset",
+        and enforcement.get("swap") == "systemd_memory_swap_max_zero",
         "original_commission_mismatch")
     if body["stage"] == "prepared":
         _require(all(body[name] is None for name in ("started_at", "started_monotonic_ns", "boot_id")),
@@ -748,8 +748,7 @@ def _validate_retained_protein_execution(store, execution, *, plan, control):
         cgroup = meta.get("verified_cgroup", {})
         _require(type(cgroup) is dict and type(cgroup.get("memory_max")) is int
             and cgroup["memory_max"] == plan["policy"]["memory_bytes"]
-            and type(cgroup.get("memory_swap_max")) is int and cgroup["memory_swap_max"] == 0
-            and cgroup.get("runtime_max") == "infinity", "original_commission_mismatch")
+            and type(cgroup.get("memory_swap_max")) is int and cgroup["memory_swap_max"] == 0, "original_commission_mismatch")
     if returned:
         _require(body["stage"] == "released" and type(metadata.get("native_returncode")) is int
             and metadata["native_returncode"] == execution["returncode"], "protein_structure_execution_record_invalid")

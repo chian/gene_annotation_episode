@@ -18,13 +18,15 @@ from method_loop.durable import canonical
 from method_loop.identities import UnitRef
 
 from .episode_journal import WorkflowError
+from .episode_completion import observes_action_outcome
+from .execution_timing import capture_progress_time
 from .numerical import (ESTIMATOR_VERSION, STATUS_INSUFFICIENT, STATUS_NORMAL,
                         STATUS_UNIDENTIFIABLE, _parameters, estimate_score_yield)
 
 
 TABLE_VERSION = "own_decision_yield_table_v1"
 LOOKUP_VERSION = "own_attempts_v1"
-CATEGORY_ESTIMATOR_VERSION = "category_occurrence_yield_v1"
+CATEGORY_ESTIMATOR_VERSION = "category_real_time_credit_mark_yield_v2"
 REFERENCE_PREVIEW_SIZE = 32
 INLINE_VALUE_BYTES = 1024
 INPUT_PREVIEW_BYTES = 4096
@@ -33,7 +35,8 @@ DETAIL_CONTAINER_PAGE = 32
 DISCRIMINATOR_BYTES = 1024
 OWN_ATTEMPTS_REPLY_BYTES = 128 * 1024
 _CHILD_KINDS = {"child", "job_child", "episode_child"}
-_OUTCOME_STATUSES = {"completed", "partial", "pending", "failed", "invalid", "unavailable"}
+_OUTCOME_STATUSES = {"completed", "partial", "pending", "failed", "interrupted",
+    "invalid", "unavailable", "delivery_only"}
 
 
 class OwnAttemptQuery(TypedDict):
@@ -261,11 +264,16 @@ def _observations(journal, episode_id, before, rows, tables):
         "json_extract(s.slot,'$.child_return') AS child_return" if has_slots else
         "NULL AS sequence,NULL AS slot_decision,NULL AS slot_episode,NULL AS slot_sequence,"
         "NULL AS slot_original,NULL AS completion_kind,NULL AS child_return")
+    original = ("COALESCE(json_extract(o.observation,'$.decision_index'),s.original_decision_index)"
+                if has_slots else "json_extract(o.observation,'$.decision_index')")
+    timing_column = ("(SELECT json_extract(t.data,'$.progress_time') FROM runtime_estimation_contexts t "
+        "WHERE t.run_id=o.run_id AND t.episode_id=o.episode_id AND t.decision_index=" + original + ")"
+        if "runtime_estimation_contexts" in tables else "NULL")
     query = """SELECT o.unit_index,
         json_extract(o.observation,'$.decision_index') AS original_decision,
         json_extract(o.observation,'$.unit_ref') AS unit_ref,
         json_extract(o.observation,'$.step.marginal_credit') AS gain,
-        json_type(o.observation,'$.step.marginal_credit') AS gain_type,""" + slot_columns + """
+        json_type(o.observation,'$.step.marginal_credit') AS gain_type,""" + timing_column + " AS progress_time," + slot_columns + """
         FROM runtime_observations o """ + join + """
         WHERE o.run_id=? AND o.episode_id=? ORDER BY o.unit_index"""
     observations, reasons, unassigned = {}, [], 0
@@ -282,7 +290,7 @@ def _observations(journal, episode_id, before, rows, tables):
             continue
         attempt = by_decision.get(index)
         if (attempt is None or attempt["action_index"] is None
-                or attempt["status"] not in {"completed", "partial"}
+                or not observes_action_outcome(attempt["selection"]["kind"], attempt["status"])
                 or index in observations):
             raise WorkflowError("decision_history_observation_identity_conflict")
         _index(row["unit_index"], "saved_observation_index")
@@ -302,14 +310,22 @@ def _observations(journal, episode_id, before, rows, tables):
         if row["gain_type"] not in {"integer", "real"} or not math.isfinite(gain):
             gain = None
             reasons.append("saved_marginal_credit_unavailable")
-        observations[index] = {"gain": gain, "identity": {
+        progress_time = None if row["progress_time"] is None else json.loads(row["progress_time"])
+        if progress_time is not None and (
+                not isinstance(progress_time, Mapping) or any(progress_time.get(key) != expected
+                for key, expected in (("run_id", journal.run_id), ("episode_id", episode_id),
+                                      ("original_decision_index", index)))):
+            raise WorkflowError("decision_history_progress_time_identity_conflict")
+        observations[index] = {"gain": gain,
+            "context": None if progress_time is None else {"progress_time": progress_time},
+            "identity": {
             "observation_index": row["unit_index"], "completion_sequence": row["sequence"],
             "unit_ref": reference, "kind": row["completion_kind"],
             "child_return": None if row["child_return"] is None else json.loads(row["child_return"])}}
     return observations, list(dict.fromkeys(reasons)), unassigned
 
 
-def _expectation(history, parameters, *, complete):
+def _expectation(history, parameters, *, complete, contexts, evaluation_time):
     result = {"status": "unavailable", "unavailable_reason": None,
         "band": None, "completed_occurrences": len(history)}
     if parameters is None:
@@ -317,14 +333,15 @@ def _expectation(history, parameters, *, complete):
     elif not complete:
         result["unavailable_reason"] = "saved_marginal_credit_unavailable"
     else:
-        estimate = estimate_score_yield(history, parameters)
+        estimate = estimate_score_yield(history, parameters, contexts=contexts,
+                                        evaluation_time=evaluation_time)
         band = estimate.expected_next_gain
         result["band"] = band.as_record()
         if band.status_code == STATUS_NORMAL:
             result["status"] = "available"
         else:
-            result["unavailable_reason"] = {
-                STATUS_INSUFFICIENT: "insufficient_completed_actions",
+            result["unavailable_reason"] = estimate.diagnostics.get("unavailable_reason") or {
+                STATUS_INSUFFICIENT: "progress_time_unavailable",
                 STATUS_UNIDENTIFIABLE: "unidentifiable"}[band.status_code]
     return result
 
@@ -337,6 +354,9 @@ def yield_table(journal, episode_id, *, before, parameters=None) -> dict:
         tables = _tables(journal)
         attempts = _attempt_rows(journal, episode_id, before, tables)
         observations, reasons, unassigned = _observations(journal, episode_id, before, attempts, tables)
+        # The actual decision/query point is captured once and retained in the
+        # original model request's snapshot. It is not a progress observation.
+        evaluation_time = capture_progress_time(journal, episode_id)
     groups = {}
     for attempt in attempts:
         category = attempt["category"]
@@ -351,15 +371,19 @@ def yield_table(journal, episode_id, *, before, parameters=None) -> dict:
         complete = all(gain is not None for gain in history)
         rows.append({"category": category, "completed_actions": len(completed),
             "total_yield": math.fsum(history) if complete else None,
-            "expected_yield": _expectation(history, parameters, complete=complete),
+            "expected_yield": _expectation(history, parameters, complete=complete,
+                contexts=[item["context"] for item in completed], evaluation_time=evaluation_time),
             "attempted_uncompleted": len(members) - len(completed)})
     return {"version": TABLE_VERSION, "before": before,
         "completion_count_basis": "saved_own_controller_observations",
         "yield_basis": "saved_signed_marginal_credit_excluding_inherited_baseline",
         "expectation_model": {"version": CATEGORY_ESTIMATOR_VERSION,
             "estimator": ESTIMATOR_VERSION, "parameters": None if parameters is None else parameters.as_record(),
-            "scope": "table_only", "conditional_on": "category_completed_again",
-            "rank_unit": "completed_category_occurrence",
+            "scope": "table_only", "conditional_on": "category_acquisition_at_recorded_query_time",
+            "fit_coordinate": "measured_progress_receipt_time",
+            "evaluation_time": evaluation_time,
+            "forecast_units": "unchanged_iterator_credit_not_credit_per_second",
+            "no_observation_forecast": "explicit_prior_only",
             "occurrence_order": "own_observation_completion_order",
             "uncertainty": "approximate_uncalibrated_working_model_band",
             "calibrated_confidence_interval": False, "failed_attempt_probability_model": False,
@@ -538,6 +562,10 @@ def _record(journal, episode_id, attempt, observed):
         "saved_value": _summary(None if saved is None else saved[1], reference_detail),
         "detail_reference": reference_detail if count is not None else None}
     inputs, input_fields = _selected_inputs(None if selection is None else json.loads(selection), index)
+    outcome_summary = _summary(outcome, outcome_detail)
+    if outcome_summary is not None:
+        outcome_summary['read_with'] = {'tool': 'episode.history', 'arguments': {
+            'view': 'records', 'decision_indices': [index]}}
     return {"decision_index": index, "category": attempt["category"],
         "selection": attempt["selection"], "status": attempt["status"],
         "selection_discriminator_summaries": {name: _bounded_input(value, index, "/" + name, [0])
@@ -546,7 +574,7 @@ def _record(journal, episode_id, attempt, observed):
         "completion": None if observed is None else observed["identity"],
         "published_references": published, "inputs": inputs, "input_fields": input_fields,
         "selection_summary": _summary(selection, detail),
-        "outcome_summary": _summary(outcome, outcome_detail), "detail_reference": detail}
+        "outcome_summary": outcome_summary, "detail_reference": detail}
 
 
 def _attempt_page(journal, episode_id, before, query, total, records, reasons, pagination_reason):

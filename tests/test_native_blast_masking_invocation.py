@@ -36,7 +36,7 @@ from gene_annotation_episode.state import Store
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "verification/tool_graders_masking_native_oracle_2026-10-28_612/retained_native"
-POLICY = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 LEGACY_MODES = (("dustmasker", "mask"), ("segmasker", "mask"),
                 ("windowmasker", "mask"), ("windowmasker", "create_counts"))
 

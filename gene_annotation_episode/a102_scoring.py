@@ -205,7 +205,7 @@ def contrast_panel(rows, *, function_ref, supporting_refs, opposing_refs,
         'status':'derived' if value is not None else 'support_only_or_unresolved_contrast'}
 
 
-def compile_native_sheet(grades, *, target_ref, supplied_length, regions=None):
+def compile_native_sheet(grades, *, target_ref, supplied_length, regions=None, evidence_regions=None):
     positive_int(supplied_length, 'supplied_length')
     regions = deepcopy(regions if regions is not None else [[0,supplied_length]])
     require(bool(regions), 'a102_required_scope_empty')
@@ -237,7 +237,9 @@ def compile_native_sheet(grades, *, target_ref, supplied_length, regions=None):
     for a,b in regions:
         comparisons=[]
         for row in selected:
-            distances=[d for position,d in zip(row['target_positions'],row['distances_A'],strict=True) if a<=position<b]
+            distances=[d for position,d in zip(row['target_positions'],row['distances_A'],strict=True)
+                if a<=position<b and (evidence_regions is None or any(x <= position < y
+                    for x,y in evidence_regions.get(row['variant_ref'], ())))]
             calculated=geometry(distances,b-a,row['reference_length'])
             comparisons.append({'comparison_ref':row['variant_ref'],**calculated})
         values.append({'start':a,'end':b,'value':max((row['B'] for row in comparisons),default=0.0),

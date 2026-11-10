@@ -24,7 +24,14 @@ def validate_finding(store, assessment, observation):
         if ref not in actual:
             raise ContractError('finding_source_subject_not_in_observation', detail={
                 'field_path': ['investigation_finding', 'source_claim', 'subject_refs', index],
-                'reference': ref, 'observation_ref': assessment['observation_ref']})
+                'reference': ref, 'observation_ref': assessment['observation_ref'],
+                'observation_subject_refs': list(observation['subject_refs']),
+                'observation_source_subject_refs': list(observation['source_subject_refs']),
+                'repair': 'The source claim must use the actual subject of this observation. '
+                    'Its recorded subjects are listed above; a numerical-value reference '
+                    'does not substitute for the measured or reported subject. A claim '
+                    'about a different subject needs its own supporting observation. '
+                    'These references do not establish a functional claim or target correspondence.'})
     equivalent = finding['same_source_claim_as_ref']
     for ref in ([equivalent] if equivalent is not None else []) + finding['replaces_refs']:
         previous = store._require(ref, {'assessment'})

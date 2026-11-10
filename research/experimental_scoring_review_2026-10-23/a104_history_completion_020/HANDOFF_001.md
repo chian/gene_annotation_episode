@@ -110,10 +110,9 @@ characterized comparator leaves P/compiled point unidentified. One positive
 reference can still give topology P, but O_candidate remains [0,1]; no guessed
 spacing or mandatory analysis is introduced.
 
-Shared A108 environmental observations retain original identity and are used
-only for the event-route question here. No A108 whole ecological score, A105
-assay magnitude or A107 coexpression score is added again. The A108 worker's
-2012 porphyran observations are distinct from this worker's 2010 inspection.
+Environmental observations retain original identity and are used only for the
+event-route question here. No A105 assay magnitude or A107 coexpression score
+is added again.
 
 ## Verification and finite remaining judgments
 

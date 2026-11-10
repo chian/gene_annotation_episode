@@ -6,7 +6,7 @@ independent evidence. This helper does not add a score or numerical formula.
 """
 from copy import deepcopy
 
-from .domain import identity
+from .domain import LABEL, identity
 from .literature_assay_inputs import _fail, _keys
 
 INPUT_VERSION = "a110_reaction_inputs_v2"
@@ -98,6 +98,19 @@ def direct_references(extraction, initial):
     return list(dict.fromkeys(refs))
 
 
+def _witness_label(quote):
+    """A display preview; the full literal quotation remains in its anchor."""
+    maximum = LABEL['maxLength']
+    if len(quote) <= maximum and '\n' not in quote and '\r' not in quote:
+        return quote
+    prefix = '[source witness preview] '
+    preview = ' '.join(quote.split())
+    available = maximum - len(prefix)
+    if len(preview) > available:
+        preview = preview[:available - 1] + '…'
+    return prefix + preview
+
+
 def publish_meanings(extraction, publish):
     """Create anchored facts and scoped handles, without scientific inference."""
     result = {"models": [], "resources": [], "demand": None}
@@ -120,13 +133,13 @@ def publish_meanings(extraction, publish):
             accession = identity("reaction_literal", {**scoped, "field": field, **anchor})
             if namespace == "term":
                 record = {**common, "namespace": "literature_reaction_" + field,
-                    "accession": accession, "label": witness["quote"], "term_type": "other"}
+                    "accession": accession, "label": _witness_label(witness["quote"]), "term_type": "other"}
             elif namespace == "context":
-                record = {**common, "context_type": "assay_condition", "name": witness["quote"],
+                record = {**common, "context_type": "assay_condition", "name": _witness_label(witness["quote"]),
                           "attributes": [], "related_refs": []}
             else:
                 record = {**common, "reference_type": "literature_result", "accession": accession,
-                    "label": witness["quote"], "sequence_ref": None, "molecule": None,
+                    "label": _witness_label(witness["quote"]), "sequence_ref": None, "molecule": None,
                     "length": None, "term_refs": [], "context_refs": []}
             reference = publish(namespace, record)
             row[field + "_ref"] = reference
@@ -138,7 +151,7 @@ def publish_meanings(extraction, publish):
         row[kind + "_ref"] = publish("reference", {
             "reference_type": "literature_result", "source_ref": data_ref if witness is None else witness["source_ref"],
             "accession": identity("reaction_literal", {**scoped, "field": "definition"}),
-            "label": "Unreported " + kind + " definition" if witness is None else witness["quote"],
+            "label": "Unreported " + kind + " definition" if witness is None else _witness_label(witness["quote"]),
             "sequence_ref": None, "molecule": None, "length": None,
             "term_refs": list(dict.fromkeys(terms)), "context_refs": list(dict.fromkeys(contexts)), "anchor": anchor})
         row["definition_reported"] = witness is not None

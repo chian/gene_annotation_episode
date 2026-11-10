@@ -242,8 +242,7 @@ def tool(name, **arguments):
 
 def test_nested_launch_real_local_job_checked_handoff_and_separate_results(resources):
     r = resources
-    assert r.policy.to_dict() == {'memory_bytes': 20 * 1024**3,
-        'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}
+    assert r.policy.to_dict() == {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
     EpisodeBindingRegistry([r.binding])
     handoffs = []
 

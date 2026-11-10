@@ -283,6 +283,7 @@ class HMMERAPIExecution:
         return snapshot
 
     def _failure(self, key, error, *, job=None, record_job_failure=True):
+        from .api_error_feedback import api_error_feedback
         snapshot = getattr(error, 'snapshot', None)
         saved = self._snapshot(snapshot) if snapshot is not None else None
         cause_error = error.__cause__ or error
@@ -302,7 +303,7 @@ class HMMERAPIExecution:
             'retry_after': getattr(error, 'retry_after', None), 'diagnostic_ref': diagnostic,
             'response_ref': diagnostic if saved is not None else None,
             'http_status': snapshot.transport.get('status') if snapshot is not None else None}
-        feedback = {'category': 'provider', 'code': code, 'phase': phase,
+        feedback = {**api_error_feedback(error), 'category': 'provider', 'code': code, 'phase': phase,
             'retry_after': getattr(error, 'retry_after', None), 'diagnostic_ref': diagnostic, 'cause': cause}
         if job is not None:
             feedback.update(job_ref=job['id'], submission_state=job['state'],
@@ -638,7 +639,9 @@ class HMMERAPIExecution:
                 'native': {'service': 'ebi_hmmer', 'execution_id': target['execution_id'],
                     'native_state': native_state, 'status': native, 'snapshot': json.loads(saved)}}
         except Exception as error:
+            from .api_error_feedback import api_error_feedback
             observation = self._unknown_observation(target, getattr(error, 'code', 'api_status_observation_failed'))
+            observation['native']['error'] = api_error_feedback(error)
             if getattr(error, 'snapshot', None) is not None:
                 saved = self._snapshot(error.snapshot)
                 observation['provenance_refs'].append(self.store.artifact(saved, 'application/json'))

@@ -7,9 +7,11 @@ other execution roles keep their existing presentation.
 from __future__ import annotations
 
 from collections.abc import Mapping
+import json
 import math
 import re
 
+from .api_error_feedback import is_api_error_return
 from .scientific_process_prompt import (_bounded_inputs, _scalar, _schema, _section, _table, _values,
     is_selected_execution_context, text_instructions)
 
@@ -175,7 +177,8 @@ _CODE = re.compile(r"[A-Za-z_][A-Za-z0-9_.:+/\-]{0,127}\Z")
 _CODE_FIELDS = frozenset({"state", "status", "kind", "lifecycle_state", "liveness", "submission_outcome",
     "failure_code", "code", "category", "reason", "unavailable_reason", "parse_status", "qualification",
     "population_coverage", "bucket_window_status", "count_exactness", "count_availability",
-    "fraction_unavailable_reason", "response_profile", "representation", "size_unit", "progress_unit"})
+    "fraction_unavailable_reason", "response_profile", "representation", "size_unit", "progress_unit",
+    "ended_by", "end_reason", "result_status", "report_delivery", "cause_code", "exception_type"})
 _NUMBER_FIELDS = frozenset({"http_status", "returncode", "retry_after_seconds", "elapsed_seconds",
     "captured_bytes", "bytes_captured", "size_bytes", "reported_total", "returned_count", "returned_row_count",
     "valid_row_count", "invalid_row_count", "requested_offset", "requested_limit", "next_offset", "offset", "limit",
@@ -191,6 +194,25 @@ _MEASUREMENT_UNITS = frozenset({"rows", "sequences", "queries", "bytes", "percen
 
 def _number(value):
     return type(value) is int or type(value) is float and math.isfinite(value)
+
+
+def _returned_value(value):
+    """Copy returned diagnostics without filtering their fields or text."""
+    if isinstance(value, Mapping):
+        return {name: _returned_value(child) for name, child in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_returned_value(child) for child in value]
+    return value
+
+
+def _is_error_return(value):
+    return is_api_error_return(value)
+
+
+def _error_text(value):
+    """The entire recorded error, outside operational-summary masking."""
+    return '```json\n' + json.dumps(_returned_value(value),
+        ensure_ascii=False, indent=2, allow_nan=False) + '\n```'
 
 
 def _operational_scalars(value):
@@ -234,10 +256,12 @@ def _qualifications(value):
 
 def _operational_facts(value):
     """A finite fact projection, independent of arbitrary result/control trees."""
+    if _is_error_return(value):
+        return _returned_value(value)
     result = _operational_scalars(value)
     if not isinstance(value, Mapping):
         return result
-    for name in ("page", "pagination", "progress", "failure"):
+    for name in ("page", "pagination", "progress"):
         if name in value:
             selected = _operational_scalars(value[name])
             if selected:
@@ -258,6 +282,9 @@ def _api_progress(value):
         if (type(operation) is not str or not operation.startswith("api.") or not _CODE.fullmatch(operation)
                 or not isinstance(row, Mapping)):
             continue
+        if _is_error_return(row) or _is_error_return(row.get('facts')):
+            result[operation] = _returned_value(row)
+            continue
         selected = _operational_scalars(row)
         facts = _operational_facts(row.get("facts"))
         if facts:
@@ -268,9 +295,14 @@ def _api_progress(value):
 
 
 def _own_outcome(value):
+    if _is_error_return(value) or (
+            isinstance(value, Mapping) and _is_error_return(value.get('result'))):
+        return _returned_value(value)
     selected = _operational_scalars(value)
     if isinstance(value, Mapping):
-        for name in ("result", "feedback"):
+        if value.get('feedback') is not None:
+            selected['feedback'] = _returned_value(value['feedback'])
+        for name in ("result", "child_completion"):
             facts = _operational_facts(value.get(name))
             if facts:
                 selected[name] = facts
@@ -280,6 +312,8 @@ def _own_outcome(value):
 def _lookup(value):
     if not isinstance(value, Mapping):
         return _values(value)
+    if _is_error_return(value) or _is_error_return(value.get('result')):
+        return _error_text(value)
     if value.get("view") == "own_attempts":
         rows = [(row.get("decision_index"), row.get("category"), row.get("status"), row.get("completed_gain"))
             for row in value.get("records", ())]
@@ -311,11 +345,18 @@ def _lookup(value):
         if page:
             _section(parts, "Selected instruction window", _values(page))
         return "\n".join(parts)
-    return _values(_own_outcome(value))
+    presented = _own_outcome(value)
+    return (_error_text(presented) if value.get('feedback') is not None
+        else _values(presented))
 
 
 def _steering(state, lookup_results):
     parts = ["STEERING"]
+    if 'completed_action_reports' in state:
+        from .episode_work_report import render_completed_action_reports
+        parts.extend(['', render_completed_action_reports(state['completed_action_reports'])])
+    if state.get('pending_child_delivery') is not None:
+        _section(parts, 'Complete the original child return', _values(state['pending_child_delivery']))
     table = state.get("action_yields", {})
     rows = []
     for row in table.get("rows", ()):
@@ -343,13 +384,25 @@ def _steering(state, lookup_results):
         _section(parts, "Original handoff completion", _scalar(state["api_execution_completed"]))
     progress = _api_progress(state.get("api_received_progress"))
     if progress:
-        _section(parts, "Recorded own API outcomes", _values(progress))
+        ordinary = {}
+        for operation, returned in progress.items():
+            if _is_error_return(returned) or _is_error_return(returned.get('facts')):
+                _section(parts, 'Complete recorded API error from ' + operation,
+                    _error_text(returned))
+            else:
+                ordinary[operation] = returned
+        if ordinary:
+            _section(parts, "Recorded own API outcomes", _values(ordinary))
     outcome = state.get("last_local_outcome")
     if isinstance(outcome, Mapping):
-        _section(parts, "Latest own action", _values(_own_outcome(outcome)))
+        presented = _own_outcome(outcome)
+        error = (_is_error_return(outcome) or _is_error_return(outcome.get('result'))
+            or outcome.get('feedback') is not None)
+        _section(parts, 'Latest own action — complete returned error' if error else 'Latest own action',
+            _error_text(presented) if error else _values(presented))
     feedback = state.get("feedback")
     if feedback is not None and (not isinstance(outcome, Mapping) or feedback != outcome.get("feedback")):
-        _section(parts, "Actionable feedback", _values(_operational_facts(feedback)))
+        _section(parts, "Complete returned feedback", _error_text(feedback))
     pending = state.get("pending_work", {})
     if pending.get("items"):
         _section(parts, "Own pending work", _values([_operational_scalars(row) for row in pending["items"]]))

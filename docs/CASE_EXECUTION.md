@@ -87,9 +87,11 @@ snapshot, not a live annotation table or a credit contribution.
 
 ## Explicit policy binding
 
-The first configured-model case now binds
-`gene_annotation_episode/investigation_policy.py` with explicit parameters in
-`cases/gene_001/runs/investigation_002/parameters.json`. It retains the existing
+The first configured-model case used a policy source snapshot with explicit
+parameters in `cases/gene_001/runs/investigation_002/parameters.json`.
+The live central policy module and its fixed-case setup were later removed when
+continuation binding moved to each episode owner. The historical case retains its
+saved source and settings. It retains the existing
 scientific projection and numerical estimator, with provisional operational units
 defined over actual recorded facts. See
 [scientific credit bindings](SCIENTIFIC_CREDIT_BINDING.md) for exact meanings and limits.

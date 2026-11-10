@@ -1,0 +1,15 @@
+{
+  "base_url": "https://rest.uniprot.org",
+  "path": "uniprotkb/search",
+  "params": {
+    "query": "protein_name:\"Isopentenyl phosphate kinase\" AND taxonomy_id:2157 AND length:[180 TO 550] AND fragment:false",
+    "fields": "accession,id,protein_name,gene_names,organism_id,organism_name,sequence,length",
+    "size": 16,
+    "format": "json"
+  },
+  "record_path": "results",
+  "max_items": 1,
+  "max_depth": 2,
+  "save_raw": true,
+  "raw_output_path": "/home/chia/repos/gene_annotation_episode/runs/a104_20261104_181336/acquired/refined/family-ipk-refined.json"
+}

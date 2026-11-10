@@ -1142,6 +1142,34 @@ def article_details(content: bytes) -> dict[str, Any]:
     root = ET.fromstring(content)
     def local(node):
         return node.tag.rsplit('}', 1)[-1] if isinstance(node.tag, str) else ''
+
+    def paragraph_text(node):
+        # Inline XML remains zero-width (k + subscript cat, s + superscript -1).
+        # Tables embedded in a paragraph still have definite cell boundaries:
+        # joining itertext() alone can concatenate adjacent decimal values.
+        # Preserve those boundaries in this derived text; original XML stays
+        # unchanged and numerical readers retain their complete-token guards.
+        blocks = {'table', 'thead', 'tbody', 'tfoot', 'tr'}
+        pieces, pending = [], [(node, False)]
+        while pending:
+            current, closing = pending.pop()
+            tag = local(current)
+            if closing:
+                if tag in {'td', 'th'}:
+                    pieces.append('\t')
+                elif tag in blocks:
+                    pieces.append('\n')
+                if current is not node and current.tail:
+                    pieces.append(current.tail)
+                continue
+            if tag in blocks:
+                pieces.append('\n')
+            if current.text:
+                pieces.append(current.text)
+            pending.append((current, True))
+            pending.extend((child, False) for child in reversed(current))
+        return ''.join(pieces)
+
     identifiers, issues = set(), []
     fronts = [item for item in root if local(item) == 'front'] if local(root) == 'article' else []
     candidates = [item for front in fronts for item in front if local(item) == 'article-meta']
@@ -1178,9 +1206,10 @@ def article_details(content: bytes) -> dict[str, Any]:
             issues.append({'code': 'conflicting_publication_identifiers', 'namespace': namespace})
     sections, cited_in = [], {}
     # Paragraphs are visited once in document order; their text, including
-    # inline elements, is preserved rather than flattened from search snippets.
+    # inline elements and embedded table boundaries, is preserved rather than
+    # flattened from search snippets.
     for index, node in enumerate(node for node in root.iter() if local(node) == 'p'):
-        text = "".join(node.itertext())
+        text = paragraph_text(node)
         if text.strip():
             sections.append({"paragraph_index": index, "text": text})
         for citation in node.iter():

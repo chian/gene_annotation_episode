@@ -22,8 +22,13 @@ closed response object. Use response_type=request_context to request your own
 prior attempts through the declared lookup form. This only retrieves information
 you already received; it does not perform new scientific work or complete an
 action. After its decision_lookup_result arrives, continue the SAME decision.
-For this protocol, use request_context for own history; episode.history is not
-an available action. This replaces the older history-tool instruction.
+Use request_context for own attempt metadata and selected inputs. Its
+own_attempt_detail pointer addresses selected inputs, not their outputs. Use
+the ordinary episode.history tool with view=records and selected
+decision_indices to read exact previously received outcomes together. That
+read is an ordinary action with its own completion observation; it does not
+execute the historical actions or earn their old credit again. The reader
+cannot access another episode's private history.
 Use response_type=select_action with selection and report_update when ready to
 dispatch an actual action. Only that action's actual completion supplies an
 observation to your configured continuation controller.

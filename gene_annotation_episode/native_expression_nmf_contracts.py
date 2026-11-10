@@ -16,7 +16,7 @@ ATTEMPT_DIRECTORY_NAME = 'expression-nmf-attempt'
 OWNER_FILENAME = '.native-expression-nmf-owner.json'
 STARTED_FILENAME = '.native-expression-nmf-started.json'
 DRIVER_MODULE = 'gene_annotation_episode.native_expression_nmf_driver'
-POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'wall_seconds': None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 ARTIFACT_NAMES = {'original_input': 'original-input.bin', 'input_data': 'input.json',
     'prepared_data': 'prepared.json', 'factors': 'factors.json', 'manifest': 'fit-manifest.json'}
 ARTIFACT_FORMATS = {'original_input': 'expression_delimited_bytes_v1', 'input_data': 'expression_nmf_input_v1',
@@ -164,11 +164,16 @@ def validate_expression_nmf_run_plan(value):
     require(all(type(v) is str and v and '\0' not in v for v in owner.values()), 'invalid_nmf_run_plan')
     execution = path_value(owner['execution_id'], absolute=True)
     attempt = path_value(value['attempt_directory'], absolute=True)
-    require(execution.name == 'native.json' and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME
+    from .terminal_scientific_evidence import terminal_plan_identity
+    current = terminal_plan_identity(owner, attempt_directory=str(attempt))
+    legacy = (execution.name == 'native.json'
         and owner['attempt_id'] == digest(owner['operation_key']) and owner['requested_job_sha256'] == digest(request)
         and execution.parent.name == owner['attempt_id'] and execution.parent.parent.name == digest({
             'run': owner['run_id'], 'episode': owner['episode_id']})
-        and execution.parent.parent.parent.name == '.episode-operations', 'nmf_original_attempt_mismatch')
+        and execution.parent.parent.parent.name == '.episode-operations')
+    require((current or legacy) and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME
+        and owner['attempt_id'] == digest(owner['operation_key']) and owner['requested_job_sha256'] == digest(request),
+        'nmf_original_attempt_mismatch')
     require(canonical(value['policy']) == canonical(POLICY), 'nmf_original_allocation_mismatch')
     require(value['outputs'] == expression_nmf_output_files(request['native_expression_nmf']), 'nmf_output_role_mismatch')
     supplied = path_value(request['native_expression_nmf']['input']['path'], absolute=True)

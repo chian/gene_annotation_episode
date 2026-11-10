@@ -139,7 +139,7 @@ def validate_worker_execution(execution, *, plan, plan_file):
     meta = execution['metadata']
     require(type(meta) is dict and meta.get('policy') == POLICY and type(meta.get('service_exit')) is dict
         and meta.get('verified_cgroup') == {'memory_max': POLICY['memory_bytes'], 'memory_swap_max': 0,
-            'runtime_max': 'infinity', 'kill_mode': 'control-group', 'oom_policy': 'kill'}, 'nmf_worker_allocation_mismatch')
+            'kill_mode': 'control-group', 'oom_policy': 'kill'}, 'nmf_worker_allocation_mismatch')
     if execution['failure'] is None:
         require(type(execution['returncode']) is int and meta['native_returncode'] == execution['returncode'], 'nmf_worker_exit_mismatch')
     else:

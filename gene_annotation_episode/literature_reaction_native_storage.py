@@ -9,6 +9,7 @@ import json
 from .domain import ContractError, canonical, identity, obj, validate_schema
 from .literature_reaction_storage import LiteratureReactionSemanticProjection, BINDINGS
 from .literature_reaction_native_inputs import RATIO_BASES, COUNT_BASES, UNCERTAINTY_KINDS, TRACE_VERSION
+from .literature_reaction_meanings import _witness_label
 
 NAMESPACE = "literature_reaction_native_observations"
 POSITIONS_FIELD = "requested_reaction_native_positions"
@@ -68,7 +69,7 @@ def publish_native_observations(extraction, scientific_bindings, semantic_bindin
         anchor = None if witness is None else {key: witness[key] for key in ("source_ref", "artifact_ref", "start", "end", "quote")}
         return publish("reference", {"reference_type": "literature_result", "source_ref": data_ref if witness is None else witness["source_ref"],
             "accession": identity("reaction_literal", {"native_role": role, "anchor": anchor, "fallback": fallback if witness is None else None}),
-            "label": "Not extracted " + role if witness is None else witness["quote"], "sequence_ref": None,
+            "label": "Not extracted " + role if witness is None else _witness_label(witness["quote"]), "sequence_ref": None,
             "molecule": None, "length": None, "term_refs": [], "context_refs": [], "anchor": anchor})
     def number_witness(number):
         selector = number["selector"]

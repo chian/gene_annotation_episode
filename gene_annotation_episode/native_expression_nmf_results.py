@@ -150,7 +150,9 @@ class NativeExpressionNMFResults:
                 original_plan=receipt["native"]["original_plan"],
                 source_action_receipt_ref=receipt["source_action_file"]["artifact_ref"],
                 writer_closure_receipt_ref=receipt["writer_closure_file"]["artifact_ref"],
-                driver_started=receipt["native"]["driver_started"])
+                driver_started=receipt["native"]["driver_started"],
+                terminal_snapshots=(receipt['native']['command_proof']['output_snapshots']
+                    if receipt['native'].get('version') == 'terminal_native_snapshot_v1' else None))
             immutable(action.directory / "capture.json", captured)
         receipt["capture"] = captured
         plan = build_native_expression_nmf_worker_plan(directory=str(action.directory / "worker"),

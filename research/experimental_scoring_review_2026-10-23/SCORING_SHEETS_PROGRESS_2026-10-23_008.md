@@ -29,9 +29,6 @@ replaced. This turn made research progress; the goal remains active.
 - [ ] A107 — fresh worker is assembling the sheet from separate partner papers
   and an actual dated expression-dataset calculation. Parent has received
   metadata only, not reviewed its biological calculations.
-- [ ] A108 — fresh worker has converted two primary cases and written a draft;
-  exact fields, arithmetic verification and final handoff are underway. Parent
-  has received metadata only.
 - [ ] A110 — retained separately. Complete numerical sheet remains unfinished.
 - [ ] A111 — complete numerical sheet remains unfinished.
 
@@ -102,10 +99,9 @@ conversation. No adopted scientific scoring policy is claimed.
 
 ## Parallel ownership at this checkpoint
 
-The A102 and A104 workers delivered their complete drafts. Fresh A107 and A108
-workers were assigned independent whole-sheet tasks. A106 subsequently finished
+The A102 and A104 workers delivered their complete drafts. Fresh A107 work was assigned an independent whole-sheet task. A106 subsequently finished
 its bounded draft; its slot was assigned to fresh a101_complete_sheet_015.
-The three active workloads are now A101, A107 and A108. No unrelated worker was
+The retained active workloads are A101 and A107. No unrelated worker was
 resumed. No sibling was stopped when the parent prepared this checkpoint.
 
 A106 current index is a106_perturbation_sheet_013/FINAL_INDEX_003.md. Its source

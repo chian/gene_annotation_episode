@@ -12,7 +12,11 @@ import math
 
 
 VERSION = 'native_evidence_root_offset_product_v1'
-AXES = ('A101', 'A102', 'A103')
+AXES = ('A101', 'A102', 'A103', 'A104')
+SIGNED_COMBINATION_VERSION = 'signed_evidence_split_product_v2'
+SIGNED_COMBINATION_FORMULA = (
+    '(product(1 + positive_axis_index) - 1) - '
+    '(product(1 + opposing_axis_magnitude) - 1)')
 
 
 def offset_volume(evidence):
@@ -36,6 +40,43 @@ def offset_volume(evidence):
         'maximum': 2 ** len(evidence) - 1}
 
 
+def signed_offset_volume(evidence):
+    """Combine support and opposition separately, then subtract opposition.
+
+    This separate entry point preserves the original nonnegative progress
+    convention. A negative dimension requires actual opposing evidence; a
+    missing measurement remains None in the caller's scientific vector.
+    """
+    if not evidence:
+        raise ValueError('evidence_root_nonempty_axis_vector_required')
+    for axis, value in evidence.items():
+        if (not isinstance(axis, str) or not axis or value is not None and (
+                type(value) not in (int, float) or not math.isfinite(value) or not -1 <= value <= 1)):
+            raise ValueError('evidence_root_signed_axis_value_outside_unit_interval')
+    known = {axis: value for axis, value in evidence.items() if value is not None}
+    terms, attribution = [], dict.fromkeys(evidence, 0.)
+    supporting = {axis: value for axis, value in known.items() if value >= 0}
+    opposing = {axis: -value for axis, value in known.items() if value < 0}
+    for sign, contributions in ((1, supporting), (-1, opposing)):
+        for size in range(1, len(contributions) + 1):
+            for members in combinations(contributions, size):
+                value = sign * math.prod(contributions[axis] for axis in members)
+                terms.append({'axes': list(members), 'value': value})
+                for axis in members:
+                    attribution[axis] += value / size
+    support = math.fsum(row['value'] for row in terms if row['value'] > 0)
+    opposition = math.fsum(-row['value'] for row in terms if row['value'] < 0)
+    additive = math.fsum(row['value'] for row in terms if len(row['axes']) == 1)
+    interaction = math.fsum(row['value'] for row in terms if len(row['axes']) > 1)
+    return {'credit': math.fsum([support, -opposition]),
+        'support': support, 'opposition': opposition, 'additive': additive,
+        'interaction': interaction, 'terms': terms, 'attribution': attribution,
+        'minimum': -(2 ** len(evidence) - 1), 'maximum': 2 ** len(evidence) - 1,
+        'unknown_axes': [axis for axis, value in evidence.items() if value is None],
+        'aggregation_version': SIGNED_COMBINATION_VERSION,
+        'formula': SIGNED_COMBINATION_FORMULA}
+
+
 def _projector(axis):
     if axis == 'A101':
         from .a101_credit import A101SequenceCredit
@@ -46,6 +87,9 @@ def _projector(axis):
     if axis == 'A103':
         from .a103_credit import A103ContextCredit
         return A103ContextCredit()
+    if axis == 'A104':
+        from .a104_credit import A104EvolutionaryCredit
+        return A104EvolutionaryCredit()
     raise ValueError('evidence_root_axis_scorer_not_bound')
 
 
@@ -117,6 +161,8 @@ class NativeEvidenceRootCredit:
                         statuses[axis]=target_status
                     if axis=='A103' and target_status in {'unresolved_attribution','partial_attribution','attributed_context_received'}:
                         statuses[axis]=target_status
+                    if axis=='A104' and target_status in {'unresolved_attribution','attributed_phylogeny_received','no_received_native_phylogeny_test'}:
+                        statuses[axis]=target_status
                     source_count += count
                     sources.extend({'axis': axis, **row} for row in view['source_contributions'])
                 targets[target] = {'assigned_length': length, 'axis_components': vector,
@@ -144,16 +190,12 @@ class NativeEvidenceRootCredit:
 
 def create_evidence_root_workflow(store, tools, provider, directory, run_id, controller_factory,
                                   *, initial_known_record_refs, axes=AXES, **options):
-    from .investigation_progress import FindingProgressPolicy, ScientificFindingProgress
     from .runtime import Workflow
     if 'project_credit' in options or 'credit_binding' in options:
         raise ValueError('evidence_root_numeric_binding_is_host_owned')
     if options.get('episode_record_receipts', True) is not True:
         raise ValueError('evidence_root_requires_explicit_receipts')
     options['episode_record_receipts'] = True
-    if 'project_child_credit' not in options:
-        fallback = ScientificFindingProgress(FindingProgressPolicy(1))
-        options.update(project_child_credit=fallback, child_credit_binding=fallback.as_record())
     scorer = NativeEvidenceRootCredit(tuple(axes))
     return Workflow(store, tools, provider, directory, run_id, controller_factory, scorer,
         credit_binding=scorer.as_record(), initial_known_record_refs=initial_known_record_refs, **options)

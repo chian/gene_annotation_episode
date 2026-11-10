@@ -110,7 +110,7 @@ def parse_records(content, *, format='genbank', sequence_content=None, genetic_c
     return records
 
 
-def _translation(record, feature):
+def _translation(record, feature, *, calculation_provenance=None):
     qualifiers = feature.qualifiers
     declared = ''.join(qualifiers.get('translation', [''])).replace(' ','').upper().rstrip('*')
     code = int(qualifiers.get('transl_table', ['1'])[0])
@@ -118,6 +118,7 @@ def _translation(record, feature):
     exact = (feature.location is not None and all(type(p.start).__name__ == type(p.end).__name__ == 'ExactPosition'
              and p.ref is None for p in feature.location.parts))
     calculated = None
+    translation_call = None
     reason = None
     try:
         nucleotide = str(feature.extract(record.seq))[offset:]
@@ -126,8 +127,10 @@ def _translation(record, feature):
         else:
             try:
                 calculated = str(Seq(nucleotide).translate(table=code, cds=True))
+                translation_call = {'table':code,'cds':True,'postprocessing':'none'}
             except Exception:
                 calculated = str(Seq(nucleotide).translate(table=code)).rstrip('*')
+                translation_call = {'table':code,'cds':False,'postprocessing':'rstrip_terminal_stop_symbols'}
         if declared and calculated is not None and declared != calculated:
             reason = 'source_translation_exception' if qualifiers.get('transl_except') else 'declared_translation_conflict'
         if '*' in (calculated or ''):
@@ -138,6 +141,11 @@ def _translation(record, feature):
     if 'pseudo' in qualifiers or 'pseudogene' in qualifiers or any(v.lower()=='true' for v in qualifiers.get('partial',[])):
         reason = 'partial_or_pseudogene_annotation'
     sequence = declared or calculated
+    if calculation_provenance is not None:
+        calculation_provenance.update({'version':'a103_translation_calculation_v1',
+            'translation_call':translation_call, 'codon_start':offset+1,
+            'nucleotide_selection':'feature_extract_in_part_order_after_codon_start_offset',
+            'completed':calculated is not None, 'qualification':reason})
     return {'sequence':sequence, 'declared_sequence':declared or None,
             'calculated_sequence':calculated, 'nucleotide_sequence':nucleotide,
             'genetic_code':code, 'codon_start':offset+1, 'exact_boundaries':exact,

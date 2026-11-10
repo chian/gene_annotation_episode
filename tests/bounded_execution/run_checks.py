@@ -186,7 +186,7 @@ def selected_native_handle(attempt, filename, unit, request_sha256):
     if not path.is_relative_to(attempt) or path == attempt / 'handle.json':
         raise ValueError('native_recovery_requires_existing_inner_handle')
     body = json.loads(path.read_bytes())
-    policy = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'wall_seconds': None}
+    policy = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
     if (body.get('version') != 'durable_systemd_native_job_v2' or body.get('unit') != unit
             or body.get('request_sha256') != request_sha256
             or body.get('metadata', {}).get('policy') != policy
@@ -485,7 +485,7 @@ if args.operation == 'launch':
         'selected_stdlib_source_pin_file': pin(attempt / 'selected_stdlib_source_pins.json'),
         'native_libraries': selected_libraries,
         **({'application_source_origin': application_origin} if args.application_source_from is not None else {}),
-        'policy': {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'wall_seconds': None}, 'swap_bytes': 0})
+        'policy': {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}, 'swap_bytes': 0})
 
 sys.path[:0] = [str(attempt / 'source_snapshot'), str(attempt / 'dependencies')]
 from gene_annotation_episode.local_jobs import LocalJobPolicy
@@ -531,7 +531,7 @@ if native_recovery:
         save(recovery_proof, recovery_body)
         raise
 elif args.operation == 'launch':
-    prepare_job(argv, cwd=working_root, policy=LocalJobPolicy(21474836480, 4294967296, None),
+    prepare_job(argv, cwd=working_root, policy=LocalJobPolicy(21474836480, 4294967296),
         handle_path=handle.path, stdout_path=attempt / 'stdout.txt', stderr_path=attempt / 'stderr.txt', env=env)
     resume_start(handle)
     print(json.dumps({'handle': str(handle.path), 'state': status(handle)['state'], 'unit': handle.read()['unit']}))

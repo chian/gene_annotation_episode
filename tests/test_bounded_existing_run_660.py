@@ -18,10 +18,7 @@ def test_original_run_and_new_closure_share_the_declared_scratch_root():
     assert Path(request['argv'][0]).is_relative_to(root)
     for name in ('TMPDIR', 'TMP', 'TEMP', 'XDG_CACHE_HOME', 'PIP_CACHE_DIR'):
         assert Path(request['environment'][name]).is_relative_to(root)
-    assert request['policy'] == {
-        'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3,
-        'wall_seconds': None,
-    }
+    assert request['policy'] == {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
     assert request['swap_bytes'] == 0
     original = json.loads((root / 'receipt.json').read_text())
     assert original['terminal'] and original['quiescent']

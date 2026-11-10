@@ -122,7 +122,7 @@ def _plan(value):
     if execution.name != "native.json" or root != execution.parent / "hmmer-preparation-attempt":
         _error("original_plan_directory_conflict")
     policy = plan["policy"]
-    if type(policy) is not dict or set(policy) != {"memory_bytes", "scratch_bytes", "wall_seconds"}:
+    if type(policy) is not dict or set(policy) != {'memory_bytes', 'scratch_bytes'}:
         _error("explicit_policy_required")
     LocalJobPolicy(**policy)
     if any(_path(row["path"], absolute=True).is_relative_to(root)

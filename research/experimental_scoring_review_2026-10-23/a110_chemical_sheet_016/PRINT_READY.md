@@ -1,6 +1,6 @@
 # A110 proposed numerical sheet — material to print for feedback
 
-A110 scores the proposed chemical and pathway account: measured reaction proportions or atom sources, conservation, and quantified resource supply relative to demand. It remains separate from A108's organism/environment plausibility. Balanced chemistry alone earns no positive evidence, and neither activity magnitude nor partner-homology scores are awarded again here.
+A110 scores the proposed chemical and pathway account: measured reaction proportions or atom sources, conservation, and quantified resource supply relative to demand. Balanced chemistry alone earns no positive evidence, and neither activity magnitude nor partner-homology scores are awarded again here.
 
 For a measured chemical quantity y, the proposed account predicts c and a named alternative predicts a. Use the actual calibrated quantity and its denominator:
 

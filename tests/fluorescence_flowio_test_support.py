@@ -65,8 +65,7 @@ def require_bounded_runtime():
     if not Path(__file__).resolve(strict=True).is_relative_to(snapshot):
         raise RuntimeError("FCS test support must execute from the frozen source snapshot")
     selected = json.loads((attempt / "selected_request.json").read_text())
-    if (selected["policy"] != {"memory_bytes": 21474836480,
-                              "scratch_bytes": 4294967296, "wall_seconds": None}
+    if (selected["policy"] != {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
             or selected["swap_bytes"] != 0):
         raise RuntimeError("FCS verification requires the selected 20GiB/4GiB/zero-swap policy")
     return attempt

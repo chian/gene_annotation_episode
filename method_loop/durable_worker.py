@@ -153,6 +153,8 @@ async def execute_commission(store, handle, execution_token):
             closed["form"] = None
         else:
             closed["completion"] = None
+        if store.retain_failed_receiver(handle, execution_token, failure):
+            return None
     payload = {"version": "returned_episode_v1", "handle": handle,
         "commission_sha256": digest, "returned_at": utc_now(), "outcome": outcome,
         **closed, "failure": failure}

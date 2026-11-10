@@ -139,7 +139,7 @@ def test_sample_file_design_requires_exact_source_correspondence_and_keeps_units
             repo.populate(context, args, "invented-map")
 
 
-def test_selected_a106_episode_returns_its_evidence_ratio_to_parent(tmp_path):
+def test_score_only_a106_episode_requires_original_investigation_task(tmp_path):
     import asyncio
     from functools import partial
     import json
@@ -165,8 +165,10 @@ def test_selected_a106_episode_returns_its_evidence_ratio_to_parent(tmp_path):
             project_credit=credit, initial_known_record_refs=list(context.received_record_refs),
             episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True, a106_intervention=True),),
             binding_definitions={"credit":credit.as_record()}))
-        receipt = store.db.execute("SELECT cells FROM literature_intervention_grading_received").fetchone()
-        assert receipt is not None
-        rows = json.loads(receipt["cells"])
-        assert next(row for row in rows if row["component"] == "source_log_evidence_ratio")["value"] == pytest.approx(7.5)
+        failures = [json.loads(row[0])['context'].get('feedback') for row in store.db.execute(
+            'SELECT request FROM runtime_model_calls ORDER BY call_index')]
+        assert any(item and item.get('detail') == 'literature_original_task_credit_required' for item in failures)
+        assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 0
+        assert not store.db.execute("SELECT 1 FROM sqlite_master WHERE name="
+            "'literature_intervention_grading_received'").fetchone()
         assert result["credit"] == 0

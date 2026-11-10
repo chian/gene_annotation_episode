@@ -17,7 +17,8 @@ from .domain import ContractError
 from .episode_bindings import native_observation_options
 from .execution_contracts import canonical, digest, validate_target
 from .practical_execution_operations import LocalPracticalOperations
-from .practical_pbs_operations import PBSPracticalOperations
+from .terminal_execution import TerminalExecution
+from .practical_execution_records import terminal_job_matches
 from .practical_receipt_information import PracticalReceiptInformation, PROVIDER
 from .progress_records import resource_status, validate_resource_observation
 
@@ -228,9 +229,11 @@ class ExecutionTargetReader:
         for resource_id, configuration in self.resources.items():
             kind = configuration.get('kind')
             if kind == 'local':
-                self.operations[resource_id] = LocalPracticalOperations(configuration)
+                self.operations[resource_id] = LocalPracticalOperations({key: value
+                    for key, value in configuration.items() if key not in {
+                        'launch_prompt_entry', 'launch_prompt_sections', 'scheduler'}})
             elif kind == 'pbs_ssh':
-                self.operations[resource_id] = PBSPracticalOperations(configuration)
+                self.operations[resource_id] = TerminalExecution(configuration)
             elif kind not in {'hmmer_api', 'api'}:
                 raise ValueError('unsupported_execution_progress_resource')
 
@@ -282,7 +285,11 @@ class ExecutionTargetReader:
         snapshot = json.loads(self.store.get_artifact(source['request_ref']))
         assignment, receipt = snapshot['assignment'], body['receipt']
         job = receipt['outcome'].get('facts', {}).get('requested_job')
-        if (receipt['tool_name'] not in {'practical.job.start', 'practical.job.status', 'practical.job.collect'}
+        terminal = receipt['tool_name'] == 'exec_command'
+        if terminal:
+            if not terminal_job_matches(assignment, receipt['outcome']):
+                raise ValueError('execution_command_native_job_identity_conflict')
+        elif (receipt['tool_name'] not in {'practical.job.start', 'practical.job.status', 'practical.job.collect'}
                 or not isinstance(job, dict) or not isinstance(job.get('handoff'), dict)
                 or job.get('requested_job_sha256') != digest(assignment['requested_job'])
                 or job.get('argv') != assignment['requested_job']['argv']
@@ -307,6 +314,14 @@ class ExecutionTargetReader:
                 or not Path(assignment['workspace']).is_relative_to(config['workspace'])):
             raise ValueError('practical_execution_resource_identity_conflict')
         origin_episode_id = body['episode_id']
+        if terminal:
+            self.operations[resource_id].validate_assignment(assignment)
+            target = validate_target({'version': 'execution_target_v1', 'handle': handle,
+                'run_id': self.run_id, 'resource_id': resource_id,
+                'resource_kind': assignment['resource_kind'], 'execution_id': job['execution_id'],
+                'request_sha256': digest(assignment['requested_job']),
+                'origin_episode_id': origin_episode_id, 'assignment': assignment, 'scope': body['scope']})
+            return target, body
         if 'native_flux_balance' in assignment['requested_job']:
             from .flux_balance_contracts import validate_flux_balance_record
             if assignment.get('resource_id') != resource_id or assignment['resource_kind'] != 'local':
@@ -618,6 +633,14 @@ class ExecutionTargetReader:
                         digest({'run': self.run_id, 'episode': body['episode_id']}) / digest(key) / 'native.json')):
                 raise ValueError('rna_original_attempt_mismatch')
         if assignment['resource_kind'] == 'hpc':
+            original_ref = (receipt['arguments'].get('receipt_ref')
+                            or receipt['outcome'].get('recovered_original_handoff_ref'))
+            if original_ref:
+                original = self.read_target(original_ref, scope)
+                if (original['assignment'] != assignment or original['execution_id'] != job['execution_id']
+                        or original['resource_id'] != resource_id):
+                    raise ValueError('hpc_recovered_original_execution_conflict')
+                origin_episode_id = original['origin_episode_id']
             detail = receipt['outcome'].get('native_outcome')
             if (not isinstance(detail, dict) or detail.get('pbs_job_id') != job['execution_id']
                     or not isinstance(detail.get('attempt_id'), str)
@@ -1319,6 +1342,10 @@ class ExecutionTargetReader:
         _, body = self._native(target['handle'], target['scope'])
         receipt = body['receipt']
         detail = receipt['outcome'].get('native_outcome') or {}
+        if target['resource_kind'] == 'hpc' and receipt['tool_name'] == 'exec_command':
+            return {'run_id': self.run_id, 'origin_episode_id': target['origin_episode_id'],
+                'resource_id': target['resource_id'], 'requested_job_sha256': target['request_sha256'],
+                'actual_job': deepcopy(detail['actual_job'])}
         value = {'run_id': self.run_id, 'origin_episode_id': target['origin_episode_id'],
             'attempt_id': detail.get('attempt_id'),
             'original_operation_key': detail.get('attempt_operation_key') or (
@@ -1393,6 +1420,11 @@ class ExecutionTargetReader:
             raise ContractError('execution_progress_operation_key_required')
         _validate_native_observation(target, native_operation)
         native_options = native_observation_options(native_operation, observation_context)
+        from .terminal_scientific_evidence import is_terminal_target, terminal_observation
+        if is_terminal_target(target):
+            _, body = self._native(target['handle'], target['scope'])
+            proof = body['receipt']['outcome']['native_outcome']['scientific_command_proof']
+            return validate_resource_observation(terminal_observation(target, proof))
         try:
             if target['resource_kind'] == 'api':
                 observation = self.api_execution.observe_target(target, operation_key=operation_key,
@@ -1410,6 +1442,38 @@ class ExecutionTargetReader:
         target = self._qualified(target)
         if target['resource_kind'] == 'api':
             raise ContractError('native_output_target_required')
+        from .terminal_scientific_evidence import is_terminal_target, verified_snapshot_path
+        if is_terminal_target(target):
+            _, body = self._native(target['handle'], target['scope'])
+            proof = body['receipt']['outcome']['native_outcome']['scientific_command_proof']
+            matches = [row for row in proof['output_snapshots'] if row['path'] == path]
+            if not matches:
+                matches = [row for row in proof['input_snapshots'] if row['path'] == path]
+            if len(matches) != 1 or not matches[0]['available']:
+                raise FileNotFoundError(path)
+            if type(offset) is not int or offset < 0 or type(limit) is not int or limit < 1:
+                raise ValueError('native_output_window_invalid')
+            actual = matches[0]
+            with verified_snapshot_path(actual).open('rb') as stream:
+                stream.seek(offset)
+                raw = stream.read(limit)
+            import base64
+            return {'path': path, 'offset': offset, 'returned_bytes': len(raw),
+                'size_bytes': actual['size_bytes'], 'bytes_base64': base64.b64encode(raw).decode('ascii')}
+        manifest = target['assignment'].get('scientific_manifest')
+        if target['resource_kind'] == 'hpc' and isinstance(manifest, dict) and manifest['path'] == path:
+            _, body = self._native(target['handle'], target['scope'])
+            detail = body['receipt']['outcome']['native_outcome']
+            snapshots = [row for row in detail.get('input_snapshots', []) if row['path'] == path]
+            if (len(snapshots) != 1 or not snapshots[0]['available']
+                    or not snapshots[0]['source_stable_during_read']
+                    or snapshots[0]['sha256'] != manifest['sha256']
+                    or snapshots[0]['size_bytes'] != manifest['size_bytes']):
+                raise ValueError('native_database_original_manifest_snapshot_unavailable')
+            value = self.operations[target['resource_id']].read_output(target['assignment'],
+                target['execution_id'], path=snapshots[0]['captured_path'], offset=offset,
+                limit=limit, **self._native_identity(target))
+            return {**value, 'path': path}
         return self.operations[target['resource_id']].read_output(target['assignment'],
             target['execution_id'], path=path, offset=offset, limit=limit,
             **self._native_identity(target))
@@ -1420,6 +1484,9 @@ class ExecutionTargetReader:
         if (target['resource_kind'] != 'hpc'
                 or 'native_blast_standard_database' not in target['assignment']['requested_job']):
             raise ContractError('native_blast_standard_database_target_required')
+        _, current = self._native(target['handle'], target['scope'])
+        if current['receipt']['tool_name'] == 'exec_command':
+            return self._terminal_database_attempt(target, current['receipt'])
         witness = self.operations[target['resource_id']].authenticate_standard_blast_database_attempt(
             target['assignment'], target['execution_id'], **self._native_identity(target))
         _, body = self._native(target['handle'], target['scope'])
@@ -1437,6 +1504,9 @@ class ExecutionTargetReader:
         if (target['resource_kind'] != 'hpc'
                 or 'native_blast_database' not in target['assignment']['requested_job']):
             raise ContractError('native_blast_database_target_required')
+        _, current = self._native(target['handle'], target['scope'])
+        if current['receipt']['tool_name'] == 'exec_command':
+            return self._terminal_database_attempt(target, current['receipt'])
         witness = self.operations[target['resource_id']].authenticate_native_blast_database_attempt(
             target['assignment'], target['execution_id'], **self._native_identity(target))
         _, body = self._native(target['handle'], target['scope'])
@@ -1446,6 +1516,24 @@ class ExecutionTargetReader:
                 or attempt['plan_sha256'] != detail.get('native_blast_database_plan_sha256')):
             raise ContractError('native_blast_database_original_receipt_plan_conflict')
         return witness
+
+    def _terminal_database_attempt(self, target, receipt):
+        from .native_database_terminal_custody import qualify_manifest
+        manifest = target['assignment'].get('scientific_manifest')
+        if not isinstance(manifest, dict):
+            raise ContractError('native_database_scientific_manifest_not_supplied')
+        offset, chunks = 0, []
+        while offset < manifest['size_bytes']:
+            row = self.read_file(target, path=manifest['path'], offset=offset,
+                limit=min(1024 * 1024, manifest['size_bytes'] - offset))
+            raw = base64.b64decode(row['bytes_base64'], validate=True)
+            if (row['offset'] != offset or row['size_bytes'] != manifest['size_bytes']
+                    or row['returned_bytes'] != len(raw) or not raw):
+                raise ContractError('native_database_manifest_snapshot_read_conflict')
+            chunks.append(raw)
+            offset += len(raw)
+        return qualify_manifest(target, receipt, b''.join(chunks),
+            configuration=self.resources[target['resource_id']])
 
 
 class ExecutionProgressProvider:

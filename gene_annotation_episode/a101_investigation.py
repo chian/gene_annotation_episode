@@ -50,8 +50,8 @@ def _references(namespace=None, *, source=None, description=None):
     return result
 
 
-def report_schema(*, include_sequence_credit=True):
-    """An opt-in parent contract; references retain the full scientific records."""
+def legacy_report_schema(*, include_sequence_credit=True):
+    """Read the closed contract of immutable historical model-verdict returns."""
     claim = obj({
         "status": {"type": "string", "enum": [
             "not_assessed", "unresolved", "supported", "limited", "contradicted"],
@@ -88,10 +88,33 @@ def report_schema(*, include_sequence_credit=True):
     return result
 
 
+def report_schema(*, include_sequence_credit=True):
+    """Return host-recorded grading evidence, without another function verdict."""
+    original = legacy_report_schema(include_sequence_credit=include_sequence_credit)
+    names = ('records', 'sequence_credit') if include_sequence_credit else ('records',)
+    result = obj({name: deepcopy(original['properties'][name]) for name in names})
+    validate_closed_schema(result)
+    return result
+
+
 def initial_report():
-    """Caller-visible unknowns, without inventing hypotheses or evidence."""
-    return {**{name: {"status": "not_assessed", "hypothesis_refs": [], "assessment_refs": []}
-        for name in CLAIMS}, "alternative_hypothesis_refs": [], "limitations": []}
+    """All new default fields are filled from saved evidence by the host."""
+    return {}
+
+
+def _graded_report(store, report, scope):
+    from .a101_credit import A101SequenceCredit
+    view = A101SequenceCredit().read_details(store, scope,
+        known_record_refs=report['records'], details_limit=len(report['records']), details_offset=0)
+    count = view['detail_pages']['source_contributions_total']
+    if len(view['source_contributions']) < count:
+        view = A101SequenceCredit().read_details(store, scope,
+            known_record_refs=report['records'], details_limit=count, details_offset=0)
+    return {'grading_sheet': view['a101_sheet'],
+        'graded_comparisons': view['source_contributions'],
+        'receiving_scope_credit': view['credit'],
+        'child_reported_credit': report.get('sequence_credit'),
+        'reporting': 'saved_native_grading; no_separate_function_verdict'}
 
 
 class A101Subtree:
@@ -172,7 +195,7 @@ class A101Subtree:
             assignment["revision_origin"] = origin
         return {"kind": "episode_child", "role": "scientific_process", "goal": question,
             "scope": scope,
-            "purpose": "Return bounded sequence-to-function conclusions, actual scientific evidence and unresolved alternatives; preserve the distinction between family, activity, specificity and physiological role.",
+            "purpose": "Return the saved sequence-comparison grading and its actual target/source scope, quantities and qualifications. The host projects the recorded evidence and credit; do not supply a second family, activity, specificity or physiological-role verdict.",
             "schema_json": json.dumps(schema, allow_nan=False),
             "initial_report_json": json.dumps(initial, allow_nan=False),
             "assignment": assignment}
@@ -183,9 +206,8 @@ def create_a101_workflow(store, tools, provider, directory, run_id, controller_f
     """Construct the ordinary Workflow with A101 numerical credit installed.
 
     Resources, service assembly, continuation parameters and model providers
-    remain caller-owned. The root cannot silently use a finding counter. A
-    general child fallback is permitted for other axes; A101's binding always
-    selects its native sheet by code.
+    remain caller-owned. Scientific children select credit in their own task
+    binding; this factory does not assign the root calculation to every child.
     """
     from .a101_credit import A101SequenceCredit
     from .runtime import Workflow
@@ -195,9 +217,6 @@ def create_a101_workflow(store, tools, provider, directory, run_id, controller_f
         raise ValueError('a101_numeric_credit_requires_episode_receipts')
     scorer = A101SequenceCredit()
     options['episode_record_receipts'] = True
-    if options.get('project_child_credit') is None:
-        options['project_child_credit'] = scorer
-        options.setdefault('child_credit_binding', scorer.as_record())
     return Workflow(store, tools, provider, directory, run_id, controller_factory, scorer,
         credit_binding=scorer.as_record(), initial_known_record_refs=initial_known_record_refs,
         **options)
@@ -217,8 +236,11 @@ def resolve_report(store, report, *, scope):
             and (namespace is None or store.get(reference)["record_type"] == namespace))
 
     # Old admitted reports retain their original shape and recorded score.
-    validate_form(report, report_schema(include_sequence_credit='sequence_credit' in report), available)
-    claims = {}
+    legacy = any(name in report for name in CLAIMS)
+    validate_form(report, (legacy_report_schema if legacy else report_schema)(
+        include_sequence_credit='sequence_credit' in report), available)
+    if not legacy:
+        return _graded_report(store, report, scope)
     for name in CLAIMS:
         claim = report[name]
         hypotheses = [store.get(ref) for ref in claim["hypothesis_refs"]]
@@ -233,11 +255,6 @@ def resolve_report(store, report, *, scope):
         if claim["status"] in {"supported", "limited", "contradicted"} and (
                 not hypotheses or not assessments):
             raise ContractError("a101_conclusion_requires_evidence", detail={"claim": name})
-        observations = [store.get(row["observation_ref"]) for row in assessments]
-        claims[name] = {"status": claim["status"], "hypotheses": hypotheses,
-            "assessments": assessments, "observations": observations}
-    return {"claims": claims, "sequence_credit": report.get("sequence_credit"),
-        "limitations": list(report["limitations"]),
-        "alternatives": [store.get(ref) for ref in report["alternative_hypothesis_refs"]],
-        "interpretation_basis_refs": list(report["interpretation_basis_refs"]),
-        "observations_after_report_basis": list(report["observations_after_report_basis"])}
+    # Historical labels remain in their original immutable form, but the
+    # current receiving view still communicates only the saved grading.
+    return _graded_report(store, report, scope)

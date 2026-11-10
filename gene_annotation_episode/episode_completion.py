@@ -25,6 +25,19 @@ SOURCE_STATE_VERSION = "episode_source_state_v1"
 _CHILD_KINDS = frozenset({"child", "job_child", "episode_child"})
 
 
+def observes_action_outcome(kind, status):
+    """Executed own attempts enter their iterator even when acquisition fails.
+
+    Callers use recorded, dispatched actions. A returned invalid result is an
+    executed failed attempt, just like another failed source read or reasoning
+    commit. Requests rejected before acquiring a unit have no executed action
+    here. Pending work and child report admission retain their own boundaries.
+    """
+    return status in {"completed", "partial"} or (
+        kind in {"tool", "reason"} and status in {"invalid", "failed", "unavailable"}) or (
+        kind in _CHILD_KINDS and status in {"failed", "interrupted"})
+
+
 class ChildReturnRefV1(TypedDict):
     handle: str
     return_id: str
@@ -166,12 +179,18 @@ class CompletionLedger:
                     raise WorkflowError("completion_identity_conflict")
                 return json.loads(old["slot"])
             action = self.journal.row("runtime_actions", episode_id, original_decision_index)
-            if (action is None or action["result"] is None or action["credit"] is None
-                    or not math.isfinite(action["credit"])
-                    or json.loads(action["result"]).get("status") not in {"completed", "partial"}):
+            if action is None or action["result"] is None or action["credit"] is None:
                 raise WorkflowError("completion_requires_recorded_outcome_and_credit")
-            is_child = json.loads(action["action"]).get("kind") in _CHILD_KINDS
-            if is_child != (kind == "child_return"):
+            from .numerical import validate_task_credit
+            validate_task_credit(action['credit'])
+            action_kind = json.loads(action["action"]).get("kind")
+            if not observes_action_outcome(action_kind, json.loads(action["result"]).get("status")):
+                raise WorkflowError("completion_requires_recorded_outcome_and_credit")
+            is_child = action_kind in _CHILD_KINDS
+            outcome = json.loads(action['result'])
+            attempted_dispatch = (is_child and kind == 'own_action' and child_return is None
+                and outcome.get('status') == 'failed' and outcome.get('execution_handle') is not None)
+            if not attempted_dispatch and is_child != (kind == "child_return"):
                 raise WorkflowError("completion_action_kind_conflict")
             if child_return is not None:
                 self._validate_admission(episode_id, original_decision_index, value, child_return)
@@ -187,11 +206,12 @@ class CompletionLedger:
             (self.run_id, episode_id, index)).fetchone() if installed else None)
         if row is None:
             raise WorkflowError("completion_requires_child_admission")
-        admission = json.loads(row[0])
+        from .episode_admission import load_return_admission
+        admission = load_return_admission(self.store, self.run_id, reference["return_id"])
         if (any(admission[name] != value for name, value in reference.items())
                 or admission["parent_episode_id"] != episode_id
                 or admission["original_decision_index"] != index
-                or admission["state"] not in {"admitted", "delivery_failed"}
+                or admission["state"] not in {"admitted", "delivery_failed", "execution_failed"}
                 or canonical(admission["controller_input"]) != canonical(controller_input)):
             raise WorkflowError("completion_child_admission_conflict")
 
@@ -313,7 +333,8 @@ class CompletionLedger:
 
         A saved call without an effect still needs its normal response handling.
         An ordinary outcome awaiting projection/staging remains unfinished;
-        recorded failed attempts and independently executing children do not.
+        executed failures awaiting observation do too. Rejected requests and
+        independently executing children do not.
         Legacy actions without slots retain unknown historical completion order.
         """
         _text(episode_id, "episode_id")
@@ -347,7 +368,7 @@ class CompletionLedger:
                 if action.get("kind") in _CHILD_KINDS:
                     continue
                 if result is not None and (result.get("pending_handle") is not None
-                        or result.get("status") not in {"completed", "partial"}):
+                        or not observes_action_outcome(action.get("kind"), result.get("status"))):
                     continue
                 unfinished.append(row["decision_index"])
             return {"version": SOURCE_RESTORE_VERSION, "next_call_index": next_index,

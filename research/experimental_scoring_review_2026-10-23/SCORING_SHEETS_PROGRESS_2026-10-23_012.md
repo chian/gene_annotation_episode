@@ -2,7 +2,7 @@
 
 The active goal attachment was reread at turn start, and the live goal and
 worker states were checked. The previous turn was progress: A105 was delivered,
-and independent A106/A108/A111 numerical connections and checks were added.
+and independent A106/A111 numerical connections and checks were added.
 This turn delivers the A101, A102 and A103 numerical research proposals.
 
 **Research-sheet completion: 4/10.** Completion here means the seven stated
@@ -33,8 +33,6 @@ remains active; all earlier records remain unchanged.
 - [ ] A107 — worker 024 is finishing the coherent sheet incorporating the
   parent missing-condition correction and already verified native data.
   Final parent review/presentation remains.
-- [ ] A108 — organism-capability and sample-context branches and exact IO were
-  reviewed in 010/011. Final whole-sheet criterion review/presentation remains.
 - [ ] A110 — fresh worker 026 is consolidating the final sheet. It identified
   the missing isotope measurement-convolution join in the cross-case sheet
   and is adding its exact equation from the retained source packet, with the

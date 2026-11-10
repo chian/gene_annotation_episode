@@ -39,7 +39,7 @@ from tests.test_runtime import ScriptedProvider
 from tests.test_vcf_result_workflow import _closed_child, _controller, _single_saved_result_controller, _tables, _zero
 
 
-POLICY = dict(memory_bytes=20 * 1024**3, scratch_bytes=4 * 1024**3, wall_seconds=None)
+POLICY = dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 PUBLICATION = Path(__file__).resolve().parents[1] / "research/slotted_process_library/publications/2026-10-24-001"
 QUESTION = ("For the supplied calibrated-signal Sheet, return the controlled aliquot and original-sample "
     "concentrations with retained units, association populations, censoring and uncertainty qualifications. "

@@ -29,7 +29,6 @@ CASES = {
     "perturbation": ("test_literature_perturbation_integration", "setup_case", "Perturbation", "perturbation_cells_schema"),
     "structure": ("test_literature_structure_storage", "fixture", "Structure", "structure_cells_schema"),
     "reaction": ("test_literature_reaction_storage", "fixture", "Reaction", "reaction_cells_schema"),
-    "context": ("test_literature_context_storage", "fixture", "Context", "context_cells_schema"),
     "figure": ("test_literature_figure_storage", "fixture", "Figure", "figure_cells_schema"),
     "partner": ("test_literature_partner_storage", "fixture", "Partner", "partner_cells_schema"),
     "partner_source": ("test_literature_partner_native_storage", "fixture", "Partner", "partner_cells_schema"),

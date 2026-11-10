@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 INDEX_PATH = ROOT / "verification/tool_graders_infernal_preparation_2026-10-26_247/NATIVE_COMPILED_INDEX_001.json"
 INDEX = json.loads(INDEX_PATH.read_text())
 CASES = INDEX["cases"]
-POLICY = LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None)
+POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
 
 
 def digest(path):

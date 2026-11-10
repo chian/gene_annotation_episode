@@ -150,7 +150,7 @@ def prepared(binding, *, thought="P01", tools=("fixture.inspect",), evidence_ref
     invocation = deepcopy(INVOCATION)
     if schema is not None:
         invocation["report_schema"] = deepcopy(schema)
-    return binding.prepare_invocation(parent or SimpleNamespace(role="annotation"), "scientific_process",
+    return binding.prepare_invocation(parent or SimpleNamespace(role="annotation", path=(("annotation", "root"),)), "scientific_process",
         assignment, SCOPE, "original-operation", invocation=invocation)
 
 
@@ -213,7 +213,7 @@ def test_assignment_uses_finite_canonical_json_without_key_coercion(mother, bad)
     assignment = {"selection": selection(binding.library), "evidence_refs": [],
                   "constraints": bad, "context": {}}
     with pytest.raises(ValueError):
-        binding.prepare_invocation(SimpleNamespace(role="annotation"), "scientific_process",
+        binding.prepare_invocation(SimpleNamespace(role="annotation", path=(("annotation", "root"),)), "scientific_process",
             assignment, SCOPE, "finite-json", invocation=INVOCATION)
 
 
@@ -474,7 +474,7 @@ def test_requested_process_facts_copy_closed_credit_and_merge_only_received_rows
         "own_action_count": 3, "initial_credit": 11, "credit": 7, "controller_credit": None,
         "episode_yield": None, "parent_invocation_ref": parent_ref}
     own = binding.facts(child, snapshot)["scientific_process_results"][0]
-    assert own == {"version": "scientific_process_result_v2",
+    assert own == {"version": "scientific_process_result_v3", "proposed_annotation_ref": None,
         "invocation_ref": scientific_invocation_ref(child.run_id, child.path),
         "parent_invocation_ref": parent_ref, "origin_kind": "ordinary_child",
         "preparation_operation_ref": None, "selection": {
@@ -564,19 +564,105 @@ def test_declared_child_edges_keep_specialist_branches_separate(mother):
 
 
 def test_setup_freezes_descriptor_without_executable_services_and_reopens_original(tmp_path):
+    from gene_annotation_episode.episode_composition import reopen_scientific_binding
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
     from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
     from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
     descriptor = prepare_scientific_binding(run_directory=tmp_path, source_directory=CATALOG,
         tool_catalog=[{**PRIMITIVE, "resources": "local"}],
         child_roles=("scientific_process", "literature"))
-    assert descriptor["version"] == "scientific_process_episodes_v8"
+    assert descriptor["version"] == "scientific_process_episodes_v10"
     assert set(descriptor["configuration"]) == {"library", "tool_library", "child_roles"}
     library = ScientificProcessLibrary(tmp_path / "scientific-process-library")
     tools = ScientificToolLibrary(tmp_path / "scientific-tool-library")
     reopened = ScientificProcessEpisodes(None, library=library, tool_library=tools,
         child_roles=("scientific_process", "literature"))
     assert reopened.as_record() == descriptor
+    assert reopen_scientific_binding(None, descriptor=descriptor,
+        directory=tmp_path).as_record() == descriptor
     assert prepare_scientific_binding(run_directory=tmp_path, source_directory=tmp_path / "missing-source",
         tool_catalog=[{**PRIMITIVE, "resources": "local"}],
         child_roles=("scientific_process", "literature")) == descriptor
+
+
+def test_scientific_task_yield_uses_its_own_credit_units_and_cutoff():
+    assignment = {'proposed_annotation_ref': 'hypothesis_' + 'c' * 24,
+        'context': {'evidence_task': {'version': 'evidence_axis_task_v1',
+            'kind': 'whole_axis_findings', 'evidence_axis': 'A105', 'credit_unit': 3}}}
+    context = BindingContext('run_fixture', 'episode_fixture', 'scientific_process',
+        (('annotation', 'root'), ('scientific_process', 'child')), SCOPE,
+        assignment, {'message': {'scope': SCOPE, 'episode_assignment': assignment}})
+    owner = ScientificProcessEpisodes.__new__(ScientificProcessEpisodes)
+    owner._original_selection = lambda _: {'version': 'scientific_process_selection_v3',
+        'evidence_axis': {'option_id': 'A105'}}
+    owner.library = SimpleNamespace(resolve=lambda _: {'entry_version': 'evidence_axis_instruction_v1'})
+    credit = owner.credit_projector(context).as_record()
+    owner._yield_bindings = {'A105:whole_axis_findings': {'kind': 'accumulation',
+        'cutoff': .075, 'parameters': {'uncertainty_alpha': .05},
+        'credit_definition': credit}}
+    controller = owner.yield_controller(context, 3, 'scientific_epoch')
+    assert controller.initial_credit == 3 and controller.cost == .075
+    assert controller.settings.uncertainty_alpha == .05
+    owner._yield_bindings['A105:whole_axis_findings']['credit_definition'] = {'kind': 'wrong_units'}
+    with pytest.raises(ContractError, match='scientific_yield_credit_definition_mismatch'):
+        owner.yield_controller(context, 3, 'scientific_epoch')
+    owner._yield_bindings.clear()
+    with pytest.raises(ContractError, match='scientific_yield_binding_missing_for_task'):
+        owner.yield_controller(context, 3, 'scientific_epoch')
+
+
+def test_bounded_sequence_task_privately_binds_its_native_score_range():
+    from gene_annotation_episode.numerical import BoundedYieldController
+    assignment = {'proposed_annotation_ref': 'hypothesis_' + 'c' * 24, 'context': {}}
+    context = BindingContext('run_fixture', 'episode_fixture', 'scientific_process',
+        (('annotation', 'root'), ('scientific_process', 'child')), SCOPE,
+        assignment, {'message': {'scope': SCOPE, 'episode_assignment': assignment}})
+    owner = ScientificProcessEpisodes.__new__(ScientificProcessEpisodes)
+    owner._original_selection = lambda _: {'version': 'scientific_process_selection_v3',
+        'evidence_axis': {'option_id': 'A101'}}
+    owner.library = SimpleNamespace(resolve=lambda _: {'entry_version': 'evidence_axis_instruction_v1'})
+    projector = owner.credit_projector(context)
+    task = owner.continuation_task(context)
+    owner._yield_bindings = {task: {'kind': 'bounded_quality', 'cutoff': .02,
+        'parameters': {'uncertainty_alpha': .05},
+        'credit_definition': projector.as_record()}}
+    controller = owner.yield_controller(context, .8, 'sequence_epoch')
+    assert isinstance(controller, BoundedYieldController)
+    assert controller.maximum_credit == 1. and controller.cost == .02
+    owner._yield_bindings[task]['kind'] = 'accumulation'
+    with pytest.raises(ContractError, match='scientific_yield_method_credit_mismatch'):
+        owner.yield_controller(context, .8, 'sequence_epoch')
+
+
+def test_a104_panel_task_privately_binds_delivered_artifact_completion():
+    from gene_annotation_episode.numerical import CompletionYieldController
+    assignment = {'proposed_annotation_ref': 'hypothesis_' + 'c' * 24,
+        'context': {'a104_task': {'name': 'panel_identity'}}}
+    context = BindingContext('run_fixture', 'episode_fixture', 'scientific_process',
+        (('annotation', 'root'), ('scientific_process', 'child')), SCOPE,
+        assignment, {'message': {'scope': SCOPE, 'episode_assignment': assignment}})
+    owner = ScientificProcessEpisodes.__new__(ScientificProcessEpisodes)
+    owner._original_selection = lambda _: {'version': 'scientific_process_selection_v3',
+        'evidence_axis': {'option_id': 'A104'}}
+    owner.library = SimpleNamespace(resolve=lambda _: {'entry_version': 'evidence_axis_instruction_v1'})
+    projector = owner.credit_projector(context)
+    task = owner.continuation_task(context)
+    assert projector.as_record()['kind'] == 'a104_panel_identity_delivered'
+    assert task == 'A104:panel_identity'
+    owner._yield_bindings = {task: {'kind': 'completion', 'cutoff': .075,
+        'parameters': {'uncertainty_alpha': .05},
+        'credit_definition': projector.as_record()}}
+    controller = owner.yield_controller(context, 0, 'panel_epoch')
+    assert isinstance(controller, CompletionYieldController)
+    assert controller.cost == .075
+
+
+def test_private_scientific_credit_rejects_missing_proposed_annotation():
+    assignment = {'context': {}}
+    context = BindingContext('run_fixture', 'episode_fixture', 'scientific_process',
+        (('annotation', 'root'), ('scientific_process', 'child')), SCOPE,
+        assignment, {'message': {'scope': SCOPE, 'episode_assignment': assignment}})
+    owner = ScientificProcessEpisodes.__new__(ScientificProcessEpisodes)
+    owner._yield_bindings = {}
+    with pytest.raises(ContractError, match='scientific_task_proposed_annotation_required'):
+        owner.credit_projector(context)

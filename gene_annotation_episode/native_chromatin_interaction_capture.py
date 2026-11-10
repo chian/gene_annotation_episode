@@ -11,6 +11,7 @@ import hashlib
 from pathlib import Path
 
 from . import native_file_capture
+from .terminal_native_file_capture import capture_execution_file, capture_execution_declarations
 from .chromatin_interaction_contracts import decode_chromatin_json, validate_chromatin_record
 from .native_chromatin_interaction_contracts import (
     TABLE_ROLES, canonical, failure, path_value,
@@ -161,10 +162,10 @@ def _retain(store, identity):
     return {"file": deepcopy(identity), "path": str(native_file_capture.retained_native_file(store, identity))}
 
 
-def _undeclared(store, plan, specification, field_path, failures):
+def _undeclared(store, plan, specification, field_path, failures, command_proof=None):
     try:
-        identity = native_file_capture.capture_native_file(store, directory=plan["attempt_directory"],
-            relative_path=specification["relative_path"], format=specification["format"])
+        identity = capture_execution_file(store, directory=plan["attempt_directory"],
+            relative_path=specification["relative_path"], format=specification["format"], command_proof=command_proof)
     except native_file_capture.NativeFileCaptureError as error:
         if error.code != "capture_file_unavailable":
             raise
@@ -226,9 +227,9 @@ def _population(value, plan, population):
     return value
 
 
-def _declared_rows(store, plan, selected, source, failures):
-    captures = native_file_capture.capture_declared_native_files(store, directory=plan["attempt_directory"],
-        declarations=[declaration for _, _, declaration in selected])
+def _declared_rows(store, plan, selected, source, failures, command_proof=None):
+    captures = capture_execution_declarations(store, directory=plan["attempt_directory"],
+        declarations=[declaration for _, _, declaration in selected], command_proof=command_proof)
     rows = {}
     for (index, specification, _), captured in zip(selected, captures):
         retained = _retain(store, captured["observed"]) if captured["observed"] is not None else None
@@ -244,7 +245,7 @@ def _declared_rows(store, plan, selected, source, failures):
 
 def capture_chromatin_native_files(store, *, original_plan: dict,
         source_action_receipt_ref: str, writer_closure_receipt_ref: str,
-        driver_started: bool | None) -> dict:
+        driver_started: bool | None, command_proof=None) -> dict:
     """Retain the exact fixed outputs after the caller qualifies writer closure.
 
     ``False`` requires affirmative caller-held evidence that this driver never
@@ -268,12 +269,12 @@ def capture_chromatin_native_files(store, *, original_plan: dict,
                 stage="execution", refs=[writer_closure_receipt_ref]))
         return validate_chromatin_native_capture(result, original_plan=plan)
     spec = plan["outputs"][-1]
-    retained_bundle = _undeclared(store, plan, spec, "/bundle", failures)
+    retained_bundle = _undeclared(store, plan, spec, "/bundle", failures, command_proof)
     bundle = _control(retained_bundle, spec, plan, "/bundle", failures, lambda value: _bundle(value, plan))
     if bundle is not None:
         result.update(driver_state="sealed_bundle", bundle=retained_bundle)
         captured = _declared_rows(store, plan, [(i, r["specification"], r["declaration"])
-            for i, r in enumerate(bundle["outputs"])], "bundle", failures)
+            for i, r in enumerate(bundle["outputs"])], "bundle", failures, command_proof)
         result["files"] = [captured[i] for i in range(len(rows))]
         return validate_chromatin_native_capture(result, original_plan=plan)
     populations = {p["population_key"]: p for p in plan["requested_job"]["native_chromatin_interactions"]["request"]["populations"]}
@@ -282,7 +283,7 @@ def capture_chromatin_native_files(store, *, original_plan: dict,
         spec = row["specification"]
         if spec["role"] != "population_manifest":
             continue
-        row["retained"] = _undeclared(store, plan, spec, f"/files/{index}", failures)
+        row["retained"] = _undeclared(store, plan, spec, f"/files/{index}", failures, command_proof)
         seal = _control(row["retained"], spec, plan, f"/files/{index}", failures,
             lambda value: _population(value, plan, populations[spec["population_key"]]))
         if seal is not None:
@@ -307,8 +308,8 @@ def capture_chromatin_native_files(store, *, original_plan: dict,
             declaration = next(r["declaration"] for r in seal["tables"] if r["draft"]["role"] == spec["role"])
             selected.append((index, spec, declaration))
         else:
-            row["retained"] = _undeclared(store, plan, spec, f"/files/{index}", failures)
-    for index, row in _declared_rows(store, plan, selected, "population", failures).items():
+            row["retained"] = _undeclared(store, plan, spec, f"/files/{index}", failures, command_proof)
+    for index, row in _declared_rows(store, plan, selected, "population", failures, command_proof).items():
         rows[index] = row
     return validate_chromatin_native_capture(result, original_plan=plan)
 

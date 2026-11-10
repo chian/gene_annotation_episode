@@ -21,7 +21,9 @@ from .launch_instructions import (SELECTION_SCHEMA as LAUNCH_INSTRUCTION_SELECTI
 ASSIGNMENT_VERSION = 'practical_assignment_v1'
 RECEIPT_VERSION = 'practical_action_receipt_v1'
 COMPLETION_VERSION = 'practical_completion_v1'
-JOB_TOOLS = frozenset({'practical.job.start', 'practical.job.status', 'practical.job.collect'})
+# Legacy native receipts remain readable; current execution uses the ordinary
+# general terminal action and authenticates its actual native command custody.
+JOB_TOOLS = frozenset({'exec_command', 'practical.job.start', 'practical.job.status', 'practical.job.collect'})
 LUMPY_OUTPUT_ROLES = ('vcf', 'stderr', 'seal', 'bam_headers')
 PREDICATE_FIELDS = {
     'context_cwd': {'kind', 'path'},
@@ -116,6 +118,11 @@ ASSIGNMENT_SCHEMA = _schema_object({'version': {'const': ASSIGNMENT_VERSION},
     'constraints': {'type': 'object'}})
 ASSIGNMENT_SCHEMA['properties']['launch_instructions'] = deepcopy(LAUNCH_INSTRUCTION_SELECTION_SCHEMA)
 ASSIGNMENT_SCHEMA['properties']['resource_id'] = deepcopy(_TEXT_SCHEMA)
+ASSIGNMENT_SCHEMA['properties']['scientific_manifest'] = _schema_object({
+    'path': _PATH_SCHEMA, 'sha256': _DIGEST_SCHEMA,
+    'size_bytes': {'type': 'integer', 'minimum': 0},
+    'format': {'enum': ['native_blast_database_run_plan_v1',
+        'native_blast_standard_database_run_plan_v1']}})
 ASSIGNMENT_SCHEMA['properties']['native_flux_balance_execution'] = deepcopy(_FBA_EXECUTION_SELECTION_SCHEMA)
 ASSIGNMENT_SCHEMA['allOf'] = [{'if': {'required': ['native_flux_balance_execution']},
     'then': {'properties': {'requested_job': {'required': ['native_flux_balance']}}}}]
@@ -260,7 +267,7 @@ def validate_assignment(value):
         'endpoint', 'requested_job', 'progress_requirements', 'completion_keys',
         'initial_context', 'inventory_snapshot', 'constraints'}
     if not required <= set(value) or set(value) - required - {
-            'launch_instructions', 'resource_id', 'native_flux_balance_execution'}:
+            'launch_instructions', 'resource_id', 'native_flux_balance_execution', 'scientific_manifest'}:
         raise ValueError('invalid_practical_assignment')
     if 'resource_id' in value and not _text(value['resource_id']):
         raise ValueError('invalid_practical_resource_id')
@@ -272,6 +279,16 @@ def validate_assignment(value):
         raise ValueError('invalid_practical_assignment')
     _path(value['workspace'])
     job = _object(value['requested_job'], code='invalid_practical_job')
+    if 'scientific_manifest' in value:
+        manifest = _object(value['scientific_manifest'], {'path', 'sha256', 'size_bytes', 'format'})
+        _path(manifest['path'])
+        _sha(manifest['sha256'])
+        if (type(manifest['size_bytes']) is not int or manifest['size_bytes'] < 0
+                or value['resource_kind'] != 'hpc'
+                or not PurePosixPath(manifest['path']).is_relative_to(value['workspace'])
+                or not any(key in job and manifest['format'] == key + '_run_plan_v1'
+                    for key in ('native_blast_database', 'native_blast_standard_database'))):
+            raise ValueError('native_database_scientific_manifest_invalid')
     if 'native_flux_balance_execution' in value:
         if ('native_flux_balance' not in job or value['native_flux_balance_execution'] != {
                 'version': 'flux_balance_execution_selection_v1',
@@ -569,7 +586,66 @@ def _utility_completed_outputs(assignment, outcome, job):
         for row in bundle['artifacts'] if row['sha256'] is not None and row['completeness'] == 'complete')}
 
 
-def _job_matches(assignment, job, tool_name):
+def terminal_job_matches(assignment, outcome):
+    """Qualify an actual scheduler submission/observation, not a worker plan.
+
+    The immutable selected command receipt owns these facts. Its captured
+    script and scheduler event bind the native job to the original assignment;
+    qsub's actual argv is not the scientific program's argv.
+    """
+    if assignment['resource_kind'] == 'local':
+        from .terminal_scientific_evidence import terminal_local_job_matches
+        return terminal_local_job_matches(assignment, outcome)
+    job = outcome.get('facts', {}).get('requested_job')
+    command = outcome.get('facts', {}).get('command')
+    detail = outcome.get('native_outcome') or {}
+    actual = detail.get('actual_job')
+    executed = detail.get('execution_command')
+    if (assignment['resource_kind'] != 'hpc' or not isinstance(job, dict)
+            or not isinstance(command, dict) or not isinstance(actual, dict)
+            or not isinstance(executed, dict)):
+        return False
+    script = actual.get('script')
+    if not isinstance(script, dict):
+        return False
+    path = PurePosixPath(script.get('path', ''))
+    sha = script.get('sha256')
+    if (not path.is_absolute() or '..' in path.parts
+            or not path.is_relative_to(assignment['workspace'])
+            or not isinstance(sha, str) or len(sha) != 64
+            or any(char not in '0123456789abcdef' for char in sha)
+            or type(script.get('bytes')) is not int or script['bytes'] < 0):
+        return False
+    arguments = {key: executed.get(key) for key in ('cmd', 'workdir', 'env')}
+    events = detail.get('scheduler_events')
+    return bool(isinstance(events, list)
+        and executed.get('command_sha256') == digest(arguments)
+        and executed.get('intent_path') == command.get('execution_id')
+        and command.get('argv') == (executed.get('cmd') if isinstance(executed.get('cmd'), list)
+            else ['/bin/bash', '-c', executed.get('cmd')])
+        and command.get('environment') == executed.get('env')
+        and command.get('returncode') == executed.get('returncode')
+        and actual.get('assignment_sha256') == digest(assignment)
+        and actual.get('requested_job_sha256') == digest(assignment['requested_job'])
+        and job.get('requested_job_sha256') == actual.get('requested_job_sha256')
+        and job.get('resource_kind') == 'hpc'
+        and job.get('execution_id') == actual.get('job_id')
+        and job.get('argv') == actual.get('argv')
+        and job.get('environment') == actual.get('environment')
+        and job.get('status') == actual.get('status')
+        and job.get('returncode') == actual.get('returncode')
+        and job.get('handoff') == {'execution_id': actual.get('job_id'),
+            'monitor_operation': 'exec_command', 'results_operation': 'exec_command'}
+        and any(isinstance(event, dict)
+            and event.get('command_intent') == executed.get('intent_path')
+            and event.get('native_job') == actual
+            and event.get('returncode') == 0
+            for event in events))
+
+
+def _job_matches(assignment, job, tool_name, outcome):
+    if tool_name == 'exec_command':
+        return terminal_job_matches(assignment, outcome)
     return bool(job is not None and tool_name in JOB_TOOLS
         and job['requested_job_sha256'] == digest(assignment['requested_job'])
         and job['argv'] == assignment['requested_job']['argv']
@@ -683,7 +759,7 @@ def assess_validations(assignment, outcome, context, *, checked_at=None, tool_na
             observed = facts.get('requested_job')
             if observed is None:
                 continue
-            satisfied = (_job_matches(assignment, observed, tool_name)
+            satisfied = (_job_matches(assignment, observed, tool_name, outcome)
                 and observed['status'] in {'submitted', 'running', 'completed'}
                 and observed['handoff'] is not None)
             if 'native_blast_utility' in assignment['requested_job'] and observed['status'] == 'completed':
@@ -696,7 +772,7 @@ def assess_validations(assignment, outcome, context, *, checked_at=None, tool_na
                 if 'output_roles' in predicate else predicate['output_paths'])
             selected_paths = [paths.get(path) for path in requested_paths]
             observed = {'requested_job': job, 'paths': selected_paths}
-            satisfied = (_job_matches(assignment, job, tool_name)
+            satisfied = (_job_matches(assignment, job, tool_name, outcome)
                 and job['status'] == 'completed' and job['returncode'] == 0
                 and set(requested_paths) <= set(job['output_paths'])
                 and all(path is not None and path['exists'] and path['object_type'] == 'file'
@@ -791,6 +867,6 @@ def validate_completion_proof(value):
 __all__ = ['ASSIGNMENT_VERSION', 'RECEIPT_VERSION', 'COMPLETION_VERSION', 'JOB_TOOLS',
     'ASSIGNMENT_SCHEMA', 'CONTEXT_SCHEMA', 'REQUESTED_JOB_SCHEMA', 'GENERIC_REQUESTED_JOB_SCHEMA', 'PREDICATE_SCHEMA',
     'REQUIREMENT_SCHEMA', 'VALIDATION_SCHEMA', 'RECEIPT_SCHEMA', 'COMPLETION_PROOF_SCHEMA',
-    'canonical', 'digest', 'validate_assignment', 'validate_context', 'validate_predicate',
+    'canonical', 'digest', 'terminal_job_matches', 'validate_assignment', 'validate_context', 'validate_predicate',
     'validate_outcome', 'assess_validations', 'validate_validations', 'validate_receipt',
     'validate_validation', 'validate_completion_proof', 'LUMPY_OUTPUT_ROLES', 'lumpy_role_outputs']

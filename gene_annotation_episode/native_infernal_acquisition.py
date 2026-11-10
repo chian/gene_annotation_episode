@@ -89,7 +89,7 @@ def _plan(value):
     if execution.name != 'native.json' or attempt != execution.parent / 'infernal-attempt':
         raise ContractError('native_infernal_original_plan_directory_conflict')
     policy = plan['policy']
-    if type(policy) is not dict or set(policy) != {'memory_bytes', 'scratch_bytes', 'wall_seconds'}:
+    if type(policy) is not dict or set(policy) != {'memory_bytes', 'scratch_bytes'}:
         raise ContractError('native_infernal_explicit_policy_required')
     LocalJobPolicy(**policy)
     return plan

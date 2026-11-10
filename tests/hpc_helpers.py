@@ -29,14 +29,13 @@ def commission():
             {'field': ['quality'], 'operator': 'ge', 'value': .9}]}},
         'candidates': [{'id': 'one-portfolio', 'queue': 'debug', 'nodes': 1, 'wall_seconds': 3600,
             'features': {'size': 10}, 'units': [{'unit_id': 'unit-1', 'obligation_id': 'original-work',
-                'effort': 1., 'minimum_seconds': 100, 'maximum_seconds': 3000,
+                'effort': 1.,
                 'argv': ['/not-an-executable-contract-fixture'], 'environment': {}}]}],
         'credit': {'model_scale': .01, 'validation_scale': .1, 'validation_slots': [
             {'id': 'original-queue', 'metric': 'queue', 'phase': 'planned', 'weight': 1., 'minimum_elapsed_seconds': 0},
             {'id': 'running-work', 'metric': 'work', 'phase': 'running', 'weight': 1., 'minimum_elapsed_seconds': 60}]},
-        'preferences': {'deadline_seconds': 5000, 'elapsed_cost_per_second': .0001, 'node_hour_cost': .01},
-        'limits': {'max_nodes': 2, 'max_wall_seconds': 3600, 'max_node_hours': 2,
-            'shutdown_margin_seconds': 15, 'result_limit_bytes': 65536,
+        'preferences': {'elapsed_cost_per_second': .0001, 'node_hour_cost': .01},
+        'limits': {'result_limit_bytes': 65536,
             'queue_max_age_seconds': 1e10}}
 
 

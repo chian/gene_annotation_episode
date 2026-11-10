@@ -854,7 +854,7 @@ def test_one_actual_action_observation_terminal_zero_and_explicit_artifact_grant
         assert metadata['policy'] == POLICY
         assert metadata['verified_cgroup']['memory_max'] == 20 * 1024**3
         assert metadata['verified_cgroup']['memory_swap_max'] == 0
-        assert metadata['verified_cgroup']['runtime_max'] == 'infinity'
+        assert 'runtime_max' not in metadata['verified_cgroup']
 
 
 def test_saved_only_recalculation_then_closed_replay_without_native_or_parsing(native_case, monkeypatch):

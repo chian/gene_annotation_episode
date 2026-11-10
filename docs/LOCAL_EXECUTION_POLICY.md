@@ -1,26 +1,30 @@
 # One bounded local workflow per Codex window
 
-The local budget covers Python coordinators, provider clients, native workers,
-and all their descendants together. The launcher accepts one workflow at a
-time per Codex window; other windows may run independently. A separate
-per-worker gate remains inside each workflow. Limits are fixed in code,
-not selectable by an episode or an ordinary launcher argument.
+The local environment covers Python coordinators, provider clients, native
+workers and all their descendants together. The launcher accepts one workflow
+at a time per Codex window; other windows may run independently. Native
+resource reservations retain their CPU/RAM meaning. Episode continuation is
+determined by its credit-based iterator.
 
 | Aggregate limit | Current value |
 |---|---:|
 | CPU | 100% of one logical CPU |
-| Memory | 512 MiB |
+| Memory | 5 GiB (user authorized on 2026-11-04) |
 | Swap | 0 |
-| Tasks/threads | 64 |
-| Runtime | 600 seconds |
-| Scratch | 256 MiB, monitored with possible overshoot |
-| Per-file size | 64 MiB, kernel limit |
+
+No elapsed-time, token, turn, action-count or cumulative-usage budget is
+configured or enforced. Scratch usage is observed and recorded; this launcher
+does not set a scratch or per-file size limit.
 
 Disk bandwidth is not enforced: the present user cgroup does not delegate the
 I/O controller. This policy permits lightweight inspection and verification.
 Heavy biological algorithms require a configured remote resource or the user's
 explicit approval of a concrete local budget. Limits must not be increased
 silently to make a test pass.
+
+Repeated ownership verification now reads `/proc` and cgroup files directly.
+It verifies the original live supervisor and enforced CPU/RAM resources without
+forking `systemctl` before provider admission.
 
 Run one command with a new output directory:
 
@@ -29,7 +33,7 @@ bash tools/one_workflow.sh runs/<unique-run> -- <command> <arguments...>
 ```
 
 The shell launcher starts Python inside a resource-limited systemd service.
-Its supervisor verifies the kernel CPU, memory, swap and task limits of a shared
+Its supervisor verifies the kernel CPU, memory and swap limits of a shared
 parent slice before starting the payload. The stable `CODEX_THREAD_ID` identifies
 the window's service, slice and exclusive lock at
 `runs/workflow-windows/<thread-id>/workflow.lock`. A second workflow in that

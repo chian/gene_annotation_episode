@@ -71,7 +71,7 @@ def register(history_path, local_resource_id):
                 implementation_sha256=None if phase == "reference_acquisition" else manifest["executable_sha256"],
                 parameters_sha256=hashlib.sha256(json.dumps(parameters, sort_keys=True).encode()).hexdigest(),
                 memory_bytes=policy["memory_bytes"], scratch_bytes=policy["scratch_bytes"],
-                wall_seconds=policy["wall_seconds"], cpu_threads=None if phase == "reference_acquisition" else 1,
+                wall_seconds=policy.get("wall_seconds"), cpu_threads=None if phase == "reference_acquisition" else 1,
                 query_residues=None if phase == "reference_acquisition" else query_residues,
                 reference_residues=manifest["database_residues"], reference_records=manifest["database_records"],
                 reference_state="download_required" if phase == "reference_acquisition" else "available")

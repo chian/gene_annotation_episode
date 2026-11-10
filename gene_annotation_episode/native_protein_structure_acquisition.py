@@ -116,6 +116,17 @@ def qualify_protein_structure_target_plan(
     plan = validate_protein_structure_run_plan(plan)
     owner = plan["identity"]
     _require(same(target["assignment"]["requested_job"], plan["requested_job"]), "original_commission_mismatch")
+    from .terminal_scientific_evidence import is_terminal_target, terminal_plan_identity
+    if is_terminal_target(target):
+        # The plan belongs to its actual preparation command; the handoff
+        # separately proves the later original driver invocation of that plan.
+        _require(all(target[left] == owner[right] for left, right in (
+            ('run_id', 'run_id'), ('origin_episode_id', 'episode_id'),
+            ('resource_id', 'resource_id'), ('request_sha256', 'requested_job_sha256')))
+            and owner['assignment_sha256'] == digest(target['assignment'])
+            and terminal_plan_identity(owner, attempt_directory=plan['attempt_directory']),
+            'original_commission_mismatch')
+        return plan
     _require(all(target[left] == owner[right] for left, right in (
         ("run_id", "run_id"), ("origin_episode_id", "episode_id"),
         ("resource_id", "resource_id"), ("execution_id", "execution_id"),
@@ -222,7 +233,24 @@ def retained_protein_structure_file(store, identity: FileIdentity) -> Path:
         raise ValueError("retained_artifact_missing") from error
 
 
-def _capture_file(store, directory, relative, format):
+def _protein_terminal_identity(snapshot, format):
+    from .terminal_scientific_evidence import terminal_file_identity
+    identity = terminal_file_identity(snapshot, format)
+    identity['byte_length'] = identity.pop('size_bytes')
+    return validate_file_identity(identity)
+
+
+def _capture_file(store, directory, relative, format, command_proof=None):
+    if command_proof is not None:
+        from .terminal_scientific_evidence import captured_terminal_file
+        _require(directory == command_proof['original_plan']['attempt_directory'], 'original_commission_mismatch')
+        matches = [row for row in command_proof['output_snapshots']
+            if row['path'] == str(Path(directory) / relative)]
+        _require(len(matches) == 1 and matches[0]['available'], 'capture_incomplete')
+        captured_terminal_file(store, matches[0], format)
+        identity = _protein_terminal_identity(matches[0], format)
+        retained_protein_structure_file(store, identity)
+        return identity
     with _producer_file(directory, relative) as path:
         reference = artifact_file(store, path)
     metadata = store._require(reference, {"artifact"})
@@ -249,8 +277,29 @@ def validate_protein_structure_capture(
 ) -> ProteinStructureCapture:
     """Revalidate detached capture facts using only retained bytes and pure ports."""
     target = _target(target)
-    return _validate_capture(store, capture,
+    value = _validate_capture(store, capture,
         qualify_plan=lambda plan: qualify_protein_structure_target_plan(target, plan))
+    from .terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
+    if is_terminal_target(target):
+        handoff = read_terminal_handoff(store, target['run_id'], target, target['scope'])
+        proof = handoff['start_receipt']['outcome']['native_outcome']['scientific_command_proof']
+        _require(same(value['original_plan'], proof['original_plan']), 'original_commission_mismatch')
+        _validate_terminal_capture_files(value, proof)
+    return value
+
+
+def _validate_terminal_capture_files(capture, command_proof):
+    """Original retained protein identities must match the executed snapshots."""
+    files = [(capture['bundle_file'], BUNDLE_FILENAME, BUNDLE_FORMAT)]
+    files.extend((row['observed'], row['declared']['relative_path'], row['declared']['format'])
+        for row in capture['files'])
+    for identity, relative, format in files:
+        if identity is None:
+            continue
+        path = str(Path(command_proof['original_plan']['attempt_directory']) / relative)
+        matches = [row for row in command_proof['output_snapshots'] if row['path'] == path]
+        _require(len(matches) == 1 and matches[0]['available']
+            and same(identity, _protein_terminal_identity(matches[0], format)), 'input_digest_mismatch')
 
 
 def validate_protein_structure_plan_capture(
@@ -349,6 +398,12 @@ def capture_local_protein_structure_bundle(
 
 
 def _capture_original(store, target):
+    from .terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
+    if is_terminal_target(target):
+        handoff = read_terminal_handoff(store, target['run_id'], target, target['scope'])
+        proof = handoff['start_receipt']['outcome']['native_outcome']['scientific_command_proof']
+        plan = qualify_protein_structure_target_plan(target, proof['original_plan'])
+        return _capture_plan_files(store, plan, command_proof=proof)
     from .native_protein_structure_local import local_protein_structure_plan
     capture = {"version": VERSION, "original_plan": None, "bundle_file": None,
         "bundle_validated": False, "files": [], "failures": [], "capture_complete": False}
@@ -361,11 +416,12 @@ def _capture_original(store, target):
     return _capture_plan_files(store, plan)
 
 
-def _capture_plan_files(store, plan):
+def _capture_plan_files(store, plan, command_proof=None):
     capture = {"version": VERSION, "original_plan": plan, "bundle_file": None,
         "bundle_validated": False, "files": [], "failures": [], "capture_complete": False}
     try:
-        capture["bundle_file"] = _capture_file(store, plan["attempt_directory"], BUNDLE_FILENAME, BUNDLE_FORMAT)
+        capture["bundle_file"] = _capture_file(store, plan["attempt_directory"], BUNDLE_FILENAME, BUNDLE_FORMAT,
+            command_proof=command_proof)
         bundle = _bundle(store, capture["bundle_file"], plan)
         capture["bundle_validated"] = True
     except (ValueError, OSError, KeyError, TypeError) as error:
@@ -377,7 +433,8 @@ def _capture_plan_files(store, plan):
             "observed": None, "outcome": "declared_absent", "issue": None}
         if declared["state"] == "present":
             try:
-                row["observed"] = _capture_file(store, plan["attempt_directory"], declared["relative_path"], declared["format"])
+                row["observed"] = _capture_file(store, plan["attempt_directory"], declared["relative_path"], declared["format"],
+                    command_proof=command_proof)
             except (ValueError, OSError):
                 row["outcome"] = "unavailable"
                 row["issue"] = issue("capture_incomplete", stage="capture", field="manifest", artifact_role=declared["role"])

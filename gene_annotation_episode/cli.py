@@ -110,7 +110,20 @@ def main(argv=None):
                     include_credit=args.include_credit, credit_policy=(config or {}).get("credit"),
                     include_artifacts=args.include_artifacts))
                 return 0
-            tools = build_tools(store, config)
+            genome = (config or {}).get('genome_investigation')
+            if genome is not None:
+                if (not isinstance(genome, dict)
+                        or set(genome) != {'version', 'root', 'services'}
+                        or genome['version'] != 'combined_genome_investigation_v2'
+                        or not isinstance(genome['root'], dict)
+                        or not isinstance(genome['services'], dict)
+                        or 'scientific_yield_bindings' not in genome['services']
+                        or set(config) & {'credit', 'controller'}):
+                    raise ValueError('explicit_combined_genome_root_and_owner_services_required')
+                from .all_evidence_tools import AllEvidenceToolRegistry
+                tools = build_tools(store, config, registry_class=AllEvidenceToolRegistry)
+            else:
+                tools = build_tools(store, config)
             if args.command == "capabilities":
                 _print(tools.catalog())
                 return 0
@@ -129,9 +142,31 @@ def main(argv=None):
             run_dir = args.run_dir
             if run_dir is None and not args.resume:
                 run_dir = store.path/"runs"/datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
-            summary = asyncio.run(run_workflow(store, tools, provider_config=config,
-                credit_policy=(config or {}).get("credit"), run_dir=run_dir,
-                resume=args.resume, goal=args.goal))
+            run_options = {'provider_config': config, 'run_dir': run_dir,
+                'resume': args.resume, 'goal': args.goal}
+            if genome is None:
+                run_options['credit_policy'] = (config or {}).get('credit')
+            else:
+                from .genome_investigation import GenomeEvidenceServices
+                from .resource_estimation import ResourceToolEstimator
+                from .signed_evidence_root import SignedRootEpisodeBinding
+
+                root = SignedRootEpisodeBinding.from_record(genome['root'])
+                services = GenomeEvidenceServices(**genome['services'])
+                run_options.update(project_credit=root.task_credit,
+                    project_annotation_score=root.annotation_support,
+                    controller_factory=root.yield_controller,
+                    initial_known_record_refs=root.initial_known_record_refs,
+                    binding_definitions={'credit': root.task_credit.as_record(),
+                        'controller': root.controller_record(),
+                        'annotation_score': root.annotation_support.as_record()},
+                    episode_service_factory=services,
+                    episode_service_binding=services.as_record(),
+                    episode_service_inputs='actual_tool_registry_v1',
+                    episode_record_receipts=True,
+                    annotation_child_roles=('scientific_process',),
+                    resource_estimator=ResourceToolEstimator())
+            summary = asyncio.run(run_workflow(store, tools, **run_options))
             _print(summary)
             return 0
     except KeyboardInterrupt:

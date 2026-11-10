@@ -152,6 +152,12 @@ actual provider input is journaled before dispatch. See
 [BOUNDED_RESTORATION.md](BOUNDED_RESTORATION.md) for configuration, evidence and
 limits; other current-input growth remains separate work.
 
+The `decision_exchange_v1` protocol keeps exact `episode.history` outcome and
+publication reads as ordinary actions. Its pending `request_context` lookups
+cover metadata and selected inputs, with no completed-action observation.
+They cannot retrieve the outcome through an input pointer. Exact recall never
+executes a historical action or adds its historical credit again.
+
 ## Report-delivery recovery and verification
 
 Automated tests use explicitly scripted providers and synthetic continuation

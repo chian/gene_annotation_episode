@@ -3,17 +3,19 @@
 Progress is a typed runtime observation, not a scientific finding. Owners expose
 committed references and direct relationships explicitly. Observing a target
 never inspects its model calls, instructions, trace or yield history, and never
-walks its descendants. The binding supplies choices to the shared source; it
-contains no investigation loop or continuation rule.
+walks its descendants. The binding supplies choices to the shared source and,
+when configured, binds this monitor's information-yield rule.
 """
 from __future__ import annotations
 
 from collections.abc import Mapping
 from copy import deepcopy
+from dataclasses import replace
 from datetime import datetime, timezone
 import hashlib
 import inspect
 import json
+import math
 from pathlib import Path
 
 from method_loop.durable import FAILURE_CODES, canonical, content_digest
@@ -36,7 +38,7 @@ _TEXT = {"type": "string", "minLength": 1}
 _RUNTIME_REFS = {"type": "array", "items": _TEXT, "uniqueItems": True}
 _FAILURE = obj({"code": {"enum": sorted(FAILURE_CODES)}, "affected_refs": _RUNTIME_REFS,
     "diagnostic_ref": {"type": ["string", "null"]}, "partial_record_refs": _RUNTIME_REFS})
-_EPISODE_STATUS = obj({"version": {"const": "execution_status_v1"}, "handle": _TEXT,
+_EPISODE_STATUS_V1 = obj({"version": {"const": "execution_status_v1"}, "handle": _TEXT,
     "commission_sha256": _TEXT, "lifecycle_state": {"enum": list(_STATES)},
     "observed_at": _TEXT, "execution_identity": {**obj({"pid": {"type": "integer", "minimum": 1},
         "start_ticks": _TEXT, "boot_id": _TEXT}), "type": ["object", "null"]},
@@ -44,6 +46,15 @@ _EPISODE_STATUS = obj({"version": {"const": "execution_status_v1"}, "handle": _T
     "return_id": {"type": ["string", "null"]}, "return_available": {"type": "boolean"},
     "acknowledgment_id": {"type": ["string", "null"]},
     "failure": {**_FAILURE, "type": ["object", "null"]}})
+_SUSPENSION = {'oneOf': [{'type': 'null'},
+    obj({'episode_id': _TEXT, 'dependency': {'type': 'object', 'required': ['kind'],
+        'properties': {'kind': {'enum': ['scheduled_external_job', 'selected_external_event',
+            'owned_child_return']}}}}),
+    obj({'kind': {'const': 'receiver_reconstruction'}, 'pending_handles': _RUNTIME_REFS,
+        'checkpoint': _TEXT, 'failure': _FAILURE})]}
+_EPISODE_STATUS_V2 = obj({**deepcopy(_EPISODE_STATUS_V1['properties']),
+    'version': {'const': 'execution_status_v2'}, 'suspension': _SUSPENSION})
+_EPISODE_STATUS = {'oneOf': [_EPISODE_STATUS_V1, _EPISODE_STATUS_V2]}
 _STATUS = {"oneOf": [_EPISODE_STATUS, deepcopy(JOB_STATUS_SCHEMA), deepcopy(RESOURCE_STATUS_SCHEMA)]}
 _DEPENDENCY = obj({"handle": _TEXT, "kind": {"enum": ["episode", "job"]},
     "relation_ref": _TEXT, "observed_at": _TEXT, "state": {"enum": list(_STATES)}})
@@ -540,7 +551,7 @@ class ProgressProvider:
         return references
 
     def receive_outcome(self, episode_id, outcome, scope, operation_key):
-        """Receive explicit saved C8 refs from a completed or partial own action.
+        """Receive explicit saved C8 refs from an executed own action.
 
         The owner records the actual outcome first and calls this within its
         receipt/credit/completion transaction. The complete finite outcome and
@@ -559,7 +570,10 @@ class ProgressProvider:
             replay = self._progress_delivery_replay(episode_id, signature, operation_key)
             if replay is not None:
                 return replay
-            if outcome.get("status") not in ("completed", "partial"):
+            # A dispatched action can return invalid arguments or references.
+            # Its original iterator still observes that executed attempt; only
+            # explicitly saved, authenticated progress refs can contribute here.
+            if outcome.get("status") not in ("completed", "partial", "invalid", "failed", "unavailable"):
                 raise ContractError("progress_completed_outcome_required")
             references = outcome.get("progress_refs", [])
             if not isinstance(references, list) or any(not isinstance(ref, str) or not ref for ref in references):
@@ -610,21 +624,68 @@ class ProgressProvider:
             raise ContractError("monitor_child_target_not_exposed_direct_dependency")
 
 
+def _monitor_information_yield(scores, parameters, contexts):
+    """Estimate another newly informative snapshot from this monitor's actions."""
+    from .numerical import estimate_nonnegative_yield
+    if any(score < 0 for score in scores):
+        raise ValueError('monitor_information_credit_cannot_decrease')
+    result = estimate_nonnegative_yield(scores, parameters, contexts=contexts)
+    return replace(result, estimator_binding={
+        'kind': 'monitor_information_accumulation_v1',
+        'credit': 'newly_informative_received_snapshot_count_times_information_unit',
+        'forecast': 'next_monitor_action_information_credit',
+        'decision': 'predicted_upper_gain_at_or_below_monitor_cutoff'})
+
+
 class MonitorEpisodes:
     """C7 choices and controlled facts; all iteration belongs to method_loop."""
 
     roles = ("monitor",)
     entry_roles = ("monitor",)
 
-    def __init__(self, services, *, outcome_page_size=32):
+    def __init__(self, services, *, outcome_page_size=32, information_unit=None,
+                 yield_settings=None):
         if type(outcome_page_size) is not int or outcome_page_size < 1:
             raise ValueError("positive_monitor_outcome_page_size_required")
         self.services, self.outcome_page_size = services, outcome_page_size
+        self.private_yield_binding = yield_settings is not None
+        if yield_settings is not None:
+            settings = plain(yield_settings)
+            if (not isinstance(settings, dict)
+                    or set(settings) != {'kind', 'cutoff', 'uncertainty_alpha'}
+                    or settings['kind'] != 'information_accumulation'):
+                raise ValueError('monitor_information_yield_settings_required')
+            cutoff, alpha = settings['cutoff'], settings['uncertainty_alpha']
+            if (type(cutoff) not in (int, float) or not math.isfinite(cutoff) or cutoff < 0
+                    or type(alpha) not in (int, float) or not math.isfinite(alpha)
+                    or not 0 < alpha < 1):
+                raise ValueError('monitor_information_yield_values_invalid')
+            if (type(information_unit) not in (int, float)
+                    or not math.isfinite(information_unit) or information_unit <= 0):
+                raise ValueError('monitor_information_unit_required_for_yield')
+            self.yield_settings = settings
+            self.information_unit = float(information_unit)
+        else:
+            self.yield_settings = None
+            self.information_unit = None
 
     def as_record(self):
         return {"version": VERSION, "binding_id": "monitor",
             "implementation_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-            "configuration": {"outcome_page_size": self.outcome_page_size}}
+            "configuration": {"outcome_page_size": self.outcome_page_size,
+                **({'information_unit': self.information_unit,
+                    'yield_settings': deepcopy(self.yield_settings)}
+                   if self.private_yield_binding else {})}}
+
+    def yield_controller(self, context, initial_credit, epoch):
+        """Interpret the monitor's own newly informative snapshot credit."""
+        self._role(context.role)
+        if not self.private_yield_binding:
+            raise ValueError('monitor_private_yield_binding_not_enabled')
+        from .numerical import YieldController, YieldParameters
+        return YieldController(epoch, initial_credit, self.yield_settings['cutoff'],
+            YieldParameters(uncertainty_alpha=self.yield_settings['uncertainty_alpha']),
+            estimate_with_context=_monitor_information_yield)
 
     @staticmethod
     def _role(role):
@@ -684,6 +745,9 @@ class MonitorEpisodes:
 
     def instructions(self, context):
         self._role(context.role)
+        credit_instruction = ("The monitor's information-credit projector and bound yield rule govern continuation. "
+            if self.private_yield_binding else
+            "The caller's monitoring projector and configured controller own credit and continuation. ")
         return ("Investigate which further exposed progress information is useful for the assigned target. "
             "Use actual status, measured quantities, committed references and source-bound logs. "
             "Liveness establishes process presence only; elapsed time alone establishes neither productive "
@@ -693,7 +757,7 @@ class MonitorEpisodes:
             "Return the original parent's typed form at your closure even while the target remains active. "
             "Do not report private reasoning, intentions or unrestricted findings. Recorded facts use saved "
             "delivered observations; closure does not poll or compose another report with a model. "
-            "The caller's monitoring projector and configured controller own credit and continuation. "
+            + credit_instruction +
             "Repeated observation identities and read timestamps alone earn no new information.")
 
     def _own_progress_refs(self, context):

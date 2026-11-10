@@ -51,7 +51,7 @@ def test_actual_worker_cgroup_receipt_full_retention_and_exact_publication(actua
     assert execution["returncode"] == 0 and execution["error"] is None
     assert execution["metadata"]["policy"] == p.POLICY
     assert execution["metadata"]["verified_cgroup"]["memory_max"] == 20 * 1024 ** 3
-    assert execution["metadata"]["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in execution["metadata"]["verified_cgroup"]
     assert execution["metadata"]["verified_cgroup"]["memory_swap_max"] == 0
     plan = read(store, receipt["plan_artifact_ref"])
     assert set(plan) == {"version", "selector", "input_data", "result_receipt_key", "calculation_key", "directory"}

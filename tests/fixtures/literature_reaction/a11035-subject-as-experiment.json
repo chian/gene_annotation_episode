@@ -1,0 +1,189 @@
+{
+  "case": "a11035_original_literature26",
+  "subject_literal_record": {
+    "accession": "reaction_literal_af2d01af8423e0538ebdfd67",
+    "anchor": {
+      "artifact_ref": "artifact_525e91c394c4b671dadf6f5547a406482d7bb567d7f6dc52ef6f2caaa033e827",
+      "end": 347,
+      "quote": "Synthetic subject S",
+      "source_ref": "source_ab4197b5c2e55ecfb2f7d208",
+      "start": 328
+    },
+    "context_refs": [],
+    "id": "reference_c6f5f43553bd602cfb44b36f",
+    "label": "Synthetic subject S",
+    "length": null,
+    "molecule": null,
+    "origin": "tool",
+    "record_type": "reference",
+    "reference_type": "assay",
+    "sequence_ref": null,
+    "source_ref": "source_ab4197b5c2e55ecfb2f7d208",
+    "term_refs": []
+  },
+  "source_population_arguments": {
+    "experiment_assessment": {
+      "assessment_key": "synthetic_usable_batch_resource_constraints",
+      "conclusion": "The declared nonregenerating resources constrain toy-model output, not physiological capacity or activity of the supplied protein. This is the same synthetic dataset as the protocol and prior numerical sheet, not independent evidence.",
+      "experiment_ref": "reference_c6f5f43553bd602cfb44b36f",
+      "experiment_type": "resource_requirement",
+      "limitations": [
+        "Chemical resource identities and protein correspondence remain unknown.",
+        "Resource quantities, coefficients and demand are synthetic model inputs, not biological measurements.",
+        "Explicit lower and upper resource selectors are omitted in this selection; resulting domain bounds must not be interpreted as measurement uncertainty.",
+        "Product-pair prediction comparisons and chemical energetics are separate questions."
+      ],
+      "revises_sheet_ref": null,
+      "revision_reason": null,
+      "scientific_question": "What output capacity follows conditionally from the separate declared usable-batch resource model?"
+    },
+    "interpretation_witnesses": [
+      {
+        "end": 1907,
+        "quote": "\nThe supplied JSON stores the individual simulated ratios; no summary statistic,\nuncertainty estimate or computed contrast is supplied.\n\nThe synthetic usable-batch model declares two resources within the same single\nbatch compartment and period. Resource 1 has 12 micromoles available; resource\n2 has 6 micromoles available. The declared model consumes one micromole of\neach resource per micromole of output and specifies 10 micromoles of output\ndemand. Within this toy model the declared resource list is complete, resources\ndo not regenerate and the declared quantities have no measurement spread.\nThese assumptions do not establish actual usable biological resources,\nphysiological capacity, steady-state flux or conditional reaction energetics.\n\nThe JSON and this protocol describe the same synthetic dataset. Reusing them\nor asking another question about them does not create an independent dataset.\nUnknown chemical identities, calibration and connection to the supplied protein\nremain unknown. The original reaction reader determines which supported\ncomponents can be calculated from these declared operands.\n",
+        "representation": "original",
+        "source_ref": "source_ab4197b5c2e55ecfb2f7d208",
+        "start": 791
+      }
+    ],
+    "literals": {
+      "condition": null,
+      "construct": null,
+      "denominator": null,
+      "endpoint": null,
+      "experiment": null,
+      "molecule": null,
+      "numerator": null,
+      "resource_context": null
+    },
+    "native_selection": {
+      "budget": {
+        "basis": "usable_batch",
+        "demand": {
+          "basis": "conditional_assumption",
+          "evidence": [],
+          "kind": "declared",
+          "value": 10
+        },
+        "resources": [
+          {
+            "coefficient": {
+              "basis": "conditional_assumption",
+              "evidence": [],
+              "kind": "declared",
+              "value": 1
+            },
+            "lower": null,
+            "resource_key": "synthetic-resource-1",
+            "upper": null,
+            "value": {
+              "number": {
+                "number_end": 52,
+                "number_start": 50,
+                "witness": {
+                  "end": 864,
+                  "quote": "{\"resource_key\": \"synthetic-resource-1\", \"value\": 12, \"lower\": 12, \"upper\": 12, \"coefficient\": 1},\n      {\"resource_key\": \"synthetic-resource-2\", \"value\": 6, \"lower\": 6, \"upper\": 6, \"coefficient\": 1}",
+                  "representation": "original",
+                  "source_ref": "source_4adb60958445fd27b6a24b02",
+                  "start": 665
+                }
+              },
+              "unit": {
+                "end": 578,
+                "quote": "umol",
+                "representation": "original",
+                "source_ref": "source_4adb60958445fd27b6a24b02",
+                "start": 574
+              }
+            }
+          },
+          {
+            "coefficient": {
+              "basis": "conditional_assumption",
+              "evidence": [],
+              "kind": "declared",
+              "value": 1
+            },
+            "lower": null,
+            "resource_key": "synthetic-resource-2",
+            "upper": null,
+            "value": {
+              "number": {
+                "number_end": 156,
+                "number_start": 155,
+                "witness": {
+                  "end": 864,
+                  "quote": "{\"resource_key\": \"synthetic-resource-1\", \"value\": 12, \"lower\": 12, \"upper\": 12, \"coefficient\": 1},\n      {\"resource_key\": \"synthetic-resource-2\", \"value\": 6, \"lower\": 6, \"upper\": 6, \"coefficient\": 1}",
+                  "representation": "original",
+                  "source_ref": "source_4adb60958445fd27b6a24b02",
+                  "start": 665
+                }
+              },
+              "unit": {
+                "end": 578,
+                "quote": "umol",
+                "representation": "original",
+                "source_ref": "source_4adb60958445fd27b6a24b02",
+                "start": 574
+              }
+            }
+          }
+        ],
+        "resources_complete": true,
+        "unit": "umol"
+      },
+      "meanings": {
+        "budget": {
+          "demand": {
+            "biological_setting": null,
+            "compartment": null,
+            "definition": null,
+            "demand_basis": "conditional_assumption",
+            "evidence": null,
+            "period": null,
+            "process": null
+          },
+          "resources": [
+            {
+              "biological_setting": null,
+              "coefficient_basis": "conditional_assumption",
+              "coefficient_evidence": null,
+              "compartment": null,
+              "definition": null,
+              "entity": null,
+              "period": null,
+              "property": null,
+              "resource_key": "synthetic-resource-1",
+              "supply_basis": "conditional_assumption",
+              "supply_evidence": null
+            },
+            {
+              "biological_setting": null,
+              "coefficient_basis": "conditional_assumption",
+              "coefficient_evidence": null,
+              "compartment": null,
+              "definition": null,
+              "entity": null,
+              "period": null,
+              "property": null,
+              "resource_key": "synthetic-resource-2",
+              "supply_basis": "conditional_assumption",
+              "supply_evidence": null
+            }
+          ]
+        },
+        "ratio": null
+      },
+      "ratio": null,
+      "version": "a110_source_reaction_selection_v1"
+    },
+    "source_kind": "synthetic_fixture",
+    "source_ref": "source_4adb60958445fd27b6a24b02"
+  },
+  "original_source_refs": {
+    "protocol": "source_ab4197b5c2e55ecfb2f7d208",
+    "data": "source_4adb60958445fd27b6a24b02"
+  },
+  "protocol_path": "tests/fixtures/a110_evaluation/declared-reaction-protocol.txt",
+  "data_path": "tests/fixtures/a110_evaluation/declared-reaction-measurements.json"
+}

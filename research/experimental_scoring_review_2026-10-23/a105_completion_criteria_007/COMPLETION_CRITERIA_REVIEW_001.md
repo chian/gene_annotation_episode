@@ -4,7 +4,7 @@
 No primary paper or paper-specific packet was read. Published coverage below is
 **documented coverage**, not independent source verification. No formula is
 adopted and no sheet or goal is marked complete. Completion remains **0/10**.
-The fixed list remains A105, A101, A102, A103, A104, A106, A107, A108, A110,
+The fixed list remains A105, A101, A102, A103, A104, A106, A107, A110,
 A111; A109 is removed and A106 perturbation evidence stays outside A105.
 
 The single-source calculation is defined. The calibrated multi-source

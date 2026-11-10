@@ -151,6 +151,9 @@ class FluxBalanceResultReceipts:
         return file
 
     def validate_observation(self, value, intent):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_observation
+        if is_terminal_target(intent['target']):
+            return validate_terminal_observation(value, intent, self.store, self.owner.run_id)
         from .native_lifecycle import VERSION as native_version
         value = validate_resource_observation(value)
         native = value['native']
@@ -218,6 +221,15 @@ class FluxBalanceResultReceipts:
 
     def _handoff_metadata(self, target, scope):
         """Authenticate actual saved practical ancestry, never live science."""
+        from .terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
+        if is_terminal_target(target):
+            proof = read_terminal_handoff(self.store, self.owner.run_id, target, scope)
+            original = self.returns.context(target['origin_episode_id'])
+            self.returns.authenticate(original)
+            require(same(self._original_practical_assignment(original), target['assignment'])
+                and same(plain(original.scope), proof['body']['scope']), 'fba_result_original_context_conflict')
+            proof['input_binding'] = self.owner.flux_balance_inputs.received(original)
+            return proof
         reader = self.owner.job_progress_provider.targets
         require(same(reader.read_target(target['handle'], scope), target), 'fba_result_target_history_conflict')
         practical = PracticalReceiptInformation(self.store, self.owner.run_id)
@@ -272,6 +284,13 @@ class FluxBalanceResultReceipts:
             'input_binding': original_input}
 
     def validate_handoff(self, proof, intent):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_handoff
+        if is_terminal_target(intent['target']):
+            closed(proof, ('source_record', 'body', 'assignment_snapshot', 'start_receipt', 'input_binding'))
+            validate_terminal_handoff(proof, intent, self.store, self.owner.run_id)
+            require(same(proof, self._handoff_metadata(intent['target'], intent['scope'])),
+                'fba_result_handoff_conflict')
+            return
         closed(proof, ('source_record', 'body', 'assignment_snapshot', 'start_source_record',
             'start_body', 'start_assignment_snapshot', 'start_receipt', 'input_binding'))
         expected = self._handoff_metadata(intent['target'], intent['scope'])
@@ -320,6 +339,12 @@ class FluxBalanceResultReceipts:
         path = action.directory / 'native-snapshot.json'
         value = read_control(path)
         if value is None:
+            from .terminal_scientific_evidence import is_terminal_target, terminal_native_snapshot
+            if is_terminal_target(action.intent['target']):
+                value = terminal_native_snapshot(self, action, observation)
+                self.validate_native(value, action.intent, observation)
+                immutable(path, value)
+                return deepcopy(value)
             from .native_flux_balance_local import local_flux_balance_plan
             from .native_flux_balance_contracts import STARTED_FILENAME
             from .native_file_capture import capture_native_file, retained_native_file
@@ -352,6 +377,37 @@ class FluxBalanceResultReceipts:
         return deepcopy(value)
 
     def validate_native(self, value, intent, observation):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_native
+        if is_terminal_target(intent['target']):
+            validate_terminal_native(value, intent, observation, self.store, self.owner.run_id)
+            handoff = read_control(self.action_directory(intent['episode_id'], intent['operation_key']) / 'handoff.json')
+            require(handoff is not None, 'fba_native_start_mismatch')
+            self.validate_handoff(handoff, intent)
+            self.file_metadata(handoff['input_binding']['file'], value=handoff['input_binding']['receipt'])
+            plan = validate_flux_balance_run_plan(value['original_plan'])
+            selection = intent['target']['assignment'].get('native_flux_balance_execution')
+            require((selection is None and plan['version'] == 'flux_balance_run_plan_v1')
+                or (selection is not None and plan['version'] == 'flux_balance_run_plan_v2'
+                    and same(plan['environment_binding']['selection'], selection)), 'fba_native_environment_selection_conflict')
+            marker = value['started_marker']
+            if marker is not None:
+                closed(marker, ('plan_sha256', 'started_at') + (('environment_observation_sha256',)
+                    if plan['version'] == 'flux_balance_run_plan_v2' else ()))
+                require(marker['plan_sha256'] == digest(plan) and type(marker['started_at']) is str
+                    and marker['started_at'], 'fba_native_marker_mismatch')
+                if plan['version'] == 'flux_balance_run_plan_v2':
+                    from .native_flux_balance_contracts import ENVIRONMENT_FILENAME
+                    from .terminal_scientific_evidence import snapshot_bytes
+                    expected_hash = marker['environment_observation_sha256']
+                    require(type(expected_hash) is str and re.fullmatch(r'[0-9a-f]{64}', expected_hash) is not None,
+                        'fba_native_marker_mismatch')
+                    path = str(Path(plan['attempt_directory']) / ENVIRONMENT_FILENAME)
+                    snapshot = next((row for row in value['command_proof']['output_snapshots']
+                        if row['path'] == path), None)
+                    if snapshot is not None and snapshot.get('available'):
+                        require(digest(json.loads(snapshot_bytes(snapshot))) == expected_hash,
+                            'fba_environment_observation_mismatch')
+            return
         from .native_flux_balance_local import _request, _invoke
         from .native_lifecycle import VERSION as native_version
         closed(value, ('original_plan', 'handle', 'request', 'request_raw', 'invoke', 'invoke_file',
@@ -545,6 +601,10 @@ class FluxBalanceResultReceipts:
                 require(intent['tool_name'] == 'execution.results.collect' and receipt['native'] is not None
                     and receipt['observation']['native']['terminal'] and receipt['observation']['native']['quiescent'], 'fba_writer_not_closed')
                 capture = validate_flux_balance_native_capture(receipt['capture'], original_plan=receipt['native']['original_plan'])
+                if receipt['native'].get('version') == 'terminal_native_snapshot_v1':
+                    from .native_flux_balance_capture import validate_terminal_flux_balance_files
+                    validate_terminal_flux_balance_files(capture, original_plan=receipt['native']['original_plan'],
+                        command_proof=receipt['native']['command_proof'])
                 self.file_metadata(receipt['source_action_file'], value=receipt['handoff_proof']['start_receipt'])
                 self.file_metadata(receipt['writer_closure_file'], value=closure_value(receipt))
                 require(capture['source_action_receipt_ref'] == receipt['source_action_file']['artifact_ref']

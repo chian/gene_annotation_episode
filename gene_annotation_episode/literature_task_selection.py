@@ -30,8 +30,6 @@ from .literature_transport_prompt import TRANSPORT_TASK
 from .literature_perturbation_prompt import PERTURBATION_TASK
 from .literature_structure_prompt import STRUCTURE_TASK
 from .literature_reaction_prompt import REACTION_TASK
-from .literature_context_prompt import CONTEXT_TASK
-from .literature_a108_subscore import TASK as A108_SUBSCORE_TASK
 from .literature_a106_subscore import TASK as A106_SUBSCORE_TASK
 from .literature_figure_prompt import FIGURE_TASK
 from .literature_partner_prompt import PARTNER_TASK
@@ -47,10 +45,25 @@ from .literature_channel_prompt import CHANNEL_TASK
 from .literature_ion_discrimination_prompt import ION_DISCRIMINATION_TASK
 from .literature_amount_prompt import AMOUNT_TASK
 from .literature_rate_observation_prompt import REPORTED_CURVE_SCOPE_TASK
+from .literature_assay_grading import ASSAY_TYPES, ASSAY_TYPE_LABELS
 from .literature_assay_grading_prompt import ASSAY_GRADING_TASK
 from .literature_a105_aggregation_prompt import A105_AGGREGATION_TASK
+from .literature_a108_prompt import A108_CONTEXT_TASK, A108_GRADING_TASK, A108_AGGREGATION_TASK
 
 A105_ASSAY_SELECTION_TASK = """For A105 experimental evidence, follow this hierarchy: A105 experimental evidence subscore → subscoring grader → subscoring reader. The grader evaluates the applicable assay protocol and uses readers to obtain its required measurements. Reader outputs return through that assessment into the requested A105 fields. Extracting a number alone does not complete the assay assessment.
+
+Choose a grader from this table for each relevant experiment. The grader names are the supported assay_type values of literature.assay_grading.populate; use the selected name in that grader's arguments. Choose from the actual protocol, measured quantity and functional assertion.
+
+| Grader name (assay_type) | Evidence assessed |
+| --- | --- |
+""" + "\n".join(
+    "| " + name + " | " + ASSAY_TYPE_LABELS[name] + " |"
+    for name in ASSAY_TYPES
+) + """
+
+When a reason action records an applicable experiment/result, an observation, an assessment or a conclusion about function, set evidence_processing.kind=graded. In evidence_processing.gradings, each entry contains arguments: the JSON encoding of the selected grader's argument object. An observation records what the source actually reports about the experiment. An assessment states what that observation establishes about a specified functional hypothesis, retaining qualifications and unknown relationships. Link the observation to the actual assay through source_subject_refs; link its assessment through observation_ref and hypothesis_ref. The grader's experiment_ref identifies that assay and its assertion_ref identifies that functional hypothesis. Use @alias references for records established in the same action, and reuse existing experiment and hypothesis IDs when they are already recorded. The host uses those existing experiment, observation and hypothesis links to associate the evidence with the selected grader and saves the interpretation and subscoring sheet together before credit is observed. Invalid grading returns the original action's failure without accepting an ungraded interpretation. Grade with currently supported operands and preserve unresolved inputs in the initial partial subscoring sheet. Later evidence may revise that same experiment's assessment; an automatic scoring-sheet update does not require another interpretation or grader selection. Metadata-only preparation of entities, terms, contexts or candidate hypotheses needs no grading. To conclude that examined material contains no applicable experiment/result, use evidence_processing.kind=no_applicable_evidence with exact examined source witnesses and the reason; that result cannot contain assessments or annotation conclusions, and any retained raw observations must lie within its exact examined source spans.
+
+Grading is a required part of processing every relevant experiment identified in examined literature or database records. Select the applicable protocol grader, establish its source-anchored experiment and functional assertion, use the supported readers for its available operands, and save the partial subscoring sheet before broadening the investigation. Do not keep rereading or searching instead of grading an experiment already in hand. The only reason to omit grading for examined material is that it contains no experiment or experimental result applicable to the assigned question; retain the source-bound reason for that conclusion. A search hit or identifier alone is a discovery lead, while an unavailable source is an acquisition failure, not a finding that no experiment exists. Missing controls, uncertainty, predictions, measurements or molecule/context links remain explicit unknown or unavailable components in the applicable grader; they do not permit bypassing grading or inventing operands. Negative and contradictory results require assessment too. An unsupported reader or grader is an explicit processing limitation, not a no-evidence finding or completed assessment. Readers and graders automatically save their own sheets even when no cells are requested for immediate parent delivery.
 
 A105 asks what direct experiments establish about the molecule's activity or function. Starting from the supplied material, investigate relevant experimental sources and establish which molecule, construct and preparation were actually measured. Recover the measurements, comparisons, controls, conditions and uncertainty that support each experimental conclusion. Choose further work according to what is needed to assess that experiment's reliability, validity, relevance and attribution. The result is a source-supported assessment of each actual experiment and the combined A105 experimental subscore, with the connection to the supplied molecule made explicit. Preserve unresolved source links and incomplete measurements as specific limitations alongside useful results. Give narrower child investigations the experimental question and the information needed to answer it.
 
@@ -66,15 +79,16 @@ Database results are received experimental sources in the same workflow as paper
 
 Keep original experiments and their repeated representations connected. A paper and its database record may report the same measurement; use the same experiment identity and preserve shared measurement ownership. Provider confidence labels, activity flags, database coverage and numbers of variant rows do not supply A105 scores or independent experiments. For variant assays, establish the measured phenotype, reference construct, substitutions, normalization and controls. Relative binding responses can inform binding assessment; growth, abundance and other indirect endpoints retain their own functional resolution. Deposited processed scores can be read as reported measurements with their actual definitions. Their presence does not establish a fitted affinity, causal mechanism or valid sampling model.
 
-For biochemical evidence, the four reusable protocol groups are enzyme activity/rate comparisons; reaction progress/endpoint conversion; product distribution/equilibrium; and reaction coupling/stoichiometric balance. Select the applicable group from the protocol, measured quantity, experimental design and intended comparison. One experiment can supply measurements relevant to more than one group; retain their common measurement ownership. A paper, case, protein name or particular protein–substrate example is not a scientific dispatch key. Those identities, preparation details, reagent amounts and conditions are source-bound inputs. Chemical identity, reporter chemistry, calibration and stoichiometry can still determine whether a method applies.
+One experiment can supply measurements relevant to more than one grader in the table; retain their common measurement ownership. Select a grader from the protocol, measured quantity, experimental design and intended comparison. A paper, case, protein name or particular protein–substrate example does not select the grader. Those identities, preparation details, reagent amounts and conditions are source-bound inputs. Chemical identity, reporter chemistry, calibration and stoichiometry can still determine whether a method applies.
 
-These protocol groups feed the same assessment dimensions: reliability, validity, relevance and attribution. Assess reliability using the signal, uncertainty, sampling design, independent replication and dependence. Assess validity using the measurement method, calibration, operating regime and controls applicable to the protocol. Assess relevance by what the measured endpoint establishes about the functional assertion and its biological conditions. Attribution concerns whether the measured effect is isolated to the assayed molecule; it is distinct from relevance. Retain a separate populated assessment for every analyzed experiment. Across experiment values, the user-defined A105 combination is reliability SUM, validity SUM, relevance MAXIMUM, attribution MAXIMUM and overall SUM. Use the existing literature parent and selected literature.a105.aggregate operation; preserve incomplete results without zero imputation, weighting, normalization or orthogonality adjustment. Keep comparability explicit: identify nuisance differences outside the deliberately tested change and whether an applicable control quantifies their effects. Preserve contradictions and complementary evidence with their actual scope and shared measurements.
+These graders feed the same assessment dimensions: reliability, validity, relevance and attribution. Assess reliability using the signal, uncertainty, sampling design, independent replication and dependence. Assess validity using the measurement method, calibration, operating regime and controls applicable to the protocol. Assess relevance by what the measured endpoint establishes about the functional assertion and its biological conditions. Attribution concerns whether the measured effect is isolated to the assayed molecule; it is distinct from relevance. Retain a separate populated assessment for every analyzed experiment. Across experiment values, the user-defined A105 combination is reliability SUM, validity SUM, relevance MAXIMUM, attribution MAXIMUM and overall SUM. Saving or revising a grading sheet automatically updates its dependent subscoring and main evidence scoring sheets before the original action's credit is observed; do not select another action merely to copy or refresh those scores. Preserve the scientifically assigned component bindings; an unavailable or unassigned component remains explicitly unresolved. Preserve incomplete results without zero imputation, weighting, normalization or orthogonality adjustment. Keep comparability explicit: identify nuisance differences outside the deliberately tested change and whether an applicable control quantifies their effects. Preserve contradictions and complementary evidence with their actual scope and shared measurements.
 
 Within the selected assessment, choose a reader by the required quantity and the actual supported source representation, layout and fields. Source names and row labels locate operands after this scientific choice; they do not define additional assay types. Alternative text, table and graph readers can populate the same assessment. Shared corrections, unit conversion and statistical calculations support the grader without becoming additional assay types. A restricted workbook adapter or graph reader remains restricted to its implemented layout, chemistry and measurement model; do not assume a general parser exists.
 
 Interpret the recovered measurements using the selected protocol's considerations, and request supported calculations for the parent's numerical A105 fields. Preserve units, correction stages, uncertainty, comparability, applicability, attribution and dependence as those results pass upward. Return useful partial results and distinguish missing source evidence from unavailable readers, calculations or grader-to-sheet bindings. Use the parent's declared typed return and the actual available operations; do not manufacture a score or claim an unavailable assessment is complete."""
 
 NATIVE_KINETIC_TASK = 'Read the selected source-reported kinetic parameter or requested descriptive parameter comparison for the assayed reference molecule. Identify the exact source row or passage, parameter definition, organism, molecule, construct, substrate, preparation, experimental system, endpoint, conditions and normalization. Keep Km, kcat and kcat/KM distinct. A single parameter can answer a magnitude question without a second comparison arm; preserve a missing denominator rather than inventing a reference, zero, affinity or preference contrast. Possible functions can emerge from supplied sequence, selected contents or snippets; an initial candidate annotation or searchable name is not required.\n\nSelect the complete native number, its actual unit and the source-qualified uncertainty and count with their exact meanings. Preserve bounds, approximations and untyped spread; do not borrow units, uncertainty or repetition meaning from a neighboring parameter or assay. When a comparison is requested, establish the actual molecule/construct relationship, separately assayed substrates, parameter definitions, normalization and protocols. A reported-protocol ratio is not automatically common-condition preference, higher Km is not automatically stronger affinity, and missing comparison relationships do not erase a valid individual parameter. Nominate source-supported selectors; deterministic readers and calculators perform parsing, validation, conversion and available arithmetic.\n\nKeep the parameter magnitude, reported SD, physical preparation count and statistical estimator meaning separate. If summary precision for the same report is requested, preserve shared source and measurement ownership without counting its parameter, spread, count or derived precision as independent evidence. Physical preparation count alone does not establish statistical n, central-value mean identity, covariance or total accuracy. A supplemental kinetic log model requires its own actual two-estimate assignment, received sheet and supported uncertainty-model inputs; do not invoke it merely because a native parameter or descriptive contrast is requested. Return exactly the requested numerical components and necessary scientific qualifications, retaining valid partials and distinguishing missing source information from unimplemented functions. No overall category grade, function probability, target-transfer weight or final annotation credit is inferred.'
+
 
 @dataclass(frozen=True)
 class _Family:
@@ -89,6 +103,8 @@ class _Family:
 # These describe existing instructions and selected-operation metadata only.
 # They do not register capabilities or expand any numerical return.
 _FAMILIES = (
+    _Family("literature_a108_grading_cells", A108_GRADING_TASK, "literature_a108_grading_storage", "LiteratureA108GradingRepository", "requested_a108_grading_components", "literature.a108_grading.populate"),
+    _Family("literature_a108_aggregation_cells", A108_AGGREGATION_TASK, "literature_a108_aggregation_storage", "LiteratureA108AggregationRepository", "requested_a108_aggregation_components", "literature.a108.aggregate"),
     _Family("literature_assay_grading_cells", ASSAY_GRADING_TASK, "literature_assay_grading_storage", "LiteratureAssayGradingRepository", "requested_assay_grading_components", "literature.assay_grading.populate"),
     _Family("literature_a105_aggregation_cells", A105_AGGREGATION_TASK, "literature_a105_aggregation_storage", "LiteratureA105AggregationRepository", "requested_a105_aggregation_components", "literature.a105.aggregate"),
     _Family("literature_concentration_window_cells", CONCENTRATION_WINDOW_TASK, "literature_concentration_window_storage", "LiteratureConcentrationWindowRepository", "requested_concentration_window_components", "literature.concentration_window.populate"),
@@ -118,8 +134,6 @@ _FAMILIES = (
     _Family("literature_a106_subscore_cells", A106_SUBSCORE_TASK, "literature_a106_subscore_storage", "LiteratureA106SubscoreRepository", "requested_a106_subscore_components", "literature.a106.finalize"),
     _Family("literature_structure_cells", STRUCTURE_TASK, "literature_structure_storage", "LiteratureStructureRepository", "requested_structure_components", "literature.structure.populate"),
     _Family("literature_reaction_cells", REACTION_TASK, "literature_reaction_storage", "LiteratureReactionRepository", "requested_reaction_components", "literature.reaction.populate"),
-    _Family("literature_context_cells", CONTEXT_TASK, "literature_context_storage", "LiteratureContextRepository", "requested_context_components", "literature.context.populate"),
-    _Family("literature_a108_subscore_cells", A108_SUBSCORE_TASK, "literature_a108_subscore", "LiteratureA108SubscoreRepository", "requested_a108_subscore_components", "literature.a108.finalize"),
     _Family("literature_figure_cells", FIGURE_TASK, "literature_figure_storage", "LiteratureFigureRepository", "requested_figure_components", "literature.figure.populate"),
     _Family("literature_partner_cells", PARTNER_TASK, "literature_partner_storage", "LiteraturePartnerRepository", "requested_partner_components", "literature.partner.populate"),
     _Family("literature_ratio_source_cells", SOURCE_RATIO_TASK, "literature_ratio_source_storage", "LiteratureRatioSourceRepository", "requested_ratio_source_components", "literature.ratio.source.populate"),
@@ -136,15 +150,14 @@ _FAMILIES = (
 _BY_SOURCE = {f.source: f for f in _FAMILIES}
 _BY_SOURCE.update({alias: _BY_SOURCE[source] for alias, source in {
     'literature_perturbation_summary_cells': 'literature_perturbation_cells',
+    'literature_perturbation_operand_cells': 'literature_perturbation_cells',
     'literature_reaction_semantic_cells': 'literature_reaction_cells',
     'literature_reaction_native_observations': 'literature_reaction_cells',
-    'literature_context_semantic_cells': 'literature_context_cells',
-    'literature_context_native_observations': 'literature_context_cells',
 }.items()})
 _BY_REQUEST = {f.requested: f.source for f in _FAMILIES}
 _BY_REQUEST.update({"requested_perturbation_summary_components": "literature_perturbation_cells",
+    "requested_perturbation_operand_components": "literature_perturbation_cells",
     "requested_reaction_native_positions": "literature_reaction_cells",
-    "requested_context_native_positions": "literature_context_cells",
     "requested_gel_views": "literature_gel_component_cells",
     "requested_controlled_response_views": "literature_controlled_response_component_cells"})
 
@@ -163,7 +176,9 @@ def population_task_metadata_specs():
             versions = (module.VERSION, module.LEGACY_VERSION)
         else:
             versions = (getattr(module, 'VERSION', repository.record_version),)
-        flag = {'literature_assay_grading_cells': 'assay_grading_population',
+        flag = {'literature_a108_grading_cells': 'a108_context_evidence',
+            'literature_a108_aggregation_cells': 'a108_context_evidence',
+            'literature_assay_grading_cells': 'assay_grading_population',
             'literature_intervention_grading_cells': 'a106_intervention',
             'literature_a106_subscore_cells': 'a106_intervention',
             'literature_a105_aggregation_cells': 'assay_grading_population',
@@ -184,6 +199,8 @@ def population_task_metadata_specs():
 
 
 _SCOPE_SOURCE = {
+    'a108_organism_context_observations': 'literature_a108_grading_cells',
+    'a108_across_observation_aggregation': 'literature_a108_aggregation_cells',
     'assay_type_experimental_evidence': 'literature_assay_grading_cells',
     'a105_across_experiment_aggregation': 'literature_a105_aggregation_cells',
     'source_concentration_window': 'literature_concentration_window_cells',
@@ -205,7 +222,6 @@ _SCOPE_SOURCE = {
     'interpreted_reference_perturbation': 'literature_perturbation_cells',
     'conditional_deposited_model_geometry': 'literature_structure_cells',
     'reported_reference_reaction_constraints': 'literature_reaction_cells',
-    'reference_organism_sample_compatibility': 'literature_context_cells',
     'reference_experimental_figure_ordinates': 'literature_figure_cells',
     'reference_experimental_partner_components': 'literature_partner_cells',
     'source_preparation_completion_time': 'literature_completion_time_cells',
@@ -217,6 +233,7 @@ _SCOPE_SOURCE = {
     'source_ion_discrimination': 'literature_ion_discrimination_cells',
 }
 _ROW_VERSION_SOURCE = {
+    'perturbation_operand_return_v1': 'literature_perturbation_operand_cells',
     'concentration_window_return_v1': 'literature_concentration_window_cells',
     'measurement_comparison_return_v2': 'literature_measurement_comparison_cells',
     'kinetic_summary_precision_return_v1': 'literature_kinetic_summary_precision_cells',

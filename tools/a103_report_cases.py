@@ -58,8 +58,7 @@ def case_summary(result_path):
         if any(a[1]>b[0] for a,b in zip(ordered,ordered[1:])):
             raise ValueError('retained_case_native_jobs_overlap')
     if any(job['cpu_threads']!=1 for job in native):raise ValueError('nonserial_native_cpu_request')
-    if any(job['policy']['memory_bytes']>128*1024**2 or job['policy']['scratch_bytes']>32*1024**2
-            or job['policy']['wall_seconds'] is None or job['policy']['wall_seconds']>180 for job in native):
+    if any(job['policy']['memory_bytes']>128*1024**2 or job['policy']['scratch_bytes']>32*1024**2 for job in native):
         raise ValueError('real_case_native_budget_exceeded')
     workflows=[]
     for directory in chain:
@@ -67,7 +66,8 @@ def case_summary(result_path):
         if not path.exists():continue
         value=json.loads(path.read_text())
         workflows.append({'case_directory':str(directory),**{key:value[key] for key in
-            ('returncode','elapsed_seconds','memory_peak_bytes','observed_scratch_bytes','memory_events','limits')}})
+            ('returncode','elapsed_seconds','memory_peak_bytes','observed_scratch_bytes','memory_events')},
+            'environment_bounds':value.get('environment_bounds',value.get('limits'))})
     audit=result['audit']
     if not audit['latest_owner_equals_parent'] or not audit['all_credit_has_native_context_measurement']:
         raise ValueError('real_case_credit_audit_incomplete')

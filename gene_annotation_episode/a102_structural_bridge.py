@@ -1,19 +1,75 @@
 """Automatic numerical delivery from an existing explicit-map CA comparison.
 
-The original producer may call this only after validating a complete sheet and
-explicitly returning the saved-sheet recalculation grant. It never treats a
-Source handle, auxiliary artifact or unselected projection as that grant.
+The producer publishes after validating its complete sheet; a receiving host
+can use the same bridge after authenticating the exact saved-sheet grant.
+A Source handle, auxiliary artifact or unselected projection is insufficient.
 """
 from __future__ import annotations
 
 from copy import deepcopy
+import hashlib
 import json
 import math
+from types import SimpleNamespace
 
 from .a102_native_worker import _validated_transform
 from .a102_publication import publish_comparison
 from .a102_scoring import NATIVE_SCHEMA,digest,require
 from .a102_structures import comparison_identity
+
+VERSION = 'a102_received_saved_comparison_bridge_v2'
+
+
+def publish_received_comparisons(store, context, *, input_authority, known_record_refs):
+    """Use exact received saved-sheet grants, independent of execution location.
+
+    The configured ordinary/native return authority owns descriptor admission.
+    This adapter neither discovers private sheets from Source IDs nor performs
+    an alignment. Matching original target bindings remain a separate condition.
+    """
+    from .protein_structure_action_records import SAVED_SOURCE
+    from .protein_structure_calculations import validate_recorded_protein_structure_components
+    from .communication import plain
+    known = set(known_record_refs)
+    descriptors = [*input_authority.received_facts(context, fact_source=SAVED_SOURCE),
+        *input_authority.own_facts(context, fact_source=SAVED_SOURCE)]
+    legacy = input_authority.legacy_returns
+    if legacy is not None:
+        from .native_protein_structure_returns import SAVED_SOURCE as RESOURCE_SAVED_SOURCE
+        descriptors.extend(row for group in legacy.received_context(context)
+            if group['fact_source'] == RESOURCE_SAVED_SOURCE for row in group['facts'])
+    generated, needs, seen = [], [], set()
+    for descriptor in descriptors:
+        key = digest(descriptor)
+        if key in seen:
+            continue
+        seen.add(key)
+        original = input_authority.authenticate_received_saved_sheet(context, descriptor,
+            required_use='recalculate')
+        scientific = original.get('scientific')
+        if scientific is None:
+            def document(field):
+                file = original[field]
+                raw = store.get_artifact(file['artifact_ref'])
+                require(len(raw) == file['byte_length']
+                    and hashlib.sha256(raw).hexdigest() == file['sha256'],
+                    'a102_saved_comparison_artifact_conflict')
+                return json.loads(raw)
+            sheet, components = document('sheet_file'), document('original_components_file')
+            components = validate_recorded_protein_structure_components(sheet, components=components)
+            scientific = {'kind': 'comparison', 'sheet': sheet, 'components': components}
+        reference = descriptor['custody']['source_ref']
+        admitted = publish_bridge(SimpleNamespace(store=store), scientific=scientific,
+            source_ref=reference, selection={'return_saved_sheet': True},
+            known_record_refs=known, scope=plain(context.scope))
+        generated.extend(admitted)
+        if not admitted:
+            for target in context.scope['subject_refs']:
+                needs.append((reference, {'target_ref': target,
+                    'policy': 'a102_received_saved_comparison',
+                    'missing': ['qualified_CA_comparison_and_unambiguous_received_target_model_bindings'],
+                    'required_operands': {'saved_comparison_source_ref': reference}}))
+    return list(dict.fromkeys(generated)), needs
 
 
 def publish_bridge(registry,*,scientific,source_ref,selection,known_record_refs,scope):
@@ -22,8 +78,8 @@ def publish_bridge(registry,*,scientific,source_ref,selection,known_record_refs,
     if components['evaluation']['state']!='performed' or components['transform']['state'] not in {'identifiable_fit','supplied'}:
         return []
     original=registry.store.get(source_ref)
-    # The new grant is emitted by this producer, alongside the actual saved
-    # sheet descriptor, not reconstructed later by opening private artifacts.
+    # The caller is either the qualified producer or the receipt-bound adapter
+    # above. Both require the actual selected saved-sheet grant.
     candidates={side:[] for side in ('fixed','moving')}
     for ref in known_record_refs:
         row=registry.store.db.execute('SELECT body FROM a102_structure_bindings WHERE source_ref=?',(ref,)).fetchone()

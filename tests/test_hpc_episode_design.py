@@ -186,8 +186,11 @@ def test_episode_can_design_candidates_without_caller_job_commands(tmp_path):
     assert plan['manifest']['units'][0]['argv'][-1] == workspace+'/work.py'
     assert plan['files_to_stage'][-1]['text'] == 'print("'+workspace+'")\n'
     changed = {**candidate, 'wall_seconds': 1800}
-    with pytest.raises(ValueError, match='immutable'):
-        asyncio.run(binding.execute(parent, 'hpc.candidate.propose', {'candidate_json': json.dumps(changed)}, 'change'))
+    rejected = asyncio.run(binding.execute(parent, 'hpc.candidate.propose',
+        {'candidate_json': json.dumps(changed)}, 'change'))
+    assert rejected['status'] == 'invalid'
+    assert rejected['feedback']['code'] == 'candidate_identity_is_immutable'
+    assert binding._candidates(ledger) == [candidate]
     candidate['files'][0]['path'] = '../escape.py'
     with pytest.raises(ValueError, match='relative_to_allocation_workspace'):
         validate_commission({**c, 'candidates': [candidate]}, resources())
@@ -244,13 +247,43 @@ def test_plan_is_real_launch_contract_with_hashed_portfolio():
         run('/no/manifest', 'none')
 
 
+@pytest.mark.parametrize('effort', [{'iterations': 2000000}, None, True, 0, -1, float('nan'), float('inf')])
+def test_malformed_effort_is_a_repairable_validation_error(effort):
+    from gene_annotation_episode.hpc_campaign import validate_commission
+    value = commission()
+    value['candidates'][0]['units'][0]['effort'] = effort
+    with pytest.raises(ValueError, match='effort_requires_positive_finite_number'):
+        validate_commission(value, resources())
+
+
+def test_invalid_candidate_returns_feedback_and_can_be_repaired_without_a_job(tmp_path):
+    c = commission()
+    candidate = c['candidates'].pop()
+    binding = HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
+                          resources=resources(), commissions={'commission': c})
+    parent = context()
+    binding.initialize(parent)
+    candidate['units'][0]['effort'] = {'iterations': 2000000}
+    arguments = {'candidate_json': json.dumps(candidate)}
+    failed = asyncio.run(binding.execute(parent, 'hpc.candidate.propose', arguments, 'bad-proposal'))
+    assert failed['status'] == 'invalid'
+    assert failed['feedback']['code'] == 'work_unit_effort_requires_positive_finite_number'
+    assert asyncio.run(binding.execute(parent, 'hpc.candidate.propose', arguments, 'bad-proposal')) == failed
+    candidate['units'][0]['effort'] = 1.
+    repaired = asyncio.run(binding.execute(parent, 'hpc.candidate.propose',
+        {'candidate_json': json.dumps(candidate)}, 'repaired-proposal'))
+    assert repaired['status'] == 'completed'
+    assert binding.state(parent).records('handoff') == []
+    assert binding.credit_view(parent, None)['credit'] == 0
+
+
 def test_binding_has_real_iterative_roles_and_direct_parent_tools(tmp_path):
     binding = HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
                           resources=resources(), commissions={'commission': commission()})
     EpisodeBindingRegistry([binding])
     parent = context()
     binding.initialize(parent)
-    assert binding.child_roles('hpc') == ('hpc_prediction', 'launch', 'monitor', 'results')
+    assert binding.child_roles('hpc') == ('hpc_prediction', 'hpc_execution', 'launch', 'monitor', 'results')
     assert {'hpc.monitor', 'hpc.results', 'hpc.allocation.order'} <= {row['name'] for row in binding.catalog(parent)}
     child = context('hpc_prediction')
     binding.prepare_assignment(parent, child.role, dict(child.assignment), dict(child.scope), 'prepare')
@@ -266,8 +299,8 @@ def test_binding_has_real_iterative_roles_and_direct_parent_tools(tmp_path):
     plan = asyncio.run(binding.execute(parent, 'hpc.plan', args, 'plan'))
     assert plan['result']['launch_assignment']['immutable_input_versions'] == []
     assert asyncio.run(binding.execute(parent, 'hpc.plan', args, 'plan')) == plan
-    with pytest.raises(ValueError, match='one_active_allocation'):
-        asyncio.run(binding.execute(parent, 'hpc.plan', args, 'another-plan'))
+    another = asyncio.run(binding.execute(parent, 'hpc.plan', args, 'another-plan'))
+    assert another['result']['plan_id'] != plan['result']['plan_id']
     reopened = HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
                            resources=resources(), commissions={'commission': commission()})
     assert reopened.as_record() == binding.as_record()
@@ -291,6 +324,66 @@ def test_factory_roundtrip_and_binding_composition(tmp_path):
         c = commission()
         plan = build_plan(c, c['candidates'][0], resources()['aurora'], {'owner': 'parent'}, 0)
         validate_schema(plan['launch_assignment'], execution.assignment_schema('launch'))
+
+
+def test_hpc_yield_binding_follows_each_original_commission(tmp_path):
+    def bound(cutoff):
+        value = commission()
+        value['yield_bindings'] = {role: {'cutoff': cutoff, 'parameters': {}}
+            for role in HPCEpisodes.roles}
+        return value
+
+    first, second = bound(.01), bound(.5)
+    binding = HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
+        resources=resources(), commissions={'commission': first, 'second': second},
+        require_commission_yield=True)
+    original = context()
+    other = BindingContext('test-run', 'other', 'hpc', (('hpc', 'other'),),
+        {'subject_refs': []}, {'commission_id': 'second'}, {})
+    assert binding.yield_controller(original, 0., 'first-epoch').cost == .01
+    other_controller = binding.yield_controller(other, 0., 'second-epoch')
+    assert other_controller.cost == .5
+    assert other_controller.estimator.estimate_with_context.cost == .5
+    assert binding.as_record()['configuration']['commissions']['second']['yield_bindings'] == second['yield_bindings']
+    with pytest.raises(ValueError, match='hpc_static_commission_yield_binding_required'):
+        HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
+            resources=resources(), commissions={'commission': commission()},
+            require_commission_yield=True)
+
+
+def test_host_generated_commissions_carry_their_own_role_cutoffs(monkeypatch):
+    from gene_annotation_episode import a102_hpc, a104_hpc, hpc_scientific_commission
+    configured = resources()
+    marker = 'a' * 64
+    monkeypatch.setattr(a102_hpc, 'request_body', lambda *_: {
+        'resource_id': 'aurora', 'reference_binding_refs': ['reference'],
+        'request': {'native_request': {'operation': 'usalign',
+            'target': {'coordinates': ['A']}, 'reference': {'coordinates': ['A']}},
+            'algorithm': 'usalign', 'software_pin': 'test'},
+        'code_manifest_sha256': marker, 'request_sha256': marker,
+        'worker_sha256': marker, 'files': {'a102-worker.py': 'pass'},
+        'request_json': '{}'})
+    a102 = a102_hpc.commission(None, 'request', configured)
+    monkeypatch.setattr(a104_hpc, 'request_body', lambda *_: {
+        'native_request': {'threads': 1, 'model': 'MFP', 'analyses': [
+            {'purpose': 'organismal_reference', 'entries': [
+                {'sequence': 'AC', 'part_lengths': [2]}]}]},
+        'worker_sha256': marker, 'native_request_sha256': marker,
+        'case_id': 'case', 'worker_text': 'pass', 'native_request_json': '{}'})
+    a104 = a104_hpc.commission(None, 'request', configured['aurora'])
+    shared = hpc_scientific_commission.commission(resource_id='aurora',
+        resource=configured['aurora'], tool='a103.test', request_sha256=marker,
+        worker_sha256=marker, implementation_sha256=marker, parameters={},
+        files={'worker.py': 'pass'}, worker_name='worker.py', request_name='request.json',
+        program='test', version='v1', features={'sequence_count': 1},
+        preparation='prepare', objective='Test one scientific work unit')
+    for generated, expected in ((a102, (.01, .001, .01)),
+                                (a104, (.02, .001, .02)),
+                                (shared, (.01, .001, .01))):
+        assert validate_commission(generated, configured) == generated
+        assert tuple(generated['yield_bindings'][role]['cutoff'] for role in HPCEpisodes.roles) == expected
+        assert all(generated['yield_bindings'][role]['parameters'] == {'uncertainty_alpha': .05}
+                   for role in HPCEpisodes.roles)
 
 
 def test_launch_receives_preparation_and_cannot_commission_duplicate_allocation(tmp_path):

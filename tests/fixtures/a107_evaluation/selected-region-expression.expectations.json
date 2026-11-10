@@ -1,0 +1,17 @@
+{
+  "version": "a107_selected_region_evaluation_v1",
+  "evaluator_only": true,
+  "case": "selected-region-expression.case.json",
+  "original_data_expectations": "declared-expression-panel.expectations.json",
+  "selected_region": {"start": 20, "end": 40, "coordinate_system": "zero_based_half_open_protein_residues"},
+  "workflow_expectations": [
+    "Run a full autonomous workflow. Admit the case and its original data, never this file or the referenced evaluator expectations.",
+    "Inspect actual native calculation, original grading, saved qualification, typed return and subsequent parent interpretation; no tool-action script is supplied.",
+    "A correspondence to the selected region must preserve the actual source frame, selected positions, mapped extent and available native or literal-identity witnesses. A whole-protein scalar alone is insufficient.",
+    "The left feature digest equals the supplied complete protein. Mapping a selected region does not create a separately measured region abundance, local expression statistic, functional requirement or site-specific activity.",
+    "The right measured RNA lacks sequence identity and a retained encoding link. Protein correspondence cannot silently supply either one.",
+    "Preserve the censored point, separate conditions and repeated biological units. Whole-feature numerical components retain their original scope when a local correspondence is attached.",
+    "A direct exact correspondence may use actual received symbols; any proposed transfer through a missing or conflicting parent frame must remain explicitly unresolved.",
+    "The parent must use the actual delivered region qualification and numerical components while retaining synthetic origin and biological limitations."
+  ]
+}

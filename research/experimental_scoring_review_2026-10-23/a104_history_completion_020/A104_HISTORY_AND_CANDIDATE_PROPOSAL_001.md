@@ -342,7 +342,7 @@ is introduced by this formula.
 | Smillie supplement, phylogenetic mapping and limitations | 23% lacked enough homologs for the quartet analysis; >99% support among those analyzed | Missing comparators are a real native-input limitation. Neither aggregate percentage populates the target's P or O. |
 | Hehemann 2010 Fig. 3, visually inspected; PorA/PorB versus AgaA/AgaB | P(Bp1689)=+1; P(Bp1670)=-1 | A plausible marine transfer narrative cannot make agarase placement support porphyranase. The comparison retains positive and contrary regions/inferences. |
 | Hehemann 2010 main discussion, resident contexts and food-route argument | Direct overlap of the two stated one-hot resident descriptors =0; routed overlap =k for the unmeasured marine→gut route fraction k | Different resident habitats do not rule out mediated transfer. k is now a precise, narrow reader/grader field, not an invented ancient contact duration. |
-| Hehemann 2010 Table 1 / Results | Observed cohort proportions 4/13=.307692 and 0/18=0 | Native distribution facts retained; diet was not individually measured, ascertainment differs, and related hosts are not independent transfers. These are not added to B or A108 again. |
+| Hehemann 2010 Table 1 / Results | Observed cohort proportions 4/13=.307692 and 0/18=0 | Native distribution facts retained; diet was not individually measured, ascertainment differs, and related hosts are not independent transfers. These are not added to B again. |
 | Hehemann 2010 mechanism paragraph / Supplementary Table 3 | Cargo/mobility associations described; no transfer capacity fraction measured | Populates linkage evidence and specific uncertainties for m_j. Best-hit identities and nearby mobility annotations do not become a measured M. |
 | Existing A104 sheet and user direction | P/O/history geometry and broader event-explanation requirement | Defines the numerical questions; papers inform operands, not the chosen averaging or candidate min/max policy. |
 
@@ -483,9 +483,8 @@ triplet slots rather than dropping them.
 
 Shared evidence retains its actual identity. A105 characterization labels the
 reference functions; its rate magnitude is not an A104 bonus. A107 partner
-coexpression is not used. A108 may use the same food/habitat observation to
-evaluate organism/function plausibility; A104 uses only its relation to this
-specific transfer route. The sheet declares that shared dependency and supplies
+coexpression is not used. A104 uses food/habitat observations only for their
+relation to this specific transfer route. The sheet declares that shared dependency and supplies
 no cross-axis independence claim or extra evidence count. W05 must receive
 these identities along with the coordinate; this draft does not claim to have
 solved or implemented the global correlated-axis formula.

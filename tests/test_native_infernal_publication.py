@@ -27,7 +27,7 @@ from gene_annotation_episode.tool_grading_artifacts import retain_tool_grading
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "tests/fixtures/native_infernal_publication"
-POLICY = LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None)
+POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
 
 
 def test_all_native_quantities_have_store_measurement_names():
@@ -183,7 +183,7 @@ def test_native_five_families_and_bounded_receipt(tmp_path, case, family):
                 assert {v["name"]: v["reason"] for v in row["unavailable"]}["deleted_model_positions"] == "not_measured"
         envelope = json.loads(store.get_artifact(prepared["grading_artifact_ref"]))["grading"]
         assert envelope["worker_receipt"]["policy"] == POLICY.to_dict()
-        assert envelope["worker_receipt"]["enforcement"]["wall_time"] == "unset"
+        assert 'wall_time' not in envelope["worker_receipt"]["enforcement"]
         assert not store.current_annotations()
 
 

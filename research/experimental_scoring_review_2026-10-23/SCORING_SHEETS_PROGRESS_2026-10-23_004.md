@@ -18,7 +18,6 @@ conditional calculations establish a finished whole-axis score.
 - [ ] A106 — complete numerical sheet remains unfinished; perturbation work is
   preserved for this axis, outside A105.
 - [ ] A107 — complete numerical sheet remains unfinished.
-- [ ] A108 — complete numerical sheet remains unfinished.
 - [ ] A110 — retained separately; complete numerical sheet remains unfinished.
 - [ ] A111 — complete numerical sheet remains unfinished.
 

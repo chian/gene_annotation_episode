@@ -50,7 +50,7 @@ QUESTION = ("For the explicitly supplied 14-nucleotide DNA, use EcoRI with linea
     "Compare the saved-reader result with the original selected search without repeating that search. "
     "Keep conditional sequence predictions distinct from measured digestion or gene-function confidence.")
 FACT = "restriction_mapping_results"
-POLICY = dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3, wall_seconds=None)
+POLICY = dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 
 
 def _forbidden(*args, **kwargs):

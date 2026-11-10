@@ -2,11 +2,12 @@ from copy import deepcopy
 import json
 
 import pytest
+from real_time_credit_fixture import progress_time
 
 from method_loop import Context, Episode, EpisodeGoal, EpisodeRequest, EpisodeTree, Grain, Leaf
 from method_loop.identities import EpisodeRef, UnitRef
 
-from gene_annotation_episode.numerical import (NumericBand, STATUS_INSUFFICIENT,
+from gene_annotation_episode.numerical import (NumericBand, STATUS_INSUFFICIENT, STATUS_NORMAL,
     YieldController, YieldEstimate, YieldParameters, estimate_score_yield)
 from gene_annotation_episode.practical_yield import ESTIMATOR_VERSION, PracticalYieldEstimator
 from gene_annotation_episode.runtime import Record
@@ -20,6 +21,8 @@ def completion_context(*, run_id="run-practical", episode_id="episode-practical"
         "endpoint": "completed_job_outputs", "operation_key": "recorded-operation",
         "receipt_sha256": "b" * 64, "validation_keys": ["requested_outputs"]}
     return {"version": "completed_action_estimation_context_v5",
+        "progress_time": progress_time(10. * (unit_index + 1), run_id=run_id,
+            episode_id=episode_id, decision_index=action_index),
         "current_completion_evidence": {"version": "completed_action_evidence_v1",
             "run_id": run_id, "episode_id": episode_id, "unit_ref": unit,
             "original_decision_index": action_index, "action_kind": "tool",
@@ -47,7 +50,7 @@ def test_unfinished_default_estimates_are_unchanged(history):
 
 
 @pytest.mark.parametrize("final_credit,final_delta", [(14, 2.5), (11.25, -.25), (11.5, 0)])
-def test_terminal_proof_changes_only_future_forecast_before_fit_window(final_credit, final_delta):
+def test_terminal_proof_changes_only_future_forecast_with_short_history(final_credit, final_delta):
     contexts = [None, None, completion_context(unit_index=2)]
     original_contexts = deepcopy(contexts)
     seen = []
@@ -76,7 +79,7 @@ def test_default_scientific_controller_does_not_consume_practical_terminal_proof
     step = controller.observe("work", {"credit": 3,
         "estimation_context": completion_context()})
     assert controller.estimator.scores == (3,)
-    assert step.estimate.expected_next_gain.status_code == STATUS_INSUFFICIENT
+    assert step.estimate.expected_next_gain.status_code == STATUS_NORMAL
     assert not step.stop
 
 
@@ -130,7 +133,7 @@ def test_invalid_terminal_input_does_not_mutate_controller_history():
             "estimation_context": completion_context()})
     assert controller.estimator.scores == ()
     assert controller.state().current_credit == 4
-    assert controller.state().estimate.expected_next_gain.status_code == STATUS_INSUFFICIENT
+    assert controller.state().estimate.expected_next_gain.status_code == STATUS_NORMAL
 
 
 @pytest.mark.parametrize("history,contexts", [

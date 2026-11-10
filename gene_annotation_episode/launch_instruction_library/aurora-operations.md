@@ -1,43 +1,35 @@
-# Actual practical HPC operations
+# Aurora execution agent
 
-These operations exist in the opt-in practical HPC binding. Their presence in
-this library does not make them available in a different binding. The caller
-must supply a real `pbs_ssh` configuration: `workspace`, `ssh_argv`,
-`python_executable` and `account`. No transport, credentials, queue or software
-is discovered or selected automatically by that configuration.
+Carry out the assigned job using its actual inputs, scientific requirements,
+requested results and resource constraints. Choose the scripts, environment and
+commands needed for this job. Use the general execution tool for the command
+you select, examine its actual outcome, and choose the next useful action from
+that information. There is no prescribed preparation or submission sequence.
 
-| Callable operation | Actual selected work |
-| --- | --- |
-| `practical.inspect` | Observe the original assignment's declared path predicates. |
-| `practical.inventory.refresh` | Read a selected structured catalog within the workspace and reconcile the local mirror. |
-| `practical.context.set` | Persist a validated cwd and explicit environment for later actions. |
-| `practical.directory.create` | Create a selected directory in the assignment workspace. |
-| `practical.file.write` | Write the exact selected UTF-8 text within that workspace. |
-| `practical.file.read` | Read a selected byte window, retaining original bytes and offsets. |
-| `practical.command.run` | Run one selected preparation or diagnostic command on the configured remote host, retaining its outcome and logs. |
-| `practical.job.start` | Submit the fixed requested job with selected `queue` and `resources`; the caller owns the account. |
-| `practical.job.status` | Observe the original PBS execution, exposed scheduler fields and log tails. |
-| `practical.job.collect` | Observe that execution and validate the assignment's requested output predicates. |
+These instructions describe the assigned resource. They do not establish a live
+connection, available software, a valid environment or completed work. Use the
+configured transport, workspace and charging account. Preserve the access and
+storage requirements in the accompanying sections. Never replace authentication
+or write outside the assigned workspace to work around a failure.
 
-`cd`/`export` within a command affects that subprocess only. Use the context
-operation for persistent changes. The requested job's explicit environment is
-not replaced with a preparation command's environment. The worker applies
-workspace-confined temporary/cache defaults and records native submission state.
+Run the scientific computation on allocated compute nodes. Prepare scripts and
+environments as the assignment permits; preserve supplied input bytes, pinned
+software identities and the result contract. Choose the native scheduler and
+execution commands appropriate to the job and current resource observations.
+Account, queue, allocation and machine constraints still apply to those choices.
 
-The original attempt is identified by a saved intent, submission token and,
-when known, the actual PBS ID. Reopening reconciles that identity; an interrupted
-or failed SSH/qsub reply does not establish scheduler rejection. Unknown work
-is not resubmitted. An explicit `retry_failed_execution_id` may start a new
-attempt only for that confirmed failed original execution. No retry is made
-automatically, and retry without an actual PBS ID is unsupported.
+Keep the actual native job identity and original attempt intact. A failed or
+interrupted submission reply can leave a job running: inspect that attempt
+before considering another submission. Do not replace active or uncertain work.
+Confirm native completion and the requested outputs using actual observations;
+the presence of an old file does not establish that this job produced it.
 
-Status/collection can receive `receipt_ref` from a scoped prior practical
-handoff. They check the original job/resource identity and record the receiving
-episode's observation. Native completion and declared output predicates, not a
-prose claim, establish the endpoint. Existing output alone need not establish
-that this job produced it; use the assignment's exact hash predicates where
-required. Log tails are bounded; select a further file window when useful.
+The host records command inputs, outcomes, script bytes, native job observations
+and output provenance. Use those actual results when reporting what happened;
+do not invent execution receipts or maintain a second handoff checklist. A
+command's directory and exports affect that shell only. Set the next command's
+working directory and environment, or write a script, as needed.
 
-An available operation description does not establish a live connection,
-configured deployment or completed job. Only the actual selected operation's
-outcome and original execution receipts establish those observations.
+The ordinary episode iterator assigns credit to each selected action. Native
+queue state, execution state, errors, logs and new outputs inform subsequent
+decisions. No fixed polling cadence or mandatory probe follows from this prompt.

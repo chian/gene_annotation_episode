@@ -224,8 +224,7 @@ def test_native_custody_and_software_inspection(native_oracle):
     oracle, manifest, _ = native_oracle
     for artifact in manifest["artifact_pins"]:
         assert _pin(oracle / artifact["path"], oracle) == artifact
-    assert manifest["policy"] == {"memory_bytes": 21474836480, "scratch_bytes": 4294967296,
-                                  "swap_bytes": 0, "wall_seconds": None}
+    assert manifest["policy"] == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'swap_bytes': 0}
     cases = {row["case_id"]: row for row in manifest["cases"]}
     for program in ("dustmasker", "segmasker", "windowmasker"):
         for kind in ("help", "version"):

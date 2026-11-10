@@ -169,6 +169,80 @@ class Scenario:
             initial_known_record_refs=[], **kwargs)
 
 
+def test_annotation_axis_root_observes_whole_child_return_and_replays_collection(tmp_path):
+    from gene_annotation_episode.numerical import AnnotationAxisYieldController
+    from gene_annotation_episode.episode_reports import report_sources as yield_sources
+    from gene_annotation_episode.episode_journal import decode_credit
+    with Store(tmp_path / 'state') as store:
+        case = Scenario(tmp_path, store)
+        subject = case.scope['subject_refs'][0]
+        proposal = store.put('hypothesis', {'subject_refs': [subject],
+            'predicate': 'functional_family', 'value': {'type': 'enum', 'value': 'unresolved'},
+            'context_refs': []}, origin='reasoning')['id']
+        arm = {'proposed_annotation_ref': proposal, 'subject_ref': subject,
+            'scope': case.scope, 'axis': 'A01', 'credit': 0., 'status': 'scored',
+            'transfer': {'status': 'established', 'needed_refs': [], 'link_refs': []}}
+        # Synthetic units exercise the native collection path. Actual native
+        # axis receipt/scalar mapping is covered by test_signed_evidence_root.
+        def projection(store, scope):
+            return {'credit': {'mode': 'annotation_axis_credit', 'arms': [deepcopy(arm)]},
+                'proposed_annotations': [{**arm, 'predicate': 'functional_family',
+                    'value': {'type': 'enum', 'value': 'unresolved'}, 'context_refs': [],
+                    'score': 0., 'support': 0., 'opposition': 0.}], 'comparisons': []}
+        projection.task_credit = True
+        assignments = []
+        def local_credit(store, scope, *, assignment, episode_id, run_id):
+            assignments.append(deepcopy(assignment))
+            assert assignment['proposed_annotation_ref'] == proposal
+            return 7.
+        def controllers(path, initial):
+            if len(path) == 1:
+                return AnnotationAxisYieldController('root', initial, {'A01': 1e6})
+            return YieldController('child', initial, .5, estimate_with_context=
+                lambda history, parameters, contexts: YieldEstimate(len(history),
+                    NumericBand.exact(.5), parameters, {}))
+        choice = case.commission([proposal])
+        choice['selection']['assignment']['proposed_annotation_ref'] = proposal
+        returned = deepcopy(FORM)
+        returned['properties']['yield'] = yield_sources()['episode_yield']['report_schema']
+        returned['required'].append('yield')
+        choice['selection']['schema_json'] = json.dumps(returned)
+        provider = ScriptedProvider([choice, action('fixture.inspect', {'value': 2}, 'qualified')])
+        def build(provider):
+            return Workflow(store, case.tools, provider, case.directory, 'annotation-axis-fixture',
+                controllers, projection, project_child_credit=local_credit,
+                episode_binding_descriptors=case.descriptors, episode_record_receipts=True,
+                initial_known_record_refs=[proposal])
+        workflow = build(provider)
+        root = workflow.build('annotation', 'root', 'Evaluate the assigned annotation', case.scope)
+        record = asyncio.run(root.run_async(workflow.context))
+        asyncio.run(root.build_result(record))
+        assert record.ended_by == 'yield_stop' and record.units_consumed == 1
+        assert record.controller_state.arms[0]['completed_invocation_observations'] == 1
+        assert record.controller_state.arms[0]['credit'] == 0
+        assert assignments
+        first = provider.contexts[0]
+        assert first['working_state'] == {} and first['child_reports'] == []
+        assert 'completed_action_reports' not in first
+        assert first['controller']['arms'][0]['proposed_annotation_ref'] == proposal
+        observed = [json.loads(row[0]) for row in store.db.execute(
+            'SELECT observation FROM runtime_observations WHERE episode_id=?', (root.source.episode_id,))]
+        assert len(observed) == 1 and observed[0]['step']['marginal_credit'] == 0
+        assert observed[0]['credit']['completed_annotation_axis']['axis'] == 'A01'
+        assert observed[0]['step']['arms'][0]['forecast_unit'] == 'another_whole_axis_invocation'
+        saved = workflow.journal.row('runtime_episodes', root.source.episode_id)
+        assert saved['initial_credit']['mode'] == 'annotation_axis_credit'
+        sql_credit = store.db.execute('SELECT credit FROM runtime_actions WHERE episode_id=?',
+            (root.source.episode_id,)).fetchone()[0]
+        assert decode_credit(sql_credit) == record.controller_state.current_credit
+        replay_provider = ScriptedProvider([])
+        reopened = build(replay_provider)
+        replay_root = reopened.build('annotation', 'root', 'Evaluate the assigned annotation', case.scope)
+        replay = asyncio.run(replay_root.run_async(reopened.context))
+        assert replay.controller_state.as_record() == record.controller_state.as_record()
+        assert replay_provider.contexts == []
+
+
 def test_constructor_iteration_prepares_revision_with_fixed_process_and_original_return(tmp_path):
     with Store(tmp_path/'state') as store:
         case = Scenario(tmp_path, store)
@@ -246,6 +320,38 @@ def prepared_child(case, workflow):
     root = workflow.build('annotation', 'root', 'Resolve fixture uncertainty', case.scope)
     unit = workflow.selected(root.source, case.commission()['selection'], 0)
     return root, unit.child
+
+
+def test_actual_scientific_child_credit_uses_original_annotation_assignment(tmp_path):
+    from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+    from test_investigation_progress import put_finding
+    from test_scientific_hypervolume_runtime import evidence
+    with Store(tmp_path/'state') as store:
+        case = Scenario(tmp_path, store)
+        target, = case.scope['subject_refs']
+        proposed = store.put('hypothesis', {'subject_refs': [target],
+            'predicate': 'biological_role', 'value': {'type': 'enum', 'value': 'unresolved'},
+            'context_refs': []}, origin='reasoning')['id']
+        competing = store.put('hypothesis', {'subject_refs': [target],
+            'predicate': 'biological_role', 'value': {'type': 'enum', 'value': 'negative'},
+            'context_refs': []}, origin='reasoning')['id']
+        first = put_finding(store, proposed, evidence(store, target, 'alignment'), target)['id']
+        second = put_finding(store, competing, evidence(store, target, 'mechanism'), target)['id']
+        scorer = ScientificFindingProgress(FindingProgressPolicy(7))
+        workflow = Workflow(store, case.tools, ScriptedProvider([]), case.directory,
+            'annotation-scoped-child-fixture', case.factory, root_credit,
+            project_child_credit=scorer, episode_binding_descriptors=case.descriptors,
+            episode_record_receipts=True,
+            initial_known_record_refs=[proposed, competing, first, second])
+        workflow.scientific_process_binding.credit_projector = lambda _: scorer
+        choice = case.commission([proposed, competing, first, second])['selection']
+        choice['assignment']['proposed_annotation_ref'] = proposed
+        root = workflow.build('annotation', 'root', 'Compare annotations', case.scope)
+        child = workflow.selected(root.source, choice, 0).child
+        assignment = workflow.child_credit_arguments(child.source)['assignment']
+        assert assignment['proposed_annotation_ref'] == proposed
+        assert assignment['scope'] == case.scope
+        assert workflow.source_credit_view(child.source)['credit'] == 7
 
 
 @pytest.mark.parametrize('request_results,request_sources,mark_revision',
@@ -381,7 +487,7 @@ def test_nested_revision_returns_existing_local_results_only_through_requested_f
                 (saved['episode_id'],)).fetchone()[0])
             row = frozen['scientific_process_results'][0]
             own_rows[depth] = row
-            assert row['version'] == 'scientific_process_result_v2'
+            assert row['version'] == 'scientific_process_result_v3'
             assert row['selection'] == {
                 'version': 'scientific_process_selection_report_v1',
                 'source_version': 'scientific_process_selection_v3',

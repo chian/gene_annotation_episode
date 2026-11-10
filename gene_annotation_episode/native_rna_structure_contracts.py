@@ -21,7 +21,7 @@ ATTEMPT_DIRECTORY_NAME = "rna-structure-attempt"
 OWNER_FILENAME = ".native-rna-structure-owner.json"
 STARTED_FILENAME = ".native-rna-structure-started.json"
 WORKER_MODULE = "gene_annotation_episode.native_rna_structure_worker"
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 INPUT_NAMES = {"input": "input.json", "model_parameter_input": "model-parameter-input.par"}
 ROLE_FORMATS = {"input": "rna_input_json_v1", "model_parameter_input": "viennarna_parameter_file",
     "native_result": "rna_native_record_json_v1", "model": "vienna_model_json_v1",

@@ -33,9 +33,6 @@ credit integration or a target annotation. No historical record was overwritten.
 - [x] A107 — completed current review and printed delivery this turn. The full
   sheet, exact fields, source/criteria record, handoff and final numerical
   receipt were inspected. Parent delivery record 002 preserves exact coverage.
-- [x] A108 — coherent current sheet 003 now joins the sample-coverage and
-  organism-capability meanings with explicit native operands and bounds.
-  Formula, complete synthetic examples and unadopted choices were printed.
 - [x] A110 — complete consolidated numerical sheet, worked examples, exact
   crosswalk, source/criteria record, handoff and 29-check receipt parent-read.
   Full isotope convolution, separate correction operations, resource equations
@@ -61,24 +58,6 @@ The worker's 87-check receipt was inspected, not rerun. The earlier parent's
 native public-matrix reconstruction remains attributed to its original review.
 No new primary inspection or production behavior is claimed. The new parent
 record is `a107_sheet_construction_001/A107_DELIVERY_AND_CRITERIA_002.md`.
-
-## A108 delivered outcome
-
-Current entry: `a108_sheet_construction_001/A108_COMPLETE_NUMERICAL_SHEET_003.md`.
-The parent reread the complete core numerical proposal, sample qualifications,
-organism extension and its qualifications, and both exact reader contracts.
-It did not reopen the paper-specific Huc/Ttr/porphyran/Cdv packets or primary
-papers. Their source coverage remains attributed to the original reviewers.
-
-Measured requirements form AND events on the same biological unit. Sample
-coverage is sum(weight*compatible)/sum(weight); organism capability uses OR
-over permitted states with an unresolved remainder. The original question
-chooses the meaning before scoring; O and C are not added or maximized.
-Synthetic coverage 8/10*6/8*5/6=.5, uncertain [.5,.6], and contradictory
-[.4,.5] cases were printed. A rare compatible witness establishes capability
-without claiming frequent occurrence. The two meanings and lower-bound-credit
-convention remain explicitly proposed. Existing parent 21- and 9-check receipts
-were not rerun; no new source data or production implementation was created.
 
 ## A110 delivered outcome
 

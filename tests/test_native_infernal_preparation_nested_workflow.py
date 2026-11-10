@@ -432,7 +432,7 @@ def test_independent_numeric_examples_and_practical_exact_zero(native_case):
     assert case.plan['policy'] == handle['metadata']['policy'] == POLICY.to_dict()
     assert handle['metadata']['verified_cgroup']['memory_max'] == 20 * 1024**3
     assert handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
-    assert handle['metadata']['verified_cgroup']['runtime_max'] == 'infinity'
+    assert 'runtime_max' not in handle['metadata']['verified_cgroup']
     assert_accounting(case)
 
 

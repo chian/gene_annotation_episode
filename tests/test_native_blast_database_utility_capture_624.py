@@ -40,8 +40,7 @@ def test_capture_selected_tiny_database_utilities():
     def record():
         manifest.write_text(json.dumps({
             'record_type': 'blast_database_utility_native_capture_v1',
-            'policy': {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296,
-                       'swap_bytes': 0, 'wall_seconds': None},
+            'policy': {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'swap_bytes': 0},
             'environment_overrides': {k:env[k] for k in
                 ('BLAST_USAGE_REPORT','NCBI_DONT_USE_NCBIRC','BLASTDB_LMDB_MAP_SIZE')},
             'inputs': [_pin(p) for p in sorted(inputs.iterdir())],

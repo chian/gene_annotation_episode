@@ -30,7 +30,7 @@ from gene_annotation_episode.state import Store
 ROOT = Path(__file__).resolve().parents[1]
 NATIVE = ROOT / "verification/tool_graders_blast_pairwise_2026-10-26_294"
 EXAMPLES = sorted((NATIVE / "native_examples").glob("*/plan.json")) + sorted((NATIVE / "native_ranges").glob("*/plan.json"))
-POLICY = LocalJobPolicy(memory_bytes=20 * 1024**3, scratch_bytes=4 * 1024**3, wall_seconds=None)
+POLICY = LocalJobPolicy(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 
 
 def selector(family="pairwise_hsp", metrics=None, rows=None):

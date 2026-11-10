@@ -1,10 +1,11 @@
 # Aurora access and authentication
 
-The practical HPC binding requires explicit `kind=pbs_ssh`, `ssh_argv`,
-`python_executable`, `workspace` and `account` configuration. It appends the
-selected remote Python worker command to `ssh_argv` and retains the resulting
-transport outcome. The recorded user requirements below inform that explicit
-configuration; they do not establish that authentication currently works.
+The assigned HPC resource supplies explicit `kind=pbs_ssh`, `ssh_argv`,
+`python_executable`, `workspace` and `account` configuration. Its
+`launch_prompt_entry` selects these instructions from the run-frozen launch
+library; the execution agent receives them directly. Use ordinary commands
+through that configured transport. The recorded user requirements below inform
+the configuration; they do not establish that authentication currently works.
 
 The established route is user `chian` through `bastion.alcf.anl.gov`, followed
 by SSH running on the bastion to Aurora using host-based authentication. Preserve
@@ -22,8 +23,8 @@ Reuse-only clients must specify `ControlMaster=no`, `ControlPersist=no`,
 `BatchMode=yes`, `StrictHostKeyChecking=yes` and `ProxyCommand=/bin/false` with
 the explicit socket. The false proxy prevents a new transport even if the master
 disappears between a socket check and the operation. The bare alias uses
-`ControlMaster auto` and is not a reuse-only operation. Preserve stdin for the
-remote worker's request. Loss of the session is an operational stop, not
+`ControlMaster auto` and is not a reuse-only operation. Preserve stdin when the
+selected command needs it. Loss of the session is an operational stop, not
 authorization for another authentication attempt. The local caller adapter
 `tools/aurora_ssh.sh` implements this reuse-only path and preserves stdin; the
 explicit example binding is `examples/aurora_execution_resources.json`.

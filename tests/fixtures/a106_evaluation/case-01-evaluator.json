@@ -20,8 +20,543 @@
     "Discover deletion and plasmid complementation in sustained nitrogen starvation.",
     "Retain the original experiment identity across paper, figures and supplementary data.",
     "Do not equate a logarithmic display with a reported log-scale mean or standard deviation.",
-    "Require supported fixed predictions, exact variance and model before a numerical evidence ratio.",
+    "Require supported fixed predictions, variance for the measured estimate and an applicable observation model before a numerical evidence ratio.",
     "Return an explicitly unresolved final score if essential inputs cannot be supported."
   ],
+  "post_discovery_review": {
+    "basis": "Added after reviewing the primary text discovered by the live sequence-only investigation; these are retrospective audit checks, not expectations supplied to that investigation.",
+    "source": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8055822/",
+      "pmcid": "PMC8055822",
+      "doi": "10.3389/fmicb.2021.657562"
+    },
+    "checks": [
+      "Keep the glucose-to-malate growth experiment separate from nitrogen-starvation recovery and from the glucose-to-glucose control condition.",
+      "The glucose-to-glucose control is described as showing no growth phenotype. Preserve that qualitative, condition-specific observation; it does not supply an exact zero effect, zero variance, an independently specified prediction, or proof that YeaG has no biological contribution.",
+      "Retain the reported MG1655 deletion background and colony-PCR confirmation without calling them direct sequencing of the actual tested protein.",
+      "The construction methods identify Keio strains as PCR templates for a kanamycin-resistance fragment. Keep this donor role separate from the stated MG1655 recipient background; the donor collection does not itself establish a different assayed strain or contradict the recipient description.",
+      "The construction methods separately report insertion of an FRT-flanked kanamycin-resistance fragment, colony-PCR confirmation and curing of the pSIJ8 recombination plasmid. The statement that pSIJ8 was cured (original article bytes 30763-30835) does not state that the chromosomal resistance cassette was excised, that all plasmids were removed or that effects on neighboring genes were excluded. Preserve the reported plasmid removal with those limits; do not silently describe a marker-free deletion. This check follows evaluator review of the original construction section and the finding retained at decision 381; it is not supplied to the live episode.",
+      "Growth-profiler biological triplicates came from different colonies. The proteomic comparison used biological duplicates; its replication does not supply growth-lag uncertainty.",
+      "Figure 1C uses scaled-up cultures with a different reported replication count. Calling it a related growth representation and excluding it from a sum does not establish that it reuses the growth-profiler samples, or that the experiments are independent. Preserve their distinct culture preparations and unresolved dependence.",
+      "Figure 1 reports average growth curves. Those curves and a count of three cultures do not themselves supply per-culture lag estimates or variance of a lag contrast.",
+      "The original Figure 1 image visibly includes error bars on plotted growth measurements. The caption states the replication counts but does not define those bars as SD, SEM or confidence intervals. Preserve that visible spread without treating it as a documented variance of a fitted lag, or claiming that the figure contains no uncertainty information.",
+      "Figure 1C's red arrows mark collection times for MS proteomics at OD600 = 0.6, as explicitly stated in the caption. Their horizontal separation is not a reported difference of fitted growth lags. Keep this sampling endpoint and the biological duplicates separate from the growth-profiler lag comparison; any numerical extraction needs the correct endpoint, graph calibration and uncertainty.",
+      "Figure 2 selects differentially regulated proteins using a cutoff of two SDs from the dataset mean. Two is the multiplier, not a reported SD value. This rule does not supply per-protein replicate variance, a fixed hypothesis prediction, or variance of the growth-lag contrast.",
+      "The reported DctA overexpression offers a possible downstream explanation of the shorter lag; it does not demonstrate that changing DctA causes the lag difference.",
+      "Reduced YjhQ Thr11 phosphorylation after yeaG deletion is a cellular intervention response. The paper explicitly allows an indirect effect through another kinase and requires further evidence before calling YjhQ a direct YeaG substrate. Do not turn this comparison alone into proof of direct catalysis; retain any separate biochemical validation on its own experimental basis.",
+      "The Phos-tag assay reports AceA positive and other tested candidates negative under its particular conditions. Those negative results do not establish that YeaG has no biological contribution, that all untested proteins are negative, or that the shorter growth lag has no phosphorylation mechanism. Keep the separate cellular Western-blot observations distinct from direct YeaG-dependent phosphorylation.",
+      "The candidate-enzyme paragraph and Figure 3B caption identify SodB, whereas the sentence reporting negative Phos-tag tests names SodA. This discrepancy is present in the original article XML (artifact_6323e85dbc2acf86468e7fc5a35f61c5d7240dadb38b526e607f7e766ef48423; reviewed byte ranges 80900-83000 and 84900-86400). Preserve the literal negative-result wording at bytes 82139-82206 without silently treating SodA and SodB as interchangeable; resolve the tested construct from additional source evidence before making a protein-specific negative claim. The discrepancy does not invalidate unrelated measurements.",
+      "Separate phosphosite rows in Tables 2 and 3 do not establish independent experiments or additional biological replicates. Retain the underlying SILAC sample and control relationships, and resolve dependence before combining any numerical evidence contributions.",
+      "WT glucose/Lys0 is the common reference for the two SILAC mixtures: one includes WT malate/Lys4; the other includes deletion glucose/Lys4 and deletion malate/Lys8. Preserve that normalization design. A shared reference condition alone does not identify which physical cultures or control measurements were reused, or supply their covariance.",
+      "Revising the growth assessment to add the possible DctA explanation must preserve the original experiment identity and must not create another independent score contribution."
+    ],
+    "figure_review": {
+      "reviewed_at": "2026-11-05",
+      "source_ref": "source_9a41b780671830173193fd2d",
+      "artifact_ref": "artifact_1363ede00a5c593794b2d0378b42a95e6b40d8c681ae360f653d4998891e9e3a",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC8055822.1/fmicb-12-657562-g001.jpg?md5=24f762d55e43484d910f5d85da984be7",
+      "scope": "Evaluator visual review of the original Figure 1 image autonomously acquired at decision 267 in runs/a106_sequence_case01_20261105_02, checked against the caption in the retained original article XML. The image SHA-256 was independently verified. No numerical digitization, lag estimation or uncertainty calculation was performed, and this review is not supplied to the episode."
+    }
+  },
+  "survival_post_discovery_review": {
+    "basis": "Retrospective evaluator checks after child_10 saved source_221de0509bf0a0c0030785ab. Reviewed retained article text artifact_498ea416ec9f259bd9092b0c8d8499d7b465c51a36e137cfb4e7bba8d3e0e924 and visually verified Table S2 on physical page 6 of supplement artifact_f76ef0b7f4ef9017622548f74e0914514133bfac9af9025d314952eebfcbf058. These checks are not episode inputs.",
+    "source": {
+      "url": "https://www.nature.com/articles/srep17524",
+      "pmcid": "PMC4664914",
+      "doi": "10.1038/srep17524",
+      "sections": ["Figure 6 caption", "Figure 3C and accompanying results", "Methods discussion of strain construction and growth conditions", "Supplementary Table S2, physical PDF page 6"]
+    },
+    "checks": [
+      "Keep sustained-starvation colony-forming survival separate from recovery lag and from the Salmonella double-mutant mouse competitive-index experiment.",
+      "The growth methods specify 0.1% (w/v) arabinose for the pBAD18 complementation plasmid and 0.2% for the separate pFCcGi dual-fluorescence plasmid. Retain the stated plasmid-to-induction mapping; do not describe the complementation induction concentration as wholly unreported or transfer the fluorescence concentration to it. This protocol statement does not measure matched active YeaG abundance or establish that every assay and control used identical induction. Evaluator review verified original article bytes 61378-61555, SHA-256 71d33026f2a245e7c302e7449f9f28c1711f812cddbdc8c9b9fc74657064a9c4, after the child read the passage at decision 624. Reading the passage alone does not establish its incorporation into an assessment or parent report. This check is not supplied to the episode.",
+      "Decision 625 subsequently retained the pBAD18 induction condition in context_6277311fb73d6fb917efd14f and observation_ae8b599cd896487a0046891d, with a mixed/transfer assessment_3b39dca8ece1c0233aaef72c qualified by conditions_limit_transfer for nitrogen-starvation survival. The separate complementation-induction-finding-checkpoint.json verifies three records, both original byte anchors and child-only receipts. The context stores numeric 0.1 with unit_ref=null; percentage and w/v are retained in the label and quotation, not a validated concentration conversion or endpoint operand. Preserve that limitation. The ordinary finding does not establish revision of a numerical grading sheet or parent delivery.",
+      "Figure 6A reports SEM and Figure 6B reports SD, each with n=3. The general methods report at least three independent experiments unless otherwise specified; retain that author statement while distinguishing it from identification of the precise biological unit or arm covariance. Do not transfer spreads between panels or treat them as variance of an unspecified contrast.",
+      "The original Figure 6A image labels its vertical quantity log CFU/ml with ticks 8.0 through 9.0; Figure 6B labels CFU/ml with power-of-ten ticks from 10^6 to 10^9. Preserve the distinction between the reported log quantity in A and density values displayed on a logarithmic axis in B. Reading a vertical coordinate does not by itself recover a native density, its uncertainty or a between-arm log fold change. Match each reported SEM/SD to its panel and statistical scale before using it in any numerical contrast.",
+      "A shared CFU assay type does not establish whether panels 6A and 6B reused biological samples or control measurements. Preserve unresolved dependence and original measurement identity rather than declaring the panels independent or identical solely from assay type. Selecting one assessment without summing the related observations avoids an unsupported sum but does not by itself verify that they are one original experiment.",
+      "A methods paragraph describing construction of double-mutant strains does not by itself contradict a caption identifying a single-mutant strain. Table S2 explicitly lists delta-yeaG780::km (JW1772-1), delta-yeaH781::km (JW1773-1) and delta-yeaGH::km as separate constructs, plus a separate Salmonella delta-yeaGH entry. Preserve those distinctions when mapping Figure 6 panels to experimental subjects.",
+      "Table S2's wild-type description includes both MG1655 and BW25113; this is visible in the original PDF, not just a text-extraction artifact. Retain the source's conflicting strain identifiers without silently selecting a laboratory background. Independently verified reference-sequence correspondence remains usable even when the identity of the actual experimental strain is unresolved.",
+      "Decisions 614/615/617 in runs/a106_sequence_case01_20261105_02 acquired BW25113 reference AIN32220.1, found full equality to the anonymous 644-residue input and saved that comparison. Independent review verified all 65 mapped sequence spans, the reconstructed GenPept ORIGIN sequence, original and sequence hashes, launch identity and the saved observation anchor. The record's BW25113_1783 locus, JW1772 synonym and CP009273.1 coding coordinates describe the reference; they do not resolve the paper's contradictory strain labels or establish the sequence of the actual deletion/complementation constructs. Its generic autokinase annotation does not independently demonstrate a contribution to recovery growth. The saved scope_limited/does_not_discriminate assessment concerns the recovery-growth hypothesis, not a numerical intervention score. The checkpoint records child-only receipts and zero report attempts at capture; verify later parent delivery separately. This retrospective check is not supplied to the episode.",
+      "Table S2 describes pBAD18-yeaG as expressing 6xHis-yeaG under an arabinose-inducible promoter, with the printed label araC. Retain that construct description without treating it as evidence of native promoter regulation, matched active-protein abundance, an induction concentration or exact full construct sequence. The finding retained at decision 415 in runs/a106_sequence_case01_20261105_02 matches extracted page-6 bytes 1300-1600 and 1362-1404 (SHA-256 be36e700d0e8ffc597581ea7447e1281a3e516f864c5884562fd1b2b2849e3f4). Evaluator review also confirmed the wording in the previously rendered original page (image SHA-256 0323c3bdeadb2871f4b6f7d518f97e97d16623491dd93d41eea2f86906ca0054; source PDF SHA-256 f76ef0b7f4ef9017622548f74e0914514133bfac9af9025d314952eebfcbf058). This retrospective check is not supplied to the live episode.",
+      "Failure of K426A and Y382Stop constructs to complement survival does not directly measure kinase catalysis. The paper's prose nevertheless reports anti-His abundance controls: K116A 64%, R232A 48%, K426A 100% and Y382Stop 96% of wild-type levels. The original Figure 3C image labels K426A's normalized signal 1.12 while the wild-type lane is 1.0, so the prose's 100% and the image label disagree. Preserve both representations and the unresolved discrepancy rather than silently substituting or averaging them. Retain these controls with their measured conditions and times before applying them to later survival measurements; do not describe all expression controls as absent.",
+      "A saved unavailable assessment is not a returned final subscore. Verify the selected assessment and the actual parent receipt independently.",
+      "In runs/a106_sequence_case01_20261105_02, finalization 408 correctly uses the current Figure 6A assessment and final predecessor, but its Figure 6B choice switches from assessment 348 to 152. Those B assessments have different assessment_key values and no revision link between them; 152 revises 133 within its own key. Preserve the actual selection and the inaccurate supersession wording in the revision reason. Do not infer a revision from creation order, count both assessments as separate experiments, or treat an accepted finalization as verification of its natural-language explanation. This is retrospective evaluator evidence, not input to the live episode."
+    ],
+    "figure_review": {
+      "reviewed_at": "2026-11-05",
+      "run": "runs/a106_sequence_case01_20261105_02",
+      "source_ref": "source_8941d989e19abd2897e19d89",
+      "artifact_ref": "artifact_accdff3253574a543f87ede2b5e2888824e7ebf6e8d00700cbe7b667e4801675",
+      "view_ref": "image_view_d1dd40f06a84582ae59958c5",
+      "display_artifact_ref": "artifact_b90beabde91987f3ad84e48697dc51b63e3172f57a66958925a84a0b3feede4b",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC4664914.1/srep17524-f6.jpg?md5=b55171ad00bc6fa530766e73ffc0b4f0",
+      "scope": "Evaluator visual review of the original image autonomously acquired at decision 341 and viewed at 342, after the child recorded the Figure 6B CFU-per-volume endpoint at 343. Independently verified original and display SHA-256 hashes. The new check concerns panel-specific endpoint and display scales; no numerical digitization, variance calculation or prediction was performed, and this review is not supplied to the episode."
+    }
+  },
+  "bw25113_reference_review": {
+    "reviewed_at": "2026-11-05",
+    "run": "runs/a106_sequence_case01_20261105_02",
+    "checkpoint": "bw25113-reference-sequence-checkpoint.json",
+    "accession": "AIN32220.1",
+    "source_ref": "source_84043026c68531ffd404031f",
+    "original_sha256": "e6c2f6506b95d5befe505c18d58be59645c3b8b97bc8f80a2285aa385f78f4ef",
+    "sequence_sha256": "657fea063a3df97645b931ce6b24f5c523c846bb2c4bdd2dfa74c1a6e28975cd",
+    "observation_ref": "observation_500ce9cf5fcf70d1560ad6ff",
+    "assessment_ref": "assessment_7999d82a6c1fc9323ed8d58e",
+    "scope": "Evaluator-only verification of an autonomously discovered exact reference match; laboratory construct identity, numerical assessment use and parent delivery remain unverified."
+  },
+  "purified_kinase_post_discovery_review": {
+    "basis": "Evaluator-only review of decision 650 in runs/a106_sequence_case01_20261105_02. purified-kinase-scope-finding-checkpoint.json verifies five records, four exact anchors and child-only receipts. These checks are not episode inputs.",
+    "source": {
+      "pmid": "18276156",
+      "doi": "10.1016/j.pep.2008.01.005",
+      "source_ref": "source_0a1b09f73c57595cf1a89d06",
+      "original_sha256": "688e83f0fa86dcb5a91dd056ba096f1eed237b4f10db5d549ceaa90a44ce9b60",
+      "representation": "Europe PMC search result containing the article abstract, not acquired full text",
+      "activity_anchor_bytes": [2435, 2571]
+    },
+    "checks": [
+      "The abstract reports autokinase and casein-kinase activities of purified YeaG, optimal with 10mM Mn(2+). Retain this reported biochemical evidence separately from the alignment-based design claim about K116A/R232A/K426A. The quoted activity statement does not test those variants or establish their residual catalytic activity.",
+      "The surrounding abstract describes pET-21a-yeaG expression in BL21(DE3) and purification with 0.1% Triton X-100. These conditions do not describe the pBAD18 recovery-growth experiment. Neither the descriptive protein reference nor the inferred 644-residue target footprint establishes exact construct sequence correspondence. The abstract supplies no kinetic values, activity uncertainty or numerical growth prediction for scoring.",
+      "Decision 650 retains the biochemical report as scope_limited/does_not_discriminate with different_source_subject for the recovery-growth hypothesis. The observation has no numerical measurements. This verifies a qualified ordinary finding, not a numerical worksheet revision or parent delivery. The checkpoint contained zero report attempts."
+    ]
+  },
+  "tnseq_dataset_post_discovery_review": {
+    "basis": "Evaluator-only review of the Entrez search and summary independently acquired at decisions 665/667 in runs/a106_sequence_case01_20261105_02. Both original hashes and Source records were verified. tnseq-dataset-discovery-checkpoint.json retains the two actions, Sources, child-only receipts and original response bodies, with zero report attempts. These checks are not episode inputs.",
+    "source": {
+      "accession": "GSE210382",
+      "entrez_uid": "200210382",
+      "title": "BosR: a novel biofilm-specific regulator in Pseudomonas aeruginosa",
+      "taxon": "Pseudomonas aeruginosa PA14",
+      "pmid": "36312952",
+      "bioproject": "PRJNA865538",
+      "source_ref": "source_62a34465e17899ff8329fcbe",
+      "original_sha256": "4d89b2b30274278b9eeac68d670b17ded9187a692e3dab28d0f6c38f4a624f32",
+      "representation": "Entrez GDS summary; the initial metadata review did not inspect sequencing files, processed tables or the full paper"
+    },
+    "paper_methods_review": {
+      "basis": "Evaluator-only review after the episode independently acquired the full text at decision 670. Both original and ordered-text hashes were verified; original XML paragraph boundaries identify the passages below. These checks do not establish that the episode has incorporated the methods into an assessment, analyzed data or delivered a result.",
+      "pmcid": "PMC9611778",
+      "doi": "10.3389/fmicb.2022.1021021",
+      "source_ref": "source_62f04c5a2a394073d4a67246",
+      "original_sha256": "d680952f9242ea0caf1a84b02245b85eafca05790609e8ebf0e9c1f16c6d3651",
+      "text_sha256": "ddf5946b9f7e2dd80b7896a40ddab36d74ad9e711fb163905e36c5881e3b0b01",
+      "reviewed_original_byte_ranges": {
+        "transposon_construction": [18370, 19564],
+        "tnseq_replication": [19633, 20176],
+        "sequencing_protocol": [22511, 23080],
+        "native_analysis_methods": [23188, 27631],
+        "competitive_index_definition": [32016, 32854],
+        "crystal_violet_normalization": [32939, 34256],
+        "biofilm_and_planktonic_design": [45761, 46967],
+        "table_fold_change_display": [67775, 68468],
+        "validation_controls": [79943, 81463],
+        "figure_3_statistics": [81541, 82903],
+        "validation_and_bosr_complementation": [83514, 85498],
+        "motility_and_planktonic_controls": [85498, 86158]
+      },
+      "checks": [
+        "The methods explicitly describe three biological replicates, each including four technical replicates, for the TnSeq screen. Retain that hierarchy rather than counting twelve biological samples. File-to-sample assignment, technical pooling and any pairing still need their own evidence. The biofilm-versus-planktonic comparison controls for growth in SCFM without ammonium chloride; T0 essentiality in LB addresses a different comparison.",
+        "The screen mutagenized P. aeruginosa PA14 with Himar1 C9 Mariner. E. coli SM10 lambda-pir is the conjugation donor, not the organism whose biofilm phenotype is measured. The paper names NC_008463, Pseudomonas Genome Database v17.1 and PseudoCAP version 138 for mapping; preserve the actual reference sequence/version when selecting analysis inputs.",
+        "The study used Bio-TraDIS v1.4.5 and TRANSIT v2.0.0 on the same sequencing experiment, including essentiality and resampling comparisons. Their agreement is not an independent experimental replication. Keep the exclusion of genes with no TA sites or only a stop-codon TA site distinct from observed essentiality. An essentiality probability estimated from these counts is not an independent prediction of those same observed counts.",
+        "The table footnote describes decreases using negative reciprocals and contains the phrase fold changes below 0. Preserve that wording and inspect the native table before interpreting its scale; a displayed negative reciprocal is not automatically a raw ratio, log2 fold change or endpoint difference. The native resampling reader must consume the actual selected output and column meaning.",
+        "YeaG validation uses a transposon mutant. The clean deletions and pBBR1MCS-5 complementation described in the reviewed paragraph concern BosR or PA14_56430, with complementation specifically for BosR. Do not supply a restored YeaG arm or a YeaG-specific polar-effect control from those experiments.",
+        "The validation paragraph identifies a nusG stop-codon transposon insertion as a WT-like insertion control and a flgM transposon mutant as a biofilm-deficient control. Preserve both alongside the actual WT comparator; nusG is not an untouched WT or a YeaG restoration arm. Its reported nonsignificant difference from WT does not establish exact equality, zero effect, zero variance or exclusion of YeaG-specific polar effects. This paragraph was independently reviewed at original bytes 79943-81463 after the episode read part of it at decision 686.",
+        "The next paragraph (original bytes 85498-86158, reviewed after decisions 738/739) concerns transposon mutants of the five primary hits, including the reported YeaG hit. It reports no significant swimming or swarming differences and separately says planktonic growth was not affected, referring to Supplementary Figures 5A/B, 5C and 6. Preserve these controls for the tested mutants without restricting them to the preceding BosR/PA14_56430 clean deletions or interpreting them as restoration. The passage supplies no effect size, variance, equivalence margin or quantitative bound excluding these mechanisms. It does not establish correspondence to the supplied sequence, eliminate every alternative cause of the biofilm phenotype, or show that the episode incorporated these controls into an assessment.",
+        "Figure 3A reports medians of WT-normalized crystal-violet biomass at 24 hours; Figure 3B reports geometric means of competitive indices in 96-hour biofilm. The competition index is the output mutant/WT ratio divided by its measured inoculum ratio. Preserve those statistics, denominators, times and actual uncertainty; the prose ranges of 60-75 percent or five-to-ten-fold are not exact YeaG means or variances. Averaging technical crystal-violet readings does not change the figure's reported biological summary into an arithmetic mean.",
+        "The methods describe 100-base single-end transposon-junction libraries spiked into RNASeq libraries for sequencing. That sequencing arrangement does not make this intervention dataset an RNASeq expression experiment. Its analysis route must follow the actual TnSeq library and study design."
+      ]
+    },
+    "article_representation_review": {
+      "basis": "Decision 705 acquired the archived article XML after the Europe PMC full-text acquisition at 670. Independently verified both SHA-256 hashes, the archive's advertised MD5, article identifiers, five exact original-byte passages and the new Source/material's child-only receipts. These checks remain outside episode inputs.",
+      "pmcid": "PMC9611778",
+      "pmid": "36312952",
+      "doi": "10.3389/fmicb.2022.1021021",
+      "earlier_source_ref": "source_62f04c5a2a394073d4a67246",
+      "earlier_sha256": "d680952f9242ea0caf1a84b02245b85eafca05790609e8ebf0e9c1f16c6d3651",
+      "archive_source_ref": "source_aa72c0474741691ca81b166f",
+      "archive_material_ref": "material_ce6eb3158f1185de1393f802",
+      "archive_sha256": "3fd7928452e1da1e32ca3415cd59d39bdc8af6d626987a8e601817f2ee7f0419",
+      "archive_md5": "68256aeb02daf53a57c7b8b912481d6e",
+      "archive_version_identifier": "PMC9611778.1",
+      "exact_original_passages": [
+        {"meaning": "tnseq_replication", "earlier_range": [19633, 20176], "archive_range": [27241, 27784]},
+        {"meaning": "sequencing_protocol", "earlier_range": [22511, 23080], "archive_range": [30104, 30673]},
+        {"meaning": "competitive_index_definition", "earlier_range": [32016, 32854], "archive_range": [39709, 40547]},
+        {"meaning": "crystal_violet_normalization", "earlier_range": [32939, 34256], "archive_range": [40617, 41934]},
+        {"meaning": "biofilm_and_planktonic_design", "earlier_range": [45761, 46967], "archive_range": [53728, 54934]}
+      ],
+      "checks": [
+        "Both XML files identify the same paper by PMCID, PMID and DOI. Preserve the underlying experiment and measurement identities when reading them; a second source record or different artifact hash does not establish another biological experiment. Conversely, the paper contains distinct experiments, which must not all be collapsed merely because their article identifier is shared.",
+        "Original byte offsets belong to their specific source representation. Five reviewed passages occur verbatim at the listed different offsets; other earlier passages were not found as exact byte strings. Do not reuse old offsets on the new artifact, assume complete text equivalence, or infer a scientific contradiction from a markup/byte mismatch alone.",
+        "This verifies acquisition and a concrete repeated-source condition for evaluation. It does not show that the episode has linked equivalent claims, deduplicated numerical selections or delivered a result to its parent."
+      ]
+    },
+    "word_supplement_acquisition_review": {
+      "basis": "Decision 706 acquired Data_Sheet_1.doc. Independently verified SHA-256 and the advertised MD5, inspected the file-format metadata, and checked the Source/material records and child-only receipts. Inspected the current and frozen document-tool routes; no document conversion or content extraction was run during this review.",
+      "source_ref": "source_a578696b24edc695f0f658b1",
+      "material_ref": "material_aa16f4401210330da801b539",
+      "asset_ref": "pmc_asset_09f7386e8d5eba690b0bf4aa",
+      "sha256": "765c4f87ca636dd5a01f593001c14b12b7a33e81ddc9e9bcad8f9244f4f429f2",
+      "md5": "2116705800d1d8c2a03ce7501ddc6595",
+      "observed_format": "Legacy Word binary compound document, not a DOCX ZIP package, PDF or plain UTF-8 text",
+      "read_attempt": {"decision_index": 707, "tool": "source.read", "requested_representation": "text", "offset": 0, "limit": 12000, "status": "invalid", "feedback_code": "source_not_utf8_text", "result": null, "record_refs": []},
+      "checks": [
+        "The acquisition retains an opaque material and original binary Source with text_ref null. Successful download and matching checksums do not establish that its tables, figures, constructs or sample definitions were read. File-header metadata is not a verified interpretation of document contents.",
+        "The inspected document routes provide ZIP/TAR, PDF and XLSX operations, without a legacy Word conversion operation. Decision 707 actually requested text at offset zero and received source_not_utf8_text with no result or new records. Source inspection confirms that absent text_ref selects the original bytes; the frozen feedback itself does not name that selected representation. Preserve this reader limitation without treating unavailable content as absent scientific evidence. A supported alternative representation would need its own acquisition and provenance.",
+        "Do not treat arbitrary readable byte fragments as a complete reconstructed Word table or reuse another representation's offsets on this file. Original bytes and any future derivative must remain distinct. This inspection establishes no episode interpretation, numerical operand, analysis execution or parent delivery."
+      ]
+    },
+    "table4_acquisition_review": {
+      "basis": "Decision 699 acquired the catalogued Table_4.xlsx asset. Independently verified SHA-256 and the advertised MD5, inspected only the ZIP directory and workbook/relationship XML, and verified the Source/material records and two child-only own_action receipts. No worksheet cells or analysis execution were evaluated by this inspection.",
+      "asset_ref": "pmc_asset_a6e0c9f2653d8f2c7b8c53fb",
+      "source_ref": "source_7380a062e0ea2a673cad58ee",
+      "material_ref": "material_e13ef0070c2881aec05948a9",
+      "sha256": "5abdb9f34ee815cb1bc26f5c2a8dff34206ec025b17c5d73b54e25e555d98be8",
+      "md5": "b6764cbdf88aa244fc6168199d3dccec",
+      "article_link_original_byte_range": [108766, 109173],
+      "worksheets": [
+        {"name": "A_Essential_genes_cp_publ_stud", "sheet_id": "4", "relationship_id": "rId1", "part": "xl/worksheets/sheet1.xml"},
+        {"name": "B_Bio-TraDIS_analysis", "sheet_id": "2", "relationship_id": "rId2", "part": "xl/worksheets/sheet2.xml"},
+        {"name": "C_TRANSIT_analysis", "sheet_id": "3", "relationship_id": "rId3", "part": "xl/worksheets/sheet3.xml"},
+        {"name": "D_Genes_excluded_from_analysis", "sheet_id": "1", "relationship_id": "rId4", "part": "xl/worksheets/sheet4.xml"}
+      ],
+      "checks": [
+        "Resolve worksheet parts through workbook relationships, preserving the printed names. The sheetId is not the worksheet part number: sheetId 4 here maps to sheet1.xml, and sheetId 1 maps to sheet4.xml.",
+        "The article links Table 4 to initial-pool essentiality in LB, the two analysis methods, their compiled list and exclusions. Keep this distinct from the biofilm-versus-planktonic comparison. Selected row/column meanings, replicate assignments and the actual YeaG locus still require cell-level evidence; four worksheets do not establish four independent experiments.",
+        "Downloading the authors' analysis workbook is acquisition of reported results. It does not establish a newly executed TRANSIT analysis, a native analysis-return receipt, populated A106 numerical operands or parent delivery. Preserve the original experiment and measurement identities if these results are later read or reanalyzed."
+      ]
+    },
+    "table4_label_lookup_review": {
+      "basis": "Decisions 700-702 listed the workbook sheets and searched the Bio-TraDIS and TRANSIT sheets for yeaG. Verified the three reader artifact hashes, parent-Source links and child-only own_action receipts. Separately inspected original shared strings, Bio-TraDIS header rows 1-3 and row 4078 without executing an analysis. This row inspection belongs to the evaluator, not the episode input or a saved episode finding.",
+      "sheet_listing_source_ref": "source_d857528a45bb0c6f80de9ed2",
+      "sheet_listing_sha256": "97f212f86276aa5e0ad82d0c37b6d68b600f0196c0e5ff3d6db05c190d791fa3",
+      "lookups": [
+        {"decision_index": 701, "sheet_key": "rId2", "source_ref": "source_670d84d10c5923984a134b78", "sha256": "85f5997d72b8dcae1f7b14b44a7e20e727deae97e941dbb3e70187f34f313fd4", "query": "yeaG", "total_matches": 0, "complete": true},
+        {"decision_index": 702, "sheet_key": "rId3", "source_ref": "source_4d5eb2fe44301f8d006d031e", "sha256": "e6201e238874fd0c5ed681c8921483605b461b72b14be90ad6828793a7c68d68", "query": "yeaG", "total_matches": 0, "complete": true}
+      ],
+      "independently_reviewed_candidate_row": {
+        "sheet_key": "rId2",
+        "part": "xl/worksheets/sheet2.xml",
+        "row": 4078,
+        "cells": {"A4078": "PA14_50790", "B4078": "PA1050", "C4078": null, "D4078": "1", "E4078": "25", "F4078": "27", "G4078": "nonessential", "H4078": "hypothetical protein"},
+        "column_meanings": {"A": "PA14 locus tag", "B": "PAO1 locus tag", "C": "Name", "D": "Read count BR1", "E": "Read count BR2", "F": "Read count BR3", "G": "Final call", "H": "Product description PA14"}
+      },
+      "checks": [
+        "The two complete zero-match results are literal gene-name lookups, not evidence that the experiment lacks the gene or that the gene has no effect. The original shared-string table contains no yeaG label, while the Bio-TraDIS sheet includes candidate PA14_50790 with a blank Name cell. Do not invent a reader error or establish correspondence to the tested kinase from this candidate row.",
+        "The Bio-TraDIS title identifies T0 essentiality before selection. Its grouped headers identify the three values as read counts BR1/BR2/BR3 and the final call as nonessential. They are not biofilm-versus-planktonic effects, variance, zero contribution or independent hypothesis predictions. Preserve original cell coordinates, blank cells and grouping when interpreting them.",
+        "The workbook title attributes displayed gene names and annotations to Pseudomonas Genome Database v20.2, with PAO1 orthologs from Ortholuge 2.1 and bracket/asterisk conventions. Preserve this annotation provenance separately from the paper's mapping-method versions; do not silently substitute a current gene name or assume a version difference proves an error."
+      ]
+    },
+    "statistic_finding_review": {
+      "basis": "Decision 690 retained the Figure 3B summary statistic. Verified five saved records, four exact anchors at original bytes 81200-83000, the original article hash and five child-only own_action receipts. No parent report existed at review. These are evaluator checks, not episode inputs.",
+      "term_ref": "term_21a19bd4db012551cb826863",
+      "assay_ref": "reference_50ff6602de12f520d3e0925f",
+      "context_ref": "context_44807c0aac31edca3ff7aec7",
+      "observation_ref": "observation_6e8ac0eeefbfe7a559b4dfe9",
+      "assessment_ref": "assessment_212d7770f610d07e0888daec",
+      "qualification": "The saved assay claim uses the source-local term geometric means of competitive indices under the 96 h biofilm context. It remains incomparable/does_not_discriminate with different_source_subject and has no numerical measurements. The context name preserves the reported duration but its attributes are empty; it is not a typed numeric time operand. This correct retention of a reported statistic does not supply an arithmetic mean, uncertainty, an independently replicated experiment, an analysis result or a parent receipt."
+    },
+    "control_finding_review": {
+      "basis": "Decision 737 retained the nusG stop-codon insertion control and its reported nonsignificant phenotype difference. tnseq-control-finding-checkpoint.json verifies four records, three exact original anchors, the article hash and four child-only own_action receipts. These checks are outside episode inputs.",
+      "reference_ref": "reference_637c40cdd5f7c3905aea92f8",
+      "reference_anchor_bytes": [80749, 80832],
+      "term_ref": "term_34a359f84b8f13c37b4e3598",
+      "observation_ref": "observation_29811a1874babd52743edb71",
+      "phenotype_anchor_bytes": [81014, 81109],
+      "assessment_ref": "assessment_9f40c1657d02b0afc682eb60",
+      "qualification": "The finding preserves nonsignificance with no numerical measurements and remains incomparable/does_not_discriminate with different_source_subject for the supplied sequence's biofilm hypothesis. The original context calls nusG a WT-like control; it is distinct from actual WT, YeaG intervention and restoration. This does not establish exact equality, a zero effect/variance, equivalence, or a bound on YeaG-specific confounding. Progress credit 86 and child-only receipts do not establish numerical-assessment use or parent delivery. The finding does not itself cover the separate flgM control."
+    },
+    "deletion_validation_finding_review": {
+      "basis": "Decision 734 retained the construction of BosR and PA14_56430 deletion mutants. tnseq-deletion-validation-scope-finding-checkpoint.json verifies three saved records, two exact anchors, the original article hash and three child-only own_action receipts, with zero report attempts. These checks remain outside episode inputs.",
+      "source_ref": "source_62f04c5a2a394073d4a67246",
+      "original_anchor_bytes": [84874, 84966],
+      "reference_ref": "reference_107596d8951693d2fe80fe0e",
+      "observation_ref": "observation_e69c18dd1bb171915e3de168",
+      "assessment_ref": "assessment_56eaf3b8d08d1febd04f18f5",
+      "hypothesis_ref": "hypothesis_62792b270d95254a40db926e",
+      "condition_observation_ref": "observation_2e342c7db84450672c129852",
+      "checks": [
+        "The exact quote states that BosR and PA14_56430 deletion mutants were constructed. It does not itself quote their later phenotype or complementation results. Preserve the collective descriptive reference and its absent sequence; the inferred target footprint is not experimental-subject correspondence.",
+        "The finding is incomparable/does_not_discriminate with different_source_subject for the supplied sequence's biofilm hypothesis and links the earlier transposon-library observation. Do not transfer these deletions or BosR-specific complementation to YeaG as a restoration arm or a YeaG-specific polar-effect control. The limited quote is not a claim about absence of YeaG deletion evidence in all sources.",
+        "The observation has no numerical measurements. Progress credit 85 is not an evidence ratio, and the child-only receipts do not establish grading-sheet incorporation or parent delivery. This separate successful finding does not repair or replace the rejected candidate-length commits at decisions 724/726."
+      ]
+    },
+    "insertion_finding_review": {
+      "basis": "Decision 687 retained an observation anchored to original bytes 80000-81200. tnseq-insertion-finding-checkpoint.json verifies two saved records, the exact original quotation and two child-only receipts, with zero report attempts at capture.",
+      "observation_ref": "observation_63d21f4a3fb9bf70755cfff9",
+      "assessment_ref": "assessment_d517eb4b9cb7d1c0527095aa",
+      "correction": {
+        "decision_index": 688,
+        "assessment_ref": "assessment_9ffc8f1e33511d69ec380fab",
+        "observation_ref": "observation_2e342c7db84450672c129852",
+        "source_subject_ref": "reference_46d8e787bfc82f2b6539b9b2",
+        "basis": "The next action explicitly replaces the 687 assessment. tnseq-insertion-finding-correction-checkpoint.json verifies four new records, three exact anchors and four child-only receipts. The source subject is now the mutants from ordered transposon libraries; the value is a source-local transposon term. Progress credit remains 83 and zero report attempts existed. The frozen episode made this correction without the pending prompt clarification."
+      },
+      "checks": [
+        "The assessment is incomparable/does_not_discriminate with confounding_unresolved, and the observation contains no numerical measurements. Retaining the control passage does not establish that its controls were incorporated correctly into a numerical assessment or delivered to the parent.",
+        "The source_claim at 687 assigns feature_structure=mobile_element to the descriptive yeaG reference. Its quotation describes transposon-mutant validation and an insertion control; it does not classify the native yeaG gene as a mobile element. Record this historical subject/predicate mismatch despite the exact quotation and progress credit, while respecting the subsequent explicit replacement at 688. An experiment's introduced material and the native gene's biological classification are different claims.",
+        "The stored quotation includes the nusG control description but ends before the sentence identifies flgM as the biofilm-deficient control. Evaluate the actual retained claim and its support; do not count these actions as a complete interpretation of both controls or as a resolution of the PA14 sequence candidate.",
+        "The assessment at 688 explicitly replaces the one at 687 and attaches the transposon term to a sample reference for the library mutants. Preserve that correction without counting it as an independent experiment or new measurement. Both assessments have revision 1 under their own identities; the correction is established by replaces_refs, not by assuming a same-key revision. The finding remains incomparable/does_not_discriminate with confounding_unresolved and no numerical measurements. Verify the actual parent receipt separately."
+      ]
+    },
+    "sequence_candidate_review": {
+      "basis": "Evaluator-only review of ABJ10214.1 independently acquired at decision 681. The original GenPept and sequence artifact hashes were verified, and extracting the uppercase ORIGIN sequence reproduced the sequence hash. These checks are not episode inputs.",
+      "accession": "ABJ10214.1",
+      "source_ref": "source_e66d7826f1027b62aaddb314",
+      "reference_ref": "reference_b898daf545ed9fc1be4412ef",
+      "original_sha256": "0f1c2ad11419979cf32a5630e547857086e39f7eae3c5315230b524244447329",
+      "sequence_sha256": "7a89a7ae347a34f3968a56a6e2005a68018692e0318c383f24fe30695281004a",
+      "reported_gene": "yeaG",
+      "locus_tag": "PA14_50790",
+      "coded_by": "complement(CP000438.1:4511775..4512887)",
+      "length_aa": 370,
+      "checks": [
+        "The fetched PA14 record labels its gene yeaG but annotates Diacid_rec and CdaR regions, including Sugar diacid utilization regulator CdaR. The paper calls its tested YeaG a serine/threonine protein kinase. Resolve the actual locus/construct used by the study before treating this search hit as the experimental subject; gene-name agreement alone does not resolve the discrepancy.",
+        "This 370-residue reference cannot be identical over its complete length to the 644-residue anonymous input. Length and annotation differences alone do not establish absence of homology, and a reference-sequence acquisition is not a demonstrated sequence alignment, construct correspondence or transfer of the biofilm phenotype."
+      ]
+    },
+    "kinase_refseq_candidate_review": {
+      "basis": "Decision 716 acquired WP_420472570.1 through Entrez, and 718 scanned it against the anonymous input. Independently verified the original hash, extracted and hashed the uppercase ORIGIN sequence, checked its 644-residue length against the retained input and launch hash, and verified the Source's child-only receipt. All 65 mapped source spans and the three reported differing positions were checked against retained bytes. No alignment, biological calculation or new workflow was run. These checks remain outside episode inputs.",
+      "accession": "WP_420472570.1",
+      "source_ref": "source_5e2a343edd640de55c8af67c",
+      "original_sha256": "26b2b40b8ba66d6d6a872241c7116f2daa123bbb256306b7c503be634ee54787",
+      "sequence_sha256": "6f23ca94e47a805911d97d0f8997bfdf45a49d9035ff93c56ac7c7c259bb7c0e",
+      "input_sequence_sha256": "657fea063a3df97645b931ce6b24f5c523c846bb2c4bdd2dfa74c1a6e28975cd",
+      "length_aa": 644,
+      "reported_organism": "Pseudomonas aeruginosa",
+      "name_assignment_evidence": {"category": "BlastRule", "accession": "NBR010993"},
+      "reference_pmids": ["26621053", "18276156"],
+      "literal_scan_review": {
+        "decision_index": 718,
+        "subject_ref": "input_61d1f7dc6d1abd00e909a27e",
+        "comparison_basis": "literal_positions_without_alignment",
+        "source_original_range": [2167, 2975],
+        "verified_mapped_spans": 65,
+        "mapped_residues": 644,
+        "positions_are_zero_based": true,
+        "reported_differences": [
+          {"position": 290, "query": "S", "source": "A"},
+          {"position": 324, "query": "Y", "source": "S"},
+          {"position": 415, "query": "M", "source": "R"}
+        ],
+        "new_record_refs": []
+      },
+      "checks": [
+        "The extracted sequence and anonymous input have equal lengths but different hashes. Equal length and the YeaG annotation do not establish exact sequence identity. This byte comparison does not establish absence of homology, an alignment, functional contradiction or experimental transfer.",
+        "The record describes a nonredundant RefSeq protein, labels its organism P. aeruginosa, and supplies no PA14 strain, locus_tag or coded_by qualifier. Keep it distinct from the earlier 370-residue PA14_50790 candidate. Neither accession alone establishes which gene or construct the biofilm study tested.",
+        "The name assignment cites BlastRule NBR010993, and the PrkA-family region is marked provisional. The two cited publications concern E. coli YeaG; citations and annotation are not direct assay measurements on this Pseudomonas sequence or a link to the PA14 biofilm experiment. The Entrez acquisition created a Source, not a demonstrated assessment, numerical operand or parent receipt."
+      ]
+    },
+    "retained_finding_review": {
+      "basis": "Decision 674 retained the PA14 biofilm competition finding. tnseq-biofilm-scope-finding-checkpoint.json verifies six records, four exact original anchors and child-only receipts, with zero report attempts.",
+      "hypothesis_ref": "hypothesis_62792b270d95254a40db926e",
+      "observation_ref": "observation_b929d2c8df68f8db791b32d6",
+      "assessment_ref": "assessment_3667cfae455d9597a3985827",
+      "qualification": "The saved assessment is incomparable/does_not_discriminate with different_source_subject. The observation has no numerical measurements; the prose's group-level five-to-ten-fold range is not converted to an exact YeaG effect. The descriptive PA14 and yeaG references have no sequences, and the inferred input footprint does not establish sequence correspondence. This is an ordinary finding, not a numerical grading sheet, executed analysis or parent return."
+    },
+    "checks": [
+      "The summary identifies P. aeruginosa PA14 and mentions yeaG among genes with confirmed biofilm phenotypes. The shared gene name does not establish correspondence to the anonymous input's E. coli reference matches, the PA14 experimental construct or transfer between species and conditions. Establish the actual sequence and experimental subject before interpreting that relationship.",
+      "Nine sample titles identify T0, planktonic and biofilm groups with r1/r2/r3 labels. Preserve each GSM-to-condition assignment and determine the comparison from the study design. Labels alone do not establish biological independence, pairing, pooling, the intervention feature or numerical uncertainty.",
+      "The metadata advertises CSV/WIG supplements and describes a transposon screen. A successful metadata acquisition does not demonstrate acquisition of those files, execution of TRANSIT or an A106 numerical result. Keep reported screen findings distinct from any newly executed analysis and its actual parameters, measurements and quality results.",
+      "GSE210382, its linked PMID 36312952 and BioProject PRJNA865538 are leads for tracing the study's original experiments. Their different identifiers and any reanalysis do not by themselves establish independent experimental evidence; preserve sample and measurement identities when combining them."
+    ]
+  },
+  "protein_control_post_discovery_review": {
+    "basis": "Evaluator-only review after decisions 627/630 in runs/a106_sequence_case01_20261105_02. The protein-control-scope-findings-checkpoint.json verifies nine records, seven exact anchors and child-only receipts. These checks are not episode inputs.",
+    "source": {
+      "pmcid": "PMC4664914",
+      "original_sha256": "71d33026f2a245e7c302e7449f9f28c1711f812cddbdc8c9b9fc74657064a9c4",
+      "methods_read_bytes": [61700, 62899],
+      "figure_5e_read_bytes": [39750, 40250]
+    },
+    "checks": [
+      "The immunoblot methods identify mouse monoclonal anti-polyHistidine-Peroxidase A7058 at 1:5000. Retain the reported reagent and protocol; their identity alone supplies neither matched YeaG abundance nor catalytic activity. Decision 627 retains this method with measurement_does_not_establish_claim for the recovery-growth hypothesis.",
+      "The variant-design paragraph says the authors selected mutations using sequence alignments to characterized AAA+ and STK domains, then calls K116A, R232A and K426A catalytically deleterious (original bytes 22582-22810; surrounding paragraph reviewed at 22200-22811). This passage alone is not a direct activity measurement on those constructs and supplies no numerical prediction of the growth effect. Decision 637 retained that distinction with prediction_not_measurement; variant-design-prediction-finding-checkpoint.json verifies six records and five exact anchors. Keep any separate biochemical activity evidence on its own experimental basis, and do not turn this qualitative design claim into a fixed numerical expectation or infer a numerical worksheet revision or parent delivery from the ordinary finding.",
+      "Figure 5E reports RpoS in whole-cell extracts sampled after 20 minutes and 24 hours of nitrogen starvation, probed with anti-RpoS and anti-DnaK. Its densitometry quantity is the RpoS-to-DnaK optical-density ratio. Keep this downstream response and its loading control separate from the anti-His YeaG-variant abundance comparison; a DnaK control in Figure 5E does not establish its use in Figure 3 or matched active YeaG abundance.",
+      "The Figure 5E caption gives n=3 in the densitometry sentence and n=4 in the immediately following SD-error-bar sentence, before panel F begins. Both counts occur in the original XML and in the retained quotation. Preserve the discrepancy without silently selecting either count for an SD-to-SEM conversion or borrowing a count from neighboring qRT-PCR panels. The repetition unit, normalization covariance and variance of a between-strain contrast need their own support.",
+      "Decision 630 retains the RpoS/DnaK control as scope_limited/does_not_discriminate with different_source_subject for the recovery-growth hypothesis. This establishes a saved control-scope finding, not explicit resolution of the conflicting repetition counts, a numerical worksheet revision, an independent experiment or parent delivery. The checkpoint contained zero report attempts."
+    ]
+  },
+  "competition_post_discovery_review": {
+    "basis": "Retrospective review after the parent commissioned child_14 for Figure 6C. Checked retained article text artifact_498ea416ec9f259bd9092b0c8d8499d7b465c51a36e137cfb4e7bba8d3e0e924; the caption's reported-index sentence starts at byte 28321 and the methods' index-definition sentence starts at byte 43528. These checks are evaluator-only and are not supplied to the live episode.",
+    "source": {
+      "url": "https://www.nature.com/articles/srep17524",
+      "pmcid": "PMC4664914",
+      "doi": "10.1038/srep17524",
+      "sections": ["Figure 6C caption", "Methods: mouse infection studies"]
+    },
+    "checks": [
+      "This experiment tests a Salmonella Typhimurium delta-yeaGH double mutant. Its joint-deletion phenotype does not isolate YeaG from YeaH or directly test the supplied E. coli protein sequence.",
+      "Retain the explicit conflict in ratio direction: the caption defines output wild-type/mutant divided by input wild-type/mutant; the methods define output mutant/wild-type divided by input mutant/wild-type. The reported CI 0.64 and attenuation conclusion are consistent with the methods' direction. Do not silently rewrite the caption, invert the reported value or present the direction as unambiguous without resolving the discrepancy.",
+      "The caption identifies five mice and individual-mouse plotted values; the methods describe both strains within each mouse and input normalization. The mouse is the reported unit for the plotted index. Colony counts, dilution plates and the two strains within a mouse are not additional independent mice.",
+      "Preserve the reported CI 0.64 and p=0.037 as different quantities. Neither a p value nor the number of mice alone supplies the variance of the estimated index. Check the actual per-mouse values and statistical method before deriving uncertainty; a mean of individual ratios is not generally the ratio of pooled counts.",
+      "Figure 6C visibly plots five individual mouse indices on a logarithmic CI axis with ticks at 0.1, 1 and 10, together with horizontal summary marks. Do not describe the figure as lacking plotted spread, identify the marks as SD/SEM without a documented definition, or transfer the SD/SEM definitions from panels A/B. Any recovery of numerical points must retain the logarithmic calibration and digitization uncertainty; the image does not supply the original input/output CFU counts or settle the conflicting ratio definitions.",
+      "Keep this original experiment and its biological scope separate from the E. coli starvation-survival and recovery-lag experiments. Preserve any unknown subject correspondence, contribution of the second deleted gene, observation-model support and competing numerical predictions when returning its final assessment."
+    ],
+    "figure_review": {
+      "reviewed_at": "2026-11-05",
+      "source_ref": "source_745613bb37a82441de7090fe",
+      "artifact_ref": "artifact_accdff3253574a543f87ede2b5e2888824e7ebf6e8d00700cbe7b667e4801675",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC4664914.1/srep17524-f6.jpg?md5=b55171ad00bc6fa530766e73ffc0b4f0",
+      "scope": "Visual inspection of the original Figure 6 image obtained by child_14 at decision 39 and viewed at decision 40. No numerical digitization or variance calculation was performed. This review is evaluation-only."
+    }
+  },
+  "recovery_post_discovery_review": {
+    "basis": "Evaluator-only review of decisions 68-73 in runs/a106_sequence_case01_20261105_02. The child selected the retained article's 32-minute recovery-lag reduction and saved measured_effect=32 min. These checks are not supplied to the episode.",
+    "source": {
+      "pmcid": "PMC4664914",
+      "doi": "10.1038/srep17524",
+      "artifact_ref": "artifact_498ea416ec9f259bd9092b0c8d8499d7b465c51a36e137cfb4e7bba8d3e0e924",
+      "selected_passage_bytes": [7807, 8029]
+    },
+    "checks": [
+      "The reported deletion strain has a 32-minute shorter recovery lag: a positive reduction is wild-type lag minus mutant lag. Preserve the comparison direction when using the number as an endpoint difference.",
+      "The 13-percent reduction in the same sentence describes the same contrast. It is not another independent observation, a variance, or a fixed hypothesis prediction.",
+      "The nearby 2.3-hour increase compares wild-type recovery growth with wild-type pre-starvation growth. It is not the deletion-versus-wild-type contrast and must not replace or be summed with the 32-minute effect.",
+      "Retain this recovery-growth experiment separately from sustained-starvation CFU survival and glucose-to-malate lag. Do not borrow their restoration arms or uncertainty without establishing that they apply to this comparison.",
+      "The recovery-growth methods state that similar numbers of viable cells were confirmed at the starting point (original article artifact_71d33026f2a245e7c302e7449f9f28c1711f812cddbdc8c9b9fc74657064a9c4, bytes 64228-64323; independently located and retained by the episode at decisions 316/317). Preserve this reported starting-inoculum control rather than treating viability comparability as wholly unexamined. The qualitative statement supplies neither exact arm-specific CFU counts nor their variance, and does not establish exact equality, equal viability later in starvation, a zero growth effect or a direct molecular mechanism.",
+      "The primary article separately reports growth-phenotype rescue with plasmid-borne wild-type yeaG in Figure 3A/B. An assessment limited to the 32-minute passage may leave restoration unestablished, but must not generalize that to no growth complementation anywhere in the paper. Check the actual growth conditions and comparison before incorporating that rescue; Figure 3's pointwise growth-curve SD (n=3) does not automatically give variance of the lag difference.",
+      "Decision 581 in runs/a106_sequence_case01_20261105_02 retains the growth-rescue statement at original article bytes 21814-22063 and links the earlier shorter-lag observation. Preserve the complemented strain, inducible plasmid and comparison direction: restoring wild-type behavior is not synonymous with making growth faster. This qualitative statement does not supply a numerical restored lag, exact equality to wild type, uncertainty or a fixed hypothesis prediction. Its use of the lag-phase term first extracted from the malate paper does not make the recovery and malate experiments one experiment. The recovery-plasmid-restoration-finding-checkpoint.json verifies the saved finding and its source anchors; numerical-assessment incorporation and actual parent receipt require separate inspection.",
+      "The original Figure 3C image labels the right-hand anti-His panel's wild-type, K426A, Y382Stop and empty-vector signals 1.0, 1.12, 0.96 and 0. The prose reports K426A at 100% instead. Retain the exact image labels, their lane identities and the prose/figure discrepancy when evaluating the previously saved prose-based ratio 1.0. These are representations of the protein-level control, not independent biological replicates, measured kinase activities, growth effects or fixed hypothesis predictions. A zero label for the vector lane does not establish a zero measurement variance.",
+      "Figure 5G's near-wild-type recovery curve comes from deleting dinJ, yafQ, mqsR and mqsA in addition to yeaG. Retain this multigene suppression separately from reintroducing yeaG. It does not restore YeaG itself, establish its direct molecular target, or supply a numerical restored-endpoint mean or lag variance merely by resembling the wild-type curve.",
+      "The retained supplement text identifies Table S1 columns for delta-yeaH and delta-yeaGH, while its prose also mentions delta-yeaG. Inspect the original PDF layout before assigning its values. Do not use another deletion's lag or uncertainty for the single delta-yeaG contrast merely because the main text cites Table S1.",
+      "A populated measured_effect cell is useful numerical evidence, but it is not a populated evidence-ratio score. Check uncertainty, competing predictions, finalization and actual parent receipt separately."
+    ],
+    "figure_review": {
+      "reviewed_at": "2026-11-05",
+      "source_ref": "source_5dad4bf5e328ece30dbf4269",
+      "artifact_ref": "artifact_f8ddc98960ea9b8fb51ee629b96090c9f60db567df649dcadebaa0c3f0715d5f",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC4664914.1/srep17524-f3.jpg?md5=d3908d9056725e1f253c99e7169a3584",
+      "scope": "Evaluator visual review of the original Figure 3 image autonomously acquired at decision 294 in runs/a106_sequence_case01_20261105_02. The image SHA-256 was independently verified. The prose's literal 100% begins at byte 23190 of original article artifact_71d33026f2a245e7c302e7449f9f28c1711f812cddbdc8c9b9fc74657064a9c4. This review reads printed labels; it does not quantify band intensities or digitize growth curves. The episode independently viewed the image at 295 and retained the 1.12 label at 296. These checks are not supplied to the episode."
+    }
+  },
+  "carbon_starvation_post_discovery_review": {
+    "basis": "Retrospective evaluator review of the article independently acquired at decision 423 in runs/a106_sequence_case01_20261105_02. Original XML and ordered-text hashes were verified. These checks are not supplied to the episode and do not establish that it has assessed or returned this study.",
+    "reference_sequence_review": {
+      "basis": "The episode independently fetched AKO57331.1 at decision 515 and scanned its GenPept sequence at 516. Evaluator review verified the source hash and reconstructed all 644 residues from the 65 retained source spans, matching both the scan and anonymous input. These checks are not supplied to the episode.",
+      "source_ref": "source_2538054506fa1f443a370365",
+      "artifact_ref": "artifact_01222c593cbb634e37f08c944f0f74565c87e4567f864b8384c15281febc8a00",
+      "accession_version": "AKO57331.1",
+      "record_strain": "NCM3722",
+      "locus_tag": "AA953_15590",
+      "coded_by": "CP011495.1:3120382..3122316",
+      "sequence_byte_range": [3349, 4157],
+      "sequence_length": 644,
+      "normalized_sequence_sha256": "657fea063a3df97645b931ce6b24f5c523c846bb2c4bdd2dfa74c1a6e28975cd",
+      "relationship": "full_string_equal",
+      "related_similarity_record": {
+        "accession_version": "WP_020233075.1",
+        "source_ref": "source_fc4fd213d22f629df824d665",
+        "artifact_ref": "artifact_71b0fb363993f3a59cfacdef8c5e361a35bf8b383911107baca6a73347902967",
+        "sequence_ref": "artifact_d49f57bea9eaec2239c6ee8fb9bb5727b00a1da11efa3cfe2ea58510321f84ec",
+        "sequence_length": 649,
+        "relationship": "no_exact_containment",
+        "basis": "Independently acquired at decision 523 and scanned at 525. Evaluator review verified the GenPept and normalized sequence hashes, both lengths and absence of exact equality or containment. AKO57331.1 cites this RefSeq record as similar sequence, not an identical sequence. No alignment or residue correspondence was calculated."
+      },
+      "scope": "Reference-sequence correspondence; this does not independently verify the study's laboratory construct, establish its functional claim or demonstrate incorporation into an assessment or parent return."
+    },
+    "source": {
+      "title": "Global proteolysis during starvation governs proteome remodeling and a survival–regrowth trade-off in bacteria",
+      "pmcid": "PMC13684143",
+      "doi": "10.1073/pnas.2611560123",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13684143/",
+      "source_ref": "source_e0f2c55650c5c3f21e50c5dd",
+      "artifact_ref": "artifact_368076ef0dc7e4fcd2cbbe078059f6ba1fd6200f593dc93cca3d3e77d7b56379",
+      "text_ref": "artifact_342901e72425571a6a405d4efef890fdcb833b00d7a67876d153880aa9caa29d",
+      "reviewed_text_byte_ranges": {
+        "proposed_gene_name": [33623, 33665],
+        "figure4D_reused_wild_type_data": [23429, 23478],
+        "figure5F_reused_viability_data": [36255, 36320],
+        "experimental_strain": [56257, 56356],
+        "proteomics_deposition_identifier": [60434, 60443]
+      }
+    },
+    "supplement_methods_review": {
+      "basis": "Evaluator review of page 2 text autonomously extracted at decision 460, after the PDF acquisition at 456. The page-text hash and the exact source.locate witness at 463 were checked against the retained bytes. No separate PDF conversion ran, and these checks are not episode inputs. This does not establish inspection of Table S3 or the remaining supplement pages.",
+      "pdf_source_ref": "source_1513a6cd4a335d491185fa97",
+      "pdf_artifact_ref": "artifact_5fdf7295c49ae211a8770929e9b545a7eb1adfc9b6f9b758143d9acb009b5064",
+      "page": 2,
+      "page_text_source_ref": "source_54ff93df4cdb4991ad8e05df",
+      "page_text_artifact_ref": "artifact_87f1f3cf206f44ab9ff5c59ee5b22d01491245249db816e22f76cd5850f2cbe5",
+      "reviewed_original_byte_ranges": {"single_deletion_construction": [214, 694]}
+    },
+    "flux_methods_review": {
+      "basis": "Evaluator review of page 7 text autonomously extracted at decision 465 and read at 466. The retained text hash was checked; the byte range below identifies the degradation-flux fitting and error-bar description. These checks are not supplied to the episode.",
+      "pdf_source_ref": "source_1513a6cd4a335d491185fa97",
+      "page": 7,
+      "page_text_source_ref": "source_8684fb51efdc1a2bd1ca8b52",
+      "page_text_artifact_ref": "artifact_0e80d7404395b485803751dc0109e22b21bd4583176f6ab63aa59a52b9ac56e2",
+      "reviewed_original_byte_ranges": {"degradation_flux_fit_and_uncertainty": [1323, 1826]}
+    },
+    "starvation_methods_review": {
+      "basis": "Evaluator review of page 3 text autonomously extracted at decision 491 and read at 492. The retained text hash and four source anchors in finding 494 were verified. The broader range below includes the definitions of runout OD, the two time origins and the wash procedures. These checks remain separate from episode inputs.",
+      "pdf_source_ref": "source_1513a6cd4a335d491185fa97",
+      "page": 3,
+      "page_text_source_ref": "source_c13fb625719d2ea6e7a70793",
+      "page_text_artifact_ref": "artifact_0da6ce3883ca66ffee49946f88d1aad1eaf25dc9f818b123810e0890ea038441",
+      "reviewed_original_byte_ranges": {"runout_and_wash_conditions": [767, 3736]}
+    },
+    "viability_analysis_review": {
+      "basis": "Evaluator review of supplement page 4 autonomously extracted at decision 495 and read at 496/497. The page-text hash was verified. Lag interpretation also uses the concluding paragraph of retained page 3; the relevant byte ranges below preserve the paragraph across the page boundary. These checks are not episode inputs and do not establish that these details have reached an assessment or parent return.",
+      "pdf_source_ref": "source_1513a6cd4a335d491185fa97",
+      "page": 4,
+      "page_text_source_ref": "source_8533c060894b6f20e77128a4",
+      "page_text_artifact_ref": "artifact_ccc9e094f06e6c0a5cb1d13d58769afc97dcf769aaf346994fbff731fb8989eb",
+      "reviewed_original_byte_ranges": {
+        "lag_definition_continuation": [0, 325],
+        "antibiotic_assay_normalization": [325, 1034],
+        "viability_calculation_and_normalization": [3639, 4813]
+      },
+      "preceding_lag_definition": {
+        "source_ref": "source_c13fb625719d2ea6e7a70793",
+        "artifact_ref": "artifact_0da6ce3883ca66ffee49946f88d1aad1eaf25dc9f818b123810e0890ea038441",
+        "start": 4319,
+        "end": 4847
+      }
+    },
+    "proteomics_sampling_review": {
+      "basis": "Evaluator review of supplement page 8 autonomously extracted at decision 563, read at 564 and used in finding 566. The retained text hash, physical-page provenance and both exact anchors in the saved source subject and observation were checked. These checks are not episode inputs; no additional PDF conversion ran.",
+      "pdf_source_ref": "source_1513a6cd4a335d491185fa97",
+      "page": 8,
+      "page_text_source_ref": "source_7dabd0de7ba2f99fbe8c1cb4",
+      "page_text_artifact_ref": "artifact_40a3a47d15c83cd75d372b1981c8af3a708e76f10bbb5341a2a22cad047ebcfd",
+      "reviewed_original_byte_ranges": {
+        "protein_abundance_sample_collection": [1589, 2738],
+        "shared_preculture": [1870, 1963],
+        "proteomics_time_zero": [2147, 2250]
+      }
+    },
+    "checks": [
+      "The authors propose renaming yeaG to spdA. Preserve that relationship when reading later figures; the change of name does not establish a second molecule or independent intervention.",
+      "The methods specify E. coli K-12 NCM3722 and its deletion derivatives. Keep the carbon-starvation experiments separate from the earlier nitrogen-starvation and glucose-to-malate experiments, and assess correspondence using the actual sequence and construct evidence. A shared K-12 designation alone does not establish an identical tested strain or construct. The exact AKO57331.1 reference-sequence match independently obtained at decision 516 supports correspondence to an NCM3722 genomic protein; do not leave that specific relationship unknown or treat it as verification of every laboratory allele or construct. Its database functional annotation is not independent experimental evidence for the biological claim.",
+      "AKO57331.1 names WP_020233075.1 in a similar-sequence annotation. The latter is an acquired 649-residue YeaG RefSeq sequence, whereas the input and AKO57331.1 have 644 residues; the retained scan and sequence bytes show no exact equality or containment. Keep these references distinct. The RefSeq record can provide an annotation or literature lead, but its citations do not prove that its exact sequence was assayed, and residue numbers cannot transfer without an established correspondence. The difference alone is not evidence against YeaG function and does not invalidate the exact NCM3722 reference match.",
+      "Supplement page 2 identifies HE845 as the yeaG deletion derivative of NCM3722 made by P1 transduction. The Keio strains are donors, not the experimental recipient background. The same paragraph says the kanamycin-resistance gene was removed in some cases; it does not identify which listed mutants underwent that removal. Do not declare HE845 marker-free from this paragraph alone, or treat this construction description as full sequence verification. Consult the named Table S3 when resolving the specific allele.",
+      "Supplement page 3 defines runout iOD as OD600 measured 15 minutes after the observed exit from exponential growth, not the inoculation OD. Runout starvation time zero is that observed exit; wash-out time zero is final resuspension. Preserve which procedure applies to the selected experiment, including whether acetate was omitted or added to mimic runout. Matching nominal cell density does not establish identical cultures, identical treatment or independence. The general wash-method assay reference retained at decision 494 is not a newly measured independent experiment.",
+      "Separate the initial proteolysis burst, which remains in the deletion strain, from the later YeaG-dependent phase. A reduction of later proteolysis does not show that all protein degradation requires YeaG or directly establish its catalytic reaction.",
+      "Figure 4C reports total protein amount; Figure 4D separately measures protein-degradation flux. Keep amount, net loss and degradation flux distinct when selecting an endpoint. The paper defines ITPM as initial total protein mass: a percentage of that mass and a percentage per hour are different quantities, and the normalization denominator belongs with the measurement. The assay reference created at decision 438 selects the Figure 4C amount measurement, not the Figure 4D flux measurement.",
+      "Figure 4A reports two independent measurements, whereas Figure 4B reports three biological replicates with SEM. Figure 1 explains that each biological CFU replicate averages three technical replicates. Keep those counts and spread definitions attached to the relevant measurements; technical plating replicates do not create additional biological samples or establish arm covariance.",
+      "Supplement page 4 averages the three plate-level CFU/mL measurements within each biological replicate. For relative viability, each biological replicate is then normalized to its own 6-hour value before calculating mean and SEM across biological replicates; a ratio of pooled means is not the stated calculation. Preserve the shared within-replicate denominator across time points and the approximately 2-hour time bins. The general description of at least three biological replicates, largely on different days, does not supply an exact count or guarantee independence for every comparison. Keep CFU/mL, CFU/iOD/mL and relative viability distinct according to the selected panel. The separate ampicillin regrowth assay normalizes to the pre-treatment value at 24 hours, not the general 6-hour denominator.",
+      "Supplement page 7 defines instantaneous degradation flux as a fitted slope across four or five time measurements, with slope standard error shown in Figure 2C. Those fit points are not a stated biological-replicate count, and the slope error must not be relabelled as SD or SEM across four or five cultures. The text says flux measurements at different timepoints were typically made in independent cultures; that qualified description does not establish every pair's independence or make the Figure 4D reuse of Figure 2C data independent evidence.",
+      "Supplement page 8 describes proteomics sample collection: for each experiment, one overnight pre-culture was divided into multiple 10 ml cultures, which were harvested individually at different starvation times. Preserve that hierarchy and shared origin when assessing dependence. This does not establish that the entire study has one biological replicate, that all time-point cultures are independent replicates, or a numerical covariance. Finding 566 records the one-pre-culture statement for the protein-loss hypothesis; it does not replace the separate CFU replication description.",
+      "Keep the proteomics methods' T=0 steady-state sample definition and the selected experiment's time origin explicit; matching approximate OD600 values do not establish that this sample is the 15-minute runout-iOD measurement. Sample groups A, B and C are described through Dataset S2 and processing methods, not as a count of three biological replicates. Resolve the selected measurement's sample and group assignments from the actual dataset before using those labels quantitatively.",
+      "The Figure 4D caption explicitly reuses wild-type data from Figure 2C, and Figure 5F reuses wild-type and single-deletion viability data from Figure 4B. Those repeated displays are not independent measurements. The additional aceA backgrounds and acetate treatments require their own experimental identities and dependence assessment.",
+      "Decisions 484 and 569 both retain the Figure 4D use of Figure 2C wild-type data, using the same source subjects and predicate. Decision 569 changes source-claim context and qualification fields and receives another investigation-progress unit. This does not establish another measurement or independent experiment. Inspect equivalence/correction links and final measurement selections separately; progress credit alone does not demonstrate correct duplicate handling or a larger evidence ratio.",
+      "Acetate supplementation of the aceA/spdA double mutant supplies energy in a different genetic background. Its viability rescue does not reintroduce YeaG and must not be relabelled as genetic complementation of the single deletion. Preserve the residual-acetate conditions and the actual compared strains.",
+      "Figure 6 reports regrowth measurements and ratios normalized to the deletion strain. Preserve the explicit direction, denominator, starvation duration and carbon source. The approximate lag differences discussed in the prose do not supply exact values, variance or independent predictions; reused survival measurements remain the same observations in the trade-off plot.",
+      "The lag definition spans supplement pages 3 and 4: it intersects a fit to normalized regrowth OD with a line based on the viable-cell fraction from the plating assay. Lag therefore uses a viability measurement in its calculation; do not assume those endpoints provide independent evidence. At day zero the authors take viability loss to be zero because nutrients are reintroduced within ten minutes. Retain that as an analysis assumption, not an independently measured zero-loss result or fixed prediction for another experiment.",
+      "PXD060434 is identified as deposited mass-spectrometry raw files and DIA-NN output. The article's six supplementary spreadsheets remain acquisition leads, not inspected datasets in this review; reading the PDF's methods does not inspect those files. A proteomics result or downloaded spreadsheet does not demonstrate the required TnSeq/RNASeq execution route. Assess the paper and any acquired deposition as representations of their underlying experiments.",
+      "The paper's FBA calculations concern theoretical ATP yields from catabolism. They do not automatically provide predictions for the selected YeaG deletion-versus-reference viability or regrowth contrast; any use must establish the actual endpoint and competing-claim relationship."
+    ]
+  },
+  "acquisition_failure_review": {
+    "basis": "Evaluator-only checks from the live run runs/a106_sequence_case01_20261105_02, child episode_0c0c2259c01230fc7ca78f94108085ad04631e529b4f55ae3b03a0df3385ce3f. The episode receives neither these checks nor the previously acquired papers. Observed Europe PMC 503, PubMed 500, unrelated BRENDA reference matches at decision 9, and empty selected SABIO-RK/MaveDB responses at decisions 14/16.",
+    "checks": [
+      "Distinguish a failed source request from a successful search that returned no records. Neither establishes that relevant intervention experiments do not exist.",
+      "The BRENDA reference hits for YeaG include author-name matches to Yeager and duplicate table rows. They are not YeaG intervention studies merely because the provider returned them for that query.",
+      "An empty selected SABIO-RK or MaveDB response establishes the content of that response, not exhaustive absence of experimental evidence across providers or publications.",
+      "Sequence-record annotations and citation scopes identify leads. Do not present their summaries as independently inspected primary-paper methods, measurements, uncertainty or restoration controls.",
+      "An unresolved return must distinguish quantities absent from an inspected experiment from quantities that remain unknown because the primary source could not be acquired. Verify the actual final assessment and parent receipt before treating either as a delivered result."
+    ]
+  },
   "limits": "This case does not pre-establish a positive numerical score or complete the separate TnSeq/RNASeq live-analysis requirements."
 }

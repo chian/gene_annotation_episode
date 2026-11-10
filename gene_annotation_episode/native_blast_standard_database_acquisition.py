@@ -62,6 +62,9 @@ def _attempt(target, witness):
     validate_target(target)
     if not is_standard_blast_database_target(target):
         raise ContractError('native_blast_standard_database_hpc_target_required')
+    if isinstance(witness, dict) and witness.get('version') == 'terminal_native_database_attempt_v1':
+        from .native_database_terminal_custody import validate_terminal_database_attempt
+        return validate_terminal_database_attempt(target, witness)
     if type(witness) is not dict or set(witness) != {'authenticated_attempt', 'plan_path', 'ledger', 'job_request'}:
         raise ContractError('native_blast_standard_database_actual_attempt_witness_required')
     authenticated, ledger, job_request = (witness[k] for k in ('authenticated_attempt', 'ledger', 'job_request'))
@@ -225,7 +228,10 @@ def capture_standard_blast_database_bundle(store, *, target, reader, operation_k
         fail('attempt_mismatch', error)
     else:
         try:
-            ref = _transfer(store, reader, target, operation_key, witness['plan_path'], directory / 'plan.capture')
+            manifest = witness.get('scientific_manifest')
+            ref = _transfer(store, reader, target, operation_key, witness['plan_path'], directory / 'plan.capture',
+                sha256=manifest['sha256'] if manifest is not None else None,
+                size_bytes=manifest['size_bytes'] if manifest is not None else None)
             result['plan_artifact_ref'] = ref
             plan = _decode(_retained(store, ref).read_bytes())
             if (digest(plan) != attempt['plan_sha256'] or plan.get('identity') != {**attempt['identity'], 'execution_id': None}

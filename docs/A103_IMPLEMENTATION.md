@@ -82,24 +82,102 @@ credit unchanged. Aggregate A101 credit is never an A103 multiplier.
 
 ## Execution and verification
 
+### Shared HPC integration
+
+`A103ServiceFactory` now accepts an explicit configured `ExecutionServiceFactory`
+as `execution_service_factory`. Supply the actual `A103ToolRegistry` through
+`episode_service_inputs='actual_tool_registry_v1'`; include the execution
+factory's `as_record()` in the caller's explicit service-binding definition.
+The factory preserves its resource catalogs, progress provider, shared execution
+memory, monitoring and configured HPC prediction/execution sisters. It freezes
+tool information after registry configuration. Existing service construction
+remains available when this port is omitted.
+
+When the HPC owner is configured, `context.request_hpc` becomes available. Its
+typed `operation`/`arguments` select one of these existing native investigations:
+
+- `context.bind_locus`
+- `reference.neighborhood` using an actual locus binding
+- `context.compare_neighborhoods`
+- `context.fusion`
+- `context.detection_inventory`
+- `context.cooccurrence`
+
+`context.contrast` and `context.association_channels` retain their existing
+host-side evidence interpretation and publication. A detection inventory still
+consumes an actual completed parent-delivered HMMER search; this interface
+launches no new sequence search and commissions no sibling evidence axis.
+
+The request operation validates the actual received operands using the same
+conditions as the existing local paths. It freezes original file bytes and
+identities, target/construct mapping, source provenance, fixed panels, sampling
+groups, definitions and a hash-pinned source snapshot. It publishes an exact
+`commission_source_ref` and `hpc_assignment` for the shared `hpc` child. Request
+preparation runs no context algorithm and earns no A103 credit. Qualified
+received local or HPC measurements are reused without another job.
+
+`a103_hpc_worker.py` executes the original `a103_scoring.execute` and detection
+reader inside the allocation. It uses the frozen package and matching
+Biopython version, with temporary files, cache and supplied inputs inside the
+original work unit. The existing HPC parent owns prediction, planning, staging,
+launch, monitoring and collection. No second scheduler or local scientific
+fallback is installed. Small metadata operations remain local; scientific
+execution stays in the selected resource.
+
+On receipt, the runtime calls the A103 adapter automatically before attribution
+refresh. `hpc_result_receipts` authenticates the actual completed collection,
+owner, unit, plan, scope and result bytes. The adapter also checks the staged
+request/worker, implementation manifest, original command, resource, compute
+identity and parser version. It applies the original host augmentation and calls
+`a103_publication.publish`; the existing `a103_attachments.refresh` then assigns
+the per-use target, component and region credit. No context calculation is
+repeated during admission, and HPC operational acceptance is never substituted
+for A103 scientific credit.
+
+The numerical publication and original execution provenance are retained
+separately. Repeated delivery retains the same measurement identity. Missing
+original operands leave a pending state and specific information needs; late
+receipt triggers admission without another job. Failed execution or unavailable
+scientific admission remains explicit with no numerical contribution. Parents
+receive these states in `received_gene_context_execution` on fresh decisions,
+and actual received HPC records survive the normal A103 typed return.
+
+The original native output stays in the work unit. Collected payloads respect
+the existing 512 KiB compact-result contract. Oversized results report an
+explicit limitation, rather than discarding rows or changing the biological
+scope to claim an absence. Input windows/panels must remain compatible with the
+configured reader; missing coverage stays unknown.
+
+This integration has had static source/diff/hash review only. Tests, imports,
+syntax checks, replays and live local/remote workflows remain deferred. The
+historical completed cases below do not validate this new HPC route. When
+testing resumes, use full autonomous workflows, one at a time, with expectations
+kept outside episode inputs. Inspect acquisition through actual parent scoring,
+including a reused measurement, missing component evidence, detection-limited
+absence, conflicting evidence and failed/pending execution.
+
+### Local resources and historical verification
+
 All execution must use the [whole-workflow launcher](LOCAL_EXECUTION_POLICY.md),
 whose aggregate cap includes Python and provider processes. The current local
-budget is 512 MiB RAM, one CPU, zero swap and one workflow per Codex window. Any native profile
+budget is 5 GiB RAM, one CPU, zero swap and one workflow per Codex window. Any native profile
 requesting more cannot run locally under this budget. Heavy algorithms need
 remote execution or explicit user approval for another concrete budget.
 
 All native operations also use the existing shared host admission gate. The A103 profile requests
-one CPU thread, at most 2 GiB memory, 1 GiB scratch and 180 seconds per job under
-the default policy. Requests and limits reach the parent. A busy host preserves
+one CPU thread, at most 2 GiB memory and 1 GiB scratch under the default policy.
+No research deadline or cumulative usage budget is introduced. Requests and
+resource limits reach the parent. A busy host preserves
 the prepared handle. Large investigations require a separately configured
 resource rather than bypassing local admission.
 
 `examples/a103_gene_context_investigation.py` runs retained real PoxA/YjeK/EF-P,
 BioY/BioMN, YjeF and MJ0044 inputs. Fresh A103 scientific choices use the configured
 model; the parent handoff and existing native HMMER launch/results mechanics
-are scripted and reported as such. This harness explicitly selects a smaller
-native profile: one CPU, 128 MiB memory, 32 MiB scratch and 180 seconds. The
-whole workflow still has its separate 512 MiB aggregate cap. The scripted
+are scripted and reported as such. Its completed histories below used the
+smaller profiles recorded for those runs; those settings are historical evidence.
+New invocations use their actual configured resource profile. The
+whole workflow still has its separate 5 GiB aggregate cap. The scripted
 parent preserves a requested family query, shares the exact missing operands,
 and reuses complete panel searches by peptide identity. Expected biological interpretations are not
 supplied to the model. Required sequences, original GenBank responses and

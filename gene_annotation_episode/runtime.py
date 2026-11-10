@@ -26,7 +26,7 @@ import time
 from jsonschema import Draft202012Validator, ValidationError
 from method_loop import (ChildEpisodeUnit, ClosedChildUnit, DeferredUnit, ClosedRecord, Context, Episode,
     EpisodeGoal, EpisodeRecord, EpisodeRequest, EpisodeTree, Grain, Leaf,
-    ReportDeliveryError, ReportRedelivery)
+    ReportDeliveryError, ReportRedelivery, PendingAction, SourceEnd)
 from method_loop.archive import ArchivedRecord, JsonArchive
 from method_loop.identities import EpisodeRef, UnitRef
 from method_loop.communication import ReportContract as GenericReportContract
@@ -51,8 +51,9 @@ from .episode_services import WorkflowServices
 from .episode_application_services import EpisodeApplicationServices, service_binding, job_progress_binding
 from .episode_journal import Journal, WorkflowError
 from .episode_commissions import CommissionCoordinator
-from .episode_completion import CompletionLedger, EFFECT_VERSION
-from .episode_admission import ReceiverBindingV1, admit_return
+from .episode_completion import CompletionLedger, EFFECT_VERSION, observes_action_outcome
+from .episode_admission import (ReceiverBindingV1, admit_return, load_return_admission,
+    resolve_return_delivery)
 from .waiting import WaitStore, estimate_wait, completed_action_context, validate_condition
 from .wait_estimation_inputs import WaitInputs
 from .local_return_history import LocalReturnHistory
@@ -70,6 +71,8 @@ from .episode_contract_information import (ContractInformationError, operation_c
     return_contract_information, expand_fact_form, validate_saved_fact_form)
 from method_loop.durable import DurableExecutionStore, EventTargetError, canonical
 from . import literature_numerical_contracts
+
+EPISODE_BRANCH_LIFECYCLE = 'owned_child_turn_taking_v2'
 
 def _plain(value):
     if hasattr(value, "as_record"):
@@ -127,19 +130,20 @@ def _category_yield_parameters(controller_binding):
     if not isinstance(definition, Mapping):
         return None
     keys = ('window_size', 'subsample_size', 'uncertainty_alpha')
-    if 'version' not in definition and all(key in definition for key in keys):
+    if 'version' not in definition and 'uncertainty_alpha' in definition:
         parameters = definition
     else:
         versions = ('existing_yield_controller_explicit_parameters_v1',
-                    'existing_yield_controller_explicit_role_costs_v2')
+                    'existing_yield_controller_explicit_role_costs_v2',
+                    'existing_yield_controller_explicit_role_costs_v3')
         if definition.get('version') not in versions:
             definition = definition.get('definition')
         if not isinstance(definition, Mapping) or definition.get('version') not in versions:
             return None
         parameters = definition.get('parameters')
-    if not isinstance(parameters, Mapping) or not all(key in parameters for key in keys):
+    if not isinstance(parameters, Mapping) or 'uncertainty_alpha' not in parameters:
         return None
-    return {key: parameters[key] for key in keys}
+    return {key: parameters[key] for key in keys if key in parameters}
 
 
 _DEFAULT_DECISION_PROTOCOL = object()
@@ -215,6 +219,12 @@ def _wait_condition_schema():
             'event': {'type': 'string', 'enum': ['returned', 'state_changed', 'progress_committed']},
             'after_cursor': {'type': 'integer', 'minimum': 0}})),
         'reconsider_at': {'type': ['string', 'null'], 'format': 'date-time'}})
+
+
+def _wait_estimate_operation():
+    return {'name': 'episode.estimate_wait', 'description':
+        'Inspect the supported estimate for a proposed wait using your received progress, original duration snapshots and completed own-action history. Unknown event probabilities and gains remain unknown. This tool selects no wait, timer, resource or work.',
+        'input_schema': _object({'condition': _wait_condition_schema()})}
 
 _ASSIGNMENT_TRANSPORT = 'atomic_composed_episode_assignment_json_v1'
 
@@ -513,6 +523,13 @@ class TimedChildUnit(ChildEpisodeUnit):
     decision_index: int
     scheduled: bool = field(default=False, kw_only=True)
 
+    def collection_measure(self):
+        return self.journal.measure('runtime_actions', self.parent_episode_id, self.decision_index)
+
+    def collection_returned(self):
+        if self.scheduled:
+            self.journal.commission_returned(self.parent_episode_id, self.decision_index)
+
     async def acquire_async(self, ctx):
         row = self.journal.row("runtime_actions", self.parent_episode_id, self.decision_index)
         if row["result"] is not None:
@@ -524,7 +541,7 @@ class TimedChildUnit(ChildEpisodeUnit):
             if self.scheduled:
                 await self.journal.await_child_commission(self.parent_episode_id, self.decision_index)
             result = await super().acquire_async(ctx)
-            if self.scheduled:
+            if self.scheduled and not isinstance(result, PendingAction):
                 self.journal.commission_returned(self.parent_episode_id, self.decision_index)
             return result
 
@@ -534,8 +551,25 @@ class ActionLeaf(Leaf):
     decision_index: int
 
 @dataclass(frozen=True, kw_only=True)
+class ReportAcquisitionLeaf(ActionLeaf):
+    report_delivery: ReportRedelivery
+
+@dataclass(frozen=True, kw_only=True)
 class DeferredActionUnit(DeferredUnit):
     decision_index: int
+
+@dataclass(frozen=True, kw_only=True)
+class OwnedChildActionUnit(DeferredActionUnit):
+    collect: object
+
+    def acquire(self, ctx):
+        raise TypeError('owned child execution requires the async method loop')
+
+    async def acquire_async(self, ctx):
+        handle = self.dispatch(ctx)
+        if inspect.isawaitable(handle):
+            handle = await handle
+        return await self.collect(ctx, handle)
 
 @dataclass(frozen=True, kw_only=True)
 class ReturnedActionUnit(ClosedChildUnit):
@@ -588,6 +622,8 @@ class ExecutionContextController:
             "WHERE run_id=? AND episode_id=? AND decision_index=?", key).fetchone()
         if old:
             context = json.loads(old[0])
+            if context.get('completed_annotation_axis') != body.get('completed_annotation_axis'):
+                raise ValueError('reconstructed_annotation_axis_completion_differs')
             if unit_ref is not None and 'current_completion_evidence' in context:
                 self._completion_packet(context['current_completion_evidence'], index, unit_ref)
             practical = body.get('practical_completion')
@@ -602,7 +638,11 @@ class ExecutionContextController:
             supplied = decision_context.get('execution_expectations')
             context = {"version": "completed_action_estimation_context_v1", "expectations": supplied,
                 "decision_time": execution_timing.snapshot(call["timing"]),
-                "selected_work_time": execution_timing.snapshot(action["timing"])}
+                "selected_work_time": execution_timing.snapshot(action["timing"]),
+                "progress_time": execution_timing.capture_progress_time(self.journal,
+                    self.episode_id, original_decision_index=index)}
+            if body.get('completed_annotation_axis') is not None:
+                context['completed_annotation_axis'] = body['completed_annotation_axis']
             if self.include_native:
                 context.update(version='completed_action_estimation_context_v2',
                     native_expectations=decision_context.get('native_execution_expectations'))
@@ -658,8 +698,39 @@ class ExecutionContextController:
             include_native=self.include_native, capture_current_completion=self.capture_current_completion)
 
 class FeedbackEpisode(Episode):
+    async def _source_end_async(self, ctx, scope, records):
+        workflow = self.source.workflow
+        if workflow.execution_binding is not None:
+            while True:
+                item = await workflow.next_branch_return(self.source, self._view(ctx, scope, records))
+                if item is None:
+                    break
+                await self._acquire_unit_async(ctx, scope, records, item)
+        await super()._source_end_async(ctx, scope, records)
+
+    async def _stop_end_async(self, ctx, scope, records, step):
+        workflow = self.source.workflow
+        if (workflow.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE
+                and workflow.execution_binding is not None):
+            # Yield ends selection of new work. Already selected child actions
+            # still belong to this live branch and its original return boundary.
+            # Suspension adds no action, observation or continuation decision.
+            while step.stop:
+                item = await workflow.next_branch_return(self.source, self._view(ctx, scope, records))
+                if item is None:
+                    break
+                step = await self._acquire_unit_async(ctx, scope, records, item)
+                if step is None:
+                    raise WorkflowError('branch_return_requires_completed_original_action')
+            if not step.stop:
+                return scope, None
+        return await super()._stop_end_async(ctx, scope, records, step)
+
     async def _acquire_unit_async(self, ctx, scope, records, item, *, unit_offset=0):
         try:
+            self.source._selection_view = self._view(ctx, scope, records, unit_offset=unit_offset)
+            if isinstance(item, ReportAcquisitionLeaf):
+                self._redeliver_report(ctx, scope, records, item.report_delivery)
             return await super()._acquire_unit_async(ctx, scope, records, item,
                                                       unit_offset=unit_offset)
         except ActionFailure as error:
@@ -670,6 +741,17 @@ class FeedbackEpisode(Episode):
             # No new controller observation exists. Reuse its unchanged
             # continuation decision while returning actionable error feedback.
             return SimpleNamespace(stop=current.decision.stop, requests_transition=False)
+
+REASONING_COMMIT_REQUIREMENT = (
+    'A common scientific reason action needs at least one proposed commit row. '
+    'A request with every commit section empty is rejected before acquisition '
+    'and creates no completed-action observation. A return-form update alone '
+    'does not make that request executable. Where the supplied action schema '
+    'explicitly permits evidence_processing.kind=no_applicable_evidence, its '
+    'source-grounded declaration is the existing exception. Keep current report '
+    'references when the interpretation is unchanged; existing saved results '
+    'require no empty reasoning action.'
+)
 
 INSTRUCTIONS = """You own an iterative scientific annotation improvement, not a tool itinerary.
 Use the fixed caller material within the parent's fixed subject and optional original-coordinate
@@ -744,12 +826,39 @@ a shared publication alone do not establish equivalence. Determining what is the
 same remains part of your scientific reasoning. The host does not make that
 judgment or require a separate review. Additional source reading is not a new
 finding unless it adds or corrects information relevant to the target question.
+When correcting an earlier finding's subject, partner, construct or other
+reference binding, use replaces_refs to identify the earlier target assessment
+being repaired. same_source_claim_as_ref shares source-claim identity; it does
+not retire that earlier target finding. A different reference handle for the
+same source-established role does not by itself make another biological question.
+Keep the actual role/material identities and their witnesses distinct; declare
+replacement when the corrected binding supersedes the earlier finding, rather
+than retaining both representations as additional information. Preserve genuinely
+different questions and unresolved identity instead of equating entities by name.
 When annotation_score is supplied, it is a separate annotation-support measure
 with its own annotation_score_binding and annotation_evidence_vector. Useful new
 information can lower annotation support while advancing investigation progress.
-Only current_credit supplies this episode's numerical yield observations.
-scientific_child_credit_binding describes the configured scientific-child score
-before you choose a commission. It does not choose a child, scope or next action.
+When proposed_annotations is supplied, each proposed annotation and subject has
+its own score and evidence vector. annotation_comparisons keeps best scored
+alternatives, ties and unscored candidates for the same subject and question.
+You retain the annotation decision and choose the next action.
+The recorded task credit supplies this episode's numerical yield observations.
+When current_credit.mode is annotation_axis_credit, controller.arms supplies
+each proposed annotation/axis credit, forecast, cutoff and transfer status.
+controller.annotation_credits totals received child credit per proposed annotation;
+controller.root_score is the largest such total. This is investigation progress,
+while proposed_annotations carries the separate signed functional-support scores.
+Each forecast concerns another whole axis invocation; a child's internal next
+action forecast is different. Choose an axis and its proposed_annotation_ref.
+The root stops only when every pair's available upper bound is at or below its
+own cutoff. Unknown scores or forecasts are not measured zeros. Coordinate
+unresolved transfer dependencies through the existing shared-information tools.
+Each child task must declare the credit calculation used for its own stopping decision.
+For an A105, A106 or A108 whole-axis investigation, include context.evidence_task
+with version evidence_axis_task_v1, kind whole_axis_findings, its evidence_axis,
+and the credit_unit from that task's configured credit_definition. Its task key is
+<axis>:whole_axis_findings. Do not copy another axis's unit or cutoff, or commission
+a separate episode merely to calculate A106/A108 scores.
 resource_tool_estimates, when supplied, describe expected execution time and
 configured resources for the declared execution classes. Use these expectations
 with your own yield estimate and prior outcomes to choose useful work. A timing
@@ -809,7 +918,8 @@ declared meanings when revising the form; neither input chooses your scientific 
 As parent, request source-bound outcome and basis fields when needed to distinguish
 new observations from prior interpretations. There is no separate report composer.
 A report_delivery_failure is operational feedback about an already completed
-child. You can select redeliver_report with a revised closed contract. It reuses
+child. You can select redeliver_report with a revised closed contract, using the
+delivery_ref shown in report_deliveries or report_delivery_failure. It reuses
 saved facts and exactly the child's existing interpretation fields; it performs
 no new scientific work and cannot answer a new interpretive question. Do not
 recommission the same investigation merely to fix its representation.
@@ -818,8 +928,10 @@ of your own actual prior decisions, not a generated scientific summary. Use the
 ordinary episode.history tool when an older selected action, exact outcome or
 admitted direct-child form matters. Its indices belong only to this Episode;
 another Episode's same index names different work. A failed saved outcome stays
-failed. Reading history does not execute that work again. A selected history
-read is one ordinary action with its actual zero or changed progress, while
+failed. Where the journal retained a pre-execution rejection, its status is
+rejected and view=records supplies the original rejection_feedback separately
+from an executed outcome. Reading history does not execute that work again.
+A selected history read is one ordinary action with its actual zero or changed progress, while
 automatic context restoration creates no completed action. Current report
 values retain their actual current_report_basis_refs, not a later tool result.
 Do not execute native provider tools. The host executes your selected action.
@@ -960,8 +1072,57 @@ class DecisionSource:
         self._restored_source_state = None
         self._model_snapshot = None
         self._presented_conversation_key = None
+        self._selection_view = None
+        self._delivery_resolution_ref = None
+        self._execution_context = None
+        self._suspension_condition = None
+        self._inprocess_replay_ready = False
         self.interpret_schema = (interpretation_schema(request.report_contract.schema)
                                 if request.report_contract else _object({}))
+
+    def bind_execution_context(self, context):
+        self._execution_context = context
+
+    def suspension_changed(self, condition):
+        self._suspension_condition = condition
+        if self.workflow.execution_handle is not None:
+            self.workflow.execution_backend.set_suspension(self.workflow.execution_handle,
+                None if condition is None else {'episode_id': self.episode_id,
+                    'dependency': condition})
+
+    def record_execution_failure(self, error, *, unit=None):
+        from .episode_source_failure import record_source_failure
+        import traceback
+        diagnostic = self.workflow.archive.store(Record({'exception_type': type(error).__name__,
+            'traceback': traceback.format_exc()}))
+        index = getattr(unit, 'decision_index', None)
+        failure = record_source_failure(self.workflow.store, self.workflow.run_id,
+            self.episode_id, index if index is not None else max(0, self.calls - 1), error,
+            category='episode_execution', cause_code='selected_operation_failed')
+        self.feedback = {**failure, 'diagnostic_ref': str(diagnostic.path)}
+        action = (None if index is None else
+            self.workflow.journal.row('runtime_actions', self.episode_id, index))
+        if (action is not None and action['result'] is None
+                and json.loads(action['action']).get('kind') in {'tool', 'reason'}):
+            selection = json.loads(action['action'])
+            outcome = {'status': 'failed', 'record_refs': [], 'changed_record_refs': [],
+                'feedback': self.feedback}
+            with self.workflow.store.transaction():
+                self.workflow.journal.save('runtime_actions', {'episode_id': self.episode_id,
+                    'decision_index': index, 'action': action['action'], 'result': _json(outcome), 'credit': None})
+                credit = self.workflow.source_credit_view(self)['credit']
+                value = self.workflow.controller_value(self, index, credit)
+                self.workflow.journal.save('runtime_actions', {'episode_id': self.episode_id,
+                    'decision_index': index, 'action': action['action'], 'result': _json(outcome), 'credit': credit})
+                if self.workflow.execution_binding is not None:
+                    self.workflow.completions.stage(self.episode_id, index,
+                        label=f"{selection['kind']}:{index}", kind='own_action',
+                        controller_input=value, child_return=None)
+            self.last_outcome, self.last_outcome_index = outcome, index
+            self.checkpoint()
+            return ActionLeaf(selection, extract=lambda _: value, result=lambda _, result: result,
+                label=f"{selection['kind']}:{index}", decision_index=index)
+        self.checkpoint()
 
     async def call(self, context, schema):
         index, self.calls = self.calls, self.calls + 1
@@ -1014,6 +1175,10 @@ class DecisionSource:
             shared_context = self.workflow.shared_information_context(self)
             if shared_context is not None:
                 context = {**context, 'shared_information_context': shared_context}
+            from .component_axis_source_access import decision_context as source_access_context
+            source_access = source_access_context(self.workflow, self.workflow.binding_context(self))
+            if source_access is not None:
+                context = {**context, 'component_axis_source_access': source_access}
             context = {**context,
                 'launch_instruction_library': self.workflow.launch_instructions.context()}
             selected_instructions = self.workflow.launch_instructions.materialize(
@@ -1027,6 +1192,22 @@ class DecisionSource:
             if set(supplied_initial).intersection(context):
                 raise ValueError('initial_binding_context_field_conflict')
             context = {**context, **supplied_initial}
+            # Receiver-specific native views are supplied above. Build the
+            # factual work/credit report only after those authorized results
+            # are available; saved calls retain their original context.
+            work_results = context.pop('_completed_work_axis_results', {})
+            if ('literature_completed_work' not in context and not (
+                    isinstance(context.get('current_credit'), Mapping)
+                    and context['current_credit'].get('mode') == 'annotation_axis_credit')):
+                from .episode_work_report import completed_action_reports
+                context['completed_action_reports'] = completed_action_reports(
+                    self.workflow, self, context, before=index,
+                    received_axis_results=work_results)
+            from .hpc_prompt import is_hpc_context
+            if is_hpc_context(context):
+                from .episode_work_report import requested_action_history
+                context['requested_action_history'] = requested_action_history(
+                    self.workflow, self, before=index)
             if 'pending_work' not in context:
                 # Direct caller dispatches need the same authoritative
                 # outstanding-work input as next(). Saved decisions above
@@ -1142,11 +1323,29 @@ class DecisionSource:
             specialized = specialist.instructions(self.workflow.binding_context(self))
             instructions = (specialized if getattr(specialist, 'replaces_default_instructions', False)
                             else instructions + '\n' + specialized)
+        if self.workflow.permits_common_action(self, 'reason'):
+            instructions += '\n' + REASONING_COMMIT_REQUIREMENT
         if 'tool_knowledge' in context:
             instructions += KNOWLEDGE_INSTRUCTIONS
         if 'launch_instruction_library' in context:
             instructions += LAUNCH_INSTRUCTIONS
-        if self.workflow.native_event_information is not None:
+        instructions += ('\nWhen pending_child_delivery is supplied, the selected child has finished '
+            'its work but its typed return has not been delivered. Complete that existing '
+            'acquisition by selecting redeliver_report with a corrected form. Use only the '
+            'saved child facts and interpretations for this repair and preserve '
+            'current_report_update. The supplied selection schema describes the available '
+            'communication operation; this repair does not select new scientific work.')
+        if self.workflow.permits_common_action(self, 'wait'):
+            instructions += ('\nA pending_child_ handle names your original in-process child, '
+                'not an external event-provider target. To give its existing scheduler time '
+                'to collect owned work, select wait with that handle, event returned, '
+                'after_cursor 0 and reconsider_at null. An earlier ready owned sibling may '
+                'wake this wait first; its original return is then collected before another '
+                'decision. Waiting only reports readiness and earns no scientific credit. '
+                'In-process state_changed/progress_committed events and mixed external '
+                'wait conditions are not supported by this collection channel.')
+        if (self.workflow.native_event_information is not None
+                and self.workflow.permits_common_action(self, 'wait')):
             instructions += ('\nThe separate native_event_targets input names native notification '
                 'targets assigned or actually received by this episode. A target is registration '
                 'metadata, not proof that submission succeeded. Its state_changed event means '
@@ -1161,8 +1360,11 @@ class DecisionSource:
             old_history_guidance = INSTRUCTIONS[INSTRUCTIONS.index('On a fresh provider conversation,'):
                 INSTRUCTIONS.index('Do not execute native provider tools.')]
             instructions = instructions.replace(old_history_guidance,
-                'Your own received action history is available through request_context exchanges '
-                'inside this pending decision. They create no completed action or observation.\n')
+                'Use request_context exchanges for your own attempt metadata and selected inputs; '
+                'these create no completed action or observation. Read exact previously received '
+                'outcomes with the ordinary episode.history tool, view=records and selected '
+                'decision_indices. That read supplies its own ordinary action observation and '
+                'does not execute or credit the historical work again.\n')
         return instructions
 
     def conversation_key(self):
@@ -1324,7 +1526,13 @@ class DecisionSource:
             output_schema = rows[0]['request']['output_schema']
         else:
             parameters = _category_yield_parameters(self.workflow.controller_binding)
-            table = yield_table(journal, self.episode_id, before=index, parameters=parameters)
+            if isinstance(context.get('current_credit'), Mapping) and context['current_credit'].get('mode') == 'annotation_axis_credit':
+                table = {'version': 'annotation_axis_yield_table_v1',
+                    'rows': context['controller']['arms'],
+                    'forecast_unit': 'another_whole_axis_invocation',
+                    'source': 'actual_root_controller'}
+            else:
+                table = yield_table(journal, self.episode_id, before=index, parameters=parameters)
             snapshot = model_snapshot(context, table)
             instructions = (contract_record['instructions'] if contract_record is not None else
                 self.instructions(context) + '\n' + DECISION_EXCHANGE_INSTRUCTIONS)
@@ -1435,21 +1643,38 @@ class DecisionSource:
                 'response': current['response'], 'lookup_result': result})
             cursor += 1
 
-    async def next(self, view):
-        if self.workflow.execution_binding is not None:
+    async def next(self, view, *, delivery_ref=None):
+        if delivery_ref is None:
+            self._selection_view = view
+            closed = self.workflow.journal.row('runtime_episodes', self.episode_id)
+            if closed is not None and closed['state'] == 'yielded' and closed['completion'] is not None:
+                completion = json.loads(closed['completion'])
+                if (completion['ended_by'] == 'source_failed'
+                        and view.units_consumed == completion['actions']):
+                    # Replaying a finalized partial result must not retry the
+                    # already-failed source or select new scientific work.
+                    return SourceEnd('source_failed')
+        if self.workflow.inprocess_replay is not None and delivery_ref is None:
+            if not self._restored:
+                self.restore()
+            ready = self.workflow.inprocess_replay.unit(self, view.units_consumed)
+            if ready is not None:
+                return ready
+            self.restore_checkpoint()
+            self._inprocess_replay_ready = True
+            with self.workflow.store.transaction():
+                self.workflow.inprocess_replay.capture(self)
+            if self._unfinished_own_actions:
+                index = self._unfinished_own_actions.pop(0)
+                action = self.workflow.journal.row('runtime_actions', self.episode_id, index)
+                return self.workflow.selected(self, json.loads(action['action']), index)
+        if self.workflow.execution_binding is not None and delivery_ref is None:
             if not self._restored:
                 self.restore()
             ready = self.workflow.completions.slot(self.episode_id, view.units_consumed)
             if ready is not None:
                 return self.workflow.completed_unit(self, ready)
-            if self._restored_source_state is not None:
-                saved = self._restored_source_state
-                self._restored_source_state = None
-                self.last_outcome_index = saved['last_outcome_index']
-                self.last_outcome = (None if self.last_outcome_index is None else json.loads(
-                    self.workflow.journal.row('runtime_actions', self.episode_id,
-                        self.last_outcome_index)['result']))
-                self.feedback = saved['feedback']
+            self.restore_checkpoint()
             if self._unfinished_own_actions:
                 index = self._unfinished_own_actions.pop(0)
                 action = self.workflow.journal.row('runtime_actions', self.episode_id, index)
@@ -1457,8 +1682,21 @@ class DecisionSource:
             ready = self.workflow.next_return(self)
             if ready is not None:
                 return self.workflow.completed_unit(self, ready)
+            await self.workflow.resolve_pending_deliveries(self, view)
+            ready = self.workflow.completions.slot(self.episode_id, view.units_consumed)
+            if ready is not None:
+                return self.workflow.completed_unit(self, ready)
         while True:
             original_call = self.workflow.journal.row('runtime_model_calls', self.episode_id, self.calls)
+            if (delivery_ref is None and original_call is None
+                    and self._execution_context is not None):
+                # A rejected selection stays inside this source loop. Collect
+                # an original child that finished meanwhile before asking for
+                # another decision. Saved calls and delivery repairs retain
+                # their original ordering and journal context.
+                ready = self._execution_context._ready_owned_child(self.path)
+                if ready is not None:
+                    return ready
             original_request = json.loads(original_call['request']) if original_call is not None else None
             if original_request is not None and (original_call['response'] is not None
                     or 'contract_information' in original_request
@@ -1483,9 +1721,6 @@ class DecisionSource:
                         AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1""",
                         (self.workflow.run_id, self.episode_id)).fetchone()
                     visual_evidence = json.loads(row[0]) if row and row[0] is not None else []
-                    forms = [(self.report_values, self.interpret_schema)]
-                    forms.extend((report.as_record(), _plain(report.contract.measurements["schema"]))
-                                 for report in view.child_reports)
                     subset = getattr(self.workflow.store, "reference_subset", None)
                     presented_outcome = self.workflow.local_outcome_preview(
                         self.last_outcome, decision_index=self.last_outcome_index)
@@ -1494,28 +1729,48 @@ class DecisionSource:
                             and self.feedback is self.last_outcome.get("feedback")
                             and isinstance(presented_outcome, Mapping)):
                         presented_feedback = presented_outcome.get("feedback")
+                    credit_view = self.workflow.source_credit_view(self)
+                    annotation_axes = (isinstance(credit_view['credit'], Mapping)
+                        and credit_view['credit'].get('mode') == 'annotation_axis_credit')
+                    forms = [(self.report_values, self.interpret_schema)]
+                    if not annotation_axes:
+                        forms.extend((report.as_record(), _plain(report.contract.measurements["schema"]))
+                                     for report in view.child_reports)
+                    controller_state = _plain(view.controller_state)
+                    if annotation_axes:
+                        state = {}
+                        controller_state = {key: controller_state[key] for key in
+                            ('arms', 'annotation_credits', 'root_score', 'decision')}
+                        if presented_outcome is not None and self.last_outcome_index is not None:
+                            prior = self.workflow.journal.row('runtime_actions', self.episode_id,
+                                self.last_outcome_index)
+                            if prior is not None and json.loads(prior['action']).get('kind') in {
+                                    'child', 'episode_child', 'job_child'}:
+                                presented_outcome = {
+                                    'status': presented_outcome.get('status'),
+                                    'record_ref_count': len(presented_outcome.get('record_refs') or ()),
+                                    'changed_record_ref_count': len(presented_outcome.get('changed_record_refs') or ())}
+                                presented_feedback = None
                     basis = _references_in({"working_state": state, "last_local_outcome": presented_outcome,
                                             "visual_evidence": visual_evidence}, self.workflow.store.get,
                                            forms=forms, reference_subset=(lambda refs: subset(refs, self.scope))
                                            if subset is not None else None)
-                    credit_view = self.workflow.source_credit_view(self)
                     context = view.model_inputs({"goal": self.request.goal.as_record(), "scope": self.scope,
                         "working_state": state, "visible_record_refs": basis,
-                        "current_credit": credit_view["credit"],
+                        "current_credit": ({'mode': 'annotation_axis_credit',
+                            'root_score': controller_state['root_score']}
+                            if annotation_axes else credit_view["credit"]),
                         "current_evidence_vector": credit_view.get("axis_components"),
                         **({'investigation_progress': {key: credit_view[key] for key in
                             ('retained_finding_count', 'inactive_dependencies', 'detail_pages')
                             if key in credit_view}} if self.workflow.receipt_projection(self) else {}),
                         "credit_binding": self.workflow.source_credit_binding(self),
-                        "scientific_child_credit_binding": (_plain(
-                            self.workflow.child_credit_binding if self.workflow.project_child_credit is not None
-                            else self.workflow.credit_binding) if not self.workflow.is_job_source(self) else None),
                         "time_accounting": self.workflow.journal.elapsed_view(self.episode_id),
                         "pending_work": self.workflow.pending_work(self),
                         "last_local_outcome": presented_outcome, "feedback": presented_feedback,
                         "visual_evidence": visual_evidence,
                         "report_deliveries": self.workflow.delivery_status(self.episode_id),
-                        "controller": _plain(view.controller_state),
+                        "controller": controller_state,
                         "controller_binding": self.workflow.controller_binding,
                         "tools": self.workflow.catalog(self.scope, source=self),
                         "tool_knowledge": self.workflow.knowledge.context(),
@@ -1529,21 +1784,66 @@ class DecisionSource:
                         "current_report_update": self.report_values,
                         "current_report_basis_refs": self.report_basis,
                         "report_lifecycle": "Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment."},
-                        reports=view.child_reports)
+                        reports=() if annotation_axes else view.child_reports)
                     if self.workflow.is_scientific_source(self):
-                        context.update(self.workflow.annotation_context(self.scope))
+                        if annotation_axes:
+                            context.update(proposed_annotations=[{key: row[key] for key in
+                                ('proposed_annotation_ref', 'subject_ref', 'predicate', 'value',
+                                 'context_refs', 'scope', 'score', 'support', 'opposition', 'status')}
+                                for row in credit_view['proposed_annotations']],
+                                annotation_comparisons=credit_view['comparisons'])
+                        else:
+                            context.update(self.workflow.annotation_context(self.scope, source=self))
                     if 'monitoring_information_credit' in credit_view:
                         context.update({key: credit_view[key] for key in
                             ('monitoring_information_credit', 'monitoring_information_binding')})
                     specialist = self.workflow.specialist(self)
                     if specialist is not None:
                         context.update(specialist.decision_context(self.workflow.binding_context(self), view))
+                    context['_completed_work_axis_results'] = {
+                        key: credit_view[key] for key in (
+                            'a101_sheet', 'a102_sheet', 'a103_sheet', 'a104_sheet',
+                            'target_sheets', 'tool_attachments', 'source_contributions')
+                        if key in credit_view}
+                    contract_catalog = getattr(self.workflow.tools, 'model_contract_catalog', None)
+                    if callable(contract_catalog):
+                        context['available_report_facts'] = contract_catalog(context)
                 schema = self.workflow.action_schema(self)
-            response, index, actual_context, schema = await self.call(context, schema)
-            with (self.workflow.store.transaction() if self.workflow.execution_binding is not None else nullcontext()):
+                if delivery_ref is not None:
+                    context, schema = self.workflow.delivery_resolution_inputs(
+                        self, delivery_ref, context)
+            if (delivery_ref is not None and
+                    context.get('pending_child_delivery', {}).get('delivery_ref') != delivery_ref):
+                raise WorkflowError('restored_delivery_resolution_identity_conflict')
+            from .providers import ModelCallError
+            try:
+                response, index, actual_context, schema = await self.call(context, schema)
+            except ModelCallError as error:
+                from .episode_source_failure import record_source_failure
+                record_source_failure(self.workflow.store, self.workflow.run_id,
+                    self.episode_id, self.calls - 1, error)
+                self.feedback = {'status': 'failed', 'category': 'decision_source',
+                    'exception_type': type(error).__name__, 'detail': str(error)}
+                self.checkpoint()
+                if delivery_ref is not None:
+                    raise
+                return SourceEnd('source_failed')
+            with (self.workflow.store.transaction() if self.workflow.execution_binding is not None
+                    or self.workflow.inprocess_replay is not None else nullcontext()):
                 unit = self.apply_response(response, index, actual_context, schema)
             if unit is not None:
                 return unit
+
+    def restore_checkpoint(self):
+        """Restore latest source state after replay, before receiving new work."""
+        if self._restored_source_state is not None:
+            saved = self._restored_source_state
+            self._restored_source_state = None
+            self.last_outcome_index = saved['last_outcome_index']
+            self.last_outcome = (None if self.last_outcome_index is None else json.loads(
+                self.workflow.journal.row('runtime_actions', self.episode_id,
+                    self.last_outcome_index)['result']))
+            self.feedback = saved['feedback']
 
     def restore(self):
         restored = self.workflow.completions.restore_source(self.episode_id)
@@ -1558,18 +1858,20 @@ class DecisionSource:
             action = self.workflow.journal.row('runtime_actions', self.episode_id, index)
             self.last_outcome = json.loads(action['result'])
             self.last_outcome_index = index
-        self._unfinished_own_actions = restored['unfinished_own_action_indices']
+        self._unfinished_own_actions = (self.workflow.inprocess_replay.unfinished(self)
+            if self.workflow.inprocess_replay is not None else restored['unfinished_own_action_indices'])
         self._latest_effect_index = restored['latest_effect_index']
         self._restored_source_state = restored['source_state']
         if self._restored_source_state is not None:
             self._source_revision = self._restored_source_state['revision']
-        self.workflow.recover_commissions(self)
+        if self.workflow.execution_binding is not None:
+            self.workflow.recover_commissions(self)
         if self.workflow.progress_provider is not None:
             self.workflow.progress_provider.flush_notifications()
         self._restored = True
 
     def record_effect(self, index, state):
-        if self.workflow.execution_binding is not None:
+        if self.workflow.execution_binding is not None or self.workflow.inprocess_replay is not None:
             self.workflow.completions.record_decision_effect(self.episode_id, index, {
                 'version': EFFECT_VERSION, 'state': state, 'report_values': self.report_values,
                 'report_basis_refs': self.report_basis, 'feedback': self.feedback})
@@ -1577,7 +1879,13 @@ class DecisionSource:
             self.checkpoint()
 
     def checkpoint(self):
-        if self.workflow.execution_binding is not None:
+        if self.workflow.inprocess_replay is not None and not self._inprocess_replay_ready:
+            # Rebuilding a prefix must not replace the original latest source
+            # checkpoint with a partially reconstructed transient state.
+            return
+        if self.workflow.execution_binding is not None or self.workflow.inprocess_replay is not None:
+            if self.workflow.inprocess_replay is not None and self._inprocess_replay_ready:
+                self.workflow.inprocess_replay.capture(self)
             saved = self.workflow.completions.checkpoint_source(self.episode_id,
                 expected_revision=self._source_revision, latest_effect_index=self._latest_effect_index,
                 last_outcome_index=self.last_outcome_index, feedback=self.feedback)
@@ -1599,19 +1907,29 @@ class DecisionSource:
             # Validate selection independently: report formatting must not
             # reject a valid scientific contribution or alter its credit.
             selection = response["selection"]
+            if self._delivery_resolution_ref is not None:
+                Draft202012Validator(schema).validate(response)
+                if response['report_update'] != self.report_values:
+                    raise ValueError('delivery_resolution_must_preserve_current_interpretation')
             if (self.workflow.permits_common_action(self, 'reason') and isinstance(selection, Mapping)
                     and selection.get("kind") == "reason"):
                 # Store owns row-level admission and preserves independent
                 # valid rows. Checking its full scientific payload here
                 # would prevent its partial-result path from ever running.
-                envelope = _object({"kind": {"const": "reason"}, "commit": {"type": "object"}})
+                envelope = self.workflow.reasoning_action_schema(self, {"type": "object"},
+                    _accept_legacy_quotes=True)
                 Draft202012Validator(envelope).validate(selection)
                 payload = selection["commit"]
                 commit_schema = self.workflow.store.reasoning_schema()
                 if (set(commit_schema.get("required", commit_schema["properties"]))
                         <= set(payload) <= set(commit_schema["properties"])
-                        and all(value == [] for value in payload.values())):
-                    raise ValueError("empty_reasoning_commit")
+                        and all(value == [] for value in payload.values())
+                        and selection.get('evidence_processing', {}).get('kind') != 'no_applicable_evidence'):
+                    owner = self.workflow.specialist(self)
+                    has_task_content = getattr(owner, 'reasoning_has_task_content', None)
+                    if has_task_content is None or not has_task_content(
+                            self.workflow.binding_context(self), selection):
+                        raise ValueError("empty_reasoning_commit")
             else:
                 Draft202012Validator(schema["properties"]["selection"]).validate(selection)
             with (self.workflow.store.transaction() if self.workflow.execution_binding is not None else nullcontext()):
@@ -1640,6 +1958,22 @@ class DecisionSource:
             self.feedback = {"status": "invalid", "category": "action_contract",
                 "detail": (schema_failure_diagnostic(error)
                            if isinstance(error, ValidationError) else str(error))}
+            if isinstance(error, ContractInformationError):
+                self.feedback['contract_error'] = {'code': error.code, 'field': error.field}
+                if error.code == 'closed_top_level_form_required':
+                    self.feedback['repair'] = (
+                        'schema_json must encode a JSON Schema object with the explicit top-level '
+                        'field "type": "object" and a properties object. Keep the intended properties, '
+                        'declare every field in required, and set additionalProperties to false. '
+                        'A properties object alone does not declare the required outer type.')
+                if isinstance(error.__cause__, ReportBoundaryError):
+                    self.feedback['schema_reason'] = str(error.__cause__)
+            if (isinstance(error, ContractError)
+                    and str(error) == 'component_native_return_channels_required'):
+                self.feedback['contract_error'] = {'code': str(error),
+                    'field': error.detail['field']}
+                self.feedback['required_fact_sources'] = error.detail['missing_fact_sources']
+                self.feedback['repair'] = error.detail['repair']
             assignment = selection.get('assignment') if isinstance(selection, Mapping) else None
             selector = assignment.get('selector') if isinstance(assignment, Mapping) else None
             if (isinstance(error, ContractError) and isinstance(error.detail, Mapping)
@@ -1674,13 +2008,18 @@ class DecisionSource:
             self.record_effect(index, 'rejected')
             return None
         try:
+            resolve_report_reference = self.workflow.resolver(self.scope, source=self)
             admitted = validate_form(response["report_update"], self.interpret_schema,
-                self.workflow.resolver(self.scope, source=self))
+                resolve_report_reference)
             self.workflow.validate_report(admitted, self.scope,
                 assignment=self.request.message.as_record().get("job_assignment"), grain=self.path[-1][0],
                 schema=self.interpret_schema, source=self)
             self.report_values = admitted
-            self.report_basis = actual_context["visible_record_refs"]
+            # Source metadata can expose private request/capture identifiers.
+            # The host-filled report basis has the same ownership rules as
+            # model-selected report references; visibility alone is no grant.
+            self.report_basis = [ref for ref in actual_context["visible_record_refs"]
+                if resolve_report_reference(ref)]
             self.feedback = None
         except (ValueError, KeyError, TypeError) as error:
             self.feedback = {"status": "invalid", "category": "report_format",
@@ -1709,7 +2048,12 @@ class DecisionSource:
                     payload = selection['commit']
                     ownership = ({'account_owner': (self.workflow.run_id, self.episode_id)}
                                  if payload.get('interpretation_accounts') else {})
-                    result = self.workflow.store.commit_reasoning(payload, self.scope, key, **ownership)
+                    specialist = self.workflow.specialist(self)
+                    execute_reasoning = getattr(specialist, 'execute_reasoning', None)
+                    result = (execute_reasoning(self.workflow.binding_context(self), selection, key)
+                              if execute_reasoning is not None else None)
+                    if result is None:
+                        result = self.workflow.store.commit_reasoning(payload, self.scope, key, **ownership)
                 elif selection['kind'] == 'wait':
                     try:
                         result = await self.workflow.perform_selected_wait(self, selection['condition'], index)
@@ -1740,15 +2084,28 @@ class DecisionSource:
             credit = None
         # Project from the recorded outcome. A crash between result publication
         # and projection resumes here without repeating the native operation.
+        observed_outcome = observes_action_outcome(selection['kind'], result['status'])
         with (self.workflow.store.transaction() if self.workflow.execution_binding is not None else nullcontext()):
             self.workflow.receive_native_outcome(self, result, index)
-            if credit is None and result["status"] in ("completed", "partial"):
+            if credit is None and observed_outcome:
                 self.workflow.receive_outcome(self, selection, result, index)
-                credit = (self.workflow.last_observed_credit(self) if selection['kind'] == 'wait'
-                          else self.workflow.source_credit_view(self)["credit"])
+        if credit is None and observed_outcome and selection['kind'] != 'wait':
+            # Native publication and its received inputs are committed before
+            # an owner requests a one-shot scientific judgment. The judgment is
+            # part of this same selected action, with no new episode or yield.
+            result = await self.workflow.automatic_score_updates(self, index, result)
+        with (self.workflow.store.transaction() if self.workflow.execution_binding is not None else nullcontext()):
+            if credit is None and observed_outcome:
+                if selection['kind'] == 'wait':
+                    credit = self.workflow.last_observed_credit(self)
+                else:
+                    credit_view = self.workflow.source_credit_view(self)
+                    credit = credit_view['credit']
+                    if selection.get('kind') == 'tool' and selection.get('tool') == 'shared.read_information':
+                        self.workflow.retain_shared_grading_results(self, result, credit_view)
                 journal.save("runtime_actions", {"episode_id": self.episode_id, "decision_index": index,
                     "action": _json(selection), "result": _json(result), "credit": credit})
-            if self.workflow.execution_binding is not None and result['status'] in ('completed', 'partial'):
+            if self.workflow.execution_binding is not None and observed_outcome:
                 self.workflow.completions.stage(self.episode_id, index, label=f"{selection['kind']}:{index}",
                     kind='own_action', controller_input=self.workflow.controller_value(self, index, credit),
                     child_return=None)
@@ -1757,16 +2114,19 @@ class DecisionSource:
         # Tools own query bounds; never reclip a selected evidence page here.
         self.last_outcome = result
         self.last_outcome_index = index
-        if result["status"] not in ("completed", "partial"):
+        if not observed_outcome:
             raise ActionFailure(result.get("feedback") or {"status": result["status"],
                 "category": result.get("error_code", "work_failed")})
         return self.workflow.controller_value(self, index, credit)
 
     async def finish(self, record):
         if self.request.report_contract is None:
+            result = {"credit": self.workflow.source_credit_view(self)["credit"],
+                'pending_handles': self.workflow.pending_handles(self)}
+            result.update(self.workflow.episode_bindings.current_report_facts(
+                self.workflow.binding_context(self)))
             await self.workflow.release(self.episode_id)
-            return Record({"credit": self.workflow.source_credit_view(self)["credit"],
-                           'pending_handles': self.workflow.pending_handles(self)})
+            return Record(result)
         saved = self.workflow.journal.row("runtime_forms", self.episode_id)
         if saved and saved["form"] is not None:
             form = json.loads(saved["form"])
@@ -1806,8 +2166,19 @@ class Workflow:
                  completed_action_inputs_version='completed_action_inputs_binding_v1',
                  native_job_events=None, episode_service_inputs=None,
                  annotation_child_roles=None, root_role='annotation', decision_protocol=None,
-                 root_action_boundary=ROOT_BOUNDARY_VERSION):
+                 root_action_boundary=ROOT_BOUNDARY_VERSION,
+                 episode_branch_lifecycle=EPISODE_BRANCH_LIFECYCLE,
+                 inprocess_completion_order=None):
+        from .inprocess_replay import VERSION as INPROCESS_COMPLETION_ORDER
+        if inprocess_completion_order not in (None, INPROCESS_COMPLETION_ORDER):
+            raise ValueError('unsupported_inprocess_completion_order')
+        if inprocess_completion_order is not None and execution_binding is not None:
+            raise ValueError('durable_execution_already_owns_completion_order')
+        self.inprocess_completion_order = inprocess_completion_order
         self.root_role = root_role
+        if episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE:
+            raise ValueError('original_episode_lifecycle_requires_its_pinned_implementation')
+        self.episode_branch_lifecycle = episode_branch_lifecycle
         if root_action_boundary not in (None, ROOT_BOUNDARY_VERSION):
             raise ValueError('unsupported_root_action_boundary')
         self.root_action_boundary = root_action_boundary
@@ -1853,7 +2224,8 @@ class Workflow:
         self.annotation_score_binding = _plain(annotation_score_binding)
         self.child_credit_binding = (_plain(child_credit_binding) if child_credit_binding is not None else
             {"kind": "custom", "projector": _binding_name(project_child_credit, "caller_injected"),
-             "meaning": "Local scientific investigation credit; not an additive parent task score."})
+             "meaning": "Available finding calculation; each scientific owner selects its task credit."}
+            if project_child_credit is not None else None)
         self.controller_binding = (_plain(controller_binding) if controller_binding is not None else
             {"kind": "custom", "factory": _binding_name(controller_factory, "caller_injected")})
         self.job_episodes = job_episodes
@@ -1899,6 +2271,13 @@ class Workflow:
         self.initial_known_record_refs = (tuple(initial_known_record_refs)
             if isinstance(initial_known_record_refs, (list, tuple)) else initial_known_record_refs)
         self.archive = JsonArchive(self.directory / "archive")
+        if self.inprocess_completion_order is not None:
+            from .inprocess_replay import InProcessReplay
+            if self.receipts is None:
+                raise ValueError('inprocess_completion_replay_requires_original_receipts')
+            self.inprocess_replay = InProcessReplay(self)
+        else:
+            self.inprocess_replay = None
         self.services = WorkflowServices(self)
         self.episode_job_progress_provider_binding = None
         if episode_service_factory is not None:
@@ -2053,7 +2432,26 @@ class Workflow:
         def dispatch(context):
             self.dispatch_commission(source, index, spec)
             return spec['handle']
-        return DeferredActionUnit(spec['child']['key'], dispatch, decision_index=index)
+        async def collect(context, handle):
+            status = await self.execution_backend.await_return_or_suspension(handle)
+            if not status['return_available']:
+                self.settle_unclaimed_child_failures(source)
+                return PendingAction(handle)
+            slot = self.next_return(source, only_handle=handle)
+            if slot is None:
+                delivery_ref = 'delivery_' + _digest({
+                    'run': self.run_id, 'parent': source.episode_id, 'index': index})[:24]
+                await self.resolve_pending_deliveries(source, source._selection_view,
+                    only_delivery_ref=delivery_ref)
+                row = self.store.db.execute('SELECT slot FROM runtime_completion_slots '
+                    'WHERE run_id=? AND episode_id=? AND original_decision_index=?',
+                    (self.run_id, source.episode_id, index)).fetchone()
+                slot = None if row is None else json.loads(row[0])
+            if slot is None:
+                raise WorkflowError('owned_return_requires_accounted_original_action')
+            return await self.completed_unit(source, slot).acquire_async(context)
+        return OwnedChildActionUnit(spec['child']['key'], dispatch,
+            decision_index=index, collect=collect)
 
     def dispatch_commission(self, source, index, spec):
         self.validate_child_choice(source, spec['child']['role'], original=True)
@@ -2085,12 +2483,161 @@ class Workflow:
         by_handle = {item['handle'] for item in self.commissions.pending(source.episode_id)['items']}
         for spec in self.commissions.recover_selected(source.episode_id):
             if spec['handle'] in by_handle:
+                if self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE:
+                    try:
+                        status = self.execution_backend.status(spec['handle'])
+                    except KeyError:
+                        pass  # An unpublished original intent still needs dispatch.
+                    else:
+                        if (status['failure'] is not None
+                                and status['execution_identity'] is None
+                                and not status['return_available']):
+                            # A recorded bootstrap failure is not permission to
+                            # retry work. Deliver it after source-state replay.
+                            continue
                 # This restores an already selected invocation. C2 inspects its
                 # original process incarnation and never repeats claimed work.
                 action = self.store.db.execute("SELECT decision_index FROM runtime_actions WHERE run_id=? "
                     "AND episode_id=? AND json_extract(result,'$.pending_handle')=?",
                     (self.run_id, source.episode_id, spec['handle'])).fetchone()
                 self.dispatch_commission(source, action[0], spec)
+
+    def settle_unclaimed_child_failures(self, source):
+        """Account for an attempted bootstrap without inventing child science."""
+        if (self.episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE
+                or self.journal.row('runtime_episodes', source.episode_id)['state'] != 'active'):
+            return
+        rows = self.store.db.execute("SELECT decision_index,result FROM runtime_actions "
+            "WHERE run_id=? AND episode_id=? AND json_extract(result,'$.status')='pending' "
+            "AND json_extract(result,'$.pending_handle') IS NOT NULL ORDER BY decision_index",
+            (self.run_id, source.episode_id)).fetchall()
+        for row in rows:
+            handle = json.loads(row['result'])['pending_handle']
+            try:
+                status = self.execution_backend.status(handle)
+            except KeyError:
+                continue  # Recovery publishes original intents before collection.
+            if (status['failure'] is None or status['execution_identity'] is not None
+                    or status['return_available']):
+                continue
+            index = row['decision_index']
+            with self.store.transaction():
+                original = self.journal.row('runtime_actions', source.episode_id, index)
+                if original['result'] != row['result'] or original['credit'] is not None:
+                    raise WorkflowError('unclaimed_child_failure_action_changed')
+                outcome = {'status': 'failed', 'execution_handle': handle,
+                    'record_refs': [], 'changed_record_refs': [], 'feedback': status['failure']}
+                self.journal.save('runtime_actions', {'episode_id': source.episode_id,
+                    'decision_index': index, 'action': original['action'],
+                    'result': _json(outcome), 'credit': None})
+                credit = self.source_credit_view(source)['credit']
+                self.journal.save('runtime_actions', {'episode_id': source.episode_id,
+                    'decision_index': index, 'action': original['action'],
+                    'result': _json(outcome), 'credit': credit})
+                self.completions.stage(source.episode_id, index, label=f'child_{index}',
+                    kind='own_action', controller_input=self.controller_value(source, index, credit),
+                    child_return=None)
+                source.last_outcome, source.last_outcome_index = outcome, index
+                source.feedback = status['failure']
+                source.checkpoint()
+
+    def pending_delivery(self, source, delivery_ref=None):
+        if self.episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE:
+            return None
+        rows = self.store.db.execute('SELECT a.* FROM runtime_report_attempts a '
+            'JOIN runtime_actions work ON work.run_id=a.run_id '
+            'AND work.episode_id=a.parent_episode_id AND work.decision_index=a.decision_index '
+            'WHERE a.run_id=? AND a.parent_episode_id=? AND a.failure IS NOT NULL '
+            'AND (work.result IS NULL OR json_extract(work.result,\'$.status\')=\'pending\') '
+            'ORDER BY a.decision_index', (self.run_id, source.episode_id)).fetchall()
+        for original in rows:
+            if delivery_ref is None or original['delivery_ref'] == delivery_ref:
+                return original
+        return None
+
+    def delivery_resolution_inputs(self, source, delivery_ref, context):
+        original = self.pending_delivery(source, delivery_ref)
+        if original is None:
+            raise WorkflowError('delivery_resolution_requires_owned_unfinished_child')
+        latest = self.store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? '
+            'AND parent_episode_id=? AND delivery_ref=? ORDER BY decision_index DESC LIMIT 1',
+            (self.run_id, source.episode_id, delivery_ref)).fetchone()
+        pending = {'delivery_ref': delivery_ref,
+            'original_decision_index': original['decision_index'],
+            'original_contract': json.loads(original['contract']),
+            'latest_contract': json.loads(latest['contract']),
+            'failure': None if latest['failure'] is None else json.loads(latest['failure'])}
+        schema = _object({'selection': {'anyOf': [_object({
+            'kind': {'type': 'string', 'const': 'redeliver_report'},
+            'delivery_ref': {'type': 'string', 'const': delivery_ref},
+            'purpose': {'type': 'string'}, 'schema_json': {'type': 'string'}})]},
+            # Enforce the frozen interpretation in apply_response. Encoding
+            # the entire object as const becomes an object-valued enum in
+            # the provider wire schema, which its structured output rejects.
+            'report_update': source.interpret_schema})
+        return {**context, 'pending_child_delivery': pending, 'tools': [],
+            'job_episode_options': []}, schema
+
+    async def resolve_pending_deliveries(self, source, view, *, only_delivery_ref=None):
+        original = self.pending_delivery(source, only_delivery_ref)
+        if original is None:
+            return
+        delivery_ref = original['delivery_ref']
+        source._delivery_resolution_ref = delivery_ref
+        try:
+            while True:
+                result = await source.next(view, delivery_ref=delivery_ref)
+                if not isinstance(result, ReportRedelivery):
+                    raise WorkflowError('delivery_resolution_requires_report_operation')
+                latest = self.store.db.execute('SELECT failure FROM runtime_report_attempts '
+                    'WHERE run_id=? AND parent_episode_id=? AND delivery_ref=? '
+                    'ORDER BY decision_index DESC LIMIT 1',
+                    (self.run_id, source.episode_id, delivery_ref)).fetchone()
+                if latest is not None and latest['failure'] is None:
+                    return
+        finally:
+            source._delivery_resolution_ref = None
+
+    async def next_branch_return(self, source, view):
+        """Complete existing owned work while selection is numerically yielded.
+
+        Keep the same active parent and receipt boundary. Durable notifications
+        release execution until a return exists; they are not episode actions.
+        This does not recreate an exited parent process or reopen closed history.
+        """
+        while True:
+            with self.execution_backend._connect() as events:
+                cursor = events.execute('SELECT coalesce(max(cursor),0) FROM events').fetchone()[0]
+            # A receipt may already be committed/acknowledged, including after
+            # interruption before its controller observation. Replay it first.
+            slot = self.completions.slot(source.episode_id, view.units_consumed)
+            if slot is not None:
+                return self.completed_unit(source, slot)
+            # Saved source state follows the old completed history. Applying it
+            # after a fresh admission would overwrite that return's feedback.
+            source.restore_checkpoint()
+            slot = self.next_return(source)
+            if slot is not None:
+                return self.completed_unit(source, slot)
+            await self.resolve_pending_deliveries(source, view)
+            slot = self.completions.slot(source.episode_id, view.units_consumed)
+            if slot is not None:
+                return self.completed_unit(source, slot)
+            # Collection can consume failed/interrupted child returns without a
+            # completed unit. Inspect the remaining commitments after admission.
+            pending = self.commissions.pending(source.episode_id)['items']
+            if not pending:
+                return None
+            conditions = [item.get('suspension') for item in pending]
+            state = source._execution_context._suspension
+            state.update({'kind': 'owned_child_return', 'handles': [item['handle'] for item in pending]}
+                if all(condition is not None for condition in conditions) else None)
+            try:
+                await self.execution_backend.wait_events({'version': 'event_condition_v1',
+                    'events': [{'handle': item['handle'], 'event': event, 'after_cursor': cursor}
+                        for item in pending for event in ('returned', 'state_changed')], 'reconsider_at': None})
+            finally:
+                state.update(None)
 
     def returned_request(self, spec):
         child, recorded = spec['child'], spec['child']['request']
@@ -2112,11 +2659,16 @@ class Workflow:
             raise WorkflowError('original_return_contract_changed')
         return EpisodeRequest(EpisodeGoal.from_record(recorded['goal']), Record(message), contract)
 
-    def next_return(self, source):
+    def next_return(self, source, *, only_handle=None):
+        self.settle_unclaimed_child_failures(source)
+        for pending in self.commissions.pending(source.episode_id)['items']:
+            self.execution_backend.supervise_receiver(pending['handle'])
         cursor = 0
         while True:
             page = self.execution_backend.return_page(source.episode_id, cursor, 16)
             for item in page['items']:
+                if only_handle is not None and item['handle'] != only_handle:
+                    continue
                 status = self.execution_backend.status(item['handle'])
                 if status['acknowledgment_id'] is not None:
                     continue
@@ -2134,8 +2686,12 @@ class Workflow:
                         if installed else None)
                     if saved is None:
                         raise WorkflowError('return_has_no_original_pending_action')
-                    admission = json.loads(saved[0])
-                    self.execution_backend.acknowledge(item['handle'], item['return_id'], admission['admission_id'])
+                    admission = load_return_admission(self.store, self.run_id, item['return_id'])
+                    observed = self.store.db.execute('SELECT 1 FROM runtime_observations WHERE run_id=? '
+                        'AND episode_id=? AND json_extract(observation,\'$.decision_index\')=?',
+                        (self.run_id, source.episode_id, admission['original_decision_index'])).fetchone()
+                    if observed is not None or admission['state'] == 'receiver_closed':
+                        self.execution_backend.acknowledge(item['handle'], item['return_id'], admission['admission_id'])
                     continue
                 index = action[0]
                 request = self.returned_request(spec)
@@ -2144,7 +2700,8 @@ class Workflow:
                     lambda form: None,
                     lambda form: self.receive_form(source, form, request.report_contract.schema, index),
                     lambda: self.source_credit_view(source)['credit'],
-                    lambda original_index, credit: self.controller_value(source, original_index, credit))
+                    lambda original_index, credit: self.controller_value(source, original_index, credit),
+                    defer_failed_delivery=self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE)
                 slot = None
                 with self.store.transaction():
                     parent_open = self.journal.row('runtime_episodes', source.episode_id)['state'] == 'active'
@@ -2162,13 +2719,17 @@ class Workflow:
                             kind='child_return', controller_input=Record(admission['controller_input']),
                             child_return={'handle': item['handle'], 'return_id': item['return_id'],
                                 'admission_id': admission['admission_id']})
-                    if admission['state'] != 'receiver_closed':
+                    if admission['state'] == 'delivery_pending':
+                        source.feedback = admission['delivery_failure']
+                        source.checkpoint()
+                    elif admission['state'] != 'receiver_closed':
                         recorded = self.journal.row('runtime_actions', source.episode_id, index)
                         source.last_outcome, source.last_outcome_index = json.loads(recorded['result']), index
                         if source.last_outcome.get('feedback') is not None:
                             source.feedback = source.last_outcome['feedback']
                         source.checkpoint()
-                self.execution_backend.acknowledge(item['handle'], item['return_id'], admission['admission_id'])
+                if admission['state'] == 'receiver_closed':
+                    self.execution_backend.acknowledge(item['handle'], item['return_id'], admission['admission_id'])
                 if admission['state'] == 'receiver_closed':
                     # The return stays durable without promoting an old
                     # pending action into a closed parent's live source state.
@@ -2228,18 +2789,28 @@ class Workflow:
         action = self.journal.row('runtime_actions', source.episode_id, index)
         source.last_outcome, source.last_outcome_index = json.loads(action['result']), index
         if slot['kind'] == 'own_action':
+            if json.loads(action['action']).get('kind') == 'redeliver_report':
+                attempt = self.store.db.execute('SELECT * FROM runtime_report_attempts '
+                    'WHERE run_id=? AND parent_episode_id=? AND decision_index=?',
+                    (self.run_id, source.episode_id, index)).fetchone()
+                contract = self.saved_delivery_contract(attempt['child_episode_id'],
+                    json.loads(attempt['contract']))
+                report = contract.admit(json.loads(attempt['form']), audit_identifiers=())
+                return ReportAcquisitionLeaf(slot, extract=lambda value: Record(value['controller_input']),
+                    result=lambda _, value: value, label=slot['label'], decision_index=index,
+                    report_delivery=ReportRedelivery(attempt['child_episode_id'], report=report))
             return ActionLeaf(slot, extract=lambda value: Record(value['controller_input']),
                 result=lambda _, value: value, label=slot['label'], decision_index=index)
         reference = slot['child_return']
         spec = self.execution_backend.load_commission(reference['handle'])
         returned = self.execution_backend.load_return(reference['handle'], reference['return_id'])
-        row = self.store.db.execute('SELECT admission FROM runtime_return_admissions WHERE run_id=? AND return_id=?',
-            (self.run_id, reference['return_id'])).fetchone()
-        admission = json.loads(row[0])
-        # Recover a commit followed by a lost backend acknowledgment even if
-        # replaying this slot immediately causes the controller to stop.
-        self.execution_backend.acknowledge(reference['handle'], reference['return_id'],
-            admission['admission_id'])
+        admission = load_return_admission(self.store, self.run_id, reference['return_id'])
+        # Ownership ends only after on_unit records this original observation.
+        # Replaying a staged receipt must not acknowledge unobserved credit.
+        if admission['state'] == 'execution_failed':
+            source.feedback = admission['delivery_failure']
+            return ActionLeaf(slot, extract=lambda value: Record(value['controller_input']),
+                result=lambda _, value: value, label=slot['label'], decision_index=index)
         request = self.returned_request(spec)
         child, completion = spec['child'], returned['completion']
         record = EpisodeRecord(child['role'], child['key'], completion['units_consumed'], completion['ended_by'],
@@ -2253,8 +2824,11 @@ class Workflow:
                     'AND parent_episode_id=? AND decision_index=?', (self.run_id, source.episode_id, index)).fetchone()
                 raise ReportDeliveryError(Record(json.loads(failure[0])))
             return admission['report']
+        delivery_contract = (request.report_contract if 'delivery_contract' not in admission else
+            self.saved_delivery_contract(child['episode_id'], admission['delivery_contract']))
         return ReturnedActionUnit(slot['label'], record, result, request,
-            lambda *_: Record(slot['controller_input']), report, decision_index=index)
+            lambda *_: Record(slot['controller_input']), report, decision_index=index,
+            delivery_contract=lambda: delivery_contract)
 
     def _closed_child_commission(self, source, selection, index):
         """Replay one wholly closed in-process commission from its real archives.
@@ -2396,6 +2970,9 @@ class Workflow:
                 return None
             projected, unsupported = [], []
             def reference_projection(reference, namespace):
+                if namespace == 'hpc_model' and child.role in {'hpc', 'hpc_prediction', 'hpc_execution'}:
+                    owner = self.episode_bindings.for_role(child.role)
+                    return owner.frozen_reference(child, reference, namespace)
                 if namespace == 'restriction_enzyme' and child.role == 'scientific_process':
                     from .restriction_mapping_references import RestrictionMappingReferences
                     return RestrictionMappingReferences(self.store, self.run_id).frozen_reference(
@@ -2463,6 +3040,31 @@ class Workflow:
                 raise WorkflowError('closed_commission_reference_projection_conflict') from error
             if unsupported:
                 return None
+            receiver_evidence = None
+            if set(references) != set(projected):
+                # The receiving host can derive a tool-specific attribution
+                # after admitting the typed form. These records belong to the
+                # original completed action, not to the child's form. Replay
+                # their frozen receipt evidence without calling producers or
+                # granting any new reference.
+                require(set(projected) <= set(references), 'reference_projection_conflict')
+                saved = self.store.db.execute('SELECT data FROM runtime_estimation_contexts WHERE run_id=? '
+                    'AND episode_id=? AND decision_index=?', (self.run_id, source.episode_id, index)).fetchone()
+                receiver_evidence = (json.loads(saved['data']).get('current_completion_evidence')
+                                     if saved is not None else None)
+                require(isinstance(receiver_evidence, dict)
+                    and receiver_evidence.get('run_id') == self.run_id
+                    and receiver_evidence.get('episode_id') == source.episode_id
+                    and receiver_evidence.get('original_decision_index') == index
+                    and receiver_evidence.get('action_kind') == 'episode_child'
+                    and type(receiver_evidence.get('received_record_refs')) is list
+                    and set(receiver_evidence['received_record_refs']) == set(references),
+                    'receiver_attribution_evidence_conflict')
+                for reference in set(references)-set(projected):
+                    record = self.store.get(reference)
+                    require(record.get('origin') == 'tool'
+                        and reference_projection(reference, record['record_type']),
+                        'receiver_attribution_reference_conflict')
             # Canonical form storage can reorder object properties. Validate
             # exact reference membership, then retain the original admission
             # order in the recorded boundary below.
@@ -2482,6 +3084,8 @@ class Workflow:
                 'observation_index_conflict')
             unit = parent_archive['units'][sequence]
             unit_ref = UnitRef(EpisodeRef(self.run_id, source.path).episode_id, sequence)
+            require(receiver_evidence is None or same(receiver_evidence.get('unit_ref'), unit_ref.as_record()),
+                'receiver_attribution_unit_conflict')
             require(same(unit.get('unit_ref'), unit_ref.as_record())
                 and unit.get('unit_id') == unit_ref.unit_id
                 and unit.get('unit_label') == f'child_{index}'
@@ -2492,10 +3096,11 @@ class Workflow:
                     'step': unit['controller_step'], 'unit_ref': unit['unit_ref'],
                     'decision_index': index}), 'observation_conflict')
             controller_input = unit['controller_input']
-            require(type(controller_input) is dict
-                and type(controller_input.get('credit')) in (int, float)
-                and type(action['credit']) in (int, float)
-                and controller_input['credit'] == action['credit']
+            from .episode_journal import decode_credit
+            from .numerical import validate_task_credit
+            require(type(controller_input) is dict, 'credit_conflict')
+            validate_task_credit(controller_input.get('credit'))
+            require(controller_input['credit'] == decode_credit(action['credit'])
                 and type(controller_input.get('estimation_action_index', index)) is int
                 and controller_input.get('estimation_action_index', index) == index, 'credit_conflict')
             expected_update = dict(record_id=child.episode_id, goal=request_value['goal'],
@@ -2717,6 +3322,8 @@ class Workflow:
             self.services.capabilities())) if specialist is not None else declared)
         if not set(roles) <= set(declared):
             raise WorkflowError('available_child_outside_declared_type_edges')
+        if len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False):
+            roles = tuple(role for role in roles if role == 'scientific_process')
         return roles
 
     def validate_child_choice(self, source, role, *, selection=None, original=False):
@@ -2725,6 +3332,20 @@ class Workflow:
         Absent-marker runs retain their original selection/recovery semantics.
         These are role and ownership checks, not scientific suitability checks.
         """
+        annotation_axes = len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False)
+        if annotation_axes and role != 'scientific_process':
+            raise ValueError('annotation_root_commissions_evidence_axes')
+        if annotation_axes and selection is not None and not original:
+            from .scientific_process_records import selection_fields
+            assignment = selection.get('assignment', {})
+            process = assignment.get('selection', {})
+            axis = process[selection_fields(process)[0]]['option_id']
+            ref = assignment.get('proposed_annotation_ref')
+            scope = self.store.validate_scope(selection['scope'], source.scope)
+            arms = self.source_credit_view(source)['credit']['arms']
+            if sum(arm['proposed_annotation_ref'] == ref and arm['axis'] == axis
+                    and arm['scope'] == scope for arm in arms) != 1:
+                raise ValueError('axis_assignment_requires_one_received_annotation_subject_scope')
         if self.annotation_child_roles is None:
             return
         roles = (self.declared_child_roles(source.path[-1][0]) if original else
@@ -2764,6 +3385,14 @@ class Workflow:
                 else not self.is_job_source(source))
 
     def permits_common_action(self, source, action):
+        if (action == 'wait' and len(source.path) == 1
+                and source.path[0][0] == 'annotation'
+                and self.annotation_child_roles == ('literature',)
+                and 'literature' in self.episode_bindings.roles
+                and not getattr(self.episode_bindings.for_role('literature'), 'supports_wait', True)):
+            # A literature-only root follows the same explicit wait capability
+            # as its bound children; A106 retains its separate analysis use.
+            return False
         if restricted_root(self, source) and action == 'tool':
             return self.receipts is not None
         binding = self.specialist(source)
@@ -2772,9 +3401,33 @@ class Workflow:
         return action in {'tool', 'wait'} or not self.is_job_source(source)
 
     def pending_work(self, source):
+        from .pending_assignment import original_assignment
         if self.execution_binding is not None:
             return self.commissions.pending(source.episode_id)
-        rows = self.store.db.execute("SELECT json_extract(result,'$.pending_handle') AS handle, "
+        if source._execution_context is not None:
+            invocations = source._execution_context._pending_children(source.path)
+            if invocations:
+                from .inprocess_waiting import public_child_handle
+                return {'version': 'pending_work_v2', 'captured_at': _now(), 'items': [
+                    # The scheduler's invocation ID is a child audit identity.
+                    # Keep the operational model view separate so admitting
+                    # that child's report does not poison the next input.
+                    {'handle': public_child_handle(source.episode_id, item.handle), 'role': item.role,
+                        'original_assignment': original_assignment(getattr(item, '_request', None),
+                            getattr(item, 'decision_index', None)),
+                        'lifecycle_state': 'returned' if item._task.done() else 'executing',
+                        # The monitor's private correlation embeds the child
+                        # audit ID. Its job and wake time remain useful here.
+                        'suspension': ({key: value for key, value in item._suspension.condition.items()
+                                if key != 'schedule_ref'}
+                            if isinstance(item._suspension.condition, Mapping)
+                            else item._suspension.condition),
+                        'event_target': False,
+                        'return_available': item._task.done(), 'selected_at': item.selected_at,
+                        'observed_at': _now(), 'resource_selection': None,
+                        'expectation_snapshot_refs': [], 'latest_progress_ref': None}
+                        for item in invocations]}
+        rows = self.store.db.execute("SELECT decision_index,json_extract(result,'$.pending_handle') AS handle, "
             "json_extract(result,'$.selected_at') AS selected_at FROM runtime_actions "
             "WHERE run_id=? AND episode_id=? AND json_extract(result,'$.status')='pending' "
             "AND json_extract(result,'$.pending_handle') IS NOT NULL ORDER BY decision_index",
@@ -2784,11 +3437,13 @@ class Workflow:
             status = self.execution_backend.status(row['handle'])
             spec = self.execution_backend.load_commission(row['handle'])
             items.append({'handle': row['handle'], 'role': spec['child']['role'],
+                'original_assignment': original_assignment(spec['child']['request'], row['decision_index']),
                 'lifecycle_state': status['lifecycle_state'], 'selected_at': row['selected_at'],
                 'observed_at': status['observed_at'], 'resource_selection': spec['resource_selection'],
                 'expectation_snapshot_refs': spec['expectation_snapshot_refs'],
-                'latest_progress_ref': None, 'return_available': status['return_available']})
-        return {'version': 'pending_work_v1', 'captured_at': _now(), 'items': items}
+                'latest_progress_ref': None, 'return_available': status['return_available'],
+                'suspension': status.get('suspension'), 'event_target': True})
+        return {'version': 'pending_work_v2', 'captured_at': _now(), 'items': items}
 
     def pending_handles(self, source):
         return [item['handle'] for item in self.pending_work(source)['items']]
@@ -2809,6 +3464,13 @@ class Workflow:
 
     def validate_wait_selection(self, source, condition):
         condition = validate_condition(_plain(condition))
+        if not condition['events']:
+            raise EventTargetError('wait_target_unavailable',
+                affected_refs=[self.binding_context(source).episode_id],
+                detail='selected_wait_requires_actual_outstanding_dependency')
+        from .inprocess_waiting import selected_owned_children
+        if selected_owned_children(self, source, condition) is not None:
+            return condition
         if self.native_event_information is not None:
             condition = self.native_event_information.validate_wait(self.binding_context(source), condition)
         else:
@@ -2840,6 +3502,19 @@ class Workflow:
             return support
 
     async def perform_selected_wait(self, source, condition, index):
+        from .inprocess_waiting import selected_owned_children, await_owned_return
+        if selected_owned_children(self, source, condition) is not None:
+            condition = self.validate_wait_selection(source, condition)
+            call = self.journal.row('runtime_model_calls', source.episode_id, index)
+            context = json.loads(call['request'])['context']
+            estimate = self.wait_estimate(source, condition, context)
+            outcome = await await_owned_return(self, source, condition)
+            # execute() retains this original wait action and its measured
+            # interval. Its ordinary zero-gain wait projection stays unchanged;
+            # the ready child's original invocation still owns typed receipt.
+            return {'status': 'completed', 'record_refs': [], 'changed_record_refs': [],
+                'result': outcome, 'wait_estimate': estimate,
+                'pending_work_after_action': self.pending_work(source)}
         wait_id = 'wait_' + _digest({'run': self.run_id, 'episode': source.episode_id, 'decision': index})
         saved = self.wait_store.get(wait_id)
         if saved is not None:
@@ -2855,19 +3530,16 @@ class Workflow:
                 'condition': condition, 'estimate_snapshot': self.wait_estimate(source, condition, context)}
             with self.store.transaction():
                 self.wait_store.select(request)
-        outcome = await self.wait_store.perform_wait(request, self.execution_backend)
+        from method_loop.suspension import external_wait
+        outcome = await external_wait(self.wait_store.perform_wait(request, self.execution_backend),
+            {'kind': 'selected_external_event', 'wait_id': wait_id,
+                'condition': request['condition']})
         return {'status': 'completed', 'record_refs': [], 'changed_record_refs': [],
             'result': outcome, 'wait_outcome': outcome, 'wait_estimate': request['estimate_snapshot'],
             'pending_work_after_action': self.pending_work(source)}
 
     def is_job_source(self, source):
         return self.job_episodes is not None and source.path[-1][0] in self.job_episodes.roles
-
-    def has_child_projection(self, source):
-        path = getattr(source, "path", ())
-        return (self.project_child_credit is not None and len(path) > 1
-                and (path[-1][0] == "improvement" or self.specialist(source) is not None
-                     and self.specialist(source).credit_kind(path[-1][0]) == 'scientific'))
 
     def child_credit_arguments(self, source):
         """Only the original commission, never another child's private history.
@@ -2877,9 +3549,15 @@ class Workflow:
         from recorded contributions, not from newly generated reporting prose.
         """
         contract = source.request.report_contract
-        return {"assignment": _plain({"goal": source.request.goal.as_record(),
+        message = source.request.message.as_record()
+        selected = message.get('episode_assignment', {})
+        if not isinstance(selected, Mapping):
+            raise ValueError('original_child_episode_assignment_required')
+        assignment = {"goal": source.request.goal.as_record(),
             "scope": source.scope, "purpose": contract.decision, "schema": contract.schema,
-            "initial_report": source.request.message.as_record()["initial_report"]}),
+            "initial_report": message["initial_report"]}
+        assignment.update(_plain(selected))
+        return {"assignment": _plain(assignment),
             "episode_id": source.episode_id, "run_id": self.run_id}
 
     def working_state(self, source):
@@ -2907,19 +3585,28 @@ class Workflow:
                 capabilities = list(read())
         from .workflow_budget import active_budget
         budget=active_budget()
-        whole={key:budget[key] for key in ('version','limits','disk_bandwidth_enforced')}
-        whole.update(max_concurrent_workflows=1,max_provider_processes_per_coordinator=1,
-            coverage='Python coordinator, provider, native workers, and all descendants')
-        return {'version': 'episode_resource_context_v1', 'local': resources.snapshot(),
+        whole={key:budget[key] for key in ('version', 'window_id', 'run_directory', 'environment_bounds') if key in budget}
+        whole.update(coverage='Python coordinator, provider, native workers, and all descendants',
+            ownership='One workflow per Codex window; other windows have independent slots.')
+        local_snapshot = resources.snapshot()
+        from .execution_planning import planning_context
+        import sqlite3
+        try:
+            shared_planning = planning_context(self, local_snapshot)
+        except (OSError, sqlite3.Error) as error:
+            shared_planning = {'state': 'unavailable', 'reason': type(error).__name__,
+                'planning': 'Shared observations are unavailable. Do not infer remote availability.'}
+        return {'version': 'episode_resource_context_v1', 'local': local_snapshot,
+            'execution_planning': shared_planning,
             'whole_workflow':whole,
             'ordinary_tool_job_limits': self.tools.local_job_policy.to_dict(),
             **({'operation_limits': self.tools.operation_resource_limits()}
                if callable(getattr(self.tools, 'operation_resource_limits', None)) else {}),
             'execution_capabilities': capabilities,
-            'planning': 'The whole-workflow cap includes Python, providers, and every native child. '
-                'Only one workflow may run locally in this Codex window. Parent and child coordinators each retain at most one provider, all inside the same aggregate cap. Other windows have independent slots. Requests exceeding the aggregate cap require an external resource. '
-                'Choose work within all limits. Capacity is shared across local jobs and runs; '
-                'a busy result preserves prepared work for a later retry. Only host admission reserves capacity.'}
+            'planning': 'Account for Python, providers and native workers when estimating local capacity. '
+                'One workflow may run locally in this Codex window; other windows have independent slots. '
+                'Use observed capacity and the actual configured execution contract. '
+                'A busy result preserves prepared work for a later retry. Only host admission reserves capacity.'}
 
     def shared_information_repository(self):
         if self.receipts is None or not hasattr(self.store, 'db'):
@@ -2930,10 +3617,64 @@ class Workflow:
         return self._shared_information
 
     def shared_information_context(self, source):
-        if source.path[-1][0] not in {'annotation', 'scientific_process', 'improvement'}:
+        from .shared_information import PARTICIPANT_ROLES
+        if source.path[-1][0] not in PARTICIPANT_ROLES:
             return None
         repository = self.shared_information_repository()
-        return None if repository is None else repository.context_view(self.binding_context(source))
+        if repository is None:
+            return None
+        view = repository.context_view(self.binding_context(source))
+        if (view['upward_recipient'] is None
+                and not any(view[name] for name in ('needs', 'information_available', 'dispositions'))):
+            return None
+        return view
+
+    def shared_information_catalog(self, source):
+        from .shared_information import PARTICIPANT_ROLES
+        if source is None or source.path[-1][0] not in PARTICIPANT_ROLES:
+            return []
+        repository = self.shared_information_repository()
+        return [] if repository is None else repository.catalog(self.binding_context(source))
+
+    def retain_shared_grading_results(self, source, outcome, credit_view):
+        """Retain existing saved grading after this original shared read's receipt.
+
+        Normal receipt, attribution and credit projection have already run.
+        This copies their authorized results; it neither grades again nor adds
+        a credit event or a separate decision. Later versions cannot replace
+        this original action's saved numerical payload.
+        """
+        body = outcome.get('result')
+        if (outcome.get('status') not in {'completed', 'partial'} or not isinstance(body, Mapping)
+                or body.get('kind') not in {'information', 'disposition'}
+                or 'saved_grading_results' in body):
+            return
+        context = self.binding_context(source)
+        selected = [ref for ref in body.get('evidence_refs', ()) if ref in context.received_record_refs]
+        if not selected:
+            return
+        from .shared_information_results import saved_grading_results
+        from .literature_sheet_updates import current_scoring_sheets
+        grading_context = self.episode_bindings.initial_decision_context(context)
+        delivered_cells = self.episode_bindings.received_report_facts(context)
+        literature_sheets = current_scoring_sheets(self.store, context)
+        details = credit_view
+        # Native __call__ projections may intentionally omit their detail rows.
+        # Use the existing saved-grading reader so a presentation page cannot
+        # turn a selected graded record into an apparently ungraded one.
+        total = credit_view.get('detail_pages', {}).get('source_contributions_total')
+        projector = self.scientific_projector_for_context(context)
+        reader = getattr(projector, 'read_details', None)
+        arguments = self.projector_receipt_arguments(projector, context.episode_id)
+        if (callable(reader) and 'known_record_refs' in arguments and type(total) is int
+                and total > len(credit_view.get('source_contributions', []))):
+            details = reader(self.store, _plain(context.scope), **arguments,
+                details_limit=total, details_offset=0)
+        saved = saved_grading_results(selected, details, grading_context, delivered_cells,
+            {'literature_current_scoring_sheets': literature_sheets})
+        body['saved_grading_results'] = saved
+        body['grading_delivery'] = ('Exact saved results from the received grading or scoring sheets.'
+            if saved else 'No saved grading was delivered for these selected records; this message supplies material only.')
 
     def uses_received_record_context(self, source):
         """Scientific visibility follows custody, not the chosen credit scalar."""
@@ -2946,26 +3687,30 @@ class Workflow:
         return bool(getattr(projector, 'requires_episode_receipts', False))
 
     def scientific_projector_for_context(self, context):
+        if len(context.path) == 1:
+            return self.project_credit
         binding = (self.episode_bindings.for_role(context.role)
             if context.role in self.episode_bindings.roles else None)
         select = getattr(binding, 'credit_projector', None)
         declared = select(context) if select is not None else None
-        if declared is not None:
-            return declared
-        return (self.project_child_credit if len(context.path) > 1
-            and self.project_child_credit is not None else self.project_credit)
+        if declared is None:
+            raise ValueError('scientific_task_credit_not_declared:' + context.role)
+        return declared
 
     def projector_receipt_arguments(self, projector, episode_id):
         if not getattr(projector, 'requires_episode_receipts', False):
             return {}
         if self.receipts is None:
             raise ValueError('numerical_credit_requires_episode_receipts')
-        if getattr(projector, 'requires_known_record_refs', False):
-            return {'known_record_refs': self.receipts.known(episode_id)}
-        return {'known_assessment_refs': self.receipts.known(episode_id, record_type='assessment')}
+        arguments = ({'known_record_refs': self.receipts.known(episode_id)}
+            if getattr(projector, 'requires_known_record_refs', False) else
+            {'known_assessment_refs': self.receipts.known(episode_id, record_type='assessment')})
+        if getattr(projector, 'requires_receiver_context', False):
+            arguments.update(run_id=self.run_id, episode_id=episode_id)
+        return arguments
 
     def projection_arguments(self, source):
-        arguments = self.child_credit_arguments(source) if self.has_child_projection(source) else {}
+        arguments = self.child_credit_arguments(source) if len(source.path) > 1 else {}
         projector = self.scientific_projector_for_context(self.binding_context(source))
         arguments.update(self.projector_receipt_arguments(projector, source.episode_id))
         return arguments
@@ -2980,14 +3725,70 @@ class Workflow:
                 # This read returns existing records, not newly published refs.
                 # Detail/provenance tools do not thereby deliver the scientific
                 # content of every witness mentioned in their diagnostics.
-                references.extend(row['id'] for row in result.get('result', {}).get('records', []))
+                references.extend(row['id'] for row in (result.get('result') or {}).get('records', []))
             self.receipts.receive(source.episode_id, references,
                                   kind='own_action', source_index=index)
-            derived = self.receive_tool_attributions(source, index, kind='own_action')
+            projection_read = selection.get('kind') == 'tool' and selection.get('tool') in {
+                'episode.credit', 'episode.annotation_score', 'episode.monitoring_information'}
+            derived = [] if projection_read else self.receive_tool_attributions(source, index, kind='own_action')
             if derived:
                 result['record_refs'] = list(dict.fromkeys([*result.get('record_refs', []), *derived]))
                 references.extend(ref for ref in derived if ref not in references)
-            self.publish_axis_information(source, references)
+
+    async def automatic_score_updates(self, source, index, result):
+        """Run owner-declared score judgments once, outside a write transaction."""
+        binding = self.specialist(source)
+        prepare = getattr(binding, 'automatic_score_judgments', None)
+        if prepare is None:
+            return result
+        complete = getattr(binding, 'complete_score_judgment', None)
+        if complete is None:
+            raise ValueError('automatic_score_judgment_completion_owner_required')
+        if self.store.db.in_transaction:
+            raise ValueError('automatic_score_judgment_requires_committed_inputs')
+        context = self.binding_context(source)
+        judgments = prepare(context)
+        if not judgments:
+            return result
+        updated = _plain(result)
+        for judgment in judgments:
+            if 'completed_outcome' in judgment:
+                outcome = judgment['completed_outcome']
+                original = judgment.get('completed_provenance', {})
+                if (original.get('episode_id') == source.episode_id
+                        and original.get('decision_index') != index
+                        and set(outcome.get('record_refs', [])) <= set(context.received_record_refs)):
+                    # Replay must recover the original action's exact result;
+                    # a later action must not publish that old change again.
+                    continue
+            else:
+                judgment_ref = judgment['judgment_ref']
+                if self.store.db.in_transaction:
+                    raise ValueError('automatic_score_judgment_requires_committed_inputs')
+                provenance = {'version': 'automatic_score_judgment_call_v1',
+                    'episode_id': source.episode_id, 'decision_index': index,
+                    'session_key': judgment_ref, 'phase': 'REASONING',
+                    'provider': type(self.provider).__module__ + '.' + type(self.provider).__qualname__}
+                model = getattr(self.provider, 'roles', {}).get('REASONING')
+                if isinstance(getattr(model, 'model', None), str):
+                    provenance['model'] = model.model
+                if isinstance(getattr(model, 'reasoning_effort', None), str):
+                    provenance['reasoning_effort'] = model.reasoning_effort
+                try:
+                    response = await self.provider.complete(judgment_ref, 'REASONING',
+                        judgment['instructions'], judgment['context'], judgment['output_schema'])
+                except Exception as error:
+                    outcome = complete(context, judgment_ref, provenance=provenance,
+                        failure={'code': 'automatic_score_judgment_call_failed',
+                            'exception_type': type(error).__name__})
+                else:
+                    outcome = complete(context, judgment_ref, response, provenance=provenance)
+            for field in ('record_refs', 'changed_record_refs'):
+                updated[field] = list(dict.fromkeys([*updated.get(field, []), *outcome.get(field, [])]))
+            if self.receipts is not None:
+                self.receipts.receive(source.episode_id, outcome.get('record_refs', []),
+                    kind='own_action', source_index=index)
+        return updated
 
     def receive_tool_attributions(self, source, index, *, kind):
         """Derive tool-specific numeric/trait evidence from actual receipts.
@@ -3001,10 +3802,24 @@ class Workflow:
             return []
         context = self.binding_context(source)
         known = set(self.receipts.known(source.episode_id))
-        generated, needs = callback(context, known)
+        structural = getattr(self.tools, 'received_structural_attributions', None)
+        generated, needs = (structural(context, known,
+            input_authority=self.services.protein_structure_input_authority(),
+            hpc_result_reader=self.services.read_received_hpc_result)
+            if callable(structural) else ([], []))
+        hpc = getattr(self.tools, 'received_hpc_attributions', None)
+        if callable(hpc):
+            received, pending = hpc(context, known | set(generated),
+                hpc_result_reader=self.services.read_received_hpc_result)
+            generated.extend(received)
+            needs.extend(pending)
+        attributed, attribution_needs = callback(context, known | set(generated))
+        generated.extend(attributed)
+        needs.extend(attribution_needs)
         generated = [ref for ref in generated if ref not in known]
-        if context.role == 'scientific_process':
-            from .shared_information import SharedInformation
+        repository = self.shared_information_repository()
+        if (context.role == 'scientific_process' and repository is not None
+                and repository.parent(context, require_active=True) is not None):
             for request_ref, need in needs:
                 args = {'target_ref':need['target_ref'],
                     'question':'Supply the specific attribution inputs for this measurement or local trait.',
@@ -3015,36 +3830,12 @@ class Workflow:
                             if need.get('required_operands') else {})}),
                     'reason':'Only this measurement/use is unresolved; native evidence and other traits retain their own scores.',
                     'blocking':False,'available_record_refs':[request_ref]}
-                published = SharedInformation(self.store,self.run_id).execute(context,'shared.request_information',args,
+                published = repository.execute(context,'shared.request_information',args,
                     known_record_refs=known,operation_key=f'{self.run_id}:{source.episode_id}:tool_attribution_need:{_digest(args)}')
                 generated.extend(ref for ref in published['record_refs'] if ref not in known)
         generated = list(dict.fromkeys(generated))
         if generated:self.receipts.receive(source.episode_id,generated,kind=kind,source_index=index)
         return generated
-
-    def publish_axis_information(self, source, references):
-        """Share availability after actual receipt, without widening a return."""
-        if self.receipts is None or source.path[-1][0] != 'scientific_process':
-            return
-        context = self.binding_context(source)
-        selection = context.assignment.get('selection', {})
-        axis = selection.get('evidence_axis', selection.get('annotation', {}))
-        axis_id = axis.get('option_id')
-        if axis_id not in {'A102','A103'}:
-            return
-        evidence = [ref for ref in dict.fromkeys(references)
-            if self.store.get(ref).get('provider') != 'episode.shared_information']
-        if not evidence:
-            return
-        material = context.assignment.get('context', {}).get(axis_id.lower()+'_material', {})
-        target = material.get('subject_ref') or _plain(context.scope)['subject_refs'][0]
-        repository = self.shared_information_repository()
-        repository.execute(context, 'shared.publish_information', {'target_ref':target,
-            'evidence_refs':evidence, 'qualification':
-                f'Actual received {axis_id} records are available. Original scopes, subjects, origins, maps and '
-                'qualifications remain in those records; this metadata publication adds no scientific score.'},
-            known_record_refs=self.receipts.known(source.episode_id),
-            operation_key=f'{self.run_id}:{source.episode_id}:{axis_id.lower()}_information:{_digest(sorted(evidence))}')
 
     def receive_native_outcome(self, source, result, index):
         if self.native_timing_information is not None:
@@ -3133,7 +3924,6 @@ class Workflow:
             kind='report_redelivery' if redelivery else 'child_form', source_index=index)
         references.extend(ref for ref in self.receive_tool_attributions(source,index,
             kind='report_redelivery' if redelivery else 'child_form') if ref not in references)
-        self.publish_axis_information(source, references)
         return references
 
     def source_credit_view(self, source, *, binding_snapshot=None):
@@ -3151,9 +3941,9 @@ class Workflow:
                 binding_snapshot.update(view=json.loads(canonical(_plain(result))),
                     selection=json.loads(canonical(_plain(selection))))
         else:
-            result = self.projection_view(
-                self.project_child_credit if self.has_child_projection(source) else self.project_credit,
-                source.scope, **self.projection_arguments(source))
+            projector = self.scientific_projector_for_context(self.binding_context(source))
+            result = self.projection_view(projector, source.scope,
+                **self.projection_arguments(source))
         if self.native_timing_information is not None:
             native = self.native_timing_information(self.store, source.scope, **self.native_timing_arguments(source))
             previous = result.get('monitoring_information_credit')
@@ -3194,7 +3984,9 @@ class Workflow:
         rows = self.store.db.execute("SELECT refs.value FROM runtime_actions actions "
             "JOIN json_each(actions.result,'$.progress_refs') refs "
             "WHERE actions.run_id=? AND actions.episode_id=? "
-            "AND json_extract(actions.result,'$.status') IN ('completed','partial') "
+            "AND (json_extract(actions.result,'$.status') IN ('completed','partial') "
+            "OR (json_extract(actions.action,'$.kind') IN ('tool','reason') "
+            "AND json_extract(actions.result,'$.status') IN ('failed','unavailable'))) "
             "ORDER BY actions.decision_index, refs.key", (self.run_id, source.episode_id))
         references.extend(row[0] for row in rows)
         return {'known_progress_refs': list(dict.fromkeys(references)),
@@ -3211,12 +4003,11 @@ class Workflow:
                         'received_native_durations': self.native_timing_information.as_record()}
             return binding
         if specialist is not None:
-            select = getattr(specialist, 'credit_projector', None)
             context = source if isinstance(source, BindingContext) else self.binding_context(source)
-            declared = select(context) if select is not None else None
-            if declared is not None:
-                return _plain(declared.as_record())
-        return self.child_credit_binding if self.has_child_projection(source) else self.credit_binding
+            return _plain(self.scientific_projector_for_context(context).as_record())
+        if len(source.path) == 1:
+            return self.credit_binding
+        raise ValueError('scientific_task_credit_not_declared:' + source.path[-1][0])
 
     def source_controller_credit(self, source):
         """Declare the actual local scalar's meaning without projecting it."""
@@ -3231,6 +4022,10 @@ class Workflow:
         binding = self.source_credit_binding(source)
         if not isinstance(binding, Mapping) or not binding:
             return None
+        context = source if isinstance(source, BindingContext) else self.binding_context(source)
+        annotation = self.services.proposed_annotation_for(context)
+        if annotation is not None:
+            binding = {**_plain(binding), 'proposed_annotation_ref': annotation}
         return {'credit_kind': kind, 'credit_binding': _plain(binding)}
 
     def extra_report_sources(self, source):
@@ -3246,7 +4041,9 @@ class Workflow:
             from .native_event_information import report_sources
             sources.update(report_sources())
         sources['pending_handles'] = {'type': 'array', 'meaning':
-            'Original selected child executions still pending when this episode closed. These handles survive parent closure; closure does not cancel them or establish scientific completion.',
+            ('Original selected child executions awaiting their outcome and parent receipt. Numerical yield suspends new selection while these owned returns remain; normal branch closure follows their settlement and does not establish scientific completion.'
+                if self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE else
+                'Original selected child executions still pending when this episode closed. These handles survive parent closure; closure does not cancel them or establish scientific completion.'),
             'report_schema': {'type': 'array', 'uniqueItems': True,
                 'items': {'type': 'string', 'format': 'reference',
                     'x-reference-namespace': 'execution_handle'}, 'x-source': 'pending_handles'}}
@@ -3262,8 +4059,14 @@ class Workflow:
             sources = native_sources | sources
         if (self.project_annotation_score is not None
                 and not (self.job_episodes and grain in self.job_episodes.roles)):
-            sources['annotation_score'] = {'type': 'number', 'meaning':
-                'Annotation support for the fixed scope at child closure, separately bound from investigation progress and numerical yield. Redelivery preserves this snapshot.'}
+            if getattr(self.project_annotation_score, 'provides_single_annotation_score', True):
+                sources['annotation_score'] = {'type': 'number', 'meaning':
+                    'Annotation support for the fixed scope at child closure, separately bound from investigation progress and numerical yield. Redelivery preserves this snapshot.'}
+            else:
+                sources['proposed_annotations'] = {'type': 'array', 'meaning':
+                    'Received proposed annotations and their separate evidence scores at child closure; unknown scores remain null.'}
+                sources['annotation_comparisons'] = {'type': 'array', 'meaning':
+                    'Best scored alternatives and ties for the same subject, region and question at child closure; the episode owns the annotation decision.'}
         if self.resource_estimator is not None:
             sources['resource_tool_estimates'] = resource_report_source()
         return sources
@@ -3302,9 +4105,18 @@ class Workflow:
         """
         return self.projection_view(self.project_credit, scope)
 
-    def projection_view(self, projector, scope, **arguments):
+    def projection_view(self, projector, scope, *, annotation_collection=False, **arguments):
         with self.store.read_snapshot():
             projected = projector(self.store, _plain(scope), **arguments)
+        if (isinstance(projected, Mapping) and isinstance(projected.get('credit'), Mapping)
+                and projected['credit'].get('mode') == 'annotation_axis_credit'):
+            from .numerical import validate_task_credit
+            return {**_plain(projected), 'credit': validate_task_credit(projected['credit'])}
+        if (annotation_collection and isinstance(projected, Mapping)
+                and projected.get('mode') == 'proposed_annotation_collection'
+                and 'credit' not in projected):
+            return {key: _plain(projected[key]) for key in ('mode', 'proposed_annotations',
+                'comparisons', 'scalar_mapping_version', 'aggregation_version')}
         if hasattr(projected, "credit"):
             value, axes = float(projected.credit), getattr(projected, "axis_components", None)
         elif isinstance(projected, Mapping):
@@ -3317,7 +4129,9 @@ class Workflow:
         if isinstance(axes, Mapping):
             result["axis_components"] = _plain(axes)
         if isinstance(projected, Mapping):
-            for key in ('retained_finding_count', 'inactive_dependencies', 'detail_pages', 'a101_sheet', 'interpretation'):
+            for key in ('retained_finding_count', 'inactive_dependencies', 'detail_pages', 'a101_sheet',
+                        'interpretation', 'axis_status', 'scalar_mapping_version',
+                        'support', 'opposition', 'aggregation_version'):
                 if key in projected:
                     result[key] = _plain(projected[key])
         return result
@@ -3325,13 +4139,25 @@ class Workflow:
     def credit(self, scope):
         return self.credit_view(scope)["credit"]
 
-    def annotation_context(self, scope):
+    def annotation_context(self, scope, *, source=None):
         """Separately bound annotation support; never a controller observation."""
         if self.project_annotation_score is None:
             return {}
-        view = self.projection_view(self.project_annotation_score, scope)
+        arguments = {}
+        if getattr(self.project_annotation_score, 'requires_episode_receipts', False):
+            if source is None:
+                raise ValueError('annotation_support_actual_receiver_required')
+            arguments = self.projector_receipt_arguments(self.project_annotation_score, source.episode_id)
+        view = self.projection_view(self.project_annotation_score, scope, annotation_collection=True, **arguments)
+        if view.get('mode') == 'proposed_annotation_collection':
+            return {'proposed_annotations': view['proposed_annotations'],
+                'annotation_comparisons': view['comparisons'],
+                'annotation_score_binding': self.annotation_score_binding}
         return {'annotation_score': view['credit'],
             'annotation_evidence_vector': view.get('axis_components'),
+            **({'annotation_evidence_status': view['axis_status']} if 'axis_status' in view else {}),
+            **({'annotation_support': view['support']} if 'support' in view else {}),
+            **({'annotation_opposition': view['opposition']} if 'opposition' in view else {}),
             'annotation_score_binding': self.annotation_score_binding}
 
     def local_outcome_preview(self, outcome, *, decision_index=None):
@@ -3343,6 +4169,10 @@ class Workflow:
         """
         if not isinstance(outcome, Mapping):
             return outcome
+        from .shared_information_results import outcome_view as shared_outcome_view
+        outcome = shared_outcome_view(outcome)
+        from .hpc_prompt import plan_outcome_view
+        outcome = plan_outcome_view(outcome)
         from .ensembl_acquisition import ensembl_outcome_view
         ensembl_view = ensembl_outcome_view(outcome)
         if ensembl_view is not None:
@@ -3371,17 +4201,16 @@ class Workflow:
                 preview["retained_record_refs"] = counts(len(retained), len(body["retained_record_refs"]))
             body["record_refs_are_preview"] = len(shown["record_refs"]) < len(refs)
             if batch["failure_rows_total"] is not None:
-                included = 0
-                for field in ("errors", "projection_errors"):
-                    if isinstance(body.get(field), list):
-                        body[field] = body[field][:size]
-                        included = len(body[field])
+                # Error diagnostics are returned whole, even when successful
+                # publication rows use the ordinary presentation preview.
+                included = max((len(body[field]) for field in ("errors", "projection_errors")
+                    if isinstance(body.get(field), list)), default=0)
                 preview["failures"] = counts(batch["failure_rows_total"], included)
             shown["result"] = body
         feedback = outcome.get("feedback")
         if (batch["failure_rows_total"] is not None and isinstance(feedback, Mapping)
                 and isinstance(feedback.get("rows"), list)):
-            shown["feedback"] = {**feedback, "rows": feedback["rows"][:size]}
+            shown["feedback"] = feedback
             preview["failures"] = counts(batch["failure_rows_total"], len(shown["feedback"]["rows"]))
         if batch.get("observation_query") is not None:
             preview["observation_query"] = {**batch["observation_query"], "limit": max(1, size)}
@@ -3394,15 +4223,47 @@ class Workflow:
     def controller(self, path):
         identity = Episode.identity(self.context, self.grains[path[-1][0]], path[-1][1], parent_path=path[:-1])
         row = self.journal.row("runtime_episodes", identity.episode_id)
-        controller = self.controller_factory(path, row["initial_credit"])
         role = path[-1][0]
-        if role in self.episode_bindings.roles:
-            binding = self.episode_bindings.for_role(role)
+        binding = self.episode_bindings.for_role(role) if role in self.episode_bindings.roles else None
+        bound = None
+        owner_controller = (getattr(binding, 'yield_controller', None)
+            if getattr(binding, 'private_yield_binding', False) else None)
+        if owner_controller is not None:
+            request = json.loads(row['request'])
+            bound = BindingContext(self.run_id, identity.episode_id, role, path,
+                request['message']['scope'], request['message'].get('episode_assignment', {}), request,
+                tuple(self.receipts.known(identity.episode_id)) if self.receipts is not None else ())
+            epoch = hashlib.sha256(canonical(path).encode()).hexdigest()
+            controller = owner_controller(bound, row['initial_credit'], epoch)
+        elif getattr(self.controller_factory, 'requires_original_task', False):
+            request = json.loads(row['request'])
+            bound = BindingContext(self.run_id, identity.episode_id, role, path,
+                request['message']['scope'], request['message'].get('episode_assignment', {}), request,
+                tuple(self.receipts.known(identity.episode_id)) if self.receipts is not None else ())
+            task_key = credit_definition = None
+            scientific_child = len(path) > 1 and (role == 'improvement'
+                or binding is not None and binding.credit_kind(role) == 'scientific')
+            if scientific_child:
+                choose_task = getattr(binding, 'continuation_task', None)
+                if choose_task is None:
+                    raise ValueError('scientific_continuation_task_not_declared:' + role)
+                task_key = choose_task(bound)
+                if not isinstance(task_key, str) or not task_key:
+                    raise ValueError('scientific_continuation_task_not_declared:' + role)
+                credit_definition = _plain(self.scientific_projector_for_context(bound).as_record())
+            controller = self.controller_factory(path, row['initial_credit'], context=bound,
+                task_key=task_key, credit_definition=credit_definition)
+        else:
+            # A saved historical factory keeps its original executable contract.
+            # Fresh task-aware factories declare the inputs above explicitly.
+            controller = self.controller_factory(path, row['initial_credit'])
+        if binding is not None and owner_controller is None:
             estimator = getattr(binding, 'practical_estimator', None)
             if estimator is not None:
-                request = json.loads(row['request'])
-                bound = BindingContext(self.run_id, identity.episode_id, role, path,
-                    request['message']['scope'], request['message']['episode_assignment'], request)
+                if bound is None:
+                    request = json.loads(row['request'])
+                    bound = BindingContext(self.run_id, identity.episode_id, role, path,
+                        request['message']['scope'], request['message']['episode_assignment'], request)
                 callback = estimator(bound)
                 if callback is not None:
                     from .numerical import YieldController
@@ -3446,16 +4307,27 @@ class Workflow:
                     or original.get('estimation_action_index', index) != index):
                 raise WorkflowError('recorded controller input does not match its action')
             return Record(original)
-        value = {"credit": credit}
-        if self.has_native_estimation() or self.execution_expectations is not None and self.execution_expectations.applies(source.path[-1][0]):
-            value["estimation_action_index"] = index
-        elif (self.execution_binding is not None or self.wait_inputs_version == 'wait_inputs_binding_v2'
-                or self.completed_action_inputs_version is not None):
-            value['estimation_action_index'] = index
-        else:
+        # Real-time fitting is part of the default iterator, independent of
+        # optional native estimates, waits or specialized receipt bindings.
+        # Every newly observed action supplies its existing original identity;
+        # the wrapper freezes its clock at observation, after work has returned.
+        value = {"credit": credit, "estimation_action_index": index}
+        if isinstance(credit, Mapping) and credit.get('mode') == 'annotation_axis_credit':
             action = self.journal.row('runtime_actions', source.episode_id, index)
-            if action is not None and json.loads(action['action']).get('kind') == 'wait':
-                value['estimation_action_index'] = index
+            selected = json.loads(action['action'])
+            if selected.get('kind') == 'episode_child' and selected.get('role') == 'scientific_process':
+                assignment = selected['assignment']
+                from .scientific_process_records import selection_fields
+                process = assignment['selection']
+                axis = process[selection_fields(process)[0]]['option_id']
+                ref = assignment.get('proposed_annotation_ref')
+                arms = [arm for arm in credit['arms']
+                    if arm['proposed_annotation_ref'] == ref and arm['axis'] == axis
+                    and arm['scope'] == selected['scope']]
+                if len(arms) != 1:
+                    raise WorkflowError('completed_axis_requires_one_original_annotation_subject_scope')
+                value['completed_annotation_axis'] = {name: arms[0][name] for name in
+                    ('proposed_annotation_ref', 'subject_ref', 'scope', 'axis')}
         binding = self.specialist(source)
         continuation = getattr(binding, 'continuation_for_action', None)
         if continuation is not None:
@@ -3583,8 +4455,10 @@ class Workflow:
 
     def catalog(self, scope, source=None):
         if restricted_root(self, source):
-            from .shared_information import catalog as shared_catalog
-            return shared_catalog() if self.receipts is not None else []
+            entries = self.shared_information_catalog(source)
+            if self.receipts is not None and source is not None and self.permits_common_action(source, 'wait'):
+                entries.append(_wait_estimate_operation())
+            return entries
         catalog = (self.job_episodes.catalog(source) if source is not None and self.is_job_source(source)
                    else self.specialist(source).catalog(self.binding_context(source))
                    if source is not None and self.specialist(source) is not None
@@ -3594,9 +4468,7 @@ class Workflow:
         knowledge_tools = knowledge_catalog()
         launch_tools = launch_instruction_catalog()
         from .shared_information import catalog as shared_catalog
-        shared_tools = (shared_catalog() if source is not None
-            and source.path[-1][0] in {'annotation', 'scientific_process', 'improvement'}
-            and self.receipts is not None else [])
+        shared_tools = self.shared_information_catalog(source)
         process_tools = []
         if self.scientific_process_binding is not None:
             from .scientific_process_library import catalog as scientific_catalog
@@ -3618,11 +4490,9 @@ class Workflow:
         if self.scientific_library_available(source):
             entries.extend(process_tools)
         if source is not None and self.permits_common_action(source, 'wait'):
-            entries.append({'name': 'episode.estimate_wait', 'description':
-                'Inspect the supported estimate for a proposed wait using your received progress, original duration snapshots and completed own-action history. Unknown event probabilities and gains remain unknown. This tool selects no wait, timer, resource or work.',
-                'input_schema': _object({'condition': _wait_condition_schema()})})
+            entries.append(_wait_estimate_operation())
         entries.append({"name": "episode.history", "description":
-            "Read only this Episode's prior decisions: metadata index, exact selected actions/outcomes and admitted direct-child forms, or a bounded publication-ID page from one prior own action. Failed outcomes remain failed. This ordinary read never executes old work or reads child-private conversations.",
+            "Read only this Episode's prior decisions: metadata index, exact selected actions/outcomes and admitted direct-child forms, or a bounded publication-ID page from one prior own action. Prior history-read bodies are represented by references to their original decision indices; read those indices directly rather than recursively copying history responses. Original scientific outcomes remain exact. Failed outcomes remain failed. In view=records, a saved rejected selection retains its exact rejection_feedback without becoming an executed outcome. This ordinary read never executes old work or reads child-private conversations.",
             "input_schema": {"anyOf": [{"type": "object", "additionalProperties": False,
                 "required": ["view"], "properties": {
                     "view": {"type": "string", "enum": ["index", "records"]},
@@ -3650,7 +4520,7 @@ class Workflow:
         if (not (source is not None and self.is_job_source(source))
                 and callable(getattr(self.project_annotation_score, 'read_details', None))):
             entries.append({'name': 'episode.annotation_score', 'description':
-                'Inspect the separately bound annotation-support score and its actual evidence operands for this fixed scope. This uses the same projector and policy as annotation_score in your decision context. Explicit limit and offset page its source contributions and inactive dependencies; limit zero requests metadata only. The result does not award investigation progress or establish biological correctness.',
+                'Inspect the separately bound score for each proposed annotation and its actual evidence operands for this fixed scope. This uses the same projector and policy as the annotation scores in your decision context. Explicit limit and offset page its source contributions and inactive dependencies; limit zero requests metadata only. The result does not award investigation progress or establish biological correctness.',
                 'input_schema': _object({
                     'limit': {'type': 'integer', 'minimum': 0},
                     'offset': {'type': 'integer', 'minimum': 0}})})
@@ -3661,7 +4531,15 @@ class Workflow:
                                          'offset': {'type': 'integer', 'minimum': 0}})})
         binding = self.specialist(source) if source is not None else None
         if self.decision_protocol == DECISION_EXCHANGE_PROTOCOL:
-            entries = [entry for entry in entries if entry['name'] != 'episode.history']
+            # The pending-decision lookup covers metadata and selected inputs
+            # only. Keep the existing ordinary reader for exact own outcomes;
+            # otherwise a fresh provider can see only its last source read.
+            # Metadata inspection stays in request_context, while a selected
+            # outcome read retains the original action/observation semantics.
+            for entry in entries:
+                if entry['name'] == 'episode.history':
+                    entry['input_schema']['anyOf'][0]['properties']['view'] = {
+                        'type': 'string', 'const': 'records'}
         names = getattr(binding, 'common_tool_names', None)
         if names is not None:
             permitted = set(names(self.binding_context(source)))
@@ -3697,11 +4575,14 @@ class Workflow:
             projector_arguments=self.projection_arguments(source) if projector is not None else {})
 
     def annotation_score_read(self, source, arguments):
+        projector_arguments = (self.projector_receipt_arguments(self.project_annotation_score, source.episode_id)
+            if self.project_annotation_score is not None else {})
         result = self.projection_read(source, arguments, self.project_annotation_score,
-                                      channel='annotation_score')
+                                      channel='annotation_score', projector_arguments=projector_arguments)
         if result['status'] == 'completed':
             details = result['result']
-            details['annotation_score'] = details.pop('credit')
+            if 'credit' in details:
+                details['annotation_score'] = details.pop('credit')
             details['interpretation'] = 'annotation_support_not_investigation_progress'
             details['annotation_score_binding'] = _plain(self.annotation_score_binding)
         return result
@@ -3717,7 +4598,11 @@ class Workflow:
                 result = _plain(reader(self.store, source.scope,
                     details_limit=arguments["limit"], details_offset=arguments["offset"],
                     **(projector_arguments or {})))
-            if not isinstance(result, dict) or "credit" not in result:
+            collection = (channel == 'annotation_score' and isinstance(result, dict)
+                and result.get('mode') == 'proposed_annotation_collection'
+                and isinstance(result.get('proposed_annotations'), list)
+                and isinstance(result.get('comparisons'), list) and 'credit' not in result)
+            if not isinstance(result, dict) or ("credit" not in result and not collection):
                 raise ValueError(channel+'_details_record_required')
         except Exception as error:
             return {"status": "failed", "record_refs": [], "changed_record_refs": [],
@@ -3725,6 +4610,24 @@ class Workflow:
                     "exception_type": type(error).__name__, "detail": str(error)}}
         return {"status": "completed", "record_refs": [], "changed_record_refs": [],
                 "result": result, "feedback": None}
+
+    def _decision_rejection(self, source, index, *, include_feedback=False):
+        """Read an actual own rejection; older journals may have no effects table."""
+        if self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+                "AND name='runtime_decision_effects'").fetchone() is None:
+            return None
+        projection = "json_extract(effect,'$.feedback')" if include_feedback else "NULL"
+        row = self.store.db.execute("SELECT " + projection + " AS feedback "
+            "FROM runtime_decision_effects WHERE run_id=? AND episode_id=? "
+            "AND decision_index=? AND json_extract(effect,'$.version')=? "
+            "AND json_extract(effect,'$.state')='rejected'",
+            (self.run_id, source.episode_id, index, EFFECT_VERSION)).fetchone()
+        if row is None:
+            return None
+        result = {"state": "rejected"}
+        if include_feedback:
+            result["feedback"] = json.loads(row["feedback"]) if row["feedback"] is not None else None
+        return result
 
     def _history_rows(self, source, before, *, offset=0, limit=None, indices=None, newest=False):
         # json_extract projects metadata in SQLite: archived source bodies,
@@ -3776,6 +4679,8 @@ class Workflow:
                 status = "pending"
             elif row["attempt_index"] is not None:
                 status = "report_delivered" if row["report_admitted"] else "report_delivery_failed"
+            elif self._decision_rejection(source, row["decision_index"]) is not None:
+                status = "rejected"
             elif (kind in {"child", "job_child", "episode_child"}
                     and ("improvement" if kind == "child" else row["child_role"]) in self.grains
                     and self.store.db.execute(
@@ -3800,6 +4705,26 @@ class Workflow:
         return {"total_prior_decisions": total, "preview_size": size,
                 "omitted_prior_decisions": total-len(entries), "entries": entries,
                 "exact_read_tool": "episode.history"}
+
+    @staticmethod
+    def _history_outcome_view(action):
+        if action is None or action['result'] is None:
+            return None
+        outcome = json.loads(action['result'])
+        selection = json.loads(action['action'])
+        body = outcome.get('result')
+        if (selection.get('kind') == 'tool' and selection.get('tool') == 'episode.history'
+                and isinstance(body, dict) and body.get('view') == 'records'
+                and isinstance(body.get('records'), list)
+                and body['records']):
+            # Keep the original journal result intact. A history result points
+            # to earlier decisions; copying its copies again adds no evidence.
+            indices = [record['decision_index'] for record in body['records']]
+            shown = {key: value for key, value in body.items() if key != 'records'}
+            shown['records_reference'] = {'tool': 'episode.history',
+                'arguments': {'view': 'records', 'decision_indices': indices}}
+            outcome = {**outcome, 'result': shown}
+        return outcome
 
     def history_read(self, source, args, *, before):
         if args["view"] == "publications":
@@ -3859,8 +4784,11 @@ class Workflow:
                         lambda value: self.validate_report(value, scope, assignment=assignment,
                             grain=role, schema=saved_schema, context=binding_context)).admit(json.loads(attempt["form"]),
                         audit_identifiers=(attempt["child_episode_id"], request["goal"]["goal_id"])).as_record()
+                rejection = (self._decision_rejection(source, index, include_feedback=True)
+                    if entry["status"] == "rejected" else None)
                 records.append({**entry, "selection": json.loads(row[0]) if row[0] is not None else None,
-                    "outcome": json.loads(action["result"]) if action and action["result"] is not None else None,
+                    "outcome": self._history_outcome_view(action),
+                    **({"rejection_feedback": rejection["feedback"]} if rejection is not None else {}),
                     "admitted_report": admitted,
                     "report_delivery_failure": json.loads(attempt["failure"]) if attempt and attempt["failure"] else None,
                     "execution_timing": {
@@ -3912,7 +4840,8 @@ class Workflow:
                       _composition_lookup=False):
         if restricted_root(self, source) and not _composition_lookup:
             from .shared_information import TOOLS as shared_tools
-            if self.receipts is None or name not in shared_tools:
+            waiting_operation = name == 'episode.estimate_wait' and self.permits_common_action(source, 'wait')
+            if self.receipts is None or (name not in shared_tools and not waiting_operation):
                 return {'status':'invalid','record_refs':[],'changed_record_refs':[],'result':None,
                     'feedback':{'code':'root_tool_requires_shared_coordination_operation'}}
         if source.path[-1][0] == 'scientific_process':
@@ -3999,6 +4928,10 @@ class Workflow:
                                 observation_kinds=support_observation_kinds(result['entry']))}}
                 return outcome
         if name == 'episode.estimate_wait':
+            if not self.permits_common_action(source, 'wait'):
+                return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [],
+                    'result': None, 'feedback': {'category': 'arguments_or_reference',
+                                               'code': 'tool_not_available_to_episode'}}
             call = self.journal.row('runtime_model_calls', source.episode_id, decision_index)
             original_context = json.loads(call['request'])['context']
             return {'status': 'completed', 'record_refs': [], 'changed_record_refs': [],
@@ -4077,6 +5010,21 @@ class Workflow:
                     result['native_execution_expectations'] = context['native_execution_expectations']
         return result
 
+    def reasoning_action_schema(self, source, commit_schema=None, *, _accept_legacy_quotes=False):
+        commit_schema = self.store.reasoning_schema() if commit_schema is None else commit_schema
+        specialist = self.specialist(source)
+        schema = (getattr(specialist, 'accept_reasoning_action_schema', None)
+                  if _accept_legacy_quotes else None)
+        if schema is None:
+            schema = getattr(specialist, 'reasoning_action_schema', None)
+        selected = schema(self.binding_context(source), commit_schema) if schema is not None else None
+        result = selected if selected is not None else _object({
+            'kind': {'type': 'string', 'const': 'reason'}, 'commit': commit_schema})
+        # Describe the existing pre-acquisition check without changing the
+        # payload, row-level partial admission or optional processing contract.
+        return {**result, 'description': '\n\n'.join(value for value in
+            (result.get('description'), REASONING_COMMIT_REQUIREMENT) if value)}
+
     def action_schema(self, source):
         # API documentation only. The parent still supplies its own contract
         # and initial values; this example is never selected or installed by
@@ -4126,21 +5074,17 @@ class Workflow:
         specialist = self.specialist(source)
         common_actions = (specialist.permitted_common_actions(self.binding_context(source))
                           if specialist is not None else ('tool', 'reason', 'child', 'wait', 'redeliver_report'))
-        gate_reader = getattr(specialist, 'decision_gate', None)
-        gate = gate_reader(self.binding_context(source)) if gate_reader is not None else None
-        if gate is not None:
-            common_actions = tuple(gate['common_actions'])
+        if not self.permits_common_action(source, 'wait'):
+            common_actions = tuple(action for action in common_actions if action != 'wait')
         if restricted_root(self, source):
             if self.receipts is None:
                 common_actions = tuple(action for action in common_actions if action != 'tool')
-        options = ([] if self.is_job_source(source) or 'reason' not in common_actions else [_object({"kind": {"type": "string", "const": "reason"},
-                            "commit": self.store.reasoning_schema()})])
+        options = ([] if self.is_job_source(source) or 'reason' not in common_actions else [
+            self.reasoning_action_schema(source)])
         if 'wait' in common_actions:
             options.append(_object({'kind': {'type': 'string', 'const': 'wait'},
                                     'condition': _wait_condition_schema()}))
         for item in (self.catalog(source.scope, source=source) if 'tool' in common_actions else ()):
-            if gate is not None and item['name'] not in gate['allowed_tools']:
-                continue
             branch = _object({"kind": {"type": "string", "const": "tool"},
                 "tool": {"type": "string", "const": item["name"]},
                 "arguments": _embedded_tool_schema(item["input_schema"])})
@@ -4156,7 +5100,8 @@ class Workflow:
             "schema_json": {"type": "string", "description": "JSON encoding of your parent-defined closed return form: explicit required fields, additionalProperties false, typed arrays, and strings restricted to enum codes or declared semantic formats. A reference can declare format reference and x-reference-namespace. Optional top-level x-source selectors bind recorded facts named in available_report_facts; do not ask a model to invent those facts. These examples are optional API guidance; choose fields and meanings for your actual later decision. Fact-only example: " + _json(form_example) + " Interpretive example, selecting actual assessment records rather than a findings paragraph: " + _json(interpretive_example)},
             "initial_report_json": {"type": "string", "description": "JSON containing exactly the interpretation fields you chose (those without x-source), with parent-supplied initial values. Use {} for the fact-only example; for the interpretive example use {\"interpreted_assessment_refs\":[],\"unresolved_hypothesis_refs\":[]}. Those initial arrays are not new child judgments. If you request other interpreted fields, define their allowed meanings and initialize them explicitly. The runtime does not choose fields or unknown values for you."}})
         if not self.is_job_source(source):
-            explicit_roles = (None if self.annotation_child_roles is None else
+            explicit_roles = (None if self.annotation_child_roles is None
+                and not (len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False)) else
                 self.available_child_roles(source))
             if (specialist is None and self.scientific_process_binding is None and 'child' in common_actions
                     and (explicit_roles is None or 'improvement' in explicit_roles)):
@@ -4183,7 +5128,9 @@ class Workflow:
                     options.append(_object(properties))
         if not self.is_job_source(source) and 'redeliver_report' in common_actions:
             options.append(_object({"kind": {"type": "string", "const": "redeliver_report"},
-            "delivery_ref": {"type": "string"}, "purpose": {"type": "string"},
+            "delivery_ref": {"type": "string", "description":
+                "Copy the delivery_ref from report_deliveries or report_delivery_failure for the saved child report."},
+            "purpose": {"type": "string"},
             "schema_json": {"type": "string"}}))
         return _object({"selection": {"anyOf": options}, "report_update": source.interpret_schema})
 
@@ -4200,15 +5147,34 @@ class Workflow:
                 selection=selection, original=original)
         common_action = ('child' if selection['kind'] in {'child', 'job_child', 'episode_child'}
                          else selection['kind'])
-        if not self.permits_common_action(source, common_action):
+        resolving = (selection['kind'] == 'redeliver_report'
+            and selection.get('delivery_ref') == source._delivery_resolution_ref
+            and self.pending_delivery(source, selection.get('delivery_ref')) is not None)
+        if not resolving and not self.permits_common_action(source, common_action):
             raise ValueError('action_not_available_to_episode')
         if restricted_root(self, source) and selection['kind'] == 'tool':
-            if selection.get('tool') not in {
+            recorded = self.journal.row('runtime_actions', source.episode_id, index)
+            replay = (recorded is not None and recorded['result'] is not None
+                and json.loads(recorded['action']) == selection)
+            if not replay and selection.get('tool') not in {
                     item['name'] for item in self.catalog(source.scope, source=source)}:
                 raise ValueError('action_not_available_to_episode')
         closed = self._closed_child_commission(source, selection, index)
         if closed is not None:
             return closed
+        if self.execution_binding is None and selection['kind'] in {'child', 'job_child', 'episode_child'}:
+            original = self.journal.row('runtime_actions', source.episode_id, index)
+            if original is not None and original['result'] is not None:
+                outcome = json.loads(original['result'])
+                if outcome.get('status') == 'failed' and outcome.get('feedback', {}).get('category') == 'child_execution':
+                    if json.loads(original['action']) != selection or original['credit'] is None:
+                        raise WorkflowError('original_child_failure_replay_conflict')
+                    def failed_result(_):
+                        source.last_outcome, source.last_outcome_index = outcome, index
+                        source.feedback = outcome['feedback']
+                        return self.controller_value(source, index, original['credit'])
+                    return ActionLeaf(selection, extract=failed_result, result=lambda _, result: result,
+                        label=f'child_{index}', decision_index=index)
         if selection['kind'] == 'wait':
             original = self.journal.row('runtime_actions', source.episode_id, index)
             recorded = original is not None and json.loads(original['action']) == selection
@@ -4222,7 +5188,7 @@ class Workflow:
         if selection["kind"] == "redeliver_report":
             return self.redeliver(source, selection, index)
         if selection["kind"] not in {"child", "job_child", "episode_child"}:
-            if self.execution_binding is not None:
+            if self.execution_binding is not None or self.inprocess_replay is not None:
                 old = self.journal.row('runtime_actions', source.episode_id, index)
                 if old is not None and json.loads(old['action']) != selection:
                     raise WorkflowError('reconstructed selected work changed')
@@ -4249,6 +5215,14 @@ class Workflow:
         episode_assignment = None
         scientific_process = None
         schema, report_declaration = self.expanded_contract_form(source, selection, index, role)
+        # A planned HPC launch must return its actual endpoint receipt. Reject
+        # a form which cannot carry it before any submission; never widen the
+        # caller's form or recreate an original submitted job to repair a form.
+        hpc_launch = (role == 'launch' and source.path[-1][0] in {'hpc', 'hpc_execution'}
+                      or role == 'launch_hpc' and any(part[0] == 'hpc' for part in source.path))
+        if hpc_launch and not any(node.get('x-source') == 'execution_handoff_refs'
+                                  for node in schema.get('properties', {}).values()):
+            raise ContractError('hpc_launch_requires_original_handoff_fact_in_return_form')
         initial = parse_json_object(selection["initial_report_json"])
         if selection['kind'] == 'episode_child':
             # Assignment-specific references need the child's original request.
@@ -4332,13 +5306,21 @@ class Workflow:
             contract_binding['context'] = self.binding_context(child.source)
             contract_binding['resolver'] = self.resolver(scope, assignment=assignment, grain=role,
                 context=contract_binding['context'])
+            allow_suspension = self.permits_common_action(child.source, 'wait')
             if self.execution_binding is not None:
                 return self.commission_child(source, child, selection, index)
         def admitted_report(result, request):
             delivery_ref = "delivery_" + _digest({"run": self.run_id, "parent": source.episode_id, "index": index})[:24]
-            saved = self.store.db.execute('SELECT form,failure FROM runtime_report_attempts '
-                'WHERE run_id=? AND parent_episode_id=? AND decision_index=?',
-                (self.run_id, source.episode_id, index)).fetchone()
+            owned = self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE
+            action = self.journal.row('runtime_actions', source.episode_id, index)
+            frozen_index = (None if action['result'] is None else
+                json.loads(action['result']).get('delivery_resolution_index'))
+            saved = self.store.db.execute('SELECT * FROM runtime_report_attempts '
+                'WHERE run_id=? AND parent_episode_id=? AND '
+                + ('decision_index=?' if frozen_index is not None or not owned else
+                    'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'),
+                (self.run_id, source.episode_id,
+                    frozen_index if frozen_index is not None else delivery_ref if owned else index)).fetchone()
             if saved is not None:
                 if saved['failure'] is not None:
                     raise ReportDeliveryError(Record(json.loads(saved['failure'])))
@@ -4354,27 +5336,36 @@ class Workflow:
                     raise ReportDeliveryError(Record(feedback)) from error
                 self.save_attempt(source.episode_id, index, delivery_ref, child.source.episode_id,
                                   contract, form=admitted)
-            references = self.receive_form(source, admitted, schema, index)
+            delivery_index = index if saved is None else saved['decision_index']
+            delivery_schema = schema if saved is None else json.loads(saved['contract'])['measurements']['schema']
+            references = self.receive_form(source, admitted, delivery_schema, delivery_index,
+                redelivery=delivery_index != index)
             return admitted, references
 
         def credit(result, completion, request):
             old = self.journal.row("runtime_actions", source.episode_id, index)
             if old["result"] is None:
                 facts = self.facts(child.source)
-                if self.receipts is not None:
-                    # Generic method_loop asks for the action value before the
-                    # report callback. Admit once here, then reuse that exact
-                    # attempt there. Failure preserves child work but conveys
-                    # no unreturned information to this parent.
-                    try:
-                        _, returned = admitted_report(result, request)
-                    except ReportDeliveryError:
-                        returned = []
+                if (self.receipts is not None
+                        or self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE):
+                    # Typed delivery has succeeded before this credit callback.
+                    # Reuse that original admitted form; a failed delivery is
+                    # never a completed acquisition with an empty receipt.
+                    _, returned = admitted_report(result, request)
                     changed = set(facts['changed_record_refs'])
                     facts = {'committed_record_refs': returned,
                              'changed_record_refs': [ref for ref in returned if ref in changed]}
                 outcome = {"status": "completed", "record_refs": facts["committed_record_refs"],
                     "changed_record_refs": facts["changed_record_refs"]}
+                original_delivery = self.store.db.execute('SELECT MAX(decision_index) '
+                    'FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? '
+                    'AND delivery_ref=?', (self.run_id, source.episode_id,
+                        'delivery_' + _digest({'run': self.run_id, 'parent': source.episode_id,
+                            'index': index})[:24])).fetchone()[0]
+                outcome['delivery_resolution_index'] = original_delivery
+                from .episode_source_failure import child_completion_status
+                outcome['child_completion'] = child_completion_status(self.store, self.run_id,
+                    child.source.episode_id, completion.as_record(), delivery='admitted')
                 if (self.wait_inputs_version == 'wait_inputs_binding_v2'
                         or self.completed_action_inputs_version is not None):
                     outcome['pending_work_after_action'] = self.pending_work(source)
@@ -4391,10 +5382,21 @@ class Workflow:
                 self.journal.save("runtime_actions", {"episode_id": source.episode_id,
                     "decision_index": index, "action": old["action"],
                     "result": old["result"], "credit": value})
+            # Successful typed delivery may still carry a partial child whose
+            # source failed. Present this actual completed own action to the
+            # assigning parent, just as for an ordinary tool or failed child.
+            source.last_outcome, source.last_outcome_index = json.loads(old['result']), index
+            source.checkpoint()
             return self.controller_value(source, index, value)
-        def report(result, completion, request):
-            if self.receipts is not None:
-                return admitted_report(result, request)[0]
+        async def report(result, completion, request):
+            if self.receipts is not None or self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE:
+                try:
+                    return admitted_report(result, request)[0]
+                except ReportDeliveryError as error:
+                    source.feedback = error.feedback.as_record()
+                    await self.resolve_pending_deliveries(source, source._selection_view,
+                        only_delivery_ref=source.feedback['delivery_ref'])
+                    return admitted_report(result, request)[0]
             delivery_ref = "delivery_" + _digest({"run": self.run_id, "parent": source.episode_id, "index": index})[:24]
             try:
                 admitted = contract.admit(result.as_record()["form"], audit_identifiers=(
@@ -4411,13 +5413,66 @@ class Workflow:
         scheduled = 'delay_seconds' in selection
         if scheduled:
             self.journal.schedule_child(source.episode_id, index, selection, child.source.episode_id)
-        return TimedChildUnit(child, credit, report, self.journal, source.episode_id, index, scheduled=scheduled)
+        async def resolved_credit(result, completion, request):
+            # The child is closed; this selected acquisition is not complete
+            # until its typed return has reached its assigning parent.
+            try:
+                admitted_report(result, request)
+            except ReportDeliveryError as error:
+                source.feedback = error.feedback.as_record()
+                await self.resolve_pending_deliveries(source, source._selection_view,
+                    only_delivery_ref=source.feedback['delivery_ref'])
+                admitted_report(result, request)
+            value = credit(result, completion, request)
+            original = self.journal.row('runtime_actions', source.episode_id, index)
+            resolved_index = json.loads(original['result']).get('delivery_resolution_index')
+            # Recovery consumes the saved communication within this original
+            # acquisition, rather than replaying it as a new selected action.
+            if resolved_index is not None:
+                source.calls = max(source.calls, resolved_index + 1)
+            return value
+        def delivery_contract():
+            action = self.journal.row('runtime_actions', source.episode_id, index)
+            resolved_index = (None if action['result'] is None else
+                json.loads(action['result']).get('delivery_resolution_index'))
+            latest = self.store.db.execute('SELECT contract FROM runtime_report_attempts '
+                'WHERE run_id=? AND parent_episode_id=? AND '
+                + ('decision_index=?' if resolved_index is not None else
+                    'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'),
+                (self.run_id, source.episode_id, resolved_index if resolved_index is not None else
+                    'delivery_' + _digest({'run': self.run_id, 'parent': source.episode_id,
+                        'index': index})[:24])).fetchone()
+            return contract if latest is None else self.saved_delivery_contract(
+                child.source.episode_id, json.loads(latest['contract']))
+        owned = self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE
+        def failed_child(error):
+            outcome = {'status': 'failed', 'record_refs': [], 'changed_record_refs': [],
+                'feedback': {'category': 'child_execution', 'exception_type': type(error).__name__}}
+            from .communication import ReportBoundaryError
+            if isinstance(error, ReportBoundaryError):
+                outcome['feedback']['report_boundary'] = dict(error.diagnostic)
+            self.journal.save('runtime_actions', {'episode_id': source.episode_id,
+                'decision_index': index, 'action': _json(selection), 'result': _json(outcome), 'credit': None})
+            value = self.source_credit_view(source)['credit']
+            self.journal.save('runtime_actions', {'episode_id': source.episode_id,
+                'decision_index': index, 'action': _json(selection), 'result': _json(outcome), 'credit': value})
+            source.last_outcome, source.last_outcome_index = outcome, index
+            source.feedback = outcome['feedback']
+            return self.controller_value(source, index, value)
+        return TimedChildUnit(child, resolved_credit if owned else credit, report,
+            self.journal, source.episode_id, index, scheduled=scheduled,
+            delivery_contract=delivery_contract if owned else None, receive_failure=failed_child,
+            allow_suspension=allow_suspension)
 
     @staticmethod
     def delivery_feedback(delivery_ref, error):
         diagnostic = error.diagnostic
-        return {"kind": "report_delivery_failure", "delivery_ref": delivery_ref,
+        feedback = {"kind": "report_delivery_failure", "delivery_ref": delivery_ref,
                 "reason": diagnostic["code"], "field": diagnostic.get("field")}
+        if diagnostic["code"] == "literature_reaction_projection_version_mismatch":
+            from .literature_reaction_storage import reaction_return_view_requirements
+            feedback.update(reaction_return_view_requirements())
+        return feedback
 
     def save_attempt(self, parent_id, index, delivery_ref, child_id, contract, *, form=None, failure=None,
                      report_contract_declaration=None):
@@ -4444,6 +5499,22 @@ class Workflow:
                  **({'timing_receipt_issues': json.loads(row['timing_receipts'])['issues']}
                     if row['timing_receipts'] is not None and json.loads(row['timing_receipts'])['issues'] else {})}
                 for row in rows]
+
+    def saved_delivery_contract(self, child_id, saved):
+        child = self.journal.row('runtime_episodes', child_id)
+        request, path = json.loads(child['request']), json.loads(child['path'])
+        scope, role = request['message']['scope'], path[-1][0]
+        assignment = request['message'].get('job_assignment')
+        context = BindingContext(self.run_id, child_id, role, path, scope,
+            request['message'].get('episode_assignment', {}), request)
+        schema = saved['measurements']['schema']
+        contract = TypedReportContract(saved['decision'], schema,
+            self.resolver(scope, assignment=assignment, grain=role, context=context),
+            lambda value: self.validate_report(value, scope, assignment=assignment,
+                grain=role, schema=schema, context=context))
+        if contract.as_record() != saved:
+            raise WorkflowError('recorded_delivery_contract_changed')
+        return contract
 
     def redeliver(self, source, selection, index):
         prior = self.store.db.execute("SELECT * FROM runtime_report_attempts WHERE run_id=? "
@@ -4485,7 +5556,39 @@ class Workflow:
             return ReportRedelivery(child_id, failure=Record(feedback))
         self.save_attempt(source.episode_id, index, selection["delivery_ref"], child_id,
                           contract, form=admitted.as_record(), report_contract_declaration=declaration)
-        self.receive_form(source, admitted.as_record(), schema, index, redelivery=True)
+        pending = self.pending_delivery(source, selection['delivery_ref'])
+        if pending is not None and self.execution_binding is not None:
+            original_index = pending['decision_index']
+            row = self.store.db.execute('SELECT admission FROM runtime_return_admissions '
+                'WHERE run_id=? AND parent_episode_id=? AND original_decision_index=?',
+                (self.run_id, source.episode_id, original_index)).fetchone()
+            if row is None:
+                raise WorkflowError('pending_delivery_missing_original_admission')
+            original = json.loads(row[0])
+            spec = self.execution_backend.load_commission(original['handle'])
+            returned = self.execution_backend.load_return(original['handle'], original['return_id'])
+            original_request = self.returned_request(spec)
+            receiver = ReceiverBindingV1(self.store, self.journal, original_index,
+                original_request.report_contract, lambda form: None,
+                lambda form: self.receive_form(source, form, schema, index, redelivery=True),
+                lambda: self.source_credit_view(source)['credit'],
+                lambda original_index, credit: self.controller_value(source, original_index, credit),
+                defer_failed_delivery=True)
+            resolve_return_delivery(spec, returned, receiver,
+                repair_decision_index=index, delivery_contract=contract)
+            action = self.journal.row('runtime_actions', source.episode_id, original_index)
+            source.last_outcome, source.last_outcome_index = json.loads(action['result']), original_index
+            source.feedback = None
+        elif pending is not None or self.episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE:
+            self.receive_form(source, admitted.as_record(), schema, index, redelivery=True)
+        else:
+            from .episode_report_acquisition import acquire_report_evidence
+            controller_input = acquire_report_evidence(self, source, selection, index,
+                original_attempt=prior, admitted=admitted, schema=schema)
+            if controller_input is not None:
+                return ReportAcquisitionLeaf(selection, extract=lambda _: controller_input,
+                    result=lambda _, value: value, label=f'redeliver_report:{index}',
+                    decision_index=index, report_delivery=ReportRedelivery(child_id, report=admitted))
         return ReportRedelivery(child_id, report=admitted)
 
     def facts(self, source, *, completion_record=None):
@@ -4493,6 +5596,10 @@ class Workflow:
         if saved is not None:
             facts = json.loads(saved["facts"])
             facts.pop("interpretations", None)
+            # Archived forms remain immutable. Bindings may expose a separate
+            # current view over the receiver's actual saved scientific sheets;
+            # reading it must not require another interpretive/finalize action.
+            facts.update(self.episode_bindings.current_report_facts(self.binding_context(source)))
             return facts
         with self.store.read_snapshot():
             def ordered_refs(field):
@@ -4533,7 +5640,10 @@ class Workflow:
                 facts.update(self.job_episodes.facts(source, credit_view=credit_view))
             else:
                 if self.project_annotation_score is not None:
-                    facts['annotation_score'] = self.annotation_context(source.scope)['annotation_score']
+                    annotation = self.annotation_context(source.scope, source=source)
+                    for key in ('annotation_score', 'proposed_annotations', 'annotation_comparisons'):
+                        if key in annotation:
+                            facts[key] = annotation[key]
                 if self.resource_estimator is not None:
                     facts['resource_tool_estimates'] = recorded_forecasts(self.store,
                         run_id=self.run_id, episode_id=source.episode_id)
@@ -4574,6 +5684,8 @@ class Workflow:
         goal = (EpisodeGoal.root(objective=goal_text, result_contract={"role": name}) if parent is None else
                 EpisodeGoal.child(parent, objective=goal_text, result_contract=contract.schema))
         message = {"scope": scope, "initial_report": initial or {}}
+        if self.inprocess_completion_order is not None:
+            message['inprocess_completion_order'] = {'version': self.inprocess_completion_order}
         if report_contract_declaration is not None:
             if contract is None:
                 raise ContractInformationError('report_contract_required_for_declaration')
@@ -4642,9 +5754,16 @@ class Workflow:
                 self.receipts.receive(identity.episode_id, initial_refs, kind='initial')
             if row is None:
                 self.journal.save("runtime_episodes", {"episode_id": identity.episode_id, "path": _json(path),
-                    "request": _json(request.as_record()), "initial_credit": self.source_credit_view(source)["credit"],
+                    "request": _json(request.as_record()), "initial_credit": 0.,
                     "state": "active",
                     "completion": None, "archive": None})
+                # Initial received science is graded at delivery, before its
+                # inherited credit is fixed or any model can inspect credit.
+                # Save the original request first to authenticate the callback.
+                self.receive_tool_attributions(source, None, kind='initial')
+                from .episode_journal import encode_credit
+                self.store.db.execute('UPDATE runtime_episodes SET initial_credit=? WHERE run_id=? AND episode_id=?',
+                    (encode_credit(self.source_credit_view(source)['credit']), self.run_id, identity.episode_id))
             if contract is not None and self.specialist(source) is not None:
                 initial_schema = interpretation_schema(contract.schema)
                 admitted = validate_form(message['initial_report'], initial_schema,
@@ -4659,16 +5778,58 @@ class Workflow:
                     "decision_index": item.decision_index}
             if self.execution_binding is not None:
                 self.completions.confirm_observed(identity.episode_id, view.unit_ref.unit_index, data)
+                slot = self.completions.slot(identity.episode_id, view.unit_ref.unit_index)
+                if slot['child_return'] is not None:
+                    returned = slot['child_return']
+                    self.execution_backend.acknowledge(returned['handle'], returned['return_id'],
+                        returned['admission_id'])
+                else:
+                    action = self.journal.row('runtime_actions', identity.episode_id, item.decision_index)
+                    outcome = json.loads(action['result'])
+                    if (json.loads(action['action']).get('kind') in {'child', 'job_child', 'episode_child'}
+                            and outcome.get('status') == 'failed' and outcome.get('execution_handle')):
+                        spec = self.execution_backend.load_commission(outcome['execution_handle'])
+                        self.execution_backend.acknowledge_failed_dispatch(outcome['execution_handle'],
+                            parent_episode_id=identity.episode_id, operation_key=spec['operation_key'],
+                            observation=data)
                 self.publish_outcome(source, item.decision_index)
                 return
-            old = self.journal.row("runtime_observations", identity.episode_id, view.unit_ref.unit_index)
-            if old and json.loads(old["observation"]) != data:
-                raise WorkflowError("reconstructed controller observation differs")
-            if not old:
-                self.journal.save("runtime_observations", {"episode_id": identity.episode_id,
-                    "unit_index": view.unit_ref.unit_index, "observation": _json(data)})
+            with (self.store.transaction() if self.inprocess_replay is not None else nullcontext()):
+                old = self.journal.row("runtime_observations", identity.episode_id, view.unit_ref.unit_index)
+                if old and json.loads(old["observation"]) != data:
+                    raise WorkflowError("reconstructed controller observation differs")
+                if not old:
+                    self.journal.save("runtime_observations", {"episode_id": identity.episode_id,
+                        "unit_index": view.unit_ref.unit_index, "observation": _json(data)})
+                if self.inprocess_replay is not None:
+                    self.inprocess_replay.capture(source)
+                    source.checkpoint()
         def on_close(record):
             old = self.journal.row("runtime_episodes", identity.episode_id)
+            if self.inprocess_replay is not None and old['state'] == 'yielded':
+                if (json.loads(old['completion']) != {
+                        'ended_by': record.ended_by, 'actions': record.units_consumed}
+                        or json.loads(old['archive']) != self.archive.store(record).descriptor()):
+                    raise WorkflowError('inprocess_closed_history_replay_differs')
+                return
+            if (self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE
+                    and old['state'] == 'active'):
+                pending = self.store.db.execute('SELECT 1 FROM runtime_actions WHERE run_id=? '
+                    'AND episode_id=? AND json_extract(action,\'$.kind\') IN '
+                    '(\'child\',\'job_child\',\'episode_child\') '
+                    'AND (result IS NULL OR json_extract(result,\'$.status\')=\'pending\') LIMIT 1',
+                    (self.run_id, identity.episode_id)).fetchone()
+                unobserved = self.store.db.execute('SELECT 1 FROM runtime_completion_slots s '
+                    'LEFT JOIN runtime_observations o ON o.run_id=s.run_id AND o.episode_id=s.episode_id '
+                    'AND o.unit_index=s.sequence WHERE s.run_id=? AND s.episode_id=? '
+                    'AND o.unit_index IS NULL LIMIT 1', (self.run_id, identity.episode_id)).fetchone()
+                unobserved_action = self.store.db.execute('SELECT 1 FROM runtime_actions a '
+                    'WHERE a.run_id=? AND a.episode_id=? AND a.credit IS NOT NULL AND NOT EXISTS '
+                    '(SELECT 1 FROM runtime_observations o WHERE o.run_id=a.run_id '
+                    'AND o.episode_id=a.episode_id AND json_extract(o.observation,\'$.decision_index\')='
+                    'a.decision_index) LIMIT 1', (self.run_id, identity.episode_id)).fetchone()
+                if pending is not None or unobserved is not None or unobserved_action is not None:
+                    raise WorkflowError('episode_cannot_close_with_unaccounted_owned_work')
             self.journal.save("runtime_episodes", {**{key: old[key] for key in
                 ("episode_id", "path", "request", "initial_credit")}, "state": "yielded",
                 "completion": _json({"ended_by": record.ended_by, "actions": record.units_consumed}),
@@ -4857,6 +6018,11 @@ def assemble_workflow(store, tools, provider, directory, run_id, settings, *,
         if recorded_completed_inputs != {'version': 'completed_action_inputs_binding_v1'}:
             raise WorkflowError('unsupported_completed_action_inputs_binding')
         completed_action_inputs_version = recorded_completed_inputs['version']
+    episode_branch_lifecycle = None
+    if 'episode_branch_lifecycle' in settings:
+        if settings['episode_branch_lifecycle'] != {'version': EPISODE_BRANCH_LIFECYCLE}:
+            raise WorkflowError('unsupported_episode_branch_lifecycle')
+        episode_branch_lifecycle = EPISODE_BRANCH_LIFECYCLE
     return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit,
                         credit_binding=_credit_binding_from_settings(settings),
                         restoration_settings=settings["restoration"],
@@ -4875,6 +6041,7 @@ def assemble_workflow(store, tools, provider, directory, run_id, settings, *,
                         annotation_child_roles=annotation_child_roles,
                         decision_protocol=decision_protocol,
                         root_action_boundary=settings.get('root_action_boundary'),
+                        episode_branch_lifecycle=episode_branch_lifecycle,
                         episode_record_receipts=episode_record_receipts,
                         native_job_events=native_job_events,
                         progress_receipt_order=settings.get('episode_progress_receipts', {}).get(
@@ -5159,6 +6326,7 @@ async def _run_bound_workflow(store, tools, *, provider=None, provider_config=No
         settings['root_action_boundary'] = ROOT_BOUNDARY_VERSION
         settings['wait_inputs'] = {'version': 'wait_inputs_binding_v2'}
         settings['completed_action_inputs'] = {'version': 'completed_action_inputs_binding_v1'}
+        settings['episode_branch_lifecycle'] = {'version': EPISODE_BRANCH_LIFECYCLE}
         if decision_protocol is not None:
             settings['decision_protocol'] = decision_protocol
         if requested_services is not None:
@@ -5253,9 +6421,12 @@ async def _run_bound_workflow(store, tools, *, provider=None, provider_config=No
             'updated_at': previous['updated_at']})
         (directory / 'run.json').write_text(_json({'run_id': run_id, **settings}) + '\n')
     from .application_execution_binding import bind_episode_execution
+    # A model connection supplies decisions, not permission to place each
+    # Episode in an independent worker. Ordinary children use the calling
+    # process; separate placement requires the caller's execution binding.
     execution = bind_episode_execution(store, directory, settings=settings,
         requested_binding=execution_binding,
-        use_saved_runtime=not resume and (owned_provider or isinstance(provider, ModelConnection)),
+        use_saved_runtime=False,
         tool_configuration=getattr(tools, 'reconstruction_configuration', None), resume=resume)
     settings = execution.settings
     workflow.configure_execution(execution.runtime_binding)
@@ -5274,7 +6445,9 @@ async def _run_bound_workflow(store, tools, *, provider=None, provider_config=No
         await root.build_result(record)
         final_credit_view = workflow.source_credit_view(root.source)
         pending_handles = workflow.pending_handles(root.source)
-        closed_state = 'yielded_with_pending_work' if pending_handles else 'yielded'
+        if pending_handles:
+            raise WorkflowError('workflow_cannot_finalize_with_unaccounted_owned_work')
+        closed_state = 'yielded'
         summary = {"run_id": run_id, "directory": str(directory), "state": closed_state,
             'pending_handles': pending_handles,
             "ended_by": record.ended_by, "scientific_completion": "not_established_by_termination",
@@ -5287,7 +6460,11 @@ async def _run_bound_workflow(store, tools, *, provider=None, provider_config=No
             summary.update({key: final_credit_view[key] for key in
                 ('monitoring_information_credit', 'monitoring_information_binding')})
         if project_annotation_score is not None:
-            summary['annotation_score'] = workflow.annotation_context(scope)['annotation_score']
+            annotation = workflow.annotation_context(scope, source=root.source)
+            for key in ('annotation_score', 'annotation_support', 'annotation_opposition',
+                        'proposed_annotations', 'annotation_comparisons'):
+                if key in annotation:
+                    summary[key] = annotation[key]
         else:
             summary['annotation_score_status'] = 'unavailable_no_scorer_bound'
         save_state(closed_state, summary)

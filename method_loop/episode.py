@@ -27,6 +27,7 @@ import json
 from abc import ABC, abstractmethod
 from contextlib import contextmanager
 from dataclasses import dataclass, field, replace
+import asyncio
 import math
 from types import MappingProxyType
 from typing import (
@@ -606,6 +607,7 @@ class _AcquiredUnit:
     child_record: Optional["EpisodeRecord"] = None
     child_result: Optional[ClosedRecord] = None
     goal_proposal: Optional[GoalProposal] = None
+    confirm_observed: Optional[Callable[[], None]] = field(default=None, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         if not isinstance(self.contribution, Contribution):
@@ -1143,10 +1145,10 @@ class PendingAction:
 
 @dataclass(frozen=True)
 class DeferredUnit:
-    """Dispatch one selection without inventing a controller observation.
+    """Dispatch an owned invocation and await its return or external suspension.
 
-    The binding persists the commission and its original selection identity.
-    Later collection completes that original action through the ordinary loop.
+    A backend binding may override collection, but dispatch by itself never
+    authorizes another scientific selection or abandons the original receiver.
     """
 
     label: str
@@ -1157,15 +1159,18 @@ class DeferredUnit:
             raise ValueError('deferred unit requires a label and dispatch function')
 
     def acquire(self, ctx):
-        handle = self.dispatch(ctx)
-        if inspect.isawaitable(handle):
-            raise TypeError('async dispatch requires the async method loop')
-        return PendingAction(handle)
+        raise TypeError('owned dispatch requires the async method loop')
 
     async def acquire_async(self, ctx):
         handle = self.dispatch(ctx)
         if inspect.isawaitable(handle):
             handle = await handle
+        invocation = next((item for item in ctx._pending_children(ctx.path)
+            if item.handle == handle), None)
+        if invocation is None:
+            raise ValueError('dispatch requires its registered original receiver')
+        if await invocation.wait_until_return_or_suspension():
+            return await invocation.acquire_async(ctx)
         return PendingAction(handle)
 
 
@@ -1238,6 +1243,8 @@ class Episode:
         ctx._active_episodes[scope] = self
         try:
             record = self._run_loop(ctx, scope)
+            if ctx._has_owned_work(scope):
+                raise RuntimeError('owned asynchronous work requires run_async')
             if self.on_close is not None:
                 result = self.on_close(record)
                 if inspect.isawaitable(result):
@@ -1246,7 +1253,8 @@ class Episode:
                     )
             return record
         finally:
-            ctx.leave(scope)
+            if not ctx._has_owned_work(scope):
+                ctx.leave(scope)
 
     async def run_async(self, ctx: "Context") -> EpisodeRecord:
         self._validate_position(ctx)
@@ -1254,15 +1262,63 @@ class Episode:
             ctx.bind_run_id(self.key)
         scope = ctx.enter(self.grain, self.key)
         ctx._active_episodes[scope] = self
+        closed = False
         try:
-            record = await self._run_loop_async(ctx, scope)
+            bind = getattr(self.source, 'bind_execution_context', None)
+            if bind is not None:
+                bind(ctx)
+            with ctx._suspension.bind(getattr(self.source, 'suspension_changed', None)):
+                try:
+                    record = await self._run_loop_async(ctx, scope)
+                except Exception as error:
+                    failed = getattr(self.source, 'record_execution_failure', None)
+                    if failed is None:
+                        raise
+                    failure_unit = failed(error, unit=ctx._current_units.get(scope))
+                    record = await self._account_failed_source_async(ctx, scope, failure_unit)
             if self.on_close is not None:
                 result = self.on_close(record)
                 if inspect.isawaitable(result):
                     await result
+            closed = True
             return record
         finally:
-            ctx.leave(scope)
+            if closed or not ctx._has_owned_work(scope):
+                ctx.leave(scope)
+
+    async def _account_failed_source_async(self, ctx, scope, failure_unit=None):
+        """Finish owned receipts after source failure, without selecting science."""
+        records = ctx._episode_records.get(scope, [])
+        if scope in ctx._pending_acquisitions:
+            # The controller raised before its observation could be committed.
+            # Do not guess whether an arbitrary controller mutated, re-observe
+            # it, or finalize the selected work as a source termination.
+            raise RuntimeError('controller_observation_requires_reconstruction')
+        if scope in ctx._pending_returns:
+            raise RuntimeError('original_child_delivery_requires_resolution')
+        await self._confirm_pending_observation(ctx, scope, records)
+        if failure_unit is not None:
+            await self._acquire_unit_async(ctx, scope, records, failure_unit)
+        await self._source_end_async(ctx, scope, records)
+        return self._record(ctx, scope, records, END_SOURCE_FAILED, END_SOURCE_FAILED)
+
+    async def resume_owned_accounting_async(self, ctx):
+        """Resume the retained receiver, never rerun an exited scientific loop.
+
+        A persistent receipt/storage error propagates with ownership intact.
+        The caller must not spin a retry loop around this accounting coroutine.
+        """
+        scope = ctx.path
+        if ctx._active_episodes.get(scope) is not self:
+            raise ValueError('failed-source accounting requires its original active receiver')
+        with ctx._suspension.bind(getattr(self.source, 'suspension_changed', None)):
+            record = await self._account_failed_source_async(ctx, scope)
+            if self.on_close is not None:
+                result = self.on_close(record)
+                if inspect.isawaitable(result):
+                    await result
+        ctx.leave(scope)
+        return record
 
     async def run_unit_async(self, ctx: "Context", *, expected_label: str, starting_unit_index: int = 0) -> UnitRecord:
         """Observe one identified unit, without closing the containing Episode.
@@ -1296,7 +1352,8 @@ class Episode:
                 raise ValueError('selected action remains pending; no completed unit to step')
             return records[0]
         finally:
-            ctx.leave(scope)
+            if not ctx._has_owned_work(scope):
+                ctx.leave(scope)
 
     def _view(
         self,
@@ -1486,6 +1543,11 @@ class Episode:
         records: list[UnitRecord],
         step: Any,
     ) -> tuple[Scope, Optional[str]]:
+        while ctx._pending_children(scope):
+            item = await ctx._next_owned_child(scope)
+            step = await self._acquire_unit_async(ctx, scope, records, item)
+            if not step.stop:
+                return scope, None
         if step.requests_transition and len(scope) == 1:
             proposal = getattr(self.source, "next_epoch", None)
             mutation = proposal(self._view(ctx, scope, records)) if proposal else None
@@ -1502,6 +1564,7 @@ class Episode:
         if records and self._state_stops(ctx.runtime.state(scope)):
             return self._record(ctx, scope, records, END_YIELD_STOP, "")
         while True:
+            ctx._current_units[scope] = None
             item = self.source.next(self._view(ctx, scope, records))
             if item is None:
                 break
@@ -1518,12 +1581,20 @@ class Episode:
                 continue
             if not isinstance(acquired, _AcquiredUnit):
                 raise TypeError("Acquirable.acquire() returned an invalid result")
+            ctx._pending_acquisitions[scope] = (item, acquired)
             _, unit_view, contribution = self._append_record(
                 ctx, scope, records, item.label, acquired
             )
+            ctx._pending_observations[scope] = (item, acquired, unit_view, contribution)
+            ctx._pending_acquisitions.pop(scope, None)
             if self.on_unit is not None:
-                self.on_unit(item, contribution, unit_view)
+                callback = self.on_unit(item, contribution, unit_view)
+                if inspect.isawaitable(callback):
+                    raise TypeError('async observation callback requires run_async')
             self._archive_completed_child(ctx, records)
+            if acquired.confirm_observed is not None:
+                acquired.confirm_observed()
+            ctx._pending_observations.pop(scope, None)
             # The acquired value and invocation edge retain the full child
             # result/source until these loop locals are released.
             del acquired, item, _
@@ -1542,22 +1613,51 @@ class Episode:
         scope: Scope,
     ) -> EpisodeRecord:
         records = self._restore_units(ctx, scope)
+        ctx._episode_records[scope] = records
         ended_by, end_reason = END_EXHAUSTED, ""
         if records and self._state_stops(ctx.runtime.state(scope)):
-            return self._record(ctx, scope, records, END_YIELD_STOP, "")
+            state = ctx.runtime.state(scope)
+            step = getattr(state, 'decision', state)
+            if not hasattr(step, 'requests_transition'):
+                from types import SimpleNamespace
+                step = SimpleNamespace(stop=True, requests_transition=False)
+            scope, end = await self._stop_end_async(ctx, scope, records, step)
+            if end is not None:
+                return self._record(ctx, scope, records, end, "")
         while True:
-            item = self.source.next(self._view(ctx, scope, records))
+            item = ctx._ready_owned_child(scope)
+            ctx._current_units[scope] = None
+            if item is None:
+                for invocation in ctx._pending_children(scope):
+                    if not invocation._released_for_wait:
+                        await ctx._wait_for_owned_progress(scope, invocation)
+                        item = ctx._ready_owned_child(scope)
+                        if item is not None:
+                            break
+            if item is None:
+                item = self.source.next(self._view(ctx, scope, records))
             if inspect.isawaitable(item):
                 item = await item
             if item is None:
+                await self._source_end_async(ctx, scope, records)
                 break
             if isinstance(item, SourceEnd):
+                await self._source_end_async(ctx, scope, records)
                 ended_by, end_reason = item.kind, item.kind
                 break
             if isinstance(item, ReportRedelivery):
                 self._redeliver_report(ctx, scope, records, item)
                 continue
-            step = await self._acquire_unit_async(ctx, scope, records, item)
+            try:
+                step = await self._acquire_unit_async(ctx, scope, records, item)
+            except Exception as error:
+                failed = getattr(self.source, 'record_execution_failure', None)
+                if failed is None or scope in ctx._pending_observations or scope in ctx._pending_acquisitions:
+                    raise
+                failure_unit = failed(error, unit=item)
+                if failure_unit is None:
+                    raise
+                step = await self._acquire_unit_async(ctx, scope, records, failure_unit)
             del item
             if step is None:
                 continue
@@ -1570,6 +1670,13 @@ class Episode:
                 ended_by = end
                 break
         return self._record(ctx, scope, records, ended_by, end_reason)
+
+    async def _source_end_async(self, ctx, scope, records):
+        # A failed/exhausted decision source supplies no new work. It still
+        # owns every selected invocation and its eventual credit observation.
+        while ctx._pending_children(scope):
+            pending = await ctx._next_owned_child(scope)
+            await self._acquire_unit_async(ctx, scope, records, pending)
 
     @staticmethod
     def _redeliver_report(ctx, scope, records, delivery):
@@ -1596,23 +1703,39 @@ class Episode:
         updates[index] = updated
 
     async def _acquire_unit_async(self, ctx, scope, records, item, *, unit_offset=0):
+        ctx._current_units[scope] = item
         self._validate_child(item)
         acquired = item.acquire_async(ctx)
         if inspect.isawaitable(acquired):
             acquired = await acquired
         if isinstance(acquired, PendingAction):
+            ctx._current_units[scope] = None
             return None
         if not isinstance(acquired, _AcquiredUnit):
             raise TypeError("Acquirable.acquire_async() returned an invalid result")
+        ctx._pending_acquisitions[scope] = (item, acquired)
         _, unit_view, contribution = self._append_record(
             ctx, scope, records, item.label, acquired, unit_offset=unit_offset
         )
+        ctx._pending_observations[scope] = (item, acquired, unit_view, contribution)
+        ctx._pending_acquisitions.pop(scope, None)
+        await self._confirm_pending_observation(ctx, scope, records)
+        return unit_view.controller_step
+
+    async def _confirm_pending_observation(self, ctx, scope, records):
+        pending = ctx._pending_observations.get(scope)
+        if pending is None:
+            return
+        item, acquired, unit_view, contribution = pending
         if self.on_unit is not None:
             result = self.on_unit(item, contribution, unit_view)
             if inspect.isawaitable(result):
                 await result
         self._archive_completed_child(ctx, records)
-        return unit_view.controller_step
+        if acquired.confirm_observed is not None:
+            acquired.confirm_observed()
+        ctx._pending_observations.pop(scope, None)
+        ctx._current_units[scope] = None
 
     def _archive_completed_child(self, ctx, records):
         """Release child history only after the parent commit hook succeeds."""
@@ -1645,6 +1768,9 @@ class ChildEpisodeUnit:
         [ClosedRecord, EpisodeCompletion, EpisodeRequest],
         Mapping[str, Any] | Awaitable[Mapping[str, Any]],
     ]
+    delivery_contract: Optional[Callable[[], ReportContract]] = field(default=None, kw_only=True)
+    receive_failure: Optional[Callable[[Exception], ClosedRecord]] = field(default=None, kw_only=True)
+    allow_suspension: bool = field(default=False, kw_only=True)
 
     def __post_init__(self) -> None:
         if not isinstance(self.child, Episode):
@@ -1653,6 +1779,10 @@ class ChildEpisodeUnit:
             raise TypeError("ChildEpisodeUnit.receive_result must be callable")
         if not callable(self.synthesize_report):
             raise TypeError("ChildEpisodeUnit.synthesize_report must be callable")
+        if self.delivery_contract is not None and not callable(self.delivery_contract):
+            raise TypeError("delivery_contract must be callable")
+        if type(self.allow_suspension) is not bool:
+            raise TypeError('allow_suspension must be bool')
         if not isinstance(self.child.request.report_contract, ReportContract):
             raise TypeError("a child invocation requires a parent-owned reporting contract")
 
@@ -1665,7 +1795,11 @@ class ChildEpisodeUnit:
         )))
 
     def _admit_report(self, value, child_result, record):
-        return self.child.request.report_contract.admit(value,
+        contract = (self.child.request.report_contract if self.delivery_contract is None
+                    else self.delivery_contract())
+        if not isinstance(contract, ReportContract):
+            raise TypeError('parent-owned delivery contract required')
+        return contract.admit(value,
             audit_identifiers=self._report_audit_identifiers(child_result, record))
 
     @property
@@ -1683,6 +1817,10 @@ class ChildEpisodeUnit:
             "Episode.build_result()",
         )
         completion = EpisodeCompletion.from_record(record)
+        report = self.synthesize_report(child_result, completion, self.child.request)
+        if inspect.isawaitable(report):
+            raise TypeError("an async report synthesis requires acquire_async()")
+        admitted = self._admit_report(report, child_result, record)
         controller_input = self.receive_result(
             child_result,
             completion,
@@ -1697,21 +1835,13 @@ class ChildEpisodeUnit:
             controller_input,
             "ChildEpisodeUnit.receive_result()",
         )
-        try:
-            report = self.synthesize_report(child_result, completion, self.child.request)
-            if inspect.isawaitable(report):
-                raise TypeError("an async report synthesis requires acquire_async()")
-            admitted = self._admit_report(report, child_result, record)
-            failures = ()
-        except ReportDeliveryError as error:
-            admitted, failures = None, (error.feedback,)
         update = EpisodeUpdate(
             record_id=record.episode_id,
             goal=record.goal,
             completion=completion,
             controller_input=controller_input,
             report=admitted,
-            delivery_failures=failures,
+            delivery_failures=(),
             _audit_identifiers=self._report_audit_identifiers(child_result, record),
         )
         return _AcquiredUnit(
@@ -1732,7 +1862,7 @@ class ChildEpisodeUnit:
             "Episode.build_result()",
         )
         return await _receive_closed_child_async(record, child_result, self.child.request,
-                                                self.receive_result, self.synthesize_report)
+            self.receive_result, self.synthesize_report, delivery_contract=self.delivery_contract)
 
     def start_async(self, ctx: "Context", *, handle: str):
         """Start this selected child without observing its still-pending action.
@@ -1741,6 +1871,8 @@ class ChildEpisodeUnit:
         be delivered. A durable binding must persist the commission before
         dispatch. This in-process primitive does not claim process recovery.
         """
+        if not self.allow_suspension:
+            raise ValueError('ordinary child must complete within its parent acquisition')
         from .independent import IndependentChild
         with ctx._child_invocation(self.child):
             branch = ctx._fork_for_child(self.child)
@@ -1748,15 +1880,49 @@ class ChildEpisodeUnit:
 
     def acquire(self, ctx: "Context") -> _AcquiredUnit:
         with ctx._child_invocation(self.child):
-            acquired = self._finish(self.child.run(ctx))
+            pending = ctx._pending_returns.get(ctx.path)
+            if pending is not None and pending[0] is not self:
+                raise ValueError('original child return must be resolved before another acquisition')
+            record = self.child.run(ctx) if pending is None else pending[1]
+            ctx._pending_returns[ctx.path] = (self, record)
+            acquired = self._finish(record)
+            ctx._pending_returns.pop(ctx.path, None)
         ctx._receive_child_update(acquired.contribution.episode_update)
         return acquired
 
     async def acquire_async(self, ctx: "Context") -> _AcquiredUnit:
-        with ctx._child_invocation(self.child):
-            acquired = await self._finish_async(await self.child.run_async(ctx))
-        ctx._receive_child_update(acquired.contribution.episode_update)
-        return acquired
+        if not self.allow_suspension:
+            with ctx._child_invocation(self.child):
+                owner = ctx.path
+                pending = ctx._pending_returns.get(owner)
+                if pending is not None and pending[0] is not self:
+                    raise ValueError('original child return must be resolved before another acquisition')
+                if pending is None:
+                    try:
+                        record = await self.child.run_async(ctx)
+                    except Exception as error:
+                        # An unfinished child retains the original stack and
+                        # ownership. Only a fully exited failure can return
+                        # through the parent's failure projection.
+                        if ctx.path != owner or self.receive_failure is None:
+                            raise
+                        value = self.receive_failure(error)
+                        if inspect.isawaitable(value):
+                            value = await value
+                        return _AcquiredUnit(Contribution(_require_closed_record(
+                            value, 'child failure projection')))
+                else:
+                    record = pending[1]
+                ctx._pending_returns[owner] = (self, record)
+                acquired = await self._finish_async(record)
+                ctx._pending_returns.pop(owner, None)
+            ctx._receive_child_update(acquired.contribution.episode_update)
+            return acquired
+        invocation = self.start_async(ctx, handle=Episode.identity(ctx, self.child.grain,
+            self.child.key, parent_path=ctx.path).episode_id)
+        if await ctx._wait_for_owned_progress(ctx.path, invocation):
+            return await invocation.acquire_async(ctx)
+        return PendingAction(invocation.handle)
 
 
 @dataclass(frozen=True)
@@ -1774,6 +1940,7 @@ class ClosedChildUnit:
     request: EpisodeRequest
     receive_result: Callable
     synthesize_report: Callable
+    delivery_contract: Optional[Callable[[], ReportContract]] = field(default=None, kw_only=True)
 
     def __post_init__(self):
         if not isinstance(self.label, str) or not self.label:
@@ -1787,6 +1954,8 @@ class ClosedChildUnit:
             raise TypeError('closed child requires its parent-owned reporting contract')
         if not callable(self.receive_result) or not callable(self.synthesize_report):
             raise TypeError('closed child requires result and report projections')
+        if self.delivery_contract is not None and not callable(self.delivery_contract):
+            raise TypeError('delivery_contract must be callable')
 
     def acquire(self, ctx):
         raise TypeError('closed child collection requires the async method loop')
@@ -1800,32 +1969,40 @@ class ClosedChildUnit:
         if any(update.record_id == self.record.episode_id
                for update in ctx._child_updates.get(ctx.path, ())):
             raise ValueError('closed child result already received by this parent')
+        pending = ctx._pending_returns.get(ctx.path)
+        if pending is not None and pending[0] is not self:
+            raise ValueError('original child return must be resolved before another acquisition')
+        ctx._pending_returns[ctx.path] = (self, self.record)
         acquired = await _receive_closed_child_async(self.record, self.result, self.request,
-                                                    self.receive_result, self.synthesize_report)
+            self.receive_result, self.synthesize_report, delivery_contract=self.delivery_contract)
         ctx._receive_child_update(acquired.contribution.episode_update)
+        ctx._pending_returns.pop(ctx.path, None)
         return acquired
 
 
-async def _receive_closed_child_async(record, child_result, request, receive_result, synthesize_report):
+async def _receive_closed_child_async(record, child_result, request, receive_result, synthesize_report,
+                                      *, delivery_contract=None):
     """One async result-projection/admission path for either execution mode."""
     completion = EpisodeCompletion.from_record(record)
+    identifiers = tuple(dict.fromkeys((record.episode_id, record.goal.goal_id,
+        *request.message.audit_identifiers(), *child_result.audit_identifiers())))
+    report = synthesize_report(child_result, completion, request)
+    if inspect.isawaitable(report):
+        report = await report
+    # A parent may repair its delivery form without changing the original
+    # child assignment, closed work, or acquisition identity. Invalid delivery
+    # never becomes a completed acquisition with an empty report.
+    contract = request.report_contract if delivery_contract is None else delivery_contract()
+    if not isinstance(contract, ReportContract):
+        raise TypeError('parent-owned delivery contract required')
+    admitted = contract.admit(report, audit_identifiers=identifiers)
     controller_input = receive_result(child_result, completion, request)
     if inspect.isawaitable(controller_input):
         controller_input = await controller_input
     controller_input = _require_closed_record(controller_input, "ChildEpisodeUnit.receive_result()")
-    identifiers = tuple(dict.fromkeys((record.episode_id, record.goal.goal_id,
-        *request.message.audit_identifiers(), *child_result.audit_identifiers())))
-    try:
-        report = synthesize_report(child_result, completion, request)
-        if inspect.isawaitable(report):
-            report = await report
-        admitted = request.report_contract.admit(report, audit_identifiers=identifiers)
-        failures = ()
-    except ReportDeliveryError as error:
-        admitted, failures = None, (error.feedback,)
     update = EpisodeUpdate(record_id=record.episode_id, goal=record.goal,
         completion=completion, controller_input=controller_input, report=admitted,
-        delivery_failures=failures, _audit_identifiers=identifiers)
+        delivery_failures=(), _audit_identifiers=identifiers)
     return _AcquiredUnit(
         contribution=Contribution(controller_input=controller_input, episode_update=update),
         child_record=record, child_result=child_result)
@@ -1924,6 +2101,13 @@ class Context:
         self._stack: list[Path] = []
         self._active_episodes: dict[Path, Episode] = {}
         self._independent_invocations: dict[Path, list[Any]] = {}
+        self._episode_records = {}
+        self._pending_observations = {}
+        self._pending_acquisitions = {}
+        self._pending_returns = {}
+        self._current_units = {}
+        from .suspension import SuspensionState
+        self._suspension = SuspensionState()
         self._child_edges: list[Episode] = []
         self._child_updates: dict[Path, list[EpisodeUpdate]] = {}
         self._grains: dict[str, Grain] = {}
@@ -1974,6 +2158,61 @@ class Context:
         if not self.path:
             raise ValueError("a child report requires an active parent Episode")
         self._child_updates.setdefault(self.path, []).append(update)
+
+    def _pending_children(self, scope):
+        return [item for item in self._independent_invocations.get(scope, ())
+                if not item.status()['delivered']]
+
+    def _has_owned_work(self, scope):
+        return (bool(self._pending_children(scope)) or scope in self._pending_observations
+            or scope in self._pending_acquisitions or scope in self._pending_returns)
+
+    def _ready_owned_child(self, scope):
+        return next((item for item in self._pending_children(scope) if item._task.done()), None)
+
+    async def _wait_for_owned_progress(self, scope, invocation):
+        """Wake for this child's suspension or any owned child's return.
+
+        A newly selected running child must not hold an earlier completed
+        return behind its own work. Only the temporary wait is cancelled;
+        every child keeps its original task, invocation and receipt boundary.
+        """
+        waiting = asyncio.create_task(invocation.wait_until_return_or_suspension())
+        other_returns = [item._task for item in self._pending_children(scope)
+                         if item is not invocation]
+        try:
+            await asyncio.wait([waiting, *other_returns],
+                               return_when=asyncio.FIRST_COMPLETED)
+            return waiting.done() and waiting.result()
+        finally:
+            waiting.cancel()
+            await asyncio.gather(waiting, return_exceptions=True)
+
+    async def _next_owned_child(self, scope):
+        try:
+            while True:
+                pending = self._pending_children(scope)
+                if not pending:
+                    return None
+                changes = [item._suspension.changed() for item in pending]
+                try:
+                    ready = self._ready_owned_child(scope)
+                    if ready is not None:
+                        return ready
+                    # Bubble only when every local branch is actually blocked.
+                    # A resumed descendant clears this state before its final
+                    # return; an ancestor need not mistake it for a waiting job.
+                    conditions = [item._suspension.condition for item in pending]
+                    self._suspension.update({'kind': 'owned_child_return',
+                        'handles': [item.handle for item in pending]}
+                        if all(condition is not None for condition in conditions) else None)
+                    await asyncio.wait([*[item._task for item in pending], *changes],
+                        return_when=asyncio.FIRST_COMPLETED)
+                finally:
+                    for change in changes:
+                        change.cancel()
+        finally:
+            self._suspension.update(None)
 
     @contextmanager
     def _child_invocation(self, child: Episode):
@@ -2090,10 +2329,13 @@ class Context:
     def leave(self, scope: Scope) -> None:
         if not self._stack or self._stack[-1] != scope:
             raise RuntimeError("episodes must close in nesting order")
+        if self._has_owned_work(scope):
+            raise RuntimeError('episode_cannot_release_unaccounted_owned_work')
         self._stack.pop()
         self._active_episodes.pop(scope, None)
-        for invocation in self._independent_invocations.pop(scope, ()):
-            invocation._release_receiver()
+        if not self._pending_children(scope):
+            self._independent_invocations.pop(scope, None)
+        self._episode_records.pop(scope, None)
 
     def transition(self, scope: Scope, mutation: EpochMutation) -> Scope:
         if scope != self.path or len(scope) != 1:

@@ -17,8 +17,7 @@ def test_acquire_glpk_5_0_primary_source():
     request = json.loads((attempt / "selected_request.json").read_text())
     if request["tests"] != ["test_flux_balance_validity_sources_685.py"]:
         pytest.skip("No implicit source downloads in other selected test sets")
-    assert request["policy"] == {"memory_bytes": 21474836480,
-                                  "scratch_bytes": 4294967296, "wall_seconds": None}
+    assert request["policy"] == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
     assert request["swap_bytes"] == 0
     target = attempt / "temporary" / "validity685_sources"
     target.mkdir(exist_ok=False)

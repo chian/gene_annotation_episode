@@ -116,7 +116,7 @@ def _controller(path, initial): return FixtureController(str(path), initial, 1)
 
 
 @pytest.fixture
-def closed_case(tmp_path, request):
+def closed_case(tmp_path, request, monkeypatch):
     store = Store(tmp_path / 'store')
     store.create_problem(raw_sequence='ACGT', molecule='dna')
     tools = ToolRegistry(store)
@@ -125,6 +125,15 @@ def closed_case(tmp_path, request):
         'uri': None, 'artifact_ref': store.artifact(b'engineering output'), 'text_ref': None,
         'request_ref': None, 'version': None, 'retrieved_at': None}, origin='tool')
     scope = store.validate_scope()
+    derived = None
+    if getattr(request, 'param', None) == 'host_attribution':
+        derived = store.put('source', {'provider': 'engineering.receipt_attribution', 'accession': None,
+            'uri': None, 'artifact_ref': store.artifact(b'engineering receiver derivation'), 'text_ref': None,
+            'request_ref': None, 'version': None, 'retrieved_at': None}, origin='tool')
+        def attributions(context, known):
+            return ([derived['id']] if context.role == 'annotation'
+                and public['id'] in known and derived['id'] not in known else []), []
+        monkeypatch.setattr(tools, 'received_attributions', attributions, raising=False)
     form, value, opaque_ref = FORM, None, None
     if getattr(request, 'param', None) == 'native_defs':
         from gene_annotation_episode.macs2_peak_result_contracts import macs2_peak_fact_sources
@@ -169,7 +178,7 @@ def closed_case(tmp_path, request):
         (root.source.episode_id,)).fetchone()
     case = dict(store=store, flow=flow, tools=tools, provider=provider, binding=bindings[0], root=root,
         archive=archive, selection=original, child_id=child['episode_id'], source=public,
-        form=form, fact_value=value, opaque_ref=opaque_ref,
+        form=form, fact_value=value, opaque_ref=opaque_ref, derived=derived,
         directory=tmp_path / 'run', input_path=store.path / 'artifacts' / input_ref[9:11] / input_ref[9:])
     try:
         yield case
@@ -263,6 +272,49 @@ def test_closed_projection_rejects_metadata_conflicts_without_preparation(closed
             return {**result, 'record_type': 'artifact'} if value == reference else result
         monkeypatch.setattr(c['store'], 'get', record)
     with pytest.raises(WorkflowError, match='closed_commission_reference_projection_conflict'):
+        c['flow'].selected(c['root'].source, c['selection'], 0)
+
+
+@pytest.mark.parametrize('closed_case', ['host_attribution'], indirect=True)
+def test_closed_replay_preserves_receiver_derivation_without_widening_form_or_regrading(closed_case, monkeypatch):
+    c = closed_case
+    derived = c['derived']['id']
+    assert derived in c['flow'].receipts.known(c['root'].source.episode_id)
+    assert derived not in c['flow'].receipts.known(c['child_id'])
+    before = _rows(c['store'])
+    _forbid_replay_work(c, monkeypatch)
+    monkeypatch.setattr(c['tools'], 'received_attributions',
+        lambda *args: pytest.fail('closed replay called the attribution producer'))
+    unit = c['flow'].selected(c['root'].source, c['selection'], 0)
+    assert isinstance(unit, ReturnedActionUnit)
+    assert unit.result.as_record() == {'form': {'source': c['source']['id']}}
+    assert _rows(c['store']) == before
+
+
+@pytest.mark.parametrize('closed_case', ['host_attribution'], indirect=True)
+@pytest.mark.parametrize('changed', ['missing', 'references', 'episode', 'index', 'unit'])
+def test_receiver_derivation_replay_requires_original_completion_evidence(closed_case, monkeypatch, changed):
+    c = closed_case
+    db, owner = c['store'].db, c['root'].source.episode_id
+    saved = db.execute('SELECT data FROM runtime_estimation_contexts WHERE episode_id=? AND decision_index=0',
+                      (owner,)).fetchone()
+    if changed == 'missing':
+        db.execute('DELETE FROM runtime_estimation_contexts WHERE episode_id=? AND decision_index=0', (owner,))
+    else:
+        data = json.loads(saved[0])
+        evidence = data['current_completion_evidence']
+        if changed == 'references':
+            evidence['received_record_refs'].remove(c['derived']['id'])
+        elif changed == 'episode':
+            evidence['episode_id'] = c['child_id']
+        elif changed == 'index':
+            evidence['original_decision_index'] = 1
+        else:
+            evidence['unit_ref']['unit_index'] = 1
+        db.execute('UPDATE runtime_estimation_contexts SET data=? WHERE episode_id=? AND decision_index=0',
+                   (_json(data), owner))
+    _forbid_replay_work(c, monkeypatch)
+    with pytest.raises(WorkflowError, match='closed_commission_receiver_attribution_'):
         c['flow'].selected(c['root'].source, c['selection'], 0)
 
 

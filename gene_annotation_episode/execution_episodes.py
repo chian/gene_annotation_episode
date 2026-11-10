@@ -21,7 +21,7 @@ from .practical_execution_records import (ASSIGNMENT_SCHEMA, validate_assignment
                                          validate_completion_proof, GENERIC_REQUESTED_JOB_SCHEMA)
 from .practical_execution_state import _immutable, _read
 from .practical_receipt_information import PracticalReceiptInformation
-from .practical_resource_episodes import PracticalResourceEpisodes, operation_catalog
+from .terminal_execution_episodes import TerminalExecutionEpisodes, operation_catalog
 from .resource_records import INPUT_VERSION_SCHEMA
 from .native_hmmer_acquisition import is_native_hmmer_target
 from .native_blast_acquisition import is_native_blast_target
@@ -102,7 +102,9 @@ class ExecutionEpisodes:
     replaces_default_instructions = True
 
     def __init__(self, services, *, store, directory, run_id, resources, initial_information,
-                 tool_registry, handoff_unit, acquired_record_unit, log_window_bytes, log_roles):
+                 tool_registry, handoff_unit, acquired_record_unit, log_window_bytes, log_roles,
+                 require_private_yield=False, results_yield_profiles=None,
+                 task_yield_profiles=None):
         self.services, self.store, self.directory = services, store, Path(directory)
         self.run_id, self.tool_registry = run_id, tool_registry
         self.resources = json.loads(canonical(resources))
@@ -123,6 +125,36 @@ class ExecutionEpisodes:
             raise ValueError('explicit_execution_log_selection_required')
         self.handoff_unit, self.acquired_record_unit = handoff_unit, acquired_record_unit
         self.log_window_bytes, self.log_roles = log_window_bytes, tuple(log_roles)
+        if type(require_private_yield) is not bool:
+            raise TypeError('execution_private_yield_binding_requires_boolean')
+        self.private_yield_binding = require_private_yield
+        profiles = {} if results_yield_profiles is None else plain(results_yield_profiles)
+        if not isinstance(profiles, dict) or set(profiles) - {
+                'native_unbounded_local', 'native_unbounded_hpc'}:
+            raise ValueError('explicit_results_yield_profiles_invalid')
+        from .numerical import YieldController, YieldParameters
+        for key, binding in profiles.items():
+            if (not isinstance(binding, dict) or set(binding) != {'cutoff', 'parameters'}
+                    or not isinstance(binding['parameters'], dict)
+                    or type(binding['cutoff']) not in (int, float)
+                    or not math.isfinite(binding['cutoff']) or binding['cutoff'] <= 0):
+                raise ValueError('explicit_results_yield_profile_invalid:' + key)
+            YieldController('configuration', 0., binding['cutoff'],
+                YieldParameters(**binding['parameters']))
+        self.results_yield_profiles = profiles
+        task_profiles = {} if task_yield_profiles is None else plain(task_yield_profiles)
+        if (not isinstance(task_profiles, dict) or any(
+                not isinstance(key, str) or not key or not isinstance(binding, dict)
+                or set(binding) != {'cutoff', 'parameters'}
+                or not isinstance(binding['parameters'], dict)
+                or type(binding['cutoff']) not in (int, float)
+                or not math.isfinite(binding['cutoff']) or binding['cutoff'] <= 0
+                for key, binding in task_profiles.items())):
+            raise ValueError('explicit_execution_task_yield_profiles_invalid')
+        for binding in task_profiles.values():
+            YieldController('configuration', 0., binding['cutoff'],
+                YieldParameters(**binding['parameters']))
+        self.task_yield_profiles = task_profiles
         self._practical = {}
         for resource_id, configuration in self.resources.items():
             kind = KINDS[configuration['kind']]
@@ -227,7 +259,7 @@ class ExecutionEpisodes:
                 validate_native_hmmer_preparation_bindings(configuration['native_hmmer_preparation'])
             if kind != 'api':
                 inventory = self.initial_information.get(resource_id)
-                self._practical[resource_id] = PracticalResourceEpisodes(services,
+                self._practical[resource_id] = TerminalExecutionEpisodes(services,
                     directory=self.directory, resources={kind: configuration}, store=store,
                     initial_information={} if inventory is None else {kind: inventory})
         from .api_service_execution import APIServiceExecution
@@ -400,7 +432,177 @@ class ExecutionEpisodes:
         return {'binding_id': 'execution_episodes', 'version': VERSION, 'configuration': {
             'resources': deepcopy(self.resources), 'initial_information': deepcopy(self.initial_information),
             'handoff_unit': self.handoff_unit, 'acquired_record_unit': self.acquired_record_unit,
-            'log_window_bytes': self.log_window_bytes, 'log_roles': list(self.log_roles)}}
+            'log_window_bytes': self.log_window_bytes, 'log_roles': list(self.log_roles),
+            **({'require_private_yield': True} if self.private_yield_binding else {}),
+            **({'results_yield_profiles': deepcopy(self.results_yield_profiles)}
+               if self.results_yield_profiles else {}),
+            **({'task_yield_profiles': deepcopy(self.task_yield_profiles)}
+               if self.task_yield_profiles else {})}}
+
+    @staticmethod
+    def _request_yield_class(request):
+        """Classify the original execution request without generated IDs."""
+        request = plain(request)
+        version = request.get('version')
+        if version != 'practical_assignment_v1':
+            if version in ('api_execution_assignment_v1', 'api_service_assignment_v1'):
+                parts = ['api', request.get('service', 'unknown')]
+                for field in ('algorithm', 'database'):
+                    if field in request:
+                        parts.append(request[field])
+                return '_'.join(parts) + '_handoff'
+            return 'compact_' + str(version)
+        requested = request['requested_job']
+        native = sorted(key for key in requested if key.startswith('native_'))
+        parts = ['practical', request['resource_kind']]
+        parts.extend(native)
+        parts.append({'usable_handoff': 'handoff',
+            'completed_job_outputs': 'outputs'}[request['endpoint']])
+        return '_'.join(parts)
+
+    def _task_yield_profile(self, key):
+        binding = self.task_yield_profiles.get(key)
+        if binding is None:
+            raise ValueError('execution_original_task_yield_profile_required:' + key)
+        return binding
+
+    def yield_controller(self, context, initial_credit, epoch):
+        """Choose only this admitted execution task's own yield binding."""
+        self.credit_kind(context.role)
+        if not self.private_yield_binding:
+            raise ValueError('execution_private_yield_binding_not_enabled')
+        if context.role == 'launch':
+            return self._launch_yield_controller(context, initial_credit, epoch)
+        if context.role == 'launch_api':
+            return self._launch_api_yield_controller(context, initial_credit, epoch)
+        if context.role == 'launch_local':
+            return self._launch_local_yield_controller(context, initial_credit, epoch)
+        if context.role == 'launch_hpc':
+            return self._launch_hpc_yield_controller(context, initial_credit, epoch)
+        if context.role == 'results':
+            return self._results_yield_controller(context, initial_credit, epoch)
+        raise ValueError('unknown_execution_episode_role:' + context.role)
+
+    def _launch_yield_controller(self, context, initial_credit, epoch):
+        """Cap one next handoff by original request slots still uncredited."""
+        from .numerical import (BoundedYieldController, NumericBand, YieldController,
+            YieldEstimate, YieldParameters)
+        assignment = plain(context.assignment)
+        if 'requests' not in assignment:
+            raise ValueError('launch_original_request_map_required')
+        original = self._launch(assignment, scope=context.scope)
+        eligible = {resource_id for resource_id in original['requests']
+            if self._permitted(original, resource_id)}
+        selected, handoffs, _ = self._received(context)
+        initial = set(selected['initial_known_record_refs'])
+        already_received = {target['resource_id'] for reference, target in handoffs.items()
+            if reference in initial and self.job_progress_provider.targets.usable_handoff(target)}
+        remaining = len(eligible - already_received) * self.handoff_unit
+        if remaining:
+            classes = sorted(self._request_yield_class(original['requests'][resource_id])
+                for resource_id in eligible)
+            profile = self._task_yield_profile('launch:' + '+'.join(classes))
+            return BoundedYieldController(epoch, initial_credit, profile['cutoff'], remaining,
+                YieldParameters(**profile['parameters']))
+        if initial_credit != 0:
+            raise ValueError('launch_no_uncredited_requests_but_nonzero_initial_credit')
+        def no_remaining_requests(history, parameters, contexts):
+            if any(value != 0 for value in history):
+                raise ValueError('launch_credit_without_original_uncredited_request')
+            return YieldEstimate(len(history), NumericBand.exact(0), parameters,
+                {'remaining_original_request_credit': 0., 'original_request_count': len(eligible)},
+                estimator_binding={'version': 'launch_original_request_exhaustion_v1',
+                    'forecast': 'exact_zero_when_every_eligible_original_request_was_in_initial_handoffs'})
+        return YieldController(epoch, initial_credit, 0., YieldParameters(),
+            estimate_with_context=no_remaining_requests)
+
+    def _launch_api_yield_controller(self, context, initial_credit, epoch):
+        from .numerical import YieldController, YieldParameters
+        from .practical_yield import PracticalYieldEstimator
+        request = self._validate_request(plain(context.assignment))
+        profile = self._task_yield_profile('launch_api:' + self._request_yield_class(request))
+        return YieldController(epoch, initial_credit, profile['cutoff'],
+            YieldParameters(**profile['parameters']),
+            estimate_with_context=PracticalYieldEstimator(
+                lambda proof: self.verify_completion(context, proof)))
+
+    def _launch_local_yield_controller(self, context, initial_credit, epoch):
+        from .numerical import YieldController, YieldParameters
+        from .practical_yield import PracticalYieldEstimator
+        request = self._validate_request(plain(context.assignment))
+        profile = self._task_yield_profile('launch_local:' + self._request_yield_class(request))
+        return YieldController(epoch, initial_credit, profile['cutoff'],
+            YieldParameters(**profile['parameters']),
+            estimate_with_context=PracticalYieldEstimator(
+                lambda proof: self.verify_completion(context, proof)))
+
+    def _launch_hpc_yield_controller(self, context, initial_credit, epoch):
+        from .numerical import YieldController, YieldParameters
+        from .practical_yield import PracticalYieldEstimator
+        request = self._validate_request(plain(context.assignment))
+        profile = self._task_yield_profile('launch_hpc:' + self._request_yield_class(request))
+        return YieldController(epoch, initial_credit, profile['cutoff'],
+            YieldParameters(**profile['parameters']),
+            estimate_with_context=PracticalYieldEstimator(
+                lambda proof: self.verify_completion(context, proof)))
+
+    def _results_yield_controller(self, context, initial_credit, epoch):
+        from .numerical import (NumericBand, YieldController, YieldEstimate,
+            YieldParameters, estimate_bounded_credit_yield)
+        from .practical_yield import PracticalYieldEstimator
+        assignment = checked(context.assignment, RESULTS_SCHEMA, 'invalid_execution_results_assignment')
+        target = self._target(context)
+        selector = self._selector(assignment, target)
+        if target['resource_kind'] != 'api' and 'version' not in selector:
+            requested = self._windows(selector)
+            if not requested:
+                raise ValueError('results_original_selector_has_no_requested_bytes')
+            if any(length is None for _, length in requested.values()):
+                key = 'native_unbounded_' + target['resource_kind']
+                if key not in self.results_yield_profiles:
+                    raise ValueError('results_original_task_yield_profile_required:' + key)
+                profile = self.results_yield_profiles[key]
+                return YieldController(epoch, initial_credit, profile['cutoff'],
+                    YieldParameters(**profile['parameters']))
+            profile = self._task_yield_profile('results:native_finite_' + target['resource_kind'])
+            selected, _, results = self._received(context)
+            initial = set(selected['initial_known_record_refs'])
+            baseline = {ref: body for ref, body in results.items() if ref in initial}
+            original_fraction = self._generic_result_selector_progress(context, baseline, set())
+            remaining = self.acquired_record_unit * (1. - original_fraction)
+            if remaining == 0 and initial_credit != 0:
+                raise ValueError('results_no_uncredited_bytes_but_nonzero_initial_credit')
+            endpoint = PracticalYieldEstimator(lambda proof: self.verify_completion(context, proof))
+            def finite_result_yield(history, parameters, contexts):
+                if contexts and contexts[-1] and contexts[-1].get('practical_completion') is not None:
+                    completed = endpoint(history, parameters, contexts)
+                    if completed.diagnostics.get('fitting_scope') == 'verified_assignment_endpoint':
+                        return completed
+                if remaining == 0:
+                    if any(value != 0 for value in history):
+                        raise ValueError('results_credit_without_original_uncredited_bytes')
+                    return YieldEstimate(len(history), NumericBand.exact(0), parameters,
+                        {'remaining_original_selector_credit': 0.}, estimator_binding={
+                            'version': 'finite_result_selector_exhaustion_v1',
+                            'forecast': 'exact_zero_after_all_requested_byte_positions_credited'})
+                return estimate_bounded_credit_yield(history, parameters, contexts=contexts,
+                    initial_credit=initial_credit, maximum_credit=remaining)
+            return YieldController(epoch, initial_credit, profile['cutoff'],
+                YieldParameters(**profile['parameters']),
+                estimate_with_context=finite_result_yield)
+        if target['resource_kind'] == 'api':
+            service = target.get('service') or target.get('assignment', {}).get('service')
+            if not isinstance(service, str) or not service:
+                raise ValueError('results_original_api_service_required_for_yield')
+            key = 'results:api_' + service + ('_' + selector['version']
+                if 'version' in selector else '')
+        else:
+            key = 'results:typed_' + target['resource_kind'] + '_' + selector['version']
+        profile = self._task_yield_profile(key)
+        return YieldController(epoch, initial_credit, profile['cutoff'],
+            YieldParameters(**profile['parameters']),
+            estimate_with_context=PracticalYieldEstimator(
+                lambda proof: self.verify_completion(context, proof)))
 
     def credit_kind(self, role):
         if role not in self.roles:
@@ -690,11 +892,6 @@ class ExecutionEpisodes:
                 # The launch request map already names this resource. A
                 # resource child later receives that same explicit identity.
                 validator({**value, 'resource_id': resource_id})
-            operations.validate_action(value, 'practical.inspect', {})
-            if value['inventory_snapshot']:
-                from .execution_inventory import validate_snapshot
-                validate_snapshot(value['inventory_snapshot'], tool_map={entry['name']: entry
-                    for entry in operation_catalog(kind)})
         return value
 
     def _launch(self, value, *, scope=None):
@@ -1270,7 +1467,7 @@ class ExecutionEpisodes:
 
     def prepare_assignment(self, parent, role, selection, scope, operation_key):
         selected = checked(selection, self.assignment_schema(role, internal=True), 'invalid_execution_assignment')
-        if parent.role == 'hpc' and role == 'launch':
+        if parent.role in ('hpc', 'hpc_execution') and role == 'launch':
             from .hpc_episodes import authenticate_launch
             authenticate_launch(parent, selected, operation_key, self.directory)
         if role == 'results':
@@ -2510,16 +2707,7 @@ class ExecutionEpisodes:
             return protein_result_catalog()
         if context.role in ROLE_KINDS:
             practical_context = self._practical_context(context)
-            entries = self._delegate(context).catalog(practical_context)
-            if 'native_lumpy' in plain(practical_context.assignment).get('requested_job', {}):
-                entries = deepcopy(entries)
-                for entry in entries:
-                    if entry['name'] == 'practical.job.start':
-                        entry['input_schema'] = obj({})
-                        entry['description'] = (
-                            'Start the original selected LUMPY job once; return its durable native identity. '
-                            'An interrupted start resumes that same original handle.')
-            return entries
+            return self._delegate(context).catalog(practical_context)
         if context.role == 'launch':
             return launch_operation_catalog()
         target = self._target(context)
@@ -3452,7 +3640,7 @@ class ExecutionEpisodes:
             values.update(minhash_fact_sources())
         if role in {'launch_local', 'launch_hpc'}:
             # Definitions are identical across actual practical resources.
-            values.update(PracticalResourceEpisodes.fact_sources(None, role))
+            values.update(TerminalExecutionEpisodes.fact_sources(None, role))
         for key, namespace, meaning in (
                 ('execution_handoff_refs', 'execution_handoff', 'Qualified original handoff sources actually available to this episode, including authenticated original failed native database or RNA attempts for partial-output acquisition; failed attempts do not establish a successful native endpoint.'),
                 ('execution_result_refs', 'execution_result', 'Qualified actual requested result acquisitions available to this episode. Generic native windows retain current-filesystem observations. Explicit BLAST/HMMER/Infernal/RNA producer bundles retain original attempt outputs matched by digest and requested numerical facts. RNA source delivery alone grants no auxiliary artifacts or unrequested rows.')):
@@ -4497,34 +4685,69 @@ class ExecutionEpisodes:
         handoffs = {ref: target for ref, target in handoffs.items()
             if self.job_progress_provider.targets.usable_handoff(target)}
         initial = set(selected['initial_known_record_refs'])
-        baseline = {(target['resource_id'], target['execution_id']) for ref, target in handoffs.items() if ref in initial}
-        identities = {(target['resource_id'], target['execution_id']) for target in handoffs.values()}
+        # A Launch assignment names one original request per resource. A new
+        # physical execution of that same request remains an observation, but
+        # cannot earn the original handoff credit a second time.
+        baseline = {target['resource_id'] for ref, target in handoffs.items() if ref in initial}
+        identities = {target['resource_id'] for target in handoffs.values()}
         handoff_count = len(identities-baseline) if context.role == 'launch' else 0
-        seen, acquired_count = set(), 0
-        for reference, body in sorted(results.items(), key=lambda item: (item[0] not in initial, item[0])):
-            if not body['windows']:
-                continue
-            contribution = (body['target']['resource_id'], body['target']['execution_id'], tuple(sorted(
-                (window['path'], window['offset'], window['returned_bytes'], digest(window['bytes_base64']))
-                for window in body['windows'])))
-            if context.role == 'results' and contribution not in seen and reference not in initial:
-                acquired_count += 1
-            seen.add(contribution)
-        credit = self.handoff_unit*handoff_count + self.acquired_record_unit*acquired_count
         mixed = (self.local_file_sources.acquisition_counts(context, selected, results)
             if context.role == 'results' else None)
+        acquired_fraction = (self._generic_result_selector_progress(context, results, initial)
+            if context.role == 'results' and mixed is None else 0.)
+        acquired_count = int(acquired_fraction > 0)
+        credit = self.handoff_unit*handoff_count + self.acquired_record_unit*acquired_fraction
         if mixed is not None:
             acquired_count = sum(mixed)
             credit = self.handoff_unit*handoff_count + self.acquired_record_unit*acquired_count
         return {'credit': credit, 'operational_credit': credit, 'new_handoff_count': handoff_count,
             **({'new_file_acquisition_count': mixed[1]} if mixed is not None else {}),
+            **({'new_acquired_selector_fraction': acquired_fraction}
+               if context.role == 'results' and mixed is None else {}),
             'new_acquired_record_count': acquired_count, 'operational_credit_binding': {
-                'version': 'execution_received_records_credit_v1', 'handoff_unit': self.handoff_unit,
+                'version': ('execution_received_selector_coverage_credit_v2'
+                    if context.role == 'results' and mixed is None else 'execution_received_records_credit_v1'),
+                'handoff_unit': self.handoff_unit,
                 'acquired_record_unit': self.acquired_record_unit,
-                'qualification': 'original_request_resource_scope_selector_and_actual_received_unique_information'}}
+                'qualification': ('original_selector_byte_position_union_current_filesystem_version_unverified'
+                    if context.role == 'results' and mixed is None else
+                    'original_request_resource_scope_selector_and_actual_received_unique_information')}}
 
     def credit_view(self, context, receiver_selection):
         return self.project_credit(context, receiver_selection)
+
+    def _generic_result_selector_progress(self, context, results, initial):
+        """Credit saved byte positions once, regardless of read boundaries."""
+        target = self._target(context)
+        requested = self._windows(self._selector(plain(context.assignment), target))
+        if not requested:
+            return 0.
+
+        def covered(windows, start, end):
+            intervals = sorted((max(start, window['offset']),
+                min(end, window['offset'] + window['returned_bytes']))
+                for window in windows if window['offset'] < end
+                and window['offset'] + window['returned_bytes'] > start)
+            total, right = 0, start
+            for left, stop in intervals:
+                if stop > right:
+                    total += stop - max(left, right)
+                    right = stop
+            return total
+
+        fractions = []
+        for path, (start, length) in requested.items():
+            windows = [(reference, window) for reference, body in results.items()
+                for window in body['windows'] if window['path'] == path]
+            observed_end = max((window['size_bytes'] for _, window in windows), default=start)
+            end = start + length if length is not None else max(start, observed_end)
+            if end <= start:
+                fractions.append(0.)
+                continue
+            all_bytes = covered((window for _, window in windows), start, end)
+            old_bytes = covered((window for reference, window in windows if reference in initial), start, end)
+            fractions.append((all_bytes - old_bytes) / (end - start))
+        return math.fsum(fractions) / len(fractions)
 
     def _native_results_complete(self, context, bodies):
         if self.local_file_sources.applies(context):

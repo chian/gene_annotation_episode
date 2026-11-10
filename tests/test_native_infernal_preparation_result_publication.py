@@ -35,7 +35,7 @@ from test_native_infernal_preparation_result_worker import (
 )
 
 
-POLICY = LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None)
+POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
 COMPILED_INDEX = json.loads((ROOT / "verification/tool_graders_infernal_preparation_2026-10-26_247/NATIVE_COMPILED_INDEX_001.json").read_bytes())
 
 
@@ -112,7 +112,7 @@ def test_original252_capture_retains_full_numbers_and_receipt(tmp_path, case):
         worker_receipt = json.loads(store.get_artifact(receipt["worker_receipt_artifact_ref"]))
         assert worker_receipt["metadata"]["policy"] == POLICY.to_dict()
         assert worker_receipt["metadata"]["verified_cgroup"]["memory_max"] == 20 * 1024**3
-        assert worker_receipt["metadata"]["verified_cgroup"]["runtime_max"] == "infinity"
+        assert 'runtime_max' not in worker_receipt["metadata"]["verified_cgroup"]
         assert store.db.execute("SELECT count(*) FROM records WHERE record_type='observation'").fetchone()[0] == 0
         if case == "consensus":
             refs = [r for r in prepared["occurrences"] if r["role"] in {"stdout", "stderr"}]

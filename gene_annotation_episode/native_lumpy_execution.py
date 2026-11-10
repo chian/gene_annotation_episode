@@ -380,7 +380,7 @@ def _allocation(assignment, policy):
     require(assignment.get('resource_kind') == 'local' and _same(policy, POLICY)
         and type(assignment.get('resource_id')) is str and bool(assignment['resource_id']))
     constraints = assignment.get('constraints')
-    require(type(constraints) is dict and not set(constraints) - {'allocation', 'memory_bytes', 'scratch_bytes', 'wall_seconds'})
+    require(type(constraints) is dict and not set(constraints) - {'allocation', 'memory_bytes', 'scratch_bytes'})
     require('allocation' not in constraints or _same(constraints['allocation'], policy))
     require(all(key not in constraints or _same(constraints[key], value) for key, value in policy.items()))
 

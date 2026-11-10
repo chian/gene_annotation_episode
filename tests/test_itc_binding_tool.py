@@ -119,8 +119,7 @@ def test_registered_itc_fit_same_episode_next_iteration_saved_and_closed_replay(
         scope = dict(subject_refs=problem["subject_refs"])
         artifact = store.artifact(raw_input, "application/json")
         input_source = source_for_artifact(store, artifact)
-        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024**3,
-            scratch_bytes=4 * 1024**3, wall_seconds=None))
+        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
         assert tools.catalog()[ITC_TOOL]["resources"] == "local"
         assert tools.catalog()[ITC_TOOL]["input_schema"] == itc_tool_contract()["input_schema"]
         descriptor, selected = _libraries(directory, tools)
@@ -592,7 +591,7 @@ def test_unreleased_original_software_mismatch_rejects_before_dispatch(tmp_path,
     monkeypatch.setattr(native, 'prepare_job', interrupted_prepare)
     directory = tmp_path / 'owned'; directory.mkdir()
     arguments = dict(request=dict(arguments=dict(mode='fit')))
-    policy = LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None)
+    policy = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
     with pytest.raises(RuntimeError, match='engineered_crash_after_preparation'):
         ordinary.run_owned_molecular_worker('itc_binding', arguments, directory=directory,
             owned_directory=directory, policy=policy, cancel_event=threading.Event())

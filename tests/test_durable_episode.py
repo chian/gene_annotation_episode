@@ -86,6 +86,19 @@ def starter(command, *arguments):
                             env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 
+def test_resource_allocation_has_no_elapsed_time_control(tmp_path):
+    from method_loop.durable import validate_commission
+    value = commission_spec(tmp_path)
+    value['resource_selection'] = {'resource_id': 'local', 'kind': 'local',
+        'capability_binding_ref': 'actual-binding',
+        'allocation': {'cpu': 1, 'memory_bytes': 1024, 'scratch_bytes': 2048}}
+    validate_commission(value)
+    for retired in (None, 3600):
+        value['resource_selection']['allocation']['wall_seconds'] = retired
+        with pytest.raises(ValueError):
+            validate_commission(value)
+
+
 def test_commission_is_immutable_and_parent_scoped_operation_identity_conflicts(tmp_path):
     store = DurableExecutionStore(tmp_path / "executions")
     spec = commission_spec(tmp_path)

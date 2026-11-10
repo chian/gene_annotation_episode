@@ -33,7 +33,7 @@ RUNTIME = import_module("verification.tool_graders_protein_structure_result_host
 
 REPO = Path(__file__).resolve().parents[1]
 FIXTURES = REPO / "verification/tool_graders_protein_structure_result_worker_2026-10-27_393/fixtures"
-POLICY = LocalJobPolicy(memory_bytes=21474836480, scratch_bytes=4294967296, wall_seconds=None)
+POLICY = LocalJobPolicy(memory_bytes=21474836480, scratch_bytes=4294967296)
 
 
 def forbidden(*args, **kwargs):

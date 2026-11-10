@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import math
-from typing import Literal, Protocol, TypedDict
+from typing import Literal, NotRequired, Protocol, TypedDict
 
 from method_loop.identities import UnitRef
 
@@ -28,7 +28,7 @@ from .run_statistics import ExecutionClass
 
 CONDITION_VERSION = "event_condition_v1"
 WAKE_VERSION = "event_wake_v1"
-PENDING_VERSION = "pending_work_v1"
+PENDING_VERSION = "pending_work_v2"
 ESTIMATE_VERSION = "wait_estimate_v1"
 REQUEST_VERSION = "wait_request_v1"
 OUTCOME_VERSION = "wait_outcome_v1"
@@ -84,6 +84,18 @@ class PendingWorkV1(TypedDict):
     version: Literal["pending_work_v1"]
     captured_at: str
     items: list[PendingWorkItemV1]
+
+
+class PendingWorkItemV2(PendingWorkItemV1):
+    suspension: dict | None
+    event_target: bool
+    original_assignment: NotRequired[dict | None]
+
+
+class PendingWorkV2(TypedDict):
+    version: Literal['pending_work_v2']
+    captured_at: str
+    items: list[PendingWorkItemV2]
 
 
 class EventExpectationV1(TypedDict):
@@ -220,13 +232,41 @@ def validate_condition(condition):
 
 def validate_pending(pending):
     _keys(pending, ("version", "captured_at", "items"))
-    if pending["version"] != PENDING_VERSION or type(pending["items"]) is not list:
+    if pending["version"] not in {"pending_work_v1", PENDING_VERSION} or type(pending["items"]) is not list:
         raise WaitError("invalid_wait_record")
     _utc(pending["captured_at"])
     seen = set()
     for item in pending["items"]:
-        _keys(item, ("handle", "role", "lifecycle_state", "selected_at", "observed_at",
-            "resource_selection", "expectation_snapshot_refs", "latest_progress_ref", "return_available"))
+        fields = ("handle", "role", "lifecycle_state", "selected_at", "observed_at",
+            "resource_selection", "expectation_snapshot_refs", "latest_progress_ref", "return_available")
+        if pending['version'] == PENDING_VERSION:
+            fields += ('suspension', 'event_target')
+            if 'original_assignment' in item:
+                fields += ('original_assignment',)
+        _keys(item, fields)
+        assignment = item.get('original_assignment')
+        if assignment is not None:
+            assignment_fields = ('objective', 'scope', 'decision_index')
+            if isinstance(assignment, dict):
+                assignment_fields += tuple(key for key in
+                    ('context', 'constraints', 'evidence_refs', 'investigation_focus')
+                    if key in assignment)
+            _keys(assignment, assignment_fields)
+            index = assignment['decision_index']
+            if (index is not None and (type(index) is not int or index < 0)
+                    or assignment['scope'] is not None and type(assignment['scope']) is not dict):
+                raise WaitError('invalid_wait_record')
+            for key in ('context', 'constraints'):
+                if assignment.get(key) is not None and type(assignment[key]) is not dict:
+                    raise WaitError('invalid_wait_record')
+            if assignment.get('evidence_refs') is not None:
+                _refs(assignment['evidence_refs'])
+        if pending['version'] == PENDING_VERSION and type(item['event_target']) is not bool:
+            raise WaitError('invalid_wait_record')
+        if pending['version'] == PENDING_VERSION and item['suspension'] is not None:
+            if type(item['suspension']) is not dict:
+                raise WaitError('invalid_wait_record')
+            _copy(item['suspension'])
         if (not _text(item["handle"]) or item["handle"] in seen or not _text(item["role"])
                 or not _text(item["lifecycle_state"])
                 or item["lifecycle_state"] not in {"pending", "executing", "returned", "admitted"}
@@ -245,10 +285,9 @@ def validate_pending(pending):
                     or resource["kind"] not in {"api", "local", "hpc"}
                     or not _text(resource["capability_binding_ref"])):
                 raise WaitError("invalid_wait_record")
-            _keys(resource["allocation"], ("cpu", "memory_bytes", "scratch_bytes", "wall_seconds"))
+            _keys(resource["allocation"], ('cpu', 'memory_bytes', 'scratch_bytes'))
             for key, value in resource["allocation"].items():
-                if value is not None and (type(value) not in (int, float) or not math.isfinite(value)
-                        or value <= 0 or key != "wall_seconds" and type(value) is not int):
+                if value is not None and (type(value) is not int or value <= 0):
                     raise WaitError("invalid_wait_record")
     return _copy(pending)
 
@@ -322,7 +361,7 @@ def estimate_wait(requested_condition: EventConditionV1, pending: PendingWorkV1,
             if resource is not None and any(resource["allocation"][key] is not None
                     and resource["allocation"][key] != getattr(scope, field) for key, field in (
                         ("cpu", "cpu_threads"), ("memory_bytes", "memory_bytes"),
-                        ("scratch_bytes", "scratch_bytes"), ("wall_seconds", "wall_seconds"))):
+                        ("scratch_bytes", "scratch_bytes"))):
                 reasons.append("duration_allocation_mismatch")
                 continue
             compatible.append(handle)

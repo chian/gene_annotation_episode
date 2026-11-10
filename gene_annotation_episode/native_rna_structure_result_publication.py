@@ -44,8 +44,7 @@ SELECTED_FIELDS = {"schema", "stable", "selector", "parameters", "components_art
 
 
 def _policy(policy):
-    require(isinstance(policy, LocalJobPolicy) and policy.to_dict() == {
-        "memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}, "rna_invalid_input_schema")
+    require(isinstance(policy, LocalJobPolicy) and policy.to_dict() == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}, "rna_invalid_input_schema")
 
 
 def _artifact_json(store, reference):

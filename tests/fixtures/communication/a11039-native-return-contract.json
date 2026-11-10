@@ -1,0 +1,114 @@
+{
+  "kind": "original_a11039_native_return_channel_rejection_and_recovery",
+  "rejected_selection": {
+    "assignment": "{\"selection\":{\"version\":\"scientific_process_selection_v3\",\"evidence_axis\":{\"version\":\"scientific_process_option_ref_v1\",\"library_id\":\"0964354a1728dec0182482a8841c7193b1b636bfb7bb0e1ff336bfdb96205b84\",\"slot\":\"evidence_axis\",\"option_id\":\"A110\",\"entry_sha256\":\"deef35f39e1baf191b1bc47d27bc2cce28408e2485de4e3a71173a6cb3b1551f\"},\"thought_pattern\":{\"version\":\"scientific_process_option_ref_v1\",\"library_id\":\"0964354a1728dec0182482a8841c7193b1b636bfb7bb0e1ff336bfdb96205b84\",\"slot\":\"thought_pattern\",\"option_id\":\"P10\",\"entry_sha256\":\"64656b914474dcd2afe8c84b25e4e87106ebe7dbc71306a046bdc3f7d3ccd70d\"},\"child_tool_info\":[{\"name\":\"source.read\",\"resources\":\"local\"},{\"name\":\"source.locate\",\"resources\":\"local\"},{\"name\":\"state.query\",\"resources\":\"local\"},{\"name\":\"chemistry.request_accounting_hpc\",\"resources\":\"local\"},{\"name\":\"chemistry.reaction_evidence\",\"resources\":\"local\"}]},\"evidence_refs\":[\"source_4adb60958445fd27b6a24b02\",\"source_ab4197b5c2e55ecfb2f7d208\",\"source_cae73dea6cc5e3ca690f3929\"],\"constraints\":{\"fixed_target_ref\":\"input_c00c745340658e21a4d5320b\",\"preserve_separate_datasets\":true,\"do_not_infer_target_activity\":true},\"context\":{\"task\":\"Investigate the supplied declared chemical equation/pathway panel, locating it among the received caller sources. Obtain applicable native accounting components and qualify their actual chemical implications. Keep the separate reaction-measurement/resource dataset distinct; its numerical population is not this assignment. Preserve synthetic origin and unknown physical applicability. Investigate atom/charge residuals, explicit electron terms, carrier regeneration and conditional chemical-standard-state energies independently. Interpret weighted pathway energy only at matching declared conditions, not as proof of favorable individual steps or coupling. Retain missing identities, conventions, conditions and target correspondence explicitly. Source assertions and native calculations are different evidence. Use actual returned outcomes to revise the chemical explanation and needed qualifications. No reaction identity or target correspondence is supplied by the anonymous protein name.\"}}",
+    "goal": "Develop a source-grounded, qualified account of what the declared chemical panel establishes about sustainable conversion, obtaining its applicable saved native components and distinguishing genuine accounting contradictions from missing physical prerequisites and unresolved protein application.",
+    "initial_report_json": "{\"interpreted_assessment_refs\":[],\"missing_information_needs\":[]}",
+    "kind": "episode_child",
+    "purpose": "I need the original native component publications and qualifications, plus the child's selected source-linked assessments, to interpret chemical accounting separately from the independent measurement/resource dataset. Missing-information codes identify unresolved prerequisites, not demonstrated chemical failures.",
+    "role": "scientific_process",
+    "schema_json": "{\"type\":\"object\",\"additionalProperties\":false,\"properties\":{\"native_component_records\":{\"$ref\":\"episode-fact:component_axis_native_component_records\"},\"qualification_records\":{\"$ref\":\"episode-fact:a110_qualification_records\"},\"committed_record_refs\":{\"$ref\":\"episode-fact:committed_record_refs\"},\"interpretation_basis_refs\":{\"$ref\":\"episode-fact:interpretation_basis_refs\"},\"observations_after_report_basis\":{\"$ref\":\"episode-fact:observations_after_report_basis\"},\"interpreted_assessment_refs\":{\"type\":\"array\",\"items\":{\"type\":\"string\",\"format\":\"reference\",\"x-reference-namespace\":\"assessment\"}},\"missing_information_needs\":{\"type\":\"array\",\"uniqueItems\":true,\"items\":{\"type\":\"string\",\"enum\":[\"panel_identity\",\"chemical_identity\",\"formula_or_charge\",\"stoichiometry_or_direction\",\"compartment\",\"electron_donor_or_acceptor\",\"carrier_regeneration\",\"usable_resources\",\"temperature_or_standard_state\",\"activities_or_concentrations\",\"physical_coupling\",\"biological_reaction_reference\",\"assayed_construct_identity\",\"target_correspondence\",\"native_execution_or_result_access\"]}}},\"required\":[\"native_component_records\",\"qualification_records\",\"committed_record_refs\",\"interpretation_basis_refs\",\"observations_after_report_basis\",\"interpreted_assessment_refs\",\"missing_information_needs\"]}",
+    "scope": {
+      "read_selection_refs": null,
+      "segments": null,
+      "subject_refs": [
+        "input_c00c745340658e21a4d5320b"
+      ]
+    }
+  },
+  "initial_objective": "Investigate the supplied chemical equation/pathway panel and the separate declared reaction-measurement/resource dataset. For each, obtain the applicable saved numerical components and assess what its inputs and assumptions support. Preserve stoichiometry, atom and charge accounting, electron terms, carrier regeneration, conditional energetics, prediction meanings and usable-resource model boundaries. Keep the two datasets and their species separate, preserve synthetic origin, unknown physical applicability and shared representations, and assess any application to the supplied protein separately. Return their qualified results and specific missing-information needs without combining unlike component values.\n\nInvestigate whether a possible reaction or pathway is chemically sustainable under its declared conditions. Start from the supplied material and biological question; discover or obtain specific reaction leads through legitimate sources and parent exchange. For direct source inspection, include the actual source.read/source.locate capabilities when selecting the fixed child toolset. Native request and qualification operations do not implicitly grant source readers. Identify chemical entities, compartments, stoichiometric coefficients, reaction direction and alternatives before interpreting feasibility. Keep atom/charge bookkeeping, electron flow, cofactor and carrier regeneration, usable resource constraints and conditional energetics distinguishable. Rhea, ChEBI and KEGG source records retain their native direction, identity and qualification; a database equation does not establish physiological direction or activity. Use literature.reaction.populate or literature.reaction.source.populate through the configured literature child for the existing reaction-prediction/resource components; retain their exact measurement scale, source meanings, native uncertainty and missing reasons. Return literature_reaction_cells and, when supported, literature_reaction_semantic_cells. Do not turn instrument signals into molar amounts, a product-pair ratio into substrate consumption, or steady-state FBA into thermodynamic feasibility. Repeated source views retain their original measurement identities. A regenerated carrier is not necessarily consumed once per turnover. Unknown formula, charge, resource, mapping or energetic prerequisite stays unknown. Use chemistry.request_accounting_hpc for an admitted declared chemical panel: exact equation residuals, explicit electron terms, declared pathway/carrier accounting and conditional chemical-standard-state Gibbs components. The declared weighted pathway energy is the sum of step energies at one matching physical condition, not evidence that each step is favorable or physically coupled. Unsupported formula/energetic conventions remain explicit; qualified chemical energetics requires the corresponding equation, identity and physical prerequisites. For received public Rhea and ChEBI records, chemistry.prepare_reference_accounting can assemble a source panel from exact participant identities and source fields for the existing HPC accounting operation. Missing source records remain specific parent needs; source balance assertions and the actual native calculation are different evidence. Source preparation supplies no physical conditions or activity. Use chemistry.reaction_evidence for a particular reaction-reference and molecular application; source interpretations and received sequence/region maps remain separate from the chemical calculation. For already saved experimental reaction-ratio, prediction or resource-model components, use chemistry.experimental_reaction_evidence with the actual sheet and selected component names. That independent path can retain source quantities and explicit unresolved application before obtaining a biological reaction reference, an accounting panel or a protein map. Qualify ratio/prediction and resource-model uses separately, retaining the source model definitions and actual assayed subject. Neither a sheet handle nor a protein map supplies unreceived cells or converts a resource model into a protein measurement. Original assay roles are not sequence operands: chemistry.source_identity_evidence can retain a received source declaration linking one original role to an actual protein and experiment. Select that saved identity for the particular molecular use; preserve unknown construct identity and share missing records with the parent. Protein features preserve their local coordinates and received parent-to-feature paths for a particular native correspondence. Keep missing parent frames and conflicting residue maps explicit and separate from chemical opposition. If a pinned remote FBA deployment is configured, chemistry.request_flux_balance_hpc uses the original driver, readers and calculations on the shared HPC service and returns only the selected projection. Do not count a remote worksheet path/digest as a receipt for other cells. Feasibility alone does not demonstrate molecular activity. Each text-derived source_content observation requires its own observations[].anchor. Supply the actual source_ref, artifact_ref, zero-based UTF-8 start/end and exact quote from a received source.read window or source.locate match. For source.locate, use its artifact_ref together with the selected match witness source_ref/start/end/quote. A source_subjects[].anchor does not populate observations[].anchor; retain the observation's own source and measured subjects. After a partial commit, reuse the successful aliases or saved record IDs and their actual witnesses when correcting rejected rows; successful rows remain committed. These source commitments are separate from the automatically projected numerical components.\n\nInvestigate A110 through independent scientific descendants as useful. Choose sources, tasks and operations from actual available capabilities and received outcomes. For work requiring primitive tools, use process.tools to obtain their actual contracts and resource labels, and include the needed operations in the fixed child_tool_info. An empty primitive toolset leaves common reasoning, communication and permitted child investigations; it does not grant the axis calculations or ordinary source readers. Tasks: [\"reaction_identity\", \"stoichiometric_accounting\", \"electron_accounting\", \"cofactor_regeneration\", \"resource_feasibility\", \"conditional_energetics\", \"prediction_contrast\", \"target_transfer\", \"synthesis\"]. Return the applicable exact typed scientific components and interpret actual received findings at the parent, preserving original sources, dependence and scope. Use the declared saved-fact return types available through episode.return_contract. The receiver automatically projects its scientific scoring sheets from admitted results; no synthesis or finalize action is required to make those values count. Choose any additional interpretation fields separately. Do not substitute controller progress for scientific values. No biological answer is supplied by this commission.",
+  "feedback": {
+    "category": "action_contract",
+    "contract_error": {
+      "code": "component_native_return_channels_required",
+      "field": "report_schema"
+    },
+    "detail": "component_native_return_channels_required",
+    "repair": "Use episode.return_contract for scientific_process and include both component_axis_native_component_records and component_axis_native_execution_records as saved-fact return fields. scientific_process_results contains process metadata, not these numerical results.",
+    "required_fact_sources": [
+      "component_axis_native_execution_records"
+    ],
+    "status": "invalid"
+  },
+  "admitted_return_form": {
+    "additionalProperties": false,
+    "properties": {
+      "a110_qualification_records": {
+        "items": {
+          "format": "reference",
+          "type": "string"
+        },
+        "type": "array",
+        "uniqueItems": true,
+        "x-source": "a110_qualification_records"
+      },
+      "component_axis_native_component_records": {
+        "items": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "source"
+        },
+        "type": "array",
+        "uniqueItems": true,
+        "x-source": "component_axis_native_component_records"
+      },
+      "component_axis_native_execution_records": {
+        "items": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "source"
+        },
+        "type": "array",
+        "uniqueItems": true,
+        "x-source": "component_axis_native_execution_records"
+      },
+      "interpreted_assessment_refs": {
+        "description": "Saved assessments selected as relevant to the chemical panel's accounting, conditional energetics and unresolved target application, including non-discriminating findings.",
+        "items": {
+          "format": "reference",
+          "type": "string",
+          "x-reference-namespace": "assessment"
+        },
+        "type": "array",
+        "uniqueItems": true
+      },
+      "missing_information_needs": {
+        "description": "Unresolved prerequisites identified from examined evidence. Empty does not assert completeness or physiological feasibility.",
+        "items": {
+          "enum": [
+            "participant_identity",
+            "formula",
+            "charge",
+            "compartment",
+            "reaction_direction",
+            "electron_convention",
+            "carrier_regeneration",
+            "usable_resources",
+            "physical_conditions",
+            "energetic_convention",
+            "energetic_inputs",
+            "physical_coupling",
+            "physiological_applicability",
+            "target_correspondence",
+            "source_access",
+            "native_execution"
+          ],
+          "type": "string"
+        },
+        "type": "array",
+        "uniqueItems": true
+      }
+    },
+    "required": [
+      "component_axis_native_component_records",
+      "component_axis_native_execution_records",
+      "a110_qualification_records",
+      "interpreted_assessment_refs",
+      "missing_information_needs"
+    ],
+    "type": "object"
+  },
+  "admitted_scientific_episode_id": "episode_10dff449bd732b611d5b6d6b692a9f90b614cb30e81a6216904e1805ccfa3eb0",
+  "original_source": "a110-5144685a4b2045cdaee57a1268cb347f",
+  "scientific_job_executed": false
+}

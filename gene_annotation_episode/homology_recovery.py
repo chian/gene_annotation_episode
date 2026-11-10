@@ -30,7 +30,7 @@ async def recover_unparsed_searches(store,original_case,known,*,directory):
     known=set(known)
     recovered=[]
     scope={'subject_refs':store.problem()['subject_refs']}
-    adapter=HomologyResults(store,policy=LocalJobPolicy(128*1024**2,32*1024**2,180))
+    adapter=HomologyResults(store,policy=LocalJobPolicy(128 * 1024 ** 2, 32 * 1024 ** 2))
     for order in orders:
         query=store.get(order['query_ref'])
         peptide=store.get_artifact(query['sequence_ref']).decode().strip().upper()

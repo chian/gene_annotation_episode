@@ -282,7 +282,7 @@ def test_selected_contracts_grants_and_practical_accounting(native_case):
     assert handle['metadata']['policy'] == POLICY
     assert handle['metadata']['verified_cgroup']['memory_max'] == 20 * 1024**3
     assert handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
-    assert handle['metadata']['verified_cgroup']['runtime_max'] == 'infinity'
+    assert 'runtime_max' not in handle['metadata']['verified_cgroup']
     root_known = set(case.flow.receipts.known(case.root_context.episode_id))
     science_known = set(case.flow.receipts.known(case.science_context.episode_id))
     resolver = case.flow.resolver(case.scope, context=case.root_context)

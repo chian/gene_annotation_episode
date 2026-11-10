@@ -252,13 +252,10 @@ def test_historical_axis_descriptors_remain_readable_without_reinstating_recipes
         assert {row['route_id'] for row in output['withdrawn_routes']} == expected
 
 
-@pytest.mark.parametrize('axis_id', ['A108', 'A110'])
-def test_organism_and_chemical_category_grades_cannot_be_recreated_from_conditions(axis_id):
-    path = Path('research/slotted_process_library/publications/2026-10-23-002/entries') / (axis_id + '.json')
+def test_chemical_category_grades_cannot_be_recreated_from_conditions():
+    path = Path('research/slotted_process_library/publications/2026-10-23-002/entries/A110.json')
     entry = json.loads(path.read_text())
-    native_metric = next(row for row in entry['native_measurements']
-                         if row['binding']['kind'] == 'recorded_measurement') if axis_id == 'A108' else next(
-                         row for row in entry['native_measurements'] if row['metric_id'] == 'atom_balance_residual')
+    native_metric = next(row for row in entry['native_measurements'] if row['metric_id'] == 'atom_balance_residual')
     measured = fact(native_metric['metric_id'], 0, unit=native_metric['units'][0],
                     direction=native_metric['direction'])
     for outcome in ('met', 'not_met', 'unknown'):

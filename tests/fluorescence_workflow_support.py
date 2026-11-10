@@ -56,8 +56,7 @@ SOURCES = {'measurements': PROJECTION_SOURCE, 'contexts': CONTEXT_SOURCE,
 TABLES = ('runtime_episodes', 'runtime_model_calls', 'runtime_actions', 'runtime_observations', 'runtime_forms',
     'runtime_report_attempts', 'runtime_estimation_contexts', 'runtime_timed_commissions',
     'runtime_record_receipts', 'runtime_receipt_inheritance')
-LIMITS = dict(memory_max=21474836480, memory_swap_max=0, runtime_max='infinity',
-    kill_mode='control-group', oom_policy='kill')
+LIMITS = dict(memory_max=21474836480, memory_swap_max=0, kill_mode='control-group', oom_policy='kill')
 HANDOFF_FORM = {'type': 'object', 'additionalProperties': False, 'properties': {
     'completed': {'type': 'boolean', 'x-source': 'execution_completed'},
     'references': {'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'format': 'reference',

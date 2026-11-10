@@ -23,7 +23,6 @@ Source packets and arithmetic checks are not completed sheets.
 - [ ] A106 — complete numerical sheet remains unfinished; perturbation work is
   preserved here, outside A105.
 - [ ] A107 — complete numerical sheet remains unfinished.
-- [ ] A108 — complete numerical sheet remains unfinished.
 - [ ] A110 — retained separately; complete numerical sheet remains unfinished.
 - [ ] A111 — complete numerical sheet remains unfinished.
 

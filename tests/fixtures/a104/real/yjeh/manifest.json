@@ -1,0 +1,14 @@
+{
+  "version": "original_a104_uniprot_inputs_20261104",
+  "base_url": "https://rest.uniprot.org",
+  "path": "uniprotkb/search",
+  "fields": "accession,id,protein_name,gene_names,organism_id,organism_name,sequence,length",
+  "files": {
+    "family-yjeh.json": {"sha256": "0095eaff642099e7db075fe0779c8f9e561542ff8a66fceee9ed6325e7c61c6f", "size": 12, "query": "taxonomy_id:2 AND gene_exact:yjeH AND length:[250 TO 700] AND fragment:false"},
+    "family-adic.json": {"sha256": "0eb81375a64056c6eab3e91f9cd1d2cbe1b0f1241cc2320eb575f0c9c0ca6ea2", "size": 12, "query": "taxonomy_id:2 AND gene_exact:adiC AND length:[250 TO 700] AND fragment:false"},
+    "family-cadb.json": {"sha256": "6c3fced1100beb9ca5927fd72770b3a8beafefe44c0c4fde76f7db887138d156", "size": 12, "query": "taxonomy_id:2 AND gene_exact:cadB AND length:[250 TO 700] AND fragment:false"},
+    "family-pote.json": {"sha256": "27e778c409262c51548b42449375dbb83a67809200d19b27315b9b3322103a05", "size": 12, "query": "taxonomy_id:2 AND gene_exact:potE AND length:[250 TO 700] AND fragment:false"},
+    "yjeh-organismal-markers.json": {"sha256": "013bd9d9936852baeb2eac550f382d74b37ddb798a0e73cd80280821bda821ce", "size": 500, "query": "(organism_id:83333 OR organism_id:1042163 OR organism_id:588858 OR organism_id:1918946 OR organism_id:225345 OR organism_id:54291 OR organism_id:61651 OR organism_id:1691940) AND (gene_exact:rpl2 OR gene_exact:rplb OR gene_exact:rpl3 OR gene_exact:rplc OR gene_exact:rps3 OR gene_exact:rpsc) AND fragment:false"}
+  },
+  "interpretation": "Original molecular inputs and acquisition queries; source annotations are leads, not expected answers or experimental characterization."
+}

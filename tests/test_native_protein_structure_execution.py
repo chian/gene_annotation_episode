@@ -216,7 +216,7 @@ def test_real_durable_reservation_start_status_restart(tmp_path):
     assert (Path(saved["attempt_directory"]) / BUNDLE_FILENAME).read_bytes() == before
     assert bundle["native_status"] == "complete"
     cgroup = completed.metadata["verified_cgroup"]
-    assert cgroup["memory_max"] == 21474836480 and cgroup["memory_swap_max"] == 0 and cgroup["runtime_max"] == "infinity"
+    assert cgroup["memory_max"] == 21474836480 and cgroup["memory_swap_max"] == 0 and 'runtime_max' not in cgroup
 
 
 @pytest.mark.parametrize("orientation", ["fixed_is_query", "fixed_is_reference"])

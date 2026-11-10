@@ -135,8 +135,7 @@ def execution_host(tmp_path):
         workspace.mkdir()
         family = ExecutionEpisodes(None, store=store, directory=tmp_path / "run",
             run_id=journal.run_id, resources={"here": {"kind": "local",
-                "workspace": str(workspace), "policy": {"memory_bytes": 21474836480,
-                "scratch_bytes": 4294967296, "wall_seconds": None}}},
+                "workspace": str(workspace), "policy": {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}}},
             initial_information={}, tool_registry=ToolRegistry(store), handoff_unit=3,
             acquired_record_unit=2, log_window_bytes=4, log_roles=["stdout", "stderr"])
         context = BindingContext(journal.run_id, "receiver", "scientific_process",

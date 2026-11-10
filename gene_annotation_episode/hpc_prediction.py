@@ -13,6 +13,8 @@ import math
 from statistics import NormalDist
 
 from .hpc_queue import digest
+from .hpc_resource_prediction import (RESOURCE_UNITS, measured_value, forecast_metric,
+                                      resource_summary, physical_attempt_key)
 
 
 METRICS = ('queue', 'setup', 'work', 'return')
@@ -97,11 +99,18 @@ def prior_model(specification):
     dimension = 1+2*len(specification['features'])
     result = {'version': 'hpc_time_model_v1', 'specification': deepcopy(specification),
               'training_ids': [], 'metrics': {}, 'successes': 0, 'failures': 0, 'ranges': {}}
-    for metric in METRICS:
-        prior = specification['priors'][metric]
-        if prior['median_seconds'] < 0 or prior['log_sigma'] <= 0 or prior['coefficient_variance'] <= 0:
+    resources = specification.get('resource_priors', {})
+    if set(resources)-set(RESOURCE_UNITS):
+        raise ValueError('unsupported_resource_prediction_metric')
+    for metric in (*METRICS, *resources):
+        prior = (resources if metric in resources else specification['priors'])[metric]
+        median = prior['median'] if metric in resources else prior['median_seconds']
+        if metric in resources and prior.get('unit') != RESOURCE_UNITS[metric]:
+            raise ValueError('explicit_resource_prior_unit_required')
+        if (not all(math.isfinite(v) for v in (median, prior['log_sigma'], prior['coefficient_variance']))
+                or median < 0 or prior['log_sigma'] <= 0 or prior['coefficient_variance'] <= 0):
             raise ValueError('explicit_positive_time_prior_required')
-        result['metrics'][metric] = {'mean': [math.log1p(prior['median_seconds'])]+[0.]*(dimension-1),
+        result['metrics'][metric] = {'mean': [math.log1p(median)]+[0.]*(dimension-1),
             'covariance': [[prior['coefficient_variance'] if i == j else 0.
                             for j in range(dimension)] for i in range(dimension)],
             'noise_variance': prior['log_sigma']**2, 'observations': 0, 'censored': 0}
@@ -120,17 +129,35 @@ def fit(specification, observations):
     if len(observations) > 2000:
         raise ValueError('select_at_most_2000_historical_observations')
     model = prior_model(specification)
+    attempts = set()
     for observation in sorted(observations, key=lambda item: (item['observed_at'], item['id'])):
         if observation['id'] in model['training_ids'] or not observation.get('provenance'):
             raise ValueError('unique_measured_history_with_provenance_required')
+        attempt = physical_attempt_key(observation)
+        if attempt is not None:
+            if attempt in attempts:
+                raise ValueError('one_training_case_per_physical_attempt_required')
+            attempts.add(attempt)
         model['training_ids'].append(observation['id'])
+        weight = observation.get('weight', 1.)
+        if type(weight) not in (int, float) or not 0 < weight <= 1:
+            raise ValueError('historical_weight_must_be_between_zero_and_one')
         x = vector(observation['features'], specification['features'])
         for name, item in observation['metrics'].items():
-            if name not in METRICS:
+            if name not in (*METRICS, *RESOURCE_UNITS):
                 raise ValueError('unknown_time_metric')
-            y = math.log1p(item['seconds'])
+            value = measured_value(name, item)
+            if name not in model['metrics']:
+                continue  # Older timing-only models make no resource forecast.
+            y = math.log1p(value)
             state = model['metrics'][name]
             mean, variance, cx = _moments(state, x)
+            metric_weight = item.get('weight', weight)
+            if type(metric_weight) not in (int, float) or not 0 < metric_weight <= 1:
+                raise ValueError('historical_weight_must_be_between_zero_and_one')
+            # Aged measurements contribute fractional precision. Censored
+            # observations still use the survival likelihood, never a fake end.
+            variance += state['noise_variance'] * (1/metric_weight - 1)
             sigma = math.sqrt(variance)
             if item.get('censored', False):
                 z = (y-mean)/sigma
@@ -146,7 +173,7 @@ def fit(specification, observations):
                     state['covariance'][i][j] -= shrink*cx[i]*cx[j]/variance
             state['observations'] += 1
         if observation.get('success') is not None:
-            model['successes' if observation['success'] else 'failures'] += 1
+            model['successes' if observation['success'] else 'failures'] += weight
         for name, value in observation['features'].items():
             if type(value) in (int, float) and math.isfinite(value):
                 old = model['ranges'].get(name, [value, value])
@@ -156,18 +183,21 @@ def fit(specification, observations):
 
 def predict(model, features):
     x = vector(features, model['specification']['features'])
-    times = {}
+    times, resources = {}, {}
     for metric, state in model['metrics'].items():
         mean, variance, _ = _moments(state, x)
-        times[metric] = distribution(mean, math.sqrt(max(variance, 1e-9)))
+        (resources if metric in RESOURCE_UNITS else times)[metric] = distribution(
+            mean, math.sqrt(max(variance, 1e-9)))
     alpha, beta = model['specification']['success_prior']
     alpha, beta = alpha+model['successes'], beta+model['failures']
     extrapolated = [name for name, limits in model['ranges'].items()
         if features.get(name) is not None and not limits[0] <= features[name] <= limits[1]]
     return {'model_sha256': digest(model), 'features': deepcopy(features), 'times': times,
+        **({'resources': resources} if resources else {}),
         'success_probability': alpha/(alpha+beta),
         'support': {'observations': len(model['training_ids']), 'extrapolated_features': extrapolated,
-                    'prior_only': not model['training_ids']}}
+                    'prior_only': not model['training_ids'],
+                    'metric_observations': {name: state['observations'] for name, state in model['metrics'].items()}}}
 
 
 def quality(model, held_out):
@@ -179,8 +209,9 @@ def quality(model, held_out):
         if case['id'] in model['training_ids']:
             raise ValueError('training_validation_overlap')
         forecast = predict(model, case['features'])
-        terms = [log_score(forecast['times'][metric], item['seconds'], censored=item.get('censored', False))
-                 for metric, item in case['metrics'].items()]
+        terms = [log_score(selected, measured_value(metric, item), censored=item.get('censored', False))
+                 for metric, item in case['metrics'].items()
+                 if (selected := forecast_metric(forecast, metric)) is not None]
         if case.get('success') is not None:
             p = forecast['success_probability']
             terms.append(math.log(p if case['success'] else 1-p))
@@ -203,6 +234,12 @@ def update(forecast, telemetry, *, refreshed_queue=None):
     elapsed_queue = telemetry.get('queue_elapsed_seconds', 0.)
     elapsed_work = telemetry.get('work_elapsed_seconds', 0.)
     value['telemetry'] = deepcopy(telemetry)
+    for metric, field in (('memory_bytes', 'peak_memory_bytes'), ('cpu_seconds', 'cpu_seconds')):
+        original = forecast.get('resources', {}).get(metric)
+        observed = telemetry.get(field)
+        if original is not None and observed is not None:
+            value['resources'][metric] = distribution(original['mu'], original['sigma'],
+                elapsed=max(original['elapsed'], observed))
     if state == 'queued':
         original = refreshed_queue or value['times']['queue']
         value['times']['queue'] = distribution(original['mu'], original['sigma'], elapsed=elapsed_queue)
@@ -248,14 +285,14 @@ def compare(candidate, forecast, obligations, preferences, *, already_credited=(
     """Expected useful credit and real elapsed cost for a sequential portfolio.
 
     Queue/setup are paid once. Work-unit effort fractions are caller estimates;
-    they do not turn command count or node occupancy into reward. Quantile-based
-    timing is an approximation, exposed here rather than a calibrated promise.
+    they do not turn command count or node occupancy into reward. Integrate setup
+    uncertainty rather than treating its median as a certain elapsed duration.
+    Phase independence and effort fractions remain modeling approximations.
     """
     times = {key: summary(value) for key, value in forecast['times'].items() if value is not None}
     overhead = sum(times[key]['p50_seconds'] for key in ('queue', 'setup', 'return') if key in times)
-    deadline = preferences['deadline_seconds']
     wall = candidate['wall_seconds']
-    budget = min(wall-times.get('setup', {}).get('p50_seconds', 0), deadline-overhead)
+    budget = wall
     remaining = forecast.get('telemetry', {}).get('allocation_remaining_seconds')
     if remaining is not None:
         budget = min(budget, remaining)
@@ -264,14 +301,26 @@ def compare(candidate, forecast, obligations, preferences, *, already_credited=(
     remaining_effort = sum(unit['effort'] for unit in candidate['units'] if unit['unit_id'] not in completed)
     effort, expected, seen = 0., 0., set(already_credited)
     work = forecast['times']['work']
+    resource_demand = resource_summary(forecast, candidate)
+    setup = forecast['times'].get('setup')
+    # Midpoint quadrature in conditional probability space includes only setup
+    # durations that fit the allocation. The remaining probability contributes
+    # zero; a broad prior must not make success impossible merely because its
+    # median exceeds the requested walltime.
+    setup_mass = probability_within(setup, budget) if setup is not None else 1.
+    setup_samples = ([quantile(setup, setup_mass*(i+.5)/64) for i in range(64)]
+                     if setup is not None and setup_mass > 0 else [0.])
     attainable = []
     for unit in candidate['units']:
         if unit['unit_id'] in completed:
             continue
         effort += unit['effort']
         fraction = effort/(remaining_effort or total_effort)
-        chance = probability_within(work, budget/fraction) if work is not None else 0.
+        chance = (setup_mass*sum(probability_within(work, (budget-seconds)/fraction)
+                    for seconds in setup_samples)/len(setup_samples) if work is not None else 0.)
         chance *= forecast['success_probability']
+        if resource_demand['memory_fit_probability'] is not None:
+            chance *= resource_demand['memory_fit_probability']
         obligation = unit['obligation_id']
         gain = 0. if obligation in seen else obligations[obligation]['credit']*chance
         expected += gain
@@ -284,5 +333,6 @@ def compare(candidate, forecast, obligations, preferences, *, already_credited=(
     return {'candidate_id': candidate['id'], 'expected_actual_credit': expected,
         'elapsed_p50_seconds': elapsed, 'requested_node_hours': node_hours,
         'net_expected_value': utility, 'attainable_units': attainable, 'time_estimates': times,
-        'support': forecast['support'], 'method': 'sequential_effort_fraction_with_median_overhead',
+        'resource_estimates': resource_demand,
+        'support': forecast['support'], 'method': 'sequential_effort_fraction_with_setup_probability_quadrature',
         'uncertainty_note': 'time components and scientific success may be correlated; validate prospectively'}

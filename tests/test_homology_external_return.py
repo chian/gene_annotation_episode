@@ -13,7 +13,7 @@ from gene_annotation_episode.a101_credit import A101SequenceCredit
 def test_result_query_reference_resolves_only_as_the_bound_operand_without_target_credit(tmp_path):
     executable=tmp_path/'not-executed';executable.write_text('#!/bin/sh\nexit 99\n');executable.chmod(0o700)
     fasta=tmp_path/'references.faa';fasta.write_text('>engineering\nMNNQ\n')
-    policy=LocalJobPolicy(128*1024**2,32*1024**2,180)
+    policy=LocalJobPolicy(128 * 1024 ** 2, 32 * 1024 ** 2)
     jobs=HomologyJobs.create(tmp_path/'jobs',executable=FileAsset(executable,digest(executable)),
         reference_database=FileAsset(fasta,digest(fasta)),policy=policy,max_cpu=1)
     try:

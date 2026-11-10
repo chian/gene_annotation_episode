@@ -1,0 +1,40 @@
+{
+  "version": "a107_expression_table_v2",
+  "dataset_id": "synthetic-expression-panel-01",
+  "origin": "synthetic",
+  "quantity": {
+    "unit": "declared_signal_units",
+    "scale": "linear",
+    "normalization": "same_declared_standard",
+    "nonnegative": true,
+    "source_locator": "synthetic://expression-panel-01/quantity"
+  },
+  "features": [
+    {"id": "left", "entity_id": null, "molecule": "protein", "sequence_sha256": "be4b2cdeb22ed37fe81a0ceb747c8a136c83ef895f8bdf243f9e210e5f3cbfce", "source_locator": "synthetic://expression-panel-01/features/0"},
+    {"id": "right", "entity_id": null, "molecule": "rna", "sequence_sha256": null, "source_locator": "synthetic://expression-panel-01/features/1"}
+  ],
+  "samples": [
+    {"id": "s1", "biological_unit_id": "u1", "condition_key": "c1", "organism_id": null, "genome_accession": null, "source_locator": "synthetic://expression-panel-01/samples/0"},
+    {"id": "s2", "biological_unit_id": "u2", "condition_key": "c1", "organism_id": null, "genome_accession": null, "source_locator": "synthetic://expression-panel-01/samples/1"},
+    {"id": "s3", "biological_unit_id": "u2", "condition_key": "c1", "organism_id": null, "genome_accession": null, "source_locator": "synthetic://expression-panel-01/samples/2"},
+    {"id": "s4", "biological_unit_id": null, "condition_key": "c1", "organism_id": null, "genome_accession": null, "source_locator": "synthetic://expression-panel-01/samples/3"},
+    {"id": "s5", "biological_unit_id": "u5", "condition_key": "c2", "organism_id": null, "genome_accession": null, "source_locator": "synthetic://expression-panel-01/samples/4"}
+  ],
+  "measurements": [
+    {"feature_id": "left", "sample_id": "s1", "measurement_id": "m1", "value": 1, "missing_reason": null, "reported_bound": null, "source_locator": "synthetic://expression-panel-01/measurements/0"},
+    {"feature_id": "right", "sample_id": "s1", "measurement_id": "m2", "value": 2, "missing_reason": null, "reported_bound": null, "source_locator": "synthetic://expression-panel-01/measurements/1"},
+    {"feature_id": "left", "sample_id": "s2", "measurement_id": "m3", "value": 2, "missing_reason": null, "reported_bound": null, "source_locator": "synthetic://expression-panel-01/measurements/2"},
+    {"feature_id": "right", "sample_id": "s2", "measurement_id": "m4", "value": 4, "missing_reason": null, "reported_bound": null, "source_locator": "synthetic://expression-panel-01/measurements/3"},
+    {"feature_id": "left", "sample_id": "s3", "measurement_id": "m5", "value": 4, "missing_reason": null, "reported_bound": null, "source_locator": "synthetic://expression-panel-01/measurements/4"},
+    {"feature_id": "right", "sample_id": "s3", "measurement_id": "m6", "value": 8, "missing_reason": null, "reported_bound": null, "source_locator": "synthetic://expression-panel-01/measurements/5"},
+    {"feature_id": "left", "sample_id": "s4", "measurement_id": "m7", "value": null, "missing_reason": "censored", "reported_bound": {"operator": "less_than", "value": 0.5, "source_locator": "synthetic://expression-panel-01/measurements/6/bound"}, "source_locator": "synthetic://expression-panel-01/measurements/6"},
+    {"feature_id": "right", "sample_id": "s4", "measurement_id": "m8", "value": 16, "missing_reason": null, "reported_bound": null, "source_locator": "synthetic://expression-panel-01/measurements/7"},
+    {"feature_id": "left", "sample_id": "s5", "measurement_id": "m9", "value": 20, "missing_reason": null, "reported_bound": null, "source_locator": "synthetic://expression-panel-01/measurements/8"},
+    {"feature_id": "right", "sample_id": "s5", "measurement_id": "m10", "value": 1, "missing_reason": null, "reported_bound": null, "source_locator": "synthetic://expression-panel-01/measurements/9"}
+  ],
+  "detection_criteria": [
+    {"id": "d1", "feature_id": "left", "sample_id": "s1", "kind": "limit_of_detection", "operator": "greater_than", "value": 0.5, "unit": "declared_signal_units", "scale": "linear", "normalization": "same_declared_standard", "calibration_condition_key": "c1", "control_source_locator": "synthetic://expression-panel-01/controls/d1", "source_locator": "synthetic://expression-panel-01/criteria/0"},
+    {"id": "d2", "feature_id": "left", "sample_id": "s4", "kind": "limit_of_detection", "operator": "greater_than", "value": 0.5, "unit": "declared_signal_units", "scale": "linear", "normalization": "same_declared_standard", "calibration_condition_key": "c1", "control_source_locator": "synthetic://expression-panel-01/controls/d2", "source_locator": "synthetic://expression-panel-01/criteria/1"},
+    {"id": "d3", "feature_id": "right", "sample_id": "s2", "kind": "background_cutoff", "operator": "greater_than", "value": 0.5, "unit": "declared_signal_units", "scale": "log2", "normalization": "same_declared_standard", "calibration_condition_key": "c1", "control_source_locator": "synthetic://expression-panel-01/controls/d3", "source_locator": "synthetic://expression-panel-01/criteria/2"}
+  ]
+}

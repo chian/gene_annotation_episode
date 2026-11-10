@@ -1,0 +1,22 @@
+{
+  "version": "a107_nonidentical_region_evaluation_v1",
+  "evaluator_only": true,
+  "case": "nonidentical-region-expression.case.json",
+  "original_data_expectations": "declared-expression-panel.expectations.json",
+  "selected_region": {
+    "start": 20,
+    "end": 40,
+    "coordinate_system": "zero_based_half_open_submitted_protein_residues"
+  },
+  "workflow_expectations": [
+    "Run a full autonomous workflow. Admit actual source inputs, never this evaluator file or the original data expectations.",
+    "The two complete protein sequences differ. Identical complete-frame reuse cannot establish their correspondence; use actual authenticated native correspondence or explicitly retain the missing map.",
+    "Exercise the received protein-feature coordinate path for the selected target subpart. Inspect actual local indices, parent indices, residue symbols, native witnesses, mapped extent and distance denominators. A whole-protein scalar or a list of positions without the selected feature correspondence is insufficient for this requirement.",
+    "Measure the actual alignment and its substitutions or gaps. Do not preassign an alignment, score, register, coverage, local identity or one-to-one residue index assumption.",
+    "The left measurement refers to the original complete P0ABA6 sequence. Its quantity is neither an independently measured region quantity nor an observation of Q9KNH4 expression. Preserve source and target biological scope separately even if their correspondence is retained.",
+    "The RNA feature still has no sequence or demonstrated encoding link. A protein alignment supplies neither.",
+    "Retain censoring, distinct conditions, repeated biological unit u2 and shared dataset identity. Reusing the panel or sequence representations adds no independent confirmation or duplicate numerical credit.",
+    "Required substantive calculations use the existing shared HPC publication path. Preserve exact original graders, actual typed delivery, actual rendered parent inputs and subsequent parent interpretation without a finalize trigger or new stopping rule.",
+    "Normal completion and actual parent use must be examined. If the nonidentical feature map is not actually exercised, retain that requirement as unverified rather than declaring the case complete."
+  ]
+}

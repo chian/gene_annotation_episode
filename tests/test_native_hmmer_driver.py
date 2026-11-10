@@ -33,7 +33,7 @@ def plan_for(tmp_path, program="hmmsearch"):
         "resource_id": "local", "execution_id": "original-execution", "attempt_id": "attempt-one",
         "operation_key": "selected-start", "requested_job_sha256": native_hmmer_digest(request)},
         "requested_job": request, "attempt_directory": str(tmp_path / "attempt"),
-        "policy": {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}}
+        "policy": {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}
 
 
 def fake_native(monkeypatch, *, returncode=0, tables=True):

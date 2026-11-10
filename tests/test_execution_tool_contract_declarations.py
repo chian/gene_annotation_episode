@@ -33,8 +33,7 @@ def test_configured_catalog_has_exact_owners_without_query_or_execution(tmp_path
         'uniprot': {'kind': 'api', 'service': 'uniprot'},
         'bvbrc': {'kind': 'api', 'service': 'bvbrc_data'},
         'local': {'kind': 'local', 'workspace': str(tmp_path/'work'),
-            'policy': {'memory_bytes': 20*1024**3, 'scratch_bytes': 4*1024**3,
-                       'wall_seconds': None}}}
+            'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}}
     with Store(tmp_path/'store') as store:
         owner = binding(store, resources)
         for service in owner.api_execution.services.values():
@@ -127,8 +126,7 @@ def _native_request(label):
 
 
 def _native_resource(workspace, request):
-    return {'kind': 'local', 'workspace': str(workspace), 'policy': {
-        'memory_bytes': 20*1024**3, 'scratch_bytes': 4*1024**3, 'wall_seconds': None},
+    return {'kind': 'local', 'workspace': str(workspace), 'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3},
         'native_hmmer': [{key: deepcopy(request['native_hmmer'][key])
             for key in ('program', 'mode', 'software')}]}
 

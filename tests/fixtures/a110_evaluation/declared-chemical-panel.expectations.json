@@ -1,0 +1,22 @@
+{
+  "version": "a110_declared_panel_evaluation_v1",
+  "evaluator_only": true,
+  "input": "declared-chemical-panel.json",
+  "scope": "Full autonomous workflow over explicitly synthetic declared equations and quantities, separate from the real-sequence source-discovery case. These inputs establish no biochemical activity or actual physical state.",
+  "conditional_expectations": {
+    "r01": {"atom_balance": "balanced", "charge_balance": "balanced", "charge_residual": "0", "literal_gibbs_kj_per_mol": 2.5},
+    "r02": {"atom_balance": "imbalanced", "oxygen_residual": "-1", "charge_balance": "balanced", "literal_gibbs_kj_per_mol": -1.5},
+    "r03": {"atom_balance": "unknown", "charge_balance": "unknown", "gibbs_status": "unavailable"},
+    "r04": {"atom_balance": "balanced", "charge_balance": "imbalanced", "charge_residual": "-1", "explicit_electron_coefficient": "1"},
+    "declared_pathway": {"oxygen_residual": "-1", "literal_gibbs_sum_kj_per_mol": 1, "qualified_physical_application": false},
+    "all_reactions": {"molecular_function_attribution": "unestablished", "qualified_chemical_application": false}
+  },
+  "workflow_expectations": [
+    "No evaluator expectations, predicted numerical outcomes or scripted biological actions are admitted to the episode.",
+    "The episode chooses questions and selections and uses the existing shared HPC owner for native calculation, with real allocation, frozen bytes/software and authenticated publication/grading.",
+    "Distinguish available literal arithmetic from qualified chemistry, an unbalanced equation from a missing formula, and explicit electron bookkeeping from inferred redox chemistry.",
+    "Do not supply missing entities, water, protons, activities, resources, stoichiometric repairs or physiological direction.",
+    "Retain synthetic origin, particular equations, source locators, shared dataset and measurement dependence across pathway/individual views and reused results.",
+    "Inspect the actual typed numerical return, rendered parent input and subsequent interpretation. A path, job ID, Source or controller progress alone is insufficient."
+  ]
+}

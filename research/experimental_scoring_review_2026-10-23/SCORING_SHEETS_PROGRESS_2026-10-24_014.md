@@ -22,8 +22,6 @@ remain unchanged; no unapproved convention is called accepted.
   reader crosswalk and SD/SEM clarification, source/criteria record, handoff
   and consolidation receipt fully reviewed; formulas/examples/choices printed.
 - [x] A107 — delivered in progress 013; partner presence/coexpression proposal.
-- [x] A108 — delivered in progress 013; organism capability and sample-context
-  coverage are distinct declared questions, with coherent current sheet 003.
 - [x] A110 — delivered in progress 013; chemical/pathway signed consistency
   proposal, complete isotope operator and resource/measurement calculations.
 - [x] A111 — current X-ray/cryoEM/NMR proposal, complete examples, exact

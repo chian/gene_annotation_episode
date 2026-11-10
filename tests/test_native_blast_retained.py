@@ -21,4 +21,4 @@ def test_all_twenty_actual_native_bundles_keep_complete_custody_and_replay(path,
     assert run_native_blast(plan)==bundle
     assert (root/'bundle.json').read_bytes()==original
     assert '-subject' in bundle['realized_argv'] and '-db' not in bundle['realized_argv']
-    assert plan['policy']=={'memory_bytes':20*1024**3,'scratch_bytes':4*1024**3,'wall_seconds':None}
+    assert plan['policy']=={'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}

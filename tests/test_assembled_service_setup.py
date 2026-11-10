@@ -56,8 +56,7 @@ def test_wired_setup_has_one_launch_family_and_actual_tool_registry(resources):
     from gene_annotation_episode.tools import ToolRegistry
     r = resources
     tools = ToolRegistry(r.store)
-    configuration = {'here': {'kind': 'local', 'workspace': str(r.directory/'project'), 'policy': {
-        'memory_bytes': 128*1024**2, 'scratch_bytes': 8*1024**2, 'wall_seconds': None}},
+    configuration = {'here': {'kind': 'local', 'workspace': str(r.directory/'project'), 'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}},
         'ebi': {'kind': 'hmmer_api'}}
     application = setup(r, execution_resources=configuration, initial_execution_information={},
         tool_registry=tools, log_roles=('stdout', 'stderr'))
@@ -78,6 +77,25 @@ def test_wired_setup_has_one_launch_family_and_actual_tool_registry(resources):
         if table in tables:
             assert r.store.db.execute('SELECT count(*) FROM '+table).fetchone()[0] == 0
     assert not (r.directory/'project').exists()
+
+
+def test_wired_setup_connects_scientific_parent_to_hpc_and_shared_memory(resources):
+    from hpc_helpers import commission, resources as hpc_resources
+    from gene_annotation_episode.execution_memory import ExecutionMemory
+    from gene_annotation_episode.tools import ToolRegistry
+    r = resources
+    tools = ToolRegistry(r.store)
+    memory = ExecutionMemory(r.directory/'shared-memory.sqlite3')
+    application = setup(r, execution_resources=hpc_resources(), initial_execution_information={},
+        tool_registry=tools, log_roles=('stdout', 'stderr'), hpc_commissions={'a101': commission()},
+        shared_execution_memory=memory.as_record())
+    scientific = application.episode_binding_descriptors[0]
+    hpc = next(row for row in application.episode_binding_descriptors if row['binding_id'] == 'hpc')
+    assert 'hpc' in scientific['configuration']['child_roles']
+    assert {'hpc', 'hpc_prediction'} <= application.role_credit_bindings.keys()
+    assert tools.execution_memory.as_record() == memory.as_record()
+    assert hpc['configuration']['shared_execution_memory'] == memory.as_record()
+    assert not memory.path.exists()  # Binding does not probe or execute work.
 
 
 def test_setup_returns_exact_existing_descriptors_six_bindings_and_actual_readers(resources, monkeypatch):
@@ -115,7 +133,7 @@ def test_setup_returns_exact_existing_descriptors_six_bindings_and_actual_reader
     tools = ScientificToolLibrary(r.directory/'scientific-tool-library')
     assert scientific == ScientificProcessEpisodes(None, library=library, tool_library=tools,
         child_roles=ROOT_ROLES, tool_retrieval=RETRIEVAL).as_record()
-    assert scientific['version'] == 'scientific_process_episodes_v8'
+    assert scientific['version'] == 'scientific_process_episodes_v10'
     assert scientific['configuration'] == {'library': library.as_record(),
         'tool_library': tools.as_record(), 'child_roles': list(ROOT_ROLES), 'tool_retrieval': RETRIEVAL}
     assert literature == LiteratureEpisodes(None, outcome_page_size=7).as_record()

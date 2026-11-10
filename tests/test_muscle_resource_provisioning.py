@@ -35,7 +35,7 @@ MAX_BYTES = 4 * 1024 * 1024
 REDIRECT_HOSTS = ("release-assets.githubusercontent.com", "objects.githubusercontent.com")
 ACQUIRE_GATE = "HMMER_NATIVE_ORACLE_MUSCLE_V5_3_ACQUIRE_JSON"
 VERSION_GATE = "HMMER_NATIVE_ORACLE_MUSCLE_V5_3_VERSION_JSON"
-POLICY = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 
 
 def _json_value(value):

@@ -16,7 +16,7 @@ from gene_annotation_episode.native_hmmer_preparation_contracts import requested
 from test_native_hmmer_preparation_contracts import BIN, CASES, EVIDENCE, FM_CONTRACT, NATIVE, ROOT, digest, job, operand
 
 
-POLICY = LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None)
+POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
 
 
 def make_plan(tmp_path, selected=None):
@@ -43,7 +43,7 @@ def run_actual(tmp_path, selected):
     (tmp_path / "native-lifecycle-receipt.json").write_text(json.dumps({"returncode": result.returncode,
         "stdout_path": str(result.stdout_path), "stderr_path": str(result.stderr_path), "metadata": result.metadata}, indent=2) + "\n")
     assert result.metadata["verified_cgroup"]["memory_max"] == POLICY.memory_bytes
-    assert result.metadata["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in result.metadata["verified_cgroup"]
     attempt = Path(plan["attempt_directory"])
     assert (attempt / "bundle.json").is_file(), result.stderr_path.read_text()
     bundle = driver.validate_preparation_bundle_files(json.loads((attempt / "bundle.json").read_bytes()), attempt)

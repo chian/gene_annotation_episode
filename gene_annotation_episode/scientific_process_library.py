@@ -261,7 +261,7 @@ def catalog():
         "entry_sha256": digest})
     return [
         {"name": "process.search", "description":
-         "Search/page frozen evidence-axis and thought-pattern options. process.entry supplies investigation guidance about the evidence and measurements to examine. Discovery selects no work and grants no capabilities.",
+         "Search/page frozen evidence-axis and thought-pattern options using case-insensitive literal substrings. Every whitespace-separated query term must match an option ID, name or description; long natural-language queries can therefore return nothing. Search a known A/P ID alone, use process.entry for that ID, or use an empty query to page all options. process.entry supplies investigation guidance about the evidence and measurements to examine. Discovery selects no work and grants no capabilities.",
          "input_schema": _object({"slot": {"enum": [*SLOTS, None]},
              "query": {"type": "string"}, "offset": offset, "limit": limit})},
         {"name": "process.entry", "description":
@@ -494,7 +494,11 @@ class ScientificProcessLibrary:
                 "description": header["description"]}).casefold() for term in terms)]
         end = offset + limit
         return {"library": self.as_record(), "entries": matches[offset:end],
-            "offset": offset, "limit": limit, "next_offset": end if end < len(matches) else None}
+            "offset": offset, "limit": limit, "next_offset": end if end < len(matches) else None,
+            "query": query, "match_count": len(matches),
+            "search_semantics": "all_whitespace_separated_terms_are_literal_case_insensitive_substrings_of_option_metadata",
+            "empty_result_guidance": None if matches else
+                "Use fewer literal terms, search a known option ID alone, use process.entry with its option_id, or page all options with an empty query. This search performs no semantic expansion."}
 
     def entry(self, option_id):
         ref = self.reference(option_id)

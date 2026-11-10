@@ -3,7 +3,7 @@ command = ["codex", "app-server", "--stdio"]
 
 [models.FAST]
 model = "gpt-6-luna"
-reasoning_effort = "none"
+reasoning_effort = "low"
 
 [models.REASONING]
 model = "gpt-6-sol"
@@ -15,8 +15,6 @@ child_interpretation = "REASONING"
 
 [controller]
 cost = 0.001
-window_size = 8
-subsample_size = 4
 uncertainty_alpha = 0.05
 
 [scientific_progress]

@@ -131,3 +131,25 @@ def finalize_a106(arguments, source_cells):
         "input_origins": unique(origin for row in rows for origin in row["input_origins"]), "annotation_credit": None}
     validate_schema(result, cell_schema())
     return result
+
+
+def annotation_scalar(cell):
+    """Reuse the existing tanh-half-log-ratio convention after axis aggregation."""
+    from collections.abc import Mapping
+    from .root_axis_scalars import _number, _result
+    axis = 'A106'
+    if not isinstance(cell, Mapping):
+        raise ValueError('root_scalar_log_evidence_input_required')
+    expected = 'overall' if axis == 'A105' else 'experimental_subscore'
+    if cell.get('component') != expected:
+        raise ValueError('root_scalar_final_axis_component_required')
+    value = cell.get('value')
+    if value is not None:
+        _number(value)
+    complete = cell.get('status') == 'complete' and value is not None
+    if complete and (cell.get('unit') != ('dimensionless' if axis == 'A105' else 'natural_log_ratio')
+            or axis == 'A105' and cell.get('source_component_names') != ['source_log_evidence_ratio']):
+        raise ValueError('root_scalar_natural_log_ratio_required')
+    return _result(axis, math.tanh(value / 2) if complete else None,
+        formula='tanh(current_complete_axis_log_evidence_ratio/2)', inputs=cell,
+        reasons=() if complete else ('complete_axis_log_evidence_ratio_unavailable',))

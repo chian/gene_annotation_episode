@@ -151,6 +151,14 @@ def assay_grading_population_schema(*, legacy=False):
     # old committed selections remain readable without inventing an identity.
     props['experiment_ref'] = {**deepcopy(REF), 'x-reference-namespace': 'reference',
         'description': 'Possessed source-anchored assay reference identifying this experiment. Reuse it for another assessment of the same experiment; different experiments use distinct references even when they share a protocol type or paper.'}
+    support = {**deepcopy(REF), 'x-reference-namespace': 'reference',
+        'description': 'A source_subjects record (record_type reference) carrying its original source anchor: source_ref, artifact_ref, start, end and quote. Use its same-action @alias or its already saved reference ID.'}
+    for criterion in props['interpretations']['properties'].values():
+        refs = criterion['properties']['support_refs']
+        refs['items'] = deepcopy(support)
+        refs['description'] = ('Select the anchored reference records supporting this criterion. '
+            'An unknown criterion with no supporting passage uses an empty list.')
+    props['prediction_model']['anyOf'][0]['properties']['support_refs']['items'] = deepcopy(support)
     if not legacy:
         schema['required'].append('experiment_ref')
     return schema
@@ -221,7 +229,7 @@ def _read_number(selector, sources):
         'raw_number': token, 'value': value, 'relation': relation}
 
 
-def _literal(selection, sources, *, unit_reader=_unit):
+def _literal(selection, sources, *, unit_reader=_unit, unit_association=None):
     unsupported = None
     try:
         number = _read_number(selection['number'], sources)
@@ -237,16 +245,19 @@ def _literal(selection, sources, *, unit_reader=_unit):
     number_witness = number['selector']['witness']
     if any(number_witness[k] != witness[k] for k in ('source_ref', 'representation', 'artifact_ref')):
         raise ContractError('assay_grading_unit_from_different_source')
-    number_end = number_witness['start'] + len(number_witness['quote'][:selection['number']['number_end']].encode())
-    raw = sources.source(witness['source_ref'], witness['representation'])['content']
-    # The scalar shortcut supports adjacent printed units only. Shared table
-    # headers and nonadjacent unit definitions use the existing typed readers.
-    try:
-        gap = raw[number_end:witness['start']].decode('utf-8')
-    except UnicodeError as error:
-        raise ContractError('assay_grading_unit_not_adjacent_to_number') from error
-    if witness['start'] < number_end or gap.strip():
-        raise ContractError('assay_grading_unit_not_adjacent_to_number')
+    if unit_association is None:
+        number_end = number_witness['start'] + len(number_witness['quote'][:selection['number']['number_end']].encode())
+        raw = sources.source(witness['source_ref'], witness['representation'])['content']
+        # The scalar shortcut still requires adjacent printed units. A typed
+        # table reader can instead supply its source-geometry validation.
+        try:
+            gap = raw[number_end:witness['start']].decode('utf-8')
+        except UnicodeError as error:
+            raise ContractError('assay_grading_unit_not_adjacent_to_number') from error
+        if witness['start'] < number_end or gap.strip():
+            raise ContractError('assay_grading_unit_not_adjacent_to_number')
+    else:
+        unit_association(selection, number, witness, sources)
     prefix, suffix = _unit_contexts(sources, witness, 0, len(witness['quote']))
     if (prefix[-1:] and (prefix[-1:].isalpha() or prefix[-1:] in '_µμ/^')) or _unit_continuation(suffix):
         raise ContractError('assay_grading_partial_source_unit')
@@ -477,7 +488,9 @@ def _support(reference, *, read_record, sources, hypothesis=False):
         return record
     anchor = record.get('anchor')
     if record.get('record_type') != 'reference' or not isinstance(anchor, dict):
-        raise ContractError('assay_grading_anchored_support_required')
+        raise ContractError('assay_grading_anchored_support_required', detail={
+            'support_ref': reference, 'actual_record_type': record.get('record_type'),
+            'required_record_type': 'reference', 'required_field': 'anchor'})
     if record.get('source_ref') not in (None, anchor['source_ref']):
         raise ContractError('assay_grading_support_source_mismatch')
     original = sources.source(anchor['source_ref'], 'original')

@@ -10,6 +10,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from copy import deepcopy
 import json
+from .episode_work_report import render_completed_action_reports
 
 from .decision_context import INSTRUCTIONS, TEXT_INSTRUCTIONS
 from .execution_contracts import digest
@@ -1069,6 +1070,17 @@ def _task(state, instructions):
     if material:
         _section(parts, "Supplied material and scoped access", _values(material))
 
+    selected_sources = set(assignment.get("evidence_refs", ())) | set(
+        working.get("supplied_context_source_refs", ()))
+    source_operands = [{"source_ref": row["id"], **_pick(row,
+        ("origin", "provider", "accession", "version", "uri"))}
+        for row in working.get("sources", ()) if row.get("id") in selected_sources]
+    if source_operands:
+        _section(parts, "Selected source operands (metadata only)",
+            "These are received source identities and provenance for navigation. "
+            "Read the actual contents to establish what each source supports.\n\n"
+            + _values(source_operands))
+
     axis = process["evidence_axis"]
     _section(parts, "Investigate the supplied target: " + axis.get("name", ""),
         axis["investigation_instructions"])
@@ -1118,7 +1130,10 @@ def _task(state, instructions):
             "For example, records can reference episode-fact:committed_record_refs. "
             "The host expands your explicit selection to its original type and fills recorded facts; "
             "leave those fact fields out of initial_report_json. Choose the relevant sources and "
-            "separate interpretation fields for your question. Contract lookup creates no evidence, "
+            "return their actual saved grading results, numerical status, qualifications and missing inputs. "
+            "Reporting does not require another supported/contradicted, function, path or scope verdict: "
+            "use the grading sheet's existing criteria and status, without inventing a score threshold "
+            "or asking a child to judge the same result again. Contract lookup creates no evidence, "
             "child, completed action or credit.")
     _section(parts, "Information requested by the parent", state.get("requested_report_purpose"))
     if state.get("requested_form") is not None:
@@ -1219,9 +1234,31 @@ def _outcome(value):
     # is the exception: its origin is an operand required to commission it.
     shown = _pick(value, ("status", "record_refs", "changed_record_refs", "result", "feedback",
         "error_code", "errors", "conflicts", "notices", "aliases",
-        "revision_origin", "automatic_preview", "visual_inputs"))
+        "revision_origin", "automatic_preview", "visual_inputs", "child_completion"))
     if "feedback" in shown:
         shown["feedback"] = _feedback(shown["feedback"])
+    proposal = shown.get("result")
+    if isinstance(proposal, Mapping) and proposal.get("version") == "scientific_process_child_selection_v1":
+        from .scientific_process_records import (
+            SELECTION_VERSION, selector_selection, validate_child_selection, validate_revision_origin)
+        from .tool_information import parent_view
+        try:
+            prepared = validate_child_selection(proposal)
+            validate_revision_origin(shown.get("revision_origin"))
+        except (ValueError, TypeError):
+            return shown
+        selected = prepared["selection"]
+        if selected["version"] == SELECTION_VERSION:
+            # The existing child-assignment interface accepts exact selectors
+            # and restores/authenticates the original pinned tool information.
+            # Full child instructions remain in the saved preparation, rather
+            # than being copied into this parent's latest-outcome table.
+            shown["result"] = {**prepared, "selection": selector_selection(selected)}
+            shown["prepared_child_tools"] = parent_view(selected["child_tool_info"])
+            shown["preparation_use"] = (
+                "Commission a separate scientific_process child with result.selection and revision_origin. "
+                "The host restores the complete pinned tool descriptions and instructions and authenticates "
+                "them against the original preparation. This preparation does not change the current episode.")
     return shown
 
 
@@ -1378,11 +1415,45 @@ def _progress(row):
 
 def _steering(state, lookup_results):
     parts = ["STEERING"]
+    if 'completed_action_reports' in state:
+        parts.extend(['', render_completed_action_reports(state['completed_action_reports'])])
+    if state.get('pending_child_delivery') is not None:
+        _section(parts, 'Complete the original child return', _values(state['pending_child_delivery']))
     if state.get('resource_context') is not None:
-        _section(parts, 'Host resource limits and current shared capacity', _values(state['resource_context']))
+        _section(parts, 'Local budget, shared capacity and Aurora planning', _values(state['resource_context']))
+    if state.get('execution_initial_information') or state.get('execution_resource_information'):
+        for name, title in (
+                ('execution_resource_capabilities', 'Actual configured execution resources'),
+                ('execution_initial_information', 'Retained initial resource observations'),
+                ('execution_resource_information', 'Retained resource observations')):
+            if state.get(name) not in (None, {}, []):
+                _section(parts, title, json.dumps({name: state[name]}, ensure_ascii=False,
+                    allow_nan=False, separators=(',', ':')))
     if state.get('shared_information_context') is not None:
         _section(parts, 'Shared-parent information needs and available deliveries',
             _values(state['shared_information_context']))
+    # These channels are resolved against this receiver's actual receipts by
+    # the scientific binding. Preserve their numerical subsets, qualifications
+    # and dependence rather than leaving them only in the unrendered context.
+    for key, title in (
+            ('component_axis_scoring_sheets',
+             'Current A107/A110 scientific scoring sheets; updated automatically from received results'),
+            ('received_partner_and_chemical_evidence',
+             'Received A107/A110 scientific component reports; separate quantities'),
+            ('received_partner_and_chemical_native_components',
+             'Received A107/A110 native components and execution findings'),
+            ('received_partner_and_chemical_qualifications',
+             'Received A107/A110 per-use scientific qualifications'),
+            ('received_gene_context_execution',
+             'Received genomic execution outcomes and missing capabilities')):
+        if state.get(key):
+            # These versioned sheets already carry their complete structure.
+            # Repeating a dotted field path for every cell and provenance
+            # leaf can exceed the provider interface even for a small dataset.
+            # Keep every supplied value and dependency in compact nested JSON.
+            body = (_molecular_literal(state[key])
+                    if key == 'component_axis_scoring_sheets' else _values(state[key]))
+            _section(parts, title, body)
     yields = state.get("action_yields", {})
     rows = []
     for row in yields.get("rows", ()):
@@ -1406,6 +1477,11 @@ def _steering(state, lookup_results):
     metrics = _pick(state, ("current_credit", "annotation_score", "monitoring_information_credit"))
     if metrics:
         _section(parts, "Current separate measures", _values(metrics))
+    progress = {key: state[key] for key in ("credit_binding", "investigation_progress")
+        if state.get(key) is not None}
+    if progress:
+        _section(parts, "Scientific progress definition and current findings",
+            _molecular_literal(progress))
     if yields.get("unavailable_reasons"):
         _section(parts, "Yield information limits", _values(yields["unavailable_reasons"]))
     records = _received_records(state)
@@ -1413,11 +1489,14 @@ def _steering(state, lookup_results):
         _section(parts, "Current interpretations and their received evidence", _values(records))
     if state.get("current_report_update"):
         _section(parts, "Current return interpretation", _values(state["current_report_update"]))
+    # Completed-work accounts summarize outcomes and earned credit; they omit
+    # source bodies, exact witnesses and command streams. Preserve the latest
+    # authorized tool return so the episode can use what it actually acquired.
     if state.get("last_local_outcome") is not None:
         _section(parts, "Last own action outcome", _values(_information(_outcome(state["last_local_outcome"]))))
     if state.get("feedback") is not None and state["feedback"] != (state.get("last_local_outcome") or {}).get("feedback"):
         _section(parts, "Actionable feedback", _values(_feedback(state["feedback"])))
-    if state.get("child_reports"):
+    if state.get("child_reports") and 'completed_action_reports' not in state:
         _section(parts, "Admitted child returns", _values([
             alignment_report_presentation(report) for report in state["child_reports"]]))
     if state.get("received_bvbrc_values"):
@@ -1429,7 +1508,7 @@ def _steering(state, lookup_results):
         rows = []
         for row in pending["items"]:
             current = _pick(row, ("handle", "role", "lifecycle_state", "selected_at", "observed_at",
-                "latest_progress_ref", "return_available"))
+                "latest_progress_ref", "return_available", "event_target", "original_assignment"))
             resource = row.get("resource_selection")
             if resource is not None:
                 current["resource_selection"] = _pick(resource, ("resource_id", "kind", "allocation"))
@@ -1716,8 +1795,10 @@ def render_selected_execution_prompt(state, instructions, *, lookup_results=()):
     macs2 = select_macs2_peak_capture_presentation(state, lookup_results=lookup_results)
     state, lookup_results = macs2['context'], macs2['lookup_results']
     steering = _execution_presentation_values(_pick(state, ("action_yields", "controller", "current_credit",
+        "completed_action_reports",
         "last_local_outcome", "feedback", "child_reports", "pending_work", "report_deliveries",
-        "waiting_support", "resource_tool_estimates", "job_execution_options", "native_event_targets")))
+        "waiting_support", "resource_tool_estimates", "job_execution_options", "native_event_targets",
+        "pending_child_delivery")))
     lookups = [_execution_presentation_values(value) for value in lookup_results]
     parts = [_selected_execution_task(state, instructions),
         _render_episode_steering(steering, lookups, interval_sections)]

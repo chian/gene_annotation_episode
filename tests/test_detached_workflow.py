@@ -248,23 +248,60 @@ def test_parent_own_action_then_selected_wait_original_return_and_followup(scena
     assert scenario.backend.status(returned['handle'])['lifecycle_state'] == 'admitted'
 
 
-def test_parent_yield_preserves_live_descendant_and_closed_history(scenario):
+def test_parent_yield_suspends_until_child_return_then_preserves_closed_history(scenario):
     async def exercise():
+        provider = ScriptedProvider([commission(scenario.subject), scenario.child_live])
+        parent = asyncio.create_task(scenario.run(provider, completed_actions=1))
+        scenario.tasks.append(parent)
         try:
-            summary = await scenario.run(ScriptedProvider([commission(scenario.subject),
-                scenario.child_live]), completed_actions=1)
+            def stopped_selecting():
+                if parent.done():
+                    parent.result()
+                    raise AssertionError('parent closed before its selected child returned')
+                with Store(scenario.workspace) as store:
+                    installed = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+                        "AND name='runtime_observations'").fetchone()
+                    if installed is None:
+                        return False
+                    row = store.db.execute('SELECT o.observation FROM runtime_observations o '
+                        'JOIN runtime_episodes e ON e.episode_id=o.episode_id '
+                        'WHERE json_array_length(e.path)=1 ORDER BY o.unit_index DESC LIMIT 1').fetchone()
+                    return row is not None and json.loads(row[0])['step']['stop']
+
+            await until(stopped_selecting)
             spec = scenario.spec()
             status = scenario.backend.status(spec['handle'])
             assert status['liveness'] == 'live' and not status['return_available']
             with Store(scenario.workspace) as store:
+                active = scenario.root(store)
+                assert active['state'] == 'active'
+                assert active['completion'] is None and active['archive'] is None
+                stopped_observations = deepcopy(scenario.observations(store))
+                assert [row['decision_index'] for row in stopped_observations] == [1]
+                assert stopped_observations[0]['step']['delta'] == 0
+                assert store.db.execute('SELECT count(*) FROM runtime_report_attempts').fetchone()[0] == 0
+                pending = store.db.execute('SELECT result,credit FROM runtime_actions WHERE episode_id=? '
+                    'AND decision_index=0', (spec['parent']['episode_id'],)).fetchone()
+                assert json.loads(pending['result'])['status'] == 'pending' and pending['credit'] is None
+            assert not parent.done() and len(provider.contexts) == 2
+            gate_paths(scenario.directory, spec['handle'])[1].write_text('parent-selection-yielded\n')
+            summary = await parent
+            returned = await scenario.returned()
+            assert len(provider.contexts) == 2
+            with Store(scenario.workspace) as store:
                 observations = deepcopy(scenario.observations(store))
+                assert observations[:1] == stopped_observations
+                assert [row['decision_index'] for row in observations] == [1, 0]
+                assert [row['step']['delta'] for row in observations] == [0, 1]
                 slots = deepcopy(scenario.frozen_slots(store))
+                assert [row['original_decision_index'] for row in slots] == [1, 0]
+                assert store.db.execute("SELECT count(*) FROM runtime_actions "
+                    "WHERE json_extract(action,'$.kind')='wait'").fetchone()[0] == 0
                 closed = scenario.root(store)
+                assert closed['state'] == 'yielded'
                 descriptor = json.loads(closed['archive'])
                 archive_path = scenario.directory / 'archive' / descriptor['file']
                 archive_bytes = archive_path.read_bytes()
-            gate_paths(scenario.directory, spec['handle'])[1].write_text('parent-already-yielded\n')
-            returned = await scenario.returned()
             unused = ScriptedProvider([])
             resumed = await scenario.run(unused, completed_actions=1, resume=True)
             assert resumed == summary and unused.contexts == []
@@ -273,18 +310,19 @@ def test_parent_yield_preserves_live_descendant_and_closed_history(scenario):
                 assert scenario.frozen_slots(store) == slots
                 assert scenario.root(store) == closed
                 assert archive_path.read_bytes() == archive_bytes
-                assert store.db.execute('SELECT count(*) FROM runtime_report_attempts').fetchone()[0] == 0
+                assert store.db.execute('SELECT count(*) FROM runtime_report_attempts').fetchone()[0] == 1
+                assert store.db.execute('SELECT count(*) FROM runtime_return_admissions').fetchone()[0] == 1
                 action = store.db.execute('SELECT result,credit FROM runtime_actions WHERE episode_id=? '
                     'AND decision_index=0', (spec['parent']['episode_id'],)).fetchone()
-                assert json.loads(action['result'])['status'] == 'pending' and action['credit'] is None
-            assert scenario.backend.status(spec['handle'])['lifecycle_state'] == 'returned'
+                assert json.loads(action['result'])['status'] == 'completed' and action['credit'] == 1
+            assert scenario.backend.status(spec['handle'])['lifecycle_state'] == 'admitted'
             return summary, returned
         finally:
             await scenario.cleanup()
     summary, returned = asyncio.run(exercise())
-    assert summary['state'] == 'yielded_with_pending_work'
-    assert summary['pending_handles'] == [returned['handle']]
-    assert summary['completed_actions'] == 1 and summary['credit'] == 0
+    assert summary['state'] == 'yielded'
+    assert summary['pending_handles'] == []
+    assert summary['completed_actions'] == 2 and summary['credit'] == 1
     assert summary['scientific_completion'] == 'not_established_by_termination'
     assert_original_child_closure(scenario, returned)
 
@@ -331,7 +369,7 @@ def test_restart_reuses_live_handle_pid_and_replays_original_completion_order(sc
     assert_original_child_closure(scenario, returned)
 
 
-def test_controller_stop_after_wait_keeps_waking_return_unadmitted(scenario):
+def test_controller_stop_after_wait_admits_original_child_return(scenario):
     async def exercise():
         try:
             provider = ScriptedProvider([commission(scenario.subject), scenario.child_live,
@@ -340,22 +378,22 @@ def test_controller_stop_after_wait_keeps_waking_return_unadmitted(scenario):
             await asyncio.gather(*scenario.tasks)
             returned = await scenario.returned()
             with Store(scenario.workspace) as store:
-                assert [row['decision_index'] for row in scenario.observations(store)] == [1, 2]
-                assert [row['step']['delta'] for row in scenario.observations(store)] == [0, 0]
-                assert [row['original_decision_index'] for row in scenario.frozen_slots(store)] == [1, 2]
-                assert store.db.execute('SELECT count(*) FROM runtime_report_attempts').fetchone()[0] == 0
-                installed = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
-                    "AND name='runtime_return_admissions'").fetchone()
-                assert installed is None or store.db.execute(
-                    'SELECT count(*) FROM runtime_return_admissions').fetchone()[0] == 0
-            assert scenario.backend.status(returned['handle'])['lifecycle_state'] == 'returned'
-            assert scenario.backend.status(returned['handle'])['acknowledgment_id'] is None
+                observations = scenario.observations(store)
+                assert [row['decision_index'] for row in observations] == [1, 2, 0]
+                assert [row['step']['delta'] for row in observations] == [0, 0, 1]
+                assert observations[1]['step']['stop'] is True
+                assert [row['original_decision_index'] for row in scenario.frozen_slots(store)] == [1, 2, 0]
+                assert store.db.execute('SELECT count(*) FROM runtime_report_attempts').fetchone()[0] == 1
+                assert store.db.execute('SELECT count(*) FROM runtime_return_admissions').fetchone()[0] == 1
+            assert len(provider.contexts) == 3
+            assert scenario.backend.status(returned['handle'])['lifecycle_state'] == 'admitted'
+            assert scenario.backend.status(returned['handle'])['acknowledgment_id'] is not None
             return summary, returned
         finally:
             await scenario.cleanup()
     summary, returned = asyncio.run(exercise())
-    assert summary['state'] == 'yielded_with_pending_work'
-    assert summary['pending_handles'] == [returned['handle']]
-    assert summary['completed_actions'] == 2 and summary['credit'] == 0
+    assert summary['state'] == 'yielded'
+    assert summary['pending_handles'] == []
+    assert summary['completed_actions'] == 3 and summary['credit'] == 1
     assert summary['scientific_completion'] == 'not_established_by_termination'
     assert_original_child_closure(scenario, returned)

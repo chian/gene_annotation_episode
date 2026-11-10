@@ -1,0 +1,21 @@
+{
+  "version": "evaluator_expectations_v1",
+  "episode_input": false,
+  "case": "a107_original_partner_components_and_unresolved_target_transfer",
+  "basis": "Original source bytes and existing native partner reader reviewed separately from the autonomous episode.",
+  "reference_subject": "Purified Clostridium kluyveri butyryl-CoA dehydrogenase/Etf complex",
+  "source_examples": [
+    {"location": "Table 2, NADH oxidation", "present": "Fd + Hyd", "present_value": 7, "omitted": "Hyd", "omitted_value": 0.1, "reported_unit": "U/mg", "endpoint_specific_unit_definition": "1 micromole NADH oxidized per minute"},
+    {"location": "Table 2, ferredoxin reduction measured via H2 formation", "present_value": 5, "omitted_upper_bound": 0.01, "omitted_operator": "less_than", "reported_unit": "U/mg", "endpoint_specific_unit_definition": "1 micromole H2 formed per minute"}
+  ],
+  "required_limits": [
+    "Source-defined activity units must be associated with the actual endpoint before conversion.",
+    "The H2 endpoint and NADH endpoint are different measurements and conditions.",
+    "A missing quantitative addback stays unknown; the reference is not a new restoration measurement.",
+    "Partial conditions or unknown physical measurement identity can leave derived controlled contrasts unavailable while preserving native rates.",
+    "Ferredoxin, hydrogenase and the coupled endpoint retain their actual assay roles; reporter dependence is not automatically physiological necessity.",
+    "HTML and its text projection must not become independent confirmations.",
+    "The anonymous target is the real E. coli AtpG sequence, not the studied Bcd/Etf complex. Source results cannot be transferred by shared functional language.",
+    "Useful saved partner components must reach and be interpreted by the actual annotation parent."
+  ]
+}

@@ -18,8 +18,7 @@ questions. The parent owns completion accounting and presentation to the user.
 
 A110 asks whether the specified chemistry, atom sources, and resources fit the
 proposed role. Direct molecular activity belongs to A105, perturbation to A106,
-partner identification/coexpression to A107, and organism/environment
-plausibility to A108. A109 stays removed. A110 remains separate. No production
+partner identification/coexpression to A107. A109 stays removed. A110 remains separate. No production
 scorer, reader, prompt, library, annotation, scientific job or completion state
 is changed here.
 
@@ -334,7 +333,7 @@ is introduced and correspondence is not restricted to sequence homology.
 | Conditions differ | Use separately declared questions or measured b_comp; an unknown correction cannot be replaced by pooling |
 | Complementary endpoints/directions | Fixed separate physical-question weights; no claim they are independent probabilities |
 | Nondetection with calibrated nonnegative amount bound LOD | Use [0,LOD] and propagate; carry background/censoring method. An unshown bar or “not detected” without a quantified limit remains unknown |
-| Same observation contributes to A105/A106/A107/A108 | Retain shared-observation references and A110's different chemical role; do not fabricate independent credit. W05 must consume that dependency |
+| Same observation contributes to A105/A106/A107 | Retain shared-observation references and A110's different chemical role; do not fabricate independent credit. W05 must consume that dependency |
 | Supplied-resource diagnostic derived from a scored stoichiometric endpoint | Show its arithmetic, with zero additional weight; it is not a new native-resource experiment |
 | Missing complement | Name the particular missing measurable operand. No mandatory experiment sequence or investigation stop follows |
 

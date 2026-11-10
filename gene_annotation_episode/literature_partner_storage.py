@@ -23,6 +23,7 @@ from .literature_partner_native_inputs import (
 )
 from .literature_rate_storage import LiteratureRateRepository
 from .literature_partner_types import EXPERIMENT_TYPES
+from .source_display_labels import source_literal_label
 from . import literature_experiment_assessments as assessments
 
 
@@ -42,6 +43,8 @@ BINDINGS = {
     "addback_condition_ref": ("addback_condition", "context"),
     "function_ref": ("function", "term"),
 }
+LITERAL_REFERENCE_ROLES_VERSION = "partner_literal_reference_roles_v1"
+LITERAL_REFERENCE_TYPES = {"subject": "literature_result", "partner": "literature_result", "experiment": "assay"}
 NATIVE_UNITS = ("pmol/min/mg", "nmol/min/mg", "umol/min/mg", "per_min", "per_s", "uM/min", "nM/min")
 CHECK_REASONS = (
     "arm_unreported", "nonpartner_conditions_differ", "subject_unreported", "subject_mismatch",
@@ -212,32 +215,49 @@ def _factor_names(extraction):
         for factor in check["differing_factors"]})
 
 
-def _binding_record(literal, kind, entry):
+def literal_reference_role(record):
+    """Identify original literal roles without interpreting labels or reading sources."""
+    if record.get("record_type") != "reference" or record.get("origin") != "tool":
+        return None
+    anchor = record.get("anchor")
+    if not isinstance(anchor, dict):
+        return None
+    for role, kind in BINDINGS.values():
+        if kind not in {"reference", "context"}:
+            continue
+        if record.get("accession") == identity("partner_literal", {"field": role, **anchor}):
+            return role
+    return None
+
+
+def _binding_record(literal, kind, entry, *, legacy_reference_types=False):
     witness = entry["witness"]
     anchor = {name: witness[name] for name in ("source_ref", "artifact_ref", "start", "end", "quote")}
     common = {"source_ref": witness["source_ref"], "anchor": anchor}
     # Even two identical selected spans retain their separate scientific roles.
     accession = identity("partner_literal", {"field": literal, **anchor})
+    label = source_literal_label(entry["value"])
     if kind == "reference":
-        return {**common, "reference_type": "assay", "accession": accession,
-            "label": entry["value"], "sequence_ref": None, "molecule": None,
+        return {**common, "reference_type": "assay" if legacy_reference_types else LITERAL_REFERENCE_TYPES.get(literal, "literature_result"), "accession": accession,
+            "label": label, "sequence_ref": None, "molecule": None,
             "length": None, "term_refs": [], "context_refs": []}
     if kind == "term":
         return {**common, "namespace": "literature_partner_" + literal,
-            "accession": accession, "label": entry["value"], "term_type": "other"}
+            "accession": accession, "label": label, "term_type": "other"}
     # Context has no accession field; an anchored role record preserves field
     # identity without changing the source's literal name.
-    role = _condition_role(literal, entry)
-    return {**common, "context_type": "assay_condition", "name": entry["value"],
+    role = _condition_role(literal, entry, legacy_reference_types=legacy_reference_types)
+    return {**common, "context_type": "assay_condition", "name": label,
         "attributes": [], "related_refs": [identity("reference", {"origin": "tool", "record": role})]}
 
 
-def _condition_role(literal, entry):
-    return _binding_record(literal, "reference", entry)
+def _condition_role(literal, entry, *, legacy_reference_types=False):
+    return _binding_record(literal, "reference", entry, legacy_reference_types=legacy_reference_types)
 
 
-def _condition_refs(extraction):
-    return [identity("reference", {"origin": "tool", "record": _condition_role(literal, entry)})
+def _condition_refs(extraction, *, legacy_reference_types=False):
+    return [identity("reference", {"origin": "tool", "record": _condition_role(
+        literal, entry, legacy_reference_types=legacy_reference_types)})
         for literal, kind in BINDINGS.values() if kind == "context"
         and (entry := extraction["literals"][literal]) is not None]
 
@@ -253,7 +273,7 @@ _COMPONENT_ROLES = {
 }
 
 
-def _native_operand_projection(extraction):
+def _native_operand_projection(extraction, *, legacy_reference_types=False):
     """Build scientific bindings from frozen arm operands, without source IO.
 
     Global literals describe the selected scope. They do not relabel measured
@@ -276,7 +296,7 @@ def _native_operand_projection(extraction):
         if witness is None:
             return None
         kind = "reference" if field in ("subject", "partner") else "term"
-        record = _binding_record(field, kind, entry(witness))
+        record = _binding_record(field, kind, entry(witness), legacy_reference_types=legacy_reference_types)
         if unit:
             record["term_type"] = "unit"
         return remember(kind, record)
@@ -372,6 +392,21 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
     received_table = "literature_partner_received"
     binding_fields = tuple(BINDINGS)
 
+    def _authorize_assessment(self, context, value):
+        assessments.authorize_assessment(self, context, value)
+        role = literal_reference_role(self.store.get(value["experiment_ref"]))
+        if role in {"subject", "partner"}:
+            raise ContractError("literature_partner_experiment_identity_is_subject_or_partner_literal")
+        if role is not None and role != "experiment":
+            raise ContractError("literature_partner_experiment_identity_is_condition_literal")
+
+    def cells_schema(self):
+        return partner_cells_schema()
+
+    def received_cells(self, context):
+        from .component_axis_cell_receipts import inherited_cells
+        return inherited_cells(self, context, super().received_cells(context))
+
     def _provenance(self, scope, reference):
         if not self.store.reference_subset([reference], plain(scope)):
             raise ContractError("literature_source_outside_scope")
@@ -443,6 +478,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
         old = self.store.db.execute(query, parameters).fetchone()
         if old is not None:
             return self._replay(context, old, signature)
+        if assessment is not None:
+            self._authorize_assessment(context, assessment)
         with self.store.transaction():
             old = self.store.db.execute(query, parameters).fetchone()
             if old is not None:
@@ -473,6 +510,7 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
                 "input_artifact_ref": source["artifact_ref"], "input_source_refs": parents,
                 "direct_input_source_refs": direct, "data_source_ref": args["data_source_ref"],
                 "extraction": extraction, "sheet": {"cells": deepcopy(extraction["cells"])}}
+            payload["literal_reference_roles_version"] = LITERAL_REFERENCE_ROLES_VERSION
             created = []
 
             def publish(kind, record):
@@ -577,9 +615,12 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
         require(operation is not None and operation["signature"] == canonical({
             "arguments": args, "scope": request["scope"]}))
         marked = "native_operand_bindings" in saved
+        typed_literal_roles = "literal_reference_roles_version" in saved
+        require(not typed_literal_roles or saved["literal_reference_roles_version"] == LITERAL_REFERENCE_ROLES_VERSION)
         require(set(saved) == {"version", "input_source_ref", "input_artifact_ref", "input_source_refs",
             "direct_input_source_refs", "data_source_ref", "extraction", "experimental_bindings", "factor_bindings", "sheet"}
             | ({"native_operand_bindings"} if marked else set())
+            | ({"literal_reference_roles_version"} if typed_literal_roles else set())
             | ({"experiment_assessment"} if assessment is not None else set()))
         require(source["version"] == self.record_version and source["text_ref"] == source["artifact_ref"])
         native = args.get("input_mode") == "native_source_spans"
@@ -623,7 +664,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
         native_common, interpretation = {}, extraction["literals"]
         if marked:
             require(native)
-            projection, native_records, native_common, interpretation = _native_operand_projection(extraction)
+            projection, native_records, native_common, interpretation = _native_operand_projection(
+                extraction, legacy_reference_types=not typed_literal_roles)
             require(saved["native_operand_bindings"] == projection)
             for reference, (kind, record) in native_records.items():
                 require(self.store.get(reference) == {"id": reference, "record_type": kind,
@@ -640,12 +682,12 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
             if entry is None:
                 require(reference is None)
             else:
-                record = _binding_record(literal, kind, entry)
+                record = _binding_record(literal, kind, entry, legacy_reference_types=not typed_literal_roles)
                 require(reference == identity(kind, {"origin": "tool", "record": record}))
                 require(self.store.get(reference) == {"id": reference, "record_type": kind,
                     "origin": "tool", **record})
                 if kind == "context":
-                    role = _condition_role(literal, entry)
+                    role = _condition_role(literal, entry, legacy_reference_types=not typed_literal_roles)
                     role_ref = record["related_refs"][0]
                     require(self.store.get(role_ref) == {"id": role_ref, "record_type": "reference",
                         "origin": "tool", **role})
@@ -669,7 +711,8 @@ class LiteraturePartnerRepository(LiteratureRateRepository):
         require(outcome["record_refs"] == list(dict.fromkeys([sheet_ref, *saved["input_source_refs"],
             *(saved["experimental_bindings"][field] for field in BINDINGS
                 if saved["experimental_bindings"][field]),
-            *(native_records if native_records is not None else _condition_refs(extraction)),
+            *(native_records if native_records is not None else _condition_refs(
+                extraction, legacy_reference_types=not typed_literal_roles)),
             *(factors[name] for name in sorted(factors))])))
         require(outcome["result"] == {"sheet_ref": sheet_ref, "cells": extraction["cells"],
             "assay_interpretation": interpretation, **_metadata(extraction, factors),

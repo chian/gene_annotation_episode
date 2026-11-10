@@ -230,6 +230,36 @@ def test_reasoning_uses_existing_state_and_signed_corrections(tmp_path):
     assert provider.released
 
 
+def test_journal_migrates_scalar_credit_columns_and_replays_typed_collection(tmp_path):
+    store, _ = setup(tmp_path)
+    store.db.executescript('''
+        CREATE TABLE runtime_episodes(run_id TEXT NOT NULL, episode_id TEXT NOT NULL,
+          path TEXT NOT NULL, request TEXT NOT NULL, initial_credit REAL NOT NULL,
+          state TEXT NOT NULL, completion TEXT, archive TEXT, PRIMARY KEY(run_id,episode_id));
+        CREATE TABLE runtime_actions(run_id TEXT NOT NULL,episode_id TEXT NOT NULL,
+          decision_index INTEGER NOT NULL,action TEXT NOT NULL,result TEXT,credit REAL,timing TEXT,
+          PRIMARY KEY(run_id,episode_id,decision_index));
+        INSERT INTO runtime_episodes VALUES('credit-fixture','old','[]','{}',3.5,'active',NULL,NULL);
+        INSERT INTO runtime_actions VALUES('credit-fixture','old',0,'{}','{}',4.5,NULL);
+    ''')
+    journal = Journal(store, 'credit-fixture')
+    assert journal.row('runtime_episodes', 'old')['initial_credit'] == 3.5
+    assert journal.row('runtime_actions', 'old', 0)['credit'] == 4.5
+    collection = {'mode': 'annotation_axis_credit', 'arms': [{
+        'proposed_annotation_ref': 'proposal', 'subject_ref': 'subject_A',
+        'scope': {'subject_refs': ['subject_A']}, 'axis': 'A105', 'credit': None,
+        'status': 'unknown', 'transfer': {'status': 'unresolved', 'needed_refs': ['link']}}]}
+    journal.save('runtime_episodes', {'episode_id': 'new', 'path': '[]', 'request': '{}',
+        'initial_credit': collection, 'state': 'active'})
+    journal.save('runtime_actions', {'episode_id': 'new', 'decision_index': 0,
+        'action': '{}', 'result': '{}', 'credit': collection})
+    reopened = Journal(store, 'credit-fixture')
+    assert reopened.row('runtime_episodes', 'new')['initial_credit'] == collection
+    assert reopened.row('runtime_actions', 'new', 0)['credit'] == collection
+    assert store.db.execute('SELECT typeof(initial_credit) FROM runtime_episodes WHERE episode_id="old"').fetchone()[0] == 'real'
+    assert store.db.execute('SELECT typeof(initial_credit) FROM runtime_episodes WHERE episode_id="new"').fetchone()[0] == 'text'
+
+
 def test_child_iterates_and_returns_only_parent_form_without_composer(tmp_path):
     store, tools = setup(tmp_path)
     schema = obj({"interpretation": {"type": "string", "enum": ["unresolved", "supported"]},
@@ -326,13 +356,13 @@ def test_child_receives_actual_parent_purpose_and_current_admitted_form_values(t
     assert json.loads(stored_child[0])["report_contract"]["decision"] == purpose
 
 
-def test_unavailable_work_is_feedback_not_zero_observation(tmp_path):
+def test_unavailable_work_keeps_feedback_and_zero_progress_observation(tmp_path):
     store, tools = setup(tmp_path)
-    provider = ScriptedProvider([tool("unavailable"), reason(1), reason(2)])
+    provider = ScriptedProvider([tool("unavailable"), reason(1)])
     result = run(store, tools, provider, tmp_path / "run")
     assert result["completed_actions"] == 2
     assert provider.contexts[1]["feedback"] == {"code": "fixture_unavailable"}
-    assert provider.contexts[1]["controller"]["scores"] == []
+    assert provider.contexts[1]["controller"]["scores"] == [0]
     assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 2
 
 
@@ -393,60 +423,22 @@ def test_resume_reuses_closed_child_archives_without_duplicate_files(tmp_path):
     assert {file.name for file in directory.iterdir()} == files_after
 
 
-def test_resume_recovers_published_operation_before_runtime_response(tmp_path, monkeypatch):
+def test_undeclared_generic_child_is_rejected_before_native_execution(tmp_path):
     store, tools = setup(tmp_path)
     schema = obj({"outcome_refs": {"type": "array", "items": {
         "type": "string", "format": "reference", "x-reference-namespace": "observation"},
         "x-source": "last_outcome_refs"}})
-    provider = ScriptedProvider([commission(schema, {}), tool()])
-    original = Journal.save
-    crashed = False
-    def crash_once(self, table, values):
-        nonlocal crashed
-        if table == "runtime_actions" and values.get("result") and not crashed:
-            crashed = True
-            raise RuntimeError("synthetic crash after semantic publication")
-        return original(self, table, values)
-    monkeypatch.setattr(Journal, "save", crash_once)
-    with pytest.raises(RuntimeError, match="synthetic crash"):
-        run(store, tools, provider, tmp_path / "run", counts=(1, 1))
-    assert crashed and tools.executions == tools.commits == 1
-    assert provider.contexts[0]["tools"] == []
-    assert "fixture.measure" in {entry["name"] for entry in provider.contexts[1]["tools"]}
-    identities = [dict(row) for row in store.db.execute(
-        "SELECT episode_id,path,request,initial_credit FROM runtime_episodes ORDER BY episode_id")]
-    root_id = next(row["episode_id"] for row in identities if len(json.loads(row["path"])) == 1)
-    child_id = next(row["episode_id"] for row in identities if len(json.loads(row["path"])) == 2)
-    child_action = dict(store.db.execute("SELECT * FROM runtime_actions WHERE episode_id=?",
-        (child_id,)).fetchone())
-    assert json.loads(child_action["action"]) == tool()["selection"]
-    assert child_action["result"] is child_action["credit"] is None
-    operation = dict(store.db.execute("SELECT * FROM synthetic_operations").fetchone())
-    assert operation["id"] == f"{child_action['run_id']}:{child_id}:{child_action['decision_index']}"
-    assert store.db.execute("SELECT COUNT(*) FROM synthetic_operations").fetchone()[0] == 1
-    assert store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 0
-    calls = [dict(row) for row in store.db.execute(
-        "SELECT * FROM runtime_model_calls ORDER BY episode_id,call_index")]
-    resumed = ScriptedProvider([])
-    result = run(store, tools, resumed, tmp_path / "run", counts=(1, 1), resume=True)
-    assert result["completed_actions"] == 1 and result["episode_count"] == 2
-    assert result["credit"] == 0 and resumed.contexts == []
-    assert tools.executions == 2 and tools.commits == 1
-    assert [dict(row) for row in store.db.execute("SELECT * FROM synthetic_operations")] == [operation]
-    assert [dict(row) for row in store.db.execute(
-        "SELECT episode_id,path,request,initial_credit FROM runtime_episodes ORDER BY episode_id")] == identities
-    assert [dict(row) for row in store.db.execute(
-        "SELECT * FROM runtime_model_calls ORDER BY episode_id,call_index")] == calls
-    # The recovered tool is one child observation; its typed return is one
-    # separate parent observation. Recovery itself supplies no observation.
-    observations = [dict(row) for row in store.db.execute("SELECT * FROM runtime_observations")]
-    assert len(observations) == 2
-    assert {episode_id: sum(row["episode_id"] == episode_id for row in observations)
-        for episode_id in (root_id, child_id)} == {root_id: 1, child_id: 1}
-    assert all(json.loads(row["observation"])["step"]["delta"] == 0 for row in observations)
-    returned = json.loads(store.db.execute("SELECT form FROM runtime_report_attempts "
-        "WHERE parent_episode_id=? AND child_episode_id=?", (root_id, child_id)).fetchone()[0])
-    assert returned == {"outcome_refs": json.loads(operation["result"])["record_refs"]}
+    # The old fixture depended on silently inheriting root credit. Its rejected
+    # commission must not execute the child or reach a native crash boundary.
+    provider = ScriptedProvider([commission(schema, {}), reason(0)])
+    result = run(store, tools, provider, tmp_path / "run", counts=(1, 1))
+    assert provider.contexts[1]['feedback']['detail'] == 'scientific_task_credit_not_declared:improvement'
+    assert result['completed_actions'] == result['episode_count'] == 1
+    assert tools.executions == tools.commits == 0
+    # Only the root's subsequent genuine reasoning commit is published.
+    assert store.db.execute('SELECT count(*) FROM synthetic_operations').fetchone()[0] == 1
+    actions = list(store.db.execute('SELECT action FROM runtime_actions'))
+    assert len(actions) == 1 and json.loads(actions[0]['action'])['kind'] == 'reason'
 
 
 def test_child_scoped_reference_error_does_not_discard_work(tmp_path):
@@ -592,8 +584,12 @@ def test_actual_store_partial_reasoning_retains_independent_rows(tmp_path):
                  "value": {"type": "enum", "value": "unknown"}, "context_refs": []}
         payload["hypotheses"] = [valid, {**valid, "alias": "invalid", "predicate": "invalid_fixture_predicate"}]
         provider = ScriptedProvider([{"selection": {"kind": "reason", "commit": payload}, "report_update": {}}])
+        # This admission fixture measures retained valid rows, not biological support.
+        def retained_valid_hypotheses(bound_store, scope):
+            return len(bound_store.list("hypothesis"))
         result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
             run_dir=tmp_path / "partial-run",
+            project_credit=retained_valid_hypotheses,
             controller_factory=lambda path, baseline: FixtureController(str(path), baseline, 1)))
         assert result["completed_actions"] == 1
         assert len(store.list("hypothesis")) == 1
@@ -644,8 +640,12 @@ def test_transport_optional_null_is_decoded_even_when_another_reasoning_row_is_i
             "predicate": "sequence_integrity", "value": {"type": "enum", "value": "unknown"},
             "context_refs": []}]
         provider = ScriptedProvider([{"selection": {"kind": "reason", "commit": payload}, "report_update": {}}])
+        # This transport fixture measures retained source-subject rows only.
+        def retained_source_subjects(bound_store, scope):
+            return len(bound_store.list("reference"))
         result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
             run_dir=tmp_path / "transport-partial-run",
+            project_credit=retained_source_subjects,
             controller_factory=lambda path, baseline: FixtureController(str(path), baseline, 1)))
         assert result["completed_actions"] == 1
         assert len(store.list("reference")) == 1 and not store.list("hypothesis")
@@ -702,7 +702,7 @@ def test_failed_child_delivery_parent_repairs_without_new_science_or_yield(tmp_p
     assert rejected_meaning["child_reports"] == []
     assert repaired_parent["child_reports"][0]["interpretation"] == "supported"
     assert len(repaired_parent["child_reports"][0]["outcome_refs"]) == 15
-    assert [context["controller"]["scores"] for context in (failed, rejected_meaning, repaired_parent)] == [[2], [2], [2]]
+    assert [context["controller"]["scores"] for context in (failed, rejected_meaning, repaired_parent)] == [[], [], [2]]
     assert tools.commits == tools.executions == 1
     assert result["completed_actions"] == 2 and result["credit"] == 3
     assert result["pending_report_deliveries"] == 0
@@ -715,7 +715,7 @@ def test_failed_child_delivery_parent_repairs_without_new_science_or_yield(tmp_p
                               descriptor["sha256"], descriptor["index_sha256"]).load()
     edge = archived["units"][0]
     assert edge["child"]["units_consumed"] == 2
-    assert len(edge["episode_update"]["delivery_failures"]) == 2
+    assert len(edge["episode_update"]["delivery_failures"]) == 0
     assert len(edge["episode_update"]["report"]["outcome_refs"]) == 15
     assert "maxItems" not in edge["episode_update"]["report_contract"]["measurements"]["schema"]["properties"]["outcome_refs"]
 
@@ -737,7 +737,7 @@ def test_report_repair_resume_preserves_child_science_and_observations(tmp_path,
     before_observations = store.db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0]
     resumed = ScriptedProvider(([redeliver(repaired)] if not after_redelivery else []) + [reason(1)])
     result = run(store, tools, resumed, None, resume=True)
-    assert before_operations == 2 and before_observations == 3
+    assert before_operations == 2 and before_observations == (3 if after_redelivery else 2)
     assert result["completed_actions"] == 2 and result["credit"] == 3
     assert result["pending_report_deliveries"] == 0
     assert tools.commits == tools.executions == 1
@@ -747,15 +747,20 @@ def test_report_repair_resume_preserves_child_science_and_observations(tmp_path,
     assert len(resumed.contexts[-1]["child_reports"][0]["outcome_refs"]) == 15
 
 
-def test_numerical_yield_with_pending_delivery_is_explicit(tmp_path):
+def test_child_delivery_resolves_before_its_parent_can_yield(tmp_path):
     store, tools = setup(tmp_path)
+    repaired = delivery_schema()
+    del repaired["properties"]["outcome_refs"]["maxItems"]
     provider = ScriptedProvider([commission(delivery_schema(), {"interpretation": "unresolved"}),
-        reason(2, {"interpretation": "unresolved"}), tool(report={"interpretation": "supported"})])
+        reason(2, {"interpretation": "unresolved"}), tool(report={"interpretation": "supported"}),
+        redeliver(repaired)])
     result = run(store, tools, provider, tmp_path / "run", counts=(1, 2))
     assert result["ended_by"] == "yield_stop"
     assert result["completed_actions"] == 1
-    assert result["pending_report_deliveries"] == 1
-    assert len(provider.contexts) == 3
+    assert result["pending_report_deliveries"] == 0
+    assert len(provider.contexts) == 4
+    assert provider.contexts[-1]["controller"]["scores"] == []
+    assert provider.contexts[-1]["pending_child_delivery"]["original_decision_index"] == 0
 
 
 def test_async_tool_protocol_runs_on_owning_loop_with_sync_fallback_available(tmp_path):
@@ -845,6 +850,13 @@ def test_form_facts_stream_only_reference_arrays_without_archived_tool_text(tmp_
         store.add({"id": ref, "record_type": kind, "subject_refs": ["subject_A"]})
     workflow = runtime.Workflow(store, tools, ScriptedProvider([]), tmp_path / "run", "fixture-memory",
         lambda path, initial: FixtureController(str(path), initial, 2), lambda bound_store, scope: 7.5)
+    scope = {"subject_refs": ["subject_A"]}
+    request = runtime.EpisodeRequest(
+        runtime.EpisodeGoal.root(objective="Inspect synthetic form facts", result_contract={"role": "annotation"}),
+        Record({"scope": scope, "initial_report": {}}))
+    source = runtime.DecisionSource(workflow, (("annotation", "fixture"),), request, scope)
+    source.last_outcome = {"record_refs": ["observation_A"]}
+    source.report_basis = ["assessment_A"]
     marker = "ARCHIVED_BODY_MUST_NOT_REACH_PYTHON"
     body = marker + ("x" * 1024 * 1024)
     # Deliberately insert out of action order and include overlapping references.
@@ -855,10 +867,8 @@ def test_form_facts_stream_only_reference_arrays_without_archived_tool_text(tmp_
         result = {"status": "completed", "record_refs": refs, "result": {"text": body}}
         if changed is not None:
             result["changed_record_refs"] = changed
-        workflow.journal.save("runtime_actions", {"episode_id": "fixture-episode", "decision_index": index,
+        workflow.journal.save("runtime_actions", {"episode_id": source.episode_id, "decision_index": index,
             "action": json.dumps({"kind": "tool", "tool": "source.read"}), "result": json.dumps(result), "credit": 7.5})
-    source = SimpleNamespace(episode_id="fixture-episode", scope={"subject_refs": ["subject_A"]},
-        last_outcome={"record_refs": ["observation_A"]}, report_basis=["assessment_A"])
     original_db, original_loads = store.db, json.loads
     class GuardCursor:
         def __init__(self, cursor):

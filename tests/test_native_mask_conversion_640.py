@@ -37,7 +37,7 @@ from gene_annotation_episode.state import Store
 ROOT = Path(__file__).resolve().parents[1]
 RETAINED = ROOT / ("verification/tool_graders_hmmer_map_verification_2026-10-28_529/"
     "check097_blast_mask_conversion_formats/temporary/convert2blastmask_formats_636")
-POLICY = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 FORMATS = ("maskinfo_xml", "maskinfo_asn1_text", "maskinfo_asn1_bin", "interval")
 DNA = b">duplicate\nAAaaGG\n>duplicate\nttCCaa\n"
 PROTEIN = b">protein_a\nMKWVtfISLLflFSSaysR\n"

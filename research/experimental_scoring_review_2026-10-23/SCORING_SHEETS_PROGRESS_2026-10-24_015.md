@@ -24,8 +24,6 @@ does not enter a scoring component is not a filled scoring example.
 - [x] A106 — perturbation numerical sheet; delivered. Contrasting YeaG variant
   experiments fill scoring inputs; different publications are not required.
 - [x] A107 — partner presence/coexpression numerical sheet; delivered.
-- [x] A108 — organism/sample-context numerical sheet; delivered, now with the
-  additive exact SD/SEM magnitude-and-basis correction004 checked.
 - [x] A110 — chemical/pathway consistency numerical sheet; delivered.
 - [x] A111 — experimentally observed molecular-feature numerical sheet; delivered.
 
@@ -36,7 +34,7 @@ goal, not production implementation or adoption of proposed policy weights.
 
 Fresh worker030 read the current nine non-A104 mathematical deliverables and
 population contracts. Its scoped criteria2/3/6 matrix is
-`scoring_completion_evidence_030/CURRENT_MATRIX_AFTER_A108_031.md`; exact
+`scoring_completion_evidence_030/CURRENT_MATRIX_031.md`; exact
 inspection and receipt coverage are in its preserved audit030. The parent has
 read both complete records. These supplement earlier full parent reviews;
 they do not independently revalidate every primary observation.
@@ -54,15 +52,6 @@ YeaG K116A's actual comparability cell .64 and K426A's conflicting alternatives
 25/28 or1 are contrasting experimental inputs. Cas2's selected-spacer counts
 remain diagnostic only. The parent printed this correction explicitly rather
 than silently imposing a second-paper requirement.
-
-A108 named SD and SEM without exact numerical magnitude fields in both
-observation types. The parent added
-`a108_sheet_construction_001/A108_EXACT_UNCERTAINTY_FIELDS_004.md`, preserving
-all earlier records and formulas. It defines actual SD, SEM and unspecified
-plus/minus magnitudes, units, separate estimand/sampling/count/dependence bases,
-and populators for NumericObservation and OrganismTraitObservation. SD/SEM
-are not automatically interpreted as admissible bounds. Worker030 and the
-parent read the complete correction; no arithmetic rerun was warranted.
 
 ## Current A104 proposal and bounded remaining work
 

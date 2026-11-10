@@ -8,7 +8,9 @@ from .ordinary_execution import OrdinaryExecutionStatistics
 from .public_configuration import configured_tools
 
 
-def build_tools(store, configuration=None):
+def build_tools(store, configuration=None, *, registry_class=ToolRegistry):
+    if not isinstance(registry_class, type) or not issubclass(registry_class, ToolRegistry):
+        raise TypeError('tool_registry_class_required')
     configuration = configured_tools(configuration)
     public, local = configuration.get('public', {}), configuration.get('local_tools', {})
     clients = PublicClients(ncbi_email=public.get('ncbi_email'),
@@ -19,7 +21,7 @@ def build_tools(store, configuration=None):
     statistics = (OrdinaryExecutionStatistics(configuration['history'], configuration['resource_id'],
         local.get('native_receipts_dir', store.path/'native-execution-receipts'))
         if 'history' in configuration or 'resource_id' in configuration else None)
-    tools = ToolRegistry(store, clients=clients, job_limits=configuration.get('local_jobs'),
+    tools = registry_class(store, clients=clients, job_limits=configuration.get('local_jobs'),
         local_resources=configuration.get('local_resources'),
         knowledge_library_directory=configuration.get('knowledge_library_directory'),
         native_statistics=statistics,

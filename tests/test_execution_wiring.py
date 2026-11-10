@@ -70,8 +70,7 @@ def test_shared_loop_launch_resource_monitor_results_and_exact_zero(tmp_path, re
         target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
         scope = {'subject_refs': [target]}
         if resource_kind == 'local':
-            resources = {'here': {'kind': 'local', 'workspace': str(project), 'policy': {
-                'memory_bytes': 128*1024**2, 'scratch_bytes': 8*1024**2, 'wall_seconds': None}}}
+            resources = {'here': {'kind': 'local', 'workspace': str(project), 'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}}
             assignment = native_assignment(project, argv=[sys.executable, '-c',
                 'from pathlib import Path; Path('+repr(str(invocation))+').write_text("once"); '
                 'Path('+repr(str(output))+').write_bytes(bytes([0,255,65,10]))'])
@@ -185,8 +184,7 @@ def test_shared_loop_launch_resource_monitor_results_and_exact_zero(tmp_path, re
 
 
 def test_all_three_resources_reconstruct_before_model_entry_without_work(tmp_path, monkeypatch):
-    resources = {'here': {'kind': 'local', 'workspace': str(tmp_path/'local'), 'policy': {
-            'memory_bytes': 128*1024**2, 'scratch_bytes': 8*1024**2, 'wall_seconds': None}},
+    resources = {'here': {'kind': 'local', 'workspace': str(tmp_path/'local'), 'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}},
         'aurora': {'kind': 'pbs_ssh', 'workspace': '/lus/flare/projects/BioReason-Aurora-Test',
             'ssh_argv': ['unexecuted-ssh', 'user-supplied-host'], 'account': 'EpiCalib',
             'python_executable': '/usr/bin/python3'}, 'ebi': {'kind': 'hmmer_api'}}
@@ -235,9 +233,7 @@ def _guard_molecular_binding_construction(monkeypatch):
 def _molecular_binding_factory(tmp_path):
     # Declared local metadata only: no installed ORF deployment or executable.
     return ExecutionServiceFactory({'here': {'kind': 'local',
-        'workspace': str(tmp_path / 'uncreated-local-workspace'), 'policy': {
-            'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3,
-            'wall_seconds': None}}}, {}, 3, 2, .5)
+        'workspace': str(tmp_path / 'uncreated-local-workspace'), 'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}}, {}, 3, 2, .5)
 
 
 def _molecular_binding_workflow(store, tools, factory, directory, run_id):

@@ -19,7 +19,7 @@ _BOUND = {'less_than': '<', 'less_or_equal': '≤', 'greater_than': '>', 'greate
 # Only inspected generation sites, together with their declared record origin
 # and namespace, distinguish host accessions from scientific identifiers.
 _REFERENCE_GENERATORS = frozenset({'source_assay', 'source_experiment', 'source_subject_token',
-    'assay_literal', 'interpreted_assay', 'binding_label', 'context_literal', 'reaction_literal',
+    'assay_literal', 'interpreted_assay', 'binding_label', 'reaction_literal',
     'structure_literal', 'perturbation_literal', 'partner_literal', 'figure_literal',
     'ratio_source_meaning', 'ratio_label', 'controlled_joint_scope_witness',
     'gel_source_witness', 'gel_scientific_meaning', 'transport_curve', 'transport_quantity'})
@@ -29,8 +29,7 @@ _TERM_GENERATORS = {'literature_endpoint': {'endpoint', 'native_rate_endpoint'},
     'literature_quantity': {'quantity'}, 'literature_analyte': {'analyte'},
     'literature_assay_endpoint': {'assay_endpoint'}, 'literature_assay_arrangement': {'assay_arrangement'},
     'literature_partner_condition_factor': {'partner_factor'}}
-_TERM_GENERATOR_FAMILIES = {'literature_context_': 'context_literal',
-    'literature_reaction_': 'reaction_literal', 'literature_perturbation_': 'perturbation_literal',
+_TERM_GENERATOR_FAMILIES = {'literature_reaction_': 'reaction_literal', 'literature_perturbation_': 'perturbation_literal',
     'literature_partner_': 'partner_literal', 'literature_figure_': 'figure_literal'}
 
 
@@ -123,6 +122,8 @@ class ReceivedFactDisplay:
         if not isinstance(value, Mapping):
             return _scalar(value)
         kind = value.get('type')
+        if not isinstance(kind, str):
+            return self.inline(value)
         if kind == 'number':
             text = ('≈' if value.get('qualifier') == 'approximate' else '')
             text += _BOUND.get(value.get('bound'), '') + _scalar(value.get('value'))
@@ -143,7 +144,10 @@ class ReceivedFactDisplay:
     def project(self, value):
         """Keep generic admitted field meanings while resolving their references."""
         if isinstance(value, Mapping):
-            if value.get('type') in {'number', 'enum', 'reference', 'term_ref', 'relation'}:
+            # Native database JSON also uses `type`, including nested objects.
+            # Only the string discriminator denotes a scientific atom here.
+            kind = value.get('type')
+            if isinstance(kind, str) and kind in {'number', 'enum', 'reference', 'term_ref', 'relation'}:
                 return self.atom(value)
             result = {}
             for name, child in value.items():
@@ -181,7 +185,8 @@ class ReceivedFactDisplay:
 
     def inline(self, value):
         if isinstance(value, Mapping):
-            if value.get('type') in {'number', 'enum', 'reference', 'term_ref', 'relation'}:
+            kind = value.get('type')
+            if isinstance(kind, str) and kind in {'number', 'enum', 'reference', 'term_ref', 'relation'}:
                 return self.atom(value)
             items = []
             for key, child in value.items():
@@ -227,6 +232,10 @@ class ReceivedFactDisplay:
             if 'sequence_ref' in row:
                 fields['sequence association'] = self.identity_ref(row['sequence_ref'], 'sequence')
             if row.get('revision') is not None or reference in self.revision_status:
+                if row.get('revision') is not None:
+                    # A versioned reasoning update needs this actual operand;
+                    # current/stale membership alone cannot supply it.
+                    fields['received revision (expected_revision for this version)'] = row['revision']
                 current = self.revision_status.get(reference)
                 fields['received revision state'] = 'current' if current is True else 'stale' if current is False else 'unknown'
             rows.append((self.labels[reference], kind or 'unrecognized', self.inline(fields), self._passage(row)))
@@ -236,4 +245,62 @@ class ReceivedFactDisplay:
         return table(('Excerpt', 'Already received source text'), self.passages.values()) if self.passages else None
 
 
-__all__ = ['KINDS', 'ReceivedFactDisplay']
+class ResolvedFactDisplay(ReceivedFactDisplay):
+    """Resolve possessed scientific meanings inline, with their usable handles.
+
+    A handle remains an argument operand, never a substitute for its meaning.
+    No generic assessment verdict is promoted to a grading result here.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._resolving = set()
+        self._resolved = {}
+
+    def identity_ref(self, reference, category):
+        if isinstance(reference, (Mapping, tuple, list)):
+            return self.inline(reference)
+        if reference is None:
+            return 'Unknown ' + category
+        record = self.records.get(reference, {})
+        name = record.get('label') or category.capitalize()
+        return name + ' (argument reference: ' + str(reference) + ')'
+
+    def ref(self, reference):
+        if isinstance(reference, (Mapping, tuple, list)):
+            return self.inline(reference)
+        if reference is None:
+            return 'Unknown'
+        if reference in self._resolved:
+            return self._resolved[reference]
+        if reference in self._resolving:
+            return 'Previously named subject (argument reference: ' + str(reference) + ')'
+        record = self.records.get(reference, self.subjects.get(reference))
+        if record is None:
+            return 'Meaning not supplied (argument reference: ' + str(reference) + ')'
+        self._resolving.add(reference)
+        try:
+            kind = record.get('record_type')
+            if record.get('label') or record.get('name'):
+                meaning = str(record.get('label') or record['name'])
+            elif kind == 'hypothesis':
+                meaning = '; '.join(self.ref(ref) for ref in record['subject_refs'])
+                meaning += ' — ' + record['predicate'].replace('_', ' ') + ': ' + self.atom(record['value'])
+            elif kind == 'observation':
+                meaning = 'Source report about ' + '; '.join(self.ref(ref)
+                    for ref in record.get('source_subject_refs', record.get('subject_refs', [])))
+                if record.get('measurements'):
+                    meaning += ': ' + self.inline(record['measurements'])
+            elif kind == 'assessment':
+                meaning = 'Recorded source finding for ' + self.ref(record['hypothesis_ref'])
+                meaning += '; source result: ' + self.ref(record['observation_ref'])
+            else:
+                meaning = str(kind or 'Record').replace('_', ' ')
+            result = meaning + ' (argument reference: ' + str(reference) + ')'
+            self._resolved[reference] = result
+            return result
+        finally:
+            self._resolving.remove(reference)
+
+
+__all__ = ['KINDS', 'ReceivedFactDisplay', 'ResolvedFactDisplay']

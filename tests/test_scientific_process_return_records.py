@@ -178,7 +178,7 @@ def test_current_projection_is_closed_detached_and_copies_every_other_field(curr
     raw = json.dumps(row)
     before = _snapshot_bytes(library, tools)
     result = project_process_result(_frozen(row), library=library, tool_library=tools)
-    assert result == {**row, "version": "scientific_process_result_v2", "selection": {
+    assert result == {**row, "version": "scientific_process_result_v3", "proposed_annotation_ref": None, "selection": {
         "version": "scientific_process_selection_report_v1", "source_version": "scientific_process_selection_v3",
         "evidence_axis": row["selection"]["evidence_axis"], "thought_pattern": row["selection"]["thought_pattern"],
         "child_tool_info": [{"name": "fixture.inspect", "resources": "hpc"},
@@ -371,7 +371,8 @@ def test_projection_preserves_exact_existing_numerical_and_unknown_values(curren
     if not binding_known:
         row.update(credit_kind=None, credit_binding_ref=None)
     result = project_process_result(row, library=library, tool_library=tools)
-    assert {key: item for key, item in result.items() if key not in {"version", "selection"}} == {
+    assert result['proposed_annotation_ref'] is None
+    assert {key: item for key, item in result.items() if key not in {"version", "selection", "proposed_annotation_ref"}} == {
         key: item for key, item in row.items() if key not in {"version", "selection"}}
     assert result["initial_credit"] == 15.25 and result["credit"] == 14.5
     assert result["episode_yield"] == yield_value

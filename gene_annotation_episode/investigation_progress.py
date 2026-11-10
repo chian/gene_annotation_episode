@@ -41,6 +41,7 @@ class ScientificFindingProgress:
     policy: FindingProgressPolicy
     loss_preview_size: int = 24
     requires_episode_receipts = True
+    yield_method = 'accumulation'
 
     def __post_init__(self):
         if not isinstance(self.policy, FindingProgressPolicy):
@@ -55,6 +56,15 @@ class ScientificFindingProgress:
             'baseline': 'frozen_inherited_parent_information',
             'parent_projection': 'received_meanings_not_sum_of_child_scores'}
 
+    def received_axis_credit(self, projected):
+        """One progress unit per distinct retained finding received by an axis."""
+        if (not isinstance(projected, dict)
+                or projected.get('policy') != self.policy.as_record()
+                or type(projected.get('retained_finding_count')) is not int
+                or projected['retained_finding_count'] < 0):
+            raise ValueError('received_axis_finding_projection_required')
+        return projected['retained_finding_count']
+
     def __call__(self, store, scope, *, known_assessment_refs, assignment=None,
                  episode_id=None, run_id=None):
         return self.read_details(store, scope, known_assessment_refs=known_assessment_refs,
@@ -65,6 +75,11 @@ class ScientificFindingProgress:
                      details_offset, assignment=None, episode_id=None, run_id=None):
         if assignment is not None and store.validate_scope(assignment['scope']) != store.validate_scope(scope):
             raise ValueError('scientific_credit_scope_differs_from_original_commission')
+        if assignment is not None and assignment.get('proposed_annotation_ref') is not None:
+            proposed = assignment['proposed_annotation_ref']
+            store._require(proposed, {'hypothesis'})
+            known_assessment_refs = [ref for ref in known_assessment_refs
+                if store._require(ref, {'assessment'})['hypothesis_ref'] == proposed]
         return project_finding_progress(store, scope, self.policy,
             known_assessment_refs=known_assessment_refs, details_limit=details_limit,
             details_offset=details_offset)

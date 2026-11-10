@@ -5,8 +5,7 @@ nineteen unchanged thought-pattern entries. It completes the prompt portion of
 W04. It does not install the numerical scoring sheets, implement the readers
 that populate those sheets, or connect annotation credit under W05.
 
-The retained evidence axes are A101–A108, A110 and A111. A109 is absent. A110
-remains separate from A108. A105's three corrected investigation paragraphs
+The retained evidence axes are A101–A107, A110 and A111. A109 is absent. A105's three corrected investigation paragraphs
 are retained verbatim, with one later clarification appended. A104 includes
 the user's organismal-tree agreement, function-conserved-clade, mixed-function,
 frequent-horizontal-transfer, very-local-tree and outlier requirements.

@@ -272,8 +272,9 @@ not become supporting evidence for a molecular function through this adapter.
 The existing numerical applicability strengths, unresolved multiplier, softening
 and scale are explicit provisional settings for the first configured-model run;
 their presence does not mean that each value was user-approved.
-The case now binds the existing scientific implementation through
-`investigation_policy.py`; it does not install the subsequently suggested
+The historical case bound the existing scientific implementation through a
+saved policy source. The live central policy module was later removed in favor
+of episode-owned bindings. That historical case did not install the subsequently suggested
 accumulation formula, remove the unresolved multiplier or add another local
 scientific score.
 

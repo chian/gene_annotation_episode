@@ -21,7 +21,8 @@ TASKS = ('locus_identity','neighborhood_organization','component_attribution','c
     'fusion_and_regions','cooccurrence','functional_contrast','synthesis')
 
 
-def report_schema():
+def legacy_report_schema():
+    """Historical model-verdict contract; new commissions use saved grading."""
     refs = {'type':'array','items':{'type':'string','format':'reference'},'uniqueItems':True}
     schema = obj({'context_summary':{'type':'string','enum':['not_assessed','locus_only','organization_measured',
             'association_measured','no_locus','incomplete_context']},
@@ -36,7 +37,8 @@ def report_schema():
             'unmapped_target','reference_context_only','ambiguous_locus','partial_sequence','incomplete_assembly',
             'unexamined_flanks','neighbor_identity_unresolved','source_labels_only','optional_module',
             'related_genome_sampling','unknown_detection_scope','alternatives_unassessed',
-            'regulatory_direction_unestablished','exact_chemistry_unestablished','unresolved_primary_variant']}},
+            'regulatory_direction_unestablished','exact_chemistry_unestablished','unresolved_primary_variant',
+            'native_execution_failed','native_admission_unavailable','missing_original_operands']}},
         'information_need_refs':refs,
         'hypothesis_refs':{**deepcopy(refs),'items':{'type':'string','format':'reference','x-reference-namespace':'hypothesis'}},
         'assessment_refs':{**deepcopy(refs),'items':{'type':'string','format':'reference','x-reference-namespace':'assessment'}},
@@ -48,9 +50,15 @@ def report_schema():
     return schema
 
 
+def report_schema():
+    original = legacy_report_schema()['properties']
+    schema = obj({name: deepcopy(original[name]) for name in ('records', 'context_credit')})
+    validate_closed_schema(schema)
+    return schema
+
+
 def initial_report():
-    return {'context_summary':'not_assessed','scope_status':'not_assessed','functional_support':'not_assessed',
-            'limitations':[],'information_need_refs':[],'hypothesis_refs':[],'assessment_refs':[]}
+    return {}
 
 
 def context_fact_sources():
@@ -85,6 +93,10 @@ def received_context_records(store,known,scope,*,committed=()):
     for ref in known:
         native=received_measurement(store,ref)
         if native is not None and native['body']['target_ref'] in targets:
+            records.add(ref)
+        source=store.get(ref)
+        if ((source.get('provider') or '').startswith('host.a103.hpc_')
+                and ref in store.reference_subset([ref],scope)):
             records.add(ref)
     for grade in received_attachments(store,known):
         if grade['target_ref'] not in targets:continue
@@ -121,18 +133,24 @@ class A103Subtree:
         supplied['a103_material'] = {'version':VERSION,'subject_ref':target_ref,'completeness':completeness,
             'supplied_length':store.subject_length(target_ref),'original_intervals':store.coverage(target_ref)}
         supplied['a103_task'] = {'name':task,'allowed_tasks':list(TASKS),
-            'communication':'Every scientific descendant remains A103. Share acquired evidence and missing information '
-                'through shared.*. The parent commissions A101/A102/A105 or other external investigations as siblings.',
+            'communication':'Every scientific descendant remains A103. Use available shared operations to send '
+                'the immediate parent specific missing operands or received evidence relevant to its decision. '
+                'That parent chooses within its own investigation options or relays the need upward. '
+                'Preserve unmet needs in the typed return; publication starts no response work.',
             'native_credit':'Actual context measurements receive native sheets automatically. Locus inventory and neighbor '
                 'homology alone do not create context-association scores. Each measurement/use has its own attribution. '
                 'Reuse existing measurements and maps; late evidence regrades without another native context job.',
-            'reporting':'Use context_summary for measured organization or association. Without actual functional '
-                'hypothesis_refs and assessment_refs, keep functional_support=not_assessed; this does not remove '
-                'context credit. Local trait evidence requires a qualified mapped fusion. Other functional '
-                'interpretations require their explicit context and hypothesis/assessment records.',
+            'reporting':'Return saved context measurements and their purpose-specific per-use grading. '
+                'Native quantities, status, missing inputs and qualifications come from those sheets. '
+                'Do not add context_summary, functional_support or a separate report verdict; '
+                'system association retains its measured scope rather than becoming exact function.',
             'resources':'Read resource_context.whole_workflow and admission feedback. Its aggregate cap includes Python, provider clients, and all workers. '
                 'One small workflow and one provider can run in this Codex window at a time; other windows have independent slots. '
-                'Use bounded genomic windows and explicit panels. Large searches require a configured external resource; publish that need.',
+                'Use bounded genomic windows and explicit panels. When context.request_hpc is available, it freezes '
+                'received operands for the shared HPC parent and its prediction/execution sisters. Original results '
+                'are automatically graded and attributed when received. Reuse qualified received measurements. '
+                'Detection inventory reads a completed parent-delivered search; new homology work stays with the shared parent. '
+                'Large searches require a configured external resource; publish that need.',
             'interpretation':'Keep target and homolog loci, components, regions, sampling dependence, optional modules and '
                 'detection scope explicit. Incomplete sequence is unknown, not absence. System association does not establish exact chemistry, '
                 'regulatory direction, physical interaction or indispensable partners.'}
@@ -145,7 +163,7 @@ class A103Subtree:
         selection = selector_selection(validate_selection({'version':SELECTION_VERSION,
             'evidence_axis':deepcopy(self.axis),'thought_pattern':self.library.reference(thought_id),'child_tool_info':tools}))
         return {'kind':'episode_child','role':'scientific_process','goal':question,'scope':scope,
-            'purpose':'Return actual gene-context measurements and their particular target/component/region attribution, bounded interpretation, and shared information needs.',
+            'purpose':'Return saved gene-context measurements and their purpose-specific target/component/region grading, with its exact recorded qualifications and missing inputs; no second report verdict.',
             'schema_json':json.dumps(schema,allow_nan=False),'initial_report_json':json.dumps(initial,allow_nan=False),
             'assignment':{'selection':selection,'evidence_refs':references,'constraints':deepcopy(constraints or {}),'context':supplied}}
 
@@ -157,9 +175,6 @@ def create_a103_workflow(store,tools,provider,directory,run_id,controller_factor
     if options.get('episode_record_receipts',True) is not True:raise ValueError('a103_numeric_credit_requires_receipts')
     options['episode_record_receipts'] = True
     scorer = A103ContextCredit()
-    if options.get('project_child_credit') is None:
-        options['project_child_credit'] = scorer
-        options.setdefault('child_credit_binding',scorer.as_record())
     return Workflow(store,tools,provider,directory,run_id,controller_factory,scorer,
         credit_binding=scorer.as_record(),initial_known_record_refs=initial_known_record_refs,**options)
 
@@ -167,10 +182,16 @@ def create_a103_workflow(store,tools,provider,directory,run_id,controller_factor
 def resolve_report(store,report,*,scope):
     from .a103_credit import A103ContextCredit
     from .a103_publication import received_measurement
-    validate_form(report,report_schema(),lambda ref,namespace:
+    legacy = 'context_summary' in report
+    validate_form(report,legacy_report_schema() if legacy else report_schema(),lambda ref,namespace:
         ref in store.reference_subset([ref],scope) and (namespace is None or store.get(ref)['record_type']==namespace))
     view = A103ContextCredit().read_details(store,scope,known_record_refs=report['records'],details_limit=24,details_offset=0)
     sheets = view['a103_sheet']
+    if not legacy:
+        return {'context_sheets': sheets, 'tool_attachments': view['tool_attachments'],
+            'target_sheets': view['target_sheets'],
+            'receiving_scope_credit': view['credit'], 'child_reported_credit': report['context_credit'],
+            'reporting': 'saved_context_grading; no_separate_function_verdict'}
     if report['context_summary']=='association_measured' and not any(sheets[k] for k in ('recurrence','fusion','cooccurrence','native_channel')):
         raise ContractError('a103_association_statement_requires_actual_measurement')
     if report['functional_support']=='system_association' and view['credit']<=0:
@@ -187,7 +208,8 @@ def resolve_report(store,report,*,scope):
             r.get('qualified_panel',{}).get('contrast_bounds',[0,1])[0]>0 for r in sheets['functional_contrast']):
         raise ContractError('a103_discriminating_contrast_requires_qualified_separated_bounds')
     return {'receiving_scope_credit':view['credit'],'child_reported_credit':report['context_credit'],
-        'context_sheets':sheets,'information_need_refs':report['information_need_refs']}
+        'context_sheets':sheets,'tool_attachments':view['tool_attachments'],
+        'target_sheets':view['target_sheets'],'information_need_refs':report['information_need_refs']}
 
 
 @dataclass(frozen=True)
@@ -195,12 +217,41 @@ class A103ServiceFactory:
     source_directory: str
     tool_retrieval: dict
     additional_descriptors: tuple = ()
+    execution_service_factory: object | None = None
 
     def __call__(self,store,*,run_id,directory,tool_catalog,job_episodes=None,resource_estimator=None,
                  tool_registry=None,**kwargs):
         from .episode_application_services import EpisodeApplicationServices
         from .literature_episodes import LiteratureEpisodes
         from .scientific_process_setup import prepare_scientific_binding
+        if self.execution_service_factory is not None:
+            from .execution_service_setup import ExecutionServiceFactory
+            from .execution_episodes import ExecutionEpisodes
+            from .episode_monitoring import MonitorEpisodes
+            factory=self.execution_service_factory
+            if not isinstance(factory,ExecutionServiceFactory):
+                raise TypeError('a103_explicit_execution_service_factory_required')
+            execution=factory(store,run_id=run_id,directory=directory,tool_catalog=tool_catalog,
+                tool_registry=tool_registry,job_episodes=job_episodes,resource_estimator=resource_estimator)
+            roles=['scientific_process','literature',*ExecutionEpisodes.entry_roles,*MonitorEpisodes.entry_roles]
+            if factory.hpc_commissions is not None:
+                from .hpc_episodes import HPCEpisodes
+                configure=getattr(tool_registry,'configure_a103_hpc',None)
+                if not callable(configure):raise ContractError('a103_hpc_requires_actual_context_tool_registry')
+                configure(factory.resources)
+                roles.extend(HPCEpisodes.entry_roles)
+            descriptors=(*execution.episode_binding_descriptors,*self.additional_descriptors)
+            ids=[descriptor['binding_id'] for descriptor in descriptors]
+            if len(ids)!=len(set(ids)) or {'scientific_process','literature'}.intersection(ids):
+                raise ContractError('a103_execution_binding_conflict')
+            for descriptor in self.additional_descriptors:roles.extend(descriptor.get('roles',()))
+            scientific=prepare_scientific_binding(run_directory=directory,source_directory=self.source_directory,
+                tool_catalog=tool_registry.catalog() if tool_registry is not None else tool_catalog,
+                child_roles=tuple(dict.fromkeys(roles)),tool_retrieval=self.tool_retrieval,
+                resource_catalogs=execution.resource_tool_catalogs)
+            return EpisodeApplicationServices((scientific,LiteratureEpisodes(None).as_record(),*descriptors),
+                execution.role_credit_bindings,execution.job_progress_provider,
+                resource_tool_catalogs=execution.resource_tool_catalogs)
         if job_episodes is not None:
             from .assembled_service_setup import bind_assembled_services
             from .composition_information import CONTRACT_INFORMATION_PROFILE

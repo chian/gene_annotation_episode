@@ -700,7 +700,7 @@ def test_selected_native_bound_and_objective_perturbations():
         immutable_json(folder / "native-execution.json", {"returncode": execution.returncode, "metadata": execution.metadata})
         assert execution.returncode == 0, execution.metadata
         assert execution.metadata["verified_cgroup"] == {"memory_max": 21474836480, "memory_swap_max": 0,
-            "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+            "kill_mode": "control-group", "oom_policy": "kill"}
         manifest = read_json(Path(plan["attempt_directory"]) / "outputs/native-manifest.json")
         records.append({"case": name, "plan": str(folder / "selected-plan.json"), "manifest": manifest})
         immutable_json(root / (name + "-result.json"), records[-1])

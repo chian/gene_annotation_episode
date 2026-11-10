@@ -502,7 +502,7 @@ def test_empty_mixed_registered_forms_use_only_their_lazy_routes(tmp_path,monkey
         # Neither route discovery nor ion/channel validation may construct
         # an unrelated science adapter, even when other capabilities are enabled.
         for name in ('literature_rate_repository','literature_perturbation_repository','literature_reaction_repository',
-                'literature_context_repository','literature_controlled_response_repository','literature_gel_repository'):
+                'literature_controlled_response_repository','literature_gel_repository'):
             monkeypatch.setattr(binding.services,name,forbid)
         form=obj({'ions':ion_discrimination_cells_schema(),'electrical':channel_cells_schema()})
         before=store.db.total_changes;store.db.execute('PRAGMA query_only=ON')

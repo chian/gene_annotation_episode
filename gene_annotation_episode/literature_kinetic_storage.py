@@ -47,6 +47,10 @@ _LEGACY_FROZEN = {
 _FROZEN = {**_LEGACY_FROZEN,
     "literature_kinetic_inputs.py": "aba2c8a2432901baf2538139cdf8649083a7537c45742dab45e113f0718f6ace",
     "literature_partner_source_fields.py": "6683a39272203ff0b2844c951ab13b2333ae0ae16e3966c4eb932970f30764a8"}
+# New input materialization retains the same stored numerical contract. Keep
+# the original release declaration for immutable receipts already published.
+_SOURCE_LOCATION_FROZEN = {**_FROZEN,
+    "literature_assay_inputs.py": "2d98f2e552a79c1a262c6507b0ab945641daabc1645a8b910a52aa8a939b997c"}
 _LEGACY_SAVED_IMPLEMENTATION = {
     "literature_kinetic_validation.py": "25c190269a33fe84f5c3d122e150d5f4acb61b724390f9a63995882d7da6463d",
     "literature_kinetic_storage.py": "ed571ce8966dd7cbf9363f1e5c38c6d431607be06073a5c957d3ff943ef3b7dc",
@@ -76,7 +80,7 @@ def _dependencies():
     from .literature_kinetic_validation import VERSION as validator
     names = [*_FROZEN, "literature_kinetic_validation.py", "literature_kinetic_storage.py"]
     hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
-    if any(hashes[name] != expected for name, expected in _FROZEN.items()):
+    if any(hashes[name] != expected for name, expected in _SOURCE_LOCATION_FROZEN.items()):
         _fail("implementation_dependency_mismatch")
     return {"sha256": hashes, "validation_version": validator}
 
@@ -91,12 +95,15 @@ def _validate_dependency_receipt(receipt, version):
     if (type(receipt) is not dict or set(receipt) != {"sha256", "validation_version"}
             or type(receipt["sha256"]) is not dict):
         _fail("saved_dependency_mismatch")
-    expected = _LEGACY_FROZEN if version == LEGACY_VERSION else _FROZEN
+    releases = ((_LEGACY_FROZEN,) if version == LEGACY_VERSION
+                else (_FROZEN, _SOURCE_LOCATION_FROZEN))
+    expected = releases[0]
     hashes = receipt["sha256"]
     if (set(hashes) != {*expected, "literature_kinetic_validation.py", "literature_kinetic_storage.py"}
             or any(type(value) is not str or re.fullmatch(r"[a-f0-9]{64}", value) is None
                    for value in hashes.values())
-            or any(hashes[name] != sha for name, sha in expected.items())
+            or not any(all(hashes[name] == sha for name, sha in release.items())
+                       for release in releases)
             or (version == LEGACY_VERSION and any(hashes[name] != sha
                 for name, sha in _LEGACY_SAVED_IMPLEMENTATION.items()))
             or receipt["validation_version"] != ("a105_kinetic_saved_validation_v2"

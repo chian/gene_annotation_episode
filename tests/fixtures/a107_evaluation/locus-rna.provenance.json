@@ -1,0 +1,19 @@
+{
+  "version": "a107_declared_reference_locus_rna_input_provenance_v1",
+  "expression": {
+    "file": "declared-locus-rna-panel.json",
+    "origin": "synthetic",
+    "description": "Artificial gene-level RNA values and declared sample reference-genome identifiers. No actual RNA experiment, source sample genotype, transcript sequence, detection calibration, protein abundance or functional partnership is claimed. The gene identifier is a retained genomic annotation label; the episode must establish its correspondence."
+  },
+  "genomic_source": {
+    "file": "../a103/real/rcapsulatus-bioy.gb",
+    "origin": "retained_original_genbank_record",
+    "accession": "NC_014034.1",
+    "sha256": "6bb4eed995036f3684bcd5475ce4293ca26375aedcc32b11353806044a56436e",
+    "source_region_one_based_inclusive": [3300000, 3700000],
+    "source_region_basis": "Original ACCESSION line REGION field in the retained file.",
+    "original_acquisition_time": null,
+    "scope": "Supplied reference window, not a new complete-genome acquisition or verification of the expression samples."
+  },
+  "dependence": "Both declared expression conditions reuse one synthetic table and gene label. Genomic parsing, selected-locus translation and correspondence reuse the same retained genomic record. These representations and calculations are not independent experimental confirmations."
+}

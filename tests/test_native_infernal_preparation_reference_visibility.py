@@ -105,7 +105,7 @@ class MetadataBoundary:
         self.tools = ToolRegistry(self.store)
         self.directory = tmp_path / 'run'
         self.resources = {'synthetic-local': {'kind': 'local', 'workspace': str(tmp_path),
-            'policy': {'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3, 'wall_seconds': None},
+            'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3},
             # Configuration only: this nonexistent software is never invoked.
             'native_infernal_preparation': [{'program': 'cmemit', 'mode': 'consensus', 'software': {
                 'executable': str(tmp_path / 'never-invoked-cmemit'), 'sha256': '0' * 64,

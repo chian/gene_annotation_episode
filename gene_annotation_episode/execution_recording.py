@@ -94,8 +94,7 @@ class NativeStatistics:
     def validate_policy(self, policy):
         scope = self.execution_class
         if (scope.backend != 'local' or scope.duration_measure != 'systemd_service_wall_seconds'
-                or scope.memory_bytes != policy.memory_bytes or scope.scratch_bytes != policy.scratch_bytes
-                or scope.wall_seconds != policy.wall_seconds):
+                or scope.memory_bytes != policy.memory_bytes or scope.scratch_bytes != policy.scratch_bytes):
             raise ValueError('statistics_class_does_not_describe_native_policy')
 
 
@@ -143,7 +142,7 @@ class HomologyStatistics:
             parameters_sha256=_sha({'program': 'phmmer', 'cpu': cpu, 'query_count': 1,
                 'search_options': search_mode, 'native_lifecycle_version': native_version,
                 'reference_database_sha256': configuration['reference_database']['sha256']}),
-            memory_bytes=policy['memory_bytes'], scratch_bytes=policy['scratch_bytes'], wall_seconds=policy['wall_seconds'],
+            memory_bytes=policy['memory_bytes'], scratch_bytes=policy['scratch_bytes'],
             cpu_threads=cpu, query_residues=len(normalized.splitlines()[1]),
             reference_records=self.reference_records, reference_residues=self.reference_residues,
             reference_state='available', duration_measure='systemd_service_wall_seconds')
@@ -155,7 +154,7 @@ class HomologyStatistics:
 def _measurement(body, end, receipt):
     """Actual execution outcome; no native return code is fabricated."""
     reason = end.get('SERVICE_RESULT')
-    if (reason == 'oom-kill' or reason == 'timeout' and body['metadata']['policy']['wall_seconds'] is not None
+    if (reason == 'oom-kill'
             or receipt is not None and receipt.get('resource_failure') is not None):
         outcome = 'resource_limit'
     elif receipt is not None and receipt.get('execution_failure') is None and receipt.get('native_returncode') == 0:
@@ -207,12 +206,15 @@ class NativeMeasurement:
                    value['condition_capture'])
 
 
-def _export_measurement(history_path, measurement):
+def _export_measurement(history_path, measurement, *, execution_memory_path=None):
     """The one shared-history write path for a hook or receipt recovery."""
     history = None
     try:
         history = RunHistory(history_path, create=False, busy_timeout_seconds=0)
         history.record(measurement.execution_class, measurement.statistic)
+        from .execution_memory import ExecutionMemory
+        memory = ExecutionMemory(execution_memory_path) if execution_memory_path else ExecutionMemory.configured()
+        memory.import_native_statistic(measurement.execution_class, measurement.statistic)
         value = {'state': 'recorded', 'code': None}
     except (OSError, sqlite3.Error) as error:
         value = {'state': 'unavailable', 'code': 'statistics_history_unavailable',
@@ -229,20 +231,22 @@ def _export_measurement(history_path, measurement):
             'condition_capture': measurement.condition_capture, 'measurement': measurement.as_record()}
 
 
-def _recoverable_export(context, measurement):
+def _recoverable_export(context, measurement, *, execution_memory_path=None):
     """Persist the compact typed receipt before attempting the history write.
 
     These are recovery inputs, not another statistics authority. A successful
     retry writes the same RunHistory record and never submits native work.
     """
     if context.recovery_directory is None:
-        return _export_measurement(context.history_path, measurement)
+        return _export_measurement(context.history_path, measurement, execution_memory_path=execution_memory_path)
     directory = context.recovery_directory
     name = measurement.statistic.attempt_sha256
     receipt_path = directory/(name+'.measurement.json')
     export_path = directory/(name+'.export.json')
     value = {'version': RECOVERY_VERSION, 'history_path': str(context.history_path),
              'measurement': measurement.as_record()}
+    if execution_memory_path is not None:
+        value['execution_memory_path'] = str(execution_memory_path)
     disposition = None
     try:
         directory.mkdir(parents=True, exist_ok=True)
@@ -254,14 +258,14 @@ def _recoverable_export(context, measurement):
                     raise ValueError('execution_attempt_measurement_conflict')
             else:
                 atomic_json(receipt_path, value)
-            disposition = _export_measurement(context.history_path, measurement)
+            disposition = _export_measurement(context.history_path, measurement, execution_memory_path=execution_memory_path)
             atomic_json(export_path, disposition)
             return {**disposition, 'recovery_state': 'retained'}
     except OSError as error:
         # Recovery storage availability does not authorize blocking the separate
         # history write. The returned outcome still carries the actual receipt.
         if disposition is None:
-            disposition = _export_measurement(context.history_path, measurement)
+            disposition = _export_measurement(context.history_path, measurement, execution_memory_path=execution_memory_path)
         return {**disposition, 'recovery_state': 'unavailable',
                 'recovery_code': 'statistics_receipt_storage_unavailable',
                 'recovery_exception_type': type(error).__name__}
@@ -271,7 +275,7 @@ def recover_native_measurement(receipt_path):
     """Recover one original receipt; no current-condition recapture or job call."""
     receipt_path = Path(receipt_path)
     value = json.loads(receipt_path.read_text())
-    if (set(value) != {'version', 'history_path', 'measurement'}
+    if (set(value)-{'execution_memory_path'} != {'version', 'history_path', 'measurement'}
             or value['version'] != RECOVERY_VERSION or type(value['history_path']) is not str):
         raise ValueError('unsupported_native_measurement_recovery')
     measurement = NativeMeasurement.from_record(value['measurement'])
@@ -279,7 +283,7 @@ def recover_native_measurement(receipt_path):
         raise ValueError('execution_attempt_receipt_path_mismatch')
     context = NativeStatistics(value['history_path'], measurement.execution_class,
         measurement.statistic.condition_ref, measurement.condition_capture, receipt_path.parent)
-    return _recoverable_export(context, measurement)
+    return _recoverable_export(context, measurement, execution_memory_path=value.get('execution_memory_path'))
 
 
 def publish_native_statistics(handle_path):
@@ -317,7 +321,7 @@ def publish_native_statistics(handle_path):
                 observed_at=end['ended']['at'], outcome=outcome, duration_kind=kind,
                 elapsed_seconds=elapsed, condition_ref=context.condition_ref)
             measurement = NativeMeasurement(context.execution_class, statistic, context.condition_capture)
-            value = _recoverable_export(context, measurement)
+            value = _recoverable_export(context, measurement, execution_memory_path=body.get('execution_memory_path'))
         except (OSError, sqlite3.Error) as error:
             value = {'state': 'unavailable', 'code': 'statistics_history_unavailable',
                      'exception_type': type(error).__name__}

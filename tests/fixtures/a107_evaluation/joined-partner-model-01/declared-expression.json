@@ -1,0 +1,196 @@
+{
+  "version": "a107_expression_table_v2",
+  "dataset_id": "synthetic-joined-expression-01",
+  "origin": "synthetic",
+  "quantity": {
+    "unit": "declared_signal_units",
+    "scale": "linear",
+    "normalization": "same_declared_standard",
+    "nonnegative": true,
+    "source_locator": "synthetic://joined-expression-01/quantity"
+  },
+  "features": [
+    {
+      "id": "role_s",
+      "entity_id": "WP_013068946.1",
+      "molecule": "protein",
+      "sequence_sha256": "e28d630f4f587596ae3cf6d60ca758491b59e47e304f64cb3eb975de724afadb",
+      "source_locator": "synthetic://joined-expression-01/features/role_s"
+    },
+    {
+      "id": "role_t",
+      "entity_id": "WP_013068947.1",
+      "molecule": "protein",
+      "sequence_sha256": "83a88132d1fff42c873c2e3d909a8bead753678757885ed208a30bea889a3cf3",
+      "source_locator": "synthetic://joined-expression-01/features/role_t"
+    }
+  ],
+  "samples": [
+    {
+      "id": "s1",
+      "biological_unit_id": "u1",
+      "condition_key": "c1",
+      "organism_id": null,
+      "genome_accession": "NC_014034.1",
+      "source_locator": "synthetic://joined-expression-01/samples/s1"
+    },
+    {
+      "id": "s2",
+      "biological_unit_id": "u2",
+      "condition_key": "c1",
+      "organism_id": null,
+      "genome_accession": "NC_014034.1",
+      "source_locator": "synthetic://joined-expression-01/samples/s2"
+    },
+    {
+      "id": "s3",
+      "biological_unit_id": "u2",
+      "condition_key": "c1",
+      "organism_id": null,
+      "genome_accession": "NC_014034.1",
+      "source_locator": "synthetic://joined-expression-01/samples/s3"
+    }
+  ],
+  "measurements": [
+    {
+      "feature_id": "role_s",
+      "sample_id": "s1",
+      "measurement_id": "joined-s1-role_s",
+      "value": 1,
+      "missing_reason": null,
+      "reported_bound": null,
+      "source_locator": "synthetic://joined-expression-01/s1/role_s"
+    },
+    {
+      "feature_id": "role_t",
+      "sample_id": "s1",
+      "measurement_id": "joined-s1-role_t",
+      "value": 2,
+      "missing_reason": null,
+      "reported_bound": null,
+      "source_locator": "synthetic://joined-expression-01/s1/role_t"
+    },
+    {
+      "feature_id": "role_s",
+      "sample_id": "s2",
+      "measurement_id": "joined-s2-role_s",
+      "value": 2,
+      "missing_reason": null,
+      "reported_bound": null,
+      "source_locator": "synthetic://joined-expression-01/s2/role_s"
+    },
+    {
+      "feature_id": "role_t",
+      "sample_id": "s2",
+      "measurement_id": "joined-s2-role_t",
+      "value": 4,
+      "missing_reason": null,
+      "reported_bound": null,
+      "source_locator": "synthetic://joined-expression-01/s2/role_t"
+    },
+    {
+      "feature_id": "role_s",
+      "sample_id": "s3",
+      "measurement_id": "joined-s3-role_s",
+      "value": 4,
+      "missing_reason": null,
+      "reported_bound": null,
+      "source_locator": "synthetic://joined-expression-01/s3/role_s"
+    },
+    {
+      "feature_id": "role_t",
+      "sample_id": "s3",
+      "measurement_id": "joined-s3-role_t",
+      "value": 8,
+      "missing_reason": null,
+      "reported_bound": null,
+      "source_locator": "synthetic://joined-expression-01/s3/role_t"
+    }
+  ],
+  "detection_criteria": [
+    {
+      "id": "criterion-s1-role_s",
+      "feature_id": "role_s",
+      "sample_id": "s1",
+      "kind": "limit_of_detection",
+      "operator": "greater_than",
+      "value": 0.5,
+      "unit": "declared_signal_units",
+      "scale": "linear",
+      "normalization": "same_declared_standard",
+      "calibration_condition_key": "c1",
+      "control_source_locator": "synthetic://joined-expression-01/s1/role_s/control",
+      "source_locator": "synthetic://joined-expression-01/s1/role_s/criterion"
+    },
+    {
+      "id": "criterion-s1-role_t",
+      "feature_id": "role_t",
+      "sample_id": "s1",
+      "kind": "limit_of_detection",
+      "operator": "greater_than",
+      "value": 0.5,
+      "unit": "declared_signal_units",
+      "scale": "linear",
+      "normalization": "same_declared_standard",
+      "calibration_condition_key": "c1",
+      "control_source_locator": "synthetic://joined-expression-01/s1/role_t/control",
+      "source_locator": "synthetic://joined-expression-01/s1/role_t/criterion"
+    },
+    {
+      "id": "criterion-s2-role_s",
+      "feature_id": "role_s",
+      "sample_id": "s2",
+      "kind": "limit_of_detection",
+      "operator": "greater_than",
+      "value": 0.5,
+      "unit": "declared_signal_units",
+      "scale": "linear",
+      "normalization": "same_declared_standard",
+      "calibration_condition_key": "c1",
+      "control_source_locator": "synthetic://joined-expression-01/s2/role_s/control",
+      "source_locator": "synthetic://joined-expression-01/s2/role_s/criterion"
+    },
+    {
+      "id": "criterion-s2-role_t",
+      "feature_id": "role_t",
+      "sample_id": "s2",
+      "kind": "limit_of_detection",
+      "operator": "greater_than",
+      "value": 0.5,
+      "unit": "declared_signal_units",
+      "scale": "linear",
+      "normalization": "same_declared_standard",
+      "calibration_condition_key": "c1",
+      "control_source_locator": "synthetic://joined-expression-01/s2/role_t/control",
+      "source_locator": "synthetic://joined-expression-01/s2/role_t/criterion"
+    },
+    {
+      "id": "criterion-s3-role_s",
+      "feature_id": "role_s",
+      "sample_id": "s3",
+      "kind": "limit_of_detection",
+      "operator": "greater_than",
+      "value": 0.5,
+      "unit": "declared_signal_units",
+      "scale": "linear",
+      "normalization": "same_declared_standard",
+      "calibration_condition_key": "c1",
+      "control_source_locator": "synthetic://joined-expression-01/s3/role_s/control",
+      "source_locator": "synthetic://joined-expression-01/s3/role_s/criterion"
+    },
+    {
+      "id": "criterion-s3-role_t",
+      "feature_id": "role_t",
+      "sample_id": "s3",
+      "kind": "limit_of_detection",
+      "operator": "greater_than",
+      "value": 0.5,
+      "unit": "declared_signal_units",
+      "scale": "linear",
+      "normalization": "same_declared_standard",
+      "calibration_condition_key": "c1",
+      "control_source_locator": "synthetic://joined-expression-01/s3/role_t/control",
+      "source_locator": "synthetic://joined-expression-01/s3/role_t/criterion"
+    }
+  ]
+}

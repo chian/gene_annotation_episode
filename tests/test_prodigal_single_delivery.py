@@ -33,8 +33,7 @@ from test_tool_grading_publication import numerical, only_grading, operation_cou
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "verification/tool_graders_batch_001/prodigal"
-POLICY = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3,
-          "wall_seconds": None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 
 
 def dump(path, value):
@@ -176,7 +175,7 @@ def test_single_native_publication_requested_return_and_saved_replay(tmp_path, m
         assert body["local_job"]["policy"] == POLICY
         assert body["local_job"]["verified_cgroup"] == {
             "memory_max": POLICY["memory_bytes"], "memory_swap_max": 0,
-            "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+            "kill_mode": "control-group", "oom_policy": "kill"}
         assert body["local_job"]["native_returncode"] == 0
         assert body["input_interval"] == [13, 100013] and body["subject_ref"] == target
         assert grading["sheet"]["native_result"] == original_native

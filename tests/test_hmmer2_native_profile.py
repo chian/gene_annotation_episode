@@ -292,8 +292,7 @@ def _phase_control_fixture(tmp_path):
     body = {"version": "durable_systemd_native_job_v2", "unit": unit, "stage": "prepared",
         "command": request["command"], "cwd": str(directory), "stdout": str(directory / "stdout"),
         "stderr": str(directory / "stderr"), "paths": paths, "request_sha256": request_sha256,
-        "metadata": {"policy": {"memory_bytes": 21474836480, "scratch_bytes": 4294967296,
-            "wall_seconds": None}}}
+        "metadata": {"policy": {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}}}
     filename = directory / "native.json"
     save(filename, body)
     return helpers, attempt, filename, body, request, receipt, audit, save

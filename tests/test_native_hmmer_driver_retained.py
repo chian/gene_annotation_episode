@@ -41,9 +41,9 @@ def test_retained_actual_native_custody_numbers_and_offline_recalculation(monkey
     assert bundle["returncode"] == 0 and bundle["failures"] == []
     assert validate_native_hmmer_requested_job(plan["requested_job"]) == bundle["requested_job"]
     assert validate_native_hmmer_bundle_files(bundle, root/"attempt") == bundle
-    assert receipt["metadata"]["policy"] == {"memory_bytes": 20*1024**3, "scratch_bytes": 4*1024**3, "wall_seconds": None}
+    assert receipt["metadata"]["policy"] == {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
     assert receipt["metadata"]["verified_cgroup"]["memory_max"] == 20*1024**3
-    assert receipt["metadata"]["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in receipt["metadata"]["verified_cgroup"]
     for row in bundle["inputs"]:
         raw = (root/"attempt"/row["relative_path"]).read_bytes()
         assert len(raw) == row["size_bytes"] == row["expected_size_bytes"]

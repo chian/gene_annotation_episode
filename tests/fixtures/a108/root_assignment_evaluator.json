@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "role": "Held-out evaluator only. Never load this file, its witnesses, identifiers, or criteria into the live workflow.",
+  "case": "A reference-strain protein with a proposed ammonia monooxygenase alpha-subunit annotation; investigate organism-context evidence through the full autonomous A108 subtree.",
+  "input_files": {
+    "assignment": "root_assignment.json",
+    "sequence": "known_sequence.txt"
+  },
+  "input_provenance": {
+    "sequence_length": 276,
+    "sequence_sha256_without_whitespace": "b9bee9fb5ca834c712b95ca153cc64002c82a81285994bcec34fc76638f96762",
+    "source_url": "https://rest.uniprot.org/uniprotkb/Q04507.json",
+    "primary_accession": "Q04507",
+    "source_payload_sha256": "2846f6cf32a662a26a28675fa896f85b7b130829b40e40630daf88ec87bbee76",
+    "source_fields": {
+      "organism.scientificName": "Nitrosomonas europaea (strain ATCC 19718 / CIP 103999 / KCTC 2705 / NBRC 14298)",
+      "organism.taxonId": 228410,
+      "proteinDescription.recommendedName.fullName.value": "Ammonia monooxygenase alpha subunit",
+      "genes": [
+        {"gene_name": "amoA1", "ordered_locus_name": "NE0944"},
+        {"gene_name": "amoA2", "ordered_locus_name": "NE2063"}
+      ]
+    },
+    "qualifications": [
+      "The assignment intentionally supplies reference-strain identity and a candidate function, as an annotation root could. It supplies no A108 supporting observation.",
+      "The sequence alone does not select one of the two listed genomic copies; no locus is assigned.",
+      "No new sample, growth condition, substrate concentration, cofactor pool, or measured localization is supplied.",
+      "The database function description grounds the candidate assignment, not a positive A108 score."
+    ]
+  },
+  "retained_expected_evidence_witness": {
+    "kind": "documented_organism_physiology",
+    "source": "Chain et al. (2003), primary research article abstract retained in a Europe PMC core search response",
+    "title": "Complete genome sequence of the ammonia-oxidizing bacterium and obligate chemolithoautotroph Nitrosomonas europaea.",
+    "pmid": "12700255",
+    "pmcid": "PMC154410",
+    "doi": "10.1128/jb.185.9.2759-2773.2003",
+    "source_url": "https://europepmc.org/article/MED/12700255",
+    "acquisition_endpoint": "https://www.ebi.ac.uk/europepmc/webservices/rest/search",
+    "retained_payload_sha256": "26999fe7db90897ed89e640dcca2dcd26545a0b72378a7c79f55ba3fe971c7e0",
+    "json_pointer": "/resultList/result/2/abstractText",
+    "exact_abstract_witness": "Nitrosomonas europaea (ATCC 19718) is a gram-negative obligate chemolithoautotroph that can derive all its energy and reductant for growth from the oxidation of ammonia to nitrite.",
+    "expected_relationship": "The documented ammonia-oxidizing metabolism of the same reference strain supports the physiological fit of the proposed ammonia monooxygenase role. This organism-level observation does not independently identify the supplied protein or establish a particular sample's conditions.",
+    "acceptable_alternatives": "Any independently acquired, source-grounded observation establishing the same strain-appropriate physiological relationship. This paper, accession, tool, query and wording are not mandatory discoveries.",
+    "source_identity_note": "The main article is PMC154410; the retained search also contains correction PMC219418. Neither is PMC165772."
+  },
+  "evaluation_criteria": [
+    {
+      "id": "autonomous_scope",
+      "requirement": "The workflow receives only the sequence and root assignment. The model selects its own child commissions, searches, source reads, interpretations and applicable subscoring sheets. The evaluator and its witnesses are absent from initial supplied material and model instructions."
+    },
+    {
+      "id": "organism_context_relationship",
+      "requirement": "The subtree independently acquires and assesses at least one documented observation supporting ammonia-oxidation physiology in Nitrosomonas europaea at the justified species/strain scope, preserving the relationship to ATCC 19718 and qualifying transfer where necessary. A repeated protein annotation alone does not satisfy this criterion."
+    },
+    {
+      "id": "scientific_resolution",
+      "requirement": "The assessment distinguishes organism-level physiological compatibility from proof that this protein performs the reaction, and preserves unspecified sample conditions and locus. It does not infer actual oxygen, pH, temperature, substrate/cofactor pools or localization solely from the candidate name or taxonomic label."
+    },
+    {
+      "id": "subscoring",
+      "requirement": "At least one purpose-appropriate saved numerical A108 subscoring sheet contains the source-grounded supporting physiological relationship, original observation identity, assertion/context binding and applicable criteria. Narrative conclusions or saved sources alone are insufficient."
+    },
+    {
+      "id": "main_evidence_scoring",
+      "requirement": "The A108 main evidence scoring sheet uses actually possessed subscoring evidence_amount components and preserves a positive physiological supporting count with the same original observations. No particular total count is prescribed; discoveries determine the eligible sets. Unknown domains stay unavailable or explicitly unresolved rather than becoming negative evidence."
+    },
+    {
+      "id": "count_meanings",
+      "requirement": "Independently recompute support_count=|S|, conflict_count=|C|, overlap_count=|S intersect C|, evidence_amount=|S union C|, net_support=|S|-|C| and unresolved_count=|U| from the retained original-observation sets. The main sheet unions observations across selected contributors and domains. Repeated source representations and repeated deliveries do not create extra observations. These counts are not annotation probabilities or iterator credit."
+    },
+    {
+      "id": "actual_parent_delivery",
+      "requirement": "Verify the root's actual typed receipt and numerical component possession, including the relevant main-sheet physiology/overall evidence and qualifications. Saved child sheets alone do not demonstrate delivery. Trace the original selected child action to its recorded parent observation and resulting root report or subsequent decision context."
+    },
+    {
+      "id": "episode_behavior",
+      "requirement": "A108 has no model-selectable wait. Parent ownership remains until the original return and credit are accounted. Any naturally occurring failed tool/child attempts receive the appropriate original iterator observation and compact failure feedback. No workflow success may be declared with an unaccounted child or rejected typed delivery."
+    }
+  ],
+  "outcome_interpretation": {
+    "source_failure": "If sources cannot be acquired, preserve the actual access failures and report incomplete scientific retrieval; do not reinterpret unavailability as contextual conflict.",
+    "partial_science": "Useful acquired observations or partial sheets are retained progress but do not satisfy the complete parent-delivery criterion.",
+    "broader_scope": "One successful physiological case does not establish completeness for every A108 environment, availability or localization observation type, and this literature case does not exercise an HPC wait."
+  }
+}

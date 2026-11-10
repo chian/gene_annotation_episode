@@ -12,12 +12,34 @@ from .literature_intervention_grading import (
 )
 from .literature_perturbation_assessments import assessment_schema
 from .intervention_analysis_native import parse_intervention_artifact, calculate_intervention_components
+from .literature_perturbation_operands import NAMESPACE as PERTURBATION_NAMESPACE, VARIANCES as PERTURBATION_VARIANCES
+from .literature_perturbation_inputs import HOURLY_RATE_UNITS, CFU_DENSITY_UNITS, endpoint_unit_token
+from .literature_intervention_table import associate_table_unit, table_number_schema
 
 DESIGN_FIELDS = ("molecule", "strain", "construct", "intervention", "reference_condition",
     "restoration_arm", "endpoint", "measurement_scale", "sampling_time", "replication",
     "shared_controls", "reference_version", "analysis_protocol", "comparison_direction")
 ANALYSIS_METRICS = ("reference_mean", "intervention_mean", "log2_fold_change", "mean_difference",
                     "base_mean", "standard_error", "effect_variance", "p_value", "adjusted_p_value")
+ANALYSIS_EFFECT_KINDS = {
+    "reference_mean": "native_endpoint", "intervention_mean": "native_endpoint",
+    "base_mean": "native_endpoint", "mean_difference": "endpoint_difference",
+    "log2_fold_change": "log2_fold_change",
+}
+# These reader components are conclusions calculated from measurements, not
+# fresh measurements or inputs to another experimental evidence comparison.
+INFERENCE_COMPONENTS = {
+    **{namespace: {"source_profile_log_ratio", "source_signed_index"}
+        for namespace in ("literature_binding_cells", "literature_binding_model_cells",
+            "literature_kinetic_cells", "literature_kinetic_model_cells",
+            "literature_ratio_cells", "literature_ratio_source_cells",
+            "literature_controlled_response_component_cells")},
+    **{namespace: {"source_profile_log_ratio", "source_presence_index"}
+        for namespace in ("literature_assay_cells", "literature_compiled_assay_cells",
+            "literature_compiled_assay_v2_cells")},
+    "literature_rate_cells": {"signed_profile_log_ratio", "source_signed_index"},
+    "literature_binding_interaction_model_cells": {"signed_profile_log_ratio", "signed_index"},
+}
 COMPARISON_NAMESPACE = "literature_measurement_comparison_cells"
 COMPARISON_EFFECTS = {
     **{name: "native_endpoint" for name in ("native_left", "native_right", "converted_left", "converted_right")},
@@ -54,6 +76,11 @@ def intervention_population_schema(*, legacy=False):
         "representation": {"enum": ["transit_resampling", "deseq2"]},
         "row_ordinal": {"type": "integer", "minimum": 0}, "feature_id": {"type": "string", "minLength": 1},
         "metric": {"enum": list(ANALYSIS_METRICS)}})
+    native["description"] = (
+        "Preserve the selected native column's meaning: reference_mean, intervention_mean and base_mean "
+        "supply native_endpoint; mean_difference supplies endpoint_difference; log2_fold_change supplies "
+        "log2_fold_change. Native effect_variance must accompany that same row's log2_fold_change. "
+        "A mean is not a contrast, and a logarithmic fold change is not a linear ratio or difference.")
     application = deepcopy(native)
     application["properties"].update(kind={"const": "application_analysis"},
         sheet_ref=application["properties"].pop("source_ref"),
@@ -66,26 +93,43 @@ def intervention_population_schema(*, legacy=False):
         choices = props["quantities"]["properties"][role]["anyOf"]
         received = choices[0]
         received["properties"]["namespace"]["enum"].append(COMPARISON_NAMESPACE)
+        received["properties"]["namespace"]["enum"].append(PERTURBATION_NAMESPACE)
+        received["description"] += (
+            " A previously calculated likelihood ratio or signed evidence index is not an "
+            "effect, prediction, control measurement or uncertainty operand. Select the underlying "
+            "measurement and its applicable uncertainty instead.")
         received["description"] += (
             " Published specific-activity tables with shared header units can use literature.measurement_comparison.populate. "
             "Its native/converted left or right estimates supply native_endpoint; protocol_difference supplies endpoint_difference; "
             "protocol_ratio supplies endpoint_ratio. difference_variance supplies uncertainty only for protocol_difference "
             "from the same sheet. Standardized discrepancies, weights and conditional scenarios are not intervention effects.")
+        received["description"] += (
+            " literature.perturbation.populate can return literature_perturbation_operand_cells with "
+            "requested_perturbation_operand_components. Select reference_endpoint/perturbed_endpoint/restored_endpoint "
+            "as native_endpoint, or perturbation_difference (W-K)/restoration_difference (R-K) as endpoint_difference. "
+            "Match W/K/R_mean_variance or perturbation/restoration_mean_variance to that exact effect in the same sheet. "
+            "Restoration indices, covariance enclosures and SD/SEM are not effect variances.")
         choices[1]["description"] += (
             " number_start and number_end are character offsets within number.witness.quote, starting at zero. "
             "The witness start/end fields are absolute UTF-8 byte offsets in the source. "
             "Whitespace, including Unicode thin spaces, may separate the number and unit.")
+        choices.insert(-1, table_number_schema(choices[1]))
     schema["required"] = [name for name in props if name != "sample_bindings"]
     return schema
 
 
 def _intervention_unit(raw):
-    text = raw.strip()
+    text = endpoint_unit_token(raw)
+    native_unit = HOURLY_RATE_UNITS.get(text) or CFU_DENSITY_UNITS.get(text)
+    if native_unit is not None:
+        return native_unit, 1.
+    if text in {"minutes", "minutes_squared"}:
+        return _unit(text.replace("minutes", "min"))
     if text in {"log2_ratio", "log2FC", "log2_fold_change"}:
         return "log2_ratio", 1.
     if text in {"log2_ratio_squared", "log2FC^2", "log2_fold_change_squared"}:
         return "log2_ratio_squared", 1.
-    return _unit(raw)
+    return _unit(text)
 
 
 def read_comparison_operand(selection, *, role, quantity_kind, read_cells):
@@ -236,12 +280,27 @@ def read_intervention_inputs(arguments, *, read_source, read_cells, read_record,
             quantities[role] = None
         elif selected["kind"] == "source_number":
             quantities[role] = _literal(selected, sources, unit_reader=_intervention_unit)
+        elif selected["kind"] == "source_table_number":
+            quantities[role] = _literal(selected, sources, unit_reader=_intervention_unit,
+                unit_association=associate_table_unit)
         elif selected["kind"] == "received_component":
-            if selected["namespace"] == COMPARISON_NAMESPACE:
+            if selected["namespace"] == PERTURBATION_NAMESPACE:
+                from .literature_perturbation_operands import read_operand
+                quantities[role] = read_operand(selected, role=role,
+                    quantity_kind=args["quantity_kind"], read_cells=read_cells)
+            elif selected["namespace"] == COMPARISON_NAMESPACE:
                 quantities[role] = read_comparison_operand(selected, role=role,
                     quantity_kind=args["quantity_kind"], read_cells=read_cells)
             else:
-                quantities[role], _ = _component(selected, read_cells)
+                operand, row = _component(selected, read_cells)
+                # Some readers select a scoped component_key such as final:...
+                # rather than its scientific component name. Check the actual
+                # validated row so the key cannot hide an inference result.
+                component = row.get("component")
+                if component in INFERENCE_COMPONENTS.get(selected["namespace"], ()):
+                    raise ContractError("intervention_inference_is_not_measurement_operand", detail=dict(
+                        namespace=selected["namespace"], component=component, role=role))
+                quantities[role] = operand
         else:
             if role not in {"effect", "effect_variance"}:
                 raise ContractError("intervention_analysis_cannot_supply_prediction_or_control")
@@ -249,6 +308,12 @@ def read_intervention_inputs(arguments, *, read_source, read_cells, read_record,
                 raise ContractError("intervention_analysis_quantity_role_mismatch")
             if selected["metric"] in {"standard_error", "p_value", "adjusted_p_value"}:
                 raise ContractError("intervention_statistic_is_not_effect_or_variance")
+            expected_kind = ("log2_fold_change" if role == "effect_variance"
+                else ANALYSIS_EFFECT_KINDS[selected["metric"]])
+            if args["quantity_kind"] != expected_kind:
+                raise ContractError("intervention_analysis_quantity_kind_mismatch", detail=dict(
+                    metric=selected["metric"], quantity_kind=args["quantity_kind"],
+                    expected_quantity_kind=expected_kind))
             quantities[role] = (read_analysis_operand(selected, sources=sources)
                 if selected["kind"] == "native_analysis" else read_application_operand(selected, read_cells=read_cells))
         if quantities[role] is not None and args["source_kind"] == "synthetic_fixture":
@@ -258,6 +323,11 @@ def read_intervention_inputs(arguments, *, read_source, read_cells, read_record,
             "estimated" in qualification for qualification in (quantities.get("effect_variance") or {}).get("qualifications", ())):
         raise ContractError("intervention_known_variance_conflicts_with_reader")
     effect, variance = args["quantities"].get("effect"), args["quantities"].get("effect_variance")
+    if variance and variance["kind"] == "received_component" and variance["namespace"] == PERTURBATION_NAMESPACE:
+        if not effect or effect["kind"] != "received_component" or effect["namespace"] != PERTURBATION_NAMESPACE or (
+                effect["component"] != PERTURBATION_VARIANCES.get(variance["component"])
+                or effect["sheet_ref"] != variance["sheet_ref"]):
+            raise ContractError("intervention_variance_estimate_mismatch")
     if variance and variance["kind"] == "received_component" and variance["namespace"] == COMPARISON_NAMESPACE:
         if not effect or effect["kind"] != "received_component" or effect["namespace"] != COMPARISON_NAMESPACE or (
                 effect["component"] != "protocol_difference" or effect["sheet_ref"] != variance["sheet_ref"]):

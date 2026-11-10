@@ -1,0 +1,33 @@
+{
+  "version": "retained_public_reaction_reference_sources_v1",
+  "sources": [
+    {
+      "file": "reference-protein.json",
+      "provider": "uniprot",
+      "accession": "P0A858",
+      "uri": "https://rest.uniprot.org/uniprotkb/P0A858",
+      "retrieved_at": "2026-11-06T07:59:48.052428+00:00",
+      "sha256": "f1024d6546b3fd54eddc8b3e88637ad0e92bd79c0f17396f4401aa0c9fd77604",
+      "representation": "Unmodified retained native JSON response; original annotations and their evidence codes remain in the file."
+    },
+    {
+      "file": "reaction-record.json",
+      "provider": "rhea",
+      "accession": "RHEA:18585",
+      "uri": "https://www.rhea-db.org/rhea",
+      "retrieved_at": "2026-11-06T08:01:27.928638+00:00",
+      "sha256": "6287a10c377b68306d737e6e26c0c34f81987c37b1417418432b34967b7c345d",
+      "representation": "Unmodified retained native JSON response."
+    }
+  ],
+  "extractions": [
+    {
+      "file": "declared-equation.json",
+      "derived_from": "reaction-record.json",
+      "locator": "/results/0",
+      "description": "The displayed participants and ChEBI identifiers are transcribed into the declared-panel input format. Signed coefficients use the displayed orientation, not a physiological direction. Unreported formula, charge, compartment and energetic operands remain null. The database's balanced field is not copied into a native calculation result.",
+      "dependence": "The panel is another use of this same reaction record, not another experiment or independent confirmation."
+    }
+  ],
+  "dependence": "The protein's reaction annotation, the reaction record and its transcribed panel serve related identification and accounting uses. They are not separate activity measurements. No original assay dataset, construct or experimental state is supplied."
+}

@@ -100,8 +100,7 @@ def make_assignment(workspace, *, reuse=False, held=False, endpoint='completed_j
 def host(store, directory, assignment, provider, *, run_id='practical-runtime-fixture',
          key='root', scope=None):
     configuration = {'kind': 'local', 'workspace': assignment['workspace'],
-        'policy': {'memory_bytes': 128 * 1024**2, 'scratch_bytes': 8 * 1024**2,
-                   'wall_seconds': None}}
+        'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}
     descriptor = PracticalResourceEpisodes(None, directory=directory,
         resources={'local': configuration}).as_record()
     def controller(path, initial):
@@ -381,8 +380,7 @@ def test_parent_receives_only_requested_verified_completion_and_receipts(tmp_pat
 
         provider = ParentAndChildChoices()
         configuration = {'kind': 'local', 'workspace': str(spec.workspace),
-            'policy': {'memory_bytes': 128 * 1024**2, 'scratch_bytes': 8 * 1024**2,
-                       'wall_seconds': None}}
+            'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}
         directory = tmp_path / 'run'
         descriptor = PracticalResourceEpisodes(None, directory=directory,
             resources={'local': configuration}).as_record()

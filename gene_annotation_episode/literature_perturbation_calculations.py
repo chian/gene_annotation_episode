@@ -30,7 +30,8 @@ _RESTORATION_DESIGNS = (
     "native_deletion_restoration", "selective_perturbation_restoration",
 )
 _ENUMS = {
-    "endpoint_unit": ("events_per_100000_cells", "fraction", "CFU_per_mL", "minutes", "per_min", "unreported"),
+    "endpoint_unit": ("events_per_100000_cells", "fraction", "CFU_per_mL",
+                      "CFU_per_initial_OD_per_mL", "minutes", "per_min", "per_h", "unreported"),
     "exposure_unit": ("molecules_per_cell", "normalized_signal", "fraction", "mg_per_mL", "unreported"),
     "design": (*_RESTORATION_DESIGNS, "cas_free_reconstitution", "variant_replacement", "other_explicit", "unknown", "conflicting"),
     "measurement_status": ("validated_ratio_scale", "qualitative_only", "unknown", "conflicting"),

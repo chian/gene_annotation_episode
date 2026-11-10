@@ -1,0 +1,50 @@
+# phmmer :: search a protein sequence against a protein database
+# HMMER 3.4 (Aug 2023); http://hmmer.org/
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             /lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107_genomic_presence_autonomous_20261108_07/hpc/f882fb680dc863106c22419baffd1785b7dab5faf27e337777ed8dc1abe3510d/units/scientific_result/inputs/component.faa
+# target sequence database:        /lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107_genomic_presence_autonomous_20261108_07/hpc/f882fb680dc863106c22419baffd1785b7dab5faf27e337777ed8dc1abe3510d/units/scientific_result/inputs/annotated-cds.faa
+# output directed to file:         /lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107_genomic_presence_autonomous_20261108_07/hpc/f882fb680dc863106c22419baffd1785b7dab5faf27e337777ed8dc1abe3510d/units/scientific_result/phmmer.txt
+# per-seq hits tabular output:     /lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107_genomic_presence_autonomous_20261108_07/hpc/f882fb680dc863106c22419baffd1785b7dab5faf27e337777ed8dc1abe3510d/units/scientific_result/phmmer.tbl
+# per-dom hits tabular output:     /lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107_genomic_presence_autonomous_20261108_07/hpc/f882fb680dc863106c22419baffd1785b7dab5faf27e337777ed8dc1abe3510d/units/scientific_result/phmmer.domtbl
+# max ASCII text line length:      unlimited
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       a107_component_query  [L=190]
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence            Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------            -----------
+   8.6e-114  372.6  32.6   9.6e-114  372.5  32.6    1.0  1  NC_014034.1:CDS:290  
+
+
+Domain annotation for each sequence (and alignments):
+>> NC_014034.1:CDS:290  
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  372.5  32.6  2.5e-116  9.6e-114       1     190 []       1     190 []       1     190 [] 1.00
+
+  Alignments for each domain:
+  == domain 1  score: 372.5 bits;  conditional E-value: 2.5e-116
+  a107_component_query   1 mernvtliglfaalivalgfvpaiplgfgvpitlqslgvmlagavlgswrgalavllvqalvaiglpvlaggrgglgifvgptagfligwlpaafvtgliverlrrvpvalaagigatlggiiimyalgilgfwlvknaglkpedapislwaataimapfipgdlvkvvvtglvartiaqyrpsallarg 190
+                           mernvtliglfaalivalgfvpaiplgfgvpitlqslgvmlagavlgswrgalavllvqalvaiglpvlaggrgglgifvgptagfligwlpaafvtgliverlrrvpvalaagigatlggiiimyalgilgfwlvknaglkpedapislwaataimapfipgdlvkvvvtglvartiaqyrpsallarg
+   NC_014034.1:CDS:290   1 MERNVTLIGLFAALIVALGFVPAIPLGFGVPITLQSLGVMLAGAVLGSWRGALAVLLVQALVAIGLPVLAGGRGGLGIFVGPTAGFLIGWLPAAFVTGLIVERLRRVPVALAAGIGATLGGIIIMYALGILGFWLVKNAGLKPEDAPISLWAATAIMAPFIPGDLVKVVVTGLVARTIAQYRPSALLARG 190
+                           8********************************************************************************************************************************************************************************************8 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                            1  (190 nodes)
+Target sequences:                        384  (121699 residues searched)
+Passed MSV filter:                        44  (0.114583); expected 7.7 (0.02)
+Passed bias filter:                        8  (0.0208333); expected 7.7 (0.02)
+Passed Vit filter:                         1  (0.00260417); expected 0.4 (0.001)
+Passed Fwd filter:                         1  (0.00260417); expected 0.0 (1e-05)
+Initial search space (Z):                384  [actual number of targets]
+Domain search space  (domZ):               1  [number of targets reported over threshold]
+# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.01
+# Mc/sec: 1225.33
+//
+[ok]

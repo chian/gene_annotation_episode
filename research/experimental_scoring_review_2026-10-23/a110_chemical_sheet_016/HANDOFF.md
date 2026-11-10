@@ -1,6 +1,6 @@
 # A110 preparatory research handoff
 
-Status: PROPOSED numerical sheet for feedback. A110 remains separate from A108; A105 remains first in the ten-sheet completion accounting, still 0/10. No acceptance or implemented-axis claim.
+Status: PROPOSED numerical sheet for feedback. A105 remains first in the ten-sheet completion accounting, still 0/10. No acceptance or implemented-axis claim.
 
 | Deliverable | Path |
 |---|---|

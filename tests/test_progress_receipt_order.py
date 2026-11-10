@@ -150,8 +150,8 @@ def test_first_listed_order_is_preserved_and_later_keys_do_not_move_refs(saved, 
     assert [tuple(row) for row in rows] == [(combined, 'own'), (first, 'own'), (last, 'form')]
 
 
-@pytest.mark.parametrize('status', ['pending', 'failed', 'invalid', None])
-def test_unfinished_or_failed_outcomes_are_rejected_without_publication(saved, monkeypatch, status):
+@pytest.mark.parametrize('status', ['pending', 'rejected', None])
+def test_unfinished_or_rejected_outcomes_are_rejected_without_publication(saved, monkeypatch, status):
     forbid_target_reads(saved, monkeypatch)
     before = counts(saved)
     with pytest.raises(ContractError, match='progress_completed_outcome_required'):
@@ -169,9 +169,10 @@ def test_only_explicit_progress_reference_arrays_are_accepted(saved, references)
     assert counts(saved) == before
 
 
-def test_outcome_without_explicit_refs_does_not_search_nested_results(saved, monkeypatch):
+@pytest.mark.parametrize('status', ['completed', 'partial', 'invalid', 'failed', 'unavailable'])
+def test_outcome_without_explicit_refs_does_not_search_nested_results(saved, monkeypatch, status):
     forbid_target_reads(saved, monkeypatch)
-    value = {'status': 'completed', 'result': {'progress_refs': saved.refs,
+    value = {'status': status, 'result': {'progress_refs': saved.refs,
         'snapshot': saved.snapshots[-1]}, 'record_refs': saved.refs}
     assert saved.provider.receive_outcome('receiver', value, saved.scope, 'no-explicit-refs') == []
     assert saved.provider.received_progress_refs('receiver') == []

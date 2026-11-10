@@ -31,7 +31,7 @@ class MonitorCheckpoint(Exception):
         self.schedule = schedule
 
 
-def choose_schedule(forecast, candidate, commission, policy, *, credited=(), now, deadline_at):
+def choose_schedule(forecast, candidate, commission, policy, *, credited=(), now):
     """Compare monitoring times using a conditional phase-completion forecast.
 
     Value after waiting is the remaining accomplishment's predicted credit,
@@ -43,12 +43,11 @@ def choose_schedule(forecast, candidate, commission, policy, *, credited=(), now
     state = forecast.get('telemetry', {}).get('state', 'queued')
     remaining = sum(value['credit'] for key, value in commission['obligations'].items()
                     if key not in credited and any(unit['obligation_id'] == key for unit in candidate['units']))
-    available = max(0., deadline_at-now)
-    if remaining == 0 or state in ('complete', 'failed') or available == 0:
+    if remaining == 0 or state in ('complete', 'failed'):
         return {'state': state, 'schedule': False, 'reason': 'terminal_or_no_remaining_value',
                 'remaining_credit_bound': remaining, 'expected_continuation_credit': 0.,
                 'next_action': 'results' if state in ('complete', 'failed') else 'reconsider'}
-    preferences = {**commission['preferences'], 'deadline_seconds': available}
+    preferences = commission['preferences']
     compared = prediction.compare(candidate, forecast, commission['obligations'], preferences,
                                    already_credited=credited)
     value = compared['expected_actual_credit']
@@ -56,7 +55,7 @@ def choose_schedule(forecast, candidate, commission, policy, *, credited=(), now
     distribution = forecast['times'][metric]
     if distribution is None:
         raise ValueError('pending_monitor_requires_phase_forecast')
-    maximum = min(available, policy['max_interval_seconds'])
+    maximum = policy['max_interval_seconds']
     minimum = min(maximum, policy['min_interval_seconds'])
     horizons = sorted({minimum, maximum, *[min(maximum, max(minimum, prediction.quantile(distribution, q)))
                                          for q in (.1, .25, .5, .75, .9)]})
@@ -94,7 +93,6 @@ class MonitorCronController:
             raise ValueError('monitor_requires_original_forecast')
         self.ledger.put('monitor_controller', {'version': 'hpc_monitor_controller_v1',
             'plan_id': plan['plan_id'], 'job_id': job_id, 'policy': validate_policy(policy),
-            'deadline_at': min(issued)+self.ledger.commission['preferences']['deadline_seconds'],
             'wake_action': 'hpc.monitor', 'scheduler_backend': 'systemd_calendar_v1'}, identity=reference)
         return reference
 
@@ -109,7 +107,7 @@ class MonitorCronController:
                         if row['kind'] == 'actual']
             issued = time.time() if now is None else now
             selection = choose_schedule(monitor['conditional_prediction'], candidate, self.ledger.commission,
-                controller['policy'], credited=credited, now=issued, deadline_at=controller['deadline_at'])
+                controller['policy'], credited=credited, now=issued)
             due = issued+selection.get('delay_seconds', 0.)
             return {'version': 'hpc_monitor_schedule_v1', 'schedule_ref': reference,
                 'controller_ref': 'monitor-controller:'+plan['plan_id'], 'plan_id': plan['plan_id'],
@@ -123,13 +121,14 @@ class MonitorCronController:
 
     async def wait(self, schedule):
         import asyncio
+        from method_loop.suspension import external_wait
         if not schedule['valuation']['schedule']:
             return
         remaining = schedule['due_at']-time.time()
-        if remaining > 45:
-            raise MonitorCheckpoint(schedule)
         if remaining > 0:
-            await asyncio.sleep(remaining)
+            await external_wait(asyncio.sleep(remaining), {'kind': 'scheduled_external_job',
+                'job_id': schedule['job_id'], 'schedule_ref': schedule['schedule_ref'],
+                'due_at': schedule['reconsider_at']})
 
 
 class HPCContinuationEstimator:
@@ -158,7 +157,9 @@ class HPCContinuationEstimator:
         indices = body.get('active_history_indices', list(range(len(history))))
         if sorted(set(indices)) != indices or any(type(i) is not int or not 0 <= i < len(history) for i in indices):
             raise ValueError('active_yield_requires_original_completed_action_indices')
-        active = estimate_score_yield([history[i] for i in indices], parameters).expected_next_gain
+        active_estimate = estimate_score_yield([history[i] for i in indices], parameters,
+            contexts=[contexts[i] for i in indices], evaluation_time=contexts[-1].get('progress_time'))
+        active = active_estimate.expected_next_gain
         if body.get('active_credit_ceiling') == 0:
             active = NumericBand.exact(0.)
         pending = body['expected_continuation_credit']
@@ -176,6 +177,7 @@ class HPCContinuationEstimator:
         return YieldEstimate(len(history), selected, parameters,
             {'hpc_continuation': supplied, 'earned_wait_credit': 0.,
              'active_next_gain': active.as_record(), 'active_history_indices': indices,
+             'active_time_fit': active_estimate.diagnostics,
              'pending_expected_credit': None if is_bound else pending,
              'pending_credit_upper_bound': pending if is_bound else None, 'activity_mode': mode,
              'pending_value_is_not_active_action_yield': True,

@@ -26,6 +26,7 @@ in [resources/local-tools.toml](resources/local-tools.toml).
 | Execution | [Case execution](docs/CASE_EXECUTION.md), [execution services](docs/EXECUTION_WIRING.md), [local job limits](docs/LOCAL_JOB_LIMITS.md), [execution statistics](docs/NATIVE_EXECUTION_STATISTICS.md) |
 | Instructions | [Tool instruction retrieval](docs/TOOL_KNOWLEDGE.md), [launch instruction retrieval](docs/LAUNCH_INSTRUCTIONS.md) |
 | Materials | [Material intake](docs/MATERIAL_INTAKE.md), [GenBank](docs/GENBANK_INTAKE.md), [packed reads](docs/PACKED_MATERIALS.md), [read-library targets](docs/READ_LIBRARY_TARGETS.md) |
+| Evidence-axis progress | [Central ledger and code appraisal](docs/EVIDENCE_AXIS_LEDGER.md) |
 | Evidence | [Evidence access](docs/EVIDENCE_ACCESS.md), [BLAST sheets](docs/BLAST_TOOL_GRADERS.md), [RNA](docs/RNA_EVIDENCE.md), [images](docs/IMAGE_EVIDENCE.md), [spreadsheets](docs/SPREADSHEET_SOURCES.md) |
 | Output | [Interpretation records](docs/INTERPRETATION_BASIS.md), [exports](docs/EXPORT.md) |
 

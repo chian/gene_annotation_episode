@@ -217,7 +217,7 @@ def test_selected_native_model_numbers_reach_requested_scientific_receiver(conne
     native_execution = json.loads((case.directory / 'native-lifecycle.json').read_bytes())
     assert native_execution['returncode'] == 0
     assert native_execution['metadata']['verified_cgroup'] == {'memory_max': 21474836480,
-        'memory_swap_max': 0, 'runtime_max': 'infinity', 'kill_mode': 'control-group', 'oom_policy': 'kill'}
+        'memory_swap_max': 0, 'kill_mode': 'control-group', 'oom_policy': 'kill'}
     assert len(case.provider.native_bytes) == 8
     manifest = json.loads(case.provider.native_bytes['manifest'])
     assert manifest['attempt'] == case.provider.plan['identity']
@@ -334,7 +334,7 @@ def test_received_sheet_alone_recalculates_without_new_native_acquisition(connec
         execution = row['execution']
         assert execution['terminal'] and execution['quiescent'] and execution['returncode'] == 0
         assert execution['metadata']['verified_cgroup'] == {'memory_max': 21474836480,
-            'memory_swap_max': 0, 'runtime_max': 'infinity', 'kill_mode': 'control-group', 'oom_policy': 'kill'}
+            'memory_swap_max': 0, 'kill_mode': 'control-group', 'oom_policy': 'kill'}
         assert execution['intent']['source_pins'] and execution['intent']['runtime_files']
         assert execution['intent']['interpreter'] and execution['intent']['dependencies']
 

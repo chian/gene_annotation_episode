@@ -8,6 +8,7 @@ import hashlib
 import json
 
 import pytest
+from real_time_credit_fixture import progress_time
 from jsonschema import Draft202012Validator
 from method_loop import ClosedRecord
 from method_loop.durable import canonical
@@ -50,7 +51,8 @@ def attempt(journal, index, selection, *, status="completed", credit=100, episod
             "credit": credit})
 
 
-def observe(journal, index, sequence, gain, *, credit=100, slot=False, episode="owner", legacy=False):
+def observe(journal, index, sequence, gain, *, credit=100, slot=False, episode="owner", legacy=False,
+            time_point=None):
     label = f"tool:{index}"
     if slot:
         ledger = CompletionLedger(journal.store, journal)
@@ -64,6 +66,9 @@ def observe(journal, index, sequence, gain, *, credit=100, slot=False, episode="
         record.pop("unit_ref")
     journal.save("runtime_observations", {"episode_id": episode, "unit_index": sequence,
         "observation": canonical(record)})
+    if time_point is not None:
+        journal.save("runtime_estimation_contexts", {"episode_id": episode,
+            "decision_index": index, "data": canonical({"progress_time": time_point})})
 
 
 def query(**values):
@@ -91,15 +96,16 @@ def test_all_saved_gain_stays_on_reason_without_inherited_or_redistributed_credi
             "kind": "tool", "tool": "source.read", "arguments": {"source": "source_A"}}
         attempt(journal, index, selection, credit=108 if index >= 4 else 100)
         observe(journal, index, index, 8 if index == 4 else 0, credit=108 if index >= 4 else 100)
-    attempt(journal, 8, {"kind": "tool", "tool": "source.read"}, status="failed", credit=None)
+    attempt(journal, 8, {"kind": "tool", "tool": "source.read"}, status="failed", credit=108)
+    observe(journal, 8, 8, 0, credit=108)
     before = store.db.total_changes
     result = history.yield_table(journal, "owner", before=9)
     rows = {row["category"]: row for row in result["rows"]}
     assert rows["reason"]["completed_actions"] == 1
     assert rows["reason"]["total_yield"] == 8
-    assert rows["tool/source.read"]["completed_actions"] == 7
+    assert rows["tool/source.read"]["completed_actions"] == 8
     assert rows["tool/source.read"]["total_yield"] == 0
-    assert rows["tool/source.read"]["attempted_uncompleted"] == 1
+    assert rows["tool/source.read"]["attempted_uncompleted"] == 0
     assert all(row["expected_yield"]["unavailable_reason"] == "parameters_unbound" for row in rows.values())
     assert store.db.total_changes == before
 
@@ -109,13 +115,19 @@ def test_category_fit_uses_signed_completion_order_and_only_explicit_binding(sav
     for index in (8, 2, 5):
         attempt(journal, index, {"kind": "tool", "tool": "same.operation"})
     for sequence, (index, gain) in enumerate(((8, 4), (2, -3), (5, 0))):
-        observe(journal, index, sequence, gain, slot=True)
+        observe(journal, index, sequence, gain, slot=True,
+            time_point=progress_time(10. * (sequence + 1), run_id="run_A",
+                episode_id="owner", decision_index=index))
+    query_time = progress_time(100., run_id="run_A", episode_id="owner", query=True)
+    monkeypatch.setattr(history, "capture_progress_time", lambda *_: query_time)
     calls, fitted = [], []
     original = history.estimate_score_yield
 
-    def capture(scores, parameters):
+    def capture(scores, parameters, **operands):
         calls.append(tuple(scores))
-        result = original(scores, parameters)
+        assert operands["evaluation_time"] == query_time
+        assert [c["progress_time"]["original_decision_index"] for c in operands["contexts"]] == [8, 2, 5]
+        result = original(scores, parameters, **operands)
         fitted.append(result.expected_next_gain.as_record())
         return result
 
@@ -130,8 +142,9 @@ def test_category_fit_uses_signed_completion_order_and_only_explicit_binding(sav
     assert row["expected_yield"]["band"] == fitted[0]
     assert set(row["expected_yield"]) == {"status", "unavailable_reason", "band", "completed_occurrences"}
     binding = bound["expectation_model"]
-    assert binding["version"] == "category_occurrence_yield_v1"
-    assert binding["conditional_on"] == "category_completed_again" and binding["scope"] == "table_only"
+    assert binding["version"] == "category_real_time_credit_mark_yield_v2"
+    assert binding["conditional_on"] == "category_acquisition_at_recorded_query_time" and binding["scope"] == "table_only"
+    assert binding["evaluation_time"] == query_time
     assert binding["controller_effect"] == "none" and binding["calibrated_confidence_interval"] is False
     assert "provenance" not in json.dumps(bound) and "diagnostics" not in json.dumps(bound)
     assert history.lookup_attempts(journal, "owner", before=9, query=query())["records"][0]["completion"] == {
@@ -139,17 +152,17 @@ def test_category_fit_uses_signed_completion_order_and_only_explicit_binding(sav
         "kind": "own_action", "child_return": None}
 
 
-def test_sparse_zero_and_unidentifiable_expectations_stay_unavailable(saved, monkeypatch):
+def test_missing_time_and_unidentifiable_expectations_stay_unavailable(saved, monkeypatch):
     _, journal = saved
     attempt(journal, 0, {"kind": "reason"})
     observe(journal, 0, 0, 0)
     sparse = history.yield_table(journal, "owner", before=1, parameters=YieldParameters())
-    assert sparse["rows"][0]["expected_yield"]["unavailable_reason"] == "insufficient_completed_actions"
+    assert sparse["rows"][0]["expected_yield"]["unavailable_reason"] == "progress_time_unavailable"
     assert sparse["rows"][0]["total_yield"] == 0
     from dataclasses import replace
     from gene_annotation_episode.numerical import NumericBand, STATUS_UNIDENTIFIABLE
     original = estimate_score_yield([], YieldParameters())
-    monkeypatch.setattr(history, "estimate_score_yield", lambda *_: replace(original,
+    monkeypatch.setattr(history, "estimate_score_yield", lambda *_, **__: replace(original,
         expected_next_gain=NumericBand.coded(STATUS_UNIDENTIFIABLE)))
     unavailable = history.yield_table(journal, "owner", before=1, parameters=YieldParameters())
     assert unavailable["rows"][0]["expected_yield"]["unavailable_reason"] == "unidentifiable"

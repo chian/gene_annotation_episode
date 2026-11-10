@@ -78,8 +78,7 @@ class ReferenceAttributionCase(EvidenceRootCase):
                 if pending:
                     need=pending[0]['publication_ref'];self.resolved_needs.add(need)
                     selection={'kind':'tool','tool':'shared.resolve_information_need','arguments':{'need_ref':need,'status':'fulfilled',
-                        'evidence_refs':state['child_reports'][-1]['records'],
-                        'reason':'The exact native target/reference correspondence is now received; automatic per-result and per-trait graders have already evaluated it.'}}
+                        'evidence_refs':state['child_reports'][-1]['records']}}
                 else:selection={'kind':'tool','tool':'shared.list_information','arguments':{'kind':'all','offset':0,'limit':24}}
         else:
             report=initial_report()

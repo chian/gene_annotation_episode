@@ -1,0 +1,86 @@
+{
+  "absence_meaning": "no_included_native_hit_in_covered_CDS_inventory; not_absence_from_unexamined_genome_or_replicons",
+  "all_actual_cds_in_search": false,
+  "component_ref": "input_f41f140cb936a0636ee3753a",
+  "database_source_ref": "source_5bb0efbd5d66f721d9b00da9",
+  "genome_key": "records:4fbd4f0285697625be7f414ac7ad243c5decfdc5ff7e4e21f62bc0af645f136a",
+  "interpretation": "detection_state_at_its_recorded_scope; no_gene_family_or_genome_absence_beyond_that_scope",
+  "native_database_sha256": "9be28f4d52d264612f474e45286aa8cdadb3b6ef20274d90e7fa2fe2b787efde",
+  "native_hits": [
+    {
+      "bitscore": 372.6,
+      "domains": [
+        {
+          "bitscore": 372.5,
+          "evalue": 9.6E-114,
+          "hit_end": 190,
+          "hit_start": 0,
+          "native_included": true,
+          "query_end": 190,
+          "query_start": 0
+        }
+      ],
+      "evalue": 8.6E-114,
+      "native_included": true,
+      "native_target_id": "NC_014034.1:CDS:290",
+      "sequence_sha256": "e28d630f4f587596ae3cf6d60ca758491b59e47e304f64cb3eb975de724afadb"
+    }
+  ],
+  "native_method": "phmmer_native_inclusion_criterion",
+  "native_parameters": {
+    "command": [
+      "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107-phmmer-deployment-20261105T1655-01a19060/bin/phmmer",
+      "--notextw",
+      "-o",
+      "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107_genomic_presence_autonomous_20261108_07/hpc/f882fb680dc863106c22419baffd1785b7dab5faf27e337777ed8dc1abe3510d/units/scientific_result/phmmer.txt",
+      "--tblout",
+      "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107_genomic_presence_autonomous_20261108_07/hpc/f882fb680dc863106c22419baffd1785b7dab5faf27e337777ed8dc1abe3510d/units/scientific_result/phmmer.tbl",
+      "--domtblout",
+      "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107_genomic_presence_autonomous_20261108_07/hpc/f882fb680dc863106c22419baffd1785b7dab5faf27e337777ed8dc1abe3510d/units/scientific_result/phmmer.domtbl",
+      "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107_genomic_presence_autonomous_20261108_07/hpc/f882fb680dc863106c22419baffd1785b7dab5faf27e337777ed8dc1abe3510d/units/scientific_result/inputs/component.faa",
+      "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/a107_genomic_presence_autonomous_20261108_07/hpc/f882fb680dc863106c22419baffd1785b7dab5faf27e337777ed8dc1abe3510d/units/scientific_result/inputs/annotated-cds.faa"
+    ],
+    "executable_sha256": "e44ed0bf3f3ce441ceed7854391954f057140dab935f2e0ac4608d1a3f72ef61",
+    "help_sha256": "8c49789f582162a27b1bb6ac2672dba453f93a92c7e57f312266d48695d55f1b"
+  },
+  "native_program_version": "3.4",
+  "native_search_complete": true,
+  "native_source_ref": null,
+  "neighborhood_ref": null,
+  "present": true,
+  "producer_operation": "context.detection_inventory",
+  "record_scopes": [
+    {
+      "accession": "NC_014034.1",
+      "record_length": 400001,
+      "source_file_sha256": "6bb4eed995036f3684bcd5475ce4293ca26375aedcc32b11353806044a56436e",
+      "source_request": {
+        "caller_associated_target_genomic_subjects": [
+          "input_f41f140cb936a0636ee3753a"
+        ],
+        "provided_path": "/home/chia/repos/gene_annotation_episode/tests/fixtures/a103/real/rcapsulatus-bioy.gb"
+      }
+    }
+  ],
+  "schema": "a103_detection_v1",
+  "scope": "examined_annotated_CDS_in_explicit_acquired_records",
+  "searched_cds": 382,
+  "snapshot_ref": null,
+  "uncertain_cds": [
+    {
+      "accession": "NC_014034.1",
+      "feature_index": 2,
+      "reason": "declared_translation_conflict"
+    },
+    {
+      "accession": "NC_014034.1",
+      "feature_index": 84,
+      "reason": "partial_or_pseudogene_annotation"
+    },
+    {
+      "accession": "NC_014034.1",
+      "feature_index": 796,
+      "reason": "declared_translation_conflict"
+    }
+  ]
+}

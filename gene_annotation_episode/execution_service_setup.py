@@ -40,6 +40,7 @@ class ExecutionServiceFactory:
     log_window_bytes: int = 8192
     log_roles: tuple = ('stdout', 'stderr')
     monitor_outcome_page_size: int = 20
+    monitor_yield_settings: dict | None = None
     protein_structure_environments: tuple = ()
     flux_balance_environments: tuple = ()
     molecular_sequence_environments: tuple = ()
@@ -59,12 +60,44 @@ class ExecutionServiceFactory:
     esm_gene_embedding_environments: tuple = ()
     esm_gene_embedding_stored_reads: bool = False
     hpc_commissions: dict | None = None
+    shared_execution_memory: dict | None = None
+    require_private_execution_yield: bool = False
+    require_hpc_commission_yield: bool = False
+    results_yield_profiles: dict | None = None
+    task_yield_profiles: dict | None = None
 
     def __post_init__(self):
+        if type(self.require_private_execution_yield) is not bool:
+            raise TypeError('require_private_execution_yield_must_be_boolean')
+        if type(self.require_hpc_commission_yield) is not bool:
+            raise TypeError('require_hpc_commission_yield_must_be_boolean')
+        if self.results_yield_profiles is not None:
+            profiles = plain(self.results_yield_profiles)
+            if not isinstance(profiles, dict):
+                raise ValueError('explicit_results_yield_profiles_invalid')
+            object.__setattr__(self, 'results_yield_profiles', _freeze(profiles))
+        if self.task_yield_profiles is not None:
+            profiles = plain(self.task_yield_profiles)
+            if not isinstance(profiles, dict):
+                raise ValueError('explicit_execution_task_yield_profiles_invalid')
+            object.__setattr__(self, 'task_yield_profiles', _freeze(profiles))
+        if self.monitor_yield_settings is not None:
+            settings = plain(self.monitor_yield_settings)
+            MonitorEpisodes(None, information_unit=self.monitoring_information_unit,
+                yield_settings=settings)
+            object.__setattr__(self, 'monitor_yield_settings', _freeze(settings))
+        if self.require_hpc_commission_yield and self.hpc_commissions is None:
+            raise ValueError('hpc_commission_yield_requires_hpc_service')
+        if self.shared_execution_memory is not None:
+            from .execution_memory import ExecutionMemory
+            object.__setattr__(self, 'shared_execution_memory', _freeze(
+                ExecutionMemory(**plain(self.shared_execution_memory)).as_record()))
         if self.hpc_commissions is not None:
             from .hpc_campaign import validate_commission
             commissions = plain(self.hpc_commissions)
-            if not isinstance(commissions, dict) or not commissions:
+            # An explicit empty catalog enables authenticated received work.
+            # None still leaves the HPC service unconfigured.
+            if not isinstance(commissions, dict):
                 raise ValueError('explicit_hpc_commissions_required')
             object.__setattr__(self, 'hpc_commissions', _freeze({key: validate_commission(value, plain(self.resources))
                 for key, value in commissions.items()}))
@@ -143,7 +176,17 @@ class ExecutionServiceFactory:
             **({'esm_gene_embedding_environments': plain(self.esm_gene_embedding_environments)}
                if self.esm_gene_embedding_environments else {}),
             **({'esm_gene_embedding_stored_reads': True} if self.esm_gene_embedding_stored_reads else {}),
-            **({'hpc_commissions': plain(self.hpc_commissions)} if self.hpc_commissions is not None else {})}
+            **({'hpc_commissions': plain(self.hpc_commissions)} if self.hpc_commissions is not None else {}),
+            **({'shared_execution_memory': plain(self.shared_execution_memory)}
+               if self.shared_execution_memory is not None else {}),
+            **({'require_private_execution_yield': True} if self.require_private_execution_yield else {}),
+            **({'results_yield_profiles': plain(self.results_yield_profiles)}
+               if self.results_yield_profiles is not None else {}),
+            **({'task_yield_profiles': plain(self.task_yield_profiles)}
+               if self.task_yield_profiles is not None else {}),
+            **({'monitor_yield_settings': plain(self.monitor_yield_settings)}
+               if self.monitor_yield_settings is not None else {}),
+            **({'require_hpc_commission_yield': True} if self.require_hpc_commission_yield else {})}
 
     @classmethod
     def from_record(cls, value):
@@ -154,6 +197,9 @@ class ExecutionServiceFactory:
 
     def configure_tool_registry(self, tool_registry):
         """Configure actual ordinary tools before freezing their callable catalog."""
+        if self.shared_execution_memory is not None and tool_registry is not None:
+            from .execution_memory import ExecutionMemory
+            tool_registry.execution_memory = ExecutionMemory(**plain(self.shared_execution_memory))
         for family in ('protein_structure', 'flux_balance', 'molecular_sequence', 'homer', 'tf_binding', 'protease_kinetics', 'protein_conservation', 'protein_phylogeny', 'somatic_variant'):
             environments = getattr(self, family + '_environments')
             saved_modes = (getattr(self, family + '_saved_modes')
@@ -183,8 +229,15 @@ class ExecutionServiceFactory:
             resources=plain(self.resources), initial_information=plain(self.initial_information),
             tool_registry=tool_registry, handoff_unit=self.handoff_unit,
             acquired_record_unit=self.acquired_record_unit,
-            log_window_bytes=self.log_window_bytes, log_roles=self.log_roles)
-        monitor = MonitorEpisodes(None, outcome_page_size=self.monitor_outcome_page_size)
+            log_window_bytes=self.log_window_bytes, log_roles=self.log_roles,
+            require_private_yield=self.require_private_execution_yield,
+            results_yield_profiles=(plain(self.results_yield_profiles)
+                if self.results_yield_profiles is not None else None),
+            task_yield_profiles=(plain(self.task_yield_profiles)
+                if self.task_yield_profiles is not None else None))
+        monitor = MonitorEpisodes(None, outcome_page_size=self.monitor_outcome_page_size,
+            information_unit=self.monitoring_information_unit,
+            yield_settings=plain(self.monitor_yield_settings) if self.monitor_yield_settings is not None else None)
         information = ProgressInformationCredit(_ProgressReader(store, run_id),
             information_unit=self.monitoring_information_unit)
         definition = {'version': 'execution_received_information_credit_v1',
@@ -199,7 +252,9 @@ class ExecutionServiceFactory:
         if self.hpc_commissions is not None:
             from .hpc_episodes import HPCEpisodes
             hpc = HPCEpisodes(None, store=store, run_id=run_id, directory=directory,
-                resources=plain(self.resources), commissions=plain(self.hpc_commissions))
+                resources=plain(self.resources), commissions=plain(self.hpc_commissions),
+                shared_execution_memory=plain(self.shared_execution_memory),
+                require_commission_yield=self.require_hpc_commission_yield)
             descriptors.append(hpc.as_record())
             hpc_credit = {role: {'definition': {'version': 'hpc_credit_v1',
                 'operands': 'original_commission', 'polling_credit': 0}, 'project': hpc.credit_view}

@@ -10,7 +10,7 @@ The isotope experiment uses *E. coli* FBE748, an MG1655-derived ΔaroD ΔubiIH s
 
 The matched comparison is anaerobic LB with 10 µM unlabeled shikimate versus 10 µM C4-[18O]shikimate in that same mutant. The separate 100 µM 4-hydroxybenzoate treatment is not pooled into that comparison; the MG1655 WT bar is also not its baseline. The intended changed variable is precursor isotope. The measured endpoint is the UQ8 mass-isotopologue pattern, with quantities in pmol per mg wet cells. The central bars in Fig. 4D are means, with SD for three independent experiments; individual values and their covariance were not obtained.
 
-Comparability concerns matching genotype, medium, supplementation, extraction and instrument response. Isolation concerns whether label in a downstream UQ oxygen reports the prephenate donor, including possible dilution, exchange and indirect label redistribution. Those are different questions. A gene-deletion/rescue result elsewhere in the paper belongs to A106; it is not an additional isotope observation or A110 score. Molecular partner and coexpression evidence belongs to A107. Sample/organism plausibility belongs to A108.
+Comparability concerns matching genotype, medium, supplementation, extraction and instrument response. Isolation concerns whether label in a downstream UQ oxygen reports the prephenate donor, including possible dilution, exchange and indirect label redistribution. Those are different questions. A gene-deletion/rescue result elsewhere in the paper belongs to A106; it is not an additional isotope observation or A110 score. Molecular partner and coexpression evidence belongs to A107.
 
 ## Source-populated numerical cells
 

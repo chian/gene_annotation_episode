@@ -266,7 +266,8 @@ def scientific_binding_compatible(actual, recorded):
             or any(type(value['version']) is not str
                 or value['version'] not in {'scientific_process_episodes_v5',
                 'scientific_process_episodes_v6', 'scientific_process_episodes_v7',
-                'scientific_process_episodes_v8'}
+                'scientific_process_episodes_v8', 'scientific_process_episodes_v9',
+                'scientific_process_episodes_v10'}
                 or value['binding_id'] != 'scientific_process'
                 or type(value['configuration']) is not dict
                 or type(value['implementation_sha256']) is not str
@@ -297,16 +298,21 @@ def reopen_scientific_binding(services, *, descriptor, directory):
     try:
         if descriptor.get('version') not in {'scientific_process_episodes_v5',
                 'scientific_process_episodes_v6', 'scientific_process_episodes_v7',
-                'scientific_process_episodes_v8'}:
+                'scientific_process_episodes_v8', 'scientific_process_episodes_v9',
+                'scientific_process_episodes_v10'}:
             raise _failure('unavailable_binding', reference)
         configuration = descriptor['configuration']
         expected = {'library', 'tool_library', 'child_roles'}
         if (descriptor['version'] == 'scientific_process_episodes_v6'
-                or descriptor['version'] in {'scientific_process_episodes_v7', 'scientific_process_episodes_v8'}
+                or descriptor['version'] in {'scientific_process_episodes_v7', 'scientific_process_episodes_v8',
+                    'scientific_process_episodes_v9', 'scientific_process_episodes_v10'}
                 and 'tool_retrieval' in configuration):
             expected.add('tool_retrieval')
-        if descriptor['version'] == 'scientific_process_episodes_v8' and 'contract_information_profile' in configuration:
+        if descriptor['version'] in {'scientific_process_episodes_v8', 'scientific_process_episodes_v9',
+                'scientific_process_episodes_v10'} and 'contract_information_profile' in configuration:
             expected.add('contract_information_profile')
+        if descriptor['version'] == 'scientific_process_episodes_v10' and 'yield_bindings' in configuration:
+            expected.add('yield_bindings')
         if set(configuration) != expected:
             raise _failure('unavailable_binding', reference)
         library = ScientificProcessLibrary(Path(directory)/'scientific-process-library')
@@ -316,7 +322,8 @@ def reopen_scientific_binding(services, *, descriptor, directory):
         binding = ScientificProcessEpisodes(services, library=library, tool_library=tools,
             child_roles=configuration['child_roles'],
             tool_retrieval=configuration.get('tool_retrieval'),
-            contract_information_profile=configuration.get('contract_information_profile'))
+            contract_information_profile=configuration.get('contract_information_profile'),
+            yield_bindings=configuration.get('yield_bindings'))
         if not scientific_binding_compatible(binding.as_record(), descriptor):
             raise _failure('identity_conflict', reference)
         return binding
@@ -388,11 +395,11 @@ def compose_episode_bindings(services, *, store, journal, execution_backend,
                 if execution_backend is None:
                     raise _failure('unavailable_binding', 'execution_backend')
                 binding = MonitorEpisodes(services, **configuration)
-            elif name == 'practical_execution':
-                from .practical_resource_episodes import PracticalResourceEpisodes
+            elif name == 'terminal_execution':
+                from .terminal_execution_episodes import TerminalExecutionEpisodes
                 if directory is None:
                     raise _failure('unavailable_binding', reference)
-                binding = PracticalResourceEpisodes(services, directory=directory, store=store, **configuration)
+                binding = TerminalExecutionEpisodes(services, directory=directory, store=store, **configuration)
             elif name == 'hpc':
                 from .hpc_episodes import HPCEpisodes
                 if directory is None:

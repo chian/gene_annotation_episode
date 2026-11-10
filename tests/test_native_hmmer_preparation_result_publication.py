@@ -18,7 +18,7 @@ from gene_annotation_episode.state import Store
 from test_native_hmmer_preparation_result_worker import CASES, capture_native
 
 
-POLICY = LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None)
+POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
 
 
 def prepare(store, tmp_path, monkeypatch, program="hmmemit", mode="consensus_simple"):
@@ -329,7 +329,7 @@ def test_unfinished_worker_recovery_denies_changed_original_controls_before_life
     elif change == "plan_type":
         write(directory / "plan.json", [])
     elif change == "policy":
-        selected_policy = LocalJobPolicy(POLICY.memory_bytes - 1, POLICY.scratch_bytes, None)
+        selected_policy = LocalJobPolicy(POLICY.memory_bytes - 1, POLICY.scratch_bytes)
     elif change == "task":
         selected["task"] = "project"
         write(directory / "execution-selection.json", selected)

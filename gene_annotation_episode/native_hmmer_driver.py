@@ -75,7 +75,7 @@ def _validate_plan(value):
     if identity["requested_job_sha256"] != native_hmmer_digest(request):
         raise ValueError("native_hmmer_requested_job_digest_mismatch")
     policy = plan["policy"]
-    if type(policy) is not dict or set(policy) != {"memory_bytes", "scratch_bytes", "wall_seconds"}:
+    if type(policy) is not dict or set(policy) != {'memory_bytes', 'scratch_bytes'}:
         raise ValueError("native_hmmer_explicit_policy_required")
     from .local_jobs import LocalJobPolicy
     LocalJobPolicy(**policy)  # Validate the supplied allocation; never replace it.

@@ -21,6 +21,13 @@ def leaf(label, work):
     return Leaf(None, lambda _: work(), lambda _, result: result, label=label)
 
 
+class ExternalJobEvent(asyncio.Event):
+    async def wait(self):
+        from method_loop.suspension import external_wait
+        return await external_wait(super().wait(),
+            {'kind': 'scheduled_external_job', 'job_id': 'fixture-job'})
+
+
 class Source:
     def __init__(self, choose):
         self.choose = choose
@@ -57,7 +64,7 @@ def child_unit(parent_goal, grain, name, entered, release, *, archive=None, rece
     child = Episode(grain, name, source, EpisodeRequest(goal, Record({}), contract),
                     lambda _: Record({'value': value}), archive_record=archive)
     unit = ChildEpisodeUnit(child, receive or (lambda *args: Record({'credit': 2})),
-                            lambda result, *_: result.as_record())
+                            lambda result, *_: result.as_record(), allow_suspension=True)
     return unit, source_ref
 
 
@@ -65,7 +72,7 @@ def test_parent_and_two_children_iterate_with_separate_stacks_and_exact_reports(
     async def exercise():
         context, goal, grain, controllers = world(4)
         entered = [asyncio.Event(), asyncio.Event()]
-        release = [asyncio.Event(), asyncio.Event()]
+        release = [ExternalJobEvent(), ExternalJobEvent()]
         handles, seen = [], []
         current = [0]
         def receive(result, *_):
@@ -110,7 +117,7 @@ def test_parent_and_two_children_iterate_with_separate_stacks_and_exact_reports(
     asyncio.run(exercise())
 
 
-def test_parent_yield_does_not_cancel_child_or_rewrite_history_and_closed_source_is_released(tmp_path):
+def test_parent_yield_keeps_original_receiver_until_child_credit_is_observed(tmp_path):
     async def exercise():
         context, goal, grain, controllers = world(1)
         entered, release = asyncio.Event(), asyncio.Event()
@@ -124,15 +131,16 @@ def test_parent_yield_does_not_cancel_child_or_rewrite_history_and_closed_source
             return Record({'credit': 0})
         root = Episode(grain, 'root', Source(lambda _: leaf('launch', dispatch)),
                        EpisodeRequest(goal, Record({})), lambda _: Record({}))
-        parent_result = await root.run_async(context)
-        before = list(parent_result.controller_state.scores)
+        parent_task = asyncio.create_task(root.run_async(context))
         await entered.wait()
+        assert not parent_task.done()
         assert handles[0].status() == {'handle': 'execution_survivor', 'state': 'running', 'delivered': False}
         release.set()
-        await handles[0].wait_ready()
+        parent_result = await parent_task
         assert handles[0].status()['state'] == 'returned'
-        assert parent_result.controller_state.scores == before == [0]
-        assert controllers[(('science', 'root'),)].scores == [0]
+        assert parent_result.controller_state.scores == [0, 2]
+        assert controllers[(('science', 'root'),)].scores == [0, 2]
+        assert handles[0].status()['delivered']
         assert len(list((tmp_path/'archive').glob('*.json'))) == 4  # two payloads and their indexes
         gc.collect()
         assert references[0]() is None
@@ -144,7 +152,7 @@ def test_parent_yield_does_not_cancel_child_or_rewrite_history_and_closed_source
 def test_cancelling_readiness_wait_does_not_cancel_selected_child():
     async def exercise():
         context, goal, grain, _ = world(3)
-        entered, release = asyncio.Event(), asyncio.Event()
+        entered, release = asyncio.Event(), ExternalJobEvent()
         handles = []
         def dispatch():
             unit, _ = child_unit(goal, grain, 'survivor', entered, release)
@@ -214,7 +222,7 @@ def test_independent_return_uses_same_closed_typed_form_guard():
 def test_nested_independent_child_keeps_its_immediate_owner_and_parent_observation_boundary():
     async def exercise():
         context, goal, grain, controllers = world(3)
-        entered, release = asyncio.Event(), asyncio.Event()
+        entered, release = asyncio.Event(), ExternalJobEvent()
         descendants, handles = [], []
         contract = TypedReportContract('Return the requested scoped fixture result',
                                       obj({'value': {'type': 'integer'}}), None)
@@ -233,7 +241,7 @@ def test_nested_independent_child_keeps_its_immediate_owner_and_parent_observati
                 if view.units_consumed == 0 else descendants[0]),
                 EpisodeRequest(scoped_goal, Record({}), contract), lambda _: Record({'value': 2}))
             unit = ChildEpisodeUnit(scoped, lambda *args: Record({'credit': 2}),
-                                    lambda result, *_: result.as_record())
+                                    lambda result, *_: result.as_record(), allow_suspension=True)
             handles.append(unit.start_async(context, handle='execution_scoped'))
             return Record({'credit': 0})
 
@@ -259,7 +267,7 @@ def test_nested_independent_child_keeps_its_immediate_owner_and_parent_observati
     asyncio.run(exercise())
 
 
-def test_pending_child_does_not_retain_closed_parent_through_delivery_callbacks():
+def test_original_parent_is_retained_until_delivery_then_callbacks_are_released():
     async def exercise():
         context, goal, grain, _ = world(1)
         entered, release = asyncio.Event(), asyncio.Event()
@@ -276,13 +284,16 @@ def test_pending_child_does_not_retain_closed_parent_through_delivery_callbacks(
         source = ParentSource()
         reference = weakref.ref(source)
         root = Episode(grain, 'root', source, EpisodeRequest(goal, Record({})), lambda _: Record({}))
-        await root.run_async(context)
-        del root, source
-        gc.collect()
-        assert reference() is None
+        task = asyncio.create_task(root.run_async(context))
         await entered.wait()
+        assert not task.done()
+        assert reference() is source
         assert handles[0].status()['state'] == 'running'
         release.set()
-        await handles[0].wait_ready()
+        await task
+        del root, source, task
+        gc.collect()
+        assert reference() is None
         assert handles[0].status()['state'] == 'returned'
+        assert handles[0].status()['delivered']
     asyncio.run(exercise())

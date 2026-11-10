@@ -41,10 +41,11 @@ def test_every_actual_registry_and_execution_operation_has_four_fields(actual):
     rows = library.resolve_tool_info(selectors(metadata))
     indexed = {(row['name'], row['resources']): row for row in rows}
     for name, contract in tools.catalog().items():
-        row = indexed[name, resource_kind(name)]
+        row = indexed[name, contract.get('resources') or resource_kind(name)]
         assert set(row) == {'name', 'description', 'resources', 'instructions'}
         assert row['description'] == contract['description']
         assert row['instructions'].strip() and name in row['instructions']
+        assert 'Execution planning and shared memory' in row['instructions']
     for kind in ('local', 'hpc'):
         for operation in [*operation_catalog(kind), *native_result_operation_catalog()]:
             assert (operation['name'], kind) in indexed

@@ -17,7 +17,7 @@ import pytest
 from gene_annotation_episode.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
 from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.execution_contracts import canonical
+from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.execution_episodes import (ExecutionEpisodes, LAUNCH_VERSION,
     RESULTS_VERSION, NATIVE_RESULT_ORIGIN)
 from gene_annotation_episode import native_lifecycle as native
@@ -48,8 +48,7 @@ def host(tmp_path):
     store = Store(tmp_path/'store')
     target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
     journal = Journal(store, 'family-fixture')
-    configuration = {'kind': 'local', 'workspace': str(workspace), 'policy': {
-        'memory_bytes': 128*1024**2, 'scratch_bytes': 8*1024**2, 'wall_seconds': None}}
+    configuration = {'kind': 'local', 'workspace': str(workspace), 'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}
     family = ExecutionEpisodes(None, store=store, directory=tmp_path/'run', run_id=journal.run_id,
         resources={'here': configuration}, initial_information={}, tool_registry=ToolRegistry(store),
         handoff_unit=3, acquired_record_unit=2, log_window_bytes=4, log_roles=['stdout', 'stderr'])
@@ -87,6 +86,14 @@ def selection(ctx, references, initial=()):
             'initial_known_record_refs': list(initial)}
 
 
+@pytest.mark.parametrize('role', ['launch_local', 'launch_hpc'])
+def test_native_launch_return_contracts_use_current_terminal_provider(host, role):
+    from gene_annotation_episode.terminal_execution_episodes import TerminalExecutionEpisodes
+    expected = TerminalExecutionEpisodes.fact_sources(None, role)
+    actual = host.family.fact_sources(role)
+    assert {name: actual[name] for name in expected} == expected
+
+
 def test_one_owner_and_data_descriptor_reconstruct_all_operands(host):
     h = host
     registry = EpisodeBindingRegistry([h.family])
@@ -106,6 +113,136 @@ def test_one_owner_and_data_descriptor_reconstruct_all_operands(host):
         'policy': h.family.resources['here']['policy'], 'inventory_snapshot': None}
     with pytest.raises(ValueError, match='duplicate_episode_role'):
         registry.register(restored)
+
+
+def test_single_execution_task_binds_verified_zero_yield_without_global_factory(host, monkeypatch):
+    from test_practical_yield import completion_context
+    from gene_annotation_episode.numerical import NumericBand
+
+    h = host
+    original = native_assignment(h.workspace)
+    missing = ExecutionEpisodes(None, store=h.store, directory=h.tmp_path/'private-missing',
+        run_id=h.journal.run_id, resources=h.family.resources, initial_information={},
+        tool_registry=h.family.tool_registry, handoff_unit=3, acquired_record_unit=2,
+        log_window_bytes=4, log_roles=['stdout', 'stderr'], require_private_yield=True)
+    owner = ExecutionEpisodes(None, store=h.store, directory=h.tmp_path/'private',
+        run_id=h.journal.run_id, resources=h.family.resources, initial_information={},
+        tool_registry=h.family.tool_registry, handoff_unit=3, acquired_record_unit=2,
+        log_window_bytes=4, log_roles=['stdout', 'stderr'], require_private_yield=True,
+        task_yield_profiles={
+            'launch_local:practical_local_handoff': {'cutoff': 0.01, 'parameters': {}},
+            'launch:practical_local_handoff': {'cutoff': 0.02, 'parameters': {}}})
+    task = context(h, 'launch_local', original, 'private-local')
+    with pytest.raises(ValueError, match='execution_original_task_yield_profile_required:launch_local:practical_local_handoff'):
+        missing.yield_controller(task, 0., 'missing-epoch')
+    controller = owner.yield_controller(task, 0., 'private-epoch')
+    assert controller.cost == 0.01
+    evidence = completion_context(run_id=task.run_id, episode_id=task.episode_id,
+        unit_index=0, action_index=0)
+    evidence['practical_completion']['assignment_sha256'] = digest(original)
+    seen = []
+    def verify(context, proof):
+        seen.append((context.episode_id, proof))
+        return context.episode_id == task.episode_id and proof['assignment_sha256'] == digest(original)
+    monkeypatch.setattr(owner, 'verify_completion', verify)
+    step = controller.observe('verified-handoff', {'credit': 7., 'estimation_context': evidence})
+    assert step.stop and step.estimate.expected_next_gain == NumericBand.exact(0)
+    assert seen[0][0] == task.episode_id
+    assert owner.as_record()['configuration']['require_private_yield'] is True
+    assert owner.as_record()['configuration']['task_yield_profiles'] == owner.task_yield_profiles
+    from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+    factory = ExecutionServiceFactory(resources=h.family.resources, initial_information={},
+        handoff_unit=3, acquired_record_unit=2, monitoring_information_unit=1,
+        require_private_execution_yield=True, task_yield_profiles=owner.task_yield_profiles)
+    assert ExecutionServiceFactory.from_record(factory.as_record()).as_record() == factory.as_record()
+    launch = context(h, 'launch', launch_assignment({'here': original}), 'private-parent')
+    launch_controller = owner.yield_controller(launch, 0., 'parent-epoch')
+    assert launch_controller.maximum_credit == 3.
+    assert launch_controller.cost == 0.02
+    assert launch_controller.observe('first-handoff', {'credit': 3.}).stop
+
+
+def test_launch_request_earns_handoff_credit_once_across_physical_retries(host, monkeypatch):
+    h = host
+    original = native_assignment(h.workspace)
+    launch = context(h, 'launch', launch_assignment({'here': original}), 'repeat-parent')
+    target = {'resource_id': 'here', 'execution_id': 'first'}
+    another = {'resource_id': 'here', 'execution_id': 'second'}
+    monkeypatch.setattr(h.family.job_progress_provider.targets, 'usable_handoff', lambda _: True)
+    monkeypatch.setattr(h.family, '_received', lambda *_args, **_kwargs: (
+        selection(launch, ['first-ref', 'second-ref']),
+        {'first-ref': target, 'second-ref': another}, {}))
+    view = h.family.credit_view(launch, None)
+    assert view['credit'] == h.family.handoff_unit
+    assert view['new_handoff_count'] == 1
+
+
+def test_results_byte_coverage_ignores_rechunking_and_counts_permitted_growth(host, monkeypatch):
+    h = host
+    result_task = context(h, 'results', {'version': RESULTS_VERSION,
+        'handoff_ref': 'original-handoff', 'selector': {}}, 'coverage-task')
+    target = {'resource_id': 'here', 'resource_kind': 'local', 'execution_id': 'original-job'}
+    monkeypatch.setattr(h.family, '_target', lambda _: target)
+    monkeypatch.setattr(h.family.local_file_sources, 'acquisition_counts', lambda *_: None)
+    requested = {'path': '/result', 'offset': 0, 'limit': 10}
+    monkeypatch.setattr(h.family, '_selector', lambda *_: requested)
+    def window(offset, count, size):
+        return {'path': '/result', 'offset': offset, 'returned_bytes': count,
+            'size_bytes': size, 'bytes_base64': ''}
+    bodies = {
+        'first': {'target': target, 'windows': [window(0, 5, 10)]},
+        'second': {'target': target, 'windows': [window(5, 5, 10)]},
+        'rechunked': {'target': target, 'windows': [window(0, 10, 10)]},
+    }
+    selected = {'run_id': result_task.run_id, 'episode_id': result_task.episode_id,
+        'known_record_refs': [], 'initial_known_record_refs': []}
+    monkeypatch.setattr(h.family, '_received', lambda *_args, **_kwargs: (selected, {},
+        {ref: bodies[ref] for ref in selected['known_record_refs']}))
+    selected['known_record_refs'] = ['first']
+    assert h.family.credit_view(result_task, None)['credit'] == 1.
+    selected['known_record_refs'] = ['first', 'second']
+    assert h.family.credit_view(result_task, None)['credit'] == 2.
+    selected['known_record_refs'].append('rechunked')
+    assert h.family.credit_view(result_task, None)['credit'] == 2.
+    selected['initial_known_record_refs'] = ['first']
+    assert h.family.credit_view(result_task, None)['credit'] == 1.
+
+    requested.clear()
+    requested['paths'] = ['/result']
+    bodies['growth'] = {'target': target, 'windows': [window(10, 5, 15)]}
+    selected['known_record_refs'] = ['first', 'rechunked', 'growth']
+    assert h.family.credit_view(result_task, None)['credit'] == pytest.approx(4/3)
+
+
+def test_results_yield_uses_finite_selector_headroom_or_explicit_unbounded_profile(host, monkeypatch):
+    h = host
+    owner = ExecutionEpisodes(None, store=h.store, directory=h.tmp_path/'result-yield',
+        run_id=h.journal.run_id, resources=h.family.resources, initial_information={},
+        tool_registry=h.family.tool_registry, handoff_unit=3, acquired_record_unit=2,
+        log_window_bytes=4, log_roles=['stdout'], require_private_yield=True,
+        results_yield_profiles={'native_unbounded_local': {'cutoff': 0.25, 'parameters': {}}},
+        task_yield_profiles={'results:native_finite_local': {'cutoff': 0.125, 'parameters': {}}})
+    task = context(h, 'results', {'version': RESULTS_VERSION,
+        'handoff_ref': 'original-handoff', 'selector': {}}, 'result-yield-task')
+    target = {'resource_id': 'here', 'resource_kind': 'local', 'execution_id': 'original-job'}
+    selector = {'path': '/result', 'offset': 0, 'limit': 10}
+    monkeypatch.setattr(owner, '_target', lambda _: target)
+    monkeypatch.setattr(owner, '_selector', lambda *_: selector)
+    monkeypatch.setattr(owner, '_received', lambda *_args, **_kwargs: (
+        selection(task, []), {}, {}))
+    finite = owner.yield_controller(task, 0., 'finite-result')
+    assert finite.cost == 0.125
+    half = finite.observe('five-bytes', {'credit': 1.})
+    assert half.estimate.expected_next_gain.upper <= 1.
+    complete = finite.observe('all-ten-bytes', {'credit': 2.})
+    assert complete.stop and complete.estimate.expected_next_gain.value == 0.
+    selector.clear()
+    selector['paths'] = ['/result']
+    unbounded = owner.yield_controller(task, 0., 'unbounded-result')
+    assert unbounded.cost == 0.25
+    owner.results_yield_profiles.clear()
+    with pytest.raises(ValueError, match='results_original_task_yield_profile_required:native_unbounded_local'):
+        owner.yield_controller(task, 0., 'unconfigured-result')
 
 
 def test_dynamic_resources_keep_several_hpcs_and_explicit_selected_request(host):
