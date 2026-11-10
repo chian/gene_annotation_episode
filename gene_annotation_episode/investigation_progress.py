@@ -65,6 +65,11 @@ class ScientificFindingProgress:
                      details_offset, assignment=None, episode_id=None, run_id=None):
         if assignment is not None and store.validate_scope(assignment['scope']) != store.validate_scope(scope):
             raise ValueError('scientific_credit_scope_differs_from_original_commission')
+        if assignment is not None and assignment.get('proposed_annotation_ref') is not None:
+            proposed = assignment['proposed_annotation_ref']
+            store._require(proposed, {'hypothesis'})
+            known_assessment_refs = [ref for ref in known_assessment_refs
+                if store._require(ref, {'assessment'})['hypothesis_ref'] == proposed]
         return project_finding_progress(store, scope, self.policy,
             known_assessment_refs=known_assessment_refs, details_limit=details_limit,
             details_offset=details_offset)

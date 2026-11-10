@@ -16,6 +16,7 @@ from pathlib import Path
 import time
 
 VERSION = "measured_episode_execution_intervals_v1"
+PROGRESS_TIME_VERSION = "episode_progress_time_v1"
 
 
 def _utc():
@@ -39,6 +40,77 @@ def _process_identity(pid=None):
 def owner_is_live(owner):
     """Resolve the recorded process incarnation, never just its PID."""
     return bool(owner is not None and _process_identity(owner["pid"]) == owner)
+
+
+def capture_progress_time(journal, episode_id, *, original_decision_index=None):
+    """Freeze a real clock point, without creating a progress observation.
+
+    The first received progress point fixes the measured reference span used
+    by the numerical binding. A decision query may read that span, but cannot
+    establish it. Runtime persists receipt points in estimation contexts and
+    decision points in the original model request. Replay reads those records.
+
+    This is elapsed real time, including idle/wait time on the same boot, not a
+    sum of overlapping dispatch durations or an estimate of compute usage.
+    Cross-boot subtraction and historical reconstruction are unavailable.
+    """
+    owner = _process_identity()
+    now = time.monotonic_ns()
+    result = {"version": PROGRESS_TIME_VERSION, "run_id": journal.run_id,
+        "episode_id": episode_id, "original_decision_index": original_decision_index,
+        "point_kind": "decision_query" if original_decision_index is None else "progress_receipt",
+        "captured_at": _utc(), "observed_monotonic_ns": now,
+        "boot_id": None if owner is None else owner["boot_id"],
+        "origin_decision_index": None, "origin_monotonic_ns": None,
+        "reference_observation_monotonic_ns": None, "reference_elapsed_seconds": None,
+        "elapsed_seconds": None, "status": "unavailable", "unavailable_reason": None,
+        "clock": "monotonic", "time_unit": "seconds", "includes_idle_time": True,
+        "is_compute_consumption": False}
+    origin = journal.db.execute("SELECT call_index,timing FROM runtime_model_calls "
+        "WHERE run_id=? AND episode_id=? AND purpose='decision' ORDER BY call_index LIMIT 1",
+        (journal.run_id, episode_id)).fetchone()
+    previous = journal.db.execute("SELECT data FROM runtime_estimation_contexts "
+        "WHERE run_id=? AND episode_id=? ORDER BY rowid LIMIT 1",
+        (journal.run_id, episode_id)).fetchone()
+    raw = None if origin is None or origin["timing"] is None else json.loads(origin["timing"])
+    spans = [] if raw is None else raw.get("intervals", [])
+    first = spans[0] if spans else {}
+    start, identity = first.get("started_monotonic_ns"), first.get("owner")
+    if type(start) is not int or not isinstance(identity, dict):
+        result["unavailable_reason"] = "episode_origin_clock_unavailable"
+        return result
+    result.update(origin_decision_index=origin["call_index"], origin_monotonic_ns=start)
+    if owner is None or identity.get("boot_id") != owner["boot_id"] or now < start:
+        result["unavailable_reason"] = "episode_clock_not_comparable"
+        return result
+    result["elapsed_seconds"] = (now - start) / 1e9
+    if previous is not None:
+        reference = json.loads(previous["data"]).get("progress_time")
+        if (not isinstance(reference, dict) or reference.get("status") != "available"
+                or reference.get("version") != PROGRESS_TIME_VERSION
+                or reference.get("run_id") != journal.run_id or reference.get("episode_id") != episode_id
+                or reference.get("origin_monotonic_ns") != start
+                or reference.get("boot_id") != owner["boot_id"]):
+            result["unavailable_reason"] = "recorded_progress_clock_unavailable"
+            return result
+        reference_ns = reference.get("reference_observation_monotonic_ns")
+        if (type(reference_ns) is not int or not start < reference_ns <= now
+                or reference.get("reference_elapsed_seconds") != (reference_ns-start)/1e9):
+            result["unavailable_reason"] = "recorded_progress_reference_span_unavailable"
+            return result
+        result.update(reference_observation_monotonic_ns=reference["reference_observation_monotonic_ns"],
+            reference_elapsed_seconds=reference["reference_elapsed_seconds"])
+    elif original_decision_index is None:
+        result["unavailable_reason"] = "progress_reference_span_unobserved"
+        return result
+    elif now == start:
+        result["unavailable_reason"] = "progress_reference_span_has_zero_duration"
+        return result
+    else:
+        result.update(reference_observation_monotonic_ns=now,
+            reference_elapsed_seconds=result["elapsed_seconds"])
+    result.update(status="available", unavailable_reason=None)
+    return result
 
 
 def snapshot(record):

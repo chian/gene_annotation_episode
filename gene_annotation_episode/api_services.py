@@ -154,6 +154,7 @@ def publish_existing_acquisition(tools, name, arguments, snapshot, scope, operat
                     result={"source_ref": sources[0] if sources else None,
                             "retained_record_refs": retained},
                     feedback={"category": "partial_execution", "code": "api_result_partially_projected",
+                              "exception_type": type(error).__name__, "message": str(error),
                               "diagnostic_ref": tools.store.artifact(
                                   f"{type(error).__name__}: {error}", "text/plain")})
             outcome["changed_record_refs"] = list(outcome["record_refs"])

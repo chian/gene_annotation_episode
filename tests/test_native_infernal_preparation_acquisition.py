@@ -88,8 +88,7 @@ def sealed_case(tmp_path, monkeypatch, mode="merge_scores"):
     request = requested_job_from_infernal_preparation(job)
     identity["requested_job_sha256"] = digest(request)
     plan = {"version": PREFIX + "run_plan_v1", "identity": identity, "requested_job": request,
-        "attempt_directory": str(root), "policy": {"memory_bytes": 20 * 1024**3,
-        "scratch_bytes": 4 * 1024**3, "wall_seconds": None}}
+        "attempt_directory": str(root), "policy": {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}
     inputs, staged, contents = [], {}, {}
     for operand, (_, _, _, data) in zip(operands, originals):
         relative = acquisition._staged_relative(operand)

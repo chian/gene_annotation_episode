@@ -43,7 +43,7 @@ OUTPUT_MANIFEST_FILENAME = "homer-output-manifest.json"
 WORKER_MODULE = "gene_annotation_episode.native_homer_worker"
 ENVIRONMENT_SELECTION = {"version": "homer_execution_selection_v1",
     "environment_realization": "operation_scoped_tmp_and_cache_v1"}
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 INPUT_ROLES = ("target_bed", "reference_fasta", "background_bed")
 ROLES = ("known_results", "known_pwm", "denovo_pwm", "denovo_combined_pwm",
     "denovo_nonredundant_pwm", "sequence_table", "group_weights", "normalization_table", "native_log")

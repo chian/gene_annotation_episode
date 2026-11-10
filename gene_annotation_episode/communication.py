@@ -645,6 +645,16 @@ def _compile_closed_schema(schema):
                     != json.dumps(registered(), sort_keys=True, allow_nan=False)):
                 raise ReportBoundaryError(f"{path}: intervention grading fact schema must match its registered source", code="invalid_schema")
             return
+        if source in {'literature_source_lead_dispositions', 'literature_screening_answers'}:
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code='invalid_schema')
+            from .literature_task_credit import LEADS, lead_return_schema, screening_schema
+            expected = lead_return_schema() if source == LEADS else screening_schema()
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(expected, sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: literature task fact schema must match its registered source", code='invalid_schema')
+            return
         if source == "literature_assay_grading_cells":
             if depth != 1:
                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
@@ -655,6 +665,16 @@ def _compile_closed_schema(schema):
                     not in {json.dumps(item, sort_keys=True, allow_nan=False) for item in expected}):
                 raise ReportBoundaryError(f"{path}: assay grading fact schema must match its registered source", code="invalid_schema")
             return
+        if source in {'literature_a108_grading_cells', 'literature_a108_aggregation_cells'}:
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code='invalid_schema')
+            from .literature_a108_grading_storage import grading_cells_schema
+            from .literature_a108_aggregation_storage import aggregation_cells_schema
+            registered = grading_cells_schema if source == 'literature_a108_grading_cells' else aggregation_cells_schema
+            if (not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(registered(), sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: A108 numerical fact schema must match its registered source", code='invalid_schema')
+            return
         if source == 'literature_a105_aggregation_cells':
             if depth != 1:
                 raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code='invalid_schema')
@@ -662,14 +682,6 @@ def _compile_closed_schema(schema):
             if (not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False)
                     != json.dumps(aggregation_cells_schema(), sort_keys=True, allow_nan=False)):
                 raise ReportBoundaryError(f"{path}: A105 aggregation fact schema must match its registered source", code='invalid_schema')
-            return
-        if source == 'literature_a108_subscore_cells':
-            if depth != 1:
-                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code='invalid_schema')
-            from .literature_a108_subscore import cells_schema
-            if (not _schema_cacheable(node) or json.dumps(node, sort_keys=True, allow_nan=False)
-                    != json.dumps(cells_schema(), sort_keys=True, allow_nan=False)):
-                raise ReportBoundaryError(f"{path}: A108 subscore schema must match its registered source", code='invalid_schema')
             return
         if source == "literature_completion_time_cells":
             if depth != 1:
@@ -715,6 +727,15 @@ def _compile_closed_schema(schema):
                     or json.dumps(node, sort_keys=True, allow_nan=False)
                     != json.dumps(expected, sort_keys=True, allow_nan=False)):
                 raise ReportBoundaryError(f"{path}: overlap fact schema must match its registered source", code="invalid_schema")
+            return
+        if source == "literature_perturbation_operand_cells":
+            if depth != 1:
+                raise ReportBoundaryError(f"{path}: fact bindings apply to whole top-level fields", code="invalid_schema")
+            from .literature_perturbation_operands import cells_schema
+            if (not _schema_cacheable(node)
+                    or json.dumps(node, sort_keys=True, allow_nan=False)
+                    != json.dumps(cells_schema(), sort_keys=True, allow_nan=False)):
+                raise ReportBoundaryError(f"{path}: perturbation operand fact schema must match its registered source", code="invalid_schema")
             return
         if source == "literature_perturbation_summary_cells":
             if depth != 1:

@@ -43,9 +43,10 @@ def witness(ref, raw, quote, representation='original'):
             'end': start+len(token), 'quote': quote}
 
 
-def setup_case(path, *, primary=False, incomplete=False):
+def setup_case(path, *, primary=False, incomplete=False, target_sequence=None):
     store = Store(path)
-    store.create_problem(raw_sequence='ATGGCT', molecule='dna')
+    store.create_problem(raw_sequence='ATGGCT' if target_sequence is None else target_sequence,
+        molecule='dna' if target_sequence is None else 'protein')
     raw = ((BASE/'primary_csid/PMC6265302_original.xml').read_bytes() if primary else
         b'SyntheticProtein produces ProductA per ProductB in independent preparations. '
         b'Matched synthetic reaction and resource budget with declared usable supply.')

@@ -34,8 +34,7 @@ def _allocation(assignment, policy):
         type(assignment.get("resource_id")) is str and bool(assignment["resource_id"]),
         "original_attempt_mismatch")
     constraints = assignment.get("constraints")
-    _require(type(constraints) is dict and not set(constraints) - {
-        "allocation", "memory_bytes", "scratch_bytes", "wall_seconds"}, "original_attempt_mismatch")
+    _require(type(constraints) is dict and not set(constraints) - {'allocation', 'memory_bytes', 'scratch_bytes'}, "original_attempt_mismatch")
     _require("allocation" not in constraints or digest(constraints["allocation"]) == digest(policy),
         "original_attempt_mismatch")
     _require(all(key not in constraints or digest(constraints[key]) == digest(value)

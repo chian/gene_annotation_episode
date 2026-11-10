@@ -1210,7 +1210,7 @@ def validate_molecular_sequence_result_worker_plan(value):
         return validate_supplied_worker_plan(value)
     closed(value, ("version", "directory", "selector", "source_files", "inputs", "association", "received_sheet_receipt_file", "software", "selected_environment", "policy"))
     require(value["version"] == PLAN_VERSION and type(value["directory"]) is str and value["directory"].startswith("/"))
-    require(value["policy"] == {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None})
+    require(value["policy"] == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296})
     from .molecular_sequence_execution_contracts import _software, absolute_path, environment
     absolute_path(value["directory"])
     environment(value["selected_environment"])
@@ -1672,11 +1672,9 @@ def supplied_execution_constraints(value):
     from .molecular_sequence_execution_contracts import environment
     value = copy_json(value)
     closed(value, ("policy", "environment"))
-    policy = value["policy"]; closed(policy, ("memory_bytes", "scratch_bytes", "wall_seconds"))
+    policy = value["policy"]; closed(policy, ('memory_bytes', 'scratch_bytes'))
     require(type(policy["memory_bytes"]) is int and 0 < policy["memory_bytes"] <= 21474836480
         and type(policy["scratch_bytes"]) is int and 0 < policy["scratch_bytes"] <= 4294967296)
-    wall = policy["wall_seconds"]
-    require(wall is None or type(wall) in (int, float) and math.isfinite(wall) and wall > 0)
     environment(value["environment"])
     return value
 
@@ -1850,7 +1848,7 @@ ORDINARY_ORF_PUBLIC_VERSION = "ordinary_orf_values_v1"
 ORDINARY_ORF_SOURCE_VERSION = "ordinary_orf_result_v1"
 ORDINARY_ORF_FACT_SOURCE = "orf_measurements"
 ORDINARY_ORF_PACKET_FORMAT = "ordinary_orf_values_packet_v1"
-ORDINARY_ORF_POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+ORDINARY_ORF_POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 ORDINARY_ORF_SAVED_INTENT_VERSION = "molecular_sequence_ordinary_saved_intent_v1"
 ORDINARY_ORF_SAVED_CUSTODY_VERSION = "ordinary_orf_saved_publication_v1"
 ORDINARY_ORF_CALCULATOR = "orf_measurements.calculate_orf_components"

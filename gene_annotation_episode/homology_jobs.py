@@ -55,7 +55,7 @@ STATUS_SCHEMA = _object({'job_ref': _reference('homology_job'), 'registry_ref': 
     'duration_measure': {'type': 'string', 'enum': ['systemd_service_wall_seconds']},
     'native_returncode': {'type': ['integer', 'null']},
     'failure_code': {'type': ['string', 'null'], 'enum': [None, 'native_nonzero_exit', 'local_job_resource_limit', 'local_job_execution_error']},
-    'resource': {'type': ['string', 'null'], 'enum': [None, 'memory_bytes', 'scratch_bytes', 'file_bytes', 'wall_seconds']},
+    'resource': {'type': ['string', 'null'], 'enum': [None, 'memory_bytes', 'scratch_bytes', 'file_bytes']},
     'progress_kind': {'type': 'string', 'enum': ['native_execution_state_and_output_bytes_not_search_fraction']},
     'outputs': {'type': 'array', 'items': _object({
         'role': {'type': 'string', 'enum': list(OUTPUTS)}, 'available': {'type': 'boolean'},

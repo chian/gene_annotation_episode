@@ -32,11 +32,11 @@ def test_different_targets_do_not_manufacture_cross_axis_interaction(tmp_path, m
                     'a101_sheet': {'targets': {target: {'profile': []}}}}
         monkeypatch.setattr('gene_annotation_episode.evidence_root._projector', Projector)
         view = NativeEvidenceRootCredit()(store, {'subject_refs': [first, second]}, known_record_refs=[])
-        assert view['axis_components'] == pytest.approx({'A101': 1/3, 'A102': 2/3, 'A103': 0})
+        assert view['axis_components'] == pytest.approx({'A101': 1/3, 'A102': 2/3, 'A103': 0, 'A104': 0})
         assert view['credit'] == 1
         assert view['volume_components']['interaction'] == 0
 
 
 def test_unbound_axes_are_explicit_and_cannot_masquerade_as_zero_measurements():
     with pytest.raises(ValueError, match='axis_scorer_not_bound'):
-        NativeEvidenceRootCredit(('A101', 'A104'))
+        NativeEvidenceRootCredit(('A101', 'A105'))

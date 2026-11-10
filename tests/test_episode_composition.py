@@ -35,6 +35,41 @@ def forbidden(*args, **kwargs):
     raise AssertionError('composition must not execute work')
 
 
+def test_one_literature_owner_selects_native_axis_capabilities_and_reconstructs(resources, monkeypatch):
+    owner = LiteratureEpisodes(resources.services, axis_scoped_profiles=True)
+    saved = owner.as_record()
+    reopened = compose(resources, [saved]).bindings[0]
+    assert type(reopened) is LiteratureEpisodes
+    assert reopened.as_record() == saved
+    a105, a108 = object(), object()
+    monkeypatch.setattr(reopened, '_assay_grading_repository', lambda: a105)
+    monkeypatch.setattr(reopened, '_a108_grading_repository', lambda: a108)
+    for axis, enabled in [('A105', 'assay_grading_population'),
+                          ('A106', 'a106_intervention'), ('A108', 'a108_context_evidence')]:
+        context = SimpleNamespace(role='scientific_process',
+            assignment={'selection': {'evidence_axis': {'option_id': axis}}})
+        for option in ('assay_grading_population', 'a106_intervention', 'a108_context_evidence'):
+            assert reopened._enabled(option, context) is (option == enabled)
+        grading = reopened._required_grading_repository(context)
+        assert grading is {'A105': a105, 'A106': None, 'A108': a108}[axis]
+        from method_loop.identities import EpisodeRef
+        import json
+        path = (('annotation', 'root'), ('scientific_process', axis))
+        resources.journal.save('runtime_episodes', {
+            'episode_id': EpisodeRef(resources.journal.run_id, path).episode_id,
+            'path': json.dumps(path), 'request': json.dumps({'message': {'episode_assignment':
+                context.assignment}}), 'initial_credit': 0., 'state': 'active'})
+        descendant = SimpleNamespace(role='literature', run_id=resources.journal.run_id,
+            path=(*path, ('literature', 'read')), assignment={})
+        assert reopened._required_grading_repository(descendant) is grading
+        assert ('wait' in reopened.permitted_common_actions(descendant)) is (axis == 'A106')
+        schema = reopened.child_assignment_schema(context, 'literature')
+        from gene_annotation_episode.literature_a105_aggregation_storage import REQUESTED as A105_REQUESTED
+        from gene_annotation_episode.literature_a106_subscore import REQUESTED as A106_REQUESTED
+        assert (A105_REQUESTED in schema['properties']) is (axis == 'A105')
+        assert (A106_REQUESTED in schema['properties']) is (axis == 'A106')
+
+
 @pytest.fixture
 def resources(tmp_path):
     with Store(tmp_path / 'workspace') as store:

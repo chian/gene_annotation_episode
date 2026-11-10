@@ -136,7 +136,7 @@ def test_selected_native_fit_and_independent_numbers_reach_requested_receiver(co
     native_execution = json.loads((case.directory / 'native-lifecycle.json').read_text())
     assert native_execution['returncode'] == 0
     assert native_execution['metadata']['verified_cgroup'] == {'memory_max': 21474836480,
-        'memory_swap_max': 0, 'runtime_max': 'infinity', 'kill_mode': 'control-group', 'oom_policy': 'kill'}
+        'memory_swap_max': 0, 'kill_mode': 'control-group', 'oom_policy': 'kill'}
     assert case.job['parameters'] == {'rank': 2, 'random_state': 42, 'normalization': 'none', 'tol': .0001, 'max_iter': 1000}
     assert len(case.provider.native_bytes) == 5
     manifest = json.loads(case.provider.native_bytes['manifest'])
@@ -229,7 +229,7 @@ def test_saved_sheet_alone_preserves_authority_and_has_zero_new_acquisition(conn
         execution = json.loads((Path(row['directory']) / 'execution.json').read_bytes())
         assert execution['terminal'] and execution['quiescent'] and execution['returncode'] == 0
         assert execution['metadata']['verified_cgroup'] == {'memory_max': 21474836480,
-            'memory_swap_max': 0, 'runtime_max': 'infinity', 'kill_mode': 'control-group', 'oom_policy': 'kill'}
+            'memory_swap_max': 0, 'kill_mode': 'control-group', 'oom_policy': 'kill'}
         assert execution['intent']['source_pins'] and execution['intent']['runtime_files']
         assert execution['intent']['interpreter'] and execution['intent']['dependencies']
 

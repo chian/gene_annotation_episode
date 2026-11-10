@@ -42,7 +42,7 @@ from .domain import identity as record_identity
 VERSION = "molecular_sequence_result_receipt_v1"
 PUBLIC_VERSION = "molecular_sequence_public_result_v1"
 PREFIX = "molecular_sequence_received_report_prefix"
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 
 
 def _json(raw):

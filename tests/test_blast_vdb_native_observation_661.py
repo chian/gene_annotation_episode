@@ -219,10 +219,10 @@ def test_selected_native_observation():
     assert str(attempt) == selection['attempt_path']
     handle = json.loads((attempt / 'handle.json').read_text())
     assert handle['stage'] == 'released'
-    assert handle['metadata']['policy'] == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'wall_seconds': None}
+    assert handle['metadata']['policy'] == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
     assert handle['metadata']['verified_cgroup']['memory_max'] == 21474836480
     assert handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
-    assert handle['metadata']['verified_cgroup']['runtime_max'] == 'infinity'
+    assert 'runtime_max' not in handle['metadata']['verified_cgroup']
     registered = json.loads((attempt / 'native_library_pins_before.json').read_text())
     registered_by_path = {row['path']: row for row in registered}
     before = selection['runtime_pins'] + selection['selected_inputs']

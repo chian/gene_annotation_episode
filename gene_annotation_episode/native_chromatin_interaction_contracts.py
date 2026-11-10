@@ -21,7 +21,7 @@ OWNER_FILENAME = ".native-chromatin-owner.json"
 STARTED_FILENAME = ".native-chromatin-started.json"
 DRIVER_MODULE = "gene_annotation_episode.native_chromatin_interaction_driver"
 HIC_READER_MODULE = "gene_annotation_episode.chromatin_hic_inputs"
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 TABLE_ROLES = ("bins", "contacts", "weights", "cell_states", "dense_values")
 TABLE_NAMES = ("bins.tsv", "contacts.npy", "weights.npy", "cell-states.npy", "dense-values.npy")
 REQUIRED_DEPENDENCIES = {"numpy", "h5py", "jsonschema", "attrs", "referencing", "rpds-py", "jsonschema-specifications"}
@@ -216,9 +216,11 @@ def validate_chromatin_run_plan(value):
     identity = value["identity"]
     execution = path_value(identity["execution_id"], absolute=True)
     attempt = path_value(value["attempt_directory"], absolute=True)
-    require(execution.name == "native.json" and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME)
+    from .terminal_scientific_evidence import terminal_plan_identity
+    current = terminal_plan_identity(identity, attempt_directory=str(attempt))
+    require((current or execution.name == "native.json") and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME)
     require(identity["attempt_id"] == digest(identity["operation_key"]) and identity["requested_job_sha256"] == digest(requested))
-    require(execution.parent.name == identity["attempt_id"] and execution.parent.parent.name ==
+    require(current or execution.parent.name == identity["attempt_id"] and execution.parent.parent.name ==
         digest({"run": identity["run_id"], "episode": identity["episode_id"]}) and
         execution.parent.parent.parent.name == ".episode-operations")
     require(value["policy"] == POLICY and type(value["policy"]["memory_bytes"]) is int

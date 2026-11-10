@@ -3,8 +3,19 @@ import asyncio
 from datetime import datetime, timedelta, timezone
 import json
 
+import pytest
+
 from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.state import Store
+from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider, fixture_credit, setup
+
+
+@pytest.fixture
+def received_wait_state(tmp_path):
+    with Store(tmp_path / 'state') as store:
+        store.create_problem(raw_sequence='MKWAA', molecule='protein')
+        yield store, ToolRegistry(store)
 
 
 def test_selected_time_wait_is_one_zero_gain_observation_and_replays_without_waiting(tmp_path):
@@ -36,8 +47,8 @@ def test_selected_time_wait_is_one_zero_gain_observation_and_replays_without_wai
     assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 1
 
 
-def test_proposed_wait_uses_own_completed_history_before_the_episode_selects_waiting(tmp_path):
-    store, tools = setup(tmp_path)
+def test_proposed_wait_uses_own_completed_history_before_the_episode_selects_waiting(tmp_path, received_wait_state):
+    store, tools = received_wait_state
     condition = {'version': 'event_condition_v1', 'events': [],
                  'reconsider_at': '2026-01-01T00:00:00+00:00'}
 
@@ -62,7 +73,8 @@ def test_proposed_wait_uses_own_completed_history_before_the_episode_selects_wai
         return controller
 
     summary = asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path / 'run',
-        controller_factory=factory, project_credit=fixture_credit))
+        controller_factory=factory, project_credit=lambda *_args, **_kwargs: 0,
+        episode_record_receipts=True, initial_known_record_refs=[]))
     assert summary['completed_actions'] == 2 and controllers[0].scores == [0, 0]
     assert store.db.execute('SELECT count(*) FROM episode_waits').fetchone()[0] == 1
     saved = json.loads(store.db.execute('SELECT data FROM runtime_estimation_contexts '

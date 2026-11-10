@@ -25,11 +25,7 @@ def _attempt():
     request = json.loads((path / "selected_request.json").read_text())
     if len(request["tests"]) != 1 or "test_flux_balance_native_contract_677.py::" not in request["tests"][0]:
         pytest.skip("Select one specific 677 verification function; no implicit downloads or solve")
-    assert request["policy"] == {
-        "memory_bytes": 21474836480,
-        "scratch_bytes": 4294967296,
-        "wall_seconds": None,
-    }
+    assert request["policy"] == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
     assert request["swap_bytes"] == 0
     return path
 

@@ -16,14 +16,22 @@ from .expression_nmf_result_contracts import validate_expression_nmf_native_capt
 
 
 def capture_expression_nmf_native_files(store, *, original_plan, source_action_receipt_ref,
-        writer_closure_receipt_ref, driver_started):
+        writer_closure_receipt_ref, driver_started, terminal_snapshots=None):
     plan = validate_expression_nmf_run_plan(original_plan)
     rows, failures = [], []
     for specification in plan['outputs']:
         row = {**specification, 'retained': None}
         try:
-            file = capture_native_file(store, directory=plan['attempt_directory'],
-                relative_path=row['relative_path'], format=row['format'])
+            if terminal_snapshots is None:
+                file = capture_native_file(store, directory=plan['attempt_directory'],
+                    relative_path=row['relative_path'], format=row['format'])
+            else:
+                from .terminal_scientific_evidence import captured_terminal_file
+                path = str(Path(plan['attempt_directory']) / row['relative_path'])
+                snapshots = [value for value in terminal_snapshots if value['path'] == path]
+                if len(snapshots) != 1 or not snapshots[0]['available']:
+                    raise NativeFileCaptureError('capture_file_unavailable')
+                file = captured_terminal_file(store, snapshots[0], row['format'])
             row['retained'] = {'file': file, 'path': str(retained_native_file(store, file))}
         except NativeFileCaptureError as error:
             if error.code != 'capture_file_unavailable':

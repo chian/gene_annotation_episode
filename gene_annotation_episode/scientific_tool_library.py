@@ -96,6 +96,8 @@ def _tool_information(catalog, resource_catalogs):
         information.append(({'name': key[0], 'description': profile.get('description'),
             'resources': key[1], 'instructions': profile['instructions']}
             if 'instructions' in profile else make_tool_info(profile, key[1])))
+        from .execution_guidance import recipe
+        information[-1]['instructions'] += '\n\n' + recipe(*key)
     return (tool_info_selection(information),
             [{'name': key[0], 'resources': key[1], 'contract': profiles[key]} for key in ordered])
 
@@ -239,6 +241,7 @@ class ScientificToolLibrary:
         from .tool_information import comparable_contract
         return (comparable_contract(entry) == comparable_contract(self._resource_contracts[key])
             and ('instructions' not in entry
+                 or entry['instructions'] == self._resource_contracts[key].get('instructions')
                  or entry['instructions'] == self._information[key]['instructions']))
 
     def parent_tool_info(self, available_catalog=None):

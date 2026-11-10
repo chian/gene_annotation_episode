@@ -175,7 +175,8 @@ class NativeAtacDifferentialResults:
                 original_plan=receipt["native"]["original_plan"],
                 source_action_receipt_ref=receipt["source_action_file"]["artifact_ref"],
                 writer_closure_receipt_ref=receipt["writer_closure_file"]["artifact_ref"],
-                driver_started=receipt["native"]["driver_started"])
+                driver_started=receipt["native"]["driver_started"],
+                command_proof=receipt["native"].get("command_proof"))
             immutable(action.directory / "capture.json", captured)
         receipt["capture"] = captured
         plan = build_native_atac_worker_plan(directory=str(action.directory / "worker"),

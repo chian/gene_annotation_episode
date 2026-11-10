@@ -14,20 +14,19 @@ The only workflow file allowed in Aurora home is the small directory index
 output, caches, temporary files or backups in home.
 
 The caller's `workspace` and `account` are independent configuration fields.
-The practical assignment supplies its own `workspace` within the configured
-workspace. Selected file operations and persistent `cwd` must remain within
-that assignment workspace. Configure both fields explicitly to satisfy the
+The assignment supplies its own `workspace` within the configured workspace.
+Selected commands, scripts and files must remain within that assignment
+workspace. Configure both fields explicitly to satisfy the
 requirements above; do not silently change a conflicting account or workspace.
 
-PBS submission uses `configuration.account`; assignment `constraints.account`
-or `constraints.allowed_accounts`, when supplied, must agree. Selected `queue`
-and `resources` are separately checked against the assignment's corresponding
-constraints and `allocation`. A storage location does not select an account,
+PBS submission uses `configuration.account`; assigned account and allowed
+account constraints, when supplied, must agree. Choose queue and resources
+within the assignment's corresponding constraints and allocation. A storage location does not select an account,
 and an account does not change the workspace. A conflict remains explicit
 feedback rather than an implicit configuration change.
 
-The initial and working contexts retain explicit `cwd` and `environment`.
-Preparation commands do not replace the requested job's original environment.
+Use explicit working directories and environments for the commands you select.
+Preparation commands do not replace the scientific job's required environment.
 Keep chosen working, temporary, cache and output paths consistent with the
 actual assignment and operation contracts. If module loading changes cache or
 user-base variables, restore their project locations before an operation writes.

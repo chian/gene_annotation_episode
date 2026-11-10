@@ -17,6 +17,7 @@ from .composition_information import CONTRACT_INFORMATION_PROFILE, is_contract_i
 from .schema_information_text import render_schema_information
 from .literature_numerical_return_presentation import state_view
 from .literature_task_selection import A105_ASSAY_SELECTION_TASK, selected_literature_task_sections
+from .literature_a108_prompt import A108_CONTEXT_TASK, A108_PARENT_TASK
 
 
 VERSION = "reference_evidence_parent_v1"
@@ -63,41 +64,20 @@ def _text_or_values(value):
 def _task(state, instructions, descriptor, *, selected_sections=None):
     normalized = text_instructions(instructions)
     parent_task, axis_task = REFERENCE_PARENT_TASK, A105_ASSAY_SELECTION_TASK
-    if descriptor.get("evidence_axis") == "A108":
-        from .literature_context_prompt import A108_INVESTIGATION_TASK, CONTEXT_TASK
-        from .literature_a108_subscore import TASK as SUBSCORE_TASK
-        parent_task = ("Investigate the assigned A108 organism/sample compatibility question. "
-            "Your own catalog supplies parent reasoning and commissioning operations. Commission "
-            "a literature child with the supplied material, legitimate context, scientific question "
-            "and requested literature_a108_subscore_cells. The child owns its searches, source "
-            "interpretation, context assessment and final subscore publication. Consume its actual "
-            "typed result, assess the conclusion and limitations, and preserve the exact assertion, "
-            "question and biological scope. A108 capability and sample coverage are different "
-            "questions. Preserve the caller's requested question when its required observations "
-            "are missing; those missing observations qualify the answer. Carry the supplied context "
-            "sources into the child assignment. When the task input is only partly visible, let the "
-            "child read its complete source before fixing an interpretation. Neither question is a "
-            "probability that the annotation is correct. Preserve bounds "
-            "and unavailable point values. For unfinished or failed child work, carry forward the "
-            "exact received subject, assertion, question kind and scope together with retained "
-            "assessment/publication sources through the commission. Failure feedback's "
-            "partial_record_refs are addresses for retained work that a recovery child can "
-            "select through its existing reading operations. They preserve recovery options; "
-            "their contents still require interpretation and typed delivery. When that question is only "
-            "present in retained records, ask the child to recover it before extending the "
-            "assessment. Distinguish completing its numerical delivery from proposing a different "
-            "biological question. Relate any changed scope explicitly to the previous result when "
-            "interpreting the return. The child tools described below are available through "
-            "the commissioned literature investigation.")
-        axis_task = "\n\n".join((A108_INVESTIGATION_TASK, CONTEXT_TASK, SUBSCORE_TASK))
+    if descriptor.get('evidence_axis') == 'A108':
+        parent_task, axis_task = A108_PARENT_TASK, A108_CONTEXT_TASK
+    elif descriptor.get('evidence_axis') == 'A106':
+        from .literature_perturbation_prompt import A106_PARENT_TASK
+        parent_task = REFERENCE_PARENT_TASK.replace('A105', 'A106')
+        axis_task = A106_PARENT_TASK
     parts = ["TASK", "", parent_task, "", axis_task,
              "", SAVED_NUMERICAL_RETURN_TASK]
     sections = selected_literature_task_sections(state) if selected_sections is None else selected_sections
     for aspect, task in sections:
         if task not in normalized:
             _section(parts, "Selected scientific instructions: " + aspect.removeprefix('literature_').removesuffix('_cells').replace('_', ' '), task)
-    additional = (normalized.replace(REFERENCE_PARENT_TASK, "")
-        .replace(A105_ASSAY_SELECTION_TASK, "").replace(SAVED_NUMERICAL_RETURN_TASK, "").strip())
+    additional = (normalized.replace(parent_task, "")
+        .replace(axis_task, "").replace(SAVED_NUMERICAL_RETURN_TASK, "").strip())
     if additional:
         parts.extend(["", additional])
     profile = state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE
@@ -113,6 +93,9 @@ def _task(state, instructions, descriptor, *, selected_sections=None):
     _section(parts, "Assigned scientific scope", _values(state.get("scope", {})))
     if descriptor['source_refs']:
         _section(parts, "Caller-selected source assignment", _values({"source_refs": descriptor["source_refs"]}))
+    elif descriptor.get('evidence_axis') == 'A108':
+        _section(parts, 'Organism-context source discovery',
+            'The caller supplied target material and no contextual source. Use a literature investigation to establish candidate functional hypotheses and organism/context from the supplied material, then discover relevant organism physiology, environment, availability or localization sources. Preserve uncertainty in the sequence-to-organism and sample correspondence.')
     else:
         _section(parts, 'Experimental source discovery',
             'The caller supplied target material and no experimental source. Discover relevant publications using the target material below. Target sequence sources are query material; assign acquired publications as experimental sources once available.')
@@ -193,7 +176,9 @@ def render_reference_evidence_parent_prompt(state, instructions, *, lookup_resul
     # The shared mechanical renderer selects own outcomes, received records and
     # admitted forms. Do not seed it with a child's assignment or task/history.
     steering_fields = ("action_yields", "controller", "working_state", "last_local_outcome",
-        "feedback", "current_report_update", "child_reports", "pending_work", "current_report_basis_refs",
+        "literature_completed_work", "literature_current_scoring_sheets", "completed_action_reports",
+        "feedback", "current_report_update", "requested_form", "child_reports", "pending_work", "waiting_support", "current_report_basis_refs",
+        "shared_information_context",
         "literature_ratio_source_return_meanings", "literature_controlled_response_return_bindings",
         "literature_gel_return_bindings", "literature_gel_return_records", "literature_rate_source_display",
         "literature_received_fact_display", "literature_rate_source_domain_display",
@@ -201,8 +186,10 @@ def render_reference_evidence_parent_prompt(state, instructions, *, lookup_resul
     steering_state = {name: state[name] for name in steering_fields if name in state}
     if state.get('contract_information_profile') == CONTRACT_INFORMATION_PROFILE:
         return _requested_contract_task(_task(state, instructions, descriptor, selected_sections=sections), lookup_results) + '\n\n' + _steering(
-            steering_state, [row for row in lookup_results if not is_contract_information(row)])
-    return _task(state, instructions, descriptor, selected_sections=sections) + "\n\n" + _steering(steering_state, lookup_results)
+            steering_state, [row for row in lookup_results if not is_contract_information(row)],
+            evidence_axis=descriptor.get('evidence_axis'))
+    return _task(state, instructions, descriptor, selected_sections=sections) + "\n\n" + _steering(
+        steering_state, lookup_results, evidence_axis=descriptor.get('evidence_axis'))
 
 
 __all__ = ["VERSION", "REFERENCE_PARENT_TASK", "render_reference_evidence_parent_prompt"]

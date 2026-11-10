@@ -20,6 +20,17 @@ def _digest(value):
     return hashlib.sha256(canonical(value).encode("utf-8")).hexdigest()
 
 
+def decode_credit(value):
+    """Scalar REAL or the explicitly serialized collection in an ANY column."""
+    return json.loads(value) if isinstance(value, str) else value
+
+
+def encode_credit(value):
+    from .numerical import validate_task_credit
+    validated = validate_task_credit(value)
+    return canonical(validated) if isinstance(validated, dict) else validated
+
+
 class Journal:
     """Durable local runtime state in the same database as biological records."""
 
@@ -31,7 +42,7 @@ class Journal:
           summary TEXT, started_at TEXT NOT NULL, updated_at TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS runtime_episodes (
           run_id TEXT NOT NULL, episode_id TEXT NOT NULL, path TEXT NOT NULL,
-          request TEXT NOT NULL, initial_credit REAL NOT NULL, state TEXT NOT NULL,
+          request TEXT NOT NULL, initial_credit ANY NOT NULL, state TEXT NOT NULL,
           completion TEXT, archive TEXT, PRIMARY KEY(run_id,episode_id));
         CREATE TABLE IF NOT EXISTS runtime_model_calls (
           run_id TEXT NOT NULL, episode_id TEXT NOT NULL, call_index INTEGER NOT NULL,
@@ -39,7 +50,7 @@ class Journal:
           PRIMARY KEY(run_id,episode_id,call_index));
         CREATE TABLE IF NOT EXISTS runtime_actions (
           run_id TEXT NOT NULL, episode_id TEXT NOT NULL, decision_index INTEGER NOT NULL,
-          action TEXT NOT NULL, result TEXT, credit REAL, timing TEXT,
+          action TEXT NOT NULL, result TEXT, credit ANY, timing TEXT,
           PRIMARY KEY(run_id,episode_id,decision_index));
         CREATE TABLE IF NOT EXISTS runtime_observations (
           run_id TEXT NOT NULL, episode_id TEXT NOT NULL, unit_index INTEGER NOT NULL,
@@ -66,6 +77,20 @@ class Journal:
             for statement in schema.split(";"):
                 if statement.strip():
                     self.db.execute(statement)
+            # Declare the native scalar-or-collection storage type explicitly.
+            # Existing scalar values retain their SQLite numeric type and all
+            # original action identities. No replacement score is introduced.
+            for table, column in (('runtime_episodes', 'initial_credit'), ('runtime_actions', 'credit')):
+                columns = list(self.db.execute('PRAGMA table_info(' + table + ')'))
+                if next(row[2] for row in columns if row[1] == column) == 'REAL':
+                    declaration = next(statement.strip() for statement in schema.split(';')
+                        if 'CREATE TABLE IF NOT EXISTS ' + table + ' (' in statement)
+                    temporary = table + '_credit_migration'
+                    self.db.execute(declaration.replace('IF NOT EXISTS ' + table, temporary))
+                    names = ','.join(row[1] for row in columns)
+                    self.db.execute(f'INSERT INTO {temporary} ({names}) SELECT {names} FROM {table}')
+                    self.db.execute('DROP TABLE ' + table)
+                    self.db.execute(f'ALTER TABLE {temporary} RENAME TO {table}')
             if 'timing_receipts' not in {row[1] for row in self.db.execute('PRAGMA table_info(runtime_report_attempts)')}:
                 self.db.execute('ALTER TABLE runtime_report_attempts ADD COLUMN timing_receipts TEXT')
             if 'report_contract_declaration' not in {row[1] for row in self.db.execute('PRAGMA table_info(runtime_report_attempts)')}:
@@ -80,10 +105,19 @@ class Journal:
                     "runtime_observations": "unit_index"}[table]
             keys.append(name + "=?"); args.append(index)
         row = self.db.execute(f"SELECT * FROM {table} WHERE " + " AND ".join(keys), args).fetchone()
-        return None if row is None else dict(row)
+        if row is None:
+            return None
+        result = dict(row)
+        for name in ('initial_credit', 'credit'):
+            if name in result:
+                result[name] = decode_credit(result[name])
+        return result
 
     def save(self, table, values):
         values = {"run_id": self.run_id, **values}
+        for name in ('initial_credit', 'credit'):
+            if name in values and values[name] is not None:
+                values[name] = encode_credit(values[name])
         if table=='runtime_model_calls' and values.get('request') is not None:
             values['request']=self.pack_request(values['request'])
         columns = list(values)

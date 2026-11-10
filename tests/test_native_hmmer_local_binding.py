@@ -38,7 +38,7 @@ from gene_annotation_episode.tools import ToolRegistry
 
 ROOT = Path(__file__).resolve().parents[1]
 PRODUCER = ROOT / 'verification/tool_graders_native_hmmer_producer_2026-10-24/runs'
-POLICY = {'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 LABELS = ('hmmscan_search_ordinary', 'hmmsearch_search_ordinary', 'jackhmmer_search_ordinary',
           'nhmmer_sequence_ordinary', 'nhmmer_profile_ordinary', 'nhmmer_alignment_ordinary',
           'nhmmscan_search_ordinary', 'hmmalign_align_ordinary')
@@ -222,7 +222,7 @@ def test_real_native_start_seals_original_inputs_and_outputs_and_replays_once(ho
     assert body['metadata']['policy'] == POLICY
     assert body['metadata']['verified_cgroup']['memory_max'] == POLICY['memory_bytes']
     assert body['metadata']['verified_cgroup']['memory_swap_max'] == 0
-    assert body['metadata']['verified_cgroup']['runtime_max'] == 'infinity'
+    assert 'runtime_max' not in body['metadata']['verified_cgroup']
     assert body['command'][1:3] == ['-m', 'gene_annotation_episode.native_hmmer_driver']
     assert bundle['requested_job'] == request_value
     assert bundle['identity'] == origin.plan['identity']

@@ -196,7 +196,7 @@ def test_parent_task_already_in_instructions_is_not_repeated_and_protocol_surviv
     lambda value:value.pop('reference_evidence_parent'),
     lambda value:value['literature_experimental_work'].update(aspect='source_rate_comparison'),
     lambda value:value['reference_evidence_parent'].update(version='unrecognized'),
-    lambda value:value['reference_evidence_parent'].update(source_refs=[]),
+    lambda value:value['reference_evidence_parent'].update(source_refs=None),
     lambda value:value['reference_evidence_parent'].update(source_refs=['source_assigned','source_assigned']),
 ])
 def test_parent_rendering_requires_explicit_valid_caller_context(change):
@@ -204,3 +204,12 @@ def test_parent_rendering_requires_explicit_valid_caller_context(change):
     change(value)
     with pytest.raises(ValueError):
         render(value)
+
+
+def test_empty_source_assignment_requests_discovery_from_supplied_material():
+    value = state()
+    value['reference_evidence_parent']['source_refs'] = []
+    task, _ = split(render(value))
+    assert 'Experimental source discovery' in task
+    assert 'no experimental source' in task
+    assert 'supplied protein snippet' in task

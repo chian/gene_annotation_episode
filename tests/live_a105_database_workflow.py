@@ -11,7 +11,35 @@ import os
 from pathlib import Path
 import shutil
 import sys
+import tomllib
 import traceback
+
+
+def build_literature_controller(cost):
+    """Apply the caller's A105 calibration to the measured literature role."""
+    from gene_annotation_episode.numerical import YieldController, YieldParameters, provenance
+    from gene_annotation_episode.providers import default_config_path
+    from gene_annotation_episode.runtime import controller_from_settings
+
+    control = tomllib.loads(default_config_path().read_text())['controller']
+    parameters = YieldParameters(**{key: value for key, value in control.items() if key != 'cost'})
+    YieldController('configuration', 0, cost, parameters)
+    baseline = controller_from_settings({'controller': control})
+
+    def controller(path, initial_credit):
+        original = baseline(path, initial_credit)
+        if path[-1][0] == 'literature':
+            return YieldController(original.epoch, initial_credit, cost, original.settings)
+        return original
+
+    definition = {
+        'version': 'existing_yield_controller_explicit_role_costs_v2',
+        'cost': control['cost'], 'cost_by_role': {'literature': cost},
+        'parameters': parameters.as_record(), 'estimator': provenance(),
+        'continuation': 'available_next_gain_upper_bound_lte_cost',
+        'cost_selection': 'exact_episode_role_override_otherwise_caller_cost',
+    }
+    return controller, definition
 
 
 def main():
@@ -20,6 +48,8 @@ def main():
     parser.add_argument('--run-dir', required=True, type=Path)
     parser.add_argument('--source-root', type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument('--resume', action='store_true')
+    parser.add_argument('--literature-continuation-cost', type=float, default=0.075,
+                        help='Yield-based continuation cost for the A105 literature episode, in its existing credit units.')
     parser.add_argument('--database-focus', choices=('sabiork', 'brenda', 'bioassay', 'chembl', 'mavedb'),
                         help='Commission a full A105 investigation centered on this source and its publications.')
     args = parser.parse_args()
@@ -37,6 +67,7 @@ def main():
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.tool_configuration import build_tools
     from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE
+    controller, controller_definition = build_literature_controller(args.literature_continuation_cost)
 
     goal = (
         'Investigate A105 direct experimental evidence of molecular function for the supplied protein sequence. '
@@ -78,7 +109,7 @@ def main():
                 (run / 'launch.json').write_text(json.dumps({
                     'goal': goal, 'input_mode': 'raw_sequence_only',
                     'sequence_length': len(sequence), 'literature_flags': flags,
-                    'models': 'repository defaults', 'controller': 'repository default YieldController',
+                    'models': 'repository defaults', 'controller': controller_definition,
                     'annotation_child_roles': ['literature'], 'preloaded_evidence': [],
                     'scripted_model_decisions': False, 'targeted_tests': False,
                     'database_focus': args.database_focus,
@@ -86,6 +117,8 @@ def main():
             result = await run_workflow(store, build_tools(store, config),
                 run_dir=run / 'workflow', resume=args.resume, goal=goal,
                 episode_binding_factories=(partial(LiteratureEpisodes, **flags),),
+                controller_factory=controller,
+                binding_definitions={'controller': controller_definition},
                 initial_known_record_refs=[store.targets()[0]['source_ref']],
                 annotation_child_roles=('literature',))
             (run / 'result.json').write_text(json.dumps(result, indent=2) + '\n')

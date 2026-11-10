@@ -185,8 +185,7 @@ def initialize_case(tmp_path, monkeypatch, *, invented=False, wired=False):
         parameters['services'].update(version='assembled_case_services_v2',
             log_roles=['stdout', 'stderr'],
             execution_resources={'here': {'kind': 'local', 'workspace': str(tmp_path/'project'),
-                'policy': {'memory_bytes': 128*1024**2, 'scratch_bytes': 8*1024**2,
-                           'wall_seconds': None}}, 'ebi': {'kind': 'hmmer_api'}},
+                'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}, 'ebi': {'kind': 'hmmer_api'}},
             initial_execution_information={})
     parameters['policy']['operational']['registry_ref'] = manifest['registry_configuration']['registry_ref']
     if invented:

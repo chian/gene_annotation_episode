@@ -78,7 +78,8 @@ for ordinal, (query, sequence) in enumerate(queries):
     sys.stdout.write("\\t".join(fields)+"\\n")
     if MODE == "resource_after_row" and ordinal == 0:
         sys.stdout.flush()
-        while True:
+        for i in range(8):
+            Path('resource-test-'+str(i)).write_bytes(b'x' * 512000)
             time.sleep(.05)
 sys.stderr.write("synthetic mapper emitted controlled PAF records\\n")
 ''')
@@ -92,7 +93,8 @@ def setup_synthetic_process_case(tmp_path, mode, *, job_limits=None):
     store = Store(tmp_path/"state")
     store.create_problem(reads, molecule="dna")
     target, = store.targets()
-    tools = ToolRegistry(store, minimap2_executable=synthetic_executable(tmp_path, mode), job_limits=job_limits)
+    tools = ToolRegistry(store, minimap2_executable=synthetic_executable(tmp_path, mode),
+        job_limits=job_limits or {'memory_bytes': 256*1024**2, 'scratch_bytes': 2*1024**2})
     material = store.register_material(data=">synthetic_reference\nACGT\n", format="fasta", molecule="dna")
     parsed = store.parse_material(material["id"])
     member, = store.material_members(parsed["collection_ref"])["members"]
@@ -170,14 +172,14 @@ def test_native_nonzero_exit_without_placements_retains_source_and_exact_streams
 
 
 def test_resource_limited_native_mapping_publishes_valid_row_and_specific_failure(tmp_path):
-    policy = {"memory_bytes": 256*1024**2, "scratch_bytes": 2*1024**2, "wall_seconds": 1}
+    policy = {'memory_bytes': 256 * 1024 ** 2, 'scratch_bytes': 2 * 1024 ** 2}
     store, tools, args = setup_synthetic_process_case(tmp_path, "resource_after_row", job_limits=policy)
     with store:
         output = tools.execute("reads.map", args, operation_key="synthetic-resource-after-row")
         assert output["status"] == "partial", output
         assert output["feedback"]["category"] == "execution"
         assert output["feedback"]["code"] == "local_job_resource_limit"
-        assert output["feedback"]["resource"] == "wall_seconds"
+        assert output["feedback"]["resource"] == "scratch_bytes"
         assert output["feedback"]["policy"] == policy
         result = output["result"]
         assert result["reported_placement_count"] == 1

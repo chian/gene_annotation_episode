@@ -30,7 +30,7 @@ from tests.test_runtime import ScriptedProvider
 from tests.test_vcf_result_workflow import _single_saved_result_controller, _tables, _zero
 
 
-POLICY = dict(memory_bytes=20*1024**3,scratch_bytes=4*1024**3,wall_seconds=None)
+POLICY = dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 QUESTION = "Return selected literal ESM vectors for the supplied protein occurrences, preserving missing, filtered and failed populations."
 
 

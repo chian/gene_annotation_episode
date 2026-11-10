@@ -25,7 +25,7 @@ def plan_for(tmp_path,program='blastp'):
     return {'version':'native_blast_run_plan_v1','identity':{'run_id':'synthetic','episode_id':'resource-child','resource_id':'local',
         'execution_id':'original','attempt_id':'one','operation_key':'selected-start','requested_job_sha256':native_blast_digest(request)},
         'requested_job':request,'attempt_directory':str(tmp_path/'attempt'),
-        'policy':{'memory_bytes':20*1024**3,'scratch_bytes':4*1024**3,'wall_seconds':None}}
+        'policy':{'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}
 
 
 def seal(plan):

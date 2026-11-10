@@ -55,7 +55,7 @@ def main():
         native=directory/'abandoned-native';native.mkdir()
         command=[sys.executable,'-c',
             "import os,time;from pathlib import Path;Path('native.pid').write_text(str(os.getpid()));time.sleep(90)"]
-        handle=prepare_job(command,cwd=native,policy=LocalJobPolicy(64*1024**2,16*1024**2,20),
+        handle=prepare_job(command,cwd=native,policy=LocalJobPolicy(64 * 1024 ** 2, 16 * 1024 ** 2),
             handle_path=native/'native.handle.json',cpu_threads=1)
         start_prepared(handle)
         deadline=time.monotonic()+5
@@ -78,7 +78,7 @@ def main():
     native=directory/'native';native.mkdir()
     command=[sys.executable,'-c',
         "from gene_annotation_episode.workflow_budget import active_budget;import json;print(json.dumps(active_budget()['limits']))"]
-    handle=prepare_job(command,cwd=native,policy=LocalJobPolicy(64*1024**2,16*1024**2,20),
+    handle=prepare_job(command,cwd=native,policy=LocalJobPolicy(64 * 1024 ** 2, 16 * 1024 ** 2),
         handle_path=native/'native.handle.json',cpu_threads=1,env={'PYTHONPATH':str(ROOT)})
     start_prepared(handle)
     result=wait_job(handle)
@@ -87,7 +87,7 @@ def main():
     assert actual['workflow_slice']==SLICE and actual['workflow_owner']==UNIT
     assert json.loads(result.stdout_path.read_text())==budget['limits']
     rejected_handle=native/'oversize.handle.json'
-    try:prepare_job(command,cwd=native,policy=LocalJobPolicy(1024**3,16*1024**2,20),
+    try:prepare_job(command,cwd=native,policy=LocalJobPolicy(1024 ** 3, 16 * 1024 ** 2),
         handle_path=rejected_handle,cpu_threads=1)
     except AcquisitionError as error:
         assert error.code=='whole_workflow_budget_unavailable'

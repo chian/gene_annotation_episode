@@ -85,8 +85,7 @@ def actual_job():
         "arguments": arguments, "scope": witness["scope"], **retained,
         "worker_request": restriction_native_request("find_restriction_sites", arguments,
             sequence=witness["sequence"], sequence_binding=retained["sequence_binding"]),
-        "software": software, "policy": {"memory_bytes": 20 * 1024**3,
-            "scratch_bytes": 4 * 1024**3, "wall_seconds": None}}
+        "software": software, "policy": {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}
     jobs = module.RestrictionMappingJobs(store)
     selector_path = directory / "selector.json"
     selector = {"store_path": str(store.path), "operation_key": operation_key,
@@ -119,7 +118,7 @@ def test_original_native_proof_and_complete_outputs(actual_job):
     assert meta["policy"] == args["policy"]
     assert meta["verified_cgroup"]["memory_max"] == 20 * 1024**3
     assert meta["verified_cgroup"]["memory_swap_max"] == 0
-    assert meta["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in meta["verified_cgroup"]
     output = Path(state["reservation"]["output_directory"])
     native = json.loads((output / "native.json").read_bytes())
     mapping = json.loads((output / "mapping.json").read_bytes())

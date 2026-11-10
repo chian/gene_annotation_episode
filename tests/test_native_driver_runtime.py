@@ -204,7 +204,7 @@ def test_freezer_enforces_supplied_scratch_budget_before_copy(tmp_path, monkeypa
     _write(source / "gene_annotation_episode/fixture_driver.py", b"VALUE = 1\n")
     monkeypatch.setattr(software, "_dependency_bindings", lambda: pytest.fail("copy budget must fail first"))
     target = tmp_path / "snapshot"
-    policy = LocalJobPolicy(memory_bytes=contracts.POLICY["memory_bytes"], scratch_bytes=1, wall_seconds=None)
+    policy = LocalJobPolicy(memory_bytes=contracts.POLICY['memory_bytes'], scratch_bytes=1)
     with pytest.raises(AcquisitionError, match="local_job_resource_limit"):
         software.freeze_driver_runtime(module_root=str(source), snapshot_directory=str(target),
             driver_modules=("gene_annotation_episode.fixture_driver",), policy=policy)

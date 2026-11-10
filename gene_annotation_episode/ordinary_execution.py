@@ -62,7 +62,7 @@ class OrdinaryExecutionStatistics:
         return ExecutionClass(phase='pairwise_sequence_alignment', backend='local',
             resource_id=self.resource_id, implementation_sha256=implementation,
             parameters_sha256=_sha(parameters), memory_bytes=policy.memory_bytes,
-            scratch_bytes=policy.scratch_bytes, wall_seconds=policy.wall_seconds,
+            scratch_bytes=policy.scratch_bytes,
             cpu_threads=None, query_residues=len(values['query']),
             reference_residues=len(values['reference']), reference_records=1,
             reference_state='available', duration_measure='systemd_service_wall_seconds')
@@ -102,7 +102,7 @@ class OrdinaryExecutionStatistics:
                       'compatibility': 'same_input_size_and_technical_selection_features_v1'}
         return ExecutionClass(phase='spreadsheet_selection', backend='local', resource_id=self.resource_id,
             implementation_sha256=implementation, parameters_sha256=_sha(parameters),
-            memory_bytes=policy.memory_bytes, scratch_bytes=policy.scratch_bytes, wall_seconds=policy.wall_seconds,
+            memory_bytes=policy.memory_bytes, scratch_bytes=policy.scratch_bytes,
             cpu_threads=None, query_residues=None, reference_residues=None, reference_records=None,
             reference_state='available', duration_measure='systemd_service_wall_seconds')
 

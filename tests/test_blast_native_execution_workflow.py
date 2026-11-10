@@ -49,7 +49,7 @@ LABELS = {'blastn': 'blastn_range_forward_json15', 'blastp': 'blastp_gaps_json15
     'blastx': 'blastx_range_reverse_json15', 'tblastn': 'tblastn_reverse_json15',
     'tblastx': 'tblastx_frames_json15'}
 PUBLICATION = ROOT / 'research/slotted_process_library/publications/2026-10-24-001'
-POLICY = {'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 RUN_ID = 'native-blast-episode-298'
 
 
@@ -434,7 +434,7 @@ def test_complete_custody_and_original_output_geometry(native_case):
     handle = native.NativeJobHandle(Path(case.plan['identity']['execution_id'])).read()
     assert handle['metadata']['verified_cgroup']['memory_max'] == POLICY['memory_bytes']
     assert handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
-    assert handle['metadata']['verified_cgroup']['runtime_max'] == 'infinity'
+    assert 'runtime_max' not in handle['metadata']['verified_cgroup']
     for context, outcome in zip(case.contexts, case.outcomes):
         body = outcome['result']
         assert outcome['status'] == 'completed' and body['complete'], body['failures']

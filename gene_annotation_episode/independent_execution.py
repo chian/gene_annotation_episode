@@ -198,12 +198,13 @@ def _standard_bindings(store, directory, settings):
                 from .hpc_episodes import HPCEpisodes
                 registry.register(HPCEpisodes(None, store=store, directory=directory,
                     run_id=_read_json(directory/'run.json')['run_id'], resources=options['resources'],
-                    commissions=options['hpc_commissions']))
+                    commissions=options['hpc_commissions'],
+                    shared_execution_memory=options.get('shared_execution_memory')))
         elif practical_factory is None:
             registry = EpisodeBindingRegistry(factory(None) for factory in _saved_episode_factories(settings, directory))
         else:
-            from .practical_resource_episodes import PracticalResourceEpisodes
-            registry = EpisodeBindingRegistry([PracticalResourceEpisodes(None, directory=directory,
+            from .terminal_execution_episodes import TerminalExecutionEpisodes
+            registry = EpisodeBindingRegistry([TerminalExecutionEpisodes(None, directory=directory,
                 resources=practical_factory.resources,
                 initial_information=practical_factory.initial_information)])
         if registry.as_record() != settings.get('episode_bindings', []):
@@ -484,5 +485,53 @@ async def open_commission(spec):
         finally:
             await workflow.release(child['episode_id'])
 
+
+def receiver_snapshot(spec):
+    """The original receiver's committed progress, without model attempts/facts.
+
+    A new process can resume only after this checkpoint changes. Repeating a
+    failing provider call is therefore never an automatic reconstruction loop.
+    """
+    spec = validate_commission(spec)
+    args = spec['runtime_binding']['arguments']
+    database = (Path(args['workspace']) / 'state.sqlite3').resolve()
+    db = sqlite3.connect(database.as_uri() + '?mode=ro', uri=True)
+    try:
+        db.execute('BEGIN')
+        saved = db.execute('SELECT settings FROM runtime_runs WHERE run_id=?', (spec['run_id'],)).fetchone()
+        if saved is None or content_digest(json.loads(saved[0])) != spec['runtime_binding']['settings_sha256']:
+            raise _failure('identity_conflict', spec['handle'])
+        if json.loads(saved[0]).get('episode_branch_lifecycle') != {'version': 'owned_child_turn_taking_v2'}:
+            raise _failure('unavailable_binding', 'original_episode_branch_lifecycle')
+        child = spec['child']['episode_id']
+        episode = db.execute('SELECT state,completion,archive FROM runtime_episodes WHERE run_id=? '
+            'AND episode_id=?', (spec['run_id'], child)).fetchone()
+        actions = db.execute('SELECT decision_index,json_extract(result,\'$.status\'),'
+            'json_extract(result,\'$.pending_handle\'),credit FROM runtime_actions '
+            'WHERE run_id=? AND episode_id=? ORDER BY decision_index', (spec['run_id'], child)).fetchall()
+        observed = db.execute('SELECT unit_index FROM runtime_observations WHERE run_id=? AND episode_id=? '
+            'ORDER BY unit_index', (spec['run_id'], child)).fetchall()
+        slots = db.execute('SELECT sequence,original_decision_index FROM runtime_completion_slots '
+            'WHERE run_id=? AND episode_id=? ORDER BY sequence', (spec['run_id'], child)).fetchall()
+        form = db.execute('SELECT form IS NOT NULL FROM runtime_forms WHERE run_id=? AND episode_id=?',
+            (spec['run_id'], child)).fetchone()
+    finally:
+        db.close()
+    pending = [row[2] for row in actions if row[1] == 'pending' and row[2] is not None]
+    backend = sqlite3.connect((Path(args['run_directory']) / 'episode-execution' / 'executions.sqlite')
+        .resolve().as_uri() + '?mode=ro', uri=True)
+    try:
+        returns = [(handle, backend.execute('SELECT return_id,acknowledgment FROM commissions '
+            'WHERE handle=?', (handle,)).fetchone()) for handle in pending]
+    finally:
+        backend.close()
+    unfinished = bool(actions or pending or slots or observed or form is not None
+        or episode is not None and episode[1] is not None)
+    return {'unfinished': unfinished, 'pending_handles': pending,
+        'checkpoint': content_digest({'episode': episode, 'actions': actions, 'observed': observed,
+            'slots': slots, 'form': form, 'returns': returns})}
+
+
+open_commission.receiver_snapshot = receiver_snapshot
 
 __all__ = ['make_runtime_binding', 'open_commission', 'implementation_sha256', 'VERSION']

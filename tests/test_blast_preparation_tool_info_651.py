@@ -311,7 +311,7 @@ def test_actual_practical_admission_matches_descriptor_for_bound_and_unbound_var
     variant = {'profile_type': 'rps', 'input_format': 'pssm_asn1_text'}
     job = selected_job(tmp_path, pair, variant)
     request = requested_job_from_native_blast_utility(job)
-    policy = {'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}
+    policy = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
     assignment = {'resource_kind': 'local', 'resource_id': 'configured-local',
         'workspace': str(tmp_path), 'requested_job': request, 'constraints': {'allocation': policy}}
     for selected, accepted in [(variant, True),

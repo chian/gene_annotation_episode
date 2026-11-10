@@ -151,7 +151,7 @@ def validate_preparation_plan(value):
     request = validate_native_hmmer_preparation_requested_job(plan["requested_job"])
     _validate_identity(plan["identity"], request)
     policy = plan["policy"]
-    if type(policy) is not dict or set(policy) != {"memory_bytes", "scratch_bytes", "wall_seconds"}:
+    if type(policy) is not dict or set(policy) != {'memory_bytes', 'scratch_bytes'}:
         _error("explicit_policy_required")
     LocalJobPolicy(**policy)
     root = _absolute_directory(plan["attempt_directory"])

@@ -583,13 +583,13 @@ def canonical_preparation277(tmp_path):
     source = Path(__file__).parent / "fixtures/native_hmmer_preparation277"
     before = _inventory(source)
     manifest = _json(source / "manifest.json",
-        "c03c40263c8289bb094e426c46e6ddc5b21100f7619208e8b71baa282884291e", 26410)
+        "965b332a12b7115f94d74b669f527261561e3b43cae6e4a1cc7c857a5fdc8f95", 19890)
     assert manifest["schema"] == "native_hmmer_preparation277_retained_fixture_v1"
     assert manifest["original_case"]["inventory_sha256"] == _PINS["hmmer_preparation"]
     subset = manifest["preserved_subset"]
     assert _sha(_canonical(subset["inventory"]).encode()) == subset["inventory_sha256"] == (
-        "8bfa589b51f0e8220bf926f36d1bde88a008e95f182f13fd820fe160ae6e5ce2")
-    assert subset["file_count"] == 84 and subset["total_file_bytes"] == 3454307
+        "d1214323c70e413f91cfb1e11e179e20004a402f148041bcf14afcdb37deb18c")
+    assert subset["file_count"] == 82 and subset["total_file_bytes"] == 3426266
     omitted = manifest["omitted_unused_manual_bodies"]
     assert omitted["file_count"] == len(omitted["original_case_relative_paths"]) == 29
     assert omitted["total_file_bytes"] == 82511 and omitted["consumed_by_new_prefix"] is False
@@ -605,7 +605,7 @@ def canonical_preparation277(tmp_path):
             pin["mode"] = 0o555 if pin["kind"] == "directory" or pin["mode"] & 0o111 else 0o444
     assert {name: pin for name, pin in before.items() if name != "manifest.json"} == expected_source
     assert before["manifest.json"] == dict(kind="file", mode=0o444 if frozen else 0o644,
-        sha256="c03c40263c8289bb094e426c46e6ddc5b21100f7619208e8b71baa282884291e", size_bytes=26410)
+        sha256="965b332a12b7115f94d74b669f527261561e3b43cae6e4a1cc7c857a5fdc8f95", size_bytes=19890)
     copied = tmp_path / "canonical277-input"
     shutil.copytree(source / "case", copied, symlinks=True)
     assert _inventory(copied) == {name.removeprefix("case/"): pin for name, pin in expected_source.items()
@@ -864,7 +864,7 @@ def test_fresh_current_preparation_launch_and_local_stop_before_first_tool(canon
             original_scientific_binding=old_binding, current_scientific_binding=descriptor,
             original_tool_info=original_info, current_tool_info=current_info,
             original_launch_commission=launch, original_local_commission=local,
-            canonical_fixture_manifest_sha256="c03c40263c8289bb094e426c46e6ddc5b21100f7619208e8b71baa282884291e",
+            canonical_fixture_manifest_sha256="965b332a12b7115f94d74b669f527261561e3b43cae6e4a1cc7c857a5fdc8f95",
             omitted_unused_manual_bodies=case["manifest"]["omitted_unused_manual_bodies"],
             original_full_inventory_sha256=case["manifest"]["original_case"]["inventory_sha256"],
             preserved_subset_inventory_sha256=case["manifest"]["preserved_subset"]["inventory_sha256"])

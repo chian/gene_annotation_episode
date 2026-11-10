@@ -230,7 +230,7 @@ def test_atac_input_identity_replay_actual_driver_staging_rejects_changed_bytes(
     assert view['terminal'] and view['quiescent']
     assert outcome.metadata['verified_cgroup']['memory_max'] == POLICY['memory_bytes']
     assert outcome.metadata['verified_cgroup']['memory_swap_max'] == 0
-    assert outcome.metadata['verified_cgroup']['runtime_max'] == 'infinity'
+    assert 'runtime_max' not in outcome.metadata['verified_cgroup']
     bundle_path = Path(plan['attempt_directory']) / next(r['relative_path'] for r in plan['outputs'] if r['file_key'] == 'bundle')
     result = validate_atac_native_bundle(json.loads(bundle_path.read_bytes()), plan=plan)
     assert [row['outcome'] for row in result['steps']] == ['not_run'] * 3

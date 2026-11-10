@@ -18,7 +18,7 @@ from gene_annotation_episode.rna_evidence import local_configuration, run_cmsear
 from gene_annotation_episode import read_mapping
 
 
-POLICY = {"memory_bytes": 256 * 1024**2, "scratch_bytes": 2 * 1024**2, "wall_seconds": 5}
+POLICY = {'memory_bytes': 256 * 1024 ** 2, 'scratch_bytes': 2 * 1024 ** 2}
 MODEL = b"INFERNAL1/a [synthetic header]\nNAME synthetic\nCLEN 4\nALPH RNA\nCM\n//\n"
 
 
@@ -36,7 +36,8 @@ phase = ("version" if args == ["-v"] or args == ["--version"] else "help" if arg
 if phase == WAIT_PHASE:
     if KIND == "mapper" and phase == "map":
         print("synthetic_query\\t4\\t0\\t4\\t+\\tsynthetic_reference\\t4\\t0\\t4\\t4\\t4\\t60\\tcg:Z:4M\\tcs:Z:=ACGT", flush=True)
-    while True:
+    for i in range(8):
+        Path('resource-test-'+str(i)).write_bytes(b'x' * 512000)
         time.sleep(.05)
 if phase == "version":
     print("pdfinfo version synthetic" if KIND == "pdf" else "synthetic-process-not-minimap2")
@@ -97,7 +98,7 @@ def test_cmsearch_help_and_work_keep_policy_and_native_output_meaning(tmp_path, 
 @pytest.mark.parametrize("kind,phase", [("pdf", "version"), ("cmsearch", "work")])
 def test_native_adapter_limit_is_reported_as_operational_failure(tmp_path, kind, phase):
     executable = synthetic_executable(tmp_path, kind=kind, wait_phase=phase)
-    policy = {**POLICY, "wall_seconds": .3}
+    policy = {**POLICY, "scratch_bytes": 1024**2}
     with pytest.raises(AcquisitionError) as raised:
         if kind == "pdf":
             source = tmp_path / "synthetic.pdf"
@@ -142,13 +143,13 @@ def test_mapper_resource_failure_retains_complete_valid_native_rows(tmp_path):
         operands.execute("CREATE TABLE operands(role TEXT,subject_ref TEXT,length INTEGER)")
         operands.executemany("INSERT INTO operands VALUES(?,?,?)", [
             ("query", "synthetic_query", 4), ("reference", "synthetic_reference", 4)])
-    policy = {**POLICY, "wall_seconds": 1}
+    policy = {**POLICY, "scratch_bytes": 1024**2}
     result = asyncio.run(read_mapping.run_mapping(directory,
         configuration=read_mapping.local_configuration(executable=executable,
             cache_dir=tmp_path/"cache", job_limits=policy), preset="map-ont"))
     failure = result.metadata["resource_failure"]
     assert failure["code"] == "local_job_resource_limit"
-    assert failure["operational"]["resource"] == "wall_seconds"
+    assert failure["operational"]["resource"] == "scratch_bytes"
     assert result.metadata["returncode"] != 0
     row, = [json.loads(line) for line in (directory/"placements.jsonl").read_text().splitlines()]
     assert row["query_name"] == "synthetic_query" and row["reference_name"] == "synthetic_reference"

@@ -280,7 +280,7 @@ def test_received_overlap_inputs_cross_actual_launch_and_resource_commission_hoo
     requested = assignment(f.store, f.specs)['requested_job']
     workspace = tmp_path / 'work'
     workspace.mkdir()
-    policy = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'wall_seconds': None}
+    policy = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
     selected = {'version': 'practical_assignment_v1', 'assignment_id': 'selected-overlap',
         'resource_id': 'here', 'resource_kind': 'local', 'workspace': str(workspace),
         'endpoint': 'usable_handoff', 'requested_job': requested,

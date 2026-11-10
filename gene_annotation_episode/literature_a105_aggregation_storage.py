@@ -41,6 +41,51 @@ def _rows(saved, sheet_ref, components):
 
 
 class LiteratureA105AggregationRepository(LiteratureRateRepository):
+    def current_annotation_cells(self, context):
+        """Resolve this owner's admitted current final cells without granting private inputs."""
+        rows = ([row for row in self.received_cells(context) if row['component'] == 'overall']
+            if self._installed(self.received_table) else [])
+        from .literature_sheet_updates import current_scoring_sheets
+        current = [row for row in current_scoring_sheets(self.store, context) if row['axis'] == 'A105']
+        return ([cell for row in current if row['status'] == 'current'
+            for cell in row['cells'] if cell['component'] == 'overall'] if current else rows)
+
+    def annotation_contribution(self, store, context, *, target, annotation, scope,
+                                comparison_ref=None, selection=None, details_limit=0, details_offset=0):
+        from .communication import plain
+        from .root_axis_scalars import _result, require_attribution, bind_contribution
+        from .literature_a105_aggregation import annotation_scalar
+        import json
+        rows = [row for row in self.current_annotation_cells(context) if row['assertion_ref'] == annotation['id']
+            and (comparison_ref is None or row.get('comparison_ref') == comparison_ref)
+            and (selection is None or row['sheet_ref'] == selection)]
+        refs, details = [], []
+        if len(rows) != 1:
+            reason = ('no_received_current_final_cell_for_this_question' if not rows else
+                'multiple_current_axis_questions_require_explicit_sheet_selection')
+            scalar = _result('A105', None, formula='received_current_axis_result_required',
+                inputs={'sheet_refs': [row['sheet_ref'] for row in rows]}, reasons=[reason])
+            transfer = {'status': 'unresolved', 'missing_inputs': [reason],
+                'needed_refs': [], 'link_refs': [row['sheet_ref'] for row in rows]}
+        else:
+            cell = rows[0]
+            refs = [cell['sheet_ref']]
+            scalar = annotation_scalar(cell)
+            transfer = direct_target_application(store, context, cell, target, scope)
+            source = store.get(cell['sheet_ref'])
+            request = json.loads(store.get_artifact(source['request_ref']))
+            if not store.scope_contains(request['scope'], plain(scope)):
+                transfer = {**transfer, 'status': 'unresolved',
+                    'missing_inputs': [*transfer['missing_inputs'], 'received_axis_result_does_not_cover_requested_scope']}
+            scalar = require_attribution(scalar, missing=transfer['missing_inputs'])
+            details = [{'source_ref': cell['sheet_ref'], 'target_ref': target,
+                'proposed_annotation_ref': annotation['id'], 'scope': plain(scope), 'transfer': transfer}]
+        scalar.update(question={'assertion_ref': annotation['id'], 'comparison_ref': comparison_ref},
+            source_contribution_count=len(refs))
+        return bind_contribution(scalar, annotation=annotation, subject=target, scope=scope,
+            transfer=transfer, source_refs=refs), details[details_offset:details_offset + details_limit]
+
+
     provider = PROVIDER
     components = COMPONENTS
     record_version = VERSION
@@ -287,3 +332,54 @@ class LiteratureA105AggregationRepository(LiteratureRateRepository):
 
 __all__ = ['PROVIDER', 'VERSION', 'NAMESPACE', 'REQUESTED', 'SCOPE', 'COMPONENTS',
     'OPERATION_DESCRIPTION', 'aggregation_cells_schema', 'LiteratureA105AggregationRepository']
+
+
+def direct_target_application(store, context, cell, target, scope=None):
+    """A105's current direct experiment-to-target links; no invented transfer kernel."""
+    from .component_assessment_dependencies import assessment_dependencies
+    scope = plain(scope) if scope is not None else None
+    experiments, linked, links, needed, states = set(cell['selected_experiment_refs']), set(), set(), set(), set()
+    known = set(context.received_record_refs)
+    for reference in known:
+        row = store.get(reference)
+        if row['record_type'] != 'assessment' or row['hypothesis_ref'] != cell['assertion_ref']:
+            continue
+        finding = row.get('investigation_finding')
+        if finding is None or target not in finding['source_claim']['subject_refs'] or row['observation_ref'] not in known:
+            continue
+        observation = store.get(row['observation_ref'])
+        references = {*observation.get('subject_refs', ()), *observation.get('source_subject_refs', ()),
+            *observation.get('dependencies', ())}
+        matching = experiments.intersection(references)
+        if not matching:
+            continue
+        links.add(reference)
+        dependency = assessment_dependencies(store, reference, known)
+        if finding['status'] == 'withdrawn':
+            states.add('withdrawn')
+            continue
+        if row['applicability'] == 'incomparable':
+            states.add('invalid')
+            continue
+        if dependency is not None and dependency['retired']:
+            continue
+        if dependency is None or row['extent_basis'] == 'context_allocation':
+            states.add('unresolved')
+            continue
+        required = {observation['source_ref'], *observation.get('dependencies', ()),
+            *row['condition_refs'], *row['assumption_refs'],
+            *finding['qualification']['context_refs'], *finding['qualification']['assumption_refs']}
+        missing = required - (known | set(store.problem()['subject_refs']))
+        needed.update(missing)
+        extent = store._assessment_write_extent(row)
+        if missing or scope is not None and (not extent or not store.scope_contains(
+                {'subject_refs': sorted({span['target_ref'] for span in extent}), 'segments': extent}, scope)):
+            states.add('unresolved')
+            continue
+        states.add('established')
+        linked.update(matching)
+    established = bool(experiments) and linked == experiments
+    return {'status': 'established' if established else 'withdrawn' if states == {'withdrawn'}
+        else 'invalid' if states == {'invalid'} else 'unresolved',
+        'missing_inputs': [] if established else ['a105_direct_target_experiment_application_unresolved'],
+        'needed_refs': sorted(needed), 'link_refs': sorted(links), 'owner_states': sorted(states)}

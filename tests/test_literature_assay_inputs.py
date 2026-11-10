@@ -8,7 +8,7 @@ import pytest
 from gene_annotation_episode.domain import validate_schema
 from gene_annotation_episode.literature_assay_inputs import (
     ASSAY_LITERAL_FIELDS, PRIMITIVE_ORDER,
-    assay_arguments_schema, read_assay_inputs,
+    _Sources, assay_arguments_schema, materialize_text_witness_inputs, read_assay_inputs,
 )
 from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
 
@@ -76,6 +76,38 @@ def populated():
     return args, sources, reader
 
 
+def test_coordinate_witness_preserves_exact_assay_extraction():
+    quoted, _, reader = populated()
+    coordinates = deepcopy(quoted)
+    coordinates['primitives']['q']['witness'].pop('quote')
+    before = deepcopy(coordinates)
+    assert read_assay_inputs(coordinates, read_source=reader) == read_assay_inputs(quoted, read_source=reader)
+    assert coordinates == before
+
+
+def test_coordinate_materialization_restores_only_text_source_witnesses():
+    _, _, reader = fixtures()
+    retained = witness(TEXT, 'µ Assayed molecule P')
+    location = {key: value for key, value in retained.items() if key != 'quote'}
+    image = {'kind': 'image', 'image_id': 'view', 'region': [0, 0, 2, 2], 'quote': 'P'}
+    operands = {'native': location, 'tagged': {'kind': 'text', **location}, 'image': image}
+    before = deepcopy(operands)
+    result = materialize_text_witness_inputs(operands, read_source=reader)
+    assert result == {'native': retained, 'tagged': {'kind': 'text', **retained}, 'image': image}
+    assert operands == before
+
+
+def test_coordinate_witness_still_rejects_split_utf8_and_explicit_wrong_quote():
+    _, _, reader = fixtures()
+    sources = _Sources(reader)
+    location = {'source_ref': SOURCE, 'representation': 'original', 'start': 1, 'end': 2}
+    with pytest.raises(ExperimentalContractError, match='source_span_utf8_boundary_required'):
+        sources.witness(location, 'selection')
+    location.update(start=0, end=2, quote='u')
+    with pytest.raises(ExperimentalContractError, match='source_quote_mismatch'):
+        sources.witness(location, 'selection')
+
+
 def add_covariance(args, sources, reader, matrix=None):
     first = read_assay_inputs(args, read_source=reader)
     diagonal = [.04, .0225, .0025, .01, .01, .01]
@@ -88,6 +120,16 @@ def add_covariance(args, sources, reader, matrix=None):
                                  'content': json.dumps(payload).encode()}
     args['covariance_source_ref'] = COVARIANCE_SOURCE
     return payload
+
+
+@pytest.mark.parametrize('include_quote', [False, True])
+def test_source_witness_retains_existing_nonempty_token_contract(include_quote):
+    _, _, reader = fixtures(' \t\n')
+    selection = dict(source_ref=SOURCE, representation='original', start=0, end=3)
+    if include_quote:
+        selection['quote'] = ' \t\n'
+    with pytest.raises(ExperimentalContractError, match='nonempty_source_token_required'):
+        _Sources(reader).witness(selection, 'witness')
 
 
 def test_all_null_preserves_unknowns_authorizes_root_and_has_no_side_effects():

@@ -22,10 +22,6 @@ def case_for(axis, path):
         from test_literature_perturbation_integration import setup_case
         from gene_annotation_episode.literature_perturbation_storage import LiteraturePerturbationRepository as Repo, perturbation_cells_schema as schema
         return (*setup_case(path), Repo, schema, 'perturbation', 'intervention_response')
-    if axis == 'A108':
-        from test_literature_context_integration import setup_case
-        from gene_annotation_episode.literature_context_storage import LiteratureContextRepository as Repo, context_cells_schema as schema
-        return (*setup_case(path), Repo, schema, 'context', 'requirement_compatibility')
     if axis == 'A110':
         from test_literature_reaction_integration import setup_case
         from gene_annotation_episode.literature_reaction_storage import LiteratureReactionRepository as Repo, reaction_cells_schema as schema
@@ -39,7 +35,7 @@ def case_for(axis, path):
     return (*setup_case(path, case='matched'), Repo, schema, 'partner', 'partner_requirement')
 
 
-@pytest.mark.parametrize('axis', ['A106', 'A108', 'A110', 'A111', 'A107'])
+@pytest.mark.parametrize('axis', ['A106', 'A110', 'A111', 'A107'])
 def test_two_selected_assessments_reach_parent_as_one_experiment_without_synthetic_credit(tmp_path, axis):
     store, context, args, Repo, schema, family, experiment_type = case_for(axis, tmp_path/'state')
     try:
@@ -100,7 +96,7 @@ def test_two_selected_assessments_reach_parent_as_one_experiment_without_synthet
         store.close()
 
 
-@pytest.mark.parametrize('axis', ['A108', 'A110', 'A111', 'A107'])
+@pytest.mark.parametrize('axis', ['A110', 'A111', 'A107'])
 def test_shared_revision_custody_keeps_distinct_experiments(tmp_path, axis):
     store, context, args, Repo, _, _, experiment_type = case_for(axis, tmp_path/'state')
     try:

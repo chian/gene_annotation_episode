@@ -2,15 +2,15 @@
 
 The exact nano-graphrag source is vendored with its MIT license and SHA-256.
 The completed real-score quasi-likelihood adapter comes from the supplied
-orbital template. Its nonnegative path is unchanged numerically. Signed
-corrections use estimator-owned paired gain/loss marks on the SAME action ranks:
+orbital template. Raw credit marks are fitted against measured progress-receipt
+times. Signed corrections use paired gain/loss marks at the SAME real times:
 positive=max(delta,0), loss=max(-delta,0). No raw observation is replaced,
 removed, smoothed, or appended twice. Each mark fits the full observed history.
 
 Gain/loss model bands use Bonferroni alpha/2 and interval subtraction. This is
 an approximate, uncalibrated working-model interval; Bonferroni allocation does
 not make the source Laplace approximation coverage calibrated. Before any loss
-has been observed, the original nonnegative template path is used exactly.
+has been observed, only the nonnegative time-conditioned model is used.
 The no-loss working model assumes zero loss until a correction is observed.
 After a loss, both marked fits are retained for every later full-history fit.
 
@@ -21,11 +21,14 @@ consecutive-zero rule, action cap, source-completion test, or scientific gate.
 """
 
 from dataclasses import dataclass, replace
+from copy import deepcopy
+import json
 import math
 from numbers import Real
 from typing import Mapping, Sequence
 
 from .vendor import nano_rarefaction as template
+from .execution_timing import PROGRESS_TIME_VERSION
 
 
 NumericBand = template.NumericBand
@@ -35,7 +38,7 @@ STATUS_UNIDENTIFIABLE = template.STATUS_UNIDENTIFIABLE
 
 SOURCE_SHA256 = "02af19652d69f368ee8875d3b27cad0bb2bbc8d1f8274344b72a4437092cdd35"
 SOURCE_REVISION = "60a167f9eeda0c9ea2ca294724174948947baf3f"
-ESTIMATOR_VERSION = "completed_signed_score_preferential_yield_v1"
+ESTIMATOR_VERSION = "real_time_signed_credit_mark_yield_v2"
 
 
 def _score(value: object, name: str) -> float:
@@ -49,23 +52,27 @@ def _score(value: object, name: str) -> float:
 
 @dataclass(frozen=True)
 class YieldParameters:
-    # These preserve the actual template's availability semantics. They are
-    # minimum information for a fit, not a rolling mean or an episode cap.
-    window_size: int = template.DEFAULT_WINDOW_SIZE
-    subsample_size: int = template.DEFAULT_SUBSAMPLE_SIZE
+    # Compatibility operands for saved caller definitions only. Neither value
+    # controls fit availability, truncates history, or changes a prediction.
+    window_size: int | None = None
+    subsample_size: int | None = None
     uncertainty_alpha: float = template.DEFAULT_ALPHA
 
     def __post_init__(self):
-        template._IncidenceEstimator.validate_parameters(
-            self.window_size, self.subsample_size, self.uncertainty_alpha)
+        for name in ("window_size", "subsample_size"):
+            value = getattr(self, name)
+            if value is not None and (type(value) is not int or value < 0):
+                raise ValueError(name + "_legacy_value_requires_nonnegative_integer_or_none")
+        if not 0 < _score(self.uncertainty_alpha, "uncertainty_alpha") < 1:
+            raise ValueError("uncertainty_alpha must be between zero and one")
 
     def as_record(self):
         return {
             "window_size": self.window_size,
             "subsample_size": self.subsample_size,
             "uncertainty_alpha": self.uncertainty_alpha,
-            "window_semantics": "minimum_completed_acquisition_turns_before_full_history_fit",
-            "subsample_semantics": "minimum_evaluated_acquisition_turns_before_full_history_fit",
+            "window_semantics": "legacy_ignored_no_minimum_history",
+            "subsample_semantics": "legacy_ignored_full_history",
         }
 
 
@@ -81,20 +88,26 @@ def provenance():
         "template_estimator": template.INCIDENCE_ESTIMATOR_VERSION,
         "turn_unit": "completed_episode_acquisition",
         "credit_input": "projected_marginal_credit",
+        "fit_coordinate": "measured_progress_receipt_time",
+        "forecast": "conditional_acquisition_credit_at_recorded_current_time",
+        "forecast_units": "unchanged_iterator_credit_not_credit_per_second",
+        "temporal_prior_scale": "first_measured_episode_start_to_progress_receipt_span",
+        "minimum_history": None,
         "per_episode_units": {
             "direct_tool": "One completed selected acquisition supplies one local observation",
             "reasoning": "One completed scientific interpretation action supplies one local observation, including when it uses existing evidence",
             "read_or_comparison": "A completed acquisition can have zero marginal credit",
             "shared_refresh": "Shared credit refreshes do not add action observations",
-            "failed_or_unexecuted_request": "Public invalid requests and failed or unexecuted tool attempts create no acquisition or estimator observation",
+            "executed_failure": "An executed failed or unavailable tool/reason action supplies its actual progress observation, including zero when none was retained",
+            "unexecuted_request": "Invalid pre-execution requests create no acquisition or estimator observation",
             "root": "One root-selected completed reasoning action, tool or child investigation supplies one root action; nested child operations add no ancestor observations",
         },
         "adaptations": [
             "Real marginal credit responses pass into the fit without integer coercion",
             "Completed Episode acquisitions condition on observation; no failure/usability model",
-            "A fresh original fitter cold-fits the entire score history each turn",
+            "A fresh fitter cold-fits the full raw credit history against its recorded real times",
             "Original numeric bands and delta/Laplace curvature approximation are retained",
-            "Signed corrections use paired gain/loss marks at the same action ranks inside the estimator",
+            "Signed corrections use paired gain/loss marks at the same progress-receipt times",
             "After an observed loss, component alpha/2 bands subtract to an approximate signed net interval",
         ],
         "statistical_model": "latent_lognormal_fractional_poisson_working_quasi_likelihood",
@@ -104,7 +117,9 @@ def provenance():
             "The fractional kernel is not a continuous-response probability density",
             "Uncertainty assumes the working model and is not coverage calibrated",
             "Credit units affect effective information and must remain fixed within an Episode",
-            "Rank-decay extrapolation assumes declining yield; late discoveries can violate it",
+            "Temporal mark decay assumes declining yield; late discoveries can violate it",
+            "The first measured progress span sets an empirical prior scale; it is not a forecast duration",
+            "The forecast conditions on current time; it does not predict a future completion time",
             "No failed-attempt probability is estimated from completed-only acquisitions",
             "The inherited local optimizer has no global optimum or convergence certificate; bands can jump across history lengths",
             "Before any observed loss the original nonnegative model assumes zero loss; this is an explicit working-model assumption",
@@ -114,12 +129,19 @@ def provenance():
 
 
 class _RealScoreFit(template._IncidenceEstimator):
-    """Reuse the original fitter, with the two input/model changes above."""
+    """Reuse the optimizer/kernel with real time as its explanatory operand."""
+
+    def __init__(self, *, alpha):
+        super().__init__(alpha=alpha)
+        # Start at the existing prior mode and its true curvature. In
+        # particular an empty history must not use the optimizer's identity
+        # matrix as if it were prior/posterior information.
+        self._fit_parameters = [0., math.log(.05), 0., 0.]
+        self._fit_inverse_hessian = [[36., 0., 0., 0.], [0., 4., 0., 0.],
+                                    [0., 0., 36., 0.], [0., 0., 0., 0.]]
 
     @staticmethod
-    def _observation_loss(parameters, rank, status, discovery):
-        if status != template.OBSERVATION_OBSERVED:
-            raise ValueError("Only completed Episode acquisition turns enter this estimator")
+    def _observation_loss(parameters, coordinate, discovery):
         beta, log_delta, _observation_intercept, _coupling = parameters
         delta = math.exp(float(log_delta))
         # The gamma term is constant with respect to parameters. It retains
@@ -129,7 +151,7 @@ class _RealScoreFit(template._IncidenceEstimator):
             - math.exp(max(-50.0, min(50.0, potential)))
             - math.lgamma(discovery + 1.0)
             for weight, potential in (
-                (weight, beta - delta * (rank - 1) + latent)
+                (weight, beta - delta * coordinate + latent)
                 for weight, latent in zip(
                     template._LOG_QUADRATURE_WEIGHTS, template._QUADRATURE_LATENT)
             )
@@ -137,20 +159,20 @@ class _RealScoreFit(template._IncidenceEstimator):
         return -template._logsumexp(terms)
 
     @classmethod
-    def _history_loss(cls, parameters, statuses, discoveries):
+    def _history_loss(cls, parameters, coordinates, discoveries):
         # Deliberately no int(discovery), identity conversion or smoothing.
         return cls._prior_loss(parameters) + sum(
-            cls._observation_loss(parameters, rank, status, discovery)
-            for rank, (status, discovery) in enumerate(zip(statuses, discoveries), 1)
+            cls._observation_loss(parameters, coordinate, discovery)
+            for coordinate, discovery in zip(coordinates, discoveries)
         )
 
     @staticmethod
-    def _metric_discovery(parameters, rank):
+    def _metric_discovery(parameters, coordinate):
         beta, log_delta, _observation_intercept, _coupling = parameters
         delta = math.exp(float(log_delta))
         return sum(
             math.exp(weight) * math.exp(max(-50.0, min(50.0,
-                beta - delta * (rank - 1.0) + latent)))
+                beta - delta * coordinate + latent)))
             for weight, latent in zip(
                 template._LOG_QUADRATURE_WEIGHTS, template._QUADRATURE_LATENT)
         )
@@ -178,36 +200,117 @@ class YieldEstimate:
         }
 
 
-def estimate_nonnegative_yield(scores: Sequence[Real], parameters: YieldParameters | None = None):
-    """Pure current-history estimate; previous predictions are never an input."""
+def _time_point(value):
+    if not isinstance(value, Mapping) or value.get("version") != PROGRESS_TIME_VERSION:
+        return None, "progress_time_unavailable"
+    if value.get("status") != "available":
+        return None, value.get("unavailable_reason") or "progress_time_unavailable"
+    integers = ("origin_monotonic_ns", "observed_monotonic_ns",
+                "reference_observation_monotonic_ns")
+    if (any(type(value.get(key)) is not int or value[key] < 0 for key in integers)
+            or any(not isinstance(value.get(key), str) or not value[key]
+                   for key in ("run_id", "episode_id", "boot_id"))):
+        return None, "invalid_progress_clock"
+    origin, observed, reference = (value[key] for key in integers)
+    if not origin < reference <= observed:
+        return None, "invalid_progress_reference_span"
+    try:
+        scale = _score(value.get("reference_elapsed_seconds"), "reference span")
+        elapsed = _score(value.get("elapsed_seconds"), "elapsed time")
+    except ValueError:
+        return None, "invalid_progress_reference_span"
+    if (scale == 0 or not math.isclose(scale, (reference-origin)/1e9, rel_tol=1e-12)
+            or not math.isclose(elapsed, (observed-origin)/1e9, rel_tol=1e-12)):
+        return None, "invalid_progress_clock_arithmetic"
+    return value, None
+
+
+def _time_operands(turns, contexts, evaluation_time):
+    contexts = (None,) * turns if contexts is None else tuple(contexts)
+    if len(contexts) != turns:
+        raise ValueError("real_time_yield_requires_aligned_contexts")
+    points = []
+    for context in contexts:
+        point, reason = _time_point(context.get("progress_time") if isinstance(context, Mapping) else None)
+        if point is None:
+            return (), 0., {"unavailable_reason": reason}
+        if point.get("point_kind") != "progress_receipt":
+            return (), 0., {"unavailable_reason": "history_time_requires_actual_progress_receipt"}
+        packet = context.get("current_completion_evidence")
+        if isinstance(packet, Mapping) and any(
+                packet.get(key) != point.get(key) for key in
+                ("run_id", "episode_id", "original_decision_index")):
+            return (), 0., {"unavailable_reason": "progress_time_completion_identity_conflict"}
+        points.append(point)
+    target, reason = _time_point(evaluation_time if evaluation_time is not None else
+                                points[-1] if points else None)
+    if not points and target is None:
+        # At an unobserved origin, the intercept prior requires no duration.
+        # This does not fabricate time for any actual history entry.
+        return (), 0., {"time_binding": "unobserved_origin_prior_only",
+                       "unobserved_time_reason": reason}
+    if target is None:
+        return (), 0., {"unavailable_reason": reason}
+    identity_keys = ("run_id", "episode_id", "boot_id", "origin_monotonic_ns",
+                     "reference_observation_monotonic_ns", "reference_elapsed_seconds")
+    previous = target["reference_observation_monotonic_ns"]
+    for point in points:
+        if any(point[key] != target[key] for key in identity_keys):
+            return (), 0., {"unavailable_reason": "progress_clocks_not_comparable"}
+        if point["observed_monotonic_ns"] < previous:
+            return (), 0., {"unavailable_reason": "progress_receipt_clock_order_conflict"}
+        previous = point["observed_monotonic_ns"]
+    if target["observed_monotonic_ns"] < previous:
+        return (), 0., {"unavailable_reason": "forecast_precedes_observed_progress"}
+    scale = target["reference_elapsed_seconds"]
+    reference = target["reference_observation_monotonic_ns"]
+    coordinates = tuple((point["observed_monotonic_ns"]-reference)/1e9/scale for point in points)
+    coordinate = (target["observed_monotonic_ns"]-reference)/1e9/scale
+    return coordinates, coordinate, {
+        "time_binding": PROGRESS_TIME_VERSION,
+        "reference_elapsed_seconds": scale,
+        "reference_observation_monotonic_ns": reference,
+        "forecast_observed_monotonic_ns": target["observed_monotonic_ns"],
+        "forecast_elapsed_seconds": target["elapsed_seconds"],
+        "forecast_coordinate": coordinate,
+        "forecast_point_kind": target.get("point_kind"),
+        "time_scale_source": "first_measured_episode_start_to_progress_receipt_span",
+        "log_decay_prior_mean": math.log(.05), "log_decay_prior_variance": 4.,
+        "decay_unit": "per_recorded_reference_span_not_per_action",
+        "forecast_quantity": "conditional_acquisition_credit_at_recorded_current_time"}
+
+
+def estimate_nonnegative_yield(scores: Sequence[Real], parameters: YieldParameters | None = None,
+                               *, contexts=None, evaluation_time=None):
+    """Fit all raw marks at real receipt times; never fit their action ranks."""
     parameters = YieldParameters() if parameters is None else parameters
     if not isinstance(parameters, YieldParameters):
         raise TypeError("parameters must be YieldParameters")
     history = tuple(_score(value, "marginal credit") for value in scores)
     turns = len(history)
     diagnostics = {"completed_acquisition_turns": turns, "history_used": turns,
-                   "fitting_scope": "full_history", "initialization": "cold_template_prior"}
-    if turns < parameters.window_size or turns < parameters.subsample_size:
+                   "fitting_scope": "full_history" if turns else "prior_only",
+                   "initialization": "cold_template_prior",
+                   "minimum_history": None, "credit_units": "unchanged_iterator_credit"}
+    coordinates, target, timing = _time_operands(turns, contexts, evaluation_time)
+    diagnostics.update(timing)
+    if "unavailable_reason" in timing:
         return YieldEstimate(turns, NumericBand.coded(STATUS_INSUFFICIENT), parameters, diagnostics)
 
     # Never reuse last turn's prediction or fit state. The history alone
     # determines this turn's fit, including the original fixed yield priors.
-    fit = _RealScoreFit(window_size=parameters.window_size,
-                        subsample_size=parameters.subsample_size,
-                        alpha=parameters.uncertainty_alpha)
-    statuses = (template.OBSERVATION_OBSERVED,) * turns
+    fit = _RealScoreFit(alpha=parameters.uncertainty_alpha)
     try:
         fitted, covariance, objective = fit._fit_full_history(
-            statuses, history, coupling_identifiable=False)
+            coordinates, history, coupling_identifiable=False)
         if not all(math.isfinite(value) for row in covariance for value in row):
             raise ArithmeticError("Non-finite fitted covariance")
-        next_rank = turns + 1
-        point = fit._metric_discovery(fitted, next_rank)
+        point = fit._metric_discovery(fitted, target)
         variance = fit._metric_variance(fitted, covariance,
-            lambda values: fit._metric_discovery(values, next_rank))
+            lambda values: fit._metric_discovery(values, target))
         band = NumericBand.laplace(point, variance, parameters.uncertainty_alpha)
         diagnostics.update({"yield_intercept": fitted[0],
-            "rank_decay": math.exp(fitted[1]), "fit_objective": objective,
+            "reference_span_decay": math.exp(fitted[1]), "fit_objective": objective,
             "next_gain_variance": variance})
     except (ArithmeticError, OverflowError, ValueError) as error:
         # Numerical non-identifiability is a prediction status, never a zero
@@ -286,12 +389,12 @@ def _parameters(value=None):
     raise TypeError("settings must be YieldParameters or their record")
 
 
-def estimate_score_yield(scores: Sequence[Real], parameters=None):
-    """Fit raw signed action history; marks are internal estimator operands."""
+def estimate_score_yield(scores: Sequence[Real], parameters=None, *, contexts=None, evaluation_time=None):
+    """Fit raw signed progress history on its aligned measured receipt times."""
     parameters = _parameters(parameters)
     history = tuple(_signed(value) for value in scores)
     if not any(value < 0 for value in history):
-        return estimate_nonnegative_yield(history, parameters)
+        return estimate_nonnegative_yield(history, parameters, contexts=contexts, evaluation_time=evaluation_time)
 
     # Every mark has one element for every actual action. Zeros below mean an
     # observed action's other sign, never an invented failure/action observation.
@@ -299,17 +402,20 @@ def estimate_score_yield(scores: Sequence[Real], parameters=None):
     losses = tuple(max(-value, 0.0) for value in history)
     component_parameters = YieldParameters(parameters.window_size,
         parameters.subsample_size, parameters.uncertainty_alpha / 2.0)
-    gain = estimate_nonnegative_yield(gains, component_parameters)
-    loss = estimate_nonnegative_yield(losses, component_parameters)
+    contexts = None if contexts is None else tuple(contexts)
+    gain = estimate_nonnegative_yield(gains, component_parameters, contexts=contexts, evaluation_time=evaluation_time)
+    loss = estimate_nonnegative_yield(losses, component_parameters, contexts=contexts, evaluation_time=evaluation_time)
     diagnostics = {"completed_acquisition_turns": len(history),
                    "history_used": len(history), "fitting_scope": "full_history",
                    "initialization": "cold_template_prior",
-                   "signed_model": "paired_gain_loss_marks_same_action_rank_v1",
+                   "signed_model": "paired_gain_loss_marks_same_real_time_v2",
                    "negative_action_count": sum(value < 0 for value in history),
                    "gain_component": gain.as_record(),
                    "loss_component": loss.as_record(),
                    "interval_method": "bonferroni_allocated_model_band_subtraction",
                    "coverage_calibrated": False}
+    if "unavailable_reason" in gain.diagnostics:
+        diagnostics["unavailable_reason"] = gain.diagnostics["unavailable_reason"]
     statuses = {gain.expected_next_gain.status_code, loss.expected_next_gain.status_code}
     if statuses != {STATUS_NORMAL}:
         status = (STATUS_UNIDENTIFIABLE if STATUS_UNIDENTIFIABLE in statuses
@@ -336,16 +442,14 @@ class ScalarScoreYieldEstimator:
 
     def _estimate(self, history, contexts):
         if self.estimate_with_context is None:
-            # The existing template has no time model. Merely receiving timing
-            # context does not authorize an invented score/time conversion.
-            return estimate_score_yield(history, self.parameters)
+            return estimate_score_yield(history, self.parameters, contexts=contexts)
         # Timing/snapshot history is paired with these SAME completed actions.
         # No previous prediction or another child's yield history is supplied.
         result = self.estimate_with_context(tuple(history), self.parameters, tuple(contexts))
         if result is None and getattr(self.estimate_with_context, 'uses_template_when_unbound', False):
-            # An opt-in binding can leave historical actions without its
-            # operands exactly on the original estimator and provenance.
-            return estimate_score_yield(history, self.parameters)
+            # The default real-time binding retains missing timing explicitly;
+            # custom bindings do not silently fall back to action-rank fits.
+            return estimate_score_yield(history, self.parameters, contexts=contexts)
         if not isinstance(result, YieldEstimate) or result.turns != len(history):
             raise TypeError("contextual_estimator_must_return_same_action_history_estimate")
         if result.estimator_binding is None:
@@ -481,3 +585,158 @@ class YieldController:
             raise ValueError("An explicit new epoch must have a distinct id")
         return type(self)(epoch, self._current_credit, self.cost, self.settings,
                           estimate_with_context=self.estimator.estimate_with_context)
+
+
+def annotation_arm_key(arm):
+    """The original proposed annotation, native subject, scope and axis."""
+    fields = ('proposed_annotation_ref', 'subject_ref', 'scope', 'axis')
+    if (not isinstance(arm, Mapping) or not all(name in arm for name in fields)
+            or any(not isinstance(arm[name], str) or not arm[name]
+                   for name in ('proposed_annotation_ref', 'subject_ref', 'axis'))
+            or not isinstance(arm['scope'], Mapping)):
+        raise ValueError('annotation_axis_identity_required')
+    return json.dumps({name: arm[name] for name in fields}, sort_keys=True,
+                      separators=(',', ':'), allow_nan=False)
+
+
+def validate_task_credit(value):
+    """Validate the two native task-credit forms without inventing a scalar."""
+    if not isinstance(value, Mapping):
+        return _signed(value, 'task credit')
+    if set(value) != {'mode', 'arms'} or value['mode'] != 'annotation_axis_credit':
+        raise ValueError('task_credit_collection_required')
+    if not isinstance(value['arms'], list):
+        raise ValueError('task_credit_arms_required')
+    keys = set()
+    for arm in value['arms']:
+        key = annotation_arm_key(arm)
+        if key in keys:
+            raise ValueError('duplicate_annotation_axis_credit')
+        keys.add(key)
+        if arm['credit'] is not None:
+            _signed(arm['credit'], 'annotation axis credit')
+        if not isinstance(arm.get('status'), str) or not isinstance(arm.get('transfer'), Mapping):
+            raise ValueError('annotation_axis_status_required')
+    return deepcopy(value)
+
+
+@dataclass(frozen=True)
+class AnnotationAxisYieldState:
+    epoch: str
+    initial_credit: dict
+    current_credit: dict
+    arms: tuple
+    stop: bool
+
+    def as_record(self):
+        return {'epoch': self.epoch, 'initial_credit': self.initial_credit,
+            'current_credit': self.current_credit, 'arms': list(self.arms),
+            'decision': {'stop': self.stop,
+                'decision_basis': 'every_annotation_axis_available_upper_bound_lte_own_cutoff'}}
+
+
+@dataclass(frozen=True)
+class AnnotationAxisYieldStep:
+    unit_label: str
+    credit: dict
+    completed_arm: dict | None
+    marginal_credit: float | None
+    state: AnnotationAxisYieldState
+    is_root: bool = False
+    requests_transition: bool = False
+
+    @property
+    def stop(self):
+        return self.state.stop
+
+    def as_record(self):
+        return {'unit_label': self.unit_label, 'credit': self.credit,
+            'completed_arm': self.completed_arm, 'marginal_credit': self.marginal_credit,
+            'decision': self.state.as_record()['decision'], 'arms': list(self.state.arms),
+            'stop': self.stop, 'is_root': self.is_root,
+            'requests_transition': self.requests_transition}
+
+
+class AnnotationAxisYieldController:
+    """One independent yield estimate per assigned annotation/axis pair.
+
+    Only an actual returned axis invocation supplies an observation. Other
+    completed root actions can change received credit or resolve a transfer,
+    but are not extra axis attempts. Unknown credit and forecasts remain unknown.
+    """
+
+    def __init__(self, epoch, initial_credit, cutoffs, settings=None):
+        if not isinstance(epoch, str) or not epoch:
+            raise ValueError('epoch_required')
+        if not isinstance(cutoffs, Mapping) or not cutoffs:
+            raise ValueError('explicit_annotation_axis_cutoffs_required')
+        self.epoch = epoch
+        self.cutoffs = {axis: _score(value, 'axis cutoff') for axis, value in cutoffs.items()}
+        self.settings = _parameters(settings)
+        self.initial_credit = validate_task_credit(initial_credit)
+        if not isinstance(self.initial_credit, dict):
+            raise ValueError('annotation_axis_credit_required')
+        self._current_credit = deepcopy(self.initial_credit)
+        self._estimators = {}
+        self._sync(self._current_credit)
+
+    def _sync(self, credit):
+        previous = {annotation_arm_key(arm): arm for arm in self._current_credit['arms']}
+        for arm in credit['arms']:
+            key = annotation_arm_key(arm)
+            if arm['axis'] not in self.cutoffs:
+                raise ValueError('explicit_cutoff_missing_for_axis:' + arm['axis'])
+            old = previous.get(key)
+            # A changed dependency creates a different opportunity. Earlier
+            # blocked attempts cannot declare that new opportunity exhausted.
+            dependency = lambda item: (item['transfer'].get('status'),
+                item['transfer'].get('needed_refs', []))
+            if (key not in self._estimators or old is not None
+                    and dependency(old) != dependency(arm)):
+                self._estimators[key] = ScalarScoreYieldEstimator(self.settings)
+
+    def observe(self, unit_label, value, is_root=False):
+        body = value.as_record() if hasattr(value, 'as_record') else value
+        credit = validate_task_credit(body['credit'])
+        context = body.get('estimation_context') or {}
+        completed = context.get('completed_annotation_axis')
+        previous = {annotation_arm_key(arm): arm for arm in self._current_credit['arms']}
+        self._sync(credit)
+        delta = None
+        if completed is not None:
+            key = annotation_arm_key(completed)
+            after = next((arm for arm in credit['arms'] if annotation_arm_key(arm) == key), None)
+            before = previous.get(key)
+            if after is None:
+                raise ValueError('completed_annotation_axis_not_received')
+            # Missing scientific support earns no contribution. An actual
+            # completed invocation with no additional credited contribution is
+            # therefore a zero gain, while its scientific value remains None.
+            # This is not a fabricated zero measurement or an opposing datum.
+            prior_credit = 0. if before is None or before['credit'] is None else before['credit']
+            current_credit = 0. if after['credit'] is None else after['credit']
+            delta = current_credit - prior_credit
+            self._estimators[key].observe(delta, context=context)
+        self._current_credit = credit
+        return AnnotationAxisYieldStep(str(unit_label), deepcopy(credit),
+            deepcopy(completed), delta, self.state(), bool(is_root))
+
+    def state(self):
+        arms = []
+        for arm in self._current_credit['arms']:
+            estimate = self._estimators[annotation_arm_key(arm)].state()
+            band = estimate.expected_next_gain
+            decision = predicted_gain_upper_bound(band, self.cutoffs[arm['axis']])
+            arms.append({**deepcopy(arm), 'expected_additional_credit': band.as_record(),
+                'completed_invocation_observations': estimate.turns,
+                'cutoff': self.cutoffs[arm['axis']],
+                'stop_requested': decision.stop,
+                'forecast_unit': 'another_whole_axis_invocation'})
+        return AnnotationAxisYieldState(self.epoch, deepcopy(self.initial_credit),
+            deepcopy(self._current_credit), tuple(arms),
+            bool(arms) and all(arm['stop_requested'] for arm in arms))
+
+    def transitioned(self, epoch):
+        if epoch == self.epoch:
+            raise ValueError('new_epoch_required')
+        return type(self)(epoch, self._current_credit, self.cutoffs, self.settings)

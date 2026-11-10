@@ -3,8 +3,8 @@
   "entries": [
     {
       "entry_id": "launch-aurora",
-      "title": "Configured PBS over SSH execution",
-      "summary": "Explicit caller-owned SSH transport, workspace, charging account and job constraints; selected preparation and original PBS execution observations establish actual outcomes.",
+      "title": "Aurora execution agent instructions",
+      "summary": "Resource-specific instructions for an execution agent that chooses scripts, environments and native commands under the assigned Aurora transport, workspace, account and compute constraints.",
       "resource_kinds": [
         "hpc"
       ],
@@ -20,20 +20,12 @@
         "results"
       ],
       "tool_names": [
-        "practical.inspect",
-        "practical.inventory.refresh",
-        "practical.context.set",
-        "practical.directory.create",
-        "practical.file.write",
-        "practical.file.read",
-        "practical.command.run",
-        "practical.job.start",
-        "practical.job.status",
-        "practical.job.collect"
+        "exec_command"
       ],
       "provenance": [
-        "gene_annotation_episode/practical_resource_episodes.py",
-        "gene_annotation_episode/practical_pbs_operations.py",
+        "gene_annotation_episode/launch_instructions.py",
+        "gene_annotation_episode/execution_episodes.py",
+        "gene_annotation_episode/hpc_episodes.py",
         "https://docs.alcf.anl.gov/aurora/running-jobs-aurora/",
         "https://docs.alcf.anl.gov/running-jobs/"
       ],
@@ -60,7 +52,7 @@
         },
         {
           "section_id": "operations",
-          "title": "Actual practical HPC operations and outcomes",
+          "title": "Execution agent role and actual outcomes",
           "path": "aurora-operations.md"
         }
       ]
@@ -68,7 +60,7 @@
     {
       "entry_id": "launch-local",
       "title": "Local compute launch instructions",
-      "summary": "Prepare or reuse local execution under caller-owned limits: the existing detached phmmer binding and the separate opt-in practical local binding each retain their own actual operations and assignments.",
+      "summary": "Choose local scripts, environments and commands under the assigned resource bounds. General execution records original command and scientific input/output custody; the separate established homology binding retains its own catalog.",
       "resource_kinds": [
         "local"
       ],
@@ -84,16 +76,7 @@
         "results"
       ],
       "tool_names": [
-        "practical.inspect",
-        "practical.inventory.refresh",
-        "practical.context.set",
-        "practical.directory.create",
-        "practical.file.write",
-        "practical.file.read",
-        "practical.command.run",
-        "practical.job.start",
-        "practical.job.status",
-        "practical.job.collect",
+        "exec_command",
         "homology.environment",
         "homology.configure",
         "homology.stage",
@@ -106,8 +89,8 @@
         "homology.errors"
       ],
       "provenance": [
-        "gene_annotation_episode/practical_resource_episodes.py",
-        "gene_annotation_episode/practical_execution_operations.py",
+        "gene_annotation_episode/terminal_execution_episodes.py",
+        "gene_annotation_episode/terminal_execution.py",
         "gene_annotation_episode/native_lifecycle.py",
         "gene_annotation_episode/local_jobs.py",
         "gene_annotation_episode/homology_episodes.py",
@@ -122,7 +105,7 @@
         },
         {
           "section_id": "operations",
-          "title": "Actual local operations and persistent context",
+          "title": "Agent-chosen commands and actual execution results",
           "path": "local-operations.md"
         },
         {

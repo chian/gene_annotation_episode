@@ -186,8 +186,11 @@ def test_episode_can_design_candidates_without_caller_job_commands(tmp_path):
     assert plan['manifest']['units'][0]['argv'][-1] == workspace+'/work.py'
     assert plan['files_to_stage'][-1]['text'] == 'print("'+workspace+'")\n'
     changed = {**candidate, 'wall_seconds': 1800}
-    with pytest.raises(ValueError, match='immutable'):
-        asyncio.run(binding.execute(parent, 'hpc.candidate.propose', {'candidate_json': json.dumps(changed)}, 'change'))
+    rejected = asyncio.run(binding.execute(parent, 'hpc.candidate.propose',
+        {'candidate_json': json.dumps(changed)}, 'change'))
+    assert rejected['status'] == 'invalid'
+    assert rejected['feedback']['code'] == 'candidate_identity_is_immutable'
+    assert binding._candidates(ledger) == [candidate]
     candidate['files'][0]['path'] = '../escape.py'
     with pytest.raises(ValueError, match='relative_to_allocation_workspace'):
         validate_commission({**c, 'candidates': [candidate]}, resources())
@@ -244,13 +247,43 @@ def test_plan_is_real_launch_contract_with_hashed_portfolio():
         run('/no/manifest', 'none')
 
 
+@pytest.mark.parametrize('effort', [{'iterations': 2000000}, None, True, 0, -1, float('nan'), float('inf')])
+def test_malformed_effort_is_a_repairable_validation_error(effort):
+    from gene_annotation_episode.hpc_campaign import validate_commission
+    value = commission()
+    value['candidates'][0]['units'][0]['effort'] = effort
+    with pytest.raises(ValueError, match='effort_requires_positive_finite_number'):
+        validate_commission(value, resources())
+
+
+def test_invalid_candidate_returns_feedback_and_can_be_repaired_without_a_job(tmp_path):
+    c = commission()
+    candidate = c['candidates'].pop()
+    binding = HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
+                          resources=resources(), commissions={'commission': c})
+    parent = context()
+    binding.initialize(parent)
+    candidate['units'][0]['effort'] = {'iterations': 2000000}
+    arguments = {'candidate_json': json.dumps(candidate)}
+    failed = asyncio.run(binding.execute(parent, 'hpc.candidate.propose', arguments, 'bad-proposal'))
+    assert failed['status'] == 'invalid'
+    assert failed['feedback']['code'] == 'work_unit_effort_requires_positive_finite_number'
+    assert asyncio.run(binding.execute(parent, 'hpc.candidate.propose', arguments, 'bad-proposal')) == failed
+    candidate['units'][0]['effort'] = 1.
+    repaired = asyncio.run(binding.execute(parent, 'hpc.candidate.propose',
+        {'candidate_json': json.dumps(candidate)}, 'repaired-proposal'))
+    assert repaired['status'] == 'completed'
+    assert binding.state(parent).records('handoff') == []
+    assert binding.credit_view(parent, None)['credit'] == 0
+
+
 def test_binding_has_real_iterative_roles_and_direct_parent_tools(tmp_path):
     binding = HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
                           resources=resources(), commissions={'commission': commission()})
     EpisodeBindingRegistry([binding])
     parent = context()
     binding.initialize(parent)
-    assert binding.child_roles('hpc') == ('hpc_prediction', 'launch', 'monitor', 'results')
+    assert binding.child_roles('hpc') == ('hpc_prediction', 'hpc_execution', 'launch', 'monitor', 'results')
     assert {'hpc.monitor', 'hpc.results', 'hpc.allocation.order'} <= {row['name'] for row in binding.catalog(parent)}
     child = context('hpc_prediction')
     binding.prepare_assignment(parent, child.role, dict(child.assignment), dict(child.scope), 'prepare')
@@ -266,8 +299,8 @@ def test_binding_has_real_iterative_roles_and_direct_parent_tools(tmp_path):
     plan = asyncio.run(binding.execute(parent, 'hpc.plan', args, 'plan'))
     assert plan['result']['launch_assignment']['immutable_input_versions'] == []
     assert asyncio.run(binding.execute(parent, 'hpc.plan', args, 'plan')) == plan
-    with pytest.raises(ValueError, match='one_active_allocation'):
-        asyncio.run(binding.execute(parent, 'hpc.plan', args, 'another-plan'))
+    another = asyncio.run(binding.execute(parent, 'hpc.plan', args, 'another-plan'))
+    assert another['result']['plan_id'] != plan['result']['plan_id']
     reopened = HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
                            resources=resources(), commissions={'commission': commission()})
     assert reopened.as_record() == binding.as_record()

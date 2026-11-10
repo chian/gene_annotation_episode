@@ -18,6 +18,7 @@ from typing import Any
 from xml.etree.ElementTree import ParseError
 
 from .acquisition import AcquisitionError, PublicClients, RfamModelSnapshots, SourceSnapshot, article_details, parse_genbank, parse_hmmer
+from .api_error_feedback import api_error_feedback, api_error_response
 from .domain import REF, REFS, RECORD_SCHEMAS, ContractError, canonical, identity, obj, validate_schema
 from .sequence_ops import compare_sites, inspect_sequence, translate, translation_codes
 from .local_jobs import LocalJobPolicy, run_local_job_async, run_cancellable_native
@@ -465,7 +466,8 @@ class ToolRegistry:
                 "limit": POSITIVE, "refs": {**REFS,
                     "description": "Exact reference mode: supply refs alone, including an empty array for no records. Omit kind, offset, limit, current_only and references in this mode."},
                 "current_only": {"type": "boolean"},
-                "references": {"type": "array", "items": REF, "minItems": 1}}, required=[])),
+                "references": {"type": "array", "items": REF, "minItems": 1,
+                    "description": "Select records that refer to any supplied ID through reference fields or provenance anchors. This does not match a record's own ID; to read known records themselves, supply refs alone instead."}}, required=[])),
             "source.read": ("Read a bounded UTF-8 byte window from an actual source. Choose original for retained source bytes, including XML tables/headings omitted by a paragraph projection; text selects that projection when available. Explicit stdout/stderr select retained native stream bytes when present, without falling back to another representation. Returned artifact/offsets support exact anchors.",
                 obj({"source_ref": REF, "offset": INTEGER, "limit": POSITIVE,
                      "representation": {"enum": ["text", "original", "stdout", "stderr"]}}, ["source_ref"])),
@@ -492,8 +494,9 @@ class ToolRegistry:
                         "match": {"enum": ["equals", "contains"]}, "value": TEXT,
                         "case_sensitive": {"type": "boolean"}}), "type": ["object", "null"]}})),
             "source.pdf.info": ("Read native PDF information and physical page count for a selected actual source; no biological interpretation.", obj({"source_ref": REF})),
-            "source.pdf.text": ("Extract one explicitly selected physical PDF page as a reusable UTF-8 text derivative. Its byte offsets are normalized-text coordinates, not original PDF byte offsets. No OCR or interpretation is performed.",
-                obj({"source_ref": REF, "page": POSITIVE, "layout": {"enum": ["reading_order", "layout", "raw"]}}, ["source_ref", "page"])),
+            "source.pdf.text": ("Extract a selected physical PDF page or contiguous page range as a reusable UTF-8 text derivative. page is the first page; optional last_page is inclusive and defaults to page. Use source.pdf.info for the physical page count, then source.locate on the extracted text to find a section without guessing pages. Native page breaks and the selected range are retained. Byte offsets refer to this text derivative, not the PDF. No OCR or interpretation is performed.",
+                obj({"source_ref": REF, "page": POSITIVE, "last_page": POSITIVE,
+                    "layout": {"enum": ["reading_order", "layout", "raw"]}}, ["source_ref", "page"])),
             "source.pdf.page": ("Render one explicitly selected physical PDF page as a reusable PNG source. Rendering does not by itself supply image input to a model or interpret a figure.",
                 obj({"source_ref": REF, "page": POSITIVE, "dpi": {"type": "number", "exclusiveMinimum": 0}}, ["source_ref", "page"])),
             "material.parse": ("Parse a registered supplied asset under a chosen wrapper interpretation. Preserve valid independent members and exact original custody; evidence never enlarges annotation targets.",
@@ -1081,6 +1084,19 @@ class ToolRegistry:
 
     async def execute_async(self, name: str, args: dict, *, scope: dict | None = None,
                             operation_key: str | None = None, permitted_record_refs=None) -> dict:
+        # Bind source readers to this exact host action's receipts. Scientific
+        # dispatch and ordinary annotation dispatch use the same readers; an
+        # omitted dispatch keyword must not discard their received-input port.
+        # Keep an explicitly selected subset, and never infer access for an
+        # unbound/manual call or for a different nested operation.
+        if permitted_record_refs is None and name in {
+                'source.locate', 'source.sequence.scan',
+                'source.sequence.references', 'source.experimental.records'}:
+            invocation = self._current_invocation.get()
+            if (invocation is not None and operation_key is not None
+                    and invocation[2:] == (name, args, operation_key)
+                    and invocation[0].scope == scope):
+                permitted_record_refs = tuple(invocation[0].received_record_refs)
         if (permitted_record_refs is not None and (not isinstance(permitted_record_refs, (list, tuple))
                 or any(not isinstance(ref, str) or not ref for ref in permitted_record_refs))):
             raise ContractError('explicit_permitted_record_refs_required')
@@ -1481,6 +1497,17 @@ class ToolRegistry:
                         result.update(status="partial", feedback={"category": "acquisition",
                             "code": result["result"]["failure_code"],
                             "source_ref": result["result"]["source_ref"]})
+                        if (name == "public.ncbi.entrez"
+                                and result["result"]["failure_code"] == "ncbi_entrez_native_error_response"
+                                and result["result"]["source_ref"] is not None):
+                            result["feedback"]["response"] = api_error_response(snapshot)
+                            result["feedback"]["detail"] = {
+                                "explanation": "The complete returned NCBI error response is included in feedback.response. "
+                                    "For searches, inspect errorlist and querytranslation even when hits are present "
+                                    "before choosing any revised request.",
+                                "read_with": "source.read",
+                                "read_query": {"source_ref": result["result"]["source_ref"],
+                                    "representation": "original", "offset": 0}}
                     if name in ordinary_molecular_tools:
                         result['changed_record_refs'] = list(self._written)
                     if name == FBA_TOOL and result['result']['failures']:
@@ -1564,15 +1591,19 @@ class ToolRegistry:
                             "rows": result["result"]["projection_errors"]})
                     if isinstance(snapshot, RfamModelSnapshots) and snapshot.metadata_error:
                         error = snapshot.metadata_error
-                        result.update(status="partial", feedback={"category": "provider",
+                        result.update(status="partial", feedback={**api_error_feedback(error), "category": "provider",
                             "code": "rfam_metadata_acquisition_failed", "cause_code": error.code,
                             "diagnostic_ref": self._acquisition_diagnostic(error),
                             "retained_model_ref": result["result"]["model_ref"]})
                     if isinstance(snapshot, PmcFiles) and snapshot.error:
-                        result.update(status="partial", feedback={"category": "provider", "code": snapshot.error.code,
+                        result.update(status="partial", feedback={**api_error_feedback(snapshot.error),
+                            "category": "provider", "code": snapshot.error.code,
                             "diagnostic_ref": self._acquisition_diagnostic(snapshot.error)})
                     if name in {"public.pmc.files", "public.pmc.asset"} and result["result"].get("representation_feedback"):
-                        result.update(status="partial", feedback=result["result"]["representation_feedback"])
+                        feedback = result["result"]["representation_feedback"]
+                        if isinstance(snapshot, PmcFiles) and snapshot.error:
+                            feedback = {**feedback, "acquisition_error": result["feedback"]}
+                        result.update(status="partial", feedback=feedback)
                 except Exception as error:
                     # Keep completed independent publications. A failed parser
                     # or later row does not erase an acquired source or an
@@ -1617,6 +1648,7 @@ class ToolRegistry:
                                       "diagnostic_ref": self.store.artifact(f"{type(error).__name__}: {error}", "text/plain")})
                     if isinstance(error, ContractError) and error.detail:
                         result["feedback"]["detail"] = error.detail
+                    result["feedback"].update(api_error_feedback(error))
                 self._save(operation_key, name, args, scope, result)
             return result
         except (RestrictionOperationUnpublished, MolecularOperationUnpublished):
@@ -1636,7 +1668,8 @@ class ToolRegistry:
                 diagnostic = self.store.artifact(canonical({"representation": "local_exception",
                     "details": error.diagnostic}), "application/json")
             result.update(status="unavailable" if error.code.endswith(("not_configured", "not_installed", "missing")) else "failed",
-                          feedback={"category": "execution" if error.code.startswith("local_job_") or error.phase in {
+                          feedback={**api_error_feedback(error),
+                              "category": "execution" if error.code.startswith("local_job_") or error.phase in {
                               'native_execution', 'local_execution', 'local_preflight', 'local_admission'} else "provider", "code": error.code, "retry_after": error.retry_after,
                                     "job_ref": error.job_ref, "diagnostic_ref": diagnostic,
                                     **({"phase": error.phase} if error.phase is not None else {}),
@@ -1644,12 +1677,14 @@ class ToolRegistry:
             if name in {ITC_TOOL, LIFTOVER_TOOL, CD_TOOL} and operational.get('known_terminal') is True:
                 result['status'] = 'failed'
         except (ContractError, ValueError, KeyError) as error:
-            result["feedback"] = {"category": "arguments_or_reference", "code": str(error) if isinstance(error, ContractError) else "invalid_tool_input"}
+            result["feedback"] = {**api_error_feedback(error), "category": "arguments_or_reference",
+                "code": str(error) if isinstance(error, ContractError) else "invalid_tool_input"}
             if isinstance(error, ContractError) and error.detail:
                 result["feedback"]["detail"] = error.detail
         except Exception as error:
             diagnostic = self.store.artifact(f"{type(error).__name__}: {error}", "text/plain")
-            result.update(status="failed", feedback={"category": "execution", "code": "adapter_execution_failed",
+            result.update(status="failed", feedback={**api_error_feedback(error),
+                "category": "execution", "code": "adapter_execution_failed",
                                                     "diagnostic_ref": diagnostic})
         # Failed attempts are durable audit, not acquired scientific units.
         # An operation key identifies this attempt; later attempts need a new key.
@@ -1936,9 +1971,11 @@ class ToolRegistry:
                 operation='xlsx_'+operation, operands=operands)
         else:
             operation = name.rsplit(".", 1)[1]
+            if operation == "text" and args.get("last_page", args["page"]) < args["page"]:
+                raise ContractError("pdf_page_range_reversed")
             output = await self._native_thread_async(pdf_native, path, operation=operation, executables=dict(self.pdf_executables),
                 job_limits=self.local_job_policy.to_dict(),
-                first_page=args.get("page"), last_page=args.get("page"), page=args.get("page"),
+                first_page=args.get("page"), last_page=args.get("last_page", args.get("page")), page=args.get("page"),
                 layout=args.get("layout", "reading_order"), dpi=args.get("dpi", 150))
         output = replace(output, metadata={**output.metadata, "parent_source_ref": source["id"],
             "input_artifact_ref": source["artifact_ref"]})
@@ -2009,9 +2046,17 @@ class ToolRegistry:
         material = self.store.register_material(source_ref=source["id"], format="opaque", use="evidence")
         self._written.append(material["id"])
         transformation = "archive_member" if name == "source.archive.extract" else "pdf_text" if name == "source.pdf.text" else "pdf_page"
+        page = args.get("page")
+        page_range = {}
+        if transformation == "pdf_text":
+            page_range = {"first_page": page, "last_page": args.get("last_page", page)}
+            if page_range["first_page"] != page_range["last_page"]:
+                # The source's retained native selection identifies the range.
+                # Do not label a multi-page derivative as one physical page.
+                page = None
         derivative = self._put("source_derivative", {"source_ref": source["id"],
             "parent_source_ref": metadata["parent_source_ref"], "transformation": transformation,
-            "selection_ref": args.get("member_ref"), "page": args.get("page"),
+            "selection_ref": args.get("member_ref"), "page": page,
             "layout": args.get("layout", "reading_order") if transformation == "pdf_text" else None,
             "dpi": args.get("dpi", 150) if transformation == "pdf_page" else None,
             "coordinate_system": "original_member_bytes" if transformation == "archive_member" else
@@ -2019,7 +2064,7 @@ class ToolRegistry:
         return {"source_ref": source["id"], "material_ref": material["id"], "derivation_ref": derivative["id"],
             "artifact_ref": source["artifact_ref"], "media_type": media_type,
             "image_source_ref": source["id"] if media_type.startswith("image/") else None,
-            "page": args.get("page"), "coordinate_system": derivative["coordinate_system"],
+            "page": page, **page_range, "coordinate_system": derivative["coordinate_system"],
             "provenance": metadata, "biological_interpretation": "not_performed"}, [source["id"], material["id"], derivative["id"]]
 
     def _acquisition_diagnostic(self, error: AcquisitionError) -> str:

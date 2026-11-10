@@ -360,7 +360,7 @@ def test_published_fba_inputs_and_retained_values_reach_recurring_text_turns(tmp
                     "reaction_id | BC", "direction | max", "optlang.glpk_interface", "cobra", "0.32.1",
                     software["python_version"],
                     "allocation.memory_bytes | 21474836480", "allocation.scratch_bytes | 4294967296",
-                    "allocation.wall_seconds | null", "Caller-authored C/BC additions", info["instructions"]):
+                    "allocation.memory_bytes", "Caller-authored C/BC additions", info["instructions"]):
                 assert value in task
             for source in ("flux_balance_measurements", "flux_balance_model_views", "flux_balance_saved_sheets",
                     "flux_balance_edited_models", "flux_balance_failures"):

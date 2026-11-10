@@ -107,7 +107,7 @@ def selected_plan(directory, software, *, sheet=None, operation="analyze_proteas
     request_path.write_text(json.dumps(request, indent=4) + "\n")
     selection = {"operation": operation, "mode": "saved_sheet", "driver_request": request, "request_file": pin(request_path)}
     environment = _environment(software)
-    policy = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+    policy = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
     payload = contracts.selected_payload_sha256(selection=selection, software=software, policy=policy, selected_environment=environment)
     job = {"argv": [software["python"]["path"], "-B", "-m", contracts.ADAPTER_MODULE, "--plan", contracts.PLAN_FILENAME,
         "--selected-payload-sha256", payload], "environment": environment}

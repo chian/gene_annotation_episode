@@ -116,8 +116,7 @@ def test_registered_liftover_native_source_delivery_and_saved_views(tmp_path, mo
         assert gzip_source["artifact_ref"] == gzip_file and malformed_source["artifact_ref"] == malformed_file
         evidence = [chain_source["id"], chain_file, gzip_file, malformed_file]
         assert store.reference_subset(evidence, scope) == evidence
-        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024**3,
-            scratch_bytes=4 * 1024**3, wall_seconds=None))
+        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
         contract = tools.catalog()[LIFTOVER_TOOL]
         assert contract["resources"] == "local" and contract["input_schema"] == liftover_tool_contract()["input_schema"]
         descriptor, selected = _libraries(directory, tools)

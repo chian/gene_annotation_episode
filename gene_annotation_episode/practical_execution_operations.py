@@ -209,8 +209,7 @@ class LocalPracticalOperations:
             if not assignment.get('resource_id'):
                 raise ValueError('native_blast_utility_resource_identity_required')
             confined(assignment['workspace'], self.configuration['workspace'])
-            if (self.policy.memory_bytes > 20 * 1024**3 or self.policy.scratch_bytes > 4 * 1024**3
-                    or self.policy.wall_seconds is not None):
+            if self.policy.memory_bytes > 20 * 1024**3 or self.policy.scratch_bytes > 4 * 1024**3:
                 raise ValueError('native_blast_utility_local_policy_conflict')
         if 'native_blast_masking' in assignment['requested_job']:
             from .native_blast_masking_contracts import validate_native_blast_masking_requested_job
@@ -227,8 +226,7 @@ class LocalPracticalOperations:
             if not assignment.get('resource_id'):
                 raise ValueError('native_blast_masking_resource_identity_required')
             confined(assignment['workspace'], self.configuration['workspace'])
-            if (self.policy.memory_bytes > 20 * 1024**3 or self.policy.scratch_bytes > 4 * 1024**3
-                    or self.policy.wall_seconds is not None):
+            if self.policy.memory_bytes > 20 * 1024**3 or self.policy.scratch_bytes > 4 * 1024**3:
                 raise ValueError('native_blast_masking_local_policy_conflict')
         if 'native_fluorescence' in assignment['requested_job']:
             from .native_fluorescence_contracts import POLICY, validate_fluorescence_requested_job
@@ -422,7 +420,7 @@ class LocalPracticalOperations:
             if not assignment.get('resource_id'):
                 raise ValueError('native_infernal_preparation_resource_identity_required')
         constraints = assignment['constraints']
-        allowed = {'allocation', 'memory_bytes', 'scratch_bytes', 'wall_seconds'}
+        allowed = {'allocation', 'memory_bytes', 'scratch_bytes'}
         if set(constraints)-allowed:
             raise ValueError('unsupported_explicit_local_constraint')
         policy = self.configuration['policy']

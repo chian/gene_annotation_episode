@@ -49,11 +49,15 @@ def create_policy(parameters: dict) -> PolicyBindings:
     supplied = parameters['services']
     wired = isinstance(supplied, dict) and supplied.get('version') == WIRED_VERSION
     expected = _WIRED_SERVICE_FIELDS if wired else _SERVICE_FIELDS
-    optional = {'scientific_contract_information_profile'} | ({'protein_structure_environments'} if wired else set())
+    optional = {'scientific_contract_information_profile', 'literature_configuration'} | ({'protein_structure_environments',
+        'hpc_commissions', 'shared_execution_memory'} if wired else set())
     if (not isinstance(supplied, dict) or not expected <= set(supplied) <= expected | optional
             or supplied.get('version') not in {VERSION, WIRED_VERSION}):
         raise ValueError('explicit_assembled_services_configuration_required')
     services = json.loads(canonical(supplied))
+    if 'literature_configuration' in services:
+        LiteratureEpisodes(None, outcome_page_size=services['literature_outcome_page_size'],
+            **services['literature_configuration'])
     if 'scientific_contract_information_profile' in services:
         from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE
         if services['scientific_contract_information_profile'] != CONTRACT_INFORMATION_PROFILE:
@@ -74,9 +78,10 @@ def create_policy(parameters: dict) -> PolicyBindings:
             or any(not isinstance(role, str) for role in services['log_roles'])):
         raise ValueError('explicit_assembled_log_roles_required')
     original = parameters['policy']
-    if not isinstance(original, dict) or original.get('scientific_child') != 'received_findings':
-        raise ValueError('assembled_policy_requires_explicit_received_findings')
-    policy = investigation_policy(original, episode_roles=_SPECIALIST_ROLES)
+    if not isinstance(original, dict):
+        raise ValueError('explicit_assembled_policy_required')
+    policy = investigation_policy(original, episode_roles=(*_SPECIALIST_ROLES,
+        *(('hpc', 'hpc_prediction') if services.get('hpc_commissions') is not None else ())))
     if wired:
         from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
         # Validate explicit configuration before constructing any application.
@@ -85,6 +90,8 @@ def create_policy(parameters: dict) -> PolicyBindings:
             services['acquired_record_unit'], services['monitoring_information_unit'],
             services['log_window_bytes'], tuple(services['log_roles']),
             services['monitor_outcome_page_size'],
+            hpc_commissions=services.get('hpc_commissions'),
+            shared_execution_memory=services.get('shared_execution_memory'),
             **({'protein_structure_environments': services['protein_structure_environments']}
                if 'protein_structure_environments' in services else {}))
 
@@ -102,11 +109,15 @@ def create_policy(parameters: dict) -> PolicyBindings:
             monitor_outcome_page_size=services['monitor_outcome_page_size'],
             log_window_bytes=services['log_window_bytes'],
             log_roles=tuple(services['log_roles']),
+            **({'literature_configuration': services['literature_configuration']}
+               if 'literature_configuration' in services else {}),
             **({'scientific_contract_information_profile': services['scientific_contract_information_profile']}
                if 'scientific_contract_information_profile' in services else {}),
             **({'execution_resources': services['execution_resources'],
                 'initial_execution_information': services['initial_execution_information'],
                 'tool_registry': tool_registry,
+                'hpc_commissions': services.get('hpc_commissions'),
+                'shared_execution_memory': services.get('shared_execution_memory'),
                 **({'protein_structure_environments': services['protein_structure_environments']}
                    if 'protein_structure_environments' in services else {})} if wired else {}))
 

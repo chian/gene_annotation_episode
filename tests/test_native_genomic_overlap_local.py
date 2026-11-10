@@ -182,7 +182,7 @@ def test_real_selected_interpreter_driver_under_existing_lifecycle(tmp_path):
     assert result.returncode == 0
     assert result.metadata['policy'] == POLICY
     assert result.metadata['verified_cgroup'] == {'memory_max': POLICY['memory_bytes'], 'memory_swap_max': 0,
-        'runtime_max': 'infinity', 'kill_mode': 'control-group', 'oom_policy': 'kill'}
+        'kill_mode': 'control-group', 'oom_policy': 'kill'}
     plan = local_genomic_overlap_plan(state.assignment, str(handle.path))
     bundle = json.loads(Path(plan['attempt_directory'], BATCH_FILENAME).read_bytes())
     assert bundle['batch_status'] == 'complete'

@@ -172,7 +172,7 @@ def test_actual_selected_resource_start_status_collect_and_original_receipt_repl
     assert completed.returncode == 0
     assert completed.metadata['policy'] == POLICY
     assert completed.metadata['verified_cgroup'] == {'memory_max': POLICY['memory_bytes'], 'memory_swap_max': 0,
-        'runtime_max': 'infinity', 'kill_mode': 'control-group', 'oom_policy': 'kill'}
+        'kill_mode': 'control-group', 'oom_policy': 'kill'}
     plan = h.operations._protein_plan(h.assignment, str(handle.path), run_id=RUN, origin_episode_id=EPISODE)
     root = Path(plan['attempt_directory'])
     bundle_before = (root/BUNDLE_FILENAME).read_bytes()

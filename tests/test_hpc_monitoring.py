@@ -55,20 +55,48 @@ def test_pending_credit_supports_long_wait_without_awarding_sleep_credit():
     c = commission()
     before = deepcopy(c)
     policy = {**DEFAULT_POLICY, 'max_interval_seconds': 1200.}
-    chosen = choose_schedule(forecast(c), c['candidates'][0], c, policy, now=100., deadline_at=5000.)
+    chosen = choose_schedule(forecast(c), c['candidates'][0], c, policy, now=100.)
     assert chosen['schedule']
     assert chosen['delay_seconds'] > policy['min_interval_seconds']
     assert chosen['expected_continuation_credit'] > 0
     assert chosen['earned_wait_credit'] == 0
     assert c == before
     expensive = choose_schedule(forecast(c), c['candidates'][0], c,
-        {**policy, 'monitor_cost': 100.}, now=100., deadline_at=5000.)
+        {**policy, 'monitor_cost': 100.}, now=100.)
     assert not expensive['schedule'] and expensive['expected_continuation_credit'] == 0
     accepted = choose_schedule(forecast(c), c['candidates'][0], c, policy,
-        credited=['original-work'], now=100., deadline_at=5000.)
+        credited=['original-work'], now=100.)
     assert not accepted['schedule']
-    expired = choose_schedule(forecast(c), c['candidates'][0], c, policy, now=5001., deadline_at=5000.)
-    assert not expired['schedule']
+    later = choose_schedule(forecast(c), c['candidates'][0], c, policy, now=5001.)
+    assert later['schedule']  # Elapsed time alone cannot expire valuable work.
+
+
+def test_broad_setup_prior_preserves_possible_success_and_pending_monitor_value():
+    import math
+    c = commission()
+    candidate = c['candidates'][0]
+    candidate['wall_seconds'] = 600
+    value = forecast(c)
+    value['times']['setup'] = prediction.distribution(math.log1p(30), 16.2773)
+    value['times']['work'] = prediction.distribution(math.log1p(120), 16.2773)
+    assert prediction.quantile(value['times']['setup']) > candidate['wall_seconds']
+    result = prediction.compare(candidate, value, c['obligations'], c['preferences'])
+    chance = result['attainable_units'][0]['completion_probability']
+    upper = prediction.probability_within(value['times']['setup'], 600)*value['success_probability']
+    assert 0 < chance < upper
+    selected = choose_schedule(value, candidate, c, DEFAULT_POLICY, now=100.)
+    assert selected['schedule'] and selected['expected_continuation_credit'] > 0
+    assert selected['earned_wait_credit'] == 0
+
+
+def test_running_work_does_not_pay_setup_again():
+    c = commission()
+    candidate = c['candidates'][0]
+    value = forecast(c, 'running')
+    value['telemetry']['allocation_remaining_seconds'] = 120
+    result = prediction.compare(candidate, value, c['obligations'], c['preferences'])
+    expected = prediction.probability_within(value['times']['work'], 120)*value['success_probability']
+    assert result['attainable_units'][0]['completion_probability'] == pytest.approx(expected)
 
 
 def test_monitor_checkpoint_keeps_exact_job_forecast_due_and_action(tmp_path):
@@ -94,6 +122,63 @@ def test_monitor_checkpoint_keeps_exact_job_forecast_due_and_action(tmp_path):
     with pytest.raises(MonitorCheckpoint) as checkpoint:
         asyncio.run(controller.wait(future))
     assert checkpoint.value.schedule == future
+
+
+def test_wait_establishes_observed_state_and_collects_known_completion(tmp_path, monkeypatch):
+    """Pure dispatch check: no remote transport, model or clock sleep."""
+    c = commission()
+    c['monitoring'] = dict(DEFAULT_POLICY)
+    binding = HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
+                          resources=resources(), commissions={'commission': c})
+    parent = context()
+    binding.initialize(parent)
+    ledger = binding.state(parent)
+    plan = {'plan_id': 'original-plan', 'candidate_id': c['candidates'][0]['id']}
+    reference = ledger.put('plan', plan)
+    ledger.put('handoff', {'plan_id': plan['plan_id']})
+    ledger.put('forecast', {'plan_id': plan['plan_id'], 'issued_at': 100.})
+    MonitorCronController(ledger).attach(plan, 'original-job', c['monitoring'])
+    monkeypatch.setattr(binding, '_target', lambda *args: {'execution_id': 'original-job'})
+    original_execute = binding.execute
+    observed = []
+    async def dispatch(ctx, tool, arguments, operation_key):
+        if tool == 'hpc.monitor':
+            observed.append(operation_key)
+            ledger.put('monitor', {'plan_id': plan['plan_id'], 'forecast_ref': 'observed-terminal',
+                                  'conditional_prediction': forecast(c, 'complete')})
+            return {'result': {'observed': True}}
+        return await original_execute(ctx, tool, arguments, operation_key)
+    monkeypatch.setattr(binding, 'execute', dispatch)
+    result = asyncio.run(binding.execute(parent, 'hpc.monitor.wait', {'plan_ref': reference}, 'wait-original'))
+    assert result['result']['reason'] == 'observed_terminal_job_collect_now'
+    assert len(observed) == 1
+    assert not ledger.records('monitor_schedule')
+    assert not ledger.records('monitor_wake')  # No claim that a timer fired.
+    assert asyncio.run(binding.execute(parent, 'hpc.monitor.wait', {'plan_ref': reference}, 'wait-original')) == result
+    assert len(observed) == 1
+
+
+def test_missing_monitor_controller_returns_original_job_recovery_feedback(tmp_path, monkeypatch):
+    """A legacy commission can recover without crashing or submitting work."""
+    c = commission()
+    binding = HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
+                          resources=resources(), commissions={'commission': c})
+    parent = context()
+    binding.initialize(parent)
+    ledger = binding.state(parent)
+    plan = {'plan_id': 'original-plan', 'candidate_id': c['candidates'][0]['id']}
+    reference = ledger.put('plan', plan)
+    ledger.put('handoff', {'plan_id': plan['plan_id']})
+    monkeypatch.setattr(binding, '_target', lambda *args: {'execution_id': 'original-job'})
+    result = asyncio.run(binding.execute(parent, 'hpc.monitor.wait', {'plan_ref': reference}, 'legacy-wait'))
+    assert result['status'] == 'invalid'
+    assert result['feedback']['code'] == 'hpc_monitor_controller_not_attached'
+    assert 'hpc.monitor' in result['feedback']['next_step']
+    assert 'hpc.results' in result['feedback']['next_step']
+    assert not ledger.records('monitor_schedule')
+    assert not ledger.records('monitor_wake')
+    assert ledger.credit_view()['credit'] == 0
+    assert asyncio.run(binding.execute(parent, 'hpc.monitor.wait', {'plan_ref': reference}, 'legacy-wait')) == result
 
 
 def test_calendar_resume_is_bound_to_selected_monitor_and_original_window(tmp_path):
@@ -179,7 +264,36 @@ def test_completed_original_goal_closes_on_new_action_without_rewriting_history(
     assert ledger.credit_view()['credit'] == 10
 
 
-def test_wait_mode_constrains_generated_actions_but_preserves_replay_catalog(tmp_path):
+def test_pending_allocations_deduplicate_the_same_obligation_and_add_different_work(tmp_path):
+    c = commission()
+    c['obligations']['second-work'] = deepcopy(c['obligations']['original-work'])
+    second = deepcopy(c['candidates'][0])
+    second['id'] = 'second-portfolio'
+    second['units'][0].update(unit_id='unit-2', obligation_id='second-work')
+    c['candidates'].append(second)
+    binding = HPCEpisodes(None, store=None, run_id='test-run', directory=tmp_path,
+                          resources=resources(), commissions={'commission': c})
+    parent = context()
+    binding.initialize(parent)
+    ledger = binding.state(parent)
+    for ordinal, candidate in enumerate([c['candidates'][0], c['candidates'][0], second]):
+        plan = {'plan_id': 'pending-'+str(ordinal), 'candidate_id': candidate['id'],
+                'original_prediction': forecast(c)}
+        ledger.put('plan', plan)
+        ledger.put('forecast', {'plan_id': plan['plan_id'], 'issued_at': 100.})
+        MonitorCronController(ledger).attach(plan, 'job-'+str(ordinal), DEFAULT_POLICY)
+    result = binding.continuation_for_action(parent, 'test-run:parent:1')['evidence']
+    assert len(result['pending_allocations']) == 3
+    values = result['pending_by_obligation']
+    assert set(values) == {'original-work', 'second-work'}
+    individual = result['pending_allocations'][0]['valuation']['expected_continuation_credit']
+    assert individual > 0
+    assert values['original-work'] == pytest.approx(individual)
+    assert result['expected_continuation_credit'] == pytest.approx(sum(values.values()))
+    assert ledger.credit_view()['credit'] == 0
+
+
+def test_wait_mode_advises_actions_and_preserves_full_catalog(tmp_path):
     from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
     from gene_annotation_episode.runtime import Workflow, controller_from_settings
     from gene_annotation_episode.tools import ToolRegistry
@@ -211,10 +325,14 @@ def test_wait_mode_constrains_generated_actions_but_preserves_replay_catalog(tmp
                 ('test-run', parent.episode_id, 0, json.dumps({'step': {'estimate': {'diagnostics': diagnostic}}})))
         save_mode('wait')
         branches = workflow.action_schema(episode.source)['properties']['selection']['anyOf']
-        assert [branch['properties']['tool']['const'] for branch in branches] == ['hpc.monitor.wait']
+        assert 'hpc.plan' in [branch['properties']['tool']['const'] for branch in branches
+                             if 'tool' in branch['properties']]
+        assert binding.activity_advice(parent)['suggested_tool'] == 'hpc.monitor.wait'
         assert 'hpc.plan' in {row['name'] for row in binding.catalog(parent)}
         save_mode('collect')
         branches = workflow.action_schema(episode.source)['properties']['selection']['anyOf']
-        assert [branch['properties']['tool']['const'] for branch in branches] == ['hpc.results']
+        assert 'hpc.plan' in [branch['properties']['tool']['const'] for branch in branches
+                             if 'tool' in branch['properties']]
+        assert binding.activity_advice(parent)['suggested_tool'] == 'hpc.results'
         save_mode('active_yield_unknown')
-        assert binding.decision_gate(parent) is None
+        assert binding.activity_advice(parent) is None

@@ -41,7 +41,7 @@ _SELECTED_INTENT_VERSION = "flux_balance_worker_intent_v2"
 _CONTROL_NAMES = ("plan.json", "intent.json", "worker.handle.json", "worker.stdout",
     "worker.stderr", "execution.json", "capture.json", ".preparation.lock")
 _CGROUP = {"memory_max": POLICY["memory_bytes"], "memory_swap_max": 0,
-    "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+    "kill_mode": "control-group", "oom_policy": "kill"}
 
 
 def _require(condition, code):

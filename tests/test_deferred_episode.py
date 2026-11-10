@@ -12,7 +12,12 @@ from test_independent_episode import Source, child_unit, leaf, world
 def test_deferred_child_and_parent_work_have_only_completed_action_observations():
     async def exercise():
         context, goal, grain, controllers = world(2)
-        entered, release = asyncio.Event(), asyncio.Event()
+        class ExternalJob(asyncio.Event):
+            async def wait(self):
+                from method_loop.suspension import external_wait
+                return await external_wait(super().wait(),
+                    {'kind': 'scheduled_external_job', 'job_id': 'fixture-job'})
+        entered, release = asyncio.Event(), ExternalJob()
         invocations, phases, credit = [], iter(range(3)), [0]
 
         def receive(result, *_):

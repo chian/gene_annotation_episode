@@ -79,7 +79,7 @@ def sealed_case(tmp_path, monkeypatch, program='cmsearch'):
     identity['requested_job_sha256'] = digest(request)
     plan = {'version': 'native_infernal_run_plan_v1', 'identity': identity,
         'requested_job': request, 'attempt_directory': str(root),
-        'policy': {'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}}
+        'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}}
     inputs = []
     for operand in job['operands']:
         relative = acquisition._staged_relative(operand)

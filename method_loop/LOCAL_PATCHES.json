@@ -1,5 +1,5 @@
 {
-  "patch_id": "durable_independent_episode_ports_v4",
+  "patch_id": "durable_independent_episode_ports_v5",
   "upstream_revision": "7576c096c39bc6af4225d2df6e10be81b189fc60",
   "upstream_hashes_remain_in": "SOURCE.json",
   "license": "Original MIT license retained unchanged in LICENSE.",
@@ -8,7 +8,7 @@
     {
       "path": "episode.py",
       "upstream_sha256": "1b5d37613b9e76530d5b6d207e4a7f0424a5cf60484bb3a7a8cef63fb8fd336d",
-      "local_sha256": "e379a669f58561894370c1e68f2e7ec0df2fdbd9ae3484b6e1c51e0b4ab066d8",
+      "local_sha256": "68c78ed2324a34be35c040287cf06dd2e4b9999f1d7e9314aacbb4d4605c2cd8",
       "details": [
         "EpisodeUpdate retains typed delivery failures and optional admitted report; views expose only admitted reports.",
         "ChildEpisodeUnit catches explicitly typed ReportDeliveryError after independent credit projection, retaining child trace/result.",
@@ -18,7 +18,8 @@
         "ChildEpisodeUnit.start_async commissions a child in an isolated Context stack with immutable parent/child goal ownership. Blocking and independent async returns use one projection/admission helper; no controller formula or completion observation is added at dispatch.",
         "DeferredUnit returns PendingAction without advancing the controller or invoking the completed-unit hook.",
         "ClosedChildUnit collects existing closed work through the original typed return boundary without rerunning a child source.",
-        "Context.from_commission restores the original parent goal/path boundary without a live parent stack."
+        "Context.from_commission restores the original parent goal/path boundary without a live parent stack.",
+        "An in-process parent waiting on one running child also wakes for any other owned child's completion. The temporary observer alone is cancelled; original child tasks, typed admission, zero-valued controller observations and exactly-once receipt identities are preserved. No elapsed-time or usage cutoff, new credit formula or replacement scheduler is introduced."
       ]
     },
     {
@@ -81,10 +82,12 @@
     "tests/test_deferred_episode.py",
     "tests/test_durable_episode.py",
     "tests/test_episode_admission.py",
-    "tests/test_episode_completion.py"
+    "tests/test_episode_completion.py",
+    "tests/test_ready_child_delivery.py::test_ready_zero_credit_reports_are_admitted_before_running_sibling_finishes (causal fixture only; no autonomous scientific validation claim)"
   ],
   "previous_patch_ids": [
     "controlled_report_delivery_and_archive_recovery_v2",
-    "independent_child_execution_foundation_v3"
+    "independent_child_execution_foundation_v3",
+    "durable_independent_episode_ports_v4"
   ]
 }

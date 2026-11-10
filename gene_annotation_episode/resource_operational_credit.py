@@ -20,7 +20,7 @@ from .episode_bindings import BindingContext
 
 _ROLES = {'launch', 'launch_api', 'launch_local', 'launch_hpc', 'results'}
 _KINDS = {'launch_api': 'api', 'launch_local': 'local', 'launch_hpc': 'hpc'}
-_ALLOCATION = {'cpu', 'memory_bytes', 'scratch_bytes', 'wall_seconds'}
+_ALLOCATION = {'cpu', 'memory_bytes', 'scratch_bytes'}
 _CONSTRAINTS = _ALLOCATION | {'allowed_resource_ids', 'allowed_kinds', 'resource_id', 'kind'}
 _JOB_OPERANDS = {'query_ref', 'cpu', 'search_mode', 'existing_job_ref'}
 
@@ -65,8 +65,7 @@ def _selection(value):
     for key, amount in value['allocation'].items():
         if amount is None:
             continue
-        if (key == 'wall_seconds' and (type(amount) not in (int, float) or amount <= 0)
-                or key != 'wall_seconds' and (type(amount) is not int or amount < 1)):
+        if type(amount) is not int or amount < 1:
             raise ValueError('invalid_resource_credit_allocation')
     return value
 
@@ -120,9 +119,7 @@ def _launch_assignment(context):
                 raise ValueError('invalid_resource_credit_constraints')
         for key in _ALLOCATION & constraints.keys():
             amount = constraints[key]
-            if amount is not None and (
-                    key == 'wall_seconds' and (type(amount) not in (int, float) or amount <= 0)
-                    or key != 'wall_seconds' and (type(amount) is not int or amount < 1)):
+            if amount is not None and (type(amount) is not int or amount < 1):
                 raise ValueError('invalid_resource_credit_constraints')
         if not isinstance(assignment['immutable_input_versions'], list):
             raise ValueError('invalid_resource_credit_assignment')

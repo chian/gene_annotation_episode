@@ -35,7 +35,7 @@ PREPARED_FIELDS = {"version", "selector_sha256", "input_data_sha256", "original_
     "comparison_sheet_sha256", "components_artifact_ref", "components_sha256", "calculator_version",
     "projection_rows_artifact_ref", "worker_receipt_artifact_ref", "projection_rows", "issues",
     "preparation_failure", "delivery_complete"}
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 _WORKER = "gene_annotation_episode.rna_structure_comparison_worker"
 _OUTPUTS = {"sheet": "sheet.json", "components": "components.json", "projections": "projections.json",
     "worker_result": "worker-result.json"}
@@ -183,7 +183,6 @@ def _read_context(store, receipt, *, selector, operands, key):
         _require(metadata is not None and _same(metadata.get("policy"), POLICY)
             and metadata.get("verified_cgroup", {}).get("memory_max") == POLICY["memory_bytes"]
             and metadata.get("verified_cgroup", {}).get("memory_swap_max") == 0
-            and metadata.get("verified_cgroup", {}).get("runtime_max") == "infinity"
             and execution["stdout_artifact_ref"] is not None and execution["stderr_artifact_ref"] is not None,
             "rna_comparison_worker_receipt_mismatch")
     outputs = receipt["output_artifacts"]

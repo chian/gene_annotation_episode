@@ -114,6 +114,28 @@ def test_initial_inspection_does_not_submit_or_create_operation_directories(remo
     assert not (remote.database/'submissions').exists()
 
 
+def test_pre_submission_status_is_not_a_failed_execution(remote):
+    value = assignment(remote.workspace)
+    for index in range(2):
+        outcome, _ = execute(remote, value, 'practical.job.status', key='before-'+str(index))
+        detail = outcome['native_outcome']
+        assert detail['status'] == detail['submission_phase'] == 'not_started'
+        assert detail['pbs_job_id'] is None
+        assert detail['requested_job_sha256'] == pbs._digest(value['requested_job'])
+        assert detail['observation_basis'] == 'no_current_submission_ledger_for_original_owned_assignment'
+        assert 'failure' not in detail
+        assert 'requested_job' not in outcome['facts']
+        assert not any(row['satisfied'] for row in assess_validations(value, outcome,
+            value['initial_context'], tool_name='practical.job.status'))
+        assert not (remote.database/'submissions').exists()
+    started, _ = execute(remote, value, 'practical.job.start',
+        {'queue': 'test', 'resources': ['select=1']}, key='first-submission')
+    observed, _ = execute(remote, value, 'practical.job.status', key='after-submission')
+    assert observed['facts']['requested_job']['execution_id'] == started['facts']['requested_job']['execution_id']
+    assert observed['facts']['requested_job']['status'] == 'submitted'
+    assert (remote.database/'submissions').read_text() == '1'
+
+
 def test_actual_command_nonzero_outcome_is_retained_without_reexecution(remote):
     value = assignment(remote.workspace)
     counter = remote.workspace/'counter'

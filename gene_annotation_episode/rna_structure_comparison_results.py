@@ -37,7 +37,7 @@ PREPARED_COPY_FIELDS = ("original_receipt_keys", "selected_input_digests",
     "components_sha256", "calculator_version", "projection_rows", "issues", "preparation_failure", "delivery_complete")
 VALIDATION_KEYS = ["selected_original_operand_authority", "retained_operand_custody",
     "requested_comparison_projection_or_explicit_unavailability"]
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 
 
 def result_receipt_key(body):

@@ -59,12 +59,19 @@ class ExecutionServiceFactory:
     esm_gene_embedding_environments: tuple = ()
     esm_gene_embedding_stored_reads: bool = False
     hpc_commissions: dict | None = None
+    shared_execution_memory: dict | None = None
 
     def __post_init__(self):
+        if self.shared_execution_memory is not None:
+            from .execution_memory import ExecutionMemory
+            object.__setattr__(self, 'shared_execution_memory', _freeze(
+                ExecutionMemory(**plain(self.shared_execution_memory)).as_record()))
         if self.hpc_commissions is not None:
             from .hpc_campaign import validate_commission
             commissions = plain(self.hpc_commissions)
-            if not isinstance(commissions, dict) or not commissions:
+            # An explicit empty catalog enables authenticated received work.
+            # None still leaves the HPC service unconfigured.
+            if not isinstance(commissions, dict):
                 raise ValueError('explicit_hpc_commissions_required')
             object.__setattr__(self, 'hpc_commissions', _freeze({key: validate_commission(value, plain(self.resources))
                 for key, value in commissions.items()}))
@@ -143,7 +150,9 @@ class ExecutionServiceFactory:
             **({'esm_gene_embedding_environments': plain(self.esm_gene_embedding_environments)}
                if self.esm_gene_embedding_environments else {}),
             **({'esm_gene_embedding_stored_reads': True} if self.esm_gene_embedding_stored_reads else {}),
-            **({'hpc_commissions': plain(self.hpc_commissions)} if self.hpc_commissions is not None else {})}
+            **({'hpc_commissions': plain(self.hpc_commissions)} if self.hpc_commissions is not None else {}),
+            **({'shared_execution_memory': plain(self.shared_execution_memory)}
+               if self.shared_execution_memory is not None else {})}
 
     @classmethod
     def from_record(cls, value):
@@ -154,6 +163,9 @@ class ExecutionServiceFactory:
 
     def configure_tool_registry(self, tool_registry):
         """Configure actual ordinary tools before freezing their callable catalog."""
+        if self.shared_execution_memory is not None and tool_registry is not None:
+            from .execution_memory import ExecutionMemory
+            tool_registry.execution_memory = ExecutionMemory(**plain(self.shared_execution_memory))
         for family in ('protein_structure', 'flux_balance', 'molecular_sequence', 'homer', 'tf_binding', 'protease_kinetics', 'protein_conservation', 'protein_phylogeny', 'somatic_variant'):
             environments = getattr(self, family + '_environments')
             saved_modes = (getattr(self, family + '_saved_modes')
@@ -199,7 +211,8 @@ class ExecutionServiceFactory:
         if self.hpc_commissions is not None:
             from .hpc_episodes import HPCEpisodes
             hpc = HPCEpisodes(None, store=store, run_id=run_id, directory=directory,
-                resources=plain(self.resources), commissions=plain(self.hpc_commissions))
+                resources=plain(self.resources), commissions=plain(self.hpc_commissions),
+                shared_execution_memory=plain(self.shared_execution_memory))
             descriptors.append(hpc.as_record())
             hpc_credit = {role: {'definition': {'version': 'hpc_credit_v1',
                 'operands': 'original_commission', 'polling_credit': 0}, 'project': hpc.credit_view}

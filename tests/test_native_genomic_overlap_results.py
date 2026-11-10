@@ -81,7 +81,7 @@ def test_catalog_and_actual_original_and_saved_exact_values(case):
         execution = row["result"]["worker_execution"]
         assert execution["metadata"]["policy"] == F.POLICY
         assert execution["metadata"]["verified_cgroup"]["memory_swap_max"] == 0
-        assert execution["metadata"]["verified_cgroup"]["runtime_max"] == "infinity"
+        assert 'runtime_max' not in execution["metadata"]["verified_cgroup"]
 
 
 def test_own_return_resolution_and_private_classification(case, monkeypatch):

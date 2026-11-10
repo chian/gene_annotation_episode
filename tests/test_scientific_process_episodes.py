@@ -150,7 +150,7 @@ def prepared(binding, *, thought="P01", tools=("fixture.inspect",), evidence_ref
     invocation = deepcopy(INVOCATION)
     if schema is not None:
         invocation["report_schema"] = deepcopy(schema)
-    return binding.prepare_invocation(parent or SimpleNamespace(role="annotation"), "scientific_process",
+    return binding.prepare_invocation(parent or SimpleNamespace(role="annotation", path=(("annotation", "root"),)), "scientific_process",
         assignment, SCOPE, "original-operation", invocation=invocation)
 
 
@@ -213,7 +213,7 @@ def test_assignment_uses_finite_canonical_json_without_key_coercion(mother, bad)
     assignment = {"selection": selection(binding.library), "evidence_refs": [],
                   "constraints": bad, "context": {}}
     with pytest.raises(ValueError):
-        binding.prepare_invocation(SimpleNamespace(role="annotation"), "scientific_process",
+        binding.prepare_invocation(SimpleNamespace(role="annotation", path=(("annotation", "root"),)), "scientific_process",
             assignment, SCOPE, "finite-json", invocation=INVOCATION)
 
 
@@ -474,7 +474,7 @@ def test_requested_process_facts_copy_closed_credit_and_merge_only_received_rows
         "own_action_count": 3, "initial_credit": 11, "credit": 7, "controller_credit": None,
         "episode_yield": None, "parent_invocation_ref": parent_ref}
     own = binding.facts(child, snapshot)["scientific_process_results"][0]
-    assert own == {"version": "scientific_process_result_v2",
+    assert own == {"version": "scientific_process_result_v3", "proposed_annotation_ref": None,
         "invocation_ref": scientific_invocation_ref(child.run_id, child.path),
         "parent_invocation_ref": parent_ref, "origin_kind": "ordinary_child",
         "preparation_operation_ref": None, "selection": {
@@ -570,7 +570,7 @@ def test_setup_freezes_descriptor_without_executable_services_and_reopens_origin
     descriptor = prepare_scientific_binding(run_directory=tmp_path, source_directory=CATALOG,
         tool_catalog=[{**PRIMITIVE, "resources": "local"}],
         child_roles=("scientific_process", "literature"))
-    assert descriptor["version"] == "scientific_process_episodes_v8"
+    assert descriptor["version"] == "scientific_process_episodes_v9"
     assert set(descriptor["configuration"]) == {"library", "tool_library", "child_roles"}
     library = ScientificProcessLibrary(tmp_path / "scientific-process-library")
     tools = ScientificToolLibrary(tmp_path / "scientific-tool-library")

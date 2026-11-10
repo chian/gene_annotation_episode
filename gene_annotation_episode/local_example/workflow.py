@@ -20,7 +20,7 @@ from ..communication import validate_closed_schema, validate_form, interpretatio
 from ..numerical import YieldController
 from ..providers import ModelConnection, load_config
 from ..runtime import (Journal, Record, TypedReportContract, ReleasingContext, FeedbackEpisode,
-    ActionLeaf, TimedChildUnit, ActionFailure, WorkflowError, _plain, _json,
+    ActionLeaf, TimedChildUnit, ActionFailure, WorkflowError, ExecutionContextController, _plain, _json,
     _action_generation_schema, _decode_action_response)
 from .service import JobStore, canonical, token, now
 
@@ -195,7 +195,7 @@ class Source:
         self.last_outcome=result
         if result['status'] not in ('completed','partial'):
             raise ActionFailure(result['feedback'])
-        return Record({'credit':credit})
+        return self.workflow.controller_value(self, index, credit)
 
     async def finish(self, record):
         saved=self.workflow.journal.row('runtime_forms',self.episode_id)
@@ -220,7 +220,7 @@ class JobWorkflow:
     def __init__(self, store, provider, directory, run_id, *, settings=None, controller_factory=None):
         self.store=store;self.provider=provider;self.directory=Path(directory);self.run_id=run_id
         self.journal=Journal(store,run_id);self.archive=JsonArchive(self.directory/'archive')
-        self.settings=settings or {'cost':.4,'window_size':3,'subsample_size':3,'uncertainty_alpha':.05}
+        self.settings=settings or {'cost':.4,'uncertainty_alpha':.05}
         self.controller_factory=controller_factory
         self.grains={name:Grain(name,'One completed selected action','Recorded contribution and parent-requested form',self.controller)
             for name in ('parent','launch','monitor','results')}
@@ -231,9 +231,28 @@ class JobWorkflow:
     def controller(self,path):
         eid=Episode.identity(self.context,self.grains[path[-1][0]],path[-1][1],parent_path=path[:-1]).episode_id
         initial=self.journal.row('runtime_episodes',eid)['initial_credit']
-        if self.controller_factory: return self.controller_factory(path,initial)
-        return YieldController(token('epoch',path),initial,self.settings['cost'],
-            {k:v for k,v in self.settings.items() if k!='cost'})
+        controller = (self.controller_factory(path, initial) if self.controller_factory else
+            YieldController(token('epoch',path),initial,self.settings['cost'],
+                {k:v for k,v in self.settings.items() if k!='cost'}))
+        return ExecutionContextController(controller, self.journal, eid)
+
+    def controller_value(self, source, index, credit):
+        """Keep the selected action identity through its actual observation.
+
+        The existing own-action path uses this boundary. The shared wrapper
+        records timing only once work has returned; old
+        observations retain their original input instead of gaining new times.
+        """
+        observed = self.store.db.execute('SELECT observation FROM runtime_observations '
+            'WHERE run_id=? AND episode_id=? AND json_extract(observation,\'$.decision_index\')=?',
+            (self.run_id, source.episode_id, index)).fetchone()
+        if observed is not None:
+            original = json.loads(observed['observation'])['credit']
+            if (not isinstance(original, dict) or 'credit' not in original
+                    or original.get('estimation_action_index', index) != index):
+                raise WorkflowError('recorded controller input does not match its action')
+            return Record(original)
+        return Record({'credit': credit, 'estimation_action_index': index})
 
     def credit(self, source):
         store=self.store

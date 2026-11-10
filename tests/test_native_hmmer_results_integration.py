@@ -41,7 +41,7 @@ from gene_annotation_episode.tools import ToolRegistry
 
 ROOT = Path(__file__).resolve().parents[1]
 PRODUCER = ROOT / 'verification/tool_graders_native_hmmer_producer_2026-10-24/runs'
-POLICY = {'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 LABELS = (
     'hmmscan_search_ordinary', 'hmmsearch_search_ordinary', 'jackhmmer_search_ordinary',
     'nhmmer_sequence_ordinary', 'nhmmer_profile_ordinary', 'nhmmer_alignment_ordinary',
@@ -336,7 +336,7 @@ def test_selected_native_results_reach_requested_parent_form_and_real_credit(tmp
         assert native_handle['metadata']['policy'] == POLICY
         assert native_handle['metadata']['verified_cgroup']['memory_max'] == POLICY['memory_bytes']
         assert native_handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
-        assert native_handle['metadata']['verified_cgroup']['runtime_max'] == 'infinity'
+        assert 'runtime_max' not in native_handle['metadata']['verified_cgroup']
         assert len(captured['artifacts']) == len(manifest['inputs']) + len(manifest['artifacts'])
         assert {row['artifact_ref'] for row in captured['artifacts']} <= set(source['auxiliary_artifact_refs'])
         prepared = body['prepared']

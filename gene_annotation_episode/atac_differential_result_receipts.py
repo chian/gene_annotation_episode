@@ -453,6 +453,10 @@ class AtacDifferentialResultReceipts:
             "size_bytes": metadata["size"], "format": "application/json"}, value=value)
 
     def validate_handoff(self, proof, intent):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_handoff
+        if is_terminal_target(intent['target']):
+            validate_terminal_handoff(proof, intent, self.store, self.owner.run_id)
+            return
         closed(proof, AtacDifferentialHandoffProof.__annotations__)
         source, body, snapshot, start = (proof[name] for name in AtacDifferentialHandoffProof.__annotations__)
         practical = PracticalReceiptInformation(self.store, self.owner.run_id)
@@ -531,6 +535,12 @@ class AtacDifferentialResultReceipts:
 
     def read_handoff(self, action):
         self.require_action(action)
+        from .terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
+        if is_terminal_target(action.intent['target']):
+            proof = read_terminal_handoff(self.store, self.owner.run_id,
+                action.intent['target'], action.intent['scope'])
+            immutable(action.directory / 'handoff.json', proof)
+            return deepcopy(proof)
         path = action.directory / "handoff.json"
         saved = read_control(path)
         if saved is None:
@@ -565,6 +575,11 @@ class AtacDifferentialResultReceipts:
     def native_snapshot(self, action, observation):
         """Freeze authenticated original controls once, after the observation."""
         self.require_action(action)
+        from .terminal_scientific_evidence import is_terminal_target, terminal_native_snapshot
+        if is_terminal_target(action.intent['target']):
+            value = terminal_native_snapshot(self, action, observation)
+            immutable(action.directory / 'native-snapshot.json', value)
+            return value
         path = action.directory / "native-snapshot.json"
         value = read_control(path)
         if value is None:
@@ -598,6 +613,10 @@ class AtacDifferentialResultReceipts:
         return deepcopy(value)
 
     def validate_native(self, value, intent, observation):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_native
+        if is_terminal_target(intent['target']):
+            validate_terminal_native(value, intent, observation, self.store, self.owner.run_id)
+            return
         from .native_atac_differential_local import _request
         from .native_lifecycle import VERSION as native_version
         closed(value, AtacDifferentialNativeSnapshot.__annotations__)
@@ -649,6 +668,10 @@ class AtacDifferentialResultReceipts:
             require(value["driver_started"] is expected)
 
     def validate_observation(self, value, intent):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_observation
+        if is_terminal_target(intent['target']):
+            validate_terminal_observation(value, intent, self.store, self.owner.run_id)
+            return value
         from .native_lifecycle import VERSION as native_version
         value = validate_resource_observation(value)
         native = value["native"]
@@ -779,7 +802,7 @@ class AtacDifferentialResultReceipts:
         if execution["failure"] is None:
             require(type(execution["returncode"]) is int)
             require(same(metadata.get("verified_cgroup"), {"memory_max": POLICY["memory_bytes"], "memory_swap_max": 0,
-                "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}))
+                "kill_mode": "control-group", "oom_policy": "kill"}))
         else:
             closed(execution["failure"], ("code", "phase", "diagnostic", "operational"))
             require(execution["returncode"] is None)
@@ -1168,6 +1191,13 @@ class AtacDifferentialResultReceipts:
                 require(intent["tool_name"] == "execution.results.collect" and receipt["native"] is not None
                     and receipt["observation"]["native"]["terminal"] and receipt["observation"]["native"]["quiescent"])
                 capture = validate_atac_native_capture(receipt["capture"], original_plan=receipt["native"]["original_plan"])
+                if receipt['native'].get('version') == 'terminal_native_snapshot_v1':
+                    from .terminal_native_file_capture import validate_execution_file
+                    plan, proof = receipt['native']['original_plan'], receipt['native']['command_proof']
+                    for row in capture['files']:
+                        spec = row['specification']
+                        validate_execution_file(row['retained']['file'] if row['retained'] is not None else None,
+                            original_plan=plan, relative_path=spec['relative_path'], format=spec['format'], command_proof=proof)
                 self.file_metadata(receipt["source_action_file"], value=receipt["handoff_proof"]["start_receipt"])
                 self.file_metadata(receipt["writer_closure_file"], value=closure_value(receipt))
                 require(capture["source_action_receipt_ref"] == receipt["source_action_file"]["artifact_ref"]

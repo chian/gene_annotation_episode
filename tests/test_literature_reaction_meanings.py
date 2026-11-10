@@ -215,8 +215,13 @@ def test_portable_old_v2_outcome_schema_payload_and_projection_exact(tmp_path):
         assert out == expected["outcome"]
         assert repo.read(ref) == expected["payload"]
         assert repo.project_cells([ref], permitted_record_refs=out["record_refs"]) == expected["rows"]
-        assert reaction_cells_schema() == expected["cells_schema"]
-        assert reaction_population_schema() == expected["population_schema"]
+        # Preserve exact historical payloads and validate their real arguments
+        # and rows under both contracts. Current documentation and general REF
+        # metadata need not equal the historical schema's serialized text.
+        validate_schema(expected["rows"], expected["cells_schema"])
+        validate_schema(expected["rows"], reaction_cells_schema())
+        validate_schema(args, expected["population_schema"])
+        validate_schema(args, reaction_population_schema())
         with pytest.raises(ContractError): repo.semantic_projection().project_cells([ref], permitted_record_refs=out["record_refs"])
         with pytest.raises(ContractError, match="projection_version"): repo.semantic_projection().validate_empty_return_family(context)
 

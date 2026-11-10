@@ -103,7 +103,7 @@ class A103NativeCase:
         self.files = definition['files'][:2] if wiring_smoke else definition['files']
         self.file_refs = [genomic_source(store,f) for f in self.files]
         self.selectors = definition['selectors'][:2] if wiring_smoke else definition['selectors']
-        self.native_policy = native_policy if native_policy is not None else LocalJobPolicy(128*1024**2,32*1024**2,180)
+        self.native_policy = native_policy if native_policy is not None else LocalJobPolicy(128 * 1024 ** 2, 32 * 1024 ** 2)
         self.tools = A103ToolRegistry(store,a103_work_directory=directory/'native',
             target_genomic_sources={self.target:[self.file_refs[0]]},job_limits=self.native_policy.to_dict())
         panel = directory/'reference-panel.faa'
@@ -462,7 +462,7 @@ class A103NativeCase:
                 if need_ref:
                     return {'response':{'response_type':'select_action','selection':{'kind':'tool',
                         'tool':'shared.resolve_information_need','arguments':{'need_ref':need_ref,'status':'partially_fulfilled',
-                            'evidence_refs':evidence,'reason':'Received actual sequence comparisons for this particular context attribution; remaining scopes retain their own needs.'}},'report_update':{}}}
+                            'evidence_refs':evidence}},'report_update':{}}}
             if stage>0:
                 # Explicit manual requests can precede a context measurement
                 # (e.g. fusion boundaries). They are parent decisions, separate
@@ -499,9 +499,7 @@ class A103NativeCase:
                     self.root_finished = True
                     return {'response':{'response_type':'select_action','selection':{'kind':'tool',
                         'tool':'shared.publish_information','arguments':{'target_ref':self.target,
-                            'evidence_refs':received_context_records(self.store,known,self.scope),
-                            'qualification':'The receiving parent has reviewed these actual context records and per-use grades. '
-                                'Measured association remains separate from unresolved activity, necessity and unexamined sequence.'}},'report_update':{}}}
+                            'evidence_refs':received_context_records(self.store,known,self.scope)}},'report_update':{}}}
                 self.synthesis_requested = True
             self.next_science_budget = 10
             self.last_science_epoch = self.evidence_epoch

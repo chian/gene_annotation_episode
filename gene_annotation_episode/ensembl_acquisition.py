@@ -1026,6 +1026,10 @@ def ensembl_outcome_view(outcome):
                 _unique_issues(_response_issues(value["response"], arguments) + issues)))
     except (ValueError, TypeError, KeyError, UnicodeError, RecursionError, OverflowError):
         return None
+    if value['native_response_state'] == 'error':
+        # A provider error is the returned diagnostic, not discovery metadata.
+        # Keep its original complete native text and parsed representation.
+        return deepcopy(outcome)
     view = {key: child for key, child in value.items() if key not in {"native_text", "xml_document", "tsv_lines"}}
     view["version"] = MODEL_VIEW_VERSION
     view["native_body"] = {"source_ref": value["source_ref"], "representation": "original",

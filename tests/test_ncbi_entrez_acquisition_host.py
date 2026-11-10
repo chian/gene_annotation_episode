@@ -479,6 +479,37 @@ def test_query_translation_and_native_not_found_are_not_reclassified_as_identity
     assert h.store.get_artifact(result.receipt['data_ref']) == raw
 
 
+@pytest.mark.parametrize("host_case", [captures.arguments("search", "protein",
+    term="kinase T123A", max_bytes=4096)], indirect=True)
+def test_native_error_feedback_reads_dropped_term_without_accepting_hits_or_rewriting_query(host_case):
+    h = host_case
+    raw = (b'{"esearchresult":{"count":"146","retstart":"0","retmax":"2",'
+        b'"idlist":["41","42"],"querytranslation":"kinase[All Fields]",'
+        b'"errorlist":{"phrasesnotfound":["T123A"],"fieldsnotfound":[]}}}')
+    selected = deepcopy(h.request)
+    result = acquire(h, raw)
+    assert result.receipt == {"acquired": False, "source_ref": result.source["id"],
+        "data_ref": None, "failure_code": "ncbi_entrez_native_error_response"}
+    assert result.outcome["status"] == "partial"
+    assert result.outcome["record_refs"] == [result.source["id"]]
+    detail = result.outcome["feedback"]["detail"]
+    assert detail["read_with"] == "source.read"
+    known = set(h.workflow.receipts.known(h.context.episode_id))
+    read = _selected(h.tools, h.workflow, h.root, detail["read_with"],
+        detail["read_query"], 1, record=True)
+    assert read["status"] == "completed" and read["result"]["text"].encode() == raw
+    returned = json.loads(read["result"]["text"])["esearchresult"]
+    assert returned["errorlist"]["phrasesnotfound"] == ["T123A"]
+    assert returned["querytranslation"] == "kinase[All Fields]"
+    assert read["record_refs"] == [] and set(h.workflow.receipts.known(h.context.episode_id)) == known
+    assert result.source["artifact_ref"] not in known and result.source["request_ref"] not in known
+    assert h.request == selected and len(h.http.requests) == 1
+    wire, = h.http.requests
+    spec = native.entrez_request_spec(selected)
+    assert wire["url"] == spec["url"] + "?" + urlencode(spec["params"])
+    assert h.store.count("observation") == h.store.count("assessment") == 0
+
+
 @pytest.mark.parametrize('host_case', [captures.arguments('summary', 'protein', ids=['1'], max_bytes=4096)], indirect=True)
 def test_native_not_found_error_keeps_its_original_failure_before_identity_checks(host_case):
     raw = b'{"result":{"uids":["999"],"999":{"uid":"999","error":"selected record not found"}}}'

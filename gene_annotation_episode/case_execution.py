@@ -51,7 +51,7 @@ class PolicyBindings:
     project_monitoring_credit: object
     controller_factory: object
     task_credit_definition: dict
-    scientific_child_credit_definition: dict
+    scientific_child_credit_definition: dict | None
     job_credit_definition: dict
     monitoring_credit_definition: dict
     controller_definition: dict
@@ -89,10 +89,19 @@ class PolicyBindings:
             inputs=self.episode_service_inputs)
         if self.native_timing_information is not None and type(self.native_timing_information) is not NativeTimingInformation:
             raise TypeError('typed_native_timing_information_required')
-        if not all(callable(value) for value in (self.project_task_credit, self.project_scientific_child_credit,
+        if not all(callable(value) for value in (self.project_task_credit,
                                                 self.project_job_credit, self.project_monitoring_credit, self.controller_factory)):
             raise ValueError('case_requires_explicit_credit_and_controller_functions')
-        for value in (self.task_credit_definition, self.scientific_child_credit_definition,
+        if self.project_scientific_child_credit is None:
+            if self.scientific_child_credit_definition is not None:
+                raise ValueError('scientific_child_definition_requires_original_projector')
+        elif (not callable(self.project_scientific_child_credit)
+                or not isinstance(self.scientific_child_credit_definition, dict)
+                or not self.scientific_child_credit_definition):
+            raise ValueError('scientific_child_requires_original_projector_and_definition')
+        else:
+            canonical(self.scientific_child_credit_definition)
+        for value in (self.task_credit_definition,
                       self.job_credit_definition, self.monitoring_credit_definition, self.controller_definition):
             if not isinstance(value, dict) or not value:
                 raise ValueError('case_requires_explicit_binding_definitions')
@@ -319,9 +328,11 @@ def _load_policy(run_dir, policy_file, parameters, *, resume):
             raise TypeError('policy_factory_must_return_PolicyBindings')
         recorded = {'source_sha256': identity, 'snapshot_file': source.name, 'parameters': _json_copy(parameters),
             'definitions': _json_copy({'credit': policy.task_credit_definition,
-                'scientific_child_credit': policy.scientific_child_credit_definition,
                 'job_credit': policy.job_credit_definition,
                 'monitoring_credit': policy.monitoring_credit_definition, 'controller': policy.controller_definition})}
+        if policy.project_scientific_child_credit is not None:
+            recorded['definitions']['scientific_child_credit'] = _json_copy(
+                policy.scientific_child_credit_definition)
         if policy.project_annotation_score is not None:
             recorded['definitions']['annotation_score'] = _json_copy(policy.annotation_score_definition)
         if policy.native_timing_information is not None:

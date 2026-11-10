@@ -78,8 +78,9 @@ def _component_link(store, actual_ref, component_ref, known, *, positions=None, 
                 'pairs':[[j,i,b,a,strength] for i,j,a,b,strength in reverse.get('pairs',[])],
                 'conflicting_target_positions':reverse.get('conflicting_reference_positions',[]),
                 'conflicting_reference_positions':reverse.get('conflicting_target_positions',[])}
-    cells = [p for p in link.get('pairs',[]) if p[0] in set(selected)]
-    ambiguous = set(link.get('conflicting_target_positions',[])) & set(selected)
+    selected_positions = set(selected)
+    cells = [p for p in link.get('pairs',[]) if p[0] in selected_positions]
+    ambiguous = set(link.get('conflicting_target_positions',[])) & selected_positions
     if not cells or ambiguous:
         return {**link,'factor':None,'missing':link['missing'] or ['native_map_in_required_component_region']}
     factor = math.fsum((a==b)*strength for _,_,a,b,strength in cells)/max(len(selected),len(expected))

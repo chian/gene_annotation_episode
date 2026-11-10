@@ -28,14 +28,14 @@ from .local_resources import LocalResources
 VERSION = 'durable_systemd_native_job_v2'
 
 
-def _control(arguments, timeout=5):
+def _control(arguments):
     return subprocess.run(arguments, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
-                          text=True, timeout=timeout, check=False)
+                          text=True, check=False)
 
 
 def _properties(unit):
     selected = ('LoadState', 'ActiveState', 'SubState', 'MemoryMax', 'MemorySwapMax',
-                'RuntimeMaxUSec', 'KillMode', 'OOMPolicy', 'ControlGroup','Slice','BindsTo')
+                'KillMode', 'OOMPolicy', 'ControlGroup','Slice','BindsTo')
     result = _control(['systemctl', '--user', 'show', unit,
                        *['--property='+name for name in selected]])
     return dict(line.split('=', 1) for line in result.stdout.splitlines() if '=' in line)
@@ -70,7 +70,6 @@ class NativeJobHandle:
 def _metadata(policy):
     return {'native_lifecycle_version': VERSION, 'policy': policy.to_dict(), 'enforcement': {
         'memory': 'systemd_cgroup_v2_memory_max', 'swap': 'systemd_memory_swap_max_zero',
-        'wall_time': 'systemd_runtime_max' if policy.wall_seconds is not None else 'unset',
         'scratch': 'monitored_visible_allocated_bytes_with_possible_overshoot',
         'per_file_bytes': 'hard_rlimit_fsize_equal_to_scratch_bytes',
         'process_tree': 'systemd_control_group', 'filesystem_sandbox': False}}
@@ -148,7 +147,9 @@ def prepare_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_p
         'paths': paths, 'metadata': metadata, 'stage': 'prepared',
         'started_at': None, 'started_monotonic_ns': None, 'boot_id': None}
     if statistics is not None:
+        from .execution_memory import ExecutionMemory
         body['statistics'] = statistics.as_record()
+        body['execution_memory_path'] = str(ExecutionMemory.configured().path)
     if native_events is not None:
         body['native_events'] = native_events.as_record()
     stdout.write_bytes(b''); stderr.write_bytes(b'')
@@ -226,20 +227,16 @@ def _dispatch_prepared(handle, body, *, cancel_event=None):
             *([handle_path] if 'statistics' in body or 'native_events' in body else [])))]
     if 'local_resources' in body['metadata']:
         properties.append(f"CPUQuota={body['metadata']['cpu_threads']*100}%")
-    if policy.wall_seconds is not None:
-        properties.append(f'RuntimeMaxSec={policy.wall_seconds}')
-    else:
-        properties.append('RuntimeMaxSec=infinity')
     from .workflow_budget import SLICE as WORKFLOW_SLICE,UNIT as WORKFLOW_UNIT
     properties.extend(['BindsTo='+WORKFLOW_UNIT,'After='+WORKFLOW_UNIT])
     argv = ['systemd-run', '--user', '--quiet', '--no-block', '--service-type=exec', '--unit='+body['unit'],
-            '--slice='+WORKFLOW_SLICE]
+            '--slice='+WORKFLOW_SLICE, '--setenv=PYTHONDONTWRITEBYTECODE=1']
     for prop in properties:
         argv.extend(['--property', prop])
     argv.extend([sys.executable, str(worker), 'run', paths['request'], body['request_sha256']])
     atomic_json(handle_path, body)
     with open(paths['launcher'], 'wb') as log:
-        launch = subprocess.run(argv, stdout=log, stderr=log, timeout=10, check=False)
+        launch = subprocess.run(argv, stdout=log, stderr=log, check=False)
     if launch.returncode != 0:
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
             operational={**body['metadata'], 'reason': 'service_submission_failed', 'launcher_returncode': launch.returncode})
@@ -269,13 +266,12 @@ def resume_start(handle, *, cancel_event=None):
     if body['stage'] == 'prepared':
         return start_prepared(handle, cancel_event=cancel_event)
     _ensure_event_registration(handle, body)
-    policy = LocalJobPolicy(**body['metadata']['policy'])
     if Path(body['paths']['release']).exists():
         return handle
+    policy = LocalJobPolicy(**body['metadata']['policy'])
     if 'capacity_reservation' in body:
         LocalResources.reopen(body['capacity_reservation']['resource']).validate_reservation(
             body['capacity_reservation'])
-    started = time.monotonic()
     while not Path(body['paths']['ready']).exists():
         if cancel_event is not None and cancel_event.is_set():
             raise AcquisitionError('local_job_cancelled', phase='local_preflight', operational=body['metadata'])
@@ -283,9 +279,6 @@ def resume_start(handle, *, cancel_event=None):
         if props.get('ActiveState') in {'failed', 'inactive'} or props.get('LoadState') == 'not-found':
             raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
                 operational={**body['metadata'], 'reason': 'service_did_not_initialize'})
-        if time.monotonic()-started >= 10:
-            raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
-                operational={**body['metadata'], 'reason': 'service_preflight_timeout'})
         time.sleep(.01)
     actual = _properties(body['unit'])
     ready = _load(body['paths']['ready'])
@@ -309,13 +302,11 @@ def resume_start(handle, *, cancel_event=None):
     if (actual.get('Slice')!=WORKFLOW_SLICE or WORKFLOW_UNIT not in actual.get('BindsTo','').split()
             or not group or memory != policy.memory_bytes or swap != 0 or not cpu_verified or
             actual.get('MemoryMax') != str(policy.memory_bytes) or actual.get('MemorySwapMax') != '0' or
-            actual.get('KillMode') != 'control-group' or actual.get('OOMPolicy') != 'kill' or
-            (policy.wall_seconds is None and actual.get('RuntimeMaxUSec') != 'infinity') or
-            (policy.wall_seconds is not None and actual.get('RuntimeMaxUSec') in {None, 'infinity'})):
+            actual.get('KillMode') != 'control-group' or actual.get('OOMPolicy') != 'kill'):
         raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight',
             operational={**body['metadata'], 'reason': 'cgroup_limits_not_verified', 'properties': actual})
     body['metadata']['verified_cgroup'] = {'memory_max': memory, 'memory_swap_max': swap,
-        'runtime_max': actual.get('RuntimeMaxUSec'), 'kill_mode': actual['KillMode'], 'oom_policy': actual['OOMPolicy'],
+        'kill_mode': actual['KillMode'], 'oom_policy': actual['OOMPolicy'],
         'workflow_slice':actual['Slice'],'workflow_owner':WORKFLOW_UNIT}
     if cpu is not None:
         body['metadata']['verified_cgroup'].update(cpu_max=cpu,
@@ -391,13 +382,12 @@ def collect(handle):
                                operational={'state': view['state'], **meta})
     exit_info = meta['service_exit']
     reason = exit_info.get('SERVICE_RESULT')
-    policy = LocalJobPolicy(**meta['policy'])
+    # A completed historical receipt may contain retired settings. Reading its
+    # memory/scratch evidence cannot restore an elapsed-time control.
+    policy = LocalJobPolicy(meta['policy']['memory_bytes'], meta['policy']['scratch_bytes'])
     failure = None
     if reason == 'oom-kill':
         failure = {'resource': 'memory_bytes', 'limit': policy.memory_bytes,
-                   'evidence': {'systemd_service_result': reason}}
-    elif reason == 'timeout' and policy.wall_seconds is not None:
-        failure = {'resource': 'wall_seconds', 'limit': policy.wall_seconds,
                    'evidence': {'systemd_service_result': reason}}
     elif receipt is not None:
         failure = receipt['resource_failure']
@@ -418,7 +408,7 @@ def cancel(handle):
     """Stop the original control group; completion is not scientific success."""
     body = handle.read()
     _control(['systemctl', '--user', 'kill', '--kill-whom=all', '--signal=KILL', body['unit']])
-    _control(['systemctl', '--user', 'stop', body['unit']], timeout=30)
+    _control(['systemctl', '--user', 'stop', body['unit']])
     properties = _properties(body['unit'])
     if not (properties.get('ActiveState') in {'inactive', 'failed'}
             or properties.get('LoadState') == 'not-found'):

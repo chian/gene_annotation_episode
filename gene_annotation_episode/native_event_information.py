@@ -390,9 +390,13 @@ class NativeEventInformation:
 
     def validate_wait(self, context, condition):
         condition = validate_condition(plain(condition))
-        visible = {row['target']['handle'] for row in self.read(context)}
+        visible = {row['target']['handle']: row['target'] for row in self.read(context)}
         for event in condition['events']:
             if event['handle'] in visible:
+                job = self.jobs._row(visible[event['handle']]['job_ref'])
+                if not self.jobs._has_intent(job):
+                    raise EventTargetError('wait_target_unavailable', affected_refs=[event['handle']],
+                        detail='native_job_has_no_submission_intent')
                 if event['event'] != 'state_changed':
                     raise EventTargetError('unsupported_wait_event', affected_refs=[event['handle']],
                         detail='native_event_information_unsupported_event')

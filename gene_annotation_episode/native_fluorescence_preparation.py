@@ -202,7 +202,7 @@ def validate_fluorescence_worker_execution(execution, *, plan, plan_file):
         require(validate_file(execution[name])["format"] == format_, "worker_execution_mismatch")
     meta = execution["metadata"]
     expected_limits = {"memory_max": POLICY["memory_bytes"], "memory_swap_max": 0,
-        "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+        "kill_mode": "control-group", "oom_policy": "kill"}
     require(type(meta) is dict and same(meta.get("policy"), POLICY) and type(meta.get("service_exit")) is dict
         and same(meta.get("verified_cgroup"), expected_limits) and same(body["metadata"].get("verified_cgroup"), expected_limits)
         and all(same(meta.get(key), value) for key, value in body["metadata"].items())

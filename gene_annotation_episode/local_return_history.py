@@ -19,10 +19,11 @@ from method_loop.identities import EpisodeRef, UnitRef
 
 from .communication import validate_form
 from .waiting import validate_condition
+from .episode_admission import load_return_admission
 
 
 VERSION = "local_parent_return_history_v1"
-_STATES = {"admitted", "delivery_failed", "execution_failed", "receiver_closed"}
+_STATES = {"admitted", "delivery_pending", "delivery_failed", "execution_failed", "receiver_closed"}
 _CHILD_KINDS = {"child", "job_child", "episode_child"}
 
 
@@ -51,7 +52,7 @@ class LocalReturnSampleV1(TypedDict):
     commission_sha256: str
     return_id: str
     admission_id: str
-    admission_state: Literal["admitted", "delivery_failed", "execution_failed", "receiver_closed"]
+    admission_state: Literal["admitted", "delivery_pending", "delivery_failed", "execution_failed", "receiver_closed"]
     observation_state: Literal["observed", "unobserved"]
     controller_input: object
     controller_step: object
@@ -230,7 +231,7 @@ class LocalReturnHistory:
             "unavailable_reasons": list(dict.fromkeys(reasons))}
 
     def _sample(self, row, episode_id, tables, reasons):
-        admission = _load(row["admission"])
+        admission = load_return_admission(self.store, self.journal.run_id, row['return_id'])
         index = row["original_decision_index"]
         if (not isinstance(admission, dict) or not _index(index)
                 or admission.get("version") != "episode_admission_v1"
@@ -254,7 +255,7 @@ class LocalReturnHistory:
         state = admission["state"]
         if state != "admitted" and (refs or admission.get("report") is not None):
             _conflict()
-        if state in {"execution_failed", "receiver_closed"} and admission.get("controller_input") is not None:
+        if state in {"delivery_pending", "receiver_closed"} and admission.get("controller_input") is not None:
             _conflict()
         action = (self.journal.row("runtime_actions", episode_id, index)
                   if "runtime_actions" in tables else None)
@@ -264,10 +265,12 @@ class LocalReturnHistory:
             _conflict()
         elif _load(action["action"]).get("kind") not in _CHILD_KINDS:
             _conflict()
-        if action is not None and state in {"admitted", "delivery_failed"}:
+        if action is not None and admission.get('controller_input') is not None:
             outcome = None if action["result"] is None else _load(action["result"])
-            if (not isinstance(outcome, dict) or outcome.get("status") != "completed"
-                    or outcome.get("record_refs") != refs or action["credit"] != row["credit_snapshot"]):
+            statuses = {'failed', 'interrupted'} if state == 'execution_failed' else {'completed'}
+            snapshot = admission.get('credit_snapshot', row['credit_snapshot'])
+            if (not isinstance(outcome, dict) or outcome.get("status") not in statuses
+                    or outcome.get("record_refs") != refs or action["credit"] != snapshot):
                 _conflict()
         intent = None
         if "runtime_commission_intents" in tables:
@@ -295,10 +298,19 @@ class LocalReturnHistory:
             if selected_at is None:
                 reasons.append("selected_at_invalid")
         attempt = None
+        delivery_index = admission.get('repair_decision_index', index)
+        if delivery_index != index:
+            original_attempt = self.store.db.execute('SELECT contract,failure FROM runtime_report_attempts '
+                'WHERE run_id=? AND parent_episode_id=? AND decision_index=?',
+                (self.journal.run_id, episode_id, index)).fetchone()
+            if (original_attempt is None or original_attempt['failure'] is None
+                    or canonical(_load(original_attempt['contract'])) != canonical(contract)):
+                _conflict()
+            contract = admission['delivery_contract']
         if "runtime_report_attempts" in tables:
             attempt = self.store.db.execute("SELECT child_episode_id,contract,form,failure "
                 "FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND decision_index=?",
-                (self.journal.run_id, episode_id, index)).fetchone()
+                (self.journal.run_id, episode_id, delivery_index)).fetchone()
         if attempt is not None:
             saved_contract = _load(attempt["contract"])
             if (contract is not None and canonical(contract) != canonical(saved_contract)
@@ -375,7 +387,7 @@ class LocalReturnHistory:
             return None
         if (admission["state"] in {"admitted", "delivery_failed"} and returned["outcome"] != "closed"
                 or admission["state"] == "execution_failed" and returned["outcome"] == "closed"
-                or admission["state"] == "admitted"
+                or admission["state"] == "admitted" and 'repair_decision_index' not in admission
                     and canonical(returned["form"]) != canonical(admission.get("report"))):
             reasons.append("original_return_admission_conflict")
             return None
@@ -398,7 +410,7 @@ class LocalReturnHistory:
                     or canonical(slot.get("controller_input")) != canonical(admission.get("controller_input"))):
                 _conflict()
             sample["completion_sequence"] = slot_row["sequence"]
-        elif admission["state"] in {"admitted", "delivery_failed"}:
+        elif admission.get('controller_input') is not None:
             reasons.append("completion_slot_unavailable")
         observations = []
         if "runtime_observations" in tables:
@@ -414,7 +426,7 @@ class LocalReturnHistory:
         row = observations[0]
         observed = _load(row["observation"])
         if (not _index(row["unit_index"]) or observed.get("decision_index") != index
-                or admission["state"] not in {"admitted", "delivery_failed"}
+                or admission["state"] not in {"admitted", "delivery_failed", "execution_failed"}
                 or slot is not None and (row["unit_index"] != slot_row["sequence"]
                     or observed.get("label") != slot.get("label"))
                 or canonical(observed.get("credit")) != canonical(admission.get("controller_input"))):

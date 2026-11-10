@@ -206,7 +206,7 @@ def test_retained_actual_native_output_and_saved_sheet_recalculation(preset, mon
         "native_"+preset.replace(":", "_"))
     receipt = json.loads((directory/"receipt.json").read_text())
     assert receipt["returncode"] == 0
-    assert receipt["metadata"]["policy"] == {"memory_bytes": 20*1024**3, "scratch_bytes": 4*1024**3, "wall_seconds": None}
+    assert receipt["metadata"]["policy"] == {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
     assert receipt["metadata"]["enforcement"]["memory"] == "systemd_cgroup_v2_memory_max"
     lines = (directory/"mappings.paf").read_bytes().splitlines()
     grades = [json.loads(line) for line in (directory/"placements.jsonl").read_text().splitlines()]

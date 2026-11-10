@@ -252,8 +252,7 @@ def test_invalid_input_controls_reject_before_reservation(selected_call, change)
     elif change == "environment":
         call["selected"]["environment"]["extra"] = "not selected"
     else:
-        call["policy"] = LocalJobPolicy(memory_bytes=ordinary.POLICY["memory_bytes"],
-            scratch_bytes=ordinary.POLICY["scratch_bytes"], wall_seconds=60)
+        call["policy"] = LocalJobPolicy(memory_bytes=ordinary.POLICY['memory_bytes'], scratch_bytes=ordinary.POLICY['scratch_bytes'] + 1)
     with pytest.raises(ValueError):
         ordinary.prepare_ordinary_orf_attempt(**call)
     assert calls == []

@@ -23,7 +23,8 @@ from .tool_information import RESOURCE_KINDS
 
 
 VERSION = "scientific_process_result_v1"
-RETURN_VERSION = "scientific_process_result_v2"
+LEGACY_RETURN_VERSION = "scientific_process_result_v2"
+RETURN_VERSION = "scientific_process_result_v3"
 SELECTION_REPORT_VERSION = "scientific_process_selection_report_v1"
 SOURCE = "scientific_process_results"
 _CREDIT_KINDS = ("scientific", "monitoring", "operational")
@@ -100,6 +101,8 @@ def report_sources(library, tool_library):
         "completed_actions": {"type": "integer", "minimum": 0},
         "episode_yield": _yield_schema(),
     }), "x-source": SOURCE}
+    schema['items']['properties']['proposed_annotation_ref'] = _reference('hypothesis', nullable=True)
+    schema['items']['required'].append('proposed_annotation_ref')
     return {SOURCE: {"type": "array", "meaning": (
         "Recorded original process selection, explicit revision origin and existing closing "
         "local credit/yield for each invocation actually returned through requested forms. "
@@ -154,8 +157,12 @@ def validate_process_result(value, *, library=None, tool_library=None):
     """Detach and validate one result, optionally resolving its pinned bodies."""
     value = _plain(value)
     code = "scientific_process_result_invalid"
-    _exact(value, _FIELDS, code)
-    if value["version"] not in (VERSION, RETURN_VERSION):
+    _exact(value, _FIELDS + (' proposed_annotation_ref' if 'proposed_annotation_ref' in value
+        or value.get('version') == RETURN_VERSION else ''), code)
+    if value.get('proposed_annotation_ref') is not None:
+        _semantic_ref(value['proposed_annotation_ref'], re.compile(r'hypothesis_[0-9a-f]{24,64}\Z'),
+            'scientific_process_result_proposed_annotation_invalid')
+    if value["version"] not in (VERSION, LEGACY_RETURN_VERSION, RETURN_VERSION):
         raise ValueError("scientific_process_result_version_invalid")
     validate_invocation_ref(value["invocation_ref"])
     parent = value["parent_invocation_ref"]
@@ -219,6 +226,9 @@ def project_process_result(value, *, library, tool_library):
     value = validate_process_result(value, library=library, tool_library=tool_library)
     if value["version"] == RETURN_VERSION:
         return value
+    if value['version'] == LEGACY_RETURN_VERSION:
+        return {**value, 'version': RETURN_VERSION,
+            'proposed_annotation_ref': value.get('proposed_annotation_ref')}
     selection = value["selection"]
     axis_field, thought_field, tools_field = selection_fields(selection)
     choices = ([{"name": name, "resources": None} for name in selection[tools_field]]
@@ -229,7 +239,8 @@ def project_process_result(value, *, library, tool_library):
         "version": SELECTION_REPORT_VERSION, "source_version": selection["version"],
         "evidence_axis": selection[axis_field], "thought_pattern": selection[thought_field],
         "child_tool_info": choices})
-    return {**value, "version": RETURN_VERSION, "selection": reported_selection}
+    return {**value, "version": RETURN_VERSION, "selection": reported_selection,
+        'proposed_annotation_ref': value.get('proposed_annotation_ref')}
 
 
 def credit_binding_ref(metadata):
@@ -287,7 +298,9 @@ def build_process_result(context, completion_snapshot):
             "selection": assignment["selection"], "initial_credit": snapshot["initial_credit"],
             "credit": snapshot["credit"], "credit_kind": kind,
             "credit_binding_ref": credit_binding_ref(metadata), "completed_actions": count,
-            "episode_yield": snapshot["episode_yield"]})
+            "episode_yield": snapshot["episode_yield"],
+            **({'proposed_annotation_ref': assignment['proposed_annotation_ref']}
+               if assignment.get('proposed_annotation_ref') else {})})
     except (KeyError, AttributeError, TypeError) as error:
         raise ValueError("scientific_process_completion_snapshot_invalid") from error
 

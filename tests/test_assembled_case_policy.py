@@ -26,17 +26,41 @@ REPLACED_FIELDS = {'episode_service_factory', 'episode_service_binding',
     'execution_planning_roles'}
 
 
+def test_annotation_root_uses_explicit_axis_cutoffs_without_repricing_child_tasks():
+    from gene_annotation_episode.numerical import AnnotationAxisYieldController
+    from gene_annotation_episode.root_axis_scalars import AXES, VERSION
+    supplied = parameters()['policy']
+    supplied['annotation_support'] = {'version': VERSION}
+    cutoffs = {axis: (index + 1) / 1000 for index, axis in enumerate(AXES)}
+    supplied['root_task'] = {'kind': 'annotation_axis_credit', 'cutoffs': cutoffs}
+    policy = investigation_policy(supplied, episode_roles=SPECIALIST_ROLES)
+    assert policy.project_task_credit.task_credit
+    assert policy.project_scientific_child_credit is None
+    assert not policy.project_annotation_score.task_credit
+    controller = policy.controller_factory((('annotation', 'root'),),
+        {'mode': 'annotation_axis_credit', 'arms': []})
+    assert type(controller) is AnnotationAxisYieldController
+    assert controller.cutoffs == cutoffs
+    assert controller.cutoffs['A105'] != controller.cutoffs['A106']
+    original = dict(cutoffs)
+    cutoffs['A105'] = 99
+    assert controller.cutoffs == original
+    with pytest.raises(ValueError, match='scientific_child_cutoff_requires_original_task'):
+        policy.controller_factory((('annotation', 'root'), ('literature', 'child')), 3)
+
+
 def parameters():
     # These units, costs and lists exercise interfaces; none adopts a real profile.
-    return {'policy': {'scientific_child': 'received_findings',
-        'scientific_progress': {'finding_unit': 7,
+    return {'policy': {'scientific_progress': {'finding_unit': 7,
             'initial_known_record_refs': [], 'loss_preview_size': 5},
         'operational': {'registry_ref': 'engineering-registry',
             'handoff_unit': 3.25, 'acquired_record_unit': .125},
         'monitoring': {'information_unit': .5, 'include_handoff_checks': True},
         'controller': {'cost': .003, 'window_size': 8, 'subsample_size': 4,
             'uncertainty_alpha': .05,
-            'cost_by_role': {role: (index+1)/100 for index, role in enumerate(SPECIALIST_ROLES)}}},
+            'cost_by_role': {**{role: (index+1)/100 for index, role in enumerate(SPECIALIST_ROLES)},
+                'improvement': .11, 'job_launch': .12, 'job_monitor': .13,
+                'job_results': .14}}},
         'services': {'version': 'assembled_case_services_v1',
             'source_directory': str(PUBLICATION), 'tool_retrieval': deepcopy(RETRIEVAL),
             'scientific_child_roles': list(ROOT_ROLES),
@@ -66,7 +90,7 @@ def test_factory_replaces_only_explicit_setup_ports_and_keeps_original_policy_ob
         if field.name not in REPLACED_FIELDS:
             assert getattr(policy, field.name) is getattr(base, field.name)
     assert type(policy.project_task_credit) is ScientificFindingProgress
-    assert policy.project_task_credit is policy.project_scientific_child_credit
+    assert policy.project_scientific_child_credit is None
     assert policy.project_annotation_score is None
     assert type(policy.native_timing_information) is NativeTimingInformation
     assert policy.native_timing_information.information_unit == .5
@@ -128,8 +152,7 @@ def test_wired_setup_keeps_scientific_policy_and_passes_original_registry(monkey
     supplied = parameters()
     supplied['services'].update(version='assembled_case_services_v2',
         execution_resources={'here': {'kind': 'local', 'workspace': str(tmp_path),
-            'policy': {'memory_bytes': 128*1024**2, 'scratch_bytes': 8*1024**2,
-                       'wall_seconds': None}}, 'ebi': {'kind': 'hmmer_api'}},
+            'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}, 'ebi': {'kind': 'hmmer_api'}},
         initial_execution_information={})
     original = deepcopy(supplied)
     policy = create_policy(supplied)
@@ -188,18 +211,18 @@ def test_snapshot_loader_preserves_exact_opt_in_definition_and_original_policy_v
     assert restored.native_timing_information.as_record() == policy.native_timing_information.as_record()
 
 
-@pytest.mark.parametrize('mode', ['annotation_accounts', 'interpretation_accounts', None])
-def test_factory_requires_explicit_received_findings_without_switching_scoring(mode):
+@pytest.mark.parametrize('mode', ['received_findings', 'annotation_accounts', None])
+def test_factory_rejects_role_wide_scientific_credit(mode):
     supplied = parameters()
     supplied['policy']['scientific_child'] = mode
     before = deepcopy(supplied)
-    with pytest.raises(ValueError, match='assembled_policy_requires_explicit_received_findings'):
+    with pytest.raises(ValueError, match='role_wide_scientific_child_credit_policy_retired'):
         create_policy(supplied)
     assert supplied == before
 
 
 @pytest.mark.parametrize('missing', ['finding_unit', 'initial_known_record_refs', 'loss_preview_size'])
-def test_original_received_findings_configuration_stays_explicit(missing):
+def test_available_finding_calculation_configuration_stays_explicit(missing):
     supplied = parameters()
     del supplied['policy']['scientific_progress'][missing]
     with pytest.raises(ValueError, match='explicit_scientific_progress_configuration_required'):

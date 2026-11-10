@@ -32,6 +32,7 @@ _ARGS = ("source_ref", "source_kind", "assay", "primitives", "covariance_source_
          "distinct_residual_variance", "variance_status", "observation_model", "model_witnesses")
 _MEASUREMENT_FIELDS = ("witness", "number_start", "number_end", "unit_start", "unit_end")
 _WITNESS_FIELDS = ("source_ref", "representation", "start", "end", "quote")
+_WITNESS_LOCATION_FIELDS = ("source_ref", "representation", "start", "end")
 _COVARIANCE_FIELDS = ("version", "primitive_order", "primitive_measurement_keys",
                       "primitive_units", "covariance", "origin")
 
@@ -93,9 +94,38 @@ def _unit(raw, role, field):
 
 
 def _witness_schema():
+    """Full retained witness contract; public input projections omit quote."""
     return obj({"source_ref": REF, "representation": {"enum": ["original", "text"]},
         "start": {"type": "integer", "minimum": 0}, "end": {"type": "integer", "minimum": 1},
         "quote": {"type": "string", "minLength": 1}})
+
+
+def materialize_text_witness_inputs(value, *, read_source):
+    """Fill only exact native-text coordinate selections from authorized bytes.
+
+    Apply after closed input admission and before the original population
+    validator. Existing quoted operands are unchanged, so their ordinary
+    authentication still rejects mismatches. Image interpretations and other
+    objects are never converted into text witnesses.
+    """
+    sources = _Sources(read_source)
+    locations = set(_WITNESS_LOCATION_FIELDS)
+
+    def materialize(selected, field):
+        if isinstance(selected, dict):
+            tagged = set(selected) == locations | {"kind"} and selected.get("kind") == "text"
+            if set(selected) == locations or tagged:
+                witness = {key: selected[key] for key in _WITNESS_LOCATION_FIELDS}
+                retained = sources.witness(witness, field)
+                return {**deepcopy(selected), "quote": retained["quote"]}
+            return {key: materialize(child, field + "." + key)
+                    for key, child in selected.items()}
+        if isinstance(selected, list):
+            return [materialize(child, f"{field}[{index}]")
+                    for index, child in enumerate(selected)]
+        return deepcopy(selected)
+
+    return materialize(value, "arguments")
 
 
 def _nullable(schema):
@@ -146,8 +176,13 @@ class _Sources:
         return self.cache[key]
 
     def witness(self, value, field):
-        _keys(value, _WITNESS_FIELDS, field)
-        _text(value["quote"], field + ".quote")
+        # New selections identify only the retained source interval. Explicit
+        # quotations remain a supported legacy contract and must still match;
+        # a bad supplied quotation must never be silently repaired.
+        quoted = isinstance(value, dict) and "quote" in value
+        _keys(value, _WITNESS_FIELDS if quoted else _WITNESS_LOCATION_FIELDS, field)
+        if quoted:
+            _text(value["quote"], field + ".quote")
         for name in ("start", "end"):
             _index(value[name], field + "." + name)
         if value["end"] <= value["start"]:
@@ -159,7 +194,9 @@ class _Sources:
             actual = source["content"][value["start"]:value["end"]].decode("utf-8")
         except UnicodeDecodeError as error:
             raise ExperimentalContractError("source_span_utf8_boundary_required", field) from error
-        if actual != value["quote"]:
+        if not quoted:
+            _text(actual, field + ".quote")
+        if quoted and actual != value["quote"]:
             actual_bytes = source["content"][value["start"]:value["end"]]
             try:
                 nominated_bytes = value["quote"].encode("utf-8")
@@ -181,7 +218,7 @@ class _Sources:
                 "nominated_utf8_length": None if nominated_bytes is None else len(nominated_bytes),
                 "first_mismatch_utf8_byte": mismatch,
                 "selected_span_text": actual, "selected_span_text_json": literal})
-        return {**deepcopy(value), "artifact_ref": source["artifact_ref"]}
+        return {**deepcopy(value), "quote": actual, "artifact_ref": source["artifact_ref"]}
 
     def measurement(self, value, role, field):
         _keys(value, _MEASUREMENT_FIELDS, field)
@@ -374,4 +411,4 @@ def read_assay_inputs(arguments, *, read_source):
 
 
 __all__ = ["VERSION", "PRIMITIVE_ORDER", "ASSAY_LITERAL_FIELDS", "ENDPOINTS", "ARRANGEMENTS",
-           "SOURCE_KINDS", "assay_arguments_schema", "read_assay_inputs"]
+           "SOURCE_KINDS", "assay_arguments_schema", "materialize_text_witness_inputs", "read_assay_inputs"]

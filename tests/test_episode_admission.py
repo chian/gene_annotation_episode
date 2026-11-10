@@ -172,9 +172,11 @@ def test_failure_preserves_closed_child_work_and_supports_existing_redelivery(tm
         returned["form"]["findings"] = []  # Violates the actual recorded x-source fact.
         seal_return(returned)
         admitted = admit_return(spec, returned, receiver_for(store, spec, contract, receipts))
-        assert admitted["state"] == "delivery_failed"
+        assert admitted["state"] == "delivery_pending"
         assert admitted["delivery_failure"]["code"] == "report_delivery_failed"
-        assert admitted["controller_input"]["credit"] == 0
+        assert admitted["controller_input"] is None
+        action = Journal(store, spec['run_id']).row('runtime_actions', spec['parent']['episode_id'], 7)
+        assert action['credit'] is None and json.loads(action['result'])['status'] == 'pending'
         assert admitted["received_record_refs"] == [] and list(receipts.known(spec["parent"]["episode_id"])) == []
         assert store.get(saved["id"]) == saved
         attempt = store.db.execute("SELECT * FROM runtime_report_attempts").fetchone()
@@ -261,7 +263,7 @@ def test_changed_return_and_original_binding_are_identity_conflicts(tmp_path):
 
 @pytest.mark.parametrize("outcome,code", [("execution_failed", "execution_failed"),
                                          ("interrupted", "interrupted_execution")])
-def test_failed_execution_has_no_completion_projection_or_controller_input(tmp_path, outcome, code):
+def test_failed_execution_observes_original_attempt_without_admitting_child_science(tmp_path, outcome, code):
     store, spec, returned, contract, saved, receipts = setup_case(tmp_path)
     with store:
         returned.update(outcome=outcome, completion=None, episode_archive=None,
@@ -269,17 +271,15 @@ def test_failed_execution_has_no_completion_projection_or_controller_input(tmp_p
                 "affected_refs": [spec["handle"]], "diagnostic_ref": None,
                 "partial_record_refs": [saved["id"]]})
         seal_return(returned)
-        def forbidden():
-            raise AssertionError("failed execution projected scientific completion")
-        receiver = receiver_for(store, spec, contract, receipts, projector=forbidden)
-        receiver = replace(receiver, make_controller_input=lambda *args: forbidden())
+        receiver = receiver_for(store, spec, contract, receipts)
         admitted = admit_return(spec, returned, receiver)
         assert admitted["state"] == "execution_failed"
-        assert admitted["controller_input"] is None and admitted["report"] is None
+        assert admitted["controller_input"] == {'credit': 0, 'estimation_action_index': 7}
+        assert admitted['report'] is None
         assert admitted["delivery_failure"] == returned["failure"]
         action = receiver.journal.row("runtime_actions", spec["parent"]["episode_id"], 7)
         assert json.loads(action["result"])["status"] == ("interrupted" if outcome == "interrupted" else "failed")
-        assert action["credit"] is None
+        assert action["credit"] == 0
         for table in ("runtime_record_receipts", "runtime_report_attempts", "runtime_observations"):
             assert store.db.execute("SELECT count(*) FROM " + table).fetchone()[0] == 0
         assert store.get(saved["id"]) == saved

@@ -14,6 +14,7 @@ import time
 
 from .hpc_queue import canonical, digest
 from .hpc_prediction import log_score
+from .hpc_resource_prediction import measured_value, forecast_metric
 
 
 class HPCLedger:
@@ -138,19 +139,24 @@ class HPCLedger:
                 observation = measured['metrics'][metric]
                 if observation['observed_at'] <= forecast['issued_at']:
                     continue  # never validate a forecast against an already known event
-                baseline = forecast['reference']['times'][metric]
-                predicted = forecast['prediction']['times'][metric]
+                baseline = forecast_metric(forecast['reference'], metric)
+                predicted = forecast_metric(forecast['prediction'], metric)
                 if predicted is None or baseline is None:
                     continue
                 elapsed = forecast['elapsed'].get(metric, 0.)
-                remaining = observation['seconds']-elapsed
-                if remaining < 0:
+                actual = measured_value(metric, observation)
+                predicted_elapsed = predicted.get('elapsed', elapsed)
+                baseline_elapsed = baseline.get('elapsed', elapsed)
+                if actual < max(predicted_elapsed, baseline_elapsed):
                     continue
                 censored = observation.get('censored', False)
-                gain = log_score(predicted, remaining, censored=censored)-log_score(baseline, remaining, censored=censored)
+                gain = (log_score(predicted, actual-predicted_elapsed, censored=censored)
+                        -log_score(baseline, actual-baseline_elapsed, censored=censored))
                 value = self.commission['credit']['validation_scale']*slot['weight']*gain
                 evidence = {'forecast_id': forecast_id, 'measured_ref': measured_ref, 'slot': slot['id'],
-                            'value': value, 'censored': censored}
+                            'value': value, 'censored': censored,
+                            'prediction_episode_id': forecast.get('prediction_episode_id'),
+                            'model_ref': forecast.get('model_ref')}
                 evidence_id = self._put(db, 'score_'+digest(evidence), 'score', evidence)
                 # A later actual finish replaces a censored interim score.
                 prior = db.execute('SELECT evidence_id FROM credits WHERE slot=?', ('validation:'+slot['id'],)).fetchone()

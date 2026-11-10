@@ -1,6 +1,7 @@
 """Exact user-selected A105 sum/max rules and parent numerical custody."""
 from copy import deepcopy
 from dataclasses import replace
+import json
 
 import pytest
 
@@ -167,6 +168,11 @@ def test_parent_combines_actual_possessed_grades_and_cold_replay_keeps_exact_sub
             read_cells=lambda ctx, ref, components: native.fact_cells(ctx, [ref], components=components))
         outcome = repo.populate(context, args, 'combine')
         ref = outcome['result']['sheet_ref']
+        native_outcome = json.loads(store.db.execute(
+            f'SELECT outcome FROM {repo.operations_table} WHERE operation_key=?',
+            ('combine',)).fetchone()['outcome'])
+        assert native_outcome['record_refs'] == [ref]
+        assert set(outcome['record_refs']) > {ref}
         rows = outcome['result']['cells']
         validate_schema(rows, aggregation_cells_schema())
         by_metric = {row['component']: row for row in rows}
@@ -181,7 +187,9 @@ def test_parent_combines_actual_possessed_grades_and_cold_replay_keeps_exact_sub
             path=(('annotation', 'annotation325'),), assignment={},
             received_record_refs=repo.cell_record_refs([by_metric['overall']]))
         repo.receive_cells(outer, [by_metric['overall']], 'trusted-aggregate-return')
+        changes = store.db.total_changes
         assert repo.populate(context, args, 'combine') == outcome
+        assert store.db.total_changes == changes
     def forbidden(*args, **kwargs):
         raise AssertionError('restoration must not calculate an aggregate or reread scientific inputs')
     monkeypatch.setattr('gene_annotation_episode.literature_a105_aggregation_storage.aggregate_a105', forbidden)
@@ -190,6 +198,9 @@ def test_parent_combines_actual_possessed_grades_and_cold_replay_keeps_exact_sub
     with Store(tmp_path) as cold:
         cold.db.execute('PRAGMA query_only=ON')
         changes = cold.db.total_changes
+        monkeypatch.setattr(cold, 'transaction', forbidden)
+        for name in ('_register', '_refresh_dependents', '_refresh_main'):
+            monkeypatch.setattr('gene_annotation_episode.literature_sheet_updates.' + name, forbidden)
         repo = LiteratureA105AggregationRepository(cold, context.run_id)
         assert repo.fact_cells(outer, [ref], components=list(COMPONENTS)) == [by_metric['overall']]
         assert repo.populate(context, args, 'combine') == outcome
@@ -197,6 +208,87 @@ def test_parent_combines_actual_possessed_grades_and_cold_replay_keeps_exact_sub
         altered = deepcopy(by_metric['overall']); altered['value'] = 99
         with pytest.raises(ContractError, match='differs_from_saved'):
             repo.validate_fact_values(outer, [altered])
+        changed = deepcopy(args)
+        changed['experiments'][0]['metrics']['validity'] = None
+        with pytest.raises(ContractError, match='operation_key_reused_for_different_work'):
+            repo.populate(context, changed, 'combine')
+        restricted = replace(context, received_record_refs=tuple(
+            ref for ref in context.received_record_refs if ref != args['assertion_ref']))
+        with pytest.raises(ContractError, match='record_not_received'):
+            repo.populate(restricted, args, 'combine')
+
+
+def test_publication_replay_keeps_original_return_after_later_publication(tmp_path, monkeypatch):
+    from gene_annotation_episode.literature_sheet_updates import current_sheet_refs, current_scoring_sheets
+    with Store(tmp_path) as store:
+        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
+        context, args, native, _ = parent_fixture(store)
+        repo = LiteratureA105AggregationRepository(store, context.run_id,
+            read_cells=lambda ctx, ref, components: native.fact_cells(ctx, [ref], components=components))
+        original = repo.populate(context, args, 'combine')
+        changed = deepcopy(args)
+        changed['experiments'][0]['metrics']['validity'] = None
+        later = repo.populate(context, changed, 'combine-later')
+        heads = current_sheet_refs(store, context)
+        assert set(heads) - set(original['record_refs'])
+        assert later != original
+        assert all('returned_record_refs' not in row['dependency_receipt']
+            for row in current_scoring_sheets(store, context))
+        before = list(store.db.iterdump())
+        def forbidden(*args, **kwargs):
+            raise AssertionError('saved publication must not publish or refresh')
+        monkeypatch.setattr(store, 'transaction', forbidden)
+        assert repo.populate(context, args, 'combine') == original
+        assert current_sheet_refs(store, context) == heads
+        assert list(store.db.iterdump()) == before
+
+
+@pytest.mark.parametrize('registered', [True, False])
+def test_old_publication_missing_return_is_not_reconstructed_or_written(tmp_path, monkeypatch, registered):
+    from gene_annotation_episode.literature_sheet_updates import TABLE
+    with Store(tmp_path) as store:
+        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
+        context, args, native, _ = parent_fixture(store)
+        repo = LiteratureA105AggregationRepository(store, context.run_id,
+            read_cells=lambda ctx, ref, components: native.fact_cells(ctx, [ref], components=components))
+        outcome = repo.populate(context, args, 'combine')
+        key = (context.run_id, context.episode_id, outcome['result']['sheet_ref'])
+        where = 'WHERE run_id=? AND episode_id=? AND sheet_ref=?'
+        if registered:
+            receipt = json.loads(store.db.execute(f'SELECT receipt FROM {TABLE} ' + where, key).fetchone()[0])
+            del receipt['returned_record_refs']
+            store.db.execute(f'UPDATE {TABLE} SET receipt=? ' + where, (json.dumps(receipt), *key))
+        else:
+            store.db.execute(f'DELETE FROM {TABLE} ' + where, key)
+        native_outcome = json.loads(store.db.execute(
+            f'SELECT outcome FROM {repo.operations_table} WHERE operation_key=?',
+            ('combine',)).fetchone()['outcome'])
+        store.db.execute('PRAGMA query_only=ON')
+        before = list(store.db.iterdump())
+        def forbidden(*args, **kwargs):
+            raise AssertionError('old saved publication must not open a transaction')
+        monkeypatch.setattr(store, 'transaction', forbidden)
+        if registered:
+            with pytest.raises(ContractError, match='literature_publication_return_not_retained'):
+                repo.populate(context, args, 'combine')
+        else:
+            assert repo.populate(context, args, 'combine') == native_outcome
+        assert list(store.db.iterdump()) == before
+
+
+def test_new_publication_still_rolls_back_native_sheet_if_update_fails(tmp_path, monkeypatch):
+    with Store(tmp_path) as store:
+        store.create_problem(raw_sequence='ATGGCT', molecule='dna')
+        context, args, native, _ = parent_fixture(store)
+        repo = LiteratureA105AggregationRepository(store, context.run_id,
+            read_cells=lambda ctx, ref, components: native.fact_cells(ctx, [ref], components=components))
+        before = list(store.db.iterdump())
+        def failed_update(*args, **kwargs):
+            raise RuntimeError('publication update failed')
+        monkeypatch.setattr('gene_annotation_episode.literature_sheet_updates._refresh_main', failed_update)
+        with pytest.raises(RuntimeError, match='publication update failed'):
+            repo.populate(context, args, 'combine')
+        assert list(store.db.iterdump()) == before
 
 
 def test_source_identifier_alone_does_not_authorize_parent_to_aggregate_private_cells(tmp_path):

@@ -317,7 +317,7 @@ def test_source_restores_rejections_redelivery_and_unfinished_ordinary_work(tmp_
         restored = ledger.restore_source("parent")
         assert restored == {"version": SOURCE_RESTORE_VERSION, "next_call_index": 6,
             "latest_effect": latest, "latest_effect_index": 5, "last_completed_decision_index": 0,
-            "unfinished_own_action_indices": [3, 6], "source_state": None}
+            "unfinished_own_action_indices": [3, 5, 6], "source_state": None}
         assert ledger.record_decision_effect("parent", 1, rejected) == rejected
         with pytest.raises(WorkflowError, match="decision_effect_identity_conflict"):
             ledger.record_decision_effect("parent", 1, effect("rejected", value=999))

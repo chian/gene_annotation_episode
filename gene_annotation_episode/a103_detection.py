@@ -8,6 +8,7 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+from copy import deepcopy
 from pathlib import Path
 
 from Bio import SearchIO,SeqIO
@@ -39,7 +40,7 @@ def search_receipt(store,snapshot_ref,native_source_ref,component_ref,known):
     return body,sequence
 
 
-def detect(request):
+def detect(request, *, verified_cds=None):
     native_path,database_path = Path(request['native_path']),Path(request['database_path'])
     metadata = request['search_metadata']
     database_bytes = database_path.read_bytes()
@@ -68,13 +69,39 @@ def detect(request):
             neighborhood = request.get('neighborhood')
             if neighborhood is not None and index not in {r['source_feature_index'] for r in neighborhood['cds']}:
                 continue
-            tr = _translation(record,feature)
+            calculation = {} if verified_cds is not None else None
+            tr = _translation(record,feature,calculation_provenance=calculation)
             if tr['status']!='verified':
                 uncertain.append({'accession':record.id,'feature_index':index,'reason':tr['qualification']})
                 continue
             sha = hashlib.sha256(tr['sequence'].encode()).hexdigest()
             features.append({'accession':record.id,'feature_index':index,'sequence_sha256':sha,
                              'in_searched_database':sha in known_hashes})
+            if verified_cds is not None:
+                # Retain the calculation already performed above. The default
+                # legacy return and the translation/scoring rules are unchanged.
+                verified_cds.append({'accession':record.id,
+                    'selected_accession':binding.get('selected_accession',binding['accession']),
+                    'record_length':len(record),
+                    'record_source_ref':binding.get('source_ref'),
+                    'source_file_sha256':binding.get('source_file_sha256'),
+                    'source_request':deepcopy(binding.get('source_request')),
+                    'source_feature_index':index,
+                    'coordinate_system':'zero_based_half_open_record_local',
+                    'location':str(feature.location),
+                    'segments':[[int(part.start),int(part.end)] for part in feature.location.parts],
+                    'location_parts':[{'start':int(part.start),'end':int(part.end),
+                        'strand':part.strand,'ref':part.ref,'ref_db':part.ref_db}
+                        for part in feature.location.parts],
+                    'location_operator':getattr(feature.location,'operator',None),
+                    'strand':feature.location.strand,
+                    'locus_tags':deepcopy(feature.qualifiers.get('locus_tag',[])),
+                    'protein_ids':deepcopy(feature.qualifiers.get('protein_id',[])),
+                    'sequence_sha256':sha,
+                    'in_searched_database':sha in known_hashes,
+                    'translation':deepcopy(tr),
+                    'translation_calculation':deepcopy(calculation),
+                    'nucleotide_sequence_scope':'feature_extract_in_part_order_after_codon_start_offset'})
     complete = bool(features) and not uncertain and all(f['in_searched_database'] for f in features)
     feature_hashes = {f['sequence_sha256'] for f in features}
     hits = []

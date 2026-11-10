@@ -183,8 +183,7 @@ def test_selected_tiny_native_preparation_cases_once():
     captures = []
     report = {"record_type": "blast_preparation_explicit_native_capture_v1",
         "case_matrix": _pin(packet / "CASE_MATRIX_001.json"),
-        "policy": {"memory_bytes": 21474836480, "scratch_bytes": 4294967296,
-                   "swap_bytes": 0, "wall_seconds": None},
+        "policy": {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'swap_bytes': 0},
         "environment_overrides": overrides,
         "scope": "native fixture evidence only; episode integration and search compatibility unverified",
         "cases": captures}

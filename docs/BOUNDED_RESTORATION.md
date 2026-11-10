@@ -56,6 +56,18 @@ as other selected tools. The host fixes the current Episode and the strict
 prior-decision boundary. The model cannot provide an Episode ID or read the
 current/future decision recursively.
 
+Under `decision_exchange_v1`, `request_context` reads own attempt metadata and
+selected inputs. Its `own_attempt_detail` pointers do not address outcomes.
+The ordinary `episode.history` reader remains available for `records` and
+`publications`; the metadata-only `index` view is supplied by pending lookups.
+An outcome fingerprint includes an actionable `read_with` declaration for its
+exact prior decision. Several selected own read results can therefore be recalled
+together without rereading their sources. This remains one ordinary completed
+read with the existing observation semantics; it does not replay old work or
+award its old credit. It does not grant another episode's private history.
+This interface correction was source reviewed on 2026-11-05; its fresh full
+workflow validation is tracked in the evidence-axis ledger.
+
 Examples:
 
 ```json

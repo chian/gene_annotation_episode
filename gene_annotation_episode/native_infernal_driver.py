@@ -121,7 +121,7 @@ def _validate_plan(value):
     request = validate_native_infernal_requested_job(plan["requested_job"])
     _validate_identity(plan["identity"], request)
     policy = plan["policy"]
-    if type(policy) is not dict or set(policy) != {"memory_bytes", "scratch_bytes", "wall_seconds"}:
+    if type(policy) is not dict or set(policy) != {'memory_bytes', 'scratch_bytes'}:
         raise ValueError("native_infernal_explicit_policy_required")
     LocalJobPolicy(**policy)
     _absolute_directory(plan["attempt_directory"])

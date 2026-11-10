@@ -35,7 +35,7 @@ from test_tool_grading_publication import numerical, operation_count
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LIMITS = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+LIMITS = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 
 
 def grading_collection(store, source_ref):
@@ -386,7 +386,7 @@ def test_nonadjacent_duplicate_synthetic_rows_group_by_exact_query_without_doubl
 def test_synthetic_resource_limit_preserves_row_grading_without_complete_search_claim(tmp_path):
     # This explicitly selected limit belongs to a synthetic waiting process.
     # The actual minimap2 tests use the unchanged 20 GiB / 4 GiB / no-time-limit policy.
-    policy = {"memory_bytes": 256 * 1024**2, "scratch_bytes": 2 * 1024**2, "wall_seconds": 1}
+    policy = {'memory_bytes': 256 * 1024 ** 2, 'scratch_bytes': 2 * 1024 ** 2}
     store, tools, args = setup_synthetic_process_case(tmp_path, "resource_after_row", job_limits=policy)
     with store:
         outcome = tools.execute("reads.map", args, operation_key="synthetic-limited-row")

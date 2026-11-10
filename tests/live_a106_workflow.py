@@ -41,6 +41,28 @@ def execution_factory(configuration, *, store, directory, tool_registry):
     return factory
 
 
+def evaluation_tool_configuration(run, *, resume=False):
+    """Bind native requests to this window's actual machine allowance.
+
+    Resumption retains the original tool operands; changed defaults must not
+    alter a saved investigation's configuration.
+    """
+    if resume:
+        return json.loads((run / "workflow/run.json").read_text())["tool_configuration"]
+    from gene_annotation_episode.workflow_budget import active_budget
+    bounds = active_budget()["environment_bounds"]
+    config = {"public": {"provider_access_dir": str(run / "provider-access")},
+        "local_jobs": {"memory_bytes": bounds["memory_bytes"]},
+        "local_resources": {"cpu_threads": bounds["cpu_percent"] // 100,
+            "memory_bytes": bounds["memory_bytes"]},
+        "local_tools": {"minimap2_cache_dir": str(run / "cache/minimap2")}}
+    for name in ("pdfinfo", "pdftotext", "pdftoppm"):
+        executable = shutil.which(name)
+        if executable:
+            config["local_tools"][name + "_executable"] = executable
+    return config
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, required=True)
@@ -49,6 +71,7 @@ def main():
     parser.add_argument("--execution-config", type=Path,
         help="JSON containing the existing execution binding configuration; omitted means no BV-BRC execution")
     args = parser.parse_args()
+    launcher_bytes = Path(__file__).read_bytes()
     root = Path(__file__).resolve().parents[1]
     run = args.run_dir.resolve()
     if not run.is_relative_to(root / "runs") or run == root / "runs":
@@ -71,6 +94,7 @@ def main():
     if not args.resume:
         if (run / "launch.json").exists() or snapshot.exists():
             parser.error("existing run: select --resume or a new run directory")
+        (run / "launcher-source.py").write_bytes(launcher_bytes)
         for package in ("gene_annotation_episode", "method_loop"):
             shutil.copytree(root / package, snapshot / package,
                 ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
@@ -103,11 +127,7 @@ def main():
         product_partition_population=True, active_site_population=True, parent_depletion_population=True,
         stoichiometric_balance_population=True, compiled_assay_population=True,
         reference_parent_sources=[], contract_information_profile=CONTRACT_INFORMATION_PROFILE)
-    config = {"public":{"provider_access_dir":str(run / "provider-access")},
-        "local_tools":{"minimap2_cache_dir":str(run / "cache/minimap2")}}
-    for name in ("pdfinfo", "pdftotext", "pdftoppm"):
-        if shutil.which(name):
-            config["local_tools"][name + "_executable"] = shutil.which(name)
+    config = evaluation_tool_configuration(run, resume=args.resume)
 
     async def execute():
         with Store(run / "state") as store:
@@ -124,7 +144,7 @@ def main():
                     sequence_sha256=hashlib.sha256(sequence.encode()).hexdigest(), sequence_length=len(sequence),
                     literature_flags=flags, models="repository defaults", controller="repository default YieldController",
                     local_resource_directory=os.environ.get("GENE_EPISODE_LOCAL_RESOURCE_DIRECTORY"),
-                    launcher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                    launcher_sha256=hashlib.sha256(launcher_bytes).hexdigest(),
                     execution_configuration_sha256=execution_digest,
                     external_cutoff=None, preloaded_evidence=[], scripted_model_decisions=False,
                     evaluator_expectations_loaded=False, bvbrc_execution=("deferred_by_user"

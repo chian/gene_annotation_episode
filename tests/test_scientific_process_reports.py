@@ -89,7 +89,8 @@ def test_source_is_closed_with_actual_slot_enums_and_semantic_namespaces(library
     schema = obj({"parent_chosen_name": source["report_schema"]})
     validate_closed_schema(schema)
     properties = source["report_schema"]["items"]["properties"]
-    assert properties["version"]["const"] == "scientific_process_result_v2"
+    assert properties["version"]["const"] == "scientific_process_result_v3"
+    assert properties['proposed_annotation_ref']['type'] == ['string', 'null']
     assert properties["selection"]["properties"]["version"]["const"] == "scientific_process_selection_report_v1"
     for field, slot in (("evidence_axis", "annotation_distinction"),
                         ("thought_pattern", "thought_pattern")):

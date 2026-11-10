@@ -94,8 +94,7 @@ def full_resources(tmp_path):
         'uniprot': {'kind': 'api', 'service': 'uniprot'},
         'blast': {'kind': 'api', 'service': 'ncbi_blast'},
         'bvbrc': {'kind': 'api', 'service': 'bvbrc_data'},
-        'here': {'kind': 'local', 'workspace': str(tmp_path/'local'), 'policy': {
-            'memory_bytes': 20*1024**3, 'scratch_bytes': 4*1024**3, 'wall_seconds': None}},
+        'here': {'kind': 'local', 'workspace': str(tmp_path/'local'), 'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}},
         'configured-pbs': {'kind': 'pbs_ssh', 'workspace': str(tmp_path/'pbs'),
             'ssh_argv': ['unexecuted-ssh', 'fixture'], 'python_executable': '/usr/bin/python3',
             'account': 'EpiCalib'}}

@@ -41,7 +41,7 @@ DRIVER_REQUEST_FILENAME = "molecular-sequence-driver-request.json"
 BINDING_FILENAME = "ordinary-orf-input-binding.json"
 ENVIRONMENT_SELECTION = {"version": "molecular_sequence_execution_selection_v1",
     "environment_realization": "operation_scoped_tmp_and_cache_v1"}
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 _CONTROL_NAMES = (BINDING_FILENAME, DRIVER_REQUEST_FILENAME, PLAN_FILENAME)
 _NATIVE_PATHS = ("request", "ready", "release", "status", "result", "launcher")
 

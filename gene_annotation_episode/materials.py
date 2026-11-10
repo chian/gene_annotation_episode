@@ -485,8 +485,30 @@ def source_window_selection(source, representation):
     return selected_ref, representation, available
 
 
+def _source_character_span(handle, offset):
+    """Find the complete UTF-8 character containing an interior byte offset."""
+    left = max(0, offset - 3)
+    handle.seek(left)
+    nearby = handle.read(7)
+    position = offset - left
+    start = position
+    while start > 0 and nearby[start] & 0xC0 == 0x80:
+        start -= 1
+    first = nearby[start]
+    width = (2 if 0xC2 <= first <= 0xDF else 3 if 0xE0 <= first <= 0xEF
+             else 4 if 0xF0 <= first <= 0xF4 else 0)
+    if not width or not start < position < start + width:
+        return None
+    try:
+        nearby[start:start + width].decode("utf-8")
+    except UnicodeDecodeError:
+        return None
+    return left + start, left + start + width
+
+
 def source_window(store, source_ref, *, offset=0, limit=12000, representation="text"):
     source = store._require(source_ref, {"source"})
+    requested_representation = representation
     selected_ref, representation, available = source_window_selection(source, representation)
     artifact = store.get(selected_ref)
     if type(offset) is not int or not 0 <= offset <= artifact["size"] or type(limit) is not int or limit < 1:
@@ -494,15 +516,33 @@ def source_window(store, source_ref, *, offset=0, limit=12000, representation="t
     with artifact_path(store, artifact["id"]).open("rb") as handle:
         handle.seek(offset)
         content = handle.read(limit)
-    if content and content[0] & 0xC0 == 0x80:
-        raise ContractError("source_offset_not_utf8_boundary")
+        if content and content[0] & 0xC0 == 0x80:
+            span = _source_character_span(handle, offset)
+            detail = {}
+            if span is not None:
+                start, end = span
+                detail = {"source_ref": source_ref, "artifact_ref": artifact["id"],
+                    "representation": representation, "requested_offset": offset,
+                    "character_start": start, "character_end": end,
+                    "retry_query": {"source_ref": source_ref, "representation": representation,
+                        "offset": start, "limit": max(limit, end - start)}}
+            # The selected read still fails; the caller chooses whether to
+            # request the suggested window. No source text is returned here.
+            raise ContractError("source_offset_not_utf8_boundary", detail=detail)
     while content:
         try:
             text = content.decode("utf-8")
             break
         except UnicodeDecodeError as error:
             if error.reason != "unexpected end of data":
-                raise ContractError("source_not_utf8_text") from error
+                raise ContractError("source_not_utf8_text", detail={
+                    "source_ref": source_ref, "artifact_ref": artifact["id"],
+                    "requested_representation": requested_representation,
+                    "representation": representation,
+                    "available_representations": available,
+                    "requested_offset": offset,
+                    "invalid_byte_offset": offset + error.start,
+                    "required_encoding": "utf-8"}) from error
             if error.start == 0:
                 raise ContractError("source_window_too_small_for_character") from error
             content = content[:error.start]

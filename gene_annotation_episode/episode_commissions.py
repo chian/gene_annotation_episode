@@ -17,6 +17,7 @@ from method_loop.durable import (DurableExecutionError, DurableExecutionStore,
 from .domain import ContractError
 from .episode_journal import Journal, WorkflowError
 from .episode_receipts import EpisodeReceipts
+from .pending_assignment import original_assignment
 from .state import Store
 
 
@@ -238,11 +239,14 @@ class CommissionCoordinator:
             else:
                 self._check_status(status, spec)
             items.append({"handle": spec["handle"], "role": spec["child"]["role"],
+                "original_assignment": original_assignment(
+                    spec["child"]["request"], row["original_decision_index"]),
                 "lifecycle_state": status["lifecycle_state"], "selected_at": row["selected_at"],
                 "observed_at": status["observed_at"], "resource_selection": spec["resource_selection"],
                 "expectation_snapshot_refs": spec["expectation_snapshot_refs"],
-                "latest_progress_ref": None, "return_available": status["return_available"]})
-        return {"version": "pending_work_v1", "captured_at": captured, "items": items}
+                "latest_progress_ref": None, "return_available": status["return_available"],
+                'suspension': status.get('suspension'), 'event_target': True})
+        return {"version": "pending_work_v2", "captured_at": captured, "items": items}
 
 
 __all__ = ["CommissionCoordinator", "CommissionError", "VERSION", "FAILURE_CODES"]

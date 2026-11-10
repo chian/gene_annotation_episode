@@ -17,6 +17,7 @@ import math
 from pathlib import Path
 
 from .acquisition import AcquisitionError, SourceSnapshot
+from .api_error_feedback import api_error_feedback, api_error_response
 from .api_execution import HMMERAPIExecution, PROVIDER as LEGACY_PROVIDER
 from .communication import plain
 from .domain import ContractError, identity, validate_schema
@@ -453,7 +454,8 @@ class APIServiceExecution:
             validate_schema(arguments, entry['input_schema'])
             self._selected(context, name, arguments, operation_key)
         except (ValueError, ContractError, KeyError, TypeError) as error:
-            return _outcome(operation_key, status='invalid', code=str(error))
+            return _outcome(operation_key, status='invalid', code=str(error),
+                **api_error_feedback(error))
         directory = self._manifest(context)/'actions'/digest(operation_key)
         directory.mkdir(exist_ok=True)
         # Acquire outside the event loop: a concurrent recovery must not block
@@ -517,8 +519,7 @@ class APIServiceExecution:
             except (ValueError, ContractError, AcquisitionError, KeyError, TypeError) as error:
                 return _outcome(key, status='invalid', code=getattr(error, 'code', str(error)),
                     retry_after=getattr(error, 'retry_after', None),
-                    **({'detail': error.detail} if service.service == 'bvbrc_minhash'
-                        and getattr(error, 'detail', None) else {}))
+                    **api_error_feedback(error))
         prepared = intent['prepared']
         snapshot = None
         try:
@@ -615,6 +616,8 @@ class APIServiceExecution:
                 _immutable(directory/'acquisition.json', receipt)
             else:
                 outcome = _outcome(key, result={'service': service.service, 'event': event})
+                if snapshot is not None and (event['state'] == 'failed' or event['failure_code']):
+                    outcome['result']['error_response'] = api_error_response(snapshot)
                 if context.role == 'launch_api' and event['handoff_ready']:
                     if snapshot is None:
                         raise ValueError('api_handoff_requires_actual_response')
@@ -636,11 +639,10 @@ class APIServiceExecution:
             return outcome
         except BaseException as error:
             interruption = isinstance(error, (asyncio.CancelledError, KeyboardInterrupt, SystemExit))
-            feedback = {'phase': getattr(error, 'phase', None),
+            feedback = {**api_error_feedback(error, snapshot=snapshot),
+                'phase': getattr(error, 'phase', None),
                 'retry_after': getattr(error, 'retry_after', None),
                 'submission_outcome': getattr(error, 'submission_outcome', None)}
-            if service.service == 'bvbrc_minhash' and getattr(error, 'detail', None):
-                feedback['detail'] = error.detail
             if service.service == 'enrichr':
                 diagnostic = getattr(error, 'diagnostic', None)
                 if isinstance(diagnostic, dict) and set(diagnostic) == {
@@ -817,12 +819,15 @@ class APIServiceExecution:
             'origin_episode_id': body['episode_id'], 'assignment': body['assignment'], 'scope': body['scope']})
 
     def _observation(self, target, event, snapshot, provenance=()):
+        facts = deepcopy(event['facts'])
+        if snapshot is not None and (event['state'] == 'failed' or event['failure_code']):
+            facts['error_response'] = api_error_response(snapshot)
         return {'observed_at': snapshot.retrieved_at if snapshot is not None else _now(),
             'state': event['state'], 'returncode': None, 'failure_code': event['failure_code'],
             'result_available': event['result_available'], 'measurements': [], 'outputs': [], 'logs': [],
             'provenance_refs': [target['handle'], *provenance],
             'native': {'service': target['assignment']['service'], 'kind': event['kind'],
-                'handle': event['native_handle'], 'facts': event['facts']}}
+                'handle': event['native_handle'], 'facts': facts}}
 
     def observe_target(self, target, *, operation_key, native_operation=None,
                        observation_context=None):
@@ -869,7 +874,8 @@ class APIServiceExecution:
                     value = self._observation(target, event, snapshot, [provenance])
                 except Exception as error:
                     event = {'kind': 'job', 'state': 'unknown', 'native_handle': body['event']['native_handle'],
-                        'handoff_ready': False, 'result_available': False, 'facts': {},
+                        'handoff_ready': False, 'result_available': False,
+                        'facts': api_error_feedback(error),
                         'failure_code': getattr(error, 'code', 'api_service_observation_failed')}
                     value = self._observation(target, event, None)
             _immutable(directory/'observation.json', value)
@@ -1267,7 +1273,8 @@ class APIServiceExecution:
         latest = {}
         for row in self._events(context.episode_id):
             latest[row['name']] = {'state': row['event']['state'],
-                'kind': row['event']['kind'], 'facts': row['event']['facts']}
+                'kind': row['event']['kind'], 'facts': row['event']['facts'],
+                'failure_code': row['event']['failure_code']}
         return {'api_service': service.service,
             'api_request': assignment['request'],
             'api_received_progress': latest,

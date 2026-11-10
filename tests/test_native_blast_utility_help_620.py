@@ -67,9 +67,7 @@ def test_explicit_native_help_and_version_only():
             cases.append(case)
             (destination / "CAPTURE_001.json").write_text(json.dumps({
                 "record_type": "blast_utility_explicit_help_version_capture_v1",
-                "policy": {"memory_bytes": 21474836480,
-                           "scratch_bytes": 4294967296, "swap_bytes": 0,
-                           "wall_seconds": None},
+                "policy": {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'swap_bytes': 0},
                 "environment_overrides": {"BLAST_USAGE_REPORT": "false",
                                           "NCBI_DONT_USE_NCBIRC": "1"},
                 "cases": cases,

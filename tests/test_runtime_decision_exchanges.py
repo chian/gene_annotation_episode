@@ -30,7 +30,8 @@ def test_category_yield_parameters_default_controller():
 
 
 @pytest.mark.parametrize('version', ['existing_yield_controller_explicit_parameters_v1',
-                                   'existing_yield_controller_explicit_role_costs_v2'])
+                                   'existing_yield_controller_explicit_role_costs_v2',
+                                   'existing_yield_controller_explicit_role_costs_v3'])
 @pytest.mark.parametrize('wrapped', [False, True])
 def test_category_yield_parameters_declared_caller_layout(version, wrapped):
     from gene_annotation_episode.numerical import YieldParameters
@@ -41,6 +42,9 @@ def test_category_yield_parameters_declared_caller_layout(version, wrapped):
     if version == 'existing_yield_controller_explicit_role_costs_v2':
         definition.update(cost_by_role={'job_monitor': .1},
             cost_selection='exact_episode_role_override_otherwise_caller_cost')
+    if version == 'existing_yield_controller_explicit_role_costs_v3':
+        definition.update(cost_by_role={'job_monitor': .1},
+            cost_selection='exact_episode_role_required_for_children')
     if wrapped:
         # prepared_case_bindings wraps controller_definition; assemble_workflow
         # then assigns this exact wrapper to controller_binding.definition.

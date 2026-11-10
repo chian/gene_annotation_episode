@@ -37,11 +37,7 @@ def _nullable(schema):
     return {**deepcopy(schema), 'type': [schema['type'], 'null']}
 
 
-ALLOCATION_SCHEMA = obj({
-    'cpu': {'type': ['integer', 'null'], 'minimum': 1},
-    'memory_bytes': {'type': ['integer', 'null'], 'minimum': 1},
-    'scratch_bytes': {'type': ['integer', 'null'], 'minimum': 1},
-    'wall_seconds': {'type': ['number', 'null'], 'exclusiveMinimum': 0}})
+ALLOCATION_SCHEMA = obj({'cpu': {'type': ['integer', 'null'], 'minimum': 1}, 'memory_bytes': {'type': ['integer', 'null'], 'minimum': 1}, 'scratch_bytes': {'type': ['integer', 'null'], 'minimum': 1}})
 SELECTION_SCHEMA = obj({'resource_id': _reference('resource_binding'),
     'kind': {'type': 'string', 'enum': ['api', 'local', 'hpc']},
     'allocation': ALLOCATION_SCHEMA, 'capability_binding_ref': _reference('execution_registry')})

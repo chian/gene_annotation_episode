@@ -24,7 +24,7 @@ from gene_annotation_episode.state import Store
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNS = ROOT / "verification/tool_graders_native_hmmer_producer_2026-10-24/runs"
-POLICY = LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None)
+POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
 
 
 def selector(program, *, offset=0, limit=100, keys=None, metrics=None):

@@ -23,7 +23,9 @@ INSTRUCTIONS = (
     'its identity. Select any relevant sections from one or several entries; pass '
     'the returned selection as launch_instructions in the child assignment. '
     'selected_launch_instructions contains exact sections already selected for '
-    'this assignment. Instructions describe ways to work; they do not select '
+    'this assignment. resource_launch_instructions contains the assigned resource\'s '
+    'configured prompt, supplied automatically from this same frozen library; '
+    'do not search for or select that prompt again. Instructions describe ways to work; they do not select '
     'resources, enable tools, override caller constraints, establish current '
     'availability or supply scientific evidence. Inventory and fresh observations '
     'remain separate. No instruction read or selection is mandatory.')
@@ -206,6 +208,34 @@ class LaunchInstructions:
             sections.append(self.read(entry_id=pin['entry_id'], section_id=pin['section_id'],
                                       offset=0, limit=max(1, metadata['lines'])))
         return {'selection': selection, 'sections': sections}
+
+    def for_resource(self, configuration):
+        """Supply a configured resource prompt without an agent lookup action.
+
+        Resource configuration names a library entry, not an execution procedure.
+        New resources supply another entry while retaining the same Launch
+        episode and general execution tools.
+        """
+        entry_id = configuration.get('launch_prompt_entry')
+        section_ids = configuration.get('launch_prompt_sections')
+        if entry_id is None:
+            if section_ids is not None:
+                raise ValueError('launch_instruction_resource_entry_missing')
+            return None
+        if not isinstance(entry_id, str) or not entry_id:
+            raise ValueError('launch_instruction_resource_entry_invalid')
+        metadata = self.entry(entry_id)['entry']
+        available = [item['section_id'] for item in metadata['sections']]
+        if section_ids is None:
+            section_ids = available
+        elif (not isinstance(section_ids, (list, tuple)) or not section_ids
+              or any(not isinstance(item, str) or not item for item in section_ids)
+              or len(set(section_ids)) != len(section_ids)
+              or any(item not in available for item in section_ids)):
+            raise ValueError('launch_instruction_resource_sections_invalid')
+        selected = self.select([{'entry_id': entry_id, 'section_id': section_id}
+                                for section_id in section_ids])
+        return self.materialize(selected)
 
     def execute(self, name, arguments):
         try:

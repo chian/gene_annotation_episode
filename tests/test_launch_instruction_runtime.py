@@ -114,7 +114,7 @@ def launch_assignment(instructions=None):
 def selected_assignment(value):
     return {**deepcopy(value), 'resource_selection': {
         'resource_id': 'fixture-local', 'kind': 'local', 'capability_binding_ref': 'fixture-registry',
-        'allocation': {'cpu': 1, 'memory_bytes': None, 'scratch_bytes': None, 'wall_seconds': None}}}
+        'allocation': {'cpu': 1, 'memory_bytes': None, 'scratch_bytes': None}}}
 
 
 def child_selection(assignment):
@@ -312,8 +312,7 @@ def test_practical_assignment_pins_are_optional_and_precede_initial_native_probe
         tools.launch_instruction_library_directory = source
         directory = tmp_path / 'run'
         resources = {'local': {'kind': 'local', 'workspace': str(spec.workspace),
-            'policy': {'memory_bytes': 128 * 1024**2, 'scratch_bytes': 8 * 1024**2,
-                       'wall_seconds': None}}}
+            'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}}
         value = Workflow(store, tools, Provider([]), directory, 'practical-library-fixture',
             lambda path, initial: FixtureController(str(path), initial, 1), lambda *_: 0,
             root_role='launch_local', episode_binding_factories=(

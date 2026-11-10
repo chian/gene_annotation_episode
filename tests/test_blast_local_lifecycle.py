@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / 'verification/tool_graders_blast_pairwise_2026-10-26_294/native_examples'
 LABELS = ('blastn_range_reverse_json15', 'blastp_gaps_json15', 'blastx_reverse_json15',
           'tblastn_reverse_json15', 'tblastx_frames_json15')
-POLICY = {'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 
 
 def request(label=LABELS[0]):
@@ -101,7 +101,7 @@ def test_exact_native_binding_schema_and_real_selected_start(tmp_path, label):
     assert bundle['requested_job'] == selected
     assert origin.handle.read()['metadata']['verified_cgroup'] == {
         'memory_max': POLICY['memory_bytes'], 'memory_swap_max': 0,
-        'runtime_max': 'infinity', 'kill_mode': 'control-group', 'oom_policy': 'kill'}
+        'kill_mode': 'control-group', 'oom_policy': 'kill'}
     assert origin.plan['policy'] == POLICY
     assert 'UNRELATED_CONTEXT' not in bundle['environment']
     assert origin.state.completion_proof()['endpoint'] == 'usable_handoff'

@@ -34,7 +34,7 @@ from gene_annotation_episode.state import Store
 REPO = Path(__file__).resolve().parents[1]
 PACKET = REPO / "verification/tool_graders_protein_structure_preparation_2026-10-27_396"
 FIXTURES = REPO / "verification/tool_graders_protein_structure_result_worker_2026-10-27_393/fixtures"
-POLICY = LocalJobPolicy(memory_bytes=21474836480, scratch_bytes=4294967296, wall_seconds=None)
+POLICY = LocalJobPolicy(memory_bytes=21474836480, scratch_bytes=4294967296)
 
 
 def _bytes(value):
@@ -131,7 +131,7 @@ def test_actual_worker_retains_exact_native_and_baseline(store, tmp_path, label)
     assert meta["policy"] == POLICY.to_dict()
     assert meta["verified_cgroup"]["memory_swap_max"] == 0
     assert meta["verified_cgroup"]["memory_max"] == POLICY.memory_bytes
-    assert meta["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in meta["verified_cgroup"]
     directory = Path(plan["directory"])
     for field, name in (("stdout_artifact_ref", "worker.stdout"), ("stderr_artifact_ref", "worker.stderr"),
                         ("handle_artifact_ref", "worker.handle.json")):

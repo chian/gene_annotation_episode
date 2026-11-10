@@ -56,7 +56,7 @@ def reservation(tool_name=TOOL, arguments=None):
             implementation_files=[pin("/engineering/source/restriction_mapping_worker.py")],
             biopython_version="1.88", native_source_file=pin("/engineering/Bio/Restriction/Restriction.py"),
             dictionary_file=pin("/engineering/Bio/Restriction/Restriction_Dictionary.py"), environment={}),
-        policy=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3, wall_seconds=None),
+        policy=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3),
         directory=directory, request_file=pin(directory + "/request.json"),
         output_directory=directory + "/output", handle_path=directory + "/handle.json",
         stdout_path=directory + "/stdout.txt", stderr_path=directory + "/stderr.txt")

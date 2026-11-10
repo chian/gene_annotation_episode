@@ -257,6 +257,10 @@ class WorkflowServices:
         if not hasattr(self, '_literature_rate_repository'):
             self._literature_rate_repository = LiteratureRateRepository(
                 self.workflow.store, self.workflow.run_id)
+        else:
+            # A rejected action can roll back DDL while this service cache
+            # survives. Restore the original adapter, retaining its identity.
+            self._literature_rate_repository._ensure_storage()
         return self._literature_rate_repository
 
     def literature_rate_observation_repository(self):
@@ -418,22 +422,6 @@ class WorkflowServices:
                 self.workflow.store, self.workflow.run_id)
         return self._literature_reaction_repository
 
-    def literature_context_repository(self):
-        """Access selected organism/sample compatibility components."""
-        from .literature_context_storage import LiteratureContextRepository
-        if not hasattr(self, '_literature_context_repository'):
-            self._literature_context_repository = LiteratureContextRepository(
-                self.workflow.store, self.workflow.run_id)
-        return self._literature_context_repository
-
-    def literature_a108_subscore_repository(self):
-        """Access final claim-bound organism/sample compatibility results."""
-        from .literature_a108_subscore import LiteratureA108SubscoreRepository
-        if not hasattr(self, '_literature_a108_subscore_repository'):
-            self._literature_a108_subscore_repository = LiteratureA108SubscoreRepository(
-                self.workflow.store, self.workflow.run_id)
-        return self._literature_a108_subscore_repository
-
     def literature_figure_repository(self):
         """Access selected native experimental figure measurements."""
         from .literature_figure_storage import LiteratureFigureRepository
@@ -492,9 +480,28 @@ class WorkflowServices:
             return False
         return self.reference_in_scope(reference, context.scope, namespace)
 
+    def annotation_task_required(self):
+        return bool(getattr(self.workflow.project_credit, 'task_credit', False))
+
+    def proposed_annotation_for(self, context):
+        """Use the task's original assignment, including an ancestor commission."""
+        reference = context.assignment.get('proposed_annotation_ref')
+        if reference is not None:
+            return reference
+        for length in range(len(context.path) - 1, 0, -1):
+            identity = EpisodeRef(context.run_id, context.path[:length]).episode_id
+            row = self.workflow.journal.row('runtime_episodes', identity)
+            if row is None:
+                continue
+            assignment = json.loads(row['request'])['message'].get('episode_assignment', {})
+            reference = assignment.get('proposed_annotation_ref')
+            if reference is not None:
+                return reference
+        return None
+
     def scientific_credit(self, context, receiver_selection):
         workflow = self.workflow
-        local = workflow.project_child_credit is not None and len(context.path) > 1
+        local = len(context.path) > 1
         projector = workflow.scientific_projector_for_context(context)
         arguments = {}
         if local:
@@ -506,8 +513,16 @@ class WorkflowServices:
                 'schema': plain(contract['measurements']['schema']),
                 'initial_report': plain(request['message']['initial_report'])},
                 episode_id=context.episode_id, run_id=context.run_id)
+            annotation = self.proposed_annotation_for(context)
+            if annotation is not None:
+                arguments['assignment']['proposed_annotation_ref'] = annotation
+            elif self.annotation_task_required():
+                raise ValueError('scientific_task_requires_original_proposed_annotation')
         arguments.update(workflow.projector_receipt_arguments(projector, context.episode_id))
-        return workflow.projection_view(projector, plain(context.scope), **arguments)
+        result = workflow.projection_view(projector, plain(context.scope), **arguments)
+        if local and arguments['assignment'].get('proposed_annotation_ref') is not None:
+            result['proposed_annotation_ref'] = arguments['assignment']['proposed_annotation_ref']
+        return result
 
     def scientific_support_routes(self, context, *, observation_kinds):
         """Describe the actual separate annotation binding without projecting it."""
@@ -623,6 +638,14 @@ class WorkflowServices:
             owner = None
         return ProteinStructureActionRecords(self.workflow.store, self.workflow.run_id,
             legacy_returns=getattr(owner, 'native_protein_structure_returns', None))
+
+    def read_received_hpc_result(self, context, reference):
+        from .hpc_result_receipts import read_received_result
+        try:
+            binding = self.workflow.episode_bindings.for_role('hpc')
+        except LookupError as error:
+            raise ValueError('configured_hpc_result_authority_required') from error
+        return read_received_result(binding, context, reference)
 
     def protein_structure_reference_access(self, context, reference, namespace):
         return self.protein_structure_input_authority().retained_reference_access(

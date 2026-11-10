@@ -41,15 +41,29 @@ class LiteratureRateRepository:
     binding_fields = ("assayed_subject_ref", "experiment_ref", "reference_condition_ref",
                       "test_condition_ref", "endpoint_ref", "normalization_ref")
 
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        # All ordinary and atomic grading paths use this same storage
+        # interface.  A dependent update is part of its original publication,
+        # not another model-selected operation or a new credit event.
+        from .literature_sheet_updates import publication
+        for name in ('populate', 'populate_native', 'populate_v3'):
+            if name in cls.__dict__:
+                setattr(cls, name, publication(cls.__dict__[name]))
+
     def __init__(self, store, run_id):
         if not isinstance(run_id, str) or not run_id:
             raise ValueError("explicit_literature_run_required")
         self.store, self.run_id = store, run_id
-        store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.operations_table}(
+        self._ensure_storage()
+
+    def _ensure_storage(self):
+        """Restore this adapter's schema after a caller transaction rolls back."""
+        self.store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.operations_table}(
             run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
             signature TEXT NOT NULL, outcome TEXT NOT NULL,
             PRIMARY KEY(run_id,episode_id,operation_key))""")
-        store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.received_table}(
+        self.store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.received_table}(
             run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
             cells TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))""")
     @property
@@ -637,6 +651,8 @@ class LiteratureRateRepository:
             raise ContractError("native_rate_return_view_requires_rate_repository")
         if not hasattr(self, "_source_projection"):
             self._source_projection = LiteratureRateSourceProjection(self.store, self.run_id)
+        else:
+            self._source_projection._ensure_storage()
         return self._source_projection
 
     def source_domain_projection(self):
@@ -779,6 +795,8 @@ class LiteratureRateRepository:
                 (self.run_id, context.episode_id, operation_key, data))
             self.store.db.execute(f"INSERT OR IGNORE INTO {self._delivery_table} VALUES(?,?,?,?)",
                 (self.run_id, context.episode_id, operation_key, digest))
+            from .literature_sheet_updates import admitted
+            admitted(self, context, cells, operation_key)
 
     def received_cells(self, context):
         """Forward copied admitted cells, not the complete private child sheet."""
@@ -918,6 +936,11 @@ def rate_population_schema():
         "dependence": {"enum": ["unknown", "independent"]},
         "observation_model": {"enum": ["none", "independent_normal_groups"]}})
 
+
+# The base adapter publishes too; subclasses are enrolled at class definition.
+from .literature_sheet_updates import publication as _sheet_publication
+LiteratureRateRepository.populate = _sheet_publication(LiteratureRateRepository.populate)
+LiteratureRateRepository.populate_native = _sheet_publication(LiteratureRateRepository.populate_native)
 
 __all__ = ["LiteratureRateRepository", "COMPONENTS", "PROVIDER", "rate_cells_schema", "rate_population_schema",
            "rate_source_cells_schema"]

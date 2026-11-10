@@ -36,7 +36,7 @@ _TEXT = {"type": "string", "minLength": 1}
 _RUNTIME_REFS = {"type": "array", "items": _TEXT, "uniqueItems": True}
 _FAILURE = obj({"code": {"enum": sorted(FAILURE_CODES)}, "affected_refs": _RUNTIME_REFS,
     "diagnostic_ref": {"type": ["string", "null"]}, "partial_record_refs": _RUNTIME_REFS})
-_EPISODE_STATUS = obj({"version": {"const": "execution_status_v1"}, "handle": _TEXT,
+_EPISODE_STATUS_V1 = obj({"version": {"const": "execution_status_v1"}, "handle": _TEXT,
     "commission_sha256": _TEXT, "lifecycle_state": {"enum": list(_STATES)},
     "observed_at": _TEXT, "execution_identity": {**obj({"pid": {"type": "integer", "minimum": 1},
         "start_ticks": _TEXT, "boot_id": _TEXT}), "type": ["object", "null"]},
@@ -44,6 +44,15 @@ _EPISODE_STATUS = obj({"version": {"const": "execution_status_v1"}, "handle": _T
     "return_id": {"type": ["string", "null"]}, "return_available": {"type": "boolean"},
     "acknowledgment_id": {"type": ["string", "null"]},
     "failure": {**_FAILURE, "type": ["object", "null"]}})
+_SUSPENSION = {'oneOf': [{'type': 'null'},
+    obj({'episode_id': _TEXT, 'dependency': {'type': 'object', 'required': ['kind'],
+        'properties': {'kind': {'enum': ['scheduled_external_job', 'selected_external_event',
+            'owned_child_return']}}}}),
+    obj({'kind': {'const': 'receiver_reconstruction'}, 'pending_handles': _RUNTIME_REFS,
+        'checkpoint': _TEXT, 'failure': _FAILURE})]}
+_EPISODE_STATUS_V2 = obj({**deepcopy(_EPISODE_STATUS_V1['properties']),
+    'version': {'const': 'execution_status_v2'}, 'suspension': _SUSPENSION})
+_EPISODE_STATUS = {'oneOf': [_EPISODE_STATUS_V1, _EPISODE_STATUS_V2]}
 _STATUS = {"oneOf": [_EPISODE_STATUS, deepcopy(JOB_STATUS_SCHEMA), deepcopy(RESOURCE_STATUS_SCHEMA)]}
 _DEPENDENCY = obj({"handle": _TEXT, "kind": {"enum": ["episode", "job"]},
     "relation_ref": _TEXT, "observed_at": _TEXT, "state": {"enum": list(_STATES)}})
@@ -540,7 +549,7 @@ class ProgressProvider:
         return references
 
     def receive_outcome(self, episode_id, outcome, scope, operation_key):
-        """Receive explicit saved C8 refs from a completed or partial own action.
+        """Receive explicit saved C8 refs from an executed own action.
 
         The owner records the actual outcome first and calls this within its
         receipt/credit/completion transaction. The complete finite outcome and
@@ -559,7 +568,10 @@ class ProgressProvider:
             replay = self._progress_delivery_replay(episode_id, signature, operation_key)
             if replay is not None:
                 return replay
-            if outcome.get("status") not in ("completed", "partial"):
+            # A dispatched action can return invalid arguments or references.
+            # Its original iterator still observes that executed attempt; only
+            # explicitly saved, authenticated progress refs can contribute here.
+            if outcome.get("status") not in ("completed", "partial", "invalid", "failed", "unavailable"):
                 raise ContractError("progress_completed_outcome_required")
             references = outcome.get("progress_refs", [])
             if not isinstance(references, list) or any(not isinstance(ref, str) or not ref for ref in references):

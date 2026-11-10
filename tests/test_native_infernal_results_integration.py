@@ -46,7 +46,7 @@ ROOT = Path(__file__).resolve().parents[1]
 INPUTS = ROOT / 'tests/fixtures/native_infernal_result_worker'
 BIN = ROOT / 'resources/software/infernal-1.1.5-install/bin'
 PUBLICATION = ROOT / 'research/slotted_process_library/publications/2026-10-24-001'
-POLICY = {'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 RUN_ID = 'native-infernal-episode-226'
 
 
@@ -420,7 +420,7 @@ def test_real_selected_program_retained_results_and_two_form_boundaries(native_c
     assert handle['metadata']['policy'] == POLICY
     assert handle['metadata']['verified_cgroup']['memory_max'] == POLICY['memory_bytes']
     assert handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
-    assert handle['metadata']['verified_cgroup']['runtime_max'] == 'infinity'
+    assert 'runtime_max' not in handle['metadata']['verified_cgroup']
     root_context = case.owner.native_infernal_returns.context(case.record.episode_id)
     science_record = next(r for r in case.records if case.owner.native_infernal_returns.context(r['episode_id']).role == 'scientific_process')
     science_context = case.owner.native_infernal_returns.context(science_record['episode_id'])

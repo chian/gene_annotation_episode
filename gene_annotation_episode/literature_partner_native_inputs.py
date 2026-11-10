@@ -116,9 +116,8 @@ def partner_source_population_schema():
         "interpretation_witnesses": {"type": "array", "items": deepcopy(witness)},
         "input_mode": {"const": "native_source_spans"},
         "arms": obj({role: _nullable(_arm_schema(enriched=False)) for role in ROLES})})
-    from .literature_experiment_assessments import assessment_schema
-    from .literature_partner_types import EXPERIMENT_TYPES
-    schema["properties"]["experiment_assessment"] = assessment_schema(EXPERIMENT_TYPES)
+    from .literature_partner_inputs import partner_experiment_assessment_schema
+    schema["properties"]["experiment_assessment"] = partner_experiment_assessment_schema()
     return schema
 
 

@@ -1,10 +1,11 @@
 """Durable execution of a selected, parent-owned Episode commission.
 
 This module persists C1/C3 records and process identities. It does not choose
-work, resources, retries, continuation or scientific credit. A bootstrap can be
-repeated in the crash window before a claim; its atomic claim permits only one
-process incarnation to invoke the caller's reconstruction factory. A dead
-claimed incarnation produces an interruption, never another work attempt.
+scientific work, resources, continuation or credit. Its atomic claim permits
+one live process incarnation of the original selected invocation. A lost
+receiver can reconstruct that same invocation from its pinned ledger after
+committed work changes; it cannot silently finalize outstanding owned returns
+or repeatedly retry an unchanged failure.
 
 The local backend requires Linux /proc and inotify. Filesystem notification is
 only a wake hint: matching events always come from the durable cursor ledger.
@@ -19,6 +20,7 @@ import ctypes
 from datetime import datetime, timezone
 import fcntl
 import hashlib
+import importlib
 import json
 import os
 from pathlib import Path
@@ -276,9 +278,9 @@ def validate_commission(spec):
         if selected["kind"] not in ("api", "local", "hpc"):
             raise ValueError("unknown resource kind")
         allocation = selected["allocation"]
-        _exact(allocation, "cpu memory_bytes scratch_bytes wall_seconds", "allocation")
+        _exact(allocation, "cpu memory_bytes scratch_bytes", "allocation")
         for name, value in allocation.items():
-            if value is not None and (type(value) not in ((int, float) if name == "wall_seconds" else (int,)) or value <= 0):
+            if value is not None and (type(value) is not int or value <= 0):
                 raise ValueError("resource allocations must be positive or null")
     _references(spec["expectation_snapshot_refs"], "expectation_snapshot_refs")
     return spec
@@ -382,6 +384,13 @@ class DurableExecutionStore:
                     UNIQUE(handle,event,operation_key));
                 CREATE TABLE IF NOT EXISTS native_targets (
                     handle TEXT PRIMARY KEY, registration TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS episode_suspensions (
+                    handle TEXT PRIMARY KEY REFERENCES commissions(handle),
+                    condition TEXT, execution_identity TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS receiver_claims (
+                    handle TEXT NOT NULL REFERENCES commissions(handle),
+                    execution_identity TEXT NOT NULL, checkpoint TEXT,
+                    failure TEXT, PRIMARY KEY(handle,execution_identity));
                 CREATE TABLE IF NOT EXISTS native_publications (
                     handle TEXT PRIMARY KEY REFERENCES native_targets(handle),
                     record_ref TEXT NOT NULL, publication TEXT NOT NULL,
@@ -514,14 +523,17 @@ class DurableExecutionStore:
         identity, live = process_identity()
         if live != "live":
             raise DurableExecutionError("unavailable_resource", affected_refs=[handle])
+        snapshot = self.receiver_snapshot(handle)
         with self._connect(write=True) as db:
             row = self._row(db, handle)
             if not secrets.compare_digest(row["execution_token"], token):
                 raise DurableExecutionError("identity_conflict", affected_refs=[handle])
-            if row["execution_identity"] is not None or row["return_id"] is not None:
+            if row["execution_identity"] is not None or row["return_id"] is not None or row['acknowledgment'] is not None:
                 return False
             db.execute("UPDATE commissions SET lifecycle_state='executing',execution_identity=?,failure=NULL WHERE handle=?",
                        (canonical(identity), handle))
+            db.execute('INSERT INTO receiver_claims VALUES(?,?,?,NULL)',
+                (handle, canonical(identity), None if snapshot is None else snapshot['checkpoint']))
             self._event(db, handle, "state_changed", record_ref=row["commission_sha256"])
         return True
 
@@ -532,7 +544,25 @@ class DurableExecutionStore:
         with (self.root_directory / (name + ".start.lock")).open("ab") as lock:
             fcntl.flock(lock, fcntl.LOCK_EX)
             status = self.status(handle)
-            if status["execution_identity"] is not None or status["return_available"]:
+            if (status['liveness'] == 'not_live' and status['suspension'] is not None
+                    and status['suspension'].get('kind') == 'receiver_reconstruction'):
+                snapshot = self.receiver_snapshot(handle)
+                with self._connect(write=True) as db:
+                    row = self._row(db, handle)
+                    claim = db.execute('SELECT checkpoint FROM receiver_claims WHERE handle=? '
+                        'AND execution_identity=?', (handle, row['execution_identity'])).fetchone()
+                    if (snapshot is None or claim is None or snapshot['checkpoint'] == claim['checkpoint']):
+                        return status
+                    if (row['return_id'] is not None
+                            or row['execution_identity'] != canonical(status['execution_identity'])):
+                        raise DurableExecutionError('identity_conflict', affected_refs=[handle])
+                    # Resume the same owned receiver after actual ledger or
+                    # descendant progress; fence its lost process incarnation.
+                    db.execute("UPDATE commissions SET execution_identity=NULL,execution_token=?,"
+                        "lifecycle_state='pending' WHERE handle=?", (secrets.token_hex(32), handle))
+                status = self.status(handle)
+            if (status["execution_identity"] is not None or status["return_available"]
+                    or status['acknowledgment_id'] is not None):
                 return status
             with self._connect() as db:
                 row = self._row(db, handle)
@@ -587,25 +617,130 @@ class DurableExecutionStore:
             if liveness == "live" and observed != identity:
                 liveness = "not_live"
         if identity is not None and liveness == "not_live" and row["return_id"] is None:
-            # Lost execution is an outcome, never an invitation to rerun it.
-            failure = {"code": "interrupted_execution", "affected_refs": [handle],
-                       "diagnostic_ref": None, "partial_record_refs": []}
-            payload = self._failure_envelope(row, failure, outcome="interrupted")
-            try:
-                self.publish_return(handle, row["execution_token"], payload)
-            except DurableExecutionError as error:
-                if error.failure["code"] != "identity_conflict":
-                    raise
+            failure = (json.loads(row['failure']) if row['failure'] else
+                {"code": "interrupted_execution", "affected_refs": [handle],
+                 "diagnostic_ref": None, "partial_record_refs": []})
+            if not self.retain_failed_receiver(handle, row['execution_token'], failure):
+                payload = self._failure_envelope(row, failure, outcome="interrupted")
+                try:
+                    self.publish_return(handle, row["execution_token"], payload)
+                except DurableExecutionError as error:
+                    if error.failure["code"] != "identity_conflict":
+                        raise
             with self._connect() as db:
                 row = self._row(db, handle)
         failure = json.loads(row["failure"]) if row["failure"] else None
+        with self._connect() as db:
+            suspended = db.execute('SELECT condition,execution_identity FROM episode_suspensions '
+                'WHERE handle=?', (handle,)).fetchone()
+        suspension = (None if suspended is None or suspended['condition'] is None
+            or suspended['execution_identity'] != row['execution_identity'] or row['return_id'] is not None
+            else json.loads(suspended['condition']))
         acknowledgment = json.loads(row["acknowledgment"]) if row["acknowledgment"] else None
-        return {"version": "execution_status_v1", "handle": handle,
+        return {"version": "execution_status_v2", "handle": handle,
             "commission_sha256": row["commission_sha256"], "lifecycle_state": row["lifecycle_state"],
             "observed_at": utc_now(), "execution_identity": identity, "liveness": liveness,
             "return_id": row["return_id"], "return_available": row["return_id"] is not None,
             "acknowledgment_id": acknowledgment["admission_id"] if acknowledgment else None,
-            "failure": failure}
+            "failure": failure, "suspension": suspension}
+
+    def set_suspension(self, handle, condition):
+        """Publish an actual live external wait; no return or credit is implied."""
+        identity, liveness = process_identity()
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (liveness != 'live' or row['execution_identity'] != canonical(identity)
+                    or row['return_id'] is not None):
+                raise DurableExecutionError('identity_conflict', affected_refs=[handle])
+            encoded = None if condition is None else canonical(condition)
+            db.execute('INSERT INTO episode_suspensions VALUES(?,?,?) ON CONFLICT(handle) '
+                'DO UPDATE SET condition=excluded.condition,execution_identity=excluded.execution_identity',
+                (handle, encoded, canonical(identity)))
+            self._event(db, handle, 'state_changed', record_ref=row['commission_sha256'])
+
+    def receiver_snapshot(self, handle):
+        """Read committed ownership from the pinned reconstruction factory."""
+        spec = self.load_commission(handle)
+        try:
+            factory = importlib.import_module(spec['runtime_binding']['factory_module'])
+            for name in spec['runtime_binding']['factory_name'].split('.'):
+                factory = getattr(factory, name)
+        except (ImportError, AttributeError) as error:
+            raise DurableExecutionError('unavailable_binding', affected_refs=[handle]) from error
+        reader = getattr(factory, 'receiver_snapshot', None)
+        if reader is None:
+            with self._connect() as db:
+                owned = db.execute('SELECT handle FROM commissions WHERE parent_episode_id=? '
+                    'AND acknowledgment IS NULL', (spec['child']['episode_id'],)).fetchall()
+            if owned:
+                # An opaque factory cannot authorize dropping descendants or
+                # replaying their science. Missing reconstruction support is
+                # an explicit infrastructure error, never terminal success.
+                raise DurableExecutionError('unavailable_binding',
+                    affected_refs=[handle, *[row['handle'] for row in owned]])
+            return None
+        try:
+            value = reader(spec)
+        except (OSError, sqlite3.Error) as error:
+            raise DurableExecutionError('storage_failure', affected_refs=[handle]) from error
+        if value is not None:
+            if (not isinstance(value, dict) or set(value) != {'unfinished', 'checkpoint', 'pending_handles'}
+                    or type(value['unfinished']) is not bool):
+                raise DurableExecutionError('invalid_return', affected_refs=[handle])
+            _text(value['checkpoint'], 'receiver checkpoint')
+            _references(value['pending_handles'], 'owned children')
+        return value
+
+    def retain_failed_receiver(self, handle, token, failure):
+        """A lost process cannot finalize its still-owned results or credit."""
+        snapshot = self.receiver_snapshot(handle)
+        if snapshot is None or not snapshot['unfinished']:
+            return False
+        condition = {'kind': 'receiver_reconstruction', 'pending_handles': snapshot['pending_handles'],
+            'checkpoint': snapshot['checkpoint'], 'failure': failure}
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (not secrets.compare_digest(row['execution_token'], token)
+                    or row['execution_identity'] is None or row['return_id'] is not None):
+                raise DurableExecutionError('identity_conflict', affected_refs=[handle])
+            prior = db.execute('SELECT condition FROM episode_suspensions WHERE handle=?', (handle,)).fetchone()
+            if prior is not None and prior[0] == canonical(condition):
+                return True
+            db.execute('UPDATE receiver_claims SET failure=? WHERE handle=? AND execution_identity=?',
+                (canonical(failure), handle, row['execution_identity']))
+            db.execute('INSERT INTO episode_suspensions VALUES(?,?,?) ON CONFLICT(handle) '
+                'DO UPDATE SET condition=excluded.condition,execution_identity=excluded.execution_identity',
+                (handle, canonical(condition), row['execution_identity']))
+            db.execute('UPDATE commissions SET failure=? WHERE handle=?', (canonical(failure), handle))
+            self._event(db, handle, 'state_changed', record_ref=row['commission_sha256'])
+        return True
+
+    def supervise_receiver(self, handle):
+        status = self.status(handle)
+        condition = status['suspension']
+        if condition is None or condition.get('kind') != 'receiver_reconstruction':
+            return status
+        for child in condition['pending_handles']:
+            if child == handle:
+                raise DurableExecutionError('identity_conflict', affected_refs=[handle])
+            try:
+                self.supervise_receiver(child)
+            except KeyError:
+                continue  # Original unpublished intent is replayed by its owner.
+        return self.start(handle) if status['liveness'] == 'not_live' else status
+
+    async def await_return_or_suspension(self, handle):
+        """Await ordinary child work until it returns or actually releases execution."""
+        while True:
+            with self._connect() as db:
+                cursor = db.execute('SELECT coalesce(max(cursor),0) FROM events').fetchone()[0]
+            status = self.supervise_receiver(handle)
+            if (status['return_available'] or status['suspension'] is not None
+                    or status['failure'] is not None and status['execution_identity'] is None):
+                return status
+            await self.wait_events({'version': 'event_condition_v1', 'events': [
+                {'handle': handle, 'event': 'state_changed', 'after_cursor': cursor},
+                {'handle': handle, 'event': 'returned', 'after_cursor': cursor}], 'reconsider_at': None})
 
     @staticmethod
     def _failure_envelope(row, failure, *, outcome="execution_failed"):
@@ -624,8 +759,14 @@ class DurableExecutionStore:
                     or not secrets.compare_digest(row["execution_token"], execution_token)
                     or row["execution_identity"] is None):
                 raise DurableExecutionError("identity_conflict", affected_refs=[handle])
+            spec = json.loads(row['spec'])
+            owned = db.execute('SELECT handle FROM commissions WHERE parent_episode_id=? '
+                'AND acknowledgment IS NULL', (spec['child']['episode_id'],)).fetchall()
+            if owned:
+                raise DurableExecutionError('invalid_return',
+                    affected_refs=[handle, *[child['handle'] for child in owned]])
             try:
-                payload = validate_return(payload, spec=json.loads(row["spec"]),
+                payload = validate_return(payload, spec=spec,
                                           commission_sha256=row["commission_sha256"])
             except (TypeError, ValueError) as error:
                 raise DurableExecutionError("invalid_return", affected_refs=[handle]) from error
@@ -682,6 +823,39 @@ class DurableExecutionStore:
                 self._event(db, handle, "state_changed", record_ref=admission_id)
         return acknowledgment
 
+    def acknowledge_failed_dispatch(self, handle, *, parent_episode_id, operation_key, observation):
+        """Settle a real unclaimed attempt after its original iterator receipt.
+
+        There is no child completion or invented return envelope. The assigning
+        runtime supplies the observation it has already committed, just as it
+        supplies an admitted-return identity to acknowledge().
+        """
+        from .identities import UnitRef
+        observation = _copy(observation)
+        unit = UnitRef.from_record(observation['unit_ref'])
+        if (unit.episode_id != parent_episode_id
+                or type(observation.get('decision_index')) is not int
+                or observation['decision_index'] < 0):
+            raise DurableExecutionError('identity_conflict', affected_refs=[handle])
+        receipt = {'version': 'failed_dispatch_receipt_v1', 'handle': handle,
+            'parent_episode_id': parent_episode_id, 'operation_key': operation_key,
+            'observation': observation}
+        receipt['admission_id'] = 'failed_dispatch_' + content_digest(receipt)
+        with self._connect(write=True) as db:
+            row = self._row(db, handle)
+            if (row['parent_episode_id'] != parent_episode_id or row['operation_key'] != operation_key
+                    or row['execution_identity'] is not None or row['return_id'] is not None
+                    or row['failure'] is None):
+                raise DurableExecutionError('identity_conflict', affected_refs=[handle])
+            if row['acknowledgment'] is not None:
+                if json.loads(row['acknowledgment']) != receipt:
+                    raise DurableExecutionError('identity_conflict', affected_refs=[handle])
+            else:
+                db.execute("UPDATE commissions SET lifecycle_state='admitted',acknowledgment=? WHERE handle=?",
+                    (canonical(receipt), handle))
+                self._event(db, handle, 'state_changed', record_ref=receipt['admission_id'])
+        return receipt
+
     def record_progress(self, handle, record_ref, operation_key):
         """Notify one already committed exposed progress reference, idempotently.
 
@@ -732,11 +906,12 @@ class DurableExecutionStore:
         return condition
 
     def _matching_events(self, condition):
-        # A selected observation can recover an actually exited incarnation.
-        # This does no work or scheduling; dead executions never restart here.
+        # A notification subscription also supervises original receiver
+        # ownership. Reconstruction uses the original work and receipt ledger;
+        # it does not commission new scientific work.
         for handle, kind in self._selected_target_kinds(condition).items():
             if kind == "commission":
-                self.status(handle)
+                self.supervise_receiver(handle)
         with self._connect() as db:
             matches = {}
             for selected in condition["events"]:

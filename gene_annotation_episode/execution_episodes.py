@@ -21,7 +21,7 @@ from .practical_execution_records import (ASSIGNMENT_SCHEMA, validate_assignment
                                          validate_completion_proof, GENERIC_REQUESTED_JOB_SCHEMA)
 from .practical_execution_state import _immutable, _read
 from .practical_receipt_information import PracticalReceiptInformation
-from .practical_resource_episodes import PracticalResourceEpisodes, operation_catalog
+from .terminal_execution_episodes import TerminalExecutionEpisodes, operation_catalog
 from .resource_records import INPUT_VERSION_SCHEMA
 from .native_hmmer_acquisition import is_native_hmmer_target
 from .native_blast_acquisition import is_native_blast_target
@@ -227,7 +227,7 @@ class ExecutionEpisodes:
                 validate_native_hmmer_preparation_bindings(configuration['native_hmmer_preparation'])
             if kind != 'api':
                 inventory = self.initial_information.get(resource_id)
-                self._practical[resource_id] = PracticalResourceEpisodes(services,
+                self._practical[resource_id] = TerminalExecutionEpisodes(services,
                     directory=self.directory, resources={kind: configuration}, store=store,
                     initial_information={} if inventory is None else {kind: inventory})
         from .api_service_execution import APIServiceExecution
@@ -690,11 +690,6 @@ class ExecutionEpisodes:
                 # The launch request map already names this resource. A
                 # resource child later receives that same explicit identity.
                 validator({**value, 'resource_id': resource_id})
-            operations.validate_action(value, 'practical.inspect', {})
-            if value['inventory_snapshot']:
-                from .execution_inventory import validate_snapshot
-                validate_snapshot(value['inventory_snapshot'], tool_map={entry['name']: entry
-                    for entry in operation_catalog(kind)})
         return value
 
     def _launch(self, value, *, scope=None):
@@ -1270,7 +1265,7 @@ class ExecutionEpisodes:
 
     def prepare_assignment(self, parent, role, selection, scope, operation_key):
         selected = checked(selection, self.assignment_schema(role, internal=True), 'invalid_execution_assignment')
-        if parent.role == 'hpc' and role == 'launch':
+        if parent.role in ('hpc', 'hpc_execution') and role == 'launch':
             from .hpc_episodes import authenticate_launch
             authenticate_launch(parent, selected, operation_key, self.directory)
         if role == 'results':
@@ -2510,16 +2505,7 @@ class ExecutionEpisodes:
             return protein_result_catalog()
         if context.role in ROLE_KINDS:
             practical_context = self._practical_context(context)
-            entries = self._delegate(context).catalog(practical_context)
-            if 'native_lumpy' in plain(practical_context.assignment).get('requested_job', {}):
-                entries = deepcopy(entries)
-                for entry in entries:
-                    if entry['name'] == 'practical.job.start':
-                        entry['input_schema'] = obj({})
-                        entry['description'] = (
-                            'Start the original selected LUMPY job once; return its durable native identity. '
-                            'An interrupted start resumes that same original handle.')
-            return entries
+            return self._delegate(context).catalog(practical_context)
         if context.role == 'launch':
             return launch_operation_catalog()
         target = self._target(context)
@@ -3452,7 +3438,7 @@ class ExecutionEpisodes:
             values.update(minhash_fact_sources())
         if role in {'launch_local', 'launch_hpc'}:
             # Definitions are identical across actual practical resources.
-            values.update(PracticalResourceEpisodes.fact_sources(None, role))
+            values.update(TerminalExecutionEpisodes.fact_sources(None, role))
         for key, namespace, meaning in (
                 ('execution_handoff_refs', 'execution_handoff', 'Qualified original handoff sources actually available to this episode, including authenticated original failed native database or RNA attempts for partial-output acquisition; failed attempts do not establish a successful native endpoint.'),
                 ('execution_result_refs', 'execution_result', 'Qualified actual requested result acquisitions available to this episode. Generic native windows retain current-filesystem observations. Explicit BLAST/HMMER/Infernal/RNA producer bundles retain original attempt outputs matched by digest and requested numerical facts. RNA source delivery alone grants no auxiliary artifacts or unrequested rows.')):

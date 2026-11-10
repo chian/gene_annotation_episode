@@ -357,7 +357,7 @@ def test_closed_assignments_registration_and_original_form_guards(tmp_path):
             registry.register(binding)
         bound = context(scope, "literature_page", page(source))
         assert binding.credit_kind(bound.role) == "scientific"
-        assert {"reason", "child", "wait"} <= set(binding.permitted_common_actions(bound))
+        assert {"reason", "child"} <= set(binding.permitted_common_actions(bound))
         with pytest.raises(ContractError, match="representation_error"):
             binding.prepare_assignment(bound, "literature_ordered", {"version": "reading_assignment_v1",
                 "page": page(source), "selection": {"source_ref": source["id"], "representation": "original",

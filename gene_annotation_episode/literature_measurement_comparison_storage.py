@@ -29,6 +29,8 @@ _PURE_HASHES = {'literature_measurement_comparison_inputs.py': '3f05d70580e6b8d1
 MEASUREMENT_COMPARISON_CELLS_SCHEMA_V2 = ORIGINAL_SCHEMAS["rows"]
 _PURE_HASHES_V2 = {**_PURE_HASHES,
     'literature_measurement_comparison_inputs.py': 'b40072f06167218c519ae4ca672eccb9bf49851a6941347ecfa467dad4baa43d'}
+_PURE_HASHES_V3 = {**_PURE_HASHES_V2,
+    'literature_assay_inputs.py': '2d98f2e552a79c1a262c6507b0ab945641daabc1645a8b910a52aa8a939b997c'}
 MEASUREMENT_COMPARISON_REQUEST_SCHEMA_V2 = ORIGINAL_SCHEMAS["request"]
 COMPONENTS = tuple(MEASUREMENT_COMPARISON_CELLS_SCHEMA_V2["items"]["properties"]["component"]["enum"])
 
@@ -373,9 +375,9 @@ class LiteratureMeasurementComparisonRepository(LiteratureRateRepository):
             'literature_numerical_contracts.py', 'literature_numerical_return_presentation.py',
             'literature_experimental_prompt.py', 'literature_reference_parent_prompt.py']
         files = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
-        if any(files[name] != digest for name, digest in _PURE_HASHES_V2.items()):
+        if any(files[name] != digest for name, digest in _PURE_HASHES_V3.items()):
             raise ContractError('measurement_comparison_prospective_dependency_mismatch')
-        return {'version': 'measurement_comparison_original_implementation_v2', 'files': files,
+        return {'version': 'measurement_comparison_original_implementation_v3', 'files': files,
             'bound_descriptor': self._bound_descriptor()}
 
     def populate(self, context, arguments, operation_key):
@@ -524,7 +526,8 @@ class LiteratureMeasurementComparisonRepository(LiteratureRateRepository):
             'literature_numerical_contracts.py', 'literature_numerical_return_presentation.py',
             'literature_experimental_prompt.py', 'literature_reference_parent_prompt.py'}
         pinned = {'measurement_comparison_original_implementation_v1': _PURE_HASHES,
-            'measurement_comparison_original_implementation_v2': _PURE_HASHES_V2}.get(receipt.get('version'))
+            'measurement_comparison_original_implementation_v2': _PURE_HASHES_V2,
+            'measurement_comparison_original_implementation_v3': _PURE_HASHES_V3}.get(receipt.get('version'))
         require(set(receipt) == {'version', 'files', 'bound_descriptor'}
             and pinned is not None
             and receipt['bound_descriptor'] == self._bound_descriptor()

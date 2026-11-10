@@ -86,7 +86,7 @@ def test_current_tool_information_reaches_child_and_compact_return_matches_froze
         admitted = json.loads(attempt['form'])
         assert admitted['approaches'] == frozen['scientific_process_results']
         returned, = admitted['approaches']
-        assert returned['version'] == 'scientific_process_result_v2'
+        assert returned['version'] == 'scientific_process_result_v3'
         assert returned['selection'] == {
             'version': 'scientific_process_selection_report_v1',
             'source_version': 'scientific_process_selection_v3',
@@ -246,7 +246,7 @@ def test_current_nested_returns_preserve_each_closure_without_extra_credit(
             frozen = json.loads(workflow.journal.row('runtime_forms', saved['episode_id'])['facts'])
             row = frozen['scientific_process_results'][0]
             rows[depth] = row
-            assert row['version'] == 'scientific_process_result_v2'
+            assert row['version'] == 'scientific_process_result_v3'
             assert row['selection']['child_tool_info'] == selected['child_tool_info']
             assert row['initial_credit'] == saved['initial_credit'] == (0 if depth == 2 else 1)
             assert row['credit'] == frozen['credit'] == 1

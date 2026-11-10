@@ -161,6 +161,17 @@ def _original_handoff(store, context, target, attempt):
     snapshot = _json(store, store.get(target['handle'])['request_ref'])
     assignment, receipt = snapshot['assignment'], body['receipt']
     detail = receipt['outcome']['native_outcome']
+    if receipt['tool_name'] == 'exec_command':
+        from .native_database_terminal_custody import qualify_manifest
+        manifest = assignment.get('scientific_manifest')
+        if (manifest is None or target['assignment'] != assignment
+                or target['origin_episode_id'] != body['episode_id']):
+            raise ContractError('native_blast_standard_database_original_handoff_conflict')
+        raw = store.get_artifact('artifact_' + manifest['sha256'])
+        witness = qualify_manifest(target, receipt, raw)
+        if witness['authenticated_attempt'] != attempt:
+            raise ContractError('native_blast_standard_database_original_handoff_conflict')
+        return
     expected = dict(version='execution_target_v1', handle=target['handle'], run_id=context.run_id,
         resource_id=assignment['resource_id'], resource_kind='hpc', execution_id=detail['pbs_job_id'],
         request_sha256=digest(assignment['requested_job']), origin_episode_id=body['episode_id'],
@@ -173,8 +184,7 @@ def _original_handoff(store, context, target, attempt):
 
 
 def _policy(policy):
-    if not isinstance(policy, LocalJobPolicy) or policy.to_dict() != {
-            'memory_bytes': 20 * 1024**3, 'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}:
+    if not isinstance(policy, LocalJobPolicy) or policy.to_dict() != {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}:
         raise ContractError('native_blast_standard_database_explicit_grading_policy_required')
     return policy
 

@@ -243,7 +243,7 @@ def test_direct_advance_rejects_untyped_identity_before_any_observation(unit_ref
 
 
 @pytest.mark.parametrize("asynchronous", [False, True])
-def test_pending_dispatch_supplies_no_identity_or_observation(asynchronous):
+def test_unowned_dispatch_is_rejected_without_completion_identity(asynchronous):
     controller = IdentityController()
     value = FixtureValue(5)
     phases, dispatches = iter(range(3)), []
@@ -266,15 +266,11 @@ def test_pending_dispatch_supplies_no_identity_or_observation(asynchronous):
             return Leaf(None, lambda _: value, lambda _, result: result, "completed-own-action")
 
     episode, context = fixture_episode(controller, Source(choose))
-    record = run_episode(episode, context, asynchronous)
-
-    assert dispatches == [record.path]
-    assert record.units_consumed == len(controller.observations) == 1
-    unit, = record.unit_records
-    assert unit.unit_label == "completed-own-action"
-    assert controller.observations[0][2] is value is unit.controller_input
-    assert controller.observations[0][3] is unit.unit_ref
-    assert unit.unit_ref == UnitRef(record.episode_id, 0)
+    expected = ValueError if asynchronous else TypeError
+    with pytest.raises(expected, match='registered original receiver|async method loop'):
+        run_episode(episode, context, asynchronous)
+    assert len(dispatches) == int(asynchronous)
+    assert controller.observations == []
 
 
 @pytest.mark.parametrize("asynchronous", [False, True])

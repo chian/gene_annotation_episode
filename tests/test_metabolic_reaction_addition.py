@@ -177,7 +177,7 @@ def _selected_native(argv, *, lifecycle, software, environment=None):
     immutable_json(lifecycle / "selected-execution.json", {"returncode": result.returncode, "metadata": result.metadata})
     assert result.returncode == 0, result.metadata
     assert result.metadata["verified_cgroup"] == {"memory_max": 21474836480, "memory_swap_max": 0,
-        "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+        "kill_mode": "control-group", "oom_policy": "kill"}
     return result
 
 
@@ -264,7 +264,7 @@ def test_selected_database_reaction_addition_and_serialized_fba(monkeypatch):
         immutable_json(folder / "native-execution.json", {"returncode": execution.returncode, "metadata": execution.metadata})
         assert execution.returncode == 0, execution.metadata
         assert execution.metadata["verified_cgroup"] == {"memory_max": 21474836480, "memory_swap_max": 0,
-            "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+            "kill_mode": "control-group", "oom_policy": "kill"}
         manifest = read_json(Path(plan["attempt_directory"]) / "outputs/native-manifest.json")
         immutable_json(folder / "selected-result.json", manifest)
         assert manifest["solve_call_count"] == 1 and manifest["execution_outcome"] == "completed", manifest["issues"]

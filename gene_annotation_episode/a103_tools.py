@@ -24,7 +24,8 @@ REFS = {'type':'array','items':REF,'uniqueItems':True}
 TEXT = {'type':'string','minLength':1}
 INT = {'type':'integer','minimum':0}
 NAMES = ('context.bind_locus','reference.neighborhood','context.compare_neighborhoods',
-    'context.fusion','context.cooccurrence','context.contrast','context.association_channels','context.detection_inventory')
+    'context.fusion','context.cooccurrence','context.contrast','context.association_channels','context.detection_inventory',
+    'context.request_hpc')
 
 
 def catalog():
@@ -66,6 +67,14 @@ def catalog():
             obj({'target_ref':REF,'source_ref':REF,'left_native_id':TEXT,'right_native_id':TEXT,
                 'left_reference_ref':REF,'right_actual_ref':REF,'right_reference_ref':REF})),
     }
+    from .a103_native_requests import OPERATIONS
+    request_schema = {'oneOf':[obj({'operation':{'const':name},'arguments':deepcopy(entries[name][1]),
+        'resource_id':TEXT}) for name in OPERATIONS]}
+    entries['context.request_hpc'] = ('Freeze an A103 native investigation from actually received genomic records, '
+        'locus bindings, panels or completed detector output. Return an exact commission for the configured '
+        'HPC parent and its prediction/execution sisters. This operation runs no context calculation or '
+        'sequence search. The original received result is automatically graded and attributed. Reuse '
+        'received measurements; missing identities and unexamined sequence remain unknown.',request_schema)
     return {name:{'description':description,'resources':'local','input_schema':schema}
             for name,(description,schema) in entries.items()}
 
@@ -76,8 +85,8 @@ class A103ToolRegistry(ToolRegistry):
         self.a103_directory = Path(a103_work_directory).resolve()
         require('runs' in self.a103_directory.parts,'a103_output_requires_runs_directory')
         self.a103_directory.mkdir(parents=True,exist_ok=True)
-        self.a103_policy = LocalJobPolicy(min(2*1024**3,self.local_job_policy.memory_bytes),
-            min(1024**3,self.local_job_policy.scratch_bytes),self.local_job_policy.wall_seconds or 180)
+        self.a103_execution_resources = None
+        self.a103_policy = LocalJobPolicy(min(2 * 1024 ** 3, self.local_job_policy.memory_bytes), min(1024 ** 3, self.local_job_policy.scratch_bytes))
         # Caller-supplied material provenance is not an argument a model can set.
         self.a103_target_genomic_sources = deepcopy(target_genomic_sources or {})
         for sql in (
@@ -89,19 +98,34 @@ class A103ToolRegistry(ToolRegistry):
     def as_record(self):
         return {**super().as_record(),'a103_tools':{'version':VERSION,'directory':str(self.a103_directory),
             'policy':self.a103_policy.to_dict(),'cpu_threads':1,
+            **({'hpc_resources':deepcopy(self.a103_execution_resources)} if self.a103_execution_resources is not None else {}),
             'target_genomic_sources':deepcopy(self.a103_target_genomic_sources),'max_panel':MAX_PANEL}}
 
     def catalog(self,scope=None):
         entries = super().catalog(scope=scope)
         legacy = entries['reference.neighborhood']
         extra = catalog()
+        if self.a103_execution_resources is None:extra.pop('context.request_hpc')
         extra['reference.neighborhood']['input_schema'] = {'oneOf':[
             extra['reference.neighborhood']['input_schema'],legacy['input_schema']]}
         return {**entries,**extra}
 
+    def configure_a103_hpc(self,resources):
+        selected = plain(resources)
+        require(any(row.get('kind')=='pbs_ssh' for row in selected.values()),'a103_configured_hpc_resource_required')
+        require(self.a103_execution_resources is None or self.a103_execution_resources==selected,
+            'a103_hpc_resource_configuration_changed')
+        self.a103_execution_resources = selected
+
+    def received_hpc_attributions(self,context,known,*,hpc_result_reader):
+        if context.role=='scientific_process' and context.assignment.get('selection',{}).get('evidence_axis',{}).get('option_id')!='A103':
+            return [],[]
+        from .a103_hpc import receive
+        return receive(self,context,known,reader=hpc_result_reader)
+
     def operation_resource_limits(self):
         parent = getattr(super(),'operation_resource_limits',lambda:{})()
-        return {**parent,'a103_native':{'tool_names':list(NAMES),'cpu_threads':1,
+        return {**parent,'a103_native':{'tool_names':[name for name in NAMES if name!='context.request_hpc'],'cpu_threads':1,
             **self.a103_policy.to_dict(),'max_genomic_file_bytes':MAX_FILE_BYTES,
             'max_panel_size':MAX_PANEL,'max_flank_bp':MAX_FLANK_BP}}
 
@@ -186,8 +210,8 @@ class A103ToolRegistry(ToolRegistry):
                 'a103_current_action_binding_required')
             context = invocation[0]
             EpisodeReturnRecords(self.store,context.run_id,failure_prefix='a103_').authenticate(context)
-            require(permitted_record_refs is not None,'a103_explicit_received_inputs_required')
-            known = set(permitted_record_refs)
+            known = set(context.received_record_refs if permitted_record_refs is None else permitted_record_refs)
+            require(known<=set(context.received_record_refs),'a103_explicit_received_inputs_required')
             request = canonical({'run_id':context.run_id,'episode_id':context.episode_id,
                 'name':name,'args':args,'scope':scope,'version':VERSION})
             prior = self.store.db.execute('SELECT * FROM a103_operations WHERE operation_key=?',(operation_key,)).fetchone()
@@ -195,7 +219,7 @@ class A103ToolRegistry(ToolRegistry):
                 require(prior['request']==request,'a103_operation_identity_conflict')
                 return json.loads(prior['result'])
             old = self.store.db.execute('SELECT result FROM a103_operations WHERE request=? LIMIT 1',(request,)).fetchone()
-            if old:
+            if old and name!='context.request_hpc':
                 outcome = json.loads(old[0])
                 outcome['result']['reused_existing_measurement'] = True
                 self.store.db.execute('INSERT INTO a103_operations VALUES(?,?,?)',(operation_key,request,canonical(outcome)))
@@ -203,7 +227,37 @@ class A103ToolRegistry(ToolRegistry):
             records,refs = [],[]
             native = None
             directory = self.work_directory(context,name,args,scope)
-            if name=='context.bind_locus':
+            if name=='context.request_hpc':
+                from .a103_hpc import freeze,commission,existing_local,result_body
+                require(self.a103_execution_resources is not None and args['resource_id'] in self.a103_execution_resources,
+                    'a103_configured_hpc_resource_required')
+                existing = existing_local(self.store,args['operation'],args['arguments'],scope,known)
+                if existing:
+                    records = existing
+                    result = {'execution_status':'qualified_measurement_already_received',
+                        'new_execution_requested':False,'scientific_credit':0.}
+                else:
+                    request_ref,body = freeze(self,args['operation'],args['arguments'],args['resource_id'],
+                        context=context,scope=scope,known=known,invocation=invocation)
+                    retained = [(ref,admission) for ref in sorted(known)
+                        if (admission:=result_body(self.store,ref)) is not None and admission['completed']
+                        and admission['logical_work_sha256']==body['logical_work_sha256']
+                        and set(admission['measurement_refs'])<=known]
+                    if retained:
+                        records = list(dict.fromkeys([request_ref,*[ref for ref,_ in retained],
+                            *[ref for _,admission in retained for ref in admission['measurement_refs']]]))
+                        result = {'request_ref':request_ref,'execution_status':'qualified_measurement_already_received',
+                            'new_execution_requested':False,'scientific_credit':0.}
+                    else:
+                        from .hpc_commission_sources import publish as publish_commission
+                        work = commission(body,self.a103_execution_resources)
+                        commission_ref = publish_commission(self.store,work,scope=scope,resources=self.a103_execution_resources)
+                        records = [request_ref,commission_ref]
+                        result = {'request_ref':request_ref,'commission_source_ref':commission_ref,
+                            'hpc_assignment':{'commission_source_ref':commission_ref},
+                            'execution_owner':'shared_hpc_parent_with_prediction_and_execution_sisters',
+                            'new_execution_requested':True,'scientific_credit':0.}
+            elif name=='context.bind_locus':
                 target,regions = self._target(args['target_ref'],known,scope)
                 path,file = self._file(args['file_source_ref'],'genbank_text' if args['format']=='genbank' else 'gff3_text',known,invocation)
                 sequence_path = None

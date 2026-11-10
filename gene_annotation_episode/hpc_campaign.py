@@ -10,31 +10,42 @@ import re
 
 from .hpc_queue import canonical, digest, seconds
 from .hpc_prediction import prior_model
+from .hpc_resource_prediction import RESOURCE_UNITS, measured_value
 
 
 def validate_commission(value, resources):
     """Fail before tools are exposed if the commission lacks real operands."""
     required = {'objective', 'resource_id', 'obligations', 'candidates', 'model', 'history',
                 'validation_ids', 'credit', 'preferences', 'limits'}
-    if set(value)-{'monitoring'} != required or not value['objective']:
+    if set(value)-{'monitoring', 'execution_profile'} != required or not value['objective']:
         raise ValueError('explicit_hpc_commission_fields_required')
+    if 'execution_profile' in value:
+        from .execution_memory import validate_profile
+        from .execution_guidance import resource_identity
+        profile = validate_profile(value['execution_profile'])
+        if (profile['backend'] != 'hpc' or profile['resource_id'] !=
+                resource_identity(value['resource_id'], resources[value['resource_id']])):
+            raise ValueError('hpc_history_profile_resource_conflict')
     if 'monitoring' in value:
         from .hpc_monitoring import validate_policy
         validate_policy(value['monitoring'])
     resource = resources[value['resource_id']]
-    if resource['kind'] != 'pbs_ssh' or resource['account'] != 'BioReason-Aurora-Test':
-        raise ValueError('Aurora_BioReason_resource_required')
-    if not PurePosixPath(resource['workspace']).is_relative_to('/lus/flare/projects/BioReason-Aurora-Test/chian/runs'):
-        raise ValueError('BioReason_run_storage_required')
+    if resource['kind'] != 'pbs_ssh':
+        raise ValueError('configured_scheduler_resource_required')
+    if not PurePosixPath(resource['workspace']).is_absolute():
+        raise ValueError('configured_resource_workspace_required')
     prior_model(value['model'])
     limits = value['limits']
-    for key in ('max_nodes', 'max_wall_seconds', 'max_node_hours', 'shutdown_margin_seconds',
-                'result_limit_bytes', 'queue_max_age_seconds'):
+    if set(limits) != {'result_limit_bytes', 'queue_max_age_seconds'}:
+        raise ValueError('hpc_execution_caps_are_not_configuration')
+    for key in ('result_limit_bytes', 'queue_max_age_seconds'):
         if not math.isfinite(limits[key]) or limits[key] <= 0:
             raise ValueError('positive_hpc_limit_required:'+key)
     if limits['result_limit_bytes'] > 512*1024:
         raise ValueError('bounded_compact_result_limit_required')
-    for name in ('deadline_seconds', 'elapsed_cost_per_second', 'node_hour_cost'):
+    if set(value['preferences']) != {'elapsed_cost_per_second', 'node_hour_cost'}:
+        raise ValueError('hpc_runtime_deadline_is_not_configuration')
+    for name in ('elapsed_cost_per_second', 'node_hour_cost'):
         if not math.isfinite(value['preferences'][name]) or value['preferences'][name] < 0:
             raise ValueError('nonnegative_elapsed_time_preferences_required')
     for name, obligation in value['obligations'].items():
@@ -47,10 +58,12 @@ def validate_commission(value, resources):
             if predicate['operator'] != 'eq' and (type(predicate['value']) not in (int, float)
                     or not math.isfinite(predicate['value'])):
                 raise ValueError('numeric_acceptance_threshold_required')
-    if len(value['candidates']) > 32:
-        raise ValueError('at_most_32_candidate_portfolios_required')
     seen = set()
     for candidate in value['candidates']:
+        capacity = candidate.get('resource_capacity', {})
+        if (set(capacity)-{'cpu_threads', 'memory_bytes'} or any(type(v) not in (int, float)
+                or not math.isfinite(v) or v <= 0 for v in capacity.values())):
+            raise ValueError('explicit_positive_allocation_capacity_required')
         for item in candidate.get('files', []):
             path = PurePosixPath(item['path'])
             if (path.is_absolute() or '..' in path.parts or str(path) in ('.', 'runner.py', 'manifest.json')
@@ -66,24 +79,25 @@ def validate_commission(value, resources):
         if (type(candidate['nodes']) is not int or type(candidate['wall_seconds']) is not int
                 or not re.fullmatch('[A-Za-z0-9_.-]+', candidate['queue'])):
             raise ValueError('integer_node_walltime_and_explicit_queue_required')
-        if (not 1 <= candidate['nodes'] <= limits['max_nodes']
-                or not 0 < candidate['wall_seconds'] <= limits['max_wall_seconds']
-                or candidate['nodes']*candidate['wall_seconds']/3600 > limits['max_node_hours']):
-            raise ValueError('candidate_exceeds_commission_budget')
-        if not candidate['units'] or len(candidate['units']) > 128:
-            raise ValueError('one_to_128_work_units_required')
+        if candidate['nodes'] < 1 or candidate['wall_seconds'] <= 0:
+            raise ValueError('positive_scheduler_allocation_request_required')
+        if not candidate['units']:
+            raise ValueError('nonempty_work_portfolio_required')
         identifiers = set()
         obligations = set()
         for unit in candidate['units']:
+            if set(unit)-{'unit_id', 'obligation_id', 'argv', 'environment', 'effort', 'reports_progress'}:
+                raise ValueError('work_unit_runtime_caps_or_unknown_settings_are_not_configuration')
             if (not re.fullmatch('[A-Za-z0-9_-]+', unit['unit_id']) or unit['unit_id'] in identifiers
                     or unit['obligation_id'] not in value['obligations'] or unit['obligation_id'] in obligations):
                 raise ValueError('unique_units_and_obligations_per_portfolio_required')
             identifiers.add(unit['unit_id'])
             obligations.add(unit['obligation_id'])
-            if (not unit['argv'] or any(not isinstance(arg, str) or not arg or '\0' in arg for arg in unit['argv'])
-                    or not 0 < unit['minimum_seconds'] <= unit['maximum_seconds']
-                    or unit['maximum_seconds'] > candidate['wall_seconds'] or unit['effort'] <= 0):
-                raise ValueError('explicit_bounded_work_unit_required')
+            if (type(unit['effort']) not in (int, float)
+                    or not math.isfinite(unit['effort']) or unit['effort'] <= 0):
+                raise ValueError('work_unit_effort_requires_positive_finite_number')
+            if (not unit['argv'] or any(not isinstance(arg, str) or not arg or '\0' in arg for arg in unit['argv'])):
+                raise ValueError('explicit_work_unit_required')
             if (not isinstance(unit['environment'], dict) or any(not isinstance(key, str) or not isinstance(val, str)
                     for key, val in unit['environment'].items()) or type(unit.get('reports_progress', False)) is not bool):
                 raise ValueError('explicit_work_unit_environment_required')
@@ -93,9 +107,8 @@ def validate_commission(value, resources):
     for row in history:
         if not row.get('provenance') or not math.isfinite(row['observed_at']):
             raise ValueError('historical_observation_provenance_required')
-        for observation in row['metrics'].values():
-            if observation['seconds'] < 0 or not math.isfinite(observation['seconds']):
-                raise ValueError('nonnegative_measured_seconds_required')
+        for metric, observation in row['metrics'].items():
+            measured_value(metric, observation)
     if not set(value['validation_ids']) <= {row['id'] for row in history}:
         raise ValueError('validation_id_not_in_measured_history')
     credit = value['credit']
@@ -106,7 +119,7 @@ def validate_commission(value, resources):
         raise ValueError('unique_original_validation_slots_required')
     for slot in slots:
         if (slot['phase'] not in ('planned', 'queued', 'running')
-                or slot['metric'] not in ('queue', 'work') or slot['weight'] < 0
+                or slot['metric'] not in ('queue', 'work', *RESOURCE_UNITS) or slot['weight'] < 0
                 or slot['minimum_elapsed_seconds'] < 0):
             raise ValueError('invalid_fixed_validation_slot')
     if not math.isfinite(credit['model_scale']) or not math.isfinite(credit['validation_scale']):
@@ -127,7 +140,6 @@ def build_plan(commission, candidate, configuration, owner, ordinal):
         return value
     manifest = {'version': 'hpc_allocation_manifest_v1', 'plan_id': plan_id,
         'workspace': workspace, 'wall_seconds': candidate['wall_seconds'],
-        'shutdown_margin_seconds': commission['limits']['shutdown_margin_seconds'],
         'result_limit_bytes': commission['limits']['result_limit_bytes'], 'units': expand(candidate['units'])}
     manifest_sha = digest(manifest)
     runner = Path(__file__).with_name('hpc_allocation.py').read_text()
@@ -137,12 +149,15 @@ def build_plan(commission, candidate, configuration, owner, ordinal):
                  for item in candidate.get('files', []))
     for item in files:
         item['sha256'] = hashlib.sha256(item['text'].encode()).hexdigest()
-    requirements = [{'key': 'file_'+str(i), 'credit': 0., 'predicate': {
-        'kind': 'file_sha256', 'path': item['path'], 'sha256': item['sha256']}} for i, item in enumerate(files)]
-    requirements.append({'key': 'handoff', 'credit': 1., 'predicate': {'kind': 'requested_job_handoff'}})
+    # Supplied sources are reference inputs, not a required staging recipe. The
+    # execution agent chooses scripts and environment; the actual native handoff
+    # is the operational endpoint. Original scientific result acceptance remains
+    # in the commission and frozen manifest, independently of that endpoint.
+    requirements = [{'key': 'handoff', 'credit': 1., 'predicate': {'kind': 'requested_job_handoff'}}]
     wall = int(candidate['wall_seconds'])
     pbs_resources = [f"select={candidate['nodes']}",
-                     f'walltime={wall//3600:02d}:{wall//60%60:02d}:{wall%60:02d}', 'filesystems=flare']
+                     f'walltime={wall//3600:02d}:{wall//60%60:02d}:{wall%60:02d}',
+                     *configuration.get('scheduler', {}).get('required_resources', [])]
     request = {'version': 'practical_assignment_v1', 'assignment_id': plan_id, 'resource_kind': 'hpc',
         'resource_id': commission['resource_id'], 'workspace': workspace, 'endpoint': 'usable_handoff',
         'requested_job': {'argv': [configuration['python_executable'], '-B', workspace+'/runner.py',
@@ -151,7 +166,7 @@ def build_plan(commission, candidate, configuration, owner, ordinal):
         'initial_context': {'revision': 0, 'cwd': workspace, 'environment': {}}, 'inventory_snapshot': {},
         'constraints': {'account': configuration['account'], 'queue': candidate['queue'], 'resources': pbs_resources}}
     return {'plan_id': plan_id, 'candidate_id': candidate['id'], 'manifest': manifest,
-        'manifest_sha256': manifest_sha, 'files_to_stage': files,
+        'manifest_sha256': manifest_sha, 'supplied_files': files,
         'preparation': expand(candidate.get('preparation', '')), 'practical_assignment': request,
         'launch_assignment': {'version': 'execution_launch_assignment_v1',
             'requests': {commission['resource_id']: request},
@@ -191,8 +206,33 @@ def telemetry(observation, allocation, candidate):
             current_unit_id=allocation['current_unit_id'], allocation_sample_at=allocation['updated_at'])
         result['work_elapsed_seconds'] = max(0., now-allocation['started_at'])
     result['peak_memory_bytes'] = memory_bytes(fields.get('resources_used', {}).get('mem'))
+    result['cpu_seconds'] = seconds(fields.get('resources_used', {}).get('cput'))
     result['memory_limit_bytes'] = memory_bytes(fields.get('Resource_List', {}).get('mem'))
     return result
+
+
+def bind_progress(progress, plan_id):
+    """Validate original identity; accept the runner environment's ID spelling.
+
+    Retained raw bytes stay unchanged. Conflicting spellings are never repaired.
+    """
+    if not isinstance(progress, dict):
+        raise ValueError('invalid_original_unit_progress')
+    value = deepcopy(progress)
+    for key, alternate in (('plan_id', 'HPC_PLAN_ID'), ('unit_id', 'HPC_UNIT_ID')):
+        if key in value and alternate in value and value[key] != value[alternate]:
+            raise ValueError('conflicting_original_progress_identity')
+        value[key] = value.get(key, value.get(alternate))
+        if not isinstance(value[key], str) or not value[key]:
+            raise ValueError('missing_original_progress_identity')
+    if value['plan_id'] != plan_id:
+        raise ValueError('unit_progress_plan_identity_conflict')
+    for key in ('observed_at', 'completed_fraction', *(['peak_memory_bytes'] if 'peak_memory_bytes' in value else [])):
+        if type(value.get(key)) not in (int, float) or not math.isfinite(value[key]) or value[key] < 0:
+            raise ValueError('invalid_original_unit_progress')
+    if value['completed_fraction'] > 1:
+        raise ValueError('invalid_original_unit_progress')
+    return value
 
 
 def incorporate_progress(current, progress, candidate):

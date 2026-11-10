@@ -15,8 +15,8 @@ import sqlite3
 import tempfile
 from typing import Any
 
-from .domain import (ContractError, MOLECULES, ROLES, RECORD_SCHEMAS, REASONING_SCHEMA,
-                     canonical, identity, parse_sequences, validate_schema)
+from .domain import (ANCHOR, ContractError, MOLECULES, ROLES, RECORD_SCHEMAS, REASONING_SCHEMA,
+                     canonical, identity, parse_sequences, source_location_inputs, validate_schema)
 from . import materials
 from . import library_targets as libraries
 from . import context_masks
@@ -662,6 +662,41 @@ class Store:
             for index, child in enumerate(value):
                 yield from self._refs(child, with_paths=with_paths, path=(*path, index))
 
+    def _materialize_anchor(self, anchor, source_ref):
+        """Retrieve the caller-selected text without asking an LLM to copy it."""
+        if anchor is None or not isinstance(anchor, dict) or "quote" in anchor:
+            # Explicit historical quotes retain their exact validation below.
+            return deepcopy(anchor)
+        validate_schema(anchor, source_location_inputs(ANCHOR))
+        source = self._require(source_ref, {"source"})
+        source_artifacts = {source.get(key) for key in ("artifact_ref", "text_ref", "stdout_ref", "stderr_ref")}
+        if anchor["source_ref"] != source_ref or anchor["artifact_ref"] not in source_artifacts:
+            raise ContractError("anchor_source_mismatch")
+        path = materials.artifact_path(self, anchor["artifact_ref"])
+        start, end = anchor["start"], anchor["end"]
+        size = path.stat().st_size
+        detail = {"source_ref": source_ref, "artifact_ref": anchor["artifact_ref"],
+                  "start": start, "end": end, "artifact_byte_count": size,
+                  "selected_byte_count": end - start}
+        if not 0 <= start < end <= size:
+            raise ContractError("anchor_transcription_mismatch", detail={
+                **detail, "mismatch_kind": "range_outside_artifact"})
+        # A UTF-8 string has at most four bytes per character. Respect the
+        # existing stored-anchor character contract before allocating a span
+        # that cannot possibly satisfy it; this adds no research stopping gate.
+        if end - start > 4 * ANCHOR["properties"]["quote"]["maxLength"]:
+            raise ContractError("representation_error", detail={
+                "field_path": ["anchor", "quote"], "schema_keyword": "maxLength"})
+        with path.open("rb") as handle:
+            handle.seek(start)
+            selected = handle.read(end - start)
+        try:
+            result = {**deepcopy(anchor), "quote": selected.decode("utf-8")}
+        except UnicodeDecodeError as error:
+            raise ContractError("anchor_utf8_boundary_required", detail=detail) from error
+        validate_schema(result, ANCHOR)
+        return result
+
     def _anchor(self, anchor, source_ref):
         if anchor is None:
             raise ContractError("extraction_anchor_required")
@@ -674,13 +709,22 @@ class Store:
         path = materials.artifact_path(self, anchor["artifact_ref"])
         start, end = anchor["start"], anchor["end"]
         quote = anchor["quote"].encode("utf-8")
-        if not 0 <= start < end <= path.stat().st_size or end-start != len(quote):
-            raise ContractError("anchor_transcription_mismatch")
+        size = path.stat().st_size
+        detail = {"source_ref": source_ref, "artifact_ref": anchor["artifact_ref"],
+            "start": start, "end": end, "artifact_byte_count": size,
+            "selected_byte_count": end - start, "quote_utf8_byte_count": len(quote)}
+        if not 0 <= start < end <= size:
+            raise ContractError("anchor_transcription_mismatch", detail={
+                **detail, "mismatch_kind": "range_outside_artifact"})
+        if end-start != len(quote):
+            raise ContractError("anchor_transcription_mismatch", detail={
+                **detail, "mismatch_kind": "quote_byte_length"})
         with path.open("rb") as handle:
             handle.seek(start)
             selected = handle.read(len(quote))
         if selected != quote:
-            raise ContractError("anchor_transcription_mismatch")
+            raise ContractError("anchor_transcription_mismatch", detail={
+                **detail, "mismatch_kind": "quote_bytes"})
 
     def _validate_atoms(self, value):
         if isinstance(value, dict):
@@ -1249,13 +1293,13 @@ class Store:
             self._require(data["subject_ref"], {"input", "feature", "product", "reference", "read_subject", "context"} if "context_account_scope" in data else {"input", "feature", "product", "reference", "read_subject"})
             if "context_account_scope" not in data:
                 self.coverage(data["subject_ref"])
-            for group in data["coherent_sets"]:
+            for group_index, group in enumerate(data["coherent_sets"]):
                 hypothesis_refs = [item["hypothesis_ref"] for item in group["interpretations"]]
                 if len(hypothesis_refs) != len(set(hypothesis_refs)):
                     raise ContractError("duplicate_hypothesis_in_coherent_set")
                 for ref in group["context_refs"]:
                     self._require(ref, {"context", "hypothesis"})
-                for item in group["interpretations"]:
+                for item_index, item in enumerate(group["interpretations"]):
                     hypothesis = self._require(item["hypothesis_ref"], {"hypothesis"})
                     if "context_account_scope" in data:
                         if data["subject_ref"] not in hypothesis["subject_refs"]:
@@ -1264,12 +1308,19 @@ class Store:
                         hypothesis_coverage = self._merge_segments([span for subject in hypothesis["subject_refs"] for span in self.coverage(subject)])
                         annotation_coverage = self._merge_segments(self.coverage(data["subject_ref"]))
                         if hypothesis_coverage != annotation_coverage:
-                            raise ContractError("annotation_hypothesis_footprint_mismatch")
+                            raise ContractError("annotation_hypothesis_footprint_mismatch", detail={
+                                "field_path": ["coherent_sets", group_index, "interpretations", item_index, "hypothesis_ref"],
+                                "subject_ref": data["subject_ref"], "hypothesis_ref": hypothesis["id"],
+                                "hypothesis_subject_refs": hypothesis["subject_refs"],
+                                "account_footprint": annotation_coverage,
+                                "hypothesis_footprint": hypothesis_coverage,
+                                "constraint": "Each localized interpretation must have the same input footprint as its account subject.",
+                                "repair": "Retain other-subject hypotheses and assessments under their actual subjects and return their references separately. An interpretation account is optional; it is not required for saved numerical results to count."})
                     for ref in item["assessment_refs"]:
                         assessment = self._require(ref, {"assessment"})
                         if assessment["hypothesis_ref"] != hypothesis["id"]:
                             raise ContractError("assessment_hypothesis_mismatch")
-            for ref in data["alternative_refs"]:
+            for alternative_index, ref in enumerate(data["alternative_refs"]):
                 hypothesis = self._require(ref, {"hypothesis"})
                 if "context_account_scope" in data:
                     if data["subject_ref"] not in hypothesis["subject_refs"]:
@@ -1277,7 +1328,14 @@ class Store:
                 else:
                     hypothesis_coverage = self._merge_segments([span for subject in hypothesis["subject_refs"] for span in self.coverage(subject)])
                     if hypothesis_coverage != self._merge_segments(self.coverage(data["subject_ref"])):
-                        raise ContractError("annotation_hypothesis_footprint_mismatch")
+                        raise ContractError("annotation_hypothesis_footprint_mismatch", detail={
+                            "field_path": ["alternative_refs", alternative_index],
+                            "subject_ref": data["subject_ref"], "hypothesis_ref": hypothesis["id"],
+                            "hypothesis_subject_refs": hypothesis["subject_refs"],
+                            "account_footprint": self._merge_segments(self.coverage(data["subject_ref"])),
+                            "hypothesis_footprint": hypothesis_coverage,
+                            "constraint": "Each localized alternative must have the same input footprint as its account subject.",
+                            "repair": "Retain other-subject hypotheses and assessments under their actual subjects and return their references separately. An interpretation account is optional; it is not required for saved numerical results to count."})
 
     def _record_roots(self, kind, data):
         if kind in {"assessment", "annotation"} and "context_account_scope" in data:
@@ -1522,6 +1580,8 @@ class Store:
             raise ContractError('interpretation_account_requires_runtime_owner_and_scope')
         validation_kind = 'annotation' if account else kind
         record = deepcopy(record)
+        if kind in {"term", "reference", "context", "observation"} and record.get("anchor") is not None:
+            record["anchor"] = self._materialize_anchor(record["anchor"], record.get("source_ref"))
         if kind == "observation" and record.get("operand_intervals") is None:
             record.pop("operand_intervals", None)
         if kind == "product" and record.get("mapping") is None and record.get("mapping_source_ref") is None:
@@ -1801,7 +1861,7 @@ class Store:
 
     @staticmethod
     def reasoning_schema():
-        return deepcopy(REASONING_SCHEMA)
+        return source_location_inputs(REASONING_SCHEMA)
 
     def commit_reasoning(self, payload, scope, operation_key, *, account_owner=None):
         scope = self.validate_scope(scope)
@@ -1834,7 +1894,8 @@ class Store:
                 for section, kind, origin in sections:
                     for index, proposed in enumerate(payload.get(section, [])):
                         try:
-                            validate_schema(proposed, REASONING_SCHEMA["properties"][section]["items"])
+                            validate_schema(proposed, source_location_inputs(
+                                REASONING_SCHEMA["properties"][section]["items"], allow_legacy_quote=True))
                             alias = proposed["alias"]
                             if alias in aliases_seen:
                                 raise ContractError("duplicate_alias")
@@ -1850,6 +1911,8 @@ class Store:
                                     return [resolve(child, reference_position, (*path, index)) for index, child in enumerate(value)]
                                 return value
                             row = resolve({key:value for key,value in proposed.items() if key != "alias"})
+                            if kind in {"term", "reference", "context", "observation"} and row.get("anchor") is not None:
+                                row["anchor"] = self._materialize_anchor(row["anchor"], row.get("source_ref"))
                             if section == "terms":
                                 row["namespace"] = "source_local"
                                 row["accession"] = identity("source_term", {"source_ref": row["source_ref"], "label": row["label"], "anchor": row["anchor"]})

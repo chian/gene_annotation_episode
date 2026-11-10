@@ -40,7 +40,7 @@ class Jobs:
     def __init__(self, backend):
         self.backend = backend
         self.config = {'registry_ref': 'execution_registry_fixture',
-            'job_limits': {'memory_bytes': 2048, 'scratch_bytes': 1024, 'wall_seconds': None}}
+            'job_limits': {'memory_bytes': 2048, 'scratch_bytes': 1024}}
         self.rows, self.targets = {}, {}
 
     def _row(self, job_ref):

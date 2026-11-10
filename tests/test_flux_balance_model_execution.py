@@ -190,7 +190,7 @@ def test_selected_command_environment_pins_and_saved_same_handle_are_preserved(t
 
 
 @pytest.mark.parametrize('policy', [None, POLICY, LocalJobPolicy(POLICY['memory_bytes'] + 1, POLICY['scratch_bytes']),
-    LocalJobPolicy(POLICY['memory_bytes'], POLICY['scratch_bytes'], 1)])
+    LocalJobPolicy(POLICY['memory_bytes'], POLICY['scratch_bytes'] + 1)])
 def test_explicit_exact_policy_is_required_before_any_dispatch(tmp_path, monkeypatch, policy):
     request, kwargs = run_arguments(tmp_path)
     kwargs['policy'] = policy

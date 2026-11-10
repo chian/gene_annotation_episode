@@ -30,9 +30,10 @@ CASES = ('primary_crossed', 'matched', 'censored', 'baseline_reused')
 FORM = obj({'measurements': partner_cells_schema()})
 
 
-def setup_case(path, *, case='primary_crossed', components=None):
+def setup_case(path, *, case='primary_crossed', components=None, target_sequence=None):
     store = Store(path)
-    store.create_problem(raw_sequence='ATGGCT', molecule='dna')
+    store.create_problem(raw_sequence='ATGGCT' if target_sequence is None else target_sequence,
+        molecule='dna' if target_sequence is None else 'protein')
     if case == 'primary_crossed':
         manifest = json.loads((PRIMARY/'PAPER_SOURCE_RECORD_001.json').read_text())
         original_args = json.loads((PRIMARY/'PAPER_ARGUMENTS_001.json').read_text())

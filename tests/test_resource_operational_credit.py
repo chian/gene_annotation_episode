@@ -14,8 +14,7 @@ RUN = 'resource-credit-run'
 REGISTRY = 'execution_registry_fixture'
 SCOPE = {'target_refs': ['input_gene'], 'problem_ref': 'problem_gene'}
 INPUTS = [{'reference': 'product_query', 'version': '1', 'content_sha256': 'a' * 64}]
-ALLOCATION = {'cpu': 2, 'memory_bytes': 20 * 1024**3,
-    'scratch_bytes': 4 * 1024**3, 'wall_seconds': None}
+ALLOCATION = {'cpu': 2, 'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 
 
 def selection(kind='local'):

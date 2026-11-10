@@ -1,7 +1,7 @@
 """Fill one ordinary scientific Episode role from composable A/P options and actual retrieved tools.
 
 The binding supplies the decision problem and actual callable restrictions.
-The common Episode loop owns iteration; the caller's projection owns credit.
+The common Episode loop owns iteration; each assigned scientific task owns credit.
 """
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ from .protein_structure_action_records import (
     validate_frozen_protein_structure_action_return)
 
 
-VERSION = "scientific_process_episodes_v8"
+VERSION = "scientific_process_episodes_v9"
 ROLE = "scientific_process"
 ROLES = (ROLE,)
 _COMMON_TOOLS = ("process.search", "process.entry", "process.sources", "process.tools",
@@ -57,10 +57,12 @@ _SHA256 = {"type": "string", "pattern": "^[a-f0-9]{64}$"}
 _SCIENTIFIC_NAMESPACES = frozenset({"scientific_invocation", "scientific_preparation",
     "scientific_process_library", "scientific_option_digest", "scientific_credit_binding"})
 _IMPLEMENTATION_FILES = ("scientific_process_episodes.py", "scientific_process_setup.py",
+    "episode_work_report.py", "api_error_feedback.py", "a101_work_report.py", "scientific_process_prompt.py",
     "scientific_process_records.py", "scientific_process_reports.py",
     "scientific_process_provenance.py", "scientific_tool_library.py",
     "scientific_support_metadata.py", "scientific_process_library.py",
     "evidence_axis_instructions.py", "episode_services.py", "resource_tool_information.py",
+    "execution_planning.py", "execution_memory.py", "execution_guidance.py",
     "scientific_tool_retrieval.py", "tool_schema_validation.py",
     "alignment_site_action_records.py", "alignment_site_returns.py",
     "alignment_site_native.py", "episode_return_records.py",
@@ -77,12 +79,26 @@ _IMPLEMENTATION_FILES = ("scientific_process_episodes.py", "scientific_process_s
     "liftover_contracts.py", "liftover_measurements.py", "liftover_tools.py",
     "circular_dichroism_contracts.py", "circular_dichroism_measurements.py",
     "circular_dichroism_tools.py", "protein_structure_action_records.py",
-    "a101_scoring.py", "a101_credit.py", "a102_investigation.py", "a102_scoring.py",
+    "a101_scoring.py", "a101_credit.py", "a101_investigation.py", "a102_investigation.py", "a102_scoring.py",
     "a102_credit.py", "a102_publication.py", "a102_structures.py", "a102_tools.py",
-    "a102_native_worker.py", "a102_structural_bridge.py", "shared_information.py",
+    "a102_structural_evidence.py", "a102_structural_catalog.py", "a102_structural_workflow.py",
+    "a102_experimental_evidence.py", "a102_structural_report.py",
+    "a102_native_worker.py", "a102_structural_bridge.py", "a102_hpc.py", "a102_hpc_worker.py",
+    "hpc_result_receipts.py", "shared_information.py", "shared_information_results.py",
     "a102_resources.py", "protein_structure_sequences.py", "a102_attachments.py", "sequence_attribution.py",
     "a103_investigation.py", "a103_tools.py", "a103_scoring.py", "a103_publication.py",
-    "a103_attachments.py", "a103_credit.py", "a103_native_worker.py", "a103_channels.py", "a103_detection.py", "homology_query.py")
+    "a103_attachments.py", "a103_credit.py", "a103_native_worker.py", "a103_channels.py", "a103_detection.py",
+    "a103_hpc.py", "a103_hpc_worker.py", "a103_native_requests.py", "hpc_scientific_commission.py", "homology_query.py",
+    "a104_investigation.py", "a104_tools.py", "a104_scoring.py", "a104_publication.py", "a104_attachments.py",
+    "a104_credit.py", "a104_hpc.py", "a104_hpc_worker.py", "a104_interpretation.py", "a104_characterization.py",
+    "a107_investigation.py", "a107_tools.py", "a107_qualification.py", "a107_expression_components.py", "a107_expression_contracts.py",
+    "a107_genomic_detection_hpc.py", "a107_genomic_detection_native.py",
+    "a110_investigation.py", "a110_tools.py", "a110_chemical_accounting.py", "a110_qualification.py", "a110_chemical_contracts.py",
+    "a110_experimental_qualification.py", "component_axis_cell_receipts.py",
+    "a110_fba_hpc.py", "a110_fba_native.py", "partner_chemical_tools.py", "component_sequence_attribution.py",
+    "component_axis_workflow.py", "component_axis_reports.py", "component_axis_native_contracts.py", "inprocess_replay.py",
+    "component_axis_source_access.py", "component_axis_execution_context.py",
+    "component_axis_native_tools.py", "component_axis_native_hpc.py", "component_axis_native_worker.py")
 _ITC_PARAMETER_SOURCE = "itc_binding_parameters"
 
 
@@ -126,9 +142,16 @@ _REVISION_ORIGIN = obj({"version": {"const": "scientific_process_revision_origin
     "parent_invocation_ref": {"type": "string",
         "pattern": "^scientific_invocation_[a-f0-9]{24}$"},
     "preparation_operation_ref": {"type": "string", "pattern": "^operation_[a-f0-9]{24}$"}})
+_EVIDENCE_TASK = obj({'version': {'const': 'evidence_axis_task_v1'},
+    'kind': {'const': 'whole_axis_findings'},
+    'evidence_axis': {'enum': ['A105', 'A106', 'A108']},
+    'credit_unit': {'type': 'number', 'exclusiveMinimum': 0,
+        'description': 'Use the finding unit in the explicitly configured credit definition for this exact task; do not select or change its cutoff.'}})
 _ASSIGNMENT = obj({"selection": _SELECTION,
+    "proposed_annotation_ref": {**_REFERENCE, "description": "The proposed annotation this task evaluates."},
     "evidence_refs": {"type": "array", "items": _REFERENCE, "uniqueItems": True},
-    "constraints": {"type": "object"}, "context": {"type": "object"},
+    "constraints": {"type": "object"}, "context": {"type": "object",
+        'properties': {'evidence_task': _EVIDENCE_TASK}},
     "revision_origin": _REVISION_ORIGIN},
     required=["selection", "evidence_refs", "constraints", "context"])
 _RECORDED_ASSIGNMENT = deepcopy(_ASSIGNMENT)
@@ -171,6 +194,11 @@ class ScientificProcessEpisodes:
 
     def as_record(self):
         files = _IMPLEMENTATION_FILES
+        # Include the axis-specific pure presentation adapters available in
+        # this build without requiring unrelated future modules to exist.
+        files = (*files, *(name for name in ('a102_work_report.py', 'a103_work_report.py',
+            'a104_work_report.py', 'a106_work_report.py', 'a107_work_report.py', 'a110_work_report.py')
+            if Path(__file__).with_name(name).is_file()))
         if self._contract_information_profile is not None:
             files = (*files, 'composition_information.py', 'schema_information_text.py')
         implementation = scientific_digest({name: hashlib.sha256(
@@ -206,6 +234,20 @@ class ScientificProcessEpisodes:
     def assignment_schema(self, role):
         self._role(role)
         return deepcopy(_ASSIGNMENT)
+
+    def child_assignment_schema(self, parent, role):
+        schema = self.assignment_schema(role)
+        required = getattr(self.services, 'annotation_task_required', lambda: False)()
+        if required:
+            schema['required'].append('proposed_annotation_ref')
+        schema['allOf'] = [{'if': {'properties': {'selection': {'properties': {
+            'evidence_axis': {'properties': {'option_id': {'const': axis}}, 'required': ['option_id']}},
+            'required': ['evidence_axis']}}, 'required': ['selection']},
+            'then': {'required': ['proposed_annotation_ref'], 'properties': {'context': {
+                'required': ['evidence_task'], 'properties': {'evidence_task': {
+                    'properties': {'evidence_axis': {'const': axis}}}}}}}}
+            for axis in ('A105', 'A106', 'A108')]
+        return schema
 
     def _selection(self, value):
         selection = validate_selection(value)
@@ -244,6 +286,9 @@ class ScientificProcessEpisodes:
             selected['child_tool_info'] = self.tool_library.resolve_tool_info(
                 selected.get('child_tool_info'), self._information_catalog(scope))
         validate_schema(assignment, _RECORDED_ASSIGNMENT)
+        proposed = assignment.get('proposed_annotation_ref')
+        if proposed is not None and not self.services.reference_in_scope(proposed, scope, 'hypothesis'):
+            raise ContractError('proposed_annotation_outside_assigned_scope')
         assignment["selection"] = self._selection(assignment["selection"])
         if "revision_origin" in assignment:
             assignment["revision_origin"] = validate_revision_origin(assignment["revision_origin"])
@@ -282,6 +327,18 @@ class ScientificProcessEpisodes:
             raise ContractError("scientific_parent_invocation_required")
         if not isinstance(operation_key, str) or not operation_key:
             raise ContractError("operation_key_required")
+        selection = plain(selection)
+        inherited = getattr(self.services, 'proposed_annotation_for', lambda context: None)(parent)
+        if inherited is not None:
+            if selection.get('proposed_annotation_ref', inherited) != inherited:
+                raise ContractError('child_proposed_annotation_differs_from_original_task')
+            selection['proposed_annotation_ref'] = inherited
+        required = getattr(self.services, 'annotation_task_required', lambda: False)()
+        proposed = selection.get('proposed_annotation_ref')
+        if required and proposed is None:
+            raise ContractError('scientific_task_requires_proposed_annotation')
+        if proposed is not None and proposed not in parent.received_record_refs:
+            raise ContractError('proposed_annotation_not_received_by_parent')
         if getattr(parent, 'role', None) == ROLE:
             parent_selection = self._original_selection(parent)
             parent_axis = parent_selection[selection_fields(parent_selection)[0]]['option_id']
@@ -292,6 +349,10 @@ class ScientificProcessEpisodes:
                 raise ContractError('a102_cross_axis_descendant_requires_shared_parent')
             if parent_axis == 'A103' and child_axis != 'A103':
                 raise ContractError('a103_cross_axis_descendant_requires_shared_parent')
+            if parent_axis == 'A104' and child_axis != 'A104':
+                raise ContractError('a104_cross_axis_descendant_requires_shared_parent')
+            if parent_axis in {'A107', 'A110'} and child_axis != parent_axis:
+                raise ContractError('component_axis_cross_axis_descendant_requires_shared_parent')
         assignment = self._assignment(selection, scope, materialize=True)
         if "revision_origin" in assignment:
             self._validate_origin(parent, assignment, owner="self")
@@ -327,6 +388,11 @@ class ScientificProcessEpisodes:
     def prepare_invocation(self, parent, role, inputs, scope, operation_key, *, invocation,
                            closed_context=None):
         original = self._invocation(invocation, scope)
+        if (parent is not None and len(parent.path) == 1
+                and getattr(self.services, 'annotation_task_required', lambda: False)()
+                and sum(node.get('x-source') == 'scientific_process_results'
+                    for node in original['report_schema'].get('properties', {}).values()) != 1):
+            raise ContractError('annotation_axis_return_requires_local_task_credit')
         if closed_context is not None:
             # Only an authenticated completed commission can resolve its
             # original frozen tools before reconstructing the closed child.
@@ -385,6 +451,8 @@ class ScientificProcessEpisodes:
                 self._validate_origin(parent, assignment, owner='self')
             return {'assignment': assignment, 'scientific_process': filled}
         assignment = self.prepare_assignment(parent, role, inputs, scope, operation_key)
+        from .component_axis_reports import validate_native_return_channels
+        validate_native_return_channels(assignment['selection'], original['report_schema'])
         filled = validate_filled_process({"version": "filled_scientific_process_v1",
             "selection": assignment["selection"],
             "assignment_sha256": scientific_digest(assignment),
@@ -517,6 +585,12 @@ class ScientificProcessEpisodes:
 
     def permitted_common_actions(self, context):
         self.validate_context(context)
+        selection = context.assignment['selection']
+        if selection[selection_fields(selection)[0]]['option_id'] == 'A104':
+            # Native work waits inside the shared operational HPC service.
+            # An idle scientific calendar wait cannot make its suspended
+            # annotation parent supply a requested sibling investigation.
+            return ('tool', 'reason', 'child', 'redeliver_report')
         return ("tool", "reason", "child", "wait", "redeliver_report")
 
     def allowed_children(self, parent, caller_capabilities):
@@ -524,6 +598,8 @@ class ScientificProcessEpisodes:
         selection=parent.assignment['selection']
         if selection[selection_fields(selection)[0]]['option_id']=='A103':
             return tuple(role for role in self._child_roles if role in {'scientific_process','literature'})
+        if selection[selection_fields(selection)[0]]['option_id']=='A104':
+            return tuple(role for role in self._child_roles if role in {'scientific_process', 'hpc'})
         return self._child_roles
 
     def instructions(self, context):
@@ -531,23 +607,40 @@ class ScientificProcessEpisodes:
         selection = context.assignment['selection']
         axis = self.library.resolve(selection[selection_fields(selection)[0]])
         axis_guidance = ("A102 owns structural work only. Scientific descendants remain A102. "
-            "Publish missing-information requests and acquired information through shared.* to the shared parent; "
-            "the parent can commission other axes as siblings. Reuse qualified retained alignments. "
+            "Use available shared operations to send the immediate parent specific missing operands or useful "
+            "received evidence. That parent chooses within its own options or relays the need upward. "
+            "Reuse qualified retained alignments. "
             "Native comparison results automatically populate the A102 numerical sheet before credit inspection; "
             "unknown functional features do not erase measured native correspondence. "
             "Follow up for missing structural cells, preserve original scope and model uncertainty, "
             "and distinguish fold resemblance from exact function. Novel folding requires an explicit configured "
             "remote/API/HPC binding; use structure.model_request when it is missing.\n\n"
             if axis.get('id') == 'A102' else '')
+        if axis.get('id') == 'A102':
+            from .a102_structural_evidence import is_merged_entry
+            if is_merged_entry(axis):
+                # The complete selected entry below owns both structural paths.
+                # Keep the legacy native-only guidance on its original catalog.
+                axis_guidance = ('A102 owns comparative and experimental structural evidence. '
+                    'Scientific descendants remain A102. Use either path or both as useful, '
+                    'and return their separate scientific quantities and shared dependencies.\n\n')
         if axis.get('id') == 'A103':
             axis_guidance = ('A103 owns gene-context work. Scientific descendants remain A103. '
-                'Publish missing information AND acquired evidence through shared.*; the parent commissions other '
-                'evidence axes as siblings. Context measurements are automatically graded at publication/receipt. '
+                'Use available shared operations to send the immediate parent specific missing operands or '
+                'useful received evidence; that parent chooses within its own options or relays the need upward. '
+                'Context measurements are automatically graded at publication/receipt. '
                 'Each target/locus, neighboring component, domain and regulatory footprint retains its own attribution. '
                 'An identity score, source label or fetched record alone is not an association score. Unknown flanks '
                 'and unevaluated detections are not absence. Preserve optional modules, paralogs and related sampling. '
                 'Use one small local job at a time, current resource_context and admission feedback. '
                 'Root/owner credit comes from actual measured context, not narrative judgments.\n\n')
+        if axis.get('id') in {'A107', 'A110'}:
+            from .component_axis_workflow import INSTRUCTIONS
+            axis_guidance = (INSTRUCTIONS[axis['id']] + '\n\nScientific descendants remain '
+                + axis['id'] + '. Use available shared operations for specific parent information needs '
+                'or useful received findings. The immediate parent chooses within its own options or relays '
+                'the need upward; publication does not commission work or promise a reply. '
+                'Preserve named scientific components separately from controller progress.\n\n')
         if axis.get('entry_version') == INSTRUCTION_VERSION:
             return (
                 axis_guidance + "Determine what the supplied target does within the parent's assigned question, scope "
@@ -678,6 +771,9 @@ class ScientificProcessEpisodes:
         entries.append({"name": "process.revise", "description": description,
             "input_schema": deepcopy(_LEGACY_REVISION_ARGUMENTS
                 if selection['version'] == LEGACY_SELECTION_VERSION else _REVISION_ARGUMENTS)})
+        if getattr(self.services, 'workflow', None) is not None and self.tool_library.supports_tool_info:
+            from .execution_planning import catalog
+            entries.extend(catalog())
         return entries
 
     def common_tool_names(self, context):
@@ -725,8 +821,14 @@ class ScientificProcessEpisodes:
             axis = self.library.resolve(selection[selection_fields(selection)[0]])
             if axis.get('id')=='A103' and tool_name=='sequence.align':
                 raise ContractError('a103_new_sequence_comparison_requires_shared_parent')
+            if axis.get('id')=='A104' and tool_name=='sequence.align':
+                raise ContractError('a104_new_sequence_comparison_requires_shared_parent')
             arguments = _object(arguments, "scientific_arguments_invalid")
             validate_schema(arguments, entries[tool_name]["input_schema"])
+            if tool_name == 'process.execution':
+                from .execution_planning import read
+                return {'status': 'completed', 'record_refs': [], 'changed_record_refs': [],
+                        'result': read(self, context, arguments)}
             if tool_name == 'sequence.align':
                 self.services.authenticate_structure_alignment_operands(context, arguments)
             elif tool_name == 'execution.estimate' and arguments['tool'] == 'sequence.align':
@@ -758,15 +860,22 @@ class ScientificProcessEpisodes:
         outcome = self.services.execute_tool(tool_name, arguments,
             scope=context.scope, operation_key=operation_key,
             **({'permitted_record_refs': context.received_record_refs}
-               if tool_name.startswith(('structure.','context.')) or tool_name in {'reference.neighborhood','result.blast.hsp', 'source.locate',
+               if tool_name.startswith(('structure.','context.','phylogeny.','partner.','chemistry.')) or tool_name in {'reference.neighborhood','result.blast.hsp', 'source.locate',
                    'find_restriction_sites', 'find_restriction_enzymes'} else {}))
         return await outcome if inspect.isawaitable(outcome) else outcome
 
     def fact_sources(self, role):
         self._role(role)
         from .a103_investigation import context_fact_sources
+        from .a104_investigation import fact_sources as evolutionary_fact_sources
+        from .a107_qualification import fact_sources as partner_qualification_sources
+        from .component_axis_native_hpc import fact_sources as component_native_sources
+        from .a110_qualification import fact_sources as chemical_qualification_sources
         return {**report_sources(self.library, self.tool_library),
-                **context_fact_sources(),
+                **context_fact_sources(), **evolutionary_fact_sources(),
+                **partner_qualification_sources(),
+                **component_native_sources(),
+                **chemical_qualification_sources(),
                 **alignment_site_fact_sources(), **restriction_mapping_fact_sources(),
                 **molecular_fact_sources(), **protein_structure_action_fact_sources()}
 
@@ -781,6 +890,38 @@ class ScientificProcessEpisodes:
         facts = {"scientific_process_results": merge_process_results(
             None if own is None else project(own), [project(value) for value in received])}
         schema = plain(context.request)['report_contract']['measurements']['schema']
+        from .component_axis_native_hpc import (FACT_SOURCE as NATIVE_COMPONENTS,
+            EXECUTION_SOURCE as NATIVE_EXECUTION, received_components,
+            execution_findings as native_execution_findings)
+        axis = context.assignment.get('selection', {}).get('evidence_axis', {}).get('option_id')
+        for source, reader in ((NATIVE_COMPONENTS, received_components), (NATIVE_EXECUTION, native_execution_findings)):
+            if any(node.get('x-source') == source for node in schema.get('properties', {}).values()):
+                workflow = getattr(self.services, 'workflow', None)
+                if workflow is None:
+                    raise ContractError('component_native_report_store_required')
+                facts[source] = [row['source_ref'] for row in reader(workflow.store,
+                    context.received_record_refs, context.scope, axis=axis if axis in {'A107', 'A110'} else None)]
+        from .a107_qualification import FACT_SOURCE as PARTNER_QUALIFICATIONS, received_qualifications
+        from .a110_qualification import FACT_SOURCE as CHEMICAL_QUALIFICATIONS, received as chemical_qualifications
+        if any(node.get('x-source') == CHEMICAL_QUALIFICATIONS for node in schema.get('properties', {}).values()):
+            workflow = getattr(self.services, 'workflow', None)
+            if workflow is None:
+                raise ContractError('a110_qualification_report_store_required')
+            facts[CHEMICAL_QUALIFICATIONS] = [row['source_ref'] for row in chemical_qualifications(
+                workflow.store, context.received_record_refs, context.scope)]
+        if any(node.get('x-source') == PARTNER_QUALIFICATIONS for node in schema.get('properties', {}).values()):
+            workflow = getattr(self.services, 'workflow', None)
+            if workflow is None:
+                raise ContractError('a107_qualification_report_store_required')
+            facts[PARTNER_QUALIFICATIONS] = [row['source_ref'] for row in received_qualifications(
+                workflow.store, context.received_record_refs, context.scope)]
+        from .a107_qualification import EXECUTION_SOURCE as PARTNER_EXECUTION, execution_findings as partner_execution_findings
+        if any(node.get('x-source') == PARTNER_EXECUTION for node in schema.get('properties', {}).values()):
+            workflow = getattr(self.services, 'workflow', None)
+            if workflow is None:
+                raise ContractError('a107_genomic_execution_report_store_required')
+            facts[PARTNER_EXECUTION] = [row['source_ref'] for row in partner_execution_findings(
+                workflow.store, context, set(context.received_record_refs))]
         from .a103_investigation import CONTEXT_RECORD_SOURCE,received_context_records
         if any(node.get('x-source')==CONTEXT_RECORD_SOURCE for node in schema.get('properties',{}).values()):
             workflow=getattr(self.services,'workflow',None)
@@ -788,6 +929,14 @@ class ScientificProcessEpisodes:
             facts[CONTEXT_RECORD_SOURCE]=received_context_records(workflow.store,
                 context.received_record_refs,plain(context.scope),
                 committed=completion_snapshot.get('committed_record_refs',()))
+        from .a104_investigation import RECORD_SOURCE as EVOLUTIONARY_RECORD_SOURCE, received_records as received_evolutionary_records
+        if any(node.get('x-source') == EVOLUTIONARY_RECORD_SOURCE for node in schema.get('properties', {}).values()):
+            workflow = getattr(self.services, 'workflow', None)
+            if workflow is None:
+                raise ContractError('a104_report_store_required')
+            facts[EVOLUTIONARY_RECORD_SOURCE] = received_evolutionary_records(workflow.store,
+                context.received_record_refs, plain(context.scope),
+                committed=completion_snapshot.get('committed_record_refs', ()))
         for source, requested in requested_site_projections(schema).items():
             facts[source], cursor = [], None
             while True:
@@ -819,7 +968,19 @@ class ScientificProcessEpisodes:
                     self.services.protein_structure_action_received_facts(context, fact_source=source),
                     self.services.protein_structure_action_own_facts(context, fact_source=source),
                     fact_source=source)
+        facts.update(self._component_scoring_facts(context))
         return facts
+
+    def _component_scoring_facts(self, context):
+        from .component_axis_reports import current_scoring_sheets, SCORING_FACT
+        workflow = getattr(self.services, 'workflow', None)
+        if workflow is None:
+            return {}
+        sheets = current_scoring_sheets(workflow.store, context=context, services=self.services)
+        return {SCORING_FACT: sheets} if sheets else {}
+
+    def current_report_facts(self, context):
+        return self._component_scoring_facts(context)
 
     def received_report_sources(self, role):
         # Scientific roles declare their own source above; the registry rejects
@@ -839,7 +1000,118 @@ class ScientificProcessEpisodes:
                 facts[source] = merge_protein_structure_action_facts(
                     self.services.protein_structure_action_received_facts(context, fact_source=source),
                     fact_source=source)
+        facts.update(self._component_scoring_facts(context))
         return facts
+
+    def initial_decision_context(self, context):
+        """Present admitted scientific outputs through the existing fresh-call hook."""
+        from .a102_structural_evidence import is_merged_entry
+        from .a102_structural_report import received_reports
+        if context.role not in {'annotation', ROLE}:
+            return {}
+        workflow = getattr(self.services, 'workflow', None)
+        result = self._component_scoring_facts(context)
+        if workflow is not None and (context.role == 'annotation' or context.assignment.get(
+                'selection', {}).get('evidence_axis', {}).get('option_id') in {'A107', 'A110'}):
+            from .component_axis_reports import received_reports as component_reports, mark_native_execution
+            reports = component_reports(workflow.store, context=context, services=self.services)
+            if reports:
+                result['received_partner_and_chemical_evidence'] = reports
+            from .component_axis_native_hpc import received_components, execution_findings as native_execution_findings
+            axis_id = context.assignment.get('selection', {}).get('evidence_axis', {}).get('option_id')
+            selected_axis = axis_id if context.role == ROLE else None
+            native = received_components(workflow.store, context.received_record_refs, context.scope, axis=selected_axis)
+            execution = native_execution_findings(workflow.store, context.received_record_refs, context.scope, axis=selected_axis)
+            if native or execution:
+                execution = mark_native_execution(execution, native)
+                result['received_partner_and_chemical_native_components'] = {
+                    'scientific_results': native, 'execution_findings': execution}
+                from .component_axis_execution_context import prepared_assignments
+                prepared = prepared_assignments(workflow.store, context=context,
+                    execution_findings=execution,
+                    resources=getattr(workflow.tools, 'component_native_resources', None))
+                if prepared is not None:
+                    result['received_partner_and_chemical_native_components']['prepared_hpc_assignments'] = prepared
+            from .a107_qualification import received_qualifications
+            from .a110_qualification import received as chemical_qualifications
+            qualifications = {}
+            for selected, reader in (('A107', received_qualifications), ('A110', chemical_qualifications)):
+                if context.role == 'annotation' or selected_axis == selected:
+                    rows = reader(workflow.store, context.received_record_refs, context.scope)
+                    if rows:
+                        qualifications[selected] = rows
+            if qualifications:
+                result['received_partner_and_chemical_qualifications'] = qualifications
+        if (workflow is not None and getattr(workflow.tools,'a103_execution_resources',None) is not None
+                and (context.role=='annotation' or context.assignment.get('selection',{}).get('evidence_axis',{}).get('option_id') in {'A103','A107'})):
+            from .a103_hpc import execution_findings
+            result['received_gene_context_execution'] = execution_findings(workflow.store,context,set(context.received_record_refs))
+        axis = next((row['option_ref'] for row in self.library.headers()
+            if row['option_ref']['option_id'] == 'A102'), None)
+        if axis is None or not is_merged_entry(self.library.resolve(axis)):
+            return result
+        if workflow is None:
+            raise ContractError('a102_report_store_required')
+        result['received_structural_evidence'] = received_reports(workflow.store,
+            context=context, structure_repository=self.services.literature_structure_repository(),
+            axis_reference=axis)
+        return result
+
+    def _validate_structural_report(self, context, form, schema):
+        from dataclasses import replace
+        from .a102_structural_evidence import is_merged_entry
+        from .a102_structural_report import is_structural_report_schema, resolve_report
+        if not is_structural_report_schema(schema):
+            return
+        axis = self.library.reference('A102')
+        if not is_merged_entry(self.library.resolve(axis)):
+            raise ContractError('a102_merged_structural_evidence_catalog_required')
+        if context.role == ROLE:
+            selection = self._original_selection(context)
+            if selection[selection_fields(selection)[0]] != axis:
+                raise ContractError('a102_structural_report_requires_merged_axis')
+        workflow = getattr(self.services, 'workflow', None)
+        if workflow is None:
+            raise ContractError('a102_report_store_required')
+        # C4 can retain a commission-time context while the child acquires new
+        # evidence. Refresh only this reporting episode's actual durable set.
+        selected = self.services.record_selection(context)
+        if selected.get('run_id') != context.run_id or selected.get('episode_id') != context.episode_id:
+            raise ContractError('a102_report_receiver_mismatch')
+        current = replace(context, received_record_refs=tuple(selected['known_record_refs']))
+        try:
+            resolve_report(workflow.store, plain(form), context=current,
+                structure_repository=self.services.literature_structure_repository())
+        except ContractError as error:
+            fields = {'a102_comparative_status_differs_from_delivered_evidence': 'comparative_status',
+                'a102_experimental_status_differs_from_delivered_evidence': 'experimental_status'}
+            if str(error) not in fields:
+                raise
+            raise ReportBoundaryError('A102 interpretation requires its delivered structural evidence',
+                code=str(error), field=fields[str(error)]) from error
+
+    def _validate_component_axis_report(self, context, form, schema):
+        from dataclasses import replace
+        from .component_axis_reports import report_axis, resolve_report
+        axis = report_axis(schema)
+        if axis is None:
+            return
+        if context.role == ROLE:
+            selected = self._original_selection(context)
+            if selected[selection_fields(selected)[0]]['option_id'] != axis:
+                raise ContractError('component_axis_report_requires_original_axis')
+        workflow = getattr(self.services, 'workflow', None)
+        if workflow is None:
+            raise ContractError('component_axis_report_store_required')
+        received = self.services.record_selection(context)
+        if received.get('run_id') != context.run_id or received.get('episode_id') != context.episode_id:
+            raise ContractError('component_axis_report_receiver_mismatch')
+        current = replace(context, received_record_refs=tuple(received['known_record_refs']))
+        try:
+            resolve_report(workflow.store, plain(form), context=current, services=self.services, axis=axis)
+        except ContractError as error:
+            raise ReportBoundaryError('The axis report requires its actual received component evidence',
+                code=str(error)) from error
 
     def _validate_molecular_report(self, context, form, schema):
         for source in requested_molecular_fact_sources(plain(schema)):
@@ -897,6 +1169,8 @@ class ScientificProcessEpisodes:
         if context.role == 'annotation':
             self._validate_molecular_report(context, form, schema)
             self._validate_protein_structure_action_report(context, form, schema)
+            self._validate_structural_report(context, form, schema)
+            self._validate_component_axis_report(context, form, schema)
 
     def resolve(self, context, reference, namespace):
         self.validate_context(context)
@@ -915,17 +1189,21 @@ class ScientificProcessEpisodes:
             self.resolve(context, reference, namespace))
         self._validate_molecular_report(context, form, original_schema)
         self._validate_protein_structure_action_report(context, form, original_schema)
-        from .a102_investigation import report_schema as a102_report_schema, resolve_report as resolve_a102_report
-        if plain(original_schema) == a102_report_schema():
+        self._validate_structural_report(context, form, original_schema)
+        self._validate_component_axis_report(context, form, original_schema)
+        from .a102_investigation import (report_schema as a102_report_schema,
+            legacy_report_schema as a102_legacy_report_schema, resolve_report as resolve_a102_report)
+        if plain(original_schema) in (a102_report_schema(), a102_legacy_report_schema()):
             workflow = getattr(self.services, 'workflow', None)
             if workflow is None:
                 raise ContractError('a102_report_store_required')
             resolve_a102_report(workflow.store, plain(form), scope=plain(context.scope))
-        from .a103_investigation import (report_schema as a103_report_schema, resolve_report as resolve_a103_report,
+        from .a103_investigation import (resolve_report as resolve_a103_report,
+            legacy_report_schema as a103_legacy_report_schema,
             measurement_report_schema as a103_measurement_report_schema,resolve_measurement_report)
         a103_axis=plain(context.assignment).get('selection',{}).get('evidence_axis',{}).get('option_id')=='A103'
         a103_fields=set(plain(original_schema).get('properties',{}))
-        if a103_axis and a103_fields==set(a103_report_schema()['properties']):
+        if a103_axis and a103_fields == set(a103_legacy_report_schema()['properties']):
             workflow = getattr(self.services, 'workflow', None)
             if workflow is None:
                 raise ContractError('a103_report_store_required')
@@ -946,6 +1224,34 @@ class ScientificProcessEpisodes:
             workflow=getattr(self.services,'workflow',None)
             if workflow is None:raise ContractError('a103_report_store_required')
             resolve_measurement_report(workflow.store,plain(form),scope=plain(context.scope))
+        from .a104_investigation import (report_schema as a104_report_schema,
+            legacy_report_schema as a104_legacy_report_schema, resolve_report as resolve_a104_report)
+        a104_axis = plain(context.assignment).get('selection', {}).get('evidence_axis', {}).get('option_id') == 'A104'
+        if a104_axis and set(plain(original_schema).get('properties', {})) in (
+                set(a104_report_schema()['properties']), set(a104_legacy_report_schema()['properties'])):
+            workflow = getattr(self.services, 'workflow', None)
+            if workflow is None:
+                raise ContractError('a104_report_store_required')
+            try:
+                resolve_a104_report(workflow.store, plain(form), scope=plain(context.scope))
+            except ContractError as error:
+                interpretation_errors = {
+                    'a104_report_numeric_credit_conflict': 'phylogenetic_credit',
+                    'a104_native_tree_statement_requires_received_original_execution': 'phylogeny_status',
+                    'a104_placement_statement_requires_native_measurement': 'phylogeny_status',
+                    'a104_history_statement_requires_actual_two_tree_comparison': 'phylogeny_status',
+                    'a104_history_agreement_requires_supported_native_comparison': 'history_interpretation',
+                    'a104_discordance_statement_requires_native_comparison': 'history_interpretation',
+                    'a104_function_clade_requires_exact_characterized_reference_links': 'function_scope',
+                    'a104_mixed_function_statement_requires_characterized_members': 'function_scope',
+                    'a104_function_statement_requires_explicit_hypothesis_and_assessment': 'function_scope'}
+                interpretation_errors.update({
+                    'a104_function_hypothesis_requires_original_target': 'hypothesis_refs',
+                    'a104_function_statement_requires_corresponding_assessment_relation': 'assessment_refs'})
+                if str(error) not in interpretation_errors:
+                    raise
+                raise ReportBoundaryError('A104 interpretation requires the particular native evidence and attribution',
+                    code=str(error), field=interpretation_errors[str(error)]) from error
         fields = [name for name, node in plain(original_schema)["properties"].items()
                   if node.get("x-source") == "scientific_process_results"]
         projections = requested_site_projections(plain(original_schema))
@@ -996,19 +1302,61 @@ class ScientificProcessEpisodes:
             return None
         selection = self._original_selection(context)
         axis = selection[selection_fields(selection)[0]]
+        if axis['option_id'] in {'A105', 'A106', 'A108'} and self.library.resolve(axis).get('entry_version') in {
+                INSTRUCTION_VERSION, EVIDENCE_AXIS_VERSION}:
+            task = plain(context.assignment).get('context', {}).get('evidence_task')
+            if (not isinstance(task, dict)
+                    or set(task) != {'version', 'kind', 'evidence_axis', 'credit_unit'}
+                    or task['version'] != 'evidence_axis_task_v1'
+                    or task['kind'] != 'whole_axis_findings'
+                    or task['evidence_axis'] != axis['option_id']):
+                raise ContractError('explicit_original_axis_finding_task_required')
+            if not context.assignment.get('proposed_annotation_ref'):
+                raise ContractError('axis_finding_task_requires_proposed_annotation')
+            from .investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+            return ScientificFindingProgress(FindingProgressPolicy(task['credit_unit']))
         if axis['option_id'] == 'A101' and self.library.resolve(axis).get('entry_version') in {
                 INSTRUCTION_VERSION, EVIDENCE_AXIS_VERSION}:
             from .a101_credit import A101SequenceCredit
             return A101SequenceCredit()
         if axis['option_id'] == 'A102' and self.library.resolve(axis).get('entry_version') in {
                 INSTRUCTION_VERSION, EVIDENCE_AXIS_VERSION}:
+            from .a102_structural_evidence import is_merged_entry, credit_projector
+            if is_merged_entry(self.library.resolve(axis)):
+                return credit_projector(context.assignment)
             from .a102_credit import A102StructuralCredit
             return A102StructuralCredit()
         if axis['option_id'] == 'A103' and self.library.resolve(axis).get('entry_version') in {
                 'evidence_axis_instruction_v1'}:
             from .a103_credit import A103ContextCredit
             return A103ContextCredit()
+        if axis['option_id'] == 'A104' and self.library.resolve(axis).get('entry_version') in {'evidence_axis_instruction_v1'}:
+            from .a104_credit import A104EvolutionaryCredit
+            return A104EvolutionaryCredit()
+        if axis['option_id'] in {'A107', 'A110'} and self.library.resolve(axis).get('entry_version') == INSTRUCTION_VERSION:
+            from .component_axis_workflow import finding_progress, task_context
+            task = plain(context.assignment).get('context', {}).get(axis['option_id'].lower()+'_task')
+            if task is not None:
+                if not isinstance(task, dict) or task != task_context(axis['option_id'], task.get('name')):
+                    raise ContractError('component_axis_original_task_context_mismatch')
+            return finding_progress()
         return None
+
+    def continuation_task(self, context):
+        """Name the original scientific task whose own units price continuation."""
+        projector = self.credit_projector(context)
+        if projector is None:
+            raise ContractError('scientific_task_credit_not_declared')
+        selection = self._original_selection(context)
+        axis = selection[selection_fields(selection)[0]]['option_id']
+        if axis in {'A105', 'A106', 'A108'}:
+            return axis + ':whole_axis_findings'
+        assigned = plain(context.assignment).get('context', {}).get(axis.lower() + '_task')
+        if assigned is not None:
+            if not isinstance(assigned, dict) or not isinstance(assigned.get('name'), str) or not assigned['name']:
+                raise ContractError('scientific_continuation_original_task_required')
+            return axis + ':' + assigned['name']
+        return axis + ':' + projector.as_record()['kind']
 
     def credit_view(self, context, receiver_selection):
         self.validate_context(context)
@@ -1018,7 +1366,9 @@ class ScientificProcessEpisodes:
         if context.role != ROLE:
             return []
         self.validate_context(context)
-        return list(context.assignment["evidence_refs"])
+        return list(dict.fromkeys([*context.assignment["evidence_refs"],
+            *([context.assignment['proposed_annotation_ref']]
+              if context.assignment.get('proposed_annotation_ref') else [])]))
 
     def received_form_references(self, context, form, schema, operation_key):
         from .protein_structure_action_records import protein_structure_action_form_references

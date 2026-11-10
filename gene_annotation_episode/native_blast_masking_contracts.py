@@ -269,7 +269,7 @@ def validate_native_blast_masking_plan(value):
     if execution.name != "native.json" or root != execution.parent / ATTEMPT_NAME:
         _error("plan_directory_conflict")
     policy = plan["policy"]
-    if type(policy) is not dict or set(policy) != {"memory_bytes", "scratch_bytes", "wall_seconds"}:
+    if type(policy) is not dict or set(policy) != {'memory_bytes', 'scratch_bytes'}:
         _error("explicit_policy_required")
     from .local_jobs import LocalJobPolicy
     LocalJobPolicy(**policy)

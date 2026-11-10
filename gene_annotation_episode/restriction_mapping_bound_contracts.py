@@ -83,9 +83,7 @@ SCHEMAS = {
 SCHEMAS["Reservation"] = _obj(version=_enum("restriction_operation_reservation_v1"), **_COMMON,
     work_mode=_enum("native", "saved"), input_source_ref=TEXT, prior_result_source_ref=_null(TEXT),
     sequence_binding=BINDING, worker_request={"anyOf": [NATIVE_REQUEST, SAVED_REQUEST]},
-    software=SCHEMAS["Software"], policy=_obj(memory_bytes={"type": "integer", "minimum": 1},
-        scratch_bytes={"type": "integer", "minimum": 1},
-        wall_seconds=_null({"type": "number", "exclusiveMinimum": 0})),
+    software=SCHEMAS["Software"], policy=_obj(memory_bytes={'type': 'integer', 'minimum': 1}, scratch_bytes={'type': 'integer', 'minimum': 1}),
     directory=TEXT, request_file=PIN, output_directory=TEXT, handle_path=TEXT, stdout_path=TEXT, stderr_path=TEXT)
 SCHEMAS["ExecutionProof"] = _obj(version=_enum("restriction_operation_execution_proof_v1"),
     reservation_sha256=SHA, handle_artifact_ref=TEXT, control_request_artifact_ref=TEXT,

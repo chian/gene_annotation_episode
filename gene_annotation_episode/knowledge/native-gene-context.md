@@ -68,11 +68,15 @@ paralogs and optional modules. It references actual context measurements and
 explicit incompatibility witnesses. It is separate from the main native
 context-progress credit and creates no independent copy of its inputs.
 
-Every scientific descendant remains A103. Publish BOTH acquired evidence and
-missing information via `shared.*`. The shared parent commissions A101 for
+Every scientific descendant remains A103. Offer decision-relevant received evidence and
+specific missing operands through available shared operations to the immediate parent.
+That parent chooses within its available child options or relays a specific need
+upward. A coordinator with the relevant options can commission A101 for
 missing sequence/family maps, A102 for structural distinctions, and A105 for
 needed experimental properties as siblings. Reuse their actual specific maps
 and subjects; aggregate axis scores are not component identities or distances.
+An information publication starts no work and promises no reply. Retain unmet
+needs in the requested typed return.
 Profile columns require a physical protein-residue map before region transfer.
 
 Native measurements and their per-use attachment sheets are graded by the host

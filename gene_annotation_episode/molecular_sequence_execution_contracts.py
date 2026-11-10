@@ -101,10 +101,8 @@ def _software(value):
 
 
 def _policy(value):
-    closed(value, {"memory_bytes", "scratch_bytes", "wall_seconds"}, "/policy")
+    closed(value, {'memory_bytes', 'scratch_bytes'}, "/policy")
     require(all(type(value[k]) is int and value[k] > 0 for k in ("memory_bytes", "scratch_bytes")), field="/policy")
-    wall = value["wall_seconds"]
-    require(wall is None or type(wall) in (int, float) and wall > 0, field="/policy/wall_seconds")
 
 
 def _selection(value):

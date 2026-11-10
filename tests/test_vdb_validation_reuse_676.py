@@ -88,8 +88,7 @@ def _forbidden(*args, **kwargs):
 def retained(tmp_path, monkeypatch):
     attempt = Path(os.environ["HMMER529_ATTEMPT"])
     selected = json.loads((attempt / "selected_request.json").read_text())
-    assert selected["policy"] == {"memory_bytes": 21474836480,
-        "scratch_bytes": 4294967296, "wall_seconds": None}
+    assert selected["policy"] == {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
     assert selected["swap_bytes"] == 0
     root = Path(__file__).resolve().parents[1]
     case = json.loads((root / BASELINE / "profile675/selected_case.json").read_text())

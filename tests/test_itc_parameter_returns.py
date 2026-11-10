@@ -96,8 +96,7 @@ def _original_workflow(store, directory, provider):
     first = store.get(ORIGINAL)
     control = json.loads(store.get_artifact(first["request_ref"]))
     supplied = control["request"]["received_input"]
-    tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024**3,
-        scratch_bytes=4 * 1024**3, wall_seconds=None))
+    tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
     workflow = Workflow(store, tools, provider, directory, "ordinary-itc-fixture",
         lambda path, initial: FixtureController(str(path), initial, 1 if len(path) == 1 else 3),
         lambda store, scope, **kwargs: 0, project_child_credit=lambda store, scope, **kwargs: 0,

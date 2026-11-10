@@ -31,6 +31,36 @@ def obj(properties: dict, required: list[str] | None = None) -> dict:
             "required": list(properties) if required is None else required, "additionalProperties": False}
 
 
+def source_location_inputs(schema, *, allow_legacy_quote=False):
+    """Expose source locations as inputs; retained records still contain quotes.
+
+    Only the two existing literal UTF-8 witness contracts are projected. Image
+    readings, cell selections and scientific text fields are not quotations of
+    a retained byte interval and must keep their own input contracts.
+    """
+    if isinstance(schema, list):
+        return [source_location_inputs(value, allow_legacy_quote=allow_legacy_quote)
+                for value in schema]
+    if not isinstance(schema, dict):
+        return schema
+    result = {key: source_location_inputs(value, allow_legacy_quote=allow_legacy_quote)
+              for key, value in schema.items()}
+    properties = result.get("properties")
+    if isinstance(properties, dict) and (set(properties) in (
+            {"source_ref", "artifact_ref", "start", "end", "quote"},
+            {"source_ref", "representation", "start", "end", "quote"})
+            or set(properties) == {"kind", "source_ref", "representation", "start", "end", "quote"}
+            and properties["kind"].get("const") == "text"):
+        result["required"] = [key for key in result.get("required", properties) if key != "quote"]
+        if not allow_legacy_quote:
+            properties.pop("quote")
+        result["description"] = (
+            "Select the retained source and half-open UTF-8 byte interval [start, end). "
+            "The host reads and stores the exact quotation within this action. "
+            "Use byte offsets supplied by the source reader; character indices are not byte offsets.")
+    return result
+
+
 REF = {"type": "string", "maxLength": 256,
        "pattern": r"^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
        "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs."}
@@ -174,6 +204,9 @@ METRIC_NAMES += [
     "reference_selected_paired_coverage", "conflicting_mapping_count", "identical_mapping_group_count",
 ]
 METRIC_NAMES += ['trait_conservation_index']
+METRIC_NAMES += ['bootstrap_split_matches', 'bootstrap_split_denominator', 'bootstrap_split_frequency',
+                 'unrooted_robinson_foulds_distance', 'matched_taxon_count', 'native_reference_member_count',
+                 'placement_membership_intersection', 'placement_membership_union', 'placement_membership_stability']
 MEASUREMENTS = {"type": "array", "items": obj({"name": {"enum": METRIC_NAMES}, "value": ATOM})}
 ANCHOR = obj({"source_ref": REF, "artifact_ref": REF, "start": {"type": "integer", "minimum": 0},
               "end": {"type": "integer", "minimum": 1}, "quote": {"type": "string", "minLength": 1, "maxLength": 16000}})
@@ -530,7 +563,12 @@ RECORD_SCHEMAS['interpretation_account'] = json.loads(canonical(RECORD_SCHEMAS['
 RECORD_SCHEMAS['interpretation_account']['description'] = (
     'A revisable episode-owned coherent interpretation of recorded evidence. '
     'It does not replace the parent annotation. Ownership and assigned scope '
-    'are bound by the runtime, never supplied in this scientific record.')
+    'are bound by the runtime, never supplied in this scientific record. '
+    'For a localized account, every interpreted hypothesis and alternative must '
+    'map to the same input footprint as subject_ref. Source-only reference '
+    'hypotheses have no input footprint; retain their actual subjects and return '
+    'their saved assessment references separately. An account is optional and '
+    'does not activate a saved numerical result.')
 
 for _schema in RECORD_SCHEMAS.values():
     _describe_reference_fields(_schema)
@@ -549,7 +587,7 @@ def aliased(schema: dict, *, revision: bool = False) -> dict:
 REASONING_SCHEMA = obj({
     "structural_proposals": {"type": "array", "items": aliased(RECORD_SCHEMAS["feature"])},
     "terms": {"type": "array", "items": aliased(obj({key:value for key,value in RECORD_SCHEMAS["term"]["properties"].items() if key not in {"namespace", "accession"}}))},
-    "source_subjects": {"type": "array", "items": aliased(obj({"reference_type": {"enum": ["protein", "dna", "rna", "assay", "construct", "sample", "organism", "complex", "element", "feature", "chemical"]},
+    "source_subjects": {"type": "array", "items": aliased(obj({"reference_type": {"enum": ["protein", "dna", "rna", "assay", "literature_result", "construct", "sample", "organism", "complex", "element", "feature", "chemical"]},
         "source_ref": REF, "label": LABEL, "anchor": ANCHOR}))},
     "contexts": {"type": "array", "description": "Source-anchored sample, environment, growth, assay or processing context. Preserve the actual reported subject and conditions; related_refs does not assign the context to the submitted target. Name must occur literally in the anchor.",
         "items": aliased(obj({**RECORD_SCHEMAS["context"]["properties"], "anchor": ANCHOR}))},
@@ -565,7 +603,7 @@ REASONING_SCHEMA = obj({
 REASONING_SCHEMA["properties"]["terms"]["items"]["properties"]["label"] = {
     **LABEL, "description": "Literal label occurring in the anchored quote, e.g. DUF8182. Do not compose DUF8182 (Pfam PF26554) unless that complete text occurs in the quote. Extraction preserves a source assertion, not its biological truth."}
 REASONING_SCHEMA["properties"]["source_subjects"]["items"]["properties"]["label"] = {
-    **LABEL, "description": "Literal source-subject label occurring in the exact anchored quote; preserve the entity actually reported or assayed."}
+    **LABEL, "description": "Literal source-subject label occurring in the exact anchored quote; preserve the entity actually reported or assayed. For literature_result, select literal wording for one distinct original reported observation and anchor that observation, rather than the paper as a whole. Reuse its reference for repeated representations of the same observation."}
 REASONING_SCHEMA['properties']['interpretation_accounts']['items']['properties']['expected_revision']['description'] += (
     ' This account lineage belongs to the current episode and assigned scope. '
     'Use 0 for this episode\'s first account even when an inherited account from '

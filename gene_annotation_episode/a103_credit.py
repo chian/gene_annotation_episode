@@ -14,6 +14,57 @@ class A103ContextCredit:
     requires_episode_receipts = True
     requires_known_record_refs = True
 
+    def _annotation_measurements(self, store, known, annotation, target, scope):
+        from .component_assessment_dependencies import annotation_assessments
+        from .evidence_geometry import _merge
+        attachments = received_attachments(store, known)
+        links, selected, selected_assessments = [], {}, {}
+        for row in annotation_assessments(store, known, annotation, target, scope):
+            source = row['observation']['source_ref']
+            references = [item['source_ref'] for item in attachments if item['target_ref'] == target
+                and (item['source_ref'] == source or item.get('measurement_ref') == source)]
+            if not references:
+                continue
+            links.append(row)
+            if row['transfer_status'] != 'established' or row['relation'] != 'strengthens':
+                continue
+            for reference in references:
+                selected[reference] = _merge([*selected.get(reference, ()), *row['regions']])
+                selected_assessments.setdefault(reference, set()).add(row['assessment_ref'])
+        return links, selected, selected_assessments
+
+    def annotation_contribution(self, store, context, *, target, annotation, scope,
+                                comparison_ref=None, selection=None, details_limit=0, details_offset=0):
+        """Identify and score this axis's received evidence for one proposed annotation."""
+        from .component_assessment_dependencies import assessment_transfer, assessment_details
+        from .root_axis_scalars import _result, correspondence_scalar, require_attribution, bind_contribution
+        known = set(context.received_record_refs)
+        links, selected, selected_assessments = self._annotation_measurements(store, known, annotation, target, scope)
+        details, count, measured = [], 0, False
+        if not selected:
+            reason = ('no_received_applicable_supporting_assessment' if not links else
+                'assessed_observation_has_no_received_applicable_supporting_measurement')
+            scalar = _result('A103', None, formula='received_current_axis_result_required', inputs={}, reasons=[reason])
+        else:
+            native = self.read_details(store, scope, known_record_refs=known, subjects=(target,),
+                evidence_regions=selected, details_limit=details_limit, details_offset=details_offset)
+            measured = native['source_contribution_count'] > 0
+            scalar = correspondence_scalar('A103', native['credit'], measured=measured)
+            if native.get('target_sheets', {}).get(target, {}).get('status') == 'unresolved_attribution':
+                scalar = require_attribution(scalar, missing=['unresolved_native_attribution'])
+            count = native['source_contribution_count']
+            for item in native['source_contributions']:
+                refs = selected_assessments.get(item['source_ref'], set())
+                details.append({**item, 'assessment_refs': sorted(refs),
+                    'assessment_qualifications': assessment_details(links, refs)})
+        refs = {reference for group in selected_assessments.values() for reference in group}
+        scalar.update(assessment_refs=sorted(refs), assessment_qualifications=assessment_details(links, refs),
+            question={'assertion_ref': annotation['id']}, source_contribution_count=count)
+        scalar = bind_contribution(scalar, annotation=annotation, subject=target, scope=scope,
+            transfer=assessment_transfer(links, missing=scalar['missing_inputs']),
+            source_refs=sorted({row['observation']['source_ref'] for row in links}))
+        return scalar, details
+
     def as_record(self):
         return {'kind':'a103_context_credit','version':VERSION,'profile':PROFILE,
             'receipt':'explicit_received_host_issued_context_attachment',
@@ -26,7 +77,7 @@ class A103ContextCredit:
             episode_id=episode_id,run_id=run_id,details_limit=0,details_offset=0)
 
     def read_details(self,store,scope,*,known_record_refs,details_limit,details_offset,
-                     assignment=None,episode_id=None,run_id=None):
+                     assignment=None,episode_id=None,run_id=None,subjects=None,evidence_regions=None):
         require(type(details_limit) is int and type(details_offset) is int and min(details_limit,details_offset)>=0,
                 'a103_nonnegative_detail_page_required')
         require(not isinstance(known_record_refs,(str,bytes,dict)),'a103_explicit_receipts_required')
@@ -36,7 +87,18 @@ class A103ContextCredit:
             scope = store.validate_scope(scope)
             require(assignment is None or store.validate_scope(assignment['scope'])==scope,
                     'a103_scope_differs_from_original_commission')
-            attachments = [r for r in received_attachments(store,known) if r['target_ref'] in scope['subject_refs']]
+            from .evidence_geometry import native_subject_regions, _intersection
+            from .component_assessment_dependencies import assigned_annotation
+            annotation = assigned_annotation(store, known, assignment)
+            if annotation is not None:
+                subjects, evidence_regions = annotation['subject_refs'], {}
+                for subject in subjects:
+                    _, selected, _ = self._annotation_measurements(store, known, annotation, subject, scope)
+                    evidence_regions.update(selected)
+            selected_regions = native_subject_regions(store, scope, subjects) if subjects is not None else None
+            selected_subjects = selected_regions if selected_regions is not None else scope['subject_refs']
+            attachments = [r for r in received_attachments(store,known) if r['target_ref'] in selected_subjects
+                and (evidence_regions is None or r['source_ref'] in evidence_regions)]
             variants = {}
             for row in attachments:
                 if row.get('dependency_group') is not None:
@@ -50,11 +112,15 @@ class A103ContextCredit:
                         'a103_attachment_score_invalid')
                 contributions.append({'source_ref':row['source_ref'],'grading_artifact_ref':row['grading_artifact_ref'],
                     'measurement_ref':row['measurement_ref'],'target_ref':row['target_ref'],
-                    'value':row['score'],'target_regions':row['target_regions'],'policy':row['policy'],
+                    'value':row['score'],'target_regions':(_intersection(row['target_regions'],
+                        evidence_regions[row['source_ref']]) if evidence_regions is not None else row['target_regions']),
+                    'policy':row['policy'],
                     'state':row['state'],'dependency_group':row.get('dependency_group')})
+            contributions = [row for row in contributions if row['target_regions']]
             targets = {}
-            for target in scope['subject_refs']:
-                regions = ([[s['start'],s['end']] for s in scope['segments'] if s['target_ref']==target]
+            for target in selected_subjects:
+                regions = (selected_regions[target] if selected_regions is not None else
+                    [[s['start'],s['end']] for s in scope['segments'] if s['target_ref']==target]
                     if 'segments' in scope else [[0,store.subject_length(target)]])
                 if not regions:continue
                 own = [r for r in contributions if r['target_ref']==target]

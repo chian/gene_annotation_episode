@@ -138,7 +138,11 @@ class FluorescenceResultReceipts:
     # Existing selected-action and resource-observation validators interpret
     # no scientific measurements. Control persistence above uses the frozen LF encoding.
     _selected = _Shared._selected
-    validate_observation = _Shared.validate_observation
+    def validate_observation(self, value, intent):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_observation
+        if is_terminal_target(intent['target']):
+            return validate_terminal_observation(value, intent, self.store, self.owner.run_id)
+        return _Shared.validate_observation(self, value, intent)
 
     def action_directory(self, episode_id, operation_key):
         return self.owner.directory / 'execution-results' / digest([self.owner.run_id, episode_id]) / 'native-fluorescence-actions' / digest(operation_key)
@@ -268,6 +272,9 @@ class FluorescenceResultReceipts:
         return deepcopy(self.validate_observation(value, action.intent))
 
     def validate_handoff(self, proof, intent):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_handoff
+        if is_terminal_target(intent['target']):
+            return validate_terminal_handoff(proof, intent, self.store, self.owner.run_id)
         closed(proof, ("source_record", "body", "assignment_snapshot", "start_receipt"))
         source, body, snapshot, start = (proof[name] for name in ("source_record", "body", "assignment_snapshot", "start_receipt"))
         practical = PracticalReceiptInformation(self.store, self.owner.run_id)
@@ -324,6 +331,12 @@ class FluorescenceResultReceipts:
         saved = read_control(path)
         if saved is None:
             target = action.intent["target"]
+            from .terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
+            if is_terminal_target(target):
+                saved = read_terminal_handoff(self.store, self.owner.run_id, target, action.intent['scope'])
+                self.validate_handoff(saved, action.intent)
+                immutable(path, saved)
+                return deepcopy(saved)
             practical = PracticalReceiptInformation(self.store, self.owner.run_id)
             body = practical.read(target["handle"], action.intent["scope"])
             source = self.store.get(target["handle"])
@@ -365,6 +378,12 @@ class FluorescenceResultReceipts:
         path = action.directory / 'native-snapshot.json'
         value = read_control(path)
         if value is None:
+            from .terminal_scientific_evidence import is_terminal_target, terminal_native_snapshot
+            if is_terminal_target(action.intent['target']):
+                value = terminal_native_snapshot(self, action, observation)
+                self.validate_native(value, action.intent, observation)
+                immutable(path, value)
+                return deepcopy(value)
             from .native_fluorescence_local import local_fluorescence_plan
             from .native_fluorescence_contracts import STARTED_FILENAME
             from .native_fluorescence_storage import confined_file, regular
@@ -391,6 +410,9 @@ class FluorescenceResultReceipts:
         return deepcopy(value)
 
     def validate_native(self, value, intent, observation):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_native
+        if is_terminal_target(intent['target']):
+            return validate_terminal_native(value, intent, observation, self.store, self.owner.run_id)
         from .native_fluorescence_local import fluorescence_native_request
         from .native_lifecycle import VERSION as native_version
         closed(value, ('original_plan', 'handle', 'request', 'request_raw', 'started_marker',
@@ -596,6 +618,10 @@ class FluorescenceResultReceipts:
                 require(intent['tool_name'] == 'execution.results.collect' and receipt['native'] is not None
                     and receipt['observation']['native']['terminal'] and receipt['observation']['native']['quiescent'], 'fluorescence_writer_not_closed')
                 capture = validate_fluorescence_native_capture(receipt['capture'], original_plan=receipt['native']['original_plan'])
+                if receipt['native'].get('version') == 'terminal_native_snapshot_v1':
+                    from .native_fluorescence_capture import validate_terminal_fluorescence_files
+                    validate_terminal_fluorescence_files(capture, original_plan=receipt['native']['original_plan'],
+                        command_proof=receipt['native']['command_proof'])
                 self.file_metadata(receipt['source_action_file'], value=receipt['handoff_proof']['start_receipt'], newline=True)
                 self.file_metadata(receipt['writer_closure_file'], value=closure_value(receipt), newline=True)
                 require(capture['source_action_receipt_ref'] == receipt['source_action_file']['artifact_ref']

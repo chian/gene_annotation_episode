@@ -41,7 +41,7 @@ from test_runtime import FixtureController
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATION = 'research/slotted_process_library/publications/2026-10-24-001'
-POLICY = dict(memory_bytes=21474836480, scratch_bytes=4294967296, wall_seconds=None)
+POLICY = dict(memory_bytes=21474836480, scratch_bytes=4294967296)
 ENVIRONMENT = dict(version='tf_binding_execution_selection_v1',
     environment_realization='operation_scoped_tmp_and_cache_v1')
 QUESTION = ('Which positions and strands in the supplied GATC DNA meet raw log2-odds thresholds '

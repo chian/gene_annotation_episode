@@ -20,6 +20,8 @@ from method_loop.durable import (DurableExecutionError, canonical, content_diges
 from .communication import ReportBoundaryError, plain, validate_closed_schema
 from .domain import ContractError
 from .episode_journal import Journal, WorkflowError
+from .episode_source_failure import child_completion_status
+from .numerical import validate_task_credit
 
 
 VERSION = "episode_admission_v1"
@@ -48,6 +50,7 @@ class ReceiverBindingV1:
     receive_references: Callable
     project_received_credit: Callable
     make_controller_input: Callable
+    defer_failed_delivery: bool = True
 
     def __post_init__(self):
         if self.journal.db is not self.store.db:
@@ -56,6 +59,8 @@ class ReceiverBindingV1:
             raise ValueError("original_decision_index_required")
         if not isinstance(self.original_contract, ReportContract):
             raise TypeError("original_report_contract_required")
+        if self.defer_failed_delivery is not True:
+            raise ValueError("parent_owned_delivery_resolution_required")
         for name in ("validate_semantics", "receive_references",
                      "project_received_credit", "make_controller_input"):
             if not callable(getattr(self, name)):
@@ -72,6 +77,38 @@ def _install(db):
         credit_snapshot REAL, admission TEXT NOT NULL,
         PRIMARY KEY(run_id,return_id), UNIQUE(run_id,handle),
         UNIQUE(run_id,parent_episode_id,original_decision_index))""")
+    db.execute("""CREATE TABLE IF NOT EXISTS runtime_return_delivery_resolutions (
+        run_id TEXT NOT NULL, return_id TEXT NOT NULL,
+        original_admission_sha256 TEXT NOT NULL, repair_decision_index INTEGER NOT NULL,
+        delivery_contract TEXT NOT NULL, admission TEXT NOT NULL,
+        PRIMARY KEY(run_id,return_id))""")
+
+
+def load_return_admission(store, run_id, return_id):
+    """Read the original admission and its immutable delivery resolution, if any."""
+    row = store.db.execute("SELECT admission FROM runtime_return_admissions "
+        "WHERE run_id=? AND return_id=?", (run_id, return_id)).fetchone()
+    if row is None:
+        raise AdmissionError("unavailable_binding", affected_refs=[return_id])
+    original = json.loads(row[0])
+    installed = store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+        "AND name='runtime_return_delivery_resolutions'").fetchone()
+    resolution = (store.db.execute("SELECT * FROM runtime_return_delivery_resolutions "
+        "WHERE run_id=? AND return_id=?", (run_id, return_id)).fetchone()
+        if installed else None)
+    if resolution is None:
+        return original
+    resolved = json.loads(resolution["admission"])
+    if (original["state"] != "delivery_pending"
+            or resolution["original_admission_sha256"] != content_digest(original)
+            or any(resolved[name] != original[name] for name in
+                ("version", "admission_id", "handle", "return_id", "parent_episode_id",
+                 "original_decision_index"))
+            or resolved["state"] != "admitted"
+            or resolved["repair_decision_index"] != resolution["repair_decision_index"]
+            or canonical(resolved["delivery_contract"]) != resolution["delivery_contract"]):
+        _conflict(original["handle"])
+    return resolved
 
 
 def _conflict(handle):
@@ -209,7 +246,7 @@ def _admit_return(spec, returned, receiver: ReceiverBindingV1):
                     or canonical(receiver.original_contract.as_record()) != canonical(
                         spec["child"]["request"]["report_contract"])):
                 _conflict(spec["handle"])
-            return json.loads(old["admission"])
+            return load_return_admission(receiver.store, spec["run_id"], returned["return_id"])
         parent, action = _validate_original(receiver, spec)
         admission_id = "admission_" + content_digest({"run_id": spec["run_id"],
             "parent_episode_id": parent_id, "original_decision_index": index,
@@ -223,8 +260,17 @@ def _admit_return(spec, returned, receiver: ReceiverBindingV1):
         if parent["state"] == "active" and returned["outcome"] != "closed":
             failure = returned["failure"]
             result.update(state="execution_failed", delivery_failure=failure)
+            if receiver.defer_failed_delivery:
+                # A definitive failed invocation is still completed work for
+                # its assigning iterator. No child-private result is admitted.
+                credit = receiver.project_received_credit()
+                validate_task_credit(credit)
+                controller = receiver.make_controller_input(index, credit)
+                if not isinstance(controller, ClosedRecord):
+                    raise TypeError("admission_controller_input_requires_closed_record")
+                result["controller_input"] = plain(controller.as_record())
             journal.save("runtime_actions", {"episode_id": parent_id,
-                "decision_index": index, "action": action["action"], "credit": None,
+                "decision_index": index, "action": action["action"], "credit": credit,
                 "result": canonical({"status": ("interrupted" if returned["outcome"] == "interrupted"
                                                else "failed"),
                     "record_refs": [], "changed_record_refs": [], "feedback": failure})})
@@ -241,7 +287,19 @@ def _admit_return(spec, returned, receiver: ReceiverBindingV1):
                 failure = {"code": "report_delivery_failed", "affected_refs": [delivery_ref],
                     "diagnostic_ref": None, "partial_record_refs": list(
                         (returned.get("failure") or {}).get("partial_record_refs", []))}
-                result.update(state="delivery_failed", delivery_failure=failure)
+                result.update(state=("delivery_pending" if receiver.defer_failed_delivery
+                                     else "delivery_failed"), delivery_failure=failure)
+                if receiver.defer_failed_delivery:
+                    pending = ({'status': 'pending', 'pending_handle': spec['handle']}
+                        if action['result'] is None else json.loads(action['result']))
+                    if pending.get('status') != 'pending' or pending.get('pending_handle') != spec['handle']:
+                        _conflict(spec['handle'])
+                    pending.update(delivery_ref=delivery_ref, feedback=feedback)
+                    pending['child_completion'] = child_completion_status(receiver.store,
+                        spec['run_id'], spec['child']['episode_id'], returned['completion'], delivery='pending')
+                    journal.save("runtime_actions", {"episode_id": parent_id,
+                        "decision_index": index, "action": action["action"],
+                        "result": canonical(pending), "credit": None})
             else:
                 _save_attempt(receiver, spec, delivery_ref, report=report)
                 references = receiver.receive_references(report)
@@ -253,9 +311,17 @@ def _admit_return(spec, returned, receiver: ReceiverBindingV1):
                 result.update(state="admitted", received_record_refs=references, report=report)
             # Failure conveys no unreturned work. Projection is still the
             # parent's cumulative received information, never child credit.
+            if result["state"] == "delivery_pending":
+                # Child execution is closed, but its original parent acquisition
+                # has no admitted return yet. Its one observation belongs after
+                # resolution, not to an unrelated later action.
+                db.execute("INSERT INTO runtime_return_admissions VALUES(?,?,?,?,?,?,?,?,?,?)",
+                    (spec["run_id"], parent_id, index, spec["handle"], returned["return_id"],
+                     commission_sha256, content_digest(json.loads(action["action"])),
+                     canonical(spec["expectation_snapshot_refs"]), None, canonical(result)))
+                return result
             credit = receiver.project_received_credit()
-            if type(credit) not in (int, float) or not math.isfinite(credit):
-                raise ValueError("finite_received_credit_required")
+            validate_task_credit(credit)
             controller_input = receiver.make_controller_input(index, credit)
             if not isinstance(controller_input, ClosedRecord):
                 raise TypeError("admission_controller_input_requires_closed_record")
@@ -269,6 +335,8 @@ def _admit_return(spec, returned, receiver: ReceiverBindingV1):
             outcome = {"status": "completed", "record_refs": result["received_record_refs"],
                 "changed_record_refs": [ref for ref in result["received_record_refs"]
                                         if ref in child_changed]}
+            outcome['child_completion'] = child_completion_status(receiver.store, spec['run_id'],
+                spec['child']['episode_id'], returned['completion'], delivery=result['state'])
             if result["delivery_failure"] is not None:
                 outcome["feedback"] = feedback
             journal.save("runtime_actions", {"episode_id": parent_id,
@@ -279,3 +347,94 @@ def _admit_return(spec, returned, receiver: ReceiverBindingV1):
              commission_sha256, content_digest(json.loads(action["action"])),
              canonical(spec["expectation_snapshot_refs"]), credit, canonical(result)))
         return result
+
+
+def resolve_return_delivery(spec, returned, receiver: ReceiverBindingV1, *,
+                            repair_decision_index, delivery_contract: ReportContract):
+    """Finish one still-owned child acquisition through a saved revised form.
+
+    The failed original attempt and immutable returned envelope are retained.
+    Receipt, parent credit, resolution and the original completion slot commit
+    together. A replay reads that resolution without receiving or repricing it.
+    """
+    if not isinstance(receiver, ReceiverBindingV1) or not receiver.defer_failed_delivery:
+        raise TypeError("deferred_delivery_receiver_required")
+    if (type(repair_decision_index) is not int
+            or repair_decision_index <= receiver.original_decision_index
+            or not isinstance(delivery_contract, ReportContract)):
+        raise ValueError("original_delivery_repair_required")
+    spec = validate_commission(spec)
+    returned = validate_return(returned, spec=spec, commission_sha256=content_digest(spec))
+    index, parent_id = receiver.original_decision_index, spec["parent"]["episode_id"]
+    try:
+        with receiver.store.transaction():
+            _install(receiver.store.db)
+            original_row = receiver.store.db.execute(
+                "SELECT admission FROM runtime_return_admissions WHERE run_id=? AND return_id=?",
+                (spec["run_id"], returned["return_id"])).fetchone()
+            if original_row is None:
+                raise AdmissionError("unavailable_binding", affected_refs=[spec["handle"]])
+            original = json.loads(original_row[0])
+            effective = load_return_admission(receiver.store, spec["run_id"], returned["return_id"])
+            if effective["state"] == "admitted":
+                if (effective.get("repair_decision_index") != repair_decision_index
+                        or canonical(effective.get("delivery_contract")) != canonical(delivery_contract.as_record())):
+                    _conflict(spec["handle"])
+                return effective
+            parent, action = _validate_original(receiver, spec)
+            if (parent["state"] != "active" or original["state"] != "delivery_pending"
+                    or original["original_decision_index"] != index
+                    or original["parent_episode_id"] != parent_id
+                    or original["handle"] != spec["handle"]
+                    or original["return_id"] != returned["return_id"]
+                    or returned["outcome"] != "closed"):
+                _conflict(spec["handle"])
+            attempt = receiver.store.db.execute("SELECT * FROM runtime_report_attempts "
+                "WHERE run_id=? AND parent_episode_id=? AND decision_index=?",
+                (spec["run_id"], parent_id, repair_decision_index)).fetchone()
+            if (attempt is None or attempt["failure"] is not None or attempt["form"] is None
+                    or attempt["delivery_ref"] != _delivery_ref(spec, index)
+                    or attempt["child_episode_id"] != spec["child"]["episode_id"]
+                    or attempt["contract"] != canonical(delivery_contract.as_record())):
+                _conflict(spec["handle"])
+            report = plain(delivery_contract.admit(json.loads(attempt["form"]),
+                audit_identifiers=(spec["child"]["episode_id"],
+                    spec["child"]["request"]["goal"]["goal_id"])).as_record())
+            receiver.validate_semantics(report)
+            references = receiver.receive_references(report)
+            if isinstance(references, (str, bytes)):
+                raise TypeError("received_references_must_be_semantic_reference_iterable")
+            references = list(dict.fromkeys(references))
+            if any(not isinstance(ref, str) or not ref for ref in references):
+                raise TypeError("received_references_must_be_semantic_reference_iterable")
+            credit = receiver.project_received_credit()
+            validate_task_credit(credit)
+            controller_input = receiver.make_controller_input(index, credit)
+            if not isinstance(controller_input, ClosedRecord):
+                raise TypeError("admission_controller_input_requires_closed_record")
+            controller_value = controller_input.as_record()
+            if not isinstance(controller_value, Mapping):
+                raise TypeError("admission_controller_input_requires_json_object")
+            resolved = {**original, "state": "admitted", "received_record_refs": references,
+                "report": report, "controller_input": json.loads(canonical(controller_value)),
+                "delivery_failure": None, "repair_decision_index": repair_decision_index,
+                "delivery_contract": plain(delivery_contract.as_record()), "credit_snapshot": credit}
+            child_form = receiver.journal.row("runtime_forms", spec["child"]["episode_id"])
+            changed = set(() if child_form is None else
+                json.loads(child_form["facts"]).get("changed_record_refs", []))
+            receiver.journal.save("runtime_actions", {"episode_id": parent_id,
+                "decision_index": index, "action": action["action"], "credit": credit,
+                "result": canonical({"status": "completed", "record_refs": references,
+                    "changed_record_refs": [ref for ref in references if ref in changed],
+                    'child_completion': child_completion_status(receiver.store, spec['run_id'],
+                        spec['child']['episode_id'], returned['completion'], delivery='admitted')})})
+            receiver.store.db.execute("INSERT INTO runtime_return_delivery_resolutions VALUES(?,?,?,?,?,?)",
+                (spec["run_id"], returned["return_id"], content_digest(original), repair_decision_index,
+                 canonical(delivery_contract.as_record()), canonical(resolved)))
+            from .episode_completion import CompletionLedger
+            CompletionLedger(receiver.store, receiver.journal).stage(parent_id, index,
+                label=spec["child"]["key"], kind="child_return", controller_input=controller_input,
+                child_return={name: resolved[name] for name in ("handle", "return_id", "admission_id")})
+            return resolved
+    except sqlite3.Error as error:
+        raise AdmissionError("storage_failure", affected_refs=[spec["handle"]]) from error

@@ -1,5 +1,6 @@
 """Retain original FBA bytes independently; the caller owns execution authority."""
 from copy import deepcopy
+from pathlib import Path
 
 from .execution_contracts import digest
 from .flux_balance_native_capture_contracts import (
@@ -30,7 +31,8 @@ def _failure_code(error):
 
 def capture_flux_balance_native_files(store, *, original_plan: dict,
         source_action_receipt_ref: str, writer_closure_receipt_ref: str,
-        input_binding_file: dict, prior_sources: list[dict], driver_started: bool | None) -> dict:
+        input_binding_file: dict, prior_sources: list[dict], driver_started: bool | None,
+        command_proof=None) -> dict:
     """Capture actual files, keeping native siblings after located I/O failures.
 
     The caller authenticates the original selected start and closed writer first.
@@ -57,10 +59,20 @@ def capture_flux_balance_native_files(store, *, original_plan: dict,
         except NativeFileCaptureError as error:
             failures.append(_issue(_failure_code(error), field))
 
+    snapshots = ({row['path']: row for row in command_proof['output_snapshots']}
+        if command_proof is not None else None)
+
     def capture(relative_path, format_, field, *, missing_required=True):
         try:
-            file = capture_native_file(store, directory=plan["attempt_directory"],
-                                       relative_path=relative_path, format=format_)
+            if snapshots is None:
+                file = capture_native_file(store, directory=plan["attempt_directory"],
+                                           relative_path=relative_path, format=format_)
+            else:
+                from .terminal_scientific_evidence import captured_terminal_file
+                snapshot = snapshots.get(str(Path(plan['attempt_directory']) / relative_path))
+                if snapshot is None or not snapshot.get('available'):
+                    raise NativeFileCaptureError('capture_file_unavailable')
+                file = captured_terminal_file(store, snapshot, format=format_)
             return {"file": file, "path": str(retained_native_file(store, file))}
         except NativeFileCaptureError as error:
             code = _failure_code(error)
@@ -100,3 +112,20 @@ def capture_flux_balance_native_files(store, *, original_plan: dict,
         "writer_closure_receipt_ref": writer_closure_receipt_ref,
         "input_binding_file": binding, "prior_sources": priors,
         "driver_started": driver_started, "failures": failures}, original_plan=plan)
+
+
+def validate_terminal_flux_balance_files(capture, *, original_plan, command_proof):
+    """Match native data and controls to their original executed snapshots."""
+    from .terminal_scientific_evidence import terminal_file_identity
+    plan = _original_plan(original_plan)
+    _require(command_proof['original_plan'] == plan, 'terminal_plan_mismatch')
+    snapshots = {row['path']: row for row in command_proof['output_snapshots']}
+    selected = [(row['relative_path'], row['format'], row['retained']) for row in capture['files']]
+    selected.extend((path, CONTROL_FORMATS[role], capture['controls'][role])
+        for role, path in _CONTROL_PATHS.items())
+    for relative_path, format_, retained in selected:
+        snapshot = snapshots.get(str(Path(plan['attempt_directory']) / relative_path))
+        expected = (terminal_file_identity(snapshot, format_)
+            if snapshot is not None and snapshot.get('available') else None)
+        actual = retained['file'] if retained is not None else None
+        _require(actual == expected, 'terminal_file_mismatch', relative_path)

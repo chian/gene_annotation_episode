@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import asdict, dataclass
-import math
+import os
 from pathlib import Path
 import threading
 import tomllib
@@ -23,16 +23,12 @@ from ._local_job_worker import allocated_bytes
 class LocalJobPolicy:
     memory_bytes: int
     scratch_bytes: int
-    wall_seconds: float | None = None
 
     def __post_init__(self) -> None:
         for name in ("memory_bytes", "scratch_bytes"):
             value = getattr(self, name)
             if type(value) is not int or value <= 0:
                 raise ValueError(f"invalid_local_job_{name}")
-        if self.wall_seconds is not None and (type(self.wall_seconds) not in (int, float) or
-                not math.isfinite(self.wall_seconds) or self.wall_seconds <= 0):
-            raise ValueError("invalid_local_job_wall_seconds")
 
     @classmethod
     def from_config(cls, settings: Mapping | None = None) -> LocalJobPolicy:
@@ -40,10 +36,19 @@ class LocalJobPolicy:
         if settings is not None and not isinstance(settings, Mapping):
             raise ValueError("invalid_local_job_settings")
         supplied = dict(settings or {})
-        unknown = supplied.keys() - {"memory_bytes", "scratch_bytes", "wall_seconds"}
+        unknown = supplied.keys() - {"memory_bytes", "scratch_bytes"}
         if unknown:
             raise ValueError("unknown_local_job_setting:" + ",".join(sorted(unknown)))
-        return cls(**{**defaults, **supplied})
+        configured = {**defaults, **supplied}
+        if "memory_bytes" not in supplied:
+            from .workflow_budget import ENV, active_budget
+            if os.environ.get(ENV):
+                # An inherited default is a ceiling, not a declaration that
+                # every native helper needs the desktop's full allocation.
+                # Explicit caller requests retain their original semantics.
+                memory = active_budget()["environment_bounds"]["memory_bytes"]
+                configured["memory_bytes"] = min(configured["memory_bytes"], memory)
+        return cls(**configured)
 
     def to_dict(self) -> dict:
         return asdict(self)

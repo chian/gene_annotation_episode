@@ -481,8 +481,7 @@ def _registered_capture_owner(store, directory):
     workspace.mkdir()
     return ExecutionEpisodes(None, store=store, directory=directory / 'registered-run',
         run_id='controlled-capture-registry', resources={'local': {'kind': 'local',
-            'workspace': str(workspace), 'policy': {'memory_bytes': 21474836480,
-                'scratch_bytes': 4294967296, 'wall_seconds': None}}},
+            'workspace': str(workspace), 'policy': {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}}},
         initial_information={}, tool_registry=None, handoff_unit=1,
         acquired_record_unit=1, log_window_bytes=128, log_roles=('stdout', 'stderr'))
 
@@ -670,8 +669,7 @@ def _registered_capture_dispatch_case(store, directory, *, saved=None, scientifi
     targets = case.owner.job_progress_provider
     owner = ExecutionEpisodes(None, store=store, directory=case.owner.directory,
         run_id=case.saved.run_id, resources={'local': {'kind': 'local',
-            'workspace': str(case.workspace), 'policy': {'memory_bytes': 21474836480,
-                'scratch_bytes': 4294967296, 'wall_seconds': None}}},
+            'workspace': str(case.workspace), 'policy': {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}}},
         initial_information={}, tool_registry=None, handoff_unit=1,
         acquired_record_unit=1, log_window_bytes=128, log_roles=('stdout', 'stderr'))
     owner.job_progress_provider = targets

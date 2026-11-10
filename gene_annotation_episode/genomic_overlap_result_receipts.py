@@ -41,7 +41,7 @@ from .genomic_overlap_result_worker import (
 )
 from .native_genomic_overlap_capture import validate_genomic_overlap_native_capture
 from .native_genomic_overlap_contracts import (
-    POLICY, genomic_overlap_driver_argv, genomic_overlap_environment,
+    POLICY, genomic_overlap_driver_argv, genomic_overlap_environment, genomic_overlap_output_files,
     validate_genomic_overlap_requested_job, validate_genomic_overlap_run_plan,
 )
 from .native_genomic_overlap_preparation import (
@@ -415,6 +415,10 @@ class GenomicOverlapResultReceipts:
             "size_bytes": metadata["size"], "format": "application/json"}, value=value)
 
     def validate_handoff(self, proof, intent):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_handoff
+        if is_terminal_target(intent['target']):
+            validate_terminal_handoff(proof, intent, self.store, self.owner.run_id)
+            return
         closed(proof, GenomicOverlapHandoffProof.__annotations__)
         source, body, snapshot, start = (proof[name] for name in GenomicOverlapHandoffProof.__annotations__)
         practical = PracticalReceiptInformation(self.store, self.owner.run_id)
@@ -467,6 +471,12 @@ class GenomicOverlapResultReceipts:
 
     def read_handoff(self, action):
         self.require_action(action)
+        from .terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
+        if is_terminal_target(action.intent['target']):
+            proof = read_terminal_handoff(self.store, self.owner.run_id,
+                action.intent['target'], action.intent['scope'])
+            immutable(action.directory / 'handoff.json', proof)
+            return deepcopy(proof)
         path = action.directory / "handoff.json"
         saved = read_control(path)
         if saved is None:
@@ -501,6 +511,11 @@ class GenomicOverlapResultReceipts:
     def native_snapshot(self, action, observation):
         """Freeze authenticated original controls once, after the observation."""
         self.require_action(action)
+        from .terminal_scientific_evidence import is_terminal_target, terminal_native_snapshot
+        if is_terminal_target(action.intent['target']):
+            value = terminal_native_snapshot(self, action, observation)
+            immutable(action.directory / 'native-snapshot.json', value)
+            return value
         path = action.directory / "native-snapshot.json"
         value = read_control(path)
         if value is None:
@@ -534,6 +549,10 @@ class GenomicOverlapResultReceipts:
         return deepcopy(value)
 
     def validate_native(self, value, intent, observation):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_native
+        if is_terminal_target(intent['target']):
+            validate_terminal_native(value, intent, observation, self.store, self.owner.run_id)
+            return
         from .native_genomic_overlap_local import _request
         from .native_lifecycle import VERSION as native_version
         closed(value, GenomicOverlapNativeSnapshot.__annotations__)
@@ -581,6 +600,9 @@ class GenomicOverlapResultReceipts:
             require(value["driver_started"] is expected)
 
     def validate_observation(self, value, intent):
+        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_observation
+        if is_terminal_target(intent['target']):
+            return validate_terminal_observation(value, intent, self.store, self.owner.run_id)
         from .native_lifecycle import VERSION as native_version
         value = validate_resource_observation(value)
         native = value["native"]
@@ -663,7 +685,7 @@ class GenomicOverlapResultReceipts:
             require(type(execution["returncode"]) is int and execution["failure"] is None
                 and type(execution["metadata"]) is dict and same(execution["metadata"].get("policy"), POLICY))
             expected_cgroup = {"memory_max": POLICY["memory_bytes"], "memory_swap_max": 0,
-                "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+                "kill_mode": "control-group", "oom_policy": "kill"}
             require(same(execution["metadata"].get("verified_cgroup"), expected_cgroup))
         else:
             require(execution["returncode"] is None and execution["metadata"] is None and type(execution["failure"]) is dict)
@@ -893,6 +915,20 @@ class GenomicOverlapResultReceipts:
                 require(intent["tool_name"] == "execution.results.collect" and receipt["native"] is not None
                     and receipt["observation"]["native"]["terminal"] and receipt["observation"]["native"]["quiescent"])
                 capture = validate_genomic_overlap_native_capture(receipt["capture"], original_plan=receipt["native"]["original_plan"])
+                if receipt['native'].get('version') == 'terminal_native_snapshot_v1':
+                    from .terminal_native_file_capture import validate_execution_file
+                    plan, proof = receipt['native']['original_plan'], receipt['native']['command_proof']
+                    specs = genomic_overlap_output_files(plan['requested_job']['native_genomic_overlap']['request'])
+                    validate_execution_file(capture['batch_file'], original_plan=plan,
+                        relative_path=specs[-1]['relative_path'], format=specs[-1]['format'], command_proof=proof)
+                    for row in capture['files']:
+                        spec = row['specification']
+                        files = [row['capture']['observed']] if row['capture'] is not None else []
+                        if row['retained'] is not None:
+                            files.append(row['retained']['file'])
+                        for file in files:
+                            validate_execution_file(file, original_plan=plan,
+                                relative_path=spec['relative_path'], format=spec['format'], command_proof=proof)
                 self.file_metadata(receipt["source_action_file"], value=receipt["handoff_proof"]["start_receipt"])
                 self.file_metadata(receipt["writer_closure_file"], value=closure_value(receipt))
                 require(capture["source_action_receipt_ref"] == receipt["source_action_file"]["artifact_ref"]

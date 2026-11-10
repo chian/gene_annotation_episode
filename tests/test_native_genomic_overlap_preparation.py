@@ -27,7 +27,7 @@ from gene_annotation_episode.state import Store
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "verification/tool_graders_genomic_overlap_result_worker_2026-10-27_432/fixtures"
-POLICY = LocalJobPolicy(memory_bytes=20 * 1024**3, scratch_bytes=4 * 1024**3, wall_seconds=None)
+POLICY = LocalJobPolicy(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 
 
 def canonical(value):
@@ -124,7 +124,7 @@ def test_actual_native_worker_snapshot_canonical_and_all_hash_joins(store, tmp_p
     assert execution["outcome"] == "returned" and execution["returncode"] == 0
     assert execution["metadata"]["policy"] == POLICY.to_dict()
     assert execution["metadata"]["verified_cgroup"] == {"memory_max": POLICY.memory_bytes,
-        "memory_swap_max": 0, "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+        "memory_swap_max": 0, "kill_mode": "control-group", "oom_policy": "kill"}
     handle = read(store, execution["handle_file"])
     request = read(store, execution["request_file"])
     assert execution["stdout_file"]["artifact_ref"] == execution["stderr_file"]["artifact_ref"]

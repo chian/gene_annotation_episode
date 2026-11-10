@@ -142,7 +142,7 @@ class NativeFluorescenceResults:
             return
         receipt["native"] = self.receipts.native_snapshot(action, observation)
         receipt["source_action_file"] = self.receipts.capture_control(action, "source-action.json",
-            receipt["handoff_proof"]["start_receipt"], "practical_action_receipt_v1")
+            receipt["handoff_proof"]["start_receipt"], receipt["handoff_proof"]["start_receipt"]['version'])
         receipt["writer_closure_file"] = self.receipts.capture_control(action, "writer-closure.json",
             closure_value(receipt), "fluorescence_writer_closure_v1")
         captured = read_control(action.directory / "capture.json")
@@ -151,7 +151,8 @@ class NativeFluorescenceResults:
                 original_plan=receipt["native"]["original_plan"],
                 source_action_receipt_ref=receipt["source_action_file"]["artifact_ref"],
                 writer_closure_receipt_ref=receipt["writer_closure_file"]["artifact_ref"],
-                driver_started=receipt["native"]["driver_started"])
+                driver_started=receipt["native"]["driver_started"],
+                command_proof=receipt['native'].get('command_proof'))
             immutable(action.directory / "capture.json", captured)
         receipt["capture"] = captured
         plan = build_native_fluorescence_worker_plan(directory=str(action.directory / "worker"),

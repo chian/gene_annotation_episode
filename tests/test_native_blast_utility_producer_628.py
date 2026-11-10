@@ -27,7 +27,7 @@ from gene_annotation_episode.state import Store
 from test_blast_utility_contracts_625 import operation
 
 
-POLICY = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 FAMILY = {"nhr": b"fixture header", "nin": b"fixture index", "nsq": b"fixture symbols",
           "ndb": b"fixture v5 member", "njs": b'{"fixture_only":true}', "future-member": b"retain this too"}
 

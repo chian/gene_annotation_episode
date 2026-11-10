@@ -407,7 +407,7 @@ def test_real_selected_tool_to_native_sheet_and_requested_typed_return(tmp_path,
         assert handle['metadata']['policy'] == case.plan['policy'] == POLICY
         assert handle['metadata']['verified_cgroup']['memory_max'] == 20 * 1024**3
         assert handle['metadata']['verified_cgroup']['memory_swap_max'] == 0
-        assert handle['metadata']['verified_cgroup']['runtime_max'] == 'infinity'
+        assert 'runtime_max' not in handle['metadata']['verified_cgroup']
         target = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope, selector=case.selector)
         assert target['result_selector_schema'] and target['output_format'] == 'native_rna_structure_bundle_v1'
         assert target['acquisition_operations'] == ['execution.results.status', 'execution.results.collect']

@@ -39,7 +39,7 @@ from test_alignment_site_action_records import (
 from test_homology_results import JOB, prepared, extract
 
 
-POLICY = LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None)
+POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
 SELF = 'sp|P0AAW1|YBHP_ECOLI'
 GAPPED = 'sp|A6H7I3|ANGE2_BOVIN'
 

@@ -100,6 +100,14 @@ class PracticalYieldEstimator:
             "continuation": "existing_available_upper_bound_lte_configured_cost",
             "raw_history": "unchanged_one_observation_per_completed_own_action"}
 
+    def _base(self, history, parameters, contexts):
+        # The built-in active fit consumes the SAME immutable progress clocks.
+        # An explicitly injected alternative retains its declared caller API
+        # and quantity; do not impose the default statistical model on it.
+        if self.base_estimate is estimate_score_yield:
+            return self.base_estimate(history, parameters, contexts=contexts)
+        return self.base_estimate(history, parameters)
+
     def __call__(self, raw_signed_history, parameters, aligned_original_contexts):
         history, contexts = tuple(raw_signed_history), tuple(aligned_original_contexts)
         if len(history) != len(contexts):
@@ -116,13 +124,13 @@ class PracticalYieldEstimator:
             raise TypeError("practical_yield_context_requires_mapping_or_none")
         supplied = None if latest is None else latest.get("practical_completion")
         if supplied is None:
-            return self.base_estimate(history, parameters)
+            return self._base(history, parameters, contexts)
         proof = _proof(supplied, latest, len(history))
         verified = self.verify_completion(json.loads(canonical(proof)))
         if type(verified) is not bool:
             raise TypeError("practical_completion_verifier_requires_boolean")
         if not verified:
-            return self.base_estimate(history, parameters)
+            return self._base(history, parameters, contexts)
         return YieldEstimate(len(history), NumericBand.exact(0), parameters,
             {"completed_acquisition_turns": len(history), "history_used": len(history),
              "fitting_scope": "verified_assignment_endpoint",

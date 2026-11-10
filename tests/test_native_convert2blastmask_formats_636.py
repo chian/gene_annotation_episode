@@ -111,8 +111,7 @@ def test_selected_convert2blastmask_native_formats_and_associations():
     ]
     record = {
         "record_type": "convert2blastmask_native_format_characterization_v1",
-        "policy": {"memory_bytes": 21474836480, "scratch_bytes": 4294967296,
-                   "swap_bytes": 0, "wall_seconds": None},
+        "policy": {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296, 'swap_bytes': 0},
         "native_executable_before": _pin(executable),
         "source_identities": [_pin(path) for path in source_files],
         "source_binary_relationship": "retained_official_source_not_proven_build_source",

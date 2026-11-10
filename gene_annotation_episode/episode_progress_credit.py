@@ -56,7 +56,7 @@ def _facts(snapshot):
         facts.add(('result_available', snapshot['result_available']))
 
     version = status.get('version')
-    if version == 'execution_status_v1':
+    if version in {'execution_status_v1', 'execution_status_v2'}:
         if status.get('liveness') in {'live', 'not_live'}:
             facts.add(('liveness', status['liveness']))
         failure = status.get('failure')

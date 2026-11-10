@@ -82,8 +82,7 @@ def test_selected_cd_worker_saved_views_and_source_only_onward(tmp_path, monkeyp
         assert input_source["artifact_ref"] == input_file
         initial = [input_source["id"], input_file]
         assert store.reference_subset(initial, scope) == initial
-        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024**3,
-            scratch_bytes=4 * 1024**3, wall_seconds=None))
+        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
         contract = tools.catalog()[contracts.CD_TOOL]
         assert contract["resources"] == "local"
         assert contract["input_schema"] == contracts.circular_dichroism_tool_argument_schema()
@@ -445,8 +444,7 @@ def test_retained_cd_structured_forgeries_and_original_closed_replay(tmp_path, m
         assert {**old_binding, "implementation_sha256": descriptor["implementation_sha256"]} == descriptor
         assert old_binding["implementation_sha256"] == "fe89110a6964fa0644919f1fcb78bfa098d01eef1181703f55f70c5d19215183"
         assert descriptor["implementation_sha256"] != old_binding["implementation_sha256"]
-        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024**3,
-            scratch_bytes=4 * 1024**3, wall_seconds=None))
+        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
         provider = _Decisions([])
         monkeypatch.setattr(provider, "complete", _forbidden)
 
@@ -667,8 +665,7 @@ def test_selected_cd_partial_spectrum_preserves_thermal_and_saved_view(tmp_path,
         input_file = store.artifact(raw, "application/json")
         input_source = source_for_artifact(store, input_file)
         initial = [input_source["id"], input_file]
-        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024**3,
-            scratch_bytes=4 * 1024**3, wall_seconds=None))
+        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
         descriptor = prepare_scientific_binding(run_directory=directory, source_directory=PUBLICATION,
             tool_catalog=tools.catalog(), child_roles=["scientific_process"])
         library = ScientificProcessLibrary(directory / "scientific-process-library")
@@ -939,8 +936,7 @@ def test_retained_cd_partial_views_and_original_closed_replay(tmp_path, monkeypa
             tool_library=ScientificToolLibrary(run / "scientific-tool-library"),
             child_roles=["scientific_process"]).as_record()
         assert {**saved_binding, "implementation_sha256": descriptor["implementation_sha256"]} == descriptor
-        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024**3,
-            scratch_bytes=4 * 1024**3, wall_seconds=None))
+        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
         provider = _Decisions([])
         monkeypatch.setattr(provider, "complete", _forbidden)
         form = root_request["report_contract"]["measurements"]["schema"]

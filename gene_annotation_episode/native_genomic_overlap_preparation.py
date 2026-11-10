@@ -67,7 +67,7 @@ class WorkerCapture(TypedDict):
     failures: list[dict]
 
 
-_POLICY = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+_POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 _MODULE = "gene_annotation_episode.genomic_overlap_result_worker"
 _PLAN = "genomic_overlap_result_worker_plan_v1"
 _EXECUTION = "genomic_overlap_worker_execution_v1"
@@ -464,7 +464,7 @@ def _check_handle(body, request, request_raw, plan, execution):
             LocalJobPolicy(**_POLICY))["enforcement"]), "genomic_overlap_preparation_allocation_binding")
     if body["stage"] == "released":
         expected = {"memory_max": _POLICY["memory_bytes"], "memory_swap_max": 0,
-                    "runtime_max": "infinity", "kill_mode": "control-group", "oom_policy": "kill"}
+                    "kill_mode": "control-group", "oom_policy": "kill"}
         _require(_same(meta.get("verified_cgroup"), expected), "genomic_overlap_preparation_allocation_binding")
     if body["stage"] == "prepared":
         _require(all(body[name] is None for name in ("started_at", "started_monotonic_ns", "boot_id")))

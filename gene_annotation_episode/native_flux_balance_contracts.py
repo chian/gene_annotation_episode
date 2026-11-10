@@ -18,7 +18,7 @@ STARTED_FILENAME = ".native-flux-balance-started.json"
 SOLVE_ENTERED_FILENAME = ".native-flux-balance-solve-entered.json"
 ENVIRONMENT_FILENAME = ".native-flux-balance-environment.json"
 DRIVER_MODULE = "gene_annotation_episode.native_flux_balance_driver"
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 SOURCE_FUNCTION_SHA256 = "ab47e2640366833d05cf896091e1c3803ce69aae940bfa46ba993abda51983b9"
 STACK = {"cobra": "0.32.1", "optlang": "1.9.1", "swiglpk": "5.0.13", "python-libsbml": "5.21.2"}
 ARTIFACT_FORMATS = {
@@ -121,7 +121,7 @@ def bind_flux_balance_environment(requested_job, *, execution_id, attempt_direct
     """
     request = validate_flux_balance_requested_job(requested_job)
     execution = path_value(execution_id, absolute=True)
-    require(execution.name == "native.json", "fba_original_attempt_mismatch")
+    require(execution.name in ("native.json", "intent.json"), "fba_original_attempt_mismatch")
     actual = flux_balance_environment(request["native_flux_balance"]["software"],
         attempt_directory=attempt_directory, lifecycle_directory=str(execution.parent))
     selected = request["environment"]
@@ -157,12 +157,14 @@ def validate_flux_balance_run_plan(value):
     owner = validate_flux_balance_record("FBAAttemptIdentity", value["identity"])
     execution = path_value(owner["execution_id"], absolute=True)
     attempt = path_value(value["attempt_directory"], absolute=True)
-    require(execution.name == "native.json" and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME
-            and owner["attempt_id"] == digest(owner["operation_key"])
-            and owner["requested_job_sha256"] == digest(request)
+    from .terminal_scientific_evidence import terminal_plan_identity
+    legacy = (execution.name == "native.json" and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME
             and execution.parent.name == owner["attempt_id"]
             and execution.parent.parent.name == digest({"run": owner["run_id"], "episode": owner["episode_id"]})
-            and execution.parent.parent.parent.name == ".episode-operations", "fba_original_attempt_mismatch")
+            and execution.parent.parent.parent.name == ".episode-operations")
+    require((legacy or terminal_plan_identity(owner, attempt_directory=str(attempt)))
+            and owner["attempt_id"] == digest(owner["operation_key"])
+            and owner["requested_job_sha256"] == digest(request), "fba_original_attempt_mismatch")
     if is_v2:
         binding = value["environment_binding"]
         require(type(binding) is dict and binding.get("selection") is not None, "fba_environment_selection_invalid")

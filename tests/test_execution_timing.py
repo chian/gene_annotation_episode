@@ -22,6 +22,37 @@ def selected(journal, index):
         'action': json.dumps({'kind': 'tool', 'index': index}), 'result': None, 'credit': None})
 
 
+def test_progress_clock_uses_one_elapsed_span_and_query_adds_no_observation(tmp_path, clock):
+    with Store(tmp_path) as store:
+        journal = Journal(store, 'run')
+        journal.save('runtime_model_calls', {'episode_id': 'episode', 'call_index': 0,
+            'purpose': 'decision', 'request': json.dumps({'context': {}}), 'response': None})
+        with journal.measure('runtime_model_calls', 'episode', 0):
+            clock['ns'] += 2_000_000_000
+        clock['ns'] = 30_000_000_000
+        first = timing.capture_progress_time(journal, 'episode', original_decision_index=0)
+        assert first['elapsed_seconds'] == first['reference_elapsed_seconds'] == 20
+        journal.save('runtime_estimation_contexts', {'episode_id': 'episode', 'decision_index': 0,
+            'data': json.dumps({'progress_time': first})})
+        clock['ns'] = 50_000_000_000
+        later = timing.capture_progress_time(journal, 'episode', original_decision_index=1)
+        assert later['elapsed_seconds'] == 40 and later['reference_elapsed_seconds'] == 20
+        assert later['reference_observation_monotonic_ns'] == first['observed_monotonic_ns']
+        before = store.db.total_changes
+        clock['ns'] = 80_000_000_000
+        query = timing.capture_progress_time(journal, 'episode')
+        assert query['point_kind'] == 'decision_query' and query['elapsed_seconds'] == 70
+        assert store.db.total_changes == before
+        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
+        assert json.loads(store.db.execute('SELECT data FROM runtime_estimation_contexts').fetchone()[0]) == {
+            'progress_time': first}
+        clock['identity'] = {**clock['identity'], 'boot_id': 'another-boot'}
+        unavailable = timing.capture_progress_time(journal, 'episode', original_decision_index=2)
+        assert unavailable['status'] == 'unavailable'
+        assert unavailable['elapsed_seconds'] is None
+        assert unavailable['unavailable_reason'] == 'episode_clock_not_comparable'
+
+
 def test_outcome_publication_preserves_actual_time_without_creating_observations(tmp_path, clock):
     with Store(tmp_path) as store:
         journal = Journal(store, 'run')

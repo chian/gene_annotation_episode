@@ -110,11 +110,9 @@ def setup_case(tmp_path, *, run_id="commission-fixture", parent_key="root"):
                             "content_sha256": hashlib.sha256(store.get_artifact(artifact)).hexdigest()},
                            {"reference": target, "version": None,
                             "content_sha256": content_digest(store.get(target))}],
-        "constraints": {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3,
-                        "wall_seconds": None, "caller_cpu": 2},
+        "constraints": {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3, 'caller_cpu': 2},
         "resource_selection": {"resource_id": "caller-local", "kind": "local",
-            "allocation": {"cpu": 2, "memory_bytes": 20 * 1024**3,
-                           "scratch_bytes": 4 * 1024**3, "wall_seconds": None},
+            "allocation": {'cpu': 2, 'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3},
             "capability_binding_ref": "saved-caller-capability"},
         "expectation_snapshot_refs": ["original-duration-expectation"],
         "selected_at": "2026-10-21T12:00:00+00:00"}
@@ -327,13 +325,16 @@ def test_pending_exposes_only_own_original_actions_and_public_status(tmp_path):
         backend.overrides[spec["handle"]] = {"lifecycle_state": "returned", "return_available": True,
             "return_id": "fixture-immutable-return", "observed_at": "2026-10-21T12:10:00+00:00"}
         pending = coordinator.pending(spec["parent"]["episode_id"])
-        assert pending["version"] == "pending_work_v1"
+        assert pending["version"] == "pending_work_v2"
         assert pending["items"] == [{"handle": spec["handle"], "role": "improvement",
+            "original_assignment": {"objective": spec["child"]["request"]["goal"]["objective"],
+                "scope": spec["child"]["scope"], "decision_index": 7},
             "lifecycle_state": "returned", "selected_at": operands["selected_at"],
             "observed_at": "2026-10-21T12:10:00+00:00",
             "resource_selection": operands["resource_selection"],
             "expectation_snapshot_refs": operands["expectation_snapshot_refs"],
-            "latest_progress_ref": None, "return_available": True}]
+            "latest_progress_ref": None, "return_available": True,
+            "suspension": None, "event_target": True}]
         calls = deepcopy(backend.calls)
         assert coordinator.pending(spec["child"]["episode_id"])["items"] == []
         assert coordinator.recover_selected(spec["child"]["episode_id"]) == []

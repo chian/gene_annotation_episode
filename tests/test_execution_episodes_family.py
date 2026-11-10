@@ -48,8 +48,7 @@ def host(tmp_path):
     store = Store(tmp_path/'store')
     target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
     journal = Journal(store, 'family-fixture')
-    configuration = {'kind': 'local', 'workspace': str(workspace), 'policy': {
-        'memory_bytes': 128*1024**2, 'scratch_bytes': 8*1024**2, 'wall_seconds': None}}
+    configuration = {'kind': 'local', 'workspace': str(workspace), 'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}
     family = ExecutionEpisodes(None, store=store, directory=tmp_path/'run', run_id=journal.run_id,
         resources={'here': configuration}, initial_information={}, tool_registry=ToolRegistry(store),
         handoff_unit=3, acquired_record_unit=2, log_window_bytes=4, log_roles=['stdout', 'stderr'])
@@ -85,6 +84,14 @@ def select(h, ctx, index, name, arguments=None):
 def selection(ctx, references, initial=()):
     return {'run_id': ctx.run_id, 'episode_id': ctx.episode_id, 'known_record_refs': list(references),
             'initial_known_record_refs': list(initial)}
+
+
+@pytest.mark.parametrize('role', ['launch_local', 'launch_hpc'])
+def test_native_launch_return_contracts_use_current_terminal_provider(host, role):
+    from gene_annotation_episode.terminal_execution_episodes import TerminalExecutionEpisodes
+    expected = TerminalExecutionEpisodes.fact_sources(None, role)
+    actual = host.family.fact_sources(role)
+    assert {name: actual[name] for name in expected} == expected
 
 
 def test_one_owner_and_data_descriptor_reconstruct_all_operands(host):

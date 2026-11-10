@@ -240,9 +240,19 @@ class ScientificToolRetriever:
                     code="scientific_tool_retrieval_interrupted"))
                 raise
             except Exception as error:
+                detail = {"exception_type": type(error).__name__}
+                if ("403" in str(error)
+                        and "reasoning level isn't available" in str(error)):
+                    detail.update(provider_status=403,
+                        provider_rejection="reasoning_effort_unavailable_for_workspace",
+                        requested_model=deepcopy(self.configuration["model"]),
+                        recovery="The workspace rejected this model's configured reasoning level. "
+                            "Changing the investigation query does not change that configuration. "
+                            "Report the provider-configuration need to the parent; an operator "
+                            "must select a supported reasoning level or model before retrying.")
                 result = _outcome("failed", operation_ref,
                     code="scientific_tool_retrieval_call_failed",
-                    detail={"exception_type": type(error).__name__})
+                    detail=detail)
             self._publish(key, digest, token, response, result)
             return result
         finally:

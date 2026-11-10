@@ -26,7 +26,7 @@ ATTEMPT_DIRECTORY_NAME = "genomic-overlap-attempt"
 BATCH_FILENAME = "bundle.json"
 OWNER_FILENAME = ".native-genomic-overlap-owner.json"
 STARTED_FILENAME = ".native-genomic-overlap-started.json"
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 DRIVER_MODULE = "gene_annotation_episode.native_genomic_overlap_driver"
 _REQUIRED_MODULES = {DRIVER_MODULE, "gene_annotation_episode.native_genomic_overlap_contracts",
                      "gene_annotation_episode.genomic_overlap_contracts",
@@ -35,10 +35,8 @@ _REQUIRED_MODULES = {DRIVER_MODULE, "gene_annotation_episode.native_genomic_over
 # Fixed data schemas, not an executable scoring language. G1 references below
 # resolve to the unchanged, in-code G1 definitions in _definitions().
 _EXECUTION_DEFINITIONS = {'Policy': {'type': 'object',
-            'properties': {'memory_bytes': {'const': 21474836480},
-                           'scratch_bytes': {'const': 4294967296},
-                           'wall_seconds': {'type': 'null'}},
-            'required': ['memory_bytes', 'scratch_bytes', 'wall_seconds'],
+            'properties': {'memory_bytes': {'const': 21474836480}, 'scratch_bytes': {'const': 4294967296}},
+            'required': ['memory_bytes', 'scratch_bytes'],
             'additionalProperties': False},
  'ImplementationFile': {'type': 'object',
                         'properties': {'module': {'type': 'string', 'minLength': 1},
@@ -590,11 +588,13 @@ def validate_genomic_overlap_run_plan(value: dict) -> dict:
     identity = value["identity"]
     execution = _path(identity["execution_id"], absolute=True)
     attempt = _path(value["attempt_directory"], absolute=True)
-    _require(execution.name == "native.json" and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME,
+    from .terminal_scientific_evidence import terminal_plan_identity
+    current = terminal_plan_identity(identity, attempt_directory=str(attempt))
+    _require((current or execution.name == "native.json") and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME,
              "original_attempt_mismatch")
     _require(identity["attempt_id"] == _digest(identity["operation_key"]) and
              identity["requested_job_sha256"] == _digest(request), "original_attempt_mismatch")
-    _require(execution.parent.name == identity["attempt_id"] and execution.parent.parent.name ==
+    _require(current or execution.parent.name == identity["attempt_id"] and execution.parent.parent.name ==
              _digest({"run": identity["run_id"], "episode": identity["episode_id"]}) and
              execution.parent.parent.parent.name == ".episode-operations", "original_attempt_mismatch")
     _require(type(value["policy"]["memory_bytes"]) is int and type(value["policy"]["scratch_bytes"]) is int

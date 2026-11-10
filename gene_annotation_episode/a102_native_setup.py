@@ -42,7 +42,7 @@ def install(run_directory):
     binary=source/'USalign'
     if not binary.exists():
         result=run_local_job([compiler,'-O3','-o',str(binary),'USalign.cpp'],cwd=source,
-            policy=LocalJobPolicy(2*1024**3,1024**3,300),cpu_threads=1)
+            policy=LocalJobPolicy(2 * 1024 ** 3, 1024 ** 3),cpu_threads=1)
         if result.returncode:raise ValueError('a102_usalign_compilation_failed')
     binaries={'US-align':binary,'Foldseek':run/'software/foldseek/bin/foldseek'}
     lock={name:{**PINS[name],'executable':str(path),

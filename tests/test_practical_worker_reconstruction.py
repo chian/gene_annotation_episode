@@ -29,8 +29,7 @@ def test_saved_c1_factory_executes_original_practical_commission_once(tmp_path, 
     spec = make_assignment(tmp_path / 'project', reuse=True)
     workspace, directory = tmp_path / 'state', tmp_path / 'run'
     resources = {'local': {'kind': 'local', 'workspace': str(spec.workspace),
-        'policy': {'memory_bytes': 128 * 1024**2, 'scratch_bytes': 16 * 1024**2,
-                   'wall_seconds': None}}}
+        'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 16 * 1024 ** 2}}}
     factory = (ExecutionServiceFactory(resources, {}, 3, 2, .5)
                if wired_family else PracticalServiceFactory(resources, {}))
     service_inputs = {'episode_service_inputs': 'actual_tool_registry_v1'} if wired_family else {}

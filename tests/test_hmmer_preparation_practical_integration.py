@@ -43,7 +43,7 @@ from gene_annotation_episode.state import Store
 
 
 ROOT = Path(__file__).resolve().parents[1]
-POLICY = {"memory_bytes": 20 * 1024**3, "scratch_bytes": 4 * 1024**3, "wall_seconds": None}
+POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 RUN, CHILD, RESOURCE = "workload276", "local-child276", "local276"
 FIELDS = ["execution_status", "measurements", "log_windows", "committed_record_refs",
           "dependencies", "result_available"]
@@ -198,7 +198,7 @@ def wait_original(outcome):
     result = native.wait_job(handle)
     assert result.metadata["policy"] == POLICY
     assert result.metadata["verified_cgroup"]["memory_max"] == POLICY["memory_bytes"]
-    assert result.metadata["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in result.metadata["verified_cgroup"]
     return handle, result
 
 

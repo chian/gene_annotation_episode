@@ -31,7 +31,7 @@ from test_runtime import FixtureController, ScriptedProvider
 from test_scientific_process_episodes import ContractLibrary
 
 
-POLICY = {"memory_bytes": 21474836480, "scratch_bytes": 4294967296, "wall_seconds": None}
+POLICY = {'memory_bytes': 21474836480, 'scratch_bytes': 4294967296}
 
 
 class ReceivedAuthorityFixture:

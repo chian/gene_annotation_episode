@@ -30,8 +30,7 @@ def test_results_receipt_accepts_preparation_and_rejects_identity_or_selector_ch
             "results_interface": "homology.results.v1"}
         handoff = {"version": "execution_handoff_v1", "execution_handle": job,
             "resource_selection": {"resource_id": "selected", "kind": "local",
-                "capability_binding_ref": registry, "allocation": {"cpu": 1, "memory_bytes": 1024**3,
-                    "scratch_bytes": 1024**2, "wall_seconds": None}},
+                "capability_binding_ref": registry, "allocation": {'cpu': 1, 'memory_bytes': 1024 ** 3, 'scratch_bytes': 1024 ** 2}},
             "submitted_input_versions": [],
             "monitoring": {"provider_id": "selected", "target_handle": job, "contract_ref": "homology.status.v1"},
             "results": {"provider_id": "selected", "target_handle": job, "contract_ref": "homology.results.v1"},

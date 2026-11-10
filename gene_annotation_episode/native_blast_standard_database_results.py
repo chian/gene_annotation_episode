@@ -185,7 +185,7 @@ class StandardBLASTDatabaseResults:
                     try:
                         prepared = prepare_standard_blast_database_grading(self.store, context=context, target=target,
                             capture=capture, selector=selector, directory=directory / 'grading',
-                            policy=LocalJobPolicy(20 * 1024**3, 4 * 1024**3, None))
+                            policy=LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3))
                         body['preparation'] = prepared
                         publication = publish_selected_standard_blast_database_rows(self.store, context=context,
                             preparation=prepared, selector=selector, directory=directory / 'publication')

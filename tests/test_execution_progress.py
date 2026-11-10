@@ -371,8 +371,7 @@ def test_real_local_closed_launch_is_observed_without_reopening_history(tmp_path
             reference, = json.loads(action['result'])['record_refs']
             execution_id = state.receipts()[0]['outcome']['facts']['requested_job']['execution_id']
             handle = native.NativeJobHandle(Path(execution_id))
-            configuration = {'kind': 'local', 'workspace': str(spec.workspace), 'policy': {
-                'memory_bytes': 128*1024**2, 'scratch_bytes': 8*1024**2, 'wall_seconds': None}}
+            configuration = {'kind': 'local', 'workspace': str(spec.workspace), 'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}
             adapter = ExecutionProgressProvider(store, run_id=origin.context.run_id,
                 directory=tmp_path/'local-execution', resources={'local': configuration},
                 api_execution=None, log_window_bytes=8, log_roles=('stdout', 'stderr'))

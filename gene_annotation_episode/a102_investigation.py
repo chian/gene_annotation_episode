@@ -20,7 +20,8 @@ TASKS=('model_inventory','target_model_correspondence','structural_discovery','n
     'interface_constraints','synthesis')
 
 
-def report_schema():
+def legacy_report_schema():
+    """Historical model-verdict contract; new commissions use saved grading."""
     refs={'type':'array','items':{'type':'string','format':'reference'},'uniqueItems':True}
     schema=obj({'structural_summary':{'type':'string','enum':['not_assessed','native_geometry_retained','partial_geometry','no_model','no_informative_match']},
         'scope_status':{'type':'string','enum':['not_assessed','unresolved','partial','represented']},
@@ -38,9 +39,15 @@ def report_schema():
     return schema
 
 
+def report_schema():
+    original = legacy_report_schema()['properties']
+    schema = obj({name: deepcopy(original[name]) for name in ('records', 'structural_credit')})
+    validate_closed_schema(schema)
+    return schema
+
+
 def initial_report():
-    return {'structural_summary':'not_assessed','scope_status':'not_assessed','functional_support':'not_assessed',
-        'limitations':[],'information_need_refs':[]}
+    return {}
 
 
 class A102Subtree:
@@ -103,8 +110,6 @@ def create_a102_workflow(store,tools,provider,directory,run_id,controller_factor
     if 'project_credit' in options or 'credit_binding' in options:raise ValueError('a102_root_numeric_binding_is_host_owned')
     if options.get('episode_record_receipts',True) is not True:raise ValueError('a102_numeric_credit_requires_episode_receipts')
     scorer=A102StructuralCredit();options['episode_record_receipts']=True
-    if options.get('project_child_credit') is None:
-        options['project_child_credit']=scorer;options.setdefault('child_credit_binding',scorer.as_record())
     return Workflow(store,tools,provider,directory,run_id,controller_factory,scorer,
         credit_binding=scorer.as_record(),initial_known_record_refs=initial_known_record_refs,**options)
 
@@ -114,14 +119,22 @@ def resolve_report(store,report,*,scope):
     from .a102_credit import A102StructuralCredit
     from .a102_publication import received_grade
     scope=store.validate_scope(plain(scope))
-    validate_form(report,report_schema(),lambda ref,namespace:
+    legacy = 'structural_summary' in report
+    validate_form(report,legacy_report_schema() if legacy else report_schema(),lambda ref,namespace:
         ref in store.reference_subset([ref],scope) and (namespace is None or store.get(ref)['record_type']==namespace))
     native=[row for ref in report['records'] if (row:=received_grade(store,ref)) is not None]
-    if report['structural_summary']=='native_geometry_retained' and not native:
+    if legacy and report['structural_summary']=='native_geometry_retained' and not native:
         raise ContractError('a102_native_geometry_statement_requires_native_records')
     projection=A102StructuralCredit().read_details(store,scope,known_record_refs=report['records'],
         details_limit=24,details_offset=0)
     features=projection['functional_sheets']['features'];panels=projection['functional_sheets']['contrasts']
+    if not legacy:
+        return {'native_comparisons': native, 'functional_sheets': projection['functional_sheets'],
+            'tool_attachments': projection['tool_attachments'],
+            'target_sheets': projection['target_sheets'],
+            'child_reported_credit': report['structural_credit'],
+            'receiving_scope_credit': projection['credit'],
+            'reporting': 'saved_native_and_per_use_grading; no_separate_function_verdict'}
     support=report['functional_support']
     if support=='fold_only' and not projection['credit']>0:
         raise ContractError('a102_fold_statement_requires_eligible_native_correspondence')
@@ -136,6 +149,7 @@ def resolve_report(store,report,*,scope):
             for feature in row['features']) for row in features):
         raise ContractError('a102_contradiction_requires_grounded_incompatible_feature')
     return {'native_comparisons':native,'functional_sheets':projection['functional_sheets'],
+        'tool_attachments':projection['tool_attachments'],'target_sheets':projection['target_sheets'],
         'child_reported_credit':report['structural_credit'],'receiving_scope_credit':projection['credit'],
         'information_need_refs':list(report['information_need_refs'])}
 

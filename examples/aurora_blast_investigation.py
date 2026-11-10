@@ -15,6 +15,7 @@ from gene_annotation_episode.workflow_budget import active_budget
 active_budget()
 
 from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.execution_memory import ExecutionMemory
 from gene_annotation_episode.providers import ModelConnection, load_config
 from gene_annotation_episode.runtime import Workflow, controller_from_settings
 from gene_annotation_episode.state import Store
@@ -89,9 +90,8 @@ def commission():
                 {'id': 'planned_work', 'metric': 'work', 'phase': 'planned', 'weight': 1., 'minimum_elapsed_seconds': 0},
                 {'id': 'queued_queue', 'metric': 'queue', 'phase': 'queued', 'weight': 1., 'minimum_elapsed_seconds': 60},
                 {'id': 'running_work', 'metric': 'work', 'phase': 'running', 'weight': 1., 'minimum_elapsed_seconds': 60}]},
-        'preferences': {'deadline_seconds': 14400, 'elapsed_cost_per_second': .00005, 'node_hour_cost': .01},
-        'limits': {'max_nodes': 2, 'max_wall_seconds': 7200, 'max_node_hours': 4,
-                   'shutdown_margin_seconds': 30, 'result_limit_bytes': 65536, 'queue_max_age_seconds': 900},
+        'preferences': {'elapsed_cost_per_second': .00005, 'node_hour_cost': .01},
+        'limits': {'result_limit_bytes': 65536, 'queue_max_age_seconds': 900},
     }
 
 
@@ -112,7 +112,8 @@ async def run(args):
     else:
         original_commission = commission()
     factory = ExecutionServiceFactory(resources, {}, 1., 1., .01,
-        hpc_commissions={'blast': original_commission})
+        hpc_commissions={'blast': original_commission},
+        shared_execution_memory=ExecutionMemory.configured().as_record())
     checkpoint = None
     with Store(directory/'state') as store:
         if store.db.execute('SELECT 1 FROM problem').fetchone() is None:
@@ -127,19 +128,6 @@ async def run(args):
                 project_credit=lambda *_: 0., episode_service_factory=factory,
                 episode_service_binding=factory.as_record(), episode_service_inputs='actual_tool_registry_v1',
                 episode_record_receipts=True, initial_known_record_refs=[], root_role='hpc')
-            original_wait = workflow.wait_store.perform_wait
-
-            async def checkpoint_wait(request, backend):
-                condition = request['condition']
-                if not condition['events'] and condition['reconsider_at'] is not None:
-                    when = datetime.fromisoformat(condition['reconsider_at'].replace('Z', '+00:00'))
-                    if (when-datetime.now(timezone.utc)).total_seconds() > 45:
-                        # The runtime has already retained the selected wait,
-                        # its original action identity and estimate snapshot.
-                        raise TimedCheckpoint(request)
-                return await original_wait(request, backend)
-
-            workflow.wait_store.perform_wait = checkpoint_wait
             episode = workflow.build('hpc', 'root', OBJECTIVE, {'subject_refs': []},
                 episode_assignment={'commission_id': 'blast'})
             print(json.dumps({'event': 'episode_started', 'run_directory': str(directory),

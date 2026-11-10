@@ -147,7 +147,7 @@ def test_actual_practical_action_stages_runs_observes_and_replays_original_job(t
     native_result = native.wait_job(handle)
     assert native_result.returncode == 0, native_result.stderr_path.read_text()
     assert native_result.metadata["verified_cgroup"]["memory_max"] == POLICY.memory_bytes
-    assert native_result.metadata["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in native_result.metadata["verified_cgroup"]
     plan = local_infernal_preparation_plan(context.assignment, str(handle.path))
     assert Path(plan["attempt_directory"]) == attempt
     assert handle.read()["command"][1:3] == ["-m", "gene_annotation_episode.native_infernal_preparation_driver"]

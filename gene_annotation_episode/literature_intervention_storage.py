@@ -103,7 +103,12 @@ class LiteratureInterventionRepository(LiteratureAssayGradingRepository):
         head = next((row for row in self.current_assessments()
             if (row["experiment_ref"], row["assessment_key"]) == key), None)
         if (None if head is None else head["sheet_ref"]) != previous:
-            raise ContractError("intervention_latest_revision_required")
+            detail = {}
+            if head is not None and head["sheet_ref"] in context.received_record_refs:
+                self._record(context, head["sheet_ref"])
+                detail = {"experiment_ref": key[0], "assessment_key": key[1],
+                    "requested_predecessor": previous, "latest_sheet_ref": head["sheet_ref"]}
+            raise ContractError("intervention_latest_revision_required", detail=detail)
 
     @staticmethod
     def cell_record_refs(cells):

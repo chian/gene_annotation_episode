@@ -52,7 +52,7 @@ QUESTION = (
     "Return the retained reference/edit outcome group and its qualifications; keep "
     "observations separate from repair mechanism inference.")
 PURPOSE = "Return the complete recorded reference/edit outcome group through the controlled form."
-POLICY = dict(memory_bytes=20 * 1024**3, scratch_bytes=4 * 1024**3, wall_seconds=None)
+POLICY = dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 SAVED_BINS = dict(deletion_upper_bounds_nt=[1, 4], insertion_upper_bounds_nt=[2, 5])
 TABLES = ("runtime_episodes", "runtime_actions", "runtime_observations", "runtime_model_calls",
           "runtime_forms", "runtime_report_attempts", "runtime_record_receipts")

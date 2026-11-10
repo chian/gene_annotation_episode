@@ -110,5 +110,5 @@ def test_actual_reservation_cli_dispatch_and_original_bundle(tmp_path):
     bundle = validate_preparation_bundle_files(json.loads((attempt / "bundle.json").read_bytes()), attempt)
     assert bundle["returncode"] == 0 and bundle["failures"] == []
     assert result.metadata["verified_cgroup"]["memory_max"] == 20 * 1024**3
-    assert result.metadata["verified_cgroup"]["runtime_max"] == "infinity"
+    assert 'runtime_max' not in result.metadata["verified_cgroup"]
     assert native.collect(handle).returncode == 0

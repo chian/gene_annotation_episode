@@ -43,7 +43,10 @@ def ncbi_entrez_tool_contract():
         "original response File, explicitly delivered with its Source. Empty successful queries are "
         "data. Native duplicates, literal number tokens, annotation qualifications and unknown units "
         "remain in that data and do not become acceptance thresholds. On failure, retain any actual "
-        "Source and captured prefix, return data_ref=null and preserve the failure code. Request "
+        "Source and captured prefix, return data_ref=null and preserve the failure code. Use "
+        "source.read on that Source with representation=original to inspect a native error; "
+        "search hits can coexist with an errorlist and a querytranslation that omitted requested terms. "
+        "Choose any revised query as a separate request. Request "
         "controls and diagnostics remain private. This step supplies no analysis, numerical summary, "
         "target annotation or stored gene/reaction/sequence mapping."}
 

@@ -229,7 +229,7 @@ def test_frozen_host_binding_reuses_original_selection_and_operand_after_observa
     monkeypatch.setattr(ordinary, "run_ordinary_orf_attempt", actual)
     monkeypatch.setattr(value.registry, "_prepare_orf_sequence_operand", lambda *a, **k: pytest.fail("restore recomputed original operand"))
     value.owner.resources = {}
-    value.registry.local_job_policy = LocalJobPolicy(memory_bytes=1024, scratch_bytes=2048, wall_seconds=1)
+    value.registry.local_job_policy = LocalJobPolicy(memory_bytes=1024, scratch_bytes=2048)
     restored = tools.OrdinaryMolecularSequenceTools(value.registry, configuration=None)
     result = asyncio.run(_execute(value, backend=restored))
     assert result["record_refs"] and read_control(directory / tools.HOST_BINDING_FILENAME) == frozen
