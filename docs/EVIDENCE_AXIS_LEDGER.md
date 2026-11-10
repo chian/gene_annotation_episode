@@ -5,6 +5,20 @@ This is the central progress record for evidence axes. Individual implementation
 documents and dated run reports supply detail; they do not independently set an
 axis's current status.
 
+## 2026-11-10 child-return form envelope correction
+
+The parent-selected information fields now pass through the shared closed-form
+compiler, which supplies the top-level object, full required-field list and
+closed-property marker when omitted. The same normalization applies to
+registered fact forms and literal child return forms, including nested child
+commissions and later redelivery. An explicitly conflicting outer form remains
+invalid. The parent-facing child-action example and missing-form feedback no
+longer instruct a parent to write the outer object declaration. The original
+submitted text and expanded declaration remain linked for saved replay.
+Focused representation and contract tests: 159 passed under
+`runs/automatic_child_form_envelope_20261110`. This is a communication
+correction; no fresh autonomous genome run or new axis result is claimed.
+
 ## 2026-11-10 combined-root child return contract correction
 
 The NC_001560.1 combined retry was manually interrupted after 496 seconds and

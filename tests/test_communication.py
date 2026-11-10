@@ -1,7 +1,9 @@
 """Representation checks only; these do not assess biological conclusions."""
+import json
 import math
 import pytest
 
+from gene_annotation_episode import runtime
 from gene_annotation_episode.boundary_validation import parse_json_object
 from gene_annotation_episode.communication import (
     ReportBoundaryError, validate_closed_schema, validate_form,
@@ -11,6 +13,13 @@ from gene_annotation_episode.communication import (
 
 def form(fields):
     return {"type": "object", "properties": fields, "required": list(fields), "additionalProperties": False}
+
+
+def test_legacy_child_return_fields_gain_closed_outer_form_automatically():
+    compact = {"properties": {"score": {"type": "number", "x-source": "credit"}}}
+    compiled = runtime._compile_form(json.dumps(compact))
+    assert compiled == form(compact['properties'])
+    assert compact == {"properties": {"score": {"type": "number", "x-source": "credit"}}}
 
 
 def test_freeform_and_schema_escape_rejected_recursively():
