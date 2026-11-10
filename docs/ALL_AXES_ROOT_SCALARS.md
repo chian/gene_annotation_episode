@@ -96,7 +96,9 @@ nonnegative and only five can oppose. The generic signed combiner permits all
 of its inputs to oppose, with bounds `[-(2**n-1), 2**n-1]` for n axes. This is
 an evidence index, not a probability scale.
 
-The collection has no scalar over different proposed annotations or genes.
+The functional-support collection has no scalar over different proposed
+annotations or genes. The root's separate investigation-progress score is
+described below.
 Each row contains support, opposition, their difference, the nine-axis vector,
 status and missing reasons. An entirely unknown vector has a null score; a
 measured zero remains scored. Comparisons group the same actual subject,
@@ -191,7 +193,10 @@ scope and evidence axis: stop when every pair has an available forecast upper
 bound at or below its applicable cutoff. Each forecast concerns another whole
 axis invocation. It is fitted from that parent's actual completed invocations;
 the child's forecast for its next internal action is not substituted for it.
-There is no cumulative score across competing annotations.
+The root also reports one progress score: sum the earned axis-child credit for
+each proposed annotation, then take the highest annotation total. It never sums
+credit across competing annotations. This maximum is a progress summary; the
+per-pair forecasts and cutoffs still determine when the root stops.
 
 A missing scientific score remains null. It supplies no evidence for or against
 the annotation. Root task credit comes from the received child's own closing
@@ -199,6 +204,8 @@ credit minus its starting credit. An opposing experiment can therefore reduce
 annotation support while earning positive task credit. A completed invocation
 that earns no additional task credit supplies a zero credit observation.
 Unknown forecasts remain unknown.
+The root maximum uses child credits in their declared local units; changing
+those units changes this summary, so each arm retains its credit definition.
 
 The policy enables this through `root_task.kind = "annotation_axis_credit"`
 alongside the dynamic `annotation_support` configuration. `root_task.cutoffs`
@@ -219,6 +226,15 @@ measurement, experiment grading and commissioned assembly use separate local
 calculations. The A106 judgment and A108 score refresh are automatic updates,
 not episodes commissioned solely to score. Production task cutoffs remain to be
 calibrated and supplied; the root cutoffs do not supply them.
+
+The ordinary CLI accepts this combined binding only when `--config` contains
+`[genome_investigation]` with version `combined_genome_investigation_v1` and
+its own `policy` and `services` tables. The policy supplies the signed
+annotation collection, root axis cutoffs, and exact local task definitions and
+cutoffs. The services table supplies the source publication, execution
+configuration, tool retrieval, and literature configuration to the existing
+nine-axis episode owners. This binding route has no calibrated production
+cutoff table yet.
 
 The literature owner already distinguishes 43 requested output families in
 `literature_task_selection.py`. Those are result families, not 43 episode roles
@@ -250,7 +266,8 @@ families have no generic credit substitution and remain unconfigured.
 `SignedEvidenceRootSupport(task_credit=True)` returns a collection of earned
 credits from authenticated typed scientific-process returns. Each return must
 include the child's own original credit calculation and starting/closing
-values. The numerical owner maintains each pair's estimator and cutoff. The
+values. The collection also retains each annotation's total and the root's
+maximum. The numerical owner maintains each pair's estimator and cutoff. The
 existing journal, completion and admission paths persist and replay this
 collection alongside the separate annotation scores.
 

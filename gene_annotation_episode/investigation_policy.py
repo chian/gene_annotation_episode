@@ -189,6 +189,7 @@ def create_policy(parameters, *, episode_roles: tuple[str, ...] = ()):
         controller_definition['root_task'] = {
             'kind': 'annotation_axis_credit', 'cutoffs': dict(axis_cutoffs),
             'unit': 'earned_credit_from_received_axis_child_in_its_declared_local_units',
+            'root_score': 'max_per_annotation_sum_of_received_axis_child_credit',
             'forecast': 'another_whole_axis_invocation',
             'continuation': 'every_annotation_axis_available_upper_bound_lte_own_cutoff'}
 

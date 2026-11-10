@@ -600,10 +600,13 @@ def annotation_arm_key(arm):
 
 
 def validate_task_credit(value):
-    """Validate the two native task-credit forms without inventing a scalar."""
+    """Validate a scalar or the root's received annotation/axis credit."""
     if not isinstance(value, Mapping):
         return _signed(value, 'task credit')
-    if set(value) != {'mode', 'arms'} or value['mode'] != 'annotation_axis_credit':
+    fields = set(value)
+    if (fields not in ({'mode', 'arms'},
+                       {'mode', 'arms', 'annotation_credits', 'root_score'})
+            or value['mode'] != 'annotation_axis_credit'):
         raise ValueError('task_credit_collection_required')
     if not isinstance(value['arms'], list):
         raise ValueError('task_credit_arms_required')
@@ -617,7 +620,27 @@ def validate_task_credit(value):
             _signed(arm['credit'], 'annotation axis credit')
         if not isinstance(arm.get('status'), str) or not isinstance(arm.get('transfer'), Mapping):
             raise ValueError('annotation_axis_status_required')
+    if 'root_score' in value:
+        annotations, score = annotation_credit_summary(value['arms'])
+        if (value['annotation_credits'] != annotations
+                or _signed(value['root_score'], 'root task credit') != score):
+            raise ValueError('root_credit_must_match_received_annotation_credits')
     return deepcopy(value)
+
+
+def annotation_credit_summary(arms):
+    """Sum earned child credit for each annotation, then take the best total.
+
+    This is root task progress. It does not read or combine functional-support
+    scores, and the controller still estimates the next invocation per arm.
+    """
+    by_annotation = {}
+    for arm in arms:
+        by_annotation.setdefault(arm['proposed_annotation_ref'], []).append(
+            0. if arm['credit'] is None else _signed(arm['credit'], 'annotation axis credit'))
+    annotations = [{'proposed_annotation_ref': reference, 'credit': math.fsum(values)}
+        for reference, values in sorted(by_annotation.items())]
+    return annotations, max((row['credit'] for row in annotations), default=0.)
 
 
 @dataclass(frozen=True)
@@ -626,11 +649,14 @@ class AnnotationAxisYieldState:
     initial_credit: dict
     current_credit: dict
     arms: tuple
+    annotation_credits: tuple
+    root_score: float
     stop: bool
 
     def as_record(self):
         return {'epoch': self.epoch, 'initial_credit': self.initial_credit,
             'current_credit': self.current_credit, 'arms': list(self.arms),
+            'annotation_credits': list(self.annotation_credits), 'root_score': self.root_score,
             'decision': {'stop': self.stop,
                 'decision_basis': 'every_annotation_axis_available_upper_bound_lte_own_cutoff'}}
 
@@ -732,8 +758,9 @@ class AnnotationAxisYieldController:
                 'cutoff': self.cutoffs[arm['axis']],
                 'stop_requested': decision.stop,
                 'forecast_unit': 'another_whole_axis_invocation'})
+        annotation_credits, root_score = annotation_credit_summary(self._current_credit['arms'])
         return AnnotationAxisYieldState(self.epoch, deepcopy(self.initial_credit),
-            deepcopy(self._current_credit), tuple(arms),
+            deepcopy(self._current_credit), tuple(arms), tuple(annotation_credits), root_score,
             bool(arms) and all(arm['stop_requested'] for arm in arms))
 
     def transitioned(self, epoch):

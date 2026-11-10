@@ -65,6 +65,8 @@ class SignedEvidenceRootSupport:
             'revisions': 'receiver_current_versions_only; historical_receipts_immutable',
             'continuation': ('per_annotation_axis_credit_and_explicit_cutoff' if self.task_credit
                 else 'separately_bound_task_credit_and_controller'),
+            **({'root_task_credit_formula': 'max_per_annotation_sum_of_received_axis_child_credit'}
+                if self.task_credit else {}),
             'interpretation': 'explicit_mixed_evidence_index; not_calibrated_function_probability'}
 
     def __call__(self, store, scope, *, known_record_refs, run_id, episode_id, assignment=None):
@@ -141,6 +143,8 @@ class SignedEvidenceRootSupport:
                     details_offset + len(page) < source_count else None,
                 'interpretation': 'separate_proposed_annotation_scores; episode_owns_annotation_decision'}
             if self.task_credit:
+                from .numerical import annotation_credit_summary
+                from .domain import canonical
                 earned, definitions = {}, {}
                 for returned in received_axis_task_credit(store, context):
                     matches = [row for row in rows
@@ -150,7 +154,7 @@ class SignedEvidenceRootSupport:
                     if len(matches) != 1:
                         raise ValueError('root_axis_return_requires_one_original_arm')
                     arm = (matches[0]['proposed_annotation_ref'], matches[0]['subject_ref'],
-                        returned['axis'])
+                        canonical(matches[0]['scope']), returned['axis'])
                     previous = definitions.get(arm)
                     if previous is not None and previous != returned['credit_binding_ref']:
                         raise ValueError('root_axis_task_credit_definition_changed')
@@ -159,11 +163,15 @@ class SignedEvidenceRootSupport:
                 result['credit'] = {'mode': 'annotation_axis_credit', 'arms': [
                     {'proposed_annotation_ref': row['proposed_annotation_ref'],
                         'subject_ref': row['subject_ref'], 'scope': row['scope'], 'axis': axis,
-                        'credit': earned.get((row['proposed_annotation_ref'], row['subject_ref'], axis), 0.),
+                        'credit': earned.get((row['proposed_annotation_ref'], row['subject_ref'],
+                            canonical(row['scope']), axis), 0.),
                         'credit_binding_ref': definitions.get((row['proposed_annotation_ref'],
-                            row['subject_ref'], axis)), 'status': row['axis_status'][axis],
+                            row['subject_ref'], canonical(row['scope']), axis)),
+                        'status': row['axis_status'][axis],
                         'transfer': row['axis_transfer'][axis]}
                     for row in rows for axis in AXES]}
+                annotation_credits, root_score = annotation_credit_summary(result['credit']['arms'])
+                result['credit'].update(annotation_credits=annotation_credits, root_score=root_score)
             return result
 
     def _subject(self, store, context, annotation, subject, scope, window):

@@ -455,6 +455,10 @@ def test_dynamic_task_credit_keeps_scientific_support_separate_from_earned_work(
             run_id=context.run_id, episode_id=context.episode_id)
         assert scorer.as_record()['task_credit'] is True
         assert result['credit']['mode'] == 'annotation_axis_credit'
+        assert result['credit']['root_score'] == 0
+        assert result['credit']['annotation_credits'] == [
+            {'proposed_annotation_ref': ref, 'credit': 0}
+            for ref in sorted((proposal, other))]
         arms = {(row['proposed_annotation_ref'], row['axis']): row for row in result['credit']['arms']}
         assert len(arms) == 2 * len(AXES)
         scientific = next(row for row in result['proposed_annotations']
@@ -512,6 +516,9 @@ def test_opposing_axis_result_earns_returned_local_credit_once(tmp_path, monkeyp
         assert scientific['score'] < 0 and scientific['axis_components']['A106'] < 0
         assert arm['credit'] == 1.5
         assert arm['credit_binding_ref'] == returned['credit_binding_ref']
+        assert view['credit']['root_score'] == 1.5
+        assert view['credit']['annotation_credits'] == [
+            {'proposed_annotation_ref': proposal, 'credit': 1.5}]
 
         changed = deepcopy(form)
         changed['results'][0]['credit'] = 4.5

@@ -110,7 +110,21 @@ def main(argv=None):
                     include_credit=args.include_credit, credit_policy=(config or {}).get("credit"),
                     include_artifacts=args.include_artifacts))
                 return 0
-            tools = build_tools(store, config)
+            genome = (config or {}).get('genome_investigation')
+            if genome is not None:
+                if (not isinstance(genome, dict)
+                        or set(genome) != {'version', 'policy', 'services'}
+                        or genome['version'] != 'combined_genome_investigation_v1'
+                        or not isinstance(genome['policy'], dict)
+                        or not isinstance(genome['services'], dict)
+                        or 'root_task' not in genome['policy']
+                        or 'annotation_support' not in genome['policy']
+                        or set(config) & {'credit', 'controller'}):
+                    raise ValueError('explicit_combined_genome_policy_and_services_required')
+                from .all_evidence_tools import AllEvidenceToolRegistry
+                tools = build_tools(store, config, registry_class=AllEvidenceToolRegistry)
+            else:
+                tools = build_tools(store, config)
             if args.command == "capabilities":
                 _print(tools.catalog())
                 return 0
@@ -129,9 +143,40 @@ def main(argv=None):
             run_dir = args.run_dir
             if run_dir is None and not args.resume:
                 run_dir = store.path/"runs"/datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
-            summary = asyncio.run(run_workflow(store, tools, provider_config=config,
-                credit_policy=(config or {}).get("credit"), run_dir=run_dir,
-                resume=args.resume, goal=args.goal))
+            run_options = {'provider_config': config, 'run_dir': run_dir,
+                'resume': args.resume, 'goal': args.goal}
+            if genome is None:
+                run_options['credit_policy'] = (config or {}).get('credit')
+            else:
+                from .execution_episodes import ExecutionEpisodes
+                from .episode_monitoring import MonitorEpisodes
+                from .genome_investigation import GenomeEvidenceServices
+                from .hpc_episodes import HPCEpisodes
+                from .investigation_policy import create_policy
+                from .literature_episodes import LiteratureEpisodes
+                from .resource_estimation import ResourceToolEstimator
+                from .scientific_process_episodes import ScientificProcessEpisodes
+
+                roles = tuple(dict.fromkeys((*ScientificProcessEpisodes.roles,
+                    *LiteratureEpisodes.roles, *ExecutionEpisodes.roles,
+                    *MonitorEpisodes.roles, *HPCEpisodes.roles)))
+                policy = create_policy(genome['policy'], episode_roles=roles)
+                services = GenomeEvidenceServices(**genome['services'])
+                run_options.update(project_credit=policy.project_task_credit,
+                    project_annotation_score=policy.project_annotation_score,
+                    controller_factory=policy.controller_factory,
+                    initial_known_record_refs=policy.initial_known_record_refs,
+                    native_timing_information=policy.native_timing_information,
+                    binding_definitions={'credit': policy.task_credit_definition,
+                        'controller': policy.controller_definition,
+                        'annotation_score': policy.annotation_score_definition},
+                    episode_service_factory=services,
+                    episode_service_binding=services.as_record(),
+                    episode_service_inputs='actual_tool_registry_v1',
+                    episode_record_receipts=policy.episode_record_receipts,
+                    annotation_child_roles=('scientific_process',),
+                    resource_estimator=ResourceToolEstimator())
+            summary = asyncio.run(run_workflow(store, tools, **run_options))
             _print(summary)
             return 0
     except KeyboardInterrupt:

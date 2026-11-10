@@ -28,6 +28,10 @@ def test_annotation_axis_forecasts_use_only_that_whole_invocation_and_own_cutoff
     from gene_annotation_episode.numerical import AnnotationAxisYieldController
     baseline = annotation_credit(('one', 'A105', .2), ('one', 'A106', -.1), ('two', 'A105', .3))
     controller = AnnotationAxisYieldController('epoch', baseline, {'A105': .075, 'A106': .8})
+    assert controller.state().annotation_credits == (
+        {'proposed_annotation_ref': 'one', 'credit': .1},
+        {'proposed_annotation_ref': 'two', 'credit': .3})
+    assert controller.state().root_score == .3
     changed = annotation_credit(('one', 'A105', .25), ('one', 'A106', -.1), ('two', 'A105', .3))
     context = {**contexts_at((10,))[0], 'completed_annotation_axis': baseline['arms'][0],
         'episode_yield': {'expected_next_gain': {'value': 999}}}
@@ -41,13 +45,32 @@ def test_annotation_axis_forecasts_use_only_that_whole_invocation_and_own_cutoff
     # Root reading/formatting is not another axis invocation.
     controller.observe('inspect summary', {'credit': changed, 'estimation_context': contexts_at((20,))[0]})
     assert [arm['completed_invocation_observations'] for arm in controller.state().arms] == [1, 0, 0]
-    # Exact, independent thresholds; equality stops. No across-proposal total.
+    # Exact, independent thresholds; equality stops. The root's score is the
+    # best annotation total, while another arm's useful gain remains visible.
     boundaries = {arm['axis']: arm['expected_additional_credit']['upper'] for arm in arms[:2]}
     check = AnnotationAxisYieldController('comparison', baseline, boundaries)
     check.observe('same invocation', {'credit': changed, 'estimation_context': context})
     assert check.state().arms[0]['stop_requested']
     assert check.state().arms[1]['stop_requested']
-    assert 'score' not in check.state().as_record()
+    assert check.state().as_record()['root_score'] == .3
+    assert check.state().as_record()['annotation_credits'] == [
+        {'proposed_annotation_ref': 'one', 'credit': .15},
+        {'proposed_annotation_ref': 'two', 'credit': .3}]
+
+
+def test_root_credit_max_tracks_the_best_annotation_without_mixing_support_scores():
+    from gene_annotation_episode.numerical import AnnotationAxisYieldController, validate_task_credit
+    initial = annotation_credit(('one', 'A105', .5), ('one', 'A106', -.2),
+        ('two', 'A105', .4))
+    controller = AnnotationAxisYieldController('epoch', initial, {'A105': .1, 'A106': .1})
+    assert controller.state().root_score == .4
+    changed = annotation_credit(('one', 'A105', .7), ('one', 'A106', -.2),
+        ('two', 'A105', .4))
+    controller.observe('first annotation improves', {'credit': changed})
+    assert controller.state().root_score == pytest.approx(.5)
+    with pytest.raises(ValueError, match='root_credit_must_match_received_annotation_credits'):
+        validate_task_credit({**changed, 'annotation_credits': [
+            {'proposed_annotation_ref': 'one', 'credit': .5}], 'root_score': .5})
 
 
 def test_unknown_and_transfer_resolution_do_not_reuse_exhausted_axis_history():

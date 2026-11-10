@@ -845,6 +845,9 @@ You retain the annotation decision and choose the next action.
 The recorded task credit supplies this episode's numerical yield observations.
 When current_credit.mode is annotation_axis_credit, controller.arms supplies
 each proposed annotation/axis credit, forecast, cutoff and transfer status.
+controller.annotation_credits totals received child credit per proposed annotation;
+controller.root_score is the largest such total. This is investigation progress,
+while proposed_annotations carries the separate signed functional-support scores.
 Each forecast concerns another whole axis invocation; a child's internal next
 action forecast is different. Choose an axis and its proposed_annotation_ref.
 The root stops only when every pair's available upper bound is at or below its
@@ -1739,7 +1742,8 @@ class DecisionSource:
                     controller_state = _plain(view.controller_state)
                     if annotation_axes:
                         state = {}
-                        controller_state = {key: controller_state[key] for key in ('arms', 'decision')}
+                        controller_state = {key: controller_state[key] for key in
+                            ('arms', 'annotation_credits', 'root_score', 'decision')}
                         if presented_outcome is not None and self.last_outcome_index is not None:
                             prior = self.workflow.journal.row('runtime_actions', self.episode_id,
                                 self.last_outcome_index)
@@ -1749,7 +1753,9 @@ class DecisionSource:
                                     ('status', 'feedback', 'record_refs') if key in presented_outcome}
                     context = view.model_inputs({"goal": self.request.goal.as_record(), "scope": self.scope,
                         "working_state": state, "visible_record_refs": basis,
-                        "current_credit": ({'mode': 'annotation_axis_credit'} if annotation_axes else credit_view["credit"]),
+                        "current_credit": ({'mode': 'annotation_axis_credit',
+                            'root_score': controller_state['root_score']}
+                            if annotation_axes else credit_view["credit"]),
                         "current_evidence_vector": credit_view.get("axis_components"),
                         **({'investigation_progress': {key: credit_view[key] for key in
                             ('retained_finding_count', 'inactive_dependencies', 'detail_pages')
