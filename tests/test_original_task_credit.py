@@ -84,6 +84,8 @@ def test_annotation_root_tells_model_both_required_child_return_sources():
         {'option_ref': {'slot': 'evidence_axis'}}])
     workflow = SimpleNamespace(
         available_child_roles=lambda _source: ['scientific_process'],
+        root_child_return_sources=lambda _source, _role: (
+            'scientific_process_results', 'committed_record_refs'),
         episode_bindings=SimpleNamespace(roles={'scientific_process'}, for_role=lambda _role: owner),
         scientific_process_binding=owner,
         report_sources=lambda _role: {},
@@ -91,9 +93,9 @@ def test_annotation_root_tells_model_both_required_child_return_sources():
             'scientific_process_results': {}, 'committed_record_refs': {}})
     root = SimpleNamespace(path=(('annotation', 'root'),))
     text = child_options(workflow, root)['text']
-    assert text.startswith('Required child return facts')
+    assert text.startswith('Child return facts supplied by the bound episode')
     assert 'scientific_process: scientific_process_results, committed_record_refs' in text
-    assert '{"$ref":"episode-fact:<source>"}' in text
+    assert 'schema_json' not in text
 
 
 def test_scientific_child_return_sources_accept_decision_source_parent():

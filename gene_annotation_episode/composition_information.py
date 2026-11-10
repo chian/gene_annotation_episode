@@ -138,7 +138,7 @@ def child_options(workflow, source, role=None):
     allowed = workflow.available_child_roles(source)
     if role is not None and role not in allowed:
         raise ValueError('child_role_not_available_to_parent')
-    rows, details, requirements = [], [], []
+    rows, details, requirements, automatic = [], [], [], []
     for name in allowed if role is None else (role,):
         if name in workflow.episode_bindings.roles:
             binding = workflow.episode_bindings.for_role(name)
@@ -151,7 +151,11 @@ def child_options(workflow, source, role=None):
         required_sources = getattr(binding, 'required_return_sources', lambda _parent, _role: ())(
             source, name) if name in workflow.episode_bindings.roles else ()
         if required_sources:
-            requirements.append(name + ': ' + ', '.join(required_sources))
+            statement = name + ': ' + ', '.join(required_sources)
+            if getattr(workflow, 'root_child_return_sources', lambda *_: ())(source, name):
+                automatic.append(statement)
+            else:
+                requirements.append(statement)
         status = 'available'
         if name == 'scientific_process':
             library = workflow.scientific_process_binding.library
@@ -167,8 +171,11 @@ def child_options(workflow, source, role=None):
                     ('Source', 'Type', 'Meaning'), [(key, _kind(value.get('report_schema', value)),
                         value.get('meaning', '')) for key, value in facts.items()])])
     text = ''
+    if automatic:
+        text += ('Child return facts supplied by the bound episode; choose the scientific work '
+                 'and assignment, with no return form to write: ' + '; '.join(automatic) + '.\n\n')
     if requirements:
-        text = ('Required child return facts (each exactly once as a top-level field in '
+        text += ('Required child return facts (each exactly once as a top-level field in '
                 'schema_json): ' + '; '.join(requirements) + '. In contract lookup mode, '
                 'use a separate {"$ref":"episode-fact:<source>"} field for each source.\n\n')
     text += _table(('Child', 'Construction', 'Required assignment fields', 'Return facts'), rows)

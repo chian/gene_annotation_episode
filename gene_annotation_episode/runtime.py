@@ -2956,7 +2956,7 @@ class Workflow:
             require(same(compiled, schema)
                 and same(request_value['message'].get('report_contract_declaration'), declaration)
                 and same(request_value['message'].get('initial_report'),
-                    parse_json_object(selection['initial_report_json']))
+                    parse_json_object(self.child_initial_report_input(source, selection, role)))
                 and request_value['report_contract']['decision'] == selection['purpose']
                 and same(EpisodeGoal.child(source.request.goal, objective=selection['goal'],
                     result_contract=schema).as_record(), request_value['goal']), 'request_conflict')
@@ -3242,15 +3242,39 @@ class Workflow:
         return literature_numerical_contracts.freeze_contracts(facts_by_role=facts,
             permitted_child_roles=roles, action_schema=schema)
 
+    def root_child_return_sources(self, source, role):
+        """The combined root receives the scientific child's declared facts."""
+        if (not restricted_root(self, source) or role != 'scientific_process'
+                or not getattr(self.project_credit, 'task_credit', False)):
+            return ()
+        binding = self.episode_bindings.for_role(role)
+        return tuple(binding.required_return_sources(self.binding_context(source), role))
+
+    def child_form_input(self, source, selection, role):
+        if 'schema_json' in selection:
+            return selection['schema_json']  # Preserve an original saved decision.
+        sources = self.root_child_return_sources(source, role)
+        if not sources:
+            raise ContractError('child_return_form_required')
+        return _json(_object({name: {'$ref': 'episode-fact:' + name} for name in sources}))
+
+    def child_initial_report_input(self, source, selection, role):
+        if 'initial_report_json' in selection:
+            return selection['initial_report_json']  # Preserve an original saved decision.
+        if not self.root_child_return_sources(source, role):
+            raise ContractError('child_initial_report_required')
+        return '{}'
+
     def expanded_contract_form(self, source, selection, index, role, *, original_child=True):
         """Resolve a chosen form from original pending or saved child records."""
+        schema_json = self.child_form_input(source, selection, role)
         if self.contract_information_profile(source) is None:
-            submitted = parse_json_object(selection['schema_json'])
+            submitted = parse_json_object(schema_json)
             if not literature_numerical_contracts.uses_fact_references(submitted):
                 # Existing literal legacy forms retain their original compiler,
                 # declaration=None and registration semantics, including local
                 # references inside existing exact native documents.
-                return _compile_form(selection['schema_json'], self.report_sources(role)), None
+                return _compile_form(schema_json, self.report_sources(role)), None
             if original_child:
                 identity = Episode.identity(self.context, self.grains[role], f'child_{index}', parent_path=source.path)
                 child = self.journal.row('runtime_episodes', identity.episode_id)
@@ -3259,7 +3283,7 @@ class Workflow:
                     declaration = request['message'].get('report_contract_declaration')
                     if declaration is None:
                         raise WorkflowError('original_report_contract_declaration_unavailable')
-                    schema = validate_saved_fact_form(child_role=role, submitted_schema_json=selection['schema_json'],
+                    schema = validate_saved_fact_form(child_role=role, submitted_schema_json=schema_json,
                         expanded_schema=request['report_contract']['measurements']['schema'], declaration=declaration)
                     return schema, declaration
             row = self.journal.row('runtime_model_calls', source.episode_id, index)
@@ -3267,13 +3291,13 @@ class Workflow:
             if literature_numerical_contracts.SAVED_MEMBER not in saved:
                 # Never manufacture a declaration snapshot for an old saved
                 # decision. Its original literal-only route stays unchanged.
-                return _compile_form(selection['schema_json'], self.report_sources(role)), None
+                return _compile_form(schema_json, self.report_sources(role)), None
             record = literature_numerical_contracts.validate_frozen_contracts(saved)
-            result = literature_numerical_contracts.expand_numerical_form(selection['schema_json'],
+            result = literature_numerical_contracts.expand_numerical_form(schema_json,
                 child_role=role, saved=saved)
             schema = _compile_form(_json(result['expanded_schema']), record['source_types_by_role'][role],
                 include_runtime_sources=False)
-            validate_saved_fact_form(child_role=role, submitted_schema_json=selection['schema_json'],
+            validate_saved_fact_form(child_role=role, submitted_schema_json=schema_json,
                 expanded_schema=schema, declaration=result['declaration'])
             return schema, result['declaration']
         if original_child:
@@ -3284,19 +3308,19 @@ class Workflow:
                 declaration = request['message'].get('report_contract_declaration')
                 if declaration is None:
                     raise WorkflowError('original_report_contract_declaration_unavailable')
-                schema = validate_saved_fact_form(child_role=role, submitted_schema_json=selection['schema_json'],
+                schema = validate_saved_fact_form(child_role=role, submitted_schema_json=schema_json,
                     expanded_schema=request['report_contract']['measurements']['schema'], declaration=declaration)
                 return schema, declaration
         _, record = self.pending_contract_information(source, index)
         full = record['fact_sources_by_role']
         typed = {key: {name: row for name, row in rows.items() if 'report_schema' in row}
                  for key, rows in full.items()}
-        result = expand_fact_form(selection['schema_json'], child_role=role, facts_by_role=typed,
+        result = expand_fact_form(schema_json, child_role=role, facts_by_role=typed,
                                   permitted_child_roles=record['permitted_child_roles'])
         # Existing fact-name/value-type checks remain authoritative. Only the
         # explicitly selected reference representation has been expanded.
         schema = _compile_form(_json(result['expanded_schema']), full[role])
-        validate_saved_fact_form(child_role=role, submitted_schema_json=selection['schema_json'],
+        validate_saved_fact_form(child_role=role, submitted_schema_json=schema_json,
             expanded_schema=schema, declaration=result['declaration'])
         return schema, result['declaration']
 
@@ -5127,6 +5151,11 @@ class Workflow:
                         'role': {'type': 'string', 'const': role},
                         'assignment': (child_schema(self.binding_context(source), role)
                             if child_schema is not None else binding.assignment_schema(role))}
+                    if self.root_child_return_sources(source, role):
+                        # This edge returns the binding's declared facts. The
+                        # parent chooses the work, not the wire format.
+                        properties.pop('schema_json')
+                        properties.pop('initial_report_json')
                     options.append(_object(properties))
         if not self.is_job_source(source) and 'redeliver_report' in common_actions:
             options.append(_object({"kind": {"type": "string", "const": "redeliver_report"},
@@ -5233,7 +5262,7 @@ class Workflow:
         if hpc_launch and not any(node.get('x-source') == 'execution_handoff_refs'
                                   for node in schema.get('properties', {}).values()):
             raise ContractError('hpc_launch_requires_original_handoff_fact_in_return_form')
-        initial = parse_json_object(selection["initial_report_json"])
+        initial = parse_json_object(self.child_initial_report_input(source, selection, role))
         if selection['kind'] == 'episode_child':
             # Assignment-specific references need the child's original request.
             # Check shape now; build validates them before credit or publication.

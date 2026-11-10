@@ -7,6 +7,7 @@ scientific content, production stopping rules or annotation demonstrations.
 import asyncio
 from copy import deepcopy
 import json
+from types import SimpleNamespace
 
 import pytest
 from jsonschema import Draft202012Validator
@@ -14,6 +15,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode import runtime
 from gene_annotation_episode.composition_information import (
     ROOT_BOUNDARY_VERSION, child_options, lookup_schema, metadata_catalog)
+from gene_annotation_episode.episode_contract_information import validate_saved_fact_form
 from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
@@ -86,6 +88,59 @@ def test_root_rejects_tools_at_schema_dispatch_and_metadata_surface(tmp_path):
         assert not any(name.startswith(('public.', 'source.', 'state.', 'result.')) for name in names)
         assert table_count(store, 'runtime_actions') == table_count(store, 'runtime_observations') == 0
         assert 'sequence.translate' in tools.catalog()
+
+
+def test_combined_root_child_form_comes_from_declared_facts(tmp_path):
+    with Store(tmp_path/'state') as store:
+        target, = store.create_problem(raw_sequence='ATGAAATAA', molecule='dna')['subject_refs']
+        workflow = runtime.Workflow(store, ToolRegistry(store), object(), tmp_path/'run',
+            'root-form', controller, zero, episode_binding_factories=(),
+            decision_protocol='decision_exchange_v1')
+        root = workflow.build('annotation', 'root', 'Synthetic root annotation',
+            {'subject_refs': [target]})
+        sources = ('scientific_process_results', 'committed_record_refs')
+        owner = SimpleNamespace(
+            required_return_sources=lambda _parent, _role: sources,
+            child_assignment_schema=lambda _parent, _role: {'type': 'object',
+                'properties': {}, 'required': [], 'additionalProperties': False})
+        workflow.project_credit = SimpleNamespace(task_credit=True)
+        workflow.annotation_child_roles = ('scientific_process',)
+        workflow.episode_bindings = SimpleNamespace(roles={'scientific_process'},
+            for_role=lambda _role: owner, entry_roles=('scientific_process',))
+        workflow.scientific_process_binding = owner
+
+        choices = workflow.action_schema(root.source)['properties']['selection']['anyOf']
+        child = next(choice for choice in choices
+            if choice['properties']['kind']['const'] == 'episode_child')
+        assert 'schema_json' not in child['properties']
+        assert 'initial_report_json' not in child['properties']
+        assert {'goal', 'scope', 'purpose', 'role', 'assignment'} <= set(child['required'])
+
+        selected = {'kind': 'episode_child', 'role': 'scientific_process'}
+        form_text = workflow.child_form_input(root.source, selected, 'scientific_process')
+        assert workflow.child_initial_report_input(root.source, selected, 'scientific_process') == '{}'
+        form = json.loads(form_text)
+        assert form['type'] == 'object' and form['additionalProperties'] is False
+        assert form['required'] == list(sources)
+        assert set(form['properties']) == set(sources)
+        assert all(form['properties'][name] == {'$ref': 'episode-fact:' + name}
+            for name in sources)
+        facts = runtime.common_fact_sources()
+        facts['scientific_process_results'] = {'type': 'array', 'meaning': 'Axis results',
+            'report_schema': {'type': 'array', 'items': {'type': 'string',
+                'format': 'reference'}, 'x-source': 'scientific_process_results'}}
+        workflow.contract_information_profile = lambda _source: 'operation_contract_information_v1'
+        workflow.pending_contract_information = lambda _source, _index: ({}, {
+            'fact_sources_by_role': {'scientific_process': facts},
+            'permitted_child_roles': ['scientific_process']})
+        compiled, declaration = workflow.expanded_contract_form(root.source, selected, 0,
+            'scientific_process', original_child=False)
+        assert {node['x-source'] for node in compiled['properties'].values()} == set(sources)
+        validate_saved_fact_form(child_role='scientific_process', submitted_schema_json=form_text,
+            expanded_schema=compiled, declaration=declaration)
+        original = '{"type":"object","properties":{},"required":[],"additionalProperties":false}'
+        assert workflow.child_form_input(root.source, {**selected, 'schema_json': original},
+            'scientific_process') == original
 
 
 def test_metadata_then_real_child_translation_typed_return_and_root_reason(tmp_path):

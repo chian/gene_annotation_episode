@@ -5,6 +5,25 @@ This is the central progress record for evidence axes. Individual implementation
 documents and dated run reports supply detail; they do not independently set an
 axis's current status.
 
+## 2026-11-10 combined-root child return contract correction
+
+The NC_001560.1 combined retry was manually interrupted after 496 seconds and
+seven root model calls. Its root committed one proposed annotation, then
+repeatedly submitted invalid scientific-child return forms: one omitted the
+JSON Schema object declaration and another requested an unavailable
+`proposed_annotations` source. The run submitted no BLAST job and completed no
+evidence-axis child. Earlier parent-role and BLAST-monitor fixes did not address
+this form-construction failure.
+
+For the combined root's scientific-process child, the action schema now asks
+only for the scientific assignment, goal, scope and purpose. The runtime builds
+the closed return form from that child binding's declared
+`scientific_process_results` and `committed_record_refs` sources; old saved
+selections with their own form remain replayable. Focused tests validate the
+offered action schema, expanded recorded-fact form and saved declaration, with
+21 targeted tests passing. A fresh autonomous genome run has not yet verified
+the revised contract or any axis return. Full-genome annotation remains open.
+
 ## 2026-11-10 combined-genome BLAST scheduling update
 
 The first NC_001542.1 combined pilot was stopped after its direct A101
