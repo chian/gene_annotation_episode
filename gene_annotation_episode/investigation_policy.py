@@ -102,22 +102,35 @@ def create_policy(parameters, *, episode_roles: tuple[str, ...] = ()):
     cost = control.pop('cost')
     supplied_role_costs = control.pop('cost_by_role', {})
     supplied_task_costs = control.pop('cost_by_task', {})
+    supplied_scientific_yield = control.pop('yield_cutoff_by_task', {})
     if (not isinstance(supplied_role_costs, dict)
             or not set(supplied_role_costs) <= set(Workflow.grain_names + ROLES + episode_roles)):
         raise ValueError('controller_cost_by_role_requires_known_episode_roles')
     # The caller owns thresholds. Freeze them independently of mutable input
     # dictionaries and of the definition exposed to reporting/persistence.
     role_costs = tuple(sorted(supplied_role_costs.items()))
-    if (not isinstance(supplied_task_costs, dict)
-            or any(not isinstance(key, str) or not key.strip()
-                or not isinstance(value, dict)
-                or set(value) != {'cutoff', 'credit_definition'}
-                or not isinstance(value['credit_definition'], dict)
-                or not value['credit_definition']
-                for key, value in supplied_task_costs.items())):
-        raise ValueError('explicit_task_cutoffs_and_credit_definitions_required')
-    # Freeze both the cutoff and the units/version it was chosen for.
+    job_roles = {'job_launch', 'job_monitor', 'job_results', 'launch', 'monitor',
+        'results', 'hpc', 'hpc_prediction', 'hpc_execution'}
+    def valid_task_cutoffs(values, *, allowed):
+        return (isinstance(values, dict)
+            and all(isinstance(key, str) and ':' in key and key.split(':', 1)[1]
+                and (key.split(':', 1)[0] in allowed if allowed is not None
+                     else key.split(':', 1)[0] in {'A101', 'A102', 'A103', 'A104',
+                         'A105', 'A106', 'A107', 'A108', 'A110'})
+                for key in values))
+    if not valid_task_cutoffs(supplied_task_costs, allowed=job_roles):
+        raise ValueError('cost_by_task_requires_long_running_job_task')
+    if not valid_task_cutoffs(supplied_scientific_yield, allowed=None):
+        raise ValueError('scientific_yield_cutoff_requires_axis_task_and_credit_definition')
+    for supplied in (supplied_task_costs, supplied_scientific_yield):
+        for value in supplied.values():
+            if (not isinstance(value, dict) or set(value) != {'cutoff', 'credit_definition'}
+                    or not isinstance(value['credit_definition'], dict)
+                    or not value['credit_definition']):
+                raise ValueError('explicit_yield_cutoff_and_credit_definition_required')
+    # An optional task-specific yield threshold is tied to the original units.
     task_costs = json.loads(canonical(supplied_task_costs))
+    scientific_yield = json.loads(canonical(supplied_scientific_yield))
     root_task = parameters.get('root_task')
     axis_cutoffs = None
     if root_task is not None:
@@ -134,7 +147,7 @@ def create_policy(parameters, *, episode_roles: tuple[str, ...] = ()):
     YieldController('configuration', 0, cost, settings)
     for _, role_cost in role_costs:
         YieldController('configuration', 0, role_cost, settings)
-    for configured in task_costs.values():
+    for configured in (*task_costs.values(), *scientific_yield.values()):
         YieldController('configuration', 0, configured['cutoff'], settings)
     if axis_cutoffs is not None:
         AnnotationAxisYieldController('configuration',
@@ -147,23 +160,32 @@ def create_policy(parameters, *, episode_roles: tuple[str, ...] = ()):
             return AnnotationAxisYieldController(epoch, initial_credit, axis_cutoffs, settings)
         scientific_child = len(path) > 1 and (path[-1][0] in {'scientific_process', 'improvement'}
             or path[-1][0].startswith('literature'))
-        if task_key is not None or scientific_child:
+        if scientific_child:
             if (context is None or tuple(context.path) != tuple(path)
-                    or not isinstance(task_key, str) or not task_key):
-                raise ValueError('scientific_child_cutoff_requires_original_task')
+                    or not isinstance(task_key, str) or not task_key
+                    or not isinstance(credit_definition, dict) or not credit_definition):
+                raise ValueError('scientific_child_yield_requires_original_task_credit')
+            configured = scientific_yield.get(task_key)
+            if configured is not None and credit_definition != configured['credit_definition']:
+                raise ValueError('episode_yield_cutoff_credit_definition_mismatch:' + task_key)
+            selected_cost = (configured['cutoff'] if configured is not None
+                else dict(role_costs).get(path[-1][0], cost))
+        elif task_key is not None:
+            role = path[-1][0]
+            if (role not in job_roles or not task_key.startswith(role + ':')
+                    or context is None or tuple(context.path) != tuple(path)):
+                raise ValueError('cost_by_task_requires_long_running_job_task')
             if task_key not in task_costs:
-                raise ValueError('episode_task_cutoff_not_declared:' + task_key)
+                raise ValueError('job_task_cost_not_declared:' + task_key)
             configured = task_costs[task_key]
             if credit_definition != configured['credit_definition']:
-                raise ValueError('episode_task_cutoff_credit_definition_mismatch:' + task_key)
+                raise ValueError('job_task_cost_credit_definition_mismatch:' + task_key)
             selected_cost = configured['cutoff']
         elif len(path) == 1 and path[-1][0] == 'annotation':
             selected_cost = cost
         else:
             configured = dict(role_costs)
-            if path[-1][0] not in configured:
-                raise ValueError('episode_task_cutoff_not_declared:' + path[-1][0])
-            selected_cost = configured[path[-1][0]]
+            selected_cost = configured.get(path[-1][0], cost)
         return YieldController(epoch, initial_credit, selected_cost, settings)
 
     # Historical factories retain their original two-argument interface. This
@@ -180,11 +202,13 @@ def create_policy(parameters, *, episode_roles: tuple[str, ...] = ()):
         controller_definition.update(
             version='existing_yield_controller_explicit_role_costs_v3',
             cost_by_role=dict(role_costs),
-            cost_selection='exact_episode_role_required_for_children')
+            cost_selection='episode_role_yield_override_or_base_yield_cutoff')
     controller_definition.update(
-        version='existing_yield_controller_original_task_cutoffs_v4',
+        version='existing_yield_controller_original_task_yield_v5',
         cost_by_task=json.loads(canonical(task_costs)),
-        scientific_cost_selection='original_commission_task_and_exact_credit_definition')
+        yield_cutoff_by_task=json.loads(canonical(scientific_yield)),
+        scientific_yield_selection='original_task_override_or_role_or_base_yield_cutoff',
+        job_cost_selection='cost_by_task_only_for_long_running_job_roles')
     if axis_cutoffs is not None:
         controller_definition['root_task'] = {
             'kind': 'annotation_axis_credit', 'cutoffs': dict(axis_cutoffs),

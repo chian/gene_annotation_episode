@@ -212,7 +212,7 @@ def test_standard_case_policy_binds_signed_support_without_changing_progress_or_
     parameters = {'scientific_progress': {'finding_unit': 3, 'initial_known_record_refs': [], 'loss_preview_size': 4},
         'operational': {'registry_ref': 'synthetic-registry', 'handoff_unit': 1, 'acquired_record_unit': 1},
         'monitoring': {'information_unit': 1},
-        'controller': {'cost': .001, 'cost_by_task': {'A105:whole_axis_findings': {
+        'controller': {'cost': .001, 'yield_cutoff_by_task': {'A105:whole_axis_findings': {
             'cutoff': .023, 'credit_definition': ScientificFindingProgress(FindingProgressPolicy(3)).as_record()}},
             'uncertainty_alpha': .05}}
     original = create_policy(parameters, episode_roles=('literature',))

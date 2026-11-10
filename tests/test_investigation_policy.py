@@ -216,7 +216,7 @@ def test_generic_child_cannot_borrow_the_available_finding_calculation():
     config['controller']['cost_by_role']['improvement'] = .02
     policy = create_policy(config)
     path = (('annotation', 'root'), ('improvement', 'child'))
-    with pytest.raises(ValueError, match='scientific_child_cutoff_requires_original_task'):
+    with pytest.raises(ValueError, match='scientific_child_yield_requires_original_task_credit'):
         policy.controller_factory(path, 0)
     workflow = SimpleNamespace(project_credit=policy.project_task_credit,
         project_child_credit=policy.project_scientific_child_credit,

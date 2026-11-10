@@ -45,7 +45,7 @@ def test_annotation_root_uses_explicit_axis_cutoffs_without_repricing_child_task
     original = dict(cutoffs)
     cutoffs['A105'] = 99
     assert controller.cutoffs == original
-    with pytest.raises(ValueError, match='scientific_child_cutoff_requires_original_task'):
+    with pytest.raises(ValueError, match='scientific_child_yield_requires_original_task_credit'):
         policy.controller_factory((('annotation', 'root'), ('literature', 'child')), 3)
 
 

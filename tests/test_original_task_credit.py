@@ -111,7 +111,7 @@ def configured_tasks():
     config = parameters('registry_fixture')
     contexts = [task_context(axis) for axis in ('A105', 'A106')]
     owners = [axis_owner(axis) for axis in ('A105', 'A106')]
-    config['controller']['cost_by_task'] = {
+    config['controller']['yield_cutoff_by_task'] = {
         owner.continuation_task(context): {'cutoff': cutoff,
             'credit_definition': owner.credit_projector(context).as_record()}
         for owner, context, cutoff in zip(owners, contexts, (.23, .41))}
@@ -136,21 +136,36 @@ def test_cutoffs_follow_task_and_exact_units_and_survive_recorded_reload(tmp_pat
             policy.controller_factory(context.path, 6, context=context,
                 task_key=key, credit_definition=changed)
     key = owners[0].continuation_task(contexts[0])
-    config['controller']['cost_by_task'][key]['cutoff'] = 99
-    policy.controller_definition['cost_by_task'][key]['cutoff'] = 88
+    config['controller']['yield_cutoff_by_task'][key]['cutoff'] = 99
+    policy.controller_definition['yield_cutoff_by_task'][key]['cutoff'] = 88
     assert policy.controller_factory(contexts[0].path, 0, context=contexts[0], task_key=key,
         credit_definition=owners[0].credit_projector(contexts[0]).as_record()).cost == .23
 
 
-def test_missing_task_cutoff_does_not_use_a_role_or_root_cutoff():
+def test_unoverridden_scientific_task_uses_its_role_yield_cutoff():
     config, contexts, owners = configured_tasks()
     config['controller']['cost_by_role']['scientific_process'] = .01
-    config['controller']['cost_by_task'].pop('A106:whole_axis_findings')
+    config['controller']['yield_cutoff_by_task'].pop('A106:whole_axis_findings')
     policy = create_policy(config, episode_roles=('scientific_process',))
     context, owner = contexts[1], owners[1]
-    with pytest.raises(ValueError, match='episode_task_cutoff_not_declared:A106'):
-        policy.controller_factory(context.path, 0, context=context,
-            task_key=owner.continuation_task(context), credit_definition=owner.credit_projector(context).as_record())
+    controller = policy.controller_factory(context.path, 0, context=context,
+        task_key=owner.continuation_task(context), credit_definition=owner.credit_projector(context).as_record())
+    assert controller.cost == .01
+
+
+def test_cost_by_task_is_rejected_for_scientific_work_and_reserved_for_jobs():
+    config, contexts, owners = configured_tasks()
+    config['controller']['cost_by_task'] = config['controller'].pop('yield_cutoff_by_task')
+    with pytest.raises(ValueError, match='cost_by_task_requires_long_running_job_task'):
+        create_policy(config)
+    config['controller']['cost_by_task'] = {'job_monitor:queue': {
+        'cutoff': .3, 'credit_definition': {'version': 'job_queue_progress_v1'}}}
+    policy = create_policy(config)
+    path = (('annotation', 'root'), ('job_monitor', 'queue'))
+    context = SimpleNamespace(path=path)
+    controller = policy.controller_factory(path, 0, context=context,
+        task_key='job_monitor:queue', credit_definition={'version': 'job_queue_progress_v1'})
+    assert controller.cost == .3
 
 
 def test_runtime_passes_original_commission_before_constructing_controller(monkeypatch):

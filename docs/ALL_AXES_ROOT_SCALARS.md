@@ -217,24 +217,28 @@ No production root cutoffs or biological calibration are established by the
 synthetic checks.
 
 The combined root now requires each scientific-process or literature child to
-name its original task and exact credit definition. The controller selects only
-the cutoff declared for that pair; an undeclared child is rejected before work
-starts. A101–A104 and A107/A110 keep their native task calculations. A105,
+name its original task and exact credit definition. Every scientific child uses
+the same yield-forecast controller. Its forecast is compared with the base or
+role yield cutoff unless an optional `yield_cutoff_by_task` entry specifies a
+cutoff for that original task and exact credit definition. No table entry is
+required for a scientific child to start. `cost_by_task` is reserved for HPC and
+other long-running job roles; a scientific task key in it is rejected.
+A101–A104 and A107/A110 keep their native task calculations. A105,
 A106 and A108 whole-axis investigations count findings for the assigned
 proposed annotation. Literature source leads, reading or screening, and A105
 measurement, experiment grading and commissioned assembly use separate local
 calculations. The A106 judgment and A108 score refresh are automatic updates,
-not episodes commissioned solely to score. Production task cutoffs remain to be
-calibrated and supplied; the root cutoffs do not supply them.
+not episodes commissioned solely to score. The root's per-axis yield cutoffs
+remain separate from each child's own forecast and cutoff.
 
 The ordinary CLI accepts this combined binding only when `--config` contains
 `[genome_investigation]` with version `combined_genome_investigation_v1` and
 its own `policy` and `services` tables. The policy supplies the signed
-annotation collection, root axis cutoffs, and exact local task definitions and
-cutoffs. The services table supplies the source publication, execution
+annotation collection, root axis yield cutoffs, and any explicit child yield
+cutoff overrides. The services table supplies the source publication, execution
 configuration, tool retrieval, and literature configuration to the existing
-nine-axis episode owners. This binding route has no calibrated production
-cutoff table yet.
+nine-axis episode owners. This binding route has no calibrated production root
+axis cutoffs yet.
 
 The literature owner already distinguishes 43 requested output families in
 `literature_task_selection.py`. Those are result families, not 43 episode roles
