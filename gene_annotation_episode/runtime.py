@@ -4313,6 +4313,8 @@ class Workflow:
         # the wrapper freezes its clock at observation, after work has returned.
         value = {"credit": credit, "estimation_action_index": index}
         if isinstance(credit, Mapping) and credit.get('mode') == 'annotation_axis_credit':
+            value.update(self.episode_bindings.annotation_axis_yield_context(
+                self.binding_context(source), credit))
             action = self.journal.row('runtime_actions', source.episode_id, index)
             selected = json.loads(action['action'])
             if selected.get('kind') == 'episode_child' and selected.get('role') == 'scientific_process':
@@ -5215,6 +5217,14 @@ class Workflow:
         episode_assignment = None
         scientific_process = None
         schema, report_declaration = self.expanded_contract_form(source, selection, index, role)
+        if selection['kind'] == 'episode_child':
+            binding = self.episode_bindings.for_role(role)
+            required = getattr(binding, 'required_return_sources', lambda _parent, _role: ())(
+                self.binding_context(source), role)
+            sources = [node.get('x-source') for node in schema.get('properties', {}).values()]
+            for fact_source in required:
+                if sources.count(fact_source) != 1:
+                    raise ContractError('child_return_requires_' + fact_source)
         # A planned HPC launch must return its actual endpoint receipt. Reject
         # a form which cannot carry it before any submission; never widen the
         # caller's form or recreate an original submitted job to repair a form.

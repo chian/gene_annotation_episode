@@ -818,6 +818,63 @@ class APIServiceExecution:
             'execution_id': execution_id, 'request_sha256': digest(body['assignment']),
             'origin_episode_id': body['episode_id'], 'assignment': body['assignment'], 'scope': body['scope']})
 
+    def received_blast_jobs(self, context, progress_provider):
+        """Current saved state of only BLAST handoffs received by this episode.
+
+        Reading this view makes no NCBI request. A status check remains a
+        separately selected monitor/results action against the same RID.
+        """
+        from .api_blast import blast_wait_forecast
+        jobs = []
+        forecast_as_of = _now()
+        received = sorted(set(context.received_record_refs))
+        result_targets = set()
+        for reference in received:
+            if not (self.directory/'result-index'/digest(reference)).exists():
+                continue
+            result = self.read_result(reference, context.scope)
+            if result['target']['assignment'].get('service') == 'ncbi_blast':
+                result_targets.add(result['target']['handle'])
+        for reference in received:
+            record = self.store.get(reference)
+            if record.get('provider') != PROVIDER:
+                continue
+            body = self._read_handoff(reference, context.scope)
+            if body['assignment']['service'] != 'ncbi_blast':
+                continue
+            target = self.read_target(reference, context.scope)
+            handle = body['event']['native_handle']
+            latest = progress_provider.latest_saved_observation(reference, context.scope)
+            native_latest = progress_provider.latest_saved_observation(reference, context.scope,
+                require_native_state=True)
+            latest_failure_code = (None if latest is None else
+                latest['execution_status']['native'].get('failure_code'))
+            if native_latest is None:
+                state = 'accepted'
+                observed_at = body['snapshot']['retrieved_at']
+                result_available = False
+            else:
+                observation = native_latest['execution_status']['native']
+                state = observation['native']['facts']['native_state']
+                observed_at = observation['observed_at']
+                result_available = native_latest['result_available']
+            progress_ref = None if latest is None else latest['progress_ref']
+            # Recalculate a planning estimate from local time without polling.
+            # Keep the last actual provider observation time separate so an
+            # old WAITING reply is never presented as a fresh status check.
+            forecast = blast_wait_forecast(handle, forecast_as_of, state)
+            jobs.append({'handoff_ref': reference, 'origin_episode_id': target['origin_episode_id'],
+                'rid': handle['rid'], 'subject_ref': body['assignment']['request']['subject_ref'],
+                'program': body['assignment']['request']['program'],
+                'database': body['assignment']['request']['database'],
+                'native_state': state, 'observed_at': observed_at,
+                'forecast_as_of': forecast_as_of,
+                'latest_progress_failure_code': latest_failure_code,
+                'wait_forecast': forecast, 'progress_ref': progress_ref,
+                'result_available': result_available,
+                'result_received': reference in result_targets})
+        return jobs
+
     def _observation(self, target, event, snapshot, provenance=()):
         facts = deepcopy(event['facts'])
         if snapshot is not None and (event['state'] == 'failed' or event['failure_code']):

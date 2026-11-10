@@ -45,6 +45,7 @@ class GenomeEvidenceServices:
                 raise ValueError('combined_hpc_private_yield_binding_required')
             execution_settings['require_hpc_commission_yield'] = True
         factory = ExecutionServiceFactory(**execution_settings)
+        tool_registry.configure_blast_execution(factory.resources)
         tool_registry.configure_a102_hpc(factory.resources)
         tool_registry.configure_a103_hpc(factory.resources)
         tool_registry.configure_component_native_hpc(factory.resources)

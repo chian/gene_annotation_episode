@@ -215,6 +215,19 @@ class EpisodeBindingRegistry:
             supplied.update(_plain(value))
         return supplied
 
+    def annotation_axis_yield_context(self, context, credit):
+        """Owner-declared unresolved work for the annotation root's local fit."""
+        supplied = {}
+        for binding in self._bindings:
+            callback = getattr(binding, 'annotation_axis_yield_context', None)
+            if callback is None:
+                continue
+            value = callback(context, credit)
+            if not isinstance(value, Mapping) or set(value).intersection(supplied):
+                raise ValueError('annotation_axis_yield_context_conflict')
+            supplied.update(_plain(value))
+        return supplied
+
     def contract_information_configurations(self):
         """Read explicit bound configuration before any provider is entered."""
         profiles = []

@@ -11,7 +11,10 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.numerical import YieldController
+from gene_annotation_episode.episode_monitoring import MonitorEpisodes
+from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.numerical import (YieldController, AnnotationAxisYieldController,
+    STATUS_UNIDENTIFIABLE)
 from gene_annotation_episode import runtime
 from gene_annotation_episode.scientific_process_episodes import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
@@ -67,9 +70,62 @@ def test_annotation_root_requires_frozen_evidence_refs_with_child_credit():
     owner._invocation = lambda *_: {'report_schema': {'properties': {
         'results': {'x-source': 'scientific_process_results'}}}}
     parent = SimpleNamespace(path=(('annotation', 'root'),))
-    with pytest.raises(ContractError, match='annotation_axis_return_requires_evidence_refs'):
+    with pytest.raises(ContractError, match='scientific_child_return_requires_committed_record_refs'):
         owner.prepare_invocation(parent, 'scientific_process', {}, {}, 'fixture', invocation={})
     assert 'committed_record_refs' in runtime.FACT_SOURCES
+
+
+def test_annotation_root_tells_model_both_required_child_return_sources():
+    from gene_annotation_episode.composition_information import child_options
+    owner = ScientificProcessEpisodes.__new__(ScientificProcessEpisodes)
+    owner.services = SimpleNamespace(annotation_task_required=lambda: True)
+    owner.assignment_schema = lambda _role: {'type': 'object', 'required': ['selection']}
+    owner.library = SimpleNamespace(headers=lambda: [
+        {'option_ref': {'slot': 'evidence_axis'}}])
+    workflow = SimpleNamespace(
+        available_child_roles=lambda _source: ['scientific_process'],
+        episode_bindings=SimpleNamespace(roles={'scientific_process'}, for_role=lambda _role: owner),
+        scientific_process_binding=owner,
+        report_sources=lambda _role: {},
+        return_contract_sources=lambda _role: {
+            'scientific_process_results': {}, 'committed_record_refs': {}})
+    root = SimpleNamespace(path=(('annotation', 'root'),))
+    text = child_options(workflow, root)['text']
+    assert text.startswith('Required child return facts')
+    assert 'scientific_process: scientific_process_results, committed_record_refs' in text
+    assert '{"$ref":"episode-fact:<source>"}' in text
+
+
+def test_scientific_child_return_sources_accept_decision_source_parent():
+    parent = SimpleNamespace(path=(('annotation', 'root'), ('scientific_process', 'a101')))
+    services = SimpleNamespace(annotation_task_required=lambda: True)
+    execution = ExecutionEpisodes.__new__(ExecutionEpisodes)
+    execution.services = services
+    monitor = MonitorEpisodes.__new__(MonitorEpisodes)
+    monitor.services = services
+    assert execution.required_return_sources(parent, 'launch') == ('execution_handoff_refs',)
+    assert execution.required_return_sources(parent, 'results') == ('execution_result_refs',)
+    assert monitor.required_return_sources(parent, 'monitor') == ('monitoring_progress_refs',)
+
+
+def test_root_yield_stays_unresolved_while_original_axis_job_can_return():
+    arm = {'proposed_annotation_ref': 'hypothesis_fixture', 'subject_ref': 'input_fixture',
+        'scope': {'subject_refs': ['input_fixture']}, 'axis': 'A101', 'credit': 0.,
+        'status': 'unscored', 'transfer': {}}
+    credit = {'mode': 'annotation_axis_credit', 'arms': [arm]}
+    owner = AnnotationAxisYieldController('root-fixture', credit, {'A101': 0.03})
+    identity = {name: arm[name] for name in ('proposed_annotation_ref', 'subject_ref', 'scope', 'axis')}
+    step = owner.observe('axis-return', {'credit': credit, 'estimation_context': {
+        'completed_annotation_axis': identity,
+        'unresolved_annotation_axis_credit': [{**identity,
+            'handoff_ref': 'source_original_blast', 'native_state': 'WAITING'}]}})
+    waiting, = step.state.arms
+    assert waiting['unresolved_execution_handoffs'] == ['source_original_blast']
+    assert waiting['expected_additional_credit']['status_code'] == STATUS_UNIDENTIFIABLE
+    assert not waiting['stop_requested'] and not step.state.stop
+    resolved = owner.observe('result-received', {'credit': credit, 'estimation_context': {
+        'unresolved_annotation_axis_credit': []}})
+    assert resolved.state.arms[0]['unresolved_execution_handoffs'] == []
 
 
 @pytest.mark.parametrize('axis', ['A105', 'A106', 'A108'])

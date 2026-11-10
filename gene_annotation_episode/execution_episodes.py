@@ -612,6 +612,16 @@ class ExecutionEpisodes:
     def child_roles(self, role):
         return tuple(ROLE_KINDS) if role == 'launch' else ()
 
+    def required_return_sources(self, parent, role):
+        """Preserve the original job identity across a scientific owner return."""
+        if (parent is not None and parent.path[-1][0] == 'scientific_process'
+                and getattr(self.services, 'annotation_task_required', lambda: False)()):
+            if role == 'launch':
+                return ('execution_handoff_refs',)
+            if role == 'results':
+                return ('execution_result_refs',)
+        return ()
+
     def _request_schema(self, resource_id, *, selected, internal=False, compact=True):
         kind = KINDS[self.resources[resource_id]['kind']]
         schema = deepcopy(self.api_execution.assignment_schema(resource_id)
@@ -1905,12 +1915,102 @@ class ExecutionEpisodes:
             'execution_initial_information': deepcopy(self.initial_information),
             'received_bvbrc_values': [] if self.api_execution is None else
                 self.api_execution.received_bvbrc_context(context)}
+        if (context.role in {'annotation', 'scientific_process'}
+                and self.api_execution is not None
+                and any(service.service == 'ncbi_blast' for service in self.api_execution.services.values())):
+            jobs = self.api_execution.received_blast_jobs(context, self.job_progress_provider)
+            for job in jobs:
+                job.update(self._blast_scientific_owner(job['origin_episode_id']))
+            value['received_blast_jobs'] = (self._blast_axis_summaries(jobs)
+                if context.role == 'annotation' else jobs)
+            value['received_blast_jobs_meaning'] = (
+                'Saved original BLAST jobs for received handoffs; root sees one summary per '
+                'annotation, axis and subject, while the scientific owner sees its original handles. '
+                'Status is only as of observed_at; the scheduling estimate is recalculated '
+                'locally as of forecast_as_of without a new provider observation. '
+                'No status request is made to build this view. The scientific owner can work locally or '
+                'return its handoff upward; the annotation root can choose another axis. A later owner '
+                'may monitor or fetch the same handoff without a new submission. Waiting earns no '
+                'scientific credit.')
         if self._forwards_minhash_reports(context.role):
             value['received_minhash_values'] = self.api_execution.minhash.received_context(context)
         if self.native_rna_structure_returns is not None and context.role in {'annotation', 'scientific_process'}:
             value['received_rna_structure_values'] = self.native_rna_structure_returns.received_context(context)
             value['received_rna_comparison_values'] = self.rna_structure_comparison_returns.received_context(context)
         return value
+
+    def _blast_scientific_owner(self, origin_episode_id):
+        """Recover the annotation and axis assigned above one original launch."""
+        row = self.store.db.execute('SELECT path FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+            (self.run_id, origin_episode_id)).fetchone()
+        if row is None:
+            raise ValueError('blast_original_launch_episode_unavailable')
+        path = json.loads(row['path'])
+        for length in range(len(path), 0, -1):
+            if path[length - 1][0] != 'scientific_process':
+                continue
+            owner = self.store.db.execute('SELECT request FROM runtime_episodes '
+                'WHERE run_id=? AND json(path)=json(?)',
+                (self.run_id, json.dumps(path[:length]))).fetchone()
+            if owner is None:
+                raise ValueError('blast_scientific_owner_unavailable')
+            assignment = json.loads(owner['request'])['message']['episode_assignment']
+            return {'proposed_annotation_ref': assignment.get('proposed_annotation_ref'),
+                    'evidence_axis': assignment['selection']['evidence_axis']['option_id']}
+        return {'proposed_annotation_ref': None, 'evidence_axis': None}
+
+    @staticmethod
+    def _blast_axis_summaries(jobs):
+        """Keep root scheduling input at annotation/axis level."""
+        grouped = {}
+        for job in jobs:
+            key = (job['proposed_annotation_ref'], job['evidence_axis'], job['subject_ref'])
+            grouped.setdefault(key, []).append(job)
+        summaries = []
+        for annotation, axis, subject in sorted(grouped,
+                key=lambda key: tuple('' if value is None else value for value in key)):
+            rows = grouped[(annotation, axis, subject)]
+            active = [row for row in rows if not row['result_received']
+                and row['native_state'] not in {'FAILED', 'UNKNOWN', 'failed', 'unknown'}]
+            actionable = min(active, key=lambda row: (
+                row['native_state'] != 'READY', row['observed_at'], row['handoff_ref'])) if active else None
+            summaries.append({'proposed_annotation_ref': annotation, 'evidence_axis': axis,
+                'subject_ref': subject, 'original_job_count': len(rows),
+                'waiting_count': sum(row['native_state'] in {'accepted', 'WAITING'} for row in active),
+                'ready_count': sum(row['native_state'] == 'READY' for row in active),
+                'result_received_count': sum(row['result_received'] for row in rows),
+                'failed_or_unknown_count': sum(row['native_state'] in
+                    {'FAILED', 'UNKNOWN', 'failed', 'unknown'} for row in rows),
+                'actionable_handoff_ref': None if actionable is None else actionable['handoff_ref'],
+                'status_observed_at': None if actionable is None else actionable['observed_at'],
+                'forecast_as_of': None if actionable is None else actionable['forecast_as_of'],
+                'latest_progress_failure_code': (None if actionable is None else
+                    actionable['latest_progress_failure_code']),
+                'estimated_remaining_seconds': (None if actionable is None else
+                    (actionable['wait_forecast'] or {}).get('estimated_remaining_seconds'))})
+        return summaries
+
+    def annotation_axis_yield_context(self, context, credit):
+        if (context.role != 'annotation' or self.api_execution is None
+                or not any(service.service == 'ncbi_blast'
+                    for service in self.api_execution.services.values())):
+            return {}
+        arms = credit.get('arms', [])
+        unresolved = []
+        for job in self.api_execution.received_blast_jobs(context, self.job_progress_provider):
+            job.update(self._blast_scientific_owner(job['origin_episode_id']))
+            if job['result_received'] or job['native_state'] in {'FAILED', 'UNKNOWN', 'failed', 'unknown'}:
+                continue
+            matches = [arm for arm in arms
+                if arm['proposed_annotation_ref'] == job['proposed_annotation_ref']
+                and arm['axis'] == job['evidence_axis']
+                and arm['subject_ref'] == job['subject_ref']]
+            if len(matches) != 1:
+                raise ValueError('blast_pending_job_requires_one_annotation_axis_arm')
+            unresolved.append({**{name: matches[0][name] for name in
+                ('proposed_annotation_ref', 'subject_ref', 'scope', 'axis')},
+                'handoff_ref': job['handoff_ref'], 'native_state': job['native_state']})
+        return {'unresolved_annotation_axis_credit': unresolved}
 
     def capabilities(self):
         """Configured operation availability, with no deployment/authentication probe."""

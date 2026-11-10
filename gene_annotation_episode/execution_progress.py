@@ -1589,6 +1589,25 @@ class ExecutionProgressProvider:
     def describe_target(self, handle, scope):
         return self.targets.describe_target(handle, scope)
 
+    def latest_saved_observation(self, handle, scope, *, require_native_state=False):
+        """Read saved progress, optionally only an actual native job state."""
+        target = self.targets.read_target(handle, scope)
+        row = self.store.db.execute(
+            "SELECT snapshot FROM runtime_execution_progress_snapshots "
+            "WHERE run_id=? AND target_handle=? "
+            + ("AND json_extract(snapshot, '$.execution_status.native.native.facts.native_state') "
+               "IS NOT NULL " if require_native_state else "") +
+            "ORDER BY json_extract(snapshot,'$.observed_at') DESC LIMIT 1",
+            (self.run_id, handle)).fetchone()
+        if row is None:
+            return None
+        snapshot = json.loads(row['snapshot'])
+        if (snapshot.get('target_handle') != handle
+                or snapshot.get('execution_status', {}).get('handle') != handle
+                or target['resource_kind'] != 'api'):
+            raise ContractError('execution_saved_observation_identity_conflict')
+        return snapshot
+
     def _operation(self, operation_key, selection):
         if operation_key is not None and (not isinstance(operation_key, str) or not operation_key):
             raise ContractError('execution_progress_operation_key_required')

@@ -328,6 +328,15 @@ class ScientificProcessEpisodes:
         self._role(role)
         return self._child_roles
 
+    def required_return_sources(self, parent, role):
+        self._role(role)
+        if (parent is not None
+                and getattr(self.services, 'annotation_task_required', lambda: False)()):
+            if len(parent.path) == 1:
+                return ('scientific_process_results', 'committed_record_refs')
+            return ('committed_record_refs',)
+        return ()
+
     def credit_kind(self, role):
         self._role(role)
         return "scientific"
@@ -489,14 +498,11 @@ class ScientificProcessEpisodes:
     def prepare_invocation(self, parent, role, inputs, scope, operation_key, *, invocation,
                            closed_context=None):
         original = self._invocation(invocation, scope)
-        if (parent is not None and len(parent.path) == 1
-                and getattr(self.services, 'annotation_task_required', lambda: False)()):
-            sources = [node.get('x-source') for node in
-                original['report_schema'].get('properties', {}).values()]
-            if sources.count('scientific_process_results') != 1:
-                raise ContractError('annotation_axis_return_requires_local_task_credit')
-            if sources.count('committed_record_refs') != 1:
-                raise ContractError('annotation_axis_return_requires_evidence_refs')
+        sources = [node.get('x-source') for node in
+            original['report_schema'].get('properties', {}).values()]
+        for source in self.required_return_sources(parent, role):
+            if sources.count(source) != 1:
+                raise ContractError('scientific_child_return_requires_' + source)
         if closed_context is not None:
             # Only an authenticated completed commission can resolve its
             # original frozen tools before reconstructing the closed child.
@@ -710,7 +716,16 @@ class ScientificProcessEpisodes:
         self.validate_context(context)
         selection = context.assignment['selection']
         axis = self.library.resolve(selection[selection_fields(selection)[0]])
-        axis_guidance = ("A102 owns structural work only. Scientific descendants remain A102. "
+        axis_guidance = ("A101 owns sequence similarity evidence. For an NCBI BLAST search that may run "
+            "remotely, use the configured Launch API job when available: submit once, return its "
+            "execution_handoff_refs to this episode, and let a separately selected monitor or Results "
+            "episode check that same RID. The handoff is operational progress, not homology evidence. "
+            "If that RID is waiting and no useful A101 work remains, return the handoff reference and "
+            "current credit to your parent so it can choose another evidence axis. Consider ClusteredNR "
+            "(nr_clustered_seq) for an initial blastx search; choose the database for the scientific "
+            "question and preserve the selected database in the original request.\n\n"
+            if axis.get('id') == 'A101' else '')
+        axis_guidance += ("A102 owns structural work only. Scientific descendants remain A102. "
             "Use available shared operations to send the immediate parent specific missing operands or useful "
             "received evidence. That parent chooses within its own options or relays the need upward. "
             "Reuse qualified retained alignments. "

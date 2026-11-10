@@ -89,3 +89,13 @@ def test_combined_services_prepare_actual_axis_catalog_without_execution(tmp_pat
             row['option_ref']['option_id'] for row in
             ScientificProcessLibrary(tmp_path / 'run/scientific-process-library').headers()
             if row['option_ref']['slot'] == 'evidence_axis'}
+
+
+def test_combined_catalog_uses_saved_blast_job_route_when_bound(tmp_path):
+    with Store(tmp_path / 'genome') as store:
+        store.create_problem(raw_sequence='ATGAAATAG', molecule='dna', role='assembly')
+        tools = AllEvidenceToolRegistry(store)
+        assert 'public.blast.search' in tools.catalog()
+        tools.configure_blast_execution({'ncbi': {'kind': 'api', 'service': 'ncbi_blast'}})
+        assert 'public.blast.search' not in tools.catalog()
+        assert 'public.blast.collect' not in tools.catalog()

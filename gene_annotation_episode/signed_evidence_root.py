@@ -83,6 +83,7 @@ class SignedRootEpisodeBinding:
             'parameters': self.yield_parameters.as_record(),
             'forecast_unit': 'another_whole_axis_invocation',
             'credit_aggregation': 'received_axis_owner_progress_v1',
+            'unresolved_execution': 'unidentifiable_yield_until_original_pending_result_is_received_or_fails',
             'continuation': 'each_annotation_axis_forecast_compared_with_own_cutoff'}
 
 

@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+from datetime import datetime, timezone
 
 from . import blast_search as blast
 from .acquisition import AcquisitionError
@@ -15,6 +16,41 @@ from .api_services import (event, object_schema, publish_existing_acquisition,
 
 TEXT = {"type": "string", "minLength": 1}
 EMPTY = object_schema({})
+
+
+def blast_wait_forecast(handle, observed_at, state):
+    """BLAST-only scheduling estimate as of an explicit evaluation time.
+
+    A saved WAITING reply establishes only that the RID was unfinished at its
+    observation time. An owner may reevaluate the unresolved job's planning
+    estimate later without another NCBI request. The provisional curve passes
+    through one minute remaining after two minutes and ten minutes remaining
+    after ten minutes. It is neither scientific credit nor a provider promise.
+    """
+    submitted = handle.get('submitted_at')
+    if submitted is None:
+        return {'method': 'unavailable_original_submission_time',
+                'elapsed_since_submission_seconds': None,
+                'estimated_remaining_seconds': None}
+    start = datetime.fromisoformat(submitted.replace('Z', '+00:00'))
+    observed = datetime.fromisoformat(observed_at.replace('Z', '+00:00'))
+    if (start.tzinfo is None or observed.tzinfo is None
+            or start.utcoffset() != timezone.utc.utcoffset(start)
+            or observed.utcoffset() != timezone.utc.utcoffset(observed)):
+        raise ValueError('blast_wait_utc_time_required')
+    elapsed = max(0., (observed - start).total_seconds())
+    if state == 'READY':
+        remaining = 0.
+    elif state in {'WAITING', 'accepted'}:
+        # Log-log interpolation of the two task-specific planning anchors.
+        exponent = 1.430676558073393  # log(10) / log(5)
+        remaining = max(0., float(handle['rtoe_seconds']) - elapsed,
+                        60. * (elapsed / 120.) ** exponent)
+    else:
+        remaining = None
+    return {'method': 'blast_unresolved_elapsed_provisional_v1',
+            'elapsed_since_submission_seconds': elapsed,
+            'estimated_remaining_seconds': remaining}
 
 
 class NCBIBlastService:
@@ -149,7 +185,8 @@ class NCBIBlastService:
         self._response_request(prepared, snapshot)
         if operation == "submit":
             rid, rtoe = blast.submission(snapshot.content)
-            return event("job", "submitted", native_handle={"rid": rid, "rtoe_seconds": rtoe},
+            return event("job", "submitted", native_handle={"rid": rid, "rtoe_seconds": rtoe,
+                "submitted_at": snapshot.retrieved_at},
                 handoff_ready=True, facts={"native_state": "accepted", "rtoe_seconds": rtoe,
                                           **self._limits("status", rid)})
         handle = self._handle(prepared["native_handle"])
@@ -163,6 +200,8 @@ class NCBIBlastService:
                 handoff_ready=native["status"] in {"WAITING", "READY"},
                 result_available=native["status"] == "READY",
                 facts={"native_state": native["status"], "has_hits": native["has_hits"],
+                       "wait_forecast": blast_wait_forecast(handle, snapshot.retrieved_at,
+                           native["status"]),
                        **self._limits("status", handle["rid"])},
                 failure_code="blast_" + native["status"].lower()
                     if native["status"] in {"FAILED", "UNKNOWN"} else None)

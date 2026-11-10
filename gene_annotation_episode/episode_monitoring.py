@@ -637,6 +637,27 @@ def _monitor_information_yield(scores, parameters, contexts):
         'decision': 'predicted_upper_gain_at_or_below_monitor_cutoff'})
 
 
+def _blast_monitor_yield(scores, parameters, contexts, target_handle):
+    """One original BLAST status observation completes this monitor visit.
+
+    The external job can remain unfinished. Another episode may later monitor
+    its saved handoff. This rule concerns the monitor's local task only.
+    """
+    from .numerical import NumericBand, YieldEstimate, STATUS_UNIDENTIFIABLE
+    observed = any(
+        isinstance(item, Mapping)
+        and isinstance(item.get('current_completion_evidence'), Mapping)
+        and any(isinstance(row, Mapping) and row.get('target_handle') == target_handle
+            and row.get('execution_status', {}).get('native', {}).get('native', {}).get('service') == 'ncbi_blast'
+            for row in item['current_completion_evidence'].get('progress_records', ()))
+        for item in contexts or ())
+    return YieldEstimate(len(scores), NumericBand.exact(0) if observed else
+        NumericBand.coded(STATUS_UNIDENTIFIABLE), parameters,
+        {'original_blast_status_observed': observed}, estimator_binding={
+            'kind': 'blast_monitor_one_observation_completion_v1',
+            'forecast': 'zero_remaining_local_monitor_work_after_original_status_observation'})
+
+
 class MonitorEpisodes:
     """C7 choices and controlled facts; all iteration belongs to method_loop."""
 
@@ -683,9 +704,20 @@ class MonitorEpisodes:
         if not self.private_yield_binding:
             raise ValueError('monitor_private_yield_binding_not_enabled')
         from .numerical import YieldController, YieldParameters
+        estimate = ((lambda scores, parameters, contexts: _blast_monitor_yield(
+            scores, parameters, contexts, context.assignment['target_handle']))
+            if self._is_blast_job(context) else _monitor_information_yield)
         return YieldController(epoch, initial_credit, self.yield_settings['cutoff'],
             YieldParameters(uncertainty_alpha=self.yield_settings['uncertainty_alpha']),
-            estimate_with_context=_monitor_information_yield)
+            estimate_with_context=estimate)
+
+    def _is_blast_job(self, context):
+        describe = getattr(self.services, 'describe_progress_target', None)
+        if not callable(describe):
+            return False
+        target = describe(context.assignment['target_handle'], context.scope)
+        return (isinstance(target, Mapping) and target.get('resource_kind') == 'api'
+            and target.get('service_or_program') == 'ncbi_blast')
 
     @staticmethod
     def _role(role):
@@ -695,6 +727,13 @@ class MonitorEpisodes:
     def child_roles(self, role):
         self._role(role)
         return ("monitor",)
+
+    def required_return_sources(self, parent, role):
+        self._role(role)
+        if (parent is not None and parent.path[-1][0] == 'scientific_process'
+                and getattr(self.services, 'annotation_task_required', lambda: False)()):
+            return ('monitoring_progress_refs',)
+        return ()
 
     def credit_kind(self, role):
         self._role(role)
@@ -706,6 +745,8 @@ class MonitorEpisodes:
 
     def permitted_common_actions(self, context):
         self._role(context.role)
+        if self.private_yield_binding and self._is_blast_job(context):
+            return ("tool", "child", "redeliver_report")
         return ("tool", "child", "wait", "redeliver_report")
 
     def _assignment(self, assignment, scope):

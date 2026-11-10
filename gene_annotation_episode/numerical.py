@@ -852,6 +852,7 @@ class AnnotationAxisYieldController:
             raise ValueError('annotation_axis_credit_required')
         self._current_credit = deepcopy(self.initial_credit)
         self._estimators = {}
+        self._unresolved = {}
         self._sync(self._current_credit)
 
     def _sync(self, credit):
@@ -874,8 +875,19 @@ class AnnotationAxisYieldController:
         credit = validate_task_credit(body['credit'])
         context = body.get('estimation_context') or {}
         completed = context.get('completed_annotation_axis')
+        pending = context.get('unresolved_annotation_axis_credit', [])
+        if not isinstance(pending, list):
+            raise ValueError('unresolved_annotation_axis_credit_invalid')
         previous = {annotation_arm_key(arm): arm for arm in self._current_credit['arms']}
         self._sync(credit)
+        current_keys = {annotation_arm_key(arm) for arm in credit['arms']}
+        unresolved = {}
+        for item in pending:
+            key = annotation_arm_key(item)
+            if key not in current_keys or not isinstance(item.get('handoff_ref'), str):
+                raise ValueError('unresolved_annotation_axis_job_not_owned')
+            unresolved.setdefault(key, set()).add(item['handoff_ref'])
+        self._unresolved = {key: sorted(refs) for key, refs in unresolved.items()}
         delta = None
         if completed is not None:
             key = annotation_arm_key(completed)
@@ -899,10 +911,16 @@ class AnnotationAxisYieldController:
         arms = []
         for arm in self._current_credit['arms']:
             estimate = self._estimators[annotation_arm_key(arm)].state()
-            band = estimate.expected_next_gain
+            waiting = self._unresolved.get(annotation_arm_key(arm), [])
+            # An unfinished original job can still return credit. Its result
+            # probability is not fitted by completed axis invocations, so a
+            # zero historical fit cannot establish a zero future yield here.
+            band = (NumericBand.coded(STATUS_UNIDENTIFIABLE) if waiting
+                    else estimate.expected_next_gain)
             decision = predicted_gain_upper_bound(band, self.cutoffs[arm['axis']])
             arms.append({**deepcopy(arm), 'expected_additional_credit': band.as_record(),
                 'completed_invocation_observations': estimate.turns,
+                'unresolved_execution_handoffs': waiting,
                 'cutoff': self.cutoffs[arm['axis']],
                 'stop_requested': decision.stop,
                 'forecast_unit': 'another_whole_axis_invocation'})

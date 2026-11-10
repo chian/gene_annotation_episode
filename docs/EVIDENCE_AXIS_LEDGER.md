@@ -5,6 +5,63 @@ This is the central progress record for evidence axes. Individual implementation
 documents and dated run reports supply detail; they do not independently set an
 axis's current status.
 
+## 2026-11-10 combined-genome BLAST scheduling update
+
+The first NC_001542.1 combined pilot was stopped after its direct A101
+`public.blast.search` submitted BLASTX to `nr` and held the scientific child
+inside a status loop. No completed annotation or full-genome validation is
+claimed from that run. The combined investigation now binds the existing
+NCBI BLAST Launch/Monitor/Results service in the pilot configuration and
+removes the blocking direct BLAST search/collect choices from that combined
+catalog when the API job resource is present. The original RID, submission
+time, selected program/database and handoff are retained; status observations
+are separate saved requests and do not resubmit.
+
+A BLAST-specific provisional wait forecast uses elapsed time since original
+submission while the last known status remains unresolved. At two and ten
+elapsed minutes it estimates roughly one and ten more minutes, respectively.
+The estimate is recalculated locally between NCBI checks, while the last
+actual provider observation keeps its own timestamp. It is scheduling input,
+not scientific credit or a provider promise. The scientific owner sees the
+original jobs it received.
+The annotation root sees compact per-annotation/A101/subject counts, one
+actionable handoff and its latest saved estimate, without making a new NCBI
+request. Required child return facts carry handoff and monitor identities
+through the scientific parents. A still unresolved original job makes the
+root's A101 additional-credit forecast unidentifiable, so the existing
+per-axis forecast cutoff cannot mistake the temporary zero credit for a
+completed negative result. After result receipt or failure, the ordinary
+per-axis estimator applies again.
+
+The 2026-11-10 live retry submitted one genome-wide `blastx` request to
+`nr_clustered_seq` and saved RID `F6YGH7J1014`. Its Launch children returned
+the handoff to A101; A101 saw the same RID and then commissioned a monitor.
+The monitor saved `WAITING` observations with remaining estimates of about
+58 and 122 seconds. It also exposed a control error: its general information
+accumulation rule kept the monitor polling, holding A101 and the root below it.
+The run was interrupted at that point. The BLAST monitor now binds a private
+one-observation completion rule and excludes local waiting, so one observed
+status ends that monitor visit even when the external job remains active.
+The A101 parent receives that status and can return its handoff to the root;
+the root can then choose another axis. This last parent/root choice has not
+yet been observed live after the correction. The retry also exposed a local
+run-layout failure: `genes.predict` rejected its output directory as outside
+the workflow budget run directory. It recovered and selected BLAST, but local
+gene prediction is still not validated in this pilot layout.
+An intervening provider rate-spacing refusal is operational feedback, not an
+NCBI `UNKNOWN` job state; the parent/root view now retains the last actual
+native state and reports that refusal separately.
+
+Focused offline checks: 35 passed under `runs/blast_rollup_final_focus_20261110`,
+covering one submit, two saved status observations on the same RID, locally
+aged forecasts without another NCBI call, the root's compact job view, and
+the monitor's one-observation stop. A later targeted regression under
+`runs/blast_spacing_root_regression_20261110` verifies the root still sees
+`WAITING` after a provider rate-spacing refusal. A101's current native credit projector
+requires a protein target; a whole-contig BLASTX result is not itself a scored
+A101 contribution. Full-genome annotation and autonomous root switching are
+still unvalidated.
+
 ## Current goal
 
 Goal-service status: `paused`, confirmed on 2026-11-09 UTC after completing the
@@ -4877,6 +4934,7 @@ No frozen workflow was restarted or reconfigured for this integration.
 
 | Date (UTC) | Scope | Confirmed finding / bookkeeping action |
 |---|---|---|
+| 2026-11-10 | Combined A101 BLAST job scheduling and root status | The pilot's blocking direct BLASTX path was stopped. The combined catalog now selects saved API handoffs when NCBI BLAST is configured; the BLAST service records submission time and a provisional remaining-time estimate at each actual status observation. A scientific owner and the root can read saved status for handoffs received through their parent path; root input is compact by annotation/A101/subject. An unresolved original job makes that arm's forecast unavailable rather than a false zero-gain stop. Focused offline checks pass 31/31 in `runs/blast_compact_root_focus_20261110`; autonomous cross-axis switching and whole-genome annotation remain unverified. Whole-contig BLASTX still does not directly satisfy the protein-target A101 credit projector. |
 | 2026-11-10 | A102 and A104 local task credit for resolved native results | `functional_feature_geometry` counts distinct resolved physical features from graded received native sheets whose `function_ref` is the commissioned proposed annotation; `functional_contrast` counts witnessed panels with that same function, including a valid zero. A104 `robustness` counts distinct evaluated comparisons with a current received assessment linking them to the commissioned annotation and scope; opposing/zero results still earn investigation credit. Saved-result focused tests pass. A broader three-file selection recorded 75 passes and one A104 report-schema failure at `function_scope` validation; that failure was not resolved here. A102 reference/trait/interface tasks and A104 panel/alignment preparation need separate local credit rules. |
 | 2026-11-10 | Episode-owned continuation binding replaces central policy | Delete the live `investigation_policy.py`, its fixed-case `assembled_case_policy.py` setup, and tests dedicated to that setup. The combined CLI now binds root credit, signed scores, and per-axis forecast settings in `SignedRootEpisodeBinding`; child runtime delegation asks the episode owner for its own controller. Scientific tasks validate their exact task and credit definition; literature tasks save yield settings with the original commission. HPC episodes can select their own settings from an authenticated durable commission; its current producers still need those settings. Ordinary execution and monitoring remain unresolved, so the combined run is not ready. Historical caller-injected workflows retain their saved controller path. The earlier shared base/role cutoff design in the next row is superseded for the combined run. |
 | 2026-11-10 | Keep scientific continuation on yield forecast; reserve `cost_by_task` for jobs | The prior policy incorrectly required each scientific-process/literature task to appear in `cost_by_task`. Scientific children now use the existing yield controller and base/role yield cutoff unless an optional `yield_cutoff_by_task` override is bound to the original task and credit definition. All scientific stops still compare the forecast upper bound with that cutoff; no new stopping gate or scoring-credit substitution is added. `cost_by_task` rejects A101–A110 task keys and accepts only long-running job role keys. Focused original-task, policy, assembled-root and numerical checks pass 32/32 under `runs/yield_only_task_cost_scope_checks_20261110_01/`. The previously stated need for a complete child `cost_by_task` table was incorrect. Root per-axis yield cutoffs remain required by the current policy and are not calibrated for the biological pilot. |
