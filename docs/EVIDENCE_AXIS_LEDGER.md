@@ -21,8 +21,9 @@ binding selects `scientific_process_results` and `committed_record_refs` and
 builds its closed return form; old saved selections with their own form remain
 replayable. A later shared envelope implementation was removed because it
 imposed one form rule across unrelated episode tasks. Other parent episodes
-still use their existing parent-selected forms and need separate return
-bindings. Focused root, original-credit, communication and contract tests:
+still select and freeze their own return forms for each child commission; those
+forms belong to the commissioning episode. Focused root, original-credit,
+communication and contract tests:
 157 passed under `runs/private_root_return_correction_20261110`. A fresh
 autonomous genome run has not yet verified the revised contract or any axis
 return. Full-genome annotation remains open.
