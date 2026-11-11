@@ -4105,7 +4105,7 @@ class Workflow:
                 raise ValueError('native_event_report_context_required')
             self.native_event_information.validate_report(native_context, value, schema)
         if assignment is not None:
-            self.job_episodes.validate_report(value, assignment, store=self.store, schema=schema)
+            self.job_episodes.validate_report(value, assignment, role=grain, store=self.store, schema=schema)
         elif self.resource_estimator is not None:
             validate_recorded_estimates(self.store, value, schema=schema,
                 reference_resolver=self.resolver(scope, source=source, grain=grain, context=context))

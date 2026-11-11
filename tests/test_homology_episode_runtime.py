@@ -296,10 +296,10 @@ def test_native_roles_return_forms_and_parent_receives_one_observation_per_child
         assert jobs.db.execute('SELECT count(*) FROM samples').fetchone()[0] == 4
         assert dict(store.db.execute('SELECT * FROM runtime_timed_commissions').fetchone()) == timer
         sample = json.loads(jobs.db.execute('SELECT body FROM samples LIMIT 1').fetchone()[0])
-        binding.validate_report({'latest': sample}, {'job_ref': handoffs[0]['job_ref']})
+        binding.validate_report({'latest': sample}, {'job_ref': handoffs[0]['job_ref']}, role='job_monitor')
         with pytest.raises(ReportBoundaryError, match='recorded values'):
             binding.validate_report({'latest': {**sample, 'elapsed_seconds': sample['elapsed_seconds']+1}},
-                                    {'job_ref': handoffs[0]['job_ref']})
+                                    {'job_ref': handoffs[0]['job_ref']}, role='job_monitor')
         stale = jobs._directory(handoffs[0]['job_ref'])/'statistics_recovery.json'
         stale.write_text('{"synthetic_old_diagnostic":true}')
         unlink = Path.unlink
@@ -616,7 +616,8 @@ def test_assigned_form_reference_names_follow_declared_namespaces(tmp_path):
             'estimate_ref': query, 'assigned_identity': assignment['job_ref']}
         contract = TypedReportContract('Use declared reference meanings', schema,
             workflow.resolver(scope, assignment=assignment),
-            lambda value: workflow.validate_report(value, scope, assignment=assignment, schema=schema))
+            lambda value: workflow.validate_report(value, scope, assignment=assignment,
+                grain='job_launch', schema=schema))
         assert contract.admit(report, audit_identifiers=('fixture-child',)).as_record() == report
         other = binding.assign(store, 'job_launch', {'query_ref': query, 'cpu': 1}, scope,
             operation_key='other-assignment')

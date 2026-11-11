@@ -15,7 +15,7 @@ from pathlib import Path
 from .communication import plain, validate_form
 from .domain import identity
 from .execution_contracts import canonical, checked, digest, obj
-from .launch_instructions import SELECTION_SCHEMA, retain_inherited_selection
+from .launch_instructions import SELECTION_SCHEMA
 from .practical_execution_operations import confined
 from .practical_execution_records import (ASSIGNMENT_SCHEMA, validate_assignment,
                                          validate_completion_proof, GENERIC_REQUESTED_JOB_SCHEMA)
@@ -67,6 +67,28 @@ NATIVE_RESULT_ORIGIN_SCHEMA = obj({key: {'type': 'string', 'enum': [value]}
                                   for key, value in NATIVE_RESULT_ORIGIN.items()})
 RESULTS_SCHEMA = obj({'version': {'const': RESULTS_VERSION}, 'handoff_ref': TEXT,
                       'selector': {'type': 'object'}})
+# A BLAST launch may request a graded database result while leaving the child
+# free to select its search program and, unless constrained, its database.
+# The original query operand is a required result identity, not a prewritten
+# service command.  A submitted RID is an intermediate handoff; the grader is
+# available after the separately selected results acquisition.
+BLAST_GRADED_REQUEST_VERSION = 'blast_database_grader_return_request_v1'
+BLAST_GRADED_REQUEST_SCHEMA = obj({
+    'version': {'const': BLAST_GRADED_REQUEST_VERSION},
+    'resource_id': TEXT,
+    'return_type': {'const': 'blast_database_sheet_v1'},
+    'query_subject_ref': TEXT,
+    'database': TEXT,
+}, ['version', 'resource_id', 'return_type', 'query_subject_ref'])
+BLAST_GRADED_RETURN_SOURCE = 'ncbi_blast_database_grader_result'
+BLAST_GRADED_RETURN_SCHEMA = {'type': 'array', 'items': obj({
+    'result_ref': {'type': 'string', 'format': 'reference',
+                   'x-reference-namespace': 'execution_result'},
+    'grading_artifact_ref': {'type': 'string', 'pattern': '^artifact_[0-9a-f]{64}$'},
+    'sheet_schema': {'const': 'blast_database_sheet_v1'},
+    'query_sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'},
+    'database': TEXT,
+}), 'x-source': BLAST_GRADED_RETURN_SOURCE}
 NATIVE_SELECTOR_SCHEMA = obj({'paths': {'type': 'array', 'minItems': 1,
     'uniqueItems': True, 'items': TEXT}, 'path': TEXT, 'offset': OFFSET, 'limit': LIMIT}, [])
 
@@ -845,7 +867,13 @@ class ExecutionEpisodes:
             return schema
         if role == 'launch':
             schema = obj({'version': {'const': LAUNCH_VERSION},
-                'requests': {'type': 'object', 'properties': {key: self._request_schema(key, selected=False, internal=internal, compact=False)
+                'requests': {'type': 'object', 'properties': {
+                    key: ({'anyOf': [self._request_schema(key, selected=False, internal=internal, compact=False),
+                            {**deepcopy(BLAST_GRADED_REQUEST_SCHEMA), 'properties': {
+                                **deepcopy(BLAST_GRADED_REQUEST_SCHEMA['properties']),
+                                'resource_id': {'const': key}}}]}
+                        if self.resources[key].get('service') == 'ncbi_blast' else
+                        self._request_schema(key, selected=False, internal=internal, compact=False))
                     for key in self.resources}, 'minProperties': 1, 'additionalProperties': False},
                 'immutable_input_versions': {'type': 'array', 'items': deepcopy(INPUT_VERSION_SCHEMA)},
                 'constraints': {'type': 'object'}})
@@ -907,11 +935,33 @@ class ExecutionEpisodes:
     def _launch(self, value, *, scope=None):
         value = checked(value, self.assignment_schema('launch', internal=True), 'invalid_execution_launch_assignment')
         for resource_id, request in value['requests'].items():
+            if request.get('version') == BLAST_GRADED_REQUEST_VERSION:
+                checked(request, BLAST_GRADED_REQUEST_SCHEMA,
+                        'blast_database_grader_return_request_invalid')
+                if (request['resource_id'] != resource_id
+                        or self.resources[resource_id].get('service') != 'ncbi_blast'):
+                    raise ValueError('blast_database_grader_resource_conflict')
+                continue
             self._validate_request(request, resource_id=resource_id)
             if scope is not None and KINDS[self.resources[resource_id]['kind']] == 'api':
                 self.api_execution.validate_assignment(request, scope=scope)
         self._constraints(value['constraints'])
         return value
+
+    def _blast_launch_requirement(self, request, resource_id, scope):
+        """Bind this launch's query and optional database from its parent request."""
+        checked(request, BLAST_GRADED_REQUEST_SCHEMA,
+                'blast_database_grader_return_request_invalid')
+        if request['resource_id'] != resource_id:
+            raise ValueError('blast_database_grader_resource_conflict')
+        subject_ref = request['query_subject_ref']
+        self.tool_registry._check_sequence_operand(subject_ref, plain(scope))
+        sequence = self.tool_registry._sequence(subject_ref,
+            molecule_model=self.store.subject_molecule(subject_ref))
+        return {'return_type': request['return_type'], 'query_subject_ref': subject_ref,
+                'query_length': len(sequence),
+                'query_sha256': hashlib.sha256(sequence.encode()).hexdigest(),
+                'database': request.get('database')}
 
     @staticmethod
     def _constraints(constraints):
@@ -1411,22 +1461,6 @@ class ExecutionEpisodes:
         return validate_chromatin_job_inputs(self.store, context, assignment,
             reference_access=self.resolve_received_reference)
 
-    def _match_request(self, assignment, selected):
-        resource_id = selected.get('resource_id')
-        if resource_id not in self.resources or not self._permitted(assignment, resource_id):
-            raise ValueError('execution_resource_selection_conflict')
-        expected = deepcopy(assignment['requests'][resource_id])
-        expected['resource_id'] = resource_id
-        retain_inherited_selection(assignment.get('launch_instructions'), selected.get('launch_instructions'))
-        retain_inherited_selection(expected.get('launch_instructions'), selected.get('launch_instructions'))
-        if ({key: value for key, value in selected.items() if key != 'launch_instructions'} !=
-                {key: value for key, value in expected.items() if key != 'launch_instructions'}):
-            raise ValueError('execution_original_request_conflict')
-        selectors = {'allowed_resource_ids', 'allowed_kinds', 'resource_id', 'kind'}
-        for key, value in assignment['constraints'].items():
-            if key not in selectors and selected['constraints'].get(key) != value:
-                raise ValueError('execution_parent_constraint_conflict')
-
     def _recorded_results_assignment(self, parent, selected, scope, operation_key):
         """Restore a successfully returned original Results commission only."""
         from .episode_receipts import EpisodeReceipts
@@ -1526,7 +1560,6 @@ class ExecutionEpisodes:
                 self.initial_references(child)
                 return selected
             original = self._launch(plain(parent.assignment))
-            self._match_request(original, selected)
             self._lumpy_inputs(parent, row['assignment'])
             self._versions(row['input_versions'], scope, context=parent, lumpy_assignments=[row['assignment']])
             return selected
@@ -1570,7 +1603,6 @@ class ExecutionEpisodes:
                 self.initial_references(child)
                 return selected
             original = self._launch(plain(parent.assignment))
-            self._match_request(original, selected)
             self._macs2_peak_inputs(parent, row['assignment'])
             self._versions(row['input_versions'], scope, context=parent, macs2_peak_assignments=[row['assignment']])
             return selected
@@ -1581,7 +1613,6 @@ class ExecutionEpisodes:
             if parent.role != 'launch':
                 raise ValueError('resource_child_role_owned_by_launch')
             original = self._launch(plain(parent.assignment))
-            self._match_request(original, selected)
             control = read_request_binding(self.store, self.run_id, parent.episode_id)
             row, = [row for row in control['requests'] if row['selection'] == selected]
             self._flux_balance_inputs(parent, row['assignment'], input_versions=row['input_versions'])
@@ -1679,7 +1710,8 @@ class ExecutionEpisodes:
         if parent.role != 'launch':
             raise ValueError('resource_child_role_owned_by_launch')
         original = self._launch(plain(parent.assignment))
-        self._match_request(original, selected)
+        if role == 'launch_api':
+            self._validate_blast_launch_selection(original, selected, scope)
         self._masking_inputs(parent, selected)
         self._utility_inputs(parent, selected)
         self._fluorescence_inputs(parent, selected)
@@ -1705,6 +1737,125 @@ class ExecutionEpisodes:
         from .native_rna_structure_result_publication import validate_rna_structure_job_inputs
         validate_rna_structure_job_inputs(self.store, parent, selected)
         return selected
+
+    def _validate_blast_launch_selection(self, launch, selected, scope):
+        """Apply only this BLAST request's stated query/database constraints."""
+        resource_id = selected['resource_id']
+        if resource_id not in launch['requests'] or not self._permitted(launch, resource_id):
+            raise ValueError('execution_resource_selection_conflict')
+        request = launch['requests'][resource_id]
+        if request.get('version') != BLAST_GRADED_REQUEST_VERSION:
+            return
+        required = self._blast_launch_requirement(request, resource_id, scope)
+        if selected.get('service') != 'ncbi_blast':
+            raise ValueError('blast_grader_selected_service_conflict')
+        prepared = self.api_execution.services[resource_id].prepare(
+            'api.blast.prepare', selected['request'], {}, scope=plain(scope), previous_events=[])
+        if prepared['sequence_sha256'] != required['query_sha256']:
+            raise ValueError('blast_grader_selected_query_conflict')
+        if required['database'] is not None and selected['request']['database'] != required['database']:
+            raise ValueError('blast_grader_selected_database_conflict')
+
+    def _validate_blast_api_parent_request(self, launch, selected, scope):
+        """Bind this API child's selected search to its immediate parent goal."""
+        resource_id = selected['resource_id']
+        request = launch['requests'].get(resource_id)
+        if request is None or request.get('version') != BLAST_GRADED_REQUEST_VERSION:
+            return
+        if selected.get('service') != 'ncbi_blast' or not self._permitted(launch, resource_id):
+            raise ValueError('blast_grader_selected_service_conflict')
+        subject_ref = request['query_subject_ref']
+        self.tool_registry._check_sequence_operand(subject_ref, plain(scope))
+        sequence = self.tool_registry._sequence(subject_ref,
+            molecule_model=self.store.subject_molecule(subject_ref))
+        prepared = self.api_execution.services[resource_id].prepare(
+            'api.blast.prepare', selected['request'], {}, scope=plain(scope), previous_events=[])
+        if prepared['sequence_sha256'] != hashlib.sha256(sequence.encode()).hexdigest():
+            raise ValueError('blast_grader_selected_query_conflict')
+        if request.get('database') is not None and selected['request']['database'] != request['database']:
+            raise ValueError('blast_grader_selected_database_conflict')
+
+    def _blast_target_requirement(self, target, scope):
+        """Rebuild the original BLAST return check from its launch request."""
+        if target['resource_kind'] != 'api' or target['assignment'].get('service') != 'ncbi_blast':
+            return None
+        row = self.store.db.execute('SELECT path FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+            (self.run_id, target['origin_episode_id'])).fetchone()
+        if row is None:
+            raise ValueError('blast_grader_original_launch_missing')
+        path = json.loads(row['path'])
+        if len(path) < 2 or path[-2][0] != 'launch':
+            raise ValueError('blast_grader_original_launch_path_invalid')
+        parent = self.store.db.execute('SELECT request FROM runtime_episodes WHERE run_id=? AND path=?',
+            (self.run_id, canonical(path[:-1]))).fetchone()
+        if parent is None:
+            raise ValueError('blast_grader_original_parent_missing')
+        launch = self._launch(json.loads(parent['request'])['message']['episode_assignment'], scope=scope)
+        request = launch['requests'].get(target['resource_id'])
+        if request is None or request.get('version') != BLAST_GRADED_REQUEST_VERSION:
+            return None
+        selected = target['assignment']
+        if selected.get('service') != 'ncbi_blast':
+            raise ValueError('blast_grader_selected_service_conflict')
+        subject_ref = request['query_subject_ref']
+        self.tool_registry._check_sequence_operand(subject_ref, plain(scope))
+        required_sequence = self.tool_registry._sequence(subject_ref,
+            molecule_model=self.store.subject_molecule(subject_ref))
+        required = {'return_type': request['return_type'], 'query_subject_ref': subject_ref,
+                    'query_length': len(required_sequence),
+                    'query_sha256': hashlib.sha256(required_sequence.encode()).hexdigest(),
+                    'database': request.get('database')}
+        prepared = self.api_execution.services[target['resource_id']].prepare(
+            'api.blast.prepare', selected['request'], {}, scope=plain(scope), previous_events=[])
+        if prepared['sequence_sha256'] != required['query_sha256']:
+            raise ValueError('blast_grader_selected_query_conflict')
+        if required['database'] is not None and selected['request']['database'] != required['database']:
+            raise ValueError('blast_grader_selected_database_conflict')
+        handoff = self.api_execution._read_handoff(target['handle'], plain(scope))
+        subject_ref = target['assignment']['request']['subject_ref']
+        sequence = self.tool_registry._sequence(subject_ref,
+            molecule_model=self.store.subject_molecule(subject_ref))
+        expected = hashlib.sha256(f'>{subject_ref}\n{sequence}'.encode()).hexdigest()
+        if handoff['snapshot']['request'].get('query_sha256') != expected:
+            raise ValueError('blast_grader_submitted_query_conflict')
+        return required
+
+    def _blast_grader_rows(self, context, result_refs, required):
+        """Return only original retained database-grader results that meet the request."""
+        from .tool_grading_artifacts import source_tool_grading_entries
+        rows = []
+        for reference in result_refs:
+            body = self.api_execution.read_result(reference, context.scope)
+            if body['target']['assignment'].get('service') != 'ncbi_blast':
+                continue
+            if body['target']['handle'] != plain(context.assignment)['handoff_ref']:
+                raise ValueError('blast_grader_result_handoff_conflict')
+            source = self.store.get(body['source_ref'])
+            graders = source_tool_grading_entries(self.store, source['id'])
+            if len(graders) != 1:
+                raise ValueError('blast_grader_result_required')
+            grading = graders[0]['grading']
+            sheet = grading.get('sheet')
+            if grading.get('failure') is not None or not isinstance(sheet, dict) or sheet.get('schema') != required['return_type']:
+                raise ValueError('blast_grader_result_type_conflict')
+            normalized = sheet.get('normalized_result') or {}
+            query, search = normalized.get('query') or {}, normalized.get('search') or {}
+            request = search.get('request') or {}
+            if (normalized.get('mode') != 'database' or normalized.get('resource') != 'api'
+                    or query.get('length') != required['query_length']
+                    or request.get('sequence_sha256') != required['query_sha256']
+                    or request.get('subject_ref') != body['service_request']['subject_ref']
+                    or request.get('database') != body['service_request']['database']):
+                raise ValueError('blast_grader_result_query_conflict')
+            database = search.get('database')
+            if not isinstance(database, str) or not database:
+                raise ValueError('blast_grader_native_database_missing')
+            if required['database'] is not None and database != required['database']:
+                raise ValueError('blast_grader_result_database_conflict')
+            rows.append({'result_ref': reference, 'grading_artifact_ref': graders[0]['artifact_ref'],
+                         'sheet_schema': sheet['schema'], 'query_sha256': required['query_sha256'],
+                         'database': database})
+        return rows
 
     def _delegate(self, context):
         assignment = self._validate_request(plain(context.assignment))
@@ -1744,25 +1895,25 @@ class ExecutionEpisodes:
     def initialize(self, context):
         from .lumpy_request_binding import is_compact_assignment as is_lumpy_assignment, is_compact_launch as is_lumpy_launch
         if is_lumpy_launch(plain(context.assignment)):
-            self.lumpy_requests.initialize(context)
+            self.lumpy_requests.initialize_launch(context)
             return
         if is_lumpy_assignment(plain(context.assignment)):
-            self.lumpy_requests.initialize(context)
+            self.lumpy_requests.initialize_resource(context)
             return self._delegate(context).initialize(self._practical_context(context))
 
         from .macs2_peak_request_binding import is_compact_assignment as is_macs2_assignment, is_compact_launch as is_macs2_launch
         if is_macs2_launch(plain(context.assignment)):
-            self.macs2_peak_requests.initialize(context)
+            self.macs2_peak_requests.initialize_launch(context)
             return
         if is_macs2_assignment(plain(context.assignment)):
-            self.macs2_peak_requests.initialize(context)
+            self.macs2_peak_requests.initialize_resource(context)
             return self._delegate(context).initialize(self._practical_context(context))
         from .flux_balance_request_binding import is_compact_assignment, is_compact_launch
         if is_compact_launch(plain(context.assignment)):
-            self.flux_balance_requests.initialize(context)
+            self.flux_balance_requests.initialize_launch(context)
             return
         if is_compact_assignment(plain(context.assignment)):
-            self.flux_balance_requests.initialize(context)
+            self.flux_balance_requests.initialize_resource(context)
             self.flux_balance_inputs.initialize(context)
             return self._delegate(context).initialize(self._practical_context(context))
         if self.local_file_sources.applies(context):
@@ -1779,6 +1930,9 @@ class ExecutionEpisodes:
             return self._delegate(context).initialize(context)
         if context.role == 'launch':
             value = self._launch(plain(context.assignment), scope=context.scope)
+            for resource_id, request in value['requests'].items():
+                if request.get('version') == BLAST_GRADED_REQUEST_VERSION:
+                    self._blast_launch_requirement(request, resource_id, context.scope)
             from .protein_structure_operands import validate_protein_structure_job_inputs
             for request in value['requests'].values():
                 self._masking_inputs(context, request)
@@ -1802,6 +1956,13 @@ class ExecutionEpisodes:
         else:
             target = self._target(context)
             self._selector(plain(context.assignment), target)
+            required = self._blast_target_requirement(target, context.scope)
+            if required is not None:
+                schema = plain(context.request)['report_contract']['measurements']['schema']
+                if not any(node.get('x-source') == BLAST_GRADED_RETURN_SOURCE
+                           and node == BLAST_GRADED_RETURN_SCHEMA
+                           for node in schema.get('properties', {}).values()):
+                    raise ValueError('blast_grader_typed_return_required')
             if (self._flux_balance_selector(plain(context.assignment))
                     or self._masking_selector(plain(context.assignment))
                     or self._utility_selector(plain(context.assignment))
@@ -1846,7 +2007,8 @@ class ExecutionEpisodes:
             (self.run_id, canonical(context.path[:-1]))).fetchone()
         if row is not None:
             original = self._launch(json.loads(row['request'])['message']['episode_assignment'])
-            self._match_request(original, plain(context.assignment))
+            if context.role == 'launch_api':
+                self._validate_blast_api_parent_request(original, plain(context.assignment), context.scope)
             self._masking_inputs(context, plain(context.assignment))
             self._utility_inputs(context, plain(context.assignment))
             self._fluorescence_inputs(context, plain(context.assignment))
@@ -3197,7 +3359,19 @@ class ExecutionEpisodes:
                 raise ValueError('execution_handoff_assignment_conflict')
             return target
         if context.role == 'launch':
-            self._match_request(self._launch(plain(context.assignment)), target['assignment'])
+            launch = self._launch(plain(context.assignment), scope=context.scope)
+            selected = target['assignment']
+            resource_id = target['resource_id']
+            request = launch['requests'].get(resource_id)
+            if request is not None and request.get('version') == BLAST_GRADED_REQUEST_VERSION:
+                self._validate_blast_launch_selection(launch, selected, context.scope)
+                handoff = self.api_execution._read_handoff(target['handle'], plain(context.scope))
+                subject_ref = selected['request']['subject_ref']
+                sequence = self.tool_registry._sequence(subject_ref,
+                    molecule_model=self.store.subject_molecule(subject_ref))
+                expected = hashlib.sha256(f'>{subject_ref}\n{sequence}'.encode()).hexdigest()
+                if handoff['snapshot']['request'].get('query_sha256') != expected:
+                    raise ValueError('blast_grader_submitted_query_conflict')
         elif context.role in ROLE_KINDS:
             if canonical(target['assignment']) != canonical(context.assignment):
                 raise ValueError('execution_handoff_assignment_conflict')
@@ -3771,6 +3945,13 @@ class ExecutionEpisodes:
         values['execution_blast_hsps'] = {'type': 'array', 'meaning':
             'Optional explicitly requested native measurements for all published HSPs of this acquired result. No automatic ranking, top-N or significance filter. target_coverage is native reference/hit coverage, not original gene-target coverage. HSP/reference records support later scoped reads; selected HSP references can instead be returned through a parent-chosen typed field. No functional assignment or annotation score.',
             'report_schema': {**deepcopy(BLAST_HSP_FACT_SCHEMA), 'x-source': 'execution_blast_hsps'}}
+        if role == 'results' and self.api_execution is not None and any(
+                service.service == 'ncbi_blast' for service in self.api_execution.services.values()):
+            values[BLAST_GRADED_RETURN_SOURCE] = {'type': 'array', 'meaning':
+                'Retained output of the original BLAST database grader. Each artifact contains the full '
+                'grader sheet and probabilities; query and any parent database constraint are checked '
+                'against the original submission and native report.',
+                'report_schema': deepcopy(BLAST_GRADED_RETURN_SCHEMA)}
         return values
 
     def _has_appservice(self):
@@ -4080,7 +4261,13 @@ class ExecutionEpisodes:
         if self.native_hmmer_results.applies(context):
             return {**native_empty, **self.native_hmmer_results.facts(context)}
         if context.role == 'launch_api' or context.role == 'results' and self._target(context)['resource_kind'] == 'api':
-            return {**native_empty, **self.api_execution.facts(context, completion_snapshot), 'execution_result_origin': None}
+            facts = self.api_execution.facts(context, completion_snapshot)
+            if context.role == 'results':
+                required = self._blast_target_requirement(self._target(context), context.scope)
+                if required is not None:
+                    facts[BLAST_GRADED_RETURN_SOURCE] = self._blast_grader_rows(
+                        context, facts['execution_result_refs'], required)
+            return {**native_empty, **facts, 'execution_result_origin': None}
         extra = self._delegate(context).facts(self._practical_context(context), completion_snapshot) if context.role in {'launch_local', 'launch_hpc'} else {}
         # Publication above completes before this operation's metadata snapshot.
         with self.store.read_snapshot():
@@ -4212,6 +4399,11 @@ class ExecutionEpisodes:
                         if not self.resolve(context, reference, 'execution_result'):
                             raise ValueError('execution_received_reference_unqualified')
                         references.append(reference)
+            if declared.get('x-source') == BLAST_GRADED_RETURN_SOURCE:
+                for row in form[name]:
+                    if not self.resolve(context, row['result_ref'], 'execution_result'):
+                        raise ValueError('blast_grader_result_reference_unqualified')
+                    references.append(row['result_ref'])
             if declared.get('x-source') in {'execution_handoff_refs', 'execution_result_refs', 'practical_receipt_refs',
                     'bvbrc_appservice_support_refs'}:
                 for reference in form[name]:

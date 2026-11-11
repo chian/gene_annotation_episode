@@ -409,11 +409,9 @@ class FluxBalanceRequestBindings:
         value = checked(selection, launch_assignment_schema(self.owner.resources), 'flux_balance_request_invalid_launch')
         self.owner._constraints(value['constraints'])
         rows = [self._row(parent, key, request) for key, request in value['requests'].items()]
-        for row in rows:
-            self.owner._match_request(value, row['selection'])
         return value, rows
 
-    def initialize(self, context):
+    def _recorded_control(self, context):
         saved = self.store.db.execute(f'SELECT 1 FROM {_TABLE} WHERE run_id=? AND episode_id=?',
             (context.run_id, context.episode_id)).fetchone()
         if saved is not None:
@@ -425,12 +423,32 @@ class FluxBalanceRequestBindings:
         if previous is not None:
             _require(previous['context'] == context.as_record(), 'original_context_conflict')
             return self._write(context, previous['requests'], previous['parent_file'], version=previous['version'])
+        return None
+
+    def initialize_launch(self, context):
+        """Build this FBA launch episode's selected scientific request control."""
+        _require(context.role == 'launch' and is_compact_launch(plain(context.assignment)),
+            'launch_context_required')
+        recorded = self._recorded_control(context)
+        if recorded is not None:
+            return recorded
+        root = self.owner.directory / 'fba-request-bindings' / digest([context.run_id, context.episode_id])
         _require(not root.exists() and self.owner.flux_balance_inputs._new_control_allowed(context),
             'original_control_missing')
-        if context.role == 'launch':
-            _, rows = self.preview(context, plain(context.assignment))
-            return self._write(context, rows)
-        _require(context.role == 'launch_local', 'resource_context_required')
+        _, rows = self.preview(context, plain(context.assignment))
+        return self._write(context, rows)
+
+    def initialize_resource(self, context):
+        """Bind this FBA resource episode to its selected launch request."""
+        _require(context.role == 'launch_local' and is_compact_assignment(plain(context.assignment)),
+            'resource_context_required')
+        recorded = self._recorded_control(context)
+        if recorded is not None:
+            return recorded
+        root = self.owner.directory / 'fba-request-bindings' / digest([context.run_id, context.episode_id])
+        _require(not root.exists() and self.owner.flux_balance_inputs._new_control_allowed(context),
+            'original_control_missing')
+        custody = AppServiceCustody(self.store, context.run_id)
         parent, _ = _commission(custody, context)
         original = read_request_binding(self.store, context.run_id, parent.episode_id)
         selection = plain(context.assignment)

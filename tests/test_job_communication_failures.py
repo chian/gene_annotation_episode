@@ -40,6 +40,21 @@ def launch_actions():
         action('homology.stage'), action('homology.submit'), action('homology.check_handoff')]
 
 
+def test_homology_return_binding_uses_the_child_role(tmp_path):
+    store, _, _, _, jobs, binding = prepared(tmp_path)
+    schema = {'type': 'object', 'properties': {
+        'progress': binding.fact_sources('job_results')['job_result_progress']['report_schema']},
+        'required': ['progress'], 'additionalProperties': False}
+    try:
+        with pytest.raises(ReportBoundaryError, match='does not belong'):
+            binding.validate_report({'progress': None}, {'job_ref': 'unused'},
+                role='job_launch', store=store, schema=schema)
+        binding.validate_report({'progress': None}, {'job_ref': 'unused'},
+            role='job_results', store=store, schema=schema)
+    finally:
+        cleanup(jobs, store)
+
+
 @pytest.mark.parametrize('failure_kind', ['receipt_write', 'control_timeout'])
 def test_closure_failure_returns_unavailable_handoff_and_preserves_selected_work(tmp_path, monkeypatch, failure_kind):
     store, tools, query, scope, jobs, binding = prepared(tmp_path)
@@ -95,7 +110,7 @@ def test_missing_order_during_closure_keeps_original_assignment_reference(tmp_pa
         form = {key: facts[key] for key in fields}
         contract = TypedReportContract('Retain the assigned identity and receiving failure', schema,
             lambda value, namespace=None: binding.resolve(store, scope, value, namespace, assignment=assignment),
-            lambda value: binding.validate_report(value, assignment, store=store, schema=schema))
+            lambda value: binding.validate_report(value, assignment, role='job_launch', store=store, schema=schema))
         assert contract.admit(form, audit_identifiers=('fixture-child',)).as_record() == form
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
     finally:
@@ -185,11 +200,11 @@ def test_registry_loss_after_sample_keeps_exact_sample_forecast_and_assigned_ide
         changed = deepcopy(form)
         changed['sample']['elapsed_seconds'] = (samples[0]['elapsed_seconds'] or 0) + 10
         with pytest.raises(ReportBoundaryError, match='Native sample fields'):
-            binding.validate_report(changed, assignments[0], store=store)
+            binding.validate_report(changed, assignments[0], role='job_monitor', store=store)
         changed = deepcopy(form)
         changed['execution_forecasts'][0]['expected_total_seconds'] = 0
         with pytest.raises(ReportBoundaryError):
-            binding.validate_report(changed, assignments[0], store=store)
+            binding.validate_report(changed, assignments[0], role='job_monitor', store=store)
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 8
         exported = json.loads(store.db.execute("SELECT json_extract(result,'$.execution_statistics_export') "
             "FROM runtime_actions WHERE json_extract(action,'$.tool')='homology.sample'").fetchone()[0])

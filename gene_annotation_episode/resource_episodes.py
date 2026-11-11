@@ -37,7 +37,7 @@ from .resource_records import (ROLES, RESOURCE_ROLES, LAUNCH_VERSION, RESULTS_VE
     FAILURE_SCHEMA, RECEIVER_SCHEMA, HANDOFF_SCHEMA, LAUNCH_SCHEMA, RESULTS_SCHEMA,
     _string, _reference, _array, _nullable, _validate)
 from .resource_information import ResourceInformation
-from .launch_instructions import retain_inherited_selection
+from .launch_instructions import validate_selection
 from .local_resources import LocalResources
 
 
@@ -173,6 +173,22 @@ class ResourceEpisodes:
             raise ValueError('resource_not_bound')
         return self.adapters[selection['resource_id']]
 
+    @staticmethod
+    def _require_launch_child_instruction_pins(parent_selection, child_selection):
+        """The resource launch parent owns the instruction pins it supplied."""
+        parent_selection = validate_selection(parent_selection)
+        child_selection = validate_selection(child_selection)
+        if parent_selection is None:
+            return
+        if (child_selection is None
+                or child_selection['library_id'] != parent_selection['library_id']):
+            raise ValueError('launch_instruction_inheritance_conflict')
+        retained = {(row['entry_id'], row['section_id'], row['sha256'])
+            for row in child_selection['sections']}
+        if any((row['entry_id'], row['section_id'], row['sha256']) not in retained
+                for row in parent_selection['sections']):
+            raise ValueError('launch_instruction_inheritance_conflict')
+
     def prepare_assignment(self, parent, role, selection, scope, operation_key):
         selected = plain(selection)
         # The common commissioning selection contains other fields (goal,
@@ -189,7 +205,7 @@ class ResourceEpisodes:
             inherited.pop('adapter_assignment', None)
             for key in LAUNCH_SCHEMA['properties']:
                 if key == 'launch_instructions':
-                    retain_inherited_selection(inherited.get(key), selected.get(key))
+                    self._require_launch_child_instruction_pins(inherited.get(key), selected.get(key))
                     continue
                 if key != 'resource_selection' and selected[key] != inherited[key]:
                     raise ValueError('resource_assignment_conflict')
@@ -354,10 +370,14 @@ class ResourceEpisodes:
     def resolve(self, context, reference, namespace):
         if reference_in_context(self.services, context, reference, namespace):
             return True
+        if context.role in RESOURCE_ROLES or context.role == 'results':
+            return self._adapter(context.assignment).resolve(context, reference, namespace)
         return any(adapter.resolve(context, reference, namespace) for adapter in self.adapters.values())
 
     def validate_report(self, context, form, original_schema):
-        for adapter in self.adapters.values():
+        adapters = (self.adapters.values() if context.role == 'launch'
+            else (self._adapter(context.assignment),))
+        for adapter in adapters:
             adapter.validate_report(context, form, original_schema)
         facts = self.facts(context, {})
         def visit(value, schema):
@@ -807,7 +827,7 @@ class HomologyResourceAdapter:
         source = self._legacy(context)
         if source is not None:
             self.homology.validate_report(form, self.homology.assignment(source),
-                store=self.store, schema=plain(original_schema))
+                store=self.store, schema=plain(original_schema), role=source.path[-1][0])
 
     def credit_view(self, context, receiver_selection):
         source = self._legacy(context)

@@ -57,13 +57,11 @@ class FluxBalanceExecutionInputs:
         _require(parent.role == "launch", "original_launch_required")
         from .flux_balance_request_binding import is_compact_assignment, materialized_assignment, read_request_binding
         if is_compact_assignment(plain(context.assignment)):
-            self.owner._match_request(plain(parent.assignment), plain(context.assignment))
             control = read_request_binding(self.store, context.run_id, context.episode_id)
             return materialized_assignment(self.store, context), control['requests'][0]['input_versions']
         assignment = validate_assignment(plain(context.assignment))
         _require("native_flux_balance" in assignment["requested_job"], "original_fba_assignment_required")
         original = plain(parent.assignment)
-        self.owner._match_request(original, assignment)
         versions = original.get("immutable_input_versions")
         _require(type(versions) is list, "original_versions_required")
         return assignment, versions

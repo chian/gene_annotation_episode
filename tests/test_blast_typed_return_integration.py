@@ -8,18 +8,62 @@ import pytest
 
 from gene_annotation_episode.blast_result_views import BLAST_HSP_FACT_SCHEMA
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.execution_episodes import (ExecutionEpisodes,
+    BLAST_GRADED_RETURN_SCHEMA)
 from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episode_reports import report_sources
+from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from gene_annotation_episode.api_blast import NCBIBlastService
 from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
 from test_api_blast_service import Client
-from test_api_service_integration import assignment
-from test_execution_episodes_family import launch_assignment
-from test_execution_wiring import child, controller, form
-from test_practical_runtime import selected
+
+
+def assignment(resource_id, service, request):
+    return {'version': 'api_service_assignment_v1', 'resource_id': resource_id,
+        'service': service, 'request': deepcopy(request), 'endpoint': 'usable_handoff',
+        'constraints': {}}
+
+
+def launch_assignment(requests):
+    return {'version': 'execution_launch_assignment_v1', 'requests': deepcopy(requests),
+        'immutable_input_versions': [], 'constraints': {}}
+
+
+def form(reference_field):
+    return {'type': 'object', 'properties': {
+        'completed': {'type': 'boolean', 'x-source': 'execution_completed'},
+        'references': {'type': 'array', 'uniqueItems': True, 'items': {
+            'type': 'string', 'format': 'reference',
+            'x-reference-namespace': ('execution_handoff' if reference_field == 'execution_handoff_refs'
+                                      else 'execution_result')}, 'x-source': reference_field},
+        'yield': report_sources()['episode_yield']['report_schema']},
+        'required': ['completed', 'references', 'yield'], 'additionalProperties': False}
+
+
+def child(role, selection, scope, schema):
+    return {'selection': {'kind': 'episode_child', 'role': role,
+        'goal': 'Run this fixture commission', 'scope': scope,
+        'purpose': 'Return the requested original recorded information',
+        'assignment': selection, 'schema_json': json.dumps(schema),
+        'initial_report_json': '{}'}, 'report_update': {}}
+
+
+def selected(name, arguments=None):
+    return {'selection': {'kind': 'tool', 'tool': name, 'arguments': arguments or {}},
+            'report_update': {}}
+
+
+def controller(path, initial):
+    role = path[-1][0]
+    def estimate(history, parameters, contexts):
+        count = 3 if role == 'annotation' else 1
+        return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= count else 1),
+            parameters, {'fixture': 'root_and_monitor_continuation_only'})
+    return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+        estimate_with_context=estimate if role in {'annotation', 'monitor'} else None)
 
 
 @pytest.mark.parametrize('scenario', ['ready', 'selected_status_waits', 'interrupted_submission', 'reported_mismatch'])
@@ -50,12 +94,16 @@ def test_parent_receives_native_scores_and_scoped_hsp_without_per_tool_task_pros
         target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
         scope = {'subject_refs': [target]}
         request = assignment('blast', 'ncbi_blast', {'subject_ref': target, 'program': 'blastp', 'database': 'swissprot'})
-        launch = launch_assignment({'blast': request})
+        launch = launch_assignment({'blast': {
+            'version': 'blast_database_grader_return_request_v1',
+            'resource_id': 'blast', 'return_type': 'blast_database_sheet_v1',
+            'query_subject_ref': target, 'database': 'swissprot'}})
         handoff_form = form('execution_handoff_refs')
         result_form = {'type': 'object', 'additionalProperties': False,
             'properties': {'complete': {'type': 'boolean', 'x-source': 'execution_completed'},
-                'matches': {**deepcopy(BLAST_HSP_FACT_SCHEMA), 'x-source': 'execution_blast_hsps'}},
-            'required': ['complete', 'matches']}
+                'matches': {**deepcopy(BLAST_HSP_FACT_SCHEMA), 'x-source': 'execution_blast_hsps'},
+                'grading': deepcopy(BLAST_GRADED_RETURN_SCHEMA)},
+            'required': ['complete', 'matches', 'grading']}
         monitor_form = {'type': 'object', 'additionalProperties': False,
             'properties': {'ready': {'type': ['boolean', 'null'], 'x-source': 'monitoring_result_available'}},
             'required': ['ready']}

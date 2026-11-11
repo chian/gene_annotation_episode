@@ -13,7 +13,6 @@ from .bvbrc_appservice_custody import AppServiceCustody
 from .communication import plain
 from .episode_bindings import BindingContext
 from .execution_contracts import canonical, checked, digest, obj
-from .flux_balance_request_binding import FluxBalanceRequestBindings, _commission
 from .genomic_overlap_result_receipts import immutable, read_control
 from .native_file_capture import _metadata, capture_native_file, retained_native_file
 from .practical_execution_records import validate_assignment
@@ -32,6 +31,12 @@ _TEXT = {'type': 'string', 'minLength': 1}
 def _require(condition, code):
     if not condition:
         raise ValueError('macs2_peak_request_' + code)
+
+
+def _macs2_resource_commission(custody, context):
+    saved = custody.store.db.execute('SELECT 1 FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+        (context.run_id, context.episode_id)).fetchone()
+    return custody._commission(context, unsaved=saved is None)
 
 
 def is_compact_assignment(value):
@@ -163,7 +168,7 @@ def read_request_binding(store, run_id, episode_id):
             _require(canonical(row['selection']) == canonical({**original['requests'][row['resource_id']],
                 'resource_id': row['resource_id']}), 'selection_conflict')
     else:
-        parent, _ = _commission(custody, context)
+        parent, _ = _macs2_resource_commission(custody, context)
         original = read_request_binding(store, run_id, parent.episode_id)
         _require(value['parent_file'] == original['file'] and len(value['requests']) == 1, 'parent_control_conflict')
         row = value['requests'][0]
@@ -200,10 +205,44 @@ def match_practical_public_outcome(value, receipt, reference):
         changed_record_refs=[reference], result=practical_outcome_view(receipt))), 'public_outcome_conflict')
 
 
-class Macs2PeakRequestBindings(FluxBalanceRequestBindings):
-    """Use existing practical-history authority with a separate closed profile."""
+class Macs2PeakRequestBindings:
+    """Private MACS2 peak launch and resource bindings."""
     def __init__(self, owner):
         self.owner, self.store = owner, owner.store
+
+    def validate_practical_history(self, context, practical_context, practical):
+        """Authenticate this MACS2 resource child's recorded peak job receipts."""
+        from .practical_receipt_information import PracticalReceiptInformation
+        _require(context.role == 'launch_local' and is_compact_assignment(plain(context.assignment)),
+            'resource_context_required')
+        control = read_request_binding(self.store, context.run_id, context.episode_id)
+        row, = control['requests']
+        _require(canonical(row['assignment']) == canonical(plain(practical_context.assignment))
+            and 'native_macs2_peak' in row['assignment']['requested_job'],
+            'original_practical_assignment_conflict')
+        actions = list(self.store.db.execute('SELECT decision_index,result FROM runtime_actions '
+            'WHERE run_id=? AND episode_id=?', (context.run_id, context.episode_id)))
+        if not (practical._state_directory(practical_context) / 'assignment.json').is_file():
+            _require(not actions, 'original_practical_state_missing')
+            return
+        state = practical.state(practical_context)
+        _require(canonical(state.assignment) == canonical(row['assignment']),
+            'original_practical_assignment_conflict')
+        receipts = state.receipts()
+        receipt_keys = {receipt['operation_key'] for receipt in receipts}
+        committed = {f'{context.run_id}:{context.episode_id}:{action["decision_index"]}'
+            for action in actions if action['result'] is not None
+            and json.loads(action['result']).get('status') in {'completed', 'partial'}}
+        _require(committed <= receipt_keys, 'original_practical_receipt_missing')
+        information = PracticalReceiptInformation(self.store, context.run_id)
+        for receipt in receipts:
+            selected = information._selected(receipt)
+            sources = information._sources(information._accession(context.episode_id, receipt['operation_key']))
+            _require(len(sources) == 1 if selected['result'] is not None else len(sources) <= 1,
+                'original_practical_publication_missing')
+            if sources:
+                body = information.read(sources[0]['id'], context.scope)
+                _require(canonical(body['receipt']) == canonical(receipt), 'original_practical_receipt_conflict')
 
     def _write(self, context, rows, parent_file=None):
         value = dict(version=CONTROL_VERSION, run_id=context.run_id, episode_id=context.episode_id,
@@ -261,11 +300,9 @@ class Macs2PeakRequestBindings(FluxBalanceRequestBindings):
         value = checked(selection, launch_assignment_schema(self.owner.resources), 'macs2_peak_request_invalid_launch')
         self.owner._constraints(value['constraints'])
         rows = [self._row(parent, key, request) for key, request in value['requests'].items()]
-        for row in rows:
-            self.owner._match_request(value, row['selection'])
         return value, rows
 
-    def initialize(self, context):
+    def _recorded_control(self, context):
         exists = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (_TABLE,)).fetchone()
         saved = (None if exists is None else self.store.db.execute(
             f'SELECT 1 FROM {_TABLE} WHERE run_id=? AND episode_id=?',
@@ -279,16 +316,39 @@ class Macs2PeakRequestBindings(FluxBalanceRequestBindings):
         if previous is not None:
             _require(canonical(previous['context']) == canonical(context.as_record()), 'original_context_conflict')
             return self._write(context, previous['requests'], previous['parent_file'])
+        return None
+
+    def initialize_launch(self, context):
+        """Build this launch episode's MACS2 peak request control."""
+        _require(context.role == 'launch' and is_compact_launch(plain(context.assignment)),
+            'launch_context_required')
+        recorded = self._recorded_control(context)
+        if recorded is not None:
+            return recorded
+        root = self.owner.directory / 'macs2-request-bindings' / digest([context.run_id, context.episode_id])
         practical = self.owner.directory / 'practical-execution' / digest(dict(run_id=context.run_id, episode_id=context.episode_id))
         _require(not root.exists() and not practical.exists() and all(self.store.db.execute(
             f'SELECT 1 FROM {table} WHERE run_id=? AND episode_id=? LIMIT 1',
             (context.run_id, context.episode_id)).fetchone() is None for table in
             ('runtime_actions', 'runtime_model_calls', 'runtime_forms', 'runtime_observations')), 'original_control_missing')
-        if context.role == 'launch':
-            _, rows = self.preview(context, plain(context.assignment))
-            return self._write(context, rows)
-        _require(context.role == 'launch_local', 'resource_context_required')
-        parent, _ = _commission(custody, context)
+        _, rows = self.preview(context, plain(context.assignment))
+        return self._write(context, rows)
+
+    def initialize_resource(self, context):
+        """Bind this MACS2 resource episode to its selected launch request."""
+        _require(context.role == 'launch_local' and is_compact_assignment(plain(context.assignment)),
+            'resource_context_required')
+        recorded = self._recorded_control(context)
+        if recorded is not None:
+            return recorded
+        root = self.owner.directory / 'macs2-request-bindings' / digest([context.run_id, context.episode_id])
+        practical = self.owner.directory / 'practical-execution' / digest(dict(run_id=context.run_id, episode_id=context.episode_id))
+        _require(not root.exists() and not practical.exists() and all(self.store.db.execute(
+            f'SELECT 1 FROM {table} WHERE run_id=? AND episode_id=? LIMIT 1',
+            (context.run_id, context.episode_id)).fetchone() is None for table in
+            ('runtime_actions', 'runtime_model_calls', 'runtime_forms', 'runtime_observations')), 'original_control_missing')
+        custody = AppServiceCustody(self.store, context.run_id)
+        parent, _ = _macs2_resource_commission(custody, context)
         original = read_request_binding(self.store, context.run_id, parent.episode_id)
         selection = plain(context.assignment)
         row, = [row for row in original['requests'] if row['resource_id'] == selection['resource_id']]

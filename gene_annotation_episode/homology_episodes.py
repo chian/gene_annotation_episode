@@ -82,13 +82,17 @@ class HomologyEpisodes:
             raise TypeError('explicit_homology_resources_required')
         if not callable(credit_projector) or not isinstance(credit_binding, dict) or not credit_binding:
             raise ValueError('explicit_operational_credit_binding_required')
-        self.jobs, self.parser_policy, self.project_credit = jobs, parser_policy, credit_projector
-        # Copy caller-owned policy; episode content cannot replace it.
-        self.credit_binding = json.loads(json.dumps(credit_binding, allow_nan=False))
+        self.jobs, self.parser_policy, self._job_credit_calculator = jobs, parser_policy, credit_projector
         if not callable(monitoring_projector) or not isinstance(monitoring_binding, dict) or not monitoring_binding:
             raise ValueError('explicit_monitoring_credit_binding_required')
         self.monitoring_projector = monitoring_projector
-        self.monitoring_binding = json.loads(json.dumps(monitoring_binding, allow_nan=False))
+        # The calculators are reusable functions. Each job episode owns its
+        # binding and its selected role-specific invocation.
+        self._role_credit_bindings = {
+            'job_launch': json.loads(json.dumps(credit_binding, allow_nan=False)),
+            'job_monitor': json.loads(json.dumps(monitoring_binding, allow_nan=False)),
+            'job_results': json.loads(json.dumps(credit_binding, allow_nan=False)),
+        }
         if statistics is not None:
             from .execution_recording import HomologyStatistics
             if type(statistics) is not HomologyStatistics:
@@ -130,12 +134,12 @@ class HomologyEpisodes:
             registry_ref=self.jobs.config['registry_ref'], original_binding=original)
 
     def as_record(self):
-        return {'version': 'shared_homology_episode_binding_v3',
+        return {'version': 'homology_episode_bindings_v4',
                 'registry_directory': str(self.jobs.directory), 'registry_configuration': self.jobs.config,
-                'parser_policy': self.parser_policy.to_dict(), 'credit_projector': _binding(self.project_credit),
-                'credit_binding': deepcopy(self.credit_binding),
+                'parser_policy': self.parser_policy.to_dict(),
+                'job_credit_calculator': _binding(self._job_credit_calculator),
                 'monitoring_projector': _binding(self.monitoring_projector),
-                'monitoring_binding': deepcopy(self.monitoring_binding),
+                'role_credit_bindings': deepcopy(self._role_credit_bindings),
                 'monitoring_projector_parameters': (self.monitoring_projector.as_record()
                     if callable(getattr(self.monitoring_projector, 'as_record', None)) else None),
                 'statistics': None if self.statistics is None else self.statistics.as_record()}
@@ -372,17 +376,33 @@ class HomologyEpisodes:
         # No implicit live poll, scientific state dump or private child history.
         return {'role': source.path[-1][0], 'assignment': self.assignment(source)}
 
+    def _launch_credit(self, store, assignment, episode_id, run_id):
+        return self._job_credit_calculator(store, role='job_launch', assignment=deepcopy(assignment),
+            episode_id=episode_id, run_id=run_id)
+
+    def _monitor_credit(self, store, assignment, episode_id, run_id):
+        return self.monitoring_projector(store, role='job_monitor', assignment=deepcopy(assignment),
+            episode_id=episode_id, run_id=run_id)
+
+    def _results_credit(self, store, assignment, episode_id, run_id):
+        return self._job_credit_calculator(store, role='job_results', assignment=deepcopy(assignment),
+            episode_id=episode_id, run_id=run_id)
+
     def initial_credit(self, store, role, assignment, episode_id, run_id):
-        projector = self.monitoring_projector if role == 'job_monitor' else self.project_credit
-        value = projector(store, role=role, assignment=deepcopy(assignment),
-                                    episode_id=episode_id, run_id=run_id)
+        bindings = {'job_launch': self._launch_credit,
+            'job_monitor': self._monitor_credit, 'job_results': self._results_credit}
+        if role not in bindings:
+            raise ValueError('unknown_job_episode_role')
+        value = bindings[role](store, assignment, episode_id, run_id)
         value = float(value['credit'] if isinstance(value, dict) else value)
         if not math.isfinite(value):
             raise ValueError('finite_operational_credit_required')
         return value
 
     def binding_for(self, role):
-        return deepcopy(self.monitoring_binding if role == 'job_monitor' else self.credit_binding)
+        if role not in self._role_credit_bindings:
+            raise ValueError('unknown_job_episode_role')
+        return deepcopy(self._role_credit_bindings[role])
 
     def credit_kind(self, role):
         """Declare the information kind of the existing controller projection."""
@@ -687,7 +707,40 @@ class HomologyEpisodes:
                     facts['job_result_progress_failure'] = 'coverage_read_failed'
         return facts
 
-    def validate_report(self, value, assignment, *, store=None, schema=None):
+    def validate_report(self, value, assignment, *, role, store=None, schema=None):
+        """Select the owning job episode's return binding explicitly."""
+        bindings = {
+            'job_launch': self._validate_launch_return,
+            'job_monitor': self._validate_monitor_return,
+            'job_results': self._validate_results_return,
+        }
+        if role not in bindings:
+            raise ValueError('homology_return_role_required')
+        bindings[role](value, assignment, store=store, schema=schema)
+
+    def _validate_launch_return(self, value, assignment, *, store, schema):
+        self._validate_role_return_sources('job_launch', schema)
+        self._validate_recorded_return(value, assignment, store=store, schema=schema)
+
+    def _validate_monitor_return(self, value, assignment, *, store, schema):
+        self._validate_role_return_sources('job_monitor', schema)
+        self._validate_recorded_return(value, assignment, store=store, schema=schema)
+
+    def _validate_results_return(self, value, assignment, *, store, schema):
+        self._validate_role_return_sources('job_results', schema)
+        self._validate_recorded_return(value, assignment, store=store, schema=schema)
+
+    def _validate_role_return_sources(self, role, schema):
+        if schema is None:
+            return
+        allowed = self.fact_sources(role)
+        for node in schema.get('properties', {}).values():
+            source = node.get('x-source')
+            if isinstance(source, str) and source.startswith(('job_', 'monitoring_')) and source not in allowed:
+                raise ReportBoundaryError('Fact does not belong to this job episode',
+                    code='homology_return_source_role_conflict')
+
+    def _validate_recorded_return(self, value, assignment, *, store=None, schema=None):
         """References and native fact fields must describe their actual record.
 
         Parent-defined names/interpretations remain allowed. A declared native
