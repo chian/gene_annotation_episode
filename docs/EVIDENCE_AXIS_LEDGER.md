@@ -5,6 +5,28 @@ This is the central progress record for evidence axes. Individual implementation
 documents and dated run reports supply detail; they do not independently set an
 axis's current status.
 
+## 2026-11-10 NC_001560.1 combined full-run retry
+
+A fresh combined run used the recorded nine-axis settings and the complete
+NC_001560.1 genome under
+`runs/alpharhabdovirinae_nc001560_full_retry_20261110/`. The root first made
+two invalid child requests without a proposed annotation, then committed one
+proposal and started an A101 scientific child. That child selected a Launch
+episode for one whole-genome `blastx` request against `nr_clustered_seq`, so
+the revised root return form passed its first live commissioning boundary.
+
+Launch could not commission its `launch_api` child. Its parent assignment
+retained `assigned_scope` and `handoff_is_not_homology_evidence` constraints,
+while the selected NCBI request declared empty API constraints. The execution
+parent check requires the child to repeat the inherited constraints; the API
+service validator rejects those same keys. Saved model feedback alternated
+between `execution_parent_constraint_conflict` and
+`api_service_constraint_conflict` for those keys. No child assignment can
+satisfy both checks. The run was manually stopped after 521 seconds to avoid
+more rejected calls. It saved 15 model calls, five actions and three episodes,
+but no BLAST handoff or evidence-axis result. Peak workflow memory was about
+1.14 GB, with no OOM event. No application code was changed during this run.
+
 ## 2026-11-10 combined-root child return contract correction
 
 The NC_001560.1 combined retry was manually interrupted after 496 seconds and
