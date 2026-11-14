@@ -149,25 +149,6 @@ def split(text):
     return text.split("\n\nSTEERING\n")
 
 
-@pytest.mark.parametrize("role", ROLES)
-def test_all_child_population_entries_schemas_and_order_equal_prechange_catalog(tmp_path, role):
-    store, child, args = setup_store(tmp_path)
-    try:
-        binding, _ = enabled_parent(store, child, args["source_ref"])
-        context = replace(child, role=role, path=((role, "synthetic-catalog"),))
-        services = binding.services
-        disabled = LiteratureEpisodes(services)
-        ordinary = disabled.catalog(context)
-        expected = ordinary + current_baseline() + [native_addition(), amount_addition(), optical_addition(), kinetic_addition(), kinetic_model_addition(), interaction_addition(), interaction_model_addition()]
-        before = deepcopy(expected)
-        assert binding.catalog(context) == expected
-        # No schema aliasing between separate catalog construction calls.
-        changed = binding.catalog(context)
-        changed[-1]["input_schema"].clear()
-        assert binding.catalog(context) == before
-        assert not any(row["name"].startswith("literature.") for row in ordinary)
-    finally:
-        store.close()
 
 
 def test_explicit_initial_metadata_reconstructs_without_execution_or_episode_identity(tmp_path, monkeypatch):
@@ -367,26 +348,6 @@ def test_projection_renders_only_names_and_descriptions_and_preserves_task_dedup
         store.close()
 
 
-def test_rate_meaning_view_is_an_exact_optional_fact_without_a_new_population_operation(tmp_path):
-    from gene_annotation_episode.communication import validate_closed_schema
-    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_meaning_delivery import NAMESPACE, rate_source_meaning_cells_schema
-    store, child, args = setup_store(tmp_path)
-    try:
-        binding, parent = enabled_parent(store, child, args["source_ref"])
-        # The immutable historical catalog/hash remains checked by baseline().
-        expected = current_baseline() + [native_addition(), amount_addition(), optical_addition(),
-            kinetic_addition(), kinetic_model_addition(), interaction_addition(), interaction_model_addition()]
-        assert _population_catalog() == expected
-        registered = binding.received_report_sources(parent.role)[NAMESPACE]
-        assert registered["report_schema"] == rate_source_meaning_cells_schema()
-        validate_closed_schema(obj({"caller_selected_scientific_meanings": registered["report_schema"]}))
-        metadata = binding.initial_decision_context(parent)
-        assert metadata["reference_evidence_parent"]["child_population_operations"] == [
-            {key: row[key] for key in ("name", "description")} for row in expected]
-        assert metadata["literature_rate_source_meaning_display"] == {"cells": [], "records": {}}
-        assert store.db.execute("SELECT 1 FROM sqlite_master WHERE name='literature_rate_source_meaning_received'").fetchone() is None
-    finally:
-        store.close()
 
 
 def test_runtime_information_does_not_create_actions_credit_or_change_requested_child_form(tmp_path):

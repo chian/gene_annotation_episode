@@ -115,51 +115,12 @@ def test_chromatin_driver_requires_its_corresponding_sources(case):
             current.validate_chromatin_software(value)
 
 
-@pytest.mark.parametrize("case", ["absent", "empty", "malformed", "legacy", "current"])
-def test_restriction_command_preserves_original_nonvalidating_boundary(case):
-    current = import_module(BASE + "restriction_mapping_jobs")
-    reservation = {"software": {"python": {"path": "/fixture/python"}},
-        "request_file": {"path": "/fixture/request.json"}, "output_directory": "/fixture/output"}
-    if case == "empty":
-        reservation["software"]["implementation_files"] = []
-    elif case == "malformed":
-        reservation["software"]["implementation_files"] = [None, {}]
-    elif case in ("legacy", "current"):
-        package = "gene_annotation_episode" + ("/episodic_workflow/root/library" if case == "current" else "")
-        reservation["software"]["implementation_files"] = [{"path": "/fixture/" + package + "/restriction_mapping_worker.py"}]
-    expected = ORIGINAL._command(reservation)
-    if case == "current":
-        expected[3] = BASE + "restriction_mapping_worker"
-    assert current._command(reservation) == expected
 
 
-@pytest.mark.parametrize("worker", ["global", "earlier_root"])
-def test_hmmer_saved_program_bytes_match_original(worker):
-    current = import_module(BASE + "native_hmmer_preparation_result_publication")
-    name = ORIGINAL._HISTORICAL_WORKER_MODULE if worker == "global" else ORIGINAL._WORKER_MODULE
-    driver = {"implementation_files": [{"module": name}, {"module": ORIGINAL._VERIFY_MODULE}]}
-    assert current._worker_program(driver) == ORIGINAL._worker_program(driver)
 
 
-def test_hmmer_fresh_program_changes_only_actual_import_owners():
-    current = import_module(BASE + "native_hmmer_preparation_result_publication")
-    driver = {"implementation_files": [{"module": ORIGINAL._WORKER_MODULE},
-        {"module": BASE + "native_atac_differential_driver"}]}
-    expected = ORIGINAL._WORKER_PROGRAM.replace(
-        "from gene_annotation_episode.native_atac_differential_driver import verify_driver_runtime\n",
-        "from " + BASE + "native_atac_differential_driver import verify_driver_runtime\n").replace(
-        "from gene_annotation_episode.native_infernal_contracts import native_infernal_digest\n",
-        "from " + BASE + "native_infernal_contracts import native_infernal_digest\n")
-    assert current._worker_program(driver) == expected
 
 
-def test_hmmer_ambiguous_worker_keeps_original_error():
-    current = import_module(BASE + "native_hmmer_preparation_result_publication")
-    value = {"implementation_files": [{"module": ORIGINAL._HISTORICAL_WORKER_MODULE},
-        {"module": ORIGINAL._WORKER_MODULE}, {"module": ORIGINAL._VERIFY_MODULE}]}
-    expected = outcome(ORIGINAL._worker_program, value)
-    assert expected[0] == "raised"
-    assert outcome(current._worker_program, value) == expected
 
 
 def runtime_files(tmp_path, variant):

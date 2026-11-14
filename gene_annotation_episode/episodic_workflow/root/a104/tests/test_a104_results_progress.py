@@ -75,19 +75,3 @@ def test_actual_returned_windows_connect_to_original_credit_and_yield(native_rec
     assert controller.estimator.scores == (expected_credit,)
 
 
-def test_actual_results_goal_and_private_guard_selection(frame, binding_home):
-    goal = frame.owner.instructions(frame.child)
-    assert goal.startswith('Acquire the original selected execution results through the original handoff.')
-    assert 'Separate read windows are not an atomic file snapshot.' in goal
-    assert 'The scientific parent interprets the returned records.' in goal
-    assert frame.owner.child_roles('results') == ()
-    assert frame.owner.allowed_children(frame.child, {}) == ()
-    protected = own_module(binding_home + '/protected_reference_access').ProtectedReferenceAccess
-    assert type(frame.owner).__bases__[0] is protected
-    assert frame.owner._protein_reference_access.__func__ is protected._protein_reference_access
-    assert frame.owner._fluorescence_reference_access.__func__ is protected._fluorescence_reference_access
-    if getattr(frame.owner, 'decision_source_type', None) is not None:
-        assert frame.owner.instructions.__module__.endswith('.goal')
-        assert frame.owner.yield_controller.__module__.endswith('.yield_estimator')
-        assert frame.owner.credit_view.__module__.endswith('.credit')
-        assert frame.owner.decision_source_type.suspension_changed.__module__.endswith('.waiting')

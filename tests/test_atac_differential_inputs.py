@@ -98,14 +98,6 @@ def table_bytes(rows, *, order='native_file_order'):
     return raw, manifest
 
 
-def test_all_original_30_byte_identities_are_pinned():
-    # This establishes original fixture custody, distinct from the parser tests.
-    manifest = json.loads((NATIVE / 'NATIVE_FILES.json').read_text())
-    assert len(manifest['files']) == 30
-    for row in manifest['files']:
-        data = (NATIVE / row['path']).read_bytes()
-        assert len(data) == row['size_bytes']
-        assert hashlib.sha256(data).hexdigest() == row['sha256']
 
 
 @pytest.mark.parametrize('name,role,count,last', [

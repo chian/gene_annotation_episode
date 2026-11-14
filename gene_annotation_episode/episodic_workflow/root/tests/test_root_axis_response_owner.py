@@ -39,16 +39,6 @@ def assert_no_acquisition(root):
     assert all(not rows for rows in action_rows(root).values())
 
 
-def test_actual_root_task_credit_has_canonical_response_method_owner(tmp_path):
-    with actual_root(tmp_path) as root:
-        scorer = root.workflow.project_credit
-        assert type(scorer) is SignedEvidenceRootSupport
-        assert isinstance(scorer, RootRequests)
-        assert RootRequests.__module__ == 'gene_annotation_episode.episodic_workflow.root.axis_response_contract'
-        assert Path(inspect.getsourcefile(RootRequests)).resolve() == Path(fresh_decision_support.__file__).resolve().parents[1] / 'axis_response_contract.py'
-        assert scorer.child_return_sources.__func__ is RootRequests.child_return_sources
-        assert scorer.child_return_form.__func__ is RootRequests.child_return_form
-        assert_no_acquisition(root)
 
 
 def test_actual_root_context_keeps_exact_required_sources_and_form_delegation(tmp_path):

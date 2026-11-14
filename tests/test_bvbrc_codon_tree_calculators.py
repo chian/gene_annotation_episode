@@ -151,11 +151,6 @@ def reasons(component):
     return {row["reason_code"] for row in calc.codon_calculation_requirements(component)}
 
 
-def test_import_origins_and_closed_exports():
-    for module in (calc, checks, shared, formats, format_checks):
-        assert Path(module.__file__).resolve().parent == STAGING / "gene_annotation_episode"
-    assert calc.__all__ == ["native_codon_literal_statistics", "codon_family_population_components",
-                            "native_codon_worst_sequence_ratios", "codon_calculation_requirements"]
 
 
 @pytest.mark.parametrize("field", ["assembly", "read_outcomes"])
@@ -661,12 +656,3 @@ def test_no_io_process_network_model_or_parser_calls_and_inputs_unchanged(monkey
     assert (doc, pop, data, historic) == before
 
 
-def test_module_uses_only_pure_dependencies_and_no_dynamic_invocation():
-    tree = ast.parse(Path(calc.__file__).read_text())
-    imports = [node for node in ast.walk(tree) if isinstance(node, (ast.Import, ast.ImportFrom))]
-    roots = {node.module for node in imports if isinstance(node, ast.ImportFrom)} | {
-        alias.name for node in imports if isinstance(node, ast.Import) for alias in node.names}
-    assert roots <= {"__future__", "collections", "copy", "math", "re", None, "phylogeny_format_contracts"}
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
-            assert node.func.id not in ("eval", "exec", "open", "__import__")

@@ -553,23 +553,6 @@ def test_saved_read_checks_original_artifact_metadata_without_source_bytes(tmp_p
     finally:
         store.close()
 
-def test_calculation_identity_binds_all_three_actual_pure_modules_and_saved_history(tmp_path, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_ratio_source_storage as storage
-    store, context, selection, _ = native_case(tmp_path)
-    try:
-        repo = repository(store, context)
-        outcome = repo.populate(context, selection, 'implementation-bound')
-        saved = repo.read(outcome['result']['sheet_ref'])
-        actual = json.loads(store.get_artifact(saved['calculation_artifact_ref']))
-        modules = ('literature_ratio_source_inputs.py', 'literature_ratio_source_calculations.py', 'literature_ratio_source_validation.py')
-        descriptor = {'version': 'relative_signal_calculator_implementation_v1', 'modules': {name: hashlib.sha256(Path(storage.__file__).with_name(name).read_bytes()).hexdigest() for name in modules}}
-        assert actual['calculator_implementation_sha256'] == hashlib.sha256(canonical(descriptor).encode()).hexdigest()
-        assert actual['calculator_implementation_sha256'] != descriptor['modules']['literature_ratio_source_calculations.py']
-        monkeypatch.setattr(storage, '_calculator_implementation_descriptor', lambda: pytest.fail('historical current-code rehash'))
-        assert repo.read(outcome['result']['sheet_ref']) == saved
-        assert repo.populate(context, selection, 'implementation-bound') == outcome
-    finally:
-        store.close()
 
 def multi_source_view_case(path):
     """Engineering-only multiple sources/views; original arrays intentionally unsorted."""

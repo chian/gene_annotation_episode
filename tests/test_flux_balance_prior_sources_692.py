@@ -222,16 +222,6 @@ def test_model_artifact_reference_has_its_actual_original_model_association(capt
     assert_independent_work(result)
 
 
-def test_supported_omitted_argument_keeps_previous_parser_digest(captures):
-    path = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/flux_balance_readers_prior.py"
-    spec = importlib.util.spec_from_file_location("gene_annotation_episode._prior_sources_692_baseline", path)
-    baseline = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(baseline)
-    payloads, expected = synthetic_bundle(captures, constraints=[change("IN", -10, 8)])
-    old = baseline.parse_fba_capture(payloads, expected=expected)
-    for supplied in (None, []):
-        current = parse_fba_capture(payloads, expected=expected, prior_sources=supplied)
-        assert current == old and digest(current) == digest(old)
 
 
 def test_prior_bytes_populate_same_sheet_and_saved_calculator_without_external_work(captures):

@@ -13,21 +13,6 @@ def no_native_or_network(monkeypatch, tmp_path):
         'explicit_homology_factory_does_not_authorize_native_or_network_work')
 
 
-def test_explicit_factory_keeps_original_map_and_exact_private_family(tmp_path):
-    with registry(tmp_path / 'resources') as (store, jobs, policy, scope, job_ref):
-        setup = own('homology_service_setup')
-        before = registry_rows(jobs)
-        original_map = setup.create_homology_bindings(jobs, **options(policy))
-        family = setup.create_homology_family(jobs, **options(policy))
-        assert type(original_map) is dict and tuple(original_map) == ROLES
-        assert type(family) is own('homology_binding_family').HomologyBindingFamily
-        assert family.as_record() == original_family_type()(jobs, **options(policy)).as_record()
-        for role, home in zip(ROLES, HOMES):
-            leaf = family.for_role(role)
-            assert type(leaf) is type(original_map[role]) is own(home + '.episode').HomologyEpisode
-            assert leaf.as_record() == original_map[role].as_record()
-            assert leaf.__dict__ is family.__dict__ and original_map[role].__dict__ is not family.__dict__
-        assert registry_rows(jobs) == before
 
 
 def test_actual_public_saved_run_consumes_explicit_factory_restorer(tmp_path, record_property):

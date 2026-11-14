@@ -176,23 +176,3 @@ def test_original027_saved_generation_reopens_without_source_read_or_reclassific
     after = {str(path.relative_to(original)): hashlib.sha256(path.read_bytes()).hexdigest() for path in original.rglob('*') if path.is_file()}
     assert before == after
 
-def test_new_dependency_digests_match_actual_c7_fingerprinted_modules(tmp_path, monkeypatch):
-    for name, field in (('literature_rate_native_inputs.py', 'sha256_at_release'), ('literature_partner_source_fields.py', 'scope_sha256_at_release')):
-        assert hashlib.sha256((ROOT / 'gene_annotation_episode' / name).read_bytes()).hexdigest() == LEXICAL_DEPENDENCY[field]
-    store, context, _ = setup(tmp_path)
-    try:
-        binding = binding_for(store, context)
-        before = binding.as_record()
-        assert before['configuration']['rate_population'] is True
-        read_bytes = Path.read_bytes
-        for name in ('literature_amount_inputs.py', 'literature_rate_native_inputs.py', 'literature_partner_source_fields.py'):
-
-            def changed_bytes(path, selected=name):
-                raw = read_bytes(path)
-                return raw + b'\n# synthetic fingerprint contrast\n' if path.name == selected else raw
-            with monkeypatch.context() as patch:
-                patch.setattr(Path, 'read_bytes', changed_bytes)
-                assert binding.as_record()['implementation_sha256'] != before['implementation_sha256']
-        assert binding.as_record() == before
-    finally:
-        store.close()

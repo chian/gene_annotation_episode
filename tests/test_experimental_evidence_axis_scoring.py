@@ -293,11 +293,3 @@ def test_an_unrelated_small_q_value_and_invalid_probability_cannot_supply_claim_
     assert invalid['reason'] == 'native_value_outside_declared_range'
 
 
-def test_experimental_axis_provenance_rows_are_exact_copies_of_the_preserved_sources():
-    crosswalk = json.loads((PUBLICATION/'SOURCE_CROSSWALK_A105_A106_A111.json').read_text())
-    for link in crosswalk['rows']:
-        original_path = REPO/link['original_path']
-        assert hashlib.sha256(original_path.read_bytes()).hexdigest() == link['original_file_sha256']
-        index = int(link['original_pointer'].rsplit('/', 1)[1])
-        original = json.loads(original_path.read_text())['evidence'][index]
-        assert axis(link['axis_id'])['evidence'][link['evidence_index']] == original

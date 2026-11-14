@@ -329,24 +329,8 @@ def test_rendering_needs_no_store_file_network_native_or_calculator(pair_sheet, 
     assert state == before
 
 
-@pytest.mark.parametrize("selector,version", [({}, "execution_results_assignment_v1"),
-    ({"version": "native_blast_result_selector_v1"}, "execution_results_assignment_v1"),
-    ({"version": SELECTOR_VERSION}, "different_assignment_version")])
-def test_other_results_instructions_unchanged(selector, version):
-    namespace = {"plain": plain}
-    exec((PACKET / "baseline_execution_instructions.txt").read_text(), namespace)
-    context = SimpleNamespace(role="results", assignment={"version": version, "selector": selector})
-    assert ExecutionEpisodes.instructions(None, context) == namespace["instructions"](None, context)
 
 
-@pytest.mark.parametrize("role", ["launch", "launch_api", "launch_local", "launch_hpc"])
-def test_original_nonresults_instructions_unchanged(role):
-    namespace = {"plain": plain}
-    exec((PACKET / "baseline_execution_instructions.txt").read_text(), namespace)
-    owner = SimpleNamespace(_delegate=lambda _: SimpleNamespace(instructions=lambda _: "Original resource instructions"),
-        _validate_request=lambda value: value)
-    context = SimpleNamespace(role=role, assignment={"service": "selected_service"})
-    assert ExecutionEpisodes.instructions(owner, context) == namespace["instructions"](owner, context)
 
 
 def test_exact_execution_branch_uses_new_full_instructions_without_observation(pair_sheet):

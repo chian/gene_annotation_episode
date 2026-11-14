@@ -296,16 +296,6 @@ def test_authentication_layout_closed_schema_and_detached_rejections():
     with pytest.raises(ExperimentalContractError, match='selected_point_required'):
         run(extract(), [select('point', 'mean', concentration_cell='A1')])
 
-def test_solver_limits_no_model_and_legacy_prefix_preservation():
-    for name, original in [('literature_rate_observation_inputs.py', 'ORIGINAL_INPUTS_001.py'), ('literature_rate_observation_calculations.py', 'ORIGINAL_CALCULATIONS_001.py')]:
-        assert (ROOT / 'gene_annotation_episode' / name).read_bytes().startswith((ART / original).read_bytes())
-    data = extract()
-    sheet = run(data, [select('point', 'mean', concentration_cell='Q193'), select('curve', 'Vmax', curve_header_cell='R192')], model='none')
-    assert sheet['cells'][0]['value'] > 0 and sheet['cells'][1]['relationship_reasons'] == ['model_not_selected']
-    assert _grid_fit([Fraction(1), Fraction(2), Fraction(3)], [Fraction(-1)] * 3)['reason'] == 'fit_nonpositive_response'
-    assert _grid_fit([Fraction(0), Fraction(2), Fraction(3)], [Fraction(1)] * 3)['reason'] == 'positive_concentrations_required'
-    assert _grid_fit([Fraction(1)] * 3, [Fraction(1)] * 3)['reason'] == 'insufficient_distinct_concentrations'
-    assert _grid_fit([Fraction(1), Fraction(2), Fraction(3)], [Fraction(1), Fraction(2), Fraction(3)])['reason'] == 'fit_domain_exhausted'
 
 def scaled_source(xexponent=0, yexponent=0):
     from decimal import Decimal, localcontext

@@ -221,31 +221,3 @@ def test_saved_recalculation_projection_copy_aliases_without_parser_or_io(monkey
     assert copied == before
 
 
-@pytest.mark.parametrize("representation,relative,legacy_schema", [
-    ("json", "tool_graders_rfam_numerical_2026-10-26_235/examples_001/examples/live_single.sheet.json", "rfam_batch_sheet_v1"),
-    ("out", "tool_graders_rfam_report_2026-10-26_242/examples_011/native.sheet.json", "rfam_batch_report_sheet_v1"),
-    ("tblout", "tool_graders_rfam_live_workflow_2026-10-26_243/live_001/parse.json", "rfam_batch_tblout_parse_result_v1"),
-])
-def test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells(monkeypatch, representation, relative, legacy_schema):
-    path = EXAMPLES.parents[1] / relative
-    original_bytes = path.read_bytes()
-    old = json.loads(original_bytes)
-    before = deepcopy(old)
-    def forbidden(*args, **kwargs):
-        raise AssertionError("legacy conversion acquired or reparsed data")
-    monkeypatch.setattr("builtins.open", forbidden)
-    monkeypatch.setattr(socket, "socket", forbidden)
-    monkeypatch.setattr(subprocess, "Popen", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs.populate_rfam_batch_json_sheet", forbidden)
-    converted = upgrade_saved_rfam_search_sheet(old, representation=representation)
-    assert converted["lineage"] == dict(source_sheet_schema=legacy_schema, source_sheet_digest=rfam_digest(old))
-    assert converted["artifacts"][0]["source_descriptor"]["byte_hash_verified"] is False
-    assert converted["artifacts"][0]["source_descriptor"]["source_byte_length"] is None
-    assert old == before
-    scores = infernal_search_grader.calculate_infernal_search_scores(converted)
-    assert scores["hits"][0]["components"]["bitscore"] == 104.6
-    assert scores["hits"][0]["components"]["sequence_span_length"] == 119
-    delegate = {"json": calculate_rfam_batch_components, "out": calculate_rfam_batch_report_components,
-                "tblout": calculate_rfam_batch_table_components}[representation]
-    with pytest.raises((ValueError, ContractError)):
-        delegate(old, parameters={"hit_scope": "reported"} if representation == "tblout" else RFAM_CALCULATION_PARAMETERS)

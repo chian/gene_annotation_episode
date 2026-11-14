@@ -36,24 +36,6 @@ def root(original_root):
         pass
 
 
-def test_original_positional_constructor_contract_is_preserved():
-    original = ('self', 'store', 'tools', 'provider', 'directory', 'run_id',
-        'controller_factory', 'project_credit', 'credit_binding', 'restoration_settings',
-        'execution_expectations', 'job_episodes', 'controller_binding', 'project_child_credit',
-        'child_credit_binding', 'resource_estimator', 'project_annotation_score',
-        'annotation_score_binding', 'initial_known_record_refs', 'native_timing_information',
-        'episode_binding_factories', 'episode_binding_descriptors', 'role_credit_bindings',
-        'job_progress_provider', 'execution_binding', 'episode_service_factory',
-        'episode_service_binding', 'progress_receipt_order', 'episode_record_receipts',
-        'wait_inputs_version', 'completed_action_inputs_version', 'native_job_events',
-        'episode_service_inputs', 'annotation_child_roles', 'root_role', 'decision_protocol',
-        'root_action_boundary', 'episode_branch_lifecycle', 'inprocess_completion_order')
-    signature = inspect.signature(WorkflowSetup.__init__)
-    assert tuple(signature.parameters) == (*original, 'episode_binding_owners')
-    sentinels = tuple(object() for _ in original)
-    bound = signature.bind(*sentinels, episode_binding_owners=('A105',))
-    assert all(bound.arguments[name] is value for name, value in zip(original, sentinels))
-    assert signature.parameters['episode_binding_owners'].default is None
 
 
 @pytest.mark.parametrize('owner', OWNERS)

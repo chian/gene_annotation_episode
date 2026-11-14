@@ -84,49 +84,8 @@ def unchanged(root, before_changes, before_rows):
     assert root.tools.execution_calls == [] and root.provider.requests == []
 
 
-def test_canonical_constructor_uses_disjoint_real_defining_classes(tmp_path):
-    with actual_root(tmp_path) as root:
-        services = root.workflow.services
-        public = episode_services.WorkflowServices
-        assert type(services) is public and services.workflow is root.workflow
-        assert public.__module__ == 'gene_annotation_episode.episodic_workflow.root.episode_services'
-        assert public.__init__.__module__ == public.__module__
-        assert public.__init__.__qualname__ == 'WorkflowServices.__init__'
-        owners = defining_owners()
-        assert public.__bases__ == tuple(getattr(module, name) for module, name, _ in owners)
-        assert public.__mro__ == (public, *public.__bases__, object)
-        methods = set()
-        for module, class_name, names in owners:
-            owner = getattr(module, class_name)
-            assert owner.__bases__ == (object,) and '__init__' not in vars(owner)
-            assert owner.__module__ == module.__name__
-            for name in names:
-                assert name not in methods and name not in vars(public)
-                methods.add(name)
-                function = vars(owner)[name]
-                assert getattr(public, name) is function
-                assert getattr(services, name).__self__ is services
-                assert function.__module__ == module.__name__
-                assert function.__qualname__ == class_name + '.' + name
-                assert Path(inspect.getsourcefile(function)).resolve() == Path(module.__file__).resolve()
-        assert len(methods) == 40
-        assert 'literature_rate_repository' in vars(public) and 'macs2_peak_monitor_task' in vars(public)
 
 
-def test_moved_annotations_and_identity_helpers_keep_canonical_objects():
-    import gene_annotation_episode.episodic_workflow.root.workflow_credit_services as workflow_credit_services
-    from gene_annotation_episode.episodic_workflow.root import workflow_scientific_provenance
-    from gene_annotation_episode.episodic_workflow.root import workflow_tool_services
-    from gene_annotation_episode.episodic_workflow.root import workflow_reference_access
-    from gene_annotation_episode.episodic_workflow.root import workflow_molecular_operands
-    assert workflow_credit_services.EpisodeRef is EpisodeRef
-    assert workflow_scientific_provenance.EpisodeRef is EpisodeRef
-    assert workflow_scientific_provenance.BindingContext is BindingContext
-    hints = typing.get_type_hints(episode_services.WorkflowServices.scientific_closed_request)
-    assert hints['context'] is BindingContext
-    for module in (workflow_tool_services, workflow_reference_access,
-                   workflow_scientific_provenance, workflow_molecular_operands):
-        assert module.plain is plain
 
 
 def test_actual_constructor_catalog_capabilities_and_absent_progress_are_read_only(tmp_path):

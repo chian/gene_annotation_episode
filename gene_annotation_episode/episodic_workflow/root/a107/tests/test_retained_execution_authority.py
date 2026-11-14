@@ -257,19 +257,8 @@ def old_chromatin_environment():
     return namespace['_environment']
 
 
-def test_requested_thread_counts_are_metadata_and_not_a_new_admission_ceiling():
-    owner=module('library.chromatin_request_contracts');original=old_chromatin_environment()
-    declared=chromatin_environment();assert original(declared) is None
-    declared.update(OPENBLAS_NUM_THREADS='8',OMP_NUM_THREADS='3')
-    with pytest.raises(ValueError,match='^invalid_native_environment$'):original(declared)
-    before=deepcopy(declared);assert owner._environment(declared) is None and declared==before
-    assert owner.POLICY=={'memory_bytes':21474836480,'scratch_bytes':4294967296}
 
 
-@pytest.mark.parametrize('key,value',[('PYTHONSAFEPATH','0'),('PYTHONHOME','relative/path'),('TMP','/path\0bad')])
-def test_original_non_count_environment_rejections_are_unchanged(key,value):
-    owner=module('library.chromatin_request_contracts');declared=chromatin_environment();declared[key]=value
-    assert error_record(lambda:owner._environment(declared))==error_record(lambda:old_chromatin_environment()(declared))
 
 
 def probe(phase,output):

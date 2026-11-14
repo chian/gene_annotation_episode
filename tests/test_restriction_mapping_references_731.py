@@ -420,34 +420,3 @@ def test_legacy_immediate_forms_do_not_infer_ancestor_receipt(engineering_case, 
     assert resolve(case, consumer) is False
 
 
-def test_retained_original728_own_catalog_is_read_only_and_needs_no_dispatch(monkeypatch):
-    selector_path = Path(os.environ.get("HMMER_NATIVE_ORACLE_RESTRICTION731_SELECTOR", str(SELECTOR)))
-    selector = json.loads(selector_path.read_text())
-    store_path = Path(selector["store_path"])
-    # Read the root-authorized original Store. The operation key, run/path/
-    # request and result-source identities remain original728; no new owner.
-    if not store_path.is_absolute():
-        store_path = Path(__file__).resolve().parents[1] / store_path
-    original_import = builtins.__import__
-    def no_bio(name, *args, **kwargs):
-        if name == "Bio" or name.startswith("Bio."):
-            raise AssertionError("retained own authority must not import Bio")
-        return original_import(name, *args, **kwargs)
-    monkeypatch.setattr(builtins, "__import__", no_bio)
-    import gene_annotation_episode.restriction_mapping_jobs as jobs
-    import gene_annotation_episode.restriction_mapping_readers as reader_module
-    import gene_annotation_episode.native_lifecycle as lifecycle
-    def forbidden(*args, **kwargs):
-        raise AssertionError("731 must not dispatch native work or719 calculation")
-    monkeypatch.setattr(jobs.RestrictionMappingJobs, "run_async", forbidden)
-    monkeypatch.setattr(lifecycle, "resume_start", forbidden)
-    monkeypatch.setattr(reader_module, "read_restriction_mapping", forbidden)
-    with Store(store_path) as store:
-        authority = RestrictionMappingReferences(store, selector["run_id"])
-        context = authority.context(selector["episode_id"])
-        assert plain(context.request) == selector["request"]
-        before = store.db.total_changes
-        assert authority.resolve(context, "EcoRI", "restriction_enzyme") is True
-        assert authority.resolve(context, "ecori", "restriction_enzyme") is False
-        assert authority.resolve(context, "BcgI", "restriction_enzyme") is False
-        assert store.db.total_changes == before

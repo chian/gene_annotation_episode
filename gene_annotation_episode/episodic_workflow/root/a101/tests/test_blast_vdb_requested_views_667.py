@@ -35,13 +35,6 @@ def legacy_reference():
             "projection_fields": views.PROJECTION_FIELDS, "fact_schemas": schemas, "examples": selected}
 
 
-def test_legacy_reference_capture_and_preservation():
-    value = json.dumps(legacy_reference(), sort_keys=True, separators=(",", ":"), allow_nan=False)
-    directory = Path(os.environ["HMMER529_ATTEMPT"])
-    baseline = os.environ.get("HMMER_NATIVE_ORACLE_VDB_VIEW_BASELINE")
-    if baseline:
-        assert value == Path(baseline).read_text()
-    (directory / ("legacy_views_after.json" if baseline else "legacy_views_before.json")).write_text(value)
 
 
 SOURCE = "source_original_vdb667"

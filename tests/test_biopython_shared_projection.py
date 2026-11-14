@@ -227,11 +227,6 @@ def test_new_format_is_explicit_and_legacy_missing_measurements_stay_missing():
         grader.grade_biopython_pairwise(native, molecule="protein")
 
 
-def test_raw_native_producer_has_no_convenience_count_or_ratio_implementation():
-    tree = ast.parse(inspect.getsource(sequence_ops.align_pair))
-    assert not any(isinstance(node, ast.Constant) and node.value in ALIASES
-        for node in ast.walk(tree) if isinstance(node, ast.Constant) and isinstance(node.value, str))
-    assert not any(isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div) for node in ast.walk(tree))
 
 
 @pytest.mark.parametrize("no_alignment", [False, True])

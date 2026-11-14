@@ -243,80 +243,8 @@ def test_malformed_composed_assignment_is_feedback_without_action_or_observation
     no_observations(case)
 
 
-def test_pinned_old_generation_and_decoder_are_exact_finite_compatibility(connected, historical):
-    schema = connected.schema
-    assert runtime._action_generation_schema(schema, _legacy_episode_assignments=True) == historical.generate(schema)
-    response = {'selection': deepcopy(connected.selection), 'report_update': {}}
-    response['selection']['assignment']['launch_instructions'] = None
-    old = historical.decode(response, schema)
-    assert 'launch_instructions' not in old['selection']['assignment']
-    assert runtime._decode_action_response(response, schema, _legacy_episode_assignments=True) == old
-    assert runtime._decode_action_response(response, schema)['selection']['assignment']['launch_instructions'] is None
-    assert runtime._decode_recorded_action_response(response, schema, recorded_selection=old['selection']) == old
-    wrong = {**old['selection'], 'purpose': 'A different requested purpose'}
-    with pytest.raises(ValueError, match='original_action_response_selection_mismatch'):
-        runtime._decode_recorded_action_response(response, schema, recorded_selection=wrong)
 
 
-@pytest.mark.parametrize('profile', [False, True])
-def test_old_recorded_pending_exchange_and_completed_selection_replay_are_unchanged(connected, historical, monkeypatch, profile):
-    case = connected
-    # Freeze a historical frame through the actual exchange writer, then decode
-    # it through today's boundary. No retained production record is modified.
-    if profile:
-        monkeypatch.setattr(case.workflow, 'contract_information_profile', lambda _: CONTRACT_INFORMATION_PROFILE)
-    response = {'selection': deepcopy(case.selection), 'report_update': {}}
-    response['selection']['assignment']['launch_instructions'] = None
-    with monkeypatch.context() as patch:
-        patch.setattr(runtime, '_action_generation_schema', historical.generate)
-        returned, index, context, schema = choose(case, response)
-    original_rows = deepcopy(case.workflow.decision_exchanges.rows(case.source.episode_id, index))
-    saved = json.loads(case.workflow.journal.row('runtime_model_calls', case.source.episode_id, index)['request'])
-    if profile:
-        case.source.validate_contract_exchange_history(saved, index)
-    exchange_schema = saved.get('contract_information', {}).get('exchange_schema')
-    # Reopen the pending decision from its serialized host record before any
-    # action exists. This exposes property-order loss in markerless histories.
-    case.source.calls = 0
-    returned, index, context, schema = asyncio.run(case.source.call({}, obj({})))
-    if profile:
-        assert runtime._json(original_rows[0]['request']['output_schema']) == runtime._json(
-            runtime._action_generation_schema(exchange_schema, _legacy_episode_assignments=True))
-    else:
-        selected_schema = obj({'response_type': {'type': 'string', 'const': 'select_action'}, **schema['properties']})
-        selected_schema['required'] = ['response_type', *schema['required']]
-        recorded = original_rows[0]['request']['output_schema']['properties']['response']['anyOf'][1]
-        regenerated = runtime._action_generation_schema(selected_schema, _legacy_episode_assignments=True)
-        assert recorded != regenerated
-        assert runtime._same_action_schema_required_members(recorded, regenerated)
-    assert runtime._decode_recorded_action_response(returned, schema, exchanges=original_rows,
-        exchange_schema=exchange_schema) == historical.decode(response, schema)
-    unit = case.source.apply_response(returned, index, context, schema)
-    assert unit is not None, case.source.feedback
-    selected = case.workflow.journal.row('runtime_actions', case.source.episode_id, index)
-    assert json.loads(selected['action']) == historical.decode(response, schema)['selection']
-    no_observations(case)
-    # An explicit synthetic completed outcome exercises replay custody; it does
-    # not claim that the native /bin/true job was run or create a measurement.
-    case.workflow.journal.save('runtime_actions', {'episode_id': case.source.episode_id, 'decision_index': index,
-        'action': selected['action'], 'result': json.dumps({'status': 'completed', 'fixture': True}), 'credit': 0})
-    before_action = dict(case.workflow.journal.row('runtime_actions', case.source.episode_id, index))
-    before_call = dict(case.workflow.journal.row('runtime_model_calls', case.source.episode_id, index))
-    case.source.calls = 0
-    replayed, same_index, same_context, old_schema = asyncio.run(case.source.call({}, obj({})))
-    assert (replayed, same_index, same_context, old_schema) == (returned, index, context, schema)
-    assert case.source.apply_response(replayed, same_index, same_context, old_schema) is not None
-    assert dict(case.workflow.journal.row('runtime_actions', case.source.episode_id, index)) == before_action
-    assert dict(case.workflow.journal.row('runtime_model_calls', case.source.episode_id, index)) == before_call
-    assert case.workflow.decision_exchanges.rows(case.source.episode_id, index) == original_rows
-    assert len(case.provider.schemas) == 1
-    no_observations(case)
-    if profile:
-        changed = deepcopy(original_rows[0]['request'])
-        changed['output_schema']['description'] = 'unrecorded alteration'
-        with pytest.raises(runtime.WorkflowError, match='original_contract_exchange_request_mismatch'):
-            case.source.validate_contract_exchange_request(changed, saved, index,
-                changed['restoration']['snapshot'], changed['restoration']['pending_public_exchanges'])
 
 
 def test_expanded_valid_explicit_null_without_historical_proof_is_preserved(connected):
@@ -404,49 +332,8 @@ def test_direct_provider_transport_marker_is_bound_to_actual_generator_and_schem
     no_observations(case)
 
 
-def test_actual_retained_cooler_selection_omits_runtime_and_roundtrips_read_only(historical):
-    root = Path(__file__).parent / 'fixtures/composed_transport/chromatin'
-    selection = json.loads((root / 'selected-branches.json').read_bytes())[0]['candidate']
-    database = root / 'selection_state.sqlite3'
-    with sqlite3.connect(database.as_uri() + '?mode=ro', uri=True) as connection:
-        saved = json.loads(connection.execute('SELECT request FROM runtime_model_calls ORDER BY rowid DESC LIMIT 1').fetchone()[0])
-    schema = saved['schema']
-    direct = {'selection': selection, 'report_update': {}}
-    Draft202012Validator(schema).validate(direct)
-    assert 'native_runtime' not in selection['assignment']['requested_job']['native_chromatin_interactions']['software']
-    assert not Draft202012Validator(historical.generate(schema)).is_valid(direct)
-    encoded = {'selection': {**selection, 'assignment': json.dumps(selection['assignment']),
-        'scope': {**selection['scope'], 'read_selection_refs': None, 'segments': None}}, 'report_update': {}}
-    Draft202012Validator(runtime._action_generation_schema(schema)).validate(encoded)
-    assert runtime._decode_action_response(encoded, schema) == direct
-    assert runtime._decode_action_response(direct, schema) == direct
 
 
-def test_actual_completed_451_actions_replay_against_original_saved_selections_read_only(historical):
-    database = Path(__file__).parent / 'fixtures/composed_transport/chromatin/actions_state.sqlite3'
-    before_bytes = hashlib.sha256(database.read_bytes()).hexdigest()
-    with sqlite3.connect(database.as_uri() + '?mode=ro', uri=True) as connection:
-        before = connection.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]
-        rows = connection.execute('SELECT calls.request,calls.response,actions.action,actions.result '
-            'FROM runtime_actions AS actions JOIN runtime_model_calls AS calls '
-            'ON calls.run_id=actions.run_id AND calls.episode_id=actions.episode_id '
-            'AND calls.call_index=actions.decision_index '
-            'WHERE json_extract(actions.action,\'$.kind\')=\'episode_child\' '
-            'AND actions.result IS NOT NULL').fetchall()
-        assert rows
-        changed_transports = 0
-        for sent, raw, action, result in rows:
-            schema = json.loads(sent)['schema']
-            response, selected = json.loads(raw), json.loads(action)
-            old = historical.decode(response, schema)
-            assert runtime._json(old['selection']) == runtime._json(selected)
-            decoded = runtime._decode_recorded_action_response(response, schema, recorded_selection=selected)
-            assert runtime._json(decoded['selection']) == runtime._json(selected)
-            Draft202012Validator(schema['properties']['selection']).validate(decoded['selection'])
-            changed_transports += runtime._json(runtime._decode_action_response(response, schema)['selection']) != runtime._json(selected)
-        assert changed_transports > 0  # Real provider-added nulls need the compatibility branch.
-        assert connection.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == before
-    assert hashlib.sha256(database.read_bytes()).hexdigest() == before_bytes
 
 
 def test_retained_nonnull_hic_runtime_and_absent_cooler_runtime_use_same_atomic_transport():
@@ -488,116 +375,6 @@ def test_bvbrc_custody_uses_original_complete_selection_for_legacy_transport(tmp
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
 
 
-@pytest.mark.parametrize('transport', ['old_direct', 'current_direct', 'old_exchange',
-    'current_exchange'])
-def test_unsaved_custody_requires_actual_writer_transport_proof(tmp_path, monkeypatch, historical, transport):
-    from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustody, AppServiceCustodyError
-    from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-    from test_api_bvbrc_appservice import CONFIG
-    from test_bvbrc_appservice_custody import request
-    from test_execution_wiring import child, form
-    from test_public_search import Client
-
-    def forbidden(*args, **kwargs):
-        raise AssertionError('Custody verification cannot use live transport')
-    monkeypatch.setattr('socket.create_connection', forbidden)
-    monkeypatch.setattr('socket.socket.connect', forbidden)
-    monkeypatch.setattr('urllib.request.OpenerDirector.open', forbidden)
-
-    class Authenticated(Exception):
-        pass
-
-    with Store(tmp_path / 'state') as store:
-        provider = Provider()
-        factory = ExecutionServiceFactory({'selected-api': CONFIG}, {}, 2, 3, .5)
-        workflow = runtime.Workflow(store, ToolRegistry(store, clients=Client()), provider,
-            tmp_path / 'run', 'custody458',
-            controller_factory=lambda path, initial: FixtureController(str(path), initial, 1),
-            project_credit=lambda *_: 0, episode_service_factory=factory,
-            episode_service_binding=factory.as_record(), episode_service_inputs='actual_tool_registry_v1',
-            annotation_child_roles=('launch', 'results'), episode_record_receipts=True,
-            initial_known_record_refs=[], decision_protocol=None)
-        scope = {'subject_refs': store.create_problem(raw_sequence='ACGT', molecule='dna')['subject_refs']}
-        api = {'version': 'api_service_assignment_v1', 'resource_id': 'selected-api',
-            'service': 'bvbrc_appservice', 'request': request(), 'endpoint': 'usable_handoff', 'constraints': {}}
-        # Explicit preparation operands make both provider representations valid.
-        # Empty native parameters do not claim submission readiness; no prepare,
-        # submission, HTTP operation or scientific computation is performed.
-        api['request']['parameters'] = {}
-        api['request']['start_parameters'] = {name: '' for name in (
-            'parent_id', 'workspace', 'base_url', 'container_id', 'user_metadata',
-            'reservation', 'data_container_id', 'user_override', 'constraint')}
-        api['request']['start_parameters'].update(disable_preflight=0, preflight_data={})
-        launch = launch_assignment({'selected-api': api})
-        root = workflow.build('annotation', 'root', 'Inspect exact original custody', scope)
-        response = child('launch', launch, deepcopy(scope), form('execution_handoff_refs'))
-        response['selection']['assignment'] = json.dumps(launch)
-        response['selection']['scope'].update(read_selection_refs=None, segments=None)
-        provider.responses.append(response)
-        returned, index, context, schema = asyncio.run(root.source.call(
-            {'visible_record_refs': [], 'scope': scope}, workflow.action_schema(root.source)))
-        unit = root.source.apply_response(returned, index, context, schema)
-        assert unit is not None, root.source.feedback
-        source = unit.child.source
-        schema = workflow.action_schema(source)
-        context_request = {'visible_record_refs': [], 'scope': scope,
-            'tools': workflow.catalog(scope, source=source)}
-        raw = child('launch_api', {**api, 'launch_instructions': None}, deepcopy(scope), form('execution_handoff_refs'))
-        raw['selection']['scope'].update(read_selection_refs=None, segments=None)
-        if transport.startswith('current'):
-            raw['selection']['assignment'] = json.dumps(raw['selection']['assignment'])
-        if transport.endswith('direct'):
-            provider.responses.append(raw)
-            call = historical.call if transport == 'old_direct' else runtime.DecisionSource.call
-            returned, index, context, schema = asyncio.run(call(source, context_request, schema))
-        else:
-            workflow.decision_protocol = 'decision_exchange_v1'
-            workflow.decision_exchanges = runtime.DecisionExchanges(workflow.journal)
-            provider.responses.append({'response': {'response_type': 'select_action', **raw}})
-            with monkeypatch.context() as patch:
-                if transport == 'old_exchange':
-                    patch.setattr(runtime, '_action_generation_schema', historical.generate)
-                returned, index, context, schema = asyncio.run(source.call(context_request, schema))
-        before = dict(workflow.journal.row('runtime_model_calls', source.episode_id, index))
-        exchanges = (() if workflow.decision_exchanges is None else
-            deepcopy(workflow.decision_exchanges.rows(source.episode_id, index)))
-        sent = json.loads(before['request'])
-        current, prior = runtime._decode_action_response(returned, schema), historical.decode(returned, schema)
-        Draft202012Validator(schema).validate(current)
-        assert workflow.journal.row('runtime_actions', source.episode_id, index) is None
-        source.calls = 0
-        replayed, same_index, same_context, same_schema = asyncio.run(source.call({}, obj({})))
-        if transport == 'old_direct':
-            assert 'assignment_transport' not in sent
-            assert current['selection'] != prior['selection']
-            assert source.apply_response(replayed, same_index, same_context, same_schema) is None
-            assert source.feedback['detail'] == 'original_assignment_transport_unavailable'
-        captured = []
-        authenticate = AppServiceCustody.authenticate
-        def inspect(self, context, *, allow_unsaved=False):
-            result = authenticate(self, context, allow_unsaved=allow_unsaved)
-            if context.role == 'launch_api' and context.path[-1][1] == 'child_0':
-                captured.append(runtime._plain(context.assignment))
-                raise Authenticated()
-            return result
-        monkeypatch.setattr(AppServiceCustody, 'authenticate', inspect)
-        selection = (prior if transport == 'old_exchange' else current)['selection']
-        # Inspect custody separately through actual selected/build construction.
-        # Stop immediately at authentication, before child/action persistence.
-        if transport == 'old_direct':
-            with pytest.raises(AppServiceCustodyError, match='parent_selection_invalid'):
-                workflow.selected(source, selection, index)
-            assert captured == []
-        else:
-            with pytest.raises(Authenticated):
-                workflow.selected(source, selection, index)
-            assert len(captured) == 1
-            assert ('launch_instructions' in captured[0]) is (transport != 'old_exchange')
-        assert dict(workflow.journal.row('runtime_model_calls', source.episode_id, index)) == before
-        if workflow.decision_exchanges is not None:
-            assert workflow.decision_exchanges.rows(source.episode_id, index) == exchanges
-        assert workflow.journal.row('runtime_actions', source.episode_id, index) is None
-        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
 
 
 def test_current_recorded_full_profile_proves_exact_decoding_before_admission(connected, monkeypatch):

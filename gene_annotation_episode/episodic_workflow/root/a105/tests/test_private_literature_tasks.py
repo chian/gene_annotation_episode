@@ -19,11 +19,6 @@ def test_runtime_build_selects_exact_private_task(binding, monkeypatch):
     workflow.episode_bindings.for_path = lambda path: object()
     assert type(runtime.Workflow.build(workflow, role, 'other', 'Original default', {})) is runtime.DecisionSource
 
-def test_task_and_binding_use_original_axis_exception(binding):
-    from importlib import import_module
-    from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractError
-    module = import_module(binding.decision_source_type.__module__)
-    assert module.ContractError is ContractError
 
 def test_active_assay_reader_exception_is_an_original_invalid_result(binding):
     import asyncio

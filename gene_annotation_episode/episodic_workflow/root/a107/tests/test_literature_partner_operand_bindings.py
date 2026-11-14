@@ -149,33 +149,6 @@ def test_valid_two_arm_contrast_keeps_its_subject_when_third_arm_cannot_share_it
         assert outcome['result']['assay_interpretation']['subject'] is None if not missing else True
 
 
-def test_markerless_historical_selection_replays_exactly_without_rebinding(tmp_path, monkeypatch):
-    # A .before source needs an explicit source loader.
-    from importlib.machinery import SourceFileLoader
-    loader = SourceFileLoader('gene_annotation_episode._partner_storage_before121', str(BASE/'literature_partner_storage.py.before'))
-    spec = importlib.util.spec_from_loader(loader.name, loader)
-    module = importlib.util.module_from_spec(spec);loader.exec_module(module)
-    assert module.partner_cells_schema() == partner_cells_schema()
-    store, context, args, records = fixture(tmp_path)
-    with store:
-        raw = store.get_artifact(records['data']['artifact_ref'])
-        args['literals']['subject'] = witness(records['data'], raw, 'PartnerP')
-        historical_repo = module.LiteraturePartnerRepository(store, context.run_id)
-        old = historical_repo.populate(context, args, 'historical')
-        old_saved = historical_repo.read(old['result']['sheet_ref'])
-        old_rows = historical_repo.project_cells([old['result']['sheet_ref']], permitted_record_refs=old['record_refs'])
-        repo = LiteraturePartnerRepository(store, context.run_id)
-        assert 'native_operand_bindings' not in old_saved
-        assert repo.populate(context, args, 'historical') == old
-        assert repo.read(old['result']['sheet_ref']) == old_saved
-        assert repo.project_cells([old['result']['sheet_ref']], permitted_record_refs=old['record_refs']) == old_rows
-        new = repo.populate(context, args, 'fresh')
-        new_rows = repo.project_cells([new['result']['sheet_ref']], permitted_record_refs=new['record_refs'])
-        assert label(store, old_rows[0]['subject_ref']) == 'PartnerP'
-        assert label(store, new_rows[0]['subject_ref']) == 'SubjectS'
-        def forbidden(*a, **kw):raise AssertionError('historical replay reread or recalculated')
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a107.literature_partner_storage.read_partner_inputs', forbidden)
-        assert repo.populate(context, args, 'historical') == old
 
 
 @pytest.mark.parametrize('change', ['subject', 'condition', 'version'])

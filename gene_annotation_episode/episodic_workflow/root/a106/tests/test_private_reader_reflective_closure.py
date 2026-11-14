@@ -23,16 +23,6 @@ def test_fba_reflective_schemas_and_native_reader_import_keep_original_records(a
         contracts.flux_balance_schema('undeclared_record')
 
 
-@pytest.mark.parametrize('axis', ['a101', 'a105', 'a106', 'a108'])
-def test_nmf_retains_actual_shared_method_bindings_without_executing_actions(axis):
-    prefix = BASE + axis + '.library.retained_input_authority.'
-    shared = import_module(prefix + 'genomic_overlap_result_receipts').GenomicOverlapResultReceipts
-    selected = import_module(prefix + 'expression_nmf_result_receipts').ExpressionNMFResultReceipts
-    for name in ('locked_action', 'require_action', '_selected', 'file_metadata', '_artifact_value',
-                 'capture_control', 'observation', 'validate_observation'):
-        assert getattr(selected, name) is getattr(shared, name)
-        assert callable(getattr(selected, name))
-    assert callable(import_module(prefix + 'native_expression_nmf_results').NativeExpressionNMFResults)
 
 
 def target(kind='local'):

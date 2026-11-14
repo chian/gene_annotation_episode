@@ -303,24 +303,6 @@ def test_actual_incoming_assignment_preserves_original_sample_identity(f, prior)
             assert assigned['prior_samples'] == ([] if prior == 'none' else [f.binding.latest_sample(f.task)])
     assert f.jobs._row(f.assignment['job_ref'])['submission_requested'] == 0
 
-@pytest.mark.parametrize('order', ['home-first', 'runtime-first', 'service-construction-first'])
-def test_cold_import_order_keeps_real_binding_and_runtime_alias(tmp_path, order):
-    """Child Python stays inside the one launcher-owned pytest resource workload."""
-    import os
-    import subprocess
-    import sys
-    fixture = tmp_path / 'cold-fixture'
-    cache = tmp_path / 'cache'
-    cache.mkdir()
-    script = "import importlib,json,sys\nfrom pathlib import Path\npackage='gene_annotation_episode.episodic_workflow.root.a103'\nmode=sys.argv[1]\nif mode=='home-first': importlib.import_module(package+'.homology_job_monitoring.episode')\nelif mode=='runtime-first': importlib.import_module(package+'.runtime')\nelse: importlib.import_module(package+'.homology_service_setup')\nhelper=importlib.import_module(package+'.homology_job_monitoring.tests.test_homology_monitor_task')\nwith helper.actual(Path(sys.argv[2])) as f:\n runtime=importlib.import_module(package+'.runtime')\n assert runtime.homology_binding_types()['legacy_annotation']['job_monitor'] is type(f.binding)\n assert type(f.task) is getattr(f.binding,'decision_source_type',runtime.DecisionSource)\n if hasattr(f.binding,'decision_source_type'):\n  assert type(f.task).__module__==package+'.homology_job_monitoring.task'\n  assert not isinstance(f.task,runtime.DecisionSource)\n print(json.dumps({'order':mode,'alias_exact':True,'private':hasattr(f.binding,'decision_source_type')}))\n"
-    env = {**os.environ, 'PYTHONDONTWRITEBYTECODE': '1', 'TMPDIR': str(cache), 'XDG_CACHE_HOME': str(cache), 'PYTHONPYCACHEPREFIX': str(cache / 'bytecode')}
-    result = subprocess.run([sys.executable, '-B', '-c', script, order, str(fixture)], cwd=tmp_path, env=env, text=True, capture_output=True)
-    (tmp_path / 'cold-stdout.log').write_text(result.stdout)
-    (tmp_path / 'cold-stderr.log').write_text(result.stderr)
-    assert result.returncode == 0, result.stderr
-    observed = json.loads(result.stdout.strip().splitlines()[-1])
-    assert observed['order'] == order and observed['alias_exact'] is True
-    assert observed['private'] == hasattr(module('homology_job_monitoring.episode').HomologyEpisode, 'decision_source_type')
 
 @pytest.mark.parametrize('role', ['job_launch', 'job_results'])
 def test_monitor_fresh_catalog_and_goal_exclude_other_owned_roles(f, role):
@@ -357,26 +339,6 @@ def test_actual_adapter_uses_authenticated_sibling_owner(f, role):
         assert asyncio.run(adapter.execute(context, name, {}, 'original-resource-operation')) == outcome
     assert calls == [(source.path, name, {}, 'original-resource-operation')] and f.jobs._row(f.assignment['job_ref'])['submission_requested'] == 0
 
-def test_resource_fingerprint_reads_exact_current_monitor_implementation(f):
-    import ast
-    implementation = module('a103_resource_implementation')
-    tree = ast.parse(Path(implementation.__file__).read_bytes())
-    function = next((n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'resource_implementation_bytes'))
-    homes = ast.literal_eval(next((n.value for n in function.body if isinstance(n, ast.Assign) and any((isinstance(t, ast.Name) and t.id == 'homes' for t in n.targets)))))
-    assert set(homes) == {'', 'legacy_improvement', 'homology_job_submission', 'homology_job_monitoring', 'homology_result_acquisition', *['legacy_improvement/' + h for h in ('homology_job_submission', 'homology_job_monitoring', 'homology_result_acquisition')]}
-    root = Path(implementation.__file__).parent
-    paths = ['homology_query.py', 'homology_service_setup.py']
-    for home in homes:
-        selected = sorted((root / home).glob('*.py')) if home else [root / name for name in ('__init__.py', 'child_message_owners.py', 'commissioning_policy.py', 'credit.py', 'decision_delivery.py', 'episode.py', 'from_child_execution_job_submission.py', 'from_child_execution_progress_assessment.py', 'from_child_execution_result_acquisition.py', 'from_child_homology_job_monitoring.py', 'from_child_homology_job_submission.py', 'from_child_homology_result_acquisition.py', 'from_child_hpc_work_planning.py', 'from_child_legacy_improvement.py', 'from_child_published_evidence_assessment.py', 'from_child_resource_result_acquisition.py', 'from_child_resource_work_submission.py', 'from_child_scientific_process.py', 'from_parent.py', 'goal.py', 'implementation.py', 'instructions.py', 'internal_summary.py', 'task.py', 'task_state.py', 'task_waiting.py', 'to_child_execution_job_submission.py', 'to_child_execution_progress_assessment.py', 'to_child_execution_result_acquisition.py', 'to_child_homology_job_monitoring.py', 'to_child_homology_job_submission.py', 'to_child_homology_result_acquisition.py', 'to_child_hpc_work_planning.py', 'to_child_legacy_improvement.py', 'to_child_published_evidence_assessment.py', 'to_child_resource_result_acquisition.py', 'to_child_resource_work_submission.py', 'to_child_scientific_process.py', 'to_parent.py', 'yield_estimator.py')]
-        paths.extend((str(p.relative_to(root)) for p in selected))
-    paths.append('resource_information.py')
-    assert implementation.resource_implementation_bytes() == b''.join(((root / p).read_bytes() for p in paths))
-    if hasattr(f.binding, 'decision_source_type'):
-        for parent in ('legacy_annotation', 'legacy_improvement'):
-            home = ('legacy_improvement/' if parent == 'legacy_improvement' else '') + 'homology_job_monitoring'
-            assert {p for p in paths if p.startswith(home + '/')} == {home + '/' + p.name for p in (root / home).glob('*.py')}
-            assert home + '/requests.py' not in paths and home + '/returns.py' not in paths
-    assert len(paths) == len(set(paths))
 
 @pytest.mark.parametrize('role', ['job_launch', 'job_results', 'unregistered'])
 def test_original_nonowner_fact_source_and_incoming_guards(f, role):

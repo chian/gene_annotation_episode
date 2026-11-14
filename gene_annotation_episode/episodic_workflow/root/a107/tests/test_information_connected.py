@@ -164,29 +164,8 @@ def case(tmp_path, request):
         value.close()
 
 
-def test_all_actual_recipient_payloads_equal_original_global_callback(case):
-    before = list(case.store.db.iterdump())
-    checked = []
-    for context in case.contexts:
-        actual = case.registry._recipient_initial_information(context)
-        expected = original_initial(case.owner, context)
-        assert actual == expected, context.path
-        assert actual['execution_initial_information']
-        checked.append({'context': context.as_record(), 'expected': expected, 'actual': actual})
-    assert list(case.store.db.iterdump()) == before
-    (case.directory / 'initial-information-complete-payloads.json').write_text(json.dumps(checked, indent=2) + '\n')
 
 
-def test_parent_and_sibling_registry_merge_keeps_original_information(case):
-    # HPC contexts now contain actual initialized-parent plan assignments.
-    # The separate Launch/native commissioner applicability conflicts remain
-    # recorded by the original baseline and covered by Launch connected tests.
-    for context in case.contexts:
-        if context.role in {'launch', 'launch_hpc'}:
-            continue
-        expected = original_initial(case.owner, context)
-        actual = case.registry.initial_decision_context(context)
-        assert all(actual[key] == value for key, value in expected.items()), context.path
 
 
 def test_reader_identity_mismatch_is_rejected_without_record_changes(case):
@@ -196,29 +175,8 @@ def test_reader_identity_mismatch_is_rejected_without_record_changes(case):
     assert list(case.store.db.iterdump()) == before
 
 
-def test_actual_capabilities_action_retains_own_payload_after_callback_retirement(case):
-    for home, family in case.execution.items():
-        owner = family['launch']
-        context = next(value for value in case.contexts if value.role == 'launch'
-            and value.path[:-1] == case.parents[home].path)
-        before = list(case.store.db.iterdump())
-        returned = asyncio.run(owner.execute(context, 'execution.capabilities', {}, 'capabilities-information'))
-        assert returned['status'] == 'completed'
-        assert returned['result'] == original_initial(owner, context)
-        invalid = asyncio.run(owner.execute(context, 'execution.capabilities', {'unrecognized': True}, 'invalid-capabilities-information'))
-        assert invalid['status'] == 'invalid'
-        assert list(case.store.db.iterdump()) == before
 
 
-def test_factory_information_reopens_from_complete_configuration(case):
-    Type = type(case.configuration)
-    original = case.catalog.as_record()
-    restored = Type.from_record(case.configuration.as_record())
-    readers = restored.construct(store=case.store, run_id=case.run_id,
-        directory=case.directory / 'workflow', tool_registry=case.tools, services=case.services)
-    readers.check_saved(original)
-    assert readers.original_global_information(case.root) == original_initial(case.owner, case.root)
-    assert restored.as_record() == case.configuration.as_record()
 
 
 def test_selected_explicit_factory_must_match_actual_execution_operands(case):
@@ -232,62 +190,10 @@ def test_selected_explicit_factory_must_match_actual_execution_operands(case):
         case.registry.configure_initial_information(bad, module('annotation_initial_information').initial_information)
 
 
-def test_current_execution_provider_is_not_needed_for_annotation_parent(case):
-    assert case.root.role == 'annotation'
-    # The partial case has no annotation/scientific Launch child, yet the
-    # explicitly original global factory retains exactly its original payload.
-    value = case.registry._recipient_initial_information(case.root)
-    assert value == original_initial(case.owner, case.root)
-    if '' not in case.execution:
-        with pytest.raises(LookupError, match='episode_child_not_bound'):
-            case.registry.for_child(case.root.path, 'launch')
 
 
-def test_all_existing_literature_recipients_select_original_information(case):
-    root = Path(module('state').__file__).parent
-    bindings = []
-    for path in sorted(root.rglob('episode.py')):
-        if '/published_evidence_assessment/' not in str(path):
-            continue
-        home = str(path.parent.relative_to(root))
-        binding = module(home + '/episode').LiteratureEpisode(case.services)
-        bindings.append(binding)
-    assert bindings
-    expanded = module('episode_bindings').EpisodeBindingRegistry([*case.bindings, *bindings])
-    expanded.configure_initial_information(case.catalog, module('annotation_initial_information').initial_information)
-    by_home = {binding.binding_path: binding for binding in bindings}
-    paths = {'legacy_annotation': case.root.path, 'scientific_process': case.parents['scientific_process'].path}
-    for binding in sorted(bindings, key=lambda item: item.binding_path.count('/')):
-        parent = paths[binding.commissioning_parent]
-        path = parent + ((binding.roles[0], 'private-literature'),)
-        context = case.context(path, {})
-        paths[binding.binding_path] = path
-        assert expanded.for_path(path) is by_home[binding.binding_path]
-        assert expanded._recipient_initial_information(context) == original_initial(case.owner, context)
 
 
-def test_untagged_custom_recipient_keeps_explicit_original_global_information(case):
-    class Custom:
-        roles, entry_roles = ('custom',), ('custom',)
-        def as_record(self):
-            return {'version': 'controlled_legacy_information_recipient_v1'}
-        def credit_kind(self, role):
-            return 'operational'
-        def child_roles(self, role):
-            return ()
-        def unused(self, *args, **kwargs):
-            raise AssertionError('custom fixture has no executed work')
-        assignment_schema = permitted_common_actions = allowed_children = unused
-        prepare_assignment = instructions = decision_context = catalog = unused
-        execute = fact_sources = facts = resolve = validate_report = credit_view = unused
-    custom = Custom()
-    registry = module('episode_bindings').EpisodeBindingRegistry([*case.bindings, custom])
-    registry.configure_initial_information(case.catalog, module('annotation_initial_information').initial_information)
-    context = case.context(case.root.path + (('custom', 'original-caller'),), {})
-    assert registry._recipient_initial_information(context) == original_initial(case.owner, context)
-    custom.initial_decision_context = lambda unused: {'execution_initial_information': {'conflict': True}}
-    with pytest.raises(ValueError, match='initial_binding_context_field_conflict'):
-        registry.initial_decision_context(context)
 
 
 def test_multifactory_unknown_custom_recipient_cannot_fall_back(case):

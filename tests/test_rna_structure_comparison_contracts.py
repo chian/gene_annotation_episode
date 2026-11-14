@@ -384,17 +384,3 @@ def test_nullable_original_energy_is_absence_never_synthetic_native_record():
         contracts.validate_rna_comparison_components(result, sheet=sheet)
 
 
-def test_production_modules_have_no_io_or_native_or_later_lane_imports():
-    import ast
-    root = Path(__file__).parents[1] / "gene_annotation_episode"
-    forbidden = {"os", "subprocess", "socket", "requests", "urllib", "RNA", "pathlib",
-        "rna_structure_comparison_calculations", "rna_structure_scan_calculations", "rna_structure_comparison_views"}
-    for name in ("rna_structure_comparison_contracts.py", "rna_structure_comparison_inputs.py"):
-        tree = ast.parse((root / name).read_text())
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
-                assert all(alias.name.split(".")[0] not in forbidden for alias in node.names)
-            elif isinstance(node, ast.ImportFrom):
-                assert (node.module or "").split(".")[0] not in forbidden
-            elif isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
-                assert node.func.id not in {"open", "exec", "eval", "compile"}

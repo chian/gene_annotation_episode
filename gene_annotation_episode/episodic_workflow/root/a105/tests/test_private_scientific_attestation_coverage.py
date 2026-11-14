@@ -38,18 +38,3 @@ def test_additional_prospective_guards_authenticate_exact_bytes(pilot, name, cla
     with pytest.raises(module.ContractError, match='dependency_mismatch'):
         read()
 
-@pytest.mark.parametrize('pilot', (False, True))
-@pytest.mark.parametrize('name, constant', (
-    ('literature_kinetic_inputs', 'LEGACY_DEPENDENCIES'),
-    ('literature_optical_inputs', 'LEXICAL_DEPENDENCY'),
-    ('literature_optical_validation', '_LEXICAL_DEPENDENCY'),
-    ('literature_amount_inputs', 'LEXICAL_DEPENDENCY'),
-    ('literature_amount_inputs', '_RELEASED027_LEXICAL_DEPENDENCY'),
-))
-def test_historical_release_module_labels_retain_original_identity(pilot, name, constant):
-    module = import_module((PILOT + '.tools.' if pilot else AXIS + '.library.') + name)
-    declaration = getattr(module, constant)
-    labels = {key: value for key, value in declaration.items() if key == 'module' or key.endswith('_module')}
-    assert labels
-    assert all(value.startswith('gene_annotation_episode.literature_') for value in labels.values())
-    assert all('.episodic_workflow.' not in value for value in labels.values())

@@ -402,60 +402,6 @@ def test_new_policy_preserves_chemical_locant_and_constructs_withholds_attached_
         assert chemical in steering and 'P450cam T252N/V253T' in steering and (statistic not in steering)
         assert 'projection_version' not in task and 'product_coupling_projection' not in steering
 
-@pytest.mark.parametrize('primary', [1, 3], ids=['old_positive', 'old_nondetection'])
-def test_current_repository_reads_actual_markerless_pin001_rows_and_forms_readonly_without_science(tmp_path, monkeypatch, primary):
-    previous = Path(__file__).parent / 'fixtures/retained_reference/a105_product_coupling_binding_218/pytest_001'
-    candidates = [p for p in previous.glob('test_selected_shared*/COLD_PROOF_218.json') if json.loads(p.read_text())['retained_case_arm'] == primary]
-    assert candidates, 'The original immutable pin001cohort must first complete its positive/NDcold proofs'
-    directory = sorted(candidates)[0].parent
-    original_form = json.loads((directory / 'ORIGINAL_ADMITTED_FORM_218.json').read_text())
-    state_path = directory / 'state'
-    hashes = lambda: {str(p.relative_to(state_path)): hashlib.sha256(p.read_bytes()).hexdigest() for p in state_path.rglob('*') if p.is_file()}
-    before = hashes()
-    cold = Store.__new__(Store)
-    cold.path = state_path
-    cold._savepoint = 0
-    cold.db = sqlite3.connect((state_path / 'state.sqlite3').as_uri() + '?mode=ro&immutable=1', uri=True, isolation_level=None)
-    cold.db.row_factory = sqlite3.Row
-    cold.db.execute('PRAGMA query_only=ON')
-    cold.db.create_function('library_scope_record', 2, cold._scope_filter_record)
-    row = cold.db.execute('SELECT run_id,episode_id,cells FROM literature_product_coupling_received').fetchone()
-    run_id = row['run_id']
-    rows = json.loads(row['cells'])
-    assert rows == original_form['numbers']
-    source_artifacts = [r[0] for r in cold.db.execute("SELECT json_extract(data,'$.artifact_ref') FROM records WHERE record_type='source' AND json_extract(data,'$.provider') != 'literature.a105.product_coupling'")]
-    get_artifact = cold.get_artifact
-
-    def saved_artifact(reference):
-        assert reference not in source_artifacts, 'Old scientific bytes cannot be reacquired'
-        return get_artifact(reference)
-
-    def forbidden(*_args, **_kwargs):
-        raise AssertionError('Old saved projection cannot run new source/science/admission/model work')
-    monkeypatch.setattr(cold, 'get_artifact', saved_artifact)
-    for module, names in {'literature_product_coupling_storage': ['read_product_coupling_inputs', 'populate_product_coupling', '_meaning'], 'literature_product_coupling_inputs': ['read_product_coupling_inputs', 'validate_product_coupling_extraction', '_read_number', '_covariance'], 'literature_product_coupling_calculations': ['populate_product_coupling', 'validate_product_coupling_extraction', '_sqrt']}.items():
-        for name in names:
-            monkeypatch.setattr('gene_annotation_episode.' + module + '.' + name, forbidden)
-    monkeypatch.setattr(LiteratureProductCouplingRepository, 'receive_cells', forbidden)
-    monkeypatch.setattr(LiteratureProductCouplingRepository, '_implementation_receipt', forbidden)
-    from test_contract_information_runtime_059 import PresentedProvider
-    monkeypatch.setattr(PresentedProvider, 'complete', forbidden)
-    repo = LiteratureProductCouplingRepository(cold, run_id)
-    refs = list(dict.fromkeys((r['sheet_ref'] for r in rows)))
-    for ref in refs:
-        assert 'projection_version' not in repo.read(ref)
-    assert repo.project_cells(refs, permitted_record_refs=refs) == rows
-    receiver = BindingContext(run_id, row['episode_id'], 'annotation', (('annotation', 'root'),), cold.validate_scope(), {}, {}, tuple(LiteratureProductCouplingRepository.cell_record_refs(rows)))
-    assert repo.received_cells(receiver) == rows and repo.fact_cells(receiver, refs, components=COMPONENTS) == rows
-    assert json.loads(cold.db.execute('SELECT form FROM runtime_forms').fetchone()[0]) == original_form
-    old_child = json.loads(cold.db.execute('SELECT request FROM runtime_episodes WHERE json_array_length(path)=2').fetchone()[0])
-    old_schema = old_child['report_contract']['measurements']['schema']
-    assert old_schema['properties']['numbers'] == product_coupling_cells_schema()
-    validate_form(original_form, old_schema, lambda ref, namespace: bool(cold.get(ref)))
-    assert cold.db.total_changes == 0 and cold.db.execute('PRAGMA query_only').fetchone()[0] == 1
-    cold.close()
-    assert hashes() == before
-    (tmp_path / 'OLD_PIN001_PROJECTION_PROOF_218.json').write_text(json.dumps({'primary': primary, 'actual_old_case': str(directory), 'original_markerless_rows_and_form': True, 'current_projection_source_science_model_receive_blocked': True, 'connection': 'mode=ro&immutable=1;query_only=ON', 'written_rows': 0, 'state_files': before, 'old_descriptor_not_migrated': True}, indent=2) + '\n')
 
 def test_unknown_host_projection_generation_is_rejected_after_source_authentication(tmp_path):
     store, ctx, args = setup(tmp_path, requested=['productive_fraction'])

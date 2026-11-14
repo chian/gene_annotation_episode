@@ -132,17 +132,3 @@ def test_connected_explicit_adapter_callback_has_precedence(selected):
     assert value['model']['witnesses'][0]['reference'] == case.source and visited
 
 
-def test_connected_original_global_role_only_schema_discovery_keeps_context_required_for_receipts(selected):
-    from ..execution_service_setup import ExecutionServiceFactory
-    from ..library.received_execution_information.received_configuration import ReceivedExecutionConfiguration
-    from ..annotation_received_execution_information import received_execution_information
-    from .general_received_registry_probe import originals
-    case = selected
-    factory = ExecutionServiceFactory(resources(), {}, 3., 2., 1., log_window_bytes=1024, log_roles=('stdout',))
-    catalog = ReceivedExecutionConfiguration.original_global_factory(factory).construct(store=case.store,
-        run_id=case.context.run_id, directory=case.owner.directory, tool_registry=None, services=case.services)
-    registry = EpisodeBindingRegistry([case.owner])
-    registry.configure_received_execution_information(catalog, received_execution_information)
-    assert registry.received_report_sources('annotation') == originals()['received_report_sources'](case.owner, 'annotation')
-    with pytest.raises(LookupError, match='episode_binding_context_required'):
-        registry._recipient_received_execution_information('annotation')

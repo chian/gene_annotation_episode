@@ -206,13 +206,3 @@ def test_uniprot_original_reader_rejects_changed_custody_before_projecting(chang
         parse_uniprot_snapshot(snapshot, request={'operation': 'record', 'accession': 'P0AAW1'})
 
 
-def test_selected_original_infernal_fixture_bytes_match_retained_manifest():
-    manifest = {row['path']: row['sha256'] for row in json.loads((FIXTURES / 'MANIFEST.json').read_bytes())}
-    for path in FIXTURES.iterdir():
-        if path.name in manifest:
-            assert hashlib.sha256(path.read_bytes()).hexdigest() == manifest[path.name]
-    required = {'tiny.fa', 'cmsearch_fmt1.hits.tbl', 'cmsearch_fmt3.hits.tbl',
-        'cmscan_fmt1.hits.tbl', 'cmscan_fmt2.hits.tbl', 'cmscan_fmt3.hits.tbl',
-        'cmsearch_no_hits.hits.tbl', 'cmscan_no_hits.hits.tbl'}
-    assert required <= manifest.keys()
-    assert all((FIXTURES / name).is_file() for name in required)

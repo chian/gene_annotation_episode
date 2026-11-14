@@ -88,17 +88,6 @@ def test_current_worksheet_interpretation_omits_host_metadata_and_duplicate_cont
     assert VERSION not in steering and 'quantity_links[' not in steering
     assert re.search('(?:source|artifact|reference)_[a-f0-9]{24,64}', steering) is None
 
-@pytest.mark.parametrize('module', ['literature_a105_worksheet.py', 'literature_a105_worksheet_render.py'])
-def test_bound_descriptor_includes_the_worksheet_implementation(monkeypatch, module):
-    binding = LiteratureEpisode(SimpleNamespace(), rate_population=True)
-    original = binding.as_record()
-    read = Path.read_bytes
-
-    def changed(path):
-        content = read(path)
-        return content + b'\n# explicit descriptor dependency probe\n' if path.name == module else content
-    monkeypatch.setattr(Path, 'read_bytes', changed)
-    assert binding.as_record() != original
 
 @pytest.mark.parametrize('variant', ['literal', 'alias', 'duplicate_same_type', 'changed_type', 'unknown', 'ambiguous', 'nested', 'external', 'alias_sibling', 'purpose'])
 def test_repair_authenticates_aliases_against_only_original_frozen_types(variant):

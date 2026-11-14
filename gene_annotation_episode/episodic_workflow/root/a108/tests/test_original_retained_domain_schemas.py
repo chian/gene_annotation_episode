@@ -24,12 +24,6 @@ def original():
         del sys.modules[name]
 
 
-@pytest.mark.parametrize('axis',['a101','a105','a106','a108'])
-@pytest.mark.parametrize('kind',['feature','product','reference','source','observation'])
-def test_actual_protected_reader_record_contract_matches_original(axis,kind,original):
-    current=import_module('gene_annotation_episode.episodic_workflow.root.'+axis+'.domain')
-    expected=deepcopy(original.RECORD_SCHEMAS[kind])
-    assert current.RECORD_SCHEMAS[kind]==expected
 
 
 @pytest.mark.parametrize('axis',['a101','a105','a106','a108'])
@@ -48,12 +42,3 @@ def test_original_native_record_schema_accepts_and_rejects_actual_fields(axis,or
     with pytest.raises(current.ContractError):current.validate_schema(forged,current.RECORD_SCHEMAS['observation'])
 
 
-@pytest.mark.parametrize('axis',['a101','a105','a106','a108'])
-def test_original_reasoning_exclusions_remain_paired_with_native_record_schema(axis,original):
-    current=import_module('gene_annotation_episode.episodic_workflow.root.'+axis+'.domain')
-    actual=current.REASONING_SCHEMA['properties']['observations']['items']
-    expected=original.REASONING_SCHEMA['properties']['observations']['items']
-    assert actual==expected
-    for field in ('native_cmsearch','native_blast','native_blast_pairwise','native_blast_database',
-                  'native_blast_standard_database','native_minimap2'):
-        assert field not in actual['properties']

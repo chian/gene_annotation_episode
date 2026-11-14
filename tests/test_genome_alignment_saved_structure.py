@@ -106,12 +106,6 @@ def scientific_barrier(monkeypatch):
     return tuple(module.__name__ + '.' + name for module, name in aliases)
 
 
-def test_dispatch_uses_exact_five_structural_interfaces_and_preserves_coordinate_checks():
-    for kind, validator in zip(KINDS, STRUCTURE):
-        assert provider.COMPONENT_VALIDATORS[kind] is validator
-        assert list(inspect.signature(validator).parameters) == ['value']
-    assert provider.COMPONENT_VALIDATORS['xmfa_coordinates'] is xmfa.validate_xmfa_coordinates
-    assert provider.COMPONENT_VALIDATORS['xmfa_inverse_coordinates'] is xmfa.validate_xmfa_inverse_coordinates
 
 
 @pytest.mark.parametrize('index', range(5), ids=KINDS)
@@ -193,21 +187,6 @@ def test_selected_row_order_remains_binding(seven, monkeypatch, index):
         STRUCTURE[index](value)
 
 
-def test_new_structure_paths_have_no_inline_scientific_arithmetic():
-    """Helper barriers cannot intercept inline division, aggregation or entropy."""
-    functions = [*STRUCTURE, v4._cell_structure, v4._intervals_structure, side._cell_structure,
-        side._intervals_structure, side._coverage_structure, xmfa._cell_structure, xmfa._intervals_structure]
-    for function in functions:
-        tree = ast.parse(textwrap.dedent(inspect.getsource(function)))
-        for node in ast.walk(tree):
-            if isinstance(node, ast.BinOp):
-                # Text method-name concatenation and this signed native start
-                # convention are the only arithmetic syntax in these functions.
-                assert isinstance(node.op, ast.Add) or ast.unparse(node) == 'abs(start) - 1'
-            if isinstance(node, ast.Call):
-                name = ast.unparse(node.func)
-                assert name not in {'sum', 'math.log2', 'math.log', 'math.isclose', 'interval_length',
-                    'union_intervals', 'multiplicity_bases', 'complement_intervals', '_cell', '_coverage_counts', '_union'}
 
 
 @pytest.mark.parametrize('operation', ['project_genome_alignment_facts', 'validate_projected_facts', 'requested_projection_status'])

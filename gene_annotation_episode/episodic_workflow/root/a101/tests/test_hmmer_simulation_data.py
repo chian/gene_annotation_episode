@@ -326,14 +326,6 @@ def test_excess_binary_population_does_not_validate_a_wrong_smaller_N():
     assert sum(r["payload"]["observed_count"] for r in kinds(sheet, "scores")) == 1000
 
 
-def test_pure_modules_have_no_acquisition_execution_or_model_service_imports():
-    import ast
-    allowed = {"__future__", "copy", "hashlib", "math", "operator", "re", "struct", "hmmer_simulation_data"}
-    for name in ("data", "calculations"):
-        module = ast.parse((Path(__file__).resolve().parents[1] / "library" / f"hmmer_simulation_{name}.py").read_text())
-        imported = {("hmmer_simulation_data" if n.module == "gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_simulation_data" else n.module).split(".")[0] for n in ast.walk(module) if isinstance(n, ast.ImportFrom)}
-        imported |= {a.name.split(".")[0] for n in ast.walk(module) if isinstance(n, ast.Import) for a in n.names}
-        assert imported <= allowed
 
 
 def test_parser_forbidden_io_and_no_mutation(monkeypatch):

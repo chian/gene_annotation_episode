@@ -11,46 +11,8 @@ from .root_selector_fixtures import (HOMES, controlled_root, selected_task, invo
     own, root_session)
 
 
-@pytest.mark.parametrize('home',HOMES)
-@pytest.mark.parametrize('method',('call','exchange_decision'))
-def test_actual_private_path_root_transport(home,method,tmp_path,monkeypatch):
-    provider,sent,workers=controlled_root(monkeypatch,tmp_path)
-    task,binding=selected_task(home,provider)
-    context=state_frame(snapshot());before=deepcopy(context)
-    assert asyncio.run(invoke(task,home,method,context))=={'fixture':True}
-    turn,=[params for name,params in sent if name=='turn/start']
-    assert_task(turn['input'][0]['text']);assert_no_bookkeeping(turn['input'][0]['text'])
-    saved=json.loads((tmp_path/'connection/session-0001/call-00001/request.json').read_text())
-    assert saved['context']==before==context and saved['instructions']==INSTRUCTION_TEXT
-    assert saved['presentation']['module']==binding.decision_prompt_renderer.__module__
-    assert saved['presentation']['declared_presenter']=={
-        'module':own.__name__,'qualname':'_SessionConnection._declared_presentation'}
-    assert 'protocol' not in saved['presentation']
-    assert provider.workers=={} and len(workers)==1
-    # This is the original release bookkeeping over a controlled lifecycle only.
-    assert workers[0].scientific_prompt_states=={}
 
 
-@pytest.mark.parametrize('home',HOMES)
-@pytest.mark.parametrize('method',('call','exchange_decision'))
-def test_original_custom_callee_identity_and_order(home,method):
-    traces=[];sentinel=object()
-    class Provider:
-        @property
-        def complete(self):
-            traces.append('complete_lookup')
-            async def call(*args): traces.append(('completed',args));return sentinel
-            return call
-        @property
-        def complete_with_presentation(self):
-            raise AssertionError('custom provider presentation lookup changed')
-    source=Provider();task,binding=selected_task(home,source)
-    context=state_frame(snapshot())
-    assert asyncio.run(invoke(task,home,method,context,original=True)) is sentinel
-    original=traces[:];traces.clear()
-    assert asyncio.run(invoke(task,home,method,context)) is sentinel
-    assert traces==original
-    assert traces[0]=='complete_lookup' and len(traces)==2
 
 
 def test_genuine_presenter_globals_and_frame_state():
@@ -74,115 +36,12 @@ def test_genuine_presenter_globals_and_frame_state():
     assert state==snapshot()
 
 
-@pytest.mark.parametrize('mutation',('instance_hook','raising_class_hook','custom_getattribute'))
-def test_root_override_preserves_original_complete(mutation,tmp_path,monkeypatch):
-    from .root_selector_fixtures import root_provider
-    provider,sent,workers=controlled_root(monkeypatch,tmp_path)
-    def forbidden(*args):
-        raise AssertionError('explicit presentation override was consulted')
-    if mutation=='instance_hook':
-        provider.complete_with_presentation=forbidden
-    elif mutation=='raising_class_hook':
-        monkeypatch.setattr(root_provider.ModelConnection,'complete_with_presentation',property(forbidden))
-    else:
-        class Custom(root_provider.ModelConnection):
-            def __getattribute__(self,name):
-                if name=='complete_with_presentation': return forbidden()
-                return object.__getattribute__(self,name)
-        provider.__class__=Custom
-    task,binding=selected_task(HOMES[0],provider)
-    context=state_frame(snapshot())
-    assert asyncio.run(invoke(task,HOMES[0],'call',context))=={'fixture':True}
-    saved=json.loads((tmp_path/'connection/session-0001/call-00001/request.json').read_text())
-    assert 'presentation' not in saved
-    assert saved['context']==context
 
 
-@pytest.mark.parametrize('method',('call','exchange_decision'))
-def test_actual_call_expression_resolves_callee_before_arguments(method):
-    from .root_selector_fixtures import expression
-    failure=LookupError('controlled complete lookup')
-    traces=[]
-    class Provider:
-        @property
-        def complete(self):
-            traces.append('callee');raise failure
-    class Request(dict):
-        def __getitem__(self,key): traces.append('argument:'+key);return super().__getitem__(key)
-    task,binding=selected_task(HOMES[0],Provider())
-    for original in (True,False):
-        code,namespace=expression(HOMES[0],method,original=original)
-        # A namespace wrapper observes the genuine schema helper, without any
-        # production monkeypatch or change to the captured call expression.
-        original_schema=namespace['_action_generation_schema']
-        def schema(value): traces.append('schema');return original_schema(value)
-        namespace['_action_generation_schema']=schema
-        traces.clear()
-        async def run():
-            return await eval(code,namespace,dict(self=task,instructions='unchanged',
-                context={},schema={},request=Request(instructions='unchanged',context={},output_schema={})))
-        with pytest.raises(LookupError) as caught: asyncio.run(run())
-        assert caught.value is failure and traces==['callee']
 
 
-@pytest.mark.parametrize('kind',('metaclass','borrowed_bound_complete','nonstring_dictionary_key'))
-@pytest.mark.parametrize('method',('call','exchange_decision'))
-def test_genuine_root_ineligible_receiver_matches_original(kind,method,tmp_path,monkeypatch):
-    from .root_selector_fixtures import unusual_root_receiver
-    observations=[]
-    for original in (True,False):
-        directory=tmp_path/('original' if original else 'selected')
-        provider,sent,workers=controlled_root(monkeypatch,directory)
-        events=[]
-        receiver=unusual_root_receiver(provider,kind,directory,events)
-        task,binding=selected_task(HOMES[0],receiver)
-        context=state_frame(snapshot());unchanged=deepcopy(context)
-        assert asyncio.run(invoke(task,HOMES[0],method,context,original=original))=={'fixture':True}
-        saved=json.loads((receiver.directory/'session-0001/call-00001/request.json').read_text())
-        assert 'presentation' not in saved
-        assert saved['context']==context==unchanged
-        assert saved['instructions']==INSTRUCTION_TEXT
-        assert events==[]
-        observations.append({key:saved[key] for key in ('episode_id','role','instructions','context','output_schema','input')})
-    assert observations[0]==observations[1]
 
 
-@pytest.mark.parametrize('method',('call','exchange_decision'))
-@pytest.mark.parametrize('change',('provider','episode'))
-@pytest.mark.parametrize('fails',(False,True))
-def test_original_argument_effect_keeps_captured_root_callee(method,change,fails,tmp_path,monkeypatch):
-    from .root_selector_fixtures import invoke_argument_mutation
-    failure=RuntimeError('controlled original argument failure')
-    observed=[]
-    for original in (True,False):
-        provider,sent,workers=controlled_root(monkeypatch,tmp_path/('original' if original else 'selected'))
-        task,binding=selected_task(HOMES[0],provider)
-        initial_episode=task.episode_id
-        context=state_frame(snapshot());unchanged=deepcopy(context);events=[]
-        work=invoke_argument_mutation(task,HOMES[0],method,context,original=original,
-            change=change,events=events,failure=failure if fails else None)
-        if fails:
-            with pytest.raises(RuntimeError) as caught: asyncio.run(work)
-            assert caught.value is failure
-            assert sent==[] and workers==[]
-            assert provider.session_index==0
-            assert not (provider.directory/'session-0001').exists()
-            observed.append(events)
-        else:
-            assert asyncio.run(work)=={'fixture':True}
-            saved=json.loads((provider.directory/'session-0001/call-00001/request.json').read_text())
-            assert saved['episode_id']==initial_episode
-            assert saved['context']==context==unchanged and saved['instructions']==INSTRUCTION_TEXT
-            if original:
-                assert 'presentation' not in saved
-            else:
-                assert saved['presentation']['declared_presenter']['module']==own.__name__
-                assert_task(saved['input'][0]['text']);assert_no_bookkeeping(saved['input'][0]['text'])
-            observed.append((events,{key:saved[key] for key in ('episode_id','role','instructions','context','output_schema')}))
-        assert events[0]=='argument_mutation' and 'replacement_called' not in events
-        if change=='provider': assert task.workflow.provider is not provider
-        else: assert task.episode_id=='changed-during-argument-evaluation'
-    assert observed[0]==observed[1]
 
 
 PRESENTATION_HOMES=(

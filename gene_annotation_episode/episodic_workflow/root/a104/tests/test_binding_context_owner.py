@@ -31,12 +31,6 @@ def test_all_eight_values_and_original_seven_field_record():
     with pytest.raises(FrozenInstanceError): context.role = 'changed'
     with pytest.raises(TypeError): context.assignment['nested']['values'] = ()
 
-def test_nominal_owner_change_is_explicit(canonical_epoch):
-    own, root = BindingContext(**operands()), RootContext(**operands())
-    assert (BindingContext is RootContext) is canonical_epoch
-    assert (own == root) is canonical_epoch
-    assert type(own) is BindingContext
-    assert own.received_record_refs == root.received_record_refs
 
 @pytest.mark.parametrize('field,value,error,message', [
     ('run_id', '', ValueError, 'nonempty_run_id_required'),

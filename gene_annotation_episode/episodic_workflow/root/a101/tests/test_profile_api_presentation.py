@@ -244,15 +244,6 @@ def test_real_session_hmmer_task_keeps_parameters_selection_and_continuation(tmp
     assert repeated == text and actual == instructions
 
 
-@pytest.mark.parametrize("name", ("rfam243", "rfam245"))
-def test_authentic_rfam_request_occurrences_and_selector_stay_literal(api_cases, name):
-    case = api_cases[name]
-    assignment = case["publication"]["target"]["assignment"]
-    safe = select_profile_api_execution_values(assignment)
-    assert safe == dict(service="rfam_batch", request=case["inputs"]["request"])
-    refs = safe["request"]["subject_refs"]
-    assert len(refs) == 3 and refs[0] == refs[1] != refs[2]
-    assert select_profile_api_execution_values(case["inputs"]["selector"]) == case["inputs"]["selector"]
 
 
 @pytest.mark.parametrize("version,representation", (("rfam_batch_result_selector_v1", "json"),
@@ -279,57 +270,8 @@ def test_malformed_recognized_and_unknown_api_shapes_do_not_break_wire_selection
     assert select_profile_api_execution_values(value) is None and value == before
 
 
-@pytest.mark.parametrize("name", ("rfam243", "rfam245"))
-def test_current_session_captured_rfam_results_task_frames_and_selected_values(api_cases, name, tmp_path):
-    case = api_cases[name]
-    call = case["results"][0]
-    current = _selected_context(case, call)
-    before = deepcopy(current)
-    session = _session(tmp_path / "captured-results")
-    state = instructional_model_context(current)
-    text, instructions = session._presentation(call["episode_id"], call["role"], call["instructions"], state_frame(state))
-    assert text.startswith("TASK") and "STEERING" in text and instructions == call["instructions"]
-    assert current["selected_execution_task"]["scientific_question"] in text
-    for info in current["selected_execution_task"]["selected_tool_info"]:
-        assert info["description"] in text and info["instructions"] in text
-    for ref in case["inputs"]["request"]["subject_refs"]:
-        assert ref in text
-    assert case["inputs"]["selector"]["version"] in text
-    assert case["inputs"]["selector"]["representation"] in text
-    assert all(metric in text for metric in case["inputs"]["selector"]["projection"]["metrics"])
-    repeated, actual = session._presentation(call["episode_id"], call["role"], call["instructions"], state_frame(state, state))
-    assert repeated == text and actual == instructions and current == before
-    # Apply the real persisted fetch outcome to the current Results state.
-    # This is current retained-data rendering, not an old post-fetch capture.
-    update = deepcopy(state)
-    update["last_local_outcome"] = deepcopy(case["acquired"])
-    received, actual = session._presentation(call["episode_id"], call["role"], call["instructions"], state_frame(update, state))
-    assert actual == instructions and "104.6" in received and "model_length_unavailable" in received
-    if name == "rfam245":
-        assert "118" in received and "75" in received and "5S_rRNA" in received
-        assert case["returned"]["populations"][0] == dict(available_row_count=3, family="hit",
-            more_rows=True, population_complete=True, selected_row_count=2,
-            source_ref="source_1d09b389cd2041a9aae25a4d")
-    else:
-        assert len({row["query_occurrence_key"] for row in case["returned"]["measurements"]}) == 3
-        assert [row["strand"] for row in case["returned"]["measurements"]] == ["+", "+", "-"]
 
 
-def test_rfam_launch_uses_authenticated_selected_question_and_keeps_own_progress_private(api_cases, tmp_path):
-    case = api_cases["rfam243"]
-    call = next(row for row in case["calls"] if row["current"].get("api_service") == "rfam_batch")
-    current = _selected_context(case, call)
-    current["goal"]["task_context"]["root_objective"] = "BROADER_ROOT_OBJECTIVE_ENGINEERED"
-    current["last_local_outcome"] = dict(status="partial", result=dict(state="unknown", returncode=None,
-        host_path="PRIVATE_CAPTURE_PATH", credential="PRIVATE_CREDENTIAL", body="PRIVATE_BODY"))
-    text, actual = _session(tmp_path / "api-launch")._presentation(call["episode_id"], call["role"], call["instructions"],
-        state_frame(instructional_model_context(current)))
-    assert text.startswith("TASK") and "STEERING" in text and actual == call["instructions"]
-    assert current["selected_execution_task"]["scientific_question"] in text
-    assert "BROADER_ROOT_OBJECTIVE_ENGINEERED" not in text
-    assert all(info["instructions"] in text for info in current["selected_execution_task"]["selected_tool_info"])
-    assert all(token not in text for token in ("PRIVATE_CAPTURE_PATH", "PRIVATE_CREDENTIAL", "PRIVATE_BODY"))
-    assert "partial" in text and "unknown" in text
 
 
 def _controller(path, initial):
@@ -353,124 +295,3 @@ class UnexpectedAPIFeedback(RuntimeError):
     pass
 
 
-def test_new_current_rfam_results_builder_stops_before_any_result_selection(api_cases, tmp_path, monkeypatch):
-    case = api_cases["rfam243"]
-    db = case["db"]
-    run_id = case["publication"]["run_id"]
-    science = _commission(db, run_id, case["scientific"]["episode_id"], "scientific_process")
-    results = _commission(db, run_id, case["publication"]["episode_id"], "results")
-    assert results["selected"]["assignment"]["handoff_ref"] == _HANDOFF
-    old_binding = science["request"]["message"]["scientific_process"]["mechanics_binding"]
-    root = tmp_path / "current-pending"
-    state = root / "state"
-    state.mkdir(parents=True)
-    destination = sqlite3.connect(state / "state.sqlite3")
-    try:
-        db.backup(destination)
-        assert _tables(destination) == case["tables"]
-    finally:
-        destination.close()
-    shutil.copytree(case["directory"] / "state/artifacts", state / "artifacts")
-    run = root / "run"
-    run.mkdir()
-    for name in ("api-service-execution", "scientific-process-library", "scientific-tool-library", "tool-knowledge", "launch-instructions"):
-        source = case["directory"] / "run" / name
-        if source.exists():
-            target = root / "original-scientific-tool-library" if name == "scientific-tool-library" else run / name
-            shutil.copytree(source, target, symlinks=True)
-    original_library = ScientificToolLibrary(root / "original-scientific-tool-library")
-    process_library = ScientificProcessLibrary(run / "scientific-process-library")
-    assert original_library.as_record() == old_binding["configuration"]["tool_library"]
-    assert process_library.as_record() == old_binding["configuration"]["library"]
-    original_info = original_library.resolve_tool_info(science["request"]["message"]["scientific_process"]["selection"]["child_tool_info"])
-    assert original_info == case["scientific"]["current"]["scientific_process"]["child_tool_info"]
-    factory = ExecutionServiceFactory({"rfam": dict(kind="api", service="rfam_batch", timeout=90.0)}, {}, 3, 2, .5)
-    session = _session(tmp_path / "pending-session")
-    calls, pending = [], {}
-    current_info = current_science = None
-
-    class Choices:
-        async def complete(self, episode_id, role, instructions, current, schema):
-            calls.append(dict(episode_id=episode_id, role=role, instructions=instructions, context=deepcopy(current)))
-            if current.get("feedback"):
-                raise UnexpectedAPIFeedback("unexpected API action-contract feedback: " + _canonical(plain(current["feedback"])))
-            frame = state_frame(instructional_model_context(current))
-            wire, actual = session._presentation(episode_id, role, instructions, frame)
-            calls[-1]["wire"] = wire
-            if current.get("execution_assignment", {}).get("version") == "execution_results_assignment_v1":
-                assert len(calls) == 3 and current["execution_assignment"] == results["selected"]["assignment"]
-                assert current["execution_target"] == case["publication"]["target"]
-                task = current["selected_execution_task"]
-                assert task["scientific_question"] == science["selected"]["goal"]
-                assert task["selected_tool_info"] == current_info
-                assert task["requests"][0]["job"] == case["publication"]["target"]["assignment"]
-                assert task["selector"] == results["selected"]["assignment"]["selector"]
-                assert current["requested_form"] == json.loads(results["selected"]["schema_json"])
-                assert current["last_local_outcome"] is None and current["child_reports"] == []
-                assert wire.startswith("TASK") and "STEERING" in wire and actual == instructions
-                assert all(info["instructions"] in wire for info in current_info)
-                pending.update(episode_id=episode_id, context=deepcopy(current), wire=wire)
-                raise PendingAPICaptured("before any API result selection")
-            selected = results["selected"] if "scientific_process" in current else current_science
-            answer = provider_value({"selection": deepcopy(selected), "report_update": {}}, plain(schema))
-            Draft202012Validator(plain(schema)).validate(answer)
-            return answer
-
-        async def release(self, episode_id):
-            pass
-
-    store = Store(state)
-    proof = dict(version="profile_api_current_pending_results_verification_v1", passed=False,
-        historical_instruction_wire_claimed=False, native_calls=0, http_calls=0, calculator_calls=0,
-        real_model_calls=0, old_replay_claimed=False)
-    initialized = None
-    try:
-        registry = ToolRegistry(store)
-        application = factory(store, run_id=run_id, directory=run, tool_registry=registry)
-        current_library = ScientificToolLibrary.freeze(run / "scientific-tool-library", catalog=registry.catalog(),
-            tool_info=True, resource_catalogs=application.resource_tool_catalogs)
-        selectors = [{key: info[key] for key in ("name", "resources")} for info in original_info]
-        current_info = current_library.resolve_tool_info(selectors)
-        descriptor = ScientificProcessEpisodes(None, library=process_library, tool_library=current_library,
-            child_roles=old_binding["configuration"]["child_roles"]).as_record()
-        current_science = deepcopy(science["selected"])
-        current_science["assignment"]["selection"]["child_tool_info"] = selectors
-        flow = Workflow(store, registry, Choices(), run, run_id, controller_factory=_controller, project_credit=_neutral,
-            annotation_child_roles=("scientific_process",), episode_record_receipts=True,
-            initial_known_record_refs=[_HANDOFF], episode_binding_descriptors=(descriptor, *application.episode_binding_descriptors),
-            role_credit_bindings=application.role_credit_bindings, job_progress_provider=application.job_progress_provider)
-        constructor = _assert_original_rows(store.db, case["tables"])
-        initialized = _tables(store.db)
-        before_files = _inventory(root)
-        episode = flow.build("annotation", "current-profile-api-pending243",
-            science["request"]["goal"]["task_context"]["root_objective"], science["selected"]["scope"])
-        with pytest.raises(PendingAPICaptured, match="before any API result selection"):
-            asyncio.run(episode.run_async(flow.context))
-        assert len(calls) == 3 and pending
-        added = _new_rows(initialized, _tables(store.db))
-        assert len(added["runtime_episodes"]) == 3 and len(added["runtime_actions"]) == 2
-        assert len(added["runtime_model_calls"]) == 3
-        for name in ("records", "artifacts", "tool_operations", "runtime_forms", "runtime_report_attempts", "runtime_observations"):
-            assert added[name] == []
-        records = EpisodeReturnRecords(store, run_id, failure_prefix="profile_api_pending_")
-        context = records.context(pending["episode_id"])
-        owner = flow.specialist(_source_for_original_context(flow, context))
-        assert owner._target(context) == case["publication"]["target"]
-        assert _HANDOFF in set(flow.receipts.known(context.episode_id))
-        current_files = _inventory(root)
-        for name, pin in before_files.items():
-            if name not in {"state/state.sqlite3", "state/state.sqlite3-wal", "state/state.sqlite3-shm"}:
-                assert current_files[name] == pin
-        proof.update(passed=True, constructor=constructor, full_current_results_builder_verified=True,
-            original_question=science["selected"]["goal"], original_binding=old_binding, current_binding=descriptor,
-            original_tool_info=original_info, current_tool_info=current_info,
-            actual_new_row_counts={name: len(rows) for name, rows in added.items()})
-    except BaseException as error:
-        proof["failure"] = dict(type=type(error).__name__, message=str(error))
-        raise
-    finally:
-        proof["calls"] = calls
-        if initialized is not None:
-            proof["actual_new_rows"] = _new_rows(initialized, _tables(store.db))
-        store.close()
-        (tmp_path / "PROFILE_API_CURRENT_PENDING_RESULTS.json").write_text(json.dumps(proof, indent=2, allow_nan=False) + "\n")

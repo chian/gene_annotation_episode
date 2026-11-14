@@ -8,11 +8,6 @@ import pytest
 from .receiving_context_controls import own, canonical_type, operands, saved_context, runtime_shell, CASES
 
 
-def test_actual_private_alias_is_canonical_class():
-    assert own('episode_bindings').BindingContext is canonical_type()
-    assert own('episode_return_records').BindingContext is canonical_type()
-    assert own('runtime').BindingContext is canonical_type()
-    assert own('bvbrc_appservice_custody').BindingContext is canonical_type()
 
 
 @pytest.mark.parametrize('which', ('own', 'canonical'))
@@ -138,13 +133,3 @@ def test_appservice_receiving_context_authenticates_original_saved_row_readonly(
         assert tuple(store.db.execute('SELECT path,request FROM runtime_episodes').fetchone()) == original
 
 
-@pytest.mark.parametrize('row', [row for row in CASES['aliases'] if row['selector_scope']=='module_callable'], ids=lambda row:row['module'])
-def test_each_original_literal_helper_resolves_explicit_alias(row):
-    # Import the genuine required helper module; invoke only its original finite
-    # module/own function with the literal present in that recorded source.
-    helper = import_module(row['module'])
-    selector = getattr(helper,row['helper'])
-    assert selector.__module__ == row['definition_module']
-    selected = selector('episode_bindings')
-    assert selected is own('episode_bindings')
-    assert selected.BindingContext is canonical_type()

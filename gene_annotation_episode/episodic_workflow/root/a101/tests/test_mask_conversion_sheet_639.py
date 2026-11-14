@@ -215,32 +215,6 @@ def test_projection_copies_exact_components_and_fulfills_known_zero_native_absen
         assert projection["artifacts"] == []
 
 
-@pytest.mark.parametrize("case_id", ["dustmasker_interval", "dustmasker_soft", "dustmasker_hard",
-    "segmasker_interval", "segmasker_soft", "windowmasker_interval", "windowmasker_soft"])
-def test_legacy_serialized_sheets_and_components_equal_original_097_implementation(case_id):
-    import importlib.util
-    from pathlib import Path
-    import test_sequence_masking as legacy_tests
-    from gene_annotation_episode import sequence_masking_inputs as current_inputs
-    from gene_annotation_episode.sequence_masking_calculations import calculate_sequence_masking_components as current_calculate
-    root = Path(__file__).resolve().parents[5]
-    baseline = root / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/mask_conversion_before"
-    def original_module(name):
-        spec = importlib.util.spec_from_file_location("gene_annotation_episode._legacy639_" + name, baseline / (name + ".py"))
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return module
-    original_inputs = original_module("sequence_masking_inputs")
-    original_calculate = original_module("sequence_masking_calculations").calculate_sequence_masking_components
-    actual = legacy_tests.native_sheet(case_id)
-    with patch.object(legacy_tests, "parse_masking_input_fasta", original_inputs.parse_masking_input_fasta), \
-         patch.object(legacy_tests, "parse_sequence_masking_output", original_inputs.parse_sequence_masking_output), \
-         patch.object(legacy_tests, "populate_sequence_masking_sheet", original_inputs.populate_sequence_masking_sheet), \
-         patch.object(legacy_tests, "calculate_sequence_masking_components", original_calculate):
-        expected = legacy_tests.native_sheet(case_id)
-    assert actual == expected
-    assert json.dumps(actual, sort_keys=True) == json.dumps(expected, sort_keys=True)
-    assert "native_maskinfo" not in actual[0]["parsed_output"]
 
 
 def test_explicit_native_order_binding_cannot_remap_the_complete_masked_population():

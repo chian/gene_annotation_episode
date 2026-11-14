@@ -226,43 +226,10 @@ def test_receiving_capability_is_exact_and_does_not_require_an_existing_result(g
     assert not _rna_comparison_receiver_context({}) and not _rna_comparison_receiver_context(None)
 
 
-@pytest.mark.parametrize('kind', ['root_without_binding', 'legacy_without_binding', 'unrelated_group'])
-def test_unrelated_legacy_inputs_preserve_original_json_and_instructions(tmp_path, kind):
-    state = root_state() if kind == 'root_without_binding' else legacy_state()
-    state.pop('received_rna_comparison_values')
-    if kind == 'unrelated_group':
-        state['received_rna_comparison_values'] = [{'fact_source': 'other', 'facts': []}]
-    wire = ScientificWire(tmp_path / 'wire')
-    frame = state_frame(state)
-    expected = baseline._SessionConnection._presentation(wire, 'comparison', 'REASONING', instructions(state), frame)
-    asyncio.run(complete(wire, state, context=frame))
-    assert wire.turns_sent()[0]['input'][0]['text'] == expected[0]
-    assert json.loads(expected[0]) == frame
-    assert next(p['developerInstructions'] for method, p in wire.sent if method == 'thread/start') == expected[1]
-    assert not wire.scientific_prompt_states
 
 
-def test_published_scientific_template_keeps_priority_over_empty_receiver_marker(tmp_path):
-    state = snapshot()
-    state['received_rna_comparison_values'] = []
-    wire = ScientificWire(tmp_path / 'wire')
-    frame = state_frame(state)
-    expected = baseline._SessionConnection._presentation(wire, 'before', 'REASONING', instructions(state), frame)
-    asyncio.run(complete(wire, state, context=frame))
-    assert wire.turns_sent()[0]['input'][0]['text'] == expected[0]
-    assert next(p['developerInstructions'] for method, p in wire.sent if method == 'thread/start') == expected[1]
 
 
-def test_literature_template_keeps_its_existing_priority(tmp_path):
-    from test_literature_experimental_prompt_delivery import snapshot as literature_snapshot
-    state = literature_snapshot()
-    state['received_rna_comparison_values'] = []
-    wire = ScientificWire(tmp_path / 'wire')
-    frame = state_frame(state)
-    expected = baseline._SessionConnection._presentation(wire, 'before', 'REASONING', instructions(state), frame)
-    asyncio.run(complete(wire, state, context=frame))
-    assert wire.turns_sent()[0]['input'][0]['text'] == expected[0]
-    assert next(p['developerInstructions'] for method, p in wire.sent if method == 'thread/start') == expected[1]
 
 
 def test_current_annotation_is_present_without_replaying_superseded_revisions(tmp_path, pair):

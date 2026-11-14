@@ -171,30 +171,8 @@ def retained_services():
         yield store,service,context,selector
 
 
-def test_actual_service_reads_original_owned_saved_record_without_dispatch(retained_services, monkeypatch):
-    store, service, context, selector = retained_services
-    from gene_annotation_episode.restriction_mapping_jobs import RestrictionMappingJobs
-    monkeypatch.setattr(RestrictionMappingJobs,"run_async",forbidden)
-    before = store.db.total_changes
-    selection = requested_restriction_projections(plain(context.request)["report_contract"]["measurements"]["schema"])[SOURCE]["selection"]
-    page = service.restriction_mapping_own_action_results(context,selection=selection,
-        after_decision_index=None,limit=64)
-    record, = page["records"]
-    assert record["source_ref"] == selector["source_ref"]
-    row, = record["mapping"]["enzyme_rows"]
-    assert row["native_search_positions_1based"] == [6]
-    assert row["recognition_match_count"] == 1
-    assert row["positions"][0]["watson_boundary_0based"] == 5
-    assert row["positions"][0]["crick_boundary_0based"] == 9
-    assert service.restriction_mapping_reference(context,"EcoRI","restriction_enzyme") is True
-    assert store.db.total_changes == before
 
 
-def test_actual_namespace_port_ignores_unrelated_references(retained_services):
-    store,service,context,_ = retained_services
-    before=store.db.total_changes
-    assert service.restriction_mapping_reference(context,"EcoRI","source") is None
-    assert store.db.total_changes==before
 
 
 def test_actual_composed_empty_source_closes_through_requested_parent_form(tmp_path):

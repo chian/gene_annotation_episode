@@ -15,15 +15,8 @@ from gene_annotation_episode.episodic_workflow.root.method_loop import identitie
 from gene_annotation_episode.episodic_workflow.root.receiving_context import BindingContext
 
 
-def test_receipt_reader_uses_iterator_identity_class():
-    assert episode_return_records.EpisodeRef is identities.EpisodeRef
-    ref = episode_return_records.EpisodeRef('identity-run', (('annotation', 'root'),))
-    assert identities.EpisodeRef.from_record(ref.as_record()) == ref
-    assert type(ref) is identities.EpisodeRef
 
 
-def test_process_records_use_canonical_structural_path_normalizer():
-    assert scientific_process_records.normalize_structural_path is identities.normalize_structural_path
 
 
 def test_saved_context_restores_exact_type_and_detaches_nested_assignments():

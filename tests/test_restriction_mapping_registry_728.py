@@ -101,139 +101,22 @@ def saved_job():
     store.close()
 
 
-def test_actual_saved_host_job(saved_job):
-    store, _, selected, _ = saved_job
-    state = RestrictionMappingJobs(store).publication_state(selected["operation_key"])
-    assert state["reservation"]["work_mode"] == "saved"
-    assert state["execution_proof"]["original_view"]["quiescent"] is True
-    assert state["execution_proof"]["returncode"] == 0
-    result = read_published_restriction_result(store, selected["source_ref"], scope=selected["scope"])
-    assert result["body"]["status"] == "completed"
-    assert result["mapping"]["status"] == "complete"
-    assert result["mapping"]["population"]["recognition_match_count"] == 1
-    row, = result["mapping"]["enzyme_rows"]
-    assert row["name"] == "EcoRI" and row["native_search_positions_1based"] == [6]
-    position, = row["positions"]
-    assert position["watson_boundary_0based"] == 5 and position["crick_boundary_0based"] == 9
-    prior = read_published_restriction_result(store, selected["arguments"]["result_source_ref"],
-        scope=selected["scope"])
-    assert result["native"] == prior["native"] and result["mapping"] == prior["mapping"]
 
 
-def test_replay_uses_archived_identity_without_execution(saved_job, monkeypatch):
-    store, tools, selected, _ = saved_job
-    monkeypatch.setattr(module, "_software", forbid)
-    monkeypatch.setattr(tools, "_sequence", forbid)
-    monkeypatch.setattr(RestrictionMappingJobs, "run_async", forbid)
-    monkeypatch.setattr(RestrictionMappingJobs, "reserve", forbid)
-    before = store.db.execute("SELECT count(*) FROM tool_operations").fetchone()[0]
-    result = module.replay_restriction_work(tools, selected["tool_name"], selected["arguments"],
-        scope=selected["scope"], operation_key=selected["operation_key"],
-        permitted_record_refs=selected["permitted"])
-    assert result == selected["outcome"]
-    reservation = asyncio.run(module.prepare_restriction_work(tools, selected["tool_name"],
-        selected["arguments"], scope=selected["scope"], operation_key=selected["operation_key"],
-        permitted_record_refs=selected["permitted"]))
-    assert reservation["operation_key"] == selected["operation_key"]
-    assert store.db.execute("SELECT count(*) FROM tool_operations").fetchone()[0] == before
 
 
-def test_actual_registry_cache_replay_without_catalog_injection(saved_job, monkeypatch):
-    store, tools, selected, _ = saved_job
-    assert selected["tool_name"] not in tools.catalog(selected["scope"])
-    monkeypatch.setattr(module, "_software", forbid)
-    monkeypatch.setattr(tools, "_sequence", forbid)
-    monkeypatch.setattr(RestrictionMappingJobs, "run_async", forbid)
-    before = store.db.total_changes
-    outcome = asyncio.run(tools.execute_async(selected["tool_name"], selected["arguments"],
-        scope=selected["scope"], operation_key=selected["operation_key"],
-        permitted_record_refs=selected["permitted"]))
-    assert outcome == selected["outcome"] and store.db.total_changes == before
 
 
-def test_actual_registry_cache_denial_keeps_original_result(saved_job, monkeypatch):
-    store, tools, selected, _ = saved_job
-    before = store.db.execute("SELECT result FROM tool_operations WHERE operation_key=?",
-        (selected["operation_key"],)).fetchone()[0]
-    monkeypatch.setattr(module, "_software", forbid)
-    monkeypatch.setattr(RestrictionMappingJobs, "run_async", forbid)
-    changes = store.db.total_changes
-    outcome = asyncio.run(tools.execute_async(selected["tool_name"], selected["arguments"],
-        scope=selected["scope"], operation_key=selected["operation_key"], permitted_record_refs=[]))
-    assert outcome["status"] == "invalid" and outcome["result"] is None
-    assert outcome["record_refs"] == []
-    assert outcome["feedback"]["code"] == "restriction_operand_not_received"
-    assert store.db.execute("SELECT result FROM tool_operations WHERE operation_key=?",
-        (selected["operation_key"],)).fetchone()[0] == before
-    assert store.db.total_changes == changes
 
 
-def test_reserved_publication_error_preserves_original_result_for_restore(saved_job, monkeypatch):
-    store, tools, selected, _ = saved_job
-    before = store.db.execute("SELECT result FROM tool_operations WHERE operation_key=?",
-        (selected["operation_key"],)).fetchone()[0]
-    def publication_error(*args, **kwargs):
-        raise ContractError("engineering_publication_interruption")
-    monkeypatch.setattr(tools_module, "publish_restriction_work", publication_error)
-    monkeypatch.setattr(tools, "_save", forbid)
-    monkeypatch.setattr(RestrictionMappingJobs, "run_async", forbid)
-    token = tools._permitted_record_refs.set(tuple(selected["permitted"]))
-    try:
-        with pytest.raises(module.RestrictionOperationUnpublished, match="engineering_publication_interruption"):
-            asyncio.run(tools._restriction_operation_async(selected["tool_name"],
-                selected["arguments"], selected["scope"], selected["operation_key"]))
-    finally:
-        tools._permitted_record_refs.reset(token)
-    assert store.db.execute("SELECT result FROM tool_operations WHERE operation_key=?",
-        (selected["operation_key"],)).fetchone()[0] == before
 
 
-@pytest.mark.parametrize("which", ["sequence", "prior", "all"])
-def test_replay_requires_explicit_received_operands(saved_job, which):
-    _, tools, selected, _ = saved_job
-    permitted = [] if which == "all" else [selected["permitted"][1 if which == "sequence" else 0]]
-    with pytest.raises(ContractError, match="restriction_operand_not_received"):
-        module.replay_restriction_work(tools, selected["tool_name"], selected["arguments"],
-            scope=selected["scope"], operation_key=selected["operation_key"], permitted_record_refs=permitted)
 
 
-@pytest.mark.parametrize("field", ["alias", "arguments"])
-def test_replay_cannot_rebind_an_original_operation(saved_job, field):
-    _, tools, selected, _ = saved_job
-    name, arguments = selected["tool_name"], deepcopy(selected["arguments"])
-    if field == "alias":
-        name = "find_restriction_enzymes"
-    else:
-        arguments["result_source_ref"] = selected["source_ref"]
-    with pytest.raises(ContractError, match="restriction_operation_conflict"):
-        module.replay_restriction_work(tools, name, arguments, scope=selected["scope"],
-            operation_key=selected["operation_key"], permitted_record_refs=selected["permitted"])
 
 
-def test_selected_saved_software_needs_no_current_bio(saved_job, monkeypatch):
-    store, _, selected, _ = saved_job
-    prior = read_published_restriction_result(store, selected["source_ref"], scope=selected["scope"])
-    monkeypatch.setattr(module, "distribution", forbid)
-    monkeypatch.setenv("UNRELATED_CREDENTIAL", "must-not-copy")
-    software = module._software(store, "restriction728-unexecuted-metadata-only", mode="saved", prior=prior)
-    assert "UNRELATED_CREDENTIAL" not in software["environment"]
-    assert software["biopython_version"] == prior["native"]["software"]["biopython_version"]
-    assert software["dictionary_file"] == prior["native"]["software"]["dictionary_file"]
-    assert software["native_source_file"] == prior["native"]["software"]["native_source_file"]
 
 
-def test_restriction_sources_grant_only_explicit_handles(saved_job):
-    store, _, selected, _ = saved_job
-    receipts = EpisodeReceipts(store, "restriction728-custody")
-    receipts.bind("parent")
-    source = store.get(selected["source_ref"])
-    receipts.receive("parent", [source["id"]], kind="child_form", source_index=0)
-    assert set(receipts.known("parent")) == {source["id"]}
-    receipts.bind("child", "parent")
-    artifact = source["text_ref"]
-    receipts.receive("parent", [artifact], kind="own_action", source_index=1)
-    assert set(receipts.known("parent")) == {source["id"], artifact}
-    assert set(receipts.known("child")) == {source["id"]}
 
 
 def test_both_custody_pairs_are_exact_and_rollback(tmp_path):

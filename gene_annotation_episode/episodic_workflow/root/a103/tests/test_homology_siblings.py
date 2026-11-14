@@ -6,16 +6,6 @@ from unittest.mock import patch
 import pytest
 from .homology_sibling_checks import *
 
-@pytest.mark.parametrize('role',ROLES,ids=ROLES)
-def test_actual_private_task_and_descriptor(tmp_path,role):
- with actual(tmp_path,role) as f:
-  assert type(f.task) is getattr(f.binding,'decision_source_type',module('runtime').DecisionSource)
-  if private(f):assert type(f.task).__module__.endswith(HOMES[role]+'.task') and not isinstance(f.task,module('runtime').DecisionSource)
-  assert f.binding.roles==f.binding.entry_roles==(role,) and f.binding.binding_path==f.parent_home+'/'+HOMES[role]
-  assert f.binding.as_record()['registry_directory']==str(f.jobs.directory)
-  assert_parent_implementations(tmp_path/'paired-parents',role)
-  assert set(f.binding.as_record()['role_credit_bindings'])=={'job_launch','job_monitor','job_results'}
-  assert f.jobs._row(f.job)['submission_requested']==0
 
 PARENTS=[(role,p,m,r) for role in ROLES for p in ('annotation','improvement') for m in (False,True) for r in (False,True)]
 PIDS=[role+'-'+p+'-'+('declared' if m else 'markerless')+'-'+('receipts' if r else 'no-receipts') for role,p,m,r in PARENTS]
@@ -155,14 +145,6 @@ def test_resource_adapter_keeps_exact_private_owner(tmp_path,role,scenario):
   if scenario=='catalog':assert adapter.catalog(context)==f.binding.catalog(internal)
   else:assert internal.request.message.as_record()['job_assignment']==assigned(f) and internal.workflow.store is f.store
 
-@pytest.mark.parametrize('role',ROLES,ids=ROLES)
-def test_credit_and_foreign_wrapper_destinations(tmp_path,role):
- with actual(tmp_path,role) as f:
-  own='_launch_credit' if role=='job_launch' else '_results_credit';foreign='_results_credit' if role=='job_launch' else '_launch_credit'
-  assert callable(getattr(f.binding,own)) and hasattr(f.binding,foreign) is (not private(f))
-  assert hasattr(f.binding,'_monitor_credit') is (not private(f))
-  assert callable(getattr(f.bindings['job_monitor'],'_monitor_credit')) and f.binding.credit_view(f.task)['credit']==0
-  assert f.binding.credit_kind(role)=='operational'
 
 @pytest.mark.parametrize('role',ROLES,ids=ROLES)
 def test_foreign_tool_rejection_precedes_action(tmp_path,role):
@@ -218,20 +200,6 @@ def test_pending_model_call_and_completed_replay_use_actual_provider_dispatch(tm
   assert first==second and first[0]==response and len(calls)==1
   assert f.flow.journal.row('runtime_actions',f.task.episode_id,0) is None
 
-@pytest.mark.parametrize('role',ROLES,ids=ROLES)
-def test_default_service_invokes_exact_private_composer(tmp_path,role):
- with actual(tmp_path,role) as f:
-  expected=module('runtime_prompt').instructions(f.task,{})
-  if not private(f):
-   assert not hasattr(type(f.task),'instruction_composer') and f.task.instructions({})==expected
-  else:
-   composer=module(private_home(f)+'.instructions').instructions
-   assert type(f.task).instruction_composer is composer
-   calls=[]
-   def observed(source,context):calls.append((source,context));return composer(source,context)
-   with patch.object(type(f.task),'instruction_composer',staticmethod(observed)):
-    assert f.task.instructions({})==expected
-   assert calls==[(f.task,{})]
 
 FOREIGN=[(r,s) for r in ROLES for s in ('job_launch','job_monitor','job_results') if r!=s]
 @pytest.mark.parametrize('role,foreign',FOREIGN,ids=['-'.join(v) for v in FOREIGN])

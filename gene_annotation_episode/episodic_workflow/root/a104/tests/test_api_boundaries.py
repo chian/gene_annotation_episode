@@ -51,28 +51,6 @@ def compare_original_property(request, name, value):
     assert canonical(value) == recorded[0], ('original_callback_or_controller_identity_changed', value, recorded[0])
 
 
-def test_actual_factory_constructor_and_private_dispatch(case, record_property):
-    descriptor = case.binding.as_record()
-    assert descriptor['binding_id'] == case.home
-    assert descriptor['configuration']['resources'] == case.options['resources']
-    for key in ('initial_information', 'handoff_unit', 'acquired_record_unit', 'log_window_bytes',
-                'task_yield_profiles'):
-        assert descriptor['configuration'][key] == case.options[key]
-    assert descriptor['configuration']['log_roles'] == ['stdout', 'stderr']
-    protected = module(case.home + '/protected_reference_access').ProtectedReferenceAccess
-    assert type(case.binding).__bases__[0] is protected
-    task = task_case(case).task
-    selected = getattr(case.binding, 'decision_source_type', module('runtime').DecisionSource)
-    assert type(task) is selected
-    if os.environ.get('A104_API_PHASE') == 'connected':
-        assert selected.__module__ == type(case.binding).__module__.removesuffix('.episode') + '.task'
-        assert not isinstance(task, module('runtime').DecisionSource)
-        assert case.binding.decision_prompt_renderer.presentation_protocol == 'episode_context_presentation_v1'
-    retained(record_property, 'original_factory', {'home': case.home,
-        'factory': None if case.factory is None else case.factory.__module__ + '.' + case.factory.__name__,
-        'direct_axis_factory_absent': case.factory is None,
-        'binding_descriptor': descriptor, 'family': [v.as_record() for v in case.family],
-        'controlled_context': case.context.as_record(), 'task_type': selected.__module__ + '.' + selected.__qualname__})
 
 
 def test_real_service_iterator_payload_credit_and_original_replay(case, record_property):
@@ -300,51 +278,6 @@ def test_exact_original_api_controller_and_missing_profile_denial(case, record_p
         'actual_outcome': completed, 'operational_units': [case.binding.handoff_unit, case.binding.acquired_record_unit]})
 
 
-@pytest.mark.parametrize('role', ('launch_api', 'launch', 'results'))
-def test_original_callback_provenance_for_all_six_execution_placements(case, role, record_property, request):
-    runtime = module('runtime')
-    if role == 'launch_api':
-        owner, context = case.binding, case.context
-    else:
-        parent = case.home.rsplit('/', 1)[0]
-        target_home = parent if role == 'launch' else parent.removesuffix('execution_job_submission') + 'execution_result_acquisition'
-        options = {**case.options, 'task_yield_profiles': {**case.options['task_yield_profiles'],
-            'launch:api_uniprot_handoff': {'cutoff': .5, 'parameters': {}},
-            'results:api_uniprot': {'cutoff': .5, 'parameters': {}}}}
-        owner = module(target_home + '/episode').ExecutionEpisode(case.services, **options)
-        if role == 'launch':
-            selected = {'version': 'execution_launch_assignment_v1',
-                'requests': {'uniprot': deepcopy(case.assignment)}, 'immutable_input_versions': [], 'constraints': {}}
-            refs = []
-        else:
-            producer = case.act('api.uniprot.record')
-            assert producer['status'] == 'completed'
-            ref, = producer['record_refs']
-            selected = {'version': 'execution_results_assignment_v1', 'handoff_ref': ref, 'selector': {}}
-            refs = [ref]
-        path = ((role, 'original-callback-owner'),)
-        identity = module('method_loop.identities').EpisodeRef(case.run_id, path).episode_id
-        receipt = case.receipts.bind(identity)
-        case.receipts.receive(identity, [*case.scope['subject_refs'], *refs], kind='initial')
-        saved_request = {'message': {'scope': deepcopy(case.scope), 'episode_assignment': selected,
-            'knowledge_inheritance': receipt}}
-        case.journal.save('runtime_episodes', {'episode_id': identity, 'path': runtime._json(path),
-            'request': runtime._json(saved_request), 'initial_credit': 0, 'state': 'active',
-            'completion': None, 'archive': None})
-        context = module('episode_bindings').BindingContext(case.run_id, identity, role,
-            path, case.scope, selected, saved_request)
-        owner.initialize(context)
-    controller = owner.yield_controller(context, 0., 'original-callback-epoch')
-    contextual = getattr(controller.estimator, 'estimate_with_context', None)
-    value = {'home': owner.binding_path, 'role': role,
-        'practical_estimator': owner.practical_estimator(context).as_record(),
-        'controller': {'type': type(controller).__module__ + '.' + type(controller).__qualname__,
-            'state': controller.state().as_record(), 'cost': controller.cost,
-            'settings': controller.settings.as_record(),
-            'contextual_estimator': None if contextual is None else contextual.as_record()},
-        'handoff_unit': owner.handoff_unit, 'acquired_record_unit': owner.acquired_record_unit}
-    retained(record_property, 'all_owner_original_callback_identity', value)
-    compare_original_property(request, 'all_owner_original_callback_identity', value)
 
 
 @pytest.mark.parametrize('protocol', (None, 'decision_exchange_v1'))

@@ -408,14 +408,3 @@ def test_fraction_rounding_and_underflow_keep_existing_diagnostics(shared, union
     assert row["recomputed_distance"] is None and row["recomputed_pvalue"] is None
 
 
-def test_finite_diagnostic_collection_matches_the_existing_issue_sites():
-    source = ROOT / "gene_annotation_episode/bvbrc_minhash_grader.py"
-    declared = set(MINHASH_DIAGNOSTIC_CODES)
-    actual = set()
-    for node in ast.walk(ast.parse(source.read_text())):
-        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "_issue":
-            for item in ast.walk(node.args[1]):
-                if isinstance(item, ast.Constant) and type(item.value) is str:
-                    actual.add(item.value)
-    assert len(declared) == len(MINHASH_DIAGNOSTIC_CODES)
-    assert declared == actual

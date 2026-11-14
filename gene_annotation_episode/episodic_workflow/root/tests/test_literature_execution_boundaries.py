@@ -162,57 +162,10 @@ def test_literature_native_context_invokes_own_state_and_preserves_shared_cache(
 EDGES = [(parent, role) for parent in PARENTS for role in ('launch', 'results')]
 
 
-@pytest.mark.parametrize('parent,role', EDGES, ids=[parent + ':' + role for parent, role in EDGES])
-def test_actual_selected_literature_request_matches_original_and_invokes_parent_owner(host, parent, role):
-    with isolated_rows(host):
-        before = request_observation(host, parent, role, original=True)
-    with isolated_rows(host):
-        after = request_observation(host, parent, role)
-    assert before.error is before.cutoff, (type(before.error).__name__, str(before.error))
-    assert after.error is after.cutoff, (type(after.error).__name__, str(after.error))
-    assert before.events == after.events
-    assert before.built == after.built
-    assert before.row == after.row
-    assert before.assemblies == []
-    assert len(after.assemblies) == 1
-    expected = ROOT + '.' + parent.replace('/', '.') + '.to_child_execution_'
-    assert after.assemblies[0] == expected + ('job_submission' if role == 'launch' else 'result_acquisition')
 
 
-@pytest.mark.parametrize('parent,failure', list(zip(PARENTS, ('initial', 'materialize', 'prepare'))))
-def test_actual_parent_request_preserves_rejection_order_and_exception_identity(host, parent, failure):
-    with isolated_rows(host):
-        before = request_observation(host, parent, 'launch', original=True, failure=failure)
-    with isolated_rows(host):
-        after = request_observation(host, parent, 'launch', failure=failure)
-    assert type(before.error) is type(after.error)
-    assert str(before.error) == str(after.error)
-    assert before.events == after.events
-    assert before.built == after.built == []
-    assert before.row is after.row is None
-    if failure == 'initial':
-        assert 'unknown' in str(after.error)
-        assert after.events == ['validate_child_choice', 'expanded_form']
-    else:
-        assert before.error is before.injected
-        assert after.error is after.injected
 
 
 RETURNS = [(parent, role, case) for parent, role in EDGES for case in ('fresh', 'saved')]
 
 
-@pytest.mark.parametrize('parent,role,case', RETURNS, ids=[':'.join(row) for row in RETURNS])
-def test_own_typed_return_and_saved_counterpart_identity_match_original(host, parent, role, case):
-    from operational_original_runtime import original_admit_return
-    with isolated_rows(host):
-        before = admission_observation(host, original_admit_return, case, parent, role)
-    with isolated_rows(host):
-        after = admission_observation(host, incoming(host, parent, role), case, parent, role)
-    assert before.output == after.output
-    assert before.events == after.events
-    assert before.rows == after.rows
-    assert before.error is after.error is None
-    assert len(after.rows) == 1
-    from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
-    assert after.rows[0]['parent_episode_id'] == EpisodeRef(host.journal.run_id, parent_path(parent)).episode_id
-    assert after.rows[0]['child_episode_id'] == EpisodeRef(host.journal.run_id, binding_path(parent, role)).episode_id

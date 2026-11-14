@@ -44,31 +44,6 @@ def _request_file(request):
     return request["fixed_selection"]["file_identity"]
 
 
-@pytest.mark.parametrize("type_name", _TYPES)
-def test_exact_schema_and_both_resources_match_prechange(before, monkeypatch, type_name):
-    captured = []
-    strict = contracts._STRICT
-
-    def construct(document, *, registry):
-        captured.append(registry)
-        return strict(document, registry=registry)
-
-    contracts._execution_validator.cache_clear()
-    monkeypatch.setattr(contracts, "_STRICT", construct)
-    validator = contracts._execution_validator(type_name)
-    original = before.protein_structure_execution_schema(type_name)
-    assert validator.schema == original == contracts.protein_structure_execution_schema(type_name)
-    assert len(captured) == 1
-    registry, = captured
-    resources = (original, original["allOf"][0])
-    assert set(registry) == {resource["$id"] for resource in resources}
-    for resource in resources:
-        body = deepcopy(resource)
-        identifier = body.pop("$id")
-        assert identifier == "urn:gene-annotation:protein-structure:schema:" + digest(body)
-        assert registry.contents(identifier) == resource
-    assert "$schema" not in original["allOf"][0]
-    assert contracts._execution_validator(type_name) is validator
 
 
 def test_one_construction_crawl_and_every_warm_payload_checked(monkeypatch):

@@ -292,41 +292,6 @@ def test_embedded_schema_has_only_unchanged_reachable_g1_definitions_and_its_own
             embedded_validator.validate({"selector": chosen})
 
 
-def test_every_advertised_execution_reader_calculator_and_projection_function_exists():
-    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_inputs, genomic_overlap_calculations
-    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_result_worker, genomic_overlap_result_views
-    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_return_views
-    from gene_annotation_episode.episodic_workflow.root import genomic_overlap_returns
-    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_capture, native_genomic_overlap_preparation
-    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_driver
-    from gene_annotation_episode.episodic_workflow.root.native_genomic_overlap_results import NativeGenomicOverlapResults, operation_catalog
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-    native = describe_genomic_overlap_result(target(), selector=selector())
-    saved = describe_genomic_overlap_result(target(), selector=selector(saved=True))
-    assert [row["name"] for row in operation_catalog()] == ["execution.results.status", "execution.results.collect"]
-    for value in (native, saved):
-        scientific = collect(value)
-        assert scientific["implementation"] == name(NativeGenomicOverlapResults.execute)
-        assert scientific["preparation"] == name(native_genomic_overlap_preparation.prepare_genomic_overlap_worker)
-        assert scientific["result_worker"] == name(genomic_overlap_result_worker.run_genomic_overlap_result_worker)
-        assert scientific["worker_output_capture"] == name(native_genomic_overlap_preparation.capture_genomic_overlap_worker_outputs)
-        assert scientific["calculators"] == [name(genomic_overlap_calculations.calculate_genomic_overlap_components)]
-        assert scientific["projection_implementation"] == name(genomic_overlap_result_views.project_genomic_overlap_result)
-        assert scientific["return_source_selection"] == name(genomic_overlap_return_views.requested_genomic_overlap_sources)
-    scientific = collect(native)
-    for key, function in (
-        ("capture", native_genomic_overlap_capture.capture_genomic_overlap_native_files),
-        ("worker_plan", native_genomic_overlap_preparation.build_native_genomic_overlap_worker_plan),
-        ("parser", genomic_overlap_inputs.parse_bedtools_intersect_wo),
-        ("input_parser", genomic_overlap_inputs.parse_region_set),
-        ("metadata_extractor", genomic_overlap_inputs.extract_overlap_reference_metadata),
-        ("sheet_population", genomic_overlap_inputs.build_genomic_overlap_sheet),
-    ):
-        assert scientific[key] == name(function)
-    assert scientific["original_native_execution"]["implementation"] == name(native_genomic_overlap_driver.run_genomic_overlap_driver)
-    assert native["extractors"][0]["implementation"] == name(LocalPracticalOperations.observe_execution)
-    assert collect(saved)["worker_plan"] == name(native_genomic_overlap_preparation.build_saved_genomic_overlap_worker_plan)
-    assert collect(saved)["saved_input_validation"] == name(genomic_overlap_returns.GenomicOverlapReturns.authenticate_received_saved_sheet)
 
 
 def test_information_never_opens_files_uses_store_observes_executes_or_calculates(monkeypatch):

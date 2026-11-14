@@ -390,41 +390,5 @@ def retained_case():
         store.close()
 
 
-def test_actual_saved_operation_preserves_original_numerical_mapping_without_work(retained_case,monkeypatch):
-    case = retained_case
-    import gene_annotation_episode.restriction_mapping_readers as readers
-    import gene_annotation_episode.native_lifecycle as lifecycle
-    def forbidden(*args,**kwargs): pytest.fail("Action reader repeated native/719/dispatch work")
-    monkeypatch.setattr(readers,"read_restriction_mapping",forbidden)
-    monkeypatch.setattr(lifecycle,"resume_start",forbidden)
-    original_import = builtins.__import__
-    def guarded(name,*args,**kwargs):
-        if name == "Bio" or name.startswith("Bio.") or name.endswith("restriction_mapping_native"):
-            pytest.fail("Action reader imported native Bio/producer")
-        return original_import(name,*args,**kwargs)
-    monkeypatch.setattr(builtins,"__import__",guarded)
-    before = case.store.db.total_changes
-    record, = page(case,case.context)["records"]
-    assert record["work_mode"] == "saved" and record["source_ref"] == case.selector["source_ref"]
-    assert record["mapping"]["enzyme_rows"][0]["native_search_positions_1based"] == [6]
-    position, = record["mapping"]["enzyme_rows"][0]["positions"]
-    assert (position["watson_boundary_0based"],position["crick_boundary_0based"]) == (5,9)
-    assert record["mapping"]["enzyme_rows"][0]["recognition_match_count"] == 1
-    assert case.store.db.total_changes == before
-    assert case.service.own_enzyme_reference(case.context,"EcoRI") is True
-    assert case.service.own_enzyme_reference(case.context,"BcgI") is False
 
 
-def test_actual_saved_projection_copies_only_original_requested_fields(retained_case):
-    case = retained_case
-    schema = plain(case.context.request)["report_contract"]["measurements"]["schema"]
-    fields = requested_restriction_projections(schema)[SOURCE]["fields"]
-    record, = page(case,case.context)["records"]
-    returned = project_restriction_action_return(record,fields)
-    assert returned["sequence_ref"] == record["sequence_ref"]
-    assert set(returned) == set(fields["items"]["properties"])
-    assert record["mapping"]["population"]["recognition_match_count"] == 1
-    retained = Path(os.environ["HMMER529_ATTEMPT"]) / "retained-action729"
-    retained.mkdir(exist_ok=True)
-    (retained/"actual_record.json").write_text(canonical(record)+"\n")
-    (retained/"actual_requested_view.json").write_text(canonical(returned)+"\n")

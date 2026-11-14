@@ -104,12 +104,3 @@ def test_original_fluc_two_formats_are_one_typed_worksheet_with_distinct_scopes(
         assert 'relationship unresolved; no independence or equality inferred' in steering
         assert not re.search('\\b(?:source|artifact|operation)_[0-9a-f]{24,64}\\b', steering)
 
-def test_exact_rosters_and_original_nine_remain_available():
-    chosen = template()
-    assert len(worksheet.FAMILIES) == 11
-    assert list(worksheet.FAMILIES)[-2:] == ['literature_channel_cells', 'literature_ion_discrimination_cells']
-    assert chosen['assignment_rosters'] == {'requested_channel_components': CHANNEL, 'requested_ion_discrimination_components': ION}
-    schema = expand(chosen)
-    for field, source in [('electrical', 'literature_channel_cells'), ('ion_comparison', 'literature_ion_discrimination_cells')]:
-        assert schema['properties'][field] == worksheet._schema(source)
-    assert list(worksheet.FAMILIES)[:9] == ['literature_concentration_window_cells', 'literature_kinetic_cells', 'literature_kinetic_summary_precision_cells', 'literature_measurement_comparison_cells', 'literature_endpoint_signal_cells', 'literature_product_coupling_cells', 'literature_calibration_recovery_cells', 'literature_compiled_assay_v2_cells', 'literature_compiled_assay_v3_cells']

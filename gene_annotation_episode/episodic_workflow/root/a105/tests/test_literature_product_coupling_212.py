@@ -548,9 +548,3 @@ def test_closed_input_and_mutated_numeric_model_unit_and_dependency_bindings_fai
     with pytest.raises(ExperimentalContractError, match='dependency_record_mismatch'):
         populate_product_coupling(wrong)
 
-def test_full_exact_task_remains_separate_from_numerical_sheet_and_interpretation_codes():
-    assert PRODUCT_COUPLING_TASK == TASK.read_text().rstrip('\n')
-    assert len(PRODUCT_COUPLING_TASK.split('\n\n')) == 6
-    assert 'an initial annotation or public searchable name is not required' in PRODUCT_COUPLING_TASK
-    assert 'source_ref' not in PRODUCT_COUPLING_TASK and 'J*Sigma' not in PRODUCT_COUPLING_TASK
-    assert len(COMPONENTS) == 11

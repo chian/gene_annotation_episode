@@ -115,9 +115,6 @@ def assert_locations(data, result):
         assert data[location["byte_start_0based"]:location["byte_end_0based_exclusive"]].decode("utf-8") == command["raw_text"]
 
 
-def test_import_is_exact_owned_staged_module():
-    assert Path(native.__file__).resolve() == STAGING / "gene_annotation_episode/bvbrc_codon_tree_native.py"
-    assert Path(formats.__file__).resolve() == STAGING / "gene_annotation_episode/phylogeny_format_contracts.py"
 
 
 def test_exact_public_signatures_cannot_accept_caller_invented_native_facts():

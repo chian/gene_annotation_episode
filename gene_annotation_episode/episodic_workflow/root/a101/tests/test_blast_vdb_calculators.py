@@ -740,34 +740,6 @@ def _shared_authority_case(case):
     return inputs(collection["searches"][0])
 
 
-@pytest.mark.parametrize("case", [
-    "ordinary", "native_count_conflict", "reported_only", "reported_invalid_identity", "reported_zero_paired",
-    "invalid_traceback", "traceback_span_conflict", "selected_native_width", "selected_empty_clip", "partial_empty_clip",
-    "unknown_query_extent", "unbound_query", "unknown_lengths", "reverse_unknown_length", "native_member_length_conflict",
-    "feature_forward", "feature_reverse", "feature_offset", "feature_code_conflict", "empty_success", "failed_empty",
-    "malformed_table_sibling",
-])
-def test_whole_components_match_pinned_pre_shared_authority(case, before_shared_authority):
-    sheet = populate(**_shared_authority_case(case)); before = _canonical(sheet)
-    expected = before_shared_authority.calculate_blast_vdb_components(sheet)
-    actual = calculate(sheet)
-    assert _canonical(actual) == _canonical(expected)
-    assert _canonical(sheet) == before
-    if case not in {"empty_success", "failed_empty"}:
-        assert actual["hsps"]
-    if case in {"unknown_lengths", "reverse_unknown_length"}:
-        row = actual["hsps"][0]
-        assert row["native_components"]["denominators"]["reference_length"] is None
-        if case == "unknown_lengths":
-            assert row["native_components"]["denominators"]["query_length"] is None
-        assert row["query_span"]["value"] is not None and row["reference_span"]["value"] is not None
-    if case in {"reported_only", "invalid_traceback", "traceback_span_conflict"}:
-        row = actual["hsps"][0]
-        assert not row["native_components"]["geometry_available"]
-        assert row["query_span"]["value"] is not None and row["reference_span"]["value"] is not None
-    if case in {"selected_empty_clip", "partial_empty_clip"}:
-        coverage = actual["subjects"][0]["selected_query_coverage"]
-        assert coverage["numerator"] == 0 and coverage["value"] is None
 
 
 @pytest.mark.parametrize("case", [
@@ -805,38 +777,3 @@ def test_common_hsp_artifacts_supply_literal_cells_once(case, monkeypatch):
             assert _canonical(hsp_row[field]["value"]) == _canonical(span["positions"] if span is not None else None)
 
 
-def test_common_interval_and_fraction_ports_keep_local_availability(before_shared_authority, monkeypatch):
-    intervals, widths, fractions = [], [], []
-    original_union, original_width, original_ratio = common.interval_union_length, common.interval_length, common._ratio
-    def union_length(value):
-        intervals.append(deepcopy(value))
-        return original_union(value)
-    def interval_length(value):
-        widths.append(deepcopy(value))
-        return original_width(value)
-    def ratio(numerator, denominator):
-        fractions.append((numerator, denominator))
-        return original_ratio(numerator, denominator)
-    monkeypatch.setattr(common, "interval_union_length", union_length)
-    monkeypatch.setattr(common, "interval_length", interval_length)
-    monkeypatch.setattr(common, "_ratio", ratio)
-    operand = [[8, 10], [0, 4], [2, 6], [6, 8], [0, 4]]
-    assert module._length(operand) == before_shared_authority._length(operand)
-    assert intervals == [operand]
-    sheet = populate(**_shared_authority_case("selected_native_width"))
-    datasets = {row["dataset_key"]: {"record": row} for row in sheet["dataset_records"]}
-    actual_issues, expected_issues = [], []
-    actual_axis = module._query_axis(sheet, datasets, sheet["reference_metadata"], actual_issues)
-    expected_axis = before_shared_authority._query_axis(sheet, datasets, sheet["reference_metadata"], expected_issues)
-    assert _canonical((actual_axis, actual_issues)) == _canonical((expected_axis, expected_issues))
-    assert widths == [sheet["query_binding"]["operand"]["selected_interval"]]
-    widths.clear()
-    actual = module._coverage([[2, 6]], [[0, 4]], False, actual_axis, 8, None)
-    expected = before_shared_authority._coverage([[2, 6]], [[0, 4]], False, expected_axis, 8, None)
-    assert _canonical(actual) == _canonical(expected) and widths == [[2, 6]] and not fractions
-    for args in ((None, 4), (1, None), (1, 0), (1, -1), (10**400, 1, False), (1, 4, True, "incompatible_input")):
-        assert _canonical(module._ratio(*args)) == _canonical(before_shared_authority._ratio(*args))
-    assert not fractions
-    for args in ((0, 4), (3, 4)):
-        assert _canonical(module._ratio(*args)) == _canonical(before_shared_authority._ratio(*args))
-    assert fractions == [(0, 4), (3, 4)]

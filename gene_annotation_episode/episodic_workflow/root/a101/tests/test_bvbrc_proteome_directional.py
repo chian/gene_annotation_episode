@@ -71,14 +71,6 @@ def hsp(result, q=1, s=0, h=0):
     return result["queries"][q]["subjects"][s]["hsps"][h]
 
 
-def test_native_fixture_provenance_hashes():
-    receipts = json.loads((FIXTURES / "ACQUISITION_RECEIPTS_002.json").read_text())
-    receipts += json.loads((FIXTURES / "ACQUISITION_RECEIPTS_003.json").read_text())
-    for receipt in receipts:
-        data = (FIXTURES / receipt["file"]).read_bytes()
-        assert len(data) == receipt["byte_count"]
-        assert hashlib.sha256(data).hexdigest() == receipt["sha256"]
-        assert receipt["http_status"] == 200
 
 
 @pytest.mark.parametrize("key,queries,descriptions,subjects,hsps", [

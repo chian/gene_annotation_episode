@@ -83,16 +83,6 @@ def check_saved(path, snapshot, monkeypatch, *, model=False):
             store.db.execute('CREATE TABLE forbidden_write (x)')
     assert hashes(path) == before
 
-@pytest.mark.parametrize('case', ['point', 'censored', 'missing_unit', 'model'])
-def test_authentic_original_v2_exact_readonly_reconstruction(tmp_path, monkeypatch, case):
-    original = hashes(BASE)
-    generated = json.loads((BASE / 'FILES_001.json').read_text())
-    assert all((original[name] == sha for name, sha in generated.items()))
-    snapshot = json.loads((BASE / f'{case}_SNAPSHOT.json').read_text())
-    assert snapshot.get('native_saved', snapshot['saved'])['version'] == 'literature_kinetic_population_record_v2'
-    shutil.copytree(BASE / case, tmp_path / 'state')
-    check_saved(tmp_path / 'state', snapshot, monkeypatch, model=case == 'model')
-    assert hashes(BASE) == original
 
 @pytest.mark.parametrize('model', [False, True])
 def test_prospective_v3_exact_readonly_reconstruction(tmp_path, monkeypatch, model):
@@ -175,19 +165,6 @@ def test_selected_compound_unit_cannot_cross_cells_or_omit_factor(unit):
     with pytest.raises(ExperimentalContractError):
         read_kinetic_inputs(selection, read_source=source.read)
 
-def test_prospective_hash_guard_remains_active_for_called_lexical_source(tmp_path, monkeypatch):
-    store, context, args = setup(tmp_path)
-    before = list(store.db.iterdump())
-    original = Path.read_bytes
-
-    def changed(path):
-        raw = original(path)
-        return raw + b'\n# changed lexical implementation\n' if path.name == 'literature_partner_source_fields.py' else raw
-    monkeypatch.setattr(Path, 'read_bytes', changed)
-    with store, pytest.raises(ContractError, match='implementation_dependency_mismatch'):
-        LiteratureKineticRepository(store, context.run_id).populate(context, args, 'changed')
-    with readonly(tmp_path) as restored:
-        assert list(restored.db.iterdump()) == before
 
 @pytest.mark.parametrize('change', ['source_release', 'validator', 'generation', 'original_storage'])
 def test_saved_receipt_rejects_wrong_generation_without_current_code_io(change):

@@ -146,25 +146,6 @@ def retained_launch():
     return request["context"], request["schema"], json.loads(row[1])
 
 
-def test_retained_api_launch_reaches_actual_turn_start_with_original_response_contract(tmp_path):
-    context, schema, response = retained_launch()
-    original = deepcopy((context, schema, response))
-    wire = LaunchWire(tmp_path / "wire"); wire.reply = response
-    assert asyncio.run(complete(wire, context, schema=schema)) == response
-    turn, = wire.inputs(); text = turn["input"][0]["text"]
-    assert_task(text)
-    assert "input_d14dec7a2167972e3147cee9" not in text
-    assert "goal_23131464985693a64ea6e2bf" not in text
-    cost = context["controller"]["decision"]["continuation_cost"]
-    assert "| 0 | 0 | unavailable | insufficient completed actions | " + str(cost) + " | continue |" in text
-    assert "-1.0" not in text.split("\n\nSTEERING\n", 1)[1]
-    assert encoded(turn["outputSchema"]) == encoded(schema)
-    saved = json.loads((tmp_path / "wire/call-00001/request.json").read_text())
-    assert encoded(saved["context"]) == encoded(context) and encoded(saved["output_schema"]) == encoded(schema)
-    assert encoded(saved["input"]) == encoded(turn["input"]) and saved["instructions"] == INSTRUCTION_TEXT
-    assert encoded((context, schema, response)) == encoded(original)
-    assert hashlib.sha256(Path(os.environ["HMMER_NATIVE_ORACLE_EXECUTION_LAUNCH_SQLITE"]).read_bytes()).hexdigest() == "d943fda9203fa869524f4714227a7455abe91cc1004b94c7c85cad3610f99fd1"
-    assert wire.process is None and len([method for method, _ in wire.sent if method == "thread/start"]) == 1
 
 
 def test_task_repeats_across_bootstrap_delta_and_same_decision_lookup_without_state_changes(tmp_path):

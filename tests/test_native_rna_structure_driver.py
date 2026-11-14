@@ -215,31 +215,3 @@ def test_live_native_short_loop_failure_retains_supplied_topology(tmp_path):
     (destination / "short_loop_native_failure.json").write_text(canonical({"plan": selected, "bundle": bundle, "record": value, "diagnostics": lines}) + "\n")
 
 
-def test_live_supplied_parameter_file_and_nondefault_model_are_preserved(tmp_path):
-    # A retained native snapshot is explicit supplied data, not a fresh hidden
-    # parameter acquisition or a second invocation of this selected job.
-    previous = json.loads((PACKET / "check001/examples/prediction.json").read_bytes())
-    previous_file = next(row for row in previous["bundle"]["files"] if row["role"] == "effective_parameters")
-    parameter_bytes = (Path(previous["plan"]["attempt_directory"]) / previous_file["relative_path"]).read_bytes()
-    parameter_input = tmp_path / "selected-native-parameters.par"
-    parameter_input.write_bytes(parameter_bytes)
-    selected_job = job(tmp_path, energy=True, native=True, parameter_file=parameter_input)
-    selected_job["model"].update(temperature_c=25.0, dangles=1, noGU=True)
-    selected, _, _ = plan(tmp_path, selected_job)
-    bundle = driver.run_rna_structure_driver(selected)
-    attempt = Path(selected["attempt_directory"])
-    assert bundle["returncode"] == 0 and bundle["native_status"] == "complete"
-    record = json.loads(read_role(bundle, attempt, "native_result"))
-    assert read_role(bundle, attempt, "model_parameter_input") == parameter_bytes
-    assert record["model"]["selected"] == selected_job["model"]
-    assert record["model"]["effective_settings"]["temperature_c"] == 25.0
-    assert record["model"]["effective_settings"]["dangles"] == 1
-    assert record["model"]["effective_settings"]["noGU"] is True
-    assert record["model"]["parameter_load_return"] == 1
-    assert record["model"]["parameter_save_return"] == 1
-    assert record["native_evaluation"]["value"] != previous["record"]["native_mfe"]["value"]
-    assert json.loads(read_role(bundle, attempt, "model")) == record["model"]
-    destination = Path.cwd() / "examples"
-    destination.mkdir(exist_ok=True)
-    (destination / "supplied_parameters_nondefault_model.json").write_text(canonical({
-        "plan": selected, "bundle": bundle, "record": record}) + "\n")

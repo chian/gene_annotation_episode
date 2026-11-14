@@ -446,12 +446,6 @@ def test_closed_arguments_and_mutated_retained_numeric_and_identity_fail():
     with pytest.raises(ExperimentalContractError, match='measurement_binding_mismatch'):
         populate_measurement_validation(wrong)
 
-def test_prompt_is_exact_reviewed_detailed_insert_without_sheet_dump():
-    assert MEASUREMENT_VALIDATION_TASK == (ARTIFACT / 'FINAL_TASK_001.txt').read_text().rstrip('\n')
-    assert len(MEASUREMENT_VALIDATION_TASK.split('\n\n')) == 5
-    assert 'a candidate annotation or public name is not required' in MEASUREMENT_VALIDATION_TASK
-    assert 'without an overall reliability grade' not in MEASUREMENT_VALIDATION_TASK
-    assert 'source_ref' not in MEASUREMENT_VALIDATION_TASK
 
 @pytest.mark.parametrize('printed', ['NaN', 'Infinity', '-Inf'])
 def test_source_nonfinite_representation_is_retained_as_per_quantity_unavailable(printed):

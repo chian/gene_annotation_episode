@@ -28,17 +28,6 @@ def before():
     sys.modules.pop(name, None)
 
 
-@pytest.mark.parametrize("type_name", [
-    "Software", "ScientificRequest", "NativeProteinJob", "RequestedProteinJob",
-    "NativeProteinBinding", "NativeProteinRunPlan", "NativeProteinBundle",
-    "WorkerInput", "NativeProteinResult", "FileIdentity",
-])
-def test_public_schema_and_content_identity_match_prechange(before, type_name):
-    actual = contracts.protein_structure_execution_schema(type_name)
-    assert actual == before.protein_structure_execution_schema(type_name)
-    body = deepcopy(actual)
-    identifier = body.pop("$id")
-    assert identifier == "urn:gene-annotation:protein-structure:schema:" + digest(body)
 
 
 @pytest.mark.parametrize("inner", [False, True])

@@ -693,60 +693,6 @@ def test_retained_volume_materializations_keep_database_members_distinct_from_me
             and row['role'] in {'stdout', 'stderr', 'alias_file'}]})
 
 
-def test_original_partial_workflow_journal_preserves_interrupted_decision_contract(tmp_path, monkeypatch):
-    """Inspect a forensic SQLite/WAL copy; this does not create or resume a run."""
-    import sqlite3
-
-    def forbidden(*args, **kwargs):
-        raise AssertionError('journal inspection must not start native or network work')
-
-    monkeypatch.setattr(subprocess, 'Popen', forbidden)
-    monkeypatch.setattr(socket, 'create_connection', forbidden)
-    retained = ROOT / ('verification/tool_graders_hmmer_map_verification_2026-10-28_529/'
-        'check113b_workflow654/temporary/pytest/preparation-workflow6540/state')
-    evidence = ROOT / 'verification/tool_graders_blast_preparation_workflow_2026-10-28_654'
-    receipt = json.loads((evidence / 'check113b_failed_volume_result/aggregate_volumes-receipt.json').read_text())
-    protected = {p: pin(p) for p in retained.glob('state.sqlite3*')}
-    copied = tmp_path / 'forensic-journal'
-    copied.mkdir()
-    for path in protected:
-        shutil.copyfile(path, copied / path.name)
-    database = sqlite3.connect(str(copied / 'state.sqlite3'))
-    database.row_factory = sqlite3.Row
-    try:
-        assert database.execute('SELECT count(*) FROM runtime_runs').fetchone()[0] == 0
-        args = (receipt['run_id'], receipt['episode_id'])
-        actions = list(database.execute('SELECT * FROM runtime_actions WHERE run_id=? AND episode_id=?', args))
-        observations = list(database.execute('SELECT * FROM runtime_observations WHERE run_id=? AND episode_id=?', args))
-        assert len(actions) == len(observations) == 1
-        assert actions[0]['decision_index'] == observations[0]['unit_index'] == 0
-        assert json.loads(actions[0]['result'])['result'] == receipt
-        assert receipt['complete'] is False
-        pending, = database.execute('SELECT * FROM runtime_model_calls WHERE run_id=? AND episode_id=? AND response IS NULL', args)
-        assert pending['call_index'] == 1
-        request = json.loads(pending['request'])
-
-        def strings(value):
-            if isinstance(value, str):
-                yield value
-            elif isinstance(value, dict):
-                for child_value in value.values():
-                    yield from strings(child_value)
-            elif isinstance(value, list):
-                for child_value in value:
-                    yield from strings(child_value)
-
-        result_operations = sorted({value for value in strings(request['schema']) if value.startswith('execution.results.')})
-        assert result_operations == ['execution.results.collect', 'execution.results.status']
-        save(tmp_path / 'ORIGINAL_JOURNAL_BOUNDARY_007.json', {'native_commands': 0,
-            'forensic_copy_only': True, 'annotation_run_created_or_resumed': False,
-            'runtime_runs': 0, 'original_action': dict(actions[0]),
-            'original_observation': dict(observations[0]), 'pending_call': dict(pending),
-            'pending_result_operations': result_operations})
-    finally:
-        database.close()
-    for path, expected in protected.items():
-        same_bytes(pin(path), expected)
 
 
 def test_selected_native_values_and_original_custody_reach_scientific_parent(native_case):

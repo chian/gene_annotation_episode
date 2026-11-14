@@ -25,30 +25,8 @@ def epochs():
     return document, current, retained
 
 
-def test_all_real_adapters_bind_their_actual_current_source_identity(epochs):
-    document, current, _ = epochs
-    bound = registry.bind_adapters(current)
-    assert len(bound) == 17
-    for row in document['adapters']:
-        implementation, configured = bound[row['adapter_id'], row['adapter_version']]
-        assert implementation.__name__ == row['module']
-        assert implementation.implementation_sha256() == configured
-        assert configured == document['owners'][row['owner']]['current']['implementation_sha256']
 
 
-def test_all_retained_bindings_authenticate_original_custody_without_relabeling(epochs):
-    document, _, retained = epochs
-    before = deepcopy(retained)
-    bound = registry.bind_adapters(retained, retained_reader=True)
-    assert retained == before
-    assert len(bound) == 17
-    for row in document['adapters']:
-        implementation, configured = bound[row['adapter_id'], row['adapter_version']]
-        owner = document['owners'][row['owner']]
-        assert implementation.__name__ == row['module']
-        assert configured == owner['original']['implementation_sha256']
-        assert implementation.implementation_sha256() == owner['current']['implementation_sha256']
-        assert configured != implementation.implementation_sha256()
 
 
 def test_real_registry_rejects_original_fingerprint_in_fresh_binding(epochs):

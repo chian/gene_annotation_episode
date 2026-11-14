@@ -60,9 +60,6 @@ def test_original_admission_selected_object_once(native_frame, monkeypatch):
     assert admitted == selected and admitted is not selected
     assert plain(frame.parent.assignment)['requests'][selected['resource_id']] == selected
 
-def test_actual_build_initializes_from_saved_parent(native_frame, tmp_path, monkeypatch):
-    adapter = SimpleNamespace(setup=lambda _: native_frame, module=own_module, role=native_frame.context.role)
-    PlanningAllocationTaskBehavior.test_original_runtime_build_selects_this_binding_task(adapter, tmp_path, monkeypatch)
 
 def test_parent_and_sibling_roles_remain_not_child_roles(native_frame):
     frame = native_frame

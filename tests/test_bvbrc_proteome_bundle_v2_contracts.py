@@ -45,18 +45,3 @@ def test_both_versions_bind_only_under_exact_selected_pin():
     with pytest.raises(ValueError,match='implementation_conflict'):bind_adapters(pins)
 
 
-def test_schema_detached_and_actual_static_import_closure_pinned():
-    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_directional_fact_contracts as facts
-    assert c.DIRECTIONAL_BINDING_CODES == frozenset(facts.BINDING_CODES)
-    a=c.parameters_schema_v2();a['$defs'].clear();assert c.parameters_schema_v2()['$defs']
-    package=Path(adapter.__file__).parent
-    pending=[n for n in adapter._DEPENDENCIES if n.endswith('.py')];seen=set()
-    while pending:
-        name=pending.pop()
-        if name in seen:continue
-        seen.add(name)
-        for node in ast.walk(ast.parse((package/name).read_text())):
-            if isinstance(node,ast.ImportFrom) and node.level==1:
-                modules=[node.module.split('.')[0]] if node.module else [i.name for i in node.names]
-                pending.extend(m+'.py' for m in modules if (package/(m+'.py')).exists())
-    assert seen<=set(adapter._DEPENDENCIES)

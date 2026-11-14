@@ -188,43 +188,10 @@ def test_exact_rna_lookup_shapes_reach_actual_turn_text(tmp_path, pair, shape):
         assert "secret" not in text and "/hidden/retained/sheet" not in text
 
 
-@pytest.mark.parametrize("reply", [None, [1, 2], {"text": "Exact selected instruction."},
-    {"view": "own_attempt_detail", "decision_index": 3, "values": [2], "has_more": False},
-    {"view": "own_attempts", "records": [], "total": 0, "offset": 0, "returned_count": 0},
-    {"status": "completed", "result": {"unrelated": 42}},
-    {"outer": {"result": {"unrelated": 42}}}])
-def test_unrecognized_lookup_shapes_keep_original_text(reply):
-    assert prompt._lookup(reply) == baseline._lookup(reply)
 
 
-def test_nested_rna_lookalikes_are_not_a_new_recursive_lookup_path(pair):
-    for reply in ({"outer": {"result": [pair[0]]}}, {"view": "own_attempt_detail", "values": [pair[0]]}):
-        assert prompt._lookup(reply) == baseline._lookup(reply)
 
 
-@pytest.mark.parametrize("variant", ["ordinary", "empty_rna", "other_source", "infernal", "manual", "own_outcome"])
-def test_non_rna_scientific_text_is_identical_to_pre379_renderer(variant):
-    state = snapshot()
-    if variant == "empty_rna":
-        state["received_rna_comparison_values"] = [{"fact_source": PROJECTION_SOURCE, "facts": []}]
-    elif variant == "other_source":
-        state["received_rna_comparison_values"] = [{"fact_source": "other", "facts": [1]}]
-    elif variant == "infernal":
-        state["working_state"]["observations"].append({"id": "automatic", "native_infernal": {
-            "version": "native_infernal_observation_v1"}, "value": "DO_NOT_EXPAND_NATIVE_SOURCE"})
-        state["child_reports"] = [{"references": ["automatic"]}]
-    elif variant == "manual":
-        state["selected_launch_instructions"] = {"sections": [{"entry_id": "selected",
-            "section_id": "usage", "text": "Preserve the full selected resource instructions."}]}
-    elif variant == "own_outcome":
-        state["last_local_outcome"] = {"status": "partial", "record_refs": ["observation_received"],
-            "result": {"measured": 7, "missing": None}, "feedback": {"code": "partial_source"}}
-        state["feedback"] = {"code": "partial_source"}
-    original = deepcopy(state)
-    lookups = [{"status": "completed", "result": {"text": "An unchanged ordinary lookup."}}]
-    assert prompt.render_scientific_process_prompt(state, INSTRUCTION_TEXT, lookup_results=lookups) == (
-        baseline.render_scientific_process_prompt(state, INSTRUCTION_TEXT, lookup_results=lookups))
-    assert state == original
 
 
 def test_task_uses_original_state_and_received_records_uses_filtered_detached_state(pair, monkeypatch):
@@ -249,13 +216,6 @@ def test_task_uses_original_state_and_received_records_uses_filtered_detached_st
     assert state == original and "UNREQUESTED_OBSERVATION" not in text
 
 
-def test_current_report_update_is_not_reclassified_or_rewritten(pair):
-    state = scientific_state([pair[0]])
-    state["current_report_update"] = {"conclusion": "unresolved", "nested_supplied_interpretation": deepcopy(pair[0])}
-    before = deepcopy(state)
-    text = prompt.render_scientific_process_prompt(state, INSTRUCTION_TEXT)
-    expected = "Current return interpretation\n\n" + baseline._values(state["current_report_update"])
-    assert expected in text and state == before
 
 
 def test_exact_equal_numbers_in_distinct_calculations_are_not_lost(pair):

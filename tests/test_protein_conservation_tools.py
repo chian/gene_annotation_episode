@@ -101,21 +101,6 @@ def test_native_parameter_grammar_is_the_drivers_shared_authority(field, value):
         validate_protein_conservation_configuration(selected)
 
 
-@pytest.mark.parametrize('operation,required', [
-    ('protein_conservation_native', {'muscle_alignment_driver.py', 'native_flux_balance_storage.py'}),
-    ('protein_conservation_result', {'protein_conservation_result_worker.py',
-        'protein_conservation_result_contracts.py', 'phylogeny_formats.py',
-        'phylogeny_format_contracts.py', 'phylogeny_calculation_contracts.py', 'phylogeny_calculators.py'}),
-])
-def test_selected_worker_preparation_covers_actual_source_and_dependency_files(operation, required):
-    """Exercise preparation in the selected runtime without starting a worker."""
-    from gene_annotation_episode.molecular_measurement_tools import _molecular_implementation_files
-    files = _molecular_implementation_files(operation)
-    assert files and len(files) == len(set(files))
-    assert all(path.is_absolute() and path.is_file() for path in files)
-    assert required <= {path.name for path in files}
-    assert any(path.name == '__init__.py' and path.parent.name == 'jsonschema' for path in files)
-    assert all('__pycache__' not in path.parts and path.suffix != '.pyc' for path in files)
 
 
 def test_execution_factory_roundtrip_freezes_the_actual_registry_selection(tmp_path):

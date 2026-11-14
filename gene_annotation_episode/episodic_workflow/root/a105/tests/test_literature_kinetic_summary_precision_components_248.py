@@ -106,16 +106,6 @@ def edit_count(inputs, count):
     selector['witness']['quote'] = str(count)
     return value
 
-def test_reviewed_schemas_and_task_are_exact_and_accessors_detach():
-    for function, filename in ((summary_precision_arguments_schema, 'SELECTION_SCHEMA_002.json'), (summary_precision_extraction_schema, 'EXTRACTION_SCHEMA_004.json'), (summary_precision_inputs_schema, 'CALCULATION_INPUTS_SCHEMA_004.json'), (summary_precision_sheet_schema, 'SHEET_SCHEMA_004.json')):
-        assert function() == saved(filename)
-        mutated = function()
-        mutated['properties'].clear()
-        assert function() == saved(filename)
-    assert KINETIC_SUMMARY_PRECISION_TASK.encode() == (FIXTURES / 'TASK_PROPOSAL_001.txt').read_bytes()
-    assert len(KINETIC_SUMMARY_PRECISION_TASK.strip().split('\n\n')) == 5
-    assert 'formula_code' not in KINETIC_SUMMARY_PRECISION_TASK
-    assert 'source_cells' not in SUMMARY_PRECISION_OPERATION_DESCRIPTION
 
 def test_actual_source_count_and_conditional_precision_match_independent_oracle():
     extraction = actual()

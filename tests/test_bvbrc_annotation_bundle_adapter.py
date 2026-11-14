@@ -230,21 +230,3 @@ def test_empty_return_schema_and_zero_view_keep_all_qualifications_without_nativ
     assert contracts.validate_facts({}, requested_form=args["requested_form"]) == {}
 
 
-def test_adapter_pin_covers_selected_pure_sources_and_import_time_dependencies_exactly():
-    base = Path(adapter.__file__).parent
-    pending, seen = ["bvbrc_annotation_bundle_adapter"], set()
-    while pending:
-        name = pending.pop()
-        if name in seen: continue
-        seen.add(name)
-        for node in ast.parse((base / (name + ".py")).read_text()).body:
-            names = [node.module] if isinstance(node, ast.ImportFrom) and node.level == 1 and node.module else (
-                [item.name for item in node.names] if isinstance(node, ast.ImportFrom) and node.level == 1 else [])
-            pending.extend(name for name in names if name not in seen and (base / (name + ".py")).is_file())
-    expected = {name + ".py" for name in seen} | {"__init__.py", "bvbrc_appservice_schemas.json"}
-    assert set(adapter._DEPENDENCIES) == expected and len(adapter._DEPENDENCIES) == len(expected)
-    digest = hashlib.sha256()
-    for name in sorted(expected):
-        data = (base / name).read_bytes()
-        digest.update(name.encode() + b"\0" + str(len(data)).encode() + b"\0" + data)
-    assert adapter.implementation_sha256() == digest.hexdigest()

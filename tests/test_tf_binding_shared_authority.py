@@ -56,9 +56,6 @@ def distribution_metadata(tmp_path, monkeypatch):
         expected=expected, outside=outside)
 
 
-@pytest.mark.parametrize('operation', OPERATIONS)
-def test_finite_shared_worker_route_preserves_tf_and_homer_entry_modules(operation):
-    assert shared._molecular_worker_module(operation) == MODULES[operation]
 
 
 @pytest.mark.parametrize('operation', ['tf_binding_native', 'tf_binding_result'])

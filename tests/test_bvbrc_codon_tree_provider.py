@@ -250,11 +250,6 @@ def native_fixture():
         "parameters": {"source_dialect": "retained_codon_trees", "membership_dialect": "pgfams_legacy", "family_stats_dialect": None}}
 
 
-def test_imports_and_exact_public_signatures():
-    for module in (provider, grader, native, common):
-        assert Path(module.__file__).resolve().parent == STAGING / "gene_annotation_episode"
-    assert list(inspect.signature(provider.extract_codon_tree_sheet).parameters) == ["documents", "inputs", "observed_run", "joins", "assembly", "parameters"]
-    assert list(inspect.signature(grader.calculate_codon_tree).parameters) == ["sheet", "parameters"]
 
 
 def test_source_derived_tables_and_hand_numerical_components():

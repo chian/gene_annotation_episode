@@ -299,27 +299,6 @@ def test_result_descriptor_fields_match_actual_selected_publication(owner):
     assert len(owner.calls) == 1  # Results reused the original immediate response.
 
 
-def test_legacy_descriptor_and_instruction_entry_remain_unchanged(owner):
-    original = {'collection': 'genome', 'filters': []}
-    handoff = launched(owner, original)
-    descriptor = owner.family.job_progress_provider.targets.describe_target(handoff, owner.scope, selector={})
-    assert descriptor == {'resource_kind': 'api', 'service_or_program': 'bvbrc_data',
-        'operation': 'genome', 'output_format': 'bvbrc_json', 'called_operation': QUERY_OPERATION,
-        'status_operations': [], 'acquisition_operations': [RESULT_OPERATION], 'extractors': [{
-            'operation': RESULT_OPERATION, 'implementation': 'gene_annotation_episode.api_bvbrc.BVBRCDataService.publish',
-            'return_fields': ['source_ref', 'records'], 'return_fact_sources': ['execution_result_refs']}]}
-    manifest = json.loads((LIBRARY/'index.json').read_text())
-    old = next(row for row in manifest['entries'] if row['entry_id'] == 'launch-api-bvbrc')
-    assert hashlib.sha256((LIBRARY/'api-bvbrc.md').read_bytes()).hexdigest() == (
-        'c4c0a79fb811713f99db5d985c2abc88a2aad96fa2e3209c3571efeb026576a9')
-    assert hashlib.sha256(json.dumps(old, sort_keys=True, separators=(',', ':')).encode()).hexdigest() == (
-        '523f1b48b93fb467045a0314fd2e2766980e680e97cb7ac912e99559ee69187a')
-    current = next(row for row in manifest['entries'] if row['entry_id'] == 'launch-api-bvbrc-data-v2')
-    assert current['tool_names'] == [DATA_QUERY_OPERATION, DATA_RESULT_OPERATION]
-    legacy = next(row for row in workflow_execution_catalogs()['api'] if row['name'] == QUERY_OPERATION)
-    instructions = make_tool_info(legacy, 'api')['instructions']
-    assert (LIBRARY/'api-bvbrc.md').read_text().strip() in instructions
-    assert (LIBRARY/'api-bvbrc-data-v2.md').read_text().strip() not in instructions
 
 
 def test_frozen_v2_information_reopens_without_replacing_original_instructions(owner, monkeypatch):

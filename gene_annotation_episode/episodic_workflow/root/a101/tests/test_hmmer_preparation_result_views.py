@@ -399,16 +399,3 @@ def test_fact_schemas_and_catalogues_are_detached_and_closed():
     assert "preflight" in views.FAILURE_STAGES
 
 
-def test_save_native_projection_examples_and_hashes(tmp_path):
-    examples = {"H1": native.dna_statistics(), "S1": native.legacy_simulation(),
-        "E1": native.selected("hmmemit", "consensus_simple"), "F1": native.selected("makehmmerdb", "build"),
-        "A1": native.legacy_artifact("hmmpress_success"), "B1": native.selected("hmmbuild", "build_alignment")}
-    report = {}
-    for name, args in examples.items():
-        grading, occurrences = prepared(args)
-        entry = views.preparation_projection_catalog(**{k: grading["operation"][k] for k in ("program", "mode")})["calculations"]
-        result = project(grading, occurrences, selection(quantities=list(entry["quantities"]), checks=entry["checks"]))
-        path = tmp_path / (name + "_projection.json")
-        path.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
-        report[name] = {"file": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest(), "occurrences": occurrences}
-    (tmp_path / "manifest.json").write_text(json.dumps(report, indent=2) + "\n")

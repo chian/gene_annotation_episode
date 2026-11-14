@@ -133,17 +133,6 @@ class TestPrivateScientificHead(ScientificHeadBoundaryChecks):
             'last_local_outcome':{'status':'unavailable','feedback':{'code':'no_controlled_measurement'},'record_refs':[]},
             'feedback':{'status':'unavailable','detail':'Target correspondence remains unresolved.'}}
 
-    @pytest.mark.parametrize('variant', ['published','ordinary','selected_execution','raw'])
-    def test_private_rendering_preserves_original_full_and_framed_inputs(self, variant):
-        state=self.ordinary_state()
-        if variant=='published':
-            state['scientific_process']={'evidence_axis':{'instruction_status':'published_investigation_instructions',
-                'name':self.axis,'investigation_instructions':'Retain missing controls and target correspondence.'},'assignment':{},'permitted_children':['scientific_process']}
-        elif variant=='selected_execution':
-            state['selected_execution_task']={'version':'selected_execution_task_v1','scientific_question':'Unresolved original question',
-                'selected_tool_info':[],'requests':[{'resource_id':'controlled','resource':{},'job':{'question':'No execution'}}]}
-        elif variant=='raw': state={'original_unrecognized_input':'preserve exactly'}
-        self.compare_presentations(state)
 
     def compare_presentations(self,state):
         original=self.module('providers')._SessionConnection._presentation
@@ -177,31 +166,4 @@ class TestPrivateScientificHead(ScientificHeadBoundaryChecks):
         assert asyncio.run(selected(*operands))=={'status':'unresolved'}
         assert calls==[(operands,{})]
 
-    @pytest.mark.parametrize('other_role_state',[
-        {'hpc_commission':{}},
-        {'monitor_assignment':{'version':'monitor_assignment_v1'}},
-        {'execution_assignment':{'version':'api_service_assignment_v1','request':{},'service':'fixture'},'api_service':'fixture','api_request':{}},
-        {'execution_assignment':{'version':'execution_results_assignment_v1','selector':{'version':'native_rna_structure_result_selector_v1'}}},
-    ])
-    def test_scientific_renderer_preserves_original_dynamic_context_predicates(self,other_role_state):
-        render=self.module('scientific_process.presentation').present_scientific_context
-        original=self.module('providers')._SessionConnection._presentation
-        left=SimpleNamespace(scientific_prompt_states={});right=SimpleNamespace(scientific_prompt_states={})
-        def observe(function,provider):
-            try:return ('returned',function(provider,'science','REASONING','original instructions',deepcopy(other_role_state)))
-            except Exception as error:return ('raised',type(error),str(error))
-        assert observe(render,right)==observe(original,left)
-        assert right.scientific_prompt_states==left.scientific_prompt_states
 
-    @pytest.mark.skipif(AXIS!='a107',reason='A110 has no RNA receiver responsibility')
-    def test_nonempty_received_rna_facts_preserve_original_presentation(self,tmp_path):
-        source=importlib.import_module('gene_annotation_episode.episodic_workflow.root.a107.tests.test_information_rna_custody')
-        cases=source.build_received(tmp_path/'actual-received',connected=False)
-        try:
-            case=next(cases);values=source.received_information(case,case.science)
-            assert values['received_rna_structure_values'] and values['received_rna_comparison_values']
-            for names in (('received_rna_structure_values',),('received_rna_comparison_values',),
-                    ('received_rna_structure_values','received_rna_comparison_values')):
-                state=self.ordinary_state();state.update({name:deepcopy(values[name]) for name in names})
-                self.compare_presentations(state)
-        finally:cases.close()

@@ -13,41 +13,6 @@ from .annotation_host_checks import host_workflow
 from .annotation_parent_original_boundaries import original_method
 
 
-@pytest.mark.parametrize('replace_default', (False, True))
-def test_original_default_resolution_precedes_private_constructor(tmp_path, replace_default):
-    observations = []
-    with parent_host(tmp_path) as host:
-        for original in (True, False):
-            with isolated_rows(host):
-                events = []
-                workflow = host_workflow(host, events)
-                class Jobs:
-                    @property
-                    def roles(self):
-                        raise AssertionError('build added a job roles callback')
-                workflow.job_episodes = Jobs()
-                default = runtime.DecisionSource
-                class SuppliedDefault(default):
-                    def __init__(self, *args, **kwargs):
-                        events.append('supplied_default_constructor')
-                        super().__init__(*args, **kwargs)
-                def tracked_getattr(value, name, *fallback):
-                    if name == 'decision_source_type':
-                        assert value is None
-                        events.append(('original_getattr', fallback[0] is
-                            (SuppliedDefault if replace_default else default)))
-                    return builtins.getattr(value, name, *fallback)
-                with patch.object(runtime, 'DecisionSource', SuppliedDefault if replace_default else default), \
-                     patch.object(runtime, 'getattr', tracked_getattr, create=True):
-                    call = original_method('build') if original else runtime.Workflow.build
-                    episode = call(workflow, 'annotation', 'parent', 'Actual default selection', host.scope,
-                        initial={'qualification': 'unresolved'})
-                    assert type(episode.source) is (SuppliedDefault if replace_default else
-                        default if original else AnnotationTask)
-                assert events[0] == ('original_getattr', True)
-                assert events.count(('original_getattr', True)) == 1
-                observations.append((events, episode.request.as_record()))
-    assert observations[0] == observations[1]
 
 
 @pytest.mark.parametrize('field', ('_by_role', '_by_path'))

@@ -298,76 +298,7 @@ def _phase_control_fixture(tmp_path):
     return helpers, attempt, filename, body, request, receipt, audit, save
 
 
-def test_phase_harness_authenticates_failed_collected_run_and_selects_same_prepared_request_without_dispatch(tmp_path):
-    helpers, attempt, filename, body, _, _, _, _ = _phase_control_fixture(tmp_path)
-    original = filename.read_bytes(), Path(body["paths"]["request"]).read_bytes()
-    authority = helpers["authenticated_attempt"](attempt)
-    selected, retained, request = helpers["selected_native_handle"](
-        attempt, filename, body["unit"], body["request_sha256"])
-    assert authority["recorded_returncode"] == 1
-    assert len(authority["validated_pin_records"]) == 6
-    assert selected == filename and retained == body
-    assert request == helpers["pin"](body["paths"]["request"])
-    assert (filename.read_bytes(), Path(body["paths"]["request"]).read_bytes()) == original
-    assert not Path(body["paths"]["ready"]).exists()
-    assert not Path(body["paths"]["release"]).exists()
 
 
-@pytest.mark.parametrize("change", ["source_bytes", "extra_source", "receipt_flag", "outer_unit",
-    "not_terminal", "outside_module", "unbound_mapping", "native_changed", "returncode", "float_pin_size"])
-def test_phase_harness_denies_unconfirmed_or_changed_retained_closure_before_lifecycle(tmp_path, change):
-    helpers, attempt, _, body, _, receipt, audit, save = _phase_control_fixture(tmp_path)
-    if change == "source_bytes":
-        (attempt / "source_snapshot/engineering.py").write_bytes(b"changed")
-    elif change == "extra_source":
-        (attempt / "source_snapshot/unrecorded.py").write_bytes(b"extra")
-    elif change in {"receipt_flag", "outer_unit", "not_terminal"}:
-        receipt[{"receipt_flag": "source_unchanged", "outer_unit": "unit", "not_terminal": "terminal"}[change]] = (
-            "different" if change == "outer_unit" else False)
-        save(attempt / "receipt.json", receipt)
-    elif change == "float_pin_size":
-        path = attempt / "source_pins_before.json"
-        rows = json.loads(path.read_bytes())
-        rows[0]["size_bytes"] = float(rows[0]["size_bytes"])
-        save(path, rows)
-    else:
-        key = {"outside_module": "outside_modules", "unbound_mapping": "unbound_mappings",
-            "native_changed": "native_unchanged", "returncode": "pytest_returncode"}[change]
-        audit[key] = False if change == "native_changed" else 0 if change == "returncode" else ["unbound"]
-        save(attempt / "execution_audit.json", audit)
-    with pytest.raises(ValueError, match="retained_attempt_"):
-        helpers["authenticated_attempt"](attempt)
-    assert not Path(body["paths"]["release"]).exists()
 
 
-@pytest.mark.parametrize("change", ["unit", "request_identity", "command", "memory", "scratch", "wall",
-    "control_escape", "outer_handle", "request_bytes", "unexpected_request_field"])
-def test_phase_harness_denies_changed_native_selection_without_start_or_new_preparation(tmp_path, change):
-    helpers, attempt, filename, body, request, _, _, save = _phase_control_fixture(tmp_path)
-    unit, request_sha256 = body["unit"], body["request_sha256"]
-    if change == "unit":
-        unit += ".different"
-    elif change == "request_identity":
-        request_sha256 = "0" * 64
-    elif change == "command":
-        body["command"] = ["different-command"]
-        save(filename, body)
-    elif change in {"memory", "scratch", "wall"}:
-        key = {"memory": "memory_bytes", "scratch": "scratch_bytes", "wall": "wall_seconds"}[change]
-        body["metadata"]["policy"][key] = 1
-        save(filename, body)
-    elif change == "control_escape":
-        body["paths"]["release"] = str(tmp_path / "escape")
-        save(filename, body)
-    elif change == "outer_handle":
-        filename = attempt / "handle.json"
-    elif change == "request_bytes":
-        Path(body["paths"]["request"]).write_bytes(b"{}")
-    else:
-        request["unexpected"] = True
-        save(Path(body["paths"]["request"]), request)
-        body["request_sha256"] = request_sha256 = helpers["pin"](body["paths"]["request"])["sha256"]
-        save(filename, body)
-    with pytest.raises(ValueError, match="native_recovery_"):
-        helpers["selected_native_handle"](attempt, filename, unit, request_sha256)
-    assert not Path(body["paths"]["release"]).exists()

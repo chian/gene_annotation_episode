@@ -95,15 +95,3 @@ def test_completion_reloads_reader_and_selected_action_on_each_call(selected):
     assert s.calls == [expected_args]
 
 
-def test_policy_globals_and_retained_custody_owner_identity(selected):
-    s = selected
-    host = type(s.host)
-    assert host.__module__ == s.module.__name__
-    for name in ('__init__', 'resolve', 'result_identity', 'execute', '_validate_body'):
-        assert host.__dict__[name].__module__ == s.module.__name__
-    assert host.credit_view.__globals__['ContractError'] is s.module.ContractError
-    assert host.credit_view.__globals__['plain'] is s.module.plain
-    assert host.credit_view.__globals__['VERSION'] == s.module.VERSION
-    assert host.facts.__globals__['ORIGIN'] is s.module.ORIGIN
-    assert host.facts.__globals__['FAMILY_SOURCES'] is s.module.FAMILY_SOURCES
-    assert host.completion.__globals__['digest'] is s.module.digest

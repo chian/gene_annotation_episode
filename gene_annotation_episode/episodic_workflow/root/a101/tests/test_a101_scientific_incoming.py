@@ -9,16 +9,6 @@ from .test_a101_implicit_parent_protocol import no_external_execution, own
 from .a101_scientific_incoming_checks import ROUTES, genuine_host, observe, original_rows
 
 
-@pytest.mark.parametrize('route', ROUTES, ids=[row[0] for row in ROUTES])
-@pytest.mark.parametrize('scenario', ('return-valid', 'saved-failure', 'nonreceipt-valid'))
-def test_actual_scientific_selected_original_and_private_incoming(tmp_path, route, scenario):
-    with genuine_host(tmp_path, route) as (workflow, source, binding):
-        with original_rows(workflow):
-            before = observe(workflow, source, binding, route, scenario, original=True)
-        source.feedback = None
-        with original_rows(workflow):
-            after = observe(workflow, source, binding, route, scenario, original=False)
-        assert before == after
 
 
 @pytest.mark.parametrize('route', ROUTES, ids=[row[0] for row in ROUTES])

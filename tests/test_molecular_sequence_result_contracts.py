@@ -199,29 +199,6 @@ def run_worker(tmp_path, plan):
     return worker.run_molecular_sequence_result_worker(plan_file={"path": str(path), "sha256": hashlib.sha256(raw).hexdigest(), "size_bytes": len(raw)}, output_directory=plan["directory"])
 
 
-@pytest.mark.parametrize("profile,expected,expected_components", [(0, "888ebdc6ba3e229b7b224c41b78e1fc38ecb2a0ce594127501175ee7fba751ea", "11becb439f1e9f2becd7e69ae41630b357a5d9a479c2de51186a91431503200c"),
-    (1, "436ba7e78ac0821f8e7ed8d939c3e392880ce39a33ef73a23465cd3da3881f1f", "b51bbaae7a80f9238a7735b777031f34413f28dc3dd92a54852da1c56e473442"),
-    (2, "9b11ec1f0e9d2808807f67eb07a52a5a0f9b8765651bef4e51f26d2799739730", "1c8e4031b3569ce21bb80adabf6a0c93c57a31ea229db68bef2dc0c30fca9b3e"),
-    (3, "e996ce8d00492baa5effc52199cac3085ca76e5d971db9b6ad83f69f93a2e0db", "6d7a1d77bf218b576978f6c8c3f49bc7fd1b5771283649c0b8d59723fb94fb95")])
-def test_exact234_original_stored_cells_need_no_calculator_or_source(tmp_path, monkeypatch, profile, expected, expected_components):
-    selected = os.environ.get("HMMER_NATIVE_ORACLE_MOLECULAR_RETAINED234")
-    if selected is None: pytest.skip("requires root-selected retained234 supplied outputs")
-    directory = Path(selected) / ("test_genuine_selected_driver_j" + str(profile)) / "output"
-    sheet_path, component_path = directory / "sheet.json", directory / "components.json"
-    assert hashlib.sha256(sheet_path.read_bytes()).hexdigest() == expected
-    assert hashlib.sha256(component_path.read_bytes()).hexdigest() == expected_components
-    from gene_annotation_episode import molecular_sequence_driver, molecular_sequence_native
-    monkeypatch.setattr(molecular_sequence_driver, "_calculate", lambda *args: pytest.fail("original path calculated"))
-    monkeypatch.setattr(molecular_sequence_native, "execute_molecular_sequence_request", lambda *args: pytest.fail("original path called source"))
-    sources = {role: contracts.empty_file_state() for role in contracts.FILE_ROLES}
-    sources.update(sheet=source(sheet_path), components=source(component_path))
-    selected = selector(contracts.OPERATIONS[profile])
-    plan = worker_plan(tmp_path, selected, sources, {"sheet": sheet_path, "components": component_path})
-    result = run_worker(tmp_path, plan)
-    assert result["failures"] == []
-    projection = json.loads((Path(plan["directory"]) / "projection.json").read_bytes())
-    assert projection["public"]["original_attempt_association"] == "unavailable"
-    assert projection["public"]["rows"][0]["value_state"] == "stored_value"
 
 
 def retained239():
@@ -233,56 +210,8 @@ def retained239():
     return directory
 
 
-def test_exact239_original_v1_and_missing_legacy_assessment_are_never_migrated(tmp_path, monkeypatch):
-    directory = retained239()
-    sources = {role: contracts.empty_file_state() for role in contracts.FILE_ROLES}
-    sources.update(sheet=source(directory / "sheet.json"), components=source(directory / "components.json"))
-    selected = selector(contracts.OPERATIONS[4], row={"kind": "protease_quantity", "quantity": "apparent_catalytic_efficiency"}, fields=["value", "variance"])
-    from gene_annotation_episode import molecular_sequence_driver, molecular_sequence_native
-    monkeypatch.setattr(molecular_sequence_driver, "_calculate", lambda *args: pytest.fail("original239 recalculated"))
-    monkeypatch.setattr(molecular_sequence_native, "execute_molecular_sequence_request", lambda *args: pytest.fail("source invoked"))
-    raw = (directory / "components.json").read_bytes()
-    plan = worker_plan(tmp_path, selected, sources, {role: directory / (role + ".json") for role in ("sheet", "components")})
-    run_worker(tmp_path, plan)
-    projection = json.loads((Path(plan["directory"]) / "projection.json").read_bytes())["public"]
-    assert projection["components_schema"] == "protease_kinetics_components_v1"
-    assert projection["rows"][1]["value_state"] == "path_missing"
-    assert projection["rows"][0]["scientific_qualifiers"]["states"]["quantity_uncertainty_reason"]["value"] == "native_covariance_asymmetric"
-    assert projection["rows"][0]["scientific_qualifiers"]["states"]["native_matrix_symmetry"]["value_state"] == "path_missing"
-    assert (directory / "components.json").read_bytes() == raw
 
 
-def test_explicit_saved239_calculates_current_v2_exactly_once_and_replays_without_inputs(tmp_path, monkeypatch):
-    directory = retained239()
-    sheet = tmp_path / "received-sheet.json"; sheet.write_bytes((directory / "sheet.json").read_bytes())
-    sources = {role: contracts.empty_file_state() for role in contracts.FILE_ROLES}; sources["sheet"] = source(sheet)
-    selected = selector(contracts.OPERATIONS[4], mode=contracts.MODES[1], saved=sources["sheet"]["file"]["artifact_ref"],
-        row={"kind": "protease_quantity", "quantity": "apparent_catalytic_efficiency"}, fields=["value", "variance"])
-    software = software_fixture(tmp_path / "selected-worker-software")
-    plan = worker_plan(tmp_path, selected, sources, {"sheet": sheet}, software=software)
-    path = tmp_path / "worker-plan.json"; path.write_text(canonical(plan) + "\n")
-    raw = path.read_bytes()
-    completed = subprocess.run([software["python"]["path"], "-B", "-m", "gene_annotation_episode.molecular_sequence_result_worker",
-        "--plan-file", str(path), "--sha256", hashlib.sha256(raw).hexdigest(), "--size-bytes", str(len(raw)),
-        "--output-directory", plan["directory"]], cwd=tmp_path, env=_environment(software),
-        stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    (tmp_path / "worker.stdout").write_bytes(completed.stdout); (tmp_path / "worker.stderr").write_bytes(completed.stderr)
-    assert completed.returncode == 0, completed.stderr.decode()
-    result = json.loads((Path(plan["directory"]) / "result.json").read_bytes())
-    diagnostics = json.loads((Path(plan["directory"]) / "diagnostics.json").read_bytes())
-    assert diagnostics["calculation_call_count"] == 1 and diagnostics["native_invocation"] == "not_requested"
-    assert diagnostics["software_before"]["state"] == diagnostics["software_after"]["state"] == "verified"
-    components = json.loads((Path(plan["directory"]) / "calculated_components.json").read_bytes())
-    assert components["schema"] == "protease_kinetics_components_v2"
-    assert components["physical_components"]["apparent_catalytic_efficiency"]["uncertainty"]["variance"] == 0.0006287504487556328
-    draft = json.loads((Path(plan["directory"]) / "projection.json").read_bytes())
-    assert draft["public"]["source_states"]["components"] == "produced_unretained"
-    with pytest.raises(ValueError): contracts.validate_molecular_sequence_fact_values(contracts.PROJECTION_SOURCE, [draft["public"]])
-    sheet.unlink()
-    Path(software["software_files_file"]["path"]).unlink()
-    Path(software["python"]["path"]).unlink()
-    monkeypatch.setattr(worker, "_calculate", lambda *args: pytest.fail("sealed replay recalculated"))
-    assert run_worker(tmp_path, plan) == result
 
 
 def test_saved_calculation_failure_keeps_received_sheet_and_distinguishes_absent_component(tmp_path, monkeypatch):

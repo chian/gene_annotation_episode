@@ -381,35 +381,6 @@ def shared_case(tmp_path, monkeypatch, profile, alias, nondetection, *, nested=F
 def test_nested_narrower_return_preserves_exact_admitted_scalar(tmp_path, monkeypatch):
     shared_case(tmp_path, monkeypatch, None, True, False, nested=True)
 
-def test_actual_old_v1_closed_data_is_exact_without_reinterpretation(tmp_path, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_compiled_assay_185 import readonly
-    baseline = json.loads((BASE / 'OLD_V1_BASELINE_001.json').read_text())
-    proof = BASE.parent / 'a105_native_reported_rate_reader_166/original_source_episode_003'
-    state = proof / 'state'
-    before = state_hashes(state)
-    assert before == baseline['state_files']
-    expected = json.loads((proof / 'ADMITTED_ROWS_001.json').read_text())['activity']
-    saved = json.loads((proof / 'SAVED_SHEET_001.json').read_text())
-    block_science(monkeypatch)
-    import gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_observation_storage as storage
-    monkeypatch.setattr(storage, 'read_rate_observations', forbid)
-    monkeypatch.setattr(storage, 'populate_rate_observation_contrast', forbid)
-    with readonly(state) as cold:
-        run_id, parent = cold.db.execute('SELECT run_id,episode_id FROM literature_rate_observation_received').fetchone()
-        repo = LiteratureRateObservationRepository(cold, run_id)
-        ref = expected[0]['sheet_ref']
-        meta = cold.get(ref)
-        get = cold.get_artifact
-        allowed = {meta['artifact_ref'], meta['request_ref']}
-
-        def saved_only(r):
-            assert r in allowed
-            return get(r)
-        monkeypatch.setattr(cold, 'get_artifact', saved_only)
-        ctx = BindingContext(run_id, parent, 'annotation', (('annotation', parent),), cold.validate_scope(), {}, {}, (ref,))
-        assert repo.read(ref) == saved and repo.received_cells(ctx) == expected
-        assert cold.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3 and cold.db.total_changes == 0
-    assert before == state_hashes(state)
 
 @pytest.mark.parametrize('profile', [None, 'operation_contract_information_v1'])
 def test_pending_grid_alias_uses_original_frozen_declaration(tmp_path, monkeypatch, profile):

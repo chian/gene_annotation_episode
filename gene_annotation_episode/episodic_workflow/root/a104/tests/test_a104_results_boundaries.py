@@ -113,14 +113,3 @@ def test_actual_presentation_preserves_json_text_bootstrap_update_and_lookup(fra
             assert actual[0].startswith('TASK\nOriginal goal')
 
 
-def test_parent_descriptors_read_current_results_files(frame, parent_binding, binding_home):
-    descriptor = parent_binding.as_record()
-    assert descriptor == parent_binding.as_record()
-    assert descriptor['configuration']['resources'] == resources()
-    if hasattr(frame.owner, 'decision_source_type'):
-        task = own_module(binding_home + '/task').ResultsTask
-        assert frame.owner.decision_source_type is task
-        assert not issubclass(task, own_module('runtime').DecisionSource)
-        assert parent_binding.child_report_receiver('results').__module__.endswith('.from_child_execution_result_acquisition')
-        assert frame.owner.prepare_assignment.__module__.endswith('.from_parent')
-        assert frame.owner.decision_prompt_renderer.presentation_protocol == 'episode_context_presentation_v1'

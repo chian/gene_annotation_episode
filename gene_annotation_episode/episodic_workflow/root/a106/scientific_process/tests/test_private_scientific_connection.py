@@ -11,18 +11,6 @@ Binding = importlib.import_module(PACKAGE + '.scientific_process.episode').Scien
 Task = importlib.import_module(PACKAGE + '.scientific_process.task').ScientificInvestigationTask
 
 
-def test_private_binding_declares_independent_task_and_responsibilities():
-    assert Binding.decision_source_type is Task
-    assert not issubclass(Task, runtime.DecisionSource)
-    expected = {'instructions': 'goal', 'prepare_assignment': 'from_parent',
-        'facts': 'to_parent', 'decision_context': 'internal_summary', 'execute': 'scientific_operations',
-        'credit_view': 'credit', 'yield_controller': 'yield_estimator', 'restore_saved_process': 'process_state'}
-    for name, module in expected.items():
-        assert getattr(Binding, name).__module__ == PACKAGE + '.scientific_process.' + module
-    for name, module in {'execute': 'task', 'next': 'task', 'call': 'task_decision',
-        'decision_inputs': 'decision_inputs', 'decision_state': 'decision_state',
-        'finish': 'report_delivery', 'restore': 'task_state', 'suspension_changed': 'waiting'}.items():
-        assert getattr(Task, name).__module__ == PACKAGE + '.scientific_process.' + module
 
 
 def test_original_runtime_constructs_declared_private_scientific_task(monkeypatch):

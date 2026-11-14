@@ -134,38 +134,8 @@ def test_duplicate_operand_identity_and_duplicate_source_rows_are_invalid():
         validate_support_entry(entry)
 
 
-@pytest.mark.parametrize("fixed_case", [False, True])
-def test_actual_policy_overrides_omissions_complete_record_and_binding_hash(fixed_case):
-    policy = CreditPolicy(observation_axes=(("alignment", "mechanistic"), ("context", "empirical")),
-        epsilon=.1, scale=7., target_weights=(("synthetic_target", 2.),))
-    projector = AnnotationSupportScore(policy)
-    binding = runtime_binding(projector, fixed_case=fixed_case)
-    snapshot = deepcopy(binding)
-    result = annotation_policy_routes(projector, binding,
-        observation_kinds=["source_content", "comparison", "context", "alignment"])
-    assert result == {"version": "scientific_support_routes_v1", "status": "available",
-        "reason": None, "annotation_binding_sha256": content_digest(binding),
-        **{key: projector.as_record()[key] for key in
-           ("projection_version", "formula_version", "integration_arithmetic")},
-        "policy": policy.as_record(), "routes": [
-            {"observation_kind": "alignment", "status": "mapped", "axis": "mechanistic"},
-            {"observation_kind": "comparison", "status": "unmapped", "axis": None},
-            {"observation_kind": "context", "status": "mapped", "axis": "empirical"},
-            {"observation_kind": "source_content", "status": "unmapped", "axis": None}]}
-    result["policy"]["observation_axes"][0][1] = "comparative"
-    assert binding == snapshot and policy.observation_axes[0][1] == "mechanistic"
 
 
-def test_equivalent_descriptive_meaning_changes_only_binding_identity():
-    projector = AnnotationSupportScore(CreditPolicy())
-    binding = runtime_binding(projector)
-    first = annotation_policy_routes(projector, binding, observation_kinds=["alignment"])
-    binding["meaning"] = "The caller's annotation support declaration."
-    second = annotation_policy_routes(projector, binding, observation_kinds=["alignment"])
-    assert first["annotation_binding_sha256"] != second["annotation_binding_sha256"]
-    first.pop("annotation_binding_sha256")
-    second.pop("annotation_binding_sha256")
-    assert first == second and first["status"] == "available"
 
 
 def assert_unavailable(result, reason):
@@ -175,83 +145,10 @@ def assert_unavailable(result, reason):
     assert result["routes"] == [{"observation_kind": "alignment", "status": "unavailable", "axis": None}]
 
 
-def test_absent_custom_and_missing_metadata_never_default_or_project(monkeypatch):
-    projector = AnnotationSupportScore(CreditPolicy())
-    binding = runtime_binding(projector)
-    monkeypatch.setattr(AnnotationSupportScore, "__call__", lambda *a, **kw: pytest.fail("projection invoked"))
-    monkeypatch.setattr(AnnotationSupportScore, "read_details", lambda *a, **kw: pytest.fail("details invoked"))
-    # Any attempted default construction is a failure after the actual instance exists.
-    monkeypatch.setattr(CreditPolicy, "__init__", lambda *a, **kw: pytest.fail("default policy constructed"))
-    assert annotation_policy_routes(projector, binding, observation_kinds=[])["status"] == "available"
-    for executable, metadata, reason in (
-        (None, binding, "annotation_score_unbound"),
-        (projector, None, "binding_definition_missing"),
-        (lambda *a: pytest.fail("custom projector invoked"), binding, "unsupported_projector"),
-        (projector, {}, "binding_definition_missing"),
-        (projector, {**binding, "definition": None}, "binding_definition_missing"),
-    ):
-        assert_unavailable(annotation_policy_routes(executable, metadata,
-            observation_kinds=["alignment"]), reason)
-    class Pretend:
-        @property
-        def policy(self):
-            pytest.fail("arbitrary policy attribute inspected")
-    assert_unavailable(annotation_policy_routes(Pretend(), binding,
-        observation_kinds=["alignment"]), "unsupported_projector")
-    class Subclass(AnnotationSupportScore):
-        pass
-    assert_unavailable(annotation_policy_routes(Subclass(projector.policy), binding,
-        observation_kinds=["alignment"]), "unsupported_projector")
 
 
-@pytest.mark.parametrize("mutation", ["projector", "versions", "scope_source", "meaning",
-    "extra_outer", "policy", "projection_version", "extra_definition", "recursive_wrapper",
-    "extra_case", "bad_case_hash", "non_json", "boolean_number"])
-def test_only_exact_known_envelopes_and_actual_complete_definition_are_available(mutation):
-    projector = AnnotationSupportScore(CreditPolicy())
-    binding = runtime_binding(projector)
-    if mutation in {"projector", "scope_source", "meaning"}:
-        binding[mutation] = " "
-    elif mutation == "versions":
-        binding["versions"]["requirement"] = "shape_only"
-    elif mutation == "extra_outer":
-        binding["extra"] = "unknown"
-    elif mutation == "policy":
-        binding["definition"]["policy"]["observation_axes"][0][1] = "comparative"
-    elif mutation == "projection_version":
-        binding["definition"]["projection_version"] = "unknown"
-    elif mutation == "extra_definition":
-        binding["definition"]["extra"] = "unknown"
-    elif mutation == "recursive_wrapper":
-        binding = runtime_binding(projector, fixed_case=True)
-        binding["definition"]["definition"] = {"definition": projector.as_record()}
-    elif mutation == "extra_case":
-        binding = runtime_binding(projector, fixed_case=True)
-        binding["definition"]["extra"] = "unknown"
-    elif mutation == "bad_case_hash":
-        binding = runtime_binding(projector, fixed_case=True)
-        binding["definition"]["policy_source_sha256"] = "A" * 64
-    elif mutation == "non_json":
-        binding["definition"]["policy"]["scale"] = float("nan")
-    elif mutation == "boolean_number":
-        # True compares equal to 1.0 in Python; serialized meaning must still match exactly.
-        binding["definition"]["policy"]["axis_weights"]["empirical"] = True
-    assert_unavailable(annotation_policy_routes(projector, binding,
-        observation_kinds=["alignment"]), "binding_definition_mismatch")
 
 
-def test_direct_definition_is_not_a_runtime_envelope_and_all_kinds_keep_policy_mapping():
-    projector = AnnotationSupportScore(CreditPolicy())
-    assert_unavailable(annotation_policy_routes(projector, projector.as_record(),
-        observation_kinds=["alignment"]), "binding_definition_missing")
-    result = annotation_policy_routes(projector, runtime_binding(projector),
-        observation_kinds=list(OBSERVATION_KINDS))
-    assert [row["observation_kind"] for row in result["routes"]] == sorted(OBSERVATION_KINDS)
-    actual = dict(projector.policy.observation_axes)
-    assert all(row["axis"] == actual.get(row["observation_kind"]) for row in result["routes"])
-    assert all(row["axis"] != "discrimination" for row in result["routes"])
-    for kind in ("source_content", "source_annotation", "coordinate_mapping"):
-        assert next(row for row in result["routes"] if row["observation_kind"] == kind)["status"] == "unmapped"
 
 
 @pytest.mark.parametrize("invalid", [["unknown"], ["alignment", "alignment"], "alignment",

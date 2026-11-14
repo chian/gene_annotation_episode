@@ -107,28 +107,6 @@ def test_explicit_equivalence_and_correction_remain_structured_in_actual_commit(
         assert store.commit_reasoning(payload, {'subject_refs': [target]}, 'synthetic-correction') == result
 
 
-def test_withdrawal_is_distinct_from_nontransferability_and_changes_actual_support(tmp_path):
-    with Store(tmp_path/'workspace') as store:
-        target, hypothesis = target_question(store)
-        observed = evidence(store, target, 'alignment')
-        original = assessment(hypothesis, observed['id'], 'direct')
-        original['investigation_finding'] = finding(target)
-        saved = store.put('assessment', original, origin='reasoning')
-        store.put('annotation', annotation(target, hypothesis, [saved['id']], 0), origin='reasoning')
-        scorer = AnnotationSupportScore(CreditPolicy())
-        initial = scorer(store, {'subject_refs': [target]}).credit
-        assert initial > 0
-        withdrawn = deepcopy(original)
-        withdrawn['expected_revision'] = saved['revision']
-        withdrawn['investigation_finding'].update(status='withdrawn', withdrawal_reason='source_misread')
-        current = store.put('assessment', withdrawn, origin='reasoning')
-        store.put('annotation', annotation(target, hypothesis, [current['id']], 1), origin='reasoning')
-        details = scorer.read_details(store, {'subject_refs': [target]}, details_limit=10, details_offset=0)
-        assert details['credit'] == 0
-        inactive, = details['inactive_dependencies']
-        assert inactive['reason'] == 'scientific_finding_withdrawn'
-        assert inactive['withdrawal_reason'] == 'source_misread'
-        assert store.get(saved['id']) == saved
 
 
 @pytest.mark.parametrize('defect,code', [

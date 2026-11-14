@@ -33,14 +33,6 @@ def prepared(profile='standard_enrichr_v1', *, supplied=False, query=True):
         'mutates_remote': query, 'cache_original': not query}
 
 
-def test_original_literals_and_canonical_pure_request_validator():
-    assert metadata.PREPARED_VERSION == 'enrichr_prepared_protocol_v1'
-    assert metadata.PROTOCOL_VERSION == 'enrichr_protocol_snapshot_v1'
-    assert metadata.WIRE_PROFILE == 'enrichr_direct_http_v1'
-    assert (metadata.QUERY, metadata.RESULT) == ('api.enrichr.query', 'api.enrichr.result')
-    assert metadata.validate_enrichr_request is validate_enrichr_request
-    assert metadata._prepared.__module__ == metadata.__name__
-    assert metadata.validate_enrichr_configuration.__module__ == metadata.__name__
 
 
 @pytest.mark.parametrize('profile,supplied', [

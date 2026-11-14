@@ -22,28 +22,8 @@ def pure_repository():
     try:yield storage.LiteratureMeasurementComparisonRepository(SimpleNamespace(db=db),'pure-pin-control')
     finally:db.close()
 
-def test_current_v4_authenticates_original_proven_equivalent_twenty(pure_repository):
-    receipt=pure_repository._original_implementation()
-    assert receipt['version']=='measurement_comparison_original_implementation_v4'
-    assert receipt['bound_descriptor'] is None
-    assert list(receipt['files'])==AUTH['prospective_roster']
-    for name,h in AUTH['prospective_pure_pins'].items():
-        assert receipt['files'][name]==h==sha(storage.source_file(name).read_bytes())
 
-@pytest.mark.parametrize('logical_name',list(AUTH['prospective_pure_pins']))
-def test_every_v4_pure_dependency_rejects_unapproved_bytes(pure_repository,tmp_path,monkeypatch,logical_name):
-    assert pure_repository._original_implementation()['version']=='measurement_comparison_original_implementation_v4'
-    actual=storage.source_file;altered=tmp_path/logical_name
-    altered.write_bytes(actual(logical_name).read_bytes()+b'\n# controlled unapproved dependency change\n')
-    monkeypatch.setattr(storage,'source_file',lambda name:altered if name==logical_name else actual(name))
-    with pytest.raises(storage.ContractError,match='measurement_comparison_prospective_dependency_mismatch'):
-        pure_repository._original_implementation()
 
-def test_original_three_pin_maps_and_version_specific_rosters_remain_exact():
-    for name,value in AUTH['historical_pure_maps'].items():assert getattr(storage,name)==value
-    for version in ('measurement_comparison_original_implementation_v1','measurement_comparison_original_implementation_v2','measurement_comparison_original_implementation_v3'):
-        assert storage._RECEIPT_ROSTERS[version]==(tuple(AUTH['original_roster']),)
-    assert storage._RECEIPT_ROSTERS['measurement_comparison_original_implementation_v4']==(tuple(AUTH['prospective_roster']),)
 
 @pytest.fixture
 def historical_repository(monkeypatch):

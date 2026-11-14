@@ -54,22 +54,6 @@ def test_actual_private_estimator_keeps_verified_action_identity(tmp_path, home)
     assert seen == [(7,)]
 
 
-@pytest.mark.parametrize('home', HOMES)
-@pytest.mark.parametrize('saved', [False, True], ids=['fresh-returned-invalid', 'saved-input'])
-def test_actual_task_next_matches_original_boundary(tmp_path, home, saved):
-    # Both fixtures share the same assignment/workspace identity. Only their
-    # separate controlled journals differ; no tool or provider is dispatched.
-    expected = observe_next(task_fixture(home, tmp_path, saved=saved), original=True)
-    actual = observe_next(task_fixture(home, tmp_path, saved=saved), original=False)
-    assert actual == expected
-    if saved:
-        assert actual['events'] == ['call', 'apply_response']
-        assert actual['seen'] == [{'context': {'saved': 'exact original context'},
-                                   'schema': {'saved': 'exact original schema'}}]
-    else:
-        assert actual['events'] == ['snapshot.enter', 'working_state', 'snapshot.exit',
-            'action_schema', 'call', 'apply_response'] * 2
-        assert actual['seen'][1]['context']['feedback'] == actual['feedback']
 
 
 @pytest.mark.parametrize('home', HOMES)

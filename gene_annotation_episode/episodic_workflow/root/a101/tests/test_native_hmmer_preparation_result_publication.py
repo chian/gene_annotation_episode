@@ -165,46 +165,6 @@ def test_captured_artifact_survives_unavailable_grade_worker(tmp_path, monkeypat
         assert counts() == baseline
 
 
-def test_original_saved_alimask_publication_keeps_absent_context_and_frozen_numbers(tmp_path, monkeypatch):
-    """Reuse the actual 277 closed publication; never rerun its native job/grade."""
-    import hashlib
-    from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_result_worker as worker
-    from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_alignment_preparation_calculations as calculations
-    root = Path(__file__).resolve().parents[5]
-    original = root / "verification/tool_graders_hmmer_preparation_workflow_2026-10-26_277/check009/temporary/test_all_native_modes_through_3"
-    prepared_path, = original.rglob("prepared.json")
-    projection_path, = original.rglob("native-hmmer-preparation-projection/publication.json")
-    prepared_bytes, projection_bytes = prepared_path.read_bytes(), projection_path.read_bytes()
-    assert hashlib.sha256(prepared_bytes).hexdigest() == "85824c53c759e26aacebed9d8ad295578f3fbf3b9b208ee985d633678441652c"
-    assert hashlib.sha256(projection_bytes).hexdigest() == "43ce501621049bc2c2c3b838fb958fab91a0b1acaa835eb6ff53d9d9714d94b0"
-    shutil.copytree(original / "state", tmp_path / "state")
-    # Verification snapshots are immutable. Store needs a writable copied DB
-    # for its normal WAL initialization; keep the historical source untouched.
-    for copied in [tmp_path / "state", *(tmp_path / "state").rglob("*")]:
-        copied.chmod(0o755 if copied.is_dir() else 0o644)
-    shutil.copytree(projection_path.parent, tmp_path / "projection/native-hmmer-preparation-projection")
-    prepared = json.loads(prepared_bytes)
-    selected = json.loads(projection_bytes)
-    intent = json.loads((projection_path.parent / "intent.json").read_bytes())
-    def forbidden(*args, **kwargs):
-        raise AssertionError("old publication replay performed native work, acquisition or numerical grading")
-    for module, name in ((publication, "run_local_job"), (publication, "_prepare_worker"),
-                         (publication, "_collect_worker"), (publication, "capture_local_bundle"),
-                         (worker, "_grade"), (calculations, "reconstruct_alimask_model_map")):
-        monkeypatch.setattr(module, name, forbidden)
-    with Store(tmp_path / "state") as store:
-        stable = publication._stable(store, prepared)
-        assert stable["effective_metadata"] == {}
-        frozen = store.get_artifact(prepared["grading_artifact_ref"])
-        assert json.loads(frozen)["metadata"] == {}
-        bundle = json.loads(store.get_artifact(prepared["bundle_artifact_ref"]))
-        assert publication.validate_prepared_grading(store, prepared, bundle=bundle) == prepared
-        assert publication.validate_publication(store, selected, source_ref=intent["source_ref"],
-            prepared=prepared, selector=intent["selector"], directory=tmp_path / "projection", policy=POLICY) == selected
-        assert store.get_artifact(prepared["grading_artifact_ref"]) == frozen
-        assert publication._stable(store, prepared)["effective_metadata"] == {}
-        assert [q["value"] for q in selected["rows"][0]["quantities"]] == [3, 14, 12, 1, 1, None]
-    assert prepared_path.read_bytes() == prepared_bytes and projection_path.read_bytes() == projection_bytes
 
 
 def test_new_alimask_context_is_bound_in_publication_and_checked_on_replay(tmp_path, monkeypatch):

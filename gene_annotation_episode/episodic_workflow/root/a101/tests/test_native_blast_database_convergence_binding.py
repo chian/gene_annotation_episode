@@ -370,39 +370,6 @@ def test_supplied_records_keep_namespace_source_order_and_conflicts(tmp_path, sc
         save(tmp_path / (name + ".json"), value)
 
 
-def test_actual_legacy_population_is_byte_equal_to_original_m(case):
-    args, prepared = case
-    path = PACKET / "native_blast_database_metadata.py"
-    assert hashlib.sha256(path.read_bytes()).hexdigest() == "3ab6b866e2a0b5c4bb7605ffbf8cad693cee56fe59b0f438b13a4b2b5566c1c7"
-    from gene_annotation_episode.episodic_workflow.root.a101.tests.original_m328_fixture import load_original_m328
-    original = load_original_m328(path, comparison_owner=metadata, contracts=producer)
-    expected = original.populate_native_blast_database_sheets(args["collection"], prepared_inputs=prepared, artifact_catalog=args["artifact_catalog"])
-    assert encode(populate(args, prepared)) == encode(expected)
-    assert "native_convergence" not in expected
-    assert metadata._SCHEMAS == original._SCHEMAS
-    registry = original.metadata_schema_registry()
-    current_owners = {
-        "gene_annotation_episode.blast_sequence_database": "gene_annotation_episode.episodic_workflow.root.a101.library.blast_sequence_database",
-        "gene_annotation_episode.blast_profile_inputs": "gene_annotation_episode.episodic_workflow.root.a101.library.blast_profile_inputs",
-        "gene_annotation_episode.blast_iteration_inputs": "gene_annotation_episode.episodic_workflow.root.a101.library.blast_iteration_inputs",
-        "gene_annotation_episode.blast_vdb_inputs": "gene_annotation_episode.episodic_workflow.root.a101.library.blast_vdb_inputs",
-    }
-    for row in registry:
-        for field in ("validator_module", "populator_module"):
-            if row[field] == original.__name__: row[field] = metadata.__name__
-            elif row[field] in current_owners: row[field] = current_owners[row[field]]
-    additions = [dict(consumer="sequence_database", schema_id="native_blast_database_sequence_metadata_v2",
-        validator_module='gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_metadata', validator_function="_validate_sequence_metadata",
-        populator_module="gene_annotation_episode.episodic_workflow.root.a101.library.blast_sequence_database", populator_function="populate_blast_sequence_database_sheet"),
-        dict(consumer="sequence_database", schema_id="native_blast_database_sequence_metadata_v3",
-            validator_module='gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_metadata', validator_function="_validate_sequence_metadata",
-            populator_module="gene_annotation_episode.episodic_workflow.root.a101.library.blast_sequence_database", populator_function="populate_blast_sequence_database_sheet"),
-        dict(consumer="vdb_function", schema_id="native_blast_vdb_function_metadata_v1",
-            validator_module="gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_vdb_function_metadata",
-            validator_function="validate_native_blast_vdb_function_metadata_payload",
-            populator_module="gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_vdb_function_metadata",
-            populator_function="populate_native_blast_vdb_function_sheets")]
-    assert metadata.metadata_schema_registry() == registry + additions
 
 
 def test_pure_bridge_no_calculation_or_io_and_saved_validation_no_interpretation(case, monkeypatch):

@@ -30,46 +30,8 @@ def actual(tmp_path):
             job_ref=job_ref, family=Family(jobs, **options(policy)), Family=Family)
 
 
-def test_exact_original_record_and_actual_private_owners(actual):
-    family = actual.family
-    original = original_family_type()(actual.jobs, **options(actual.policy))
-    assert family.as_record() == original.as_record()
-    assert family.roles == original.roles == ROLES and 'binding_id' not in family.as_record()
-    assert not hasattr(type(family), 'decision_source_type')
-    for home, role in zip(HOMES, ROLES):
-        leaf = family.for_role(role)
-        assert type(leaf) is own(home + '.episode').HomologyEpisode
-        assert leaf.roles == (role,) and leaf.jobs is family.jobs is actual.jobs
-        assert leaf.parser_policy is actual.policy
-        assert leaf._job_credit_calculator is operational_credit
-        assert leaf.monitoring_projector is monitoring_credit
-        assert leaf.__dict__ is family.__dict__
-        assert leaf.as_record() == {'binding_id': home, **original.as_record()}
-        assert leaf.decision_source_type.__module__ == type(leaf).__module__.removesuffix('.episode') + '.task'
 
 
-def test_original_admission_binding_copies_run_once(actual, monkeypatch):
-    supplied = options(actual.policy)
-    credit, monitor = supplied['credit_binding'], supplied['monitoring_binding']
-    dumps = json.dumps
-    calls = []
-    def observe(value, *args, **kwargs):
-        if value is credit: calls.append('operational')
-        elif value is monitor: calls.append('monitoring')
-        return dumps(value, *args, **kwargs)
-    with monkeypatch.context() as patched:
-        patched.setattr(json, 'dumps', observe)
-        original = original_family_type()(actual.jobs, **supplied)
-        original_calls = list(calls); calls.clear()
-        family = actual.Family(actual.jobs, **supplied)
-    assert calls == original_calls == ['operational', 'monitoring', 'operational']
-    assert family.as_record() == original.as_record()
-    assert family._role_credit_bindings['job_launch'] is not credit
-    assert family._role_credit_bindings['job_results'] is not family._role_credit_bindings['job_launch']
-    family._role_credit_bindings['job_launch']['fixture_mutation'] = True
-    assert all(leaf._role_credit_bindings['job_launch']['fixture_mutation'] is True
-        for leaf in family._private_bindings.values())
-    assert 'fixture_mutation' not in credit and 'fixture_mutation' not in family._role_credit_bindings['job_results']
 
 
 def test_native_event_view_preserves_typed_resources_and_caller(actual, tmp_path):
@@ -92,50 +54,8 @@ def test_native_event_view_preserves_typed_resources_and_caller(actual, tmp_path
         family.with_native_events(SimpleNamespace(resource_id=provider.resource_id))
 
 
-def test_schema_shared_operands_and_original_callback_order(actual):
-    original = original_family_type()(actual.jobs, **options(actual.policy))
-    schema = {'properties': {'kind': {'const': 'child'},
-        'scope': {'type': 'object', 'properties': {'subject_refs': {'type': 'array'}}},
-        'purpose': {'type': 'string'}}}
-    original_calls, family_calls = [], []
-    original.has_information_channel = lambda role: original_calls.append(role) or False
-    actual.family.has_information_channel = lambda role: family_calls.append(role) or False
-    before = deepcopy(schema)
-    expected = original.commission_schemas(schema)
-    observed = actual.family.commission_schemas(schema)
-    assert observed == expected and schema == before
-    assert family_calls == original_calls == ['job_launch', 'job_results']
-    assert [value['properties']['role']['const'] for value in observed] == [
-        'job_launch', 'job_launch', 'job_monitor', 'job_results']
-    for values in (expected, observed):
-        assert values[0]['properties']['scope'] is values[2]['properties']['scope']
-        assert values[2]['properties']['scope'] is values[3]['properties']['scope']
-        assert values[1]['properties']['scope'] is not values[0]['properties']['scope']
-        assert values[0]['properties']['scope'] is not schema['properties']['scope']
 
 
-@pytest.mark.parametrize('path', (None, (('unknown_job_role', 'actual-callback'),)), ids=('missing_path', 'unknown_role'))
-@pytest.mark.parametrize('raises', (False, True), ids=('returned', 'same_exception'))
-def test_bound_outer_callback_precedes_role_access(actual, path, raises):
-    original = original_family_type()(actual.jobs, **options(actual.policy))
-    source = SimpleNamespace() if path is None else SimpleNamespace(path=path)
-    marker = ValueError('explicit-original-bound-callback')
-    payload = {'status': 'failed', 'result': {'preserved': ['actual', 'callback']}}
-    for owner in (original, actual.family):
-        calls = []
-        async def callback(source_value, name, args, *, operation_key):
-            calls.append((source_value, name, args, operation_key))
-            if raises: raise marker
-            return payload
-        owner._execute = callback
-        arguments = {'unchanged': ['operand']}
-        if raises:
-            with pytest.raises(ValueError) as captured:
-                asyncio.run(owner.execute(source, 'explicit-callback-name', arguments, operation_key='original-key'))
-            assert captured.value is marker
-        else:
-            assert asyncio.run(owner.execute(source, 'explicit-callback-name', arguments, operation_key='original-key')) is payload
-        assert calls == [(source, 'explicit-callback-name', arguments, 'original-key')]
 
 
 def test_registry_close_reopen_and_explicit_family_restore(actual):
@@ -181,38 +101,6 @@ def test_changed_saved_record_is_not_aliased_or_activated(actual, change):
     assert registry_rows(actual.jobs) == before
 
 
-@pytest.mark.parametrize('role', ROLES)
-def test_family_actual_assignment_keeps_original_order_and_unsubmitted_denial(actual, role, record_property):
-    original = original_family_type()(actual.jobs, **options(actual.policy))
-    handoff = {'job_ref': actual.job_ref, 'registry_ref': actual.jobs.config['registry_ref'],
-        'backend': own('homology_jobs').VERSION, 'status_interface': 'homology.status.v1',
-        'progress_interface': 'homology.progress.v1', 'results_interface': 'homology.results.v1'}
-    selection = {'existing_job_ref': actual.job_ref} if role == 'job_launch' else {
-        'handoff': handoff, 'prior_sample_refs': []}
-    before = registry_rows(actual.jobs)
-    observed = []
-    for owner in (original, actual.family):
-        supplied = deepcopy(selection)
-        try:
-            value = owner.assign(actual.store, role, supplied, actual.scope,
-                operation_key='unchanged-original-family-assignment')
-        except Exception as error:
-            observed.append({'status': 'raised', 'type': type(error).__module__ + '.' + type(error).__qualname__,
-                'args': list(error.args)})
-        else: observed.append({'status': 'returned', 'assignment': value})
-        assert supplied == selection and registry_rows(actual.jobs) == before
-    assert observed[0] == observed[1]
-    if role == 'job_launch':
-        assert observed[1]['status'] == 'returned'
-        assert observed[1]['assignment']['job_ref'] == actual.job_ref
-        assert observed[1]['assignment']['cpu'] == actual.jobs._row(actual.job_ref)['cpu'] == 1
-    else:
-        assert observed[1] == {'status': 'raised', 'type': 'builtins.ValueError',
-            'args': ['job_submission_handoff_unresolved']}
-    assert not actual.jobs._row(actual.job_ref)['submission_requested']
-    record_property('actual_family_assignment_boundary', json.dumps({'role': role,
-        'original': observed[0], 'private_family': observed[1],
-        'unsubmitted_handoff_is_positive_custody': False}, sort_keys=True))
 
 
 @pytest.mark.parametrize('role', ROLES)

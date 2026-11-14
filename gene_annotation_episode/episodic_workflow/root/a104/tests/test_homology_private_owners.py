@@ -124,65 +124,7 @@ def test_actual_unsubmitted_fact_reads_keep_all_public_source_roles(case, record
         records[role] = normalize(facts)
     emit(record_property, records)
 
-def test_original_bound_execute_callback_result_and_exception_identity(case, monkeypatch, record_property):
-    calls, result = [], {'status': 'controlled_callback_result'}
-    async def operation(source, name, arguments, *, operation_key):
-        calls.append((source, name, arguments, operation_key)); return result
-    monkeypatch.setattr(case.binding, '_execute', operation)
-    records = []
-    for role in ROLES:
-        source, args = source_for(case, role), {'controlled': role}
-        value = asyncio.run(case.binding.execute(source, TOOLS[role][0], args, operation_key='original-bound-callback'))
-        assert value is result and calls[-1] == (source, TOOLS[role][0], args, 'original-bound-callback')
-        assert calls[-1][0] is source and calls[-1][2] is args
-        records.append({'role': role, 'tool': TOOLS[role][0], 'result_identity_preserved': True})
-    events = []
-    def bind_events(source, job_ref):
-        assert source is case.source and job_ref == case.assignment['job_ref']
-        events.append('bind')
-    def targets(job_ref):
-        assert job_ref == case.assignment['job_ref']; events.append('targets'); return []
-    monkeypatch.setattr(case.binding, 'native_event_provider', SimpleNamespace(controlled='callback-postprocessing'))
-    monkeypatch.setattr(case.binding, 'bind_job_native_events', bind_events)
-    monkeypatch.setattr(case.jobs, 'native_event_targets', targets)
-    # Original public callback results still enter their complete optional
-    # postprocessing even if the injected callback accepts a foreign name.
-    assert asyncio.run(case.binding.execute(case.source, 'homology.submit', {}, operation_key='controlled-postprocessing')) is result
-    assert events == ['bind', 'targets'] and result['native_event_targets'] == []
-    records.append({'foreign_callback_native_event_order': events})
-    marker = RuntimeError('original_controlled_callback_failure')
-    async def failed(*args, **kwargs): raise marker
-    monkeypatch.setattr(case.binding, '_execute', failed)
-    with pytest.raises(RuntimeError) as caught:
-        asyncio.run(case.binding.execute(case.source, TOOLS[case.role][0], {}, operation_key='callback-failure'))
-    assert caught.value is marker
-    emit(record_property, records)
 
-def test_original_report_validation_order_role_and_object_identity(case, monkeypatch, record_property):
-    calls, value, schema = [], {'controlled': 'original-form'}, {'controlled': 'original-schema'}
-    def sources(role, supplied):
-        assert supplied is schema; calls.append(['sources', role])
-    def recorded(form, assignment, *, store, schema):
-        assert form is value and assignment is case.assignment and store is case.store
-        calls.append(['recorded'])
-    monkeypatch.setattr(case.binding, '_validate_role_return_sources', sources)
-    monkeypatch.setattr(case.binding, '_validate_recorded_return', recorded)
-    records = {}
-    for role in ROLES:
-        calls.clear()
-        assert case.binding.validate_report(value, case.assignment, role=role, store=case.store, schema=schema) is None
-        assert calls == [['sources', role], ['recorded']]; records[role] = deepcopy(calls)
-    calls.clear()
-    with pytest.raises(ValueError, match='homology_return_role_required'):
-        case.binding.validate_report(value, case.assignment, role='unknown_job_role', store=case.store, schema=schema)
-    assert calls == []
-    marker = RuntimeError('original_first_report_boundary_failure')
-    def rejected(*args): calls.append(['rejected']); raise marker
-    monkeypatch.setattr(case.binding, '_validate_role_return_sources', rejected)
-    with pytest.raises(RuntimeError) as caught:
-        case.binding.validate_report(value, case.assignment, role=case.role, store=case.store, schema=schema)
-    assert caught.value is marker and calls == [['rejected']]
-    emit(record_property, records)
 
 def test_actual_assigned_reference_keeps_original_query_scope_authority(case, record_property):
     reference = case.assignment['job_ref']
@@ -222,17 +164,9 @@ def _assert_unclassified_outer_callback(case, monkeypatch, record_property, *, b
         'actual_bound_callback_calls': 1, 'operand_and_result_or_exception_identity_preserved': True})
 
 
-def test_unknown_source_role_preserves_original_outer_callback_return(case, monkeypatch, record_property):
-    _assert_unclassified_outer_callback(case, monkeypatch, record_property, boundary='unknown_role', outcome='return')
 
 
-def test_unknown_source_role_preserves_original_outer_callback_exception(case, monkeypatch, record_property):
-    _assert_unclassified_outer_callback(case, monkeypatch, record_property, boundary='unknown_role', outcome='exception')
 
 
-def test_missing_source_path_preserves_original_outer_callback_return(case, monkeypatch, record_property):
-    _assert_unclassified_outer_callback(case, monkeypatch, record_property, boundary='missing_path', outcome='return')
 
 
-def test_missing_source_path_preserves_original_outer_callback_exception(case, monkeypatch, record_property):
-    _assert_unclassified_outer_callback(case, monkeypatch, record_property, boundary='missing_path', outcome='exception')

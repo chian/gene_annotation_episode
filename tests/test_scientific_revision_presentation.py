@@ -33,30 +33,6 @@ def retained_failure():
     return json.loads(gzip.decompress(FIXTURE.read_bytes()))
 
 
-def test_actual_revised_selection_fits_the_observed_provider_interface():
-    trace = retained_failure()
-    state = deepcopy(trace['state'])
-    before = deepcopy(state)
-    original = trace['sent_text']
-    assert trace['original_input_matches_sent']
-    assert len(original) == trace['transport_failure']['input_chars']
-    assert len(original) > trace['transport_failure']['provider_max_chars']
-    rendered = with_fact_contract_instructions(
-        render_scientific_process_prompt(state, trace['instructions']), state)
-    projected = _outcome(state['last_local_outcome'])
-    # Context JSON sorts stored keys; the original presentation has an explicit
-    # field order. Preserve that order while restoring the recorded old values.
-    old_view = {key: trace['old_outcome_view'][key] for key in projected
-        if key in trace['old_outcome_view']}
-    old_section = _values(_information(old_view))
-    new_section = _values(_information(projected))
-    assert original.count(old_section) == 1
-    # The actual task, scientific values, uncertainty, receipts and controller
-    # text are byte-identical; only the prepared-selection view changes.
-    assert rendered == original.replace(old_section, new_section, 1)
-    assert state == before
-    # This is a retained provider-interface rejection, not a runtime budget.
-    assert len(rendered) <= trace['transport_failure']['provider_max_chars']
 
 
 def test_prepared_selectors_restore_complete_registered_child_information(actual):

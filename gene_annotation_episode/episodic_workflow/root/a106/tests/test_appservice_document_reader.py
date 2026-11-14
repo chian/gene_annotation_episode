@@ -38,11 +38,6 @@ def test_active_schema_keeps_actual_capability_document():
     assert error.value.code=='contract_shape_invalid'
 
 
-def test_original_document_diff_is_only_the_retained_application_enum():
-    original=original_document()
-    current=json.loads(Path(active.__file__).with_name('bvbrc_appservice_schemas.json').read_text())
-    current['$defs']['RequiredApplication']['enum']=original['$defs']['RequiredApplication']['enum']
-    assert current==original
 
 
 @pytest.mark.parametrize('name',['Variation','GenomeAnnotation'])

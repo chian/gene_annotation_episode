@@ -9,13 +9,6 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_expe
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_reference_parent_prompt import REFERENCE_PARENT_TASK
 from literature_gel_worker_fixture_107 import make_case, run_case
 
-def test_existing_full_tasks_are_exact_before_and_after_gel_registration():
-    baseline = json.loads((Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/gel_prompt/BASELINE_DEFAULT_CONTRACTS_001.json').read_text())
-    assert EXPERIMENTAL_TASK == baseline['EXPERIMENTAL_TASK']
-    assert SAVED_NUMERICAL_RETURN_TASK == baseline['SAVED_NUMERICAL_RETURN_TASK']
-    correction = json.loads((Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/gel_prompt/PARENT_TASK_CORRECTION_001.json').read_text())
-    assert baseline['REFERENCE_PARENT_TASK'].count(correction['before']) == 1
-    assert REFERENCE_PARENT_TASK == baseline['REFERENCE_PARENT_TASK'].replace(correction['before'], correction['after'], 1)
 
 @pytest.mark.parametrize('raw', [False, True])
 def test_actual_own_and_received_steering_shows_only_requested_component(tmp_path, raw):

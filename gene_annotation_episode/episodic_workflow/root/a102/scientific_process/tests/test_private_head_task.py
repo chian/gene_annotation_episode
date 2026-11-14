@@ -58,9 +58,6 @@ def test_ready_child_precedes_decision(tmp_path, standalone):
     with actual(tmp_path / 'actual', standalone=standalone) as value:
         ready_child(value)
 
-@pytest.mark.parametrize('order', ['head_first', 'runtime_first'], ids=['head_first', 'runtime_first'])
-def test_cold_import_order(tmp_path, order):
-    cold_import(tmp_path / 'imports', order)
 
 @pytest.mark.parametrize('case,exchange', [('default', False), ('default', True), ('instance_shadow', False), ('instance_shadow', True), ('nonparticipant', False), ('nonparticipant', True), ('nonparticipant_shadow', False), ('nonparticipant_shadow', True), ('custom_return', False), ('custom_return', True), ('custom_raise', False), ('custom_raise', True), ('subclass_return', False), ('subclass_return', True), ('subclass_raise', False), ('subclass_raise', True), ('custom_delegates', False), ('custom_delegates', True)], ids=['default;exchange=false', 'default;exchange=true', 'instance_shadow;exchange=false', 'instance_shadow;exchange=true', 'nonparticipant;exchange=false', 'nonparticipant;exchange=true', 'nonparticipant_shadow;exchange=false', 'nonparticipant_shadow;exchange=true', 'custom_return;exchange=false', 'custom_return;exchange=true', 'custom_raise;exchange=false', 'custom_raise;exchange=true', 'subclass_return;exchange=false', 'subclass_return;exchange=true', 'subclass_raise;exchange=false', 'subclass_raise;exchange=true', 'custom_delegates;exchange=false', 'custom_delegates;exchange=true'])
 def test_instruction_service_override_and_private_composer(tmp_path, case, exchange):

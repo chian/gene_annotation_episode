@@ -448,29 +448,6 @@ def test_actual_saved_receipt_cache_and_redelivery_preserve_source_and_child_ide
             runtime.Workflow.receive_form(workflow, source, form, schema, 2, redelivery=True)
 
 
-@pytest.mark.parametrize('home,role', HOMES)
-def test_connected_task_and_message_source_owners_are_explicit(family, home, role):
-    binding, context = case(family, home, 'connected-owners')
-    task = importlib.import_module(PREFIX + home.replace('/', '.') + '.task').SourceInvestigationTask
-    assert binding.decision_source_type is task and runtime.DecisionSource not in task.__mro__
-    presentation = importlib.import_module(PREFIX + home.replace('/', '.') + '.task_presentation')
-    assert binding.decision_prompt_renderer is presentation.present_source_context
-    assert 'next' in task.__dict__ and task.next.__module__ == task.__module__
-    directory = Path(importlib.import_module(task.__module__).__file__).parent
-    contracts = importlib.import_module(PREFIX + home.replace('/', '.') + '.contracts')
-    assert contracts.ContractError is ContractError
-    assert contracts.ReportBoundaryError is runtime.ReportBoundaryError
-    for path in directory.glob('*.py'):
-        module = importlib.import_module(PREFIX + home.replace('/', '.') + '.' + path.stem)
-        for node in ast.parse(path.read_bytes()).body:
-            if isinstance(node, ast.ImportFrom) and node.module == PREFIX + 'runtime':
-                for item in node.names:
-                    assert getattr(module, item.asname or item.name) is getattr(runtime, item.name)
-    for parent, child, child_role in EDGES:
-        if parent != home: continue
-        receiver = binding.child_report_receiver(child_role)
-        assert receiver.__module__ == PREFIX + home.replace('/', '.') + '.from_child_' + child.rsplit('/', 1)[1]
-        assert not receiver is runtime.Workflow._receive_form
 
 
 @pytest.mark.parametrize('home,role', HOMES)

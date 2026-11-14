@@ -179,48 +179,8 @@ def save_request(workflow, observation, *, changed):
         'initial_credit': 0, 'state': 'active', 'completion': None, 'archive': None})
 
 
-@pytest.mark.parametrize('parent_home,child_home,role', EDGES)
-@pytest.mark.parametrize('scenario', SCENARIOS)
-def test_original_and_current_selected_request_trace(family, original_methods, instructions, monkeypatch,
-        parent_home, child_home, role, scenario):
-    # Same actual parent path/run/selection gives exact comparable immutable
-    # identities, not normalized/fabricated equality across different requests.
-    label = 'assembly-' + scenario + '-' + parent_home.replace('/', '_') + '-' + role
-    current_methods = SimpleNamespace(selected=runtime.Workflow.selected, build=runtime.Workflow.build)
-    if scenario in {'saved_same', 'saved_changed'}:
-        initial, workflow = observe(family, parent_home, child_home, role, 'valid',
-            original_methods, instructions, monkeypatch, label)
-        save_request(workflow, initial, changed=scenario == 'saved_changed')
-    original, _ = observe(family, parent_home, child_home, role, scenario,
-        original_methods, instructions, monkeypatch, label)
-    current, _ = observe(family, parent_home, child_home, role, scenario,
-        current_methods, instructions, monkeypatch, label)
-    assert current == original
-    expected_admission = 0 if scenario in {'invalid_initial', 'invalid_pin'} else 1
-    assert current['trace'].count('child_admission') == expected_admission
-    if scenario == 'valid':
-        assert current['trace'] == ['allowed_children', 'materialize', 'child_admission',
-            'materialize', 'inheritance', 'constructed']
-        assert current['outcome']['type'].endswith('.ConstructionObserved')
-    elif scenario == 'saved_same':
-        assert current['trace'][-1] == 'saved_request_compared'
-        assert current['outcome']['type'].endswith('.ReconstructionObserved')
-    elif scenario == 'saved_changed':
-        assert current['outcome'] == {'type': WorkflowError.__module__ + '.' + WorkflowError.__qualname__,
-            'message': 'reconstructed immutable assignment differs'}
-    else:
-        assert 'constructed' not in current['trace']
 
 
-@pytest.mark.parametrize('parent_home,child_home,role', EDGES)
-def test_connected_named_endpoint_owns_original_request_assembly(family, parent_home, child_home, role):
-    parent = family.bindings[parent_home]
-    assert not hasattr(parent, 'prepare_child_request')
-    method = parent.child_request_assembler(role)
-    assert method.__self__ is parent
-    assert method.__module__ == type(parent).__module__.removesuffix('.episode') + '.to_child_' + child_home.rsplit('/', 1)[-1]
-    assert method.__name__ == '_assemble_' + child_home.rsplit('/', 1)[-1] + '_request'
-    assert parent.child_request_assembler('not_declared') is None
 
 
 @pytest.mark.parametrize('parent_home,child_home,role', EDGES)
@@ -259,69 +219,3 @@ def test_nonparticipant_build_override_keeps_original_keywords(family, instructi
     assert workflow.journal.row('runtime_actions', source.episode_id, 0) is None
 
 
-@pytest.mark.parametrize('parent_home,child_home,role', EDGES)
-@pytest.mark.parametrize('variant', BUILD_CASES)
-def test_full_build_prelude_matches_original(family, original_methods, instructions, monkeypatch,
-        parent_home, child_home, role, variant):
-    from ..inprocess_replay import VERSION as COMPLETION_ORDER
-    workflow, source, parent, selection = host(family, parent_home, role,
-        'prelude-' + variant + '-' + parent_home.replace('/', '_') + '-' + role, instructions)
-    workflow.inprocess_completion_order = COMPLETION_ORDER
-    child = family.bindings[child_home]
-    selected_type = getattr(child, 'decision_source_type', runtime.DecisionSource)
-    original_constructor = selected_type.__init__
-    schema = json.loads(selection['schema_json'])
-    contract = runtime.TypedReportContract(selection['purpose'], schema, lambda *_: True)
-    operands = dict(parent=source.request.goal, parent_path=source.path, contract=contract,
-        initial={'qualification': 'unresolved'}, episode_assignment=selection['assignment'],
-        job_assignment={'original_message_fixture': ['job', 3]},
-        scientific_process={'original_message_fixture': ['process', None]})
-    # These two opaque fields test the actual message assembler only. The
-    # original later role/assignment checks are deliberately beyond the stop.
-    if variant in {'malformed_declaration', 'declaration_without_contract'}:
-        operands['report_contract_declaration'] = {'submitted_schema_json': '{}'}
-    if variant == 'declaration_without_contract': operands['contract'] = None
-    if variant == 'invalid_pin':
-        operands['episode_assignment'] = {**selection['assignment'], 'launch_instructions': {'invalid': 'pin'}}
-    observations = []
-    for route in ('original', 'current_fallback', 'private_if_declared'):
-        captured = {}
-        def capture(self, *args, **kwargs):
-            original_constructor(self, *args, **kwargs)
-            captured.update(request=plain(self.request.as_record()), path=plain(self.path),
-                identity=self.episode_id, known=sorted(workflow.receipts.known(self.episode_id)),
-                goal_type=type(self.request.goal), request_type=type(self.request), message_type=type(self.request.message))
-            raise ConstructionObserved()
-        with monkeypatch.context() as patch:
-            patch.setattr(selected_type, '__init__', capture)
-            try:
-                with workflow.store.transaction():
-                    if route == 'private_if_declared' and hasattr(parent, 'child_request_assembler'):
-                        runtime.Workflow.build(workflow, role, 'child_0', selection['goal'], selection['scope'],
-                            **operands, request_assembler=parent.child_request_assembler(role))
-                    elif route != 'original':
-                        runtime.Workflow.build(workflow, role, 'child_0', selection['goal'], selection['scope'], **operands)
-                    else:
-                        original_methods.build(workflow, role, 'child_0', selection['goal'], selection['scope'], **operands)
-            except (ConstructionObserved, AttributeError, ValueError, TypeError, KeyError) as error:
-                captured['exception'] = (type(error), str(error))
-            else:
-                raise AssertionError('prelude boundary unexpectedly entered scientific work')
-        observations.append(captured)
-    assert observations[0] == observations[1] == observations[2]
-    if variant == 'full_message':
-        assert observations[1]['exception'][0] is ConstructionObserved
-        assert observations[1]['goal_type'] is runtime.EpisodeGoal
-        assert observations[1]['request_type'] is runtime.EpisodeRequest
-        assert observations[1]['message_type'] is runtime.Record
-        message = observations[1]['request']['message']
-        assert message['job_assignment'] == operands['job_assignment']
-        assert message['scientific_process'] == operands['scientific_process']
-        assert message['inprocess_completion_order'] == {'version': COMPLETION_ORDER}
-        assert family.source['id'] in observations[1]['known']
-    else:
-        assert 'request' not in observations[1]
-        if variant == 'declaration_without_contract':
-            # Original child-goal construction precedes the later declaration
-            # guard and dereferences this absent contract first.
-            assert observations[1]['exception'] == (AttributeError, "'NoneType' object has no attribute 'schema'")

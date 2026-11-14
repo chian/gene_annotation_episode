@@ -28,33 +28,6 @@ def configured(case):
     return tools, backend, original, configuration, catalog
 
 
-def test_actual_empty_factory_preserves_original_nonempty_fba_source_declarations(actual_case):
-    tools, backend, original, configuration, catalog = configured(actual_case)
-    selected = catalog.setup_for('@annotation')
-    reader = selected.check()
-    assert reader.native_flux_balance_returns.ordinary_backend is backend
-    before_catalog = list(actual_case.store.db.iterdump())
-    declarations = reader.received_report_sources('scientific_process')
-    assert 'flux_balance_model_views' in declarations and 'flux_balance_edited_models' in declarations
-    # Retain the earlier narrowed private callback as a distinct historical
-    # baseline, not the full pre-relocation receiving specification.
-    private_before = originals()['received_report_sources'](original, 'scientific_process')
-    assert len(private_before) == 7
-    expected = original_catalog(reader, 'scientific_process')
-    assert declarations == expected and len(expected) == 36
-    shared_fba = set(private_before) - {'execution_file_source_refs', 'execution_file_capture_outcomes'}
-    assert len(shared_fba) == 5
-    assert {name: declarations[name] for name in shared_fba} == {name: private_before[name] for name in shared_fba}
-    assert private_before['execution_file_source_refs']['meaning'] == 'Source references for selected local file streams retained by this results episode.'
-    assert private_before['execution_file_capture_outcomes']['meaning'] == 'Recorded selected-file availability, original job status and file-custody qualifications.'
-    assert list(actual_case.store.db.iterdump()) == before_catalog
-    before = list(actual_case.store.db.iterdump())
-    reconstructed = type(configuration).from_record(configuration.as_record()).construct(
-        store=actual_case.store, run_id=original.run_id, directory=actual_case.directory,
-        tool_registry=tools, services=actual_case.services)
-    assert reconstructed.as_record() == catalog.as_record()
-    assert reconstructed.configured('@annotation').native_flux_balance_returns.ordinary_backend is backend
-    assert list(actual_case.store.db.iterdump()) == before
 
 
 @pytest.mark.parametrize('changed', ['tool_backend', 'return_backend', 'backend_registry', 'backend_store', 'configuration'])

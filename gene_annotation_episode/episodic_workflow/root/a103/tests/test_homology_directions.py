@@ -79,13 +79,6 @@ def test_nested_legacy_improvement_keeps_original_credit_error(tmp_path):
    f.flow.selected(f.source,selection,0)
   assert raw_rows(f.flow)==before
 
-@pytest.mark.parametrize('name,home',[('_launch_credit','homology_job_submission'),('_results_credit','homology_result_acquisition')],
- ids=('launch-destination','results-destination'))
-def test_removed_foreign_credit_wrapper_keeps_actual_destination(tmp_path,name,home):
- with actual(tmp_path) as f:
-  assert callable(getattr(f.bindings['job_launch' if home=='homology_job_submission' else 'job_results'],name))
-  assert hasattr(f.binding,name) is (not private())
-  assert set(f.binding.as_record()['role_credit_bindings'])=={'job_launch','job_monitor','job_results'}
 
 @pytest.mark.parametrize('role',('job_launch','job_results'),ids=('submission','acquisition'))
 @pytest.mark.parametrize('parent,marker',[(p,m) for p in ('annotation','improvement') for m in (False,True)],

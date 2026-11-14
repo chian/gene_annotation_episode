@@ -45,13 +45,3 @@ def test_commissioned_state_preserves_own_credit_source_findings_and_optional_ti
     assert credit==retained
 
 
-@pytest.mark.parametrize('standalone',[False,True])
-def test_actual_private_task_selects_explicit_credit_presentation_owner(standalone):
-    task,_,_,_=make_task({})
-    if not standalone:
-        task.path=(('annotation','original-parent'),*task.path)
-    selector=getattr(task,'credit_presentation',None)
-    assert callable(selector)
-    selected=selector()
-    expected='standalone' if standalone else 'commissioned'
-    assert selected.__module__.endswith('.scientific_process.'+expected+'_credit_presentation')

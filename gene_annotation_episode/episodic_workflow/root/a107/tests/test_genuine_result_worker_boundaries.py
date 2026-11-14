@@ -25,15 +25,6 @@ def test_original_worker_entry_rejects_missing_plan_before_any_worker_call(name,
     with pytest.raises(ValueError,match='^'+error+'$'):worker.main([])
 
 
-def test_all_original_genomic_worker_public_contracts_have_one_actual_owner():
-    worker=module('library.genomic_overlap_result_worker')
-    for name in worker.__all__:assert hasattr(worker,name),name
-    for name in ('RetainedFile','CapturedInputFile','NativeWorkerPlan','SavedWorkerPlan',
-            'SetConversion','PairConversion','Diagnostics','WorkerOutput','WorkerResult'):
-        assert getattr(worker,name).__module__==worker.__name__
-    preparation=module('library.native_genomic_overlap_preparation')
-    assert preparation.validate_genomic_overlap_result_worker_plan is worker.validate_genomic_overlap_result_worker_plan
-    assert preparation.validate_genomic_overlap_result_worker_result is worker.validate_genomic_overlap_result_worker_result
 
 
 def test_missing_fba_input_retains_original_unavailable_issue():

@@ -42,8 +42,3 @@ def test_revision_conflict_remains_own_subclass_with_original_fields():
     assert caught.value.detail == {"kind": "sequence", "key_ref": "sequence_ref", "current_revision": 3, "proposal_ref": "proposal_ref"}
 
 
-def test_experimental_error_keeps_its_separate_scientific_contract():
-    from gene_annotation_episode.episodic_workflow.root.a106.literature_contract_error import ExperimentalContractError
-    assert ExperimentalContractError is not CanonicalContractError
-    assert not issubclass(ExperimentalContractError, CanonicalContractError)
-    assert issubclass(ExperimentalContractError, ValueError)

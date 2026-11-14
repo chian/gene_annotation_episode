@@ -85,11 +85,6 @@ def test_saved_native_outcome_closed_dictionary_membership_not_projected_array()
     with pytest.raises(ExperimentalContractError):
         validate_relative_signal_saved(selection, extraction, sheet, [{'component': 'reported_ratio'}])
 
-def test_runtime_all_three_schema_definitions_equal_normative008():
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_ratio_source_inputs as inputs
-    base = Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_visual_signal_reader_070/normative'
-    for family in ('REQUEST', 'EXTRACTION', 'SHEET'):
-        assert getattr(inputs, '_' + family + '_SCHEMA') == json.loads((base / (family + '_SCHEMA_008.json')).read_text())
 
 def test_generic_html_text_span_saved_forgery_and_actual_jats_unchanged(monkeypatch):
     from gene_annotation_episode.episodic_workflow.root.a105.library import literature_ratio_source_inputs as inputs

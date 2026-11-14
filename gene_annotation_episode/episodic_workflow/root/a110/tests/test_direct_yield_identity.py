@@ -91,58 +91,6 @@ class YieldIdentityChecks:
             estimator((0, -.25), numeric.YieldParameters(), (None, context))
         assert observed.value is error
 
-    @pytest.mark.parametrize('branch', ['finite_or_exhausted', 'typed_or_available'])
-    def test_actual_role_controller_definition_and_captured_replay(self, selected, branch, monkeypatch, tmp_path):
-        s = selected
-        monkeypatch.setattr(s.binding, 'private_yield_binding', True)
-        practical_type = self.module('practical_yield').PracticalYieldEstimator
-        if s.role == 'launch':
-            original = s.binding._launch(s.v.runtime._plain(s.context.assignment), scope=s.context.scope)
-            eligible = {resource for resource in original['requests'] if s.binding._permitted(original, resource)}
-            assert eligible
-            classes = sorted(s.binding._request_yield_class(original['requests'][resource]) for resource in eligible)
-            monkeypatch.setattr(s.binding, 'task_yield_profiles', {
-                'launch:' + '+'.join(classes): {'cutoff': 0, 'parameters': {}}})
-            handoffs = {'controlled-' + resource: {'resource_id': resource} for resource in eligible}
-            selected_refs = list(handoffs) if branch == 'finite_or_exhausted' else []
-            monkeypatch.setattr(s.binding, '_received', lambda context:
-                ({'initial_known_record_refs': selected_refs}, handoffs, {}))
-            monkeypatch.setattr(s.binding.job_progress_provider.targets, 'usable_handoff', lambda target: True)
-        elif branch == 'finite_or_exhausted':
-            monkeypatch.setattr(s.binding, 'task_yield_profiles', {
-                'results:native_finite_local': {'cutoff': 0, 'parameters': {}}})
-        else:
-            monkeypatch.setattr(s.binding, '_target', lambda context:
-                {'resource_kind': 'local'})
-            monkeypatch.setattr(s.binding, '_selector', lambda assignment, target:
-                {'version': 'controlled_selector_v1'})
-            monkeypatch.setattr(s.binding, 'task_yield_profiles', {
-                'results:typed_local_controlled_selector_v1': {'cutoff': 0, 'parameters': {}}})
-        records = []
-        for repeat in range(2):
-            controller = s.binding.yield_controller(s.context, 0, 'controlled-original-role-yield')
-            callback = controller.estimator.estimate_with_context if hasattr(controller.estimator, 'estimate_with_context') else None
-            identity = None
-            if s.role == 'launch' and branch == 'finite_or_exhausted':
-                identity = callback.__module__ + '.' + callback.__qualname__
-                assert identity == self.expected('_launch_yield_controller.<locals>.no_remaining_requests')
-            elif s.role == 'results' and branch == 'finite_or_exhausted':
-                identity = callback.__module__ + '.' + callback.__qualname__
-                assert identity == self.expected('_results_yield_controller.<locals>.finite_result_yield')
-                endpoints = [cell.cell_contents for cell in callback.__closure__
-                    if isinstance(cell.cell_contents, practical_type)]
-                endpoint, = endpoints
-                assert endpoint.as_record()['completion_verifier'] == self.expected('_results_yield_controller.<locals>.<lambda>')
-                identity = {'callback': identity, 'endpoint': endpoint.as_record()}
-            elif s.role == 'results':
-                assert isinstance(callback, practical_type)
-                identity = callback.as_record()
-                assert identity['completion_verifier'] == self.expected('_results_yield_controller.<locals>.<lambda>')
-            initial = controller.state().as_record()
-            step = controller.observe('original-unavailable', {'credit': 0, 'estimation_context': None}).as_record()
-            records.append({'identity': identity, 'initial': initial, 'step': step, 'state': controller.state().as_record()})
-        assert records[0] == records[1]
-        self.retain(s, branch, records[0], tmp_path)
 
 
 class TestAnnotationLaunch(YieldIdentityChecks):

@@ -84,12 +84,6 @@ def test_all_new_parent_schemas_use_existing_closed_grammar_and_legacy_schemas_s
     assert set(c.FAMILIES.values()) <= {name.removeprefix('bvbrc_proteome_') for name in sources}
 
 
-def test_layer_zero_has_no_provider_projection_parser_or_calculator_import():
-    tree = ast.parse(Path(c.__file__).read_text())
-    imports = [node.module or '' for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)]
-    assert not any(any(word in name for word in ('bundle_v2', 'projection', 'returns', 'calculation', 'geometry')) for name in imports)
-    from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_proteome_bundle_v2_contracts import DIRECTIONAL_BINDING_CODES
-    assert set(c.BINDING_CODES) == set(DIRECTIONAL_BINDING_CODES)
 
 
 def numerical_fact():

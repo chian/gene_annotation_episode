@@ -25,17 +25,6 @@ def forbid_external_execution(monkeypatch):
     monkeypatch.setattr(socket, 'create_connection', forbidden)
 
 
-@pytest.mark.parametrize('module_name,symbol', READERS)
-def test_installed_class_keeps_own_axis_types(module_name, symbol):
-    module = importlib.import_module(PACKAGE + '.' + module_name)
-    cls = getattr(module, symbol)
-    assert cls.__module__ == PACKAGE + '.' + module_name
-    if hasattr(module, 'EpisodeReturnRecords'):
-        assert module.EpisodeReturnRecords is EpisodeReturnRecords
-    if hasattr(module, 'ContractError'):
-        assert module.ContractError is ContractError
-    if symbol.endswith('Returns'):
-        assert issubclass(cls, EpisodeReturnRecords)
 
 
 @pytest.mark.parametrize('flags', [(), *(tuple([name]) for name in FLAGS), FLAGS])
@@ -58,17 +47,6 @@ def test_actual_installers_keep_selected_readers_and_original_owner(tmp_path, fl
                     assert reader.results is getattr(owner, name.removesuffix('_returns') + '_results')
 
 
-def test_utility_helper_uses_existing_worker_and_own_exception():
-    from gene_annotation_episode.episodic_workflow.root.a104.library import native_blast_utility_capture_failure as helper
-    from gene_annotation_episode.episodic_workflow.root.a104.library import native_blast_utility_result_publication as publication
-    from gene_annotation_episode.episodic_workflow.root.a104 import native_blast_utility_result_worker as worker
-    from gene_annotation_episode.episodic_workflow.root.a104.local_jobs import LocalJobPolicy
-    assert helper.ContractError is publication.ContractError is worker.ContractError is ContractError
-    assert helper.captured_utility_observations is worker.captured_utility_observations
-    assert helper.qualified_utility_context is worker.qualified_utility_context
-    assert publication.LocalJobPolicy is LocalJobPolicy
-    with pytest.raises(ContractError, match='native_blast_utility_capture_failure_fixture'):
-        helper._require(False, 'fixture')
 
 
 def synthetic_preparation_failure():

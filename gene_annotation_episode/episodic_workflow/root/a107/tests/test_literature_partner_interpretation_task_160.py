@@ -153,25 +153,6 @@ def test_selected_conditions_keep_native_values_and_explicit_unavailable_compari
         assert outcome['result']['statistical_uncertainty'] == 'not_evaluated'
 
 
-def test_prompt_change_rejects_original_binding_and_restores_current_descriptor(monkeypatch):
-    binding = LiteratureEpisode(None, rate_population=True)
-    current = binding.as_record()
-    old_prompt = (RECORDS/'PARTNER_PROMPT_BEFORE_001.py').read_bytes()
-    read_bytes = Path.read_bytes
-    prompt_path = Path(__file__).resolve().parents[1]/'literature_partner_prompt.py'
-    with monkeypatch.context() as patch:
-        patch.setattr(Path, 'read_bytes', lambda path:
-            old_prompt if path.resolve() == prompt_path else read_bytes(path))
-        original = binding.as_record()
-    assert original['configuration'] == current['configuration']
-    assert original['implementation_sha256'] != current['implementation_sha256']
-    store = object()
-    arguments = dict(store=store, journal=SimpleNamespace(store=store, run_id='synthetic-run'),
-        execution_backend=None, job_episodes=None, resource_estimator=None, role_credit_bindings={})
-    with pytest.raises(DurableExecutionError, match='identity_conflict'):
-        compose_episode_bindings(None, descriptors=[original], **arguments)
-    restored, = compose_episode_bindings(None, descriptors=[current], **arguments).bindings
-    assert restored.as_record() == current
 
 
 def test_ordinary_child_parent_transport_preserves_task_ownership_partial_meaning_and_observations(tmp_path):

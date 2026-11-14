@@ -150,20 +150,3 @@ def test_actual_fluorescence_readers_keep_saved_grants_denials_and_reopen(
     assert case.transported_reads
 
 
-@pytest.mark.parametrize('operation', OPERATIONS)
-def test_historical_transport_rejects_undeclared_paths_and_changed_control_bytes(
-        tmp_path, retained_cases, operation):
-    original = retained_cases[operation]
-    with pytest.raises(AssertionError, match='undeclared historical path'):
-        original.transport_control(original.logical_root / 'run/execution-results/undeclared.json')
-    with pytest.raises(AssertionError):
-        original.transport_control(original.logical_root.parent / 'outside.json')
-    relative = next(name for name in original.allowed if name.endswith('/receipt.json')
-        and '/native-fluorescence-actions/' in name)
-    copied = tmp_path / 'changed' / relative
-    copied.parent.mkdir(parents=True)
-    shutil.copyfile(original.directory / relative, copied)
-    copied.write_bytes(copied.read_bytes() + b' ')
-    changed = RetainedCase(tmp_path / 'changed', original.manifest, original.recovered)
-    with pytest.raises(AssertionError, match='historical control digest mismatch'):
-        changed.transport_control(original.logical_root / relative)

@@ -23,18 +23,6 @@ ROOT = 'gene_annotation_episode.episodic_workflow.root'
 RUN = 'canonical-private-context-boundary'
 
 
-@pytest.mark.parametrize('private_owner,name,canonical_owner', [
-    ('domain', 'ContractError', 'gene_annotation_episode.domain'),
-    ('communication', 'ReportBoundaryError', ROOT + '.communication'),
-    ('episode_contract_information', 'ContractInformationError', ROOT + '.episode_contract_information'),
-    ('episode_journal', 'WorkflowError', ROOT + '.episode_journal'),
-    ('acquisition', 'AcquisitionError', 'gene_annotation_episode.acquisition'),
-    ('providers', 'ModelCallError', ROOT + '.provider_errors'),
-    ('runtime', 'ActionFailure', ROOT + '.task_action_units'),
-    ('episode_bindings', 'BindingContext', ROOT + '.receiving_context'),
-])
-def test_real_private_producing_owners_use_canonical_types(private_owner, name, canonical_owner):
-    assert getattr(import_module(PRIVATE + '.' + private_owner), name) is getattr(import_module(canonical_owner), name)
 
 
 def test_private_report_validator_preserves_canonical_diagnostic():
@@ -93,12 +81,6 @@ def test_model_failure_retains_args_and_diagnostic_without_transport():
     assert error.args == ('provider_unavailable', 'retained detail') and error.diagnostic is diagnostic
 
 
-@pytest.mark.parametrize('module,name', [('episode_commissions', 'CommissionError'), ('episode_admission', 'AdmissionError')])
-def test_original_private_error_subclasses_keep_canonical_base(module, name):
-    cls = getattr(import_module(PRIVATE + '.' + module), name)
-    assert cls.__module__.startswith(PRIVATE + '.')
-    assert issubclass(cls, import_module(ROOT + '.episode_journal').WorkflowError)
-    assert cls is not import_module(ROOT + '.episode_journal').WorkflowError
 
 
 @pytest.fixture

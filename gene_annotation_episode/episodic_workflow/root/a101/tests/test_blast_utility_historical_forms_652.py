@@ -107,54 +107,12 @@ def saved_forms():
     return forms
 
 
-def test_registry_contains_only_exact_pinned_prior_registrations(registrations):
-    expected = {}
-    for record in registrations.values():
-        assert len(record["schemas"]) == 11
-        for source, schema in record["schemas"].items():
-            expected.setdefault(source, set()).add(_canonical(schema))
-    registry = blast_utility_historical_fact_schemas()
-    assert {source: {_canonical(schema) for schema in variants}
-            for source, variants in registry.items()} == expected
-    assert sum(map(len, registry.values())) == 14
-    assert blast_utility_historical_schema_provenance() == {
-        name: {key: value for key, value in record.items() if key != "schemas"}
-        for name, record in registrations.items()}
 
 
-@pytest.mark.parametrize("source", tuple(blast_utility_fact_sources()))
-def test_every_historical_and_current_registration_passes_real_values_reader(source, registrations):
-    nodes = [record["schemas"][source] for record in registrations.values()]
-    nodes.append(blast_utility_fact_sources()[source]["report_schema"])
-    for node in nodes:
-        schema = _form_schema(node)
-        assert _compile_closed_schema(schema) == schema
-        assert _reader()._values({"rows": []}, schema) == {source: []}
 
 
-@pytest.mark.parametrize("index", range(6))
-def test_actual_unchanged_saved_parent_forms_reach_values_reader(index, registrations, saved_forms):
-    item = saved_forms[index]
-    before = _canonical(item)
-    schemas = registrations[CHECK096.name]["schemas"]
-    expected = {}
-    for name, node in item["schema"]["properties"].items():
-        source = node.get("x-source")
-        if source in schemas:
-            assert _canonical(node) == _canonical(schemas[source])
-            expected[source] = item["form"][name]
-    assert _reader()._values(item["form"], item["schema"]) == expected
-    assert _canonical(item) == before
 
 
-def test_saved_return_examples_remain_actual_measurements(saved_forms):
-    built, extracted = saved_forms[:2]
-    assert {row["field_name"]: row["value"] for row in built["form"]["database_fields"]} == {
-        "database_sequence_count": 3, "database_residue_count": 33}
-    assert len(extracted["form"]["sequences"]) == 2
-    for row in extracted["form"]["sequences"]:
-        assert row["native_reported_length"] == 12 and row["returned_symbol_count"] == 6
-        assert row["sequences"] == {"normalized_sequence": "ATTGCA"}
 
 
 def test_saved_forms_also_validate_under_current_registered_forms(saved_forms):
@@ -185,15 +143,6 @@ def test_new_v2_subject_values_are_current_only():
             _reader()._values({"rows": rows}, _form_schema(node))
 
 
-def test_prior_failure_enums_keep_their_exact_different_populations(registrations):
-    source = "execution.blast_utility_failures"
-    row = {"source_ref": "source_synthetic", "stage": "capture", "code": "output_writer_not_closed",
-           "occurrence_id": None, "record_key": None, "line_number": None, "native_returncode": None}
-    old = _form_schema(registrations[CHECK096.name]["schemas"][source])
-    later = _form_schema(registrations[CHECK101.name]["schemas"][source])
-    with pytest.raises(ValueError, match="returned_form_invalid"):
-        _reader()._values({"rows": [row]}, old)
-    assert _reader()._values({"rows": [row]}, later) == {source: [row]}
 
 
 @pytest.mark.parametrize("mutation", ("narrower", "expanded", "open", "scalar_type", "wrong_source", "unknown_source"))

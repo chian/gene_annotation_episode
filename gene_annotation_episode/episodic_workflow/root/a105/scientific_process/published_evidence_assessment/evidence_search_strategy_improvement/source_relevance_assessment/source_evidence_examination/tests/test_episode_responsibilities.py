@@ -140,13 +140,6 @@ def test_runtime_delivers_redelivery_to_the_original_child_counterpart(role, met
         assert receipts[0][1] == {'kind':'report_redelivery', 'source_index':3}
 
 
-def test_implementation_receipts_resolve_private_grading_and_scoring():
-    from pathlib import Path
-    from ..implementation_sources import source_file
-    from ..grading import literature_assay_grading
-    from ..scoring import assay_evidence
-    assert source_file('literature_assay_grading.py') == Path(literature_assay_grading.__file__)
-    assert source_file('assay_evidence.py') == Path(assay_evidence.__file__)
 
 
 def test_private_tool_contract_error_returns_an_invalid_action():

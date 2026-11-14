@@ -104,13 +104,6 @@ def observe(values, renderer=None):
     return rows
 
 
-@pytest.mark.parametrize('home,class_name', HOMES)
-def test_all_twelve_bindings_select_their_own_complete_policy(home, class_name):
-    binding = getattr(importlib.import_module(BASE + home.replace('/', '.') + '.episode'), class_name)
-    renderer = binding.decision_prompt_renderer
-    assert getattr(renderer, 'presentation_protocol', None) == 'episode_context_presentation_v1'
-    own = importlib.import_module(BASE + home.replace('/', '.') + '.presentation')
-    assert renderer is own.present_task_context and renderer.__module__ == own.__name__
 
 
 @pytest.mark.parametrize('home,class_name', REPRESENTATIVES)

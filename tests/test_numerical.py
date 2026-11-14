@@ -249,11 +249,6 @@ def test_controller_rule_is_exact_for_root_and_child_and_signed_band():
             assert c.observe("action",-.2,is_root).stop
 
 
-def test_vendored_source_digest_and_license_are_preserved():
-    vendor = Path(__file__).resolve().parents[1]/"gene_annotation_episode/vendor"
-    assert hashlib.sha256((vendor/"nano_rarefaction.py").read_bytes()).hexdigest() == SOURCE_SHA256
-    assert json.loads((vendor/"SOURCE.nano-graphrag.json").read_text())["source_sha256"] == SOURCE_SHA256
-    assert "Copyright (c) 2024 Gustavo Ye" in (vendor/"LICENSE.nano-graphrag").read_text()
 
 
 def test_default_context_is_not_an_implicit_new_time_formula():

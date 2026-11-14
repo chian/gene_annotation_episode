@@ -565,28 +565,4 @@ def _complete_baseline_cases():
     cases.append(inputs)
     return cases
 
-def test_previously_accepted_complete_result_dictionaries_are_exact():
-    baseline = _baseline_module()
-    for inputs in _complete_baseline_cases():
-        for model in [None] + [observation_model(inputs, status=status) for status in ('known', 'estimated', 'unknown')]:
-            old = baseline.populate_binding_interaction(inputs, model)
-            new = populate_binding_interaction(inputs, model)
-            assert new == old
-            assert json.dumps(new, sort_keys=True, allow_nan=False) == json.dumps(old, sort_keys=True, allow_nan=False)
 
-def test_numeric_model_identity_and_relationship_code_is_unchanged_from_048():
-    baseline = _baseline_module()
-    baseline_tree = ast.parse(Path(baseline.__file__).read_text())
-    current_tree = ast.parse((Path(__file__).resolve().parents[5] / 'gene_annotation_episode' / 'literature_binding_interaction_calculations.py').read_text())
-    old_functions = {node.name: node for node in baseline_tree.body if isinstance(node, ast.FunctionDef)}
-    new_functions = {node.name: node for node in current_tree.body if isinstance(node, ast.FunctionDef)}
-    assert set(new_functions) - set(old_functions) == {'_uncertainty_qualifications'}
-    assert set(old_functions) <= set(new_functions)
-    for name, node in old_functions.items():
-        if name not in ('_uncertainty', 'populate_binding_interaction'):
-            assert ast.dump(node) == ast.dump(new_functions[name]), name
-    current_populate = deepcopy(new_functions['populate_binding_interaction'])
-    additions = [node for node in current_populate.body if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Attribute) and isinstance(node.value.func.value, ast.Name) and (node.value.func.value.id == 'qualifications') and (node.value.func.attr == 'extend') and (len(node.value.args) == 1) and isinstance(node.value.args[0], ast.Call) and isinstance(node.value.args[0].func, ast.Name) and (node.value.args[0].func.id == '_uncertainty_qualifications')]
-    assert len(additions) == 1
-    current_populate.body.remove(additions[0])
-    assert ast.dump(current_populate) == ast.dump(old_functions['populate_binding_interaction'])

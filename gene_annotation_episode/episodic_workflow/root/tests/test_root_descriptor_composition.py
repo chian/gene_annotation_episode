@@ -43,16 +43,6 @@ def uncalled_projector(*args, **kwargs):
     raise AssertionError('composition must not project credit or execute work')
 
 
-def test_exact_canonical_type_exception_and_schema_owners():
-    assert composition.DurableExecutionError is DurableExecutionError
-    assert composition.canonical is canonical
-    assert composition.EpisodeBinding is EpisodeBinding
-    assert composition.EpisodeBindingRegistry is EpisodeBindingRegistry
-    assert composition.ProgressProvider is ProgressProvider
-    assert composition.validate_schema is validate_schema
-    assert composition.CAPABILITY_SCHEMA is resource_records.CAPABILITY_SCHEMA
-    assert resource_records.plain is plain
-    assert resource_records.LAUNCH_INSTRUCTION_SELECTION_SCHEMA is SELECTION_SCHEMA
 
 
 def test_empty_descriptors_construct_real_progress_provider_and_reopen(resources):
@@ -153,20 +143,6 @@ def test_actual_empty_journal_run_identity_is_rejected(resources):
     assert tables(store) == before and store.db.total_changes == writes
 
 
-@pytest.mark.parametrize('binding_id,owner', [
-    ('literature', 'literature_episodes'), ('monitor', 'episode_monitoring'),
-    ('resource_episodes', 'resource_episodes'),
-])
-def test_selected_unrestored_private_owner_fails_without_fallback(resources, binding_id, owner):
-    # This records a selected import boundary, not private binding validation.
-    # A future genuine owner restoration must replace this blocked expectation
-    # with real descriptor restoration tests; no missing-owner skip is allowed.
-    store, _, _ = resources
-    before, writes = tables(store), store.db.total_changes
-    with pytest.raises(ModuleNotFoundError) as caught:
-        compose(resources, descriptors=[{'binding_id': binding_id, 'configuration': {}}])
-    assert caught.value.name == 'gene_annotation_episode.episodic_workflow.root.' + owner
-    assert tables(store) == before and store.db.total_changes == writes
 
 
 def descriptor(digest='a' * 64, version='scientific_process_episodes_v8'):

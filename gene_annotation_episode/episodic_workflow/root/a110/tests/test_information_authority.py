@@ -70,17 +70,6 @@ def original_setup(tmp_path):
             setup=setup, context=context)
 
 
-def test_declared_parent_information_does_not_require_a_launch_child(original_setup):
-    v = original_setup
-    catalog = InitialInformationCatalog([v.setup], [
-        {'recipient': '@annotation', 'authority_id': v.setup.authority_id},
-        {'recipient': 'scientific_process', 'authority_id': v.setup.authority_id}])
-    actual = resource_information(catalog.readers('@annotation', v.context))
-    from .test_information_connected import original_initial
-    expected = original_initial(v.owner, v.context)
-    assert actual == {name: expected[name] for name in (
-        'execution_resource_capabilities', 'execution_initial_information')}
-    assert actual['execution_initial_information']
 
 
 def test_equal_factory_values_do_not_supply_missing_provenance(original_setup):

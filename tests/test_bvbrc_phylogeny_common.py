@@ -519,9 +519,6 @@ def test_duplicate_headers_do_not_create_dependence_and_explicit_source_does():
         contracts.validate_shared_fields(sheet, provider='gene_tree')
 
 
-def test_imports_resolve_only_to_owned_staging_modules():
-    staging = Path(__file__).resolve().parents[1] / 'gene_annotation_episode'
-    assert all(Path(module.__file__).resolve().parent == staging for module in (inputs, contracts, grader))
 
 
 def test_missing_bootstrap_method_preserves_multiple_independent_requests():

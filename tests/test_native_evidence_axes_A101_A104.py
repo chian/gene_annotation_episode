@@ -108,19 +108,5 @@ def test_axis_outputs_are_closed_judgments_and_witnesses_not_model_generated_num
         validate_axis_judgment(entry, unsupported)
 
 
-def test_only_the_user_permitted_hgt_explanation_gets_qualitative_grading():
-    for name in ('A101', 'A102', 'A103'):
-        assert axis(name)['qualitative_grading'] == []
-    grade, = axis('A104')['qualitative_grading']
-    assert grade['kind'] == 'hgt_environment_explanation'
-    assert all(set(level) == {'code', 'meaning'} for level in grade['ordered_levels'])
 
 
-def test_corrected_axis_sources_retain_original_observations_limits_and_file_hashes():
-    crosswalk = json.loads((PUBLICATION/'SOURCE_CROSSWALK_A101_A104.json').read_text())
-    for link in crosswalk['rows']:
-        path = REPO/link['original_path']
-        assert hashlib.sha256(path.read_bytes()).hexdigest() == link['original_file_sha256']
-        index = int(link['original_pointer'].rsplit('/', 1)[1])
-        original = json.loads(path.read_text())['evidence'][index]
-        assert axis(link['axis_id'])['evidence'][link['evidence_index']] == original

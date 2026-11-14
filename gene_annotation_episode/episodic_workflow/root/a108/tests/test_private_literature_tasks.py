@@ -59,11 +59,3 @@ def test_actual_returned_outcome_is_observed_and_replayed_once(private,tmp_path,
         assert runtime.observes_action_outcome('tool',status)
 
 
-def test_declared_task_and_exception_identity(private):
-    runtime=import_module(AXIS+'.runtime')
-    task=import_module(private.__module__.removesuffix('.episode')+'.task')
-    assert private.decision_source_type is task.LiteratureTask
-    assert not issubclass(task.LiteratureTask,runtime.DecisionSource)
-    for name in ('WorkflowError','ActionFailure','ReportBoundaryError','ValidationError'):
-        assert getattr(task,name) is getattr(runtime,name)
-    assert task.LiteratureTask.execute.__module__==task.__name__

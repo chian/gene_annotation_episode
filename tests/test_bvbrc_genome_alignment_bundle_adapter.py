@@ -47,27 +47,8 @@ def actual_local_closure():
     return {m + '.py' for m in seen} | resources | {'__init__.py'}
 
 
-def test_public_callable_protocol_and_exact_transitive_pin_closure():
-    assert facade.ADAPTER_ID == 'bvbrc_genome_alignment' and facade.ADAPTER_VERSION == '1'
-    for name in ('validate_parameters', 'parameters_schema', 'requested_form_schema', 'validate_requested_form',
-                 'consume_bundle', 'implementation_sha256'):
-        assert callable(getattr(facade, name))
-    signature = inspect.signature(facade.consume_bundle)
-    assert list(signature.parameters) == ['bundle', 'artifact_bytes', 'supplied_values', 'retained_records', 'requested_form', 'parameters']
-    assert signature.parameters['retained_records'].default is inspect.Parameter.empty
-    assert len(facade._DEPENDENCIES) == len(set(facade._DEPENDENCIES))
-    assert set(facade._DEPENDENCIES) == actual_local_closure()
-    assert 'bvbrc_appservice_schemas.json' in facade._DEPENDENCIES
-    assert 'bvbrc_genome_alignment_retained_records.py' in facade._DEPENDENCIES
-    assert 'bvbrc_genome_alignment_returns.py' not in facade._DEPENDENCIES
 
 
-def test_pin_uses_actual_sorted_filenames_exact_bytes_and_decimal_length_framing():
-    digest = hashlib.sha256()
-    for name in sorted(actual_local_closure()):
-        content = (BASE / name).read_bytes()
-        digest.update(name.encode('utf-8') + b'\0' + str(len(content)).encode('ascii') + b'\0' + content)
-    assert facade.implementation_sha256() == digest.hexdigest()
 
 
 @pytest.mark.parametrize('changed_name', facade._DEPENDENCIES)

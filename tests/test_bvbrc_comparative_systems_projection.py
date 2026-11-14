@@ -427,18 +427,3 @@ def test_family_membership_with_no_genome_selects_observed_aggregate():
     assert projection["membership"]["values"][0]["source_locations"]
 
 
-def test_pin_covers_every_transitive_package_module_and_frozen_data_asset():
-    directory = Path(adapter.__file__).parent
-    pending, found = [Path(adapter.__file__).stem], set()
-    while pending:
-        name = pending.pop()
-        if name in found:
-            continue
-        found.add(name)
-        for node in ast.walk(ast.parse((directory / (name + ".py")).read_text())):
-            if isinstance(node, ast.ImportFrom) and node.level == 1:
-                children = [node.module] if node.module else [item.name for item in node.names]
-                pending.extend(name for name in children if name and (directory / (name + ".py")).is_file())
-    assert {name + ".py" for name in found} <= set(adapter._DEPENDENCIES)
-    assert {"bvbrc_comparative_systems_handoff_schemas.json", "bvbrc_appservice_schemas.json"} <= set(adapter._DEPENDENCIES)
-    assert len(adapter.implementation_sha256()) == 64

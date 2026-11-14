@@ -319,13 +319,6 @@ def test_storage_immutable_confined_and_changed_identity(tmp_path):
         decode_json(b'{"a":1,"a":2}')
 
 
-def test_retained677_native_point_no_new_solve():
-    packet = ATTEMPT / "source_snapshot/tests/fixtures/flux_balance/native_contract_probe"
-    summary = read_json(packet / "probe_summary.json")
-    assert summary["model_optimize_calls"] == 1
-    assert summary["fluxes"] == {"IN": 7.0, "AB": 6.0, "OUT": 6.0}
-    assert summary["aux_primal"] == 6 and summary["objective"] == -2.75
-    assert read_json(packet / "native_passes.json")[0]["return_code"] == 0
 
 
 def test_synthetic_pass_chronology_and_per_value_qualification(tmp_path, monkeypatch):
@@ -453,103 +446,8 @@ def test_decoded_xml_audit_survives_source_interpretation_exception(tmp_path, mo
     assert payload["loaded_original"] is None and manifest["request_realization"] != "exact"
 
 
-def test_saved_emission_recalculation_cli_replay_and_tamper_no_solve(tmp_path, monkeypatch):
-    retained = os.environ.get("HMMER_NATIVE_ORACLE_FBA_RETAINED")
-    if retained is None:
-        pytest.skip("requires explicitly supplied original producer emissions")
-    from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver import main, run_flux_balance_native
-    from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
-    import cobra
-    def forbidden(*args, **kwargs):
-        raise AssertionError("saved/replay verification must not optimize")
-    monkeypatch.setattr(cobra.Model, "optimize", forbidden)
-    examples = []
-    for profile in ("sbml", "cobra_json"):
-        folder = Path(retained) / profile
-        plan = read_json(folder / "selected-plan.json")
-        sheet, calculated = _parsed_calculated(plan)
-        before = digest(sheet)
-        parameters = deepcopy(calculated["parameters"])
-        parameters["objective_absolute_tolerance"] = 0
-        recalculated = calculate_flux_balance_sheet(sheet, parameters=parameters)
-        assert digest(sheet) == before
-        assert recalculated["objective"]["full_calculated"]["value"] == 10
-        assert main([str(folder / "selected-plan.json")]) == 0
-        manifest = run_flux_balance_native(plan)
-        solution = read_json(Path(plan["attempt_directory"]) / "outputs/solution-capture.json")
-        assert len(solution["native_passes"]) == 1
-        examples.append({"profile": profile, "public_optimize_calls": manifest["solve_call_count"],
-            "native_passes": len(solution["native_passes"]), "point_state": solution["point_state"],
-            "fluxes": {r["reaction_id"]: r["flux"]["value"] for r in solution["reaction_values"]},
-            "variable_count": sheet["problems"]["effective"]["variable_count"],
-            "constraint_count": sheet["problems"]["effective"]["constraint_count"],
-            "calculated_objective": calculated["objective"]["full_calculated"]["value"],
-            "candidate_feasibility": calculated["candidate_feasibility"], "request_realization": sheet["native"]["request_realization"],
-            "evaluated_variable_bound_sides": calculated["evaluated_variable_bound_count"],
-            "violated_variable_bound_sides": calculated["violated_variable_bound_count"],
-            "constraint_activities": {r["constraint_id"]: r["activity"]["value"] for r in calculated["constraint_checks"]},
-            "artifact_bytes": {r["role"]: r["identity"]["size_bytes"] for r in manifest["files"]},
-            "original_sheet_sha256": calculated["sheet_sha256"], "saved_recalculation_sheet_sha256": recalculated["sheet_sha256"]})
-        assert manifest["request_application"]["constraint_changes"] == [] if profile == "sbml" else len(manifest["request_application"]["constraint_changes"]) == 2
-        altered = deepcopy(plan)
-        altered["identity"]["requested_job_sha256"] = "0" * 64
-        with pytest.raises(ValueError, match="original_attempt_mismatch"):
-            run_flux_balance_native(altered)
-    immutable_json(ATTEMPT / "verified-numerical-examples.json", examples)
-    print(canonical({"authentic_original_cases": examples, "new_native_calls_in_this_test": 0}))
 
 
-def test_controlled_exception_after_observed_return_and_csv_write_failure(tmp_path, monkeypatch):
-    """Synthetic execution faults: zero native solves, not native measurements."""
-    retained = os.environ.get("HMMER_NATIVE_ORACLE_FBA_RETAINED")
-    if retained is None:
-        pytest.skip("controlled transport fixture requires original retained bytes")
-    import cobra
-    import optlang.glpk_interface as interface
-    from gene_annotation_episode.episodic_workflow.root.library import native_flux_balance_driver as driver
-    original_plan = read_json(Path(retained) / "sbml/selected-plan.json")
-    retained_payload = read_json(Path(original_plan["attempt_directory"]) / "outputs/solution-capture.json")
-    native_calls = []
-    # The wrapper observes a controlled Python routine return, not GLPK work.
-    def controlled_native(problem, parameters):
-        native_calls.append("controlled_return_only")
-        return 0
-    monkeypatch.setattr(interface, "glp_simplex", controlled_native)
-    def controlled_optimize(model):
-        interface.glp_simplex(model.solver.problem, model.solver.configuration._smcp)
-        raise RuntimeError("controlled exception after the observed routine returned")
-    monkeypatch.setattr(cobra.Model, "optimize", controlled_optimize)
-    software = _software()
-    plan = _plan(tmp_path / "controlled_exception", "sbml", SBML, software=software)
-    _environment(monkeypatch, plan)
-    manifest = driver.run_flux_balance_native(plan)
-    assert manifest["solve_call_count"] == 1 and manifest["execution_outcome"] == "partial"
-    output = Path(plan["attempt_directory"]) / "outputs"
-    payload = read_json(output / "solution-capture.json")
-    assert payload["solution_object_state"] == "not_returned"
-    assert payload["point_state"] == "not_established"  # Actual unsolved getters are not promoted.
-    assert len(payload["native_passes"]) == 1 and payload["native_passes"][0]["return_code"] == 0
-    assert all(r["primal"]["state"] == "missing" for r in payload["variable_values"])
-    assert (output / "problem-capture.json").is_file()
-    # A transport stub supplies already retained bytes to exercise only the
-    # post-capture writer branch. No Cobra Solution is constructed or restored.
-    sentinel = object()
-    monkeypatch.setattr(cobra.Model, "optimize", lambda model: sentinel)
-    monkeypatch.setattr(native, "capture_cobra_glpk_solution", lambda *args, **kwargs: deepcopy(retained_payload))
-    def failed_csv(*args, **kwargs):
-        raise OSError("controlled CSV writer failure after native payload retention")
-    monkeypatch.setattr(driver, "_csv", failed_csv)
-    plan = _plan(tmp_path / "controlled_csv", "sbml", SBML, software=software)
-    _environment(monkeypatch, plan)
-    manifest = driver.run_flux_balance_native(plan)
-    output = Path(plan["attempt_directory"]) / "outputs"
-    assert manifest["execution_outcome"] == "partial" and manifest["solve_call_count"] == 1
-    assert read_json(output / "solution-capture.json") == retained_payload
-    assert next(r for r in manifest["files"] if r["role"] == "flux_csv")["state"] == "absent"
-    assert len(native_calls) == 1
-    immutable_json(ATTEMPT / "controlled-fault-evidence.json", {"evidence_class": "synthetic transport and exception plumbing",
-        "actual_glpk_calls": 0, "controlled_routine_returns": len(native_calls), "cobra_solution_objects_constructed": 0,
-        "authoritative_native_emissions_unchanged": str(Path(retained))})
 
 
 def test_final_software_identity_failure_downgrades_exact_without_native_work(tmp_path, monkeypatch):

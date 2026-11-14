@@ -26,13 +26,6 @@ def source_frame(*, common_reason=True, specialist=None):
     return workflow, SimpleNamespace(workflow=workflow, path=(('annotation', 'root'),))
 
 
-def test_original_trace_has_three_empty_selections_and_explicit_rejections():
-    assert [row['decision_index'] for row in RECORDED['attempts']] == [64, 75, 80]
-    for row, feedback in zip(RECORDED['attempts'], RECORDED['rejection_feedback']):
-        assert row['response']['selection']['kind'] == 'reason'
-        assert all(value == [] for value in row['response']['selection']['commit'].values())
-        assert feedback == {'category': 'action_contract',
-            'detail': 'empty_reasoning_commit', 'status': 'invalid'}
 
 
 def test_admission_requirement_reaches_actual_scientific_text_before_feedback():

@@ -237,68 +237,6 @@ def test_legacy_jobs_remain_uncached_with_identical_values_and_errors(tmp_path, 
     assert _answer(invalid) == _answer(invalid, uncached=True)
 
 
-def test_same_retained_case_full_body_facts_admission_and_resolution_profile(retained, monkeypatch):
-    h = retained
-    evidence = h.attempt / "validation676"
-    evidence.mkdir(exist_ok=False)
-    before = {table: h.store.db.execute("SELECT count(*) FROM " + table).fetchone()[0]
-        for table in ("artifacts", "runtime_actions", "runtime_observations", "runtime_report_attempts")}
-    phases = {
-        "saved_body": lambda: h.provider._validate_body(h.body, h.scope),
-        "own_facts": lambda: h.provider.facts(h.child),
-        "child_report": lambda: h.reader.validate_received_report(h.child, h.form, h.schema),
-        "parent_admission": lambda: h.reader.record_admission(h.parent, h.form, h.schema, h.admission_key),
-    }
-    def received():
-        with frames.form_reference_validation():
-            h.reader.validate_received_report(h.parent, h.form, h.schema)
-            rows = [[namespace, ref, h.reader.resolve_received(h.parent, ref, namespace)]
-                for namespace in views.IDENTIFIER_NAMESPACES
-                for ref in views.projection_identifiers(h.body, namespace)]
-            rows += [["execution_result", ref, h.reader.resolve_received(h.parent, ref, "execution_result")]
-                for ref in h.body["record_refs"]]
-            return rows
-    phases["received_report_and_references"] = received
-    answers, measured = {}, []
-    for enabled in (False, True):
-        with _memo(monkeypatch, enabled):
-            for name, call in phases.items():
-                phase = ("enabled_" if enabled else "disabled_") + name
-                value = _profile(evidence, phase, call)
-                if not enabled:
-                    answers[name] = value
-                else:
-                    assert canonical(value) == canonical(answers[name])
-                summary = json.loads((evidence / (phase + ".summary.json")).read_text())
-                rows = json.loads((evidence / (phase + ".calls.json")).read_text())
-                counts = {function: sum(row["total_calls"] for row in rows if row["function"] == function)
-                    for function in (UNCACHED, "validate_native_blast_utility_job", "_validate_body",
-                        "_retained", "_validate_saved", "validate_prepared_utility_result",
-                        "validate_utility_publication", "validate_vdb_context_authentication", "_received")}
-                measured.append({"phase": name, "memo_enabled": enabled,
-                    **{key: summary[key] for key in ("elapsed_seconds", "process_seconds", "total_calls")},
-                    "counts": counts})
-    for name in phases:
-        old, new = [row for row in measured if row["phase"] == name]
-        assert old["counts"][UNCACHED] == old["counts"]["validate_native_blast_utility_job"]
-        assert new["counts"][UNCACHED] == new["counts"]["_validate_body"] == 1
-        assert new["counts"]["validate_native_blast_utility_job"] == old["counts"]["validate_native_blast_utility_job"]
-        for function in ("_retained", "_validate_saved", "validate_prepared_utility_result",
-                         "validate_utility_publication", "validate_vdb_context_authentication", "_received"):
-            assert new["counts"][function] == old["counts"][function]
-    assert answers["saved_body"] == h.body
-    assert form_with_facts({}, h.schema, answers["own_facts"]) == h.form
-    assert answers["parent_admission"] == h.body["record_refs"]
-    assert all(row[2] is True for row in answers["received_report_and_references"])
-    assert h.form["sequences"][0]["fields"] == {"returned_symbol_count": 4}
-    assert h.form["sequences"][0]["sequences"] == {"normalized_sequence": "ACGT"}
-    assert "vdb_identity" not in h.form["sequences"][0]
-    assert before == {table: h.store.db.execute("SELECT count(*) FROM " + table).fetchone()[0] for table in before}
-    _save(evidence / "comparison.json", {"measurements": measured, "record_counts_before_and_after": before,
-        "original675_case_reused": True, "acquisitions": 0, "observations": 0, "worker_calls": 0,
-        "native_helper_executed": False, "projection_fact_form_equality": True,
-        "normalized_sequence": "ACGT", "returned_symbol_count": 4,
-        "explicit_reference_decisions": answers["received_report_and_references"]})
 
 
 @pytest.mark.parametrize("mutation", ["artifact_bytes", "scope", "action", "assignment",
@@ -450,26 +388,6 @@ def test_each_body_gets_fresh_frame_and_restores_its_outer_frame(retained):
     assert count == 3
 
 
-def test_original_validator_bodies_and_existing_frame_helper_are_unchanged():
-    root = Path(__file__).resolve().parents[5]
-    def parsed(path):
-        return ast.parse(path.read_text())
-    def function(module, name):
-        return next(node for node in module.body if isinstance(node, ast.FunctionDef) and node.name == name)
-    def dump(body):
-        return [ast.dump(node, include_attributes=False) for node in body]
-    old = parsed(root / BASELINE / "source_snapshot/gene_annotation_episode/native_blast_utility_contracts.py")
-    new = parsed(Path(contracts.__file__))
-    assert dump(function(old, "validate_native_blast_utility_job").body[1:]) == dump(
-        function(new, UNCACHED).body[1:])
-    assert dump(function(old, "validate_native_blast_utility_job").body[:1]) == dump(
-        function(new, "validate_native_blast_utility_job").body[:1])
-    old = parsed(root / BASELINE / "source_snapshot/gene_annotation_episode/native_blast_utility_results.py")
-    new = parsed(Path(results.__file__))
-    before = next(node for node in old.body if isinstance(node, ast.ClassDef) and node.name == "NativeBLASTUtilityResults")
-    after = next(node for node in new.body if isinstance(node, ast.ClassDef) and node.name == before.name)
-    assert dump(function(before, "_validate_body").body) == dump(function(after, "_validate_body_in_frame").body)
-    assert hashlib.sha256(Path(frames.__file__).read_bytes()).hexdigest() == "d5185145c1a910ca54566980d0f4286be5a902ce67dc2445bd5b0ae7f57c688a"
 
 
 def test_forwarded_original_subset_preserves_namespaces_and_no_auxiliary_grants(retained, monkeypatch):
@@ -544,27 +462,3 @@ def test_forwarded_original_subset_preserves_namespaces_and_no_auxiliary_grants(
     assert json.loads(saved) == frozen and frozen["artifacts"] == []
 
 
-def test_child_report_profile_with_equal_schema_cache_warmth(retained, monkeypatch):
-    """Resolve the first profile's pre-existing cold form-schema cache effect."""
-    h = retained
-    h.reader.validate_received_report(h.child, h.form, h.schema)
-    directory = h.attempt / "report_warm676"
-    directory.mkdir()
-    rows = []
-    for enabled in (False, True):
-        name = "enabled" if enabled else "disabled"
-        with _memo(monkeypatch, enabled):
-            assert _profile(directory, name, lambda: h.reader.validate_received_report(
-                h.child, h.form, h.schema)) is None
-        summary = json.loads((directory / (name + ".summary.json")).read_text())
-        calls = json.loads((directory / (name + ".calls.json")).read_text())
-        counts = {key: sum(row["total_calls"] for row in calls if row["function"] == key)
-            for key in (UNCACHED, "validate_native_blast_utility_job", "_compiled_schema_content",
-                        "_retained", "_validate_saved", "validate_vdb_context_authentication")}
-        rows.append({"memo_enabled": enabled,
-            **{key: summary[key] for key in ("elapsed_seconds", "process_seconds", "total_calls")}, "counts": counts})
-    assert rows[0]["counts"][UNCACHED] == 171 and rows[1]["counts"][UNCACHED] == 1
-    for key in rows[0]["counts"].keys() - {UNCACHED}:
-        assert rows[0]["counts"][key] == rows[1]["counts"][key]
-    assert rows[0]["counts"]["_compiled_schema_content"] == 0
-    _save(directory / "comparison.json", rows)

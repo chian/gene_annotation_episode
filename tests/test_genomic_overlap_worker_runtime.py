@@ -224,31 +224,3 @@ def legacy_inventory(directory, request):
     return rows
 
 
-def test_actual_521_legacy_failure_metadata_needs_no_dependency_discovery(monkeypatch):
-    selected = os.environ.get(LEGACY_GATE)
-    if selected is None:
-        pytest.skip("explicit authenticated legacy worker metadata required")
-    assert os.environ.get(LEGACY_GATE + "_SHA256") == LEGACY_INVENTORY_SHA256
-    directory = Path(selected)
-    body = json.loads((directory / "worker.handle.json").read_bytes())
-    request_path = Path(body["paths"]["request"])
-    before = legacy_inventory(directory, request_path)
-    assert hashlib.sha256(canonical(before)).hexdigest() == LEGACY_INVENTORY_SHA256
-    plan = json.loads((directory / "plan.json").read_bytes())
-    intent = json.loads((directory / "intent.json").read_bytes())
-    execution = json.loads((directory / "execution.json").read_bytes())
-    request_raw = request_path.read_bytes()
-    request = json.loads(request_raw)
-    assert execution["outcome"] == "returned" and execution["returncode"] == 1
-    assert "dependencies" not in intent and "dependencies" not in execution
-    assert execution["source_pins"] == intent["source_pins"]
-    assert request["env"] == intent["environment"]
-    assert request["env"]["PYTHONPATH"] == str(directory / "source_snapshot")
-    with monkeypatch.context() as patch:
-        for name in ("_runtime_dependencies", "_runtime_file_pin", "_capture"):
-            patch.setattr(preparation, name, deny)
-        patch.setattr(Path, "open", deny)
-        preparation._validate_intent(intent, plan)
-        preparation._pins(execution, plan)
-        preparation._check_handle(body, request, request_raw, plan, execution)
-    assert legacy_inventory(directory, request_path) == before

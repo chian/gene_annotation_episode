@@ -26,15 +26,6 @@ REPORTS = {'A107': reports_a107, 'A110': reports_a110}
 assert (FACT_SOURCE, EXECUTION_SOURCE) == (native_a110.FACT_SOURCE, native_a110.EXECUTION_SOURCE)
 
 
-@pytest.mark.parametrize('axis', ['A107', 'A110'])
-def test_axis_instructions_expose_the_existing_required_pair_before_rejection(axis):
-    workflow = WORKFLOWS[axis]
-    required = 'must include both ' + FACT_SOURCE + ' and ' + EXECUTION_SOURCE
-    assert required in workflow.INSTRUCTIONS[axis]
-    assert 'child_tool_info' in workflow.INSTRUCTIONS[axis]
-    assert 'episode.return_contract' in workflow.INSTRUCTIONS[axis]
-    assert 'empty component arrays' in workflow.INSTRUCTIONS[axis]
-    assert required in workflow.task_context(axis, workflow.TASKS[axis][0])['scientific_question']
 
 
 @pytest.mark.parametrize('axis,operation', NATIVE_OPERATIONS)

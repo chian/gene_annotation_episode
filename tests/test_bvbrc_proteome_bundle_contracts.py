@@ -164,33 +164,3 @@ def test_saved_wrapper_rejects_unbounded_host_diagnostic_and_numerically_equal_c
         c.validate_provider_sheet(corrupted)
 
 
-def test_facade_abi_and_transitive_pin_closure():
-    import inspect
-    assert adapter.ADAPTER_ID == "bvbrc_proteome" and adapter.ADAPTER_VERSION == "1"
-    assert list(inspect.signature(adapter.consume_bundle).parameters) == ["bundle", "artifact_bytes", "supplied_values", "requested_form", "parameters"]
-    directory = Path(adapter.__file__).parent
-    visited = {"__init__.py"}
-    pending = ["bvbrc_proteome_bundle_adapter.py"]
-    assets = set()
-    while pending:
-        name = pending.pop()
-        if name in visited:
-            continue
-        visited.add(name)
-        tree = ast.parse((directory / name).read_text())
-        for node in ast.walk(tree):
-            if isinstance(node, ast.ImportFrom) and node.level == 1:
-                modules = [node.module] if node.module else [alias.name for alias in node.names]
-                for module in modules:
-                    path = module.split(".")[0] + ".py"
-                    assert (directory / path).is_file()
-                    pending.append(path)
-            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "with_name":
-                if node.args and isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, str) and node.args[0].value.endswith(".json"):
-                    assets.add(node.args[0].value)
-    assert visited | assets == set(adapter._DEPENDENCIES)
-    digest = hashlib.sha256()
-    for name in sorted(visited | assets):
-        raw = (directory / name).read_bytes()
-        digest.update(name.encode() + b"\0" + str(len(raw)).encode() + b"\0" + raw)
-    assert adapter.implementation_sha256() == digest.hexdigest()

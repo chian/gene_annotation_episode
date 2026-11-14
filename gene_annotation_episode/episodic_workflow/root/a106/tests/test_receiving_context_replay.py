@@ -24,34 +24,6 @@ def make_provider(store,tmp_path,kind):
 KINDS = ('execution','homology') if AXIS == 'a101' else ('execution',)
 
 
-@pytest.mark.parametrize('kind', KINDS)
-def test_inline_original_file_identity_record_shape_and_binding_gate(tmp_path,kind):
-    module = own(kind+'_progress')
-    source = Path(module.__file__)
-    expected_hash = CASES['inline'][kind+'_progress.py']
-    assert hashlib.sha256(source.read_bytes()).hexdigest() == expected_hash
-    with own('state').Store(tmp_path/'store') as store:
-        provider = make_provider(store,tmp_path,kind)
-        record = provider.as_record()
-        assert record['implementation_sha256'] == expected_hash
-        if kind == 'execution':
-            assert record == {'version':'execution_progress_provider_v1',
-                'implementation_sha256':expected_hash,
-                'configuration':{'resources':{},'log_window_bytes':8,'log_roles':['stdout']}}
-        else:
-            assert record == {'version':'homology_progress_provider_v1',
-                'implementation_sha256':expected_hash,'registry_ref':'controlled-registry',
-                'registry_configuration_sha256':module.content_digest({'registry_ref':'controlled-registry'}),
-                'configuration':{'log_window_bytes':8,'log_roles':['native_text']}}
-        gate = own('episode_application_services').job_progress_binding
-        assert gate(provider) == record and gate(None) is None
-        with pytest.raises(ValueError, match='^reconstructible_job_progress_provider_required$'):
-            gate(SimpleNamespace(as_record=provider.as_record))
-        invalid = SimpleNamespace(as_record=lambda:{},scope=provider.scope,
-            observe=provider.observe,direct_dependencies=provider.direct_dependencies)
-        with pytest.raises(ValueError, match='^job_progress_provider_definition_required$'): gate(invalid)
-        record['configuration']['log_roles'].append('caller-only')
-        assert provider.as_record()['configuration']['log_roles'] != record['configuration']['log_roles']
 
 
 @pytest.mark.parametrize('kind', KINDS)

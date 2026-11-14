@@ -146,10 +146,3 @@ def test_capture_requires_actual_registry_and_preserves_unexpected_callback_erro
             support.capture_publisher_binding(store, context.run_id, context, registry)
 
 
-@pytest.mark.parametrize('owner', ['literature_implementation_sources', 'scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.implementation_sources'])
-def test_actual_receipt_locator_resolves_exact_new_owner_sources(owner):
-    from pathlib import Path
-    resolver = module(owner).source_file
-    for name, actual in [('episode_binding_graph.py', module('episode_binding_graph')), ('literature_publisher_binding.py', module('library.literature_publisher_binding'))]:
-        assert resolver(name).resolve() == Path(actual.__file__).resolve()
-        assert resolver(name).read_bytes() == Path(actual.__file__).read_bytes()

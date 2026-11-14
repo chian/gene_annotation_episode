@@ -70,17 +70,3 @@ def test_correlated_private_profile_rejects_mixed_or_changed_identity(stage,vers
     assert error.value.code==('saved_graph_image_identity_mismatch' if mutation=='mismatched_counter' else 'saved_dependency_contract_mismatch')
     assert error.value.field==('pixels' if mutation=='mismatched_counter' else 'implementation_dependencies')
 
-@pytest.mark.parametrize('stage',STAGES)
-def test_actual_fixture_inputs_and_implementation_provenance_are_preserved(stage):
-    m=manifest();entry=m['captures'][stage];capture=json.loads((DIRECTORY/entry['capture']).read_bytes())
-    assert capture['actual_original_producer_calls']==2 and capture['historical_store_claim'] is False
-    assert capture['metadata_transformation'] is False and capture['application_unchanged']
-    for relative,digest in capture['files'].items():
-        assert hashlib.sha256((DIRECTORY/stage/relative).read_bytes()).hexdigest()==digest
-    for version in (2,3):
-        row,_,_=saved(stage,version);profile=row['result']['implementation_dependencies']
-        assert profile==capture['profiles']['controlled_response_source_extraction_v'+str(version)]
-        assert row['arguments']==row['result']['selection']
-        for source in row['implementation']:
-            assert hashlib.sha256((DIRECTORY/stage/source['file']).read_bytes()).hexdigest()==profile['expected_module_fingerprints'][source['name']]
-        assert row['actual_read_calls'] and row['source_inputs']

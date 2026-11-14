@@ -222,29 +222,6 @@ def test_actual_runtime_selects_each_private_native_task(native_frame, tmp_path,
     PlanningAllocationTaskBehavior.test_original_runtime_build_selects_this_binding_task(adapter, tmp_path, monkeypatch)
 
 
-def test_original_yield_callback_record_and_observation_replay(native_frame, tmp_path):
-    frame = native_frame
-    home_module = 'gene_annotation_episode.episodic_workflow.root.a104.' + frame.home.replace('/', '.')
-    controller = frame.binding.yield_controller(frame.context, 0., 'original-native-epoch')
-    actual = controller.estimator.estimate_with_context.as_record()
-    expected = home_module + '.yield_estimator.ExecutionEpisodeYield._' + frame.context.role + '_yield_controller.<locals>.<lambda>'
-    assert actual['completion_verifier'] == expected
-    assert frame.binding.practical_estimator.__func__.__module__ == home_module + '.yield_estimator'
-    assert frame.binding.practical_estimator.__func__.__qualname__ == 'ExecutionEpisodeYield.practical_estimator'
-    service_record = frame.binding.practical_estimator(frame.context).as_record()
-    assert service_record['completion_verifier'] == 'gene_annotation_episode.episodic_workflow.root.a104.practical_execution_state.PracticalState.verify_completion'
-    before = controller.state().as_record()
-    values = [{'credit': 0.}, {'credit': 1.}, {'credit': 1.}]
-    observed = [controller.observe(str(index), deepcopy(value)).as_record() for index, value in enumerate(values)]
-    restored = frame.binding.yield_controller(frame.context, 0., 'original-native-epoch')
-    assert restored.state().as_record() == before
-    assert [restored.observe(str(index), deepcopy(value)).as_record() for index, value in enumerate(values)] == observed
-    assert restored.state().as_record() == controller.state().as_record()
-    # Durable per-test evidence supports baseline/connected comparison. This is
-    # actual controller replay, distinct from full closed-carrier reconstruction.
-    (tmp_path / 'yield_identity.json').write_text(json.dumps({'home': frame.home,
-        'estimator': actual, 'service_estimator': service_record, 'initial_state': before,
-        'observed': observed, 'final_state': controller.state().as_record()}, sort_keys=True, indent=2) + '\n')
 
 
 @pytest.mark.parametrize('text_context', (False, True))

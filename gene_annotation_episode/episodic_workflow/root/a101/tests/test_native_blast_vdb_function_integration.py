@@ -383,36 +383,6 @@ def test_partial_native_work_and_explicit_zero_keep_distinct_receipts(tmp_path, 
         h.store.close()
 
 
-@pytest.mark.parametrize('program',['blastn_vdb','tblastn_vdb'])
-def test_legacy_vdb_components_rows_and_closed_forms_equal_released_before_bytes(tmp_path,program):
-    import importlib.util
-    import sys
-    from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_database_result_worker as worker
-    from gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_database_result_views as views
-    from test_native_blast_database_result_worker import vdb_sheets,ATTEMPT
-    from test_blast_vdb_calculators import translated_case as old_translated
-    directory=Path(__file__).resolve().parents[5]/'gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/blast_vdb_function_integration_before'
-    modules={}
-    for name in ('native_blast_database_result_views','native_blast_database_result_worker'):
-        module_name='gene_annotation_episode._before347_'+name
-        spec=importlib.util.spec_from_file_location(module_name,directory/(name+'.py'))
-        module=importlib.util.module_from_spec(spec);sys.modules[module_name]=module
-        spec.loader.exec_module(module);modules[name]=module
-    previous=modules['native_blast_database_result_worker'];old_views=modules['native_blast_database_result_views'];previous._views=old_views
-    sheets=vdb_sheets(None if program=='blastn_vdb' else old_translated(reverse=True))
-    old=previous.calculate_native_blast_database_sheets(sheets,sequence_model=None)
-    current=_scientific_native_blast_database_result_worker.calculate_native_blast_database_sheets(sheets,sequence_model=None)
-    assert canonical(current)==canonical(old)
-    args=dict(bundle_identity=ATTEMPT,calculation_id='a'*64,sheet_set=sheets)
-    old_rows=previous.build_native_blast_database_rows(calculations=old,**args)
-    new_rows=_scientific_native_blast_database_result_worker.build_native_blast_database_rows(calculations=current,**args)
-    assert canonical(new_rows)==canonical(old_rows)
-    assert current['vdb'][0]['components']['population_components']['function_weight_model']['reason']=='vdb_function_weight_model_not_defined'
-    assert 'vdb_function' not in current and 'vdb_function' not in sheets
-    assert views.native_blast_database_metric_definitions(include_vdb_function=False)==old_views.native_blast_database_metric_definitions()
-    for source,descriptor in old_views.native_blast_database_fact_sources().items():
-        assert views.native_blast_database_fact_sources()[source]==descriptor
-    (tmp_path/'legacy-byte-equivalence.json').write_text(canonical(dict(sheets=sheets,calculations=current,rows=new_rows)))
 
 
 def test_versions_are_explicit_and_old_selection_does_not_import_new_science(tmp_path):

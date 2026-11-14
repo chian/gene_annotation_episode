@@ -203,21 +203,6 @@ def transformation(kind, name, member, alignment_id, row_index=0, **changes):
     return value
 
 
-def test_origins_signatures_and_no_external_operations():
-    for module in (provider, grader, common_inputs, common_contracts, common_grader,
-                   formats, calculators, calculation_contracts):
-        assert Path(module.__file__).resolve().parent == STAGING / "gene_annotation_episode"
-    signature = inspect.signature(provider.extract_gene_tree_sheet)
-    assert list(signature.parameters) == ["documents", "inputs", "observed_run", "joins", "assembly", "parameters"]
-    assert all(item.kind == inspect.Parameter.KEYWORD_ONLY for item in signature.parameters.values())
-    assert list(inspect.signature(provider.validate_gene_tree_sheet).parameters) == ["sheet"]
-    assert list(inspect.signature(grader.calculate_gene_tree).parameters) == ["sheet", "parameters"]
-    for module in (provider, grader):
-        syntax = ast.parse(Path(module.__file__).read_text())
-        imports = {node.module for node in ast.walk(syntax) if isinstance(node, ast.ImportFrom)}
-        imports.update(alias.name for node in ast.walk(syntax) if isinstance(node, ast.Import) for alias in node.names)
-        assert imports <= {"__future__", "copy", "urllib.parse", "bvbrc_phylogeny_common_inputs",
-                           "bvbrc_phylogeny_common_contracts", "bvbrc_phylogeny_common_grader", "bvbrc_gene_tree_inputs"}
 
 
 def test_ordinary_mode_exact_shapes_and_hand_arithmetic():

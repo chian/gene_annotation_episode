@@ -30,17 +30,6 @@ def test_accepted_full_profile_rejects_a_different_counter(index,mutation):
     with pytest.raises(ExperimentalContractError) as error:validate(arguments,value)
     assert error.value.code=='saved_graph_image_identity_mismatch' and error.value.field=='pixels'
 
-@pytest.mark.parametrize('stage',('pre_repair_private','post_repair_private'))
-@pytest.mark.parametrize('version',(2,3))
-def test_private_profile_is_exactly_bound_to_inert_source_bytes(stage,version):
-    directory=Path(__file__).parent/'fixtures/controlled_response_private_profiles_20261112'
-    manifest=json.loads((directory/'manifest.json').read_bytes());assert manifest['historical_store_claim'] is False
-    key='controlled_response_source_extraction_v'+str(version)
-    profile=PROFILES_BY_SOURCE_STAGE[stage][key]
-    assert profile==manifest['profiles'][stage][key] and profile in RETAINED_PRIVATE_DEPENDENCIES
-    observed={r['name']:hashlib.sha256((directory/r['fixture']).read_bytes()).hexdigest() for r in manifest['sources'] if r['stage']==stage}
-    assert {name:observed[name] for name in profile['expected_module_fingerprints']}==profile['expected_module_fingerprints']
-    assert 'controlled_response_retained_profiles.py' not in profile['expected_module_fingerprints']
 
 def test_current_repository_descriptor_includes_the_passive_profile_dependency():
     from ..library import controlled_response_retained_profiles

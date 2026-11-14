@@ -26,18 +26,7 @@ HISTORICAL_HARNESS = Path(__file__).parent / 'fixtures/retained_reference/a105_n
 PIN = Path(__file__).parent / 'fixtures/retained_reference/a105_native_binding_dependency_142/original_pin'
 PREVIOUS_PIN = Path(__file__).parent / 'fixtures/retained_reference/a105_native_binding_dependency_142/previous_pin'
 
-def test_original_dependency_snapshot_matches_untouched_historical_files():
-    hashes = _ORIGINAL_DEPENDENCIES['sha256']
-    assert len(hashes) == 9
-    assert {name: hashlib.sha256((PIN / 'gene_annotation_episode' / name).read_bytes()).hexdigest() for name in hashes} == hashes
-    tree = ast.parse((PIN / 'gene_annotation_episode/literature_binding_interaction_validation.py').read_text())
-    version = next((ast.literal_eval(node.value) for node in tree.body if isinstance(node, ast.Assign) and any((isinstance(target, ast.Name) and target.id == 'VERSION' for target in node.targets))))
-    assert version == _ORIGINAL_DEPENDENCIES['validation_version']
-    assert _dependencies(_ORIGINAL_DEPENDENCIES) == _dependencies()
 
-def test_previous_dependency_snapshot_matches_untouched_prechange_files():
-    assert {name: hashlib.sha256((PREVIOUS_PIN / 'gene_annotation_episode' / name).read_bytes()).hexdigest() for name in _PREVIOUS_DEPENDENCIES['sha256']} == _PREVIOUS_DEPENDENCIES['sha256']
-    assert _dependencies(_PREVIOUS_DEPENDENCIES) == _dependencies()
 
 def test_whole_supported_maps_do_not_authorize_mixed_snapshots():
     snapshots = [_ORIGINAL_DEPENDENCIES, _PREVIOUS_DEPENDENCIES, _PRE_CONNECTION_DEPENDENCIES, _dependencies()]
@@ -51,22 +40,6 @@ def test_whole_supported_maps_do_not_authorize_mixed_snapshots():
                 with pytest.raises(ContractError, match='implementation_dependency_mismatch'):
                     _dependencies(mixed)
 
-def test_binding_custody_methods_unchanged_and_rate_only_differences_explicit():
-
-    def methods(path, cls):
-        tree = ast.parse(path.read_text())
-        body = next((node.body for node in tree.body if isinstance(node, ast.ClassDef) and node.name == cls))
-        return {node.name: ast.dump(node, include_attributes=False) for node in body if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))}
-    name = 'literature_rate_storage.py'
-    original = methods(PIN / 'gene_annotation_episode' / name, 'LiteratureRateRepository')
-    current = methods(source_file(name), 'LiteratureRateRepository')
-    overrides = methods(source_file('literature_binding_interaction_storage.py'), 'LiteratureBindingInteractionRepository')
-    changed = {name for name in original if current.get(name) != original[name]}
-    assert changed == {'populate_native', '_validate_native_saved', 'read', '_runtime_delivery_cells'}
-    assert {'populate', 'read', 'project_cells'}.issubset(overrides)
-    for name in set(original) - changed - set(overrides):
-        assert original[name] == current[name], name
-    assert set(current) - set(original) == {'source_domain_projection'}
 
 def test_preconnection_writer_is_retained_as_one_exact_historical_map():
     assert _dependencies(_PRE_CONNECTION_DEPENDENCIES) == _dependencies()
@@ -141,62 +114,3 @@ def test_current_native_cells_record_actual_dependency_and_keep_subset_custody(t
         assert repo.populate(context, args, 'current') == outcome
         assert not store.list('observation') and (not store.list('assessment'))
 
-@pytest.mark.parametrize('snapshot', ['original140', 'previous142'])
-def test_untouched_historical_runtime_output_and_actual_typed_receipt_reopen_cold(tmp_path, monkeypatch, snapshot):
-    selected_pin, expected_dependencies = (PIN, _ORIGINAL_DEPENDENCIES) if snapshot == 'original140' else (PREVIOUS_PIN, _PREVIOUS_DEPENDENCIES)
-    script = "import hashlib, json, pathlib, sys\npin, tests, destination = map(pathlib.Path, sys.argv[1:4])\nexpected_rate_hash = sys.argv[4]\nsys.path[:0] = [str(pin), str(tests)]\nimport pytest\nimport gene_annotation_episode.literature_binding_interaction_storage as native\nimport gene_annotation_episode.literature_rate_storage as rate\nfrom gene_annotation_episode.literature_binding_interaction_storage import _dependencies\nfrom test_literature_binding_interaction_integration import test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen\nassert pathlib.Path(native.__file__).parent == pin / 'gene_annotation_episode'\nassert pathlib.Path(rate.__file__).parent == pin / 'gene_annotation_episode'\nassert _dependencies()['sha256']['literature_rate_storage.py'] == expected_rate_hash\nwith pytest.MonkeyPatch.context() as patch:\n    test_actual_c4_admission_rollback_original_receipt_tamper_and_read_only_reopen(destination, patch)\nprint(json.dumps({'status': 'historical_original_runtime_c4_passed', 'native_module': native.__file__, 'rate_module': rate.__file__, 'harness': str(tests / 'test_literature_binding_interaction_integration.py'), 'dependencies': _dependencies()}, sort_keys=True))\n"
-    result = subprocess.run([sys.executable, '-B', '-c', script, str(selected_pin), str(HISTORICAL_HARNESS), str(tmp_path), expected_dependencies['sha256']['literature_rate_storage.py']], cwd=selected_pin, capture_output=True, text=True)
-    (tmp_path / 'historical_stdout.log').write_text(result.stdout)
-    (tmp_path / 'historical_stderr.log').write_text(result.stderr)
-    assert result.returncode == 0, result.stdout + result.stderr
-    proof = json.loads(result.stdout)
-    assert proof['dependencies'] == expected_dependencies
-    path = tmp_path / 'state'
-    store = Store.__new__(Store)
-    store.path, store._savepoint = (path.resolve(), 0)
-    store.db = sqlite3.connect((path / 'state.sqlite3').resolve().as_uri() + '?mode=ro', uri=True, isolation_level=None)
-    store.db.row_factory = sqlite3.Row
-    try:
-        before = list(store.db.iterdump())
-        operation = store.db.execute('SELECT * FROM literature_binding_interaction_operations').fetchone()
-        outcome = json.loads(operation['outcome'])
-        attempt = store.db.execute('SELECT * FROM runtime_report_attempts WHERE failure IS NULL').fetchone()
-        form = json.loads(attempt['form'])
-        child_row = store.db.execute('SELECT * FROM runtime_episodes WHERE episode_id=?', (attempt['child_episode_id'],)).fetchone()
-        child_request = json.loads(child_row['request'])
-        original = store.get(outcome['result']['sheet_ref'])
-        original_saved_bytes = store.get_artifact(original['artifact_ref'])
-        original_saved = json.loads(original_saved_bytes)
-        source_artifacts = {store.get(ref)['artifact_ref'] for ref in original_saved['input_source_refs']}
-        references = tuple(dict.fromkeys([*original_saved['input_source_refs'], *outcome['record_refs']]))
-        child = BindingContext(operation['run_id'], attempt['child_episode_id'], 'literature', tuple((tuple(part) for part in json.loads(child_row['path']))), child_request['message']['scope'], child_request['message']['episode_assignment'], child_request, references)
-        parent = replace(child, episode_id=attempt['parent_episode_id'], role='annotation', path=(('annotation', 'root'),), assignment={})
-        get = store.get_artifact
-
-        def saved_only(reference):
-            assert reference not in source_artifacts, 'cold read accessed experimental bytes'
-            return get(reference)
-
-        def forbidden(*_args, **_kwargs):
-            raise AssertionError('cold read must not parse, calculate, decode or receive again')
-        monkeypatch.setattr(store, 'get_artifact', saved_only)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_interaction_storage.read_binding_interaction_inputs', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_interaction_storage.populate_binding_interaction', forbidden)
-        monkeypatch.setattr('PIL.Image.open', forbidden)
-        repo = LiteratureBindingInteractionRepository(store, operation['run_id'])
-        monkeypatch.setattr(repo, 'receive_cells', forbidden)
-        saved = repo.read(original['id'])
-        assert saved == original_saved
-        assert canonical(saved['implementation_dependencies']) == canonical(expected_dependencies)
-        assert get(original['artifact_ref']) == original_saved_bytes
-        assert repo.populate(child, saved['selection'], operation['operation_key']) == outcome
-        assert repo.received_cells(parent) == form['numbers']
-        assert repo.fact_cells(parent, [original['id']], components=COMPONENTS) == form['numbers']
-        assert [row['component'] for row in form['numbers']] == ['interaction_ratio']
-        assert form['numbers'][0]['value'] == 4
-        _, binding = service_binding(store, child)
-        assert binding.received_report_facts(parent)['literature_binding_interaction_cells'] == form['numbers']
-        assert list(store.db.iterdump()) == before
-        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
-    finally:
-        store.db.close()

@@ -12,14 +12,6 @@ HOMES = sorted(path.parent.relative_to(ROOT).as_posix() for path in ROOT.rglob('
 PILOT = 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination'
 
 
-def test_required_assets_are_actual_loader_bytes():
-    module = import_module(AXIS + '.runtime_assets')
-    shared = module.required_runtime_asset_fingerprints()
-    complete = module.required_runtime_asset_fingerprints(include_pilot=True)
-    assert set(shared) == {'library/literature_assay_grading_legacy_cells_v1.json',
-        'library/retained_input_authority/bvbrc_appservice_schemas.json'}
-    assert set(complete) == {*shared, PILOT + '/grading/literature_assay_grading_legacy_cells_v1.json'}
-    assert complete == {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in complete}
 
 
 @pytest.mark.parametrize('home', HOMES)

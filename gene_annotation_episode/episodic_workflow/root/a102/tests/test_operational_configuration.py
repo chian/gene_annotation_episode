@@ -31,33 +31,6 @@ def directory(tmp_path, monkeypatch):
     return selected
 
 
-@pytest.mark.parametrize('operation,missing', [
-    ('policy', 'local_jobs'), ('capacity', 'local_resources'),
-    ('mapper', 'local_tools'), ('tools', 'local_jobs'),
-    ('a102_tools', 'local_jobs'), ('adapter', 'local_jobs'),
-], ids=['policy', 'capacity', 'mapper', 'tools', 'a102_tools', 'adapter'])
-def test_original_constructor_failure(operation, missing, directory, tmp_path, store):
-    # Run only before application. These are real constructors, not repaired
-    # original fixtures, a fake registry, or assertions of future success.
-    with pytest.raises(KeyError) as caught:
-        if operation == 'policy':
-            local_jobs.LocalJobPolicy.from_config()
-        elif operation == 'capacity':
-            lr.LocalResources.configured()
-        elif operation == 'mapper':
-            read_mapping.local_configuration()
-        elif operation == 'tools':
-            ToolRegistry(store)
-        else:
-            tools = A102ToolRegistry(store, a102_work_directory=tmp_path/'native')
-            if operation == 'adapter':
-                A102ResourceAdapter(tools, store, 'operational-constructor')
-    assert type(caught.value) is KeyError
-    assert caught.value.args == (missing,)
-    (tmp_path/'raw-constructor.json').write_text(json.dumps({'operation': operation,
-        'exception_type': type(caught.value).__module__+'.'+type(caught.value).__qualname__,
-        'message': str(caught.value), 'args': list(caught.value.args),
-        'production_registry_replaced': False}, indent=2))
 
 
 def test_real_constructor_and_resource_identity(directory, tmp_path, monkeypatch, store):

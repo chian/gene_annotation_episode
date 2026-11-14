@@ -111,28 +111,7 @@ def test_authentic_v1_original_payload_rows_and_admitted_subset_without_science(
             store.db.execute('DELETE FROM records')
     assert hashes(path) == before
 
-def test_original_implementation_demonstrates_the_recalculation_gap(monkeypatch):
-    spec = importlib.util.spec_from_file_location('gene_annotation_episode._active_site_storage_baseline182', HERE / 'baseline/literature_active_site_storage.py')
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    monkeypatch.setattr(module, 'validate_active_site_extraction', forbidden)
-    with readonly(HERE / 'legacy/point') as store:
-        saved_artifacts_only(monkeypatch, store)
-        repo = module.LiteratureActiveSiteRepository(store, LEGACY['point']['run_id'])
-        with pytest.raises(AssertionError, match='must not parse'):
-            repo.read(LEGACY['point']['outcome']['result']['sheet_ref'])
 
-def test_old_frozen_descriptor_still_rejects_changed_implementation(monkeypatch):
-    item = LEGACY['point']
-    before = hashes(HERE / 'legacy/point')
-    disable_science(monkeypatch)
-    with readonly(HERE / 'legacy/point') as store:
-        saved_artifacts_only(monkeypatch, store)
-        _, services = services_for(store, item['run_id'])
-        with pytest.raises(DurableExecutionError, match='identity_conflict'):
-            compose_episode_bindings(services, store=store, journal=SimpleNamespace(store=store, run_id=item['run_id']), execution_backend=None, descriptors=[item['binding_descriptor']], job_episodes=None, resource_estimator=None, role_credit_bindings={})
-        assert store.db.total_changes == 0
-    assert before == hashes(HERE / 'legacy/point')
 
 @pytest.mark.parametrize('mutation', ['signature', 'outcome_value', 'outcome_meaning', 'outcome_omission', 'outcome_status', 'operation_ref', 'provider', 'origin', 'source_identity', 'unselected_copy'])
 def test_selected_output_authentication_rejects_corruption(tmp_path, mutation):

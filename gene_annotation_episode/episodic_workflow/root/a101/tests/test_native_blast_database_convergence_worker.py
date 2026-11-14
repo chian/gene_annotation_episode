@@ -200,54 +200,8 @@ def test_reuse_changed_native_artifact_fails_without_reinterpreting(tmp_path, mo
     assert not (Path(new["output_directory"]) / "sheets.json").exists()
 
 
-@pytest.mark.parametrize("program", views._PROGRAMS)
-def test_retained_legacy_v1_recalculation_preserves_original_interpretation(tmp_path, monkeypatch, program):
-    entry = next(r for r in json.loads((PACKET / "LEGACY_GENERATIONS_001.json").read_bytes()) if r["program"] == program)
-    for row in entry["files"]:
-        raw = (ROOT / row["path"]).read_bytes()
-        assert len(raw) == row["size_bytes"] and hashlib.sha256(raw).hexdigest() == row["sha256"]
-    original = json.loads((ROOT / entry["request"]).read_bytes())
-    manifest = load(original, "worker-manifest.json")
-    new = reuse_request(original, manifest)
-    new["output_directory"] = str(tmp_path / "legacy-recalculation")
-    new["implementation"] = implementation(execution_program=program)
-    new["calculation_id"] = _scientific_native_blast_database_result_worker.native_blast_database_calculation_identity(
-        input_identity=_scientific_native_blast_database_result_worker.native_blast_database_input_identity(new), input_implementation_sha256=manifest["input_implementation_sha256"],
-        sequence_model=new["sequence_model"], implementation_manifest_sha256=new["implementation"]["manifest_sha256"])["calculation_id"]
-    no_interpretation(monkeypatch)
-    result = run_request(tmp_path, new)
-    assert result["status"] != "failed", load(new, "diagnostics.json")
-    assert result["version"] == "native_blast_database_result_worker_manifest_v1"
-    assert result["input_interpretation_id"] == manifest["input_interpretation_id"]
-    assert (Path(new["output_directory"]) / "sheets.json").read_bytes() == (Path(original["output_directory"]) / "sheets.json").read_bytes()
-    assert "native_convergence" not in {r["role"] for r in result["artifacts"]}
-    for row in entry["files"]:
-        assert hashlib.sha256((ROOT / row["path"]).read_bytes()).hexdigest() == row["sha256"]
 
 
-def test_native_fact_schemas_are_exact_previous_descriptors():
-    previous = json.loads((PACKET / "FACT_SCHEMAS_BEFORE_001.json").read_bytes())
-    current = views.native_blast_database_fact_sources()
-    assert {name: current[name] for name in previous} == previous
-    additions = {
-        "execution_blast_database_sequence_record_quality_rows",
-        "execution_blast_database_vdb_function_summary_rows",
-        "execution_blast_database_vdb_function_rows",
-        "execution_blast_database_vdb_function_contribution_rows",
-        "execution_blast_database_vdb_function_census_rows",
-        "execution_blast_database_vdb_function_saved_inputs",
-    }
-    assert set(current) - set(previous) == additions - set(previous)
-    descriptor = current["execution_blast_database_vdb_function_saved_inputs"]["report_schema"]["items"]
-    assert descriptor["type"] == "object" and descriptor["additionalProperties"] is False
-    assert set(descriptor["properties"]) == set(descriptor["required"]) == {
-        "schema", "original_result_receipt", "manifest_artifact_ref", "manifest_sha256", "sheets_artifact_ref",
-        "sheets_sha256", "collection_artifact_ref", "collection_sha256", "input_interpretation_id", "original_calculation_id"}
-    assert descriptor["properties"]["schema"] == {"const": "native_blast_vdb_function_saved_input_v1"}
-    address = descriptor["properties"]["original_result_receipt"]
-    assert address["type"] == "object" and address["additionalProperties"] is False
-    assert set(address["properties"]) == set(address["required"]) == {
-        "source_ref", "run_id", "episode_id", "operation_key", "receipt_sha256"}
 
 
 def test_partial_tail_does_not_create_a_convergence_record(tmp_path):

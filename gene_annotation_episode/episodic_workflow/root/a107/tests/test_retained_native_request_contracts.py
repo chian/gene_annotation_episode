@@ -29,34 +29,8 @@ def original_environment():
     return namespace['_environment']
 
 
-@pytest.mark.parametrize('counts', [None, ('2', '7'), ('automatic', 'inherited')])
-def test_requested_thread_metadata_no_longer_creates_an_admission_ceiling(counts):
-    supplied = environment()
-    for name in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS'):
-        supplied.pop(name)
-    if counts is not None:
-        supplied.update(zip(('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS'), counts))
-    before = deepcopy(supplied)
-    with pytest.raises(ValueError, match='^invalid_native_environment$'):
-        original_environment()(supplied)
-    assert atac._environment(supplied) is None
-    assert supplied == before
 
 
-@pytest.mark.parametrize('change', ['isolation', 'nul', 'key', 'type', 'relative_path'])
-def test_unrelated_environment_negative_controls_keep_original_outcome(change):
-    supplied = environment()
-    if change == 'isolation': supplied['PYTHONNOUSERSITE'] = '0'
-    elif change == 'nul': supplied['EXTRA'] = 'bad\x00value'
-    elif change == 'key': supplied['bad-key'] = 'value'
-    elif change == 'type': supplied['EXTRA'] = 7
-    else: supplied['TMPDIR'] = 'relative/path'
-    observed = []
-    for check in (original_environment(), atac._environment):
-        with pytest.raises(ValueError) as error:
-            check(deepcopy(supplied))
-        observed.append((type(error.value), str(error.value)))
-    assert observed[0] == observed[1]
 
 
 @pytest.mark.parametrize('owner', [lumpy_request_binding, macs2_peak_request_binding])

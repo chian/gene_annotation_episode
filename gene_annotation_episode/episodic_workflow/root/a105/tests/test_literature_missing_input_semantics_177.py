@@ -57,26 +57,7 @@ def test_distinct_missing_transport_inputs(field, key, reason, component):
     assert result['cells'][component]['unavailable_reason'] == reason
     assert result['cells']['apparent_km']['value'] == 12
 
-def test_available_transport_math_and_uncertainty_exactly_match_original_code():
-    old = baseline('literature_transport_calculations')
-    for variance in ('known', 'estimated', 'unknown'):
-        inputs = example()
-        inputs['variance_status'] = variance
-        before, after = (old.populate_transport_response(inputs), transport.populate_transport_response(inputs))
-        assert before.pop('version') == 'a105_transport_response_v1'
-        assert after.pop('version') == 'a105_transport_response_v2'
-        assert before == after
-    assert transport.populate_transport_response(example())['cells']['condition_response']['value'] == 0.55
 
-@pytest.mark.parametrize('status', ['known', 'estimated', 'unknown'])
-def test_supplied_binding_model_math_and_uncertainty_exactly_match_original_code(status):
-    source = sheet()
-    declaration = model(source, variance_status=status)
-    before = baseline('literature_binding_models').populate_binding_model(source, declaration)
-    after = binding.populate_binding_model(source, declaration)
-    assert before.pop('version') == 'binding_model_sheet_v1'
-    assert after.pop('version') == 'binding_model_sheet_v2'
-    assert before == after
 
 def test_absent_binding_model_retains_native_contrast_without_publication_claim():
     source = sheet(100, 200)

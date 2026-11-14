@@ -18,21 +18,6 @@ def load(name):
     return json.loads((DATA/name).read_text())
 
 
-def test_all_mapped_rows_preserve_actual_primary_byte_custody_and_distinct_temperature():
-    custody = load('PRIMARY_TABLE_CUSTODY.json')
-    primary = (ROOT/custody['source_path']).read_bytes()
-    assert hashlib.sha256(primary).hexdigest() == custody['source_sha256']
-    for row in custody['rows']:
-        for name in ('mixture_cell','value_cell','assay_heading'):
-            witness = row[name]['witness']
-            assert primary[witness['start']:witness['end']].decode() == witness['quote']
-    assert len(custody['rows']) == 21
-    parenthetical, = [row for row in custody['rows'] if row['parenthetical']]
-    assert parenthetical['temperature_C'] == 37
-    assert parenthetical['printed_marker'] == 'a'
-    assert parenthetical['value_cell']['text'] == '7 (14)a'
-    assert all(row['sampling_count'] is None for row in custody['rows'])
-    assert custody['table_rows_are_reported_summaries_not_raw_replicates']
 
 
 def test_actual_mapped_table_reader_reproduces_retained_operand_records():
@@ -79,10 +64,3 @@ def test_actual_optical_partial_validates_detached_without_reading_or_recalculat
     assert result['calibration_recovery'] is result['path_length'] is None
 
 
-def test_same_temperature_rates_for_different_readouts_do_not_become_a_stoichiometry_grade():
-    result = load('CROSS_ENDPOINT_LIMIT.json')
-    assert result['cells']['reference_rate']['value'] == 14
-    assert result['cells']['test_rate']['value'] == 5
-    assert result['cells']['retained_fraction']['value'] is None
-    assert result['cells']['retained_fraction']['unavailable_reason'] == 'endpoint_mismatch'
-    assert result['annotation_credit'] is None

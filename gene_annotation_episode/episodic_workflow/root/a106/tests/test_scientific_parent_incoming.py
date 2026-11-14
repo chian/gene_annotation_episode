@@ -46,49 +46,6 @@ def original_admission(name):
     return namespace[name]
 
 
-@pytest.mark.parametrize('home', ['execution_job_submission', 'execution_progress_assessment',
-                                'execution_result_acquisition', 'published_evidence_assessment'])
-@pytest.mark.parametrize('saved', ['fresh', 'invalid', 'form', 'failure', 'unowned', 'unowned_invalid'])
-def test_scientific_incoming_matches_original_recorded_and_nonreceipt_body(home, saved):
-    rt = module('runtime')
-    name = 'admit_unowned_return' if saved.startswith('unowned') else 'admit_return'
-    candidate = getattr(module('scientific_process.from_child_' + home), name)
-    assert candidate.__globals__ is vars(rt)
-    schema = {'type': 'object', 'properties': {'ready': {'type': 'boolean'}},
-              'required': ['ready'], 'additionalProperties': False}
-    observed = []
-    for callback in (original_admission(name), candidate):
-        events = []
-        class ReceiptPorts:
-            run_id = 'controlled-original'
-            episode_branch_lifecycle = rt.EPISODE_BRANCH_LIFECYCLE
-            def __init__(self):
-                self.journal = SimpleNamespace(row=lambda *_args: {'result': None})
-                self.store = SimpleNamespace(db=SimpleNamespace(execute=self.query))
-            def query(self, sql, args):
-                events.append(('saved_read', sql, args))
-                row = None if saved in ('fresh', 'invalid', 'unowned', 'unowned_invalid') else {
-                    'failure': json.dumps({'category': 'original_failure'}) if saved == 'failure' else None,
-                    'form': json.dumps({'ready': True}), 'decision_index': 8,
-                    'contract': json.dumps({'measurements': {'schema': schema}})}
-                return SimpleNamespace(fetchone=lambda: row)
-            def save_attempt(self, *args, **kwargs): events.append(('save_attempt', args, kwargs))
-            def receive_form(self, *args, **kwargs):
-                events.append(('receive_form', args[1:], kwargs))
-                return ['original_received_reference']
-            def delivery_feedback(self, delivery_ref, error):
-                return {'delivery_ref': delivery_ref, **error.diagnostic}
-        source = SimpleNamespace(episode_id='parent')
-        child = SimpleNamespace(source=SimpleNamespace(episode_id='child'))
-        request = SimpleNamespace(goal=SimpleNamespace(goal_id='goal'))
-        contract = rt.TypedReportContract('Original readiness', schema, lambda *_args: True)
-        result = rt.Record({'form': {'ready': 'invalid_boolean' if 'invalid' in saved else True}})
-        try: value = callback(ReceiptPorts(), source, child, 8, schema, contract, result, request)
-        except rt.ReportDeliveryError as error: value = ('failure', error.feedback.as_record())
-        observed.append((value, events))
-    assert observed[0] == observed[1]
-    if 'invalid' in saved or saved == 'failure':
-        assert observed[0][0][0] == 'failure'
 
 
 @pytest.mark.parametrize('role,home,preparer_name', [

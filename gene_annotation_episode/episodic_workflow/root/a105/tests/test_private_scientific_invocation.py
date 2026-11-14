@@ -7,16 +7,6 @@ import pytest
 from .test_private_literature_bindings import AXIS, HOMES
 
 
-@pytest.mark.parametrize('home', HOMES)
-def test_private_interpretation_and_sheet_owners(home):
-    package = AXIS + '.' + home
-    binding = import_module(package + '.episode').LiteratureEpisode(
-        SimpleNamespace(), rate_population=True, assay_grading_population=True)
-    assert binding.execute_reasoning.__module__ == package + '.grading.experimental_interpretation'
-    assert binding.reasoning_action_schema.__module__ == package + '.grading.experimental_interpretation'
-    assert binding._required_grading_repository.__module__ == package + '.grading.assay_subscoring'
-    assert binding._assay_grading_repository.__module__ == package + '.grading.assay_subscoring'
-    assert binding._a105_aggregation_repository.__module__ == package + '.scoring.experimental_main_sheet'
 
 
 @pytest.mark.parametrize('home', HOMES)

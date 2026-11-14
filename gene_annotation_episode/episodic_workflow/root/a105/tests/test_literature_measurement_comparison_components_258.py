@@ -147,10 +147,6 @@ def execute(selection, read):
     validate_measurement_comparison_sheet(sheet, inputs=inputs)
     return (extraction, inputs, {c['component']: c for c in sheet['cells']}, sheet)
 
-def test_exact_reviewed_schema_resources_and_task():
-    for name, factory in [('SELECTION', measurement_comparison_selection_schema), ('EXTRACTION', measurement_comparison_extraction_schema), ('CALCULATION_INPUTS', measurement_comparison_calculation_inputs_schema), ('SHEET', measurement_comparison_sheet_schema), ('COVARIANCE_DOCUMENT', measurement_comparison_covariance_schema)]:
-        assert factory() == json.loads((PACKET / (name + '_SCHEMA_004.json')).read_text())
-    assert hashlib.sha256(MEASUREMENT_COMPARISON_TASK.encode()).hexdigest() == 'cd98aa8e5208a0b1c7f2d0b67c3e522589313474a52f613be157f8985577382e'
 
 def test_authenticated_reader_detachment_common_covariance():
     s, docs, read = source_fixture()

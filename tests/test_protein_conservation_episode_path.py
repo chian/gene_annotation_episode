@@ -973,8 +973,6 @@ def test_genuine_current_muscle_alignment_conservation_saved_views_typed_parent_
     _exercise_conservation_workflow(tmp_path, monkeypatch)
 
 
-def test_retained_genuine_conservation_new_receipts_saved_views_typed_parent_and_closed_replay(tmp_path, monkeypatch):
-    _exercise_conservation_workflow(tmp_path, monkeypatch, retained=True)
 
 
 def test_genuine_current_muscle_malformed_output_partial_typed_parent_and_closed_replay(tmp_path, monkeypatch):

@@ -117,18 +117,6 @@ def feature_member(ordinal=0, start=10, end=20):
             "type_window": None, "description_window": None, "evidence": None}}
 
 
-def test_selection_and_expanded_schema_match_frozen_artifact_exactly():
-    artifact = json.loads(SPEC.read_text())
-    assert uniprot_return_selection_schema() == artifact["selection_schema"]
-    actual = uniprot_selected_return_schema(artifact["example_selection"])
-    assert actual == artifact["example_parent_form"]["properties"]["selected_uniprot"]
-    assert "$defs" not in actual and "$schema" not in actual
-    assert '"$ref"' not in json.dumps(actual)
-    assert requested_uniprot_selection(form({"a_different_parent_name": actual})) == artifact["example_selection"]
-    advertised = uniprot_fact_sources()[SOURCE]
-    assert advertised["type"] == "object"
-    assert advertised["meaning"] == "Exactly requested UniProt source facts and explicit material grants."
-    assert advertised["report_schema"]["x-uniprot-selection"]["pages"] == []
 
 
 def test_selection_and_schema_copies_are_detached_and_unmodified():

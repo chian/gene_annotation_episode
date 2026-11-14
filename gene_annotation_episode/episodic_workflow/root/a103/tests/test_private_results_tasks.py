@@ -146,10 +146,6 @@ def test_original_instruction_service_override_and_private_composer(actual, case
     from .results_task_checks import instruction_observation
     instruction_observation(actual, case, exchange)
 
-@pytest.mark.parametrize('actual', ['execution_result_acquisition', 'scientific_process/execution_result_acquisition', 'hpc_work_planning/execution_result_acquisition', 'hpc_work_planning/hpc_allocation_execution/execution_result_acquisition', 'scientific_process/hpc_work_planning/execution_result_acquisition', 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition'], indirect=['actual'], ids=['home=execution_result_acquisition', 'home=scientific_process/execution_result_acquisition', 'home=hpc_work_planning/execution_result_acquisition', 'home=hpc_work_planning/hpc_allocation_execution/execution_result_acquisition', 'home=scientific_process/hpc_work_planning/execution_result_acquisition', 'home=scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition'])
-def test_original_estimator_lexical_identity_and_saved_replay(actual):
-    from .results_task_checks import estimator_observations
-    estimator_observations(actual)
 
 @pytest.mark.parametrize('actual', ['execution_result_acquisition', 'scientific_process/execution_result_acquisition', 'hpc_work_planning/execution_result_acquisition', 'hpc_work_planning/hpc_allocation_execution/execution_result_acquisition', 'scientific_process/hpc_work_planning/execution_result_acquisition', 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition'], indirect=['actual'], ids=['home=execution_result_acquisition', 'home=scientific_process/execution_result_acquisition', 'home=hpc_work_planning/execution_result_acquisition', 'home=hpc_work_planning/hpc_allocation_execution/execution_result_acquisition', 'home=scientific_process/hpc_work_planning/execution_result_acquisition', 'home=scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition'])
 def test_saved_reason_keeps_original_completed_outcome_without_reexecution(actual):

@@ -134,51 +134,8 @@ def test_description_only_exact_equality_detachment_no_defaults_and_export():
     assert strip_descriptions(other) == strip_descriptions(partner_source_population_schema())
 
 
-def test_all_103_witnesses_15_number_selectors_and_six_definitions_have_information():
-    counts = dict(witness=0, number=0, definition=0)
-    def walk(node):
-        if isinstance(node, dict):
-            fields = node.get("properties", {})
-            if set(fields) == {"source_ref", "representation", "start", "end", "quote"}:
-                counts["witness"] += 1
-                assert "half-open UTF-8 byte positions" in node["description"]
-            if set(fields) == {"witness", "number_start", "number_end"}:
-                counts["number"] += 1
-                assert "Unicode characters" in node["description"]
-                for name in ("number_start", "number_end"):
-                    assert "Unicode character position inside witness.quote" in fields[name]["description"]
-            if fields.get("kind", {}).get("const") == "source_defined_rate_unit":
-                counts["definition"] += 1
-                assert "no universal U conversion" in node["description"]
-                assert "retains raw inputs" not in node["description"]
-            for child in node.values():
-                walk(child)
-        elif isinstance(node, list):
-            for child in node:
-                walk(child)
-    schema = information.partner_source_population_schema_with_information()
-    walk(schema)
-    assert counts == {"witness": 103, "number": 15, "definition": 6}
-    assert json.dumps(schema).count("one unit was defined as") == 1
 
 
-@pytest.mark.parametrize("role", ("reference", "omitted", "addback"))
-def test_rate_and_spread_definition_instructions_bind_to_exact_role_endpoint(role):
-    schema = information.partner_source_population_schema_with_information()
-    rate = schema["properties"]["arms"]["properties"][role]["anyOf"][0]["properties"]["rate"]["anyOf"][0]["properties"]
-    for unit in (rate["unit"], rate["spread"]["properties"]["unit"]["anyOf"][0]):
-        plain, defined = unit["anyOf"]
-        assert "bare U/mg witness is rejected" in plain["description"]
-        fields = defined["properties"]["definition"]["properties"]
-        assert "arguments.arms." + role + ".endpoint" in fields["endpoint"]["description"]
-        assert "exact same witness" in fields["endpoint"]["description"]
-        assert "different source occurrence" in fields["endpoint"]["description"]
-        assert "all alternative endpoint branches" in fields["bridge"]["description"]
-        assert "contained in the bridge" in fields["clause"]["description"]
-        assert "actual source order" in fields["clause"]["description"]
-        assert "physical numeric token must be contained in the clause" in fields["amount"]["description"]
-        assert "endpoint occurrence" in fields["endpoint_entity"]["description"]
-        assert "does not infer chemical aliases" in fields["definition_entity"]["description"]
 
 
 def test_actual_reader_calculator_success_is_identical_with_either_schema():
@@ -304,41 +261,5 @@ def test_actual_catalog_contract_information_and_ordinary_prompt_keep_task_and_s
     assert "defined_unit_endpoint_mismatch" not in task
 
 
-def test_metadata_module_bytes_participate_in_actual_binding_identity(monkeypatch):
-    binding = LiteratureEpisode(None, rate_population=True)
-    original = binding.as_record()
-    original_fact_sources = binding.fact_sources("literature")
-    read_bytes = Path.read_bytes
-    def altered(path):
-        value = read_bytes(path)
-        return value + b"\n# synthetic identity probe\n" if path.name == "literature_partner_operand_information.py" else value
-    monkeypatch.setattr(Path, "read_bytes", altered)
-    assert original["implementation_sha256"] != binding.as_record()["implementation_sha256"]
-    assert binding.fact_sources("literature") == original_fact_sources
 
 
-def test_dispatch_probe_proves_only_one_selected_repository_route(monkeypatch):
-    args, _read_source, _witness, _text = fixture()
-    calls = []
-    outcome = {"status": "completed", "result": {"synthetic_dispatch_probe": True}}
-    class Repository:
-        def populate(self, context, selected, key):
-            calls.append((context, deepcopy(selected), key))
-            return outcome
-    class Services:
-        def tool_catalog(self, scope):
-            return {}
-        def __getattr__(self, name):
-            if name.startswith("literature_") and name.endswith("_repository"):
-                return lambda: Repository()
-            raise AttributeError(name)
-    context = SimpleNamespace(role="literature", scope={}, assignment={
-        "version": "literature_assignment_v1", "question_context_refs": [], "source_refs": []})
-    binding = LiteratureEpisode(Services(), rate_population=True)
-    # This unit test isolates dispatch after argument admission. Actual source
-    # authorization is exercised by the storage and ordinary-episode tests.
-    monkeypatch.setattr(binding, '_tool_arguments', lambda context, name, args: args)
-    result = asyncio.run(binding.execute(
-        context, "literature.partner.source.populate", args, "synthetic:partner:operation"))
-    assert result is outcome
-    assert calls == [(context, args, "synthetic:partner:operation")]

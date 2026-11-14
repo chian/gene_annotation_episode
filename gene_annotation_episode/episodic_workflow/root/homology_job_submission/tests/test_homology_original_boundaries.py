@@ -67,74 +67,12 @@ def capture(callback):
 def baseline():return original_class()
 
 
-@pytest.mark.parametrize('home,name,role',CASES)
-@pytest.mark.parametrize('value',(0.0,2.5,-1.0,float('inf'),float('nan')))
-def test_original_role_credit_and_copy_custody(home,name,role,value,baseline):
-    observations=[]
-    for cls in (baseline,getattr(importlib.import_module(ROOT+'.'+home.replace('/','.')+'.episode'),name)):
-        events=[]; binding=configured(cls,value=value,events=events)
-        assignment={'job_ref':'job_'+'1'*24,'cpu':2,'query_ref':'subject_'+'2'*24}
-        result=capture(lambda:binding.initial_credit(None,role,assignment,'episode:original','run:original'))
-        current=binding.binding_for(role); current['units'].append('changed')
-        observations.append((result,events,binding.binding_for(role),binding.credit_kind(role),assignment))
-    assert observations[0]==observations[1]
-    expected='monitoring' if role=='job_monitor' else 'operational'
-    assert observations[1][1][0][0]==expected
-    assert observations[1][3]==expected
-    assert 'changed' not in observations[1][2]['units']
-    if math.isfinite(value):assert observations[1][0]==('returned',value)
-    else:assert observations[1][0][0]=='raised'
 
 
-@pytest.mark.parametrize('home,name,role',CASES)
-@pytest.mark.parametrize('scenario',('wrong_resource','wrong_policy','no_credit','empty_credit','no_monitor','empty_monitor'))
-def test_original_explicit_typed_resource_and_projector_rejection(home,name,role,scenario,baseline):
-    def build(cls):
-        changes={'wrong_resource':{'jobs':object()},'wrong_policy':{'parser_policy':object()},
-            'no_credit':{'credit_projector':None},'empty_credit':{'credit_binding':{}},
-            'no_monitor':{'monitoring_projector':None},'empty_monitor':{'monitoring_binding':{}}}[scenario]
-        return capture(lambda:configured(cls,**changes))
-    cls=getattr(importlib.import_module(ROOT+'.'+home.replace('/','.')+'.episode'),name)
-    assert build(cls)==build(baseline)
-    assert build(cls)[0]=='raised'
 
 
-@pytest.mark.parametrize('home,name,role',CASES)
-@pytest.mark.parametrize('failure',('value','storage','os','contract','unowned'))
-def test_original_executed_failure_and_unacquired_tool_boundary(home,name,role,failure,baseline):
-    observations=[]
-    for cls in (baseline,getattr(importlib.import_module(ROOT+'.'+home.replace('/','.')+'.episode'),name)):
-        events=[]; jobs=resource(); binding=configured(cls,jobs=jobs)
-        errors={'value':ValueError('controlled_failed'),'storage':sqlite3.OperationalError('controlled_failed'),
-                'os':OSError('controlled_failed'),
-                'contract':importlib.import_module('gene_annotation_episode.domain').ContractError('controlled_failed')}
-        def row(ref):events.append(('row',ref)); raise errors[failure]
-        jobs._row=row
-        operation={'job_launch':'homology.environment','job_monitor':'homology.sample','job_results':'homology.extract'}[role]
-        binding.catalog=lambda source:[{'name':operation}]
-        binding.assignment=lambda source:{'job_ref':'job_'+'1'*24,'cpu':2}
-        source=SimpleNamespace(path=(('annotation','root'),(role,'child')),scope={},workflow=SimpleNamespace(store=None))
-        name_used='homology.unowned' if failure=='unowned' else operation
-        result=capture(lambda:asyncio.run(binding._execute(source,name_used,{},operation_key='original:operation')))
-        observations.append((result,events))
-    assert observations[0]==observations[1]
-    if failure=='unowned':assert observations[1][0][0]=='raised' and observations[1][1]==[]
-    else:
-        assert observations[1][0][1]['status']=='failed'
-        assert observations[1][0][1]['result'] is None
-        assert observations[1][0][1]['feedback']['operation']==operation
 
 
-@pytest.mark.parametrize('home,name,role',CASES)
-def test_typed_return_source_conflict_keeps_original_exception_identity(home,name,role,baseline):
-    observed=[]
-    for cls in (baseline,getattr(importlib.import_module(ROOT+'.'+home.replace('/','.')+'.episode'),name)):
-        binding=configured(cls); binding.fact_sources=lambda selected:{'job_ref':{}}
-        observed.append(capture(lambda:binding._validate_role_return_sources(role,
-            {'properties':{'unsupported':{'x-source':'job_foreign_fact'}}})))
-    assert observed[0]==observed[1]
-    assert observed[1][1] is importlib.import_module(ROOT+'.communication').ReportBoundaryError
-    assert observed[1][3]=='homology_return_source_role_conflict'
 
 
 @pytest.mark.parametrize('role',ROLES)

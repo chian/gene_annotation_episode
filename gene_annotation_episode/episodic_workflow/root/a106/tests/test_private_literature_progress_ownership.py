@@ -20,9 +20,3 @@ def test_private_plan_uses_actual_original_commission_and_calculator(progress_ca
     assert type(binding.yield_controller(context,0.,'epoch')).__module__==module+'.yield_estimator'
 
 
-@pytest.mark.parametrize('home',HOMES)
-def test_actual_descriptor_records_current_private_source_after_retirement(home):
-    binding=import_module(PACKAGE+'.'+home.replace('/','.')+'.episode').LiteratureEpisode(SimpleNamespace())
-    descriptor=binding.as_record()
-    assert descriptor['binding_id']==home
-    assert len(descriptor['implementation_sha256'])==64

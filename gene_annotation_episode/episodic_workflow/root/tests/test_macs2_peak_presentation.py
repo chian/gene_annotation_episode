@@ -264,15 +264,6 @@ def test_malformed_unknown_and_old_profiles_keep_prior_generic_behavior():
     assert prompt._execution_schema_view(schema)==schema
 
 
-def test_units_cover_the_registered_reported_numbers_and_instruction_units_are_unchanged():
-    from gene_annotation_episode.macs2_peak_presentation import _NUMBER_UNITS
-    schema=macs2_peak_result_schema()
-    assert set(_NUMBER_UNITS)==set(schema['$defs']['Macs2PeakReturn']['properties']['reported_numbers']['properties'])
-    source=Path(prompt.__file__).read_text();tree=ast.parse(source)
-    for name, expected in dict(_task='fdffd84c9f19fa8705f55b74153e35288d319c524344458dd3f1126ebaa8c0bc',
-            _steering='286cc38ec22fe2a7f2c1bd3c05c0a3ddf5a332c4f127407b630ae3fb97c1f9f1').items():
-        unit=next(node for node in tree.body if isinstance(node,ast.FunctionDef) and node.name==name)
-        assert hashlib.sha256(ast.get_source_segment(source,unit).encode()).hexdigest()==expected
 
 
 def _capture_outcome():

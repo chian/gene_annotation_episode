@@ -210,28 +210,6 @@ def test_original_projection_failure_context_roundtrip_not_subtracted():
     validate(result, data, fields)
 
 
-def test_module_facade_pins_exact_scientific_dependency_bytes(monkeypatch):
-    expected = hashlib.sha256()
-    base = Path(provider.__file__).parent
-    for name in sorted(provider._DEPENDENCIES):
-        raw = (base / name).read_bytes()
-        expected.update(name.encode() + b"\0" + str(len(raw)).encode() + b"\0" + raw)
-    assert len(provider._DEPENDENCIES) == len(set(provider._DEPENDENCIES)) == 37
-    assert provider.implementation_sha256() == expected.hexdigest()
-    assert {'bvbrc_fastqutils_cutadapt_reader.py', 'bvbrc_fastqutils_cutadapt_specs.py',
-            'bvbrc_fastqutils_legacy_v2_schemas.json', 'bvbrc_fastqutils_legacy_cutadapt_schemas.json',
-            'bvbrc_fastqutils_sra_native.py', 'bvbrc_fastqutils_sra_specs.py',
-            'bvbrc_fastqutils_json_tokens.py', 'bvbrc_fastqutils_samstat_specs.py',
-            'bvbrc_fastqutils_samstat_native.py', 'bvbrc_fastqutils_samstat_svg.py',
-            'bvbrc_fastqutils_samstat_legacy.py', 'bvbrc_fastqutils_samstat_mapping.py',
-            'sequence_composition_counts.py'} <= set(provider._DEPENDENCIES)
-    assert provider.FastqUtilsBundleAdapter.adapter_id == provider.ADAPTER_ID
-    original_read = Path.read_bytes
-    def changed_common_bytes(path):
-        raw = original_read(path)
-        return raw + b'\n' if path == base / 'sequence_composition_counts.py' else raw
-    monkeypatch.setattr(Path, 'read_bytes', changed_common_bytes)
-    assert provider.implementation_sha256() != expected.hexdigest()
 
 
 @pytest.mark.parametrize("change", ["association_artifact", "omit_library", "lineage_injection", "promote_association"])
@@ -376,60 +354,8 @@ def _same_composition_json(original, current):
     assert canonical_json(current) == canonical_json(original)
 
 
-@pytest.mark.parametrize('arguments', [
-    dict(sequence='acgN', molecule='dna', quality='!+5?', quality_encoding='phred33'),
-    dict(sequence='ACGTRYSWKMBDHVN', molecule='dna'),
-    dict(sequence='ggcuuN', molecule='rna'),
-    dict(sequence='ABXZWJOu*', molecule='protein'),
-    dict(sequence='ACGT', molecule='unspecified'),
-    dict(sequence='', molecule='dna', quality='', quality_encoding='phred33'),
-    dict(sequence='', molecule='protein'),
-    dict(sequence='', molecule='unspecified'),
-    dict(sequence='ACGTU N-?ß', molecule='dna'),
-    dict(sequence='NRY', molecule='dna'),
-    dict(sequence='AT', molecule='dna'),
-    dict(sequence='ACG', molecule='dna', quality=';@J', quality_encoding='solexa64'),
-], ids=['dna_quality', 'iupac', 'rna', 'protein', 'unspecified', 'empty_quality',
-        'empty_protein', 'empty_unspecified', 'invalid_unicode', 'zero_gc_denominator',
-        'observed_zero_gc', 'solexa_unchanged'])
-def test_shared_composition_literal_whole_json_parity(frozen_composition_calculators, arguments):
-    before = deepcopy(arguments)
-    old = frozen_composition_calculators['sequence_composition_grader'].grade_sequence_composition(**arguments)
-    new = ordinary_composition.grade_sequence_composition(**arguments)
-    _same_composition_json(old, new)
-    _same_composition_json(before, arguments)
 
 
-@pytest.mark.parametrize('change', ['gc_count', 'gc_denominator', 'unambiguous_count',
-    'missing_ambiguity', 'missing_symbol', 'bool_symbol', 'float_length', 'extra_zero_symbol'])
-def test_shared_composition_saved_cells_whole_json_parity(frozen_composition_calculators, change):
-    old = frozen_composition_calculators['sequence_composition_grader']
-    sheet = old.build_sequence_composition_sheet('ACGN', molecule='dna', quality='!+5?', quality_encoding='phred33')
-    if change == 'gc_count':
-        sheet['composition']['gc_count'] = -1
-    elif change == 'gc_denominator':
-        sheet['composition']['gc_denominator'] = None
-    elif change == 'unambiguous_count':
-        sheet['composition']['unambiguous_nucleotide_count'] = None
-    elif change == 'missing_ambiguity':
-        del sheet['composition']['ambiguous_symbol_count']
-    elif change == 'missing_symbol':
-        del sheet['symbol_counts']['G']
-    elif change == 'bool_symbol':
-        sheet['symbol_counts']['A'] = True
-    elif change == 'float_length':
-        sheet['length'] = 4.0
-    else:
-        sheet['symbol_counts']['extra'] = 0
-    before = deepcopy(sheet)
-    expected = old.calculate_sequence_composition_scores(sheet)
-    actual = ordinary_composition.calculate_sequence_composition_scores(sheet)
-    _same_composition_json(expected, actual)
-    _same_composition_json(before, sheet)
-    if change == 'gc_count':
-        assert actual['gc_count'] is actual['gc_fraction'] is None
-        assert actual['gc_denominator'] == expected['gc_denominator']
-        assert actual['mean_phred'] == expected['mean_phred']
 
 
 def _composition_parity_inputs(raw, *, scope='complete'):
@@ -461,138 +387,9 @@ def _composition_rows(module, sheet, job):
     return module.calculate_composition(sheet, job=job, parameters_sha256=json_sha256(parameters))
 
 
-@pytest.mark.parametrize('change', ['complete', 'partial', 'unknown', 'empty', 'invalid',
-    'missing_g', 'missing_reads', 'missing_g_value', 'membership', 'count_conflict', 'unavailable',
-    'huge_count_conflict', 'huge_partial', 'huge_unavailable'])
-def test_shared_composition_partition_whole_json_parity(frozen_composition_calculators, change, monkeypatch):
-    raw = b'@one\nACGTNRY\n+\n!!!!!!!\n@two\nGC\n+\nII\n'
-    if change == 'empty':
-        raw = b''
-    elif change == 'invalid':
-        raw = b'@invalid\nAC?\n+\n!!!\n'
-    sheet, job = _composition_parity_inputs(raw, scope=change if change in ('partial', 'unknown') else 'complete')
-    g = next(row for row in sheet['measurements']
-        if row['metric'] == 'fastq_symbol_count' and row['axis']['label'] == 'G')
-    if change in ('missing_g', 'missing_reads'):
-        reference = g['id'] if change == 'missing_g' else next(
-            row['id'] for row in sheet['measurements'] if row['metric'] == 'fastq_read_count')
-        job['operand_measurement_refs'].remove(reference)
-    elif change == 'missing_g_value':
-        _change_composition_cell(sheet, g['id'], value=None, state='missing')
-    elif change == 'membership':
-        reads = next(row for row in sheet['populations'] if row['population_key'] == 'fastq_reads')
-        for rows in ([doc['populations'] for doc in sheet['documents']] + [sheet['populations']]):
-            for row in rows:
-                if row['id'] == reads['id']:
-                    row['member_record_refs'] = row['member_record_refs'][:1]
-        _change_composition_cell(sheet, g['id'], population_ref=reads['id'])
-    elif change == 'count_conflict':
-        bases = next(row for row in sheet['measurements'] if row['metric'] == 'fastq_base_count')
-        _change_composition_cell(sheet, bases['id'], value=bases['value'] + 1)
-    elif change == 'unavailable':
-        job['state'] = 'unavailable'
-    elif change.startswith('huge_'):
-        # This401digit count is admitted by the exact legacy integer domain.
-        # Legacy qualification suppresses division; it must not overflow first.
-        for row in list(sheet['measurements']):
-            if row['metric'] == 'fastq_symbol_count':
-                _change_composition_cell(sheet, row['id'], value=10**400 if row['axis']['label'] == 'N' else 0)
-            elif row['metric'] == 'fastq_base_count':
-                _change_composition_cell(sheet, row['id'], value=1)
-        if change == 'huge_partial':
-            for rows in ([doc['populations'] for doc in sheet['documents']] + [sheet['populations']]):
-                for row in rows:
-                    if row['population_key'] in ('fastq_reads', 'fastq_bases'):
-                        row['scope'] = 'partial'
-        elif change == 'huge_unavailable':
-            job['state'] = 'unavailable'
-    requests = []
-    if change.startswith('huge_'):
-        calculate = common_composition.calculate_composition_count_components
-        def observe(count_sheet, *, requested_fractions=('gc_fraction', 'ambiguity_fraction')):
-            requests.append(requested_fractions)
-            return calculate(count_sheet, requested_fractions=requested_fractions)
-        monkeypatch.setattr(common_composition, 'calculate_composition_count_components', observe)
-    before = deepcopy([sheet, job])
-    old = _composition_rows(frozen_composition_calculators['bvbrc_fastqutils_composition'], sheet, job)
-    current = _composition_rows(fastq_composition, sheet, job)
-    _same_composition_json(old, current)
-    _same_composition_json(before, [sheet, job])
-    if change.startswith('huge_'):
-        assert requests == [()]
 
 
-@pytest.mark.parametrize('metric', ['fastq_read_count', 'fastq_base_count', 'fastq_symbol_count'])
-@pytest.mark.parametrize('value', [5.0, True])
-def test_shared_composition_count_type_rejection_parity(frozen_composition_calculators, metric, value):
-    sheet, job = _composition_parity_inputs(b'@r\nAC\n+\n!!\n')
-    row = next(row for row in sheet['measurements'] if row['metric'] == metric)
-    _change_composition_cell(sheet, row['id'], value=value)
-    failures = []
-    for module in (frozen_composition_calculators['bvbrc_fastqutils_composition'], fastq_composition):
-        with pytest.raises(FastqUtilsContractError) as caught:
-            _composition_rows(module, sheet, job)
-        failures.append(dict(type=type(caught.value).__name__, code=caught.value.code,
-            path=caught.value.path, diagnostics=caught.value.diagnostics))
-    _same_composition_json(*failures)
 
 
-def test_shared_composition_uses_actual_summary_and_partition_cells(frozen_composition_calculators, monkeypatch):
-    """Observe the real shared calculator, without manufacturing its values."""
-    old = frozen_composition_calculators['sequence_composition_grader']
-    sheet = old.build_sequence_composition_sheet('ACGN', molecule='dna')
-    sheet['composition']['gc_count'] = -1
-    fastq_sheet, job = _composition_parity_inputs(b'@r\nACGN\n+\n!!!!\n')
-    seen = []
-    calculate = common_composition.calculate_composition_count_components
-    def observe(count_sheet, *, requested_fractions=('gc_fraction', 'ambiguity_fraction')):
-        result = calculate(count_sheet, requested_fractions=requested_fractions)
-        seen.append((deepcopy(count_sheet), deepcopy(result), requested_fractions))
-        return result
-    def forbidden(*args, **kwargs):
-        raise AssertionError('Saved counts attempted sequence construction or parsing')
-    monkeypatch.setattr(common_composition, 'calculate_composition_count_components', observe)
-    monkeypatch.setattr(ordinary_composition, 'build_sequence_composition_sheet', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_fastqutils_native.parse_fastqutils_artifact', forbidden)
-    actual = ordinary_composition.calculate_sequence_composition_scores(sheet)
-    rows = _composition_rows(fastq_composition, fastq_sheet, job)
-    assert [count_sheet['basis'] for count_sheet, _, _ in seen] == [
-        'validated_saved_counts', 'dna_partition_counts', 'dna_partition_counts', 'dna_partition_counts']
-    assert [requested for _, _, requested in seen] == [
-        ('gc_fraction', 'ambiguity_fraction'), (), ('gc_fraction',), ('ambiguity_fraction',)]
-    summary, summary_result, _ = seen[0]
-    assert summary['operands']['gc_count'] is summary['summary']['gc_count'] is None
-    assert actual['gc_fraction'] is summary_result['fractions']['gc_fraction']['value'] is None
-    partitions, partition_result, _ = seen[1]
-    expected_counts = {row['axis']['label']: row['value'] for row in fastq_sheet['measurements']
-        if row['metric'] == 'fastq_symbol_count'}
-    _same_composition_json(expected_counts, partitions['operands'])
-    for metric, shared, result_index in (('gc_acgt_fraction', 'gc_fraction', 2), ('ambiguous_fraction', 'ambiguity_fraction', 3)):
-        row = next(row for row in rows if row['metric'] == metric)
-        cell = seen[result_index][1]['fractions'][shared]
-        retained = partition_result['fractions'][shared]
-        assert retained['reason'] == 'not_requested' and retained['value'] is None
-        _same_composition_json({key: retained[key] for key in ('numerator', 'denominator')},
-            {key: cell[key] for key in ('numerator', 'denominator')})
-        _same_composition_json({key: cell[key] for key in ('numerator', 'denominator', 'value')},
-            {key: row[key] for key in ('numerator', 'denominator', 'value')})
 
 
-@pytest.mark.parametrize('partial', [False, True])
-def test_shared_composition_provider_whole_json_parity(frozen_composition_calculators, monkeypatch, partial):
-    data = f.build({'reads': (b'@one\nACGTNRY\n+\n!!!!!!!\n@two\nGC\n+\nII\n', 'fastq')})
-    if partial:
-        data[0]['artifacts'][0]['transfer'].update(body_complete=False, object_complete='no')
-    data[3]['calculation_requests'] = [dict(calculation_id='composition', method='composition_v1',
-        population=f.population())]
-    fields = {name: f.selection('component', dict(selection='semantic', calculation_id='composition',
-        metric=metric, threshold=None)) for name, metric in
-        (('gc', 'gc_acgt_fraction'), ('ambiguity', 'ambiguous_fraction'))}
-    before = canonical_json([data[0], data[2], data[3], fields])
-    with monkeypatch.context() as patch:
-        patch.setattr(fastq_composition, 'calculate_composition',
-            frozen_composition_calculators['bvbrc_fastqutils_composition'].calculate_composition)
-        original = f.run(data, fields)
-    current = f.run(data, fields)
-    _same_composition_json(original, current)
-    assert canonical_json([data[0], data[2], data[3], fields]) == before

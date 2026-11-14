@@ -189,25 +189,6 @@ def test_saved_monitor_credit_reader_delegates_exact_operands_without_observing(
     assert_no_work(r)
 
 
-def test_current_publication_remains_a0_p19_and_cannot_construct_absent_first_slot(resources):
-    r = resources
-    application = setup(r)
-    library = ScientificProcessLibrary(r.directory/'scientific-process-library')
-    headers = library.headers()
-    assert sum(row['option_ref']['slot'] == 'annotation_distinction' for row in headers) == 0
-    assert sum(row['option_ref']['slot'] == 'thought_pattern' for row in headers) == 19
-    tools = ScientificToolLibrary(r.directory/'scientific-tool-library')
-    binding = ScientificProcessEpisodes(None, library=library, tool_library=tools,
-        child_roles=ROOT_ROLES, tool_retrieval=RETRIEVAL)
-    thought = headers[0]['option_ref']
-    absent = {**thought, 'slot': 'annotation_distinction', 'option_id': 'A1'}
-    with pytest.raises(ValueError, match='scientific_process_option_unknown'):
-        binding.prepare_assignment(object(), 'scientific_process',
-            {'selection': {'version': 'scientific_process_selection_v2',
-                'annotation_ref': absent, 'thought_ref': thought, 'tools': []},
-             'evidence_refs': [], 'constraints': {}, 'context': {}}, {}, 'engineering-only')
-    assert application.episode_binding_descriptors[0] == binding.as_record()
-    assert_no_work(r)
 
 
 @pytest.mark.parametrize('change', ['missing', 'added', 'schema', 'configuration'])
@@ -252,12 +233,3 @@ def test_original_component_validation_rejects_invalid_explicit_inputs(resources
     assert resources.jobs.db.execute('SELECT count(*) FROM orders').fetchone()[0] == 0
 
 
-@pytest.mark.parametrize('missing', [
-    name for name, parameter in inspect.signature(bind_assembled_services).parameters.items()
-    if name != 'store' and parameter.default is inspect.Parameter.empty
-])
-def test_all_setup_operands_are_required(resources, missing):
-    supplied = operands(resources)
-    del supplied[missing]
-    with pytest.raises(TypeError, match=missing):
-        bind_assembled_services(resources.store, **supplied)

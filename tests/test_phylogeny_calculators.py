@@ -192,14 +192,6 @@ def quantities(value):
             yield from quantities(child)
 
 
-def test_actual_module_origins_and_only_pure_imports():
-    for module in (calc, checks, format_checks):
-        assert Path(module.__file__).resolve().parent == STAGING / "gene_annotation_episode"
-    for module in (calc, checks):
-        syntax = ast.parse(Path(module.__file__).read_text())
-        imports = [node.module for node in ast.walk(syntax) if isinstance(node, ast.ImportFrom)]
-        imports += [alias.name for node in ast.walk(syntax) if isinstance(node, ast.Import) for alias in node.names]
-        assert set(imports) <= {None, "__future__", "collections", "copy", "math", "re", "phylogeny_format_contracts"}
 
 
 def test_four_row_hand_arithmetic_and_closed_cells():

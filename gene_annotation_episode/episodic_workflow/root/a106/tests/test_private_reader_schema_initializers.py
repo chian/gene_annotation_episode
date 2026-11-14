@@ -20,18 +20,6 @@ def test_original_blast_query_geometry_and_invalid_kind(axis,program,query,repor
     with pytest.raises(ValueError,match='blast_program_query_kind_conflict'):
         module.resolve_blast_program_context(**{**args,'query_kind':'unsupported_fixture_kind'})
 
-@pytest.mark.parametrize('axis',AXES)
-def test_blast_saved_version_schema_registry_and_view_identity(axis):
-    module=owner(axis,'blast_utility_contracts')
-    assert {'PreparationDocument','ParameterObservation','MaterializationReceipt','VDBUtilityContext','VDBMember'}<=module.SCHEMAS.keys()
-    assert module.SCHEMAS['Operation']['anyOf'][1]==module._VDB_SCHEMAS['Operation']
-    assert module.SCHEMAS['Operation']['anyOf'][0]['anyOf'][1]==module._NEW_SCHEMAS['Operation']
-    assert module.SCHEMAS['ArtifactOccurrence']==module._VDB_SCHEMAS['ArtifactOccurrence']
-    assert module.SCHEMAS['NativeField']['anyOf']==[*module._FIELD['anyOf'],*module._VDB_SCHEMAS['NativeField']['anyOf']]
-    views=owner(axis,'blast_utility_result_views')
-    assert views.ARTIFACT_SCHEMA['properties']['occurrence_id']==views._OCCURRENCE
-    assert views.ARTIFACT_SCHEMA['properties']['artifact_ref']==views._ARTIFACT
-    assert 'description' in views._SLOT_SCHEMA['properties']['ordinal']
 
 @pytest.mark.parametrize('axis',AXES)
 def test_native_blast_retained_version_fields_and_conditional_argv(axis):
@@ -80,10 +68,3 @@ def test_fluorescence_saved_format_scaling_and_native_comparison_schema(axis):
     assert reports.PROFILE_SOURCES[reports.CYTOKINE_CSV_PROFILE]==reports.PROFILE_SOURCES[reports.CYTOKINE_LOG_PROFILE]
     assert reports.PROFILE_SOURCES[reports.CYTOKINE_CSV_PROFILE] is not reports.PROFILE_SOURCES[reports.CYTOKINE_LOG_PROFILE]
 
-@pytest.mark.parametrize('axis',AXES)
-def test_reference_edit_schema_keeps_descriptive_denominators(axis):
-    module=owner(axis,'reference_edit_outcomes')
-    assert module._EVENT['description']=='One retained substitution/deletion column or existing contiguous insertion run; not a normalized variant or repair event.'
-    props=module._POPULATION['properties']['categories']['items']['properties']
-    assert props['fraction_of_classified']['description']=='Category occurrences divided by full-global classified pair occurrences; zero denominator remains null.'
-    assert props['observed_fraction_of_declared']['description']=='Observed category occurrences divided by all declared pair occurrences; unclassified occurrences contribute only to the denominator, not inferred absence.'

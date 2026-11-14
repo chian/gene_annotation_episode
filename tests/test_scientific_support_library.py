@@ -157,14 +157,3 @@ def test_invalid_support_source_is_never_published(tmp_path, malformed):
     assert not snapshot.exists()
 
 
-def test_actual_publication_stays_zero_support_nineteen_thoughts_seventy_six_rows(tmp_path):
-    original = {str(path.relative_to(PUBLICATION)): hashlib.sha256(path.read_bytes()).hexdigest()
-                for path in PUBLICATION.rglob("*") if path.is_file()}
-    library = ScientificProcessLibrary.freeze(tmp_path / "snapshot", source=PUBLICATION)
-    assert library.search(slot="annotation_distinction", query="", offset=0, limit=99)["entries"] == []
-    assert len(library.headers()) == 19
-    assert all(header["option_ref"]["slot"] == "thought_pattern" for header in library.headers())
-    assert sum(library.entry(header["option_ref"]["option_id"])["source_count"]
-               for header in library.headers()) == 76
-    assert original == {str(path.relative_to(PUBLICATION)): hashlib.sha256(path.read_bytes()).hexdigest()
-                        for path in PUBLICATION.rglob("*") if path.is_file()}

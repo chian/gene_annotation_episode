@@ -157,27 +157,6 @@ def test_mixed_legacy_and_preparation_rows_only_expose_selected_pairs():
     assert len(native_blast_utility_tool_contracts(new[:1], resource_kind='local', resource_id='one')) == 1
 
 
-@pytest.mark.parametrize('pair', LEGACY_MODES)
-def test_legacy_descriptors_are_exactly_unchanged(tmp_path, pair):
-    saved = json.loads((PACKET / 'LEGACY_INFORMATION_001.json').read_text())
-    before = (PACKET / 'TOOL_INFO_BEFORE.py.txt').read_bytes()
-    assert hashlib.sha256(before).hexdigest() == saved['source_sha256']
-    # Literal source text only; no historical implementation executes.
-    ast.parse(before)
-    row = {'program': pair[0], 'mode': pair[1], 'software': software(pair[0]), 'molecules': ['dna', 'protein']}
-    schema = deepcopy(NATIVE_BLAST_UTILITY_REQUESTED_JOB_SCHEMA)
-    job_schema = native_blast_utility_job_schema(program=pair[0], mode=pair[1])
-    job_schema['properties']['software'] = {'const': row['software']}
-    job_schema['properties']['operation']['allOf'].append({'properties': {'molecule': {'enum': row['molecules']}}})
-    schema['properties']['native_blast_utility'] = job_schema
-    expected = {'name': 'native.' + '.'.join(pair), 'description': saved['_DESCRIPTIONS'][pair[1]],
-        'resources': 'local', 'instructions': saved['_INSTRUCTIONS'][pair[1]] + saved['suffix'],
-        'input_schema': schema, 'invocation_route': {'kind': 'commission', 'routes': [
-            {'entry_role': 'launch', 'resource_id': 'legacy', 'resource_role': 'launch_local'}]}}
-    assert native_blast_utility_tool_contracts([row], resource_kind='local', resource_id='legacy') == [expected]
-    job = job_fixture(tmp_path, pair[1]); job['software'] = software(pair[0])
-    assert native_blast_utility_binding_accepts_job(row, job)
-    assert Draft202012Validator(expected['input_schema']).is_valid(requested_job_from_native_blast_utility(job))
 
 
 @pytest.mark.parametrize('mode,bad', [

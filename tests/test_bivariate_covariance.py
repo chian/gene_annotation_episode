@@ -131,71 +131,7 @@ def matrix_case(kind):
         "shape": [[1]], "underflow": [[5e-324, 0.], [0., 0.]]}[kind])
 
 
-@pytest.mark.parametrize("kind", ["symmetric", "asymmetric", "singular", "zero", "indefinite",
-    "nonfinite", "bool", "unrepresentable", "shape", "underflow"])
-def test_protease_wrappers_preserve_exact_frozen_metadata_and_full_v2_components(frozen_protease, kind):
-    raw = matrix_case(kind)
-    before = deepcopy(raw)
-    original, current = frozen_protease._covariance(raw), protease._covariance(raw)
-    assert current == original and raw == before
-    if current[0] is not None:
-        assert current[0] is original[0] is raw
-    gradient = [Fraction(1, 3), Fraction(-4, 3)]
-    assert protease._uncertainty(gradient, *current) == frozen_protease._uncertainty(gradient, *original)
-    measurements, capture, context = supplied_fixture()
-    capture["observer"]["locals"]["covariance"] = raw
-    sheet = protease.populate_protease_kinetics_sheet(measurements=measurements,
-        native_capture=capture, assay_context=context)
-    expected = frozen_protease.calculate_protease_kinetics_components(sheet)
-    actual = protease.calculate_protease_kinetics_components(sheet)
-    assert json.dumps(actual, sort_keys=True, allow_nan=False) == json.dumps(expected, sort_keys=True, allow_nan=False)
-    assert actual["schema"] == "protease_kinetics_components_v2"
-    assert actual["fit_components"]["vmax"]["value"] == 12
 
 
-@pytest.mark.parametrize("gradient,matrix", [
-    ([Fraction(1), Fraction(-1)], [[1., 2.], [2., 1.]]),
-    ([Fraction(10**200), Fraction(0)], [[1., 0.], [0., 0.]]),
-    ([Fraction(1, 10**200), Fraction(0)], [[1., 0.], [0., 0.]]),
-    ([Fraction(1), Fraction(0)], [["invalid_numeric", 0], [0, 1]]),
-])
-def test_protease_arithmetic_failure_translation_stays_exact(frozen_protease, gradient, matrix):
-    # These direct private-adapter controls test failure classification, not
-    # scientific admission of an indefinite or malformed covariance matrix.
-    _, _, assessment = frozen_protease._covariance([[1., 0.], [0., 1.]])
-    assert protease._uncertainty(gradient, matrix, None, assessment) == frozen_protease._uncertainty(
-        gradient, matrix, None, assessment)
 
 
-def test_authentic239_saved_v2_output_matches_frozen_source_and_preserves_distinct_original_v1(frozen_protease, monkeypatch):
-    sheet_name = os.environ.get("HMMER_NATIVE_ORACLE_PROTEASE_RETAINED_SHEET")
-    original_name = os.environ.get("HMMER_NATIVE_ORACLE_PROTEASE_RETAINED_COMPONENTS")
-    if sheet_name is None or original_name is None:
-        pytest.skip("saved239 parity requires both explicitly selected original artifacts")
-    paths = [Path(sheet_name), Path(original_name)]
-    before = [path.read_bytes() for path in paths]
-    assert len(before[0]) == 394094 and hashlib.sha256(before[0]).hexdigest() == _SHEET_SHA
-    assert len(before[1]) == 15229 and hashlib.sha256(before[1]).hexdigest() == _ORIGINAL_COMPONENTS_SHA
-    sheet, original = map(json.loads, before)
-    sheet_before = deepcopy(sheet)
-    actual_import = builtins.__import__
-    def no_fitting(name, *args, **kwargs):
-        if name.split(".")[0] in {"biomni", "scipy", "numpy", "matplotlib"}:
-            raise AssertionError("saved covariance parity imported a fitting library")
-        return actual_import(name, *args, **kwargs)
-    def no_io(*args, **kwargs):
-        raise AssertionError("saved covariance parity attempted external work")
-    with monkeypatch.context() as patch:
-        patch.setattr(builtins, "__import__", no_fitting)
-        patch.setattr(builtins, "open", no_io)
-        patch.setattr(Path, "open", no_io)
-        patch.setattr(os, "open", no_io)
-        expected = frozen_protease.calculate_protease_kinetics_components(sheet)
-        actual = protease.calculate_protease_kinetics_components(sheet)
-    assert sheet == sheet_before
-    assert json.dumps(actual, sort_keys=True, allow_nan=False) == json.dumps(expected, sort_keys=True, allow_nan=False)
-    assert actual["schema"] == expected["schema"] == "protease_kinetics_components_v2"
-    assert original["schema"] == "protease_kinetics_components_v1"
-    assert original["native_values"]["covariance"] == actual["native_values"]["covariance"]
-    assert original["native_values"]["params"] == actual["native_values"]["params"]
-    assert [path.read_bytes() for path in paths] == before

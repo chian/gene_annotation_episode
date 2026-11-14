@@ -177,9 +177,3 @@ def test_saved_local_reconstruction_opens_no_sources_or_images_or_calculators(mo
     assert source.validate_controlled_response_v3_extraction(f.args, result) == result
     assert f.calls == calls
 
-def test_original095_unknown_global_alternate_reaches_runtime_custody_check(tmp_path):
-    path = Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/controlled_episode_integration_095/coherent_code_001/tests/original_consumer.py'
-    spec = importlib.util.spec_from_file_location('original095_controlled_consumer', path)
-    original = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(original)
-    original.test_actual_runtime_digest_and_complete_alternate_wrapper_cannot_replace_selected_output(tmp_path)

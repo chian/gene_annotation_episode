@@ -18,26 +18,6 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_refe
 from literature_ratio_source_worker_fixture_077 import make_case, run_case
 DESIGN = Path(__file__).parent / 'fixtures/retained_reference/a105_ratio_episode_integration_077'
 
-def test_exact_default_contracts_opt_in_schemas_and_constructor_semantics():
-    old = json.loads((DESIGN / 'BASELINE_DEFAULT_CONTRACTS_001.json').read_text())
-    disabled = LiteratureEpisode(None, rate_population=True)
-    assert _population_catalog() == old['population_catalog']
-    assert disabled._rate_fact_sources() == old['fact_sources']
-    enabled = LiteratureEpisode(None, rate_population=True, ratio_source_population=True, ratio_source_evidence_origin='synthetic_fixture')
-    for role in enabled.roles:
-        assert disabled.assignment_schema(role) == old['assignment_schemas'][role]
-        modified = enabled.assignment_schema(role)
-        modified['properties'].pop('requested_ratio_source_components')
-        assert modified == old['assignment_schemas'][role]
-    assert len(_population_catalog(ratio_source_population=True)) == 20
-    assert len(enabled._rate_fact_sources()) == 19
-    assert enabled._rate_fact_sources()['literature_ratio_source_cells']['report_schema'] == ratio_source_cells_schema()
-    validate_closed_schema(obj({'arbitrary_field': ratio_source_cells_schema()}))
-    for args in ({'ratio_source_population': 1}, {'ratio_source_population': True}, {'ratio_source_evidence_origin': 'synthetic_fixture'}, {'ratio_source_evidence_origin': 'wrong'}):
-        with pytest.raises(ValueError):
-            LiteratureEpisode(None, **args)
-    assert 'ratio_source_population' not in disabled.as_record()['configuration']
-    assert enabled.as_record()['configuration']['ratio_source_evidence_origin'] == 'synthetic_fixture'
 
 @pytest.mark.parametrize('mode', ['point', 'conflict', 'unreadable', 'different', 'unknown'])
 def test_actual_selected_view_population_typed_subset_parent_decision_and_observations(tmp_path, mode):

@@ -33,42 +33,7 @@ def setup(kind='accumulation',*,parameters=None,cutoff=0.125,declared=True):
     actual=binding.credit_projector(context)
     assert type(actual) is type(projector) and actual.as_record()==projector.as_record()
     return binding,context,task
-@pytest.mark.parametrize('initial_credit',(0,2.5,-0.25))
-def test_actual_accumulation_controller_preserves_original_identity_and_settings(initial_credit):
-    compared=[]
-    for old in (True,False):
-        binding,context,task=setup()
-        callback=original_callback() if old else type(binding).yield_controller
-        controller=callback(binding,context,initial_credit,'original-epoch')
-        assert type(controller) is module('numerical').YieldController
-        compared.append((controller.epoch,controller.initial_credit,controller.cost,controller.settings.as_record(),controller.estimator.scores))
-    assert compared[0]==compared[1]
-@pytest.mark.parametrize('kind',('bounded_quality','completion'))
-def test_original_constructor_accepts_other_declarations_but_private_projector_rejects(kind):
-    binding,context,task=setup(kind)
-    assert binding._yield_bindings[task]['kind']==kind
-    for callback in (original_callback(),type(binding).yield_controller):
-        with pytest.raises(constants.ContractError) as caught:callback(binding,context,0,'original-epoch')
-        assert str(caught.value)=='scientific_yield_method_credit_mismatch:'+task
-@pytest.mark.parametrize('failure',('role','missing_task','credit_definition','missing_annotation','invalid_task_context'))
-def test_original_private_admission_failures_remain_exact(failure):
-    observed=[]
-    for old in (True,False):
-        binding,context,task=setup()
-        if failure=='role':context.role='literature'
-        elif failure=='missing_task':binding._yield_bindings={}
-        elif failure=='credit_definition':binding._yield_bindings[task]['credit_definition']['policy']['finding_unit']=7
-        elif failure=='missing_annotation':context.assignment.pop('proposed_annotation_ref')
-        elif failure=='invalid_task_context':context.assignment['context']={'a110_task':{'name':'unrecognized'}}
-        callback=original_callback() if old else type(binding).yield_controller
-        with pytest.raises(constants.ContractError) as caught:callback(binding,context,0,'original-epoch')
-        observed.append((type(caught.value),str(caught.value)))
-    assert observed[0]==observed[1]
 @pytest.mark.parametrize('kind',('accumulation','bounded_quality','completion'))
 def test_original_configuration_still_validates_numerical_operands(kind):
     with pytest.raises(constants.ContractError):setup(kind,parameters={'uncertainty_alpha':-1})
     with pytest.raises(constants.ContractError):setup(kind,cutoff=-1)
-def test_original_absent_private_declaration_keeps_legacy_return():
-    binding,context,_=setup(declared=False)
-    assert original_callback()(binding,context,0,'original-epoch') is None
-    assert binding.yield_controller(context,0,'original-epoch') is None

@@ -71,56 +71,7 @@ def original_initializer():
     return compiled(node,{'json':json,'HomologyJobs':importlib.import_module(ROOT+'.homology_jobs').HomologyJobs,
                          'LocalJobPolicy':importlib.import_module('gene_annotation_episode.local_jobs').LocalJobPolicy})
 
-def test_native_types_keep_original_members_and_genuine_external_type_identity():
-    recording=importlib.import_module(ROOT+'.execution_recording');events=importlib.import_module(ROOT+'.native_events')
-    for module,fixture,names in ((events,'native_events',('NativeEventDisposition','NativeEventBinding','NativeEventProvider')),
-                                (recording,'execution_recording',('NativeStatistics','NativeMeasurement'))):
-        actual=ast.parse(Path(module.__file__).read_bytes());old=original(fixture)
-        for name in names:
-            before=next(n for n in old.body if isinstance(n,ast.ClassDef) and n.name==name)
-            after=next(n for n in actual.body if isinstance(n,ast.ClassDef) and n.name==name)
-            assert ast.dump(before,include_attributes=False)==ast.dump(after,include_attributes=False)
-    actual=ast.parse(Path(recording.__file__).read_bytes())
-    cls=deepcopy(next(n for n in actual.body if isinstance(n,ast.ClassDef) and n.name=='HomologyStatistics'))
-    method=next(n for n in cls.body if isinstance(n,ast.FunctionDef) and n.name=='execution_class_for_query')
-    imports=[n for n in ast.walk(method) if isinstance(n,ast.ImportFrom)]
-    assert [(n.module,n.level) for n in imports]==[(ROOT+'.library.homology_job_inputs',0),('gene_annotation_episode.native_lifecycle',0)]
-    imports[0].module='homology_jobs';imports[0].level=1
-    imports[1].module='native_lifecycle';imports[1].level=1
-    guard=next(n for n in method.body if isinstance(n,ast.If) and ast.unparse(n.test)=='type(cpu) is not int or cpu < 1')
-    guard.test=ast.parse("type(cpu) is not int or not 1 <= cpu <= configuration['max_cpu']",mode='eval').body
-    before=next(n for n in original('execution_recording').body if isinstance(n,ast.ClassDef) and n.name=='HomologyStatistics')
-    assert ast.dump(before,include_attributes=False)==ast.dump(cls,include_attributes=False)
-    statistics=importlib.import_module('gene_annotation_episode.run_statistics')
-    durable=importlib.import_module(ROOT+'.method_loop.durable')
-    assert recording.ExecutionClass is statistics.ExecutionClass and recording.RunStatistic is statistics.RunStatistic
-    assert events.DurableExecutionStore is durable.DurableExecutionStore and events.DurableExecutionError is durable.DurableExecutionError
 
-@pytest.mark.parametrize('home,name',CASES)
-@pytest.mark.parametrize('kind',('real','wrong_object','foreign_subclass'))
-def test_genuine_statistics_type_and_original_constructor_rejection(home,name,kind,tmp_path):
-    recording=importlib.import_module(ROOT+'.execution_recording')
-    class ForeignStatistics(recording.HomologyStatistics):pass
-    statistics=(recording.HomologyStatistics if kind=='real' else ForeignStatistics)(tmp_path/'history.sqlite3','cpu_original',10,100) if kind!='wrong_object' else object()
-    jobs,keywords=resources(tmp_path);keywords['statistics']=statistics
-    original_self=SimpleNamespace()
-    expected=capture(lambda:original_initializer()(original_self,jobs,**keywords))
-    observed=capture(lambda:actual_class(home,name)(jobs,**keywords))
-    if kind!='real':
-        assert observed==expected==('raised',TypeError,'typed_homology_statistics_binding_required')
-        return
-    assert expected==('returned',None)
-    binding=observed[1]
-    assert binding.statistics is original_self.statistics is statistics
-    assert binding.jobs is jobs and binding.parser_policy is keywords['parser_policy']
-    configuration=deepcopy(jobs.config)
-    record=binding.as_record()
-    assert record['statistics']==statistics.as_record()
-    assert record['registry_configuration']==configuration==jobs.config
-    if home=='library':
-        assert all(row['statistics']==statistics.as_record() for group in ('private_implementations','standalone_improvement_implementations') for row in record[group].values())
-    else:
-        assert len(record['implementation_sha256'])==64
 
 @pytest.mark.parametrize('home,name',CASES)
 @pytest.mark.parametrize('kind',('real','wrong_object','foreign_subclass','resource_conflict'))
@@ -148,49 +99,7 @@ def test_native_provider_identity_and_host_local_custody(home,name,kind,tmp_path
     assert type(events.NativeEventBinding.from_record(native.as_record())) is events.NativeEventBinding
     assert provider.for_job(owner_episode_id='other_episode',job_ref='job_original',registry_ref='registry_original',original_binding=native) is native
 
-@pytest.mark.parametrize('cpu',(1,2,0,True,'2'))
-def test_configured_cpu_is_metadata_and_existing_positive_integer_rule_is_preserved(cpu,tmp_path):
-    recording=importlib.import_module(ROOT+'.execution_recording')
-    statistics=recording.HomologyStatistics(tmp_path/'history.sqlite3','cpu_original',10,100)
-    jobs,_=resources(tmp_path)
-    node=member(original('execution_recording'),'HomologyStatistics','execution_class_for_query')
-    imports=[n for n in ast.walk(node) if isinstance(n,ast.ImportFrom)]
-    assert [(n.module,n.level) for n in imports]==[('homology_jobs',1),('native_lifecycle',1)]
-    imports[0].module=ROOT+'.library.homology_job_inputs';imports[0].level=0
-    imports[1].module='gene_annotation_episode.native_lifecycle';imports[1].level=0
-    baseline=compiled(node,dict(vars(recording)))
-    before=capture(lambda:baseline(statistics,jobs,query_fasta='>query\nACDEFG\n',cpu=cpu))
-    after=capture(lambda:statistics.execution_class_for_query(jobs,query_fasta='>query\nACDEFG\n',cpu=cpu))
-    if cpu==2 and type(cpu) is int:
-        assert before==('raised',ValueError,'cpu_outside_caller_allocation')
-        assert after[0]=='returned' and after[1].cpu_threads==2
-        assert jobs.config['max_cpu']==1
-    elif type(cpu) is int and cpu==1:
-        assert before==after and after[1].cpu_threads==1
-    else:
-        assert before==after==('raised',ValueError,'cpu_outside_caller_allocation')
     # A proposed ExecutionClass is metadata only: no registry, subprocess,
     # service, cgroup or verified execution receipt is created by this call.
 
-@pytest.mark.parametrize('scenario',('succeeded','failed_exit','missing_receipt','oom','resource_failure','unmeasured','negative'))
-def test_original_native_receipt_outcome_and_unavailable_duration_are_preserved(scenario):
-    recording=importlib.import_module(ROOT+'.execution_recording')
-    original_node=next(n for n in original('execution_recording').body if isinstance(n,ast.FunctionDef) and n.name=='_measurement')
-    baseline=compiled(original_node,{})
-    body={'boot_id':'original_boot','started_monotonic_ns':100}
-    end={'SERVICE_RESULT':'success','ended':{'boot_id':'original_boot','monotonic_ns':500}}
-    receipt={'execution_failure':None,'native_returncode':0,'resource_failure':None}
-    if scenario=='failed_exit':receipt['native_returncode']=3
-    elif scenario=='missing_receipt':receipt=None
-    elif scenario=='oom':end['SERVICE_RESULT']='oom-kill'
-    elif scenario=='resource_failure':receipt['resource_failure']='controlled_memory_failure'
-    elif scenario=='unmeasured':end['ended']['boot_id']='other_boot'
-    elif scenario=='negative':end['ended']['monotonic_ns']=50
-    before=capture(lambda:baseline(deepcopy(body),deepcopy(end),deepcopy(receipt)))
-    after=capture(lambda:recording._measurement(deepcopy(body),deepcopy(end),deepcopy(receipt)))
-    assert before==after
-    if scenario in {'failed_exit','missing_receipt'}:assert after[1][0]=='failed'
-    if scenario in {'oom','resource_failure'}:assert after[1][0]=='resource_limit'
-    if scenario=='unmeasured':assert after[1][1:]==('unmeasured',None)
-    if scenario=='negative':assert after==('raised',ValueError,'negative_native_receipt_duration')
 

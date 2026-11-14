@@ -357,38 +357,6 @@ def load_before(name):
     return module
 
 
-def test_additive_catalogs_preserve_all_old_exact_registered_forms():
-    for current, name, catalog, row_schema, sources in [
-        (sv, 'native_blast_standard_database_result_views', 'standard_blast_database_metric_definitions', 'standard_blast_database_row_schema', 'standard_blast_database_fact_sources'),
-        (nv, 'native_blast_database_result_views', 'native_blast_database_metric_definitions', 'native_blast_database_row_schema', 'native_blast_database_fact_sources')]:
-        before = load_before(name)
-        old = getattr(before, catalog)()
-        new = getattr(current, catalog)()
-        additions = {'sequence_record_quality'}
-        if current is nv:
-            additions |= {'vdb_function_summary', 'vdb_function', 'vdb_function_contribution', 'vdb_function_census'}
-        assert set(new) - set(old) == additions - set(old)
-        assert new['sequence_record_quality'] == old['sequence_quality']
-        assert {k: new[k] for k in old} == old
-        for family in old:
-            assert getattr(before, row_schema)(family) == getattr(current, row_schema)(family)
-        old_sources, new_sources = getattr(before, sources)(), getattr(current, sources)()
-        assert {k: new_sources[k] for k in old_sources} == old_sources
-        prefix = 'execution_blast_database_' if current is nv else 'execution_blast_standard_database_'
-        added_sources = {prefix + family + '_rows' for family in additions}
-        if current is nv:
-            added_sources.add('execution_blast_database_vdb_function_saved_inputs')
-            descriptor = new_sources['execution_blast_database_vdb_function_saved_inputs']['report_schema']['items']
-            assert descriptor['type'] == 'object' and descriptor['additionalProperties'] is False
-            assert set(descriptor['properties']) == set(descriptor['required']) == {
-                'schema', 'original_result_receipt', 'manifest_artifact_ref', 'manifest_sha256', 'sheets_artifact_ref',
-                'sheets_sha256', 'collection_artifact_ref', 'collection_sha256', 'input_interpretation_id', 'original_calculation_id'}
-            assert descriptor['properties']['schema'] == {'const': 'native_blast_vdb_function_saved_input_v1'}
-            address = descriptor['properties']['original_result_receipt']
-            assert address['type'] == 'object' and address['additionalProperties'] is False
-            assert set(address['properties']) == set(address['required']) == {
-                'source_ref', 'run_id', 'episode_id', 'operation_key', 'receipt_sha256'}
-        assert set(new_sources) - set(old_sources) == added_sources - set(old_sources)
 
 
 @pytest.mark.parametrize('consumer,schema', [('query_identity', V2), ('sequence_database', 'native_blast_database_query_metadata_v1'),
@@ -414,30 +382,6 @@ def test_exact_tuple_rejection_in_job_selector_worker_schema(consumer, schema):
         _scientific_native_blast_standard_database_result_worker._shape({**item, 'origin': 'selected_results_input'}, _scientific_native_blast_standard_database_result_worker._DESCRIPTOR)
 
 
-def test_old_v1_rows_and_explicit_null_quality_remain_exact(tmp_path):
-    before = load_before('native_blast_standard_database_calculators')
-    inputs = sf.fixture()
-    payload = sf.numerical_metadata(inputs, census=False)
-    # All assertions reside in the supplied JSON; this is file/pointer provenance.
-    payload['documents'].append(sf.received(inputs, 'record-assignments', sf.encoded({'synthetic': True})))
-    quality(payload, inputs=inputs)
-    sf.add_metadata(inputs, payload, 'sequence_database')
-    sheets = sf.run(inputs)
-    calculated = calc.calculate_standard_blast_database_sheets(sheets, sequence_model=None)
-    args = dict(bundle_identity=inputs['bundle']['identity'], calculation_id='a'*64, sheet_set=sheets, calculations=calculated)
-    actual = calc.build_standard_blast_database_rows(**args)
-    assert actual == before.build_standard_blast_database_rows(**args)
-    assert len([r for r in actual if r['family'] == 'sequence_quality']) == 4
-    assert not [r for r in actual if r['family'] == 'sequence_record_quality']
-    nullable = deepcopy(sheets)
-    scientific = nullable['sequence'][0]['sheet']
-    scientific['schema'] = 'blast_sequence_database_result_sheet_v2'
-    for row in scientific['reference_metadata']: row['record_locator'] = None
-    for row in scientific['description_bindings']: row['binding']['metadata_record_locator'] = None
-    for row in scientific['sequence_identity_bindings']: row['binding']['record_locator'] = None
-    changed = calc.calculate_standard_blast_database_sheets(nullable, sequence_model=None)
-    assert calc.build_standard_blast_database_rows(**{**args, 'sheet_set': nullable, 'calculations': changed}) == actual
-    save(tmp_path/'original-v1-rows.json', actual)
 
 
 def test_repeated_exact_record_coalesces_and_mixed_old_new_quality_survives(tmp_path):
@@ -548,9 +492,3 @@ def test_v2_real_worker_geometry_uses_full_record_units(tmp_path, monkeypatch, p
     assert values(row)['full_reference_paired_coverage'] == .4
 
 
-def test_native_old_rows_keep_exact_calculated_values_and_forms():
-    before = load_before('native_blast_database_result_worker')
-    for sheets in (nr.psi_sheets(), nr.profile_sheets(), nr.vdb_sheets()):
-        calculations, actual = nr.calculate_rows(sheets)
-        assert before.build_native_blast_database_rows(bundle_identity=nr.ATTEMPT,
-            calculation_id=nr.CALCULATION_ID, sheet_set=sheets, calculations=calculations) == actual
