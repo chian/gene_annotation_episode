@@ -18,7 +18,7 @@ from gene_annotation_episode.bvbrc_proteome_data_contracts import ProteomeDataEr
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXAMPLES = ROOT / "verification/tool_graders_bvbrc_proteome_sheet_contract_2026-10-25_165"
+EXAMPLES = ROOT / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/proteome_sheet_contract"
 IDENTITY = "native_first_hsp_alignment_identity_fraction"
 
 
@@ -647,7 +647,7 @@ def test_cross_input_identifier_collisions_cannot_be_hidden():
 
 def tsv_sheet():
     saved = sheet()
-    original = ROOT / "verification/tool_graders_bvbrc_proteome_native_2026-10-25/SYNTHETIC_PROJECTIONS_001.json"
+    original = ROOT / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/proteome_native/SYNTHETIC_PROJECTIONS_001.json"
     result = json.loads(original.read_text())[1]["result"]
     primary = result["value"]
     saved["native_results"] = [result]

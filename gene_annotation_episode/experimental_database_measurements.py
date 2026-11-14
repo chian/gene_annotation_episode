@@ -192,7 +192,7 @@ def read_measurement(selection, *, sources, read_record, read_database_request, 
         status, reason = 'unavailable', 'native_measurement_relation_unresolved'
     factor = 1.
     if unit is not None and unit != 'native_score':
-        from .literature_assay_grading_inputs import _unit
+        from .episodic_workflow.root.a105.library.literature_assay_grading_inputs import _unit
         aliases = {'s^(-1)': 's^-1', 'min^(-1)': 'min^-1', 'M': 'M',
                    'percent': '%', 'ratio': 'dimensionless'}
         try:

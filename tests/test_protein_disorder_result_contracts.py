@@ -25,7 +25,7 @@ CASES = ("ordinary", "duplicate", "unsorted", "nonfinite", "skipped", "empty", "
 
 @lru_cache(maxsize=1)
 def retained():
-    raw = (Path(__file__).parent / "fixtures/protein_disorder231/retained_values.json").read_bytes()
+    raw = (Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/protein_disorder231/retained_values.json").read_bytes()
     assert len(raw) == 253166 and hashlib.sha256(raw).hexdigest() == RETAINED_SHA256
     value = json.loads(raw)
     assert value["schema"] == "retained_protein_disorder231_values_v1"

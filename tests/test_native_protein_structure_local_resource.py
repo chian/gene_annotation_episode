@@ -32,7 +32,7 @@ from gene_annotation_episode.practical_execution_records import ASSIGNMENT_SCHEM
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
 from gene_annotation_episode.state import Store
 
-_f = import_module('verification.tool_graders_protein_structure_execution_2026-10-27_390.fixture_helpers')
+_f = import_module('gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390')
 RUN, EPISODE, RESOURCE = 'protein-local-run', 'protein-local-child', 'selected-local'
 FIELDS = ['execution_status', 'measurements', 'log_windows', 'result_available']
 

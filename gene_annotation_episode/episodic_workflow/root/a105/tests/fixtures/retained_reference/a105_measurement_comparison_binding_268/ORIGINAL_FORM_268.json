@@ -1,0 +1,3787 @@
+{
+  "limit": "source_qualifications_retained",
+  "numbers": [
+    {
+      "assertion_context": {
+        "functional_assertion": {
+          "fragments": [
+            {
+              "location": {
+                "artifact_ref": "artifact_207abf4aa206635c4c1514ddeab77e2571847684a6192c7a626443c731febe91",
+                "end": 3043,
+                "representation": "original",
+                "source_ref": "source_5e26b5128d75bdf1c6eec7fc",
+                "start": 2946
+              },
+              "text": "Reaction5 links one two-electron ferredoxin and one NADH per two NADPH in its\nbackward direction."
+            }
+          ],
+          "status": "selected"
+        },
+        "molecule": {
+          "fragments": [
+            {
+              "location": {
+                "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                "end": 8373,
+                "representation": "original",
+                "source_ref": "source_009eb4975b1d54e1284959e0",
+                "start": 8368
+              },
+              "text": "NfnAB"
+            }
+          ],
+          "status": "selected"
+        }
+      },
+      "assertion_question": "quantitative_activity",
+      "assumptions": [
+        "fixed_reaction_conversion",
+        "no_reference_distribution_assumed"
+      ],
+      "cell": {
+        "approximate": true,
+        "component": "protocol_ratio",
+        "conditional_exact_value": null,
+        "conditional_value": null,
+        "contribution_key": "measurement_comparison_contribution_a3618ecea4b22bde26267fe3",
+        "exact_value": {
+          "denominator": "23",
+          "numerator": "8"
+        },
+        "formula": "L/R",
+        "input_origins": [
+          "reported"
+        ],
+        "interpretation": "descriptive_protocol_comparison",
+        "meaning_code": "protocol_ratio",
+        "model_keys": [
+          "measurement_comparison_conversion_a6e3634e87587822cb9bf260",
+          "measurement_comparison_conversion_48634796fde67ae7ef4442ff"
+        ],
+        "operand_keys": [
+          "literature_measurement_4686b5403d7b14974629275e",
+          "literature_measurement_cbc25026e44928b9aaaf1b05"
+        ],
+        "operand_roles": [
+          "left",
+          "right"
+        ],
+        "origin": "derived",
+        "reasons": {
+          "domain": [],
+          "implementation": [],
+          "relationship": [],
+          "source": []
+        },
+        "relation": "point",
+        "status": "populated",
+        "uncertainty": {
+          "covariance_source_refs": [],
+          "sampling_distribution": "not_assumed",
+          "scope": "not_applicable",
+          "variance_status": "not_selected"
+        },
+        "unit": "dimensionless",
+        "value": 0.34782608695652173
+      },
+      "component": "protocol_ratio",
+      "conversion_conditions": [
+        {
+          "direction": "same_direction_supported",
+          "kind": "fixed_reaction_scale",
+          "role": "left",
+          "support_status": "supported"
+        },
+        {
+          "direction": "same_direction_supported",
+          "kind": "fixed_reaction_scale",
+          "role": "right",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [],
+      "dependence": [
+        {
+          "relation": "sampling_unknown",
+          "roles": [
+            "left",
+            "right"
+          ]
+        }
+      ],
+      "dependencies": [
+        {
+          "dependency_keys": [
+            "literature_measurement_4686b5403d7b14974629275e"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "owner_key": "literature_measurement_4686b5403d7b14974629275e",
+          "physical_owner_key": null,
+          "role": "left",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 86459,
+              "representation": "original",
+              "source_ref": "source_9c0cbfde901e6349ff33e9db",
+              "start": 86458
+            }
+          ],
+          "unit": "umol/min/mg"
+        },
+        {
+          "dependency_keys": [
+            "literature_measurement_cbc25026e44928b9aaaf1b05"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "owner_key": "literature_measurement_cbc25026e44928b9aaaf1b05",
+          "physical_owner_key": null,
+          "role": "right",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 85833,
+              "representation": "original",
+              "source_ref": "source_9c0cbfde901e6349ff33e9db",
+              "start": 85831
+            }
+          ],
+          "unit": "umol/min/mg"
+        }
+      ],
+      "evaluation_scope": "source_measurement_comparison",
+      "evidence_source_ref": "source_9c0cbfde901e6349ff33e9db",
+      "model_conditions": [],
+      "model_settings": {
+        "common_combination": "not_selected",
+        "common_variance_interpretation": "not_selected",
+        "optical_nuisance_sign": null,
+        "optical_observation_equation": null,
+        "optical_signal_role": null,
+        "scenario_anchor_role": null
+      },
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "fixed_reaction_conversion"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "sampling",
+          "value": "independence_not_established"
+        },
+        {
+          "name": "systematic_coverage",
+          "value": "identified_unresolved"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "mixed_optical_contributions"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        },
+        {
+          "name": "protocol",
+          "value": "additional_differences"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "existence_only"
+        },
+        {
+          "name": "left_validity",
+          "value": "identified_unresolved_interference"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        }
+      ],
+      "role_meanings": [
+        {
+          "approximate": true,
+          "contexts": [
+            {
+              "field": "assay.active_fraction",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.additional_differences",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.assay",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.blank",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.calibration",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.conditions",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.denominator",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 18166,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 18162
+                  },
+                  "text": "NADH"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "assay.fit_basis",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.intended_change",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.partners",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.preparation",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purity",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.sampling_unit",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.substrates",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.time_window",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "quantity_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "row_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.arrangement",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.construct",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 13459,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 13383
+                  },
+                  "text": "nfnAB\nwith both an\nnfnA\n5\u2032 His\n6\ncassette and an\nnfnB\n3\u2032 His\n6\ncassette."
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.expression_host",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.genotype",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.molecule",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8373,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8368
+                  },
+                  "text": "NfnAB"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.organism",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8502,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8483
+                  },
+                  "text": "C. kluyveri\nDSM 555"
+                }
+              ],
+              "status": "selected"
+            }
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "qualification": "rounded_after_fit",
+          "quantity_kind": "apparent_specific_activity",
+          "relation": "point",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "reported_uncertainty_statistic": "unreported",
+          "role": "left",
+          "semantics": "reported_point_estimate"
+        },
+        {
+          "approximate": true,
+          "contexts": [
+            {
+              "field": "assay.active_fraction",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.additional_differences",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.assay",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.blank",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.calibration",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.conditions",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.denominator",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 19017,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 19007
+                  },
+                  "text": "ferredoxin"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "assay.fit_basis",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.intended_change",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.partners",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.preparation",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purity",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.sampling_unit",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.substrates",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.time_window",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "quantity_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "row_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.arrangement",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.construct",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 13459,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 13383
+                  },
+                  "text": "nfnAB\nwith both an\nnfnA\n5\u2032 His\n6\ncassette and an\nnfnB\n3\u2032 His\n6\ncassette."
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.expression_host",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.genotype",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.molecule",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8373,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8368
+                  },
+                  "text": "NfnAB"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.organism",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8502,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8483
+                  },
+                  "text": "C. kluyveri\nDSM 555"
+                }
+              ],
+              "status": "selected"
+            }
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "qualification": "rounded_after_fit",
+          "quantity_kind": "apparent_specific_activity",
+          "relation": "point",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "reported_uncertainty_statistic": "unreported",
+          "role": "right",
+          "semantics": "reported_point_estimate"
+        }
+      ],
+      "row_version": "measurement_comparison_return_v2",
+      "sheet_ref": "source_9eec72f3328cfe8d3f366fd6",
+      "source_kind": "primary_source",
+      "withheld_locations": [
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 86459,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 86458
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 86396,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 86377
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 84635,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 84595
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 84634,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 84630
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18210,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18138
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18174,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18151
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18152,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18151
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18158,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18153
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18174,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18171
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18166,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18162
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 92042,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 91990
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 8502,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 8483
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 8373,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 8368
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 13459,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 13383
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 12980,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 12973
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 21440,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 17018
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 85833,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 85831
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 85769,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 85691
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19061,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18983
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19025,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18996
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18997,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18996
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19003,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18998
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19025,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 19022
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19017,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 19007
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32761,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32758
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32779,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32745
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32751,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32745
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32755,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32753
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32777,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32762
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 34566,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32428
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33093,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33090
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33111,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33052
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33072,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33052
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33085,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33074
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33109,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33094
+        },
+        {
+          "artifact_ref": "artifact_207abf4aa206635c4c1514ddeab77e2571847684a6192c7a626443c731febe91",
+          "end": 3043,
+          "representation": "original",
+          "source_ref": "source_5e26b5128d75bdf1c6eec7fc",
+          "start": 2946
+        }
+      ]
+    },
+    {
+      "assertion_context": {
+        "functional_assertion": {
+          "fragments": [
+            {
+              "location": {
+                "artifact_ref": "artifact_207abf4aa206635c4c1514ddeab77e2571847684a6192c7a626443c731febe91",
+                "end": 3043,
+                "representation": "original",
+                "source_ref": "source_5e26b5128d75bdf1c6eec7fc",
+                "start": 2946
+              },
+              "text": "Reaction5 links one two-electron ferredoxin and one NADH per two NADPH in its\nbackward direction."
+            }
+          ],
+          "status": "selected"
+        },
+        "molecule": {
+          "fragments": [
+            {
+              "location": {
+                "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                "end": 8373,
+                "representation": "original",
+                "source_ref": "source_009eb4975b1d54e1284959e0",
+                "start": 8368
+              },
+              "text": "NfnAB"
+            }
+          ],
+          "status": "selected"
+        }
+      },
+      "assertion_question": "quantitative_activity",
+      "assumptions": [
+        "fixed_reaction_conversion",
+        "no_reference_distribution_assumed"
+      ],
+      "cell": {
+        "approximate": true,
+        "component": "protocol_difference",
+        "conditional_exact_value": null,
+        "conditional_value": null,
+        "contribution_key": "measurement_comparison_contribution_a3618ecea4b22bde26267fe3",
+        "exact_value": {
+          "denominator": "1",
+          "numerator": "-15"
+        },
+        "formula": "L-R",
+        "input_origins": [
+          "reported"
+        ],
+        "interpretation": "descriptive_protocol_comparison",
+        "meaning_code": "protocol_difference",
+        "model_keys": [
+          "measurement_comparison_conversion_a6e3634e87587822cb9bf260",
+          "measurement_comparison_conversion_48634796fde67ae7ef4442ff"
+        ],
+        "operand_keys": [
+          "literature_measurement_4686b5403d7b14974629275e",
+          "literature_measurement_cbc25026e44928b9aaaf1b05"
+        ],
+        "operand_roles": [
+          "left",
+          "right"
+        ],
+        "origin": "derived",
+        "reasons": {
+          "domain": [],
+          "implementation": [],
+          "relationship": [],
+          "source": []
+        },
+        "relation": "point",
+        "status": "populated",
+        "uncertainty": {
+          "covariance_source_refs": [],
+          "sampling_distribution": "not_assumed",
+          "scope": "not_applicable",
+          "variance_status": "not_selected"
+        },
+        "unit": "umol/min/mg",
+        "value": -15.0
+      },
+      "component": "protocol_difference",
+      "conversion_conditions": [
+        {
+          "direction": "same_direction_supported",
+          "kind": "fixed_reaction_scale",
+          "role": "left",
+          "support_status": "supported"
+        },
+        {
+          "direction": "same_direction_supported",
+          "kind": "fixed_reaction_scale",
+          "role": "right",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [],
+      "dependence": [
+        {
+          "relation": "sampling_unknown",
+          "roles": [
+            "left",
+            "right"
+          ]
+        }
+      ],
+      "dependencies": [
+        {
+          "dependency_keys": [
+            "literature_measurement_4686b5403d7b14974629275e"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "owner_key": "literature_measurement_4686b5403d7b14974629275e",
+          "physical_owner_key": null,
+          "role": "left",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 86459,
+              "representation": "original",
+              "source_ref": "source_9c0cbfde901e6349ff33e9db",
+              "start": 86458
+            }
+          ],
+          "unit": "umol/min/mg"
+        },
+        {
+          "dependency_keys": [
+            "literature_measurement_cbc25026e44928b9aaaf1b05"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "owner_key": "literature_measurement_cbc25026e44928b9aaaf1b05",
+          "physical_owner_key": null,
+          "role": "right",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 85833,
+              "representation": "original",
+              "source_ref": "source_9c0cbfde901e6349ff33e9db",
+              "start": 85831
+            }
+          ],
+          "unit": "umol/min/mg"
+        }
+      ],
+      "evaluation_scope": "source_measurement_comparison",
+      "evidence_source_ref": "source_9c0cbfde901e6349ff33e9db",
+      "model_conditions": [],
+      "model_settings": {
+        "common_combination": "not_selected",
+        "common_variance_interpretation": "not_selected",
+        "optical_nuisance_sign": null,
+        "optical_observation_equation": null,
+        "optical_signal_role": null,
+        "scenario_anchor_role": null
+      },
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "fixed_reaction_conversion"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "sampling",
+          "value": "independence_not_established"
+        },
+        {
+          "name": "systematic_coverage",
+          "value": "identified_unresolved"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "mixed_optical_contributions"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        },
+        {
+          "name": "protocol",
+          "value": "additional_differences"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "existence_only"
+        },
+        {
+          "name": "left_validity",
+          "value": "identified_unresolved_interference"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        }
+      ],
+      "role_meanings": [
+        {
+          "approximate": true,
+          "contexts": [
+            {
+              "field": "assay.active_fraction",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.additional_differences",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.assay",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.blank",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.calibration",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.conditions",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.denominator",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 18166,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 18162
+                  },
+                  "text": "NADH"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "assay.fit_basis",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.intended_change",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.partners",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.preparation",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purity",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.sampling_unit",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.substrates",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.time_window",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "quantity_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "row_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.arrangement",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.construct",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 13459,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 13383
+                  },
+                  "text": "nfnAB\nwith both an\nnfnA\n5\u2032 His\n6\ncassette and an\nnfnB\n3\u2032 His\n6\ncassette."
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.expression_host",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.genotype",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.molecule",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8373,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8368
+                  },
+                  "text": "NfnAB"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.organism",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8502,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8483
+                  },
+                  "text": "C. kluyveri\nDSM 555"
+                }
+              ],
+              "status": "selected"
+            }
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "qualification": "rounded_after_fit",
+          "quantity_kind": "apparent_specific_activity",
+          "relation": "point",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "reported_uncertainty_statistic": "unreported",
+          "role": "left",
+          "semantics": "reported_point_estimate"
+        },
+        {
+          "approximate": true,
+          "contexts": [
+            {
+              "field": "assay.active_fraction",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.additional_differences",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.assay",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.blank",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.calibration",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.conditions",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.denominator",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 19017,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 19007
+                  },
+                  "text": "ferredoxin"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "assay.fit_basis",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.intended_change",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.partners",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.preparation",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purity",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.sampling_unit",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.substrates",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.time_window",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "quantity_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "row_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.arrangement",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.construct",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 13459,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 13383
+                  },
+                  "text": "nfnAB\nwith both an\nnfnA\n5\u2032 His\n6\ncassette and an\nnfnB\n3\u2032 His\n6\ncassette."
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.expression_host",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.genotype",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.molecule",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8373,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8368
+                  },
+                  "text": "NfnAB"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.organism",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8502,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8483
+                  },
+                  "text": "C. kluyveri\nDSM 555"
+                }
+              ],
+              "status": "selected"
+            }
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "qualification": "rounded_after_fit",
+          "quantity_kind": "apparent_specific_activity",
+          "relation": "point",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "reported_uncertainty_statistic": "unreported",
+          "role": "right",
+          "semantics": "reported_point_estimate"
+        }
+      ],
+      "row_version": "measurement_comparison_return_v2",
+      "sheet_ref": "source_9eec72f3328cfe8d3f366fd6",
+      "source_kind": "primary_source",
+      "withheld_locations": [
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 86459,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 86458
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 86396,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 86377
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 84635,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 84595
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 84634,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 84630
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18210,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18138
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18174,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18151
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18152,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18151
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18158,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18153
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18174,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18171
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18166,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18162
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 92042,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 91990
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 8502,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 8483
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 8373,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 8368
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 13459,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 13383
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 12980,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 12973
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 21440,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 17018
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 85833,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 85831
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 85769,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 85691
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19061,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18983
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19025,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18996
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18997,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18996
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19003,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18998
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19025,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 19022
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19017,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 19007
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32761,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32758
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32779,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32745
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32751,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32745
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32755,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32753
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32777,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32762
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 34566,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32428
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33093,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33090
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33111,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33052
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33072,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33052
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33085,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33074
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33109,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33094
+        },
+        {
+          "artifact_ref": "artifact_207abf4aa206635c4c1514ddeab77e2571847684a6192c7a626443c731febe91",
+          "end": 3043,
+          "representation": "original",
+          "source_ref": "source_5e26b5128d75bdf1c6eec7fc",
+          "start": 2946
+        }
+      ]
+    },
+    {
+      "assertion_context": {
+        "functional_assertion": {
+          "fragments": [
+            {
+              "location": {
+                "artifact_ref": "artifact_207abf4aa206635c4c1514ddeab77e2571847684a6192c7a626443c731febe91",
+                "end": 3043,
+                "representation": "original",
+                "source_ref": "source_5e26b5128d75bdf1c6eec7fc",
+                "start": 2946
+              },
+              "text": "Reaction5 links one two-electron ferredoxin and one NADH per two NADPH in its\nbackward direction."
+            }
+          ],
+          "status": "selected"
+        },
+        "molecule": {
+          "fragments": [
+            {
+              "location": {
+                "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                "end": 8373,
+                "representation": "original",
+                "source_ref": "source_009eb4975b1d54e1284959e0",
+                "start": 8368
+              },
+              "text": "NfnAB"
+            }
+          ],
+          "status": "selected"
+        }
+      },
+      "assertion_question": "quantitative_activity",
+      "assumptions": [
+        "fixed_reaction_conversion",
+        "common_rate_equality_stipulated",
+        "linear_estimate_scale_mapping_stipulated",
+        "no_reference_distribution_assumed"
+      ],
+      "cell": {
+        "approximate": true,
+        "component": "required_nuisance_equivalent_scenario",
+        "conditional_exact_value": {
+          "denominator": "43",
+          "numerator": "90"
+        },
+        "conditional_value": 2.0930232558139537,
+        "contribution_key": "measurement_comparison_optical_contribution_b83d0886c0d073d05145d860",
+        "exact_value": null,
+        "formula": "(y-H)/(s*alpha)",
+        "input_origins": [
+          "reported"
+        ],
+        "interpretation": "stipulated_report_scale_scenario",
+        "meaning_code": "required_nuisance_equivalent_scenario",
+        "model_keys": [
+          "measurement_comparison_optical_model_ad0bb35701ac1f3aed3b1582",
+          "measurement_comparison_conversion_a6e3634e87587822cb9bf260",
+          "measurement_comparison_conversion_48634796fde67ae7ef4442ff"
+        ],
+        "operand_keys": [
+          "literature_measurement_4686b5403d7b14974629275e",
+          "literature_measurement_cbc25026e44928b9aaaf1b05",
+          "literature_measurement_a4b6c9fbdf2a24589cffcea0",
+          "literature_measurement_0fb93a3471fbf85ea3b3f8bf"
+        ],
+        "operand_roles": [
+          "left",
+          "right",
+          "epsilon_nuisance",
+          "epsilon_signal"
+        ],
+        "origin": "derived",
+        "reasons": {
+          "domain": [],
+          "implementation": [],
+          "relationship": [],
+          "source": []
+        },
+        "relation": "point",
+        "status": "conditional_scenario",
+        "uncertainty": {
+          "covariance_source_refs": [],
+          "sampling_distribution": "not_assumed",
+          "scope": "not_applicable",
+          "variance_status": "not_selected"
+        },
+        "unit": "umol_nuisance_equivalent/min/mg_on_apparent_report_scale",
+        "value": null
+      },
+      "component": "required_nuisance_equivalent_scenario",
+      "conversion_conditions": [
+        {
+          "direction": "same_direction_supported",
+          "kind": "fixed_reaction_scale",
+          "role": "left",
+          "support_status": "supported"
+        },
+        {
+          "direction": "same_direction_supported",
+          "kind": "fixed_reaction_scale",
+          "role": "right",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [],
+      "dependence": [
+        {
+          "relation": "sampling_unknown",
+          "roles": [
+            "left",
+            "right"
+          ]
+        }
+      ],
+      "dependencies": [
+        {
+          "dependency_keys": [
+            "literature_measurement_4686b5403d7b14974629275e"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "owner_key": "literature_measurement_4686b5403d7b14974629275e",
+          "physical_owner_key": null,
+          "role": "left",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 86459,
+              "representation": "original",
+              "source_ref": "source_9c0cbfde901e6349ff33e9db",
+              "start": 86458
+            }
+          ],
+          "unit": "umol/min/mg"
+        },
+        {
+          "dependency_keys": [
+            "literature_measurement_cbc25026e44928b9aaaf1b05"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "owner_key": "literature_measurement_cbc25026e44928b9aaaf1b05",
+          "physical_owner_key": null,
+          "role": "right",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 85833,
+              "representation": "original",
+              "source_ref": "source_9c0cbfde901e6349ff33e9db",
+              "start": 85831
+            }
+          ],
+          "unit": "umol/min/mg"
+        },
+        {
+          "dependency_keys": [
+            "literature_measurement_a4b6c9fbdf2a24589cffcea0"
+          ],
+          "estimator_scale": "parameter_estimate",
+          "owner_key": "literature_measurement_a4b6c9fbdf2a24589cffcea0",
+          "physical_owner_key": null,
+          "role": "epsilon_nuisance",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+              "end": 33093,
+              "representation": "original",
+              "source_ref": "source_009eb4975b1d54e1284959e0",
+              "start": 33090
+            }
+          ],
+          "unit": "mM^-1cm^-1"
+        },
+        {
+          "dependency_keys": [
+            "literature_measurement_0fb93a3471fbf85ea3b3f8bf"
+          ],
+          "estimator_scale": "parameter_estimate",
+          "owner_key": "literature_measurement_0fb93a3471fbf85ea3b3f8bf",
+          "physical_owner_key": null,
+          "role": "epsilon_signal",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+              "end": 32761,
+              "representation": "original",
+              "source_ref": "source_009eb4975b1d54e1284959e0",
+              "start": 32758
+            }
+          ],
+          "unit": "mM^-1cm^-1"
+        }
+      ],
+      "evaluation_scope": "source_measurement_comparison",
+      "evidence_source_ref": "source_9c0cbfde901e6349ff33e9db",
+      "model_conditions": [
+        {
+          "name": "optical.raw_optical_relation",
+          "state": "supported"
+        },
+        {
+          "name": "optical.scenario.common_rate_equality",
+          "state": "stipulated_sensitivity"
+        },
+        {
+          "name": "optical.scenario.linear_mixture_on_estimate_scale",
+          "state": "stipulated_sensitivity"
+        },
+        {
+          "name": "optical.coefficient_applicability",
+          "state": "supported"
+        }
+      ],
+      "model_settings": {
+        "common_combination": "not_selected",
+        "common_variance_interpretation": "not_selected",
+        "optical_nuisance_sign": -1,
+        "optical_observation_equation": "y=h+s*alpha*f",
+        "optical_signal_role": "left",
+        "scenario_anchor_role": "right"
+      },
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "fixed_reaction_conversion"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "protocol",
+          "value": "additional_differences"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "existence_only"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "left_validity",
+          "value": "identified_unresolved_interference"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "mixed_optical_contributions"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        }
+      ],
+      "role_meanings": [
+        {
+          "approximate": true,
+          "contexts": [
+            {
+              "field": "assay.active_fraction",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.additional_differences",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.assay",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.blank",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.calibration",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.conditions",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.denominator",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 18166,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 18162
+                  },
+                  "text": "NADH"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "assay.fit_basis",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.intended_change",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.partners",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.preparation",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purity",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.sampling_unit",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.substrates",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.time_window",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "quantity_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "row_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.arrangement",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.construct",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 13459,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 13383
+                  },
+                  "text": "nfnAB\nwith both an\nnfnA\n5\u2032 His\n6\ncassette and an\nnfnB\n3\u2032 His\n6\ncassette."
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.expression_host",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.genotype",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.molecule",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8373,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8368
+                  },
+                  "text": "NfnAB"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.organism",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8502,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8483
+                  },
+                  "text": "C. kluyveri\nDSM 555"
+                }
+              ],
+              "status": "selected"
+            }
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "qualification": "rounded_after_fit",
+          "quantity_kind": "apparent_specific_activity",
+          "relation": "point",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "reported_uncertainty_statistic": "unreported",
+          "role": "left",
+          "semantics": "reported_point_estimate"
+        },
+        {
+          "approximate": true,
+          "contexts": [
+            {
+              "field": "assay.active_fraction",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.additional_differences",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.assay",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.blank",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.calibration",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.conditions",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.denominator",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 19017,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 19007
+                  },
+                  "text": "ferredoxin"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "assay.fit_basis",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.intended_change",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.partners",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.preparation",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purity",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.sampling_unit",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.substrates",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.time_window",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "quantity_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "row_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.arrangement",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.construct",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 13459,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 13383
+                  },
+                  "text": "nfnAB\nwith both an\nnfnA\n5\u2032 His\n6\ncassette and an\nnfnB\n3\u2032 His\n6\ncassette."
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.expression_host",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.genotype",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.molecule",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8373,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8368
+                  },
+                  "text": "NfnAB"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.organism",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8502,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8483
+                  },
+                  "text": "C. kluyveri\nDSM 555"
+                }
+              ],
+              "status": "selected"
+            }
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "qualification": "rounded_after_fit",
+          "quantity_kind": "apparent_specific_activity",
+          "relation": "point",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "reported_uncertainty_statistic": "unreported",
+          "role": "right",
+          "semantics": "reported_point_estimate"
+        },
+        {
+          "approximate": true,
+          "contexts": [
+            {
+              "field": "assay.active_fraction",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.additional_differences",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.assay",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.blank",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.calibration",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.conditions",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.denominator",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 19017,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 19007
+                  },
+                  "text": "ferredoxin"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "assay.fit_basis",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.intended_change",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.partners",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.preparation",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purity",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.sampling_unit",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.substrates",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.time_window",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "quantity_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "row_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.arrangement",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.construct",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.expression_host",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.genotype",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.molecule",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 19017,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 19007
+                  },
+                  "text": "ferredoxin"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.organism",
+              "fragments": [],
+              "status": "source_unavailable"
+            }
+          ],
+          "estimator_scale": "parameter_estimate",
+          "normalization": "extinction_unit",
+          "origin": "reported",
+          "qualification": "source_qualified_approximate",
+          "quantity_kind": "extinction_coefficient",
+          "relation": "point",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "reported_uncertainty_statistic": "unreported",
+          "role": "epsilon_nuisance",
+          "semantics": "reported_point_estimate"
+        },
+        {
+          "approximate": true,
+          "contexts": [
+            {
+              "field": "assay.active_fraction",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.additional_differences",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.assay",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.blank",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.calibration",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.conditions",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.denominator",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 18166,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 18162
+                  },
+                  "text": "NADH"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "assay.fit_basis",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.intended_change",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.partners",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.preparation",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purity",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.sampling_unit",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.substrates",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.time_window",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "quantity_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "row_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.arrangement",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.construct",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.expression_host",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.genotype",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.molecule",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 18166,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 18162
+                  },
+                  "text": "NADH"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.organism",
+              "fragments": [],
+              "status": "source_unavailable"
+            }
+          ],
+          "estimator_scale": "parameter_estimate",
+          "normalization": "extinction_unit",
+          "origin": "reported",
+          "qualification": "source_qualified_approximate",
+          "quantity_kind": "extinction_coefficient",
+          "relation": "point",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "reported_uncertainty_statistic": "unreported",
+          "role": "epsilon_signal",
+          "semantics": "reported_point_estimate"
+        }
+      ],
+      "row_version": "measurement_comparison_return_v2",
+      "sheet_ref": "source_9eec72f3328cfe8d3f366fd6",
+      "source_kind": "primary_source",
+      "withheld_locations": [
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 86459,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 86458
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 86396,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 86377
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 84635,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 84595
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 84634,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 84630
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18210,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18138
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18174,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18151
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18152,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18151
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18158,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18153
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18174,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18171
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18166,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18162
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 92042,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 91990
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 8502,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 8483
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 8373,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 8368
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 13459,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 13383
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 12980,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 12973
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 21440,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 17018
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 85833,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 85831
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 85769,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 85691
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19061,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18983
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19025,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18996
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18997,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18996
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19003,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18998
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19025,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 19022
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19017,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 19007
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32761,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32758
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32779,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32745
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32751,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32745
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32755,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32753
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32777,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32762
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 34566,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32428
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33093,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33090
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33111,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33052
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33072,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33052
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33085,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33074
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33109,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33094
+        },
+        {
+          "artifact_ref": "artifact_207abf4aa206635c4c1514ddeab77e2571847684a6192c7a626443c731febe91",
+          "end": 3043,
+          "representation": "original",
+          "source_ref": "source_5e26b5128d75bdf1c6eec7fc",
+          "start": 2946
+        }
+      ]
+    },
+    {
+      "assertion_context": {
+        "functional_assertion": {
+          "fragments": [
+            {
+              "location": {
+                "artifact_ref": "artifact_207abf4aa206635c4c1514ddeab77e2571847684a6192c7a626443c731febe91",
+                "end": 3043,
+                "representation": "original",
+                "source_ref": "source_5e26b5128d75bdf1c6eec7fc",
+                "start": 2946
+              },
+              "text": "Reaction5 links one two-electron ferredoxin and one NADH per two NADPH in its\nbackward direction."
+            }
+          ],
+          "status": "selected"
+        },
+        "molecule": {
+          "fragments": [
+            {
+              "location": {
+                "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                "end": 8373,
+                "representation": "original",
+                "source_ref": "source_009eb4975b1d54e1284959e0",
+                "start": 8368
+              },
+              "text": "NfnAB"
+            }
+          ],
+          "status": "selected"
+        }
+      },
+      "assertion_question": "quantitative_activity",
+      "assumptions": [
+        "fixed_reaction_conversion",
+        "no_reference_distribution_assumed"
+      ],
+      "cell": {
+        "approximate": true,
+        "component": "combined_estimate",
+        "conditional_exact_value": null,
+        "conditional_value": null,
+        "contribution_key": "measurement_comparison_contribution_a3618ecea4b22bde26267fe3",
+        "exact_value": null,
+        "formula": "if(V_D>0,w_L*L+w_R*R,if(V_D==0&&D==0,L,unavailable))",
+        "input_origins": [
+          "reported"
+        ],
+        "interpretation": "unavailable",
+        "meaning_code": "combined_estimate",
+        "model_keys": [
+          "measurement_comparison_conversion_a6e3634e87587822cb9bf260",
+          "measurement_comparison_conversion_48634796fde67ae7ef4442ff"
+        ],
+        "operand_keys": [
+          "literature_measurement_4686b5403d7b14974629275e",
+          "literature_measurement_cbc25026e44928b9aaaf1b05"
+        ],
+        "operand_roles": [
+          "left",
+          "right"
+        ],
+        "origin": "derived",
+        "reasons": {
+          "domain": [],
+          "implementation": [],
+          "relationship": [
+            "common_model_not_selected",
+            "preparation_target_unknown",
+            "protocols_not_matched",
+            "functional_resolution_not_quantitative",
+            "validity_unresolved"
+          ],
+          "source": [
+            "covariance_not_supplied"
+          ]
+        },
+        "relation": "point",
+        "status": "unavailable",
+        "uncertainty": {
+          "covariance_source_refs": [],
+          "sampling_distribution": "not_assumed",
+          "scope": "selected_estimator_covariance",
+          "variance_status": "unknown"
+        },
+        "unit": "umol/min/mg",
+        "value": null
+      },
+      "component": "combined_estimate",
+      "conversion_conditions": [
+        {
+          "direction": "same_direction_supported",
+          "kind": "fixed_reaction_scale",
+          "role": "left",
+          "support_status": "supported"
+        },
+        {
+          "direction": "same_direction_supported",
+          "kind": "fixed_reaction_scale",
+          "role": "right",
+          "support_status": "supported"
+        }
+      ],
+      "covariance_provenance": [],
+      "dependence": [
+        {
+          "relation": "sampling_unknown",
+          "roles": [
+            "left",
+            "right"
+          ]
+        }
+      ],
+      "dependencies": [
+        {
+          "dependency_keys": [
+            "literature_measurement_4686b5403d7b14974629275e"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "owner_key": "literature_measurement_4686b5403d7b14974629275e",
+          "physical_owner_key": null,
+          "role": "left",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 86459,
+              "representation": "original",
+              "source_ref": "source_9c0cbfde901e6349ff33e9db",
+              "start": 86458
+            }
+          ],
+          "unit": "umol/min/mg"
+        },
+        {
+          "dependency_keys": [
+            "literature_measurement_cbc25026e44928b9aaaf1b05"
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "owner_key": "literature_measurement_cbc25026e44928b9aaaf1b05",
+          "physical_owner_key": null,
+          "role": "right",
+          "source_locations": [
+            {
+              "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+              "end": 85833,
+              "representation": "original",
+              "source_ref": "source_9c0cbfde901e6349ff33e9db",
+              "start": 85831
+            }
+          ],
+          "unit": "umol/min/mg"
+        }
+      ],
+      "evaluation_scope": "source_measurement_comparison",
+      "evidence_source_ref": "source_9c0cbfde901e6349ff33e9db",
+      "model_conditions": [
+        {
+          "name": "common_model.applicability",
+          "state": "not_selected"
+        }
+      ],
+      "model_settings": {
+        "common_combination": "not_selected",
+        "common_variance_interpretation": "not_selected",
+        "optical_nuisance_sign": null,
+        "optical_observation_equation": null,
+        "optical_signal_role": null,
+        "scenario_anchor_role": null
+      },
+      "relationships": [
+        {
+          "name": "endpoint",
+          "value": "fixed_reaction_conversion"
+        },
+        {
+          "name": "denominator",
+          "value": "same_basis_supported"
+        },
+        {
+          "name": "construct",
+          "value": "same_construct_supported"
+        },
+        {
+          "name": "preparation_target",
+          "value": "unknown"
+        },
+        {
+          "name": "protocol",
+          "value": "additional_differences"
+        },
+        {
+          "name": "functional_bearing",
+          "value": "existence_only"
+        },
+        {
+          "name": "left_validity",
+          "value": "identified_unresolved_interference"
+        },
+        {
+          "name": "right_validity",
+          "value": "endpoint_quantification_supported"
+        },
+        {
+          "name": "attribution",
+          "value": "unknown"
+        },
+        {
+          "name": "sampling",
+          "value": "independence_not_established"
+        },
+        {
+          "name": "systematic_coverage",
+          "value": "identified_unresolved"
+        },
+        {
+          "name": "left_readout_isolation",
+          "value": "mixed_optical_contributions"
+        },
+        {
+          "name": "right_readout_isolation",
+          "value": "isolated_signal_supported"
+        }
+      ],
+      "role_meanings": [
+        {
+          "approximate": true,
+          "contexts": [
+            {
+              "field": "assay.active_fraction",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.additional_differences",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.assay",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.blank",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.calibration",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.conditions",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.denominator",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 18166,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 18162
+                  },
+                  "text": "NADH"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "assay.fit_basis",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.intended_change",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.partners",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.preparation",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purity",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.sampling_unit",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.substrates",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.time_window",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "quantity_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "row_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.arrangement",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.construct",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 13459,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 13383
+                  },
+                  "text": "nfnAB\nwith both an\nnfnA\n5\u2032 His\n6\ncassette and an\nnfnB\n3\u2032 His\n6\ncassette."
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.expression_host",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.genotype",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.molecule",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8373,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8368
+                  },
+                  "text": "NfnAB"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.organism",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8502,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8483
+                  },
+                  "text": "C. kluyveri\nDSM 555"
+                }
+              ],
+              "status": "selected"
+            }
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "qualification": "rounded_after_fit",
+          "quantity_kind": "apparent_specific_activity",
+          "relation": "point",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "reported_uncertainty_statistic": "unreported",
+          "role": "left",
+          "semantics": "reported_point_estimate"
+        },
+        {
+          "approximate": true,
+          "contexts": [
+            {
+              "field": "assay.active_fraction",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.additional_differences",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.assay",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.blank",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.calibration",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.conditions",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.denominator",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.direct_endpoint",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 19017,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 19007
+                  },
+                  "text": "ferredoxin"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "assay.fit_basis",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.inferred_quantity",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "assay.intended_change",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.partners",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.preparation",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purification_reconstitution",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.purity",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.sampling_unit",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.substrates",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "assay.time_window",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "quantity_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "row_label",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.arrangement",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.construct",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 13459,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 13383
+                  },
+                  "text": "nfnAB\nwith both an\nnfnA\n5\u2032 His\n6\ncassette and an\nnfnB\n3\u2032 His\n6\ncassette."
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.expression_host",
+              "fragments": [],
+              "status": "not_selected"
+            },
+            {
+              "field": "subject.genotype",
+              "fragments": [],
+              "status": "source_unavailable"
+            },
+            {
+              "field": "subject.molecule",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8373,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8368
+                  },
+                  "text": "NfnAB"
+                }
+              ],
+              "status": "selected"
+            },
+            {
+              "field": "subject.organism",
+              "fragments": [
+                {
+                  "location": {
+                    "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+                    "end": 8502,
+                    "representation": "original",
+                    "source_ref": "source_009eb4975b1d54e1284959e0",
+                    "start": 8483
+                  },
+                  "text": "C. kluyveri\nDSM 555"
+                }
+              ],
+              "status": "selected"
+            }
+          ],
+          "estimator_scale": "fitted_asymptote",
+          "normalization": "protein_mass",
+          "origin": "reported",
+          "qualification": "rounded_after_fit",
+          "quantity_kind": "apparent_specific_activity",
+          "relation": "point",
+          "reported_uncertainty_meaning": "reported_spread_not_joint_estimator_covariance",
+          "reported_uncertainty_statistic": "unreported",
+          "role": "right",
+          "semantics": "reported_point_estimate"
+        }
+      ],
+      "row_version": "measurement_comparison_return_v2",
+      "sheet_ref": "source_9eec72f3328cfe8d3f366fd6",
+      "source_kind": "primary_source",
+      "withheld_locations": [
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 86459,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 86458
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 86396,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 86377
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 84635,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 84595
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 84634,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 84630
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18210,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18138
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18174,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18151
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18152,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18151
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18158,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18153
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18174,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18171
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18166,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18162
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 92042,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 91990
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 8502,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 8483
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 8373,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 8368
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 13459,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 13383
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 12980,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 12973
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 21440,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 17018
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 85833,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 85831
+        },
+        {
+          "artifact_ref": "artifact_056f3c93bce434f3d45a21185d8c7b36a13664778f9a8f537b3024fedaa409fa",
+          "end": 85769,
+          "representation": "original",
+          "source_ref": "source_9c0cbfde901e6349ff33e9db",
+          "start": 85691
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19061,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18983
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19025,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18996
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 18997,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18996
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19003,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 18998
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19025,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 19022
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 19017,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 19007
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32761,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32758
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32779,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32745
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32751,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32745
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32755,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32753
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 32777,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32762
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 34566,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 32428
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33093,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33090
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33111,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33052
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33072,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33052
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33085,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33074
+        },
+        {
+          "artifact_ref": "artifact_32477da75c460b593002d2216243789594d2dff0ad1cc87d75801ae84d88814d",
+          "end": 33109,
+          "representation": "original",
+          "source_ref": "source_009eb4975b1d54e1284959e0",
+          "start": 33094
+        },
+        {
+          "artifact_ref": "artifact_207abf4aa206635c4c1514ddeab77e2571847684a6192c7a626443c731febe91",
+          "end": 3043,
+          "representation": "original",
+          "source_ref": "source_5e26b5128d75bdf1c6eec7fc",
+          "start": 2946
+        }
+      ]
+    }
+  ]
+}

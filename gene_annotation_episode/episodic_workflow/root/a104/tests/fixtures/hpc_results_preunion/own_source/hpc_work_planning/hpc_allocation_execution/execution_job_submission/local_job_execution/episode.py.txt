@@ -1,0 +1,1034 @@
+"""Private launch_local episode behavior for A104."""
+from __future__ import annotations
+from .requests import (A104HomologyExecution, ASSIGNMENT_SCHEMA, BLAST_GRADED_REQUEST_SCHEMA, BLAST_GRADED_REQUEST_VERSION, BLAST_GRADED_RETURN_SCHEMA, BLAST_GRADED_RETURN_SOURCE, GENERIC_REQUESTED_JOB_SCHEMA, KINDS, LOCAL_FILE_SOURCE_RECEIPT_VERSION, LocalFileSourceResults, NATIVE_RESULT_ORIGIN, NATIVE_SELECTOR_SCHEMA, Path, RESULTS_SCHEMA, RESULT_PROVIDER, ROLE_KINDS, TerminalExecutionBehavior, VERSION, _immutable, _outcome, _read, base64, canonical, checked, confined, deepcopy, digest, hashlib, homology_api_contracts, identity, install_preparation_result_readers, install_primary_result_readers, is_file_source_selector, is_native_blast_database_target, is_native_blast_masking_target, is_native_blast_target, is_native_blast_utility_target, is_native_hmmer_preparation_target, is_native_hmmer_target, is_standard_blast_database_target, json, launch_operation_catalog, math, native_operation_contracts, native_result_operation_catalog, operation_catalog, plain, preparation_job_schemas, preparation_operation_contracts, requested_job_schemas, validate_assignment, validate_preparation_resource_binding, validate_primary_resource_bindings)
+from .requests import ExecutionEpisodeRequests
+from .returns import ExecutionEpisodeReturns
+from .credit import ExecutionEpisodeCredit
+from importlib import import_module as _import_module
+ExecutionEpisodeYield = _import_module(".yield", __package__).ExecutionEpisodeYield
+
+from .protected_reference_access import ProtectedReferenceAccess
+
+class ExecutionEpisode(ProtectedReferenceAccess, ExecutionEpisodeRequests, ExecutionEpisodeReturns, ExecutionEpisodeCredit, ExecutionEpisodeYield, A104HomologyExecution):
+    binding_path = 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution'
+    commissioning_parent = 'hpc_work_planning/hpc_allocation_execution/execution_job_submission'
+    roles = ('launch_local',)
+
+    entry_roles = ()
+
+    replaces_default_instructions = True
+
+    def __init__(self, services, *, store, directory, run_id, resources, initial_information,
+                 tool_registry, handoff_unit, acquired_record_unit, log_window_bytes, log_roles,
+                 require_private_yield=False, results_yield_profiles=None,
+                 task_yield_profiles=None):
+        self.services, self.store, self.directory = services, store, Path(directory)
+        self.run_id, self.tool_registry = run_id, tool_registry
+        self.resources = json.loads(canonical(resources))
+        self.initial_information = json.loads(canonical(initial_information))
+        if (not isinstance(self.resources, dict) or not self.resources
+                or any(not isinstance(key, str) or not key or not isinstance(value, dict)
+                    or value.get('kind') not in KINDS for key, value in self.resources.items())):
+            raise ValueError('explicit_execution_resources_required')
+        if (not isinstance(self.initial_information, dict)
+                or not set(self.initial_information) <= set(self.resources)):
+            raise ValueError('initial_inventory_resource_not_bound')
+        for unit in (handoff_unit, acquired_record_unit):
+            if type(unit) not in (int, float) or not math.isfinite(unit) or unit <= 0:
+                raise ValueError('explicit_positive_operational_credit_units_required')
+        if (type(log_window_bytes) is not int or log_window_bytes < 1
+                or not isinstance(log_roles, (tuple, list))
+                or any(not isinstance(role, str) or not role for role in log_roles)):
+            raise ValueError('explicit_execution_log_selection_required')
+        self.handoff_unit, self.acquired_record_unit = handoff_unit, acquired_record_unit
+        self.log_window_bytes, self.log_roles = log_window_bytes, tuple(log_roles)
+        if type(require_private_yield) is not bool:
+            raise TypeError('execution_private_yield_binding_requires_boolean')
+        self.private_yield_binding = require_private_yield
+        profiles = {} if results_yield_profiles is None else plain(results_yield_profiles)
+        if not isinstance(profiles, dict) or set(profiles) - {
+                'native_unbounded_local', 'native_unbounded_hpc'}:
+            raise ValueError('explicit_results_yield_profiles_invalid')
+        from gene_annotation_episode.episodic_workflow.root.a104.numerical import YieldController, YieldParameters
+        for key, binding in profiles.items():
+            if (not isinstance(binding, dict) or set(binding) != {'cutoff', 'parameters'}
+                    or not isinstance(binding['parameters'], dict)
+                    or type(binding['cutoff']) not in (int, float)
+                    or not math.isfinite(binding['cutoff']) or binding['cutoff'] <= 0):
+                raise ValueError('explicit_results_yield_profile_invalid:' + key)
+            YieldController('configuration', 0., binding['cutoff'],
+                YieldParameters(**binding['parameters']))
+        self.results_yield_profiles = profiles
+        task_profiles = {} if task_yield_profiles is None else plain(task_yield_profiles)
+        if (not isinstance(task_profiles, dict) or any(
+                not isinstance(key, str) or not key or not isinstance(binding, dict)
+                or set(binding) != {'cutoff', 'parameters'}
+                or not isinstance(binding['parameters'], dict)
+                or type(binding['cutoff']) not in (int, float)
+                or not math.isfinite(binding['cutoff']) or binding['cutoff'] <= 0
+                for key, binding in task_profiles.items())):
+            raise ValueError('explicit_execution_task_yield_profiles_invalid')
+        for binding in task_profiles.values():
+            YieldController('configuration', 0., binding['cutoff'],
+                YieldParameters(**binding['parameters']))
+        self.task_yield_profiles = task_profiles
+        self._practical = {}
+        allowed_native = {
+            'native_blast', 'native_blast_masking', 'native_blast_utility',
+            'native_blast_database', 'native_blast_standard_database',
+            'native_hmmer', 'native_hmmer_preparation',
+        }
+        for resource_id, configuration in self.resources.items():
+            kind = KINDS[configuration['kind']]
+            foreign = {name for name in configuration
+                if name.startswith('native_') and name not in allowed_native}
+            if foreign:
+                raise ValueError('a104_execution_resource_binding_conflict')
+            validate_primary_resource_bindings(configuration, kind)
+            validate_preparation_resource_binding(configuration, kind)
+            if kind != 'api':
+                inventory = self.initial_information.get(resource_id)
+                self._practical[resource_id] = TerminalExecutionBehavior(services,
+                    directory=self.directory, resources={kind: configuration}, store=store,
+                    initial_information={} if inventory is None else {kind: inventory})
+        from gene_annotation_episode.episodic_workflow.root.a104.api_service_execution import APIServiceExecution
+        api_resources = {key: value for key, value in self.resources.items()
+                         if KINDS[value['kind']] == 'api'}
+        self.api_execution = None if not api_resources else APIServiceExecution(store,
+            run_id=run_id, directory=self.directory, configuration=api_resources,
+            tool_registry=tool_registry, handoff_unit=handoff_unit,
+            acquired_record_unit=acquired_record_unit,
+            received_input_reader=getattr(services, 'read_received_molecular_input', None))
+        if self.api_execution is not None:
+            from gene_annotation_episode.episodic_workflow.root.a104.bvbrc_phylogeny_returns import BVBRCPhylogenyReturns
+            self.api_execution.phylogeny_returns = BVBRCPhylogenyReturns(self.api_execution)
+        from gene_annotation_episode.episodic_workflow.root.a104.execution_progress import ExecutionProgressProvider
+        self.job_progress_provider = ExecutionProgressProvider(store, run_id=run_id,
+            directory=self.directory, resources=self.resources, api_execution=self.api_execution,
+            log_window_bytes=log_window_bytes, log_roles=self.log_roles)
+        self.local_file_sources = LocalFileSourceResults(self)
+        install_primary_result_readers(self)
+        install_preparation_result_readers(self)
+        self._install_protected_reference_readers()
+
+    def as_record(self):
+        return {'binding_id': 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution',
+            'version': VERSION, 'configuration': {
+            'resources': deepcopy(self.resources), 'initial_information': deepcopy(self.initial_information),
+            'handoff_unit': self.handoff_unit, 'acquired_record_unit': self.acquired_record_unit,
+            'log_window_bytes': self.log_window_bytes, 'log_roles': list(self.log_roles),
+            **({'require_private_yield': True} if self.private_yield_binding else {}),
+            **({'results_yield_profiles': deepcopy(self.results_yield_profiles)}
+               if self.results_yield_profiles else {}),
+            **({'task_yield_profiles': deepcopy(self.task_yield_profiles)}
+               if self.task_yield_profiles else {})}}
+
+    def child_roles(self, role):
+        return tuple(ROLE_KINDS) if role == 'launch' else ()
+
+    def required_return_sources(self, parent, role):
+        """Preserve the original job identity across a scientific return."""
+        if (parent is not None and parent.path[-1][0] == 'scientific_process'
+                and getattr(self.services, 'annotation_task_required', lambda: False)()):
+            if role == 'launch':
+                return ('execution_handoff_refs',)
+            if role == 'results':
+                return ('execution_result_refs',)
+        return ()
+
+
+
+
+
+    def allowed_children(self, parent, caller_capabilities):
+        if parent.role != 'launch':
+            return ()
+        assignment = self._launch(plain(parent.assignment))
+        return tuple(role for role, kind in ROLE_KINDS.items() if any(
+            KINDS[configuration['kind']] == kind and self._permitted(assignment, resource_id)
+            for resource_id, configuration in self.resources.items()))
+
+    @staticmethod
+    def _masking_selector(assignment):
+        return assignment.get('selector', {}).get('version') == 'native_blast_masking_result_selector_v1'
+
+    def _masking_inputs(self, context, assignment):
+        return self.native_blast_masking_results.validate_job_inputs(context, assignment)
+
+    def _retained_masking_target(self, context, assignment, scope):
+        if not self._masking_selector(assignment):
+            return None
+        return self.native_blast_masking_results.retained_target(
+            context, assignment=assignment, scope=scope)
+
+    def _masking_reference_access(self, context, reference, namespace):
+        access = self.native_blast_masking_results.retained_reference_access(context, reference, namespace)
+        if access is not None:
+            return access
+        from gene_annotation_episode.episodic_workflow.root.a104.sequence_masking_result_views import IDENTIFIER_NAMESPACES
+        if self.native_blast_masking_results.applies(context):
+            resolved = self.native_blast_masking_results.resolve(context, reference, namespace)
+        else:
+            resolved = self.native_blast_masking_returns.resolve_received(context, reference, namespace)
+        if resolved:
+            return True
+        return False if namespace in IDENTIFIER_NAMESPACES else None
+
+    @staticmethod
+    def _utility_selector(assignment):
+        return assignment.get('selector', {}).get('version') in {
+            'native_blast_utility_result_selector_v1', 'native_blast_utility_result_selector_v2'}
+
+    def _utility_inputs(self, context, assignment):
+        return self.native_blast_utility_results.validate_job_inputs(context, assignment)
+
+    def _retained_utility_target(self, context, assignment, scope):
+        if not self._utility_selector(assignment):
+            return None
+        return self.native_blast_utility_results.retained_target(
+            context, assignment=assignment, scope=scope)
+
+    def _utility_reference_access(self, context, reference, namespace):
+        access = self.native_blast_utility_results.retained_reference_access(context, reference, namespace)
+        if access is not None:
+            return access
+        from gene_annotation_episode.episodic_workflow.root.a104.blast_utility_result_views import IDENTIFIER_NAMESPACES
+        if self.native_blast_utility_results.applies(context):
+            resolved = self.native_blast_utility_results.resolve(context, reference, namespace)
+        else:
+            resolved = self.native_blast_utility_returns.resolve_received(context, reference, namespace)
+        if resolved:
+            return True
+        return False if namespace in IDENTIFIER_NAMESPACES else None
+
+    def _versions(self, versions, scope, *, context):
+        from gene_annotation_episode.episodic_workflow.root.a104.library.execution_input_versions import validate_execution_input_versions
+        return validate_execution_input_versions(self, versions, scope, context=context)
+
+    def _recorded_results_assignment(self, parent, selected, scope, operation_key):
+        """Restore a successfully returned original Results commission only."""
+        from gene_annotation_episode.episodic_workflow.root.a104.episode_receipts import EpisodeReceipts
+        from gene_annotation_episode.episodic_workflow.root.a104.episode_return_records import EpisodeReturnRecords
+        inheritance = parent.request.get('message', {}).get('knowledge_inheritance')
+        if inheritance is None:
+            return None
+        try:
+            manifest = EpisodeReceipts.read_manifest(self.store.db, self.run_id, parent.episode_id)
+        except ValueError as error:
+            if str(error) == 'episode_receipts_not_bound':
+                return None
+            raise ValueError('recorded_results_receipt_history_invalid') from error
+        proof = EpisodeReturnRecords(self.store, self.run_id, failure_prefix='recorded_results_')
+        proof.authenticate(parent)
+        proof._require(proof._equal(inheritance, manifest), 'receipt_context_conflict')
+        proof._require(isinstance(operation_key, str), 'operation_required')
+        index = proof._admission_index(parent, operation_key + ':typed_form')
+        attempt = self.store.db.execute('SELECT child_episode_id,contract,form,failure '
+            'FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND decision_index=?',
+            (self.run_id, parent.episode_id, index)).fetchone()
+        if attempt is None or attempt['form'] is None or attempt['failure'] is not None:
+            return None
+        try:
+            form, contract = json.loads(attempt['form']), json.loads(attempt['contract'])
+            schema = contract['measurements']['schema']
+        except (ValueError, TypeError, KeyError) as error:
+            raise ValueError('recorded_results_original_return_invalid') from error
+        if proof.recorded_admission_references(parent, form, schema, index) is None:
+            return None
+        child = proof.context(attempt['child_episode_id'])
+        proof._require(child.role == 'results' and child.path[:-1] == parent.path
+            and child.path[-1] == ('results', 'child_' + str(index)), 'original_child_conflict')
+        state = self.store.db.execute('SELECT state FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+            (self.run_id, child.episode_id)).fetchone()
+        if state['state'] != 'yielded':
+            return None
+        action = self.store.db.execute('SELECT action FROM runtime_actions WHERE run_id=? '
+            'AND episode_id=? AND decision_index=?', (self.run_id, parent.episode_id, index)).fetchone()
+        original = json.loads(action['action'])
+        proof._require(original.get('kind') == 'episode_child' and original.get('role') == 'results',
+            'original_selection_conflict')
+        proof._require(proof._equal(selected, original.get('assignment'))
+            and proof._equal(selected, child.assignment), 'assignment_conflict')
+        proof._require(proof._equal(scope, original.get('scope'))
+            and proof._equal(scope, child.scope), 'scope_conflict')
+        return plain(child.assignment)
+
+    def _delegate(self, context):
+        assignment = self._validate_request(plain(context.assignment))
+        return self.api_execution if context.role == 'launch_api' else self._practical[assignment['resource_id']]
+
+    def _practical_context(self, context):
+        return context
+
+    def initialize(self, context):
+        if self.local_file_sources.applies(context):
+            target = self._target(context)
+            self.local_file_sources.selector(plain(context.assignment), target, validate_paths=False)
+            return self._result_directory(context)
+        if context.role in ROLE_KINDS:
+            self._check_parent_inputs(context)
+            return self._delegate(context).initialize(context)
+        if context.role == 'launch':
+            value = self._launch(plain(context.assignment), scope=context.scope)
+            for resource_id, request in value['requests'].items():
+                if request.get('version') == BLAST_GRADED_REQUEST_VERSION:
+                    self._blast_launch_requirement(request, resource_id, context.scope)
+            for request in value['requests'].values():
+                self._masking_inputs(context, request)
+                self._utility_inputs(context, request)
+            self._versions(value['immutable_input_versions'], context.scope, context=context)
+        else:
+            target = self._target(context)
+            self._selector(plain(context.assignment), target)
+            required = self._blast_target_requirement(target, context.scope)
+            if required is not None:
+                schema = plain(context.request)['report_contract']['measurements']['schema']
+                if not any(node.get('x-source') == BLAST_GRADED_RETURN_SOURCE
+                           and node == BLAST_GRADED_RETURN_SCHEMA
+                           for node in schema.get('properties', {}).values()):
+                    raise ValueError('blast_grader_typed_return_required')
+            if (self._masking_selector(plain(context.assignment))
+                    or self._utility_selector(plain(context.assignment))
+                    ):
+                self.initial_references(context)
+            if target['resource_kind'] == 'api':
+                return self.api_execution.initialize(context)
+            self._result_directory(context)
+
+    def _check_parent_inputs(self, context):
+        if len(context.path) < 2 or context.path[-2][0] != 'launch':
+            return
+        row = self.store.db.execute('SELECT request FROM runtime_episodes WHERE run_id=? AND path=?',
+            (self.run_id, canonical(context.path[:-1]))).fetchone()
+        if row is not None:
+            original = self._launch(json.loads(row['request'])['message']['episode_assignment'])
+            if context.role == 'launch_api':
+                self._validate_blast_api_parent_request(original, plain(context.assignment), context.scope)
+            self._masking_inputs(context, plain(context.assignment))
+            self._utility_inputs(context, plain(context.assignment))
+            self._versions(original['immutable_input_versions'], context.scope, context=context)
+            from gene_annotation_episode.episodic_workflow.root.a104.native_blast_database_result_publication import validate_native_job_inputs
+            from gene_annotation_episode.episodic_workflow.root.a104.native_blast_standard_database_result_publication import validate_standard_blast_job_inputs
+            validate_native_job_inputs(self.store, context, plain(context.assignment))
+            validate_standard_blast_job_inputs(self.store, context, plain(context.assignment))
+            return
+        raise ValueError('execution_original_launch_assignment_unavailable')
+
+    def state(self, context):
+        """Expose the original practical state for its original resource role."""
+        if context.role not in {'launch_local', 'launch_hpc'}:
+            raise ValueError('practical_resource_role_required')
+        return self._delegate(context).state(self._practical_context(context))
+
+    def _resource_information(self, resource_id):
+        config = self.resources[resource_id]
+        capability = next(value for value in self.capabilities() if value['resource_id'] == resource_id)
+        value = {'resource_id': resource_id, 'resource_kind': KINDS[config['kind']],
+            'availability': capability['availability'], 'tool_names': capability['tool_names'],
+            **{key: deepcopy(config[key]) for key in ('workspace', 'policy', 'account', 'python_executable',
+                'service', 'base_url') if key in config},
+            'inventory_snapshot': deepcopy(self.initial_information.get(resource_id))}
+        if config['kind'] == 'api':
+            facts = {}
+            for entry in self.api_execution.capabilities(resource_id):
+                reported = entry.get('configuration', {})
+                for name in ('ncbi_contact_configured', 'provider_rate_state_configured'):
+                    if name not in reported:
+                        continue
+                    actual = reported[name]
+                    if type(actual) is not bool:
+                        raise ValueError('api_configuration_fact_must_be_boolean')
+                    if name in facts and facts[name] != actual:
+                        raise ValueError('api_configuration_fact_conflict')
+                    facts[name] = actual
+            if facts:
+                value['api_configuration_facts'] = facts
+        return value
+
+    def initial_decision_context(self, context):
+        if self.local_file_sources.applies(context):
+            target = self._target(context)
+            return {'execution_resource_capabilities': [{'resource_id': target['resource_id'],
+                'resource_kind': 'local'}], 'execution_initial_information': {}}
+        value = {'execution_resource_capabilities': [self._resource_information(key) for key in self.resources],
+            'execution_initial_information': deepcopy(self.initial_information),
+            'received_bvbrc_values': [] if self.api_execution is None else
+                self.api_execution.received_bvbrc_context(context)}
+        if (context.role in {'annotation', 'scientific_process'}
+                and self.api_execution is not None
+                and any(service.service == 'ncbi_blast' for service in self.api_execution.services.values())):
+            jobs = self.api_execution.received_blast_jobs(context, self.job_progress_provider)
+            value['received_blast_jobs'] = jobs
+            value['received_blast_jobs_meaning'] = (
+                'Saved original BLAST jobs for received handoffs. '
+                'Status is only as of observed_at; the scheduling estimate is recalculated '
+                'locally as of forecast_as_of without a new provider observation. '
+                'No status request is made to build this view. Waiting earns no scientific credit.')
+        return value
+
+    def capabilities(self):
+        """Configured operation availability, with no deployment/authentication probe."""
+        return [{'resource_id': key, 'kind': KINDS[configuration['kind']],
+            'availability': 'unknown', 'observed_at': 'caller_configuration',
+            'provenance_refs': [], 'knowledge_entry_ids': [],
+            'tool_names': [entry['name'] for entry in (
+                self.api_execution.capabilities(key) if KINDS[configuration['kind']] == 'api'
+                else operation_catalog(KINDS[configuration['kind']]))]}
+            for key, configuration in self.resources.items()]
+
+    def resource_tool_contracts(self):
+        """Declare only bound A104 launch, result and homology operations."""
+        contracts = {}
+        def add(entry, kind):
+            key = entry['name'], kind
+            if key in contracts:
+                prior = contracts[key]
+                if canonical(prior['input_schema']) != canonical(entry['input_schema']):
+                    schemas = prior.setdefault('_native_schemas',
+                        [deepcopy(prior['input_schema'])])
+                    if entry['input_schema'] not in schemas:
+                        schemas.append(deepcopy(entry['input_schema']))
+                    prior['input_schema'] = {'anyOf': deepcopy(schemas)}
+                for route in entry.get('invocation_route', {}).get('routes', ()):
+                    if route not in prior['invocation_route']['routes']:
+                        prior['invocation_route']['routes'].append(route)
+                return
+            contracts[key] = deepcopy(entry)
+        for resource_id, configuration in self.resources.items():
+            kind = KINDS[configuration['kind']]
+            resource_role = {'api': 'launch_api', 'local': 'launch_local', 'hpc': 'launch_hpc'}[kind]
+            launch = (self.api_execution.operation_contracts(resource_id, 'launch_api')
+                if kind == 'api' else operation_catalog(kind))
+            results = (self.api_execution.operation_contracts(resource_id, 'results')
+                if kind == 'api' else native_result_operation_catalog())
+            for entry_role, target_role, entries in (
+                    ('launch', resource_role, launch), ('results', 'results', results)):
+                for entry in entries:
+                    route = {'entry_role': entry_role, 'resource_id': resource_id,
+                        'resource_role': target_role}
+                    selected = {name: deepcopy(entry[name]) for name in
+                        ('name', 'description', 'input_schema')}
+                    if 'instructions' in entry:
+                        selected['instructions'] = entry['instructions']
+                    selected.update(resources=kind,
+                        invocation_route={'kind': 'commission', 'routes': [route]})
+                    add(selected, kind)
+            if kind == 'api':
+                service = self.api_execution.services.get(resource_id)
+                for entry in homology_api_contracts(self.api_execution, resource_id, kind, service):
+                    add(entry, kind)
+                if service is not None and service.service == 'bvbrc_appservice':
+                    versions = tuple(version for version in ('1', '2')
+                        if ('bvbrc_proteome', version) in service.scientific_adapters)
+                    if versions:
+                        from gene_annotation_episode.episodic_workflow.root.a104.bvbrc_proteome_tool_info import proteome_tool_contracts
+                        for entry in proteome_tool_contracts(resource_id=resource_id,
+                                assignment_schema=self.api_execution.assignment_schema(resource_id),
+                                adapter_versions=versions):
+                            add(entry, kind)
+            for entry in (*native_operation_contracts(configuration, kind, resource_id),
+                          *preparation_operation_contracts(configuration, kind, resource_id)):
+                add(entry, kind)
+        for entry in contracts.values():
+            entry.pop('_native_schemas', None)
+        return [contracts[key] for key in sorted(contracts)]
+
+    def permitted_common_actions(self, context):
+        if context.role == 'launch':
+            if any(role == 'hpc' for role, _ in context.path):
+                # This parent synchronously commissions preparation. Queue/run
+                # waiting belongs to its HPC parent after a real handoff.
+                return ('tool', 'child', 'redeliver_report')
+            return ('tool', 'reason', 'child', 'wait', 'redeliver_report')
+        if context.role == 'launch_api':
+            assignment = self._validate_request(plain(context.assignment))
+            if assignment['version'] == 'api_service_assignment_v1':
+                return ('tool', 'wait')
+        elif context.role == 'results':
+            target = self._target(context)
+            if (target['resource_kind'] == 'api'
+                    and target['assignment']['version'] == 'api_service_assignment_v1'):
+                return ('tool', 'wait')
+        return ('tool',)
+
+    def instructions(self, context):
+        if context.role in {'launch_local', 'launch_hpc'}:
+            return self._delegate(context).instructions(self._practical_context(context))
+        if context.role == 'launch_api':
+            assignment = self._validate_request(plain(context.assignment))
+            service = assignment['service']
+            return (f'Carry out the assigned work through {service} using one selected operation each turn. '
+                'Keep the original inputs, request, resource and parent constraints fixed. Choose useful '
+                'preparation, service requests, observations or repair from the actual available operations '
+                'and received outcomes. Distinguish an immediate returned response from a service job that '
+                'continues remotely. Preserve the actual request or job identity and submission uncertainty; '
+                'a missing reply does not establish that no job was created. Establish the requested usable '
+                'monitoring/results handoff from recorded service facts. The configured controller governs '
+                'continuation; verified original handoff completion gives exact zero future credit.')
+        if context.role == 'results':
+            return ('Acquire the original selected execution results through the original handoff. Choose bounded '
+                'status or requested file/page reads using actual preceding outcomes. Preserve partial bytes and '
+                'native scores. Native paths expose the current resource filesystem: the exact attempt observation '
+                'does not establish that current file bytes were produced by that attempt. Separate read windows '
+                'are not an atomic file snapshot. The scientific parent interprets the returned records. Original work, resource '
+                'and selector stay fixed. Only actual complete acquisition establishes this endpoint.')
+        return ('Choose which permitted concrete execution request to commission on an explicit resource_id. '
+            'Capabilities, recorded inventory and timing information inform the choice. Preserve the original '
+            'job, immutable inputs, constraints and pinned instructions. A resource child owns iterative execution '
+            'in the shared loop. Receive its requested typed handoff; no infrastructure chooses an approach. '
+            'Actual received usable handoff completes this launch endpoint with exact zero future credit.')
+
+    def _with_selected_execution_task(self, context, value):
+        assignment = plain(context.assignment)
+        if context.role == 'launch':
+            requests = assignment.get('requests')
+            if not isinstance(requests, dict) or not requests:
+                return value
+        elif context.role in {'launch_local', 'launch_api'}:
+            requests = {assignment.get('resource_id'): assignment}
+        elif context.role == 'results':
+            target = self._target(context) if self.local_file_sources.applies(context) else value.get('execution_target', {})
+            requests = {target.get('resource_id'): target.get('assignment', {})}
+        else:
+            return value
+        callback = getattr(self.services, 'scientific_parent_task', None)
+        parent = None if callback is None else callback(context)
+        if parent is None:
+            return value
+        selected = []
+        for resource_id, request in requests.items():
+            if not isinstance(request, dict) or resource_id not in self.resources:
+                return value
+            kind = KINDS[self.resources[resource_id]['kind']]
+            if kind == 'api':
+                if request.get('service') != 'ebi_hmmer':
+                    return value
+                job = deepcopy(request)
+            else:
+                jobs = request.get('requested_job', {})
+                supported = ('native_blast', 'native_blast_masking', 'native_blast_utility',
+                    'native_blast_database', 'native_blast_standard_database',
+                    'native_hmmer', 'native_hmmer_preparation')
+                chosen = [name for name in supported if isinstance(jobs.get(name), dict)]
+                if len(chosen) != 1:
+                    return value
+                name = chosen[0]
+                job = deepcopy(jobs[name])
+                if name in {'native_hmmer', 'native_hmmer_preparation'}:
+                    from gene_annotation_episode.episodic_workflow.root.a104.native_profile_presentation import native_profile_scientific_job_view
+                    job = native_profile_scientific_job_view(job)
+            selected.append({'resource_id': resource_id, 'resource_kind': kind,
+                'endpoint': deepcopy(request.get('endpoint')),
+                'constraints': deepcopy(request.get('constraints', {})), 'job': job,
+                'resource': self._resource_information(resource_id)})
+        value['selected_execution_task'] = deepcopy({'version': 'selected_execution_task_v1',
+            'scientific_question': parent['scientific_question'],
+            'selected_tool_info': parent['selected_tool_info'], 'requests': selected,
+            'constraints': assignment.get('constraints', {}), 'selector': assignment.get('selector'),
+            'result_description': value.get('execution_target_description')})
+        return value
+
+    def decision_context(self, context, current_view):
+        if context.role in {'launch_local', 'launch_hpc'}:
+            value = self._delegate(context).decision_context(context, current_view)
+            return self._with_selected_execution_task(context, value)
+        value = {'execution_assignment': plain(context.assignment),
+                 'execution_progress': self.facts(context, {})}
+        if context.role == 'results':
+            assignment = plain(context.assignment)
+            if self.local_file_sources.applies(context):
+                from gene_annotation_episode.episodic_workflow.root.a104.local_file_capture_results import ORIGIN
+                value['execution_target'] = {'resource_kind': 'local',
+                    'files': deepcopy(assignment['selector']['files'])}
+                value['execution_target_description'] = {
+                    'status_operations': ['execution.results.status'],
+                    'acquisition_operations': ['execution.results.collect'],
+                    'provenance': deepcopy(ORIGIN)}
+                return self._with_selected_execution_task(context, value)
+            value['execution_target'] = self._target(context)
+            value['execution_target_description'] = self.job_progress_provider.targets.describe_target(
+                value['execution_target']['handle'], context.scope, selector=assignment['selector'])
+            from gene_annotation_episode.episodic_workflow.root.a104.bvbrc_data_host import is_bvbrc_request
+            if value['execution_target']['resource_kind'] == 'api' and is_bvbrc_request(
+                    value['execution_target']['assignment'].get('request')):
+                value['own_bvbrc_values'] = self.api_execution.bvbrc_data.own_values(context)
+        if context.role == 'launch_api':
+            callback = getattr(self.api_execution, 'decision_context', None)
+            if callback is not None:
+                value.update(callback(context, current_view))
+        return self._with_selected_execution_task(context, value)
+
+    def _target(self, context):
+        assignment = checked(context.assignment, RESULTS_SCHEMA, 'invalid_execution_results_assignment')
+        masking = self._retained_masking_target(context, assignment, context.scope)
+        if masking is not None:
+            return masking
+        utility = self._retained_utility_target(context, assignment, context.scope)
+        if utility is not None:
+            return utility
+        return self.job_progress_provider.targets.read_target(assignment['handoff_ref'], context.scope)
+
+    def _selector(self, assignment, target):
+        if is_file_source_selector(assignment.get('selector')):
+            return self.local_file_sources.selector(assignment, target)
+        if self._masking_selector(assignment) or is_native_blast_masking_target(target):
+            if not is_native_blast_masking_target(target) or target.get('resource_kind') != 'local':
+                raise ValueError('native_blast_masking_result_target_conflict')
+            from gene_annotation_episode.episodic_workflow.root.a104.sequence_masking_result_views import validate_masking_result_selector
+            return validate_masking_result_selector(assignment['selector'],
+                operation=target['assignment']['requested_job']['native_blast_masking']['operation'])
+        if self._utility_selector(assignment) or is_native_blast_utility_target(target):
+            if not is_native_blast_utility_target(target) or target.get('resource_kind') != 'local':
+                raise ValueError('native_blast_utility_result_target_conflict')
+            from gene_annotation_episode.episodic_workflow.root.a104.blast_utility_result_views import validate_blast_utility_result_selector
+            return validate_blast_utility_result_selector(assignment['selector'],
+                operation=target['assignment']['requested_job']['native_blast_utility']['operation'])
+        if target['resource_kind'] == 'api':
+            return self.api_execution.validate_result_selector(target, assignment['selector'])
+        if is_standard_blast_database_target(target):
+            if self.native_blast_standard_database_results is None:
+                raise ValueError('native_blast_standard_database_results_binding_unavailable')
+            from gene_annotation_episode.episodic_workflow.root.a104.native_blast_standard_database_result_views import validate_standard_blast_database_selector
+            return validate_standard_blast_database_selector(assignment['selector'],
+                program=target['assignment']['requested_job']['native_blast_standard_database']['program'])
+        if is_native_blast_database_target(target):
+            if self.native_blast_database_results is None:
+                raise ValueError('native_blast_database_results_binding_unavailable')
+            from gene_annotation_episode.episodic_workflow.root.a104.native_blast_database_result_views import validate_native_blast_database_result_selector
+            return validate_native_blast_database_result_selector(assignment['selector'],
+                program=target['assignment']['requested_job']['native_blast_database']['program'])
+        if is_native_hmmer_preparation_target(target):
+            if self.native_hmmer_preparation_results is None:
+                raise ValueError('native_hmmer_preparation_results_binding_unavailable')
+            from gene_annotation_episode.episodic_workflow.root.a104.hmmer_preparation_result_views import validate_preparation_result_selector
+            job = target['assignment']['requested_job']['native_hmmer_preparation']
+            return validate_preparation_result_selector(assignment['selector'], program=job['program'], mode=job['mode'])
+        if is_native_hmmer_target(target):
+            from gene_annotation_episode.episodic_workflow.root.a104.hmmer_native_result_views import validate_native_hmmer_result_selector
+            return validate_native_hmmer_result_selector(assignment['selector'],
+                program=target['assignment']['requested_job']['native_hmmer']['program'])
+        if is_native_blast_target(target):
+            if self.native_blast_results is None:
+                raise ValueError('native_blast_results_binding_unavailable')
+            from gene_annotation_episode.episodic_workflow.root.a104.blast_pairwise_result_views import validate_native_blast_result_selector
+            return validate_native_blast_result_selector(assignment['selector'],
+                program=target['assignment']['requested_job']['native_blast']['program'])
+        value = checked(assignment['selector'], NATIVE_SELECTOR_SCHEMA, 'invalid_execution_native_selector')
+        paths = list(value.get('paths', []))
+        if 'path' in value:
+            if value['path'] in paths:
+                raise ValueError('ambiguous_execution_results_selector')
+            paths.append(value['path'])
+        if not paths or ('offset' in value or 'limit' in value) and 'path' not in value:
+            raise ValueError('execution_results_paths_required')
+        for path in paths:
+            confined(path, target['assignment']['workspace'])
+        return value
+
+    def catalog(self, context):
+        if self.native_blast_masking_results.applies(context):
+            from gene_annotation_episode.episodic_workflow.root.a104.native_blast_masking_results import operation_catalog as masking_result_catalog
+            self._selector(plain(context.assignment), self._target(context))
+            return masking_result_catalog()
+        if self.native_blast_utility_results.applies(context):
+            from gene_annotation_episode.episodic_workflow.root.a104.native_blast_utility_results import operation_catalog as utility_result_catalog
+            self._selector(plain(context.assignment), self._target(context))
+            return utility_result_catalog()
+        if context.role in ROLE_KINDS:
+            practical_context = self._practical_context(context)
+            return self._delegate(context).catalog(practical_context)
+        if context.role == 'launch':
+            return launch_operation_catalog()
+        target = self._target(context)
+        if is_standard_blast_database_target(target):
+            self._selector(plain(context.assignment), target)
+            from gene_annotation_episode.episodic_workflow.root.a104.native_blast_standard_database_results import operation_catalog as database_catalog
+            return database_catalog()
+        if is_native_blast_database_target(target):
+            selector = self._selector(plain(context.assignment), target)
+            from gene_annotation_episode.episodic_workflow.root.a104.native_blast_database_results import operation_catalog as database_catalog
+            return database_catalog(selector)
+        if target['resource_kind'] == 'api':
+            return self.api_execution.catalog(context)
+        if is_native_hmmer_preparation_target(target):
+            if self.native_hmmer_preparation_results is None:
+                raise ValueError('native_hmmer_preparation_results_binding_unavailable')
+            from gene_annotation_episode.episodic_workflow.root.a104.native_hmmer_preparation_results import operation_catalog as hmmer_preparation_result_catalog
+            return hmmer_preparation_result_catalog()
+        if is_native_hmmer_target(target):
+            from gene_annotation_episode.episodic_workflow.root.a104.native_hmmer_results import operation_catalog as hmmer_result_catalog
+            return hmmer_result_catalog()
+        if is_native_blast_target(target):
+            if self.native_blast_results is None:
+                raise ValueError('native_blast_results_binding_unavailable')
+            from gene_annotation_episode.episodic_workflow.root.a104.native_blast_results import operation_catalog as blast_result_catalog
+            return blast_result_catalog()
+        return native_result_operation_catalog()
+
+    async def execute(self, context, tool_name, arguments, operation_key):
+        if context.role in ROLE_KINDS:
+            self._check_parent_inputs(context)
+            practical_context = self._practical_context(context)
+            outcome = await self._delegate(context).execute(
+                practical_context, tool_name, arguments, operation_key)
+            return outcome
+        try:
+            catalog = {entry['name']: entry for entry in self.catalog(context)}
+            if tool_name not in catalog:
+                raise ValueError('execution_operation_not_available')
+            arguments = checked(arguments, catalog[tool_name]['input_schema'], 'invalid_execution_operation_arguments')
+            if context.role == 'launch':
+                return _outcome(self.initial_decision_context(context))
+            target = self._target(context)
+            if self.local_file_sources.applies(context):
+                return await self.local_file_sources.execute(
+                    context, target, tool_name, arguments, operation_key)
+            if self.native_blast_masking_results.applies(context):
+                self._selector(plain(context.assignment), target)
+                return await self.native_blast_masking_results.execute(
+                    context, target, tool_name, arguments, operation_key)
+            if self.native_blast_utility_results.applies(context):
+                self._selector(plain(context.assignment), target)
+                return await self.native_blast_utility_results.execute(
+                    context, target, tool_name, arguments, operation_key)
+            if is_standard_blast_database_target(target):
+                return await self.native_blast_standard_database_results.execute(context, target, tool_name, arguments, operation_key)
+            if is_native_blast_database_target(target):
+                return await self.native_blast_database_results.execute(context, target, tool_name, arguments, operation_key)
+            if target['resource_kind'] == 'api':
+                return await self.api_execution.execute(context, tool_name, arguments, operation_key)
+            if is_native_hmmer_preparation_target(target):
+                return await self.native_hmmer_preparation_results.execute(
+                    context, target, tool_name, arguments, operation_key)
+            if is_native_hmmer_target(target):
+                return await self.native_hmmer_results.execute(context, target, tool_name, arguments, operation_key)
+            if is_native_blast_target(target):
+                return await self.native_blast_results.execute(context, target, tool_name, arguments, operation_key)
+            return await self._execute_native_results(context, target, tool_name, arguments, operation_key)
+        except (ValueError, TypeError) as error:
+            from gene_annotation_episode.episodic_workflow.root.a104.native_file_capture import NativeFileCaptureError
+            if (isinstance(error, NativeFileCaptureError)
+                    and self.local_file_sources.applies(context)
+                    and error.code in {'retained_artifact_unavailable', 'retained_artifact_mismatch'}):
+                # Keep the selected action pending so its independently
+                # committed files remain recoverable under the same key.
+                raise
+            return _outcome(code=str(error))
+
+    def _result_directory(self, context, *, create=True):
+        if type(create) is not bool:
+            raise TypeError('execution_results_directory_create_boolean_required')
+        directory = self.directory/'execution-results'/digest([context.run_id, context.episode_id])
+        manifest = {'run_id': context.run_id, 'episode_id': context.episode_id,
+            'assignment': plain(context.assignment), 'scope': plain(context.scope)}
+        if create:
+            directory.mkdir(parents=True, exist_ok=True)
+            _immutable(directory/'assignment.json', manifest)
+        else:
+            try:
+                existing = _read(directory/'assignment.json')
+            except FileNotFoundError as error:
+                raise ValueError('execution_results_assignment_control_missing') from error
+            if canonical(existing) != canonical(manifest):
+                raise ValueError('practical_immutable_record_conflict')
+        return directory
+
+    def _windows(self, selector):
+        values = {path: (0, None) for path in selector.get('paths', [])}
+        if 'path' in selector:
+            values[selector['path']] = (selector.get('offset', 0), selector.get('limit'))
+        return values
+
+    def _selected_result_action(self, episode_id, key, name, arguments):
+        prefix = self.run_id+':'+episode_id+':'
+        suffix = key.removeprefix(prefix)
+        if not key.startswith(prefix) or not suffix.isdecimal() or str(int(suffix)) != suffix:
+            raise ValueError('execution_result_selected_action_missing')
+        row = self.store.db.execute('SELECT action,result FROM runtime_actions WHERE run_id=? '
+            'AND episode_id=? AND decision_index=?', (self.run_id, episode_id, int(suffix))).fetchone()
+        if row is None:
+            raise ValueError('execution_result_selected_action_missing')
+        action = json.loads(row['action'])
+        if action.get('kind') != 'tool' or action.get('tool') != name or action.get('arguments') != arguments:
+            raise ValueError('execution_result_selected_action_conflict')
+        return row
+
+    async def _execute_native_results(self, context, target, tool_name, arguments, operation_key):
+        self._selected_result_action(context.episode_id, operation_key, tool_name, arguments)
+        selector = self._selector(plain(context.assignment), target)
+        requested = self._windows(selector)
+        windows = []
+        if tool_name == 'execution.results.read':
+            if arguments['path'] not in requested:
+                raise ValueError('execution_results_selector_conflict')
+            start, length = requested[arguments['path']]
+            if (arguments['offset'] < start or length is not None
+                    and arguments['offset'] + arguments['limit'] > start + length):
+                raise ValueError('execution_results_selector_conflict')
+            windows = [arguments]
+        elif tool_name == 'execution.results.collect':
+            windows = [{'path': path, 'offset': start,
+                'limit': min(self.log_window_bytes, 1024*1024, length) if length is not None
+                    else min(self.log_window_bytes, 1024*1024)}
+                for path, (start, length) in requested.items()]
+        directory = self._result_directory(context)
+        key = digest(operation_key)
+        intent = {'operation_key': operation_key, 'tool_name': tool_name, 'arguments': arguments,
+            'target': target, 'assignment': plain(context.assignment)}
+        receipt_path = directory/(key+'.receipt.json')
+        if receipt_path.exists():
+            _immutable(directory/(key+'.intent.json'), intent)
+            body = _read(receipt_path)
+        else:
+            previous = self.store.db.execute('SELECT decision_index FROM runtime_actions WHERE run_id=? '
+                'AND episode_id=? AND result IS NOT NULL ORDER BY decision_index DESC',
+                (self.run_id, context.episode_id))
+            for row in previous:
+                if self._proof_for_action(context, f'{self.run_id}:{context.episode_id}:{row[0]}') is not None:
+                    raise ValueError('execution_results_assignment_already_completed')
+            _immutable(directory/(key+'.intent.json'), intent)
+            observation_path = directory/(key+'.observation.json')
+            if not observation_path.exists():
+                observed = self.job_progress_provider.targets.observe_target(target,
+                    operation_key=operation_key)
+                _immutable(observation_path, observed)
+            observation = _read(observation_path)
+            acquired, failures = [], []
+            for index, window in enumerate(windows):
+                path = directory/(key+f'.window-{index}.json')
+                if not path.exists():
+                    try:
+                        data = self.job_progress_provider.targets.read_file(target, **window,
+                            operation_key=operation_key+f':file:{index}')
+                        value = {'window': data, 'failure': None}
+                    except (ValueError, OSError) as error:
+                        value = {'window': None, 'failure': {'path': window['path'],
+                            'code': str(error) if isinstance(error, ValueError) else 'execution_result_file_unavailable',
+                            'exception_type': type(error).__name__}}
+                    _immutable(path, value)
+                value = _read(path)
+                if value['window'] is not None:
+                    acquired.append(value['window'])
+                else:
+                    failures.append(value['failure'])
+            body = {'version': 'execution_result_information_v2', 'run_id': context.run_id,
+                'episode_id': context.episode_id, 'scope': plain(context.scope),
+                'assignment': plain(context.assignment), 'operation_key': operation_key,
+                'tool_name': tool_name, 'arguments': arguments, 'target': target,
+                'observation': observation, 'windows': acquired, 'failures': failures,
+                'acquisition_origin': deepcopy(NATIVE_RESULT_ORIGIN)}
+            _immutable(receipt_path, body)
+        reference = self._publish_result(context, body)
+        return _outcome(body, references=[reference])
+
+    def _publish_result(self, context, body):
+        self._validate_result_body(body, context.scope)
+        artifact = self.store.artifact(canonical(body), 'application/json')
+        payload = {'provider': RESULT_PROVIDER, 'accession': 'execution_result_'+digest([
+            context.run_id, context.episode_id, body['operation_key']]), 'uri': None,
+            'artifact_ref': artifact, 'text_ref': artifact, 'request_ref': None,
+            'version': body['version'], 'retrieved_at': body['observation']['observed_at']}
+        return self.store.put('source', payload, origin='tool')['id']
+
+    def _validate_result_body(self, body, scope):
+        fields = {'version', 'run_id', 'episode_id', 'scope', 'assignment', 'operation_key',
+            'tool_name', 'arguments', 'target', 'observation', 'windows', 'failures', 'acquisition_origin'}
+        if (not isinstance(body, dict) or set(body) != fields
+                or body['version'] != 'execution_result_information_v2' or body['run_id'] != self.run_id
+                or body['acquisition_origin'] != NATIVE_RESULT_ORIGIN):
+            raise ValueError('invalid_execution_result_information')
+        self.store.validate_scope(body['scope'], parent_scope=plain(scope))
+        target = self.job_progress_provider.targets.read_target(body['assignment']['handoff_ref'], scope)
+        if canonical(target) != canonical(body['target']):
+            raise ValueError('execution_result_original_target_conflict')
+        selector = self._selector(body['assignment'], target)
+        requested = self._windows(selector)
+        row = self._selected_result_action(body['episode_id'], body['operation_key'], body['tool_name'], body['arguments'])
+        episode = self.store.db.execute('SELECT request,path FROM runtime_episodes WHERE run_id=? AND episode_id=?',
+            (self.run_id, body['episode_id'])).fetchone()
+        if episode is not None:
+            message = json.loads(episode['request'])['message']
+            if (message.get('episode_assignment') != body['assignment'] or message['scope'] != body['scope']
+                    or json.loads(episode['path'])[-1][0] != 'results'):
+                raise ValueError('execution_result_original_assignment_conflict')
+        for window in body['windows']:
+            if window['path'] not in requested:
+                raise ValueError('execution_result_selector_conflict')
+            raw = base64.b64decode(window['bytes_base64'], validate=True)
+            start, length = requested[window['path']]
+            if (window['offset'] < start or window['returned_bytes'] != len(raw)
+                    or length is not None and window['offset']+len(raw) > start+length
+                    or window['size_bytes'] < 0):
+                raise ValueError('execution_result_window_conflict')
+        # The immutable receiver journal, rather than model assertions or a
+        # forged Store artifact, owns this selected acquisition.
+        directory = self.directory/'execution-results'/digest([self.run_id, body['episode_id']])
+        path = directory/(digest(body['operation_key'])+'.receipt.json')
+        if not path.exists() or canonical(_read(path)) != canonical(body):
+            raise ValueError('execution_result_original_receipt_conflict')
+        return row
+
+    def _read_result(self, reference, scope):
+        source = self.store.get(reference)
+        if source.get('provider') != RESULT_PROVIDER:
+            return None
+        if source.get('version') == LOCAL_FILE_SOURCE_RECEIPT_VERSION:
+            return self.local_file_sources.read_wrapper(reference, scope)
+        raw = self.store.get_artifact(source['artifact_ref'])
+        body = json.loads(raw)
+        row = self._validate_result_body(body, scope)
+        payload = {'provider': RESULT_PROVIDER, 'accession': 'execution_result_'+digest([
+            body['run_id'], body['episode_id'], body['operation_key']]), 'uri': None,
+            'artifact_ref': source['artifact_ref'], 'text_ref': source['artifact_ref'], 'request_ref': None,
+            'version': body['version'], 'retrieved_at': body['observation']['observed_at']}
+        expected = identity('source', {'origin': 'tool', 'record': payload})
+        if (reference != expected or raw != canonical(body).encode()
+                or {key: value for key, value in source.items() if key not in {'id', 'record_type', 'origin'}} != payload):
+            raise ValueError('execution_result_source_identity_conflict')
+        if row['result'] is not None:
+            outcome = json.loads(row['result'])
+            if (outcome.get('status') != 'completed' or outcome.get('result') != body
+                    or reference not in outcome.get('record_refs', [])):
+                raise ValueError('execution_result_saved_outcome_conflict')
+        return body
+
+    def _selection(self, context, supplied=None):
+        if supplied is None and self.services is not None:
+            callback = getattr(self.services, 'record_selection', None)
+            supplied = None if callback is None else callback(context)
+        if supplied is None:
+            from gene_annotation_episode.episodic_workflow.root.a104.episode_receipts import EpisodeReceipts
+            table = self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='runtime_receipt_inheritance'").fetchone()
+            if table and self.store.db.execute('SELECT 1 FROM runtime_receipt_inheritance WHERE run_id=? AND episode_id=?',
+                    (self.run_id, context.episode_id)).fetchone():
+                receipts = EpisodeReceipts(self.store, self.run_id)
+                supplied = {'run_id': self.run_id, 'episode_id': context.episode_id,
+                    'known_record_refs': list(receipts.known(context.episode_id)),
+                    'initial_known_record_refs': list(receipts.known(context.episode_id, baseline=True))}
+            else:
+                rows = self.store.db.execute('SELECT result FROM runtime_actions WHERE run_id=? AND episode_id=? '
+                    'AND result IS NOT NULL ORDER BY decision_index', (self.run_id, context.episode_id))
+                supplied = {'run_id': self.run_id, 'episode_id': context.episode_id,
+                    'known_record_refs': list(dict.fromkeys(ref for row in rows
+                        for ref in json.loads(row[0]).get('record_refs', []))), 'initial_known_record_refs': []}
+        supplied = plain(supplied)
+        if supplied.get('run_id') != self.run_id or supplied.get('episode_id') != context.episode_id:
+            raise ValueError('execution_receiver_identity_conflict')
+        for key in ('known_record_refs', 'initial_known_record_refs'):
+            if not isinstance(supplied.get(key), list) or any(not isinstance(ref, str) or not ref for ref in supplied[key]):
+                raise ValueError('execution_receiver_references_required')
+        if not set(supplied['initial_known_record_refs']) <= set(supplied['known_record_refs']):
+            raise ValueError('execution_initial_references_must_be_known')
+        return supplied
+
+    def _context_target(self, context, target):
+        if context.role == 'launch':
+            launch = self._launch(plain(context.assignment), scope=context.scope)
+            selected = target['assignment']
+            resource_id = target['resource_id']
+            request = launch['requests'].get(resource_id)
+            if request is not None and request.get('version') == BLAST_GRADED_REQUEST_VERSION:
+                self._validate_blast_launch_selection(launch, selected, context.scope)
+                handoff = self.api_execution._read_handoff(target['handle'], plain(context.scope))
+                subject_ref = selected['request']['subject_ref']
+                sequence = self.tool_registry._sequence(subject_ref,
+                    molecule_model=self.store.subject_molecule(subject_ref))
+                expected = hashlib.sha256(f'>{subject_ref}\n{sequence}'.encode()).hexdigest()
+                if handoff['snapshot']['request'].get('query_sha256') != expected:
+                    raise ValueError('blast_grader_submitted_query_conflict')
+        elif context.role in ROLE_KINDS:
+            if canonical(target['assignment']) != canonical(context.assignment):
+                raise ValueError('execution_handoff_assignment_conflict')
+        elif context.role == 'results' and target != self._target(context):
+            raise ValueError('execution_result_target_conflict')
+        return target
+
+    def _has_appservice(self):
+        return self.api_execution is not None and any(service.service == 'bvbrc_appservice'
+            for service in self.api_execution.services.values())
+
+    def _has_uniprot(self):
+        return self.api_execution is not None and any(service.service == 'uniprot'
+            for service in self.api_execution.services.values())
+
+    @staticmethod
+    def _appservice_sources():
+        from gene_annotation_episode.episodic_workflow.root.a104.bvbrc_homology_returns import homology_fact_sources
+        from gene_annotation_episode.episodic_workflow.root.a104.bvbrc_phylogeny_returns import phylogeny_fact_sources
+        return {**homology_fact_sources(), **phylogeny_fact_sources(), 'bvbrc_appservice_support_refs': {'type': 'array', 'meaning':
+            'Actually received AppService preparation, Workspace, upload or observation receipts; these are not scientific result acquisitions.',
+            'report_schema': {'type': 'array', 'uniqueItems': True, 'items': {
+                'type': 'string', 'format': 'reference', 'x-reference-namespace': 'bvbrc_appservice_support'},
+                'x-source': 'bvbrc_appservice_support_refs'}}}
+
+    def _generic_result_selector_progress(self, context, results, initial):
+        """Credit saved byte positions once, regardless of read boundaries."""
+        target = self._target(context)
+        requested = self._windows(self._selector(plain(context.assignment), target))
+        if not requested:
+            return 0.
+
+        def covered(windows, start, end):
+            intervals = sorted((max(start, window['offset']),
+                min(end, window['offset'] + window['returned_bytes']))
+                for window in windows if window['offset'] < end
+                and window['offset'] + window['returned_bytes'] > start)
+            total, right = 0, start
+            for left, stop in intervals:
+                if stop > right:
+                    total += stop - max(left, right)
+                    right = stop
+            return total
+
+        fractions = []
+        for path, (start, length) in requested.items():
+            windows = [(reference, window) for reference, body in results.items()
+                for window in body['windows'] if window['path'] == path]
+            observed_end = max((window['size_bytes'] for _, window in windows), default=start)
+            end = start + length if length is not None else max(start, observed_end)
+            if end <= start:
+                fractions.append(0.)
+                continue
+            all_bytes = covered((window for _, window in windows), start, end)
+            old_bytes = covered((window for reference, window in windows if reference in initial), start, end)
+            fractions.append((all_bytes - old_bytes) / (end - start))
+        return math.fsum(fractions) / len(fractions)
+
+    def _native_results_complete(self, context, bodies):
+        if self.local_file_sources.applies(context):
+            return self.local_file_sources.complete(context, bodies)
+        if self.native_blast_masking_results.applies(context):
+            return False  # Its original selected typed-result receipt owns completion.
+        if self.native_blast_utility_results.applies(context):
+            return False  # Its original selected typed-result receipt owns completion.
+        if is_standard_blast_database_target(self._target(context)):
+            return False  # Only its original frozen publication proves this endpoint.
+        if is_native_blast_database_target(self._target(context)):
+            return False  # Only its original frozen publication proves this endpoint.
+        if not bodies:
+            return False
+        closed = [body for body in bodies if body['observation']['state'] == 'completed'
+                  and body['observation']['returncode'] == 0]
+        if not closed:
+            return False
+        target = self._target(context)
+        requested = self._windows(self._selector(plain(context.assignment), target))
+        for path, (start, length) in requested.items():
+            # A pre-terminal read remains useful partial custody. Completion
+            # here establishes requested acquisition alongside a successful
+            # exact attempt observation; current files have no verified
+            # producing-attempt identity or common atomic version.
+            windows = [window for body in closed for window in body['windows'] if window['path'] == path]
+            if not windows:
+                return False
+            end = max(window['size_bytes'] for window in windows)
+            if length is not None:
+                end = min(end, start+length)
+            cursor = start
+            for window in sorted(windows, key=lambda item: item['offset']):
+                if window['offset'] > cursor:
+                    return False
+                cursor = max(cursor, window['offset']+window['returned_bytes'])
+            if cursor < end:
+                return False
+        return True

@@ -41,10 +41,9 @@ from test_practical_runtime import selected
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "verification/tool_graders_rfam_workflow_2026-10-26_241"
-RUNS = Path(os.environ.get("RFAM_WORKFLOW_RUNS", str(EVIDENCE / "runs")))
+RUNS = Path(os.environ.get("RFAM_WORKFLOW_RUNS", str(ROOT / "runs/rfam_composed_workflow")))
 PUBLICATION = ROOT / "research/slotted_process_library/publications/2026-10-24-001"
-NATIVE_FILE = ROOT / "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/003-fetch-json/response.body"
+NATIVE_FILE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/transport/live/single/003-fetch-json/response.body"
 RESOURCES = {"rfam": {"kind": "api", "service": "rfam_batch", "timeout": 12.5}}
 SELECTED_TOOLS = [{"name": name, "resources": "api"}
     for name in ("api.rfam.submit", "api.rfam.fetch")]

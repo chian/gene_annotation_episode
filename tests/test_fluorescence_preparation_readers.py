@@ -9,10 +9,10 @@ from fluorescence_flowio_test_support import require_bounded_runtime, mutate_wri
 
 require_bounded_runtime()
 
-from gene_annotation_episode import fluorescence_event_contracts as core
-from gene_annotation_episode import fluorescence_event_preparation as preparation
-from gene_annotation_episode import fluorescence_preparation_contracts as contracts
-from gene_annotation_episode import fluorescence_preparation_readers as readers
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_preparation as preparation
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_preparation_contracts as contracts
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_preparation_readers as readers
 from test_fluorescence_preparation import (
     native, _codes, _comp_case, _fcs, _file, _matrix, _parse, _request, _retain,
 )

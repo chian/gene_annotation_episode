@@ -1,0 +1,788 @@
+{
+  "type": "array",
+  "x-source": "literature_assay_grading_cells",
+  "items": {
+    "type": "object",
+    "properties": {
+      "component": {
+        "enum": [
+          "measured_effect",
+          "effect_variance",
+          "effect_precision",
+          "recovery_deviation",
+          "attributed_fraction",
+          "condition_response",
+          "assertion_prediction_error",
+          "alternative_prediction_error",
+          "source_log_evidence_ratio"
+        ]
+      },
+      "dimension": {
+        "enum": [
+          "measurement",
+          "reliability",
+          "validity",
+          "attribution",
+          "comparability",
+          "relevance",
+          "experimental_evidence"
+        ]
+      },
+      "value": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "unit": {
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "populated",
+          "conditional",
+          "unavailable"
+        ]
+      },
+      "reasons": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueItems": true
+      },
+      "formula": {
+        "type": "string"
+      },
+      "meaning": {
+        "type": "string"
+      },
+      "measurement_keys": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueItems": true
+      },
+      "source_refs": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "reference"
+        },
+        "uniqueItems": true
+      },
+      "input_origins": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "reported",
+            "derived",
+            "graph_derived",
+            "synthetic",
+            "proposed"
+          ]
+        },
+        "uniqueItems": true
+      },
+      "conditions": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueItems": true
+      },
+      "sheet_ref": {
+        "type": "string",
+        "format": "reference",
+        "x-reference-namespace": "source"
+      },
+      "evidence_source_ref": {
+        "type": "string",
+        "format": "reference",
+        "x-reference-namespace": "source"
+      },
+      "evaluation_scope": {
+        "const": "assay_type_experimental_evidence"
+      },
+      "assay_type": {
+        "enum": [
+          "activity_rate",
+          "endpoint_conversion",
+          "product_distribution",
+          "reaction_coupling"
+        ]
+      },
+      "assertion_ref": {
+        "type": "string",
+        "format": "reference",
+        "x-reference-namespace": "hypothesis"
+      },
+      "quantity_kind": {
+        "enum": [
+          "rate",
+          "rate_difference",
+          "rate_ratio",
+          "turnover",
+          "catalytic_efficiency",
+          "conversion_fraction",
+          "conversion_difference",
+          "endpoint_amount",
+          "completion_time",
+          "completion_time_ratio",
+          "product_fraction",
+          "product_fraction_ratio",
+          "equilibrium_fraction",
+          "equilibrium_ratio",
+          "productive_fraction",
+          "stoichiometric_ratio",
+          "balance_residual"
+        ]
+      },
+      "interpretations": {
+        "type": "object",
+        "properties": {
+          "measurement_identity": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "calibration_applicability": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "matrix_interference": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "background_alternatives": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "attribution_supported": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "assertion_relevance": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "condition_scope": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "variance_correspondence": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "sampling_basis": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "rate_regime": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "normalization_basis": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "kinetic_model": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "endpoint_alignment": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "conversion_denominator": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "product_identity": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "species_identity": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "response_factors": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "common_denominator": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "equilibrium_state": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "stoichiometry": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "matched_windows": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          "reporter_specificity": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "supported",
+                  "unknown",
+                  "conflicting",
+                  "not_applicable"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "status",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "prediction_model": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "fixed_predictions_known_normal"
+              },
+              "variance_interpretation": {
+                "enum": [
+                  "known",
+                  "estimated",
+                  "unknown"
+                ]
+              },
+              "support_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "reference"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "kind",
+              "variance_interpretation",
+              "support_refs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "annotation_credit": {
+        "type": "null"
+      }
+    },
+    "required": [
+      "component",
+      "dimension",
+      "value",
+      "unit",
+      "status",
+      "reasons",
+      "formula",
+      "meaning",
+      "measurement_keys",
+      "source_refs",
+      "input_origins",
+      "conditions",
+      "sheet_ref",
+      "evidence_source_ref",
+      "evaluation_scope",
+      "assay_type",
+      "assertion_ref",
+      "quantity_kind",
+      "interpretations",
+      "prediction_model",
+      "annotation_credit"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -36,7 +36,7 @@ def legacy(text, *, section="addgene-full", sequence_id="17"):
 
 
 def test_actual_saved_current_page_retains_three_authenticated_metadata_rows():
-    base = Path(__file__).resolve().parents[1] / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check201_native739/sequence-support-native739"
+    base = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/sequence_support"
     content = (base / "addgene50005.entity").read_bytes()
     provenance = json.loads((base / "addgene50005.json").read_text())
     assert len(content) == 211547

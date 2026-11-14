@@ -5,16 +5,16 @@ from dataclasses import replace
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.literature_intervention_inputs import (
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_intervention_inputs import (
     COMPARISON_NAMESPACE, read_comparison_operand,
 )
-from gene_annotation_episode.literature_intervention_storage import LiteratureInterventionRepository
-from gene_annotation_episode.literature_a106_subscore import REQUESTED as FINAL_REQUESTED, COMPONENTS as FINAL_COMPONENTS
-from gene_annotation_episode.literature_a106_subscore_storage import LiteratureA106SubscoreRepository
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_intervention_storage import LiteratureInterventionRepository
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_a106_subscore import REQUESTED as FINAL_REQUESTED, COMPONENTS as FINAL_COMPONENTS
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_a106_subscore_storage import LiteratureA106SubscoreRepository
 from gene_annotation_episode.state import Store
-from test_literature_intervention_storage import intervention_fixture
-from test_literature_a106_subscore import final_arguments
-from test_literature_measurement_comparison_binding_268 import setup, selected
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_intervention_storage import intervention_fixture
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_a106_subscore import final_arguments
+from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_measurement_comparison_binding_268 import setup, selected
 
 
 def operand(sheet_ref, component):

@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "stage": "post_repair_private",
+  "repair_manifest_sha256": "6f63e373bec540c4421f667fac696ba5fee038b7db83075fb16e81015b59db97",
+  "capture_script_sha256": "0a8d1a57e13766722febc27810c6fa1e765fc9b5bcf65472525cc2de16310222",
+  "records_sha256": "651a8e61ff75bb4a2625dea2b7540605dab9d6ddb84233ad03d278d82e07cca6",
+  "files": {
+    "source_inputs/75aeed084c2719116593927f9e30b7e311058bc1e63f1f3387aa8af4667ad678.bin": "75aeed084c2719116593927f9e30b7e311058bc1e63f1f3387aa8af4667ad678",
+    "source_inputs/c64110f11cdac9aabe6788298547b9d38e46b684db210955b59d2198fa9044a2.bin": "c64110f11cdac9aabe6788298547b9d38e46b684db210955b59d2198fa9044a2",
+    "source_inputs/7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae.bin": "7ae8535eb4955105896f0ad6b2ec22188af122266865fc8de00cbf6a7af1e9ae",
+    "source_inputs/0bf9e965b2541cef5e6192aec11c837065fa1f8de20c9a747868c87f4842ebe3.bin": "0bf9e965b2541cef5e6192aec11c837065fa1f8de20c9a747868c87f4842ebe3",
+    "implementation/literature_assay_inputs.py.txt": "2d98f2e552a79c1a262c6507b0ab945641daabc1645a8b910a52aa8a939b997c",
+    "implementation/literature_rate_native_inputs.py.txt": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500",
+    "implementation/literature_partner_source_fields.py.txt": "6683a39272203ff0b2844c951ab13b2333ae0ae16e3966c4eb932970f30764a8",
+    "implementation/literature_partner_defined_units.py.txt": "cc6733d763ba494e3c4016a9a3be98ea6b7b6076b97dc8ef1aad5f43a8f856ca",
+    "implementation/literature_kinetic_inputs.py.txt": "aba2c8a2432901baf2538139cdf8649083a7537c45742dab45e113f0718f6ace",
+    "implementation/literature_binding_visual_inputs.py.txt": "8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718",
+    "implementation/literature_binding_reader.py.txt": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1",
+    "implementation/literature_controlled_response_calculations.py.txt": "a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d849ca01aadaec023",
+    "implementation/literature_controlled_response_inputs.py.txt": "a6ef5758d74c162fc6f6f1ced525701121e38e54c8a5c969b5d1282b5f0885f0",
+    "implementation/literature_controlled_response_v2_inputs.py.txt": "0e5562ec88a9578ec784b3c48ca1a470578bace7c8002645734a05d7bfe72e67",
+    "implementation/literature_controlled_response_figure_inputs.py.txt": "7d343aa29f15eb27d0db56ab184de102939c9ff0c8d4c30570a12dcc1ffa1b1d",
+    "implementation/literature_controlled_response_owner_calculations.py.txt": "88399f65c495ca6800daf2a64237c7cfe0be481e349424ad1c03e1509969a546",
+    "implementation/literature_controlled_response_v3_inputs.py.txt": "bc54c98900f42408c58bbc23d4c0517051f253d7cda7a4f0a85ebda76716d4bd",
+    "implementation/literature_controlled_response_local_calculations.py.txt": "7c4f70b121db634d8aad6d90b75a7bd1bc31108335de560cb79f09e32b3dd89a",
+    "fixture_source/controlled_v2_fixtures.py.txt": "fcfc786e2e68e1f69ecccbd85cd9780372f1330b579938833313001aeaa3fa7b",
+    "fixture_source/controlled_v3_fixtures.py.txt": "35ff4184b1969e2d0d54ce1aa66cad8ac07839c5bd0ac59616858446f617561d",
+    "fixture_design/CONSTRUCTED_SOURCE_CASES_001.json": "ec1a8a79edb5aca3dfe4e717eb40ce1733eb8909296e043b95f36e0277fe9b65",
+    "fixture_design/CONSTRUCTED_SOURCE_ROSTER_001.json": "96de0362577da2aac12554b613f5811cd316c2367f5a1fb301c917674b9be7ef",
+    "support/controlled_response_retained_profiles.py.txt": "a09f76a4b353ba4d4e89c1a92201f4799021ab01dfa96d023ae1da8f9309157b",
+    "records.json": "651a8e61ff75bb4a2625dea2b7540605dab9d6ddb84233ad03d278d82e07cca6"
+  },
+  "actual_original_producer_calls": 2,
+  "actual_current_validation_calls": 2,
+  "actual_source_stage": "post_repair_private",
+  "profiles": {
+    "controlled_response_source_extraction_v2": {
+      "reader_contract_version": "controlled_response_source_extraction_v2",
+      "calculator_contract_version": "controlled_response_owner_inputs_v2",
+      "expected_module_fingerprints": {
+        "literature_assay_inputs.py": "2d98f2e552a79c1a262c6507b0ab945641daabc1645a8b910a52aa8a939b997c",
+        "literature_binding_reader.py": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1",
+        "literature_binding_visual_inputs.py": "8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718",
+        "literature_controlled_response_calculations.py": "a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d849ca01aadaec023",
+        "literature_controlled_response_figure_inputs.py": "7d343aa29f15eb27d0db56ab184de102939c9ff0c8d4c30570a12dcc1ffa1b1d",
+        "literature_controlled_response_inputs.py": "a6ef5758d74c162fc6f6f1ced525701121e38e54c8a5c969b5d1282b5f0885f0",
+        "literature_controlled_response_owner_calculations.py": "88399f65c495ca6800daf2a64237c7cfe0be481e349424ad1c03e1509969a546",
+        "literature_controlled_response_v2_inputs.py": "0e5562ec88a9578ec784b3c48ca1a470578bace7c8002645734a05d7bfe72e67",
+        "literature_kinetic_inputs.py": "aba2c8a2432901baf2538139cdf8649083a7537c45742dab45e113f0718f6ace",
+        "literature_partner_defined_units.py": "cc6733d763ba494e3c4016a9a3be98ea6b7b6076b97dc8ef1aad5f43a8f856ca",
+        "literature_partner_source_fields.py": "6683a39272203ff0b2844c951ab13b2333ae0ae16e3966c4eb932970f30764a8",
+        "literature_rate_native_inputs.py": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500"
+      }
+    },
+    "controlled_response_source_extraction_v3": {
+      "reader_contract_version": "controlled_response_source_extraction_v3",
+      "calculator_contract_version": "controlled_response_owner_inputs_v2",
+      "expected_module_fingerprints": {
+        "literature_assay_inputs.py": "2d98f2e552a79c1a262c6507b0ab945641daabc1645a8b910a52aa8a939b997c",
+        "literature_binding_reader.py": "e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1",
+        "literature_binding_visual_inputs.py": "8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718",
+        "literature_controlled_response_calculations.py": "a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d849ca01aadaec023",
+        "literature_controlled_response_figure_inputs.py": "7d343aa29f15eb27d0db56ab184de102939c9ff0c8d4c30570a12dcc1ffa1b1d",
+        "literature_controlled_response_inputs.py": "a6ef5758d74c162fc6f6f1ced525701121e38e54c8a5c969b5d1282b5f0885f0",
+        "literature_controlled_response_local_calculations.py": "7c4f70b121db634d8aad6d90b75a7bd1bc31108335de560cb79f09e32b3dd89a",
+        "literature_controlled_response_owner_calculations.py": "88399f65c495ca6800daf2a64237c7cfe0be481e349424ad1c03e1509969a546",
+        "literature_controlled_response_v2_inputs.py": "0e5562ec88a9578ec784b3c48ca1a470578bace7c8002645734a05d7bfe72e67",
+        "literature_controlled_response_v3_inputs.py": "bc54c98900f42408c58bbc23d4c0517051f253d7cda7a4f0a85ebda76716d4bd",
+        "literature_kinetic_inputs.py": "aba2c8a2432901baf2538139cdf8649083a7537c45742dab45e113f0718f6ace",
+        "literature_partner_defined_units.py": "cc6733d763ba494e3c4016a9a3be98ea6b7b6076b97dc8ef1aad5f43a8f856ca",
+        "literature_partner_source_fields.py": "6683a39272203ff0b2844c951ab13b2333ae0ae16e3966c4eb932970f30764a8",
+        "literature_rate_native_inputs.py": "55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500"
+      }
+    }
+  },
+  "fixture_case": 6,
+  "historical_store_claim": false,
+  "metadata_transformation": false,
+  "native_or_provider_job": false,
+  "application_unchanged": true,
+  "source_inputs_preserved": true
+}

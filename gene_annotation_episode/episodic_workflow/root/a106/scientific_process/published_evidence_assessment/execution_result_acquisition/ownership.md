@@ -1,0 +1,30 @@
+# A106 scientific_process/published_evidence_assessment/execution_result_acquisition
+
+Current source declares `ExecutionEpisode` for `results` under `scientific_process/published_evidence_assessment`. Its explicit base classes, task binding, source methods, direct imports, configured owner arguments, local tests and retained assets are recorded in ownership_inventory.json.
+
+Named responsibility homes:
+
+- `configuration`: `scientific_process/published_evidence_assessment/execution_result_acquisition/configuration.py`
+- `credit`: `scientific_process/published_evidence_assessment/execution_result_acquisition/credit.py`
+- `decision_presentation`: `scientific_process/published_evidence_assessment/execution_result_acquisition/decision_presentation.py`
+- `execution_operations`: `scientific_process/published_evidence_assessment/execution_result_acquisition/execution_operations.py`
+- `execution_state`: `scientific_process/published_evidence_assessment/execution_result_acquisition/execution_state.py`
+- `from_parent`: `scientific_process/published_evidence_assessment/execution_result_acquisition/from_parent.py`
+- `from_parent_launch`: `scientific_process/published_evidence_assessment/execution_result_acquisition/from_parent_launch.py`
+- `goal`: `scientific_process/published_evidence_assessment/execution_result_acquisition/goal.py`
+- `internal_summary`: `scientific_process/published_evidence_assessment/execution_result_acquisition/internal_summary.py`
+- `received_evidence`: `scientific_process/published_evidence_assessment/execution_result_acquisition/received_evidence.py`
+- `task`: `scientific_process/published_evidence_assessment/execution_result_acquisition/task.py`
+- `to_parent`: `scientific_process/published_evidence_assessment/execution_result_acquisition/to_parent.py`
+- `waiting`: `scientific_process/published_evidence_assessment/execution_result_acquisition/waiting.py`
+- `yield`: `scientific_process/published_evidence_assessment/execution_result_acquisition/yield.py`
+
+Application receipts and selected control outcomes, including failures and collection errors, remain separate from source membership. These records do not establish shared Root integration, native execution, autonomous scientific work or saved restoration. No per-episode test coverage is inferred from axis-selected controls.
+
+The directional_connections entries resolve declared parent callbacks through their actual imported functions and locate each child admission/report method through its source bases. declared_boundary_exceptions names generic mechanics, recursive reuse and commissioners outside this axis-home set; no directional filename is guessed. Dependency and asset records state their retained source purpose.
+
+
+Current implicit-parent source join: affected source maps/import custody are recorded under `implicit_annotation_improvement_parent_source_20261113`. Earlier controlled receipts retain their original source epochs. No new scientific iteration, native execution or restored-workflow claim is made.
+
+
+Current source custody is recorded under `final_runtime_provider_custody_20261114`: authentic late runtime providers, private lexical presentation owners, original own-role operands, current endpoint/source spans and permanent controls. The 41-case earlier goal/Scientific result and 69-case current registered-owner result remain separate actual epochs. No configured descriptor or scientific iteration is inferred.

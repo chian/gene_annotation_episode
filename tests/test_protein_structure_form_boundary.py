@@ -16,12 +16,12 @@ from gene_annotation_episode.protein_structure_result_views import (
     protein_structure_fact_sources, project_protein_structure_results,
 )
 from gene_annotation_episode.schema_information_text import schema_fingerprint
-_helpers = import_module("verification.tool_graders_protein_structure_inputs_2026-10-27_386.fixture_helpers")
+_helpers = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 identity = _helpers.identity
 sequence_descriptor = _helpers.sequence_descriptor
 synthetic_custody = _helpers.synthetic_custody
 
-FIXTURES = Path(__file__).resolve().parents[1] / "verification/tool_graders_protein_structure_result_worker_2026-10-27_393/fixtures"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_result_worker_393/fixtures"
 PREFIX = "execution_protein_structure_"
 FIELDS = {"the_comparison": PREFIX + "projections", "reuse_later": PREFIX + "saved_sheets",
     "selected_sequence": PREFIX + "sequences", "unavailable": PREFIX + "failures"}

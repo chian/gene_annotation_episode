@@ -4,10 +4,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.bvbrc_appservice_adapters import bind_adapters
-from gene_annotation_episode import bvbrc_rnaseq_bundle_adapter as rnaseq
-from gene_annotation_episode.domain import ContractError, validate_schema
-from gene_annotation_episode.intervention_execution import contract_catalog, prepare_analysis_contract
+from gene_annotation_episode.episodic_workflow.root.a106.bvbrc_appservice_adapters import bind_adapters
+from gene_annotation_episode.episodic_workflow.root.a106 import bvbrc_rnaseq_bundle_adapter as rnaseq
+from gene_annotation_episode.episodic_workflow.root.a106.domain import ContractError, validate_schema
+from gene_annotation_episode.episodic_workflow.root.a106.library.standalone_intervention_execution import contract_catalog, prepare_analysis_contract
 from test_intervention_analysis import arguments
 
 

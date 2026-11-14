@@ -17,7 +17,7 @@ from gene_annotation_episode.genomic_overlap_inputs import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKET = ROOT / 'verification/tool_graders_genomic_overlap_contract_2026-10-27_418'
+PACKET = ROOT / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/contract'
 WORKED = json.loads((PACKET / 'WORKED_EXAMPLE.json').read_text())
 PARAMETERS = {'version': 'genomic_overlap_calculation_parameters_v1', 'minimum_overlap_bp': 1,
               'minimum_a_fraction': {'numerator': 0, 'denominator': 1},
@@ -341,7 +341,7 @@ def test_saved_input_outputs_are_detached():
 
 
 def test_untouched_retained_native_tokens_are_explicitly_incompatible():
-    native_root = ROOT / 'verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work'
+    native_root = ROOT / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/native_work'
     a, b = [(native_root / f'overlapping_a.{side}.bed').read_bytes() for side in ('A', 'B')]
     raw = (native_root / 'overlapping_a.stdout').read_bytes()
     assert hashlib.sha256(raw).hexdigest() == '363d108caac15ca99a4850892b890693fd2b9f1b9d16e41c9a566e05cecf9edb'

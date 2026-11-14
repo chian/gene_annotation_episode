@@ -633,7 +633,7 @@ def test_authentic549_source_only_input_inspection_without_workers_or_original_f
     import shutil
     from gene_annotation_episode.decision_context import state_frame
     from tests.test_homer_motif_saved_workflow import _encode
-    from tests.test_molecular_sequence_n_glycosylation_native import _files, _history, _sqlite_pins
+    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history, _sqlite_pins
     configured = os.environ.get("HMMER_NATIVE_ORACLE_ARSENIC_INPUT_VIEW_PROOF")
     if not configured: pytest.skip("requires the explicitly pinned successful549 supplied-result evidence")
     path = Path(configured)

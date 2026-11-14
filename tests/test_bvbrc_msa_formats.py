@@ -12,7 +12,7 @@ from gene_annotation_episode.bvbrc_msa_format_contracts import (
 from gene_annotation_episode.bvbrc_msa_formats import parse_msa_frequency_table
 
 
-NATIVE = Path(__file__).resolve().parents[1] / 'verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples'
+NATIVE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_metacats_boundaries/native_examples'
 
 
 def artifact(data, label='synthetic-table'):

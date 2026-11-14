@@ -31,7 +31,7 @@ from gene_annotation_episode.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 
-PACKET = Path(__file__).resolve().parents[1] / "verification/tool_graders_genomic_overlap_return_authority_2026-10-27_435"
+PACKET = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/returns"
 
 
 def schema_for(*sources):

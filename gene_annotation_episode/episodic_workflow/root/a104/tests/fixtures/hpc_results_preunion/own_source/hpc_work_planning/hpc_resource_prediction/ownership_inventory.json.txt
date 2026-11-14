@@ -1,0 +1,4377 @@
+{
+  "home": "hpc_work_planning/hpc_resource_prediction",
+  "axis": "a104",
+  "binding_path": "hpc_work_planning/hpc_resource_prediction",
+  "commissioning_parent": "hpc_work_planning",
+  "registered_role": "hpc_prediction",
+  "class": "HPCEpisode",
+  "children": [],
+  "task": "Improve a generalized time/resource model from measured history and compare original portfolios.",
+  "commissioned_objective": "Original parent commission objective and scope; fixed reference model and validation identities.",
+  "status": "Private task/responsibilities, named parent exchange, prompt selection and mathematical/estimator libraries connected; remaining dependency review explicit.",
+  "pre_prediction_split_inventory": {
+    "home": "hpc_work_planning/hpc_resource_prediction",
+    "original": "gene_annotation_episode/episodic_workflow/root/a104/hpc_episode.py:HPCEpisode",
+    "class": "HPCEpisode",
+    "registered_role": "hpc_prediction",
+    "commissioning_parent": "hpc_work_planning",
+    "supporting_files": [
+      "hpc_work_planning/hpc_resource_prediction/credit.py",
+      "hpc_work_planning/hpc_resource_prediction/episode.py",
+      "hpc_work_planning/hpc_resource_prediction/requests.py",
+      "hpc_work_planning/hpc_resource_prediction/returns.py",
+      "hpc_work_planning/hpc_resource_prediction/waiting.py",
+      "hpc_work_planning/hpc_resource_prediction/yield.py"
+    ],
+    "methods": {
+      "hpc_work_planning/hpc_resource_prediction/credit.py": {
+        "HPCEpisodeCredit": [
+          "credit_kind",
+          "_quality",
+          "credit_view"
+        ]
+      },
+      "hpc_work_planning/hpc_resource_prediction/requests.py": {
+        "HPCEpisodeRequests": [
+          "assignment_schema",
+          "commission_identity",
+          "_commission",
+          "prepare_assignment",
+          "_tool_request",
+          "original_launch_handoff"
+        ]
+      },
+      "hpc_work_planning/hpc_resource_prediction/waiting.py": {
+        "HPCEpisodeWaiting": [
+          "_observe_queue",
+          "_queue"
+        ]
+      },
+      "hpc_work_planning/hpc_resource_prediction/returns.py": {
+        "HPCEpisodeReturns": [
+          "export_closed",
+          "resolve_received_reference",
+          "read_evidence",
+          "_publish",
+          "fact_sources",
+          "facts",
+          "resolve",
+          "validate_report"
+        ]
+      },
+      "hpc_work_planning/hpc_resource_prediction/yield.py": {
+        "HPCEpisodeYield": [
+          "yield_controller",
+          "continuation_for_action",
+          "activity_advice",
+          "practical_estimator"
+        ]
+      },
+      "hpc_work_planning/hpc_resource_prediction/episode.py": {
+        "HPCEpisode": [
+          "__init__",
+          "targets",
+          "as_record",
+          "child_roles",
+          "allowed_children",
+          "permitted_common_actions",
+          "state",
+          "initialize",
+          "initial_decision_context",
+          "_current_model",
+          "_history",
+          "_shared_history",
+          "instructions",
+          "decision_context",
+          "catalog",
+          "_candidates",
+          "_features",
+          "_comparisons",
+          "_freeze",
+          "_candidate",
+          "_last_forecast",
+          "_collected_unit_ids",
+          "_uncollected_completed_unit_ids",
+          "_target",
+          "_known",
+          "_window",
+          "_allocation",
+          "_measure",
+          "execute",
+          "frozen_reference"
+        ]
+      }
+    },
+    "dependency_modules": [
+      "__init__.py",
+      "_local_job_worker.py",
+      "a104_action_custody.py",
+      "a104_assay_grading_read.py",
+      "a104_attachments.py",
+      "a104_characterization.py",
+      "a104_contribution_records.py",
+      "a104_credit.py",
+      "a104_execution_bindings.py",
+      "a104_homology_execution.py",
+      "a104_hpc.py",
+      "a104_hpc_worker.py",
+      "a104_interpretation.py",
+      "a104_investigation.py",
+      "a104_native_controls.py",
+      "a104_native_storage.py",
+      "a104_native_worker.py",
+      "a104_publication.py",
+      "a104_record_identity.py",
+      "a104_scientific_process_binding.py",
+      "a104_scientific_report_validation.py",
+      "a104_scoring.py",
+      "a104_work_report.py",
+      "a104_worker_implementation.py",
+      "acquisition.py",
+      "alignment_correspondence.py",
+      "alignment_presentation_references.py",
+      "alignment_result_presentation.py",
+      "alignment_site_action_records.py",
+      "alignment_site_calculators.py",
+      "alignment_site_inputs.py",
+      "alignment_site_mapping.py",
+      "alignment_site_native.py",
+      "alignment_site_returns.py",
+      "api_blast.py",
+      "api_bvbrc.py",
+      "api_bvbrc_appservice.py",
+      "api_error_feedback.py",
+      "api_execution.py",
+      "api_selected_call.py",
+      "api_selected_effects.py",
+      "api_service_execution.py",
+      "api_services.py",
+      "api_uniprot.py",
+      "application_execution_binding.py",
+      "biopython_pairwise_grader.py",
+      "blast_database_extraction.py",
+      "blast_database_grader.py",
+      "blast_database_inspection.py",
+      "blast_database_population_associations.py",
+      "blast_database_preparation.py",
+      "blast_fasta_record_identity.py",
+      "blast_graders.py",
+      "blast_grading_inputs.py",
+      "blast_hsp_site_calculators.py",
+      "blast_hsp_site_inputs.py",
+      "blast_iteration_calculators.py",
+      "blast_iteration_inputs.py",
+      "blast_maskinfo_inputs.py",
+      "blast_native_iteration_records.py",
+      "blast_pairwise_grader.py",
+      "blast_pairwise_result_views.py",
+      "blast_pairwise_results.py",
+      "blast_preparation_contracts.py",
+      "blast_preparation_inputs.py",
+      "blast_preparation_population.py",
+      "blast_preparation_result_assembly.py",
+      "blast_profile_calculators.py",
+      "blast_profile_inputs.py",
+      "blast_program_context.py",
+      "blast_pssm_calculators.py",
+      "blast_pssm_inputs.py",
+      "blast_pssm_master_inputs.py",
+      "blast_report_collection.py",
+      "blast_result_views.py",
+      "blast_search.py",
+      "blast_sequence_database.py",
+      "blast_utility_contracts.py",
+      "blast_utility_historical_fact_schemas.py",
+      "blast_utility_result_views.py",
+      "blast_vdb_calculators.py",
+      "blast_vdb_function_calculators.py",
+      "blast_vdb_function_inputs.py",
+      "blast_vdb_inputs.py",
+      "blast_vdb_utility_contracts.py",
+      "blast_vdb_utility_inputs.py",
+      "boundary_validation.py",
+      "bvbrc_analysis_protocol.py",
+      "bvbrc_analysis_transport.py",
+      "bvbrc_application_definitions.py",
+      "bvbrc_appservice_adapters.py",
+      "bvbrc_appservice_contracts.py",
+      "bvbrc_appservice_custody.py",
+      "bvbrc_appservice_host.py",
+      "bvbrc_appservice_inputs.py",
+      "bvbrc_appservice_monitor.py",
+      "bvbrc_appservice_readers.py",
+      "bvbrc_appservice_receipt_values.py",
+      "bvbrc_appservice_records.py",
+      "bvbrc_appservice_tool_info.py",
+      "bvbrc_codon_tree_bundle_adapter.py",
+      "bvbrc_codon_tree_calculators.py",
+      "bvbrc_codon_tree_grader.py",
+      "bvbrc_codon_tree_inputs.py",
+      "bvbrc_codon_tree_native.py",
+      "bvbrc_data_calculators.py",
+      "bvbrc_data_feature_sequences.py",
+      "bvbrc_data_fields.py",
+      "bvbrc_data_host.py",
+      "bvbrc_data_molecular.py",
+      "bvbrc_data_publication.py",
+      "bvbrc_data_query.py",
+      "bvbrc_data_readers.py",
+      "bvbrc_data_schema.py",
+      "bvbrc_data_views.py",
+      "bvbrc_gene_tree_bundle_adapter.py",
+      "bvbrc_gene_tree_grader.py",
+      "bvbrc_gene_tree_inputs.py",
+      "bvbrc_homology_bundle_adapter.py",
+      "bvbrc_homology_grader.py",
+      "bvbrc_homology_inputs.py",
+      "bvbrc_homology_metadata.py",
+      "bvbrc_homology_returns.py",
+      "bvbrc_homology_subject_binding.py",
+      "bvbrc_phylogeny_bundle_contracts.py",
+      "bvbrc_phylogeny_bundle_projection.py",
+      "bvbrc_phylogeny_bundle_resolution.py",
+      "bvbrc_phylogeny_common_contracts.py",
+      "bvbrc_phylogeny_common_grader.py",
+      "bvbrc_phylogeny_common_inputs.py",
+      "bvbrc_phylogeny_return_contracts.py",
+      "bvbrc_phylogeny_returns.py",
+      "communication.py",
+      "completion_evidence.py",
+      "component_assessment_dependencies.py",
+      "composition_information.py",
+      "context_masks.py",
+      "decision_context.py",
+      "decision_exchanges.py",
+      "decision_history.py",
+      "decision_protocol_prompt.py",
+      "default_scientific_binding.py",
+      "document_tools.py",
+      "domain.py",
+      "episode_admission.py",
+      "episode_application_services.py",
+      "episode_bindings.py",
+      "episode_commissions.py",
+      "episode_completion.py",
+      "episode_composition.py",
+      "episode_contract_information.py",
+      "episode_input_versions.py",
+      "episode_journal.py",
+      "episode_monitoring.py",
+      "episode_receipts.py",
+      "episode_report_acquisition.py",
+      "episode_reports.py",
+      "episode_return_records.py",
+      "episode_services.py",
+      "episode_source_failure.py",
+      "episode_work_report.py",
+      "evidence_axis_contracts.py",
+      "evidence_axis_instructions.py",
+      "evidence_geometry.py",
+      "evolutionary_reference_privacy.py",
+      "evolutionary_result_facts.py",
+      "execution_contracts.py",
+      "execution_expectations.py",
+      "execution_guidance.py",
+      "execution_inventory.py",
+      "execution_memory.py",
+      "execution_planning.py",
+      "execution_progress.py",
+      "execution_prompt.py",
+      "execution_recording.py",
+      "execution_service_setup.py",
+      "execution_timing.py",
+      "experimental_database_acquisition.py",
+      "experimental_database_measurements.py",
+      "experimental_database_records.py",
+      "finding_validity.py",
+      "form_reference_validation.py",
+      "genbank_intake.py",
+      "genome_alignment_presentation_references.py",
+      "hmmalign_grader.py",
+      "hmmalign_inputs.py",
+      "hmmer_alignment_input_alphabet.py",
+      "hmmer_alignment_input_blocks.py",
+      "hmmer_alignment_input_fasta.py",
+      "hmmer_alignment_input_phylip.py",
+      "hmmer_alignment_input_types.py",
+      "hmmer_alignment_input_validation.py",
+      "hmmer_alignment_pb_sampling.py",
+      "hmmer_alignment_preparation_calculations.py",
+      "hmmer_alignment_preparation_data.py",
+      "hmmer_alignment_tree_weights.py",
+      "hmmer_artifact_calculations.py",
+      "hmmer_artifact_data.py",
+      "hmmer_emission_calculations.py",
+      "hmmer_emission_data.py",
+      "hmmer_fm_calculations.py",
+      "hmmer_fm_data.py",
+      "hmmer_graders.py",
+      "hmmer_model_binary.py",
+      "hmmer_model_binary2.py",
+      "hmmer_model_calculations.py",
+      "hmmer_model_data.py",
+      "hmmer_model_legacy.py",
+      "hmmer_model_source_cells.py",
+      "hmmer_native_result_views.py",
+      "hmmer_preparation_result_views.py",
+      "hmmer_search_grader.py",
+      "hmmer_search_inputs.py",
+      "hmmer_simulation_calculations.py",
+      "hmmer_simulation_data.py",
+      "hmmer_statistics_calculations.py",
+      "hmmer_statistics_data.py",
+      "homology_job_monitoring/credit.py",
+      "homology_job_monitoring/episode.py",
+      "homology_job_monitoring/requests.py",
+      "homology_job_monitoring/returns.py",
+      "homology_job_monitoring/waiting.py",
+      "homology_job_submission/credit.py",
+      "homology_job_submission/episode.py",
+      "homology_job_submission/requests.py",
+      "homology_job_submission/returns.py",
+      "homology_job_submission/waiting.py",
+      "homology_jobs.py",
+      "homology_observation_schema.py",
+      "homology_query.py",
+      "homology_result_acquisition/credit.py",
+      "homology_result_acquisition/episode.py",
+      "homology_result_acquisition/requests.py",
+      "homology_result_acquisition/returns.py",
+      "homology_result_acquisition/waiting.py",
+      "homology_results.py",
+      "hpc_campaign.py",
+      "hpc_commission_sources.py",
+      "hpc_history.py",
+      "hpc_ledger.py",
+      "hpc_monitoring.py",
+      "hpc_prediction.py",
+      "hpc_prompt.py",
+      "hpc_queue.py",
+      "hpc_resource_prediction.py",
+      "hpc_result_receipts.py",
+      "image_evidence.py",
+      "independent_execution.py",
+      "inprocess_replay.py",
+      "inprocess_waiting.py",
+      "investigation_progress.py",
+      "iqtree_phylogeny_driver.py",
+      "journal_metadata.py",
+      "launch_instructions.py",
+      "library_targets.py",
+      "literature_a105_aggregation.py",
+      "literature_a105_aggregation_prompt.py",
+      "literature_a105_aggregation_storage.py",
+      "literature_a105_worksheet.py",
+      "literature_a105_worksheet_components.py",
+      "literature_active_site_calculations.py",
+      "literature_active_site_inputs.py",
+      "literature_active_site_prompt.py",
+      "literature_active_site_storage.py",
+      "literature_activity_calculations.py",
+      "literature_amount_calculations.py",
+      "literature_amount_inputs.py",
+      "literature_amount_prompt.py",
+      "literature_amount_storage.py",
+      "literature_assay_contribution.py",
+      "literature_assay_grading.py",
+      "literature_assay_grading_inputs.py",
+      "literature_assay_grading_prompt.py",
+      "literature_assay_grading_storage.py",
+      "literature_assay_inputs.py",
+      "literature_assay_prompt.py",
+      "literature_assay_storage.py",
+      "literature_assets.py",
+      "literature_binding_calculations.py",
+      "literature_binding_interaction_calculations.py",
+      "literature_binding_interaction_inputs.py",
+      "literature_binding_interaction_model_inputs.py",
+      "literature_binding_interaction_model_prompt.py",
+      "literature_binding_interaction_model_storage.py",
+      "literature_binding_interaction_storage.py",
+      "literature_binding_interaction_validation.py",
+      "literature_binding_model_inputs.py",
+      "literature_binding_model_storage.py",
+      "literature_binding_models.py",
+      "literature_binding_prompt.py",
+      "literature_binding_reader.py",
+      "literature_binding_storage.py",
+      "literature_binding_visual_inputs.py",
+      "literature_calibration_recovery_calculations.py",
+      "literature_calibration_recovery_inputs.py",
+      "literature_calibration_recovery_prompt.py",
+      "literature_calibration_recovery_storage.py",
+      "literature_channel_calculations.py",
+      "literature_channel_inputs.py",
+      "literature_channel_prompt.py",
+      "literature_channel_storage.py",
+      "literature_compiled_assay_calculations.py",
+      "literature_compiled_assay_inputs.py",
+      "literature_compiled_assay_prompt.py",
+      "literature_compiled_assay_storage.py",
+      "literature_completion_time_calculations.py",
+      "literature_completion_time_inputs.py",
+      "literature_completion_time_prompt.py",
+      "literature_completion_time_storage.py",
+      "literature_concentration_window_calculations.py",
+      "literature_concentration_window_inputs.py",
+      "literature_concentration_window_prompt.py",
+      "literature_concentration_window_storage.py",
+      "literature_contract_error.py",
+      "literature_controlled_response_calculations.py",
+      "literature_controlled_response_figure_inputs.py",
+      "literature_controlled_response_inputs.py",
+      "literature_controlled_response_local_calculations.py",
+      "literature_controlled_response_owner_calculations.py",
+      "literature_controlled_response_prompt.py",
+      "literature_controlled_response_storage.py",
+      "literature_controlled_response_v2_inputs.py",
+      "literature_controlled_response_v3_inputs.py",
+      "literature_controlled_response_v3_population.py",
+      "literature_credit_policy.py",
+      "literature_endpoint_signal_calculations.py",
+      "literature_endpoint_signal_inputs.py",
+      "literature_endpoint_signal_prompt.py",
+      "literature_endpoint_signal_storage.py",
+      "literature_experimental_contracts.py",
+      "literature_figure_inputs.py",
+      "literature_figure_measurements.py",
+      "literature_figure_prompt.py",
+      "literature_figure_storage.py",
+      "literature_gel_calculations.py",
+      "literature_gel_inputs.py",
+      "literature_gel_native_contracts.py",
+      "literature_gel_prompt.py",
+      "literature_gel_storage.py",
+      "literature_html_quantity_reader.py",
+      "literature_implementation_sources.py",
+      "literature_ion_discrimination_calculations.py",
+      "literature_ion_discrimination_inputs.py",
+      "literature_ion_discrimination_numbers.py",
+      "literature_ion_discrimination_prompt.py",
+      "literature_ion_discrimination_storage.py",
+      "literature_kinetic_calculations.py",
+      "literature_kinetic_inputs.py",
+      "literature_kinetic_model_inputs.py",
+      "literature_kinetic_model_prompt.py",
+      "literature_kinetic_model_storage.py",
+      "literature_kinetic_storage.py",
+      "literature_kinetic_summary_precision_calculations.py",
+      "literature_kinetic_summary_precision_inputs.py",
+      "literature_kinetic_summary_precision_prompt.py",
+      "literature_kinetic_summary_precision_storage.py",
+      "literature_kinetic_validation.py",
+      "literature_measurement_comparison_calculations.py",
+      "literature_measurement_comparison_inputs.py",
+      "literature_measurement_comparison_prompt.py",
+      "literature_measurement_comparison_storage.py",
+      "literature_measurement_validation_calculations.py",
+      "literature_measurement_validation_inputs.py",
+      "literature_measurement_validation_prompt.py",
+      "literature_measurement_validation_storage.py",
+      "literature_native_rate_operand_information.py",
+      "literature_numerical_contracts.py",
+      "literature_numerical_return_presentation.py",
+      "literature_optical_calculations.py",
+      "literature_optical_inputs.py",
+      "literature_optical_storage.py",
+      "literature_optical_validation.py",
+      "literature_parent_depletion_calculations.py",
+      "literature_parent_depletion_inputs.py",
+      "literature_parent_depletion_prompt.py",
+      "literature_parent_depletion_storage.py",
+      "literature_partner_defined_units.py",
+      "literature_partner_source_fields.py",
+      "literature_population_catalog.py",
+      "literature_product_coupling_calculations.py",
+      "literature_product_coupling_inputs.py",
+      "literature_product_coupling_prompt.py",
+      "literature_product_coupling_storage.py",
+      "literature_product_partition_calculations.py",
+      "literature_product_partition_inputs.py",
+      "literature_product_partition_prompt.py",
+      "literature_product_partition_storage.py",
+      "literature_prose_reader.py",
+      "literature_quantity_storage.py",
+      "literature_rate_calculations.py",
+      "literature_rate_domains.py",
+      "literature_rate_meaning_delivery.py",
+      "literature_rate_native_inputs.py",
+      "literature_rate_observation_calculations.py",
+      "literature_rate_observation_inputs.py",
+      "literature_rate_observation_prompt.py",
+      "literature_rate_observation_storage.py",
+      "literature_rate_reader.py",
+      "literature_rate_replicate_calculations.py",
+      "literature_rate_replicate_inputs.py",
+      "literature_rate_replicate_prompt.py",
+      "literature_rate_replicate_storage.py",
+      "literature_rate_source_render.py",
+      "literature_rate_storage.py",
+      "literature_ratio_calculations.py",
+      "literature_ratio_reader.py",
+      "literature_ratio_source_calculations.py",
+      "literature_ratio_source_inputs.py",
+      "literature_ratio_source_prompt.py",
+      "literature_ratio_source_render.py",
+      "literature_ratio_source_storage.py",
+      "literature_ratio_source_validation.py",
+      "literature_ratio_storage.py",
+      "literature_received_fact_render.py",
+      "literature_required_grading.py",
+      "literature_sequence_discovery.py",
+      "literature_sheet_policy.py",
+      "literature_sheet_updates.py",
+      "literature_source_inputs.py",
+      "literature_stoichiometric_balance_calculations.py",
+      "literature_stoichiometric_balance_inputs.py",
+      "literature_stoichiometric_balance_prompt.py",
+      "literature_stoichiometric_balance_storage.py",
+      "literature_task_credit.py",
+      "literature_task_families.py",
+      "literature_task_selection.py",
+      "literature_transport_calculations.py",
+      "literature_transport_inputs.py",
+      "literature_transport_prompt.py",
+      "literature_transport_storage.py",
+      "literature_work_report.py",
+      "literature_work_results.py",
+      "local_file_capture_controls.py",
+      "local_file_capture_results.py",
+      "local_jobs.py",
+      "local_resources.py",
+      "local_return_history.py",
+      "material_gzip.py",
+      "material_parsing.py",
+      "materials.py",
+      "materials_packing.py",
+      "minimap2_grader.py",
+      "minimap2_grading_inputs.py",
+      "molecular_sequence_input_contracts.py",
+      "library/monitor_prompt.py",
+      "muscle_alignment_driver.py",
+      "native_blast_acquisition.py",
+      "native_blast_contracts.py",
+      "native_blast_database_acquisition.py",
+      "native_blast_database_contracts.py",
+      "native_blast_database_convergence.py",
+      "native_blast_database_driver.py",
+      "native_blast_database_metadata.py",
+      "native_blast_database_population_metadata.py",
+      "native_blast_database_result_publication.py",
+      "native_blast_database_result_views.py",
+      "native_blast_database_result_worker.py",
+      "native_blast_database_results.py",
+      "native_blast_driver.py",
+      "native_blast_hsp_views.py",
+      "native_blast_local.py",
+      "native_blast_masking_acquisition.py",
+      "native_blast_masking_contracts.py",
+      "native_blast_masking_driver.py",
+      "native_blast_masking_local.py",
+      "native_blast_masking_results.py",
+      "native_blast_masking_tool_info.py",
+      "native_blast_result_publication.py",
+      "native_blast_result_worker.py",
+      "native_blast_results.py",
+      "native_blast_standard_database_acquisition.py",
+      "native_blast_standard_database_calculators.py",
+      "native_blast_standard_database_contracts.py",
+      "native_blast_standard_database_metadata.py",
+      "native_blast_standard_database_result_publication.py",
+      "native_blast_standard_database_result_views.py",
+      "native_blast_standard_database_result_worker.py",
+      "native_blast_standard_database_results.py",
+      "native_blast_tool_info.py",
+      "native_blast_utility_acquisition.py",
+      "native_blast_utility_contracts.py",
+      "native_blast_utility_driver.py",
+      "native_blast_utility_local.py",
+      "native_blast_utility_materializations.py",
+      "native_blast_utility_result_worker.py",
+      "native_blast_utility_results.py",
+      "native_blast_utility_tool_info.py",
+      "native_blast_vdb_function_metadata.py",
+      "native_blast_vdb_utility_context.py",
+      "native_blast_vdb_utility_execution.py",
+      "native_database_terminal_custody.py",
+      "native_driver_runtime.py",
+      "native_event_information.py",
+      "native_events.py",
+      "native_file_capture.py",
+      "native_file_receipts.py",
+      "native_hmmer_acquisition.py",
+      "native_hmmer_contracts.py",
+      "native_hmmer_local.py",
+      "native_hmmer_preparation_acquisition.py",
+      "native_hmmer_preparation_contracts.py",
+      "native_hmmer_preparation_driver.py",
+      "native_hmmer_preparation_job_schema.py",
+      "native_hmmer_preparation_local.py",
+      "native_hmmer_preparation_result_publication.py",
+      "native_hmmer_preparation_result_worker.py",
+      "native_hmmer_preparation_results.py",
+      "native_hmmer_preparation_returns.py",
+      "native_hmmer_preparation_tool_info.py",
+      "native_hmmer_preparation_worker.py",
+      "native_hmmer_result_publication.py",
+      "native_hmmer_results.py",
+      "native_hmmer_tool_info.py",
+      "native_json.py",
+      "native_lifecycle.py",
+      "native_profile_presentation.py",
+      "native_record_identity.py",
+      "native_timing_information.py",
+      "native_worker_files.py",
+      "ncbi_entrez_acquisition.py",
+      "ncbi_entrez_tools.py",
+      "nhmmer_grader.py",
+      "nhmmer_inputs.py",
+      "numerical.py",
+      "ordinary_execution.py",
+      "pending_assignment.py",
+      "phmmer_format.py",
+      "phmmer_grading_worker.py",
+      "phylogeny_calculation_contracts.py",
+      "phylogeny_calculators.py",
+      "phylogeny_format_contracts.py",
+      "phylogeny_formats.py",
+      "phylogeny_raxml_inputs.py",
+      "practical_execution_credit.py",
+      "practical_execution_operations.py",
+      "practical_execution_records.py",
+      "practical_execution_state.py",
+      "practical_receipt_information.py",
+      "practical_yield.py",
+      "progress_records.py",
+      "protein_conservation_publication.py",
+      "protein_conservation_result_contracts.py",
+      "protein_conservation_result_views.py",
+      "protein_conservation_result_worker.py",
+      "protein_conservation_tools.py",
+      "protein_phylogeny_publication.py",
+      "protein_phylogeny_result_contracts.py",
+      "protein_phylogeny_result_views.py",
+      "protein_phylogeny_result_worker.py",
+      "protein_phylogeny_tools.py",
+      "provider_authentication.py",
+      "provider_jobs.py",
+      "providers.py",
+      "public_configuration.py",
+      "read_mapping.py",
+      "received_input_bindings.py",
+      "received_input_frames.py",
+      "received_native_file_inputs.py",
+      "receiver_prompt.py",
+      "resource_estimation.py",
+      "resource_records.py",
+      "resource_tool_information.py",
+      "run_statistics.py",
+      "runtime.py",
+      "runtime_prompt.py",
+      "schema_information_text.py",
+      "schema_support.py",
+      "scientific_findings.py",
+      "scientific_process/credit.py",
+      "scientific_process/episode.py",
+      "scientific_process/execution_job_submission/api_job_execution/credit.py",
+      "scientific_process/execution_job_submission/api_job_execution/episode.py",
+      "scientific_process/execution_job_submission/api_job_execution/requests.py",
+      "scientific_process/execution_job_submission/api_job_execution/returns.py",
+      "scientific_process/execution_job_submission/api_job_execution/terminal_execution.py",
+      "scientific_process/execution_job_submission/credit.py",
+      "scientific_process/execution_job_submission/episode.py",
+      "scientific_process/execution_job_submission/hpc_job_execution/credit.py",
+      "scientific_process/execution_job_submission/hpc_job_execution/episode.py",
+      "scientific_process/execution_job_submission/hpc_job_execution/requests.py",
+      "scientific_process/execution_job_submission/hpc_job_execution/returns.py",
+      "scientific_process/execution_job_submission/hpc_job_execution/terminal_execution.py",
+      "scientific_process/execution_job_submission/local_job_execution/credit.py",
+      "scientific_process/execution_job_submission/local_job_execution/episode.py",
+      "scientific_process/execution_job_submission/local_job_execution/requests.py",
+      "scientific_process/execution_job_submission/local_job_execution/returns.py",
+      "scientific_process/execution_job_submission/local_job_execution/terminal_execution.py",
+      "scientific_process/execution_job_submission/requests.py",
+      "scientific_process/execution_job_submission/returns.py",
+      "scientific_process/execution_job_submission/terminal_execution.py",
+      "scientific_process/execution_progress_assessment/credit.py",
+      "scientific_process/execution_progress_assessment/episode.py",
+      "scientific_process/execution_progress_assessment/progress_observations.py",
+      "scientific_process/execution_progress_assessment/requests.py",
+      "scientific_process/execution_progress_assessment/returns.py",
+      "scientific_process/execution_result_acquisition/credit.py",
+      "scientific_process/execution_result_acquisition/episode.py",
+      "scientific_process/execution_result_acquisition/requests.py",
+      "scientific_process/execution_result_acquisition/returns.py",
+      "scientific_process/execution_result_acquisition/terminal_execution.py",
+      "scientific_process/hpc_work_planning/credit.py",
+      "scientific_process/hpc_work_planning/episode.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/api_job_execution/credit.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/api_job_execution/episode.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/api_job_execution/requests.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/api_job_execution/returns.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/api_job_execution/terminal_execution.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/credit.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/episode.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution/credit.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution/episode.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution/requests.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution/returns.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution/terminal_execution.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/local_job_execution/credit.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/local_job_execution/episode.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/local_job_execution/requests.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/local_job_execution/returns.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/local_job_execution/terminal_execution.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/requests.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/returns.py",
+      "scientific_process/hpc_work_planning/execution_job_submission/terminal_execution.py",
+      "scientific_process/hpc_work_planning/execution_result_acquisition/credit.py",
+      "scientific_process/hpc_work_planning/execution_result_acquisition/episode.py",
+      "scientific_process/hpc_work_planning/execution_result_acquisition/requests.py",
+      "scientific_process/hpc_work_planning/execution_result_acquisition/returns.py",
+      "scientific_process/hpc_work_planning/execution_result_acquisition/terminal_execution.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/credit.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/episode.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/credit.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/episode.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/requests.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/returns.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/terminal_execution.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/credit.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/credit.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/episode.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/requests.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/returns.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/terminal_execution.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/credit.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/episode.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/requests.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/returns.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/terminal_execution.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/requests.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/returns.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/terminal_execution.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/credit.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/episode.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/requests.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/returns.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/terminal_execution.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/requests.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/returns.py",
+      "scientific_process/hpc_work_planning/hpc_allocation_execution/waiting.py",
+      "scientific_process/hpc_work_planning/hpc_resource_prediction/credit.py",
+      "scientific_process/hpc_work_planning/hpc_resource_prediction/episode.py",
+      "scientific_process/hpc_work_planning/hpc_resource_prediction/requests.py",
+      "scientific_process/hpc_work_planning/hpc_resource_prediction/returns.py",
+      "scientific_process/hpc_work_planning/hpc_resource_prediction/waiting.py",
+      "scientific_process/hpc_work_planning/requests.py",
+      "scientific_process/hpc_work_planning/returns.py",
+      "scientific_process/hpc_work_planning/waiting.py",
+      "scientific_process/published_evidence_assessment/credit.py",
+      "scientific_process/published_evidence_assessment/episode.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/credit.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/episode.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/requests.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/returns.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/credit.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/episode.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/requests.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/returns.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/credit.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/episode.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/credit.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/episode.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/requests.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/returns.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/waiting.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/requests.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/returns.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/credit.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/requests.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/returns.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/waiting.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/credit.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/episode.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/requests.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/returns.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/waiting.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/waiting.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/waiting.py",
+      "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/waiting.py",
+      "scientific_process/published_evidence_assessment/requests.py",
+      "scientific_process/published_evidence_assessment/returns.py",
+      "scientific_process/published_evidence_assessment/waiting.py",
+      "scientific_process/requests.py",
+      "scientific_process/returns.py",
+      "scientific_process_library.py",
+      "scientific_process_prompt.py",
+      "scientific_process_provenance.py",
+      "scientific_process_records.py",
+      "scientific_process_reports.py",
+      "scientific_process_setup.py",
+      "scientific_support_metadata.py",
+      "scientific_tool_library.py",
+      "scientific_tool_retrieval.py",
+      "sequence_composition_counts.py",
+      "sequence_composition_grader.py",
+      "sequence_extraction_grader.py",
+      "sequence_input_reader.py",
+      "sequence_mapping.py",
+      "sequence_masking_contracts.py",
+      "sequence_masking_inputs.py",
+      "sequence_masking_result_views.py",
+      "sequence_ops.py",
+      "sequence_translation_grader.py",
+      "sequence_views.py",
+      "sequence_worker.py",
+      "shared_information.py",
+      "shared_information_results.py",
+      "source_locations.py",
+      "source_representation.py",
+      "source_sequences.py",
+      "spreadsheet_tools.py",
+      "spreadsheet_worker.py",
+      "state.py",
+      "terminal_execution.py",
+      "terminal_scientific_evidence.py",
+      "tool_configuration.py",
+      "tool_grading_artifacts.py",
+      "tool_information.py",
+      "tool_knowledge.py",
+      "tool_schema_validation.py",
+      "tools.py",
+      "uniprot_native.py",
+      "uniprot_native_contracts.py",
+      "uniprot_publication.py",
+      "uniprot_return_contracts.py",
+      "uniprot_return_projection.py",
+      "uniprot_returns.py",
+      "uniprot_service_support.py",
+      "vendor/__init__.py",
+      "vendor/nano_rarefaction.py",
+      "wait_estimation_inputs.py",
+      "waiting.py",
+      "workflow_budget.py"
+    ]
+  },
+  "supporting_files": [
+    "hpc_work_planning/hpc_resource_prediction/__init__.py",
+    "hpc_work_planning/hpc_resource_prediction/binding_record.py",
+    "hpc_work_planning/hpc_resource_prediction/closed_models.py",
+    "hpc_work_planning/hpc_resource_prediction/configuration.py",
+    "hpc_work_planning/hpc_resource_prediction/credit.py",
+    "hpc_work_planning/hpc_resource_prediction/decision_inputs.py",
+    "hpc_work_planning/hpc_resource_prediction/decision_state.py",
+    "hpc_work_planning/hpc_resource_prediction/episode.py",
+    "hpc_work_planning/hpc_resource_prediction/from_parent.py",
+    "hpc_work_planning/hpc_resource_prediction/goal.py",
+    "hpc_work_planning/hpc_resource_prediction/internal_summary.py",
+    "hpc_work_planning/hpc_resource_prediction/portfolio_comparison.py",
+    "hpc_work_planning/hpc_resource_prediction/prediction_history.py",
+    "hpc_work_planning/hpc_resource_prediction/prediction_operations.py",
+    "hpc_work_planning/hpc_resource_prediction/prediction_state.py",
+    "hpc_work_planning/hpc_resource_prediction/queue_observations.py",
+    "hpc_work_planning/hpc_resource_prediction/received_evidence.py",
+    "hpc_work_planning/hpc_resource_prediction/report_delivery.py",
+    "hpc_work_planning/hpc_resource_prediction/task.py",
+    "hpc_work_planning/hpc_resource_prediction/task_decision.py",
+    "hpc_work_planning/hpc_resource_prediction/task_instructions.py",
+    "hpc_work_planning/hpc_resource_prediction/task_state.py",
+    "hpc_work_planning/hpc_resource_prediction/to_parent.py",
+    "hpc_work_planning/hpc_resource_prediction/waiting.py",
+    "hpc_work_planning/hpc_resource_prediction/yield.py"
+  ],
+  "current_sources": {
+    "__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": {},
+      "imports": []
+    },
+    "binding_record.py": {
+      "sha256": "36127855c92c9091dbbbd780397459a2449565c62aee6af5bd5981d49167f897",
+      "functions": [],
+      "classes": {
+        "PredictionBindingRecord": [
+          "as_record"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from pathlib import Path",
+        "from copy import deepcopy",
+        "import hashlib",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue"
+      ]
+    },
+    "closed_models.py": {
+      "sha256": "c152e975dfb7198c6756e189229f61c1a842bc729c3a8d8014cbef7c429b98ef",
+      "functions": [],
+      "classes": {
+        "ClosedModels": [
+          "frozen_reference"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "import json",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain"
+      ]
+    },
+    "configuration.py": {
+      "sha256": "b28a151eea8ead20730dcc1d2945a65da5b9e1bca44d1fbd46fd262f6965eb49",
+      "functions": [],
+      "classes": {
+        "PredictionConfiguration": [
+          "__init__"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from pathlib import Path",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_campaign import validate_commission"
+      ]
+    },
+    "credit.py": {
+      "sha256": "af83e23c1f9d505e8e0e17b0dc2a617686ab4674f0e9e79e9b031bcb731bf3f8",
+      "functions": [],
+      "classes": {
+        "HPCEpisodeCredit": [
+          "credit_kind",
+          "_quality",
+          "credit_view"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.library import hpc_prediction as prediction"
+      ]
+    },
+    "decision_inputs.py": {
+      "sha256": "562158b9bfa8fa62600d983daee10f3b2e3eaec6c28f4bf667bd2f5bc830890b",
+      "functions": [],
+      "classes": {
+        "PredictionDecisionInputs": [
+          "decision_inputs"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations"
+      ]
+    },
+    "decision_state.py": {
+      "sha256": "a00a6a58afed85d34f345aa9ddc8d93568744a0c993056b2e12f9db6532169f6",
+      "functions": [],
+      "classes": {
+        "PredictionDecisionState": [
+          "decision_state"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import FACT_MEANINGS, FACT_SOURCES, Mapping, _plain, _references_in, json"
+      ]
+    },
+    "episode.py": {
+      "sha256": "d9304f57b44f86f4905342d589aa4ba088bf5467f00964687dc5886ce7a5d481",
+      "functions": [],
+      "classes": {
+        "HPCEpisode": [
+          "child_roles",
+          "allowed_children",
+          "permitted_common_actions"
+        ]
+      },
+      "imports": [
+        "from importlib import import_module",
+        "from .task import ResourcePredictionTask",
+        "from gene_annotation_episode.episodic_workflow.root.a104.library.hpc_prompt import render_hpc_prompt",
+        "from .configuration import PredictionConfiguration",
+        "from .from_parent import PredictionAssignment",
+        "from .to_parent import PredictionReport",
+        "from .goal import PredictionGoal",
+        "from .internal_summary import PredictionSummary",
+        "from .prediction_state import PredictionState",
+        "from .prediction_history import PredictionHistory",
+        "from .prediction_operations import PredictionOperations",
+        "from .portfolio_comparison import PortfolioComparison",
+        "from .received_evidence import ReceivedEvidence",
+        "from .closed_models import ClosedModels",
+        "from .credit import HPCEpisodeCredit",
+        "from .queue_observations import QueueObservations",
+        "from .binding_record import PredictionBindingRecord"
+      ]
+    },
+    "from_parent.py": {
+      "sha256": "9d80e4df8287de3d92946700d0921c43e91ddad57493d244b306a58fe3f57d67",
+      "functions": [],
+      "classes": {
+        "PredictionAssignment": [
+          "assignment_schema",
+          "commission_identity",
+          "_commission",
+          "prepare_assignment"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.execution_contracts import obj",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104.domain import validate_schema"
+      ]
+    },
+    "goal.py": {
+      "sha256": "d35fe48ea0ae5810f0664ec6182f0c49af6bd9455b2354da3402516cb9085342",
+      "functions": [],
+      "classes": {
+        "PredictionGoal": [
+          "instructions"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations"
+      ]
+    },
+    "internal_summary.py": {
+      "sha256": "e19107ee5d4c01f88594878c85b483b9ec7fbe28ae6fbd7969f061d7ad7bf954",
+      "functions": [],
+      "classes": {
+        "PredictionSummary": [
+          "decision_context"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.library import hpc_prediction as prediction"
+      ]
+    },
+    "portfolio_comparison.py": {
+      "sha256": "3257b99f066f61c03aa73ff2089a3fe27865c6e54254b9f9a7c80dbaf71bf878",
+      "functions": [],
+      "classes": {
+        "PortfolioComparison": [
+          "_candidates",
+          "_features",
+          "_comparisons"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "from gene_annotation_episode.episodic_workflow.root.a104.library import hpc_prediction as prediction"
+      ]
+    },
+    "prediction_history.py": {
+      "sha256": "a9f1440357a15c805ce7d7d55020510484b92b8a42b329564c927a4df3af4e75",
+      "functions": [],
+      "classes": {
+        "PredictionHistory": [
+          "_history",
+          "_shared_history"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.library.hpc_resource_prediction import physical_attempt_key",
+        "import time"
+      ]
+    },
+    "prediction_operations.py": {
+      "sha256": "18824240c6475e489b247978888a8cd8d903684f1f19ba04a2291c6cfec03885",
+      "functions": [],
+      "classes": {
+        "PredictionOperations": [
+          "catalog",
+          "execute"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "import asyncio",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "import json",
+        "from gene_annotation_episode.episodic_workflow.root.a104.execution_contracts import obj",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104.library import hpc_prediction as prediction",
+        "import shlex",
+        "import subprocess",
+        "import time",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_campaign import validate_commission",
+        "from gene_annotation_episode.episodic_workflow.root.a104.domain import validate_schema"
+      ]
+    },
+    "prediction_state.py": {
+      "sha256": "27b3e5e05c19211c432853e1ec923e7ef836efa8c917b19b6e30d4e349bbb78f",
+      "functions": [],
+      "classes": {
+        "PredictionState": [
+          "state",
+          "initialize",
+          "_current_model"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_ledger import HPCLedger",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104.library import hpc_prediction as prediction",
+        "from gene_annotation_episode.episodic_workflow.root.a104.domain import validate_schema"
+      ]
+    },
+    "queue_observations.py": {
+      "sha256": "feba7563d583f221960fbae892267e34ba7bc78f311bc3130f2902f445805c48",
+      "functions": [],
+      "classes": {
+        "QueueObservations": [
+          "_observe_queue",
+          "_queue"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "import time"
+      ]
+    },
+    "received_evidence.py": {
+      "sha256": "01118b41bc33b7be22fbff58ddd780959211c58ea296c34c762dda1d45ae705a",
+      "functions": [],
+      "classes": {
+        "ReceivedEvidence": [
+          "_known",
+          "resolve_received_reference",
+          "read_evidence"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "import json",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain"
+      ]
+    },
+    "report_delivery.py": {
+      "sha256": "873889007d2dfa8db0e62697491b67105a263019b6550257ee74a4c6444796d2",
+      "functions": [],
+      "classes": {
+        "PredictionReportDelivery": [
+          "finish"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import Record, _json, form_with_facts, json"
+      ]
+    },
+    "task.py": {
+      "sha256": "7cb4245da8abc0bdf08b462df9f432b625b36e91d9b8a2f62f3392025ea71220",
+      "functions": [],
+      "classes": {
+        "ResourcePredictionTask": [
+          "next",
+          "apply_response",
+          "execute"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import ActionFailure, ContractInformationError, Draft202012Validator, EventTargetError, ReportBoundaryError, SourceEnd, ValidationError, WorkflowError, _decode_recorded_action_response, _json, _wait_target_feedback, inspect, json, nullcontext, observes_action_outcome, schema_failure_diagnostic, validate_form",
+        "from .task_state import PredictionTaskState",
+        "from .task_decision import PredictionTaskDecision",
+        "from .waiting import PredictionSuspension",
+        "from .report_delivery import PredictionReportDelivery",
+        "from .decision_state import PredictionDecisionState",
+        "from .decision_inputs import PredictionDecisionInputs"
+      ]
+    },
+    "task_decision.py": {
+      "sha256": "7fdf3e4c5a80df2821d5ff487288af1a310c34a9531fcde68ce04db06eb3a1c9",
+      "functions": [],
+      "classes": {
+        "PredictionTaskDecision": [
+          "call",
+          "instructions",
+          "complete_decision",
+          "conversation_key",
+          "interpretation_context",
+          "exchange_schema",
+          "exchange_response",
+          "validate_contract_exchange_request",
+          "validate_contract_exchange_history",
+          "exchange_decision"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from .task_instructions import instructions",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import CONTRACT_INFORMATION_OPERATIONS, DECISION_CONTEXT_VERSION, DECISION_EXCHANGE_PROTOCOL, Draft202012Validator, Mapping, ValidationError, WorkflowError, _ASSIGNMENT_TRANSPORT, _action_generation_schema, _category_yield_parameters, _digest, _json, _object, _plain, _recorded_action_generation_schema, _recorded_assignment_transport, _references_in, apply_state_frame, composition_lookup_schema, instructional_model_context, is_contract_information, json, lookup_attempts, model_snapshot, requested_contract_information, schema_failure_diagnostic, sqlite3, state_frame, yield_table"
+      ]
+    },
+    "task_instructions.py": {
+      "sha256": "37227fe8e9c93ebf6c9a0422623bf46af081adde9c03609d47527cd884155cb7",
+      "functions": [
+        "instructions"
+      ],
+      "classes": {},
+      "imports": []
+    },
+    "task_state.py": {
+      "sha256": "19eda5970a5ef08441f7d00a466f9624553367e84977925956915d23492cefd7",
+      "functions": [],
+      "classes": {
+        "PredictionTaskState": [
+          "__init__",
+          "bind_execution_context",
+          "record_execution_failure",
+          "restore_checkpoint",
+          "restore",
+          "record_effect",
+          "checkpoint"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import ActionLeaf, EFFECT_VERSION, Episode, Record, _json, _object, _plain, interpretation_schema, json"
+      ]
+    },
+    "to_parent.py": {
+      "sha256": "22fe549a8593acd0aae721fe7d74e7fbd36cf5c29d66e00c7089d38453dbc828",
+      "functions": [],
+      "classes": {
+        "PredictionReport": [
+          "fact_sources",
+          "facts",
+          "resolve",
+          "validate_report"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.episode_bindings import reference_in_context",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import validate_form"
+      ]
+    },
+    "waiting.py": {
+      "sha256": "6dbf1bee8ceedb5a238c4503b02e061cb5e82a02a93ceacf9455725f7034fcf8",
+      "functions": [],
+      "classes": {
+        "PredictionSuspension": [
+          "suspension_changed"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations"
+      ]
+    },
+    "yield.py": {
+      "sha256": "472cae7581b040b2dcb693f0cac778c45bbf0fbf847d67784ce1e2e41719e49b",
+      "functions": [],
+      "classes": {
+        "HPCEpisodeYield": [
+          "yield_controller",
+          "continuation_for_action",
+          "practical_estimator"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "import time"
+      ]
+    }
+  },
+  "current_descriptor": {
+    "version": "hpc_episode_v1",
+    "binding_id": "hpc_work_planning/hpc_resource_prediction",
+    "implementation_sha256": "dd57cfc2abf86e01aa80f6429cd988290273cbc3f30cecb0d142d38591a2ef99",
+    "configuration": {
+      "resources": {
+        "aurora": {
+          "kind": "pbs_ssh",
+          "launch_prompt_entry": "launch-aurora",
+          "scheduler": {
+            "kind": "pbs",
+            "required_resources": [
+              "filesystems=flare"
+            ]
+          },
+          "workspace": "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-hpc-20261104T022708Z",
+          "ssh_argv": [
+            "/bin/bash",
+            "/home/chia/repos/gene_annotation_episode/tools/aurora_ssh.sh"
+          ],
+          "python_executable": "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-hpc-20261104T022708Z/env/bin/python",
+          "account": "BioReason-Aurora-Test"
+        }
+      },
+      "commissions": {
+        "commission": {
+          "objective": "Exercise the contract without running a job",
+          "resource_id": "aurora",
+          "model": {
+            "features": [
+              {
+                "name": "size",
+                "transform": "log1p",
+                "scale": 1
+              }
+            ],
+            "priors": {
+              "queue": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "setup": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "work": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "return": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              }
+            },
+            "success_prior": [
+              2,
+              1
+            ],
+            "resource_priors": {
+              "cpu_seconds": {
+                "median": 1000.0,
+                "unit": "cpu_seconds",
+                "log_sigma": 0.4,
+                "coefficient_variance": 2.0
+              },
+              "memory_bytes": {
+                "median": 4294967296,
+                "unit": "bytes",
+                "log_sigma": 0.4,
+                "coefficient_variance": 2.0
+              }
+            }
+          },
+          "history": [
+            {
+              "id": "measurement-1",
+              "observed_at": 1,
+              "features": {
+                "size": 1
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 20,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 5,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 33554432,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-2",
+              "observed_at": 2,
+              "features": {
+                "size": 2
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 40,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 10,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 67108864,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-3",
+              "observed_at": 3,
+              "features": {
+                "size": 3
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 60,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 15,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 100663296,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-4",
+              "observed_at": 4,
+              "features": {
+                "size": 4
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 80,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 20,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 134217728,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-5",
+              "observed_at": 5,
+              "features": {
+                "size": 5
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 100,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 25,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 167772160,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-6",
+              "observed_at": 6,
+              "features": {
+                "size": 6
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 120,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 30,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 201326592,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-7",
+              "observed_at": 7,
+              "features": {
+                "size": 7
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 140,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 35,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 234881024,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-8",
+              "observed_at": 8,
+              "features": {
+                "size": 8
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 160,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 40,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 268435456,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            }
+          ],
+          "validation_ids": [
+            "measurement-7",
+            "measurement-8"
+          ],
+          "obligations": {
+            "original-work": {
+              "credit": 10.0,
+              "acceptance": [
+                {
+                  "field": [
+                    "quality"
+                  ],
+                  "operator": "ge",
+                  "value": 0.9
+                }
+              ]
+            }
+          },
+          "candidates": [
+            {
+              "id": "one-portfolio",
+              "queue": "debug",
+              "nodes": 1,
+              "wall_seconds": 3600,
+              "features": {
+                "size": 10
+              },
+              "units": [
+                {
+                  "unit_id": "unit-1",
+                  "obligation_id": "original-work",
+                  "effort": 1.0,
+                  "argv": [
+                    "/not-an-executable-contract-fixture"
+                  ],
+                  "environment": {}
+                }
+              ]
+            }
+          ],
+          "credit": {
+            "model_scale": 0.01,
+            "validation_scale": 0.1,
+            "validation_slots": [
+              {
+                "id": "original-queue",
+                "metric": "queue",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0
+              },
+              {
+                "id": "running-work",
+                "metric": "work",
+                "phase": "running",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 60
+              },
+              {
+                "id": "cpu_seconds",
+                "metric": "cpu_seconds",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0.0
+              },
+              {
+                "id": "memory_bytes",
+                "metric": "memory_bytes",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0.0
+              }
+            ]
+          },
+          "preferences": {
+            "elapsed_cost_per_second": 0.0001,
+            "node_hour_cost": 0.01
+          },
+          "limits": {
+            "result_limit_bytes": 65536,
+            "queue_max_age_seconds": 10000000000.0
+          }
+        }
+      }
+    }
+  },
+  "implementation_sha256": "dd57cfc2abf86e01aa80f6429cd988290273cbc3f30cecb0d142d38591a2ef99",
+  "fingerprint_definition": "Existing private source digest with relocated mathematical library paths and library/hpc_continuation.py added; configuration and binding identity unchanged. Does not assert complete transitive ownership.",
+  "original_symbol_destinations": {
+    "yield_controller": {
+      "original": "yield.py",
+      "destination": "yield.py",
+      "body": "unchanged"
+    },
+    "continuation_for_action": {
+      "original": "yield.py",
+      "destination": "yield.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "activity_advice": {
+      "original": "yield.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/yield.py:activity_advice",
+        "a104/hpc_work_planning/hpc_allocation_execution/yield.py:activity_advice"
+      ]
+    },
+    "practical_estimator": {
+      "original": "yield.py",
+      "destination": "yield.py",
+      "body": "unchanged"
+    },
+    "__init__": {
+      "original": "episode.py",
+      "destination": "configuration.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "targets": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:targets",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:targets"
+      ]
+    },
+    "as_record": {
+      "original": "episode.py",
+      "destination": "binding_record.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "child_roles": {
+      "original": "episode.py",
+      "destination": "episode.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "allowed_children": {
+      "original": "episode.py",
+      "destination": "episode.py",
+      "body": "unchanged"
+    },
+    "permitted_common_actions": {
+      "original": "episode.py",
+      "destination": "episode.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "state": {
+      "original": "episode.py",
+      "destination": "prediction_state.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "initialize": {
+      "original": "episode.py",
+      "destination": "prediction_state.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "initial_decision_context": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:initial_decision_context",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:initial_decision_context"
+      ]
+    },
+    "_current_model": {
+      "original": "episode.py",
+      "destination": "prediction_state.py",
+      "body": "unchanged"
+    },
+    "_history": {
+      "original": "episode.py",
+      "destination": "prediction_history.py",
+      "body": "unchanged"
+    },
+    "_shared_history": {
+      "original": "episode.py",
+      "destination": "prediction_history.py",
+      "body": "unchanged"
+    },
+    "instructions": {
+      "original": "episode.py",
+      "destination": "goal.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "decision_context": {
+      "original": "episode.py",
+      "destination": "internal_summary.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "catalog": {
+      "original": "episode.py",
+      "destination": "prediction_operations.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "_candidates": {
+      "original": "episode.py",
+      "destination": "portfolio_comparison.py",
+      "body": "unchanged"
+    },
+    "_features": {
+      "original": "episode.py",
+      "destination": "portfolio_comparison.py",
+      "body": "unchanged"
+    },
+    "_comparisons": {
+      "original": "episode.py",
+      "destination": "portfolio_comparison.py",
+      "body": "unchanged"
+    },
+    "_freeze": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:_freeze",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:_freeze"
+      ]
+    },
+    "_candidate": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:_candidate",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:_candidate"
+      ]
+    },
+    "_last_forecast": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:_last_forecast",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:_last_forecast"
+      ]
+    },
+    "_collected_unit_ids": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:_collected_unit_ids",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:_collected_unit_ids"
+      ]
+    },
+    "_uncollected_completed_unit_ids": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:_uncollected_completed_unit_ids",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:_uncollected_completed_unit_ids"
+      ]
+    },
+    "_target": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:_target",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:_target"
+      ]
+    },
+    "_known": {
+      "original": "episode.py",
+      "destination": "received_evidence.py",
+      "body": "unchanged"
+    },
+    "_window": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:_window",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:_window"
+      ]
+    },
+    "_allocation": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:_allocation",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:_allocation"
+      ]
+    },
+    "_measure": {
+      "original": "episode.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/episode.py:_measure",
+        "a104/hpc_work_planning/hpc_allocation_execution/episode.py:_measure"
+      ]
+    },
+    "execute": {
+      "original": "episode.py",
+      "destination": "prediction_operations.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "frozen_reference": {
+      "original": "episode.py",
+      "destination": "closed_models.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "credit_kind": {
+      "original": "credit.py",
+      "destination": "credit.py",
+      "body": "unchanged"
+    },
+    "_quality": {
+      "original": "credit.py",
+      "destination": "credit.py",
+      "body": "unchanged"
+    },
+    "credit_view": {
+      "original": "credit.py",
+      "destination": "credit.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "_observe_queue": {
+      "original": "waiting.py",
+      "destination": "queue_observations.py",
+      "body": "unchanged"
+    },
+    "_queue": {
+      "original": "waiting.py",
+      "destination": "queue_observations.py",
+      "body": "unchanged"
+    },
+    "export_closed": {
+      "original": "returns.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/returns.py:export_closed",
+        "a104/hpc_work_planning/hpc_allocation_execution/returns.py:export_closed"
+      ]
+    },
+    "resolve_received_reference": {
+      "original": "returns.py",
+      "destination": "received_evidence.py",
+      "body": "unchanged"
+    },
+    "read_evidence": {
+      "original": "returns.py",
+      "destination": "received_evidence.py",
+      "body": "unchanged"
+    },
+    "_publish": {
+      "original": "returns.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/returns.py:_publish",
+        "a104/hpc_work_planning/hpc_allocation_execution/returns.py:_publish"
+      ]
+    },
+    "fact_sources": {
+      "original": "returns.py",
+      "destination": "to_parent.py",
+      "body": "unchanged"
+    },
+    "facts": {
+      "original": "returns.py",
+      "destination": "to_parent.py",
+      "body": "unchanged"
+    },
+    "resolve": {
+      "original": "returns.py",
+      "destination": "to_parent.py",
+      "body": "unchanged"
+    },
+    "validate_report": {
+      "original": "returns.py",
+      "destination": "to_parent.py",
+      "body": "unchanged"
+    },
+    "assignment_schema": {
+      "original": "requests.py",
+      "destination": "from_parent.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "commission_identity": {
+      "original": "requests.py",
+      "destination": "from_parent.py",
+      "body": "unchanged"
+    },
+    "_commission": {
+      "original": "requests.py",
+      "destination": "from_parent.py",
+      "body": "unchanged"
+    },
+    "prepare_assignment": {
+      "original": "requests.py",
+      "destination": "from_parent.py",
+      "body": "prediction specialization or fingerprint update"
+    },
+    "_tool_request": {
+      "original": "requests.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/requests.py:_tool_request",
+        "a104/hpc_work_planning/hpc_allocation_execution/requests.py:_tool_request"
+      ]
+    },
+    "original_launch_handoff": {
+      "original": "requests.py",
+      "disposition": "inapplicable to prediction; original body retained by owners",
+      "owners": [
+        "a104/hpc_work_planning/requests.py:original_launch_handoff",
+        "a104/hpc_work_planning/hpc_allocation_execution/requests.py:original_launch_handoff"
+      ]
+    }
+  },
+  "removed_helpers": {
+    "requests.py:authenticate_launch": "a104/hpc_launch_authentication.py:authenticate_launch (actual launch callers)",
+    "requests.py:_binding_source_bytes": "unused; current private files fingerprinted by binding_record.py"
+  },
+  "private_task_methods": {
+    "record_effect": "task_state.py",
+    "bind_execution_context": "task_state.py",
+    "record_execution_failure": "task_state.py",
+    "__init__": "task_state.py",
+    "checkpoint": "task_state.py",
+    "restore": "task_state.py",
+    "restore_checkpoint": "task_state.py",
+    "call": "task_decision.py",
+    "validate_contract_exchange_request": "task_decision.py",
+    "interpretation_context": "task_decision.py",
+    "instructions": "task_decision.py",
+    "validate_contract_exchange_history": "task_decision.py",
+    "exchange_schema": "task_decision.py",
+    "conversation_key": "task_decision.py",
+    "exchange_response": "task_decision.py",
+    "exchange_decision": "task_decision.py",
+    "suspension_changed": "waiting.py",
+    "finish": "report_delivery.py",
+    "decision_state": "decision_state.py",
+    "decision_inputs": "decision_inputs.py",
+    "execute": "task.py",
+    "next": "task.py",
+    "apply_response": "task.py"
+  },
+  "loop_connection": {
+    "selection": "a104/runtime.py:Workflow.build -> HPCEpisode.decision_source_type",
+    "source": "task.py:ResourcePredictionTask",
+    "next": "task.py:ResourcePredictionTask.next",
+    "execute": "task.py:ResourcePredictionTask.execute -> original Workflow.execute -> prediction_operations.py",
+    "progress": "Original saved runtime action and credit measurement; all returned outcome statuses reenter the original observation path.",
+    "continuation": "yield.py:HPCEpisodeYield; original numerical controller, measured opportunities and explicit caller settings.",
+    "return": "report_delivery.py:PredictionReportDelivery.finish -> original runtime typed admission"
+  },
+  "responsibilities": {
+    "goal": "goal.py:PredictionGoal.instructions and original objective in internal_summary.py",
+    "task": "task.py; task_decision.py; decision_inputs.py; decision_state.py; task_state.py",
+    "assignment": "from_parent.py:PredictionAssignment",
+    "report": "to_parent.py:PredictionReport; report_delivery.py",
+    "internal_summary": "internal_summary.py; decision_state.py",
+    "credit": "credit.py:HPCEpisodeCredit; model-scale signed quality delta plus own prospective validation credit, excluding actual job credit",
+    "yield": "yield.py owns the prediction evidence ceiling and verifier; it selects library/hpc_continuation.py, retaining the original numerical controller and caller settings.",
+    "waiting": "waiting.py:PredictionSuspension.suspension_changed; no selected wait action",
+    "queue_information": "queue_observations.py; existing cache freshness and one observation per selected operation",
+    "persistence": "prediction_state.py; task_state.py; original parent-owned HPCLedger",
+    "history": "prediction_history.py; original attempt identities and censored measurements",
+    "calculations": "Private portfolio/model/history/credit functions select library/hpc_prediction.py and library/hpc_resource_prediction.py with original commission operands.",
+    "tools": "prediction_operations.py; original seven conditional operation branches, six without shared memory",
+    "readers": "received_evidence.py; closed_models.py",
+    "grading_and_scientific_scoring": "Not applicable to this operational predictor. Calibration quality is not biological evidence assessment; no scientific sheets or findings are invented.",
+    "instructions": "task_instructions.py:instructions; exact original goal and selected tool/resource-library guidance. Prediction has no child, reasoning or wait capability.",
+    "prompt": "episode.py:decision_prompt_renderer -> axis library/hpc_prompt.py; task_decision.py:complete_decision used by ordinary and exchange decisions."
+  },
+  "message_endpoints": [
+    {
+      "direction": "parent_to_prediction",
+      "parent_current": "../to_child_hpc_resource_prediction.py:prepare_request",
+      "child_current": "from_parent.py:PredictionAssignment.prepare_assignment",
+      "status": "connected; runtime selected preserves parent then child validation"
+    },
+    {
+      "direction": "prediction_to_parent",
+      "child_current": "to_parent.py; report_delivery.py",
+      "parent_current": "../from_child_hpc_resource_prediction.py:receive_prediction_report",
+      "status": "connected; original parent/action/report-attempt identity and shared ledger retained"
+    }
+  ],
+  "external_dependencies": [
+    {
+      "modules": [
+        "library/hpc_prediction.py",
+        "library/hpc_resource_prediction.py"
+      ],
+      "consumers": [
+        "prediction_state.py",
+        "prediction_history.py",
+        "portfolio_comparison.py",
+        "prediction_operations.py",
+        "credit.py",
+        "internal_summary.py"
+      ],
+      "reason": "Axis-local standalone calculations reused by planning, prediction, execution, ledger scoring and measured-history storage; privately selected/configured here. Separate copies retained across axes."
+    },
+    {
+      "modules": [
+        "hpc_ledger.py",
+        "execution_memory.py"
+      ],
+      "consumers": [
+        "prediction_state.py",
+        "prediction_history.py",
+        "queue_observations.py",
+        "prediction_operations.py",
+        "credit.py"
+      ],
+      "reason": "Shared ledger/database and measured-history storage; child opens the existing authenticated parent ledger."
+    },
+    {
+      "modules": [
+        "hpc_campaign.py",
+        "hpc_queue.py",
+        "execution_guidance.py",
+        "hpc_commission_sources.py",
+        "hpc_monitoring.py"
+      ],
+      "reason": "Original commission validation, acquisition, provenance and resource identity; no scientific or transport behavior changed. The supplied commission can include a monitor policy; original validation remains applicable even though this predictor has no monitoring action."
+    },
+    {
+      "modules": [
+        "library/hpc_continuation.py",
+        "numerical.py",
+        "method_loop/"
+      ],
+      "consumers": [
+        "yield.py",
+        "task.py"
+      ],
+      "reason": "Private yield.py supplies its own authenticated ledger verifier and original cost to the shared estimator; numerical iteration remains external infrastructure."
+    },
+    {
+      "modules": [
+        "runtime.py",
+        "providers.py",
+        "communication.py",
+        "domain.py",
+        "episode_bindings.py",
+        "episode_return_records.py"
+      ],
+      "reason": "Original framework types, exception identities, transport and journal mechanics; task method bodies are now privately selected."
+    },
+    {
+      "modules": [
+        "library/hpc_prompt.py",
+        "episode_work_report.py"
+      ],
+      "reason": "This episode explicitly selects its axis-local standalone HPC formatter; the original saved action/report reader remains shared database/presentation infrastructure."
+    }
+  ],
+  "tests": [
+    "tests/test_prediction_behavior.py",
+    "tests/test_prediction_task.py",
+    "root/tests/hpc_prediction_behavior.py",
+    "root/tests/hpc_prediction_task_behavior.py",
+    "root/tests/hpc_prediction_inputs.py",
+    "tests/test_prediction_prompt.py",
+    "root/tests/hpc_prediction_prompt_behavior.py",
+    "root/tests/hpc_prediction_parent_exchange.py",
+    "tests/test_calculation_connections.py",
+    "root/tests/hpc_calculation_behavior.py"
+  ],
+  "required_assets": [
+    "root/tests/fixtures/hpc_prediction/aurora_jobs.json",
+    "root/tests/fixtures/hpc_prediction/aurora_queues.json",
+    "root/tests/fixtures/hpc_prediction/aurora_activity.json",
+    "examples/aurora_execution_resources.json"
+  ],
+  "validation": {
+    "source_audit": "runs/hpc_prediction_private_20261111_audit/audit.json",
+    "baseline": "runs/hpc_prediction_private_20261111_baseline_tests/pytest.xml",
+    "task_baseline": [
+      "runs/hpc_prediction_private_20261111_task_baseline/pytest.xml",
+      "runs/hpc_prediction_private_20261111_task_baseline02/pytest.xml"
+    ],
+    "current": "runs/hpc_prediction_private_20261111_combined/pytest.xml",
+    "scope": "230 passing controlled checks; actual local ledger/calculations, saved action replay, fixture provider dispatch and runtime construction. Failed/unavailable acquisitions are controlled returns.",
+    "resolved_failures": [
+      "Initial task-summary fixture supplied frozen scope; corrected to runtime plain scope and all ten affected baselines passed.",
+      "Initial task extraction emitted empty import in suspension file; all 80 import failures resolved and retained."
+    ]
+  },
+  "limitations": [
+    "HPCLedger.open_existing retains its unchanged read-only SQLite connection without explicit close in all five axes. The expanded single-process suite exhausted descriptors (784 passed/11 failed); all eleven passed in a fresh process. This inherited lifecycle defect remains open.",
+    "Further review of generic presentation, source acquisition, contract parsing and saved-source dependencies remains before claiming complete prediction implementation ownership.",
+    "The planning and allocation episodes retain mixed-role methods and axis-owned central tasks; their full private responsibility splits remain incomplete.",
+    "Monitor scheduling/controller code remains at its existing hpc_monitoring.py home; prediction uses it only indirectly for supplied commission-policy validation, not as available monitoring work.",
+    "A104 retains its inherited missing runtime closed-HPC model-reference branch; full saved reopening, autonomous science and shared-root integration remain unverified.",
+    "The full root-and-every-existing-episode goal remains active/incomplete."
+  ],
+  "message_endpoints_before_prediction_parent_split": [
+    {
+      "direction": "parent_to_prediction",
+      "parent_current": "../episode.py:prepare_child_request (original default passthrough)",
+      "child_current": "from_parent.py:prepare_assignment",
+      "parent_named_destination": "../to_child_hpc_resource_prediction.py",
+      "status": "parent directional extraction pending"
+    },
+    {
+      "direction": "prediction_to_parent",
+      "child_current": "to_parent.py; report_delivery.py",
+      "parent_current": "a104/runtime.py typed admission and original shared ledger",
+      "parent_named_destination": "../from_child_hpc_resource_prediction.py",
+      "status": "parent directional extraction pending"
+    }
+  ],
+  "prediction_parent_exchange_validation": {
+    "baseline": "runs/hpc_prediction_messages_20261111_baseline_tests/pytest.xml",
+    "baseline_passes": 90,
+    "behavior": "runs/hpc_prediction_messages_20261111_combined/pytest.xml",
+    "prediction_exchange_passes": 120,
+    "existing_monitor_exchange_passes": 40,
+    "resolved_audit_fixture_error": "The first audit supplied empty resources, which the original A102 binding rejects with explicit_hpc_resource_required. The audit was corrected to use the same established commission/resources fixture as the passing behavior tests; no application change was needed. Original failure remains in runs/hpc_prediction_messages_20261111_audit/.",
+    "source_audit": "runs/hpc_prediction_messages_20261111_audit02/audit.json",
+    "scope": "Actual local child/parent ledger, typed contracts, Journal and runtime selection/receipt functions with controlled Store lookup, receipt/progress ports, cached admission and child construction. Full redeliver/reopening and autonomous science are not claimed."
+  },
+  "prediction_parent_exchange_limitations": [
+    "The ten parent planning episodes still have mixed-role binding methods and axis-owned central tasks; the full parent responsibility split remains open.",
+    "Prediction prompt ownership, shared calculation library placement and remaining dependency review remain open.",
+    "Controlled SQLite journal/ledger and receipt/provider ports establish the tested connections. No live remote work, autonomous prediction or full saved-workflow restoration is established.",
+    "A104 runtime._closed_child_commission lacks the HPC-model frozen-reference branch present in the other four axes before this change. Child frozen-reference custody passes, but this inherited runtime omission requires separate follow-up.",
+    "Missing legacy axis heads, remaining role-only resource/native replay routing, shared-root integration and the full private-implementation goal remain open."
+  ],
+  "historical_sources_before_private_prompt": {
+    "__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "classes": {},
+      "functions": [],
+      "imports": []
+    },
+    "binding_record.py": {
+      "sha256": "8e0932c5e45bf1df5a3c5e947826f2f83ac0b041283a19fe87e835d13d27f9c1",
+      "classes": {
+        "PredictionBindingRecord": [
+          "as_record"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from pathlib import Path",
+        "from copy import deepcopy",
+        "import hashlib",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue"
+      ]
+    },
+    "closed_models.py": {
+      "sha256": "c152e975dfb7198c6756e189229f61c1a842bc729c3a8d8014cbef7c429b98ef",
+      "classes": {
+        "ClosedModels": [
+          "frozen_reference"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "import json",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain"
+      ]
+    },
+    "configuration.py": {
+      "sha256": "b28a151eea8ead20730dcc1d2945a65da5b9e1bca44d1fbd46fd262f6965eb49",
+      "classes": {
+        "PredictionConfiguration": [
+          "__init__"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from pathlib import Path",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_campaign import validate_commission"
+      ]
+    },
+    "credit.py": {
+      "sha256": "50d46f698c0a7330febe2d849c51f3007a9dc178e60929dfdbb0f2b057b4111b",
+      "classes": {
+        "HPCEpisodeCredit": [
+          "credit_kind",
+          "_quality",
+          "credit_view"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_prediction as prediction"
+      ]
+    },
+    "decision_inputs.py": {
+      "sha256": "979644c75571ff5deab535bb0c363ed70f62f93ae467664ae373dcb212a2fcce",
+      "classes": {
+        "PredictionDecisionInputs": [
+          "decision_inputs"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations"
+      ]
+    },
+    "decision_state.py": {
+      "sha256": "a00a6a58afed85d34f345aa9ddc8d93568744a0c993056b2e12f9db6532169f6",
+      "classes": {
+        "PredictionDecisionState": [
+          "decision_state"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import FACT_MEANINGS, FACT_SOURCES, Mapping, _plain, _references_in, json"
+      ]
+    },
+    "episode.py": {
+      "sha256": "223a14213ba17c24d2dcc1a5a796a33f7facd8b21614d48c34ec5cbf290c0efb",
+      "classes": {
+        "HPCEpisode": [
+          "child_roles",
+          "allowed_children",
+          "permitted_common_actions"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from importlib import import_module",
+        "from .task import ResourcePredictionTask",
+        "from .configuration import PredictionConfiguration",
+        "from .from_parent import PredictionAssignment",
+        "from .to_parent import PredictionReport",
+        "from .goal import PredictionGoal",
+        "from .internal_summary import PredictionSummary",
+        "from .prediction_state import PredictionState",
+        "from .prediction_history import PredictionHistory",
+        "from .prediction_operations import PredictionOperations",
+        "from .portfolio_comparison import PortfolioComparison",
+        "from .received_evidence import ReceivedEvidence",
+        "from .closed_models import ClosedModels",
+        "from .credit import HPCEpisodeCredit",
+        "from .queue_observations import QueueObservations",
+        "from .binding_record import PredictionBindingRecord"
+      ]
+    },
+    "from_parent.py": {
+      "sha256": "9d80e4df8287de3d92946700d0921c43e91ddad57493d244b306a58fe3f57d67",
+      "classes": {
+        "PredictionAssignment": [
+          "assignment_schema",
+          "commission_identity",
+          "_commission",
+          "prepare_assignment"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.execution_contracts import obj",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104.domain import validate_schema"
+      ]
+    },
+    "goal.py": {
+      "sha256": "d35fe48ea0ae5810f0664ec6182f0c49af6bd9455b2354da3402516cb9085342",
+      "classes": {
+        "PredictionGoal": [
+          "instructions"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations"
+      ]
+    },
+    "internal_summary.py": {
+      "sha256": "11afe92a00d6f9c75fbed9c897321fe91928e09efba37311f7945b93ac67eb11",
+      "classes": {
+        "PredictionSummary": [
+          "decision_context"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_prediction as prediction"
+      ]
+    },
+    "portfolio_comparison.py": {
+      "sha256": "a0a98d869ca0ea31cac042a15a30557fa02e9e08f486febd870c4398ba0dfbd0",
+      "classes": {
+        "PortfolioComparison": [
+          "_candidates",
+          "_features",
+          "_comparisons"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_prediction as prediction"
+      ]
+    },
+    "prediction_history.py": {
+      "sha256": "1dceaec183c7e184b24b57d16b6795b2302fa7932e76bf3f2d3230bdf50f95b5",
+      "classes": {
+        "PredictionHistory": [
+          "_history",
+          "_shared_history"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_resource_prediction import physical_attempt_key",
+        "import time"
+      ]
+    },
+    "prediction_operations.py": {
+      "sha256": "058b54c08f59f3ee2da584b004849ca8df326015395a3c223dbeba7f12918c3c",
+      "classes": {
+        "PredictionOperations": [
+          "catalog",
+          "execute"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "import asyncio",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "import json",
+        "from gene_annotation_episode.episodic_workflow.root.a104.execution_contracts import obj",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_prediction as prediction",
+        "import shlex",
+        "import subprocess",
+        "import time",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_campaign import validate_commission",
+        "from gene_annotation_episode.episodic_workflow.root.a104.domain import validate_schema"
+      ]
+    },
+    "prediction_state.py": {
+      "sha256": "93da7c94cf211e330a60898a429e9126378c387a8a7b074f86d89ccef8f715ad",
+      "classes": {
+        "PredictionState": [
+          "state",
+          "initialize",
+          "_current_model"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_ledger import HPCLedger",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_prediction as prediction",
+        "from gene_annotation_episode.episodic_workflow.root.a104.domain import validate_schema"
+      ]
+    },
+    "queue_observations.py": {
+      "sha256": "feba7563d583f221960fbae892267e34ba7bc78f311bc3130f2902f445805c48",
+      "classes": {
+        "QueueObservations": [
+          "_observe_queue",
+          "_queue"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "import time"
+      ]
+    },
+    "received_evidence.py": {
+      "sha256": "01118b41bc33b7be22fbff58ddd780959211c58ea296c34c762dda1d45ae705a",
+      "classes": {
+        "ReceivedEvidence": [
+          "_known",
+          "resolve_received_reference",
+          "read_evidence"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "import json",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain"
+      ]
+    },
+    "report_delivery.py": {
+      "sha256": "873889007d2dfa8db0e62697491b67105a263019b6550257ee74a4c6444796d2",
+      "classes": {
+        "PredictionReportDelivery": [
+          "finish"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import Record, _json, form_with_facts, json"
+      ]
+    },
+    "task.py": {
+      "sha256": "7cb4245da8abc0bdf08b462df9f432b625b36e91d9b8a2f62f3392025ea71220",
+      "classes": {
+        "ResourcePredictionTask": [
+          "next",
+          "apply_response",
+          "execute"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import ActionFailure, ContractInformationError, Draft202012Validator, EventTargetError, ReportBoundaryError, SourceEnd, ValidationError, WorkflowError, _decode_recorded_action_response, _json, _wait_target_feedback, inspect, json, nullcontext, observes_action_outcome, schema_failure_diagnostic, validate_form",
+        "from .task_state import PredictionTaskState",
+        "from .task_decision import PredictionTaskDecision",
+        "from .waiting import PredictionSuspension",
+        "from .report_delivery import PredictionReportDelivery",
+        "from .decision_state import PredictionDecisionState",
+        "from .decision_inputs import PredictionDecisionInputs"
+      ]
+    },
+    "task_decision.py": {
+      "sha256": "37e2716dc93faf9221c07a8c7ae5b6298634ade34cd341346132136e04c5bdcc",
+      "classes": {
+        "PredictionTaskDecision": [
+          "call",
+          "instructions",
+          "conversation_key",
+          "interpretation_context",
+          "exchange_schema",
+          "exchange_response",
+          "validate_contract_exchange_request",
+          "validate_contract_exchange_history",
+          "exchange_decision"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import CONTRACT_INFORMATION_OPERATIONS, DECISION_CONTEXT_VERSION, DECISION_EXCHANGE_PROTOCOL, Draft202012Validator, Mapping, ValidationError, WorkflowError, _ASSIGNMENT_TRANSPORT, _action_generation_schema, _category_yield_parameters, _digest, _json, _object, _plain, _recorded_action_generation_schema, _recorded_assignment_transport, _references_in, apply_state_frame, composition_lookup_schema, instructional_model_context, is_contract_information, json, lookup_attempts, model_snapshot, requested_contract_information, schema_failure_diagnostic, sqlite3, state_frame, yield_table"
+      ]
+    },
+    "task_state.py": {
+      "sha256": "19eda5970a5ef08441f7d00a466f9624553367e84977925956915d23492cefd7",
+      "classes": {
+        "PredictionTaskState": [
+          "__init__",
+          "bind_execution_context",
+          "record_execution_failure",
+          "restore_checkpoint",
+          "restore",
+          "record_effect",
+          "checkpoint"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import ActionLeaf, EFFECT_VERSION, Episode, Record, _json, _object, _plain, interpretation_schema, json"
+      ]
+    },
+    "to_parent.py": {
+      "sha256": "22fe549a8593acd0aae721fe7d74e7fbd36cf5c29d66e00c7089d38453dbc828",
+      "classes": {
+        "PredictionReport": [
+          "fact_sources",
+          "facts",
+          "resolve",
+          "validate_report"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.episode_bindings import reference_in_context",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import validate_form"
+      ]
+    },
+    "waiting.py": {
+      "sha256": "6dbf1bee8ceedb5a238c4503b02e061cb5e82a02a93ceacf9455725f7034fcf8",
+      "classes": {
+        "PredictionSuspension": [
+          "suspension_changed"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations"
+      ]
+    },
+    "yield.py": {
+      "sha256": "150223f8547dbc376a1c89a4a6433039abaefb9278e93a1652fc6be962d8f16b",
+      "classes": {
+        "HPCEpisodeYield": [
+          "yield_controller",
+          "continuation_for_action",
+          "practical_estimator"
+        ]
+      },
+      "functions": [],
+      "imports": [
+        "from __future__ import annotations",
+        "import time"
+      ]
+    }
+  },
+  "descriptor_before_private_prompt": {
+    "version": "hpc_episode_v1",
+    "binding_id": "hpc_work_planning/hpc_resource_prediction",
+    "implementation_sha256": "be887fd59a411a4deb56bb751b1d0cb8cb3bb5e346e26c0018652b4d94a54073",
+    "configuration": {
+      "resources": {
+        "aurora": {
+          "kind": "pbs_ssh",
+          "launch_prompt_entry": "launch-aurora",
+          "scheduler": {
+            "kind": "pbs",
+            "required_resources": [
+              "filesystems=flare"
+            ]
+          },
+          "workspace": "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-hpc-20261104T022708Z",
+          "ssh_argv": [
+            "/bin/bash",
+            "/home/chia/repos/gene_annotation_episode/tools/aurora_ssh.sh"
+          ],
+          "python_executable": "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-hpc-20261104T022708Z/env/bin/python",
+          "account": "BioReason-Aurora-Test"
+        }
+      },
+      "commissions": {
+        "commission": {
+          "objective": "Exercise the contract without running a job",
+          "resource_id": "aurora",
+          "model": {
+            "features": [
+              {
+                "name": "size",
+                "transform": "log1p",
+                "scale": 1
+              }
+            ],
+            "priors": {
+              "queue": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "setup": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "work": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "return": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              }
+            },
+            "success_prior": [
+              2,
+              1
+            ],
+            "resource_priors": {
+              "cpu_seconds": {
+                "median": 1000.0,
+                "unit": "cpu_seconds",
+                "log_sigma": 0.4,
+                "coefficient_variance": 2.0
+              },
+              "memory_bytes": {
+                "median": 4294967296,
+                "unit": "bytes",
+                "log_sigma": 0.4,
+                "coefficient_variance": 2.0
+              }
+            }
+          },
+          "history": [
+            {
+              "id": "measurement-1",
+              "observed_at": 1,
+              "features": {
+                "size": 1
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 20,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 5,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 33554432,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-2",
+              "observed_at": 2,
+              "features": {
+                "size": 2
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 40,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 10,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 67108864,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-3",
+              "observed_at": 3,
+              "features": {
+                "size": 3
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 60,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 15,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 100663296,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-4",
+              "observed_at": 4,
+              "features": {
+                "size": 4
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 80,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 20,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 134217728,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-5",
+              "observed_at": 5,
+              "features": {
+                "size": 5
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 100,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 25,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 167772160,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-6",
+              "observed_at": 6,
+              "features": {
+                "size": 6
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 120,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 30,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 201326592,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-7",
+              "observed_at": 7,
+              "features": {
+                "size": 7
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 140,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 35,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 234881024,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-8",
+              "observed_at": 8,
+              "features": {
+                "size": 8
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 160,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 40,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 268435456,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            }
+          ],
+          "validation_ids": [
+            "measurement-7",
+            "measurement-8"
+          ],
+          "obligations": {
+            "original-work": {
+              "credit": 10.0,
+              "acceptance": [
+                {
+                  "field": [
+                    "quality"
+                  ],
+                  "operator": "ge",
+                  "value": 0.9
+                }
+              ]
+            }
+          },
+          "candidates": [
+            {
+              "id": "one-portfolio",
+              "queue": "debug",
+              "nodes": 1,
+              "wall_seconds": 3600,
+              "features": {
+                "size": 10
+              },
+              "units": [
+                {
+                  "unit_id": "unit-1",
+                  "obligation_id": "original-work",
+                  "effort": 1.0,
+                  "argv": [
+                    "/not-an-executable-contract-fixture"
+                  ],
+                  "environment": {}
+                }
+              ]
+            }
+          ],
+          "credit": {
+            "model_scale": 0.01,
+            "validation_scale": 0.1,
+            "validation_slots": [
+              {
+                "id": "original-queue",
+                "metric": "queue",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0
+              },
+              {
+                "id": "running-work",
+                "metric": "work",
+                "phase": "running",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 60
+              },
+              {
+                "id": "cpu_seconds",
+                "metric": "cpu_seconds",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0.0
+              },
+              {
+                "id": "memory_bytes",
+                "metric": "memory_bytes",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0.0
+              }
+            ]
+          },
+          "preferences": {
+            "elapsed_cost_per_second": 0.0001,
+            "node_hour_cost": 0.01
+          },
+          "limits": {
+            "result_limit_bytes": 65536,
+            "queue_max_age_seconds": 10000000000.0
+          }
+        }
+      }
+    }
+  },
+  "private_prompt_20261111": {
+    "composer": "task_instructions.py:instructions",
+    "renderer": "library/hpc_prompt.py:render_hpc_prompt",
+    "declared_by": "episode.py:HPCEpisode.decision_prompt_renderer",
+    "dispatch": "task_decision.py:call/exchange_decision -> complete_decision -> existing provider complete_with_presentation; original complete fallback retained",
+    "removed_inapplicable_text": "Original unconditional pending_child_delivery repair advice; this predictor has no child/report-redelivery action.",
+    "preserved": "Original prediction goal, conditional library guidance, typed facts, frozen operand descriptors, history and exact lookup/frame presentation.",
+    "validation": {
+      "baseline": "runs/hpc_prediction_prompt_20261111_baseline/pytest.xml",
+      "baseline_passes": 130,
+      "behavior": "runs/hpc_prediction_prompt_20261111_combined/pytest.xml",
+      "passes": 410,
+      "prompt_checks": 180,
+      "existing_binding_task_checks": 230,
+      "source_audit": "runs/hpc_prediction_prompt_20261111_audit/audit.json",
+      "current_catalog_consistency": "runs/hpc_prediction_prompt_20261111_consistency/consistency.json",
+      "scope": "Actual private task call/exchange and SQLite journal/replay with controlled input/provider ports; actual formatter and transport frames. Existing local ledger/calculation/outcome checks retained. No live provider, native work or full saved-workflow restoration.",
+      "resolved_fixture_failure": "Focused run has 30 passes and 20 failures because its new exchange fixture omitted task.scope. Supplying the original task scope resolves all affected checks without application changes; the failed run remains under runs/hpc_prediction_prompt_20261111_focused/."
+    }
+  },
+  "historical_sources_before_calculation_library": {
+    "__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": {},
+      "imports": []
+    },
+    "binding_record.py": {
+      "sha256": "ad9aeadb541ea6cc6fa06d8edf889cc85a0d5fbab16fd0061588cf73a3802e45",
+      "functions": [],
+      "classes": {
+        "PredictionBindingRecord": [
+          "as_record"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from pathlib import Path",
+        "from copy import deepcopy",
+        "import hashlib",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue"
+      ]
+    },
+    "closed_models.py": {
+      "sha256": "c152e975dfb7198c6756e189229f61c1a842bc729c3a8d8014cbef7c429b98ef",
+      "functions": [],
+      "classes": {
+        "ClosedModels": [
+          "frozen_reference"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "import json",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain"
+      ]
+    },
+    "configuration.py": {
+      "sha256": "b28a151eea8ead20730dcc1d2945a65da5b9e1bca44d1fbd46fd262f6965eb49",
+      "functions": [],
+      "classes": {
+        "PredictionConfiguration": [
+          "__init__"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from pathlib import Path",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_campaign import validate_commission"
+      ]
+    },
+    "credit.py": {
+      "sha256": "50d46f698c0a7330febe2d849c51f3007a9dc178e60929dfdbb0f2b057b4111b",
+      "functions": [],
+      "classes": {
+        "HPCEpisodeCredit": [
+          "credit_kind",
+          "_quality",
+          "credit_view"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_prediction as prediction"
+      ]
+    },
+    "decision_inputs.py": {
+      "sha256": "562158b9bfa8fa62600d983daee10f3b2e3eaec6c28f4bf667bd2f5bc830890b",
+      "functions": [],
+      "classes": {
+        "PredictionDecisionInputs": [
+          "decision_inputs"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations"
+      ]
+    },
+    "decision_state.py": {
+      "sha256": "a00a6a58afed85d34f345aa9ddc8d93568744a0c993056b2e12f9db6532169f6",
+      "functions": [],
+      "classes": {
+        "PredictionDecisionState": [
+          "decision_state"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import FACT_MEANINGS, FACT_SOURCES, Mapping, _plain, _references_in, json"
+      ]
+    },
+    "episode.py": {
+      "sha256": "d9304f57b44f86f4905342d589aa4ba088bf5467f00964687dc5886ce7a5d481",
+      "functions": [],
+      "classes": {
+        "HPCEpisode": [
+          "child_roles",
+          "allowed_children",
+          "permitted_common_actions"
+        ]
+      },
+      "imports": [
+        "from importlib import import_module",
+        "from .task import ResourcePredictionTask",
+        "from gene_annotation_episode.episodic_workflow.root.a104.library.hpc_prompt import render_hpc_prompt",
+        "from .configuration import PredictionConfiguration",
+        "from .from_parent import PredictionAssignment",
+        "from .to_parent import PredictionReport",
+        "from .goal import PredictionGoal",
+        "from .internal_summary import PredictionSummary",
+        "from .prediction_state import PredictionState",
+        "from .prediction_history import PredictionHistory",
+        "from .prediction_operations import PredictionOperations",
+        "from .portfolio_comparison import PortfolioComparison",
+        "from .received_evidence import ReceivedEvidence",
+        "from .closed_models import ClosedModels",
+        "from .credit import HPCEpisodeCredit",
+        "from .queue_observations import QueueObservations",
+        "from .binding_record import PredictionBindingRecord"
+      ]
+    },
+    "from_parent.py": {
+      "sha256": "9d80e4df8287de3d92946700d0921c43e91ddad57493d244b306a58fe3f57d67",
+      "functions": [],
+      "classes": {
+        "PredictionAssignment": [
+          "assignment_schema",
+          "commission_identity",
+          "_commission",
+          "prepare_assignment"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.execution_contracts import obj",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104.domain import validate_schema"
+      ]
+    },
+    "goal.py": {
+      "sha256": "d35fe48ea0ae5810f0664ec6182f0c49af6bd9455b2354da3402516cb9085342",
+      "functions": [],
+      "classes": {
+        "PredictionGoal": [
+          "instructions"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations"
+      ]
+    },
+    "internal_summary.py": {
+      "sha256": "11afe92a00d6f9c75fbed9c897321fe91928e09efba37311f7945b93ac67eb11",
+      "functions": [],
+      "classes": {
+        "PredictionSummary": [
+          "decision_context"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_prediction as prediction"
+      ]
+    },
+    "portfolio_comparison.py": {
+      "sha256": "a0a98d869ca0ea31cac042a15a30557fa02e9e08f486febd870c4398ba0dfbd0",
+      "functions": [],
+      "classes": {
+        "PortfolioComparison": [
+          "_candidates",
+          "_features",
+          "_comparisons"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_prediction as prediction"
+      ]
+    },
+    "prediction_history.py": {
+      "sha256": "1dceaec183c7e184b24b57d16b6795b2302fa7932e76bf3f2d3230bdf50f95b5",
+      "functions": [],
+      "classes": {
+        "PredictionHistory": [
+          "_history",
+          "_shared_history"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_resource_prediction import physical_attempt_key",
+        "import time"
+      ]
+    },
+    "prediction_operations.py": {
+      "sha256": "058b54c08f59f3ee2da584b004849ca8df326015395a3c223dbeba7f12918c3c",
+      "functions": [],
+      "classes": {
+        "PredictionOperations": [
+          "catalog",
+          "execute"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "import asyncio",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "import json",
+        "from gene_annotation_episode.episodic_workflow.root.a104.execution_contracts import obj",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_prediction as prediction",
+        "import shlex",
+        "import subprocess",
+        "import time",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_campaign import validate_commission",
+        "from gene_annotation_episode.episodic_workflow.root.a104.domain import validate_schema"
+      ]
+    },
+    "prediction_state.py": {
+      "sha256": "93da7c94cf211e330a60898a429e9126378c387a8a7b074f86d89ccef8f715ad",
+      "functions": [],
+      "classes": {
+        "PredictionState": [
+          "state",
+          "initialize",
+          "_current_model"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.hpc_ledger import HPCLedger",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_prediction as prediction",
+        "from gene_annotation_episode.episodic_workflow.root.a104.domain import validate_schema"
+      ]
+    },
+    "queue_observations.py": {
+      "sha256": "feba7563d583f221960fbae892267e34ba7bc78f311bc3130f2902f445805c48",
+      "functions": [],
+      "classes": {
+        "QueueObservations": [
+          "_observe_queue",
+          "_queue"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue",
+        "import time"
+      ]
+    },
+    "received_evidence.py": {
+      "sha256": "01118b41bc33b7be22fbff58ddd780959211c58ea296c34c762dda1d45ae705a",
+      "functions": [],
+      "classes": {
+        "ReceivedEvidence": [
+          "_known",
+          "resolve_received_reference",
+          "read_evidence"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "import json",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import plain"
+      ]
+    },
+    "report_delivery.py": {
+      "sha256": "873889007d2dfa8db0e62697491b67105a263019b6550257ee74a4c6444796d2",
+      "functions": [],
+      "classes": {
+        "PredictionReportDelivery": [
+          "finish"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import Record, _json, form_with_facts, json"
+      ]
+    },
+    "task.py": {
+      "sha256": "7cb4245da8abc0bdf08b462df9f432b625b36e91d9b8a2f62f3392025ea71220",
+      "functions": [],
+      "classes": {
+        "ResourcePredictionTask": [
+          "next",
+          "apply_response",
+          "execute"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import ActionFailure, ContractInformationError, Draft202012Validator, EventTargetError, ReportBoundaryError, SourceEnd, ValidationError, WorkflowError, _decode_recorded_action_response, _json, _wait_target_feedback, inspect, json, nullcontext, observes_action_outcome, schema_failure_diagnostic, validate_form",
+        "from .task_state import PredictionTaskState",
+        "from .task_decision import PredictionTaskDecision",
+        "from .waiting import PredictionSuspension",
+        "from .report_delivery import PredictionReportDelivery",
+        "from .decision_state import PredictionDecisionState",
+        "from .decision_inputs import PredictionDecisionInputs"
+      ]
+    },
+    "task_decision.py": {
+      "sha256": "7fdf3e4c5a80df2821d5ff487288af1a310c34a9531fcde68ce04db06eb3a1c9",
+      "functions": [],
+      "classes": {
+        "PredictionTaskDecision": [
+          "call",
+          "instructions",
+          "complete_decision",
+          "conversation_key",
+          "interpretation_context",
+          "exchange_schema",
+          "exchange_response",
+          "validate_contract_exchange_request",
+          "validate_contract_exchange_history",
+          "exchange_decision"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from .task_instructions import instructions",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import CONTRACT_INFORMATION_OPERATIONS, DECISION_CONTEXT_VERSION, DECISION_EXCHANGE_PROTOCOL, Draft202012Validator, Mapping, ValidationError, WorkflowError, _ASSIGNMENT_TRANSPORT, _action_generation_schema, _category_yield_parameters, _digest, _json, _object, _plain, _recorded_action_generation_schema, _recorded_assignment_transport, _references_in, apply_state_frame, composition_lookup_schema, instructional_model_context, is_contract_information, json, lookup_attempts, model_snapshot, requested_contract_information, schema_failure_diagnostic, sqlite3, state_frame, yield_table"
+      ]
+    },
+    "task_instructions.py": {
+      "sha256": "37227fe8e9c93ebf6c9a0422623bf46af081adde9c03609d47527cd884155cb7",
+      "functions": [
+        "instructions"
+      ],
+      "classes": {},
+      "imports": []
+    },
+    "task_state.py": {
+      "sha256": "19eda5970a5ef08441f7d00a466f9624553367e84977925956915d23492cefd7",
+      "functions": [],
+      "classes": {
+        "PredictionTaskState": [
+          "__init__",
+          "bind_execution_context",
+          "record_execution_failure",
+          "restore_checkpoint",
+          "restore",
+          "record_effect",
+          "checkpoint"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.runtime import ActionLeaf, EFFECT_VERSION, Episode, Record, _json, _object, _plain, interpretation_schema, json"
+      ]
+    },
+    "to_parent.py": {
+      "sha256": "22fe549a8593acd0aae721fe7d74e7fbd36cf5c29d66e00c7089d38453dbc828",
+      "functions": [],
+      "classes": {
+        "PredictionReport": [
+          "fact_sources",
+          "facts",
+          "resolve",
+          "validate_report"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "from gene_annotation_episode.episodic_workflow.root.a104.episode_bindings import reference_in_context",
+        "from gene_annotation_episode.episodic_workflow.root.a104.communication import validate_form"
+      ]
+    },
+    "waiting.py": {
+      "sha256": "6dbf1bee8ceedb5a238c4503b02e061cb5e82a02a93ceacf9455725f7034fcf8",
+      "functions": [],
+      "classes": {
+        "PredictionSuspension": [
+          "suspension_changed"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations"
+      ]
+    },
+    "yield.py": {
+      "sha256": "150223f8547dbc376a1c89a4a6433039abaefb9278e93a1652fc6be962d8f16b",
+      "functions": [],
+      "classes": {
+        "HPCEpisodeYield": [
+          "yield_controller",
+          "continuation_for_action",
+          "practical_estimator"
+        ]
+      },
+      "imports": [
+        "from __future__ import annotations",
+        "import time"
+      ]
+    }
+  },
+  "descriptor_before_calculation_library": {
+    "version": "hpc_episode_v1",
+    "binding_id": "hpc_work_planning/hpc_resource_prediction",
+    "implementation_sha256": "df6cfc6c829be616c2451a733ab50d8887503f69f1f8bb1c63670538eb2fee3d",
+    "configuration": {
+      "resources": {
+        "aurora": {
+          "kind": "pbs_ssh",
+          "launch_prompt_entry": "launch-aurora",
+          "scheduler": {
+            "kind": "pbs",
+            "required_resources": [
+              "filesystems=flare"
+            ]
+          },
+          "workspace": "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-hpc-20261104T022708Z",
+          "ssh_argv": [
+            "/bin/bash",
+            "/home/chia/repos/gene_annotation_episode/tools/aurora_ssh.sh"
+          ],
+          "python_executable": "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-hpc-20261104T022708Z/env/bin/python",
+          "account": "BioReason-Aurora-Test"
+        }
+      },
+      "commissions": {
+        "commission": {
+          "objective": "Exercise the contract without running a job",
+          "resource_id": "aurora",
+          "model": {
+            "features": [
+              {
+                "name": "size",
+                "transform": "log1p",
+                "scale": 1
+              }
+            ],
+            "priors": {
+              "queue": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "setup": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "work": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "return": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              }
+            },
+            "success_prior": [
+              2,
+              1
+            ],
+            "resource_priors": {
+              "cpu_seconds": {
+                "median": 1000.0,
+                "unit": "cpu_seconds",
+                "log_sigma": 0.4,
+                "coefficient_variance": 2.0
+              },
+              "memory_bytes": {
+                "median": 4294967296,
+                "unit": "bytes",
+                "log_sigma": 0.4,
+                "coefficient_variance": 2.0
+              }
+            }
+          },
+          "history": [
+            {
+              "id": "measurement-1",
+              "observed_at": 1,
+              "features": {
+                "size": 1
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 20,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 5,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 33554432,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-2",
+              "observed_at": 2,
+              "features": {
+                "size": 2
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 40,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 10,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 67108864,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-3",
+              "observed_at": 3,
+              "features": {
+                "size": 3
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 60,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 15,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 100663296,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-4",
+              "observed_at": 4,
+              "features": {
+                "size": 4
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 80,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 20,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 134217728,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-5",
+              "observed_at": 5,
+              "features": {
+                "size": 5
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 100,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 25,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 167772160,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-6",
+              "observed_at": 6,
+              "features": {
+                "size": 6
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 120,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 30,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 201326592,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-7",
+              "observed_at": 7,
+              "features": {
+                "size": 7
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 140,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 35,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 234881024,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-8",
+              "observed_at": 8,
+              "features": {
+                "size": 8
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 160,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 40,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 268435456,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            }
+          ],
+          "validation_ids": [
+            "measurement-7",
+            "measurement-8"
+          ],
+          "obligations": {
+            "original-work": {
+              "credit": 10.0,
+              "acceptance": [
+                {
+                  "field": [
+                    "quality"
+                  ],
+                  "operator": "ge",
+                  "value": 0.9
+                }
+              ]
+            }
+          },
+          "candidates": [
+            {
+              "id": "one-portfolio",
+              "queue": "debug",
+              "nodes": 1,
+              "wall_seconds": 3600,
+              "features": {
+                "size": 10
+              },
+              "units": [
+                {
+                  "unit_id": "unit-1",
+                  "obligation_id": "original-work",
+                  "effort": 1.0,
+                  "argv": [
+                    "/not-an-executable-contract-fixture"
+                  ],
+                  "environment": {}
+                }
+              ]
+            }
+          ],
+          "credit": {
+            "model_scale": 0.01,
+            "validation_scale": 0.1,
+            "validation_slots": [
+              {
+                "id": "original-queue",
+                "metric": "queue",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0
+              },
+              {
+                "id": "running-work",
+                "metric": "work",
+                "phase": "running",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 60
+              },
+              {
+                "id": "cpu_seconds",
+                "metric": "cpu_seconds",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0.0
+              },
+              {
+                "id": "memory_bytes",
+                "metric": "memory_bytes",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0.0
+              }
+            ]
+          },
+          "preferences": {
+            "elapsed_cost_per_second": 0.0001,
+            "node_hour_cost": 0.01
+          },
+          "limits": {
+            "result_limit_bytes": 65536,
+            "queue_max_age_seconds": 10000000000.0
+          }
+        }
+      }
+    }
+  },
+  "descriptor_at_calculation_baseline": {
+    "version": "hpc_episode_v1",
+    "binding_id": "hpc_work_planning/hpc_resource_prediction",
+    "implementation_sha256": "df6cfc6c829be616c2451a733ab50d8887503f69f1f8bb1c63670538eb2fee3d",
+    "configuration": {
+      "resources": {
+        "aurora": {
+          "kind": "pbs_ssh",
+          "launch_prompt_entry": "launch-aurora",
+          "scheduler": {
+            "kind": "pbs",
+            "required_resources": [
+              "filesystems=flare"
+            ]
+          },
+          "workspace": "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-hpc-20261104T022708Z",
+          "ssh_argv": [
+            "/bin/bash",
+            "/home/chia/repos/gene_annotation_episode/tools/aurora_ssh.sh"
+          ],
+          "python_executable": "/lus/flare/projects/BioReason-Aurora-Test/chian/runs/gene-annotation-hpc-20261104T022708Z/env/bin/python",
+          "account": "BioReason-Aurora-Test"
+        }
+      },
+      "commissions": {
+        "commission": {
+          "objective": "Exercise the contract without running a job",
+          "resource_id": "aurora",
+          "model": {
+            "features": [
+              {
+                "name": "size",
+                "transform": "log1p",
+                "scale": 1
+              }
+            ],
+            "priors": {
+              "queue": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "setup": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "work": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              },
+              "return": {
+                "median_seconds": 100,
+                "log_sigma": 0.5,
+                "coefficient_variance": 0.2
+              }
+            },
+            "success_prior": [
+              2,
+              1
+            ],
+            "resource_priors": {
+              "cpu_seconds": {
+                "median": 1000.0,
+                "unit": "cpu_seconds",
+                "log_sigma": 0.4,
+                "coefficient_variance": 2.0
+              },
+              "memory_bytes": {
+                "median": 4294967296,
+                "unit": "bytes",
+                "log_sigma": 0.4,
+                "coefficient_variance": 2.0
+              }
+            }
+          },
+          "history": [
+            {
+              "id": "measurement-1",
+              "observed_at": 1,
+              "features": {
+                "size": 1
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 20,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 5,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 33554432,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-2",
+              "observed_at": 2,
+              "features": {
+                "size": 2
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 40,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 10,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 67108864,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-3",
+              "observed_at": 3,
+              "features": {
+                "size": 3
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 60,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 15,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 100663296,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-4",
+              "observed_at": 4,
+              "features": {
+                "size": 4
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 80,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 20,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 134217728,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-5",
+              "observed_at": 5,
+              "features": {
+                "size": 5
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 100,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 25,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 167772160,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-6",
+              "observed_at": 6,
+              "features": {
+                "size": 6
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 120,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 30,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 201326592,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-7",
+              "observed_at": 7,
+              "features": {
+                "size": 7
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 140,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 35,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 234881024,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            },
+            {
+              "id": "measurement-8",
+              "observed_at": 8,
+              "features": {
+                "size": 8
+              },
+              "metrics": {
+                "work": {
+                  "seconds": 160,
+                  "censored": false
+                },
+                "cpu_seconds": {
+                  "value": 40,
+                  "unit": "cpu_seconds",
+                  "censored": false
+                },
+                "memory_bytes": {
+                  "value": 268435456,
+                  "unit": "bytes",
+                  "censored": false
+                }
+              },
+              "success": true,
+              "provenance": [
+                "mathematical_test_case"
+              ]
+            }
+          ],
+          "validation_ids": [
+            "measurement-7",
+            "measurement-8"
+          ],
+          "obligations": {
+            "original-work": {
+              "credit": 10.0,
+              "acceptance": [
+                {
+                  "field": [
+                    "quality"
+                  ],
+                  "operator": "ge",
+                  "value": 0.9
+                }
+              ]
+            }
+          },
+          "candidates": [
+            {
+              "id": "one-portfolio",
+              "queue": "debug",
+              "nodes": 1,
+              "wall_seconds": 3600,
+              "features": {
+                "size": 10
+              },
+              "units": [
+                {
+                  "unit_id": "unit-1",
+                  "obligation_id": "original-work",
+                  "effort": 1.0,
+                  "argv": [
+                    "/not-an-executable-contract-fixture"
+                  ],
+                  "environment": {}
+                }
+              ]
+            }
+          ],
+          "credit": {
+            "model_scale": 0.01,
+            "validation_scale": 0.1,
+            "validation_slots": [
+              {
+                "id": "original-queue",
+                "metric": "queue",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0
+              },
+              {
+                "id": "running-work",
+                "metric": "work",
+                "phase": "running",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 60
+              },
+              {
+                "id": "cpu_seconds",
+                "metric": "cpu_seconds",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0.0
+              },
+              {
+                "id": "memory_bytes",
+                "metric": "memory_bytes",
+                "phase": "planned",
+                "weight": 1.0,
+                "minimum_elapsed_seconds": 0.0
+              }
+            ]
+          },
+          "preferences": {
+            "elapsed_cost_per_second": 0.0001,
+            "node_hour_cost": 0.01
+          },
+          "limits": {
+            "result_limit_bytes": 65536,
+            "queue_max_age_seconds": 10000000000.0
+          }
+        }
+      }
+    }
+  },
+  "methods": {
+    "hpc_work_planning/hpc_resource_prediction/__init__.py": {},
+    "hpc_work_planning/hpc_resource_prediction/binding_record.py": {
+      "PredictionBindingRecord": [
+        "as_record"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/closed_models.py": {
+      "ClosedModels": [
+        "frozen_reference"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/configuration.py": {
+      "PredictionConfiguration": [
+        "__init__"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/credit.py": {
+      "HPCEpisodeCredit": [
+        "credit_kind",
+        "_quality",
+        "credit_view"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/decision_inputs.py": {
+      "PredictionDecisionInputs": [
+        "decision_inputs"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/decision_state.py": {
+      "PredictionDecisionState": [
+        "decision_state"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/episode.py": {
+      "HPCEpisode": [
+        "child_roles",
+        "allowed_children",
+        "permitted_common_actions"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/from_parent.py": {
+      "PredictionAssignment": [
+        "assignment_schema",
+        "commission_identity",
+        "_commission",
+        "prepare_assignment"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/goal.py": {
+      "PredictionGoal": [
+        "instructions"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/internal_summary.py": {
+      "PredictionSummary": [
+        "decision_context"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/portfolio_comparison.py": {
+      "PortfolioComparison": [
+        "_candidates",
+        "_features",
+        "_comparisons"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/prediction_history.py": {
+      "PredictionHistory": [
+        "_history",
+        "_shared_history"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/prediction_operations.py": {
+      "PredictionOperations": [
+        "catalog",
+        "execute"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/prediction_state.py": {
+      "PredictionState": [
+        "state",
+        "initialize",
+        "_current_model"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/queue_observations.py": {
+      "QueueObservations": [
+        "_observe_queue",
+        "_queue"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/received_evidence.py": {
+      "ReceivedEvidence": [
+        "_known",
+        "resolve_received_reference",
+        "read_evidence"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/report_delivery.py": {
+      "PredictionReportDelivery": [
+        "finish"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/task.py": {
+      "ResourcePredictionTask": [
+        "next",
+        "apply_response",
+        "execute"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/task_decision.py": {
+      "PredictionTaskDecision": [
+        "call",
+        "instructions",
+        "complete_decision",
+        "conversation_key",
+        "interpretation_context",
+        "exchange_schema",
+        "exchange_response",
+        "validate_contract_exchange_request",
+        "validate_contract_exchange_history",
+        "exchange_decision"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/task_instructions.py": {},
+    "hpc_work_planning/hpc_resource_prediction/task_state.py": {
+      "PredictionTaskState": [
+        "__init__",
+        "bind_execution_context",
+        "record_execution_failure",
+        "restore_checkpoint",
+        "restore",
+        "record_effect",
+        "checkpoint"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/to_parent.py": {
+      "PredictionReport": [
+        "fact_sources",
+        "facts",
+        "resolve",
+        "validate_report"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/waiting.py": {
+      "PredictionSuspension": [
+        "suspension_changed"
+      ]
+    },
+    "hpc_work_planning/hpc_resource_prediction/yield.py": {
+      "HPCEpisodeYield": [
+        "yield_controller",
+        "continuation_for_action",
+        "practical_estimator"
+      ]
+    }
+  },
+  "functions": {
+    "hpc_work_planning/hpc_resource_prediction/__init__.py": [],
+    "hpc_work_planning/hpc_resource_prediction/binding_record.py": [],
+    "hpc_work_planning/hpc_resource_prediction/closed_models.py": [],
+    "hpc_work_planning/hpc_resource_prediction/configuration.py": [],
+    "hpc_work_planning/hpc_resource_prediction/credit.py": [],
+    "hpc_work_planning/hpc_resource_prediction/decision_inputs.py": [],
+    "hpc_work_planning/hpc_resource_prediction/decision_state.py": [],
+    "hpc_work_planning/hpc_resource_prediction/episode.py": [],
+    "hpc_work_planning/hpc_resource_prediction/from_parent.py": [],
+    "hpc_work_planning/hpc_resource_prediction/goal.py": [],
+    "hpc_work_planning/hpc_resource_prediction/internal_summary.py": [],
+    "hpc_work_planning/hpc_resource_prediction/portfolio_comparison.py": [],
+    "hpc_work_planning/hpc_resource_prediction/prediction_history.py": [],
+    "hpc_work_planning/hpc_resource_prediction/prediction_operations.py": [],
+    "hpc_work_planning/hpc_resource_prediction/prediction_state.py": [],
+    "hpc_work_planning/hpc_resource_prediction/queue_observations.py": [],
+    "hpc_work_planning/hpc_resource_prediction/received_evidence.py": [],
+    "hpc_work_planning/hpc_resource_prediction/report_delivery.py": [],
+    "hpc_work_planning/hpc_resource_prediction/task.py": [],
+    "hpc_work_planning/hpc_resource_prediction/task_decision.py": [],
+    "hpc_work_planning/hpc_resource_prediction/task_instructions.py": [
+      "instructions"
+    ],
+    "hpc_work_planning/hpc_resource_prediction/task_state.py": [],
+    "hpc_work_planning/hpc_resource_prediction/to_parent.py": [],
+    "hpc_work_planning/hpc_resource_prediction/waiting.py": [],
+    "hpc_work_planning/hpc_resource_prediction/yield.py": []
+  },
+  "calculation_library_20261111": {
+    "selected_libraries": [
+      "library/hpc_prediction.py",
+      "library/hpc_resource_prediction.py",
+      "library/hpc_continuation.py"
+    ],
+    "original_homes": [
+      "hpc_prediction.py",
+      "hpc_resource_prediction.py",
+      "hpc_monitoring.py:HPCContinuationEstimator"
+    ],
+    "configuration": "This private binding supplies its original commission model, measured history, fixed validation, portfolio, preference and credit operands. yield.py supplies its own ledger verifier and original continuation cost.",
+    "current_estimator_type": "gene_annotation_episode.episodic_workflow.root.a104.library.hpc_continuation.HPCContinuationEstimator",
+    "preserved": "Functions and estimator methods unchanged apart from relative imports; original model versions, receipt identities, calibration definitions, missing-data treatment and raw credit history retained.",
+    "fingerprint": "Existing source digest now names both calculation libraries and the extracted estimator, retaining monitor-policy validation/scheduling source where previously declared.",
+    "validation": {
+      "baseline": "runs/hpc_calculation_ownership_20261111_baseline/pytest.xml",
+      "baseline_passes": 155,
+      "behavior": "runs/hpc_calculation_ownership_20261111_combined/pytest.xml",
+      "passes": 795,
+      "pass_count_scope": "Distinct checks passed across original run and exact failed-check retry; the original run itself had 784 passes and eleven descriptor-exhaustion failures.",
+      "original_passes": 784,
+      "original_failures": 11,
+      "failed_check_retry": "runs/hpc_calculation_ownership_20261111_retry/pytest.xml",
+      "inherited_connection_review": "runs/hpc_calculation_ownership_20261111_retry/failure_review.json",
+      "source_audit": "runs/hpc_calculation_ownership_20261111_audit/audit.json",
+      "numeric_vectors": "runs/hpc_calculation_ownership_20261111_audit/vectors.json",
+      "current_catalog_consistency": "runs/hpc_calculation_ownership_20261111_consistency02/consistency.json",
+      "scope": "Actual local mathematics, ledger custody, private estimator selection and original numerical controller replay across thirty consumers; existing prediction tasks/prompts/messages and monitor boundaries use their documented controlled ports. No live provider, remote work or full saved-workflow restoration."
+    },
+    "limitations": [
+      "HPCLedger.open_existing retains its unchanged read-only SQLite connection without explicit close in all five axes. The expanded single-process suite exhausted descriptors (784 passed/11 failed); all eleven passed in a fresh process. This inherited lifecycle defect remains open.",
+      "Further review of generic presentation, source acquisition, contract parsing and saved-source dependencies remains before claiming complete prediction implementation ownership.",
+      "The planning and allocation episodes retain mixed-role methods and axis-owned central tasks; their full private responsibility splits remain incomplete.",
+      "Monitor scheduling/controller code remains at its existing hpc_monitoring.py home; prediction uses it only indirectly for supplied commission-policy validation, not as available monitoring work.",
+      "A104 retains its inherited missing runtime closed-HPC model-reference branch; full saved reopening, autonomous science and shared-root integration remain unverified.",
+      "The full root-and-every-existing-episode goal remains active/incomplete."
+    ]
+  },
+  "planning_allocation_task_limitation_resolved_by": "axis ownership inventory:hpc_planning_allocation_private_20261111; remaining messages/dependencies remain open"
+}

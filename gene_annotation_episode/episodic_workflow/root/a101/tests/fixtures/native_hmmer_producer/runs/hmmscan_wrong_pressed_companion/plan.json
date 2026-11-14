@@ -1,0 +1,155 @@
+{
+  "version": "native_hmmer_run_plan_v1",
+  "identity": {
+    "run_id": "producer-native-verification-2026-10-24",
+    "episode_id": "no-episode-standalone-verification",
+    "resource_id": "local",
+    "execution_id": "hmmscan-wrong-index",
+    "attempt_id": "original",
+    "operation_key": "hmmscan-wrong-index",
+    "requested_job_sha256": "4515191e7b444f8a0f1f69da9e80d7dec19003de2707dc4b69845fe0fb1e21b5"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmscan",
+      "--cpu",
+      "1",
+      "--notextw",
+      "--tblout",
+      "outputs/tblout",
+      "--domtblout",
+      "outputs/domtblout",
+      "--qformat",
+      "fasta",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_wrong_pressed_companion/selected-inputs/model.hmm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/query.fa"
+    ],
+    "environment": {},
+    "native_hmmer": {
+      "version": "native_hmmer_job_v1",
+      "program": "hmmscan",
+      "mode": "search",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmscan",
+        "sha256": "6b87004533c99411cfb1281c95b2aad0325761120f3b5b2ad097f79079ddda5b",
+        "engine_version": "3.4"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "profile_database",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_wrong_pressed_companion/selected-inputs/model.hmm",
+          "format": "hmmer3_ascii",
+          "sha256": "3623a6d460e3580a804a0eff56e8bccfd5bdd099fb50e9a5dade14a139c36144",
+          "size_bytes": 10261,
+          "artifact_ref": null
+        },
+        {
+          "role": "query_sequence",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmer_search_2026-10-24/native/query.fa",
+          "format": "fasta",
+          "sha256": "a3364b4239794e1747d80230032f23029f0f03c9f19bb819bb63be70fde025ed",
+          "size_bytes": 28,
+          "artifact_ref": "fixture:sha256:a3364b4239794e1747d80230032f23029f0f03c9f19bb819bb63be70fde025ed"
+        },
+        {
+          "role": "profile_database_h3f",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_wrong_pressed_companion/selected-inputs/model.hmm.h3f",
+          "format": "hmmer_h3f",
+          "sha256": "c296376355c312d80fa0e86191b4df0810bdeda2e71d79bd68ebad8025c2b11b",
+          "size_bytes": 9910,
+          "artifact_ref": null
+        },
+        {
+          "role": "profile_database_h3i",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_wrong_pressed_companion/selected-inputs/model.hmm.h3i",
+          "format": "hmmer_h3i",
+          "sha256": "fbc77cd8c30fccbb4ffd9b4292f95bfa99765da548b27724671cb8ff80346ccc",
+          "size_bytes": 135,
+          "artifact_ref": null
+        },
+        {
+          "role": "profile_database_h3m",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_wrong_pressed_companion/selected-inputs/model.hmm.h3m",
+          "format": "hmmer_h3m",
+          "sha256": "63532984472eba5a5328cb2b9fc75523a72cf2b8ada60cdc6ea7aab6f14cf119",
+          "size_bytes": 4198,
+          "artifact_ref": null
+        },
+        {
+          "role": "profile_database_h3p",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_wrong_pressed_companion/selected-inputs/model.hmm.h3p",
+          "format": "hmmer_h3p",
+          "sha256": "c4a604aa1dfe65c7ee520b110453b956ad07611f1245c6074f6b51cb036961d0",
+          "size_bytes": 16346,
+          "artifact_ref": null
+        }
+      ],
+      "operand_bindings": [],
+      "options": [
+        "--cpu",
+        "1",
+        "--notextw"
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "hmmer_stdout",
+          "relative_path": "outputs/stdout"
+        },
+        {
+          "role": "stderr",
+          "format": "text",
+          "relative_path": "outputs/stderr"
+        },
+        {
+          "role": "tblout",
+          "format": "protein_tblout",
+          "relative_path": "outputs/tblout"
+        },
+        {
+          "role": "domtblout",
+          "format": "protein_domtblout",
+          "relative_path": "outputs/domtblout"
+        }
+      ],
+      "metadata": {
+        "targets": [
+          {
+            "name": "test",
+            "accession": null,
+            "kind": "profile",
+            "alphabet": "protein",
+            "length": 20
+          }
+        ],
+        "query": {
+          "name": "test1",
+          "accession": null,
+          "sequence": "ACDEFGHIKLMNPQRSTVWY",
+          "kind": "protein_sequence",
+          "alphabet": "protein",
+          "length": 20
+        },
+        "acquisition": {
+          "output_complete": true,
+          "hit_population_complete": true
+        },
+        "native_parameters": {
+          "argv": [
+            "--cpu",
+            "1",
+            "--notextw"
+          ]
+        }
+      },
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmscan_wrong_pressed_companion/attempt",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

@@ -11,7 +11,7 @@ from pathlib import Path
 import sqlite3
 from types import SimpleNamespace
 
-from gene_annotation_episode.component_axis_source_access import decision_context
+from gene_annotation_episode.episodic_workflow.root.component_axis_source_access import decision_context
 from gene_annotation_episode.decision_context import apply_state_frame, state_frame
 from gene_annotation_episode.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episode_return_records import EpisodeReturnRecords

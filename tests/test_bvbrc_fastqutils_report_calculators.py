@@ -9,7 +9,7 @@ from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContrac
 from gene_annotation_episode.bvbrc_fastqutils_identity import join_ref, metadata_ref
 from gene_annotation_episode.bvbrc_fastqutils_retention import calculate_retention
 from gene_annotation_episode.bvbrc_fastqutils_consistency import calculate_report_consistency
-FIXTURES = Path(__file__).parent / 'fixtures/bvbrc_fastqutils/reports'
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/reports'
 
 
 def saved(which='native'):

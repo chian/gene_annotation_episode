@@ -25,7 +25,7 @@ from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.expression_nmf_result_receipts import _CLOSED_PATHS, _READING
 from gene_annotation_episode.state import Store
 
-F = import_module('verification.tool_graders_expression_nmf_episode_path_2026-10-27_490.fixture_helpers')
+F = import_module('gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.retained_workflow.verification.tool_graders_expression_nmf_episode_path_2026-10-27_490.fixture_helpers')
 
 
 ENV = 'HMMER_NATIVE_ORACLE_NMF_RETAINED'

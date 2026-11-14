@@ -1,0 +1,347 @@
+{
+   "argv" : [
+      "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+      "-B",
+      "-m",
+      "gene_annotation_episode.native_genomic_overlap_driver",
+      "genomic-overlap-plan.json"
+   ],
+   "environment" : {
+      "LC_ALL" : "C"
+   },
+   "native_genomic_overlap" : {
+      "environment" : {
+         "LC_ALL" : "C"
+      },
+      "inputs" : [
+         {
+            "path" : "/synthetic/retained/A.bed",
+            "set_key" : "A"
+         },
+         {
+            "path" : "/synthetic/retained/B.bed",
+            "set_key" : "B"
+         },
+         {
+            "path" : "/synthetic/retained/C.bed",
+            "set_key" : "C"
+         }
+      ],
+      "outputs" : [
+         {
+            "comparison_key" : null,
+            "file_key" : "stdout",
+            "format" : "genomic_overlap_driver_log_v1",
+            "relative_path" : "stdout.log",
+            "role" : "stdout",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "stderr",
+            "format" : "native_stderr_text_v1",
+            "relative_path" : "stderr.log",
+            "role" : "stderr",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "version_stdout",
+            "format" : "native_stdout_text_v1",
+            "relative_path" : "overlap_analysis/software/version.stdout.txt",
+            "role" : "version_stdout",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "version_stderr",
+            "format" : "native_stderr_text_v1",
+            "relative_path" : "overlap_analysis/software/version.stderr.txt",
+            "role" : "version_stderr",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s0:original",
+            "format" : "bed_outer_span_v1",
+            "relative_path" : "overlap_analysis/sets/s0/original.data",
+            "role" : "original_input",
+            "set_key" : "A"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s0:rejected",
+            "format" : "bed_outer_span_v1",
+            "relative_path" : "overlap_analysis/sets/s0/rejected-source.data",
+            "role" : "rejected_input",
+            "set_key" : "A"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s0:parsed",
+            "format" : "genomic_overlap_parsed_set_v1",
+            "relative_path" : "overlap_analysis/sets/s0/parsed-set.json",
+            "role" : "parsed_set",
+            "set_key" : "A"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s0:canonical",
+            "format" : "bed4_occurrence_v1",
+            "relative_path" : "overlap_analysis/sets/s0/canonical.bed",
+            "role" : "canonical_set",
+            "set_key" : "A"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s1:original",
+            "format" : "bed_outer_span_v1",
+            "relative_path" : "overlap_analysis/sets/s1/original.data",
+            "role" : "original_input",
+            "set_key" : "B"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s1:rejected",
+            "format" : "bed_outer_span_v1",
+            "relative_path" : "overlap_analysis/sets/s1/rejected-source.data",
+            "role" : "rejected_input",
+            "set_key" : "B"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s1:parsed",
+            "format" : "genomic_overlap_parsed_set_v1",
+            "relative_path" : "overlap_analysis/sets/s1/parsed-set.json",
+            "role" : "parsed_set",
+            "set_key" : "B"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s1:canonical",
+            "format" : "bed4_occurrence_v1",
+            "relative_path" : "overlap_analysis/sets/s1/canonical.bed",
+            "role" : "canonical_set",
+            "set_key" : "B"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s2:original",
+            "format" : "bed_outer_span_v1",
+            "relative_path" : "overlap_analysis/sets/s2/original.data",
+            "role" : "original_input",
+            "set_key" : "C"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s2:rejected",
+            "format" : "bed_outer_span_v1",
+            "relative_path" : "overlap_analysis/sets/s2/rejected-source.data",
+            "role" : "rejected_input",
+            "set_key" : "C"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s2:parsed",
+            "format" : "genomic_overlap_parsed_set_v1",
+            "relative_path" : "overlap_analysis/sets/s2/parsed-set.json",
+            "role" : "parsed_set",
+            "set_key" : "C"
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "s2:canonical",
+            "format" : "bed4_occurrence_v1",
+            "relative_path" : "overlap_analysis/sets/s2/canonical.bed",
+            "role" : "canonical_set",
+            "set_key" : "C"
+         },
+         {
+            "comparison_key" : "comparison_0",
+            "file_key" : "p0:manifest",
+            "format" : "genomic_overlap_native_manifest_v1",
+            "relative_path" : "overlap_analysis/pairs/p0/manifest.json",
+            "role" : "pair_manifest",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : "comparison_0",
+            "file_key" : "p0:stdout",
+            "format" : "bedtools_intersect_wo_bed4_v1",
+            "relative_path" : "overlap_analysis/pairs/p0/overlap.wo.tsv",
+            "role" : "overlap_stdout",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : "comparison_0",
+            "file_key" : "p0:stderr",
+            "format" : "native_stderr_text_v1",
+            "relative_path" : "overlap_analysis/pairs/p0/stderr.txt",
+            "role" : "overlap_stderr",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : "comparison_1",
+            "file_key" : "p1:manifest",
+            "format" : "genomic_overlap_native_manifest_v1",
+            "relative_path" : "overlap_analysis/pairs/p1/manifest.json",
+            "role" : "pair_manifest",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : "comparison_1",
+            "file_key" : "p1:stdout",
+            "format" : "bedtools_intersect_wo_bed4_v1",
+            "relative_path" : "overlap_analysis/pairs/p1/overlap.wo.tsv",
+            "role" : "overlap_stdout",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : "comparison_1",
+            "file_key" : "p1:stderr",
+            "format" : "native_stderr_text_v1",
+            "relative_path" : "overlap_analysis/pairs/p1/stderr.txt",
+            "role" : "overlap_stderr",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : "comparison_2",
+            "file_key" : "p2:manifest",
+            "format" : "genomic_overlap_native_manifest_v1",
+            "relative_path" : "overlap_analysis/pairs/p2/manifest.json",
+            "role" : "pair_manifest",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : "comparison_2",
+            "file_key" : "p2:stdout",
+            "format" : "bedtools_intersect_wo_bed4_v1",
+            "relative_path" : "overlap_analysis/pairs/p2/overlap.wo.tsv",
+            "role" : "overlap_stdout",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : "comparison_2",
+            "file_key" : "p2:stderr",
+            "format" : "native_stderr_text_v1",
+            "relative_path" : "overlap_analysis/pairs/p2/stderr.txt",
+            "role" : "overlap_stderr",
+            "set_key" : null
+         },
+         {
+            "comparison_key" : null,
+            "file_key" : "batch_manifest",
+            "format" : "genomic_overlap_native_batch_v1",
+            "relative_path" : "bundle.json",
+            "role" : "batch_manifest",
+            "set_key" : null
+         }
+      ],
+      "program" : "bedtools_intersect_all_pairs",
+      "request" : {
+         "comparisons" : [
+            {
+               "a_set_key" : "A",
+               "b_set_key" : "B",
+               "comparison_key" : "comparison_0",
+               "ordinal" : 0
+            },
+            {
+               "a_set_key" : "A",
+               "b_set_key" : "C",
+               "comparison_key" : "comparison_1",
+               "ordinal" : 1
+            },
+            {
+               "a_set_key" : "B",
+               "b_set_key" : "C",
+               "comparison_key" : "comparison_2",
+               "ordinal" : 2
+            }
+         ],
+         "mode" : "unstranded_outer_span",
+         "operation" : "analyze_genomic_region_overlap",
+         "output_prefix" : "overlap_analysis",
+         "region_sets" : [
+            {
+               "display_label" : "supplied A intervals",
+               "format" : "bed_outer_span_v1",
+               "reference" : null,
+               "set_key" : "A",
+               "source" : {
+                  "file" : {
+                     "artifact_ref" : "artifact_56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+                     "format" : "bed_outer_span_v1",
+                     "sha256" : "56045d330feb6db27e1860eb984f1fcecad7b0a9423cd34fc664912db9a08303",
+                     "size_bytes" : 46
+                  },
+                  "kind" : "bed_artifact",
+                  "source_ref" : "synthetic:source:A"
+               }
+            },
+            {
+               "display_label" : "supplied B intervals",
+               "format" : "bed_outer_span_v1",
+               "reference" : null,
+               "set_key" : "B",
+               "source" : {
+                  "file" : {
+                     "artifact_ref" : "artifact_150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+                     "format" : "bed_outer_span_v1",
+                     "sha256" : "150c37186121f7adf3f91f1692649a9dafc0f699352f18c1896e68e5e2a49878",
+                     "size_bytes" : 35
+                  },
+                  "kind" : "bed_artifact",
+                  "source_ref" : "synthetic:source:B"
+               }
+            },
+            {
+               "display_label" : "supplied C intervals",
+               "format" : "bed_outer_span_v1",
+               "reference" : null,
+               "set_key" : "C",
+               "source" : {
+                  "file" : {
+                     "artifact_ref" : "artifact_b475e5f5fd7027bc5cf98c7f600987bee1228b77373b0b79ebc34abd383ecaf9",
+                     "format" : "bed_outer_span_v1",
+                     "sha256" : "b475e5f5fd7027bc5cf98c7f600987bee1228b77373b0b79ebc34abd383ecaf9",
+                     "size_bytes" : 24
+                  },
+                  "kind" : "bed_artifact",
+                  "source_ref" : "synthetic:source:C"
+               }
+            }
+         ],
+         "version" : "genomic_overlap_request_v1"
+      },
+      "software" : {
+         "bedtools_executable" : "/home/chia/repos/gene_annotation_episode/software/bedtools/ubuntu-2.31.1+dfsg-2/installation/usr/bin/bedtools",
+         "bedtools_sha256" : "b6c6e44b79180f0c9f64f916010c71bcd44baf81e5abe71b63f19aa9d4bc9fb6",
+         "bedtools_version" : "bedtools v2.31.1",
+         "driver_module" : "gene_annotation_episode.native_genomic_overlap_driver",
+         "implementation_files" : [
+            {
+               "module" : "gene_annotation_episode.native_genomic_overlap_driver",
+               "sha256" : "620975edffbdde15ed215dab36c26b1a690ccd73946c4609af95e4066438f67d"
+            },
+            {
+               "module" : "gene_annotation_episode.native_genomic_overlap_contracts",
+               "sha256" : "6e0ef87f041824c61eaee84c4b8fbecc6ce4cddbc5ffcd45d45e2dba70a6bbb2"
+            },
+            {
+               "module" : "gene_annotation_episode.genomic_overlap_contracts",
+               "sha256" : "29219c3da6bb436a6a145017c4870a8a2187c960f6cb4d57133531922c3e378a"
+            },
+            {
+               "module" : "gene_annotation_episode.genomic_overlap_inputs",
+               "sha256" : "360bfd7ced5471cbbf5790f95523cfc326bd338e22c47b4191ffdc5bec1d1ad8"
+            }
+         ],
+         "module_root" : "/synthetic/source-snapshot",
+         "python_executable" : "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+         "python_sha256" : "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+         "python_version" : "3.12.3"
+      },
+      "version" : "native_genomic_overlap_job_v1"
+   }
+}

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core"
+      xmlns:fbc="http://www.sbml.org/sbml/level3/version1/fbc/version2"
+      level="3" version="1" fbc:required="false">
+  <model id="engineering_fba_677" name="Explicit tiny interface fixture" fbc:strict="true">
+    <listOfCompartments>
+      <compartment id="c" name="fixture compartment" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="M_A_c" name="fixture A" compartment="c" boundaryCondition="false" constant="false" hasOnlySubstanceUnits="false" fbc:charge="0" fbc:chemicalFormula="C"/>
+      <species id="M_B_c" name="fixture B" compartment="c" boundaryCondition="false" constant="false" hasOnlySubstanceUnits="false" fbc:charge="0" fbc:chemicalFormula="C"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="lb_in" value="-10" constant="true"/>
+      <parameter id="ub_in" value="10" constant="true"/>
+      <parameter id="zero" value="0" constant="true"/>
+      <parameter id="infinity" value="INF" constant="true"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="R_IN" name="fixture input" reversible="true" fast="false" fbc:lowerFluxBound="lb_in" fbc:upperFluxBound="ub_in">
+        <listOfProducts><speciesReference species="M_A_c" stoichiometry="1" constant="true"/></listOfProducts>
+      </reaction>
+      <reaction id="R_AB" name="fixture conversion" reversible="false" fast="false" fbc:lowerFluxBound="zero" fbc:upperFluxBound="infinity">
+        <listOfReactants><speciesReference species="M_A_c" stoichiometry="1" constant="true"/></listOfReactants>
+        <listOfProducts><speciesReference species="M_B_c" stoichiometry="1" constant="true"/></listOfProducts>
+        <fbc:geneProductAssociation><fbc:and><fbc:geneProductRef fbc:geneProduct="G_one"/><fbc:geneProductRef fbc:geneProduct="G_two"/></fbc:and></fbc:geneProductAssociation>
+      </reaction>
+      <reaction id="R_OUT" name="fixture output" reversible="false" fast="false" fbc:lowerFluxBound="zero" fbc:upperFluxBound="infinity">
+        <listOfReactants><speciesReference species="M_B_c" stoichiometry="1" constant="true"/></listOfReactants>
+      </reaction>
+    </listOfReactions>
+    <fbc:listOfObjectives fbc:activeObjective="original_min">
+      <fbc:objective fbc:id="original_min" fbc:type="minimize">
+        <fbc:listOfFluxObjectives>
+          <fbc:fluxObjective fbc:reaction="R_IN" fbc:coefficient="0.25"/>
+          <fbc:fluxObjective fbc:reaction="R_OUT" fbc:coefficient="-1"/>
+        </fbc:listOfFluxObjectives>
+      </fbc:objective>
+    </fbc:listOfObjectives>
+    <fbc:listOfGeneProducts>
+      <fbc:geneProduct fbc:id="G_one" fbc:label="one" fbc:name="fixture gene one"/>
+      <fbc:geneProduct fbc:id="G_two" fbc:label="two" fbc:name="fixture gene two"/>
+    </fbc:listOfGeneProducts>
+  </model>
+</sbml>

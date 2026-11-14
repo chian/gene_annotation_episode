@@ -1,0 +1,3 @@
+"""Bounded views of explicitly received native BLAST HSPs, without execution."""
+from __future__ import annotations
+BLAST_HSP_FACT_SCHEMA = {'type': 'array', 'items': {'type': 'object', 'additionalProperties': False, 'properties': {'hsp_ref': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'execution_result'}, 'reference_ref': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'execution_result'}, **{name: {'type': ['number', 'null']} for name in ('bitscore', 'alignment_score', 'evalue', 'query_coverage', 'target_coverage')}, 'identity_fraction': {'type': ['number', 'null']}}, 'required': ['hsp_ref', 'reference_ref', 'bitscore', 'alignment_score', 'evalue', 'query_coverage', 'target_coverage', 'identity_fraction']}}

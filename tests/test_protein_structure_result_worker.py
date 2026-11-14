@@ -29,7 +29,7 @@ from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.protein_structure_contracts import issue, same
 
 REPO = Path(__file__).resolve().parents[1]
-PACKET = REPO / "verification/tool_graders_protein_structure_result_worker_2026-10-27_393"
+PACKET = REPO / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_result_worker_393"
 FIXTURES = PACKET / "fixtures"
 
 

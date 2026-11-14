@@ -12,7 +12,8 @@ from types import ModuleType
 
 import pytest
 
-from gene_annotation_episode import component_axis_native_worker as worker
+from gene_annotation_episode.episodic_workflow.root.a107 import component_axis_native_worker as worker_a107
+from gene_annotation_episode.episodic_workflow.root.a110 import component_axis_native_worker as worker_a110
 from gene_annotation_episode.hpc_scientific_commission import commission
 
 
@@ -44,6 +45,7 @@ def test_unspecified_native_threads_are_not_presented_as_known_single_thread():
 
 @pytest.mark.parametrize('axis', ['A107', 'A110'])
 def test_worker_passes_environment_without_installing_thread_ceilings(tmp_path, monkeypatch, axis):
+    worker = worker_a107 if axis == 'A107' else worker_a110
     input_bytes = b'{}'
     manifest = {'component-worker.py': worker.sha(Path(worker.__file__).read_bytes())}
     (tmp_path / 'component-sources.json').write_text('{}')
@@ -64,12 +66,9 @@ def test_worker_passes_environment_without_installing_thread_ceilings(tmp_path, 
     monkeypatch.setattr(worker.socket, 'gethostname', lambda: 'simulated-compute-policy-probe')
     monkeypatch.setattr(worker.sys, 'argv', [worker.__file__, str(path)])
     monkeypatch.setattr(worker.sys, 'path', list(sys.path))
-    package = ModuleType('axis_native')
-    package.__path__ = []
-    contracts = ModuleType('axis_native.component_axis_native_contracts')
-    contracts.load_json = json.loads
-    module = ModuleType('axis_native.' + ('a107_expression_components' if axis == 'A107'
-        else 'a110_chemical_accounting'))
+    module = ModuleType('gene_annotation_episode.episodic_workflow.root.' +
+        ('a107.a107_expression_components' if axis == 'A107'
+         else 'a110.a110_chemical_accounting'))
     observed = {}
 
     def calculate(panel, selection):
@@ -77,8 +76,7 @@ def test_worker_passes_environment_without_installing_thread_ceilings(tmp_path, 
         return {'version': request['scientific_profile']}
 
     module.calculate = calculate
-    for name, supplied in (('axis_native', package), (contracts.__name__, contracts), (module.__name__, module)):
-        monkeypatch.setitem(sys.modules, name, supplied)
+    monkeypatch.setitem(sys.modules, module.__name__, module)
     assert worker.main() == 0
     assert not THREAD_SETTINGS.intersection(observed)
     assert observed['TMPDIR'] == str(unit / 'tmp')

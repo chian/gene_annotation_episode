@@ -1,0 +1,61 @@
+{
+  "broader_first": {
+    "cause": "four old prospective reason assertions already loaded before expectation updates",
+    "failed": 4,
+    "files": [
+      "test_literature_missing_input_semantics_177.py",
+      "test_literature_transport_calculations.py",
+      "test_literature_transport_inputs.py",
+      "test_literature_transport_storage.py",
+      "test_literature_transport_integration.py",
+      "test_literature_transport_quantity_integration.py",
+      "test_literature_binding_models.py",
+      "test_literature_binding_model_inputs.py",
+      "test_literature_binding_model_storage.py",
+      "test_literature_binding_model_integration.py"
+    ],
+    "log": "REGRESSION_FIRST_001.log",
+    "passed": 552,
+    "seconds": 332.21,
+    "xml": "REGRESSION_FIRST_001.xml"
+  },
+  "coverage_accounting": "Runs overlap. Do not sum as unique tests. No all-green broad regression, paper-specific adequacy, or complete A105 grader is claimed.",
+  "focused_final": {
+    "command": "PYTHONPATH=. .venv/bin/python -m pytest -q tests/test_literature_missing_input_semantics_177.py --junitxml=verification/literature_reference_evidence_2026-10-25_001/a105_missing_input_semantics_177/TEST_FINAL_001.xml",
+    "failed": 0,
+    "log": "TEST_FINAL_001.log",
+    "passed": 21,
+    "seconds": 6.7,
+    "xml": "TEST_FINAL_001.xml"
+  },
+  "focused_first": {
+    "cause": "test-fixture field/function-name mistakes; no production failure",
+    "failed": 5,
+    "log": "TEST_FIRST_001.log",
+    "passed": 16,
+    "xml": "TEST_FIRST_001.xml"
+  },
+  "focused_second": {
+    "failed": 0,
+    "log": "TEST_SECOND_001.log",
+    "passed": 21,
+    "seconds": 6.2,
+    "xml": "TEST_SECOND_001.xml"
+  },
+  "repaired_synthetic": {
+    "failed": 0,
+    "log": "REGRESSION_REPAIRED_SYNTHETIC_001.log",
+    "nodeids": [
+      "tests/test_literature_transport_inputs.py::test_selected_concentrations_and_authoritative_km_supply_common_curve_calculator",
+      "tests/test_literature_transport_inputs.py::test_different_system_blocks_response_but_preserves_supported_native_and_single_arm_cells",
+      "tests/test_literature_transport_integration.py::test_selected_transport_response_actual_typed_delivery_and_observation_accounting[False]"
+    ],
+    "passed": 3,
+    "seconds": 10.82,
+    "xml": "REGRESSION_REPAIRED_SYNTHETIC_001.xml"
+  },
+  "updated_not_rerun": {
+    "nodeid": "tests/test_literature_binding_model_integration.py::test_primary_without_error_model_preserves_limit_and_specific_unknown",
+    "reason": "existing paper-backed setup_primary fixture was outside the intended synthetic-only verification scope; underlying packet not inspected, no scientific interpretation made, conservative full reset recorded"
+  }
+}

@@ -8,11 +8,11 @@ import pytest
 
 from live_a106_workflow import execution_factory, evaluation_tool_configuration
 from audit_a106_workflow import returned_score_cells, latest_received_score_cells
-from gene_annotation_episode import bvbrc_tnseq_bundle_adapter as tnseq
-from gene_annotation_episode import bvbrc_rnaseq_bundle_adapter as rnaseq
-from gene_annotation_episode.intervention_execution import analysis_children, contract_catalog
-from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a106 import bvbrc_tnseq_bundle_adapter as tnseq
+from gene_annotation_episode.episodic_workflow.root.a106 import bvbrc_rnaseq_bundle_adapter as rnaseq
+from gene_annotation_episode.episodic_workflow.root.a106.library.standalone_intervention_execution import analysis_children, contract_catalog
+from gene_annotation_episode.episodic_workflow.root.a106.state import Store
+from gene_annotation_episode.episodic_workflow.root.a106.tools import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG
 
 
@@ -68,9 +68,9 @@ def pdf_with_text(path, texts=("A106 document fixture",)):
 ])
 def test_native_document_read_uses_the_actual_workflow_memory_bound(
         tmp_path, monkeypatch, operation, executable_name):
-    from gene_annotation_episode.document_tools import pdf_native
-    from gene_annotation_episode.tool_configuration import build_tools
-    from gene_annotation_episode.workflow_budget import ENV, active_budget
+    from gene_annotation_episode.episodic_workflow.root.a106.document_tools import pdf_native
+    from gene_annotation_episode.episodic_workflow.root.a106.tool_configuration import build_tools
+    from gene_annotation_episode.episodic_workflow.root.a106.workflow_budget import ENV, active_budget
     if not os.environ.get(ENV):
         pytest.skip("Native document execution requires the owned workflow launcher")
     configuration = evaluation_tool_configuration(tmp_path)
@@ -118,9 +118,9 @@ def test_resume_preserves_original_tool_configuration(tmp_path, monkeypatch):
 
 
 def test_native_spreadsheet_read_uses_the_actual_workflow_memory_bound(tmp_path, monkeypatch):
-    from gene_annotation_episode.spreadsheet_tools import xlsx_native
-    from gene_annotation_episode.tool_configuration import build_tools
-    from gene_annotation_episode.workflow_budget import active_budget
+    from gene_annotation_episode.episodic_workflow.root.a106.spreadsheet_tools import xlsx_native
+    from gene_annotation_episode.episodic_workflow.root.a106.tool_configuration import build_tools
+    from gene_annotation_episode.episodic_workflow.root.a106.workflow_budget import active_budget
     from test_spreadsheet_tools import workbook
     monkeypatch.setenv("GENE_EPISODE_LOCAL_RESOURCE_DIRECTORY", str(tmp_path / "local-resources"))
     document, _ = workbook(tmp_path)

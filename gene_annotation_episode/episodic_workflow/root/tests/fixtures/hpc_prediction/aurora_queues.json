@@ -1,0 +1,48 @@
+{
+  "timestamp": 1793768168,
+  "Queue": {
+    "debug": {
+      "queue_type": "Execution",
+      "Priority": 10,
+      "total_jobs": 14,
+      "state_count": "Transit:0 Queued:3 Held:1 Waiting:0 Running:10 Exiting:0 Begun:0 ",
+      "resources_max": {
+        "nodect": 2,
+        "walltime": "01:00:00"
+      },
+      "resources_min": {
+        "nodect": 1,
+        "walltime": "00:05:00"
+      },
+      "resources_default": {
+        "base_score": 51,
+        "bkc_definition": "compute_aurora_prod_20261002T162246_af5b0375_b4fd227",
+        "enable_2nd_fp64": "True",
+        "enable_fifo": 1,
+        "hbm_mode": "flat",
+        "snc_mode": "quad"
+      },
+      "acl_group_enable": "False",
+      "acl_groups": "aurora_admins,aurora_aig,aurora_compute,aurora_intel_daos,post_hpl_early_access",
+      "default_chunk": {
+        "at_queue": "lustre_scaling",
+        "broken": "False",
+        "system": "aurora",
+        "validation": "False"
+      },
+      "resources_assigned": {
+        "mem": "0gb",
+        "mpiprocs": 0,
+        "ncpus": 2496,
+        "nodect": 12
+      },
+      "max_run": "[u:PBS_GENERIC=1]",
+      "max_run_res": {
+        "nodect": "[o:PBS_ALL=64]"
+      },
+      "enabled": "True",
+      "started": "True",
+      "queued_jobs_threshold": "[u:PBS_GENERIC=1]"
+    }
+  }
+}

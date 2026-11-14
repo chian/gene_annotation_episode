@@ -20,7 +20,7 @@ from gene_annotation_episode.rna_structure_native import (
     parse_rna_native_record, parse_biomni_rna_prediction_text, populate_rna_prediction_sheet,
 )
 
-PACKET = Path(__file__).resolve().parents[1] / "verification/tool_graders_rna_structure_core_2026-10-26_354"
+PACKET = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_core_354"
 SPEC = importlib.util.spec_from_file_location("rna_calculation_fixture_helpers", PACKET / "fixture_helpers.py")
 F = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(F)

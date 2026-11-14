@@ -17,7 +17,7 @@ from test_atac_differential_sheet import explicit_inputs, native_inputs
 
 
 HEADERS = (Path(__file__).resolve().parents[1]
-           / 'verification/tool_graders_atac_bam_references_2026-10-27_468/native001')
+           / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/atac/bam_headers')
 
 
 def parse_header(raw, *, run='callpeak-1', ordinal=0, input_ref='condition1.bam', **changes):

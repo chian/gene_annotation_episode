@@ -8,7 +8,7 @@ import json
 import sqlite3
 from types import SimpleNamespace
 
-from gene_annotation_episode.literature_work_report import (
+from gene_annotation_episode.episodic_workflow.root.literature_work_report import (
     _display_cell_results, _display_scoring_results, completed_work, render_completed_work,
 )
 

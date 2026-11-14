@@ -12,7 +12,7 @@ from gene_annotation_episode.native_genomic_overlap_tool_info import (
     genomic_overlap_tool_contracts, genomic_overlap_tool_information,
 )
 
-f = import_module("verification.tool_graders_genomic_overlap_execution_contracts_2026-10-27_426.fixtures")
+f = import_module("gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.genomic_overlap.execution_contracts_426.fixtures")
 
 
 def test_four_substantive_information_fields_and_exact_commission_route():

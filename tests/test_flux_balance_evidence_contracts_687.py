@@ -485,7 +485,7 @@ def test_original_selected_null_and_empty_constraints_keep_distinct_digests():
 
 
 def test_retained_old_sheet_digest_and_new_examples_are_saved_as_verification_only():
-    path = Path(__file__).parents[1] / "verification/tool_graders_flux_balance_core_2026-10-29_679/VERIFIED_NUMERICAL_EXAMPLE_001.json"
+    path = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/VERIFIED_NUMERICAL_EXAMPLE_001.json"
     old = json.loads(path.read_text())
     sheet = validate_flux_balance_sheet(old["sheet"])
     assert sheet == old["sheet"]

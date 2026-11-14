@@ -69,7 +69,7 @@ def form_schema(sources=SOURCES):
 
 @pytest.mark.parametrize("mode", ["genome", "fasta"])
 def test_upstream_native_numbers_in_synthetic_publication(mode):
-    path = ROOT / "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources/Mash/test/ref/genomes.dist"
+    path = ROOT / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/native_rpc_contract/sources/Mash/test/ref/genomes.dist"
     fields = path.read_text().splitlines()[0].split("\t")
     assert fields == ["genome1.fna", "reads", "0.12101", "4.48626e-214", "41/1000"]
     value = qualified([["83333.1", *fields[2:]]], mode=mode)

@@ -102,7 +102,7 @@ def test_selected_convert2blastmask_native_formats_and_associations():
         inputs[name] = {**definition, "artifact": _pin(path),
                         "origin": "explicit_synthetic_supplied_test_input"}
 
-    reference = snapshot / "verification/tool_graders_blast_utility_boundaries_2026-10-28_620"
+    reference = snapshot / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/convert2blastmask_native_reference"
     source_files = [
         Path(__file__),
         reference / "official_source/convert2blastmask.cpp",

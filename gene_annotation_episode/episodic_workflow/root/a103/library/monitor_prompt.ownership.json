@@ -1,0 +1,25 @@
+{
+  "source": "library/monitor_prompt.py",
+  "original": "monitor_prompt.py",
+  "functions": [
+    "is_monitor_context",
+    "_requested_sources",
+    "render_monitor_prompt"
+  ],
+  "consumers": [
+    "execution_progress_assessment/episode.py:MonitorEpisode.decision_prompt_renderer",
+    "hpc_work_planning/execution_progress_assessment/episode.py:MonitorEpisode.decision_prompt_renderer",
+    "hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/episode.py:MonitorEpisode.decision_prompt_renderer",
+    "scientific_process/execution_progress_assessment/episode.py:MonitorEpisode.decision_prompt_renderer",
+    "scientific_process/hpc_work_planning/execution_progress_assessment/episode.py:MonitorEpisode.decision_prompt_renderer",
+    "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/episode.py:MonitorEpisode.decision_prompt_renderer",
+    "providers.py:_SessionConnection._presentation (legacy default selection)"
+  ],
+  "reason": "Standalone presentation reused only within this axis; each private monitor explicitly selects it",
+  "external_dependency": {
+    "module": "episode_work_report.render_completed_action_reports",
+    "reason": "Saved-action report formatting, preserving original outcome/receipt content"
+  },
+  "source_sha256": "7036c76fc29055870a24d89a311c6958608dc4008cd1d5b1862cc2db33de0570",
+  "source_audit": "runs/monitor_prompt_ownership_20261111_audit02/audit.json"
+}

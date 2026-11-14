@@ -38,10 +38,10 @@ from gene_annotation_episode.scientific_process_setup import prepare_scientific_
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from tests.test_homer_motif_saved_workflow import _archive, _archive_value, _encode
-from tests.test_molecular_sequence_n_glycosylation_native import (
+from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import (
     _assemble, _checkpoint, _document, _files, _history, _sqlite_pins,
 )
-from tests.test_molecular_sequence_tools_native import (
+from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_tools_native import (
     PUBLICATION, ROOT, _selected_closure, _tables, _write,
 )
 

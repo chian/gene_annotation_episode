@@ -1062,7 +1062,7 @@ parent response or numerical/root outcome has yet been observed.
 
 The queued genomic case also needs an explicit protein-search database, as
 required by the original native detector. The reusable helper
-`tests/a107_annotated_cds_inputs.py` copies only the original GenBank translation
+`gene_annotation_episode/episodic_workflow/root/a107/tests/a107_annotated_cds_inputs.py` copies only the original GenBank translation
 annotations into FASTA inputs, preserving original acquisition hashes and every
 copied/uncopied CDS in provenance. It performs no DNA translation verification,
 sequence search or expected-match calculation. The original workflow remains

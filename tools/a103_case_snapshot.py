@@ -59,7 +59,7 @@ def main():
     for package in ('gene_annotation_episode','method_loop'):
         shutil.copytree(root/package,snapshot/package,ignore=shutil.ignore_patterns('__pycache__','*.pyc'))
     for relative in (
-        'tests/fixtures/a103/real',
+        'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/a103/real',
         'research/slotted_process_library/publications/2026-10-24-001',
     ):
         shutil.copytree(root/relative,snapshot/relative)

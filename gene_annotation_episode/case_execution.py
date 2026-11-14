@@ -20,23 +20,24 @@ import tomllib
 
 from ._local_job_worker import atomic_json
 from .domain import canonical
-from .episode_application_services import service_binding
+from .episodic_workflow.root.episode_application_services import service_binding
 from .episode_bindings import native_job_event_configuration
-from .execution_expectations import ExecutionExpectations
-from .execution_recording import HomologyStatistics
-from .homology_episodes import HomologyEpisodes
-from .homology_jobs import FileAsset, HomologyJobs, digest
+from .episodic_workflow.root.execution_expectations import ExecutionExpectations
+from .episodic_workflow.root.execution_recording import HomologyStatistics
+from .episodic_workflow.root.library.homology_episode_family import HomologyEpisodes
+from .episodic_workflow.root.homology_jobs import HomologyJobs
+from .episodic_workflow.root.library.homology_job_inputs import FileAsset, digest
 from .local_jobs import LocalJobPolicy
 from .materials import artifact_path
 from .run_statistics import RunHistory
-from .native_timing_information import NativeTimingInformation
-from .resource_estimation import ResourceToolEstimator
-from .runtime import (
-    _DEFAULT_DECISION_PROTOCOL, _effective_models,
-    _effective_restoration_configuration, run_workflow,
-)
+from .episodic_workflow.root.native_timing_information import NativeTimingInformation
+from .episodic_workflow.root.resource_estimation import ResourceToolEstimator
+from .episodic_workflow.root.saved_run_assembly import _DEFAULT_DECISION_PROTOCOL
+from .episodic_workflow.root.saved_run_configuration import _effective_models
+from .episodic_workflow.root.workflow_values import _effective_restoration_configuration
+from .episodic_workflow.root.run_execution import run_workflow
 from .state import Store
-from .tool_configuration import build_tools
+from .episodic_workflow.root.tool_configuration import build_tools
 from .public_configuration import configured_tools
 
 
@@ -434,7 +435,7 @@ async def run_prepared_case(run_dir, *, policy_file=None, parameters=None, resum
         raise ValueError('prepared_case_workspace_unavailable')
     with Store(settings['workspace']) as store, prepared_case_bindings(store, run_dir,
             policy_file=policy_file, parameters=parameters, resume=resume) as (manifest, bindings):
-        return await run_workflow(store, build_tools(store, settings), provider=provider,
+        return await run_workflow(store, build_tools(store, settings, run_directory=run_dir), provider=provider,
             provider_config={'models': settings['models'], 'restoration': settings['restoration']},
             run_dir=run_dir, resume=resume, goal=manifest['goal'],
             decision_protocol=decision_protocol, **bindings)

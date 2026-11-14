@@ -7,14 +7,14 @@ from copy import deepcopy
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import fluorescence_event_contracts as core
-from gene_annotation_episode.fluorescence_context_views import project_fluorescence_context
-from gene_annotation_episode.fluorescence_event_calculations import calculate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_execution_common import identity
-from gene_annotation_episode.fluorescence_result_contracts import (
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_context_views import project_fluorescence_context
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import identity
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_contracts import (
     CONTEXT_VIEW_SCHEMA, validate_fluorescence_context,
 )
-from gene_annotation_episode.native_fluorescence_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import (
     JOB_SCHEMA, validate_fluorescence_job, validate_fluorescence_parsed_batch,
 )
 from test_fluorescence_event_calculations import (

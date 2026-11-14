@@ -24,7 +24,7 @@ from gene_annotation_episode.genomic_overlap_execution_information import (
 from gene_annotation_episode.genomic_overlap_return_views import genomic_overlap_fact_sources
 
 
-fixtures = import_module("verification.tool_graders_genomic_overlap_execution_contracts_2026-10-27_426.fixtures")
+fixtures = import_module("gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.genomic_overlap.execution_contracts_426.fixtures")
 KEYS = {"resource_kind", "service_or_program", "operation", "mode", "output_format",
     "called_operation", "selected_outputs", "result_selector_schema", "result_selection",
     "status_operations", "acquisition_operations", "status_meanings", "extractors", "return_fact_sources"}

@@ -8,27 +8,27 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import bvbrc_rnaseq_bundle_adapter as rnaseq
-from gene_annotation_episode import bvbrc_tnseq_bundle_adapter as tnseq
-from gene_annotation_episode.bvbrc_application_returns import FACT_SOURCE, application_fact_sources
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.domain import obj
-from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.intervention_execution import (received_application_rows, analysis_children,
+from gene_annotation_episode.episodic_workflow.root.a106 import bvbrc_rnaseq_bundle_adapter as rnaseq
+from gene_annotation_episode.episodic_workflow.root.a106 import bvbrc_tnseq_bundle_adapter as tnseq
+from gene_annotation_episode.episodic_workflow.root.a106.library.bvbrc_application_facts import FACT_SOURCE, application_fact_sources
+from gene_annotation_episode.episodic_workflow.root.a106.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a106.domain import obj
+from gene_annotation_episode.episodic_workflow.root.a106.execution_contracts import canonical
+from gene_annotation_episode.episodic_workflow.root.a106.scientific_process.execution_job_submission.episode import ExecutionEpisode
+from gene_annotation_episode.episodic_workflow.root.a106.library.standalone_intervention_execution import (received_application_rows, analysis_children,
     prepare_analysis_contract, contract_catalog)
-from gene_annotation_episode.literature_intervention_storage import LiteratureInterventionRepository
-from gene_annotation_episode.literature_a106_subscore_storage import LiteratureA106SubscoreRepository
-from gene_annotation_episode.literature_a106_subscore import REQUESTED, COMPONENTS
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_intervention_storage import LiteratureInterventionRepository
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_a106_subscore_storage import LiteratureA106SubscoreRepository
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_a106_subscore import REQUESTED, COMPONENTS
+from gene_annotation_episode.episodic_workflow.root.a106.state import Store
 from test_api_bvbrc_appservice import CONFIG, metadata
 from test_bvbrc_appservice_custody import SavedRecords, api_assignment, selector as support_selector
 from test_bvbrc_appservice_inputs import receipt_row
 from bvbrc_proteome_host_fixture import ProteomeDriver, ControlledClient, OUTPUT_UUID
 from test_bvbrc_comparative_systems_episode_flow import declaration
 from test_intervention_analysis import arguments, DESEQ, TRANSIT
-from test_literature_intervention_storage import intervention_fixture
-from test_literature_a106_subscore import final_arguments
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_intervention_storage import intervention_fixture
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_a106_subscore import final_arguments
 
 
 class InterventionDriver(ProteomeDriver):
@@ -38,7 +38,7 @@ class InterventionDriver(ProteomeDriver):
         self.config = deepcopy(CONFIG)
         self.config["scientific_adapters"] = [dict(adapter_id=adapter.ADAPTER_ID,
             adapter_version="1", implementation_sha256=adapter.implementation_sha256())]
-        self.family = ExecutionEpisodes(None, store=store, directory=directory, run_id=self.saved.run_id,
+        self.family = ExecutionEpisode(None, store=store, directory=directory, run_id=self.saved.run_id,
             resources={"selected-api":self.config}, initial_information={},
             tool_registry=SimpleNamespace(store=store, clients={}), handoff_unit=2, acquired_record_unit=3,
             log_window_bytes=1024, log_roles=("stdout", "stderr"))

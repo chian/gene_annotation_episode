@@ -37,7 +37,7 @@ ALL = GROUP + ["tool_name", "work_mode", "operation_status", "source_ref", "inpu
     "enzyme_rows.positions.crick_boundary_0based", "enzyme_rows.positions.watson_canonical_boundary_0based",
     "enzyme_rows.positions.crick_canonical_boundary_0based"] + EVENT + SEGMENT + [
     "enzyme_rows.recognition_events.unwrapped_span_0based", "enzyme_rows.recognition_events.crosses_origin"]
-SAVED = Path("verification/tool_graders_hmmer_map_verification_2026-10-28_529/check191_registry728/restriction728-saved/published.json")
+SAVED = Path("gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/registry_published.json")
 
 
 def _selection(fields=None, *, policy="all_own_completed_results", reference=None):

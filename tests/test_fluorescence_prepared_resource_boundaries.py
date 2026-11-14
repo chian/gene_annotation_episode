@@ -13,8 +13,8 @@ from fluorescence_flowio_test_support import require_bounded_runtime
 
 require_bounded_runtime()
 
-from gene_annotation_episode.fluorescence_execution_common import canonical, identity
-from gene_annotation_episode.native_fluorescence_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical, identity
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import (
     OPERATIONS, PREPARATION_METHODS, REPORT_PROFILES, fluorescence_environment,
     requested_job_from_fluorescence,
 )

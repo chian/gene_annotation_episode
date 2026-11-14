@@ -1,0 +1,60 @@
+{
+  "axis": "a102",
+  "source": "gene_annotation_episode/episodic_workflow/root/a102/library/progress_information_credit.py",
+  "sha256": "dc3c378906678099805d637f5c6d150f079789daa818f8ea3760347086f35e40",
+  "original_source": "runs/monitor_credit_ownership_20261111_baseline/before/a102/episode_progress_credit.py",
+  "original_sha256": "947359317d8272439fc5852bf32e856780c533369a00a878b79ea7cb40a4d4d4",
+  "unchanged_functions": 5,
+  "accounted_changed_functions": [],
+  "current_projector_identity": "gene_annotation_episode.episodic_workflow.root.a102.library.progress_information_credit.ProgressInformationCredit",
+  "historical_projector_identity": "gene_annotation_episode.episodic_workflow.root.a102.episode_progress_credit.ProgressInformationCredit",
+  "exception_context_identity_verified": true,
+  "definition": {
+    "version": "received_progress_information_v1",
+    "information_unit": 0.375,
+    "formula": "information_unit * newly_informative_received_snapshot_count",
+    "baseline": "semantic_facts_in_original_initial_progress_refs_per_target",
+    "order": "known_progress_refs_in_supplied_receipt_order",
+    "contribution": "one_unit_per_snapshot_with_at_least_one_novel_eligible_fact",
+    "eligible_information": [
+      "known_lifecycle_and_liveness",
+      "result_availability",
+      "recorded_failure_code_and_affected_refs",
+      "exposed_dependency_identity_and_relation",
+      "parent_permitted_committed_record_availability",
+      "known_native_state_and_outcome",
+      "native_output_availability_and_writer_closure",
+      "finite_terminal_native_duration_by_target_and_measure",
+      "known_resource_execution_state_and_returncode",
+      "finite_closed_resource_interval_by_target_and_measure"
+    ],
+    "excluded_information": [
+      "unfinished_elapsed_time",
+      "output_byte_growth",
+      "timestamps",
+      "source_representation_ids",
+      "raw_log_hashes",
+      "private_history"
+    ],
+    "interpretation": "monitoring_information_not_scientific_progress_or_annotation_support",
+    "installation": "explicit_caller_binding_required"
+  },
+  "consumers": [
+    "execution_progress_assessment/credit.py:MonitorEpisodeCredit.information_credit",
+    "hpc_work_planning/execution_progress_assessment/credit.py:MonitorEpisodeCredit.information_credit",
+    "hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/credit.py:MonitorEpisodeCredit.information_credit",
+    "scientific_process/execution_progress_assessment/credit.py:MonitorEpisodeCredit.information_credit",
+    "scientific_process/hpc_work_planning/execution_progress_assessment/credit.py:MonitorEpisodeCredit.information_credit",
+    "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/credit.py:MonitorEpisodeCredit.information_credit"
+  ],
+  "factory_callers": [
+    "execution_service_setup.py",
+    "a102_investigation.py"
+  ],
+  "external_dependencies": {
+    "episode_bindings.BindingContext": "Original axis receiver identity",
+    "progress_records": "Original typed progress validation; no acquisition or evidence interpretation"
+  },
+  "reason": "Standalone received-information calculation selected privately within this axis",
+  "validation": "runs/monitor_credit_ownership_20261111_audit02/summary.json"
+}

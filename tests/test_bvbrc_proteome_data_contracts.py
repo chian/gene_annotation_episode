@@ -12,7 +12,7 @@ from gene_annotation_episode.bvbrc_proteome_data_contracts import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXAMPLE = ROOT / ("verification/tool_graders_bvbrc_proteome_sheet_contract_2026-10-25_165/"
+EXAMPLE = ROOT / ("gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/proteome_sheet_contract/"
                   "B1_PRECISION_EXAMPLES_002.json")
 
 
@@ -287,7 +287,8 @@ def test_invalid_records_cannot_be_presented_as_an_ok_result():
 def test_saved_validation_does_not_read_sources_or_call_scientific_functions(monkeypatch):
     import socket
     import subprocess
-    from gene_annotation_episode import bvbrc_proteome_native, blast_pairwise_grader
+    from gene_annotation_episode import bvbrc_proteome_native
+    from gene_annotation_episode.episodic_workflow.root.a101 import blast_pairwise_grader
     value = inventory()
     validate_proteome_data("ProteinInventory", value)  # load static package schema
 

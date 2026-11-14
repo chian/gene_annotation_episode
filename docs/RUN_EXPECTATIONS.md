@@ -140,7 +140,7 @@ cannot replace it. Prospective and assigned classes use the same
 After reservation, the recorded native class is reused. This selector is data-only
 caller configuration; it does not poll execution, change credit or let episode
 content replace global resource identities. Decisions still pin the selected
-snapshot before dispatch. See [CASE_EXECUTION.md](CASE_EXECUTION.md).
+snapshot before dispatch.
 
 `runtime_estimation_contexts` stores one immutable local context per completed
 own action. It contains the captured statistical input, original resource/tool
@@ -195,55 +195,3 @@ isolated learning stores. Current development uses
 `resources/run_statistics.sqlite`, across any future run workspaces that bind it.
 The local resource alias `local-development` is explicitly supplied at import;
 it is not a measured historical hardware fingerprint.
-
-## Actual probe import and verification
-
-```bash
-.venv/bin/python cases/gene_001/register_run_statistics.py \
-  --history resources/run_statistics.sqlite \
-  --local-resource-id local-development
-```
-
-The importer verifies the retained native inputs/outputs, streams the observation
-archive for the two phase-start identities and imports only the two measured
-protected-service durations. It does not submit another job, import scientific
-results into global history or change biological state. The reference-acquisition
-helper's execution-time hash and resource condition were not recorded; these
-remain unknown rather than being supplied from today's environment.
-
-| Phase | Complete successful samples | Measured duration |
-| --- | ---: | ---: |
-| Reference acquisition, download required | 1 | 580.9212270560092 s |
-| Single-query protein homology search, references available | 1 | 1.5410503179882653 s |
-
-`cases/gene_001/run-expectations.json` records the actual class/snapshot bindings.
-`cases/gene_001/run-expectations-verification.json` records actual replay evidence:
-two measurements remain two, bindings are unchanged, native process creation was
-forbidden during replay, and the scientific database and native receipt hashes
-remain unchanged.
-`cases/gene_001/verify_preparation.py` reproduces this check and exercises the
-runtime's input-binding class against the two actual saved statistical snapshots.
-It also verifies canonical evidence registration separately. This remains case
-preparation, not a configured-model episodic run.
-The cached database remains reusable. Its acquisition cost is not charged again
-merely because another gene uses it. Successful timing does not establish a gene
-function. The earlier unfinished minimap2 credit scaffold is not used.
-
-Focused tests cover durable sharing across reopened connections, duplicate and
-conflicting replay, immutable snapshots, exact compatibility, outcome/censoring
-separation, caller outage/recovery and late receipts, read-only child access and
-the restricted data boundary. Runtime integration tests described above extend
-that evidence through the actual method-loop execution boundary. Neither group
-verifies model-driven annotation, approved credit formulas or parallel execution.
-Separate job-role tests cover the role binding and parent-selected delayed
-commissions; they do not establish a production time/yield policy.
-
-The current correction passed **40 tests** in 96.59 seconds across
-`test_case_execution.py`, `test_homology_jobs.py`, `test_assigned_expectations.py`,
-`test_homology_episode_runtime.py`, `test_resource_estimation_contract.py` and
-`test_episode_timing_learning.py`. Those checks include prospective parent input
-before any order, refresh after explicit protein acquisition, immutable parent
-CPU allocation through a tiny native run, frozen forecast form references, and
-actual measured timing reaching monitoring credit, updated expectations and a
-subsequent scripted parent choice. No configured-model scientific investigation
-or new production numerical formula was demonstrated by these fixtures.

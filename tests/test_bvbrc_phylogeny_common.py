@@ -21,8 +21,7 @@ from gene_annotation_episode import bvbrc_phylogeny_common_contracts as contract
 from gene_annotation_episode import bvbrc_phylogeny_common_grader as grader
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / 'verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24'
-EVIDENCE = ROOT / 'verification/tool_graders_bvbrc_phylogeny_implementation_2026-10-24/provider-common-verification'
+NATIVE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries'
 
 
 def artifact(data, name):

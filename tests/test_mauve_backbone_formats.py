@@ -12,7 +12,7 @@ from gene_annotation_episode.mauve_backbone_contracts import (
     validate_mauve_backbone_document, validate_mauve_bbcols_document,
 )
 
-NATIVE = Path(__file__).parents[1] / 'verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/native_examples'
+NATIVE = Path(__file__).parents[1] / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_xmfa_boundaries/native_examples'
 HEADER = b'seq0_leftend\tseq0_rightend\tseq1_leftend\tseq1_rightend\n'
 
 

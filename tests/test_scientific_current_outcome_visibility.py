@@ -31,7 +31,7 @@ def test_completed_work_summary_keeps_latest_authorized_tool_return(result, mark
 
 
 def test_original_finding_exclusion_and_progress_policy_reach_rendered_input():
-    state = json.loads((Path(__file__).parent / 'fixtures/progress/'
+    state = json.loads((Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/progress/'
         'a11030-missing-finding-feedback.json').read_text())
     before = deepcopy(state)
     rendered = render_episode_steering(state)

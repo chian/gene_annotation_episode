@@ -20,7 +20,7 @@ from gene_annotation_episode.native_file_capture import NativeFileCaptureError, 
 from gene_annotation_episode import native_genomic_overlap_results as host_module
 
 
-F = import_module("verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers")
+F = import_module("gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.retained_workflow.verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers")
 
 
 def deny(*args, **kwargs):

@@ -181,7 +181,7 @@ def test_duplicate_tags_are_preserved_and_invalid_header_bytes_are_raw():
 
 
 def test_retained_handcrafted_alignment_fixture_bytes():
-    directory=Path(__file__).parent/"fixtures/bvbrc_fastqutils/alignment"
+    directory=Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/alignment"
     for name,count,scope in (("mapped_and_unmapped.bam",3,"complete"),
                              ("auxiliary_types.bam",2,"complete"),("bounded_bad_record.bam",2,"partial")):
         result=read((directory/name).read_bytes())

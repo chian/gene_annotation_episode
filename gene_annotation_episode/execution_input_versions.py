@@ -56,7 +56,7 @@ def _flux_balance_witnesses(owner, versions, scope, context, assignments):
 
 
 def _check_flux_balance_version(owner, supplied, witness, index):
-    from .flux_balance_operands import _check_version
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_operands import _check_version
     from .episode_return_records import EpisodeReturnRecords
     if not EpisodeReturnRecords._equal(supplied, witness[1]):
         raise ValueError('flux_balance_input_version_conflict')
@@ -156,8 +156,8 @@ def validate_execution_input_versions(owner, versions, scope, *, context, atac_a
         if owner._chromatin_reference_access(context, supplied['reference'], None) is False:
             raise ValueError('chromatin_input_protected_reference_denied')
         if owner._protein_reference_access(context, supplied['reference'], None) is False:
-            from .protein_structure_authority import ProteinStructureOperandError
-            from .protein_structure_contracts import issue
+            from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
+            from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue
             raise ProteinStructureOperandError(issue('original_commission_mismatch',
                 stage='authority', field='receipt'))
         if witness is not None:

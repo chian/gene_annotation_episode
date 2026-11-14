@@ -13,7 +13,7 @@ from gene_annotation_episode.bvbrc_fastqutils_contracts import (
 )
 from gene_annotation_episode.bvbrc_fastqutils_saved_codec import validate_saved_projection
 
-_SAVED_RELATIVE = Path('verification/tool_graders_bvbrc_fastqutils_implementation_2026-10-25_198/evidence_c/integration_handoff_002')
+_SAVED_RELATIVE = Path('gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/fastqutils_saved')
 ROOT = next(parent for parent in Path(__file__).resolve().parents
             if (parent / _SAVED_RELATIVE / 'requested_schema.json').is_file())
 SAVED = ROOT / _SAVED_RELATIVE

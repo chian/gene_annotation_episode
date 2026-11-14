@@ -17,7 +17,7 @@ from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 
 
-NATIVE = Path(__file__).parent / "fixtures/native_infernal_result_worker/cmsearch"
+NATIVE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/native_infernal_result_worker/cmsearch"
 
 
 def prepared_case(store):

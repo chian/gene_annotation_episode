@@ -30,8 +30,8 @@ from gene_annotation_episode.native_file_capture import retained_native_file
 from gene_annotation_episode.state import Store
 
 ROOT = Path(__file__).resolve().parents[1]
-EMISSIONS = ROOT / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions"
-BASE = ROOT / "verification/tool_graders_flux_balance_core_2026-10-29_679/VERIFIED_NUMERICAL_EXAMPLE_001.json"
+EMISSIONS = ROOT / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/producer_emissions"
+BASE = ROOT / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/VERIFIED_NUMERICAL_EXAMPLE_001.json"
 pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="requires bounded529")
 
 

@@ -1,9 +1,9 @@
 """FastqUtils information for the existing API launch and results episodes."""
 from copy import deepcopy
 
-from .bvbrc_appservice_contracts import contract_schema
+from .episodic_workflow.root.a103.bvbrc_appservice_contracts import contract_schema
 from .bvbrc_fastqutils_contracts import _definition_closure
-from .execution_episodes import RESULTS_SCHEMA
+from .episodic_workflow.root.a103.execution_result_acquisition.execution_contracts import RESULTS_SCHEMA
 
 _INSTRUCTIONS = '''Inspect or preprocess the supplied sequencing reads through the selected BV-BRC FastqUtils service. Supply original paired_end_libs, single_end_libs or srr_libs arrays, the ordered recipe, output_path and output_file. Preserve library order, repeated recipe entries, original spelling and start parameters. A paired library may omit read2; do not infer a mate. Files and internally named inputs are valid starting material; no candidate function or public gene identifier is required.
 

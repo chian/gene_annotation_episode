@@ -1,0 +1,93 @@
+{
+  "schema_version": "rfam_batch_sheet_v1",
+  "source": {
+    "artifact_ref": "example:official-single-artifact",
+    "source_ref": "example:official-single-source",
+    "source_sha256": "1396240ef8eb2073f3e307915814ca418a6f6bae29088e27c76ee375882362ab",
+    "evidence_kind": "official_documentation_example",
+    "representation": "json",
+    "http_status": null,
+    "body_complete": true,
+    "request_job_id": "infernal_cmscan-R20240522-154022-0777-68207895-p1m",
+    "request_sequence_sha256": "af9f4de00e14ab119b18199ef3d9a4eaeb9a5e1cdebf7e028cc9b1b16c3689eb"
+  },
+  "input": {
+    "version": "rfam_batch_input_identity_v1",
+    "query_occurrence_key": "example:query:0",
+    "subject_ref": "example:subject:0",
+    "original_input_ref": "example:file:0",
+    "original_record_ordinal": 0,
+    "original_header": null,
+    "submitted_sequence": "AGTTACGGCCATACCTCAGAGAATATACCGTATCCCGTTCGATCTGCGAAGTTAAGCTCTGAAGGGCGTCGTCAGTACTATAGTGGGTGACCATATGGGAATACGACGTGCTGTAGCTT",
+    "submitted_sequence_sha256": "af9f4de00e14ab119b18199ef3d9a4eaeb9a5e1cdebf7e028cc9b1b16c3689eb",
+    "submitted_length_nt": 119,
+    "input_to_submitted_transform": "unchanged",
+    "expected_job_id": "infernal_cmscan-R20240522-154022-0777-68207895-p1m",
+    "submission_source_ref": "example:submission:documentation",
+    "input_coordinate_mapping_ref": null
+  },
+  "job": {
+    "job_id": "infernal_cmscan-R20240522-154022-0777-68207895-p1m",
+    "opened": "2024-05-22 15:40:27",
+    "started": "2024-05-22 15:40:27",
+    "closed": "2024-05-22 15:42:16"
+  },
+  "format_metadata": {
+    "native_program": null,
+    "native_program_version": null,
+    "rfam_release": null,
+    "search_space_nt": null,
+    "searched_model_count": null,
+    "reporting_thresholds": null,
+    "inclusion_thresholds": null,
+    "native_model_mode": null
+  },
+  "population": {
+    "native_reported_count": 1,
+    "observed_row_count": 1,
+    "family_bucket_count": 1,
+    "count_agrees": true,
+    "body_complete": true,
+    "result_identity_matches": true,
+    "reported_set_complete": true,
+    "provider_filtering_known": null,
+    "all_model_hits_complete": null
+  },
+  "hits": [
+    {
+      "hit_key": "example:official-single-artifact#/hits/5S_rRNA/0",
+      "native_json_pointer": "/hits/5S_rRNA/0",
+      "document_ordinal": 0,
+      "family_list_ordinal": 0,
+      "query_occurrence_key": "example:query:0",
+      "family_name": "5S_rRNA",
+      "family_accession": "RF00001",
+      "identity_valid": true,
+      "native": {
+        "start": 1,
+        "end": 119,
+        "strand": "+",
+        "score_bits": 104.9,
+        "evalue": 4.5e-24,
+        "gc_fraction": 0.49
+      },
+      "query_length_nt": 119,
+      "query_interval": [
+        0,
+        119
+      ],
+      "query_coordinates_valid": true,
+      "model_metadata_ref": null,
+      "model_length_positions": null,
+      "alignment_components": null,
+      "duplicate_of": null,
+      "missing": {
+        "model_length_positions": "model_length_unavailable",
+        "alignment_components": "alignment_not_parsed"
+      },
+      "issues": []
+    }
+  ],
+  "model_metadata": null,
+  "issues": []
+}

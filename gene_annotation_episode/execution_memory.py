@@ -137,7 +137,7 @@ class ExecutionMemory:
                type(v) in (int, float) and not math.isfinite(v)
                for v in observation['features'].values()):
             raise ValueError('numeric_execution_features_required')
-        from .hpc_resource_prediction import RESOURCE_UNITS, measured_value
+        from gene_annotation_episode.episodic_workflow.root.library.hpc_resource_prediction import RESOURCE_UNITS, measured_value
         for metric, item in observation['metrics'].items():
             if (metric not in ('queue', 'setup', 'work', 'return', *RESOURCE_UNITS)
                     or type(item.get('censored')) is not bool):

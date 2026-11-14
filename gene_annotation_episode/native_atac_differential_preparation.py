@@ -15,7 +15,7 @@ import shutil
 import stat
 import sys
 
-from . import native_lifecycle as native
+from gene_annotation_episode import native_lifecycle as native
 from .acquisition import AcquisitionError
 from .local_jobs import LocalJobPolicy, check_scratch_budget
 from .native_file_capture import capture_native_file, capture_declared_native_files, retained_native_file, NativeFileCaptureError

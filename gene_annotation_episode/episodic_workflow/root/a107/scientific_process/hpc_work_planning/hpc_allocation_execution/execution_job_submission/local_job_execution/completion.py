@@ -1,0 +1,51 @@
+from __future__ import annotations
+from .execution_contracts import ROLE_KINDS
+from .execution_contracts import canonical
+from .execution_contracts import digest
+from .execution_contracts import is_native_blast_database_target
+from .execution_contracts import is_native_rna_structure_target
+from .execution_contracts import is_standard_blast_database_target
+from .execution_contracts import json
+from .execution_contracts import plain
+from .execution_contracts import validate_completion_proof
+
+class NativeCompletion:
+
+    def completion_for_action(self, context, operation_key):
+        return self._delegate(context).completion_for_action(self._practical_context(context), operation_key)
+
+    def _closed_completion_verdict(self, context, proof):
+        """Reuse only an endpoint verification actually recorded in history."""
+        if self._closed_operational_credit_view(context, None) is None:
+            return None
+        from gene_annotation_episode.episodic_workflow.root.a107.method_loop.identities import UnitRef
+        from gene_annotation_episode.episodic_workflow.root.a107.episode_return_records import _same
+        from gene_annotation_episode.episodic_workflow.root.a107.numerical import NumericBand
+        from gene_annotation_episode.episodic_workflow.root.a107.practical_yield import ESTIMATOR_VERSION
+        assignment = context.assignment
+        matches = 0
+        for row in self.store.db.execute('SELECT unit_index,observation FROM runtime_observations WHERE run_id=? AND episode_id=? ORDER BY unit_index', (self.run_id, context.episode_id)):
+            try:
+                observed = json.loads(row['observation'])
+                supplied = observed['credit']
+                if type(supplied) is not dict or not _same(supplied.get('practical_completion'), proof):
+                    continue
+                index = observed['decision_index']
+                unit = UnitRef.from_record(observed['unit_ref'])
+                estimate = observed['step']['estimate']
+                diagnostics, provenance = (estimate['diagnostics'], estimate['provenance'])
+                if type(index) is int and index >= 0 and (type(supplied.get('estimation_action_index')) is int) and (supplied['estimation_action_index'] == index) and (unit.episode_id == context.episode_id) and (unit.unit_index == row['unit_index']) and (proof['run_id'] == self.run_id) and (proof['episode_id'] == context.episode_id) and (proof['assignment_sha256'] == digest(assignment)) and (proof['operation_key'] == f'{self.run_id}:{context.episode_id}:{index}') and (type(estimate['turns']) is int) and (estimate['turns'] == unit.unit_index + 1) and (provenance['version'] == ESTIMATOR_VERSION) and (diagnostics['fitting_scope'] == 'verified_assignment_endpoint') and _same(diagnostics['completion_proof'], proof) and (type(diagnostics['completion_action_index']) is int) and (diagnostics['completion_action_index'] == index) and _same(diagnostics['completion_unit_ref'], unit.as_record()) and _same(estimate['expected_next_gain'], NumericBand.exact(0).as_record()):
+                    matches += 1
+            except (ValueError, TypeError, KeyError):
+                continue
+        return matches == 1
+
+    def verify_completion(self, context, proof):
+        try:
+            proof = validate_completion_proof(plain(proof))
+        except (ValueError, TypeError):
+            return False
+        historical = self._closed_completion_verdict(context, proof)
+        if historical is not None:
+            return historical
+        return self.state(context).verify_completion(proof)

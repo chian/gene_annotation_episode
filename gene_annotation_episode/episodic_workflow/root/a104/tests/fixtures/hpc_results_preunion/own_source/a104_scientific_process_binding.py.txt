@@ -1,0 +1,48 @@
+"""A104 task credit for commissioned evolutionary investigations."""
+
+from .communication import plain
+from .domain import ContractError
+from .a104_credit import (A104EvolutionaryCredit, A104PanelIdentityCredit,
+    A104AlignmentSuitabilityCredit, A104RobustnessCredit)
+from .a104_investigation import TASKS
+from .a104_investigation import RECORD_SOURCE, received_records
+
+
+def original_task_projector(assignment):
+    assigned = plain(assignment)
+    task = assigned.get('context', {}).get('a104_task')
+    if task is not None and (not isinstance(task, dict) or task.get('name') not in TASKS
+            or 'allowed_tasks' in task and task['allowed_tasks'] != list(TASKS)):
+        raise ContractError('a104_original_task_definition_required')
+    if task is None:
+        return A104EvolutionaryCredit()
+    return {'panel_identity': A104PanelIdentityCredit,
+        'alignment_suitability': A104AlignmentSuitabilityCredit,
+        'robustness': A104RobustnessCredit}.get(task['name'], A104EvolutionaryCredit)()
+
+
+def allowed_child_roles(child_roles):
+    return tuple(role for role in child_roles if role in {'scientific_process', 'hpc'})
+
+
+def permitted_common_actions():
+    # Native work waits inside the shared operational HPC service. The
+    # annotation parent cannot supply a sibling through an idle local wait.
+    return ('tool', 'reason', 'child', 'redeliver_report')
+
+
+def validate_tool_name(tool_name):
+    if tool_name == 'sequence.align':
+        raise ContractError('a104_new_sequence_comparison_requires_shared_parent')
+
+
+def received_report_facts(binding, context, completion_snapshot, schema):
+    if not any(node.get('x-source') == RECORD_SOURCE
+            for node in schema.get('properties', {}).values()):
+        return {}
+    workflow = getattr(binding.services, 'workflow', None)
+    if workflow is None:
+        raise ContractError('a104_report_store_required')
+    return {RECORD_SOURCE: received_records(workflow.store,
+        context.received_record_refs, plain(context.scope),
+        committed=completion_snapshot.get('committed_record_refs', ()))}

@@ -333,7 +333,7 @@ def _population(pop, *, artifacts, records, populations, metadata=None, native=F
 
 
 def validate_native_document(value: dict) -> None:
-    from . import bvbrc_fastqutils_identity as identity
+    from gene_annotation_episode import bvbrc_fastqutils_identity as identity
     doc = validate_contract('NativeDocument', value)
     artifact = doc['artifact']
     content = artifact['content_binding']
@@ -406,7 +406,7 @@ def validate_native_document(value: dict) -> None:
 
 
 def _original_metadata(value):
-    from . import bvbrc_fastqutils_identity as identity
+    from gene_annotation_episode import bvbrc_fastqutils_identity as identity
     original = value['original_task']
     task = original['submission_receipt_ref']
     analysis = value['analysis_id']

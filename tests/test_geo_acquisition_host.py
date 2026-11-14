@@ -473,7 +473,7 @@ def test_live_advertised_geo_supplementary_ordinary_acquisition(tmp_path, monkey
 
     if os.environ.get("HMMER_NATIVE_ORACLE_GEO_SUPPLEMENTARY") != "1":
         pytest.skip("requires explicit one-request GEO supplementary acquisition")
-    fixture_path = Path(__file__).parent / "fixtures/geo_acquisition/GSE1000_supplementary_advertisement.json"
+    fixture_path = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a106/tests/fixtures/geo_acquisition/GSE1000_supplementary_advertisement.json"
     advertisement = json.loads(fixture_path.read_bytes())
     assert advertisement["version"] == "geo_retained_supplementary_advertisement_v1"
     assert advertisement["study"] == advertisement["native_record"]["identifier"] == "GSE1000"

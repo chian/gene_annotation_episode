@@ -14,7 +14,7 @@ from gene_annotation_episode.bvbrc_data_calculators import (
 from gene_annotation_episode.bvbrc_data_readers import parse_data_snapshot
 from test_bvbrc_data_readers import envelope, parse_docs, prepared, snapshot
 
-EVIDENCE = Path(__file__).resolve().parents[1] / "verification/tool_graders_bvbrc_data_contract_2026-10-24"
+EVIDENCE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"
 EXAMPLES = json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())
 POLICY = "same_response_exact_document_count"
 

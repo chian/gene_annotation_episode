@@ -9,7 +9,7 @@ from gene_annotation_episode.bvbrc_proteome_tool_info import proteome_tool_contr
 from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
 from test_api_bvbrc_appservice import CONFIG
 from test_bvbrc_appservice_custody import request, selector
-from test_bvbrc_homology_tool_info import factory
+from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homology_tool_info import factory
 from test_bvbrc_proteome_bundle_resolution import fixture as provider_fixture
 
 

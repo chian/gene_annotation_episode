@@ -26,7 +26,7 @@ from gene_annotation_episode.practical_execution_state import PracticalState
 
 pytestmark = pytest.mark.skipif('HMMER529_ATTEMPT' not in os.environ, reason='requires bounded529')
 ROOT = Path(__file__).resolve().parents[1]
-ORIGINAL = ROOT / 'verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions/sbml/selected-plan.json'
+ORIGINAL = ROOT / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/producer_emissions/sbml/selected-plan.json'
 SELECTION = {'version': 'flux_balance_execution_selection_v1',
              'environment_realization': 'operation_scoped_tmp_and_cache_v1'}
 

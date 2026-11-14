@@ -1,0 +1,682 @@
+{
+  "entry_version": "evidence_axis_instruction_v1",
+  "id": "A105",
+  "slot": "evidence_axis",
+  "name": "Experimental molecular activity",
+  "description": "Investigate experimentally measured molecular activities and their relationship to the supplied target, preserving assayed subjects, endpoints and conditions.",
+  "investigation_instructions": "Find and evaluate experimental evidence to determine what molecular activities the supplied gene or protein may perform. Start from the supplied sequence, specified file record or region, or snippets. A candidate annotation or searchable public name is not required; possible functions should emerge from the evidence.\n\nExamine measurements of substrate conversion, transport or binding from published findings or experimental datasets, including measurements on relevant homologs. Distinguish what was measured on the actual assayed subject from what can be inferred about the supplied target.\n\nRetain the assayed subject/preparation, molecular endpoint, native quantities/units, controls, conditions and source experiment/dataset. Distinguish direct molecular measurements from proxies, including proteomic abundance or association. For homolog evidence, retain the correspondence and limitations connecting the measured activity to the supplied target. Preserve negative results, uncertainty, and the boundaries of partial sequences or snippets. Binding, conversion, transport and physiological role remain distinct conclusions.\n\nEvidence transfer need not rest on sequence homology alone: establish the actual relationship that makes the measured activity informative about the supplied target, including relevant structural correspondence or demonstrated functional interchangeability when available. Keep that relationship separate from the activity measured in the source experiment. A growth effect, gene disruption or restoration can show a contribution to an output without identifying the molecular activity responsible; retain any direct molecular measurement as its own observation.",
+  "evidence": [
+    {
+      "case_group": "Arad3529_Fan_2013",
+      "case_id": "Arad3529_Fan_2013",
+      "limit": "Relevant primary methods/results read. Exact full substrate profile not independently reproduced.",
+      "observation": "Docking alternative models prioritized pterins; experimental screening then expanded pterin analogues and validated deamination, with product mass spectrometry.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:7#/actual_observations/paper_reported/1",
+      "source_url": "https://doi.org/10.1021/ja309680b"
+    },
+    {
+      "case_group": "BC1793_Hitchcock_2013",
+      "case_id": "BC1793_Hitchcock_2013",
+      "limit": "Relevant full primary discussion/results read; no new modeling.",
+      "observation": "Aligned arginine retained, but SAH was not prioritized by docking or active in assays.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:23#/actual_observations/paper_reported/0",
+      "source_url": "https://doi.org/10.1021/ja4066078"
+    },
+    {
+      "case_group": "Cc0300_Xiang_2009",
+      "case_id": "Cc0300_Xiang_2009",
+      "limit": "Relevant primary passages inspected; environmental comparator is not assigned a species.",
+      "observation": "Dipeptide libraries supported hydrophobic C-terminal substrates and activity on longer/acylated substrates.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:18#/actual_observations/paper_reported/0",
+      "source_url": "https://doi.org/10.1021/bi900453u"
+    },
+    {
+      "case_group": "Cc2672_Cc3125_Xiang_2009",
+      "case_id": "Cc2672_Cc3125_Xiang_2009",
+      "limit": "Relevant primary sections inspected; comparator environmental organism not assigned a species.",
+      "observation": "Neither target hydrolyzed Xaa-Pro; terminal Arg/Lys peptides were substrates, with differing length/derivative tolerance.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:9#/actual_observations/paper_reported/0",
+      "source_url": "https://doi.org/10.1021/bi900111q"
+    },
+    {
+      "case_group": "DUF1537_Zhang_2016",
+      "case_id": "DUF1537_Zhang_2016",
+      "limit": "Relevant primary structural/results passages inspected; complete supplement not read.",
+      "observation": "Context/biochemistry established four-carbon acid-sugar kinases.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:14#/actual_observations/paper_reported/2",
+      "source_url": "https://doi.org/10.1073/pnas.1605546113"
+    },
+    {
+      "case_group": "EF1143_Vorontsov_2011_2014",
+      "case_id": "EF1143_Vorontsov_2011_2014",
+      "limit": "Relevant primary indexed passages inspected; no full supplement reanalysis or new assay.",
+      "observation": "With magnesium, hydrolysis required dGTP effector; manganese supported broader hydrolysis.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:20#/actual_observations/paper_reported/0",
+      "source_url": "https://doi.org/10.1074/jbc.M111.250456"
+    },
+    {
+      "case_group": "EUBREC0560_PG1327_Fleischman_2014",
+      "case_id": "EUBREC0560_PG1327_Fleischman_2014",
+      "limit": "Relevant indexed primary passages read, not complete supplement.",
+      "observation": "Global/local structural searches, half-reaction screening and kinetics supported tryptophan and aromatic aminotransferase assignments, respectively.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:21#/actual_observations/paper_reported/0",
+      "source_url": "https://doi.org/10.1002/pro.2493"
+    },
+    {
+      "case_group": "EUBREC2651_Fleischman_2014",
+      "case_id": "EUBREC2651_Fleischman_2014",
+      "limit": "Relevant indexed primary results/limitations inspected; no new experiments.",
+      "observation": "PLP-to-PMP conversion occurred, but phosphoserine/alpha-ketoglutarate did not yield expected glutamate; phosphate elimination occurred.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:22#/actual_observations/paper_reported/0",
+      "source_url": "https://doi.org/10.1002/pro.2493"
+    },
+    {
+      "case_group": "HpbD_Zhao_2013",
+      "case_id": "HpbD_Zhao_2013",
+      "limit": "Relevant full primary methods/results inspected; supplementary datasets not independently reanalyzed.",
+      "observation": "Epimerization assays and ligand-bound structure supported hydroxyproline-betaine chemistry.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:15#/actual_observations/paper_reported/1",
+      "source_url": "https://doi.org/10.1038/nature12576"
+    },
+    {
+      "case_group": "Lmo2620_Bh0225_Xiang_2012",
+      "case_id": "Lmo2620_Bh0225_Xiang_2012",
+      "limit": "Primary abstract and relevant indexed discussion inspected; complete methods not read.",
+      "observation": "Synthesized substrates supported D-lyxono- and L-ribono-1,4-lactone-5-phosphate hydrolysis; comparable hexonic lactones could not be synthesized.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:8#/actual_observations/paper_reported/2",
+      "source_url": "https://doi.org/10.1021/bi201838b"
+    },
+    {
+      "case_group": "MJ0577_Zarembinski_1998",
+      "case_id": "MJ0577_Zarembinski_1998",
+      "limit": "Full primary text and live 1MJH contact record checked; published answer known.",
+      "observation": "Bound ATP had not been supplied during purification/crystallization; purified protein alone showed no appreciable ATPase activity.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:2#/actual_observations/paper_reported/1",
+      "source_url": "https://doi.org/10.1073/pnas.95.26.15189"
+    },
+    {
+      "case_group": "MS53_0025_MAG6390_Korczynska_2014",
+      "case_id": "MS53_0025_MAG6390_Korczynska_2014",
+      "limit": "Primary abstract/methods and initial context read; complete results not read in this pass.",
+      "observation": "Docking, context and empirical screening identified D-xylono- and L-arabino-1,4-lactone-5-phosphate hydrolysis.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:16#/actual_observations/paper_reported/1",
+      "source_url": "https://doi.org/10.1021/bi500595c"
+    },
+    {
+      "case_group": "TM0936_Hermann_2007",
+      "case_id": "TM0936_Hermann_2007",
+      "limit": "Read relevant primary results and methods; live deposited binding-site API retrievals. Original API URLs lacking entity ID returned 404 and were repaired using current PDBe documentation. No repository changes or scientific-case runs.",
+      "observation": "Docking favored adenine/adenosine compounds; biochemical assays supported MTA, SAH and adenosine but not AMP or SAM.",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:1#/actual_observations/paper_reported/1",
+      "source_url": "https://doi.org/10.1038/nature05981"
+    },
+    {
+      "case_group": "archaeal_pibd_flak_recognition_access",
+      "case_id": "archaeal_pibd_flak_recognition_access",
+      "limit": "Qualitative published outcomes, complete relevant Methods/Results and bounded table audit; no wet-lab replication or direct native cleavage-site/topology measurement. | Source observation limit: FlaK panel assays used M. voltae membranes at 37 °C; PibD used E. coli membranes at 55 °C. Native complementation used a different methanogen, M. maripaludis. PibD was undetectable by anti-His, extracted membranes lacked detectable activity and cleavage termini were not mapped. Mislocalization, lipid dependence or missing assembly interactions remain hypotheses.",
+      "observation": "The matched M. voltae FlaB2 leader panel retained cleavage-flanking residues. FlaK processed lengths 12,10,9,8,7,5, but not 6,4,3; PibD processed all nine. Separately, M. maripaludis ΔflaK accumulated unprocessed membrane archaellins, lacked archaella/motility and retained pili. Native FlaK complementation restored processing and archaella/motility. Sulfolobus PibD gave an apparent processed-band shift at 37 °C, but no archaella or motility at either tested growth temperature.",
+      "source_locator": "research/slotted_process_library/corpus/spatial/archaeal_processing/investigation.json#/source_observations/2/published_wetlab",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2795283/"
+    },
+    {
+      "case_group": "causal_cas2_spacer_acquisition",
+      "case_id": "causal_cas2_spacer_acquisition",
+      "limit": "Three primary E. coli relevant Results/Methods inspected, with earlier other-species nuclease comparators explicitly limited; new descriptive deposited-coordinate comparison. No biological experiments or new annotation run. | Source observation limit: A change in plasmid migration is not automatically covalent spacer integration. Cas1's demonstrated integrase strand-transfer role must not be collapsed into an unsupported requirement that Cas1 or Cas2 cuts donor DNA to generate all prespacers.",
+      "observation": "Radiolabel incorporation and product analysis distinguish integration products from plasmid topoisomers. Band X is not radiolabelled and is interpreted through disintegration/topology experiments. Blocking both protospacer 3-prime hydroxyls prevents integration; Cas1 also catalyses disintegration of a defined half-site substrate.",
+      "source_locator": "research/slotted_process_library/corpus/causal/cas2/case_trace.json#/key_observations/3/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4359072/"
+    },
+    {
+      "case_group": "causal_nlpI_scaffolding",
+      "case_id": "causal_nlpI_scaffolding",
+      "limit": "Relevant full pull-down, affinity, ternary-complex, activity and synthase-association Results; scaffolding Discussion; corresponding MST/denaturation/complex/PG-digestion Methods inspected. Other proteomics/localization Methods not exhaustively read.",
+      "observation": "Authors: purified NlpI binds several endopeptidases; pairwise interactions alone do not establish simultaneous binding.",
+      "source_locator": "research/slotted_process_library/corpus/causal/cases.jsonl:4#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7049810/"
+    },
+    {
+      "case_group": "cellular_ugtP",
+      "case_id": "cellular_ugtP",
+      "limit": "Full Results on nutritional dependence, pathway controls and FtsZ assays inspected. | Group source-use limits: Cellular perturbations and purified FtsZ assays are connected study outputs, not independent proofs of every causal link. Native sensing remains bounded.",
+      "observation": "UgtP amount and localization depend on nutrients/UDP-glucose pathway state. Mutants alter cell length. Purified UgtP inhibits FtsZ assembly, while localization changes are separable from gross protein abundance.",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:11#/actual_observations/0/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1971218/"
+    },
+    {
+      "case_group": "cellular_yfgM",
+      "case_id": "cellular_yfgM",
+      "limit": "2014 primary full Results/Discussion and 2019 full primary article inspected. Detergent-dependent detection limits retained. | Group source-use limits: Detergent dependence limits association/negative assays. Later crosslinking repeats/extends complex detection; it is not independent functional activity evidence. | This row selects an exact clause from the aggregate retained observation; other source clauses are not attributed to this URL.",
+      "observation": "YfgM alone did not reproduce PpiD anti-aggregation activity.",
+      "source_locator": "research/slotted_process_library/corpus/cellular/verified_cases.jsonl:6#/actual_observations/0/observation[characters 100:160]",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4081946/"
+    },
+    {
+      "case_group": "chem_bcd_etf",
+      "case_id": "chem_bcd_etf",
+      "limit": "Full relevant introduction, purification/assay methods, results, tables and discussion inspected; raw HTML and parsed paragraphs saved.",
+      "observation": "Purified complex reduces ferredoxin only with crotonyl-CoA; omission controls and NADPH substitution distinguish dependencies.",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:1#/actual_observations/1/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/"
+    },
+    {
+      "case_group": "chem_bioc",
+      "case_id": "chem_bioc",
+      "limit": "Full relevant primary introduction, methods, all results and discussion inspected; source figure numerical constants not independently fitted.",
+      "observation": "8 mM malonyl-CoA gives only half the activity of 0.05 mM malonyl-ACP; other tested acyl-ACPs are inactive. Mass analysis supports methyl ester formation.",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:4#/actual_observations/1/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3481302/"
+    },
+    {
+      "case_group": "chem_dsr_terminal",
+      "case_id": "chem_dsr_terminal",
+      "limit": "Full relevant primary results, discussion, assay/product methods and limitations inspected; 2015 DsrAB source saw abstract only and is not counted as a separately verified case.",
+      "observation": "Thiol labeling/peptide MS detect reduced DsrC; derivatization/HPLC detects sulfide increasing with substrate. Recovery is only 40-50%, with quantitative limitations disclosed.",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:10#/actual_observations/1/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10861901/"
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "case_id": "chem_f420_precursor_partner",
+      "limit": "Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting.",
+      "observation": "2022: changing only the downstream CofD/FbiA partner changes the apparent precursor preference. Cognate mycobacterial pairs favor PEP, Mycetohabitans pairs 3-PG, tested archaeal pairs 2-PL. GPPG is trapped structurally.",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:7#/actual_observations/2/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8764529/"
+    },
+    {
+      "case_group": "chem_hemq",
+      "case_id": "chem_hemq",
+      "limit": "Relevant primary body/results and main methods inspected for both; detailed supplementary purification protocols and later mechanistic revisions not checked.",
+      "observation": "2015 Biochemistry: time-resolved/HPLC/MS assays of S. aureus HemQ establish sequential oxidative decarboxylation; excess peroxide also destroys product heme.",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:9#/actual_observations/1/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4950513/"
+    },
+    {
+      "case_group": "chem_hydabc",
+      "case_id": "chem_hydabc",
+      "limit": "Full relevant primary methods, donor/stoichiometry results and discussion inspected; original raw gas-chromatography data not reprocessed.",
+      "observation": "Combining NADH with enzymatically reduced native ferredoxin increases H2 formation; purified enzyme needs added FMN.",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:11#/actual_observations/0/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2698477/"
+    },
+    {
+      "case_group": "chem_mvh_hdr",
+      "case_id": "chem_mvh_hdr",
+      "limit": "Relevant entire primary body, methods, results, limitations and figure legends inspected. Supporting-information raw data not independently analyzed.",
+      "observation": "Purified complex reduces ferredoxin almost completely with H2 only when heterodisulfide is supplied, beyond the uncoupled hydrogenase equilibrium.",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:3#/actual_observations/0/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3041090/"
+    },
+    {
+      "case_group": "chem_nfnab",
+      "case_id": "chem_nfnab",
+      "limit": "Relevant expression/reconstitution/assay methods, results, stoichiometry figures and discussion inspected; supplements not independently reanalyzed.",
+      "observation": "Recombinant NfnAB reduces ferredoxin with NADPH efficiently only with NAD+; NADP+ reduction by reduced ferredoxin depends on NADH.",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:2#/actual_observations/0/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2944534/"
+    },
+    {
+      "case_group": "chem_queg",
+      "case_id": "chem_queg",
+      "limit": "Relevant purification, reconstitution, activity/complementation methods, cofactor results and EPR interpretation inspected; raw spectra not reprocessed.",
+      "observation": "Elemental/cofactor analysis supports two Fe-S clusters and one cobalamin; LC-MS measures oQ-to-Q conversion.",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:5#/actual_observations/1/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4753064/"
+    },
+    {
+      "case_group": "chem_ubix",
+      "case_id": "chem_ubix",
+      "limit": "Relevant primary body and methods, including substrate tests, filtrate reconstitution and structure work, inspected.",
+      "observation": "DMAP binds UbiX; tested DMAPP/IPP do not yield comparable binding/modification evidence. Reduced FMN plus DMAP produces a prenylated flavin identified by mass/spectroscopy.",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:6#/actual_observations/0/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4988493/"
+    },
+    {
+      "case_group": "context_archaeal_shikimate_kinase_2001",
+      "case_id": "context_archaeal_shikimate_kinase_2001",
+      "limit": "Complete main paper, genome-analysis methods, results, and substrate-assay methods read. No WIT reconstruction, alignment, or enzyme assay rerun. Historical WIT identifier retained without an unverified modern-locus mapping. | Group source-use limits: Related genome occurrences are not asserted independent tests. The historical WIT/gi identity is preserved without an invented modern locus mapping; none of the analyses was rerun.",
+      "observation": "Purified recombinant RMJ07785 phosphorylated shikimate; RMJ01903 phosphorylated homoserine. Cross-substrate assays detected no overlapping activity. These assays establish specificity beyond pathway association.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:2#/experiment_dependence",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC94878/"
+    },
+    {
+      "case_group": "context_bioy_optional_module_2007",
+      "case_id": "context_bioy_optional_module_2007",
+      "limit": "Comparative results, all transport/complex results, discussion, and assay/bioinformatics methods read from full paper. No membrane assay or phylogenetic reconstruction performed. | Group source-use limits: Heterologous uptake does not establish a native role across all BioY paralogs, so it is not assigned allele-linked native A109. Late accumulation and initial-rate readouts are related tests.",
+      "observation": "Many bioY loci associate with biotin biosynthesis/regulons, but only approximately one-third link to bioMN; some genomes lack obvious BioMN homologs. In heterologous E. coli, BioY alone transported biotin. Longer accumulation assays initially suggested BioMN dispensability; initial-rate substrate titrations showed the full system has greater affinity. BioM Walker-A mutation impaired efficient uptake.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:11#/actual_observations",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1815280/"
+    },
+    {
+      "case_group": "context_cfbb_f430_ringf_2017",
+      "case_id": "context_cfbb_f430_ringf_2017",
+      "limit": "Complete main cluster/enzyme results and relevant ligase methods read. Not all structural/spectroscopic supplementary detail inspected. Cfb letter assignments kept specific to this paper, avoiding conflation with the 2016 study. | Group source-use limits: Use the 2017 paper-specific CfbB letter assignment. Not all spectroscopy/structural supplements were inspected; upstream natural electron supply remains unknown.",
+      "observation": "Chemically required chelation, amidation, and reduction motivated searching for a matching gene grouping. Several methanogen clusters combine a type-II chelatase, MurF-like ligase, nitrogenase-like pair, and amidation enzyme. The M. barkeri MurF-like CfbB converted two candidate reduced intermediates; reduced enzyme concentration made the faster seco-F430 reaction discriminate the preferred substrate.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:12#/actual_observations",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5337119/"
+    },
+    {
+      "case_group": "context_cfbb_f430_ringf_2017",
+      "case_id": "context_cfbb_f430_ringf_2017",
+      "limit": "Complete main cluster/enzyme results and relevant ligase methods read. Not all structural/spectroscopic supplementary detail inspected. Cfb letter assignments kept specific to this paper, avoiding conflation with the 2016 study. | Group source-use limits: Use the 2017 paper-specific CfbB letter assignment. Not all spectroscopy/structural supplements were inspected; upstream natural electron supply remains unknown.",
+      "observation": "Context nominates an enzyme ensemble; anaerobic reconstitution, HPLC/MS, substrate comparisons and product NMR establish final ring formation. Natural electron supply for preceding reductases remained unresolved.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:12#/experiment_dependence",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5337119/"
+    },
+    {
+      "case_group": "context_mj0044_ip_kinase_2006",
+      "case_id": "context_mj0044_ip_kinase_2006",
+      "limit": "Complete primary methods/results and pathway caveats read. No assay or genomic analysis rerun; historical whole-pathway claims not promoted to a current confirmed pathway. | Group source-use limits: The proposed upstream decarboxylation and its gene remain unidentified; historical full-pathway reconstruction is not confirmed by the measured kinase reaction.",
+      "observation": "IP-dependent ADP production, 31P NMR, and mass spectrometry established ATP-dependent IP-to-IPP conversion. This did not establish the unidentified upstream decarboxylation step or its candidate gene.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:7#/experiment_dependence",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1447442/"
+    },
+    {
+      "case_group": "context_poxa_yjek_efp_2010_2011",
+      "case_id": "context_poxa_yjek_efp_2010_2011",
+      "limit": "2010 hypothesis/results/methods passages and complete 2011 main article read. Detailed 2011 supplementary methods not inspected. No new genome count, alignment, or assays. | Group source-use limits: The 2010 source is explicitly a hypothesis; the 2011 source is later discriminating evidence, not information available to the earlier investigation. Detailed 2011 supplementary methods were not inspected. | This row selects an exact clause from the aggregate retained observation; other source clauses are not attributed to this URL.",
+      "observation": "Subsequent work found free (R)-beta-lysine is the efficient PoxA substrate and rescues a yjeK mutant phenotype.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:8#/actual_observations[characters 273:384]",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3177975/"
+    },
+    {
+      "case_group": "context_rbkr_regulator_kinase_2017",
+      "case_id": "context_rbkr_regulator_kinase_2017",
+      "limit": "Complete genomic reconstruction, dual-function results, evolutionary caveats, and relevant bioinformatics/DNA-binding/kinase methods read. Structure section not exhaustively inspected; no motif scan or assay repeated. | Group source-use limits: Native activation/sign was inferred from operator positions, not established with native genetics/transcriptomics; it is not A107 observed native regulation. Kinase and binding outputs are connected study measurements.",
+      "observation": "RibK and the wHTH-RibK fusion occupy complementary genomes. Conserved upstream motifs recur at riboflavin biosynthesis/uptake loci; Thermoplasma auxotrophs instead point toward an uptake target. Recombinant proteins bound predicted DNA sites, kinase assays produced FMN, and FMN disrupted DNA binding. Candidate operator positions suggested activation.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:10#/actual_observations",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5397151/"
+    },
+    {
+      "case_group": "context_ribk_mj0056_2008",
+      "case_id": "context_ribk_mj0056_2008",
+      "limit": "Complete short primary paper and methods read. No ribB-neighborhood retrieval or enzymatic measurement repeated. | Group source-use limits: Auxotroph occurrence is compatible with salvage but does not measure native salvage flux. Fold, adjacency and assays remain connected evidence, not automatically independent.",
+      "observation": "Recombinant expression increased FMN; purified protein converted riboflavin to an HPLC/MS-confirmed FMN product. Donor comparisons established the preference for CTP. Neighborhoods do not determine the phosphate donor.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:6#/experiment_dependence",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2293203/"
+    },
+    {
+      "case_group": "csiD_glutarate_hydroxylase",
+      "case_id": "csiD_glutarate_hydroxylase",
+      "limit": "Primary introduction and results inspected by root.",
+      "observation": "Authors tested glutarate hydroxylation and stereochemistry of the product.",
+      "source_locator": "research/slotted_process_library/corpus/root/cases.jsonl:3#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6265302/"
+    },
+    {
+      "case_group": "fluc_fluoride_channel",
+      "case_id": "fluc_fluoride_channel",
+      "limit": "Primary full results/methods and correction inspected by root.",
+      "observation": "Authors measured fluoride flux, contrasted chloride flux, and recorded channel currents from reconstituted proteins.",
+      "source_locator": "research/slotted_process_library/corpus/root/cases.jsonl:1#/actual_observations/0",
+      "source_url": "https://elifesciences.org/articles/01084"
+    },
+    {
+      "case_group": "hemk_prmc",
+      "case_id": "context_hemk_prmc_2002",
+      "limit": "Full primary main text retrieved; identification, gene-organization, methylation results and methods read. No independent prfA-neighborhood query, mutation, or assay.",
+      "observation": "HemK truncation removed RF1 methylation; HemK-enriched extracts methylated RF1/RF2, with GGQ-mutant substrate controls. The neighborhood nominates the substrate class; methylation and residue specificity require these measurements.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:5#/experiment_dependence",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC125846/"
+    },
+    {
+      "case_group": "lhgO_electron_acceptor_correction",
+      "case_id": "lhgO_electron_acceptor_correction",
+      "limit": "Primary LhgO results, controls and limitations inspected by root.",
+      "observation": "Authors found no oxygen consumption by purified active enzyme, then tested quinone reduction.",
+      "source_locator": "research/slotted_process_library/corpus/root/cases.jsonl:4#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6265302/"
+    },
+    {
+      "case_group": "organism_02_xoxf",
+      "case_id": "organism_02_xoxf",
+      "limit": "2012 Results/Methods; 2016 MeDH Results/growth/glassware/assay methods and ExaF Results, tables and assay details. Published curves/tables inspected; no numerical raw OD data reanalysis. | Group source-use limits: The original summary combines 2012 XoxF and 2016 ExaF observations; selected URLs identify those scopes. No raw OD fitting or natural-leaf metal/competition experiment was done. Contrast 1 is scientifically an A107 deployment/reporter correction, documented in retained detailed_traces.md, but the original JSONL observation does not actually retain that reporter result. It is not silently copied from an unrelated original field into body evidence. | This row selects an exact clause from the aggregate retained observation; other source clauses are not attributed to this URL.",
+      "observation": "Metal-conditioned growth, purified protein identity/metal content and knockout combinations support lanthanide-dependent oxidation",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:2#/actual_observations/0[characters 0:130]",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4859578/"
+    },
+    {
+      "case_group": "organism_04_gcsr",
+      "case_id": "organism_04_gcsr",
+      "limit": "Main Results, growth and RNA-seq/accession Methods; live GSE76522 metadata: four RNA-seq samples, two WT/two deletion, SRA SRP068065. No reads reprocessed. | Group source-use limits: GEO metadata are custody/availability information, not an independent RNA-seq experiment. GcsR is a regulator, not a glycine-cleaving enzyme; direct ligand binding remains unknown.",
+      "observation": "Clean deletion abolished glycine-only carbon growth, strongly lowered gcs2 transcripts, and removed most broad expression changes reported from an older transposon strain. Promoter reporters responded to glycine; EMSAs established promoter binding.",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:4#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4894688/"
+    },
+    {
+      "case_group": "organism_08_porphyran",
+      "case_id": "organism_08_porphyran",
+      "limit": "Complete relevant growth/PUL induction/ICE/enzyme Results and methods overview; no human dietary intervention, historical transfer experiment or new enzymology. | Group source-use limits: One study measures induced loci, recombinant reactions and whole-cell growth. No transfer event/donor or human dietary intervention was established; negative growth retains substrate-preparation scope.",
+      "observation": "B. plebeius grew on porphyran, not tested agarose/carrageenan preparations; porphyran induced the examined PUL genes. Recombinant GH16B/GH86A cleaved native and purified porphyran with diagnostic products. A neighboring GH16A was agarolytic although intact cells did not grow on agarose.",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:8#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3511707/"
+    },
+    {
+      "case_group": "organism_09_huc",
+      "case_id": "organism_09_huc",
+      "limit": "2019 relevant full Results and culture methods; 2023 purification/kinetics/quinone Results and methods. Do not read the 2025 heterologous liposome ATP result as direct native-cell ATP quantification. | Group source-use limits: The composite original observation spans 2019 whole-cell and 2023 purified-protein scopes. The later heterologous liposome ATP result is not native ATP quantification; early/late deployment is not an unconditional survival effect. | This row selects an exact clause from the aggregate retained observation; other source clauses are not attributed to this URL.",
+      "observation": "Purified Huc oxidized very low hydrogen concentrations and reduced quinone analogues despite oxygen.",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:9#/actual_observations/0[characters 193:293]",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10017518/"
+    },
+    {
+      "case_group": "organism_11_fucp",
+      "case_id": "organism_11_fucp",
+      "limit": "Primary Results/uptake Methods and both papers' poultry Results inspected; no universal chicken-negative or virulence-essential claim. | Group source-use limits: The original string combines two papers and host conditions; neither URL is asserted to independently support every composite clause. No universal chicken-negative or virulence-essential conclusion follows.",
+      "observation": "Fucose induced the locus and improved growth. Cj0486 restored E. coli fucP function; radiolabeled uptake was lost in its mutant. Piglet competition showed a defect. Poultry effects differed with inoculum, supplementation and competition versus single-strain infection.",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:11#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3084102/"
+    },
+    {
+      "case_group": "organism_13_icl",
+      "case_id": "organism_13_icl",
+      "limit": "Relevant complete Results and culture/extraction Methods; no isotope-flux recomputation. The 2005 infection paper was retrieved but remains an abstract-level auxiliary source here. | Group source-use limits: Metabolomics, rescue and GlpX assays are connected evidence; isotope flux was not recomputed. The auxiliary 2005 infection source remains abstract-only.",
+      "observation": "Isotope tracing showed methylcitrate accumulation and downstream TCA depletion. Vitamin B12 rerouting restored survival without fully restoring growth; other supplements addressed growth limitations. Purified GlpX was inhibited by methylcitrate.",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:13#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3977286/"
+    },
+    {
+      "case_group": "organism_16_malr",
+      "case_id": "organism_16_malr",
+      "limit": "Relevant Results including deletion, reporter rescue and sugar-independent DNA binding; growth/deletion/purification Methods inspected. | Group source-use limits: Growth, reporters and EMSA are related system measurements. Sugar-independent EMSA does not rule out every possible ligand-binding/sensing mechanism.",
+      "observation": "malR deletion removed extra growth supported by maltose/dextrin but retained sucrose growth. Locus transcripts and malE reporters fell; reporter activation was restored by MalR coexpression. Purified MalR bound the promoter; adding maltose did not change binding in EMSA.",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:16#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3911195/"
+    },
+    {
+      "case_group": "organism_19_pyruvate_transport",
+      "case_id": "organism_19_pyruvate_transport",
+      "limit": "Relevant main Results/transport Methods across three papers, including alternative-transporter and resuscitation controls. Grouped as one investigation, not three cases. | Group source-use limits: Three papers form one connected investigation. No new transport fitting occurred; YhjX specificity remains unresolved. The network resuscitation phenotype is not forced into allele-linked BtsT-only A109.",
+      "observation": "BtsT transported radiolabeled pyruvate specifically; purified proteoliposomes demonstrated proton-coupled uptake. CstA-related mutant selection and extracellular depletion established an additional route. Cold-starved cells accumulated BtsT and rapidly imported pyruvate; sensing-network mutants failed resuscitation under tested conditions.",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:19#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5738728/"
+    },
+    {
+      "case_group": "organism_20_isia",
+      "case_id": "organism_20_isia",
+      "limit": "Complete relevant mutant/spectroscopy/growth Results and growth conditions. No new fluorescence-lifetime analysis. | Group source-use limits: Spectroscopy and growth are connected but distinct measurements. Early and late outcomes do not independently support one unconditional benefit; no new lifetime analysis was done.",
+      "observation": "A markerless C260V substitution removed excitation quenching in purified IsiA. Under stringent iron deficiency and high light, mutant cells initially grew quickly then bleached/declined; low light avoided bleaching. In iron-replete high light the mutant reached greater density.",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:20#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8545134/"
+    },
+    {
+      "case_group": "organism_21_vcra",
+      "case_id": "organism_21_vcra",
+      "limit": "Main purification/substrate/gene-identification/transcription Results and cultivation/assay Methods. GenBank AY322364 reported; no new field dechlorination or sequence analysis. | Group source-use limits: Culture was nonaxenic and protein only partially purified; there was no knockout. Activity, identity and transcripts are connected evidence, not independent proof of unique gene causation.",
+      "observation": "Anoxically enriched activity reduced vinyl chloride/DCEs, not PCE and only slowly TCE. Peptide sequencing mapped the major candidate to vcrA; transcripts occurred in VC-grown cultures. Environmental water contained vcrAB DNA.",
+      "source_locator": "research/slotted_process_library/corpus/organism/cases.jsonl:21#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC492378/"
+    },
+    {
+      "case_group": "pa0142",
+      "case_id": "seq_pa0142_8oxoguanine",
+      "limit": "Primary paper abstract, target-selection narrative, substrate assay and concluding limitation inspected. Homolog crystal structure was not mislabeled as PA0142's own structure.",
+      "observation": "Purified PA0142 was tested against a library exceeding 50 potential substrates; it deaminated 8-oxoguanine to urate.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:14#/actual_observations/1",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2820149/"
+    },
+    {
+      "case_group": "pxpT_pxpR_access_and_sensing",
+      "case_id": "pxpT_pxpR_access_and_sensing",
+      "limit": "Indexed complete relevant regulatory Results, transport Discussion, figure descriptions and culture/purification Methods inspected. Direct publisher fetch 403; raw binding data not obtained. Current published 2026 article used, not 2025 preprint.",
+      "observation": "Authors: purified PxpR binds 5-OP by ITC; four related amino acids show no detectable binding under tested conditions.",
+      "source_locator": "research/slotted_process_library/corpus/root/cases.jsonl:12#/actual_observations/2",
+      "source_url": "https://journals.asm.org/doi/10.1128/aem.02181-25"
+    },
+    {
+      "case_group": "quef",
+      "case_id": "seq_queF_not_folE",
+      "limit": "Primary Results and Discussion plus alignment and assay descriptions inspected through indexed full-text sections. No sequence alignment or experiments rerun here.",
+      "observation": "NADPH-dependent turnover yielded product matching authentic preQ1 by HPLC and proton NMR.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:6#/actual_observations/2",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC555470/"
+    },
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "case_id": "reg_iscR_state_target_specificity",
+      "limit": "Five primary papers’ relevant complete paths inspected as itemized in sources. One independent published-table/oligo arithmetic probe was run. No biological experiment, new regulon scan, raw-curve fit or IscR structure computation.",
+      "observation": "E43A preserved hya affinity approximately but expanded apo-protein recognition to a type-1 site. Symmetrizing the type-1 dinucleotide alone did not restore wild-type apo binding.",
+      "source_locator": "research/slotted_process_library/corpus/root/regulatory_specificity/case_trace.json#/case/actual_observations/5/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3676455/"
+    },
+    {
+      "case_group": "replacement_bioG",
+      "case_id": "replacement_bioG",
+      "limit": "Complete relevant Results and assay descriptions read; no native donor knockouts or kinetics inferred.",
+      "observation": "BioGs rescued E. coli ΔbioH and purified proteins cleaved pimeloyl-ACP methyl ester. Induction inhibited some rescue; shorter-substrate cleavage and a soluble inactive S65A control helped resolve specificity.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:7#/actual_observations/0/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3494674/"
+    },
+    {
+      "case_group": "replacement_bioJ",
+      "case_id": "replacement_bioJ",
+      "limit": "Relevant complete Results/Methods inspected; no cultures, hosts or quantitative figures reanalyzed.",
+      "observation": "BioJ rescued ΔbioH, hydrolyzed methyl-pimeloyl-ACP with product mass support and restored DTB synthesis in extracts. Catalytic-triad mutants impaired native growth/host replication; biotin relieved defects.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:9#/actual_observations/0/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3933004/"
+    },
+    {
+      "case_group": "replacement_bioV",
+      "case_id": "replacement_bioV",
+      "limit": "Complete main Results read; source hypothesis about uptake is not adopted as a demonstrated mechanism.",
+      "observation": "Subcloning separated HP0287 from HP0288. BioV restored ΔbioH growth, cleaved cognate-ACP methyl-pimelate with a mass change, and supported DTB synthesis. Native deletion attempts yielded no transformants.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:10#/actual_observations/0/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4751477/"
+    },
+    {
+      "case_group": "replacement_bioZ",
+      "case_id": "replacement_bioZ",
+      "limit": "Main relevant Results/Methods read; no independent raw spectral or isotope analysis.",
+      "observation": "BioZ bypassed BioC plus BioH. Native bioZ deletion/C115S caused biotin auxotrophy; reconstitution and product MS supported glutaryl-CoA/malonyl-ACP condensation. CaiB loss/assays connected glutaryl-CoA supply.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:11#/actual_observations/0/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/"
+    },
+    {
+      "case_group": "replacement_cobY",
+      "case_id": "replacement_cobY",
+      "limit": "Complete main Results and relevant Methods read; reported assay negatives remain condition-bounded.",
+      "observation": "Purified MTH1152 transferred GMP to AdoCbi-P but lacked detected AdoCbi kinase activity. cobY rescued de-novo-dependent Salmonella cobU deficiency, but not aerobic cobinamide-salvage demand.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:12#/actual_observations/0/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC101920/"
+    },
+    {
+      "case_group": "replacement_folE2",
+      "case_id": "replacement_folE2",
+      "limit": "Complete relevant Results and Methods; trace zinc and authors’ lag explanation kept distinct from measured growth.",
+      "observation": "ΔfolE growth lag shortened with zur deletion; removing folE2 as well blocked growth. Purified FolE2 accepted several metals, with Mn supporting greater activity than Zn.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:5#/actual_observations/0/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2772490/"
+    },
+    {
+      "case_group": "replacement_folM",
+      "case_id": "replacement_folM",
+      "limit": "Complete relevant main texts/methods. P. aeruginosa validation deletes folX, not folM; natural E. coli use of exported monapterin remains unresolved in this study.",
+      "observation": "At matched substrate concentration, purified FolM reduced dihydromonapterin faster than dihydrofolate; NADH could not replace NADPH.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:2#/actual_observations/4/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2805310/"
+    },
+    {
+      "case_group": "replacement_queH",
+      "case_id": "replacement_queH",
+      "limit": "Full relevant primary results/methods in both papers; independent read-only 7LC5 coordinate probe recorded separately. No cultures, mass-spectrometric assays or mechanism reconstruction rerun.",
+      "observation": "Structure placed Cys9/Cys10 at a separate metal site; in-vitro oQ decreased without detectable Q product.",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:1#/actual_observations/5/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8884141/"
+    },
+    {
+      "case_group": "rida",
+      "case_id": "seq_yjgF_ridA_salmonella",
+      "limit": "Primary active-site modeling, variant results and homolog-assay sections inspected through indexed full text; no new assays.",
+      "observation": "YjgF accelerated ammonia release from reactive intermediates made by IlvA.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:5#/actual_observations/0",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3270999/"
+    },
+    {
+      "case_group": "seq_codA_isoguanine_failed_candidate",
+      "case_id": "seq_codA_isoguanine_failed_candidate",
+      "limit": "Primary complete indexed narrative, purification table, peptide-ID results and recombinant assays inspected. No wet-lab work performed.",
+      "observation": "Recombinant CodA converted isoguanine to xanthine; product mass spectrometry and a ligand-bound structure supported the assignment.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:15#/actual_observations/3",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3138507/"
+    },
+    {
+      "case_group": "seq_hutW_vibrio",
+      "case_id": "seq_hutW_vibrio",
+      "limit": "Primary hypothesis discussion, expression methods, enzyme results and product-analysis sections inspected through indexed full text; no heme experiment performed.",
+      "observation": "Reconstituted HutW degraded heme anaerobically, released iron and generated SAM-turnover products.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:13#/actual_observations/1",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8672366/"
+    },
+    {
+      "case_group": "seq_ptmvd_m3k_picrophilus",
+      "case_id": "seq_ptmvd_m3k_picrophilus",
+      "limit": "Primary sequence-analysis methods/results, abstract and product-analysis conclusion inspected; no new sequence search or biochemical experiment.",
+      "observation": "Substrate and reaction-product experiments instead identified phosphorylation of mevalonate to mevalonate-3-phosphate.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:17#/actual_observations/2",
+      "source_url": "https://journals.asm.org/doi/full/10.1128/aem.04033-14"
+    },
+    {
+      "case_group": "seq_pucM_transthyretin_like",
+      "case_id": "seq_pucM_transthyretin_like",
+      "limit": "Primary abstract, indexed methods for LC-MS and indexed human-TTR control result inspected; direct publisher full-page access was blocked. Kept as a concise verified activity case, not a full investigative reconstruction.",
+      "observation": "PucM facilitated hydrolysis of the uricase product 5-hydroxyisourate.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:7#/actual_observations/0",
+      "source_url": "https://febs.onlinelibrary.wiley.com/doi/10.1016/j.febslet.2005.07.056"
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "case_id": "seq_queFL_archaeosine",
+      "limit": "2012 comparative alignment and tRNA-analysis results plus 2017 substrate/adduct methods and discussion inspected through indexed primary text. No new enzyme experiments.",
+      "observation": "Later biochemical work tested both free preQ0 and preQ0-tRNA. Both formed thioimide-like adducts, but productive synthesis used preQ0-tRNA.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:10#/actual_observations/1",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5485725/"
+    },
+    {
+      "case_group": "seq_triA_atzA_near_identity",
+      "case_id": "seq_triA_atzA_near_identity",
+      "limit": "Primary introduction, sequence results, substrate table and competition methods/results inspected through indexed full text. Historical organism name preserved explicitly.",
+      "observation": "TriA deaminated melamine and ammeline but showed no detected halo-triazine activity in the tested panel; AtzA lacked the corresponding melamine/ammeline activities.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:12#/actual_observations/2",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC95154/"
+    },
+    {
+      "case_group": "seq_yadB_gluQRS_ecoli",
+      "case_id": "seq_yadB_gluQRS_ecoli",
+      "limit": "Primary PNAS abstract plus NAR substrate-preparation methods and Q34 comparison results inspected. No live tRNA or protein calculation.",
+      "observation": "A subsequent matched-substrate experiment used tRNA-Asp differing in Q34: only the queuosine-containing tRNA was glutamylated, although both bound the enzyme.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:11#/actual_observations/2",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC419609/"
+    },
+    {
+      "case_group": "seq_ygbP_ispD_ecoli",
+      "case_id": "seq_ygbP_ispD_ecoli",
+      "limit": "Primary results for purification, nucleotide preference, NMR and the database-search narrative inspected through indexed full-text sections; no live pathway analysis.",
+      "observation": "Recombinant E. coli YgbP catalyzed product formation.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:8#/actual_observations/3",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC18359/"
+    },
+    {
+      "case_group": "seq_yggH_trmB_ecoli",
+      "case_id": "seq_yggH_trmB_ecoli",
+      "limit": "Primary introduction, cloning methods and positional-assay results inspected through indexed sections; no new analysis performed.",
+      "observation": "Recombinant YggH produced m7G in tRNA in radiolabel/TLC assays.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:3#/actual_observations/1",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC154064/"
+    },
+    {
+      "case_group": "seq_yjeH_exporter_ecoli",
+      "case_id": "seq_yjeH_exporter_ecoli",
+      "limit": "Primary sequence-modeling methods, phylogenetic results and functional assays inspected through indexed full-text sections. No transport experiment rerun.",
+      "observation": "Overexpression increased tolerance, reduced intracellular substrate pools and enhanced methionine/branched-chain amino-acid export in dipeptide-loading assays.",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:4#/actual_observations/1",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4616930/"
+    },
+    {
+      "case_group": "spatial_ftsw_bpbp_job",
+      "case_id": "spatial_ftsw_bpbp_job",
+      "limit": "Both papers’ relevant main Results and controls inspected; 2019 purification/polymerization methods read. No independent reproduction or resolution of every assay discrepancy.",
+      "observation": "Purified FtsW alone lacked detectable polymerization; cognate bPBP addition restored it. FtsW catalytic substitution abolished product despite inactive bPBP transpeptidase retaining stimulation.",
+      "source_locator": "research/slotted_process_library/corpus/spatial/cases.jsonl:2#/actual_observations/1/observation",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6430707/"
+    },
+    {
+      "case_group": "spec_aquifex_hfp_coupling_contamination",
+      "case_id": "spec_aquifex_hfp_coupling_contamination",
+      "limit": "Primary relevant complete results/discussion and reconstitution/NMR/purification methods inspected. Supplement MS identification accepted as reported; its underlying spectra were not reanalyzed. Current PDB polymer records bind HFP to aq_1744/O67630; gpmA is a record label, not independent mutase evidence.",
+      "observation": "Two of 22 screened proteins supported a staged ARAPDP-dephosphorylation readout; only HFP supported the full one-pot pathway. IMP depleted NADPH and Ru5P.",
+      "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:6#/actual_observations/0/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12051542/"
+    },
+    {
+      "case_group": "spec_cysq_pap_not_imp",
+      "case_id": "spec_cysq_pap_not_imp",
+      "limit": "2008 primary relevant full methods/results/discussion inspected. 2010 CysQ deletion, extract-activity and discussion sections inspected; no genome analysis of putative suppressors.",
+      "observation": "PAP had low-micromolar Km; IMP and FBP catalytic efficiencies were over 1,000-fold lower. A sensitive MS assay was needed; low-PAP linearity and PAPS instability remained limitations.",
+      "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:4#/actual_observations/1/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2711008/"
+    },
+    {
+      "case_group": "spec_frsa_disputed_pdc_native_unknown",
+      "case_id": "spec_frsa_disputed_pdc_native_unknown",
+      "limit": "2013 main narrative, modeling assumptions and stated assay outcomes inspected; detailed supplementary assay protocols not independently checked. 2019 complete relevant activity/results/discussion and assay conditions inspected. Original 2011 paper not newly verified.",
+      "observation": "Mechanistic calculations questioned the earlier claim. Two protein preparations showed no detectable pyruvate decarboxylation in coupled ADH, NMR and membrane-inlet MS assays despite a nearly identical crystallized fold.",
+      "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:7#/actual_observations/0/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3788570/"
+    },
+    {
+      "case_group": "spec_suhb_catalysis_vs_rrna",
+      "case_id": "spec_suhb_catalysis_vs_rrna",
+      "limit": "2000 primary abstract only; 2016 suppressor, recruitment, reporter/endogenous comparison, genetic-interaction results and relevant methods/discussion inspected; 2019 relevant binding/reconstitution results/methods and stated limitations inspected. Raw data and earlier 1994 activity paper not independently analyzed.",
+      "observation": "Purified SuhB bound NusA-AR2 and rrnG RNA and joined a transcription complex. Weak RNAP contacts and detailed recruitment mechanisms retained uncertainty.",
+      "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:3#/actual_observations/3/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6614797/"
+    },
+    {
+      "case_group": "spec_yigl_conditional_b6",
+      "case_id": "spec_yigl_conditional_b6",
+      "limit": "2024 relevant complete results/discussion and assay/genotype methods inspected; 2013 relevant regulation, competition and growth results inspected. Supplements not independently analyzed. Fresh public-record probe documented in raw/live_probe_summary.json.",
+      "observation": "Six multicopy suppressors were recovered; only YigL was a phosphatase. Purified YigL hydrolyzed PNP (Km 0.83 mM, kcat 1.9/s).",
+      "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:1#/actual_observations/1/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11409668/"
+    },
+    {
+      "case_group": "spec_yihu_native_sulfonate",
+      "case_id": "spec_yihu_native_sulfonate",
+      "limit": "2009 relevant whole results/discussion and reaction methods; 2014 primary main results, enzyme methods and relevant extended-data legends; 2020 accepted manuscript sequence, kinetics, structure and conclusion sections inspected. Supporting spectra/kinetic fits were not reanalyzed.",
+      "observation": "Later SLA kinetics showed roughly 42,000-fold greater catalytic efficiency than prior SSA parameters; GAP reduction was undetected. Product-bound structures identified a sulfonate-recognition pocket.",
+      "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:2#/actual_observations/3/result",
+      "source_url": "https://doi.org/10.1021/acscatal.9b04427"
+    },
+    {
+      "case_group": "sulfoglycolysis_selectivity",
+      "case_id": "spec_yihs_sulfosugar_selectivity",
+      "limit": "2008 primary abstract inspected; 2021 relevant complete YihS results, comparisons and figure legends inspected. Supporting spectra/kinetic fits not independently reprocessed.",
+      "observation": "NMR revealed an additional product. Deuterium exchange and an authentic synthetic reference identified sulforhamnose; starting from each sulfosugar reached the same equilibrium.",
+      "source_locator": "research/slotted_process_library/corpus/specificity/cases.jsonl:5#/actual_observations/2/result",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8006165/"
+    },
+    {
+      "case_group": "yeag",
+      "case_id": "cellular_yeaG",
+      "limit": "Complete relevant growth, proteome/phosphoproteome, candidate-substrate and concluding Results; strain construction, sampling, MS processing, purification and in-vitro-assay Methods. Main Tables 2/3, supplementary workbook legends/headers and selected site/protein rows, supplementary figure captions. No raw spectra or gel quantification. | Draft source-use limitation: The workbook descriptive arithmetic is not a new phosphoproteomics experiment. The selected author assay does not locate the exact modified sites. | Group source-use limits: cellular_yeaG and organism_06_yeag duplicate the same 2015 study; their source identity must be shared. The 2021 workbook retains its exact original lineage. Keep the further-72h versus 24h caption inconsistency, delta-yeaH/delta-yeaGH labels and 2021 table-count/SodB-SodA inconsistencies. Missing ratios are not zero phosphorylation.",
+      "observation": "Purified YeaG/AceA with ATP and malate yields the reported Phos-tag shift; absence of malate does not show that shift.",
+      "source_locator": "research/slotted_process_library/corpus/organism/yeag/trace.json#/route_2_phosphorylation_to_direct_contribution/2/author_observations",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8055822/"
+    },
+    {
+      "case_group": "yjef_nnr",
+      "case_id": "context_yjef_nnr_fusion_2011",
+      "limit": "Complete main experimental procedures and relevant results read from full PMC HTML; supplementary procedures not independently inspected. No new sequence/fusion search or assays. | Group source-use limits: The context/root records duplicate the 2011 paper and are not independent enzyme characterizations. Supplementary methods were not independently inspected. The 3RS8 ADP-ribose query is separate record work and does not confirm the paper ligand prose.",
+      "observation": "Fusion supports functional coupling, not epimerase chemistry. HPLC with enriched epimers, with/without ADP, and nucleotide measurements established epimerization, repair, and ADP-to-AMP coupling.",
+      "source_locator": "research/slotted_process_library/corpus/context/verified_cases.jsonl:3#/experiment_dependence",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3308837/"
+    },
+    {
+      "case_group": "yjef_nnr",
+      "case_id": "nnr_yjef_cofactor_and_repair",
+      "limit": "Primary results and discussion inspected; root additionally queried current 3RS8 records, which list ADP-ribose rather than independently confirming the paper paragraph about NADHX/ADP. | Group source-use limits: The context/root records duplicate the 2011 paper and are not independent enzyme characterizations. Supplementary methods were not independently inspected. The 3RS8 ADP-ribose query is separate record work and does not confirm the paper ligand prose.",
+      "observation": "ADP-dependent dehydration and a separate epimerase activity were experimentally characterized.",
+      "source_locator": "research/slotted_process_library/corpus/root/cases.jsonl:2#/actual_observations/1",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3308837/"
+    }
+  ]
+}

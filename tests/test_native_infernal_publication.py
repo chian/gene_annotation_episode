@@ -26,7 +26,7 @@ from gene_annotation_episode.tool_grading_artifacts import retain_tool_grading
 
 
 ROOT = Path(__file__).resolve().parents[1]
-FIXTURES = ROOT / "tests/fixtures/native_infernal_publication"
+FIXTURES = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/native_infernal_publication"
 POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
 
 

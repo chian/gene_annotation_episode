@@ -19,7 +19,7 @@ from gene_annotation_episode import flux_balance_readers as readers
 from test_flux_balance_model_tools import addition, file_for, request, selector
 
 
-FIXTURES = Path(__file__).parent / "fixtures" / "flux_balance_model_views"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance_model_views"
 CAPTURE_PINS = {
     "inspect/original-model.json": (696, "c82d1a09f98331f517e6d997fe2008f6682f562e0cf42901071645c6a4114aeb"),
     "inspect/model-capture.json": (19630, "8a9674b1c807470018ac696dccc77e122f1b97fbb94e330baf7abf832d6e7d5e"),

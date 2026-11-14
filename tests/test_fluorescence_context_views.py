@@ -3,9 +3,9 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.fluorescence_context_views import project_fluorescence_context
-from gene_annotation_episode.fluorescence_event_calculations import calculate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_result_contracts import CONTEXT_FIELDS, validate_fluorescence_context
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_context_views import project_fluorescence_context
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_contracts import CONTEXT_FIELDS, validate_fluorescence_context
 from test_fluorescence_event_calculations import _batch, _basis, _file, _gate, _location, _parameters, _request, _sheet
 
 

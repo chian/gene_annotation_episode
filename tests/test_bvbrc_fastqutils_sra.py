@@ -20,7 +20,7 @@ from test_bvbrc_fastqutils_report_formats import context
 from test_bvbrc_fastqutils_provider import f
 from test_bvbrc_fastqutils_returns import saved_fixture
 
-FIXTURES = Path(__file__).parent / 'fixtures/bvbrc_fastqutils/sra'
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/sra'
 
 
 def parse(raw, **kwargs):

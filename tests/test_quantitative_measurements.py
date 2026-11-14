@@ -24,7 +24,7 @@ from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
 
 
-ARTICLE = Path(__file__).parent / "fixtures/quantitative/PMC2621071.1.xml"
+ARTICLE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/quantitative/PMC2621071.1.xml"
 ARTICLE_SHA256 = "f1c4af1d469c9a6f689477fdd22f29115eb07e0bd5b1d51941a865d2de0596d0"
 
 

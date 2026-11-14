@@ -4,10 +4,10 @@ from copy import deepcopy
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.native_fluorescence_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import (
     OPERATIONS, fluorescence_environment, requested_job_from_fluorescence,
 )
-from gene_annotation_episode.native_fluorescence_tool_info import (
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_tool_info import (
     fluorescence_tool_contracts, fluorescence_tool_information,
 )
 from test_native_fluorescence_contracts import event_input, job

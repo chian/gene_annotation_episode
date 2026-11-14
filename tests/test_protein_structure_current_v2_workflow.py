@@ -27,7 +27,7 @@ from gene_annotation_episode.runtime import DecisionSource
 from gene_annotation_episode.tools import ToolRegistry
 
 
-F = import_module("verification.tool_graders_protein_structure_workflow_2026-10-27_410.fixture_helpers")
+F = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.workflow_410")
 HELPER_SHA = "6405670c166657c0ae2bceb628fc2d4f430eef824a3e7c9526a55c3266207863"
 QUESTION = ("For the two received AGST structure sequences, what are the native alignment score and "
     "mapped pair count, and, after fitting their first three CA pairs, what fit and held-out "

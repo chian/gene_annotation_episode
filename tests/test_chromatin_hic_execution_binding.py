@@ -31,7 +31,7 @@ from gene_annotation_episode.native_chromatin_interaction_tool_info import chrom
 
 REPO = Path(os.environ['C3_ORIGINAL_REPO'])
 ATTEMPT = Path(os.environ['C3_ATTEMPT'])
-FIXTURES = REPO / 'verification/tool_graders_chromatin_hic_native_2026-10-27_454'
+FIXTURES = REPO / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/hic_native'
 _spec = importlib.util.spec_from_file_location('chromatin457_c3_helpers', REPO / 'tests/test_chromatin_native_execution_c3.py')
 helpers = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(helpers)

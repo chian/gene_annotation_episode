@@ -22,8 +22,8 @@ from test_bvbrc_alignment_bundle_resolution import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-MSA = ROOT / 'verification/tool_graders_bvbrc_msa_sheet_2026-10-25/filled_examples_009'
-META = ROOT / 'verification/tool_graders_bvbrc_metacats_provider_2026-10-25/EXAMPLES_001'
+MSA = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_answers'
+META = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_answers'
 
 
 def unique(rows):

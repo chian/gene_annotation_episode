@@ -10,11 +10,11 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode import native_fluorescence_preparation as preparation
-from gene_annotation_episode.fluorescence_execution_common import canonical, identity
+import gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_preparation as preparation
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical, identity
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.native_fluorescence_contracts import POLICY
-from gene_annotation_episode.native_fluorescence_storage import read_json
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_storage import read_json
 from gene_annotation_episode.native_file_capture import retained_native_file
 from gene_annotation_episode.state import Store
 from test_fluorescence_result_worker import saved_plan

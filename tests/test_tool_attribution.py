@@ -6,16 +6,16 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.a102_attachments import request,refresh,received_attachments
-from gene_annotation_episode.a102_credit import (A102StructuralCredit,
+from gene_annotation_episode.episodic_workflow.root.a102.a102_attachments import request,refresh,received_attachments
+from gene_annotation_episode.episodic_workflow.root.a102.a102_credit import (A102StructuralCredit,
     A102FeatureGeometryCredit, A102FunctionalContrastCredit,
     A102ReferenceAttributionCredit, A102LocalTraitCredit, A102InterfaceContactCredit)
-from gene_annotation_episode.a102_native_worker import _native
-from gene_annotation_episode.a102_publication import publish_comparison
-from gene_annotation_episode.a102_structures import bind_structure,binding_summary
-from gene_annotation_episode.a102_tools import A102ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a102.a102_native_worker import _native
+from gene_annotation_episode.episodic_workflow.root.a102.a102_publication import publish_comparison
+from gene_annotation_episode.episodic_workflow.root.a102.a102_structures import bind_structure,binding_summary
+from gene_annotation_episode.episodic_workflow.root.a102.a102_tools import A102ToolRegistry
 from gene_annotation_episode.domain import canonical
-from gene_annotation_episode.a102_scoring import digest
+from gene_annotation_episode.episodic_workflow.root.a102.a102_scoring import digest
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import retain_tool_grading
 
@@ -167,7 +167,7 @@ def test_saved_zero_feature_and_contrast_credit_their_original_annotation(case, 
         'supporting_source_refs': [supporting], 'opposing_source_refs': [opposing],
         'incompatibility_witness_refs': [definition]}, known, scope)
     known.update(delivered)
-    from gene_annotation_episode.a102_attachments import refresh
+    from gene_annotation_episode.episodic_workflow.root.a102.a102_attachments import refresh
     additions, _ = refresh(store, known, scope)
     known.update(additions)
     contrast = A102FunctionalContrastCredit()
@@ -178,7 +178,7 @@ def test_saved_zero_feature_and_contrast_credit_their_original_annotation(case, 
     assert contrast(store, scope, known_record_refs=known,
         assignment={'scope': scope, 'proposed_annotation_ref': other})['credit'] == 0
 
-    from gene_annotation_episode.root_axis_receipts import axis_progress_from_received
+    from gene_annotation_episode.episodic_workflow.root.credit import axis_progress_from_received
     from gene_annotation_episode.domain import canonical
     receiver = SimpleNamespace(run_id='a102-axis-union', received_record_refs=tuple(known))
     def returned(proposal, projector, refs, invocation):
@@ -196,13 +196,13 @@ def test_saved_zero_feature_and_contrast_credit_their_original_annotation(case, 
     assert progress[other, canonical(scope), 'A102']['credit'] == 0
     assert progress[annotation, canonical(scope), 'A102']['task_credit_binding_refs'] == [
         'contrast-original', 'feature-original', 'feature-redelivery']
-    from gene_annotation_episode.signed_evidence_root import SignedEvidenceRootSupport
-    from test_signed_evidence_root import registered_receiver
+    from gene_annotation_episode.episodic_workflow.root.scoring import SignedEvidenceRootSupport
+    from gene_annotation_episode.episodic_workflow.root.tests.test_signed_evidence_root import registered_receiver
     root = registered_receiver(store, receiver.run_id, 'axis-union', scope)
     local_scope = store.validate_scope({'subject_refs': [target],
         'segments': store.coverage(target)})
     root_reports = [{**report, 'scope': local_scope} for report in reports]
-    monkeypatch.setattr('gene_annotation_episode.signed_evidence_root.received_axis_task_credit',
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.scoring.received_axis_task_credit',
         lambda *_: iter(root_reports))
     combined = SignedEvidenceRootSupport(task_credit=True)(store, scope,
         known_record_refs=known, run_id=root.run_id, episode_id=root.episode_id)

@@ -670,7 +670,7 @@ def _normalized_probe677():
     Metadata not observed in those probe files remains fixture metadata. This
     conversion does not claim to implement the future producer/capture format.
     """
-    root = Path(__file__).parents[1] / "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe"
+    root = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/native_contract_probe"
     pins = {"effective_problem.json": "4b7976dd1641d74ee0e692f752db2909b040dba6da824cd160b8c9ec07196d2b",
         "native_solution.json": "9b2e4f2088f81cf4c3acf353e16c782da98b3dd0823978962b3d3b692042225c",
         "solution.json": "ccc06fc47b323519a909d69fa8be2224992bd28f2caa7969ded368b52f3e8729"}

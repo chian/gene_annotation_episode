@@ -8,7 +8,7 @@ from gene_annotation_episode.providers import _SessionConnection
 from gene_annotation_episode.scientific_process_prompt import render_episode_steering
 
 
-FIXTURE = Path(__file__).parent / 'fixtures/work_reports/a107-genomic06-resource-context.json.gz'
+FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/work_reports/a107-genomic06-resource-context.json.gz'
 
 
 def test_actual_root_receives_resource_history_beyond_the_host_context():

@@ -14,7 +14,7 @@ import pytest
 from gene_annotation_episode import cmalign_inputs as inputs
 from gene_annotation_episode.cmalign_grader import calculate_cmalign_scores
 
-FIXTURES = Path(__file__).parent / "fixtures/cmalign_graders"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/cmalign_graders"
 
 
 def native(name):

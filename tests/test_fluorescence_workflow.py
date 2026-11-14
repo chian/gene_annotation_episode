@@ -13,9 +13,9 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode import fluorescence_event_contracts as core
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
 from gene_annotation_episode.communication import plain
-from gene_annotation_episode.fluorescence_execution_common import canonical as control_canonical
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical as control_canonical
 from gene_annotation_episode.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
@@ -121,7 +121,7 @@ def connected_case(tmp_path_factory, request):
         prepare = native_lifecycle.prepare_job
 
         def saved_worker_only(command, **kwargs):
-            assert command[1:5] == ['-B', '-S', '-m', 'gene_annotation_episode.fluorescence_result_worker']
+            assert command[1:5] == ['-B', '-S', '-m', 'gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_worker']
             plan = json.loads(Path(command[-1]).read_bytes())
             assert plan['mode'] == 'saved_sheet_recalculation'
             assert plan['selector']['saved_sheet_file'] == sheet_file
@@ -141,7 +141,7 @@ def connected_case(tmp_path_factory, request):
                 return _function(handle, *args, **kwargs)
 
             patch.setattr(native_lifecycle, name, saved_lifecycle_only)
-        patch.setattr('gene_annotation_episode.native_fluorescence_results.capture_fluorescence_native_files', deny)
+        patch.setattr('gene_annotation_episode.episodic_workflow.root.library.original_native_fluorescence_results.capture_fluorescence_native_files', deny)
         patch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', deny)
         patch.setattr('socket.create_connection', deny)
         patch.setattr('socket.socket.connect', deny)
@@ -351,8 +351,8 @@ def test_closed_workflow_and_result_replay_without_producer_or_numerical_bytes(c
     for name in ('prepare_job', 'start_prepared', 'resume_start', 'status', 'wait_job', 'collect'):
         monkeypatch.setattr('gene_annotation_episode.native_lifecycle.' + name, deny)
     for name in ('capture_fluorescence_native_files', 'prepare_fluorescence_result_worker'):
-        monkeypatch.setattr('gene_annotation_episode.native_fluorescence_results.' + name, deny)
-    monkeypatch.setattr('gene_annotation_episode.native_fluorescence_preparation._verify_pins', deny)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.original_native_fluorescence_results.' + name, deny)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_preparation._verify_pins', deny)
     monkeypatch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', deny)
     monkeypatch.setattr('socket.create_connection', deny)
     monkeypatch.setattr('socket.socket.connect', deny)

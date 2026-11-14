@@ -11,7 +11,7 @@ from gene_annotation_episode.nhmmer_inputs import (
     iter_nhmmer_tblout_rows, parse_nhmmer_artifacts,
 )
 
-FIXTURES = Path(__file__).resolve().parents[1] / "verification/tool_graders_nhmmer_2026-10-24"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/nhmmer"
 
 
 def native_fixture(name):

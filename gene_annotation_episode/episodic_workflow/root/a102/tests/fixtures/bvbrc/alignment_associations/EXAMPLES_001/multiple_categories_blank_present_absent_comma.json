@@ -1,0 +1,1501 @@
+{
+  "name": "multiple_categories_blank_present_absent_comma",
+  "required_example_groups": [
+    7,
+    8
+  ],
+  "source_status": "synthetic",
+  "native_executed_this_workload": false,
+  "native_execution_case": null,
+  "common_operands": {
+    "inputs": [
+      {
+        "binding_id": "original",
+        "parameter_pointer": "/input/original",
+        "kind": "retained_bytes",
+        "content": {
+          "source_ref": "source:original",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "original",
+          "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be",
+          "byte_count": 12
+        },
+        "workspace_path": "/workspace/original",
+        "inline_value": null,
+        "link_evidence": null,
+        "members": []
+      }
+    ],
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "original#alignment",
+          "artifact": {
+            "raw_artifact_ref": "original",
+            "source_ref": "source:original",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "declarations": {
+      "common": {
+        "version": "bvbrc_alignment_associations_v1",
+        "analysis_id": "analysis",
+        "input_sequences": [
+          {
+            "kind": "parsed_document",
+            "input_binding_id": "original",
+            "document": "original#alignment",
+            "member_id_rule": "first_whitespace_token",
+            "molecule": "dna",
+            "host_member_joins": [],
+            "evidence": []
+          }
+        ],
+        "row_joins": [],
+        "automatic_row_joins": [
+          {
+            "alignment": "aligned#alignment",
+            "input_binding_ids": [
+              "original"
+            ],
+            "method": "exact_unique_header",
+            "case_policy": "literal",
+            "gap_policy": "literal",
+            "transformation_ids": [],
+            "evidence": []
+          }
+        ],
+        "transformations": [],
+        "correspondences": [],
+        "feature_genomes": [],
+        "source_records": [],
+        "member_entities": []
+      },
+      "functions": null,
+      "taxonomy": null
+    }
+  },
+  "common_result": {
+    "status": "ok",
+    "value": {
+      "original_members": [
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "a",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 0,
+          "raw_header": "a",
+          "member_label": "a",
+          "sequence_sha256": "472e73d796e20aa8ff9059e6316f218e0322548f661ec4dc267507ed66317404",
+          "original_length": 2,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        },
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "b",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 1,
+          "raw_header": "b",
+          "member_label": "b",
+          "sequence_sha256": "eb5442705969dc8da5dfac8f9658dc68acdab5bb7635ba7cc551e389416ac34e",
+          "original_length": 2,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "inline_inputs": [],
+      "row_members": [
+        {
+          "association_id": "aligned#alignment/rows/0/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        },
+        {
+          "association_id": "aligned#alignment/rows/1/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "b",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        }
+      ],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "diagnostics": []
+  },
+  "metacats_operands": {
+    "analysis": {
+      "analysis_id": "analysis",
+      "mode": "files",
+      "alignment_id": "aligned#alignment",
+      "metadata_document_id": "metacats_metadata:71f3fe5ecd82c197cdaaeaa07596235b0b80b99dc2be329eb0552f27a72134fd",
+      "category_ids": [
+        "first",
+        "second"
+      ],
+      "adjusted_matrix_ids": [],
+      "chisq_table_ids": [],
+      "pair_table_ids": [],
+      "raw_r_table_ids": [],
+      "output_role_evidence": []
+    },
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "original#alignment",
+          "artifact": {
+            "raw_artifact_ref": "original",
+            "source_ref": "source:original",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "metadata",
+        "value": {
+          "document_id": "metacats_metadata:71f3fe5ecd82c197cdaaeaa07596235b0b80b99dc2be329eb0552f27a72134fd",
+          "artifact": {
+            "raw_artifact_ref": "metadata",
+            "source_ref": "source:metadata",
+            "sha256": "552ee4c92ec813af18c4065f8f4370e36bc458c4364b9d02288c8bdf3020fe18"
+          },
+          "encoding": "utf-8",
+          "completeness": "partial",
+          "delimiter": "tab",
+          "header": "present",
+          "header_tokens": [
+            "id",
+            "group",
+            "group"
+          ],
+          "rows": [
+            {
+              "row_index": 0,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "metadata",
+                  "source_ref": "source:metadata",
+                  "sha256": "552ee4c92ec813af18c4065f8f4370e36bc458c4364b9d02288c8bdf3020fe18"
+                },
+                "byte_start_0based": 15,
+                "byte_end_0based_exclusive": 22,
+                "line_start_1based": 2,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              },
+              "cells": [
+                "a",
+                "",
+                "A,B"
+              ]
+            },
+            {
+              "row_index": 1,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "metadata",
+                  "source_ref": "source:metadata",
+                  "sha256": "552ee4c92ec813af18c4065f8f4370e36bc458c4364b9d02288c8bdf3020fe18"
+                },
+                "byte_start_0based": 22,
+                "byte_end_0based_exclusive": 26,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 3,
+                "xml_path": null
+              },
+              "cells": [
+                "b",
+                "C"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "associations": {
+      "original_members": [
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "a",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 0,
+          "raw_header": "a",
+          "member_label": "a",
+          "sequence_sha256": "472e73d796e20aa8ff9059e6316f218e0322548f661ec4dc267507ed66317404",
+          "original_length": 2,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        },
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "b",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 1,
+          "raw_header": "b",
+          "member_label": "b",
+          "sequence_sha256": "eb5442705969dc8da5dfac8f9658dc68acdab5bb7635ba7cc551e389416ac34e",
+          "original_length": 2,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "inline_inputs": [],
+      "row_members": [
+        {
+          "association_id": "aligned#alignment/rows/0/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        },
+        {
+          "association_id": "aligned#alignment/rows/1/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "b",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        }
+      ],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "declarations": {
+      "version": "bvbrc_metacats_context_v1",
+      "analysis_id": "analysis",
+      "metadata_joins": [
+        {
+          "metadata": "metacats_metadata:71f3fe5ecd82c197cdaaeaa07596235b0b80b99dc2be329eb0552f27a72134fd",
+          "id_column_index_0based": 0,
+          "alignment": "aligned#alignment",
+          "alignment_identity": "member_label",
+          "case_policy": "preserve",
+          "duplicate_policy": "retain_unresolved",
+          "evidence": []
+        }
+      ],
+      "categories": [
+        {
+          "category_id": "first",
+          "metadata": "metacats_metadata:71f3fe5ecd82c197cdaaeaa07596235b0b80b99dc2be329eb0552f27a72134fd",
+          "metadata_column_index_0based": 1,
+          "raw_heading_token": "group",
+          "native_category_ordinal_1based": 1,
+          "native_output_stem": "first",
+          "input_mode": "files",
+          "group_identity_rule": "exact_category_value",
+          "evidence": []
+        },
+        {
+          "category_id": "second",
+          "metadata": "metacats_metadata:71f3fe5ecd82c197cdaaeaa07596235b0b80b99dc2be329eb0552f27a72134fd",
+          "metadata_column_index_0based": 2,
+          "raw_heading_token": "group",
+          "native_category_ordinal_1based": 2,
+          "native_output_stem": "second",
+          "input_mode": "files",
+          "group_identity_rule": "exact_category_value",
+          "evidence": []
+        }
+      ],
+      "explicit_memberships": [],
+      "auto_group_entries": [],
+      "group_sources": [],
+      "biological_group_populations": [
+        {
+          "kind": "observed_metadata_groups",
+          "group_population_id": "first-groups",
+          "category_id": "first",
+          "order": "first_metadata_occurrence",
+          "include_metadata_only": true,
+          "evidence": []
+        },
+        {
+          "kind": "observed_metadata_groups",
+          "group_population_id": "second-groups",
+          "category_id": "second",
+          "order": "first_metadata_occurrence",
+          "include_metadata_only": true,
+          "evidence": []
+        }
+      ],
+      "native_group_maps": [],
+      "r_columns": [],
+      "exported_group_joins": [],
+      "native_test_joins": []
+    }
+  },
+  "metacats_result": {
+    "status": "partial",
+    "value": {
+      "categories": [
+        {
+          "category_id": "first",
+          "metadata_document_id": "metacats_metadata:71f3fe5ecd82c197cdaaeaa07596235b0b80b99dc2be329eb0552f27a72134fd",
+          "metadata_column_index_0based": 1,
+          "raw_heading_token": "group",
+          "native_category_ordinal_1based": 1,
+          "native_output_stem": "first",
+          "input_mode": "files",
+          "group_ids": [
+            "metacats_group:first/",
+            "metacats_group:first/C"
+          ],
+          "state": "resolved",
+          "evidence": []
+        },
+        {
+          "category_id": "second",
+          "metadata_document_id": "metacats_metadata:71f3fe5ecd82c197cdaaeaa07596235b0b80b99dc2be329eb0552f27a72134fd",
+          "metadata_column_index_0based": 2,
+          "raw_heading_token": "group",
+          "native_category_ordinal_1based": 2,
+          "native_output_stem": "second",
+          "input_mode": "files",
+          "group_ids": [
+            "metacats_group:second/A%2CB"
+          ],
+          "state": "resolved",
+          "evidence": []
+        }
+      ],
+      "groups": [
+        {
+          "group_id": "metacats_group:first/",
+          "category_id": "first",
+          "raw_group_value": "",
+          "metadata_row_indices": [
+            0
+          ],
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            }
+          ],
+          "source_group_bindings": [],
+          "membership_completeness": "complete",
+          "evidence": []
+        },
+        {
+          "group_id": "metacats_group:first/C",
+          "category_id": "first",
+          "raw_group_value": "C",
+          "metadata_row_indices": [
+            1
+          ],
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "b",
+              "occurrence_index": 0
+            }
+          ],
+          "source_group_bindings": [],
+          "membership_completeness": "complete",
+          "evidence": []
+        },
+        {
+          "group_id": "metacats_group:second/A%2CB",
+          "category_id": "second",
+          "raw_group_value": "A,B",
+          "metadata_row_indices": [
+            0
+          ],
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            }
+          ],
+          "source_group_bindings": [],
+          "membership_completeness": "partial",
+          "evidence": []
+        }
+      ],
+      "metadata_members": [
+        {
+          "metadata_document_id": "metacats_metadata:71f3fe5ecd82c197cdaaeaa07596235b0b80b99dc2be329eb0552f27a72134fd",
+          "metadata_row_index": 0,
+          "id_column_index_0based": 0,
+          "raw_member_token": "a",
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            }
+          ],
+          "alignment_rows": [
+            {
+              "alignment_id": "aligned#alignment",
+              "row_index": 0
+            }
+          ],
+          "state": "resolved",
+          "evidence": []
+        },
+        {
+          "metadata_document_id": "metacats_metadata:71f3fe5ecd82c197cdaaeaa07596235b0b80b99dc2be329eb0552f27a72134fd",
+          "metadata_row_index": 1,
+          "id_column_index_0based": 0,
+          "raw_member_token": "b",
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "b",
+              "occurrence_index": 0
+            }
+          ],
+          "alignment_rows": [
+            {
+              "alignment_id": "aligned#alignment",
+              "row_index": 1
+            }
+          ],
+          "state": "resolved",
+          "evidence": []
+        }
+      ],
+      "auto_group_entries": [],
+      "biological_assignments": [
+        {
+          "category_id": "first",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "a",
+            "occurrence_index": 0
+          },
+          "group_id": "metacats_group:first/",
+          "state": "resolved",
+          "evidence": []
+        },
+        {
+          "category_id": "first",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "b",
+            "occurrence_index": 0
+          },
+          "group_id": "metacats_group:first/C",
+          "state": "resolved",
+          "evidence": []
+        },
+        {
+          "category_id": "second",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "a",
+            "occurrence_index": 0
+          },
+          "group_id": "metacats_group:second/A%2CB",
+          "state": "resolved",
+          "evidence": []
+        },
+        {
+          "category_id": "second",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "b",
+            "occurrence_index": 0
+          },
+          "group_id": null,
+          "state": "missing",
+          "evidence": []
+        }
+      ],
+      "biological_group_populations": [
+        {
+          "group_population_id": "first-groups",
+          "category_id": "first",
+          "groups": [
+            {
+              "group_id": "metacats_group:first/",
+              "raw_group_value": "",
+              "evidence": []
+            },
+            {
+              "group_id": "metacats_group:first/C",
+              "raw_group_value": "C",
+              "evidence": []
+            }
+          ],
+          "completeness": "partial",
+          "evidence": []
+        },
+        {
+          "group_population_id": "second-groups",
+          "category_id": "second",
+          "groups": [
+            {
+              "group_id": "metacats_group:second/A%2CB",
+              "raw_group_value": "A,B",
+              "evidence": []
+            }
+          ],
+          "completeness": "partial",
+          "evidence": []
+        }
+      ],
+      "native_group_assignments": [
+        {
+          "category_id": "first",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "a",
+            "occurrence_index": 0
+          },
+          "metadata_row_index": 0,
+          "metadata_column_index": 1,
+          "raw_group_value": "",
+          "native_group_ordinal": null,
+          "displayed_group_label": null,
+          "state": "native_unlabeled",
+          "evidence": []
+        },
+        {
+          "category_id": "first",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "b",
+            "occurrence_index": 0
+          },
+          "metadata_row_index": 1,
+          "metadata_column_index": 1,
+          "raw_group_value": "C",
+          "native_group_ordinal": null,
+          "displayed_group_label": null,
+          "state": "native_unlabeled",
+          "evidence": []
+        },
+        {
+          "category_id": "second",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "a",
+            "occurrence_index": 0
+          },
+          "metadata_row_index": 0,
+          "metadata_column_index": 2,
+          "raw_group_value": "A,B",
+          "native_group_ordinal": null,
+          "displayed_group_label": null,
+          "state": "native_unlabeled",
+          "evidence": []
+        },
+        {
+          "category_id": "second",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "b",
+            "occurrence_index": 0
+          },
+          "metadata_row_index": null,
+          "metadata_column_index": null,
+          "raw_group_value": null,
+          "native_group_ordinal": null,
+          "displayed_group_label": null,
+          "state": "missing",
+          "evidence": []
+        }
+      ],
+      "native_group_columns": [],
+      "exported_groups": [],
+      "native_test_associations": [],
+      "requirements": [
+        {
+          "requirement_id": "analysis/second/metadata_category_cell_absent",
+          "kind": "scientific_metadata",
+          "role": "metacats_group_association",
+          "source_refs": [],
+          "reason_code": "metadata_category_cell_absent"
+        },
+        {
+          "requirement_id": "analysis/second/biological_row_membership_missing",
+          "kind": "scientific_metadata",
+          "role": "metacats_group_association",
+          "source_refs": [],
+          "reason_code": "biological_row_membership_missing"
+        },
+        {
+          "requirement_id": "analysis/first/native_r_column_identity_required",
+          "kind": "scientific_metadata",
+          "role": "native_r_columns",
+          "source_refs": [],
+          "reason_code": "native_r_column_identity_required"
+        },
+        {
+          "requirement_id": "analysis/second/native_r_column_identity_required",
+          "kind": "scientific_metadata",
+          "role": "native_r_columns",
+          "source_refs": [],
+          "reason_code": "native_r_column_identity_required"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "bvbrc_metacats_association_metadata_category_cell_absent",
+          "phase": "association",
+          "path": "/categories",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "bvbrc_metacats_association_biological_row_membership_missing",
+          "phase": "association",
+          "path": "/categories",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "bvbrc_metacats_association_native_r_column_identity_required",
+          "phase": "association",
+          "path": "/categories",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "bvbrc_metacats_association_native_r_column_identity_required",
+          "phase": "association",
+          "path": "/categories",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "bvbrc_metacats_association_metadata_category_cell_absent",
+        "phase": "association",
+        "path": "/categories",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "bvbrc_metacats_association_biological_row_membership_missing",
+        "phase": "association",
+        "path": "/categories",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "bvbrc_metacats_association_native_r_column_identity_required",
+        "phase": "association",
+        "path": "/categories",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "bvbrc_metacats_association_native_r_column_identity_required",
+        "phase": "association",
+        "path": "/categories",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "calculations": [
+    {
+      "function": "biological_group_counts",
+      "alignment": {
+        "alignment_id": "aligned#alignment",
+        "artifact": {
+          "raw_artifact_ref": "aligned",
+          "source_ref": "source:aligned",
+          "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+        },
+        "format": "aligned_fasta",
+        "layout": "fasta",
+        "id_rule": "first_whitespace_token",
+        "encoding": "utf-8",
+        "declared_row_count": null,
+        "declared_column_count": null,
+        "observed_row_count": 2,
+        "observed_column_count": 2,
+        "completeness": "complete",
+        "rows": [
+          {
+            "row_index": 0,
+            "raw_header": "a",
+            "member_label": "a",
+            "sequence": "AC",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "aligned",
+                "source_ref": "source:aligned",
+                "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+              },
+              "byte_start_0based": 0,
+              "byte_end_0based_exclusive": 6,
+              "line_start_1based": 1,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          {
+            "row_index": 1,
+            "raw_header": "b",
+            "member_label": "b",
+            "sequence": "AT",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "aligned",
+                "source_ref": "source:aligned",
+                "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+              },
+              "byte_start_0based": 6,
+              "byte_end_0based_exclusive": 12,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          }
+        ]
+      },
+      "arguments": {
+        "analysis_id": "analysis",
+        "population": {
+          "population_id": "all-physical-rows-and-columns",
+          "alignment_id": "aligned#alignment",
+          "row_indices": [
+            0,
+            1
+          ],
+          "columns_0based": [
+            0,
+            1
+          ],
+          "completeness": "complete",
+          "evidence": []
+        },
+        "category_id": "first",
+        "assignments": [
+          {
+            "category_id": "first",
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "member_key": {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            },
+            "group_id": "metacats_group:first/",
+            "state": "resolved",
+            "evidence": []
+          },
+          {
+            "category_id": "first",
+            "alignment_id": "aligned#alignment",
+            "row_index": 1,
+            "member_key": {
+              "input_binding_id": "original",
+              "member_id": "b",
+              "occurrence_index": 0
+            },
+            "group_id": "metacats_group:first/C",
+            "state": "resolved",
+            "evidence": []
+          }
+        ],
+        "group_population": {
+          "group_population_id": "first-groups",
+          "category_id": "first",
+          "groups": [
+            {
+              "group_id": "metacats_group:first/",
+              "raw_group_value": "",
+              "evidence": []
+            },
+            {
+              "group_id": "metacats_group:first/C",
+              "raw_group_value": "C",
+              "evidence": []
+            }
+          ],
+          "completeness": "partial",
+          "evidence": []
+        },
+        "case_policy": "preserve",
+        "terminal_gap_policy": "exclude_terminal_dash",
+        "original_hash_policy": "exclude_hash"
+      },
+      "result": {
+        "status": "partial",
+        "analysis_id": "analysis",
+        "population_id": "all-physical-rows-and-columns",
+        "alignment_id": "aligned#alignment",
+        "category_id": "first",
+        "group_population": {
+          "group_population_id": "first-groups",
+          "category_id": "first",
+          "groups": [
+            {
+              "group_id": "metacats_group:first/",
+              "raw_group_value": "",
+              "evidence": []
+            },
+            {
+              "group_id": "metacats_group:first/C",
+              "raw_group_value": "C",
+              "evidence": []
+            }
+          ],
+          "completeness": "partial",
+          "evidence": []
+        },
+        "method_parameters": {
+          "case_policy": "preserve",
+          "terminal_gap_policy": "exclude_terminal_dash",
+          "original_hash_policy": "exclude_hash"
+        },
+        "sites": [
+          {
+            "table_id": "biological_group_counts:3854b828ecc40d6893e2a00fe4e18dbfea8268e11658d47b3352b2594e4939c6",
+            "column_0based": 0,
+            "state": "unresolved",
+            "symbols": [
+              "A"
+            ],
+            "observed_counts": [
+              [
+                1,
+                1
+              ]
+            ],
+            "included_rows_by_group": [
+              [
+                0
+              ],
+              [
+                1
+              ]
+            ],
+            "excluded_terminal_rows_by_group": [
+              [],
+              []
+            ],
+            "excluded_original_hash_rows_by_group": [
+              [],
+              []
+            ],
+            "internal_gap_rows_by_group": [
+              [],
+              []
+            ],
+            "unresolved_row_indices": [],
+            "completeness": "complete",
+            "evidence": []
+          },
+          {
+            "table_id": "biological_group_counts:b9e7079510fd74fc63f02010b5876bc2261f423c730a2ef98eddbbcdd919582e",
+            "column_0based": 1,
+            "state": "unresolved",
+            "symbols": [
+              "C",
+              "T"
+            ],
+            "observed_counts": [
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                1
+              ]
+            ],
+            "included_rows_by_group": [
+              [
+                0
+              ],
+              [
+                1
+              ]
+            ],
+            "excluded_terminal_rows_by_group": [
+              [],
+              []
+            ],
+            "excluded_original_hash_rows_by_group": [
+              [],
+              []
+            ],
+            "internal_gap_rows_by_group": [
+              [],
+              []
+            ],
+            "unresolved_row_indices": [],
+            "completeness": "complete",
+            "evidence": []
+          }
+        ],
+        "requirements": [
+          {
+            "requirement_id": "biological_group_counts:3854b828ecc40d6893e2a00fe4e18dbfea8268e11658d47b3352b2594e4939c6/complete_group_population_required",
+            "kind": "scientific_metadata",
+            "role": "biological_group_population",
+            "source_refs": [],
+            "reason_code": "complete_group_population_required"
+          },
+          {
+            "requirement_id": "biological_group_counts:b9e7079510fd74fc63f02010b5876bc2261f423c730a2ef98eddbbcdd919582e/complete_group_population_required",
+            "kind": "scientific_metadata",
+            "role": "biological_group_population",
+            "source_refs": [],
+            "reason_code": "complete_group_population_required"
+          }
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "function": "biological_group_counts",
+      "alignment": {
+        "alignment_id": "aligned#alignment",
+        "artifact": {
+          "raw_artifact_ref": "aligned",
+          "source_ref": "source:aligned",
+          "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+        },
+        "format": "aligned_fasta",
+        "layout": "fasta",
+        "id_rule": "first_whitespace_token",
+        "encoding": "utf-8",
+        "declared_row_count": null,
+        "declared_column_count": null,
+        "observed_row_count": 2,
+        "observed_column_count": 2,
+        "completeness": "complete",
+        "rows": [
+          {
+            "row_index": 0,
+            "raw_header": "a",
+            "member_label": "a",
+            "sequence": "AC",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "aligned",
+                "source_ref": "source:aligned",
+                "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+              },
+              "byte_start_0based": 0,
+              "byte_end_0based_exclusive": 6,
+              "line_start_1based": 1,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          {
+            "row_index": 1,
+            "raw_header": "b",
+            "member_label": "b",
+            "sequence": "AT",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "aligned",
+                "source_ref": "source:aligned",
+                "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+              },
+              "byte_start_0based": 6,
+              "byte_end_0based_exclusive": 12,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          }
+        ]
+      },
+      "arguments": {
+        "analysis_id": "analysis",
+        "population": {
+          "population_id": "all-physical-rows-and-columns",
+          "alignment_id": "aligned#alignment",
+          "row_indices": [
+            0,
+            1
+          ],
+          "columns_0based": [
+            0,
+            1
+          ],
+          "completeness": "complete",
+          "evidence": []
+        },
+        "category_id": "second",
+        "assignments": [
+          {
+            "category_id": "second",
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "member_key": {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            },
+            "group_id": "metacats_group:second/A%2CB",
+            "state": "resolved",
+            "evidence": []
+          },
+          {
+            "category_id": "second",
+            "alignment_id": "aligned#alignment",
+            "row_index": 1,
+            "member_key": {
+              "input_binding_id": "original",
+              "member_id": "b",
+              "occurrence_index": 0
+            },
+            "group_id": null,
+            "state": "missing",
+            "evidence": []
+          }
+        ],
+        "group_population": {
+          "group_population_id": "second-groups",
+          "category_id": "second",
+          "groups": [
+            {
+              "group_id": "metacats_group:second/A%2CB",
+              "raw_group_value": "A,B",
+              "evidence": []
+            }
+          ],
+          "completeness": "partial",
+          "evidence": []
+        },
+        "case_policy": "preserve",
+        "terminal_gap_policy": "exclude_terminal_dash",
+        "original_hash_policy": "exclude_hash"
+      },
+      "result": {
+        "status": "partial",
+        "analysis_id": "analysis",
+        "population_id": "all-physical-rows-and-columns",
+        "alignment_id": "aligned#alignment",
+        "category_id": "second",
+        "group_population": {
+          "group_population_id": "second-groups",
+          "category_id": "second",
+          "groups": [
+            {
+              "group_id": "metacats_group:second/A%2CB",
+              "raw_group_value": "A,B",
+              "evidence": []
+            }
+          ],
+          "completeness": "partial",
+          "evidence": []
+        },
+        "method_parameters": {
+          "case_policy": "preserve",
+          "terminal_gap_policy": "exclude_terminal_dash",
+          "original_hash_policy": "exclude_hash"
+        },
+        "sites": [
+          {
+            "table_id": "biological_group_counts:a6c7e4ed8746cc672fd601bfbf7e9dee10bde2cef16adb295078b9a4294ad6c9",
+            "column_0based": 0,
+            "state": "unresolved",
+            "symbols": [
+              "A"
+            ],
+            "observed_counts": [
+              [
+                1
+              ]
+            ],
+            "included_rows_by_group": [
+              [
+                0
+              ]
+            ],
+            "excluded_terminal_rows_by_group": [
+              []
+            ],
+            "excluded_original_hash_rows_by_group": [
+              []
+            ],
+            "internal_gap_rows_by_group": [
+              []
+            ],
+            "unresolved_row_indices": [
+              1
+            ],
+            "completeness": "complete",
+            "evidence": []
+          },
+          {
+            "table_id": "biological_group_counts:2be9868917a28b024e1ebf7372a4f1b0e0db7c14e4aa8eed9fe5cc610132f6b4",
+            "column_0based": 1,
+            "state": "unresolved",
+            "symbols": [
+              "C"
+            ],
+            "observed_counts": [
+              [
+                1
+              ]
+            ],
+            "included_rows_by_group": [
+              [
+                0
+              ]
+            ],
+            "excluded_terminal_rows_by_group": [
+              []
+            ],
+            "excluded_original_hash_rows_by_group": [
+              []
+            ],
+            "internal_gap_rows_by_group": [
+              []
+            ],
+            "unresolved_row_indices": [
+              1
+            ],
+            "completeness": "complete",
+            "evidence": []
+          }
+        ],
+        "requirements": [
+          {
+            "requirement_id": "biological_group_counts:a6c7e4ed8746cc672fd601bfbf7e9dee10bde2cef16adb295078b9a4294ad6c9/complete_group_population_required",
+            "kind": "scientific_metadata",
+            "role": "biological_group_population",
+            "source_refs": [],
+            "reason_code": "complete_group_population_required"
+          },
+          {
+            "requirement_id": "biological_group_counts:2be9868917a28b024e1ebf7372a4f1b0e0db7c14e4aa8eed9fe5cc610132f6b4/complete_group_population_required",
+            "kind": "scientific_metadata",
+            "role": "biological_group_population",
+            "source_refs": [],
+            "reason_code": "complete_group_population_required"
+          }
+        ],
+        "diagnostics": []
+      }
+    }
+  ],
+  "downstream_operands": {}
+}

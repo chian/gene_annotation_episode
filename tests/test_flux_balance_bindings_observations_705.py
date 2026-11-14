@@ -34,7 +34,7 @@ from test_flux_balance_operands_694 import software
 
 pytestmark = pytest.mark.skipif('HMMER529_ATTEMPT' not in os.environ, reason='requires bounded529')
 ROOT = Path(__file__).resolve().parents[1]
-EMITTED = ROOT / 'verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions'
+EMITTED = ROOT / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/producer_emissions'
 SELECTION = {'version': 'flux_balance_execution_selection_v1',
     'environment_realization': 'operation_scoped_tmp_and_cache_v1'}
 

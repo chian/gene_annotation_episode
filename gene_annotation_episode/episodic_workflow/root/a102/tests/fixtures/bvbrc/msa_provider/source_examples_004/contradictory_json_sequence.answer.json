@@ -1,0 +1,474 @@
+{
+  "verification": {
+    "supplied_inputs": {
+      "schema_version": "mauve_xmfa_source_inputs_v1",
+      "invocation": {
+        "mode": "single_file_entries",
+        "ordered_file_ids": [
+          "combined.fa"
+        ],
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "source:fixture-declared-invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "fixture-declared-invocation",
+              "sha256": "adacc60df74f737c31fcae4e6e5ced97e86d4853181194ed67049a8847dda34e",
+              "byte_count": 68
+            },
+            "pointer": ""
+          }
+        ]
+      },
+      "files": [
+        {
+          "file_id": "combined.fa",
+          "native_path_token": "combined.fa",
+          "artifact": {
+            "raw_artifact_ref": "combined.fa",
+            "source_ref": "source:combined.fa",
+            "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e"
+          },
+          "format": "FastA",
+          "record_completeness": "complete",
+          "path_binding_evidence": [
+            {
+              "content": {
+                "source_ref": "source:combined.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "combined.fa",
+                "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e",
+                "byte_count": 166
+              },
+              "pointer": ""
+            }
+          ],
+          "records": [
+            {
+              "record_id": "row:0",
+              "entry_1based": 1,
+              "header": "equCab1",
+              "sequence": "AAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "combined.fa",
+                  "source_ref": "source:combined.fa",
+                  "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 60,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "record_id": "row:1",
+              "entry_1based": 2,
+              "header": "mm9",
+              "sequence": "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "combined.fa",
+                  "source_ref": "source:combined.fa",
+                  "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e"
+                },
+                "byte_start_0based": 60,
+                "byte_end_0based_exclusive": 107,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            },
+            {
+              "record_id": "row:2",
+              "entry_1based": 3,
+              "header": "canFam2",
+              "sequence": "CAAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTTC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "combined.fa",
+                  "source_ref": "source:combined.fa",
+                  "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e"
+                },
+                "byte_start_0based": 107,
+                "byte_end_0based_exclusive": 166,
+                "line_start_1based": 5,
+                "line_end_1based_inclusive": 6,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      ],
+      "original_maps": []
+    },
+    "source_readers": [
+      {
+        "file_id": "combined.fa",
+        "reader": "fasta_records_for_xmfa_v1",
+        "id_rule": "first_whitespace_token",
+        "encoding": "ascii"
+      }
+    ],
+    "verified_inputs": {
+      "schema_version": "mauve_xmfa_source_inputs_v1",
+      "invocation": {
+        "mode": "single_file_entries",
+        "ordered_file_ids": [
+          "combined.fa"
+        ],
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "source:fixture-declared-invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "fixture-declared-invocation",
+              "sha256": "adacc60df74f737c31fcae4e6e5ced97e86d4853181194ed67049a8847dda34e",
+              "byte_count": 68
+            },
+            "pointer": ""
+          }
+        ]
+      },
+      "files": [],
+      "original_maps": []
+    },
+    "files": [
+      {
+        "file_id": "combined.fa",
+        "artifact": {
+          "raw_artifact_ref": "combined.fa",
+          "source_ref": "source:combined.fa",
+          "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e"
+        },
+        "format": "FastA",
+        "reader": {
+          "file_id": "combined.fa",
+          "reader": "fasta_records_for_xmfa_v1",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii"
+        },
+        "state": "incompatible",
+        "requirements": [
+          {
+            "requirement_id": "xmfa_verified_source:159688a2413c9248ce3ecb2e6959a999b96708f799a5f8c761ec17a8ef7d0397",
+            "kind": "input_metadata",
+            "role": "xmfa_staged_source",
+            "source_refs": [
+              "source:combined.fa"
+            ],
+            "reason_code": "xmfa_source_record_bytes_conflict"
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "phylogeny_alignment_lengths_unequal",
+            "phase": "native_decode",
+            "path": "/rows",
+            "severity": "qualification",
+            "evidence_refs": [
+              "combined.fa"
+            ]
+          },
+          {
+            "code": "xmfa_source_record_bytes_conflict",
+            "phase": "association",
+            "path": "/source_inputs",
+            "severity": "qualification",
+            "evidence_refs": [
+              "source:combined.fa"
+            ]
+          }
+        ]
+      }
+    ],
+    "status": "invalid",
+    "requirements": [
+      {
+        "requirement_id": "xmfa_verified_source:159688a2413c9248ce3ecb2e6959a999b96708f799a5f8c761ec17a8ef7d0397",
+        "kind": "input_metadata",
+        "role": "xmfa_staged_source",
+        "source_refs": [
+          "source:combined.fa"
+        ],
+        "reason_code": "xmfa_source_record_bytes_conflict"
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "phylogeny_alignment_lengths_unequal",
+        "phase": "native_decode",
+        "path": "/rows",
+        "severity": "qualification",
+        "evidence_refs": [
+          "combined.fa"
+        ]
+      },
+      {
+        "code": "xmfa_source_record_bytes_conflict",
+        "phase": "association",
+        "path": "/source_inputs",
+        "severity": "qualification",
+        "evidence_refs": [
+          "source:combined.fa"
+        ]
+      }
+    ]
+  },
+  "binding": {
+    "document_id": "mauve_xmfa:ecd03e7b97c30e7c5b85b4e500333f5a179e081a628ab3c53b47bf46d767102e",
+    "source_comparison": "case_insensitive_iupac_exact",
+    "verification": {
+      "supplied_inputs": {
+        "schema_version": "mauve_xmfa_source_inputs_v1",
+        "invocation": {
+          "mode": "single_file_entries",
+          "ordered_file_ids": [
+            "combined.fa"
+          ],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:fixture-declared-invocation",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "fixture-declared-invocation",
+                "sha256": "adacc60df74f737c31fcae4e6e5ced97e86d4853181194ed67049a8847dda34e",
+                "byte_count": 68
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        "files": [
+          {
+            "file_id": "combined.fa",
+            "native_path_token": "combined.fa",
+            "artifact": {
+              "raw_artifact_ref": "combined.fa",
+              "source_ref": "source:combined.fa",
+              "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e"
+            },
+            "format": "FastA",
+            "record_completeness": "complete",
+            "path_binding_evidence": [
+              {
+                "content": {
+                  "source_ref": "source:combined.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "combined.fa",
+                  "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e",
+                  "byte_count": 166
+                },
+                "pointer": ""
+              }
+            ],
+            "records": [
+              {
+                "record_id": "row:0",
+                "entry_1based": 1,
+                "header": "equCab1",
+                "sequence": "AAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "combined.fa",
+                    "source_ref": "source:combined.fa",
+                    "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 60,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              {
+                "record_id": "row:1",
+                "entry_1based": 2,
+                "header": "mm9",
+                "sequence": "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "combined.fa",
+                    "source_ref": "source:combined.fa",
+                    "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e"
+                  },
+                  "byte_start_0based": 60,
+                  "byte_end_0based_exclusive": 107,
+                  "line_start_1based": 3,
+                  "line_end_1based_inclusive": 4,
+                  "xml_path": null
+                }
+              },
+              {
+                "record_id": "row:2",
+                "entry_1based": 3,
+                "header": "canFam2",
+                "sequence": "CAAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTTC",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "combined.fa",
+                    "source_ref": "source:combined.fa",
+                    "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e"
+                  },
+                  "byte_start_0based": 107,
+                  "byte_end_0based_exclusive": 166,
+                  "line_start_1based": 5,
+                  "line_end_1based_inclusive": 6,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        ],
+        "original_maps": []
+      },
+      "source_readers": [
+        {
+          "file_id": "combined.fa",
+          "reader": "fasta_records_for_xmfa_v1",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii"
+        }
+      ],
+      "verified_inputs": {
+        "schema_version": "mauve_xmfa_source_inputs_v1",
+        "invocation": {
+          "mode": "single_file_entries",
+          "ordered_file_ids": [
+            "combined.fa"
+          ],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:fixture-declared-invocation",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "fixture-declared-invocation",
+                "sha256": "adacc60df74f737c31fcae4e6e5ced97e86d4853181194ed67049a8847dda34e",
+                "byte_count": 68
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        "files": [],
+        "original_maps": []
+      },
+      "files": [
+        {
+          "file_id": "combined.fa",
+          "artifact": {
+            "raw_artifact_ref": "combined.fa",
+            "source_ref": "source:combined.fa",
+            "sha256": "b9ec525fe43342bbc7b993b1ff832b15b8dfd9775d74ed25313a2a46a223d60e"
+          },
+          "format": "FastA",
+          "reader": {
+            "file_id": "combined.fa",
+            "reader": "fasta_records_for_xmfa_v1",
+            "id_rule": "first_whitespace_token",
+            "encoding": "ascii"
+          },
+          "state": "incompatible",
+          "requirements": [
+            {
+              "requirement_id": "xmfa_verified_source:159688a2413c9248ce3ecb2e6959a999b96708f799a5f8c761ec17a8ef7d0397",
+              "kind": "input_metadata",
+              "role": "xmfa_staged_source",
+              "source_refs": [
+                "source:combined.fa"
+              ],
+              "reason_code": "xmfa_source_record_bytes_conflict"
+            }
+          ],
+          "diagnostics": [
+            {
+              "code": "phylogeny_alignment_lengths_unequal",
+              "phase": "native_decode",
+              "path": "/rows",
+              "severity": "qualification",
+              "evidence_refs": [
+                "combined.fa"
+              ]
+            },
+            {
+              "code": "xmfa_source_record_bytes_conflict",
+              "phase": "association",
+              "path": "/source_inputs",
+              "severity": "qualification",
+              "evidence_refs": [
+                "source:combined.fa"
+              ]
+            }
+          ]
+        }
+      ],
+      "status": "invalid",
+      "requirements": [
+        {
+          "requirement_id": "xmfa_verified_source:159688a2413c9248ce3ecb2e6959a999b96708f799a5f8c761ec17a8ef7d0397",
+          "kind": "input_metadata",
+          "role": "xmfa_staged_source",
+          "source_refs": [
+            "source:combined.fa"
+          ],
+          "reason_code": "xmfa_source_record_bytes_conflict"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "phylogeny_alignment_lengths_unequal",
+          "phase": "native_decode",
+          "path": "/rows",
+          "severity": "qualification",
+          "evidence_refs": [
+            "combined.fa"
+          ]
+        },
+        {
+          "code": "xmfa_source_record_bytes_conflict",
+          "phase": "association",
+          "path": "/source_inputs",
+          "severity": "qualification",
+          "evidence_refs": [
+            "source:combined.fa"
+          ]
+        }
+      ]
+    },
+    "bindings": null,
+    "state": "conflicting",
+    "evidence": [],
+    "requirements": [
+      {
+        "requirement_id": "xmfa_verified_source:159688a2413c9248ce3ecb2e6959a999b96708f799a5f8c761ec17a8ef7d0397",
+        "kind": "input_metadata",
+        "role": "xmfa_staged_source",
+        "source_refs": [
+          "source:combined.fa"
+        ],
+        "reason_code": "xmfa_source_record_bytes_conflict"
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "phylogeny_alignment_lengths_unequal",
+        "phase": "native_decode",
+        "path": "/rows",
+        "severity": "qualification",
+        "evidence_refs": [
+          "combined.fa"
+        ]
+      },
+      {
+        "code": "xmfa_source_record_bytes_conflict",
+        "phase": "association",
+        "path": "/source_inputs",
+        "severity": "qualification",
+        "evidence_refs": [
+          "source:combined.fa"
+        ]
+      }
+    ]
+  }
+}

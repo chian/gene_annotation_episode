@@ -1,0 +1,114 @@
+{
+  "version": "tool_knowledge_v1",
+  "entries": [
+    {
+      "entry_id": "launch-aurora",
+      "title": "Aurora execution agent instructions",
+      "summary": "Resource-specific instructions for an execution agent that chooses scripts, environments and native commands under the assigned Aurora transport, workspace, account and compute constraints.",
+      "resource_kinds": [
+        "hpc"
+      ],
+      "tags": [
+        "launch",
+        "HPC",
+        "PBS",
+        "SSH",
+        "configuration",
+        "workspace",
+        "account",
+        "execution",
+        "results"
+      ],
+      "tool_names": [
+        "exec_command"
+      ],
+      "provenance": [
+        "gene_annotation_episode/launch_instructions.py",
+        "gene_annotation_episode/execution_episodes.py",
+        "gene_annotation_episode/hpc_episodes.py",
+        "https://docs.alcf.anl.gov/aurora/running-jobs-aurora/",
+        "https://docs.alcf.anl.gov/running-jobs/"
+      ],
+      "sections": [
+        {
+          "section_id": "access",
+          "title": "Configured SSH access and authentication",
+          "path": "aurora-access.md"
+        },
+        {
+          "section_id": "storage",
+          "title": "Configured workspace and charging account",
+          "path": "aurora-storage.md"
+        },
+        {
+          "section_id": "software",
+          "title": "Supplied software, preparation and reuse",
+          "path": "aurora-software.md"
+        },
+        {
+          "section_id": "pbs",
+          "title": "PBS allocation, execution and observations",
+          "path": "aurora-pbs.md"
+        },
+        {
+          "section_id": "operations",
+          "title": "Execution agent role and actual outcomes",
+          "path": "aurora-operations.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "launch-local",
+      "title": "Local compute launch instructions",
+      "summary": "Choose local scripts, environments and commands under the assigned resource bounds. General execution records original command and scientific input/output custody; the separate established homology binding retains its own catalog.",
+      "resource_kinds": [
+        "local"
+      ],
+      "tags": [
+        "launch",
+        "local",
+        "compute",
+        "systemd",
+        "setup",
+        "reuse",
+        "repair",
+        "native",
+        "results"
+      ],
+      "tool_names": [
+        "exec_command"
+      ],
+      "provenance": [
+        "gene_annotation_episode/terminal_execution_episodes.py",
+        "gene_annotation_episode/terminal_execution.py",
+        "gene_annotation_episode/native_lifecycle.py",
+        "gene_annotation_episode/local_jobs.py",
+        "gene_annotation_episode/homology_episodes.py",
+        "gene_annotation_episode/homology_jobs.py",
+        "gene_annotation_episode/resource_episodes.py"
+      ],
+      "sections": [
+        {
+          "section_id": "preparation",
+          "title": "Assignment, inventory, setup and reuse",
+          "path": "local-preparation.md"
+        },
+        {
+          "section_id": "operations",
+          "title": "Agent-chosen commands and actual execution results",
+          "path": "local-operations.md"
+        },
+        {
+          "section_id": "results",
+          "title": "Native handles, output validation and failures",
+          "path": "local-results.md"
+        },
+        {
+          "section_id": "homology",
+          "title": "Existing detached phmmer launch binding and receiving roles",
+          "path": "local-homology.md"
+        }
+      ]
+    }
+  ]
+}

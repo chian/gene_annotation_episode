@@ -14,9 +14,9 @@ from gene_annotation_episode.waiting import validate_pending
 from test_episode_commissions import setup_case
 
 
-RECORDED = json.loads((Path(__file__).parent / 'fixtures/waiting/'
+RECORDED = json.loads((Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/waiting/'
     'a11031-pending-assignment.json').read_text())
-TASK_CONTEXT = json.loads((Path(__file__).parent / 'fixtures/waiting/'
+TASK_CONTEXT = json.loads((Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/waiting/'
     'a11032-pending-task-context.json').read_text())
 
 

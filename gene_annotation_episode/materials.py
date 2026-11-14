@@ -18,8 +18,8 @@ from urllib.parse import urlparse, unquote
 
 from .domain import ContractError, MOLECULES, ROLES, canonical, identity
 from .material_parsing import FORMATS, VERSION, recognize, records
-from . import materials_packing as packing
-from . import library_targets as libraries
+from gene_annotation_episode import materials_packing as packing
+from gene_annotation_episode import library_targets as libraries
 
 METADATA_PREVIEW_CHARACTERS = 256
 

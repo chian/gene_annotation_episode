@@ -1,4 +1,4 @@
-"""Explicit workspace registration, ordinary tools and the shared Episode runtime."""
+"""Workspace registration, ordinary tools and the private Root workflow."""
 from __future__ import annotations
 
 import argparse
@@ -12,7 +12,6 @@ import tomllib
 from .boundary_validation import parse_json_object
 from .domain import MOLECULES, ROLES
 from .state import Store
-from .tool_configuration import build_tools
 from .material_parsing import FORMATS
 
 
@@ -119,11 +118,17 @@ def main(argv=None):
                         or not isinstance(genome['services'], dict)
                         or 'scientific_yield_bindings' not in genome['services']
                         or set(config) & {'credit', 'controller'}):
-                    raise ValueError('explicit_combined_genome_root_and_owner_services_required')
-                from .all_evidence_tools import AllEvidenceToolRegistry
-                tools = build_tools(store, config, registry_class=AllEvidenceToolRegistry)
-            else:
-                tools = build_tools(store, config)
+                    raise ValueError('explicit_combined_genome_root_and_services_required')
+                raise ValueError('combined_genome_private_tool_bindings_unavailable')
+            from .episodic_workflow.root.tool_configuration import build_tools
+            run_dir = args.run_dir if args.command == "run" else None
+            if run_dir is None:
+                if args.command == "run" and args.resume:
+                    from .episodic_workflow.root.saved_run_configuration import _run_location
+                    run_dir, _ = _run_location(store, None, True)
+                else:
+                    run_dir = store.path/"runs"/datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
+            tools = build_tools(store, config, run_directory=run_dir)
             if args.command == "capabilities":
                 _print(tools.catalog())
                 return 0
@@ -132,40 +137,16 @@ def main(argv=None):
                                        scope=parse_json_object(args.scope) if args.scope else None)
                 _print(result)
                 return 0 if result["status"] in {"completed", "partial"} else 1
-            from .runtime import run_workflow
+            from .episodic_workflow.root.run_execution import run_workflow
             if not store.targets():
                 _print({"status": "operational_unavailable", "code": "biological_target_binding_unavailable",
                     "target_binding": store.problem().get("target_binding"),
                     "available_work": ["material.parse", "material.read", "material.members", "material.member", "source.read"],
                     "scientific_completion": "not_established"})
                 return 1
-            run_dir = args.run_dir
-            if run_dir is None and not args.resume:
-                run_dir = store.path/"runs"/datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
             run_options = {'provider_config': config, 'run_dir': run_dir,
-                'resume': args.resume, 'goal': args.goal}
-            if genome is None:
-                run_options['credit_policy'] = (config or {}).get('credit')
-            else:
-                from .genome_investigation import GenomeEvidenceServices
-                from .resource_estimation import ResourceToolEstimator
-                from .signed_evidence_root import SignedRootEpisodeBinding
-
-                root = SignedRootEpisodeBinding.from_record(genome['root'])
-                services = GenomeEvidenceServices(**genome['services'])
-                run_options.update(project_credit=root.task_credit,
-                    project_annotation_score=root.annotation_support,
-                    controller_factory=root.yield_controller,
-                    initial_known_record_refs=root.initial_known_record_refs,
-                    binding_definitions={'credit': root.task_credit.as_record(),
-                        'controller': root.controller_record(),
-                        'annotation_score': root.annotation_support.as_record()},
-                    episode_service_factory=services,
-                    episode_service_binding=services.as_record(),
-                    episode_service_inputs='actual_tool_registry_v1',
-                    episode_record_receipts=True,
-                    annotation_child_roles=('scientific_process',),
-                    resource_estimator=ResourceToolEstimator())
+                'resume': args.resume, 'goal': args.goal,
+                'credit_policy': (config or {}).get('credit')}
             summary = asyncio.run(run_workflow(store, tools, **run_options))
             _print(summary)
             return 0

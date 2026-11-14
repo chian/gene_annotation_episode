@@ -1,0 +1,130 @@
+{
+  "entry_version": "evidence_axis_instruction_v1",
+  "id": "A110",
+  "slot": "evidence_axis",
+  "name": "Biochemical feasibility and chemical/resource accounting",
+  "description": "Chemical and pathway consistency of possible functions, including supporting enzyme identities, stoichiometry, electron flow, carrier regeneration and conditional energetics.",
+  "investigation_instructions": "Determine which biochemical functions are consistent with the chemistry, pathway relationships and molecular resources relevant to the supplied gene or protein. Start from the supplied sequence, selected file record or region, or snippets; no candidate annotation or searchable public name is required. Let evidence identify possible reactions or pathway roles, and preserve what is unresolved when the available material does not yet specify a chemical conversion.\n\nFor a reaction or route under consideration, identify actual reactants and products, stoichiometry, cofactors, donors and acceptors, and the boundary of any coupled system. Keep experimentally identified species and measured amounts distinct from assumed intermediates or model inputs. Consider alternative reaction orders, carrier forms or coupled steps when they explain observed products or resolve a specific inconsistency; do not fill missing chemistry with an invented route.\n\nWhere a proposed route depends on other genes or enzymes, examine evidence identifying the substrate-producing steps, downstream consumers, cofactor-regeneration steps or other needed conversions. Retain their actual identities and supporting sequence, structural or experimental measurements, distinguishing inferred annotations from experimentally characterized activities. Use those relationships to assess whether the chemical route is supported in the system being examined. A complete-looking annotation list does not establish a working pathway, and a missing annotation does not establish an absent step; preserve alternative enzymes, routes and unresolved steps.\n\nWhere the inputs permit it, examine conservation of atoms and charge under the stated species and protonation conventions, electron equivalents transferred between named donors and acceptors, and consumption versus regeneration of required carriers. Distinguish catalytic cofactors from consumed substrates. An isolated apparent activity does not establish a sustainable cycle, and an unassigned donor, acceptor or regeneration step remains unknown rather than a measured imbalance.\n\nRetain native stoichiometries, amounts, concentrations, rate or energy units, conditions, uncertainties and the source of each measured or calculated quantity. Preserve analytical recovery limits and the difference between an observed ratio and an extrapolated fully coupled ratio. For energetic comparisons, retain temperature, concentrations or activities, standard-state conventions and assumptions. A favorable standard-state estimate is not intracellular free energy or observed flux.\n\nUse the account to constrain the possible function without equating feasibility with demonstrated target activity or physiological use. A genuine atom, charge, electron or conditional energy contradiction can challenge a specified route; missing inputs cannot. Keep the chemical/pathway account separate from organism or sample plausibility, and preserve alternative mechanisms or system boundaries that the evidence has not distinguished.",
+  "evidence": [
+    {
+      "case_group": "EUBREC2651_Fleischman_2014",
+      "case_id": "EUBREC2651_Fleischman_2014",
+      "source_url": "https://doi.org/10.1002/pro.2493",
+      "source_locator": "research/slotted_process_library/corpus/structure/cases.jsonl:22#/actual_observations/paper_reported/0",
+      "observation": "PLP-to-PMP conversion occurred, but phosphoserine/alpha-ketoglutarate did not yield expected glutamate; phosphate elimination occurred.",
+      "limit": "Relevant indexed primary results/limitations inspected; no new experiments."
+    },
+    {
+      "case_group": "chem_bcd_etf",
+      "case_id": "chem_bcd_etf",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2223550/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:1#/actual_observations/2/result",
+      "observation": "H2 assay gives 2.2 NADH and 1.4 crotonyl-CoA per H2; fully coupled 2:1:1 stoichiometry is an extrapolation.",
+      "limit": "Full relevant introduction, purification/assay methods, results, tables and discussion inspected; raw HTML and parsed paragraphs saved."
+    },
+    {
+      "case_group": "chem_dsr_terminal",
+      "case_id": "chem_dsr_terminal",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10861901/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:10#/actual_observations/0/result",
+      "observation": "Purified complex oxidizes menadiol when DsrC-trisulfide is supplied; omission controls and sequential substrate additions support dependency.",
+      "limit": "Full relevant primary results, discussion, assay/product methods and limitations inspected; 2015 DsrAB source saw abstract only and is not counted as a separately verified case."
+    },
+    {
+      "case_group": "chem_f420_precursor_partner",
+      "case_id": "chem_f420_precursor_partner",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6450877/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:7#/actual_observations/0/result",
+      "observation": "2019: PEP in FbiD/FbiA assays yields dehydro-F420; FbiB plus reduced-FMN regeneration yields mature reduced product. Broad archaeal extrapolation leaves an unexplained reductase.",
+      "limit": "Relevant full primary results/discussion and assay/LC-MS/crystallography methods inspected in all three papers. No new flux measurements, crystallographic refinement or spectrum fitting."
+    },
+    {
+      "case_group": "chem_hemq",
+      "case_id": "chem_hemq",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4343137/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:9#/actual_observations/0/result",
+      "observation": "2015 PNAS: purified pathway enzymes produce coproheme then protoheme; HemQ acts on Fe-coproporphyrin but not tested Ni-coproporphyrin. H2O2 or FMN supports product formation whereas several common acceptors do not.",
+      "limit": "Relevant primary body/results and main methods inspected for both; detailed supplementary purification protocols and later mechanistic revisions not checked."
+    },
+    {
+      "case_group": "chem_hydabc",
+      "case_id": "chem_hydabc",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2698477/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:11#/actual_observations/1/result",
+      "observation": "Limited-NADH experiments yield about 1.8 H2 per NADH, consistent with roughly equal electron input from both carriers.",
+      "limit": "Full relevant primary methods, donor/stoichiometry results and discussion inspected; original raw gas-chromatography data not reprocessed."
+    },
+    {
+      "case_group": "chem_mvh_hdr",
+      "case_id": "chem_mvh_hdr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3041090/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:3#/actual_observations/1/result",
+      "observation": "Limiting-substrate experiments support approximately one two-electron ferredoxin per heterodisulfide; precise stoichiometry has stated analytical uncertainty.",
+      "limit": "Relevant entire primary body, methods, results, limitations and figure legends inspected. Supporting-information raw data not independently analyzed."
+    },
+    {
+      "case_group": "chem_nfnab",
+      "case_id": "chem_nfnab",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2944534/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:2#/actual_observations/1/result",
+      "observation": "Measured stoichiometry supports one two-electron ferredoxin plus NADH reducing two NADP+ in a reversible reaction.",
+      "limit": "Relevant expression/reconstitution/assay methods, results, stoichiometry figures and discussion inspected; supplements not independently reanalyzed."
+    },
+    {
+      "case_group": "chem_ubiuv_oxygen_donor",
+      "case_id": "chem_ubiuv_oxygen_donor",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10990095/",
+      "source_locator": "research/slotted_process_library/corpus/chemistry/cases.jsonl:8#/actual_observations/1/result",
+      "observation": "C4-18O-shikimate labels three ubiquinone oxygen positions; added unlabeled 4-hydroxybenzoate does not erase that pattern.",
+      "limit": "Full relevant primary body, methods and figure legends inspected; supplement synthesis/raw isotopologue data not independently reanalyzed."
+    },
+    {
+      "case_group": "pxpABC_oxoproline_disposal",
+      "case_id": "pxpABC_oxoproline_disposal",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5625064/",
+      "source_locator": "research/slotted_process_library/corpus/root/cases.jsonl:11#/actual_observations/2",
+      "observation": "Author experiments reconstituted ATP-dependent activity with three proteins; known ATP-independent activity raised a thermodynamic concern.",
+      "limit": "Primary indexed introduction, discussion and relevant comparative-genomics/assay methods inspected. No experiments or source genome analysis repeated."
+    },
+    {
+      "case_group": "replacement_bioZ",
+      "case_id": "replacement_bioZ",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:11#/actual_observations/0/observation",
+      "observation": "BioZ bypassed BioC plus BioH. Native bioZ deletion/C115S caused biotin auxotrophy; reconstitution and product MS supported glutaryl-CoA/malonyl-ACP condensation. CaiB loss/assays connected glutaryl-CoA supply.",
+      "limit": "Main relevant Results/Methods read; no independent raw spectral or isotope analysis."
+    },
+    {
+      "case_group": "replacement_thyX",
+      "case_id": "replacement_thyX",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2168944/",
+      "source_locator": "research/slotted_process_library/corpus/replacement/cases.jsonl:3#/actual_observations/0/observation",
+      "observation": "thyX disruption caused thymidine auxotrophy. ThyA alone gave slow/incomplete rescue; ThyA plus FolA restored near-parent growth and more labeled dT synthesis.",
+      "limit": "Relevant full main Results and Methods; authors’ folate-cycle simulations were inspected but not rerun."
+    },
+    {
+      "case_group": "seq_hutW_vibrio",
+      "case_id": "seq_hutW_vibrio",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8672366/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:13#/actual_observations/2",
+      "observation": "Mass spectrometry supported a more reduced anaerobilin product; NADPH could drive turnover, exposing differences from the ChuW reference.",
+      "limit": "Primary hypothesis discussion, expression methods, enzyme results and product-analysis sections inspected through indexed full text; no heme experiment performed."
+    },
+    {
+      "case_group": "seq_ptmvd_m3k_picrophilus",
+      "case_id": "seq_ptmvd_m3k_picrophilus",
+      "source_url": "https://journals.asm.org/doi/full/10.1128/aem.04033-14",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:17#/actual_observations/3",
+      "observation": "Isobutene formation from another substrate reflected spontaneous decomposition after phosphorylation rather than direct enzymatic decarboxylation.",
+      "limit": "Primary sequence-analysis methods/results, abstract and product-analysis conclusion inspected; no new sequence search or biochemical experiment."
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "case_id": "seq_queFL_archaeosine",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5485725/",
+      "source_locator": "research/slotted_process_library/corpus/sequence/verified_cases.jsonl:10#/actual_observations/2",
+      "observation": "Free ammonium supplied nitrogen in the assayed reaction; glutamine did not.",
+      "limit": "2012 comparative alignment and tRNA-analysis results plus 2017 substrate/adduct methods and discussion inspected through indexed primary text. No new enzyme experiments."
+    }
+  ]
+}

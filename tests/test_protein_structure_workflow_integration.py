@@ -19,7 +19,7 @@ from gene_annotation_episode.tools import ToolRegistry
 from gene_annotation_episode.protein_structure_authority import ProteinStructureOperandError
 from gene_annotation_episode.protein_structure_operands import authenticate_structure_sequence_reference
 
-F = import_module("verification.tool_graders_protein_structure_workflow_2026-10-27_410.fixture_helpers")
+F = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.workflow_410")
 
 
 def values(projection):

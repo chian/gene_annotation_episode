@@ -19,14 +19,14 @@ from fluorescence_flowio_test_support import require_bounded_runtime, mutate_wri
 
 require_bounded_runtime()
 
-from gene_annotation_episode import fluorescence_event_contracts as core
-from gene_annotation_episode import fluorescence_event_preparation as preparation
-from gene_annotation_episode import fluorescence_preparation_contracts as contracts
-from gene_annotation_episode import fluorescence_preparation_readers as readers
-from gene_annotation_episode.fluorescence_fcs_reader import parse_fluorescence_fcs
-from gene_annotation_episode.fluorescence_event_calculations import calculate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_event_sheet import populate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_result_views import project_fluorescence_result
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_preparation as preparation
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_preparation_contracts as contracts
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_preparation_readers as readers
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_fcs_reader import parse_fluorescence_fcs
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_sheet import populate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views import project_fluorescence_result
 
 
 @pytest.fixture
@@ -424,7 +424,7 @@ def test_selected_scale_then_compensate_preserves_inherited_parameter_identity(n
 
 
 def test_compensation_composes_supplied_primary_correspondence(native):
-    from gene_annotation_episode.fluorescence_event_readers import parse_fluorescence_table_snapshot
+    from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_readers import parse_fluorescence_table_snapshot
 
     raw, original, matrix, _ = _comp_case(native)
     table_raw = core.canonical(dict(schema=core.TABLE_SCHEMA, columns=["A", "B"], rows=[[110, 60], [20, 100]]))

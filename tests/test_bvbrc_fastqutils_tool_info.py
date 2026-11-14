@@ -13,7 +13,7 @@ from gene_annotation_episode.bvbrc_fastqutils_tool_info import fastqutils_tool_c
 from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
 from gene_annotation_episode.runtime import Workflow, _compile_form
 from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
-from test_bvbrc_homology_tool_info import factory
+from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homology_tool_info import factory
 from test_api_bvbrc_appservice import CONFIG, original_request
 from test_bvbrc_appservice_custody import api_assignment
 from test_bvbrc_fastqutils_returns import f

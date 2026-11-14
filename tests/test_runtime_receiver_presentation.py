@@ -21,7 +21,7 @@ from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 
 
-FIXTURE = Path(__file__).parent / "fixtures/runtime_receiver569"
+FIXTURE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/runtime_receiver569"
 PINS = {
     "contexts.json": ("8f2d26bce1257c0c30f9e27bc50e99c4b6b7e945ec4f87765ca55315275107e6", 77876),
     "provenance.json": ("c3065ceb3b759c03177f90a53ec8d457dc2b9a4a7b0c6e45484fbe43d163113d", 4515),

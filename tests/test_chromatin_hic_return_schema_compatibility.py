@@ -17,8 +17,8 @@ from tests.test_chromatin_interaction_returns import RuntimeFixture, files, refe
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = ROOT / 'verification/tool_graders_chromatin_hic_contract_2026-10-27_452/schema002'
-WORKED = ROOT / 'verification/tool_graders_chromatin_interaction_contract_2026-10-27_439/WORKED_RECORDS.json'
+BASELINE = ROOT / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/schema'
+WORKED = ROOT / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/WORKED_RECORDS.json'
 
 
 def legacy(source):

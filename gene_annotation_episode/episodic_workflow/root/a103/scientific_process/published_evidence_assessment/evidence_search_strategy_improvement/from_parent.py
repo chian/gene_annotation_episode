@@ -1,0 +1,34 @@
+"""Private A103 literature_strategy from parent."""
+from __future__ import annotations
+from .source_contracts import ContractError, _CHILDREN, _PAGE, _REFERENCES, _TABLE, _WINDOW, deepcopy, json, obj, plain, validate_schema
+
+class SourceAssignment:
+
+    def child_assignment_schema(self, parent, role):
+        return self.assignment_schema(role, context=parent)
+
+    def assignment_schema(self, role, *, context=None):
+        self._role(role)
+        version, field = ('strategy_assignment_v1', 'prior_search_refs')
+        schema = obj({'version': {'const': version}, 'question_context_refs': _REFERENCES, field: _REFERENCES})
+        schema = deepcopy(schema)
+        return schema
+
+    def _validate_assignment(self, role, assignment, scope, *, context=None):
+        value = plain(assignment)
+        json.dumps(value, allow_nan=False)
+        validate_schema(value, self.assignment_schema(role, context=context))
+        for field, references in value.items():
+            if field.endswith('_refs'):
+                for reference in references:
+                    self._require(reference, scope, None if field == 'question_context_refs' else 'source')
+        return value
+
+    def prepare_assignment(self, parent, role, selection, scope, operation_key):
+        self._role(role)
+        if not isinstance(operation_key, str) or not operation_key:
+            raise ContractError('operation_key_required')
+        selection = plain(selection)
+        value = self._validate_assignment(role, selection, scope, context=parent)
+        parent.role
+        return value

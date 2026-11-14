@@ -1,0 +1,62 @@
+"""Private scientific decision inputs."""
+from __future__ import annotations
+from gene_annotation_episode.episodic_workflow.root.a106.runtime import Mapping, child_option_information
+
+class ScientificDecisionInputs:
+
+    def decision_inputs(self, context, index, profile):
+        resource_context = self.workflow.resource_context(self)
+        if resource_context is not None:
+            context = {**context, 'resource_context': resource_context}
+        shared_context = self.workflow.shared_information_context(self)
+        if shared_context is not None:
+            context = {**context, 'shared_information_context': shared_context}
+        context = {**context, 'launch_instruction_library': self.workflow.launch_instructions.context()}
+        selected_instructions = self.workflow.launch_instructions.materialize(self.request.message.as_record().get('episode_assignment', {}).get('launch_instructions'))
+        if selected_instructions is not None:
+            context['selected_launch_instructions'] = selected_instructions
+        if self.workflow.available_child_roles(self):
+            context['child_options'] = child_option_information(self.workflow, self)['text']
+        supplied_initial = self.workflow.episode_bindings.initial_decision_context(self.workflow.binding_context(self))
+        if set(supplied_initial).intersection(context):
+            raise ValueError('initial_binding_context_field_conflict')
+        context = {**context, **supplied_initial}
+        context = self.credit_presentation(context).completed_work(self, context, index)
+        if 'pending_work' not in context:
+            context = {**context, 'pending_work': self.workflow.pending_work(self)}
+        binding = self.workflow.execution_expectations
+        if binding is not None and binding.applies(self.path[-1][0]):
+            context = {**context, 'execution_expectations': binding.capture(self.path[-1][0])}
+        if self.workflow.resource_estimator is not None:
+            if self.workflow.is_job_source(self):
+                estimates = self.workflow.resource_estimator.estimate(context.get('execution_expectations'), job_ref=self.workflow.job_episodes.assignment(self)['job_ref'], sample=self.workflow.job_episodes.latest_sample(self, include_inherited=True))
+            elif 'execution_expectations' in context:
+                estimates = self.workflow.resource_estimator.estimate_context(context['execution_expectations'])
+            else:
+                estimates = None
+            if estimates is not None:
+                context = {**context, 'resource_tool_estimates': estimates}
+        native_expectations = self.workflow.native_estimation_context(self, context)
+        if native_expectations is not None:
+            context = {**context, 'native_execution_expectations': native_expectations}
+            if self.workflow.resource_estimator is not None:
+                native_estimates = self.workflow.resource_estimator.estimate_context(native_expectations)
+                context['resource_tool_estimates'] = [*context.get('resource_tool_estimates', []), *native_estimates]
+        if self.workflow.permits_common_action(self, 'wait'):
+            context['waiting_support'] = self.workflow.waiting_support(self, context)
+        if profile is not None:
+            context = {**context, 'contract_information_profile': profile}
+        return context
+
+
+def _bind_scientific_runtime_providers(namespace):
+    from ..library.live_runtime_functions import bind_functions
+    names = {'decision_inputs': 'ScientificDecisionInputs.decision_inputs'}
+    functions = bind_functions(namespace, {name: ScientificDecisionInputs.__dict__[name] for name in names},
+        runtime_module='gene_annotation_episode.episodic_workflow.root.a106.runtime', qualified_names=names,
+        defining_module='gene_annotation_episode.episodic_workflow.root.a106.scientific_process.decision_inputs')
+    for name, function in functions.items():
+        setattr(ScientificDecisionInputs, name, function)
+
+from .. import runtime as _original_runtime
+_bind_scientific_runtime_providers(vars(_original_runtime))

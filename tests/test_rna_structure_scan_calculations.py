@@ -10,7 +10,7 @@ from gene_annotation_episode.rna_structure_scan_calculations import calculate_rn
 from gene_annotation_episode.rna_structure_comparison_contracts import validate_rna_comparison_components
 from gene_annotation_episode.rna_structure_comparison_inputs import populate_rna_comparison_sheet
 
-f = importlib.import_module("verification.tool_graders_rna_comparison_calculations_2026-10-26_367.fixture_helpers")
+f = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_calculations_367.fixture_helpers")
 
 
 def calculated(sheet):

@@ -7,7 +7,7 @@ from collections.abc import Mapping
 from copy import deepcopy
 import re
 
-from .bvbrc_alignment_bundle_contracts import decode_reference
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_bundle_contracts import decode_reference
 
 
 _OPAQUE = re.compile(r"(?:artifact_|source_|[a-z_]*document_)?[0-9a-f]{24,64}(?:\b|_)")
@@ -16,7 +16,7 @@ _PREFIXES = ('bvbrc_alignment_', 'bvbrc_genome_alignment_')
 
 def _decode(reference):
     if reference.startswith('bvbrc_genome_alignment_'):
-        from .bvbrc_genome_alignment_bundle_contracts import decode_reference as genome_reference
+        from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_bundle_contracts import decode_reference as genome_reference
         return genome_reference(reference)
     return decode_reference(reference)
 

@@ -35,11 +35,11 @@ from gene_annotation_episode.scientific_process_setup import prepare_scientific_
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from tests.test_homer_motif_saved_workflow import _archive, _archive_value, _encode
-from tests.test_molecular_sequence_n_glycosylation_native import (
+from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import (
     _assemble, _cell, _checkpoint, _document, _files, _history, _NoNewDecisions,
     _selected_closure, _sqlite_pins,
 )
-from tests.test_molecular_sequence_tools_native import _pin, _write, _tables
+from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_tools_native import _pin, _write, _tables
 
 
 ROOT = Path(__file__).resolve().parents[1]

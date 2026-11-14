@@ -25,7 +25,7 @@ from gene_annotation_episode.rna_structure_result_views import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-RETAINED = ROOT / "verification/tool_graders_rna_structure_integration_2026-10-26_360/NUMERICAL_EXAMPLES.json"
+RETAINED = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_integration_360/NUMERICAL_EXAMPLES.json"
 PARAMETERS = {"schema": "rna_calculation_parameters_v1",
     "topology": {"long_stem_min_pairs": 3, "include_exterior_in_loop_size_statistics": False},
     "pair_composition": {"accepted_ordered_pair_types": ["AU", "UA", "GC", "CG", "GU", "UG"],

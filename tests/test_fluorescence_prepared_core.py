@@ -8,10 +8,10 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import fluorescence_event_contracts as core
-from gene_annotation_episode.fluorescence_event_calculations import calculate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_event_sheet import validate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_result_views import project_fluorescence_result
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_sheet import validate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views import project_fluorescence_result
 from test_fluorescence_event_calculations import (
     _batch, _cell, _control_sheet, _file, _gate, _native_report, _parameters, _request, _sheet,
 )

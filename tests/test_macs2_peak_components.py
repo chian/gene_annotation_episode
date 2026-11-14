@@ -28,7 +28,7 @@ from test_atac_differential_result_worker import selector
 ROOT = Path(__file__).resolve().parents[1]
 # Byte-for-byte required fixture from the immutable original:
 # verification/tool_graders_atac_result_worker_finish_2026-10-27_475/check008/FILLED_ACTUAL_NATIVE_EXAMPLE.json
-ORIGINAL = Path(__file__).resolve().parent / 'fixtures/macs2/retained_native_475.json'
+ORIGINAL = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/macs2/retained_native_475.json'
 PROFILE = 'matched_control_native_model'
 FIELDS = ('reference', 'callpeak_bindings', 'peaks_xls', 'narrowpeaks', 'summits')
 

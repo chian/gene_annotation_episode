@@ -10,7 +10,7 @@ import pytest
 
 from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.homology_jobs import VERSION
+from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import VERSION
 from gene_annotation_episode.resource_records import RESULTS_VERSION
 from gene_annotation_episode.state import Store
 

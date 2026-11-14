@@ -10,7 +10,7 @@ from gene_annotation_episode.runtime import DecisionSource, Workflow
 from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
 
 
-RECORDED = json.loads((Path(__file__).parent / 'fixtures/reasoning/'
+RECORDED = json.loads((Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/reasoning/'
     'a11033-empty-reason-admission.json').read_text())
 
 

@@ -26,7 +26,7 @@ def _required_correspondence(grading):
 def validate_tool_correspondence(grading, correspondence, *, admission=False):
     from .alignment_correspondence import validate_correspondence_artifacts
     from .biopython_pairwise_grader import validate_biopython_correspondence
-    from .blast_pairwise_grader import validate_blast_correspondence_instance
+    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_pairwise_grader import validate_blast_correspondence_instance
     correspondence = validate_correspondence_artifacts(correspondence, admission=admission)
     schema = grading["sheet"]["schema"]
     instances = correspondence["instances"]

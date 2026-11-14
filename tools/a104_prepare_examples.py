@@ -38,7 +38,7 @@ def main():
     acquired = args.acquired.resolve()
     refined = args.refined.resolve()
     ipk_specific = args.ipk_specific.resolve()
-    fixtures = root/'tests/fixtures/a104/real'
+    fixtures = root/'gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/a104/real'
     oarx_files = [refined/name for name in ('oarx-supplement.xlsx', 'oarx-supplement-acquisition.json')]
     oarx_files += [acquired/'oarx'/name for name in ('family-fabg.json', 'family-fabg-request.json')]
     preserve(fixtures/'oarx', oarx_files)

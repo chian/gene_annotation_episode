@@ -34,7 +34,7 @@ SOURCE = "restriction_mapping_results"
 RUN = "restriction729-engineering"
 ALIAS = "find_restriction_sites"
 SELECTOR = Path(__file__).resolve().parents[1] / (
-    "verification/tool_graders_restriction_registry_2026-10-29_728/SAVED_SELECTOR_001.json")
+    "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/SAVED_SELECTOR_001.json")
 
 
 def requested(policy="all_own_completed_results", sequence_ref=None):

@@ -16,7 +16,7 @@ from gene_annotation_episode.infernal_search_contracts import (
 from gene_annotation_episode.infernal_search_grader import calculate_infernal_search_scores
 
 
-FIXTURE = Path(__file__).parents[1] / "verification/tool_graders_infernal_shared_core_2026-10-28_582/SYNTHETIC_COMMON_INPUT.json"
+FIXTURE = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_search_shared_cells/SYNTHETIC_COMMON_INPUT.json"
 
 
 def supplied():
@@ -272,8 +272,7 @@ def test_explicit_v1_conversion_keeps_original_cells_and_lineage(monkeypatch):
 
 def test_authentic_saved_native_v1_conversion_preserves_recorded_calculation(monkeypatch):
     directory = Path(__file__).parents[1] / (
-        "verification/tool_graders_infernal_publication_2026-10-26_225/run_003/pytest/"
-        "test_host_no_full_dataset_or_s0/grading/native-infernal-grading")
+        "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_search_native_v1")
     sheet_bytes = (directory / "sheet.json").read_bytes()
     score_bytes = (directory / "scores.json").read_bytes()
     assert hashlib.sha256(sheet_bytes).hexdigest() == "71e44e3894b71ada18dabcb0853e008bef218b28e2ef556ae0bbc9153531ea18"

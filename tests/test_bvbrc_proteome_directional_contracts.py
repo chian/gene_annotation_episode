@@ -16,7 +16,7 @@ from gene_annotation_episode.bvbrc_proteome_native_contracts import native_schem
 
 @pytest.fixture
 def result():
-    path = Path(__file__).parent / "fixtures/bvbrc_proteome_directional/biopython_text_2221L_blastp_001.txt"
+    path = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_proteome_directional/biopython_text_2221L_blastp_001.txt"
     data = path.read_bytes()
     source = {"content": {"source_ref": "fixture", "artifact_field": "artifact_ref", "artifact_ref": path.name,
                           "sha256": hashlib.sha256(data).hexdigest(), "byte_count": len(data)},
@@ -76,7 +76,7 @@ def test_malformed_or_reassociated_projections_rejected(result, mutation):
 
 
 def test_contradictory_source_preserved_but_removing_issue_is_invalid():
-    path = Path(__file__).parent / "fixtures/bvbrc_proteome_directional/biopython_text_2221L_blastp_001.txt"
+    path = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_proteome_directional/biopython_text_2221L_blastp_001.txt"
     data = path.read_bytes().replace(b"Identities = 353/414", b"Identities = 415/414")
     source = {"content": {"source_ref": "constructed-contradiction", "artifact_field": "artifact_ref", "artifact_ref": "constructed-bytes",
                           "sha256": hashlib.sha256(data).hexdigest(), "byte_count": len(data)},
@@ -92,7 +92,7 @@ def test_contradictory_source_preserved_but_removing_issue_is_invalid():
 
 
 def test_all_six_geometry_issues_are_required_at_saved_boundary():
-    path = Path(__file__).parent / "fixtures/bvbrc_proteome_directional/biopython_text_2221L_blastp_001.txt"
+    path = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_proteome_directional/biopython_text_2221L_blastp_001.txt"
     data = path.read_bytes().replace(b"Identities = 353/414", b"Identities = 415/413")
     data = data.replace(b"Query: 1   MENS", b"Query: 99   MENS").replace(b"(600 letters)", b"(80 letters)")
     data = data.replace(b"Sbjct: 1   MENS", b"Sbjct: 1   ENS")

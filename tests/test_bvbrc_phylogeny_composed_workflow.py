@@ -34,7 +34,6 @@ from gene_annotation_episode.scientific_process_prompt import render_scientific_
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
-from bvbrc_minhash_episode_fixture import PUBLICATION
 from test_api_bvbrc_appservice import PREFIX
 from test_bvbrc_appservice_inputs import NativeClient
 from test_bvbrc_phylogeny_host_integration import MODES, configured, supplied
@@ -47,7 +46,8 @@ from test_public_search import Client
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / 'verification/tool_graders_bvbrc_phylogeny_workflow_2026-10-25'
+PUBLICATION = ROOT / 'research/slotted_process_library/publications/2026-10-24-001'
+EVIDENCE = ROOT / 'runs/bvbrc_phylogeny_workflow'
 EXPECTED = {'tips': 4, 'cells': 16, 'gap_fraction': .125}
 ADAPTER_PIN = 'd2cad59d6b38933bdb7e9d2a3412612b87d70c16567c128d68632fff821e4093'
 RETURNS_PIN = 'eeb008272fcc5a88601a01c1e146d9cfcb8c739f41bdd1db33faeb5a7a7acb1b'
@@ -76,7 +76,7 @@ def source_provenance(original=None):
             'test_bvbrc_phylogeny_bundle_resolution.py', 'test_bvbrc_phylogeny_returns.py',
             'test_bvbrc_appservice_inputs.py', 'test_api_bvbrc_appservice.py',
             'test_execution_episodes_family.py', 'test_execution_wiring.py',
-            'test_practical_runtime.py', 'test_public_search.py', 'bvbrc_minhash_episode_fixture.py'))
+            'test_practical_runtime.py', 'test_public_search.py'))
     else:
         paths = {Path(path) for path in original['files']}
     files = {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(paths)}

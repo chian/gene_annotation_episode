@@ -20,7 +20,7 @@ from gene_annotation_episode.rna_structure_result_views import rna_structure_fac
 from gene_annotation_episode.runtime import TypedReportContract
 
 f = importlib.import_module(
-    "verification.tool_graders_rna_comparison_calculations_2026-10-26_367.fixture_helpers")
+    "gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_calculations_367.fixture_helpers")
 RECEIPT = "rna_comparison_receipt:" + "1" * 64
 CALCULATION = "rna_comparison_calculation:" + "2" * 64
 

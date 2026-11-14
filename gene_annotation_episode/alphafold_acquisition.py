@@ -15,7 +15,7 @@ from jsonschema import Draft202012Validator, validators
 
 from .acquisition import SourceSnapshot
 from .data_acquisition_receipts import acquisition_receipt_schema, validate_acquisition_receipt
-from .protein_structure_contracts import validate_file_identity
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import validate_file_identity
 
 
 SERVICE = "alphafold"

@@ -6,7 +6,7 @@ import pytest
 
 from gene_annotation_episode.api_bvbrc_appservice import BVBRCAppServiceService
 from gene_annotation_episode.bvbrc_appservice_adapters import bind_adapters, selected_adapter
-from gene_annotation_episode import bvbrc_homology_bundle_adapter as homology
+from gene_annotation_episode.episodic_workflow.root.a101 import bvbrc_homology_bundle_adapter as homology
 from test_api_bvbrc_appservice import CONFIG, original_request
 from test_bvbrc_appservice_custody import selector
 

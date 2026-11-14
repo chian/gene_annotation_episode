@@ -24,7 +24,7 @@ class SavedArticle:
 
 
 def test_saved_primary_original_heading_is_readable_and_anchorable(tmp_path):
-    fixture = Path(__file__).parent / 'fixtures/PMC8874281.xml'
+    fixture = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a106/tests/fixtures/PMC8874281.xml'
     body = fixture.read_bytes()
     provenance = json.loads(fixture.with_suffix('.provenance.json').read_text())
     assert len(body) == provenance['bytes']

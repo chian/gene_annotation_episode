@@ -5,7 +5,7 @@ import pytest
 from gene_annotation_episode.biopython_pairwise_grader import build_biopython_pairwise_sheet
 from gene_annotation_episode.protein_structure_correspondence import correspondence_from_pairwise_sheet, validate_explicit_residue_map
 from gene_annotation_episode.protein_structure_sequences import rebind_structure_sequence
-f = import_module("verification.tool_graders_protein_structure_inputs_2026-10-27_386.fixture_helpers")
+f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 
 
 def pair():

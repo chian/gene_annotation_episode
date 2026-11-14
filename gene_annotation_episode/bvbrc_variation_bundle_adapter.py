@@ -12,7 +12,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
-from . import vcf_result_measurements as vcf
+from gene_annotation_episode import vcf_result_measurements as vcf
 from .bvbrc_annotation_bundle_adapter import _resolve
 from .bvbrc_annotation_contracts import selected_field_schema as _literal_schema
 from .bvbrc_annotation_native import _canonical, _content, _finite_json

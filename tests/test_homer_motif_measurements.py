@@ -27,7 +27,7 @@ from gene_annotation_episode.homer_motif_measurements import (
 )
 
 
-FIXTURE = Path(__file__).with_name("fixtures") / "homer_v51_selected_regions.zip"
+FIXTURE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/homer_v51_selected_regions.zip"
 FIXTURE_SHA256 = "f4aad8991e2bceb7b555726891c4fbaf9b6c6eabfaa1f903ea629631dc9c7a68"
 SOURCE = "source_" + "a" * 24
 HEADER = ("Motif Name\tConsensus\tP-value\tLog P-value\tq-value (Benjamini)\t"

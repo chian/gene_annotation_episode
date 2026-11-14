@@ -16,8 +16,8 @@ from gene_annotation_episode.bvbrc_metacats_formats import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CASES = ROOT / "verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases"
-LEGACY = ROOT / "verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/additional_sources/bvbrc_metacats/docs/example_output.tsv"
+CASES = ROOT / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_native/cases"
+LEGACY = ROOT / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_metacats_boundaries/additional_sources/bvbrc_metacats/docs/example_output.tsv"
 HEADER = b"Position\tChi-square_value\tP-value\tDegrees_of_freedom\tFewer_5\tA\tB\n"
 PAIR = b"Position\tMultiple_comparison_p-value\tGroups\n"
 RAW = "r_write_table_single_result_string"

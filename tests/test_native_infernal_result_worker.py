@@ -17,9 +17,9 @@ from gene_annotation_episode.infernal_native_result_views import NATIVE_INFERNAL
 
 
 ROOT = Path(__file__).resolve().parents[1]
-FIXTURES = ROOT / "tests/fixtures/native_infernal_result_worker"
-ALIGNMENTS = ROOT / "tests/fixtures/cmalign_graders/native"
-SEARCHES = ROOT / "tests/fixtures/infernal_search_graders"
+FIXTURES = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/native_infernal_result_worker"
+ALIGNMENTS = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/cmalign_graders/native"
+SEARCHES = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_search_graders"
 
 
 def plan_for(tmp_path, case="cmsearch", family="search_hit", *, rows=None, metrics=None):

@@ -27,23 +27,17 @@ def atomic_json(path, body):
         os.close(fd)
 
 
-def allocated_bytes(directory):
-    """Visible allocated blocks, without following links; not a hard quota."""
-    total, stack = 0, [Path(directory)]
-    while stack:
-        try:
-            with os.scandir(stack.pop()) as entries:
-                for entry in entries:
-                    try:
-                        total += entry.stat(follow_symlinks=False).st_blocks * 512
-                        if entry.is_dir(follow_symlinks=False):
-                            stack.append(Path(entry.path))
-                    except FileNotFoundError:
-                        pass
-        except FileNotFoundError:
-            pass
-    return total
-
+if __package__:
+    from .local_scratch import allocated_bytes
+else:
+    # The native environment can enable PYTHONSAFEPATH; bind this exact sibling
+    # without depending on the script directory being present in sys.path.
+    import importlib.util
+    _scratch_spec = importlib.util.spec_from_file_location(
+        'gene_annotation_episode.local_scratch', Path(__file__).with_name('local_scratch.py'))
+    _scratch_module = importlib.util.module_from_spec(_scratch_spec)
+    _scratch_spec.loader.exec_module(_scratch_module)
+    allocated_bytes = _scratch_module.allocated_bytes
 
 def event_time():
     return {'at': datetime.now(timezone.utc).isoformat(), 'monotonic_ns': time.monotonic_ns(),
@@ -59,7 +53,7 @@ def report(status_path, handle_path=None):
     service_exit = {name: os.environ.get(name) for name in ('SERVICE_RESULT', 'EXIT_CODE', 'EXIT_STATUS')}
     if body is not None and 'native_events' in body:
         try:
-            from gene_annotation_episode.native_events import commit_service_exit_receipt
+            from gene_annotation_episode.episodic_workflow.root.native_events import commit_service_exit_receipt
             commit_service_exit_receipt(handle_path, status_path, service_exit=service_exit, event_time=event_time)
         except Exception as error:
             print(json.dumps({'code': 'native_event_receipt_hook_failed',
@@ -69,14 +63,14 @@ def report(status_path, handle_path=None):
         atomic_json(status_path, {**service_exit, 'ended': event_time()})
     if body is not None and 'statistics' in body:
         try:
-            from gene_annotation_episode.execution_recording import publish_native_statistics
+            from gene_annotation_episode.episodic_workflow.root.execution_recording import publish_native_statistics
             publish_native_statistics(handle_path)
         except Exception as error:
             print(json.dumps({'code': 'statistics_export_hook_failed',
                               'exception_type': type(error).__name__}), file=sys.stderr)
     if body is not None and 'native_events' in body:
         try:
-            from gene_annotation_episode.native_events import publish_native_events
+            from gene_annotation_episode.episodic_workflow.root.native_events import publish_native_events
             publish_native_events(handle_path)
         except Exception as error:
             print(json.dumps({'code': 'native_event_export_hook_failed',

@@ -98,7 +98,7 @@ class AlignmentSiteActionRecords(EpisodeReturnRecords):
         else:
             self._require(self._received_before(context.episode_id, args['observation_ref'],
                 row['decision_index']), 'original_hsp_receipt_required')
-            from .blast_result_views import _original_hsp
+            from gene_annotation_episode.episodic_workflow.root.a101.library.blast_result_views import _original_hsp
             alignment, original, reference, native = _original_hsp(self.store,
                 args['observation_ref'], [args['observation_ref']], plain(context.scope))
             marker = 'native_blast_pairwise' if 'native_blast_pairwise' in alignment else 'native_blast'
@@ -219,12 +219,12 @@ class AlignmentSiteActionRecords(EpisodeReturnRecords):
     def _sheet_identity(self, sheet, alignment, source):
         self._require(self._equal(sheet['source'], source_descriptor(self.store, source, alignment)), 'sheet_source_conflict')
         if source['provider'] == 'ncbi_blast':
-            from .blast_search import PROGRAM_UNITS
+            from gene_annotation_episode.episodic_workflow.root.a101.library.blast_search import PROGRAM_UNITS
             request = json.loads(self.store.get_artifact(source['request_ref']))['request']
             alignment_unit = PROGRAM_UNITS[request['algorithm']][2]
             self._require(sheet['program'] == request['algorithm'], 'sheet_processing_model_conflict')
         elif source['provider'] == 'episode.execution_result':
-            from .blast_search import PROGRAM_UNITS
+            from gene_annotation_episode.episodic_workflow.root.a101.library.blast_search import PROGRAM_UNITS
             program = alignment['native_blast_pairwise']['program']
             alignment_unit = PROGRAM_UNITS[program][2]
             self._require(sheet['program'] == program, 'sheet_processing_model_conflict')

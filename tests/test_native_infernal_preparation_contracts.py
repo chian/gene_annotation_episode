@@ -17,7 +17,7 @@ from gene_annotation_episode.native_infernal_preparation_contracts import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / "verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native"
+NATIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/boundaries/native"
 BIN = ROOT / "resources/software/infernal-1.1.5-install/bin"
 MODELS = NATIVE / "cmbuild_hand/built.cm"
 CALIBRATED = NATIVE / "cmcalibrate_tiny/model.cm"

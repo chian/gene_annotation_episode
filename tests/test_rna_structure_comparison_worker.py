@@ -15,7 +15,7 @@ from gene_annotation_episode.rna_structure_comparison_worker import (
     comparison_input_digests, comparison_calculation_key, run_rna_comparison_worker,
 )
 
-f = importlib.import_module("verification.tool_graders_rna_comparison_worker_2026-10-26_369.fixture_helpers")
+f = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_worker_369.fixture_helpers")
 
 
 def test_value_and_byte_digests_are_distinct_and_membership_order_is_preserved():
@@ -141,7 +141,7 @@ def _numerical_cells(value):
 
 
 def test_all_eight_filled_examples_match_saved_numerical_answers(tmp_path):
-    saved = f.load(f.REPO / "verification/tool_graders_rna_comparison_calculations_2026-10-26_367/FILLED_EXAMPLES_001.json")
+    saved = f.load(f.REPO / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_comparison_calculations_367/FILLED_EXAMPLES_001.json")
     filled = {}
     for name, example in saved["examples"].items():
         sheet = example["sheet"]
@@ -158,7 +158,7 @@ def test_all_eight_filled_examples_match_saved_numerical_answers(tmp_path):
 
 @pytest.mark.parametrize("name,quantity", [("prediction", "native_mfe"), ("evaluation", "native_evaluation")])
 def test_retained357_original_values_and_unavailable_arrays_survive_worker(tmp_path, name, quantity):
-    packet = f.load(f.REPO / "tests/fixtures/rna_structure_comparison_calculations_367/retained357" / (name + ".json"))
+    packet = f.load(f.REPO / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_comparison_calculations_367/retained357" / (name + ".json"))
     original, software = packet["sheet"], packet["bundle"]["software"]
     from gene_annotation_episode.rna_structure_comparison_inputs import populate_rna_comparison_sheet
     selected = f.b.selector([f.b.member(original, key="WT")], [], scan=f.b.scan_request({**f.b.energy_request(), "quantity": quantity}))

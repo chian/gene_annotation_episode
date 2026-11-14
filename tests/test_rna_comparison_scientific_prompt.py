@@ -21,7 +21,7 @@ from test_scientific_process_prompt_delivery import (
 from test_rna_comparison_presentation import pair, scan, receipt, results_context
 
 
-PACKET = Path(__file__).resolve().parents[1] / "verification/tool_graders_rna_scientific_text_integration_2026-10-27_379"
+PACKET = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_scientific_prompt_379"
 BASELINE_SPEC = importlib.util.spec_from_file_location(
     "gene_annotation_episode._scientific_prompt_baseline_379", PACKET / "baseline_scientific_process_prompt.py")
 baseline = importlib.util.module_from_spec(BASELINE_SPEC)
@@ -311,7 +311,7 @@ def test_scientific_renderer_has_no_hidden_io_store_native_calculator_or_model_w
 
 def test_retained_shared_workflow_scan_values_reach_actual_scientific_turn(tmp_path):
     source = Path(__file__).resolve().parents[1] / (
-        "verification/tool_graders_rna_comparison_shared_integration_2026-10-26_372/FILLED_ACTUAL_SCAN_001.json")
+        "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_comparison_shared_372/FILLED_ACTUAL_SCAN_001.json")
     retained = json.loads(source.read_text())
     case = retained["workflow_case"]
     rows = case["returned"]["comparison"]

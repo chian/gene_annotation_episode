@@ -17,9 +17,9 @@ from gene_annotation_episode.rfam_batch_contracts import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "verification/tool_graders_rfam_alignment_2026-10-26_236"
-DOCS = ROOT / "verification/tool_graders_rfam_contract_2026-10-26_232/examples/official-single-result.json"
-LIVE = ROOT / "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/003-fetch-json/response.body"
+EVIDENCE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/alignment"
+DOCS = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/contract/examples/official-single-result.json"
+LIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/transport/live/single/003-fetch-json/response.body"
 IDENTITY = {"artifact_ref": "fixture:synthetic-display", "hit_key": "fixture:synthetic-display/hits/test/0",
             "query_occurrence_key": "fixture:original-occurrence-0", "family_accession": "RF00001"}
 

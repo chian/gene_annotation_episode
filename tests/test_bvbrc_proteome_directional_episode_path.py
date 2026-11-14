@@ -6,6 +6,7 @@ synthetic AppService task only by this test. No live service or model claim.
 import asyncio
 from copy import deepcopy
 import json
+from pathlib import Path
 from types import SimpleNamespace
 
 from method_loop.archive import iter_json
@@ -23,7 +24,6 @@ from gene_annotation_episode.scientific_process_library import ScientificProcess
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
-from bvbrc_minhash_episode_fixture import PUBLICATION
 from test_api_bvbrc_appservice import CONFIG, PREFIX, metadata, OBJECT_UUID
 from test_bvbrc_appservice_inputs import NativeClient
 from test_bvbrc_proteome_directional_returns import DirectionalDriver, DIRECTIONAL_SOURCES, selected_fields
@@ -34,6 +34,8 @@ from test_execution_episodes_family import launch_assignment
 from test_execution_wiring import child, form
 from test_practical_runtime import selected
 from test_public_search import Client
+
+PUBLICATION = Path(__file__).resolve().parents[1] / 'research/slotted_process_library/publications/2026-10-24-001'
 
 
 def test_fourteen_source_definitions_reach_actual_registry_workflow_and_form_compilation(tmp_path):

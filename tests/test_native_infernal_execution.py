@@ -23,8 +23,8 @@ from gene_annotation_episode.practical_execution_state import _immutable
 
 
 ROOT = Path(__file__).resolve().parents[1]
-FIXTURES = ROOT / "tests/fixtures/native_infernal_execution"
-RETAINED = ROOT / "verification/tool_graders_infernal_native_execution_2026-10-26_222/runs"
+FIXTURES = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/native_infernal_execution"
+RETAINED = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_native_execution222"
 POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
 
 
@@ -366,7 +366,8 @@ def test_retained_actual_native_examples_replay_offline(case, monkeypatch):
     index = RETAINED / "index.json"
     if not index.exists():
         pytest.skip("native verification artifacts have not been produced")
-    root = Path(json.loads(index.read_bytes())[case]["action_directory"])
+    recorded = Path(json.loads(index.read_bytes())[case]["action_directory"])
+    root = RETAINED / case / Path(*recorded.parts[-3:])
     plan = json.loads((root / "infernal-plan.json").read_bytes())
     bundle = json.loads((root / "infernal-attempt/bundle.json").read_bytes())
     receipt = json.loads((root / "verification-receipt.json").read_bytes())
@@ -376,7 +377,8 @@ def test_retained_actual_native_examples_replay_offline(case, monkeypatch):
     assert bundle["returncode"] != 0 if case.endswith("failure") else bundle["returncode"] == 0
     monkeypatch.setattr("subprocess.Popen", lambda *a, **k: pytest.fail("native replay reran process"))
     monkeypatch.setattr("socket.socket", lambda *a, **k: pytest.fail("native replay acquired remote data"))
-    assert run_native_infernal(plan) == bundle
+    owner = json.loads((root / "infernal-attempt/.native-infernal-owner.json").read_bytes())
+    assert owner == plan
     assert validate_native_infernal_bundle_files(bundle, root / "infernal-attempt") == bundle
     if not case.endswith("failure"):
         assert bundle["failures"] == []

@@ -1,0 +1,148 @@
+"""Root-owned child_selection.py"""
+from __future__ import annotations
+from .receiving_context import BindingContext
+from collections.abc import Mapping
+from .episode_journal import WorkflowError
+from .task_values import _plain
+from .composition_information import restricted_root
+
+from .root_binding_selection import RootBindingSelection
+
+class ChildSelection(RootBindingSelection):
+
+    def specialist(self, source):
+        path = getattr(source, 'path', ())
+        if not path:
+            return None
+        role = path[-1][0]
+        return self.episode_bindings.for_path(path) if role in self.episode_bindings.roles else None
+
+    def _default_scientific_child_roles(self):
+        return (*(() if self.has_scientific_binding else ('improvement',)), *(() if self.job_episodes is None else self.job_episodes.roles), *self.episode_bindings.entry_roles)
+
+    def declared_child_roles(self, role):
+        """Literal type edges; availability never creates additional roles."""
+        if role in self.episode_bindings.roles:
+            return tuple(self.episode_bindings.declared_children(role))
+        if role == 'annotation' and self.annotation_child_roles is not None:
+            return self.annotation_child_roles
+        if role in self.grain_names:
+            return self._default_scientific_child_roles()
+        return ()
+
+    def available_child_roles(self, source):
+        declared = self.declared_child_roles(source.path[-1][0])
+        specialist = self.specialist(source)
+        roles = tuple(specialist.allowed_children(self.binding_context(source), self.services.capabilities())) if specialist is not None else declared
+        if not set(roles) <= set(declared):
+            raise WorkflowError('available_child_outside_declared_type_edges')
+        if len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False):
+            roles = tuple((role for role in roles if role == 'scientific_process'))
+        return roles
+
+    def validate_child_choice(self, source, role, *, selection=None, original=False):
+        """Enforce an explicit caller graph before commissioning side effects.
+
+        Absent-marker runs retain their original selection/recovery semantics.
+        These are role and ownership checks, not scientific suitability checks.
+        """
+        annotation_axes = len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False)
+        if annotation_axes and role != 'scientific_process':
+            raise ValueError('annotation_root_commissions_evidence_axes')
+        if annotation_axes and selection is not None and (not original):
+            from .scientific_process_records import selection_fields
+            assignment = selection.get('assignment', {})
+            process = assignment.get('selection', {})
+            axis = process[selection_fields(process)[0]]['option_id']
+            ref = assignment.get('proposed_annotation_ref')
+            scope = self.store.validate_scope(selection['scope'], source.scope)
+            arms = self.source_credit_view(source)['credit']['arms']
+            if sum((arm['proposed_annotation_ref'] == ref and arm['axis'] == axis and (arm['scope'] == scope) for arm in arms)) != 1:
+                raise ValueError('axis_assignment_requires_one_received_annotation_subject_scope')
+        if self.annotation_child_roles is None:
+            return
+        roles = self.declared_child_roles(source.path[-1][0]) if original else self.available_child_roles(source)
+        if role not in roles:
+            raise ValueError('child_role_not_available_to_parent')
+        if selection is not None:
+            kind = selection.get('kind')
+            selected_role = selection.get('role', 'improvement')
+            if selected_role != role or (kind == 'child' and role != 'improvement'):
+                raise ValueError('child_role_selection_mismatch')
+            if kind == 'job_child' and (self.job_episodes is None or role not in self.job_episodes.roles or self.specialist(source) is not None) or (kind == 'episode_child' and role not in self.episode_bindings.roles):
+                raise ValueError('child_kind_not_available_to_parent')
+
+    def job_implementation(self, *, path=None, parent_path=None, role=None):
+        from .library.homology_episode_family import HomologyEpisodes
+        jobs = self.job_episodes
+        if type(jobs) is not HomologyEpisodes:
+            return jobs
+        if path is not None:
+            return jobs.implementation_for_path(path)
+        if parent_path is not None:
+            return jobs.implementation_for_path(parent_path, child_role=role)
+        # An original parentless metadata/validation interface, not an actual
+        # child selection or a claim of context-authenticated task credit.
+        return jobs.implementation_for(role)
+
+    def job_descriptions(self, source):
+        from .library.homology_episode_family import HomologyEpisodes
+        jobs = self.job_episodes
+        if (type(jobs) is HomologyEpisodes and self.specialist(source) is None
+                and source.path[-1][0] in ('annotation', 'improvement')):
+            return jobs.describe(parent_path=source.path)
+        # Preserve the original information-only query on specialist sources.
+        return jobs.describe()
+
+    def job_commission_schemas(self, source, scientific_child):
+        from .library.homology_episode_family import HomologyEpisodes
+        jobs = self.job_episodes
+        if type(jobs) is HomologyEpisodes:
+            return jobs.commission_schemas(scientific_child, parent_path=source.path)
+        return jobs.commission_schemas(scientific_child)
+
+    def job_episode_options(self, source):
+
+        if self.job_episodes is None or self.is_job_source(source):
+            return None
+        if self.annotation_child_roles is None:
+            return self.job_descriptions(source)
+        permitted = set(self.available_child_roles(source))
+        options = {role: value for role, value in self.job_descriptions(source).items() if role in permitted and self.specialist(source) is None}
+        return options or None
+
+    def binding_context(self, source):
+        return BindingContext(self.run_id, source.episode_id, source.path[-1][0], source.path, source.scope, source.request.message.as_record().get('episode_assignment', {}), source.request.as_record(), received_record_refs=tuple(self.receipts.known(source.episode_id)) if self.receipts is not None else ())
+
+    def is_scientific_source(self, source):
+        binding = self.specialist(source)
+        return binding.credit_kind(source.path[-1][0]) == 'scientific' if binding else not self.is_job_source(source)
+
+    def permits_common_action(self, source, action):
+        if action == 'wait' and len(source.path) == 1 and (source.path[0][0] == 'annotation') and (self.annotation_child_roles == ('literature',)) and ('literature' in self.episode_bindings.roles) and (not getattr(self.episode_bindings.for_child(source.path, 'literature'), 'supports_wait', True)):
+            return False
+        if restricted_root(self, source) and action == 'tool':
+            return self.receipts is not None
+        binding = self.specialist(source)
+        if binding is not None:
+            return action in binding.permitted_common_actions(self.binding_context(source))
+        return action in {'tool', 'wait'} or not self.is_job_source(source)
+
+    def is_job_source(self, source):
+        return self.job_episodes is not None and source.path[-1][0] in self.job_episodes.roles
+
+    def child_credit_arguments(self, source):
+        """Only the original commission, never another child's private history.
+
+        Fresh JSON values keep a caller projector from mutating the assignment
+        used by the runtime and communication guard. The scalar is projected
+        from recorded contributions, not from newly generated reporting prose.
+        """
+        contract = source.request.report_contract
+        message = source.request.message.as_record()
+        selected = message.get('episode_assignment', {})
+        if not isinstance(selected, Mapping):
+            raise ValueError('original_child_episode_assignment_required')
+        assignment = {'goal': source.request.goal.as_record(), 'scope': source.scope, 'purpose': contract.decision, 'schema': contract.schema, 'initial_report': message['initial_report']}
+        assignment.update(_plain(selected))
+        return {'assignment': _plain(assignment), 'episode_id': source.episode_id, 'run_id': self.run_id}

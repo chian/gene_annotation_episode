@@ -12,7 +12,7 @@ from gene_annotation_episode.nhmmer_inputs import build_nhmmer_sheet, parse_nhmm
 from gene_annotation_episode.nhmmer_grader import calculate_nhmmer_scores
 
 
-FIXTURES = Path(__file__).resolve().parents[1] / "verification/tool_graders_nhmmer_2026-10-24"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/nhmmer"
 
 
 def sheet_for(name):

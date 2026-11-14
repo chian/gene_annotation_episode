@@ -7,8 +7,8 @@ executes work, prepares a job or accepts a later live-path replacement.
 from copy import deepcopy
 from pathlib import Path
 
-from . import native_file_capture
-from .terminal_scientific_evidence import captured_terminal_file, terminal_file_identity
+from gene_annotation_episode import native_file_capture
+from gene_annotation_episode.episodic_workflow.root.terminal_scientific_evidence import captured_terminal_file, terminal_file_identity
 
 
 def capture_execution_file(store, *, directory, relative_path, format, command_proof=None):

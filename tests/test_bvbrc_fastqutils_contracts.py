@@ -9,7 +9,7 @@ from gene_annotation_episode import bvbrc_fastqutils_contracts as c
 from gene_annotation_episode import bvbrc_fastqutils_identity as identity
 from gene_annotation_episode.bvbrc_fastqutils_metric_specs import metric_spec, component_spec
 
-HERE = Path(__file__).parent / 'fixtures/bvbrc_fastqutils/contracts'
+HERE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/contracts'
 
 
 def example(name):

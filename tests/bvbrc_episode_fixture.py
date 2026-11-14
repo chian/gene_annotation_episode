@@ -27,7 +27,7 @@ from gene_annotation_episode.runtime import Workflow
 from gene_annotation_episode.tools import ToolRegistry
 
 
-EVIDENCE = Path(__file__).resolve().parents[1] / 'verification/tool_graders_bvbrc_data_contract_2026-10-24'
+EVIDENCE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract'
 FEATURE_IDS = ['PATRIC.511145.12.NC_000913.CDS.822959.823720.rev',
                'RefSeq.511145.12.NC_000913.CDS.822959.823720.rev']
 RESOURCES = {'bvbrc': {'kind': 'api', 'service': 'bvbrc_data',

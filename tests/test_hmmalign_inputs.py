@@ -10,7 +10,7 @@ from gene_annotation_episode.hmmalign_inputs import (
 )
 
 
-FIXTURES = Path(__file__).resolve().parents[1]/"verification/tool_graders_hmmalign_2026-10-24/native"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/hmmalign_native"
 
 
 def parse(text):

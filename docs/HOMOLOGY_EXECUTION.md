@@ -1,10 +1,7 @@
-# Durable execution for the fixed gene investigation
+# Durable homology execution
 
-The selected biological question remains the function of the one fixed ybhP
-gene. A native homology search supplies evidence about that question. Executing
-the search, obtaining matches, or handing off a job is not an annotation result.
-The empirical full-corpus probe and its 20 registered HSP observations remain
-in `cases/gene_001`; development did not rerun that unchanged search or download.
+Executing a search, obtaining matches, or handing off a job does not by itself
+establish a functional annotation.
 
 ## One execution implementation
 

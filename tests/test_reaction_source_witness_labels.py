@@ -7,18 +7,18 @@ import pytest
 
 from gene_annotation_episode.domain import LABEL, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.literature_reaction_meanings import (
+from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_meanings import (
     MODEL_FIELDS, RESOURCE_FIELDS, publish_meanings,
 )
-from gene_annotation_episode.literature_reaction_source import (
+from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_source import (
     populate_source, reaction_source_population_schema,
 )
-from gene_annotation_episode.literature_reaction_storage import LiteratureReactionRepository
+from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository
 from gene_annotation_episode.state import Store
-from test_literature_reaction_storage import source
+from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_storage import source
 
 
-FIXTURES = Path(__file__).parent / 'fixtures' / 'a110_evaluation'
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/a110_evaluation'
 
 
 def rebind_sources(value, original, replacement):

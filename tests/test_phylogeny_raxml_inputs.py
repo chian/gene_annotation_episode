@@ -11,8 +11,8 @@ import gene_annotation_episode.phylogeny_raxml_inputs as native
 
 
 _REPOSITORY = next(path for path in Path(__file__).resolve().parents
-    if (path / "verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example").is_dir())
-_EXAMPLES = _REPOSITORY / "verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example/test9_genome_dir"
+    if (path / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries/official_example").is_dir())
+_EXAMPLES = _REPOSITORY / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries/official_example/test9_genome_dir"
 
 
 def _artifact(data):

@@ -11,17 +11,12 @@ import hashlib
 import json
 import re
 
-from .api_enrichr import PROTOCOL_VERSION, WIRE_PROFILE, _prepared as validate_prepared_enrichr
-from .communication import ReportBoundaryError, plain
 from .domain import identity, canonical as domain_canonical
 from .enrichr_contracts import validate_enrichr_selector
-from .episode_bindings import BindingContext
-from .episode_receipts import EpisodeReceipts
-from .episode_return_records import EpisodeReturnRecords, _same
-from .execution_contracts import digest
 
 
 def _boundary(code):
+    from .episodic_workflow.root.communication import ReportBoundaryError
     return ReportBoundaryError("enrichr_" + code, code="enrichr_" + code)
 
 
@@ -42,7 +37,7 @@ def validated_enrichr_source(store, reference):
 def normalized_enrichr_outcome(value):
     value = deepcopy(value)
     if isinstance(value, dict) and "pending_work_after_action" in value:
-        from .waiting import validate_pending
+        from .episodic_workflow.root.wait_events import validate_pending
         validate_pending(value.pop("pending_work_after_action"))
     return value
 
@@ -83,6 +78,10 @@ def matching_enrichr_publications(store, reference, *, current_run_id=None):
 
 def committed_enrichr_reference_kind(store, row, reference):
     """The original committed-chain classifier; never read API paths or bytes."""
+    from .episodic_workflow.root.enrichr_publication_metadata import PROTOCOL_VERSION, WIRE_PROFILE, _prepared as validate_prepared_enrichr
+    from .episodic_workflow.root.communication import ReportBoundaryError, plain
+    from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords, _same
+    from .episodic_workflow.root.library.receipt_digest import digest
     try:
         run_id, key = row["publication_run_id"], row["operation_key"].removesuffix(":publication")
         records = EpisodeReturnRecords(store, run_id, failure_prefix="enrichr_foreign_")
@@ -177,9 +176,15 @@ def enrichr_reference_restriction(store, context, reference, namespace, *, initi
         return False
     if "raw" not in kinds or private_only:
         return None
-    if namespace not in {None, "artifact"} or not isinstance(context, BindingContext):
+    from .episode_bindings import BindingContext
+    from .episodic_workflow.root import receiving_context
+    if namespace not in {None, "artifact"} or not (
+            isinstance(context, BindingContext)
+            or type(context) is receiving_context.BindingContext):
         return False
     try:
+        from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+        from .episodic_workflow.root.episode_receipts import EpisodeReceipts
         EpisodeReturnRecords(store, context.run_id, failure_prefix="enrichr_reference_").authenticate(
             context, allow_unsaved=True)
         if len(context.path) == 1 and reference in initial_record_refs:

@@ -1,0 +1,112 @@
+STEERING
+
+Own action yields
+
+| Category | Completed | Total signed yield | Expected next yield | Uncertainty or unavailable reason | Uncompleted attempts |
+| --- | --- | --- | --- | --- | --- |
+| tool/source.read | 2 | -0.25 | unavailable | parameters_unbound | 1 |
+
+Current continuation expectation
+
+| Completed actions | Expected next gain | Uncertainty | Continuation cost |
+| --- | --- | --- | --- |
+| 2 | 0.5 | lower=-0.1; upper=0.9; approximate Laplace model band; alpha=0.05 | 0.001 |
+
+Relevant received experimental facts
+
+| Record | Scientific type | Received scientific meaning and relationships | Selected excerpt |
+| --- | --- | --- | --- |
+| Condition 1 | context | attributes=none supplied; context_type=assay_condition; name=addback arm selected conditions (complete); origin=tool; related_refs=Condition 4; Condition 5; Condition 6; Entity 3; Entity 2; Term 1; Term 3; source identity=Source handle 1 | no selected text excerpt |
+| Term 1 | term | label=product formation; namespace=literature_partner_endpoint; origin=tool; term_type=other; source identity=Source handle 1 | Passage 1 |
+| Entity 1 | reference | context_refs=none supplied; label=PLP assay; length=unknown; molecule=unknown; origin=tool; reference_type=assay; term_refs=none supplied; source identity=Source handle 1; sequence association=unknown | Passage 2 |
+| Term 2 | term | label=PLP assay; namespace=literature_partner_function; origin=tool; term_type=other; source identity=Source handle 1 | Passage 2 |
+| Term 3 | term | label=per mg SubjectS; namespace=literature_partner_normalization; origin=tool; term_type=other; source identity=Source handle 1 | Passage 3 |
+| Condition 2 | context | attributes=none supplied; context_type=assay_condition; name=omitted arm selected conditions (complete); origin=tool; related_refs=Condition 4; Condition 5; Condition 6; Entity 3; Entity 2; Term 1; Term 3; source identity=Source handle 1 | no selected text excerpt |
+| Entity 2 | reference | context_refs=none supplied; label=PartnerP; length=unknown; molecule=unknown; origin=tool; reference_type=assay; term_refs=none supplied; source identity=Source handle 1; sequence association=unknown | Passage 4 |
+| Condition 3 | context | attributes=none supplied; context_type=assay_condition; name=reference arm selected conditions (complete); origin=tool; related_refs=Condition 4; Condition 5; Condition 6; Entity 3; Entity 2; Term 1; Term 3; source identity=Source handle 1 | no selected text excerpt |
+| Entity 3 | reference | context_refs=none supplied; label=SubjectS; length=unknown; molecule=unknown; origin=tool; reference_type=assay; term_refs=none supplied; source identity=Source handle 1; sequence association=unknown | Passage 5 |
+| Condition 4 | context | attributes=name=assay_outcome; value=Term 4; context_type=assay_condition; name=condition factor nitrogen_source level; origin=tool; related_refs=Term 5; source identity=Source handle 1 | no selected text excerpt |
+| Condition 5 | context | attributes=name=assay_outcome; value=37.0 Term 6; context_type=assay_condition; name=condition factor temperature level; origin=tool; related_refs=Term 7; source identity=Source handle 1 | no selected text excerpt |
+| Condition 6 | context | attributes=name=assay_outcome; value=8.0; context_type=assay_condition; name=condition factor pH level; origin=tool; related_refs=Term 8; source identity=Source handle 1 | no selected text excerpt |
+| Term 4 | term | label=glutamine; namespace=literature_partner_condition_value_nitrogen_source; origin=tool; term_type=other; source identity=Source handle 1 | Passage 6 |
+| Term 5 | term | label=nitrogen_source; namespace=literature_partner_condition_factor; origin=tool; term_type=other; source identity=Source handle 1 | no selected text excerpt |
+| Term 6 | term | label=degC; namespace=literature_partner_condition_unit_temperature; origin=tool; term_type=unit; source identity=Source handle 1 | Passage 7 |
+| Term 7 | term | label=temperature; namespace=literature_partner_condition_factor; origin=tool; term_type=other; source identity=Source handle 1 | no selected text excerpt |
+| Term 8 | term | label=pH; namespace=literature_partner_condition_factor; origin=tool; term_type=other; source identity=Source handle 1 | no selected text excerpt |
+
+Selected received source excerpts
+
+| Excerpt | Already received source text |
+| --- | --- |
+| Passage 1 | product formation |
+| Passage 2 | PLP assay |
+| Passage 3 | per mg SubjectS |
+| Passage 4 | PartnerP |
+| Passage 5 | SubjectS |
+| Passage 6 | glutamine |
+| Passage 7 | degC |
+
+Local scientific links
+
+Record and excerpt labels identify this display; they do not establish independent experiments.
+
+Calculated source cells
+
+| Component | Value | Unit | Status | Unavailable reason | Statistical conditions | Origin |
+| --- | --- | --- | --- | --- | --- | --- |
+| partner_loss_fraction | 0.8 | dimensionless | populated | unknown |  | derived |
+
+Source cell bounds and qualifications
+
+| Field | Supplied value |
+| --- | --- |
+| partner_loss_fraction.lower | 0.7999999999999999 |
+| partner_loss_fraction.upper | 0.8 |
+| partner_loss_fraction.bound_kind | point_only_not_uncertainty |
+
+Selected comparison and reported uncertainty
+
+| Field | Supplied value |
+| --- | --- |
+| sheet_ref | source_8fff8c3c50ebcbb08a385594 |
+| source_kind | synthetic_fixture |
+| evaluation_scope | reference_experimental_partner_components |
+| measurement_corrections | not_applied |
+| target_correspondence | not_evaluated |
+| statistical_uncertainty | not_evaluated |
+| partner_necessity | not_inferred |
+| comparison_checks.addback_omitted.status | matched |
+| comparison_checks.addback_omitted.unavailable_reason | unknown |
+| comparison_checks.addback_omitted.differing_factor_refs | none supplied |
+| comparison_checks.reference_omitted.status | matched |
+| comparison_checks.reference_omitted.unavailable_reason | unknown |
+| comparison_checks.reference_omitted.differing_factor_refs | none supplied |
+| arm_metadata.addback.partner_state | present |
+| arm_metadata.addback.condition_coverage | complete |
+| arm_metadata.addback.spread.kind | unreported |
+| arm_metadata.addback.spread.magnitude | unknown |
+| arm_metadata.omitted.partner_state | absent |
+| arm_metadata.omitted.condition_coverage | complete |
+| arm_metadata.omitted.spread.kind | unreported |
+| arm_metadata.omitted.spread.magnitude | unknown |
+| arm_metadata.reference.partner_state | present |
+| arm_metadata.reference.condition_coverage | complete |
+| arm_metadata.reference.spread.kind | SD |
+| arm_metadata.reference.spread.magnitude | 10.0 |
+
+Received experimental partner bindings
+
+| Field | Supplied value |
+| --- | --- |
+| sheet_ref | Unresolved link 1 (meaning unavailable in this scoped display) |
+| evidence_source_ref | Unresolved link 2 (meaning unavailable in this scoped display) |
+| data_source_ref | Source handle 1 |
+| subject_ref | Entity 3 |
+| partner_ref | Entity 2 |
+| experiment_ref | Entity 1 |
+| endpoint_ref | Term 1 |
+| normalization_ref | Term 3 |
+| reference_condition_ref | Condition 3 |
+| omitted_condition_ref | Condition 2 |
+| addback_condition_ref | Condition 1 |
+| function_ref | Term 2 |

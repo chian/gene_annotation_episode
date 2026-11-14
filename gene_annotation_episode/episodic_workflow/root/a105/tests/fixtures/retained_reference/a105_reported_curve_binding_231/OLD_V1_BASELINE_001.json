@@ -1,0 +1,999 @@
+{
+  "version": "reported_curve_binding_legacy_v1_baseline_v1",
+  "proof_directory": "/home/chia/repos/gene_annotation_episode/verification/literature_reference_evidence_2026-10-25_001/a105_native_reported_rate_reader_166/original_source_episode_003",
+  "state_files": {
+    "artifacts/0f/0fdf98ab91ca8da634201b9c23375698fc04fefcaba5df0250f866551ce5cea2": "0fdf98ab91ca8da634201b9c23375698fc04fefcaba5df0250f866551ce5cea2",
+    "artifacts/70/700ab67bebaa137fd7e1dfe63a3c27ef9603b7834667dcc03559c73f6cef8c2a": "700ab67bebaa137fd7e1dfe63a3c27ef9603b7834667dcc03559c73f6cef8c2a",
+    "artifacts/85/85cbcfa7667f9f566dd167708e815cb987b95169405c4123f3382674ee776db8": "85cbcfa7667f9f566dd167708e815cb987b95169405c4123f3382674ee776db8",
+    "artifacts/9e/9e8eb5c352265f6c90d2cbc86b9d2f3a7dc3be67feba6dfea77e307cd0403a28": "9e8eb5c352265f6c90d2cbc86b9d2f3a7dc3be67feba6dfea77e307cd0403a28",
+    "artifacts/e6/e6d31a25930fe62cf10dd13c1b3e8193202687e78ed935cb3dfd21fd51ff4a7a": "e6d31a25930fe62cf10dd13c1b3e8193202687e78ed935cb3dfd21fd51ff4a7a",
+    "empty-manifest.json": "9e8eb5c352265f6c90d2cbc86b9d2f3a7dc3be67feba6dfea77e307cd0403a28",
+    "state.sqlite3": "79ebbed7f4625ae216c041e8e11549134c519f8baa738ba27ad836bed37da89a"
+  },
+  "counts": {
+    "runtime_actions": 3,
+    "runtime_observations": 3,
+    "literature_rate_observation_operations": 1,
+    "literature_rate_observation_received": 1
+  },
+  "runs": [
+    [
+      "run_9ecb788e84e1457faf885947f893a8d1",
+      "yielded"
+    ]
+  ],
+  "original_contracts": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "activity": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "component": {
+                "enum": [
+                  "reference_rate",
+                  "test_rate",
+                  "rate_difference",
+                  "retained_fraction",
+                  "fractional_decrease",
+                  "reference_sample_sd",
+                  "test_sample_sd",
+                  "reference_cv",
+                  "test_cv",
+                  "reference_observed_point_mean",
+                  "test_observed_point_mean",
+                  "reference_observed_point_sd",
+                  "test_observed_point_sd"
+                ]
+              },
+              "evaluation_scope": {
+                "const": "source_reported_rate_observations"
+              },
+              "evidence_source_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "source"
+              },
+              "formula": {
+                "enum": [
+                  "sum(all_selected_distinct_entries)/selected_entry_count",
+                  "sqrt(sum((entry-full_set_mean)^2)/(selected_entry_count-1))",
+                  "descriptive_sample_sd/full_set_mean",
+                  "sum(available_distinct_point_entries)/point_entry_count",
+                  "sqrt(sum((point-observed_point_mean)^2)/(point_entry_count-1))",
+                  "reference_rate-test_rate",
+                  "test_rate/reference_rate",
+                  "1-test_rate/reference_rate"
+                ]
+              },
+              "grouping": {
+                "const": "unknown"
+              },
+              "groups": {
+                "additionalProperties": false,
+                "properties": {
+                  "reference": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "observed": {
+                        "anyOf": [
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "association_unresolved": {
+                                "type": "boolean"
+                              },
+                              "complete": {
+                                "type": "boolean"
+                              },
+                              "entry_count": {
+                                "minimum": 0,
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ]
+                              },
+                              "known_entry_count": {
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "label": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "limitations": {
+                                "items": {
+                                  "enum": [
+                                    "numerical_model_range",
+                                    "insufficient_entry_count",
+                                    "no_point_observations",
+                                    "nonpositive_mean",
+                                    "conflicting_reported_entry",
+                                    "source_entry_association_unresolved",
+                                    "incomplete_selected_roster",
+                                    "missing_reference_group",
+                                    "missing_test_group",
+                                    "zero_reference_rate",
+                                    "source_measurement_unavailable",
+                                    "nondetection_without_point",
+                                    "censored_measurement",
+                                    "formula_measurement_unsupported",
+                                    "numeric_cell_type_required",
+                                    "source_cell_error",
+                                    "invalid_numeric_lexeme"
+                                  ]
+                                },
+                                "type": "array",
+                                "uniqueItems": true
+                              },
+                              "observation_labels": {
+                                "items": {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "association_unresolved": {
+                                      "type": "boolean"
+                                    },
+                                    "conflicting": {
+                                      "type": "boolean"
+                                    },
+                                    "group_source": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "artifact_ref": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "cell": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "cell_type": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "error": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "formula": {
+                                          "anyOf": [
+                                            {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "attributes": {
+                                                  "additionalProperties": {
+                                                    "type": "string"
+                                                  },
+                                                  "type": "object"
+                                                },
+                                                "text": {
+                                                  "type": [
+                                                    "string",
+                                                    "null"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "text",
+                                                "attributes"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
+                                        },
+                                        "member": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "member_sha256": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "raw_value": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "source_ref": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "style_index": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "value": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "value_is_formula_cache": {
+                                          "type": "boolean"
+                                        },
+                                        "workbook_sha256": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "worksheet": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source_ref",
+                                        "artifact_ref",
+                                        "workbook_sha256",
+                                        "worksheet",
+                                        "member",
+                                        "member_sha256",
+                                        "cell",
+                                        "cell_type",
+                                        "value",
+                                        "raw_value",
+                                        "style_index",
+                                        "error",
+                                        "formula",
+                                        "value_is_formula_cache"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "label": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "label_source": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "artifact_ref": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "cell": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "cell_type": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "error": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "formula": {
+                                          "anyOf": [
+                                            {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "attributes": {
+                                                  "additionalProperties": {
+                                                    "type": "string"
+                                                  },
+                                                  "type": "object"
+                                                },
+                                                "text": {
+                                                  "type": [
+                                                    "string",
+                                                    "null"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "text",
+                                                "attributes"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
+                                        },
+                                        "member": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "member_sha256": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "raw_value": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "source_ref": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "style_index": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "value": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "value_is_formula_cache": {
+                                          "type": "boolean"
+                                        },
+                                        "workbook_sha256": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "worksheet": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source_ref",
+                                        "artifact_ref",
+                                        "workbook_sha256",
+                                        "worksheet",
+                                        "member",
+                                        "member_sha256",
+                                        "cell",
+                                        "cell_type",
+                                        "value",
+                                        "raw_value",
+                                        "style_index",
+                                        "error",
+                                        "formula",
+                                        "value_is_formula_cache"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "record_identity": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "status": {
+                                      "enum": [
+                                        "observed",
+                                        "missing",
+                                        "not_detected",
+                                        "censored",
+                                        "unsupported_cell"
+                                      ]
+                                    },
+                                    "unavailable_reason": {
+                                      "enum": [
+                                        "source_measurement_unavailable",
+                                        "nondetection_without_point",
+                                        "censored_measurement",
+                                        "formula_measurement_unsupported",
+                                        "numeric_cell_type_required",
+                                        "source_cell_error",
+                                        "invalid_numeric_lexeme",
+                                        null
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "record_identity",
+                                    "label",
+                                    "status",
+                                    "conflicting",
+                                    "association_unresolved",
+                                    "unavailable_reason",
+                                    "label_source",
+                                    "group_source"
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "point_entry_count": {
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "representation_count": {
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "selected_row_count": {
+                                "minimum": 0,
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "label",
+                              "selected_row_count",
+                              "known_entry_count",
+                              "representation_count",
+                              "point_entry_count",
+                              "entry_count",
+                              "association_unresolved",
+                              "complete",
+                              "observation_labels",
+                              "limitations"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "requested_label": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "status": {
+                        "enum": [
+                          "observed",
+                          "not_observed"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "requested_label",
+                      "status",
+                      "observed"
+                    ],
+                    "type": "object"
+                  },
+                  "test": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "observed": {
+                        "anyOf": [
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "association_unresolved": {
+                                "type": "boolean"
+                              },
+                              "complete": {
+                                "type": "boolean"
+                              },
+                              "entry_count": {
+                                "minimum": 0,
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ]
+                              },
+                              "known_entry_count": {
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "label": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "limitations": {
+                                "items": {
+                                  "enum": [
+                                    "numerical_model_range",
+                                    "insufficient_entry_count",
+                                    "no_point_observations",
+                                    "nonpositive_mean",
+                                    "conflicting_reported_entry",
+                                    "source_entry_association_unresolved",
+                                    "incomplete_selected_roster",
+                                    "missing_reference_group",
+                                    "missing_test_group",
+                                    "zero_reference_rate",
+                                    "source_measurement_unavailable",
+                                    "nondetection_without_point",
+                                    "censored_measurement",
+                                    "formula_measurement_unsupported",
+                                    "numeric_cell_type_required",
+                                    "source_cell_error",
+                                    "invalid_numeric_lexeme"
+                                  ]
+                                },
+                                "type": "array",
+                                "uniqueItems": true
+                              },
+                              "observation_labels": {
+                                "items": {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "association_unresolved": {
+                                      "type": "boolean"
+                                    },
+                                    "conflicting": {
+                                      "type": "boolean"
+                                    },
+                                    "group_source": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "artifact_ref": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "cell": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "cell_type": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "error": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "formula": {
+                                          "anyOf": [
+                                            {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "attributes": {
+                                                  "additionalProperties": {
+                                                    "type": "string"
+                                                  },
+                                                  "type": "object"
+                                                },
+                                                "text": {
+                                                  "type": [
+                                                    "string",
+                                                    "null"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "text",
+                                                "attributes"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
+                                        },
+                                        "member": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "member_sha256": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "raw_value": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "source_ref": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "style_index": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "value": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "value_is_formula_cache": {
+                                          "type": "boolean"
+                                        },
+                                        "workbook_sha256": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "worksheet": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source_ref",
+                                        "artifact_ref",
+                                        "workbook_sha256",
+                                        "worksheet",
+                                        "member",
+                                        "member_sha256",
+                                        "cell",
+                                        "cell_type",
+                                        "value",
+                                        "raw_value",
+                                        "style_index",
+                                        "error",
+                                        "formula",
+                                        "value_is_formula_cache"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "label": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "label_source": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "artifact_ref": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "cell": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "cell_type": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "error": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "formula": {
+                                          "anyOf": [
+                                            {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "attributes": {
+                                                  "additionalProperties": {
+                                                    "type": "string"
+                                                  },
+                                                  "type": "object"
+                                                },
+                                                "text": {
+                                                  "type": [
+                                                    "string",
+                                                    "null"
+                                                  ]
+                                                }
+                                              },
+                                              "required": [
+                                                "text",
+                                                "attributes"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
+                                        },
+                                        "member": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "member_sha256": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "raw_value": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "source_ref": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "style_index": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "value": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "value_is_formula_cache": {
+                                          "type": "boolean"
+                                        },
+                                        "workbook_sha256": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "worksheet": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source_ref",
+                                        "artifact_ref",
+                                        "workbook_sha256",
+                                        "worksheet",
+                                        "member",
+                                        "member_sha256",
+                                        "cell",
+                                        "cell_type",
+                                        "value",
+                                        "raw_value",
+                                        "style_index",
+                                        "error",
+                                        "formula",
+                                        "value_is_formula_cache"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "record_identity": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "status": {
+                                      "enum": [
+                                        "observed",
+                                        "missing",
+                                        "not_detected",
+                                        "censored",
+                                        "unsupported_cell"
+                                      ]
+                                    },
+                                    "unavailable_reason": {
+                                      "enum": [
+                                        "source_measurement_unavailable",
+                                        "nondetection_without_point",
+                                        "censored_measurement",
+                                        "formula_measurement_unsupported",
+                                        "numeric_cell_type_required",
+                                        "source_cell_error",
+                                        "invalid_numeric_lexeme",
+                                        null
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "record_identity",
+                                    "label",
+                                    "status",
+                                    "conflicting",
+                                    "association_unresolved",
+                                    "unavailable_reason",
+                                    "label_source",
+                                    "group_source"
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "point_entry_count": {
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "representation_count": {
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "selected_row_count": {
+                                "minimum": 0,
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "label",
+                              "selected_row_count",
+                              "known_entry_count",
+                              "representation_count",
+                              "point_entry_count",
+                              "entry_count",
+                              "association_unresolved",
+                              "complete",
+                              "observation_labels",
+                              "limitations"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "requested_label": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "status": {
+                        "enum": [
+                          "observed",
+                          "not_observed"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "requested_label",
+                      "status",
+                      "observed"
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "reference",
+                  "test"
+                ],
+                "type": "object"
+              },
+              "input_origins": {
+                "items": {
+                  "enum": [
+                    "reported",
+                    "synthetic"
+                  ]
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "origin": {
+                "const": "derived"
+              },
+              "panel": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "physical_conversion": {
+                "const": "unknown"
+              },
+              "qualifications": {
+                "const": [
+                  "reported_convention_only",
+                  "preparation_grouping_unknown",
+                  "pairing_unknown",
+                  "physical_unit_conversion_unknown",
+                  "method_binding_unknown",
+                  "blank_binding_unknown",
+                  "calibration_binding_unknown",
+                  "product_attribution_unknown",
+                  "experimental_comparability_not_established"
+                ]
+              },
+              "sheet_ref": {
+                "format": "reference",
+                "type": "string",
+                "x-reference-namespace": "source"
+              },
+              "source_exact_value": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "denominator": {
+                        "pattern": "^[1-9][0-9]*$",
+                        "type": "string"
+                      },
+                      "numerator": {
+                        "pattern": "^-?[0-9]+$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "numerator",
+                      "denominator"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source_kind": {
+                "enum": [
+                  "primary_source",
+                  "retained_extraction",
+                  "synthetic_fixture"
+                ]
+              },
+              "source_native_unit": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "populated",
+                  "unavailable"
+                ]
+              },
+              "subject": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "unavailable_reason": {
+                "enum": [
+                  "numerical_model_range",
+                  "insufficient_entry_count",
+                  "no_point_observations",
+                  "nonpositive_mean",
+                  "conflicting_reported_entry",
+                  "source_entry_association_unresolved",
+                  "incomplete_selected_roster",
+                  "missing_reference_group",
+                  "missing_test_group",
+                  "zero_reference_rate",
+                  "source_measurement_unavailable",
+                  "nondetection_without_point",
+                  "censored_measurement",
+                  "formula_measurement_unsupported",
+                  "numeric_cell_type_required",
+                  "source_cell_error",
+                  "invalid_numeric_lexeme",
+                  null
+                ]
+              },
+              "unit": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "sheet_ref",
+              "evidence_source_ref",
+              "evaluation_scope",
+              "component",
+              "value",
+              "unit",
+              "formula",
+              "origin",
+              "status",
+              "unavailable_reason",
+              "source_exact_value",
+              "subject",
+              "panel",
+              "source_native_unit",
+              "source_kind",
+              "groups",
+              "grouping",
+              "physical_conversion",
+              "qualifications",
+              "input_origins"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-source": "literature_rate_observation_cells"
+        }
+      },
+      "required": [
+        "activity"
+      ],
+      "type": "object"
+    }
+  ],
+  "proof_records_sha256": {
+    "ADMITTED_ROWS_001.json": "0b13a8e889f46a607f9a3dc890e25de5b07b706c3ed28a18dd8a9641381eadee",
+    "BINDING_DESCRIPTOR_001.json": "18bc3964879cb5635684dc6a61ef52e14f1bcc5f9e05766117b1563404b8a640",
+    "CHILD_TASK_001.txt": "7862b2a1c96238d82e66602cde8bf39c1bc44cd8e10cad364aeaabee9f8c522a",
+    "PARENT_PROMPT_001.txt": "ff35f2477838af53a88b7165320e7059b764082a8b8737a1ba7a9ca0b958c347",
+    "PROOF_RESULT_001.json": "bb3e873023b41bfb6d94a39e031079a269d71df0026e7dd55edcd752cb4d26f6",
+    "SAVED_SHEET_001.json": "eea30a26a4379a9978d7e38a50f7e4413aa52d3ee08aefb2bcb8450581ab11bb"
+  },
+  "scope": "Actual already closed controlled pre231 originalv1state. Hashes/publiccounts/originaltypedcontracts only; no new paper or scientific reinterpretation. Future current-reader compatibility does not migrate old runtime descriptors."
+}

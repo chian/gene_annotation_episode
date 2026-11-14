@@ -359,7 +359,7 @@ def test_synthetic_profile_with_retained_upstream_wrapped_display_has_real_geome
     root = Path(__file__).resolve().parents[1]
     original = (root / "resources/software/infernal-1.1.5/tutorial/minifam-metag.out").read_bytes()
     assert hashlib.sha256(original).hexdigest() == "79fa771808a40d33f00d58eeb9320289a2bc48740c9928fafbeee66ae91262e4"
-    fixture = json.loads((root / "verification/tool_graders_rfam_alignment_2026-10-26_236/fixtures/upstream-cobalamin-wrapped-local-end.json").read_text())
+    fixture = json.loads((root / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/alignment/fixtures/upstream-cobalamin-wrapped-local-end.json").read_text())
     case = one_query()
     head = case[0].split(b"Query:")[0]
     block = b"Query:" + original.split(b"Query:       AAFY01022046.1", 1)[1].split(b"//", 1)[0]
@@ -428,7 +428,7 @@ def test_projection_requires_exact_supplied_artifact_digests():
 def test_legacy_alignment_outputs_exactly_match_the_preexisting_retained_objects():
     from gene_annotation_episode.rfam_batch_alignment import parse_rfam_alignment_display
     root = Path(__file__).resolve().parents[1]
-    evidence = root / "verification/tool_graders_rfam_alignment_2026-10-26_236"
+    evidence = root / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/alignment"
     for name in ("native-rfam_example_original", "native-rfam_example_repeat", "native-rfam_example_reverse_complement",
                  "native-rfam_example_prefix70", "native-rfam_example_insertion", "native-rfam_example_deletion",
                  "upstream-cobalamin-wrapped-local-end"):
@@ -438,8 +438,8 @@ def test_legacy_alignment_outputs_exactly_match_the_preexisting_retained_objects
             ("hit_identity", "query_sequence", "native_start", "native_end", "native_strand")})
         assert result == expected
     for name, path in (
-        ("live-single", root / "verification/tool_graders_rfam_transport_2026-10-26_234/live/single/003-fetch-json/response.body"),
-        ("official-documentation-single", root / "verification/tool_graders_rfam_contract_2026-10-26_232/examples/official-single-result.json")):
+        ("live-single", root / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/transport/live/single/003-fetch-json/response.body"),
+        ("official-documentation-single", root / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/contract/examples/official-single-result.json")):
         expected = json.loads((evidence / "examples_001/examples" / (name + ".components.json")).read_text())["rows"][0]
         original = json.loads(path.read_text())
         hit = original["hits"]["5S_rRNA"][0]

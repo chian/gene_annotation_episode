@@ -16,7 +16,7 @@ from .communication import plain
 from .domain import ContractError, identity, obj
 from .episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
-from .flux_balance_tools import _action_lock
+from .native_operation_lock import _action_lock
 from .macs2_peak_result_contracts import (
     TOOL, VERSION, PACKET_VERSION, CONTROL_VERSION, STORED_VERSION,
     macs2_peak_return, validate_macs2_peak_return, macs2_peak_fact_sources,

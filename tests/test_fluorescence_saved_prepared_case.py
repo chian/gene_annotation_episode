@@ -20,22 +20,22 @@ require_bounded_runtime()
 import pytest
 
 from method_loop.archive import ArchivedRecord
-from gene_annotation_episode import fluorescence_event_contracts as core
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
 from gene_annotation_episode.communication import validate_form
 from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.fluorescence_context_views import project_fluorescence_context
-from gene_annotation_episode.fluorescence_event_calculations import calculate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_execution_common import digest as control_digest
-from gene_annotation_episode.fluorescence_result_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_context_views import project_fluorescence_context
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import digest as control_digest
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_contracts import (
     validate_fluorescence_context, validate_fluorescence_projection,
     validate_fluorescence_selector, validate_fluorescence_worker_plan,
     validate_fluorescence_worker_result,
 )
-from gene_annotation_episode.fluorescence_result_receipts import (
+from gene_annotation_episode.episodic_workflow.root.library.original_fluorescence_result_receipts import (
     FluorescenceResultReceipts, qualified_files,
 )
-from gene_annotation_episode.fluorescence_result_views import project_fluorescence_result
-from gene_annotation_episode.fluorescence_return_views import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views import project_fluorescence_result
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_return_views import (
     CONTEXT_SOURCE, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE,
     requested_fluorescence_sources, select_fluorescence_return_facts,
     validate_fluorescence_fact_values,

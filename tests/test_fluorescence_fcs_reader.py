@@ -12,8 +12,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import fluorescence_fcs_reader as reader
-from gene_annotation_episode.fluorescence_event_contracts import (
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_fcs_reader as reader
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import (
     FluorescenceContractError,
     validate_event_input_request,
     validate_event_parse_result,

@@ -23,7 +23,7 @@ from gene_annotation_episode.bvbrc_data_molecular import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "verification/tool_graders_bvbrc_data_contract_2026-10-24"
+EVIDENCE = ROOT / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"
 FROZEN = json.loads((EVIDENCE / "CONTRACT_SHAPES.json").read_text())
 EXPECTED = json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())["molecular_expected_sheet"]
 FIELDS = ["counts", "fpkm", "tpm", "log2_fc", "p_value", "z_score", "other_value"]

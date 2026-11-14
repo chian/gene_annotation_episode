@@ -9,7 +9,7 @@ from gene_annotation_episode.bvbrc_fastqutils_metadata import select_metadata, e
 from gene_annotation_episode.bvbrc_fastqutils_resolution import resolve_calculation_inputs
 from gene_annotation_episode.bvbrc_fastqutils_calculators import calculate_fastqutils
 
-spec = importlib.util.spec_from_file_location("fixture_support", Path(__file__).parent / "fixtures/bvbrc_fastqutils/bundle/fixture_support.py")
+spec = importlib.util.spec_from_file_location("fixture_support", Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/bundle/fixture_support.py")
 f = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(f)
 

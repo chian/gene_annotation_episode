@@ -18,36 +18,36 @@ from fluorescence_flowio_test_support import require_bounded_runtime
 
 require_bounded_runtime()
 
-from gene_annotation_episode import fluorescence_event_contracts as core
-from gene_annotation_episode import fluorescence_result_worker as worker
-from gene_annotation_episode import fluorescence_event_preparation as preparation
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_worker as worker
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_preparation as preparation
 from gene_annotation_episode.communication import plain
-from gene_annotation_episode.fluorescence_event_readers import parse_fluorescence_csv
-from gene_annotation_episode.fluorescence_execution_common import canonical, digest, identity
-from gene_annotation_episode.fluorescence_native_report_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_readers import parse_fluorescence_csv
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical, digest, identity
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_native_report_contracts import (
     FACS_PROFILE, CYTOKINE_CSV_PROFILE, make_fluorescence_report_binding,
 )
-from gene_annotation_episode.fluorescence_native_reports import parse_fluorescence_native_reports
-from gene_annotation_episode.fluorescence_preparation_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_native_reports import parse_fluorescence_native_reports
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_preparation_contracts import (
     COMPENSATE_METHOD, assemble_prepared_parse,
 )
-from gene_annotation_episode.fluorescence_result_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_contracts import (
     FAILURE_SCHEMA, OUTPUTS, validate_fluorescence_selector,
 )
-from gene_annotation_episode.fluorescence_result_receipts import FluorescenceResultReceipts, qualified_files
-from gene_annotation_episode.fluorescence_return_views import (
+from gene_annotation_episode.episodic_workflow.root.library.original_fluorescence_result_receipts import FluorescenceResultReceipts, qualified_files
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_return_views import (
     PROJECTION_SOURCE, CONTEXT_SOURCE, SAVED_SOURCE, FAILURE_SOURCE,
 )
-from gene_annotation_episode.native_fluorescence_capture import capture_fluorescence_native_files
-from gene_annotation_episode.native_fluorescence_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_capture import capture_fluorescence_native_files
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import (
     OPERATIONS, validate_fluorescence_manifest,
 )
-from gene_annotation_episode.native_fluorescence_preparation import (
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_preparation import (
     build_native_fluorescence_worker_plan, build_saved_fluorescence_worker_plan,
     _dependencies,
 )
 from gene_annotation_episode.native_atac_differential_preparation import _source_closure
-from gene_annotation_episode.native_fluorescence_results import NativeFluorescenceResults
+from gene_annotation_episode.episodic_workflow.root.library.original_native_fluorescence_results import NativeFluorescenceResults
 from gene_annotation_episode.state import Store
 from test_native_fluorescence_contracts import event_input, job, plan as original_plan, pin
 from test_fluorescence_result_worker import _retain, selector, output
@@ -264,9 +264,9 @@ def _deny_native(monkeypatch):
     def forbidden(*args, **kwargs):
         pytest.fail("retained admission/recalculation executed native preparation or parsing")
     for module, names in ((preparation, ("prepare_fcs_scaling", "prepare_spill_compensation")),
-            (importlib.import_module("gene_annotation_episode.fluorescence_native_reports"), ("parse_fluorescence_native_reports",)),
-            (importlib.import_module("gene_annotation_episode.fluorescence_fcs_reader"), ("parse_fluorescence_fcs", "decode_selected_fcs")),
-            (importlib.import_module("gene_annotation_episode.fluorescence_event_readers"), ("parse_fluorescence_csv", "parse_fluorescence_table_snapshot"))):
+            (importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.fluorescence_native_reports"), ("parse_fluorescence_native_reports",)),
+            (importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.fluorescence_fcs_reader"), ("parse_fluorescence_fcs", "decode_selected_fcs")),
+            (importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_readers"), ("parse_fluorescence_csv", "parse_fluorescence_table_snapshot"))):
         for name in names:
             monkeypatch.setattr(module, name, forbidden)
     original_import = builtins.__import__
@@ -306,7 +306,7 @@ def test_prepared_chain_common_cells_and_primary_event_identity(tmp_path, monkey
 def test_existing_selected_producer_envelopes_reach_worker_and_requested_projection(tmp_path, monkeypatch, operation):
     from native_fluorescence_prepared_test_support import prepared_job
     from test_native_fluorescence_driver import finite_driver
-    from gene_annotation_episode.native_fluorescence_driver import run_fluorescence_driver
+    from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_driver import run_fluorescence_driver
     with Store(tmp_path / "store") as store:
         selected_job = prepared_job(tmp_path / "supplied", operation=operation)
         selected_job["parameters"]["intensity_requests"] = [
@@ -551,11 +551,11 @@ def test_saved_only_recalculation_preserves_values_without_native_import_or_new_
 
 
 def test_result_worker_closure_remains_native_free():
-    sources = _source_closure(Path(__file__).resolve().parents[1], ["gene_annotation_episode.fluorescence_result_worker"])
+    sources = _source_closure(Path(__file__).resolve().parents[1], ["gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_worker"])
     assert _dependencies(sources) == []
-    assert not {"gene_annotation_episode.fluorescence_event_preparation",
-        "gene_annotation_episode.fluorescence_preparation_readers", "gene_annotation_episode.fluorescence_native_reports",
-        "gene_annotation_episode.fluorescence_fcs_reader"}.intersection(sources)
+    assert not {"gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_preparation",
+        "gene_annotation_episode.episodic_workflow.root.library.fluorescence_preparation_readers", "gene_annotation_episode.episodic_workflow.root.library.fluorescence_native_reports",
+        "gene_annotation_episode.episodic_workflow.root.library.fluorescence_fcs_reader"}.intersection(sources)
 
 
 def test_report_inputs_use_existing_received_authority_and_exact_store_path(selected, monkeypatch):
@@ -583,7 +583,7 @@ def test_report_inputs_use_existing_received_authority_and_exact_store_path(sele
 
 
 def test_supplied_report_custody_is_not_taken_over_and_generated_outputs_stay_protected(monkeypatch):
-    from gene_annotation_episode.fluorescence_result_receipts import VERSION
+    from gene_annotation_episode.episodic_workflow.root.library.original_fluorescence_result_receipts import VERSION
     original = identity(b"supplied report", format="text")
     generated = identity(b"generated report envelope", format="fluorescence_report_batch_v1")
     prepared = identity(b"generated prepared values", format="fluorescence_prepared_event_data_v1")

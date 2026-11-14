@@ -139,8 +139,7 @@ def test_historical_software_shape_stays_valid_but_current_execution_requires_tr
 
 
 _RETAINED398 = Path(__file__).resolve().parents[1] / (
-    'verification/tool_graders_protein_structure_operands_2026-10-27_398/'
-    'check005/temporary/pytest/398-original-native-fixtures0')
+    'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_operands_398/native_fixture')
 _RETAINED_FILES = {
     'fixture.json': ('ce2ce51127e309f3dc89e36ee7cf071ed4815835666a91d1ed9d2cfb53c280eb', 633184),
     'original-alignment-0.json': ('e8994cd4a2e30f784ae9b2ad2107e9871fded9149d7125d224b4f0cf5bb1a700', 547),

@@ -11,7 +11,7 @@ from gene_annotation_episode.state import Store
 from gene_annotation_episode.rna_structure_comparison_contracts import validate_rna_comparison_components
 from gene_annotation_episode import rna_structure_comparison_publication as p
 
-f = importlib.import_module("verification.tool_graders_rna_comparison_worker_2026-10-26_369.fixture_helpers")
+f = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_worker_369.fixture_helpers")
 POLICY = LocalJobPolicy(**p.POLICY)
 
 

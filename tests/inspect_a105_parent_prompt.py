@@ -15,12 +15,12 @@ import sqlite3
 from types import SimpleNamespace
 
 from gene_annotation_episode.decision_context import state_frame
-from gene_annotation_episode.literature_work_report import completed_work
+from gene_annotation_episode.episodic_workflow.root.literature_work_report import completed_work
 from gene_annotation_episode.providers import _SessionConnection
 
 
-FIXTURE = Path(__file__).parent / 'fixtures/work_reports/a105-parent-input-too-large.json.gz'
-WORK_RECEIPTS = Path(__file__).parent / 'fixtures/work_reports/a105-parent-completed-work-receipts.json.gz'
+FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/work_reports/a105-parent-input-too-large.json.gz'
+WORK_RECEIPTS = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/work_reports/a105-parent-completed-work-receipts.json.gz'
 
 
 @cache

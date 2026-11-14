@@ -15,7 +15,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode import native_genomic_overlap_contracts as contracts
 from gene_annotation_episode.genomic_overlap_contracts import genomic_overlap_schema
 
-f = import_module("verification.tool_graders_genomic_overlap_execution_contracts_2026-10-27_426.fixtures")
+f = import_module("gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.genomic_overlap.execution_contracts_426.fixtures")
 
 
 def test_exact_frozen_three_set_plan_batch_and_pair_records():

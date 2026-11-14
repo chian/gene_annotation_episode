@@ -12,8 +12,8 @@ import re
 
 from .alignment_site_native import immutable_record
 from .domain import ContractError, identity
-from . import library_targets as libraries
-from . import materials_packing as packing
+from gene_annotation_episode import library_targets as libraries
+from gene_annotation_episode import materials_packing as packing
 from .materials import artifact_path
 from .restriction_mapping_contracts import restriction_canonical, validate_restriction_record
 from .sequence_mapping import validate_mapping

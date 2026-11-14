@@ -164,7 +164,7 @@ def test_saved_replay_and_calculation_no_io(monkeypatch):
 
 def native_fixture(case):
     root = Path(__file__).resolve().parents[1]
-    base = Path('verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases') / case
+    base = Path('gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_native/cases') / case
     original_path = base / 'original.fasta'; source = (root / original_path).read_text()
     mdpath = base / 'metadata.tsv'; mdtext = (root / mdpath).read_text()
     operands, common_operands = metacats_fixture(source, mdtext, categories=('comparison',))
@@ -192,7 +192,7 @@ def native_fixture(case):
         operands['documents'] += ({'kind': kind, 'value': parsed['value']},)
         field = {'adjusted_matrix': 'adjusted_matrix_ids', 'metacats_chisq': 'chisq_table_ids', 'metacats_pair': 'pair_table_ids', 'metacats_raw_r': 'raw_r_table_ids'}[kind]
         operands['analysis'][field].append(parsed['value'].get('document_id', parsed['value'].get('table_id')))
-    old = root / 'verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25' / ('EXAMPLES_002' if case == 'twelve_groups' else 'EXAMPLES_001') / (case + '-inputs.json')
+    old = root / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_inputs' / ('EXAMPLES_002' if case == 'twelve_groups' else 'EXAMPLES_001') / (case + '-inputs.json')
     saved = json.loads(old.read_text()); columns = saved['counts_arguments']['group_order']
     native_map = []
     # These are the retained fixture's explicit metadata/native-ordinal

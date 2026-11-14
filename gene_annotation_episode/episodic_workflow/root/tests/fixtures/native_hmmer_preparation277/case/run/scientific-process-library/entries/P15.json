@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P15",
+  "name": "Hold upstream success while investigating downstream failure",
+  "description": "Preserve demonstrated recognition, binding, cleavage or delivery when productive output fails. Compare the additional compatibility or coupling explanations rather than repeat upstream positives.",
+  "use_when": "Binding/processing is being treated as sufficient for catalysis, assembly, regulation or organismal output.",
+  "live_alternatives": [
+    "Upstream engagement is sufficient here.",
+    "Another structural/chemical/partner constraint blocks progression.",
+    "Upstream readout differs or was misidentified.",
+    "Downstream measurement is incompetent."
+  ],
+  "decision_guidance": [
+    "Seek contrasts with upstream competence but differing downstream outcomes.",
+    "Separate unexpressed constructs from expressed/processed variants.",
+    "If progression remains unexplained, return separated outcomes instead of inventing a mechanism."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Both substrates bind but only one converts",
+      "then_consider": "Narrow productive recognition beyond binding."
+    },
+    {
+      "if_observed": "Expressed processed variant fails assembly",
+      "then_consider": "Support an additional compatibility requirement without assigning its mechanism."
+    },
+    {
+      "if_observed": "Only upstream event is known",
+      "then_consider": "Leave final role unresolved."
+    }
+  ],
+  "boundary": "The accepted starting evidence establishes an upstream event while the downstream outcome differs or remains unknown. P09 disputes physical contact; P17 requires selective causal perturbation with retained alternative properties. P15 can preserve a downstream unknown without isolating its cause; no recognize–process–assemble itinerary follows.",
+  "evidence": [
+    {
+      "case_group": "seq_yadB_gluQRS_ecoli",
+      "case_id": "seq_yadB_gluQRS_ecoli",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC419609/",
+      "source_locator": "Case-record observation; inspected scope: Primary PNAS abstract plus NAR substrate-preparation methods and Q34 comparison results inspected. No live tRNA or protein calculation.",
+      "observation": "Both Q-containing/lacking tRNA-Asp bound YadB, but only Q-containing substrate was glutamylated.",
+      "limit": "Matched tests are author-performed; binding alone does not locate the modified atom."
+    },
+    {
+      "case_group": "seq_queFL_archaeosine",
+      "case_id": "seq_queFL_archaeosine",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5485725/",
+      "source_locator": "Case-record observation; inspected scope: 2012 comparative alignment and tRNA-analysis results plus 2017 substrate/adduct methods and discussion inspected through indexed primary text. No new enzyme experiments.",
+      "observation": "Free preQ0 and preQ0-tRNA formed adducts; productive synthesis used tRNA-bound precursor.",
+      "limit": "Physiological ammonia-delivery partner remained open."
+    },
+    {
+      "case_group": "MJ0577_Zarembinski_1998",
+      "case_id": "MJ0577_Zarembinski_1998",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC28018/",
+      "source_locator": "Case-record observation; inspected scope: Full primary text and live 1MJH contact record checked; published answer known.",
+      "observation": "Retained ATP coexisted with little isolated ATPase; native extract enabled hydrolysis.",
+      "limit": "The enabling factor and cellular role remained unknown."
+    },
+    {
+      "case_group": "archaeal_hvo_pilin_processing_assembly",
+      "case_id": "archaeal_hvo_pilin_processing_assembly",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754589/",
+      "source_locator": "Figs. 8–9 and hybrid Results; spatial/archaeal_processing/investigation.json B2.",
+      "observation": "Expressed, processed PilA1 hybrid lacked pili/adhesion; an unexpressed PilA3 hybrid could not support that same conclusion.",
+      "limit": "No native packing or specific interaction mechanism established."
+    }
+  ]
+}

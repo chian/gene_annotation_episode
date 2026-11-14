@@ -31,20 +31,7 @@ from .domain import PUBLICATION_ID_PATTERNS
 from .public_configuration import UNSET, ncbi_contact
 
 
-@dataclass(frozen=True)
-class SourceSnapshot:
-    service: str
-    url: str
-    request: dict[str, Any]
-    retrieved_at: str
-    content: bytes
-    media_type: str
-    transport: dict[str, Any]
-
-    @property
-    def sha256(self) -> str:
-        return hashlib.sha256(self.content).hexdigest()
-
+from .acquisition_types import SourceSnapshot, AcquisitionError
 
 @dataclass(frozen=True)
 class RfamModelSnapshots:
@@ -53,20 +40,6 @@ class RfamModelSnapshots:
     metadata_error: AcquisitionError | None = None
 
 
-class AcquisitionError(RuntimeError):
-    def __init__(self, code: str, *, retry_after: float | None = None, job_ref: str | None = None,
-                 snapshot: SourceSnapshot | None = None, phase: str | None = None,
-                 submission_outcome: str | None = None, diagnostic: dict | None = None,
-                 operational: dict | None = None):
-        super().__init__(code)
-        self.code = code
-        self.retry_after = retry_after
-        self.job_ref = job_ref
-        self.snapshot = snapshot
-        self.phase = phase
-        self.submission_outcome = submission_outcome
-        self.diagnostic = diagnostic
-        self.operational = operational
 
 
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -157,7 +130,7 @@ class PublicClients:
     """
 
     def __init__(self, *, ncbi_email: str | None | object = UNSET, skill_root: Path | None = None,
-                 timeout: int = 90, access_dir: Path | None = None,
+                 timeout: int = 90, access_dir: Path | None = None, work_dir: Path | None = None,
                  rhea_response_byte_limit: int = 8 * 1024 * 1024,
                  chebi_response_byte_limit: int = 8 * 1024 * 1024,
                  string_caller_identity: str = "gene-annotation-episode",
@@ -179,6 +152,7 @@ class PublicClients:
         self.skill_root = skill_root
         self.timeout = timeout
         self.access_dir = access_dir
+        self.work_dir = None if work_dir is None else Path(work_dir).expanduser().resolve()
         self.rhea_response_byte_limit = rhea_response_byte_limit
         self.chebi_response_byte_limit = chebi_response_byte_limit
         self.string_caller_identity = string_caller_identity
@@ -211,6 +185,9 @@ class PublicClients:
         if max_bytes is not None and (not capture_headers or type(max_bytes) is not int or max_bytes <= 0):
             raise ValueError('explicit_observed_response_byte_limit_required')
         script = _skill_script(self.skill_root, skill, filename)
+        if self.work_dir is not None:
+            self.work_dir.mkdir(parents=True, exist_ok=True)
+            script = script.absolute()
         observer_policy = (None if max_bytes is None else {
             'version': 'bounded_skill_http_entity_capture_v1',
             'adapter_module': __name__, 'adapter_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
@@ -218,7 +195,7 @@ class PublicClients:
             'stream': True, 'automatic_redirects': False, 'redirect_preparation': False})
         # Full payloads are retained as provenance, as the user's workflow
         # requires. The helper's compact preview is never parsed as full data.
-        with tempfile.TemporaryDirectory(prefix="gene-evidence-") as directory:
+        with tempfile.TemporaryDirectory(prefix="gene-evidence-", dir=self.work_dir) as directory:
             output_path = Path(directory) / "response.json"
             headers_path = Path(directory) / "headers.json"
             entity_path = Path(directory) / "response.entity"
@@ -274,7 +251,7 @@ finally:
                         str(max_bytes), str(headers_path), str(entity_path)]
             try:
                 result = subprocess.run(command, input=json.dumps(request),
-                                        text=True, capture_output=True, timeout=self.timeout)
+                                        text=True, capture_output=True, timeout=self.timeout, cwd=self.work_dir)
             except subprocess.TimeoutExpired as error:
                 # An observer may already have received the HTTP response
                 # before the client exceeded its processing deadline.
@@ -420,9 +397,13 @@ finally:
             raise AcquisitionError("blast_rate_state_not_configured", phase="local_preflight", submission_outcome="not_sent")
         try:
             script = _skill_script(self.skill_root, "ncbi-blast-skill", "ncbi_blast.py")
+            if self.work_dir is not None:
+                script = script.absolute()
         except AcquisitionError as error:
             error.phase, error.submission_outcome = "local_preflight", "not_sent"
             raise
+        if self.work_dir is not None:
+            self.work_dir.mkdir(parents=True, exist_ok=True)
         request = {"action": action, "tool": "gene-annotation-episode", "result_format": "json2",
             "email": self.ncbi_email, "rid": rid, "program": program, "database": database,
             "query_fasta": query_fasta, "hitlist_size": hitlist_size, "max_hits": 12, "max_queries": 1}
@@ -484,11 +465,11 @@ except Exception as error:
                 state.setdefault("rids", {})[rid] = time.time()
             handle.seek(0); handle.truncate(); json.dump(state, handle); handle.flush(); os.fsync(handle.fileno())
             try:
-                with tempfile.TemporaryDirectory(prefix="gene-blast-") as temporary:
+                with tempfile.TemporaryDirectory(prefix="gene-blast-", dir=self.work_dir) as temporary:
                     entity, metadata = Path(temporary)/"entity", Path(temporary)/"metadata.json"
                     try:
                         process = subprocess.run([sys.executable, "-c", observer, str(script), str(entity), str(metadata)],
-                            input=json.dumps(request), text=True, capture_output=True, timeout=self.timeout)
+                            input=json.dumps(request), text=True, capture_output=True, timeout=self.timeout, cwd=self.work_dir)
                         envelope = json.loads(process.stdout)
                     except (subprocess.TimeoutExpired, ValueError) as error:
                         envelope = {"ok": False, "error": {"code": "provider_client_timeout" if isinstance(error, subprocess.TimeoutExpired)

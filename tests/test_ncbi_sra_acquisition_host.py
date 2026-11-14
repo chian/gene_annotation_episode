@@ -644,7 +644,7 @@ def test_live_current_episode_entrez_advertisement_then_one_explicit_sra_normali
 
     if os.environ.get("HMMER_NATIVE_ORACLE_SRA_LIVE_WORKFLOW") != "1":
         pytest.skip("requires explicit bounded live metadata and up-to-1GiB archive acquisition selection")
-    fixture = Path(__file__).parent / "fixtures/ncbi_sra/experiment_package.xml"
+    fixture = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a106/tests/fixtures/ncbi_sra/experiment_package.xml"
     fixture_raw = fixture.read_bytes()
     assert len(fixture_raw) == 7802 and hashlib.sha256(fixture_raw).hexdigest() == (
         "e2e72cc189d988194ef9ab9faff6b96132749afd7cdc3293f386902544e45b10")

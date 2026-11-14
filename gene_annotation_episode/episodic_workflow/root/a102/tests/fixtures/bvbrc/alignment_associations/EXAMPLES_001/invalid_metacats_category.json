@@ -1,0 +1,623 @@
+{
+  "name": "invalid_metacats_category",
+  "required_example_groups": [
+    7,
+    8
+  ],
+  "source_status": "synthetic",
+  "native_executed_this_workload": false,
+  "native_execution_case": null,
+  "common_operands": {
+    "inputs": [
+      {
+        "binding_id": "original",
+        "parameter_pointer": "/input/original",
+        "kind": "retained_bytes",
+        "content": {
+          "source_ref": "source:original",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "original",
+          "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be",
+          "byte_count": 12
+        },
+        "workspace_path": "/workspace/original",
+        "inline_value": null,
+        "link_evidence": null,
+        "members": []
+      }
+    ],
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "original#alignment",
+          "artifact": {
+            "raw_artifact_ref": "original",
+            "source_ref": "source:original",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "declarations": {
+      "common": {
+        "version": "bvbrc_alignment_associations_v1",
+        "analysis_id": "analysis",
+        "input_sequences": [
+          {
+            "kind": "parsed_document",
+            "input_binding_id": "original",
+            "document": "original#alignment",
+            "member_id_rule": "first_whitespace_token",
+            "molecule": "dna",
+            "host_member_joins": [],
+            "evidence": []
+          }
+        ],
+        "row_joins": [],
+        "automatic_row_joins": [
+          {
+            "alignment": "aligned#alignment",
+            "input_binding_ids": [
+              "original"
+            ],
+            "method": "exact_unique_header",
+            "case_policy": "literal",
+            "gap_policy": "literal",
+            "transformation_ids": [],
+            "evidence": []
+          }
+        ],
+        "transformations": [],
+        "correspondences": [],
+        "feature_genomes": [],
+        "source_records": [],
+        "member_entities": []
+      },
+      "functions": null,
+      "taxonomy": null
+    }
+  },
+  "common_result": {
+    "status": "ok",
+    "value": {
+      "original_members": [
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "a",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 0,
+          "raw_header": "a",
+          "member_label": "a",
+          "sequence_sha256": "472e73d796e20aa8ff9059e6316f218e0322548f661ec4dc267507ed66317404",
+          "original_length": 2,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        },
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "b",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 1,
+          "raw_header": "b",
+          "member_label": "b",
+          "sequence_sha256": "eb5442705969dc8da5dfac8f9658dc68acdab5bb7635ba7cc551e389416ac34e",
+          "original_length": 2,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "inline_inputs": [],
+      "row_members": [
+        {
+          "association_id": "aligned#alignment/rows/0/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        },
+        {
+          "association_id": "aligned#alignment/rows/1/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "b",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        }
+      ],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "diagnostics": []
+  },
+  "metacats_operands": {
+    "analysis": {
+      "analysis_id": "analysis",
+      "mode": "files",
+      "alignment_id": "aligned#alignment",
+      "metadata_document_id": "metacats_metadata:07bffcfbe23e8cbd5defad502db6a81d9390eab4cb100c8c44a9d3095d2db52d",
+      "category_ids": [
+        "category"
+      ],
+      "adjusted_matrix_ids": [],
+      "chisq_table_ids": [],
+      "pair_table_ids": [],
+      "raw_r_table_ids": [],
+      "output_role_evidence": []
+    },
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "original#alignment",
+          "artifact": {
+            "raw_artifact_ref": "original",
+            "source_ref": "source:original",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "AC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "AT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "0189c4aa583d625dcbc5ae9367af02fb949ad99a7933b2ba63568cddc6dca9be"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "metadata",
+        "value": {
+          "document_id": "metacats_metadata:07bffcfbe23e8cbd5defad502db6a81d9390eab4cb100c8c44a9d3095d2db52d",
+          "artifact": {
+            "raw_artifact_ref": "metadata",
+            "source_ref": "source:metadata",
+            "sha256": "c07f346fbf1091a71e1a7ed5a964b700db1a187bb06e9aaaf0f29d5d29bed362"
+          },
+          "encoding": "utf-8",
+          "completeness": "complete",
+          "delimiter": "tab",
+          "header": "present",
+          "header_tokens": [
+            "id",
+            "group"
+          ],
+          "rows": [
+            {
+              "row_index": 0,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "metadata",
+                  "source_ref": "source:metadata",
+                  "sha256": "c07f346fbf1091a71e1a7ed5a964b700db1a187bb06e9aaaf0f29d5d29bed362"
+                },
+                "byte_start_0based": 9,
+                "byte_end_0based_exclusive": 13,
+                "line_start_1based": 2,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              },
+              "cells": [
+                "a",
+                "B"
+              ]
+            },
+            {
+              "row_index": 1,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "metadata",
+                  "source_ref": "source:metadata",
+                  "sha256": "c07f346fbf1091a71e1a7ed5a964b700db1a187bb06e9aaaf0f29d5d29bed362"
+                },
+                "byte_start_0based": 13,
+                "byte_end_0based_exclusive": 17,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 3,
+                "xml_path": null
+              },
+              "cells": [
+                "b",
+                "C"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "associations": {
+      "original_members": [
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "a",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 0,
+          "raw_header": "a",
+          "member_label": "a",
+          "sequence_sha256": "472e73d796e20aa8ff9059e6316f218e0322548f661ec4dc267507ed66317404",
+          "original_length": 2,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        },
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "b",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 1,
+          "raw_header": "b",
+          "member_label": "b",
+          "sequence_sha256": "eb5442705969dc8da5dfac8f9658dc68acdab5bb7635ba7cc551e389416ac34e",
+          "original_length": 2,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "inline_inputs": [],
+      "row_members": [
+        {
+          "association_id": "aligned#alignment/rows/0/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        },
+        {
+          "association_id": "aligned#alignment/rows/1/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "b",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        }
+      ],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "declarations": {
+      "version": "bvbrc_metacats_context_v1",
+      "analysis_id": "analysis",
+      "metadata_joins": [
+        {
+          "metadata": "metacats_metadata:07bffcfbe23e8cbd5defad502db6a81d9390eab4cb100c8c44a9d3095d2db52d",
+          "id_column_index_0based": 0,
+          "alignment": "aligned#alignment",
+          "alignment_identity": "member_label",
+          "case_policy": "preserve",
+          "duplicate_policy": "retain_unresolved",
+          "evidence": []
+        }
+      ],
+      "categories": [
+        {
+          "category_id": "foreign",
+          "metadata": "metacats_metadata:07bffcfbe23e8cbd5defad502db6a81d9390eab4cb100c8c44a9d3095d2db52d",
+          "metadata_column_index_0based": 1,
+          "raw_heading_token": "group",
+          "native_category_ordinal_1based": 1,
+          "native_output_stem": "category",
+          "input_mode": "files",
+          "group_identity_rule": "exact_category_value",
+          "evidence": []
+        }
+      ],
+      "explicit_memberships": [],
+      "auto_group_entries": [],
+      "group_sources": [],
+      "biological_group_populations": [
+        {
+          "kind": "observed_metadata_groups",
+          "group_population_id": "category-groups",
+          "category_id": "category",
+          "order": "first_metadata_occurrence",
+          "include_metadata_only": true,
+          "evidence": []
+        }
+      ],
+      "native_group_maps": [],
+      "r_columns": [],
+      "exported_group_joins": [],
+      "native_test_joins": []
+    }
+  },
+  "metacats_result": {
+    "status": "invalid",
+    "value": null,
+    "diagnostics": [
+      {
+        "code": "bvbrc_metacats_association_category_scope_invalid",
+        "phase": "association",
+        "path": "",
+        "severity": "error",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "calculations": [],
+  "downstream_operands": {}
+}

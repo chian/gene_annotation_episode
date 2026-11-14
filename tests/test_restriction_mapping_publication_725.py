@@ -36,7 +36,8 @@ from gene_annotation_episode.native_file_capture import capture_native_file, ret
 
 pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="requires bounded529")
 BASE = Path(__file__).resolve().parents[1]
-PACKET = "verification/tool_graders_hmmer_map_verification_2026-10-28_529"
+NATIVE_DIR = BASE / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/native718"
+MAPPING_DIR = BASE / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/retained_reader719"
 VALIDATION_ONLY = os.environ.get("HMMER_NATIVE_ORACLE_RESTRICTION725_VALIDATION_ONLY") == "1"
 
 
@@ -180,8 +181,8 @@ def test_bound_schema_detachment_and_input_operation_relationship(supplied):
 @pytest.mark.skipif(VALIDATION_ONLY, reason="previously verified retained file readers")
 def test_original_file_reader_fixtures_preserve719_arrays_without_job_claim(tmp_path, name):
     # These files are original718/719 evidence, NOT a726-owned execution proof.
-    native_path = BASE / PACKET / "check182_native718/restriction-native718" / (name + ".json")
-    mapping_path = BASE / PACKET / "check183b_reader719_native/retained-reader719" / (name + ".json")
+    native_path = NATIVE_DIR / (name + ".json")
+    mapping_path = MAPPING_DIR / (name + ".json")
     original_native = native_path.read_bytes()
     mapping = validate_restriction_record("MappingResult", json.loads(mapping_path.read_bytes()))
     with Store(tmp_path / "store") as store:

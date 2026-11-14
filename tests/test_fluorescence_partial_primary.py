@@ -4,11 +4,11 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.fluorescence_event_calculations import calculate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_event_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import (
     FluorescenceContractError, canonical, validate_components,
 )
-from gene_annotation_episode.fluorescence_result_views import project_fluorescence_result
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views import project_fluorescence_result
 from test_fluorescence_event_calculations import _batch, _cell, _gate, _parameters, _sheet
 
 
@@ -157,7 +157,7 @@ def test_saved_recalculation_and_requested_view_preserve_exact_qualified_cells(m
     selected = [_cell(result, "selected_event_count", gate="a.g"),
                 _cell(result, "selected_fraction", gate="a.g"),
                 _cell(result, "selected_intensity_mean", gate="b.g")]
-    import gene_annotation_episode.fluorescence_event_calculations as calculator
+    import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations as calculator
 
     def no_recalculation(*args, **kwargs):
         raise AssertionError("Projection must copy saved calculated values")

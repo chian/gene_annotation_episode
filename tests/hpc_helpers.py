@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 
-FIXTURES = Path(__file__).parent/'fixtures'/'hpc'
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/hpc'
 
 
 def recorded_queue():

@@ -13,7 +13,7 @@ from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
 from gene_annotation_episode.phylogeny_format_contracts import validate_alignment_document
 
 
-NATIVE = Path(__file__).resolve().parents[1] / 'verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases'
+NATIVE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_native/cases'
 
 
 def artifact(data):

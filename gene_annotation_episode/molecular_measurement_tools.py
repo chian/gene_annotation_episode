@@ -173,7 +173,7 @@ def _molecular_worker_module(operation):
     return "gene_annotation_episode." + module.get(operation, "sequence_worker")
 
 
-def run_owned_molecular_worker(operation, arguments, *, directory, owned_directory, policy, cancel_event):
+def run_owned_molecular_worker(operation, arguments, *, directory, owned_directory, policy, cancel_event, worker_ports=None):
     """Resume one authenticated native handle; retain its immutable controls.
 
     Unlike the transient sequence-worker default, these files are the recovery
@@ -197,15 +197,21 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
     esm = operation == "esm_gene_embedding"
     worker_body, request_raw = payload, None
     if esm:
-        from .esm_gene_embedding_contracts import validate_esm_worker_request
-        from .esm_gene_embedding_tools import esm_worker_environment, esm_worker_implementation_files
+        if worker_ports is None:
+            from .esm_gene_embedding_contracts import validate_esm_worker_request
+            from .esm_gene_embedding_tools import esm_worker_environment, esm_worker_implementation_files
+        else:
+            validate_esm_worker_request, esm_worker_environment, esm_worker_implementation_files = worker_ports.esm_validation_owners()
         if type(arguments) is not dict or set(arguments) != {"request"}:
             raise ContractError("esm_gene_embedding_worker_request_conflict")
         esm_request = validate_esm_worker_request(arguments["request"])
         esm_driver = esm_request["deployment"]["driver"]
     if protease:
-        from . import molecular_sequence_driver as driver
-        from . import molecular_sequence_native as native_source
+        if worker_ports is None:
+            from gene_annotation_episode import molecular_sequence_driver as driver
+            from gene_annotation_episode import molecular_sequence_native as native_source
+        else:
+            driver, native_source, current_native_request = worker_ports.validation_owners()
         if type(arguments) is not dict or set(arguments) != {"request"}:
             raise ContractError("protease_kinetics_worker_request_conflict")
         worker_body = json.loads(canonical(arguments["request"]))
@@ -217,17 +223,22 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
         output = owned / "driver-output" / "declaration.json"
         if operation == "protease_kinetics_native":
             selected_native = worker_body["selection"]
-            from .protease_kinetics_measurements import _native_request
+            if worker_ports is None:
+                from .protease_kinetics_measurements import _native_request
+            else:
+                _native_request = current_native_request
             _native_request(selected_native)
             native_source._deployment(selected_native["deployment"], version=native_source.DEPLOYMENT_VERSION_V3,
                 source_sha256=native_source.BIOCHEMISTRY_SOURCE_SHA256)
             if Path(selected_native["output_workspace"]) != output.parent:
                 raise ContractError("protease_kinetics_worker_output_conflict")
 
+    worker_module = None if worker_ports is None else worker_ports.module(operation)
+
     def command(python):
         if not protease:
-            return [python, "-m", _molecular_worker_module(operation), str(request), str(output)]
-        return [python, "-B", "-m", _molecular_worker_module(operation),
+            return [python, "-m", _molecular_worker_module(operation) if worker_ports is None else worker_module, str(request), str(output)]
+        return [python, "-B", "-m", _molecular_worker_module(operation) if worker_ports is None else worker_module,
             "--request-file", str(request), "--request-sha256", hashlib.sha256(request_raw).hexdigest(),
             "--request-size-bytes", str(len(request_raw)), "--output-directory", str(output.parent)]
 
@@ -242,6 +253,8 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
     selection_path = owned / "execution-selection.json"
     if selection_path.exists():
         selected = json.loads(selection_path.read_bytes())
+        if worker_ports is not None:
+            worker_module = worker_ports.recorded_module(operation, selected)
         fields = {"version", "command", "cwd", "environment", "policy", "request", "python", "implementation_files"}
         if (type(selected) is not dict or set(selected) != fields
                 or selected["version"] != "ordinary_molecular_execution_v1"
@@ -284,7 +297,7 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             environment = esm_worker_environment(esm_request, owned)
             python = dict(path=esm_driver["python_executable"], sha256=esm_driver["python_sha256"])
         else:
-            implementation_files = _molecular_implementation_files(operation)
+            implementation_files = (_molecular_implementation_files(operation) if worker_ports is None else worker_ports.implementation_files(operation))
             python = dict(path=sys.executable, sha256=hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest())
         if operation == "protease_kinetics_native":
             deployment = worker_body["selection"]["deployment"]
@@ -292,8 +305,12 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             # Bind the explicitly selected deployment; no host package discovery
             # or identity substitution supplies its interpreter/source closure.
             python = {key: deployment["runtime"]["executable"][key] for key in ("path", "sha256")}
-            expected = {str(Path(root) / "gene_annotation_episode" / path.name): path
-                for root in deployment["import_roots"] for path in implementation_files}
+            if worker_ports is None:
+                expected = {str(Path(root) / "gene_annotation_episode" / path.name): path
+                    for root in deployment["import_roots"] for path in implementation_files}
+            else:
+                worker_module, implementation_files, expected = worker_ports.native_selection(
+                    deployment, index, implementation_files)
             for path in implementation_files:
                 matches = [pin for name, pin in index.items() if name in expected
                     and expected[name] == path and pin["sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()]
@@ -875,7 +892,7 @@ def _read_retained_molecular_publication(registry, context, reader, source_ref, 
         from .protein_phylogeny_publication import _read_protein_phylogeny_publication
         return _read_protein_phylogeny_publication(registry, context, reader, source_ref)
     if tool_name == "analyze_protein_conservation":
-        from .protein_conservation_publication import _read_protein_conservation_publication
+        from gene_annotation_episode.episodic_workflow.root.library.protein_conservation_publication import _read_protein_conservation_publication
         return _read_protein_conservation_publication(registry, context, reader, source_ref)
     if tool_name == "predict_protein_disorder_regions":
         from .protein_disorder_tools import read_protein_disorder_publication

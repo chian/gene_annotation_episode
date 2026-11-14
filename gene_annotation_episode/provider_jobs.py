@@ -13,7 +13,7 @@ from typing import Any
 from .acquisition import AcquisitionError, PublicClients, SourceSnapshot
 from .domain import ContractError, canonical, identity
 from .rfam_discovery import submission_handle, result_body, validate_result_url, submission_failure_feedback
-from . import blast_search as blast
+from gene_annotation_episode import blast_search as blast
 
 
 HMMER_IDENTITY_VERSION = "hmmer_single_fasta_sequence_v2"

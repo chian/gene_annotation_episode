@@ -11,7 +11,7 @@ from gene_annotation_episode.sequence_masking_contracts import validate_sequence
 from gene_annotation_episode.windowmasker_statistics import parse_windowmasker_statistics, validate_windowmasker_statistics
 
 
-FIXTURES = Path(__file__).resolve().parents[1] / "verification/tool_graders_masking_native_oracle_2026-10-28_612/retained_native"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/masking_native"
 
 
 def descriptor(raw, complete="complete"):

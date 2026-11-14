@@ -15,7 +15,7 @@ from pathlib import Path
 import re
 
 from .execution_contracts import canonical, digest
-from .practical_execution_state import _immutable, _read
+from .immutable_json_records import _immutable, _read
 
 
 RESERVATION_VERSION = 'selected_api_effect_reservation_v1'

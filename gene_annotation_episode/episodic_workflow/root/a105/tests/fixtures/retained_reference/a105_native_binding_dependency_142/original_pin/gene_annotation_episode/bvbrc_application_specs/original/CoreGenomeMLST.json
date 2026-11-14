@@ -1,0 +1,81 @@
+{
+    "id": "CoreGenomeMLST",
+    "label": "Core Genome MLST",
+    "script": "App-CoreGenomeMLST",
+    "description": "Evaulate core genomes from a set of genome groups of the same species.",
+    "default_memory": "100G",
+    "parameters": [
+        {
+            "desc": "Geneomes can be passed via (genome group / fasta file )",
+            "required": 1,
+            "default": "genome_group",
+            "label": "Input Type",
+            "type": "enum",
+            "enum": [
+                "genome_group",
+                "genome_fasta",
+            ],
+            "id": "input_genome_type"
+        },
+        {
+        "desc": "Analysis type is determined by the SNP caller",
+        "required": 1,
+        "default": "chewbbaca",
+        "label": "Analysis Type",
+        "type": "enum",
+        "enum": [
+            "chewbbaca",
+        ],
+        "id": "analysis_type"
+        },
+        {
+            "id": "input_genome_group",
+            "label": "Genome group",
+            "required": 0,
+            "default": null,
+            "desc": "Name of feature group that defines the gene set ",
+            "type": "string"
+        },
+        {
+            "id": "input_genome_fasta",
+            "required": 0,
+            "default": null,
+            "label": "Gene set FASTA data",
+            "desc": "Nucleotide data in FASTA format",
+            "wstype": "genome_fasta",
+            "type": "wstype"
+        },
+        {
+            "id": "schema_location",
+            "label": "Schema Location",
+            "required": 0,
+            "default": null,
+            "desc": "This is  the path to the location/parent directory where all schemas are held. The specific schema is deteremined by input_schema_selection",
+            "type": "string"
+        },
+        {
+            "id": "input_schema_selection",
+            "label": "Schema Speices",
+            "required": 1,
+            "default": null,
+            "desc": "The species the schema should use to compare the user data against. This will correlate to a sub directory name at the  'schema_location'",
+            "type": "string"
+        },
+        {
+            "id": "output_path",
+            "label": "Output Folder",
+            "required": 1,
+            "default": null,
+            "desc": "Path to which the output will be written. Defaults to the directory containing the input data. ",
+            "type": "folder"
+        },
+        {
+            "id": "output_file",
+            "label": "File Basename",
+            "required": 1,
+            "default": null,
+            "desc": "Basename for the generated output files. Defaults to the basename of the input data.",
+            "type": "wsid"
+        }
+    ]
+}

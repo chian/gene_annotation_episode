@@ -117,7 +117,7 @@ def active_budget():
 
 def native_budget(policy,cpu_threads,cwd):
     value=active_budget()
-    if cpu_threads*100>ENVIRONMENT_BOUNDS['cpu_percent'] or policy.memory_bytes>ENVIRONMENT_BOUNDS['memory_bytes']:
+    if policy.memory_bytes>ENVIRONMENT_BOUNDS['memory_bytes']:
         raise ValueError('native_request_exceeds_environment_bounds')
     if not Path(cwd).resolve().is_relative_to(Path(value['run_directory'])):
         raise ValueError('native_output_outside_workflow_run')

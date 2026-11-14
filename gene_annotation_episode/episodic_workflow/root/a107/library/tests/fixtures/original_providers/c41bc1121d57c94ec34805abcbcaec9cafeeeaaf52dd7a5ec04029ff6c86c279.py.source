@@ -1,0 +1,12 @@
+class OriginalProviderMethods:
+    def interpretation_context(self, context, exchanges):
+        subset = getattr(self.workflow.store, 'reference_subset', None)
+        received = [row['lookup_result'] for row in exchanges if row.get('lookup_result_recorded', row.get('lookup_result') is not None)]
+        publications = []
+        for result in received:
+            if isinstance(result, Mapping):
+                for record in result.get('records', []):
+                    if isinstance(record, Mapping):
+                        publications.extend(record.get('published_references', {}).get('values', []))
+        references = _references_in({'record_refs': publications}, self.workflow.store.get, reference_subset=(lambda refs: subset(refs, self.scope)) if subset is not None else None)
+        return {**context, 'visible_record_refs': list(dict.fromkeys([*context.get('visible_record_refs', []), *references]))}

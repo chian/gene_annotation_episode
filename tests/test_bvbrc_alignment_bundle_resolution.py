@@ -18,8 +18,8 @@ from gene_annotation_episode import bvbrc_alignment_bundle_contracts as c
 from gene_annotation_episode import bvbrc_alignment_bundle_resolution as r
 
 ROOT = Path(__file__).resolve().parents[1]
-MSA_NATIVE = ROOT / 'verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples'
-META_NATIVE = ROOT / 'verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases'
+MSA_NATIVE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_metacats_boundaries/native_examples'
+META_NATIVE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_native/cases'
 BACKEND = {'name': 'scipy_chi2_integer_df_logtail_v1', 'version': scipy.__version__}
 
 
@@ -184,7 +184,7 @@ def meta_fixture(data=b'>a\nAC\n>b\nAT\n', metadata=b'id\tgroup\na\tB\nb\tC\n', 
 def meta_native_fixture(case='aa_two_groups'):
     directory = META_NATIVE / case
     receipt = json.loads((directory / 'RECEIPT.json').read_text())
-    old = ROOT / 'verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25'
+    old = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_inputs'
     saved = json.loads((old / ('EXAMPLES_002' if case == 'twelve_groups' else 'EXAMPLES_001') / (case + '-inputs.json')).read_text())
     category = saved['counts_arguments']['category_id']; columns = saved['counts_arguments']['group_order']
     f = Fixture('metacats'); plan = f.plan(); plan['analysis']['category_ids'] = [category]
@@ -246,8 +246,8 @@ def meta_native_fixture(case='aa_two_groups'):
 
 
 def xmfa_native_fixture(with_sources=True):
-    native = ROOT / 'verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/native_examples'
-    saved = json.loads((ROOT / 'verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples/combined_native-inputs.json').read_text())
+    native = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_xmfa_boundaries/native_examples'
+    saved = json.loads((ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/xmfa_sources/saved_examples/combined_native-inputs.json').read_text())
     f = Fixture(); p = f.plan(); p['analysis'].update(mode='mauve_blocks', full_xmfa_slot_id='full', xmfa_document_id=slot('analysis', 'full'))
     f.artifact((native / 'combined.xmfa').read_bytes(), 'full', {'reader': 'mauve_xmfa_v1', 'dialect': 'mauve1', 'alphabet': 'dna', 'encoding': 'ascii'}, 'full_xmfa')
     selection = {'population_id': 'xmfa-all', 'document_id': slot('analysis', 'full'), 'member_numbers': [1,2,3],

@@ -30,9 +30,9 @@ from gene_annotation_episode.runtime import ActionFailure, Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from tests.test_glycosylation_measurements import o_log
-from tests.test_molecular_sequence_n_glycosylation import _retained, _tables
+from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation import _retained, _tables
 from tests.test_molecular_sequence_ordinary import selected_call, _lifecycle, _metadata_fixture, _pin, _write
-from tests.test_molecular_sequence_tools_native import _controller, _credit
+from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_tools_native import _controller, _credit
 from tests.test_runtime import ScriptedProvider
 
 

@@ -1,0 +1,59 @@
+"""A102 task credit and structural guidance for scientific processes."""
+
+from .communication import plain
+from .domain import ContractError
+from .a102_credit import (A102StructuralCredit, A102FeatureGeometryCredit,
+    A102FunctionalContrastCredit, A102ReferenceAttributionCredit,
+    A102LocalTraitCredit, A102InterfaceContactCredit)
+from .a102_structural_evidence import credit_projector, task_context, is_merged_entry
+from .a102_structural_report import received_reports
+
+
+def original_task_projector(assignment, *, merged_a102=False):
+    assigned = plain(assignment)
+    context = assigned.get('context', {})
+    if not merged_a102:
+        return A102StructuralCredit()
+    task = context.get('a102_task')
+    if task is not None and (not isinstance(task, dict)
+            or task != task_context(task.get('name'))):
+        raise ContractError('a102_original_task_definition_required')
+    if task is None:
+        return credit_projector(assigned)
+    local = {
+        'functional_feature_geometry': A102FeatureGeometryCredit,
+        'functional_contrast': A102FunctionalContrastCredit,
+        'reference_attribution': A102ReferenceAttributionCredit,
+        'local_trait_attribution': A102LocalTraitCredit,
+        'interface_constraints': A102InterfaceContactCredit,
+    }.get(task['name'])
+    return local() if local is not None else credit_projector(assigned)
+
+
+def scientific_guidance(entry):
+    if is_merged_entry(entry):
+        return ('A102 owns comparative and experimental structural evidence. '
+            'Scientific descendants remain A102. Use either path or both as useful, '
+            'and return their separate scientific quantities and shared dependencies.\n\n')
+    return ("A102 owns structural work only. Scientific descendants remain A102. "
+        "Use available shared operations to send the immediate parent specific missing operands or useful "
+        "received evidence. That parent chooses within its own options or relays the need upward. "
+        "Reuse qualified retained alignments. "
+        "Native comparison results automatically populate the A102 numerical sheet before credit inspection; "
+        "unknown functional features do not erase measured native correspondence. "
+        "Follow up for missing structural cells, preserve original scope and model uncertainty, "
+        "and distinguish fold resemblance from exact function. Novel folding requires an explicit configured "
+        "remote/API/HPC binding; use structure.model_request when it is missing.\n\n")
+
+
+def received_structural_context(binding, context, workflow):
+    axis = next((row['option_ref'] for row in binding.library.headers()
+        if row['option_ref']['option_id'] == 'A102'), None)
+    if axis is None or not is_merged_entry(binding.library.resolve(axis)):
+        return {}
+    if workflow is None:
+        raise ContractError('a102_report_store_required')
+    from .literature_structure_storage import LiteratureStructureRepository
+    return {'received_structural_evidence': received_reports(workflow.store,
+        context=context, structure_repository=LiteratureStructureRepository(workflow.store, workflow.run_id),
+        axis_reference=axis)}

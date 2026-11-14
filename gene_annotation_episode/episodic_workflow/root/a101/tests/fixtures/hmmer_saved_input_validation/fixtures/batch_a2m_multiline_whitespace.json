@@ -1,0 +1,281 @@
+{
+  "alphabet": "RNA",
+  "diagnostics": [],
+  "end_state": "eof",
+  "format": "a2m",
+  "next_byte_offset": 24,
+  "records": [
+    {
+      "block_count": null,
+      "byte_end": 24,
+      "byte_start": 0,
+      "column_annotations": {
+        "RF": {
+          "basis": "native_format_derivation",
+          "fragments": [],
+          "text": ".x.x..x..",
+          "valid": true
+        }
+      },
+      "column_count": 9,
+      "declared_column_count": null,
+      "declared_row_count": null,
+      "diagnostics": [],
+      "events": [
+        {
+          "block_index": null,
+          "event_ordinal": 0,
+          "kind": "header",
+          "locator": {
+            "byte_end": 3,
+            "byte_start": 0,
+            "line": 1
+          },
+          "raw": ">a\n",
+          "row_ordinal": 0,
+          "tag": null,
+          "value": "a"
+        },
+        {
+          "block_index": null,
+          "event_ordinal": 1,
+          "kind": "sequence",
+          "locator": {
+            "byte_end": 11,
+            "byte_start": 3,
+            "line": 2
+          },
+          "raw": "\t aA cC\n",
+          "row_ordinal": 0,
+          "tag": null,
+          "value": "aA cC"
+        },
+        {
+          "block_index": null,
+          "event_ordinal": 2,
+          "kind": "sequence",
+          "locator": {
+            "byte_end": 15,
+            "byte_start": 11,
+            "line": 3
+          },
+          "raw": "Guu\n",
+          "row_ordinal": 0,
+          "tag": null,
+          "value": "Guu"
+        },
+        {
+          "block_index": null,
+          "event_ordinal": 3,
+          "kind": "header",
+          "locator": {
+            "byte_end": 18,
+            "byte_start": 15,
+            "line": 4
+          },
+          "raw": ">b\n",
+          "row_ordinal": 1,
+          "tag": null,
+          "value": "b"
+        },
+        {
+          "block_index": null,
+          "event_ordinal": 4,
+          "kind": "sequence",
+          "locator": {
+            "byte_end": 24,
+            "byte_start": 18,
+            "line": 5
+          },
+          "raw": "ACggG\n",
+          "row_ordinal": 1,
+          "tag": null,
+          "value": "ACggG"
+        }
+      ],
+      "header_valid": true,
+      "line_end": 5,
+      "line_start": 1,
+      "native_status_equivalent": 0,
+      "reader_state": "complete",
+      "record_ordinal": 0,
+      "rows": [
+        {
+          "aligned_sequence": "aAcC--Guu",
+          "annotation_fragments": [],
+          "column_annotations": {},
+          "description": null,
+          "diagnostics": [],
+          "geometry_valid": true,
+          "identity_unambiguous": true,
+          "name": "a",
+          "name_bytes_hex": "61",
+          "row_ordinal": 0,
+          "segments": [
+            {
+              "aligned_end": 0,
+              "aligned_start": 0,
+              "basis": "input_ignored",
+              "byte_end": 5,
+              "byte_start": 3,
+              "column_end": 2,
+              "column_start": 0,
+              "decoded_text": "",
+              "event_ordinal": 1,
+              "operation": "ignore",
+              "source_text": "\t "
+            },
+            {
+              "aligned_end": 2,
+              "aligned_start": 0,
+              "basis": "input_symbol",
+              "byte_end": 7,
+              "byte_start": 5,
+              "column_end": 4,
+              "column_start": 2,
+              "decoded_text": "aA",
+              "event_ordinal": 1,
+              "operation": "copy",
+              "source_text": "aA"
+            },
+            {
+              "aligned_end": 2,
+              "aligned_start": 2,
+              "basis": "input_ignored",
+              "byte_end": 8,
+              "byte_start": 7,
+              "column_end": 5,
+              "column_start": 4,
+              "decoded_text": "",
+              "event_ordinal": 1,
+              "operation": "ignore",
+              "source_text": " "
+            },
+            {
+              "aligned_end": 4,
+              "aligned_start": 2,
+              "basis": "input_symbol",
+              "byte_end": 10,
+              "byte_start": 8,
+              "column_end": 7,
+              "column_start": 5,
+              "decoded_text": "cC",
+              "event_ordinal": 1,
+              "operation": "copy",
+              "source_text": "cC"
+            },
+            {
+              "aligned_end": 6,
+              "aligned_start": 4,
+              "basis": "a2m_insert_slot",
+              "byte_end": null,
+              "byte_start": null,
+              "column_end": null,
+              "column_start": null,
+              "decoded_text": "--",
+              "event_ordinal": null,
+              "operation": "native_gap",
+              "source_text": ""
+            },
+            {
+              "aligned_end": 9,
+              "aligned_start": 6,
+              "basis": "input_symbol",
+              "byte_end": 14,
+              "byte_start": 11,
+              "column_end": 3,
+              "column_start": 0,
+              "decoded_text": "Guu",
+              "event_ordinal": 2,
+              "operation": "copy",
+              "source_text": "Guu"
+            }
+          ],
+          "symbols_valid": true
+        },
+        {
+          "aligned_sequence": "-A-CggG--",
+          "annotation_fragments": [],
+          "column_annotations": {},
+          "description": null,
+          "diagnostics": [],
+          "geometry_valid": true,
+          "identity_unambiguous": true,
+          "name": "b",
+          "name_bytes_hex": "62",
+          "row_ordinal": 1,
+          "segments": [
+            {
+              "aligned_end": 1,
+              "aligned_start": 0,
+              "basis": "a2m_insert_slot",
+              "byte_end": null,
+              "byte_start": null,
+              "column_end": null,
+              "column_start": null,
+              "decoded_text": "-",
+              "event_ordinal": null,
+              "operation": "native_gap",
+              "source_text": ""
+            },
+            {
+              "aligned_end": 2,
+              "aligned_start": 1,
+              "basis": "input_symbol",
+              "byte_end": 19,
+              "byte_start": 18,
+              "column_end": 1,
+              "column_start": 0,
+              "decoded_text": "A",
+              "event_ordinal": 4,
+              "operation": "copy",
+              "source_text": "A"
+            },
+            {
+              "aligned_end": 3,
+              "aligned_start": 2,
+              "basis": "a2m_insert_slot",
+              "byte_end": null,
+              "byte_start": null,
+              "column_end": null,
+              "column_start": null,
+              "decoded_text": "-",
+              "event_ordinal": null,
+              "operation": "native_gap",
+              "source_text": ""
+            },
+            {
+              "aligned_end": 7,
+              "aligned_start": 3,
+              "basis": "input_symbol",
+              "byte_end": 23,
+              "byte_start": 19,
+              "column_end": 5,
+              "column_start": 1,
+              "decoded_text": "CggG",
+              "event_ordinal": 4,
+              "operation": "copy",
+              "source_text": "CggG"
+            },
+            {
+              "aligned_end": 9,
+              "aligned_start": 7,
+              "basis": "a2m_insert_slot",
+              "byte_end": null,
+              "byte_start": null,
+              "column_end": null,
+              "column_start": null,
+              "decoded_text": "--",
+              "event_ordinal": null,
+              "operation": "native_gap",
+              "source_text": ""
+            }
+          ],
+          "symbols_valid": true
+        }
+      ]
+    }
+  ],
+  "trailing_range": null,
+  "version": "hmmer_native_alignment_decoding_v1"
+}

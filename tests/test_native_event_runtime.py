@@ -15,7 +15,7 @@ import pytest
 from method_loop.durable import DurableExecutionError, DurableExecutionStore
 from gene_annotation_episode import native_events
 from gene_annotation_episode import _local_job_worker as worker
-from gene_annotation_episode.homology_jobs import FileAsset, HomologyJobs, digest
+from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import FileAsset, HomologyJobs, digest
 from gene_annotation_episode.independent_execution import _standard_bindings
 from gene_annotation_episode.native_event_information import NativeEventInformation
 from gene_annotation_episode.runtime import WorkflowError, run_workflow
@@ -69,7 +69,7 @@ def fixture_dispatch(monkeypatch, *, fast=False):
         if fast:
             worker.report(handle.read()['paths']['status'], handle.path)
         return handle
-    monkeypatch.setattr('gene_annotation_episode.homology_jobs.start_prepared', dispatch)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a101.homology_jobs.start_prepared', dispatch)
     return handles
 
 
@@ -259,7 +259,7 @@ def test_host_recovers_original_export_without_resubmission_or_restamping(tmp_pa
             (_ for _ in ()).throw(AssertionError('reentered exit hook')))
         monkeypatch.setattr(worker, 'event_time', lambda:
             (_ for _ in ()).throw(AssertionError('restamped original receipt')))
-        monkeypatch.setattr('gene_annotation_episode.homology_jobs.start_prepared', lambda *a, **k:
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a101.homology_jobs.start_prepared', lambda *a, **k:
             (_ for _ in ()).throw(AssertionError('resubmitted original native job')))
         def recovered(context):
             target = context['native_event_targets'][0]['target']

@@ -7,9 +7,9 @@ import base64
 import json
 import math
 
-from .communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from .domain import ContractError, canonical, obj, validate_schema
-from .homology_jobs import STATUS_SCHEMA
+from .episodic_workflow.root.a101.homology_jobs import STATUS_SCHEMA
 
 
 JOB_STATUS_VERSION = 'job_execution_status_v1'

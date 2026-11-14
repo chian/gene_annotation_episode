@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P16",
+  "name": "Distinguish direct input action from indirect response and feedback",
+  "description": "Environmental responses can arise through direct ligand recognition, cofactor chemistry, changed abundance or system-demand feedback. Choose contrasts distinguishing those routes before assigning a direct sensor or regulatory sign.",
+  "use_when": "Induction, binding or physiology is being treated as proof of direct signal recognition.",
+  "live_alternatives": [
+    "Input binds the regulator.",
+    "Input changes a cofactor/state without selective ligand binding.",
+    "Partner demand/feedback mediates the response.",
+    "Abundance or another regulator explains it."
+  ],
+  "decision_guidance": [
+    "Keep signal, molecular state, amount, DNA recognition and productive regulation distinct.",
+    "Choose contrasts controlling the relevant alternatives, including target classes and feedback demand.",
+    "Direct binding addresses recognition; promoter binding alone proves neither signal binding nor transcriptional sign."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Purified protein binds input with informative controls",
+      "then_consider": "Support assay-specific binding without claiming the whole native mechanism."
+    },
+    {
+      "if_observed": "State controls distinguish cofactor chemistry from feedback",
+      "then_consider": "Retain compatible supported routes; do not call a chemical input a selective ligand."
+    },
+    {
+      "if_observed": "Response is known but direct action untested",
+      "then_consider": "Report response with sensing route unresolved."
+    }
+  ],
+  "boundary": "The disputed relation is how a biological input reaches a regulatory response, not general response correlation or component attribution. P06 assigns contribution to an established system output; P08 asks which prerequisite enables function. Direct ligand binding, cofactor chemistry and feedback are different explanations; promoter binding alone supplies neither input sensing nor transcriptional sign.",
+  "evidence": [
+    {
+      "case_group": "pxpT_pxpR_access_and_sensing",
+      "case_id": "pxpT_pxpR_access_and_sensing",
+      "source_url": "https://journals.asm.org/doi/10.1128/aem.02181-25",
+      "source_locator": "Case-record observation; inspected scope: Indexed complete relevant regulatory Results, transport Discussion, figure descriptions and culture/purification Methods inspected. Direct publisher fetch 403; raw binding data not obtained. Current published 2026 article used, not 2025 preprint.",
+      "observation": "Repression tests and direct 5-OP ITC with competitors establish different parts of the sensing/control claim.",
+      "limit": "Growth rescue of pxpT did not measure purified transport."
+    },
+    {
+      "case_group": "organism_16_malr",
+      "case_id": "organism_16_malr",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3911195/",
+      "source_locator": "Case-record observation; inspected scope: Relevant Results including deletion, reporter rescue and sugar-independent DNA binding; growth/deletion/purification Methods inspected.",
+      "observation": "Promoter binding and maltose-utilization regulation coexisted with no maltose-induced EMSA change.",
+      "limit": "Direct maltose sensing was not established."
+    },
+    {
+      "case_group": "reg_iscR_state_target_specificity",
+      "case_id": "reg_iscR_state_target_specificity",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12594620/",
+      "source_locator": "Figs. 1–6 and relevant redox/binding/reporter Results; I9–I12 in root/regulatory_specificity/case_trace.json.",
+      "observation": "PMS/state and target controls separate anaerobic redox effects from cluster loss and indirect Fe-S-demand explanations.",
+      "limit": "No selective PMS pocket or complete intracellular state trajectory was measured."
+    },
+    {
+      "case_group": "context_rbkr_regulator_kinase_2017",
+      "case_id": "context_rbkr_regulator_kinase_2017",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5397151/",
+      "source_locator": "Case-record observation; inspected scope: Complete genomic reconstruction, dual-function results, evolutionary caveats, and relevant bioinformatics/DNA-binding/kinase methods read. Structure section not exhaustively inspected; no motif scan or assay repeated.",
+      "observation": "FMN disrupted fusion-protein DNA binding; operator placement suggested but did not measure activation.",
+      "limit": "Do not convert site geometry into observed transcriptional sign."
+    }
+  ]
+}

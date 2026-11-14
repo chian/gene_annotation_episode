@@ -14,7 +14,7 @@ from tests.test_chromatin_interaction_inputs import build_native_sheet
 class TablesTest(unittest.TestCase):
     def test_readonly_mmap_repeated_access_and_caller_lifetime(self):
         sheet, memory = build_native_sheet()
-        with tempfile.TemporaryDirectory(dir=Path.cwd()) as directory:
+        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / 'runs') as directory:
             handles = {}
             for index, (key, stream) in enumerate(memory.items()):
                 path = Path(directory) / str(index)

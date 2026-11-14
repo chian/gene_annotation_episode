@@ -1,0 +1,395 @@
+{
+  "version": "tool_knowledge_v1",
+  "entries": [
+    {
+      "entry_id": "experimental-database-search",
+      "title": "Experimental database search and source measurements",
+      "summary": "Discover and read native assay records, kinetics and multiplexed variant measurements for the existing experimental evidence assessment.",
+      "tags": [
+        "experimental",
+        "database",
+        "A105",
+        "kinetics",
+        "binding",
+        "assay"
+      ],
+      "tool_names": [
+        "source.experimental.records"
+      ],
+      "resource_kinds": [
+        "api",
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/experimental_database_acquisition.py",
+        "gene_annotation_episode/experimental_database_records.py",
+        "gene_annotation_episode/experimental_database_measurements.py"
+      ],
+      "sections": [
+        {
+          "section_id": "search-and-read",
+          "title": "Search, records and experimental assessment",
+          "path": "experimental-database-search.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "alignment-reference-sites",
+      "title": "Selected reference positions and original-coordinate correspondence",
+      "summary": "Read one retained pairwise alignment or minimap2 placement; preserve requested positions, distinct counting populations, gaps, insertions, original coordinates and read quality.",
+      "tags": [
+        "alignment",
+        "sequence",
+        "minimap2",
+        "sites",
+        "coordinates",
+        "results"
+      ],
+      "tool_names": [
+        "sequence.sites"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/alignment_site_native.py",
+        "gene_annotation_episode/alignment_site_inputs.py",
+        "gene_annotation_episode/alignment_site_calculators.py",
+        "gene_annotation_episode/tools.py"
+      ],
+      "sections": [
+        {
+          "section_id": "operation-results",
+          "title": "Selected sites, measurements and coordinate meanings",
+          "path": "alignment-reference-sites.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "blast-hsp-columns",
+      "title": "Selected columns of a received BLAST HSP",
+      "summary": "Inspect a received NCBI or native paired BLAST HSP with native operand units, translated/reverse correspondence, gap counts and explicit identity/coverage denominators.",
+      "tags": [
+        "BLAST",
+        "alignment",
+        "HSP",
+        "columns",
+        "coordinates",
+        "results"
+      ],
+      "tool_names": [
+        "result.blast.hsp"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/blast_result_views.py",
+        "gene_annotation_episode/native_blast_hsp_views.py",
+        "gene_annotation_episode/blast_hsp_site_inputs.py",
+        "gene_annotation_episode/blast_hsp_site_calculators.py",
+        "gene_annotation_episode/alignment_site_returns.py"
+      ],
+      "sections": [
+        {
+          "section_id": "operation-results",
+          "title": "Received HSP windows and numerical correspondence",
+          "path": "blast-hsp-columns.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "minimap2-read-placements",
+      "title": "Selected-read placement and native mapping measurements",
+      "summary": "Six explicitly selected minimap2 presets, complete reported placements, native and path-derived counts, exact query/reference coverage and ambiguity distinctions.",
+      "tags": [
+        "sequence",
+        "reads",
+        "mapping",
+        "minimap2",
+        "results"
+      ],
+      "tool_names": [
+        "reads.map"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/read_mapping.py",
+        "gene_annotation_episode/minimap2_grading_inputs.py",
+        "gene_annotation_episode/minimap2_grader.py",
+        "gene_annotation_episode/tools.py"
+      ],
+      "sections": [
+        {
+          "section_id": "operation-results",
+          "title": "Selected mapping and numerical placement measurements",
+          "path": "minimap2-placements.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "biopython-pairwise-correspondence",
+      "title": "Pairwise sequence and selected-read correspondence",
+      "summary": "Local/global protein, DNA and RNA alignment with explicit paired positions, gaps, coordinate correspondence and coverage denominators.",
+      "tags": [
+        "sequence",
+        "alignment",
+        "pairwise",
+        "Biopython",
+        "results"
+      ],
+      "tool_names": [
+        "sequence.align",
+        "reads.align"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/sequence_ops.py",
+        "gene_annotation_episode/biopython_pairwise_grader.py",
+        "gene_annotation_episode/tools.py"
+      ],
+      "sections": [
+        {
+          "section_id": "operation-results",
+          "title": "Native alignment and numerical correspondence",
+          "path": "pairwise-correspondence.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "sequence-read-composition",
+      "title": "Sequence composition and original read quality",
+      "summary": "Declared-molecule composition, ambiguity and explicit GC denominator; original quality encodings, error probabilities and threshold counts.",
+      "tags": [
+        "sequence",
+        "reads",
+        "composition",
+        "quality",
+        "results"
+      ],
+      "tool_names": [
+        "sequence.inspect",
+        "reads.inspect"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/sequence_composition_grader.py",
+        "gene_annotation_episode/materials_packing.py",
+        "gene_annotation_episode/tools.py"
+      ],
+      "sections": [
+        {
+          "section_id": "operation-results",
+          "title": "Declared molecule and numerical read measurements",
+          "path": "sequence-read-composition.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "sequence-translation",
+      "title": "Translation with explicit genetic code and source correspondence",
+      "summary": "Translate selected nucleotide intervals with the chosen code, strand, frame and CDS semantics; retain codons, stops, trailing bases and original coordinates.",
+      "tags": [
+        "sequence",
+        "translation",
+        "genetic-code",
+        "coordinates",
+        "preparation",
+        "results"
+      ],
+      "tool_names": [
+        "sequence.translate",
+        "translation.codes"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/sequence_ops.py",
+        "gene_annotation_episode/sequence_translation_grader.py",
+        "gene_annotation_episode/sequence_mapping.py",
+        "gene_annotation_episode/tools.py"
+      ],
+      "sections": [
+        {
+          "section_id": "operation-results",
+          "title": "Translation settings and numerical correspondence",
+          "path": "sequence-translation.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "sequence-extraction",
+      "title": "Ordered sequence extraction and reverse complements",
+      "summary": "Create reusable DNA, RNA or protein views while preserving ordered and repeated selections, actual symbol correspondence and original source paths.",
+      "tags": [
+        "sequence",
+        "extraction",
+        "coordinates",
+        "reverse-complement",
+        "preparation",
+        "results"
+      ],
+      "tool_names": [
+        "sequence.view"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/sequence_views.py",
+        "gene_annotation_episode/sequence_extraction_grader.py",
+        "gene_annotation_episode/sequence_mapping.py",
+        "gene_annotation_episode/tools.py"
+      ],
+      "sections": [
+        {
+          "section_id": "operation-results",
+          "title": "Selected regions and numerical correspondence",
+          "path": "sequence-extraction.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "publication-access",
+      "title": "Europe PMC and PMC publication access",
+      "summary": "Exact protein-sequence identities and citations, formatting-aware source sequence reading, literature queries, retained full text and supplements.",
+      "tags": [
+        "literature",
+        "search",
+        "sequence",
+        "identity",
+        "checksum",
+        "citations",
+        "formatting",
+        "article",
+        "supplement",
+        "EuropePMC",
+        "PMC",
+        "UniProt"
+      ],
+      "tool_names": [
+        "public.literature.sequence_identity",
+        "source.sequence.references",
+        "source.sequence.scan",
+        "public.literature.search",
+        "public.literature.read",
+        "public.pmc.versions",
+        "public.pmc.files",
+        "public.pmc.asset"
+      ],
+      "provenance": [
+        "gene_annotation_episode/acquisition.py",
+        "gene_annotation_episode/tools.py",
+        "gene_annotation_episode/literature_assets.py",
+        "gene_annotation_episode/literature_sequence_discovery.py",
+        "gene_annotation_episode/source_sequences.py"
+      ],
+      "sections": [
+        {
+          "section_id": "search",
+          "title": "Search and article identity",
+          "path": "publication-search.md"
+        },
+        {
+          "section_id": "access",
+          "title": "Article versions and supplements",
+          "path": "publication-access.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "source-reading",
+      "title": "Reading retained article and supplement representations",
+      "summary": "Choose source windows, PDF text or images, archive members and spreadsheet rows according to the actual material and question.",
+      "tags": [
+        "literature",
+        "reading",
+        "PDF",
+        "XML",
+        "table",
+        "spreadsheet",
+        "XLSX",
+        "image",
+        "archive"
+      ],
+      "tool_names": [
+        "source.read",
+        "source.pdf.info",
+        "source.pdf.text",
+        "source.pdf.page",
+        "image.view",
+        "source.xlsx.sheets",
+        "source.xlsx.rows",
+        "source.archive.members",
+        "source.archive.extract"
+      ],
+      "provenance": [
+        "gene_annotation_episode/tools.py",
+        "gene_annotation_episode/document_tools.py",
+        "gene_annotation_episode/spreadsheet_tools.py",
+        "gene_annotation_episode/materials.py"
+      ],
+      "sections": [
+        {
+          "section_id": "representations",
+          "title": "Exact text, PDF and image reading",
+          "path": "source-representations.md"
+        },
+        {
+          "section_id": "tables",
+          "title": "Archive and spreadsheet context",
+          "path": "source-tables.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "native-structural-homology",
+      "title": "A102 structural homology and automatic native credit",
+      "summary": "Bind actual target models, execute bounded US-align or Foldseek comparisons, retain scopes and uncertainty, and request external facts through the shared parent.",
+      "tags": [
+        "A102",
+        "structural",
+        "US-align",
+        "Foldseek",
+        "model",
+        "homology"
+      ],
+      "tool_names": [
+        "structure.bind",
+        "structure.inspect",
+        "structure.align",
+        "structure.discover",
+        "structure.feature_geometry",
+        "structure.contrast",
+        "structure.reported_comparison",
+        "structure.model_request",
+        "structure.reference_traits",
+        "structure.interface_geometry"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/a102_scoring.py",
+        "gene_annotation_episode/a102_tools.py",
+        "gene_annotation_episode/a102_resources.py",
+        "gene_annotation_episode/a102_attachments.py",
+        "gene_annotation_episode/sequence_attribution.py"
+      ],
+      "sections": [
+        {
+          "section_id": "investigate",
+          "title": "Native evidence, scope, receiving and missing information",
+          "path": "native-structural-homology.md"
+        }
+      ]
+    }
+  ]
+}

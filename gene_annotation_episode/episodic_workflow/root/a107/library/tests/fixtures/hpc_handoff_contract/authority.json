@@ -1,0 +1,508 @@
+{
+  "runtime_sha256": "8de2e105314e01de5e558ac6980d551c987a7df867b8a53b454640924f5536fa",
+  "selected_AST": "e877bbe8e3cc753173f5b2557f26b21e05e2b1845faa3b97b44789614610467d",
+  "guard_AST": "4dbe6bc9db561912b99c5efbb6e31fd3e920c37bb5e5852ee98f91bd048ca90a",
+  "consumers": [
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a107.hpc_work_planning.task",
+      "class": "HPCWorkTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "hpc",
+          "controlled-0"
+        ]
+      ],
+      "role": "launch",
+      "declaration_sources": [
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/episode.py",
+            "sha256": "cb761f5ed44af886bee0f59c4b4be65fb887fdce439146a8ddf5ba492a1e5c53"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc",
+          "literal_operands": []
+        }
+      ]
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a107.hpc_work_planning.execution_job_submission.task",
+      "class": "LaunchTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "hpc",
+          "controlled-0"
+        ],
+        [
+          "launch",
+          "controlled-1"
+        ]
+      ],
+      "role": "launch_hpc",
+      "declaration_sources": [
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/episode.py",
+            "sha256": "cb761f5ed44af886bee0f59c4b4be65fb887fdce439146a8ddf5ba492a1e5c53"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc",
+          "literal_operands": []
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/execution_job_submission/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/execution_job_submission/episode.py",
+            "sha256": "79e40c637868aa36458d204bcbd2a3d1bd81802639f34bfcf7d450c912a24a86"
+          },
+          "class": "ExecutionEpisode",
+          "role": "launch",
+          "literal_operands": []
+        }
+      ]
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a107.hpc_work_planning.hpc_allocation_execution.task",
+      "class": "HPCWorkTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "hpc",
+          "controlled-0"
+        ],
+        [
+          "hpc_execution",
+          "controlled-1"
+        ]
+      ],
+      "role": "launch",
+      "declaration_sources": [
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/episode.py",
+            "sha256": "cb761f5ed44af886bee0f59c4b4be65fb887fdce439146a8ddf5ba492a1e5c53"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc",
+          "literal_operands": []
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_allocation_execution/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_allocation_execution/episode.py",
+            "sha256": "5228f886b4d2697e90146733320fc8197fd07058c4a70c9b5a6ec8d7c1874fcc"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc_execution",
+          "literal_operands": []
+        }
+      ]
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a107.hpc_work_planning.hpc_allocation_execution.execution_job_submission.task",
+      "class": "LaunchTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "hpc",
+          "controlled-0"
+        ],
+        [
+          "hpc_execution",
+          "controlled-1"
+        ],
+        [
+          "launch",
+          "controlled-2"
+        ]
+      ],
+      "role": "launch_hpc",
+      "declaration_sources": [
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/episode.py",
+            "sha256": "cb761f5ed44af886bee0f59c4b4be65fb887fdce439146a8ddf5ba492a1e5c53"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc",
+          "literal_operands": []
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_allocation_execution/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_allocation_execution/episode.py",
+            "sha256": "5228f886b4d2697e90146733320fc8197fd07058c4a70c9b5a6ec8d7c1874fcc"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc_execution",
+          "literal_operands": []
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py",
+            "sha256": "acc649fbb2d39fb8b846858aa909192e42cfab0dffcd58c898c0b1098d9b0c2e"
+          },
+          "class": "ExecutionEpisode",
+          "role": "launch",
+          "literal_operands": []
+        }
+      ]
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a107.scientific_process.hpc_work_planning.task",
+      "class": "HPCWorkTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "controlled-0"
+        ],
+        [
+          "hpc",
+          "controlled-1"
+        ]
+      ],
+      "role": "launch",
+      "declaration_sources": [
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+            "sha256": "8a6e707b9b84edf27bcc1db0b8c485bc8f22a121c7e45a7b00ebd4ae699361db"
+          },
+          "class": "ScientificProcessEpisode",
+          "role": "scientific_process",
+          "literal_operands": [
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+                "sha256": "8a6e707b9b84edf27bcc1db0b8c485bc8f22a121c7e45a7b00ebd4ae699361db"
+              },
+              "name": "ROLES",
+              "expression": "from .scientific_assignment_contracts import ContractError, ROLE, ROLES",
+              "provider": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py"
+            },
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+                "sha256": "c205b54bdbe7d8cdd56a7e696d2fd0df0abd7a57bd4950b95a684fdb3e2fb422"
+              },
+              "name": "ROLES",
+              "expression": "(ROLE,)"
+            },
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+                "sha256": "c205b54bdbe7d8cdd56a7e696d2fd0df0abd7a57bd4950b95a684fdb3e2fb422"
+              },
+              "name": "ROLE",
+              "expression": "'scientific_process'"
+            }
+          ]
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/episode.py",
+            "sha256": "ec53a8bac38d7703ecb53b9189e079e7b3398a115dd83c411f8ff149eb53ebe6"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc",
+          "literal_operands": []
+        }
+      ]
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a107.scientific_process.hpc_work_planning.execution_job_submission.task",
+      "class": "LaunchTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "controlled-0"
+        ],
+        [
+          "hpc",
+          "controlled-1"
+        ],
+        [
+          "launch",
+          "controlled-2"
+        ]
+      ],
+      "role": "launch_hpc",
+      "declaration_sources": [
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+            "sha256": "8a6e707b9b84edf27bcc1db0b8c485bc8f22a121c7e45a7b00ebd4ae699361db"
+          },
+          "class": "ScientificProcessEpisode",
+          "role": "scientific_process",
+          "literal_operands": [
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+                "sha256": "8a6e707b9b84edf27bcc1db0b8c485bc8f22a121c7e45a7b00ebd4ae699361db"
+              },
+              "name": "ROLES",
+              "expression": "from .scientific_assignment_contracts import ContractError, ROLE, ROLES",
+              "provider": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py"
+            },
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+                "sha256": "c205b54bdbe7d8cdd56a7e696d2fd0df0abd7a57bd4950b95a684fdb3e2fb422"
+              },
+              "name": "ROLES",
+              "expression": "(ROLE,)"
+            },
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+                "sha256": "c205b54bdbe7d8cdd56a7e696d2fd0df0abd7a57bd4950b95a684fdb3e2fb422"
+              },
+              "name": "ROLE",
+              "expression": "'scientific_process'"
+            }
+          ]
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/episode.py",
+            "sha256": "ec53a8bac38d7703ecb53b9189e079e7b3398a115dd83c411f8ff149eb53ebe6"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc",
+          "literal_operands": []
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/execution_job_submission/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/execution_job_submission/episode.py",
+            "sha256": "d970f53ba538ab07bc41c81e2d03d1b7f76df89f97143c2d9dc5f3ace92ad255"
+          },
+          "class": "ExecutionEpisode",
+          "role": "launch",
+          "literal_operands": []
+        }
+      ]
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a107.scientific_process.hpc_work_planning.hpc_allocation_execution.task",
+      "class": "HPCWorkTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "controlled-0"
+        ],
+        [
+          "hpc",
+          "controlled-1"
+        ],
+        [
+          "hpc_execution",
+          "controlled-2"
+        ]
+      ],
+      "role": "launch",
+      "declaration_sources": [
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+            "sha256": "8a6e707b9b84edf27bcc1db0b8c485bc8f22a121c7e45a7b00ebd4ae699361db"
+          },
+          "class": "ScientificProcessEpisode",
+          "role": "scientific_process",
+          "literal_operands": [
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+                "sha256": "8a6e707b9b84edf27bcc1db0b8c485bc8f22a121c7e45a7b00ebd4ae699361db"
+              },
+              "name": "ROLES",
+              "expression": "from .scientific_assignment_contracts import ContractError, ROLE, ROLES",
+              "provider": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py"
+            },
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+                "sha256": "c205b54bdbe7d8cdd56a7e696d2fd0df0abd7a57bd4950b95a684fdb3e2fb422"
+              },
+              "name": "ROLES",
+              "expression": "(ROLE,)"
+            },
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+                "sha256": "c205b54bdbe7d8cdd56a7e696d2fd0df0abd7a57bd4950b95a684fdb3e2fb422"
+              },
+              "name": "ROLE",
+              "expression": "'scientific_process'"
+            }
+          ]
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/episode.py",
+            "sha256": "ec53a8bac38d7703ecb53b9189e079e7b3398a115dd83c411f8ff149eb53ebe6"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc",
+          "literal_operands": []
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_allocation_execution/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_allocation_execution/episode.py",
+            "sha256": "7abf84c973db0fa2b2b014d03332559bd95af48c5cc74ab2130c0bbfdebe0ccc"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc_execution",
+          "literal_operands": []
+        }
+      ]
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a107.scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.task",
+      "class": "LaunchTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "controlled-0"
+        ],
+        [
+          "hpc",
+          "controlled-1"
+        ],
+        [
+          "hpc_execution",
+          "controlled-2"
+        ],
+        [
+          "launch",
+          "controlled-3"
+        ]
+      ],
+      "role": "launch_hpc",
+      "declaration_sources": [
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+            "sha256": "8a6e707b9b84edf27bcc1db0b8c485bc8f22a121c7e45a7b00ebd4ae699361db"
+          },
+          "class": "ScientificProcessEpisode",
+          "role": "scientific_process",
+          "literal_operands": [
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/episode.py",
+                "sha256": "8a6e707b9b84edf27bcc1db0b8c485bc8f22a121c7e45a7b00ebd4ae699361db"
+              },
+              "name": "ROLES",
+              "expression": "from .scientific_assignment_contracts import ContractError, ROLE, ROLES",
+              "provider": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py"
+            },
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+                "sha256": "c205b54bdbe7d8cdd56a7e696d2fd0df0abd7a57bd4950b95a684fdb3e2fb422"
+              },
+              "name": "ROLES",
+              "expression": "(ROLE,)"
+            },
+            {
+              "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+              "source": {
+                "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/scientific_assignment_contracts.py",
+                "sha256": "c205b54bdbe7d8cdd56a7e696d2fd0df0abd7a57bd4950b95a684fdb3e2fb422"
+              },
+              "name": "ROLE",
+              "expression": "'scientific_process'"
+            }
+          ]
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/episode.py",
+            "sha256": "ec53a8bac38d7703ecb53b9189e079e7b3398a115dd83c411f8ff149eb53ebe6"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc",
+          "literal_operands": []
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_allocation_execution/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_allocation_execution/episode.py",
+            "sha256": "7abf84c973db0fa2b2b014d03332559bd95af48c5cc74ab2130c0bbfdebe0ccc"
+          },
+          "class": "HPCEpisode",
+          "role": "hpc_execution",
+          "literal_operands": []
+        },
+        {
+          "target": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py",
+          "source": {
+            "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py",
+            "sha256": "17fdc18b318fbde4f129dc9d62ab7beeeaf103e96bf2e69dea44e733ca371083"
+          },
+          "class": "ExecutionEpisode",
+          "role": "launch",
+          "literal_operands": []
+        }
+      ]
+    }
+  ],
+  "scope": "Supplied declared paths and controlled callback ports; no constructor, admission, science or native execution claim."
+}

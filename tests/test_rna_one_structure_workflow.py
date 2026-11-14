@@ -24,7 +24,7 @@ from test_native_rna_structure_results_integration import history, RUN_ID
 from test_scientific_process_prompt_delivery import ScientificWire, OUTPUT_SCHEMA
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKET = ROOT / 'verification/tool_graders_rna_one_structure_workflow_2026-10-27_385'
+PACKET = ROOT / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_one_structure_385'
 
 
 def module(name, path):
@@ -227,7 +227,7 @@ def test_structure_only_opening_accepts_any_valid_field_subset_and_order(one_cas
 
 @pytest.mark.parametrize('kind', ['pair', 'scan'])
 def test_existing_actual_pair_and_scan_task_are_byte_identical(kind):
-    file = ROOT / 'verification/tool_graders_rna_comparison_shared_integration_2026-10-26_372' / (
+    file = ROOT / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_comparison_shared_372' / (
         'FILLED_ACTUAL_PAIR_001.json' if kind == 'pair' else 'FILLED_ACTUAL_SCAN_001.json')
     case = json.loads(file.read_text())['workflow_case']
     assignment = {'version': 'execution_results_assignment_v1', 'handoff_ref': case['body']['anchor_handoff_ref'],

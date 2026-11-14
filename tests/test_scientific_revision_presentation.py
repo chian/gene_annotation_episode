@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.component_axis_literature_prompt import with_fact_contract_instructions
+from gene_annotation_episode.episodic_workflow.root.component_axis_literature_prompt import with_fact_contract_instructions
 from gene_annotation_episode.scientific_process_prompt import (
     _information, _outcome, _values, render_scientific_process_prompt)
 from gene_annotation_episode.tool_information import selectors
@@ -16,7 +16,7 @@ from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 
 
-FIXTURE = Path(__file__).parent / 'fixtures/work_reports/a107-genomic02-revised-selection.json.gz'
+FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/work_reports/a107-genomic02-revised-selection.json.gz'
 
 
 @pytest.fixture

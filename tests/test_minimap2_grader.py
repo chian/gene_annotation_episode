@@ -202,7 +202,7 @@ def test_query_sweep_uses_compressed_segments_for_large_intervals():
 
 @pytest.mark.parametrize("preset", ["map-ont", "map-pb", "map-hifi", "lr:hq", "map-iclr", "sr"])
 def test_retained_actual_native_output_and_saved_sheet_recalculation(preset, monkeypatch):
-    directory = Path(__file__).resolve().parents[1]/"verification/tool_graders_minimap2_2026-10-24"/(
+    directory = Path(__file__).resolve().parents[1]/"gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/minimap2"/(
         "native_"+preset.replace(":", "_"))
     receipt = json.loads((directory/"receipt.json").read_text())
     assert receipt["returncode"] == 0

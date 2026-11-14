@@ -14,7 +14,7 @@ from gene_annotation_episode.bvbrc_fastqutils_identity import native_ref
 from gene_annotation_episode.bvbrc_fastqutils_native import parse_fastqutils_artifact
 from gene_annotation_episode.bvbrc_fastqutils_samstat_svg import parse_samstat_html_2_5_0, parse_samstat_bvbrc_error_html
 
-FIXTURES=Path(__file__).parent/'fixtures/bvbrc_fastqutils_samstat_svg'
+FIXTURES=Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils_samstat_svg'
 
 
 def context(raw, *, version=None, fmt='samstat_html', scope='complete', identity='source_executed_synthetic'):

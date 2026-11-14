@@ -1,0 +1,127 @@
+{
+  "calculator_version": "rna_comparison_calculators_v1",
+  "comparisons": [],
+  "input_sheet_sha256": "0b9539028da1df108cef47bf8b13bb508692ced5739e6e8a472653a16aa7b9c6",
+  "issues": [
+    {
+      "code": "selected_population_only",
+      "comparison_id": null,
+      "field": null,
+      "index": null,
+      "member_id": null,
+      "selection_id": null,
+      "stage": "calculate"
+    },
+    {
+      "code": "unknown_source_origin",
+      "comparison_id": null,
+      "field": null,
+      "index": null,
+      "member_id": "supplied-RNA",
+      "selection_id": null,
+      "stage": "input"
+    }
+  ],
+  "parameters": {
+    "arithmetic": "retained_binary64_values_v1",
+    "native_uncertainty_policy": "retain_no_fabricated_transfer",
+    "pair_difference": "alignment_column_pair_sets",
+    "schema": "rna_comparison_parameters_v1",
+    "site_denominator": "decidable_selected_shared_sites",
+    "tie_rule": "exact_selected_numeric_value"
+  },
+  "scan": {
+    "baseline_member_id": "supplied-RNA",
+    "baseline_rank_class": "not_requested",
+    "energy_components": [],
+    "issues": [
+      {
+        "code": "selected_population_only",
+        "comparison_id": null,
+        "field": null,
+        "index": null,
+        "member_id": null,
+        "selection_id": null,
+        "stage": "calculate"
+      },
+      {
+        "code": "unknown_source_origin",
+        "comparison_id": null,
+        "field": null,
+        "index": null,
+        "member_id": "supplied-RNA",
+        "selection_id": null,
+        "stage": "input"
+      }
+    ],
+    "members": [
+      {
+        "canonical_member_id": "supplied-RNA",
+        "comparison_id": null,
+        "delta": null,
+        "energy": null,
+        "energy_state": "not_requested",
+        "exact_rank_end": null,
+        "exact_rank_start": null,
+        "issues": [
+          {
+            "code": "unknown_source_origin",
+            "comparison_id": null,
+            "field": null,
+            "index": null,
+            "member_id": "supplied-RNA",
+            "selection_id": null,
+            "stage": "input"
+          }
+        ],
+        "member_id": "supplied-RNA",
+        "membership_state": "canonical"
+      }
+    ],
+    "request": {
+      "baseline_in_rank": true,
+      "energy": null,
+      "member_order": "as_declared",
+      "population_unit": "unique_analyzed_sequence_variant",
+      "scan_id": "scan",
+      "topology_selection_ids": []
+    },
+    "site_components": []
+  },
+  "schema": "rna_structure_comparison_components_v1",
+  "unused_input_paths": [
+    "/operands/0/saved_input",
+    "/operands/0/original_sheet/analysis_sequence",
+    "/operands/0/original_sheet/coordinate_system",
+    "/operands/0/original_sheet/issues",
+    "/operands/0/original_sheet/legacy_quantities",
+    "/operands/0/original_sheet/mode",
+    "/operands/0/original_sheet/model",
+    "/operands/0/original_sheet/native_evaluation",
+    "/operands/0/original_sheet/native_input",
+    "/operands/0/original_sheet/native_mfe",
+    "/operands/0/original_sheet/native_uncertainty",
+    "/operands/0/original_sheet/operation",
+    "/operands/0/original_sheet/original_input",
+    "/operands/0/original_sheet/record_key",
+    "/operands/0/original_sheet/schema",
+    "/operands/0/original_sheet/sequence_pairs",
+    "/operands/0/original_sheet/status",
+    "/operands/0/original_sheet/structure",
+    "/operands/0/original_sheet/subject_binding",
+    "/operands/0/original_sheet/topology",
+    "/operands/0/original_bundle_software",
+    "/operands/0/received_failure"
+  ],
+  "used_input_paths": [
+    "/comparisons",
+    "/operands/0/canonical_member_id",
+    "/operands/0/issues",
+    "/operands/0/member_id",
+    "/operands/0/state",
+    "/operands/0/variant_identity",
+    "/parameters",
+    "/scan_request",
+    "/selected_question"
+  ]
+}

@@ -33,7 +33,7 @@ from test_runtime import ScriptedProvider
 
 
 SOURCE = "source_" + "b" * 24
-FIXTURE = Path(__file__).parent / "fixtures/primer_placement234"
+FIXTURE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/primer_placement234"
 PINS = {"sheet.json": ("436ba7e78ac0821f8e7ed8d939c3e392880ce39a33ef73a23465cd3da3881f1f", 11127),
     "components.json": ("b51bbaae7a80f9238a7735b777031f34413f28dc3dd92a54852da1c56e473442", 18516)}
 

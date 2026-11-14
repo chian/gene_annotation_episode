@@ -22,8 +22,8 @@ from gene_annotation_episode.native_protein_structure_driver import (
     run_protein_structure_driver, _strict_json, _immutable, confined_file,
 )
 from gene_annotation_episode.native_protein_structure_local import prepare_local_protein_structure, local_protein_structure_plan
-_f = import_module("verification.tool_graders_protein_structure_execution_2026-10-27_390.fixture_helpers")
-_a = import_module("verification.tool_graders_protein_structure_inputs_2026-10-27_386.fixture_helpers")
+_f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390")
+_a = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 
 
 @pytest.mark.parametrize("kind", ["inspect", "extract_sequence", "compare"])

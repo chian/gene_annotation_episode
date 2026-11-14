@@ -18,7 +18,7 @@ from gene_annotation_episode.rna_structure_comparison_presentation import (
     render_rna_comparison_projections, select_rna_comparison_presentation,
 )
 
-f = importlib.import_module("verification.tool_graders_rna_comparison_calculations_2026-10-26_367.fixture_helpers")
+f = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_calculations_367.fixture_helpers")
 KEYS = {"result_receipt_key": "rna_comparison_receipt:" + "1" * 64,
     "calculation_key": "rna_comparison_calculation:" + "2" * 64}
 
@@ -265,7 +265,7 @@ def test_rendering_requires_no_hidden_io_calculation_or_mutation(pair, scan, mon
 
 def test_retained_workflow_scan_return_renders_without_expanding_inputs(tmp_path):
     path = Path(__file__).resolve().parents[1] / (
-        "verification/tool_graders_rna_comparison_shared_integration_2026-10-26_372/FILLED_ACTUAL_SCAN_001.json")
+        "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_comparison_shared_372/FILLED_ACTUAL_SCAN_001.json")
     example = json.loads(path.read_text())
     case = example["workflow_case"]
     rows = case["returned"]["comparison"]

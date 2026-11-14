@@ -31,9 +31,9 @@ from gene_annotation_episode.communication import validate_form
 from gene_annotation_episode.bvbrc_appservice_publication import RESULT_VERSION
 from gene_annotation_episode.execution_contracts import canonical, digest
 
-FIXTURES = Path(__file__).parent / 'fixtures/bvbrc_fastqutils_samstat_mapping'
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils_samstat_mapping'
 spec = importlib.util.spec_from_file_location('samstat_mapping_fixture_support',
-    Path(__file__).parent / 'fixtures/bvbrc_fastqutils/bundle/fixture_support.py')
+    Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/bundle/fixture_support.py')
 f = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(f)
 METRICS = ('samstat_report_mapped_record_fraction', 'samstat_report_ge30_record_fraction')

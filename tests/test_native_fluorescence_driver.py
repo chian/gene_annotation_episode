@@ -13,15 +13,15 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import native_fluorescence_driver as driver
-from gene_annotation_episode import native_fluorescence_local as local
+import gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_driver as driver
+import gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_local as local
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.fluorescence_execution_common import canonical, digest, identity
-from gene_annotation_episode import fluorescence_event_contracts as core
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical, digest, identity
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.native_fluorescence_contracts import (POLICY, fluorescence_environment,
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import (POLICY, fluorescence_environment,
     validate_fluorescence_manifest, validate_fluorescence_parsed_batch)
-from gene_annotation_episode.native_fluorescence_storage import immutable_bytes, immutable_json, read_json
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_storage import immutable_bytes, immutable_json, read_json
 from test_native_fluorescence_contracts import event_input, job, plan, software
 
 
@@ -126,7 +126,7 @@ def test_no_replacement_or_partial_final_file_on_publication_failure(tmp_path, m
     assert not list(tmp_path.glob('*.writing'))
     new = tmp_path / 'unpublished.json'
     def interrupted(*args): raise OSError(errno.ENOSPC, 'fixture scratch failure')
-    monkeypatch.setattr('gene_annotation_episode.native_fluorescence_storage.os.fsync', interrupted)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_storage.os.fsync', interrupted)
     with pytest.raises(OSError): immutable_bytes(new, b'partial')
     assert not new.exists()
 

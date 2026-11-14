@@ -16,10 +16,10 @@ import tempfile
 from typing import Any, Iterable
 from urllib.parse import quote
 
-from . import __version__
+from gene_annotation_episode import __version__
 from .domain import ContractError, canonical
-from . import materials_packing as packing
-from . import library_targets as libraries
+from gene_annotation_episode import materials_packing as packing
+from gene_annotation_episode import library_targets as libraries
 
 FORMAT = "gene_annotation_episode.current_annotation"
 SCHEMA_VERSION = 1

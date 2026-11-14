@@ -17,7 +17,7 @@ from gene_annotation_episode.bvbrc_analysis_protocol import (
 )
 
 
-STUDY = Path(__file__).resolve().parents[1] / "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24"
+STUDY = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/native_rpc_contract"
 METHOD = "AppService.enumerate_apps"
 UUID_A = "11111111-1111-4111-8111-111111111111"
 UUID_B = "22222222-2222-4222-8222-222222222222"

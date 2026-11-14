@@ -34,7 +34,7 @@ from gene_annotation_episode.tools import ToolRegistry
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATION = ROOT / "research/slotted_process_library/publications/2026-10-24-001"
-NATIVE = Path(__file__).parent / "fixtures/vcf_results/expected.testExposureOfSmithWatermanParameters.M2.gatk4.vcf"
+NATIVE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/vcf_results/expected.testExposureOfSmithWatermanParameters.M2.gatk4.vcf"
 QUESTION = ("For the supplied Mutect2 VCF, what native record, ALT-token and sample-cell populations "
     "and selected reported GT, AD, FAD and AF values are retained? Return the controlled VCF result groups.")
 POLICY = dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)

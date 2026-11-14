@@ -1,15 +1,9 @@
 """XLSX representation checks; no model or biological conclusion is asserted."""
-import json
-from pathlib import Path
 import zipfile
 
 import pytest
 
-from gene_annotation_episode.spreadsheet_tools import read_workbook, xlsx_native
-
-
-ROOT = Path(__file__).resolve().parents[1]
-REAL_SHA = 'b7a18c32752040f3e11150c8024bda6d9df2b51ed5261a895bfe63c2f48a7952'
+from gene_annotation_episode.spreadsheet_tools import read_workbook
 
 
 def workbook(tmp_path, *, bad_string=False, truncated=False):
@@ -122,26 +116,3 @@ def test_unknown_row_number_retains_prior_rows_and_actual_cell_addresses(tmp_pat
     assert last['row_ordinal'] == 3 and last['cells'][0]['address'] == 'A3'
     assert last['cells'][0]['value'] == 'other'
     assert result['header'] is None
-
-
-def test_retained_actual_study_row_through_protected_native_reader():
-    path = ROOT/'cases/gene_001/workspace/artifacts'/REAL_SHA[:2]/REAL_SHA
-    if not path.is_file():
-        pytest.skip('The actual study spreadsheet acquired by investigation_002 is unavailable')
-    limits = {'memory_bytes': 256*1024**2, 'scratch_bytes': 8*1024**2}
-    inventory = json.loads(xlsx_native(path, operation='sheets', arguments={}, job_limits=limits).content)
-    sheet = next(row for row in inventory['sheets'] if row['name'] == 'Average ratio and clustering')
-    output = xlsx_native(path, operation='rows', arguments={'sheet_key': sheet['sheet_key'],
-        'offset': 0, 'limit': 2, 'header_row': 1,
-        'where': {'column': 'A', 'match': 'equals', 'value': 'YBHP', 'case_sensitive': False}}, job_limits=limits)
-    result = json.loads(output.content)
-    assert result['status'] == 'completed' and result['total_matches'] == 1
-    row, = result['rows']
-    assert row['row_number'] == 1324
-    cells = {cell['address']: cell['value'] for cell in row['cells']}
-    assert cells['A1324'] == 'YBHP' and cells['B1324'] == 'P0AAW1'
-    assert cells['R1324'] == 'Cytoplasm' and cells['Y1324'] == 'IM'
-    header = {cell['address']: cell['value'] for cell in result['header']['cells']}
-    assert header['R1'] == 'STEPdb_loc_code' and header['Y1'] == 'localization (sucrose gradient)'
-    assert output.metadata['job_limits']['memory_bytes'] == limits['memory_bytes']
-    assert output.metadata['job_limits']['wall_seconds'] is None

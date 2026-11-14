@@ -1,0 +1,97 @@
+{
+  "custody": "publisher PDF text rendered by web tool; native PDF download HTTP403; not original PDF bytes",
+  "source_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/j.1365-2958.2010.07381.x",
+  "doi": "10.1111/j.1365-2958.2010.07381.x",
+  "inspection_scope": [
+    "first Results section and Fig1 caption with page1 visual",
+    "full cloning-expression-purification and enzyme-assay Methods with page5 visual"
+  ],
+  "sources": [
+    {
+      "source_ref": "source_c13ecf972d7bc5d881476cb0",
+      "file": "PUBLISHER_RESULTS_RENDERING_001.txt",
+      "bytes": 26047,
+      "sha256": "c13ecf972d7bc5d881476cb05cb116c4b4bf39983e88151268ba21e4b51e5b9d",
+      "upstream_record": "WEB_RESULTS_001.json",
+      "origin": "tool_rendered_publisher_text"
+    },
+    {
+      "source_ref": "source_a0a3073db4007b84d6240ef8",
+      "file": "PUBLISHER_METHODS_RENDERING_001.txt",
+      "bytes": 23944,
+      "sha256": "a0a3073db4007b84d6240ef8734c731e311c355ccf8d977f4c9337178a451ff4",
+      "upstream_record": "WEB_METHODS_001.json",
+      "origin": "tool_rendered_publisher_text"
+    },
+    {
+      "source_ref": "source_ed34d536871205d2dd7dfac4",
+      "file": "PAPER_SELECTION_001.json",
+      "bytes": 2679,
+      "sha256": "ed34d536871205d2dd7dfac4ec62ef642aff4bc361a8498b5f80296789b479fd",
+      "origin": "coordinator_transcription_not_native_reader",
+      "upstream_files": [
+        "PUBLISHER_RESULTS_RENDERING_001.txt",
+        "PUBLISHER_METHODS_RENDERING_001.txt"
+      ]
+    }
+  ],
+  "reported_native_values": [
+    {
+      "source_location": "Fig1D caption, page981",
+      "value": 284,
+      "spread": 33,
+      "unit": "pmol/min/mg",
+      "spread_kind": "unspecified"
+    },
+    {
+      "source_location": "first Results continuation, page982",
+      "value": 774,
+      "spread": 58,
+      "unit": "pmol/min/mg",
+      "spread_kind": "unspecified"
+    }
+  ],
+  "descriptive_printed_value_arithmetic": {
+    "ratio": "284/774",
+    "exact_fraction": "142/387",
+    "value": 0.3669250645994832,
+    "meaning": "ratio of printed specific-activity numbers, not controlled partner loss; denominators not resolved"
+  },
+  "repetition_statement": {
+    "times_repeated": 4,
+    "triplicates_per_experiment": 3,
+    "shown": "one representative experiment",
+    "independent_protein_preparations": null,
+    "pooled_n": null,
+    "uncertainty_basis": null
+  },
+  "constructs": {
+    "origin_organism": "Mycobacterium tuberculosis H37Rv",
+    "source_loci": [
+      "Rv2606c",
+      "Rv2604c"
+    ],
+    "tag": "C-terminal 6xHis as reported",
+    "expression_host": "BL21-CodonPlus(DE3)-RP",
+    "vector": "pET21a+",
+    "purification": [
+      "Ni-NTA",
+      "Superdex200 size-exclusion"
+    ],
+    "exact_construct_boundaries": "not verified; TableS1 not inspected"
+  },
+  "visual_verification": [
+    "PDF text loses micro symbols: Methods uses20 micromolar purified Pdx1 and/orPdx2; do not read rendered20mM as a measured20 millimolar protein amount.",
+    "Printed plus/minus rates are visually checked; tool text contains a control character in place of the plus/minus glyph."
+  ],
+  "not_established": [
+    "mass denominator identity for each reported specific activity",
+    "SD/SEM/CI meaning of Fig1 rate spreads",
+    "same-nitrogen-source Pdx2 omission rate",
+    "quantified Pdx2 addback rate",
+    "quantitative glutaminase absence limit",
+    "physical protein-preparation independence",
+    "physiological availability of bypass ammonium",
+    "target correspondence or annotation transfer"
+  ]
+}

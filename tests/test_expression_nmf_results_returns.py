@@ -70,7 +70,7 @@ class Fixture:
         self.host = StrictHost(store, self.run_id)
         self.boundary = ExpressionNMFReturns(SimpleNamespace(store=store, run_id=self.run_id, native_expression_nmf_results=self.host))
         self.root = self.context((('annotation', 'root'),), {}, None)
-        raw = (Path(os.environ['NMF489_REPO']) / 'verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check003/native-none/sheet-example.json').read_bytes()
+        raw = (Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/expression_nmf/native-none/sheet-example.json').read_bytes()
         reference = store.artifact(raw, 'application/json')
         self.sheet = {'artifact_ref': reference, 'sha256': reference[9:], 'size_bytes': len(raw), 'format': 'expression_nmf_sheet_v1'}
         self.projection = dict(schema='expression_nmf_result_view_v1', view='fit_diagnostics', selector={

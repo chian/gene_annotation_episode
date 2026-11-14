@@ -11,7 +11,7 @@ from gene_annotation_episode.infernal_preparation_models import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / "verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native"
+NATIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/boundaries/native"
 
 
 def artifact(data, fmt="infernal_cm_ascii", ref="fixture/models", completeness="complete"):

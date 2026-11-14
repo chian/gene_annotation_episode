@@ -11,7 +11,6 @@ from dataclasses import replace
 from datetime import datetime, timezone
 import hashlib
 import http.client
-import math
 import re
 import time
 from typing import Literal
@@ -19,7 +18,7 @@ from urllib.parse import urlsplit
 import uuid
 
 from .acquisition import AcquisitionError, SourceSnapshot
-from .rfam_discovery import BASE_URL, result_url
+from gene_annotation_episode.episodic_workflow.root.library.rfam_discovery import BASE_URL, result_url
 
 
 def _now() -> str:
@@ -33,16 +32,12 @@ def _digest(value: bytes) -> str:
 class RfamBatchHTTP:
     """Stateless, fixed-origin transport; each call sends at most one request.
 
-    ``timeout_seconds`` limits a blocking network operation. It is not a remote
-    job deadline. There is no connection pool, automatic retry, redirect,
+    There is no connection pool, automatic retry, redirect,
     status interpretation, or saved-job lookup. The caller owns durable replay.
     """
 
-    def __init__(self, *, timeout_seconds: float):
-        if (type(timeout_seconds) not in (int, float)
-                or not math.isfinite(timeout_seconds) or timeout_seconds <= 0):
-            raise ValueError("rfam_transport_timeout_invalid")
-        self.timeout_seconds = float(timeout_seconds)
+    def __init__(self):
+        """No elapsed transport setting is introduced during construction."""
 
     def submit(self, sequence: str) -> SourceSnapshot:
         """Submit the supplied ASCII sequence followed by exactly one newline."""
@@ -115,7 +110,7 @@ class RfamBatchHTTP:
         # Explicit HTTPConnection request construction below captures every
         # actual header, including headers commonly added by higher-level
         # clients. HTTPSConnection verifies the provider's TLS certificate.
-        return http.client.HTTPSConnection("batch.rfam.org", timeout=self.timeout_seconds)
+        return http.client.HTTPSConnection("batch.rfam.org")
 
     def _request(self, method, address, *, body, accept, metadata, content_type=None):
         parsed = urlsplit(address)
@@ -154,7 +149,7 @@ class RfamBatchHTTP:
                           "acquisition_started_at": started_at, "acquisition_finished_at": _now(),
                           "elapsed_seconds": time.monotonic() - started_clock,
                           "duration_meaning": "http_request_turnaround",
-                          "timeout_seconds": self.timeout_seconds, "response_received": False}
+                          "response_received": False}
             raise AcquisitionError("rfam_transport_error", phase=phase,
                                    submission_outcome=("not_sent" if phase == "connect" else "unknown")
                                        if method == "POST" else None,
@@ -209,7 +204,7 @@ class RfamBatchHTTP:
                      "acquisition_started_at": started_at, "acquisition_finished_at": finished_at,
                      "elapsed_seconds": time.monotonic() - started_clock,
                      "duration_meaning": "http_request_turnaround",
-                     "timeout_seconds": self.timeout_seconds, "body_complete": capture_error is None,
+                     "body_complete": capture_error is None,
                      "bytes_received": len(content), "declared_content_length": declared_length,
                      "body_capture_error": capture_error, "automatic_redirects": False,
                      "automatic_retries": False, "http_request_count": 1,

@@ -1,0 +1,71 @@
+{
+  "homes": {
+    "execution_job_submission": {
+      "endpoint_identity_ASTs": [
+        "FunctionDef(name='prepare_api_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_local_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_hpc_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])"
+      ],
+      "original_method_AST_sha256": "5d77e26e0612b7fa8eaa7dfc220bc952ffd9575546ba8924f723faa0bd17b8f8",
+      "original_source_path": "gene_annotation_episode/episodic_workflow/root/a107/execution_job_submission/episode.py",
+      "original_source_sha256": "3ec73f442a8be424afd8534093438c89a44eb7816a2b33322a5b0437d03e7ac7",
+      "source": "def prepare_api_request(binding, parent, selection):\n    return selection\n\ndef prepare_local_request(binding, parent, selection):\n    return selection\n\ndef prepare_hpc_request(binding, parent, selection):\n    return selection\n\ndef prepare_child_request(self, parent, role, assignment):\n    if role == 'launch_api':\n        return prepare_api_request(self, parent, assignment)\n    if role == 'launch_local':\n        return prepare_local_request(self, parent, assignment)\n    if role == 'launch_hpc':\n        return prepare_hpc_request(self, parent, assignment)\n    return assignment\n"
+    },
+    "hpc_work_planning/execution_job_submission": {
+      "endpoint_identity_ASTs": [
+        "FunctionDef(name='prepare_api_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_local_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_hpc_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])"
+      ],
+      "original_method_AST_sha256": "5d77e26e0612b7fa8eaa7dfc220bc952ffd9575546ba8924f723faa0bd17b8f8",
+      "original_source_path": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/execution_job_submission/episode.py",
+      "original_source_sha256": "8489513ef4e2610b65d24138d23f2fd2d44ff365fc9070690b40acf7faac552c",
+      "source": "def prepare_api_request(binding, parent, selection):\n    return selection\n\ndef prepare_local_request(binding, parent, selection):\n    return selection\n\ndef prepare_hpc_request(binding, parent, selection):\n    return selection\n\ndef prepare_child_request(self, parent, role, assignment):\n    if role == 'launch_api':\n        return prepare_api_request(self, parent, assignment)\n    if role == 'launch_local':\n        return prepare_local_request(self, parent, assignment)\n    if role == 'launch_hpc':\n        return prepare_hpc_request(self, parent, assignment)\n    return assignment\n"
+    },
+    "hpc_work_planning/hpc_allocation_execution/execution_job_submission": {
+      "endpoint_identity_ASTs": [
+        "FunctionDef(name='prepare_api_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_local_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_hpc_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])"
+      ],
+      "original_method_AST_sha256": "5d77e26e0612b7fa8eaa7dfc220bc952ffd9575546ba8924f723faa0bd17b8f8",
+      "original_source_path": "gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py",
+      "original_source_sha256": "9cbbb0c7dc96a88bb774504cd8104f01ec1b30a380d287d40187e475c9084fde",
+      "source": "def prepare_api_request(binding, parent, selection):\n    return selection\n\ndef prepare_local_request(binding, parent, selection):\n    return selection\n\ndef prepare_hpc_request(binding, parent, selection):\n    return selection\n\ndef prepare_child_request(self, parent, role, assignment):\n    if role == 'launch_api':\n        return prepare_api_request(self, parent, assignment)\n    if role == 'launch_local':\n        return prepare_local_request(self, parent, assignment)\n    if role == 'launch_hpc':\n        return prepare_hpc_request(self, parent, assignment)\n    return assignment\n"
+    },
+    "scientific_process/execution_job_submission": {
+      "endpoint_identity_ASTs": [
+        "FunctionDef(name='prepare_api_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_local_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_hpc_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])"
+      ],
+      "original_method_AST_sha256": "5d77e26e0612b7fa8eaa7dfc220bc952ffd9575546ba8924f723faa0bd17b8f8",
+      "original_source_path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/execution_job_submission/episode.py",
+      "original_source_sha256": "d7954861edb711fcf302d2560cb0418ae0b17e8ccd88f8bc75ef50888584539e",
+      "source": "def prepare_api_request(binding, parent, selection):\n    return selection\n\ndef prepare_local_request(binding, parent, selection):\n    return selection\n\ndef prepare_hpc_request(binding, parent, selection):\n    return selection\n\ndef prepare_child_request(self, parent, role, assignment):\n    if role == 'launch_api':\n        return prepare_api_request(self, parent, assignment)\n    if role == 'launch_local':\n        return prepare_local_request(self, parent, assignment)\n    if role == 'launch_hpc':\n        return prepare_hpc_request(self, parent, assignment)\n    return assignment\n"
+    },
+    "scientific_process/hpc_work_planning/execution_job_submission": {
+      "endpoint_identity_ASTs": [
+        "FunctionDef(name='prepare_api_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_local_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_hpc_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])"
+      ],
+      "original_method_AST_sha256": "5d77e26e0612b7fa8eaa7dfc220bc952ffd9575546ba8924f723faa0bd17b8f8",
+      "original_source_path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/execution_job_submission/episode.py",
+      "original_source_sha256": "1a7dddfce03cea37a5f29b83882dd0cea138c95fd8f1106d10d32b7e61418d96",
+      "source": "def prepare_api_request(binding, parent, selection):\n    return selection\n\ndef prepare_local_request(binding, parent, selection):\n    return selection\n\ndef prepare_hpc_request(binding, parent, selection):\n    return selection\n\ndef prepare_child_request(self, parent, role, assignment):\n    if role == 'launch_api':\n        return prepare_api_request(self, parent, assignment)\n    if role == 'launch_local':\n        return prepare_local_request(self, parent, assignment)\n    if role == 'launch_hpc':\n        return prepare_hpc_request(self, parent, assignment)\n    return assignment\n"
+    },
+    "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission": {
+      "endpoint_identity_ASTs": [
+        "FunctionDef(name='prepare_api_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_local_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])",
+        "FunctionDef(name='prepare_hpc_request', args=arguments(args=[arg(arg='binding'), arg(arg='parent'), arg(arg='selection')]), body=[Return(value=Name(id='selection', ctx=Load()))])"
+      ],
+      "original_method_AST_sha256": "5d77e26e0612b7fa8eaa7dfc220bc952ffd9575546ba8924f723faa0bd17b8f8",
+      "original_source_path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py",
+      "original_source_sha256": "7f9e0bc43ab86c0546e425a0f372801ec4ecc65e4a264d12340beb59166da2c9",
+      "source": "def prepare_api_request(binding, parent, selection):\n    return selection\n\ndef prepare_local_request(binding, parent, selection):\n    return selection\n\ndef prepare_hpc_request(binding, parent, selection):\n    return selection\n\ndef prepare_child_request(self, parent, role, assignment):\n    if role == 'launch_api':\n        return prepare_api_request(self, parent, assignment)\n    if role == 'launch_local':\n        return prepare_local_request(self, parent, assignment)\n    if role == 'launch_hpc':\n        return prepare_hpc_request(self, parent, assignment)\n    return assignment\n"
+    }
+  },
+  "version": "a107_original_launch_identity_callbacks_v1"
+}

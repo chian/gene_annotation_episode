@@ -14,7 +14,7 @@ from gene_annotation_episode.chromatin_cooler_inputs import read_cooler_contacts
 from gene_annotation_episode.chromatin_interaction_tables import open_chromatin_contact_tables
 from tests.test_chromatin_interaction_contracts import examples
 
-FIXTURES = Path('/home/chia/repos/gene_annotation_episode/verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/fixtures')
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/cooler'
 
 
 def identity(raw, format):
@@ -39,7 +39,7 @@ def extract(raw, request):
     extraction = read_cooler_contacts(source, spec=request['contact'], normalization=request['normalization'], populations=request['populations'], table_streams=streams)
     assert not source.closed
     key = hashlib.sha256(json.dumps(request, sort_keys=True).encode()).hexdigest()
-    retained = Path.cwd() / 'native_cases' / key
+    retained = Path(__file__).resolve().parents[1] / 'runs/chromatin_native_cases' / key
     retained.mkdir(parents=True, exist_ok=True)
     (retained / 'input.cool').write_bytes(raw)
     (retained / 'request.json').write_text(json.dumps(request, indent=2))

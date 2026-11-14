@@ -26,7 +26,7 @@ from gene_annotation_episode.sequence_masking_calculations import calculate_sequ
 from gene_annotation_episode.windowmasker_statistics import parse_windowmasker_statistics
 
 
-FIXTURES = Path(__file__).resolve().parents[1] / "verification/tool_graders_masking_native_oracle_2026-10-28_612/retained_native"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/masking_native"
 
 
 def occurrence(content, oid="input", role="sequences", completeness="complete"):
@@ -148,7 +148,8 @@ def test_saved_native_dust_hard_ambiguity_preserves_exact_changed_count():
 
 
 def test_synthetic_overlap_duplicate_intervals_reuse_exact_shared_helpers():
-    from gene_annotation_episode import genomic_overlap_calculations, hmmer_search_grader
+    from gene_annotation_episode import genomic_overlap_calculations
+    from gene_annotation_episode.episodic_workflow.root.a101 import hmmer_search_grader
     with patch.object(hmmer_search_grader, "_union", wraps=hmmer_search_grader._union) as union, \
          patch.object(genomic_overlap_calculations, "_ratio", wraps=genomic_overlap_calculations._ratio) as ratio:
         sheet, result = build(b">one\nACGTACGTACGT\n", b">generated\n0 - 3\n2 - 5\n8 - 8\n0 - 3\n")

@@ -21,7 +21,7 @@ from gene_annotation_episode.phylogeny_calculators import alignment_components
 from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
 
 
-NATIVE = Path(__file__).resolve().parents[1] / 'verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples'
+NATIVE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_metacats_boundaries/native_examples'
 ROUNDING = 'binary64_fixed_2_ties_to_even'
 
 

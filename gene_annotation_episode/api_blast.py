@@ -8,7 +8,7 @@ import hashlib
 import re
 from datetime import datetime, timezone
 
-from . import blast_search as blast
+from gene_annotation_episode.episodic_workflow.root.library import blast_search as blast
 from .acquisition import AcquisitionError
 from .api_services import (event, object_schema, publish_existing_acquisition,
                            validate_service_configuration, validate_value)

@@ -1,0 +1,102 @@
+def facts(self, source, *, completion_record=None):
+    saved = self.journal.row('runtime_forms', source.episode_id)
+    if saved is not None:
+        facts = json.loads(saved['facts'])
+        facts.pop('interpretations', None)
+        facts.update(self.episode_bindings.current_report_facts(self.binding_context(source)))
+        return facts
+    with self.store.read_snapshot():
+
+        def ordered_refs(field):
+            rows = self.store.db.execute('SELECT refs.value FROM runtime_actions actions JOIN json_each(actions.result, ?) refs WHERE actions.run_id=? AND actions.episode_id=? AND actions.result IS NOT NULL ORDER BY actions.decision_index, refs.key', ('$.' + field, self.run_id, source.episode_id))
+            return list(dict.fromkeys((row[0] for row in rows)))
+        committed = ordered_refs('record_refs')
+        changed = ordered_refs('changed_record_refs')
+        changed_types = {ref: self.store.get(ref)['record_type'] for ref in changed}
+        last = (source.last_outcome or {}).get('record_refs', [])
+        unseen = []
+        for ref in last:
+            if ref not in source.report_basis:
+                record = self.store.get(ref)
+                if record.get('record_type') == 'observation':
+                    unseen.append(ref)
+        specialist = self.specialist(source)
+        credit_snapshot = {} if callable(getattr(specialist, '_closed_credit_facts', None)) else None
+        credit_view = self.source_credit_view(source) if credit_snapshot is None else self.source_credit_view(source, binding_snapshot=credit_snapshot)
+        facts = {'credit': credit_view['credit'], 'subject_refs': source.scope['subject_refs'], 'committed_record_refs': committed, 'changed_record_refs': changed, 'changed_annotation_refs': [ref for ref in changed if changed_types[ref] == 'annotation'], 'changed_assessment_refs': [ref for ref in changed if changed_types[ref] == 'assessment'], 'changed_interpretation_account_refs': [ref for ref in changed if changed_types[ref] == 'interpretation_account'], 'last_outcome_refs': last, 'interpretation_basis_refs': source.report_basis, 'observations_after_report_basis': unseen, 'episode_yield': closing_yield(completion_record), 'pending_handles': self.pending_handles(source)}
+        if self.native_event_information is not None:
+            facts.update(self.native_event_information.facts(self.binding_context(source)))
+        if self.is_job_source(source):
+            facts.update(self.job_episode_for_path(source.path).facts(source, credit_view=credit_view))
+        else:
+            if self.project_annotation_score is not None:
+                annotation = self.annotation_context(source.scope, source=source)
+                for key in ('annotation_score', 'proposed_annotations', 'annotation_comparisons'):
+                    if key in annotation:
+                        facts[key] = annotation[key]
+            if self.resource_estimator is not None:
+                facts['resource_tool_estimates'] = recorded_forecasts(self.store, run_id=self.run_id, episode_id=source.episode_id)
+        if self.native_timing_information is not None:
+            native = self.native_timing_information.read_details(self.store, source.scope, details_limit=None, details_offset=0, **self.native_timing_arguments(source))
+            facts['monitoring_information_credit'] = credit_view['monitoring_information_credit']
+            facts['native_execution_measurements'] = native['native_execution_measurements']
+        snapshot = {'completion': None if completion_record is None else {'ended_by': completion_record.ended_by, 'end_reason': completion_record.end_reason, 'units_consumed': completion_record.units_consumed}, 'own_action_count': None if completion_record is None else completion_record.units_consumed, 'last_outcome_refs': last, 'committed_record_refs': committed, 'changed_record_refs': changed, 'report_basis_refs': source.report_basis}
+        if specialist is not None:
+            if credit_snapshot is not None:
+                snapshot['operational_credit_snapshot'] = credit_snapshot
+            context = self.binding_context(source)
+            if specialist is self.scientific_process_binding:
+                snapshot.update(initial_credit=self.journal.row('runtime_episodes', source.episode_id)['initial_credit'], credit=facts['credit'], controller_credit=self.source_controller_credit(source), episode_yield=facts['episode_yield'], parent_invocation_ref=self.services.scientific_parent_invocation(context))
+            facts.update(specialist.facts(context, snapshot))
+        received_facts = self.episode_bindings.received_report_facts(self.binding_context(source), completion_snapshot=snapshot)
+        if set(received_facts).intersection(facts):
+            raise ValueError('received_report_fact_conflict')
+        facts.update(received_facts)
+        return facts
+
+def action_schema(self, source):
+    form_example = _object({'changed_annotation_refs': {'type': 'array', 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'annotation'}, 'x-source': 'changed_annotation_refs', 'description': 'Actual annotation revisions changed during this investigation; these references are not a claim that every revision is still current.'}, 'changed_assessment_refs': {'type': 'array', 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'assessment'}, 'x-source': 'changed_assessment_refs', 'description': 'Actual changed source-linked assessment revisions, retaining their hypotheses, observations, relations and applicability.'}, 'changed_interpretation_account_refs': {'type': 'array', 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'interpretation_account'}, 'x-source': 'changed_interpretation_account_refs', 'description': FACT_MEANINGS['changed_interpretation_account_refs']}, 'scoped_credit': {'type': 'number', 'x-source': 'credit', 'description': 'Credit projected for the fixed child scope at completion, not an accuracy verdict or a stopping instruction.'}})
+    interpretive_example = _object({'interpreted_assessment_refs': _array({'type': 'string', 'format': 'reference', 'x-reference-namespace': 'assessment', 'description': 'Assessments the child selects as bearing on the assigned distinction. Each resolves to its actual hypothesis, observation, relation, conditions and assumptions; a non-discriminating result remains useful information.'}), 'unresolved_hypothesis_refs': _array({'type': 'string', 'format': 'reference', 'x-reference-namespace': 'hypothesis', 'description': 'In-scope alternatives the child currently considers unresolved; an empty array makes no claim that every possible explanation was tested.'}), 'changed_annotation_refs': form_example['properties']['changed_annotation_refs'], 'interpretation_basis_refs': {'type': 'array', 'items': {'type': 'string', 'format': 'reference'}, 'x-source': 'interpretation_basis_refs', 'description': FACT_MEANINGS['interpretation_basis_refs']}, 'observations_after_report_basis': {'type': 'array', 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'observation'}, 'x-source': 'observations_after_report_basis', 'description': FACT_MEANINGS['observations_after_report_basis']}})
+    scope_schema = {'type': 'object', 'additionalProperties': False, 'required': ['subject_refs'], 'properties': {'subject_refs': _array({'type': 'string'}), 'read_selection_refs': _array({'type': 'string'}), 'segments': _array({'type': 'object', 'additionalProperties': False, 'required': ['target_ref', 'start', 'end', 'unit'], 'properties': {'target_ref': {'type': 'string'}, 'member_ref': {'type': 'string'}, 'start': {'type': 'integer', 'minimum': 0}, 'end': {'type': 'integer', 'minimum': 1}, 'unit': {'type': 'string', 'enum': ['nt', 'aa', 'symbol']}}})}}
+    specialist = self.specialist(source)
+    common_actions = specialist.permitted_common_actions(self.binding_context(source)) if specialist is not None else ('tool', 'reason', 'child', 'wait', 'redeliver_report')
+    if not self.permits_common_action(source, 'wait'):
+        common_actions = tuple((action for action in common_actions if action != 'wait'))
+    if restricted_root(self, source):
+        if self.receipts is None:
+            common_actions = tuple((action for action in common_actions if action != 'tool'))
+    options = [] if self.is_job_source(source) or 'reason' not in common_actions else [self.reasoning_action_schema(source)]
+    if 'wait' in common_actions:
+        options.append(_object({'kind': {'type': 'string', 'const': 'wait'}, 'condition': _wait_condition_schema()}))
+    for item in self.catalog(source.scope, source=source) if 'tool' in common_actions else ():
+        branch = _object({'kind': {'type': 'string', 'const': 'tool'}, 'tool': {'type': 'string', 'const': item['name']}, 'arguments': _embedded_tool_schema(item['input_schema'])})
+        if item.get('argument_transport') is not None:
+            if item['argument_transport'] != CONTRACT_ARGUMENT_TRANSPORT:
+                raise ValueError('unsupported_tool_argument_transport')
+            branch['x-argument-transport'] = CONTRACT_ARGUMENT_TRANSPORT
+        options.append(branch)
+    scientific_child = _object({'kind': {'type': 'string', 'const': 'child'}, 'goal': {'type': 'string', 'description': "A substantive improvement the child can pursue iteratively and revise from outcomes. A fully specified one-off lookup/calculation belongs to an ordinary tool. Numerical yield controls the child's continuation."}, 'scope': scope_schema, 'purpose': {'type': 'string', 'description': 'Explain what information you need for your later scientific decision and what your selected form fields mean.'}, 'schema_json': {'type': 'string', 'description': 'JSON encoding of your parent-defined closed return form: explicit required fields, additionalProperties false, typed arrays, and strings restricted to enum codes or declared semantic formats. A reference can declare format reference and x-reference-namespace. Optional top-level x-source selectors bind recorded facts named in available_report_facts; do not ask a model to invent those facts. These examples are optional API guidance; choose fields and meanings for your actual later decision. Fact-only example: ' + _json(form_example) + ' Interpretive example, selecting actual assessment records rather than a findings paragraph: ' + _json(interpretive_example)}, 'initial_report_json': {'type': 'string', 'description': 'JSON containing exactly the interpretation fields you chose (those without x-source), with parent-supplied initial values. Use {} for the fact-only example; for the interpretive example use {"interpreted_assessment_refs":[],"unresolved_hypothesis_refs":[]}. Those initial arrays are not new child judgments. If you request other interpreted fields, define their allowed meanings and initialize them explicitly. The runtime does not choose fields or unknown values for you.'}})
+    if not self.is_job_source(source):
+        explicit_roles = None if self.annotation_child_roles is None and (not (len(source.path) == 1 and getattr(self.project_credit, 'task_credit', False))) else self.available_child_roles(source)
+        if specialist is None and self.scientific_process_binding is None and ('child' in common_actions) and (explicit_roles is None or 'improvement' in explicit_roles):
+            options.append(scientific_child)
+        if self.job_episodes is not None and specialist is None:
+            for role in self.job_episodes.roles:
+                own = self.job_episode_for_child(source.path, role)
+                options.extend(option for option in own.commission_schemas(scientific_child) if option['properties']['role']['const'] == role and (explicit_roles is None or role in explicit_roles))
+        if 'child' in common_actions:
+            roles = tuple((role for role in explicit_roles if role in self.episode_bindings.roles)) if explicit_roles is not None else specialist.allowed_children(self.binding_context(source), self.services.capabilities()) if specialist is not None else self.episode_bindings.entry_roles
+            declared = set(specialist.child_roles(source.path[-1][0])) if specialist else set(roles)
+            if not set(roles) <= declared:
+                raise WorkflowError('available_child_outside_declared_type_edges')
+            for role in roles:
+                binding = self.episode_bindings.for_child(source.path, role)
+                child_schema = getattr(binding, 'child_assignment_schema', None)
+                properties = {**scientific_child['properties'], 'kind': {'type': 'string', 'const': 'episode_child'}, 'role': {'type': 'string', 'const': role}, 'assignment': child_schema(self.binding_context(source), role) if child_schema is not None else binding.assignment_schema(role)}
+                if self.root_child_return_sources(source, role):
+                    properties.pop('schema_json')
+                    properties.pop('initial_report_json')
+                options.append(_object(properties))
+    if not self.is_job_source(source) and 'redeliver_report' in common_actions:
+        options.append(_object({'kind': {'type': 'string', 'const': 'redeliver_report'}, 'delivery_ref': {'type': 'string', 'description': 'Copy the delivery_ref from report_deliveries or report_delivery_failure for the saved child report.'}, 'purpose': {'type': 'string'}, 'schema_json': {'type': 'string'}}))
+    return _object({'selection': {'anyOf': options}, 'report_update': source.interpret_schema})

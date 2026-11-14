@@ -302,8 +302,8 @@ def test_saved_reader_has_no_native_import_io_network_or_dispatch(monkeypatch):
 def retained_observing_results():
     """Read actual718 records, including explicitly labelled engineering faults."""
     root = Path(__file__).resolve().parents[1]
-    pins = json.loads((root / "verification/tool_graders_restriction_mapping_2026-10-29_718/NATIVE_FIXTURE_PINS_001.json").read_text())
-    directory = root / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check182_native718/restriction-native718"
+    pins = json.loads((root / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/NATIVE_FIXTURE_PINS_001.json").read_text())
+    directory = root / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/native718"
     native, results = {}, {}
     for pin in pins:
         path = directory / Path(pin["path"]).name

@@ -88,12 +88,12 @@ def prepare_job(command, *, cwd, policy, handle_path, stdout_path=None, stderr_p
     if type(cpu_threads) is not int or cpu_threads < 1:
         raise ValueError('invalid_local_job_cpu_threads')
     if statistics is not None:
-        from .execution_recording import NativeStatistics
+        from gene_annotation_episode.episodic_workflow.root.execution_recording import NativeStatistics
         if type(statistics) is not NativeStatistics:
             raise TypeError('typed_native_execution_statistics_required')
         statistics.validate_policy(policy)
     if native_events is not None:
-        from .native_events import NativeEventBinding
+        from gene_annotation_episode.episodic_workflow.root.native_events import NativeEventBinding
         if type(native_events) is not NativeEventBinding:
             raise TypeError('typed_native_event_binding_required')
     if not command or any(type(item) is not str or not item or '\0' in item for item in command):
@@ -211,7 +211,7 @@ def _dispatch_prepared(handle, body, *, cancel_event=None):
     paths = body['paths']
     stdout, stderr, handle_path = Path(body['stdout']), Path(body['stderr']), handle.path
     if 'statistics' in body:
-        from .execution_recording import NativeStatistics
+        from gene_annotation_episode.episodic_workflow.root.execution_recording import NativeStatistics
         context = NativeStatistics.from_record(body['statistics'])
         if context.condition_capture == 'not_started':
             body['statistics'] = NativeStatistics.capture(context.history_path, context.execution_class,
@@ -320,8 +320,8 @@ def resume_start(handle, *, cancel_event=None):
 def _ensure_event_registration(handle, body):
     if 'native_events' not in body:
         return
-    from method_loop.durable import DurableExecutionError
-    from .native_events import ensure_native_event_target
+    from gene_annotation_episode.episodic_workflow.root.method_loop.durable import DurableExecutionError
+    from gene_annotation_episode.episodic_workflow.root.native_events import ensure_native_event_target
     try:
         ensure_native_event_target(handle.path)
     except (DurableExecutionError, OSError, ValueError, KeyError, TypeError) as error:

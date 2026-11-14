@@ -10,26 +10,28 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import a107_qualification as partner
-from gene_annotation_episode import a110_qualification as chemistry
-from gene_annotation_episode import a110_experimental_qualification as experimental
+from gene_annotation_episode.episodic_workflow.root.a107 import a107_qualification as partner
+from gene_annotation_episode.episodic_workflow.root.a110 import a110_qualification as chemistry
+from gene_annotation_episode.episodic_workflow.root.a110 import a110_experimental_qualification as experimental
 from gene_annotation_episode import component_source_identity as identity
-from gene_annotation_episode.a107_expression_components import calculate as expression_components
-from gene_annotation_episode.a110_chemical_accounting import calculate as chemical_components
+from gene_annotation_episode.episodic_workflow.root.a107.a107_expression_components import calculate as expression_components
+from gene_annotation_episode.episodic_workflow.root.a110.a110_chemical_accounting import calculate as chemical_components
 from gene_annotation_episode.communication import form_with_facts, plain
-from gene_annotation_episode.component_axis_native_hpc import publish, RESULT_PROVIDER
+from gene_annotation_episode.episodic_workflow.root.a107.component_axis_native_hpc import publish as publish_a107, RESULT_PROVIDER
+from gene_annotation_episode.episodic_workflow.root.a110.component_axis_native_hpc import publish as publish_a110
 from gene_annotation_episode.domain import ContractError, obj
-from gene_annotation_episode.literature_partner_storage import LiteraturePartnerRepository, partner_cells_schema
-from gene_annotation_episode.literature_reaction_storage import LiteratureReactionRepository, reaction_cells_schema
+from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_storage import LiteraturePartnerRepository, partner_cells_schema
+from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository, reaction_cells_schema
 from gene_annotation_episode.tool_grading_artifacts import source_tool_grading_entries
-from test_component_identity_regions import reference
-from test_literature_partner_integration import setup_case as partner_case, binding_for as partner_binding
-from test_literature_reaction_integration import setup_case as reaction_case, binding_for as reaction_binding, source
-from test_literature_perturbation_assessments import identify
+from gene_annotation_episode.episodic_workflow.root.a107.tests.test_component_identity_regions import reference
+from gene_annotation_episode.episodic_workflow.root.a107.tests.test_literature_partner_integration import setup_case as partner_case, binding_for as partner_binding
+from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_integration import setup_case as reaction_case, binding_for as reaction_binding, source
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_assessments import identify
 from test_scientific_hypervolume_runtime import assessment
 
 
-FIXTURES = Path(__file__).parent / 'fixtures/a107_evaluation'
+FIXTURES = (Path(__file__).resolve().parents[1] /
+    'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/a107_evaluation')
 
 
 def observation(store, source_ref, subjects, *, end=None):
@@ -270,7 +272,7 @@ def test_required_component_identity_joins_expression_without_changing_measureme
         document = json.loads((FIXTURES / 'declared-expression-panel.json').read_text())
         native = expression_components(document, {'condition_key': 'c1', 'left_feature_id': 'left',
             'right_feature_id': 'right', 'sample_ids': ['s1', 's2', 's3', 's4']})
-        expression = publish(store, RESULT_PROVIDER, {'axis': 'A107',
+        expression = publish_a107(store, RESULT_PROVIDER, {'axis': 'A107',
             'scientific_profile': 'a107_expression_components_v2', 'scope': plain(case['context'].scope),
             'operation': 'partner.request_expression_hpc', 'native_components': native})
         case['known'].add(expression)
@@ -355,7 +357,7 @@ def test_chemical_accounting_keeps_the_source_identity_experiment_link_separate(
         document = json.loads((FIXTURES.parent / 'a110_evaluation/declared-chemical-panel.json').read_text())
         native = chemical_components(document, {'reaction_ids': ['r01'],
             'include_declared_pathway': False, 'include_reported_constraints': False})
-        accounting = publish(store, RESULT_PROVIDER, {'axis': 'A110',
+        accounting = publish_a110(store, RESULT_PROVIDER, {'axis': 'A110',
             'scientific_profile': 'a110_chemical_accounting_v2', 'scope': plain(case['context'].scope),
             'operation': 'chemistry.request_accounting_hpc', 'native_components': native})
         case['known'].add(accounting)

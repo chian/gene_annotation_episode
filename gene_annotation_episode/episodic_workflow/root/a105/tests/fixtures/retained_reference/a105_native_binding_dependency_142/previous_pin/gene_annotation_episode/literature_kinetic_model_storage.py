@@ -1,0 +1,387 @@
+"""Selected conditional kinetic precision/evidence cells over a committed sheet.
+
+This operation preserves the native sheet, its original inputs and five cells.
+Replay validates and copies saved results without reading scientific originals,
+parsing models, calculating cells, calling a model or adding observations.
+"""
+from copy import deepcopy
+import hashlib
+import json
+import math
+
+from .communication import plain
+from .domain import ContractError, REF, NULL_REF, canonical, identity, obj, validate_schema
+from .literature_assay_inputs import _Sources, _witness_schema
+from .literature_kinetic_calculations import (
+    COMPONENTS as ALL_COMPONENTS, FORMULAS, populate_kinetic_contrast, _model as validate_kinetic_model,
+)
+from .literature_kinetic_storage import LiteratureKineticRepository, kinetic_cells_schema
+from .literature_rate_storage import LiteratureRateRepository
+from .literature_kinetic_model_inputs import read_kinetic_model
+
+PROVIDER = "literature.a105.kinetic_model_population"
+VERSION = "literature_kinetic_model_population_record_v1"
+COMPONENTS = ALL_COMPONENTS[5:]
+FORMULA_CODES = {name: "kinetic_model_" + name + "_v1" for name in COMPONENTS}
+FORMULA_MEANINGS = {FORMULA_CODES[name]: FORMULAS[name] for name in COMPONENTS}
+VIEW = "kinetic_log_model_components"
+REQUESTED = "requested_kinetic_model_components"
+
+
+def kinetic_model_population_schema():
+    return obj({"source_ref": deepcopy(REF), "model_source_ref": deepcopy(NULL_REF),
+        "model_witnesses": {"type": "array", "items": _witness_schema()}})
+
+
+def _selected(assignment):
+    values = plain(assignment).get(REQUESTED, list(COMPONENTS))
+    if (not isinstance(values, (list, tuple)) or any(type(v) is not str or v not in COMPONENTS for v in values)
+            or len(values) != len(set(values))):
+        raise ContractError("literature_kinetic_model_component_selection_invalid")
+    return list(values)
+
+
+def _fail():
+    raise ContractError("literature_kinetic_model_saved_mismatch")
+
+
+def _metadata(calculation):
+    model = calculation["model"]
+    return {"variance_status": calculation["variance_status"],
+        "observation_model": model["observation_model"] if model else "not_supplied",
+        "log_basis": model["log_basis"] if model else "not_supplied",
+        "model_origin": model["origin"] if model else "not_supplied"}
+
+
+class LiteratureKineticModelRepository(LiteratureRateRepository):
+    provider = PROVIDER
+    record_version = VERSION
+    components = COMPONENTS
+    operations_table = "literature_kinetic_model_operations"
+    received_table = "literature_kinetic_model_received"
+    binding_fields = ()
+
+    def __init__(self, store, run_id):
+        # Discovery/reconstruction must work on a query-only saved store, even
+        # when this optional operation has never been selected there.
+        if type(run_id) is not str or not run_id:
+            raise ValueError("explicit_literature_run_required")
+        self.store, self.run_id = store, run_id
+
+    def _installed(self, table):
+        return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
+
+    def _install(self):
+        super().__init__(self.store, self.run_id)
+
+    def _native(self):
+        # Native read has no writes. Avoid its legacy table-installing constructor.
+        repo = LiteratureKineticRepository.__new__(LiteratureKineticRepository)
+        repo.store, repo.run_id = self.store, self.run_id
+        return repo
+
+    def _parents(self, scope, direct):
+        return self._native()._parents(scope, direct)
+
+    def _json(self, reference):
+        raw = self.store.get_artifact(reference)
+        if reference != "artifact_" + hashlib.sha256(raw).hexdigest():
+            _fail()
+        return json.loads(raw)
+
+    def _result(self, saved, sheet_ref):
+        return {"view": VIEW, "cells": {name: deepcopy(saved["calculation"]["cells"][name])
+            for name in saved["requested_components"]}, **_metadata(saved["calculation"]),
+            "rows": self._project_saved(sheet_ref, saved, self._native().read(saved["input_source_ref"]), saved["requested_components"])}
+
+    def populate(self, context, arguments, operation_key):
+        if context.run_id != self.run_id:
+            raise ContractError("literature_run_mismatch")
+        if type(operation_key) is not str or not operation_key:
+            raise ContractError("operation_key_required")
+        args = plain(arguments)
+        validate_schema(args, kinetic_model_population_schema())
+        request = {"run_id": self.run_id, "episode_id": context.episode_id, "operation_key": operation_key,
+            "selected_tool": "literature.kinetic.model.populate", "arguments": args,
+            "scope": plain(context.scope), "assignment": plain(context.assignment),
+            "requested_components": _selected(context.assignment)}
+        signature = canonical(request)
+        old = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
+            (self.run_id, context.episode_id, operation_key)).fetchone() if self._installed(self.operations_table) else None
+        if old is not None:
+            if old["signature"] != signature:
+                raise ContractError("operation_key_reused_for_different_work")
+            outcome = json.loads(old["outcome"])
+            saved = self.read(outcome["result"]["sheet_ref"])
+            for reference in saved["direct_input_source_refs"]:
+                self._native_source(context, reference)
+            return outcome
+        source = self._native_source(context, args["source_ref"])
+        native = self._native().read(source["id"])
+        direct = [source["id"]]
+        model_source = None
+        if args["model_source_ref"] is not None:
+            model_source = self._native_source(context, args["model_source_ref"])
+            direct.append(model_source["id"])
+            if not args["model_witnesses"]:
+                raise ContractError("kinetic_model_witness_required")
+        elif args["model_witnesses"]:
+            raise ContractError("kinetic_model_source_required_for_witnesses")
+        def read_source(reference, representation):
+            row = self._native_source(context, reference)
+            artifact = row["artifact_ref"] if representation == "original" else row.get("text_ref")
+            if artifact is None:
+                raise ContractError("literature_source_representation_unavailable")
+            return {"artifact_ref": artifact, "content": self.store.get_artifact(artifact)}
+        sources = _Sources(read_source)
+        witnesses = [sources.witness(w, f"model_witnesses[{i}]") for i, w in enumerate(args["model_witnesses"])]
+        direct.extend(sources.references)
+        model = None
+        if model_source is not None:
+            raw_model = self.store.get_artifact(model_source["artifact_ref"])
+            if "artifact_" + hashlib.sha256(raw_model).hexdigest() != model_source["artifact_ref"]:
+                raise ContractError("literature_kinetic_model_source_artifact_mismatch")
+            parsed = read_kinetic_model({"source_ref": model_source["id"], "artifact_ref": model_source["artifact_ref"],
+                "content": raw_model}, inputs=native["extraction"]["calculation_inputs"])
+            model = parsed["model"]
+        calculation = populate_kinetic_contrast(native["extraction"]["calculation_inputs"], model)
+        saved = {"version": VERSION, "input_source_ref": source["id"], "input_artifact_ref": source["artifact_ref"],
+            "model_source_ref": args["model_source_ref"], "model_witnesses": witnesses,
+            "direct_input_source_refs": list(dict.fromkeys(direct)),
+            "input_source_refs": self._parents(context.scope, list(dict.fromkeys(direct))),
+            "requested_components": request["requested_components"], "calculation": calculation}
+        with self.store.transaction():
+            self._install()
+            supports, created = [], []
+            for value in self._support_records(witnesses):
+                candidate = identity("reference", {"origin": "tool", "record": value})
+                exists = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
+                support = self.store.put("reference", value, origin="tool", scope=plain(context.scope))["id"]
+                supports.append(support)
+                if exists is None:
+                    created.append(support)
+            saved["model_support_refs"] = supports
+            artifact = self.store.artifact(canonical(saved), "application/json")
+            request_ref = self.store.artifact(canonical(request), "application/json")
+            record = {"provider": PROVIDER, "accession": None, "uri": None, "artifact_ref": artifact,
+                "text_ref": artifact, "request_ref": request_ref, "version": VERSION, "retrieved_at": None,
+                "parent_source_refs": saved["input_source_refs"]}
+            candidate = identity("source", {"origin": "tool", "record": record})
+            existed = self.store.db.execute("SELECT 1 FROM records WHERE id=?", (candidate,)).fetchone()
+            row = self.store.put("source", record, origin="tool", scope=plain(context.scope))
+            # Semantic refs are inherited saved bindings, not newly measured facts.
+            semantic = self._semantic_refs(native)
+            outcome = {"status": "completed", "operation_ref": identity("operation", {"run_id": self.run_id,
+                "episode_id": context.episode_id, "key": operation_key}),
+                "record_refs": list(dict.fromkeys([row["id"], *saved["direct_input_source_refs"], *semantic, *supports])),
+                "changed_record_refs": [*created, *([] if existed else [row["id"]])],
+                "result": {"sheet_ref": row["id"], **self._result(saved, row["id"])}, "feedback": None}
+            self.store.db.execute(f"INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)",
+                (self.run_id, context.episode_id, operation_key, signature, canonical(outcome)))
+        return outcome
+
+    @staticmethod
+    def _support_records(witnesses):
+        for witness in witnesses:
+            anchor = {k: witness[k] for k in ("source_ref", "artifact_ref", "start", "end", "quote")}
+            yield {"reference_type": "literature_result", "source_ref": witness["source_ref"],
+                "accession": identity("kinetic_model_support", witness), "label": "Kinetic model interpretation support",
+                "sequence_ref": None, "molecule": None, "length": None, "term_refs": [], "context_refs": [], "anchor": anchor}
+
+    @staticmethod
+    def _semantic_refs(native):
+        def refs(value):
+            if isinstance(value, dict):
+                for child in value.values():
+                    yield from refs(child)
+            elif isinstance(value, list):
+                for child in value:
+                    yield from refs(child)
+            elif isinstance(value, str) and value.startswith("reference_"):
+                yield value
+        return list(dict.fromkeys(refs([native["role_bindings"], native["comparison_bindings"]])))
+
+    def read(self, sheet_ref):
+        try:
+            return self._read(sheet_ref)
+        except (KeyError, TypeError, ValueError, OverflowError, UnicodeError) as error:
+            if isinstance(error, ContractError):
+                raise
+            raise ContractError("literature_kinetic_model_saved_mismatch") from error
+
+    def _read(self, sheet_ref):
+        source = self.store.get(sheet_ref)
+        record = {k: v for k, v in source.items() if k not in ("id", "record_type", "origin")}
+        if (source.get("id") != sheet_ref or source.get("record_type") != "source" or source.get("provider") != PROVIDER
+                or source.get("origin") != "tool" or source.get("version") != VERSION
+                or identity("source", {"origin": "tool", "record": record}) != sheet_ref):
+            _fail()
+        request = self._json(source["request_ref"])
+        if (set(request) != {"run_id", "episode_id", "operation_key", "selected_tool", "arguments", "scope", "assignment", "requested_components"}
+                or request["run_id"] != self.run_id or request["selected_tool"] != "literature.kinetic.model.populate"
+                or request["requested_components"] != _selected(request["assignment"])):
+            _fail()
+        validate_schema(request["arguments"], kinetic_model_population_schema())
+        operation = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
+            (self.run_id, request["episode_id"], request["operation_key"])).fetchone()
+        if operation is None or operation["signature"] != canonical(request):
+            _fail()
+        saved = self._json(source["artifact_ref"])
+        if (set(saved) != {"version", "input_source_ref", "input_artifact_ref", "model_source_ref", "model_witnesses",
+                "direct_input_source_refs", "input_source_refs", "requested_components", "calculation", "model_support_refs"}
+                or saved["version"] != VERSION or saved["input_source_ref"] != request["arguments"]["source_ref"]
+                or saved["model_source_ref"] != request["arguments"]["model_source_ref"]
+                or saved["requested_components"] != request["requested_components"]
+                or source["parent_source_refs"] != saved["input_source_refs"] or source["text_ref"] != source["artifact_ref"]):
+            _fail()
+        native_source = self._native_provenance(request["scope"], saved["input_source_ref"])
+        native = self._native().read(saved["input_source_ref"])
+        if native_source["artifact_ref"] != saved["input_artifact_ref"]:
+            _fail()
+        direct = [saved["input_source_ref"]]
+        if saved["model_source_ref"] is not None:
+            direct.append(saved["model_source_ref"])
+        if len(saved["model_witnesses"]) != len(request["arguments"]["model_witnesses"]):
+            _fail()
+        for selected, witness in zip(request["arguments"]["model_witnesses"], saved["model_witnesses"]):
+            meta = self._native_provenance(request["scope"], witness["source_ref"])
+            artifact = meta["artifact_ref"] if witness["representation"] == "original" else meta.get("text_ref")
+            if (set(witness) != {*selected, "artifact_ref"} or {k: witness[k] for k in selected} != selected
+                    or witness["artifact_ref"] != artifact or type(witness["start"]) is not int or type(witness["end"]) is not int
+                    or witness["start"] < 0 or witness["end"] <= witness["start"]
+                    or len(witness["quote"].encode()) != witness["end"] - witness["start"]):
+                _fail()
+            direct.append(witness["source_ref"])
+        if (saved["direct_input_source_refs"] != list(dict.fromkeys(direct))
+                or saved["input_source_refs"] != self._parents(request["scope"], saved["direct_input_source_refs"])):
+            _fail()
+        supports = []
+        for value in self._support_records(saved["model_witnesses"]):
+            reference = identity("reference", {"origin": "tool", "record": value})
+            actual = self.store.get(reference)
+            if (actual.get("record_type") != "reference" or actual.get("origin") != "tool"
+                    or canonical({k: actual.get(k) for k in value}) != canonical(value)):
+                _fail()
+            supports.append(reference)
+        if saved["model_support_refs"] != supports:
+            _fail()
+        calculation, original = saved["calculation"], native["calculation"]
+        if set(calculation) != set(original) or set(calculation["cells"]) != set(ALL_COMPONENTS):
+            _fail()
+        for field in original:
+            if field not in ("model", "variance_status", "cells") and canonical(calculation[field]) != canonical(original[field]):
+                _fail()
+        for name in ALL_COMPONENTS[:5]:
+            if canonical(calculation["cells"][name]) != canonical(original["cells"][name]):
+                _fail()
+        model = calculation["model"]
+        if saved["model_source_ref"] is None:
+            if model is not None or saved["model_witnesses"] or calculation != original:
+                _fail()
+        else:
+            meta = self._native_provenance(request["scope"], saved["model_source_ref"])
+            expected_locator = {"source_ref": meta["id"], "artifact_ref": meta["artifact_ref"], "representation": "original",
+                "start": 0, "end": self.store.get(meta["artifact_ref"])["size"]}
+            if (not saved["model_witnesses"] or model is None or model["source"] != expected_locator
+                    or model["measurement_keys"] != [original["measurement_keys"][r] for r in ("numerator", "denominator")]
+                    or calculation["variance_status"] != model["variance_status"]):
+                _fail()
+            # Reuse the existing closed model validator, not the source reader
+            # or any score calculator. This checks saved representation/owners,
+            # finite covariance, symmetry and PSD without recalculating cells.
+            validate_kinetic_model(model, original["measurement_keys"])
+        outcome = json.loads(operation["outcome"])
+        expected_result = {"sheet_ref": sheet_ref, **self._result(saved, sheet_ref)}
+        if (outcome.get("status") != "completed" or canonical(outcome.get("result")) != canonical(expected_result)
+                or outcome.get("operation_ref") != identity("operation", {"run_id": self.run_id, "episode_id": request["episode_id"], "key": request["operation_key"]})
+                or outcome["record_refs"] != list(dict.fromkeys([sheet_ref, *saved["direct_input_source_refs"], *self._semantic_refs(native), *supports]))
+                or any(ref not in [sheet_ref, *supports] for ref in outcome["changed_record_refs"])):
+            _fail()
+        # Typed finite cell and relationship validation without recalculation.
+        for name in COMPONENTS:
+            cell = calculation["cells"][name]
+            if set(cell) != set(original["cells"][name]) or cell["formula"] != FORMULAS[name]:
+                _fail()
+            for field in ("unit", "origin", "threshold", "relation", "approximate", "conditional_on"):
+                if canonical(cell[field]) != canonical(original["cells"][name][field]):
+                    _fail()
+            q = cell["value"]
+            if q is not None and (type(q) not in (int, float) or not math.isfinite(q)):
+                _fail()
+            if (cell["status"] != ("unavailable" if q is None else "populated")
+                    or (cell["unavailable_reason"] is None) != (q is not None)):
+                _fail()
+        validate_schema(self._project_saved(sheet_ref, saved, native, COMPONENTS), kinetic_model_cells_schema())
+        return saved
+
+    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+        selected = _selected({REQUESTED: self.components if components is None else components})
+        rows = []
+        for reference in dict.fromkeys(sheet_refs):
+            if reference not in permitted_record_refs:
+                raise ContractError("literature_sheet_not_received")
+            saved = self.read(reference)
+            native = self._native().read(saved["input_source_ref"])
+            rows.extend(self._project_saved(reference, saved, native, selected))
+        return rows
+
+    def _project_saved(self, reference, saved, native, selected):
+        rows = []
+        roles = deepcopy(native["role_bindings"])
+        for metadata in roles.values():
+            metadata.pop("uncertainty_canonical")
+            metadata["uncertainty_values"] = {"delivery_status": "not_requested",
+                **{k: None for k in ("magnitude", "interval", "confidence_level", "count", "count_reported_value")}}
+        for name in selected:
+            cell = saved["calculation"]["cells"][name]
+            model = saved["calculation"]["model"]
+            private_locations = [*saved["model_witnesses"], *([model["source"]] if model else [])]
+            rows.append({"sheet_ref": reference, "evidence_source_ref": native["input_source_ref"],
+                "kinetic_sheet_ref": saved["input_source_ref"], "model_source_ref": saved["model_source_ref"],
+                "model_support_refs": deepcopy(saved["model_support_refs"]),
+                "model_support_locations": [{k: witness[k] for k in ("source_ref", "artifact_ref", "start", "end")}
+                    for witness in private_locations],
+                "view": VIEW, "component": name, **{k: deepcopy(v) for k, v in cell.items() if k != "formula"},
+                "formula_code": FORMULA_CODES[name], **_metadata(saved["calculation"]),
+                "evaluation_scope": "source_kinetic_parameter_contrast", "contrast_meaning": "numerator_parameter_exceeds_denominator",
+                "model_input_status": "supplied" if saved["model_source_ref"] else "not_supplied",
+                "model_reader_capability": "implemented", "comparison": deepcopy(native["comparison_bindings"]), **deepcopy(roles)})
+        return rows
+
+    def received_cells(self, context):
+        if context.run_id != self.run_id:
+            raise ContractError("literature_run_mismatch")
+        return super().received_cells(context) if self._installed(self.received_table) else []
+
+    def receive_cells(self, context, cells, operation_key):
+        with self.store.transaction():
+            self._install()
+            return super().receive_cells(context, cells, operation_key)
+
+
+def kinetic_model_cells_schema():
+    schema = kinetic_cells_schema()
+    schema["x-source"] = "literature_kinetic_model_cells"
+    fields = schema["items"]["properties"]
+    def enum(values):
+        return {"type": "string", "enum": list(values)}
+    def ref(namespace, nullable=False):
+        return {"type": ["string", "null"] if nullable else "string", "format": "reference", "x-reference-namespace": namespace}
+    fields.update({"component": enum(COMPONENTS), "formula_code": enum(FORMULA_CODES.values()),
+        "unit": enum(["dimensionless", "dimensionless_squared"]),
+        "origin": enum(["derived", "proposed"]),
+        "view": enum([VIEW]), "kinetic_sheet_ref": ref("source"), "model_source_ref": ref("source", True),
+        "model_support_refs": {"type": "array", "items": {"type": "string", "format": "reference", "x-reference-namespace": "reference"}},
+        "model_support_locations": {"type": "array", "items": obj({"source_ref": ref("source"), "artifact_ref": ref("artifact"),
+            "start": {"type": "integer", "minimum": 0}, "end": {"type": "integer", "minimum": 1}})},
+        "model_input_status": enum(["supplied", "not_supplied"]), "model_reader_capability": enum(["implemented"]),
+        "variance_status": enum(["known", "estimated", "unknown", "not_supplied"]),
+        "observation_model": enum(["known_normal_log_parameters", "unspecified", "not_supplied"]),
+        "log_basis": enum(["natural_log_canonical_parameter", "not_supplied"]),
+        "model_origin": enum(["reported", "derived", "synthetic", "not_supplied"])})
+    schema["items"]["required"] = list(fields)
+    return schema
+
+
+__all__ = ["PROVIDER", "VERSION", "COMPONENTS", "VIEW", "FORMULA_CODES", "FORMULA_MEANINGS",
+    "LiteratureKineticModelRepository", "kinetic_model_population_schema", "kinetic_model_cells_schema"]

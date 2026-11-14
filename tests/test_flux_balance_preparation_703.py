@@ -26,8 +26,8 @@ from gene_annotation_episode.state import Store
 
 pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="requires bounded529")
 ROOT = Path(__file__).resolve().parents[1]
-EMISSIONS = ROOT / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions/sbml"
-EXAMPLE = ROOT / "verification/tool_graders_flux_balance_core_2026-10-29_679/VERIFIED_NUMERICAL_EXAMPLE_001.json"
+EMISSIONS = ROOT / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/producer_emissions/sbml"
+EXAMPLE = ROOT / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/VERIFIED_NUMERICAL_EXAMPLE_001.json"
 
 
 def retain(store, raw, format_):

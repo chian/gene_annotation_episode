@@ -1,0 +1,40 @@
+# cmcalibrate :: fit exponential tails for CM E-values
+# INFERNAL 1.1.5 (Sep 2023)
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# CM file:                                     model.cm
+# total sequence length to search per mode:    0.01 Mb
+# fraction of histogram tail to fit:           0.1
+# saving fitted score histograms to file:      hist.dat
+# saving survival plot to file:                survival.dat
+# saving Q-Q plot for histograms to file:      qq.dat
+# saving lambdas for tail fit probs to file:   fits.dat
+# saving scores from fit tails to file:        tail.dat
+# number of worker threads:                    1 [--cpu]
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#
+# Calibrating CM(s):
+#
+#                        predicted                                                   actual   
+#                       running time              percent complete                running time
+# model name            (hr:min:sec)  [........25........50........75..........]  (hr:min:sec)
+# --------------------  ------------  ------------------------------------------  ------------
+  fixture246                       ?  [========================================]      00:00:00
+#
+# Calibration summary statistics:
+#
+#                           exponential tail fit mu        exponential tail fit lambda         total number of hits      
+#                       -------------------------------  -------------------------------  -------------------------------
+# model name            glc cyk glc ins loc cyk loc ins  glc cyk glc ins loc cyk loc ins  glc cyk glc ins loc cyk loc ins
+# --------------------  ------- ------- ------- -------  ------- ------- ------- -------  ------- ------- ------- -------
+  fixture246              -3.98   -3.39   -2.54   -2.12    0.374   0.381   0.449   0.368     3149    3035    4409    3812
+#
+# Histogram of high scoring hits in random seqs saved to file hist.dat.
+# Survival plot for exponential tails saved to file survival.dat.
+# Exponential tail QQ plots saved to file qq.dat.
+# Exponential tail fit points saved to file fits.dat.
+# Scores from tail fits saved to file tail.dat.
+#
+# CPU time: 0.25u 0.00s 00:00:00.25 Elapsed: 00:00:00.25
+[ok]

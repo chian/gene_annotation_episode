@@ -138,7 +138,7 @@ def main():
     parser.add_argument("--alphas", type=float, nargs="+", default=[.05, .1, .2])
     parser.add_argument("--verify-fit-prefixes", type=int, nargs="*", default=[])
     parser.add_argument("--profile", type=Path,
-        default=Path(__file__).resolve().parents[1] / "tests/fixtures/a106_evaluation/yield-controller.json")
+        default=Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a106/tests/fixtures/a106_evaluation/yield-controller.json")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     output = args.output_dir.resolve()

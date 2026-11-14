@@ -33,7 +33,7 @@ def packet():
 
 @pytest.fixture(scope='module')
 def helpers(packet):
-    path = packet / 'source_snapshot/verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/fixture_helpers.py'
+    path = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/support/expression_nmf/fixture_helpers.py'
     spec = importlib.util.spec_from_file_location('nmf484_helpers', path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

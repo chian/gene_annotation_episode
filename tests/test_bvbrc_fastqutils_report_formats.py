@@ -14,7 +14,7 @@ from gene_annotation_episode.bvbrc_fastqutils_trim_reader import parse_trim_galo
 from gene_annotation_episode.bvbrc_fastqutils_pair_report_reader import parse_fastq_pair_stderr
 from gene_annotation_episode.bvbrc_fastqutils_hostile_reader import parse_hostile_json
 
-FIXTURES = Path(__file__).parent / 'fixtures/bvbrc_fastqutils/reports'
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/reports'
 
 
 def context(raw, fmt, version=None, scope='complete', identity='handcrafted_synthetic'):

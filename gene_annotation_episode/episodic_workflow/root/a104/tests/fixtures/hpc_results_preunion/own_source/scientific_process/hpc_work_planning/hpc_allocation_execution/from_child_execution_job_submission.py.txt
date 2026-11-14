@@ -1,0 +1,46 @@
+"""Private from child execution job submission for A104 hpc_execution."""
+from __future__ import annotations
+from gene_annotation_episode.episodic_workflow.root.a104.hpc_ledger import HPCLedger
+from gene_annotation_episode.episodic_workflow.root.a104 import hpc_queue
+import json
+from gene_annotation_episode.episodic_workflow.root.a104.communication import plain
+
+
+
+
+class LaunchReceiptCustody:
+    def original_launch_handoff(self, context):
+        """Recover this frozen plan's actual receipt across Launch report repair.
+
+        Inspect committed native outcomes only, never a sibling's conversation.
+        Exact plan assignment, owning HPC path and scope authenticate the receipt.
+        """
+        if self.store is None or context.role != 'launch_hpc':
+            return None
+        from gene_annotation_episode.episodic_workflow.root.a104.method_loop.identities import EpisodeRef
+        prefixes = [context.path[:i+1] for i, part in enumerate(context.path) if part[0] == 'hpc']
+        if not prefixes:
+            return None
+        owner_path = prefixes[-1]
+        owner = EpisodeRef(context.run_id, owner_path).episode_id
+        ledger = HPCLedger.open_existing(self.directory/'hpc'/hpc_queue.digest([context.run_id, owner]))
+        selected = plain(context.assignment)
+        plans = [row['body'] for row in ledger.records('plan') if row['body']['practical_assignment'] == selected]
+        if len(plans) != 1 or ledger.read('owner')['scope'] != plain(context.scope):
+            raise ValueError('hpc_original_handoff_plan_identity_conflict')
+        rows = self.store.db.execute('SELECT e.path,a.result FROM runtime_actions a JOIN runtime_episodes e '
+            'ON e.run_id=a.run_id AND e.episode_id=a.episode_id WHERE a.run_id=? '
+            "AND json_extract(a.result,'$.result.outcome.facts.requested_job.handoff') IS NOT NULL "
+            'ORDER BY a.rowid', (context.run_id,)).fetchall()
+        for row in rows:
+            path = tuple(tuple(part) for part in json.loads(row[0]))
+            if path[:len(owner_path)] != owner_path:
+                continue
+            for reference in json.loads(row[1]).get('record_refs', []):
+                try:
+                    target = self.targets.read_target(reference, context.scope)
+                except (ValueError, KeyError):
+                    continue
+                if target['assignment'] == selected:
+                    return reference
+        return None

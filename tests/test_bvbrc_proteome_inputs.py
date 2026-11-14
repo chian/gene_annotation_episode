@@ -106,7 +106,7 @@ def assert_envelope(result, name):
 
 
 def test_precision_correction_is_reused_as_synthetic_input_only():
-    path = Path(__file__).parents[1] / "verification/tool_graders_bvbrc_proteome_sheet_contract_2026-10-25_165/B1_PRECISION_EXAMPLES_002.json"
+    path = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/proteome_sheet_contract/B1_PRECISION_EXAMPLES_002.json"
     example = json.loads(path.read_text())
     assert example["origin"] == "constructed_supplied_input_and_expected_contract_values_not_production_reader_output"
     expected = example["expected_inventory"]

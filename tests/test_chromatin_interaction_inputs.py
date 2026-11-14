@@ -27,7 +27,7 @@ def build_native_sheet(*, weighted=False, bed=None, assignments=None):
     metadata = extract_chromatin_metadata(request=request, native=contacts, supplied=request['supplied_metadata'], elements=elements)
     with open_chromatin_contact_tables(descriptors, streams=streams) as arrays:
         sheet = build_chromatin_sheet(request=request, contacts=contacts, elements=elements, metadata=metadata, tables=descriptors, table_views=arrays)
-    directory = Path.cwd() / 'saved_sheets' / chromatin_record_digest(sheet)
+    directory = Path(__file__).resolve().parents[1] / 'runs/chromatin_saved_sheets' / chromatin_record_digest(sheet)
     directory.mkdir(parents=True, exist_ok=True)
     (directory / 'sheet.json').write_text(json.dumps(sheet, indent=2, allow_nan=False))
     for key, stream in streams.items():

@@ -35,7 +35,7 @@ from gene_annotation_episode.sequence_extraction_grader import calculate_extract
 from gene_annotation_episode.sequence_mapping import VERSION
 
 ROOT = Path(__file__).resolve().parents[1]
-CAPTURE = ROOT / 'verification/tool_graders_hmmer_map_verification_2026-10-28_529/check201_native739/sequence-support-native739'
+CAPTURE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/sequence_support'
 
 
 def identity_mapping(length, source_ref):

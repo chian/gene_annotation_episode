@@ -1,0 +1,225 @@
+{
+  "version": "tool_knowledge_v1",
+  "entries": [
+    {
+      "entry_id": "experimental-database-search",
+      "title": "Experimental database search and source measurements",
+      "summary": "Discover and read native assay records, kinetics and multiplexed variant measurements for the existing experimental evidence assessment.",
+      "tags": [
+        "experimental",
+        "database",
+        "A105",
+        "kinetics",
+        "binding",
+        "assay"
+      ],
+      "tool_names": [
+        "source.experimental.records"
+      ],
+      "resource_kinds": [
+        "api",
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/experimental_database_acquisition.py",
+        "gene_annotation_episode/experimental_database_records.py",
+        "gene_annotation_episode/experimental_database_measurements.py"
+      ],
+      "sections": [
+        {
+          "section_id": "search-and-read",
+          "title": "Search, records and experimental assessment",
+          "path": "experimental-database-search.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "sequence-read-composition",
+      "title": "Sequence composition and original read quality",
+      "summary": "Declared-molecule composition, ambiguity and explicit GC denominator; original quality encodings, error probabilities and threshold counts.",
+      "tags": [
+        "sequence",
+        "reads",
+        "composition",
+        "quality",
+        "results"
+      ],
+      "tool_names": [
+        "sequence.inspect"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/sequence_composition_grader.py",
+        "gene_annotation_episode/materials_packing.py",
+        "gene_annotation_episode/tools.py"
+      ],
+      "sections": [
+        {
+          "section_id": "operation-results",
+          "title": "Declared molecule and numerical read measurements",
+          "path": "sequence-read-composition.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "sequence-translation",
+      "title": "Translation with explicit genetic code and source correspondence",
+      "summary": "Translate selected nucleotide intervals with the chosen code, strand, frame and CDS semantics; retain codons, stops, trailing bases and original coordinates.",
+      "tags": [
+        "sequence",
+        "translation",
+        "genetic-code",
+        "coordinates",
+        "preparation",
+        "results"
+      ],
+      "tool_names": [
+        "sequence.translate",
+        "translation.codes"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/sequence_ops.py",
+        "gene_annotation_episode/sequence_translation_grader.py",
+        "gene_annotation_episode/sequence_mapping.py",
+        "gene_annotation_episode/tools.py"
+      ],
+      "sections": [
+        {
+          "section_id": "operation-results",
+          "title": "Translation settings and numerical correspondence",
+          "path": "sequence-translation.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "sequence-extraction",
+      "title": "Ordered sequence extraction and reverse complements",
+      "summary": "Create reusable DNA, RNA or protein views while preserving ordered and repeated selections, actual symbol correspondence and original source paths.",
+      "tags": [
+        "sequence",
+        "extraction",
+        "coordinates",
+        "reverse-complement",
+        "preparation",
+        "results"
+      ],
+      "tool_names": [
+        "sequence.view"
+      ],
+      "resource_kinds": [
+        "local"
+      ],
+      "provenance": [
+        "gene_annotation_episode/sequence_views.py",
+        "gene_annotation_episode/sequence_extraction_grader.py",
+        "gene_annotation_episode/sequence_mapping.py",
+        "gene_annotation_episode/tools.py"
+      ],
+      "sections": [
+        {
+          "section_id": "operation-results",
+          "title": "Selected regions and numerical correspondence",
+          "path": "sequence-extraction.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "publication-access",
+      "title": "Europe PMC and PMC publication access",
+      "summary": "Exact protein-sequence identities and citations, formatting-aware source sequence reading, literature queries, retained full text and supplements.",
+      "tags": [
+        "literature",
+        "search",
+        "sequence",
+        "identity",
+        "checksum",
+        "citations",
+        "formatting",
+        "article",
+        "supplement",
+        "EuropePMC",
+        "PMC",
+        "UniProt"
+      ],
+      "tool_names": [
+        "public.literature.sequence_identity",
+        "source.sequence.references",
+        "source.sequence.scan",
+        "public.literature.search",
+        "public.literature.read",
+        "public.pmc.versions",
+        "public.pmc.files",
+        "public.pmc.asset"
+      ],
+      "provenance": [
+        "gene_annotation_episode/acquisition.py",
+        "gene_annotation_episode/tools.py",
+        "gene_annotation_episode/literature_assets.py",
+        "gene_annotation_episode/literature_sequence_discovery.py",
+        "gene_annotation_episode/source_sequences.py"
+      ],
+      "sections": [
+        {
+          "section_id": "search",
+          "title": "Search and article identity",
+          "path": "publication-search.md"
+        },
+        {
+          "section_id": "access",
+          "title": "Article versions and supplements",
+          "path": "publication-access.md"
+        }
+      ]
+    },
+    {
+      "entry_id": "source-reading",
+      "title": "Reading retained article and supplement representations",
+      "summary": "Choose source windows, PDF text or images, archive members and spreadsheet rows according to the actual material and question.",
+      "tags": [
+        "literature",
+        "reading",
+        "PDF",
+        "XML",
+        "table",
+        "spreadsheet",
+        "XLSX",
+        "image",
+        "archive"
+      ],
+      "tool_names": [
+        "source.read",
+        "source.pdf.info",
+        "source.pdf.text",
+        "source.pdf.page",
+        "image.view",
+        "source.xlsx.sheets",
+        "source.xlsx.rows",
+        "source.archive.members",
+        "source.archive.extract"
+      ],
+      "provenance": [
+        "gene_annotation_episode/tools.py",
+        "gene_annotation_episode/document_tools.py",
+        "gene_annotation_episode/spreadsheet_tools.py",
+        "gene_annotation_episode/materials.py"
+      ],
+      "sections": [
+        {
+          "section_id": "representations",
+          "title": "Exact text, PDF and image reading",
+          "path": "source-representations.md"
+        },
+        {
+          "section_id": "tables",
+          "title": "Archive and spreadsheet context",
+          "path": "source-tables.md"
+        }
+      ]
+    }
+  ]
+}

@@ -8,7 +8,7 @@ from copy import deepcopy
 import json
 import math
 
-from .homology_jobs import SAMPLE_SCHEMA, STATUS_SCHEMA
+from .episodic_workflow.root.a101.homology_jobs import SAMPLE_SCHEMA, STATUS_SCHEMA
 from .resource_estimation import ESTIMATE_SCHEMA
 
 

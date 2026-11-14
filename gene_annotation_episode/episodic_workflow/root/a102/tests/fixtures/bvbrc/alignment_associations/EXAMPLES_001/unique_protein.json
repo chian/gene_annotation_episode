@@ -1,0 +1,572 @@
+{
+  "name": "unique_protein",
+  "required_example_groups": [
+    1
+  ],
+  "source_status": "synthetic",
+  "native_executed_this_workload": false,
+  "native_execution_case": null,
+  "common_operands": {
+    "inputs": [
+      {
+        "binding_id": "original",
+        "parameter_pointer": "/input/original",
+        "kind": "retained_bytes",
+        "content": {
+          "source_ref": "source:original",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "original",
+          "sha256": "505e74267342e1d756e508557bc5e2ce83e1d6ef1360e5342c53f759e71724f6",
+          "byte_count": 12
+        },
+        "workspace_path": "/workspace/original",
+        "inline_value": null,
+        "link_evidence": null,
+        "members": []
+      }
+    ],
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "original#alignment",
+          "artifact": {
+            "raw_artifact_ref": "original",
+            "source_ref": "source:original",
+            "sha256": "505e74267342e1d756e508557bc5e2ce83e1d6ef1360e5342c53f759e71724f6"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "MK",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "505e74267342e1d756e508557bc5e2ce83e1d6ef1360e5342c53f759e71724f6"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "ML",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "505e74267342e1d756e508557bc5e2ce83e1d6ef1360e5342c53f759e71724f6"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "505e74267342e1d756e508557bc5e2ce83e1d6ef1360e5342c53f759e71724f6"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 2,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "a",
+              "member_label": "a",
+              "sequence": "MK",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "505e74267342e1d756e508557bc5e2ce83e1d6ef1360e5342c53f759e71724f6"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "b",
+              "member_label": "b",
+              "sequence": "ML",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "505e74267342e1d756e508557bc5e2ce83e1d6ef1360e5342c53f759e71724f6"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "declarations": {
+      "common": {
+        "version": "bvbrc_alignment_associations_v1",
+        "analysis_id": "analysis",
+        "input_sequences": [
+          {
+            "kind": "parsed_document",
+            "input_binding_id": "original",
+            "document": "original#alignment",
+            "member_id_rule": "first_whitespace_token",
+            "molecule": "protein",
+            "host_member_joins": [],
+            "evidence": []
+          }
+        ],
+        "row_joins": [],
+        "automatic_row_joins": [
+          {
+            "alignment": "aligned#alignment",
+            "input_binding_ids": [
+              "original"
+            ],
+            "method": "exact_unique_header",
+            "case_policy": "literal",
+            "gap_policy": "literal",
+            "transformation_ids": [],
+            "evidence": []
+          }
+        ],
+        "transformations": [],
+        "correspondences": [],
+        "feature_genomes": [],
+        "source_records": [],
+        "member_entities": []
+      },
+      "functions": null,
+      "taxonomy": null
+    }
+  },
+  "common_result": {
+    "status": "ok",
+    "value": {
+      "original_members": [
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "a",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 0,
+          "raw_header": "a",
+          "member_label": "a",
+          "sequence_sha256": "b2690faaaa9351ecb43b60145db79e38151129eaa426b9529f1705b2dd5168bc",
+          "original_length": 2,
+          "molecule": "protein",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        },
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "b",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 1,
+          "raw_header": "b",
+          "member_label": "b",
+          "sequence_sha256": "a5713dc015b27286ec0cdd8fe5c20e055cada2827cbffd1ab4aa1c26528b59d4",
+          "original_length": 2,
+          "molecule": "protein",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "inline_inputs": [],
+      "row_members": [
+        {
+          "association_id": "aligned#alignment/rows/0/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "a",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        },
+        {
+          "association_id": "aligned#alignment/rows/1/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "b",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        }
+      ],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "diagnostics": []
+  },
+  "metacats_operands": null,
+  "metacats_result": null,
+  "calculations": [
+    {
+      "function": "msa_native_entropy",
+      "alignment": {
+        "alignment_id": "aligned#alignment",
+        "artifact": {
+          "raw_artifact_ref": "aligned",
+          "source_ref": "source:aligned",
+          "sha256": "505e74267342e1d756e508557bc5e2ce83e1d6ef1360e5342c53f759e71724f6"
+        },
+        "format": "aligned_fasta",
+        "layout": "fasta",
+        "id_rule": "first_whitespace_token",
+        "encoding": "utf-8",
+        "declared_row_count": null,
+        "declared_column_count": null,
+        "observed_row_count": 2,
+        "observed_column_count": 2,
+        "completeness": "complete",
+        "rows": [
+          {
+            "row_index": 0,
+            "raw_header": "a",
+            "member_label": "a",
+            "sequence": "MK",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "aligned",
+                "source_ref": "source:aligned",
+                "sha256": "505e74267342e1d756e508557bc5e2ce83e1d6ef1360e5342c53f759e71724f6"
+              },
+              "byte_start_0based": 0,
+              "byte_end_0based_exclusive": 6,
+              "line_start_1based": 1,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          {
+            "row_index": 1,
+            "raw_header": "b",
+            "member_label": "b",
+            "sequence": "ML",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "aligned",
+                "source_ref": "source:aligned",
+                "sha256": "505e74267342e1d756e508557bc5e2ce83e1d6ef1360e5342c53f759e71724f6"
+              },
+              "byte_start_0based": 6,
+              "byte_end_0based_exclusive": 12,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          }
+        ]
+      },
+      "arguments": {
+        "analysis_id": "analysis",
+        "population": {
+          "population_id": "all-physical-rows-and-columns",
+          "alignment_id": "aligned#alignment",
+          "row_indices": [
+            0,
+            1
+          ],
+          "columns_0based": [
+            0,
+            1
+          ],
+          "completeness": "complete",
+          "evidence": []
+        },
+        "alphabet": "protein",
+        "case_policy": "uppercase",
+        "terminal_gap": "-",
+        "observed_table": null,
+        "native_rounding": "binary64_fixed_2_ties_to_even"
+      },
+      "result": {
+        "status": "ok",
+        "analysis_id": "analysis",
+        "population_id": "all-physical-rows-and-columns",
+        "alignment_id": "aligned#alignment",
+        "method_parameters": {
+          "alphabet": "protein",
+          "case_policy": "uppercase",
+          "terminal_gap": "-",
+          "native_rounding": "binary64_fixed_2_ties_to_even"
+        },
+        "sites": [
+          {
+            "column_0based": 0,
+            "included_row_indices": [
+              0,
+              1
+            ],
+            "excluded_terminal_row_indices": [],
+            "symbol_counts": [
+              {
+                "symbol": "M",
+                "count": 2
+              }
+            ],
+            "strict_majority_consensus": "M",
+            "native_observation_ids": [],
+            "eligible_count": {
+              "value": 2,
+              "state": "available",
+              "unit": "characters",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_eligible_count_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            },
+            "internal_gap_count": {
+              "value": 0,
+              "state": "available",
+              "unit": "characters",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_internal_gap_count_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            },
+            "terminal_gap_excluded_count": {
+              "value": 0,
+              "state": "available",
+              "unit": "characters",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_terminal_gap_excluded_count_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            },
+            "literal_entropy_bits": {
+              "value": 0.0,
+              "state": "available",
+              "unit": "bits",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": 2,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_literal_entropy_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            },
+            "native_score_recalculated": {
+              "value": 0.0,
+              "state": "available",
+              "unit": "hundredths_of_bit",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            },
+            "score_residual": {
+              "value": null,
+              "state": "not_measured",
+              "unit": "hundredths_of_bit",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_observed_minus_selected_population_score_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          },
+          {
+            "column_0based": 1,
+            "included_row_indices": [
+              0,
+              1
+            ],
+            "excluded_terminal_row_indices": [],
+            "symbol_counts": [
+              {
+                "symbol": "K",
+                "count": 1
+              },
+              {
+                "symbol": "L",
+                "count": 1
+              }
+            ],
+            "strict_majority_consensus": "X",
+            "native_observation_ids": [],
+            "eligible_count": {
+              "value": 2,
+              "state": "available",
+              "unit": "characters",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_eligible_count_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            },
+            "internal_gap_count": {
+              "value": 0,
+              "state": "available",
+              "unit": "characters",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_internal_gap_count_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            },
+            "terminal_gap_excluded_count": {
+              "value": 0,
+              "state": "available",
+              "unit": "characters",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_terminal_gap_excluded_count_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            },
+            "literal_entropy_bits": {
+              "value": 1.0,
+              "state": "available",
+              "unit": "bits",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": 2,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_literal_entropy_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            },
+            "native_score_recalculated": {
+              "value": 100.0,
+              "state": "available",
+              "unit": "hundredths_of_bit",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            },
+            "score_residual": {
+              "value": null,
+              "state": "not_measured",
+              "unit": "hundredths_of_bit",
+              "origin": "calculated",
+              "numerator": null,
+              "denominator": null,
+              "population_id": "all-physical-rows-and-columns",
+              "method_id": "msa_observed_minus_selected_population_score_v1",
+              "evidence": [],
+              "uncertainty": null,
+              "requirement_ids": []
+            }
+          }
+        ],
+        "requirements": [],
+        "diagnostics": []
+      }
+    }
+  ],
+  "downstream_operands": {}
+}

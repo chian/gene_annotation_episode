@@ -7,7 +7,7 @@ from method_loop.durable import canonical
 from method_loop.identities import UnitRef
 
 from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.homology_episodes import HomologyEpisodes
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.wait_estimation_inputs import (WaitInputs,
     validate_local_return_history)
@@ -231,7 +231,7 @@ def test_completion_default_is_exact_v3_and_v4_only_forwards_selection_history()
 
 
 def test_homology_declares_existing_controller_credit_split_without_projection():
-    binding = HomologyEpisodes.__new__(HomologyEpisodes)
+    binding = HomologyEpisode.__new__(HomologyEpisode)
     binding.credit_binding = {"version": "operational-fixture"}
     binding.monitoring_binding = {"version": "monitoring-fixture"}
     for role, kind in (("job_launch", "operational"), ("job_monitor", "monitoring"),

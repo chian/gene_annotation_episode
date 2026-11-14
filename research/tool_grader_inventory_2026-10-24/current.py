@@ -258,7 +258,7 @@ group('hmmer_api', 'api.hmmer.databases api.hmmer.prepare api.hmmer.submit api.h
     limits=['Database inventory is discovery, not a search.', 'Six operation names represent lifecycle of two algorithms, not six graders.', 'No API hmmsearch/jackhmmer/nhmmer binding.'])
 group('phmmer_local', 'homology.environment homology.configure homology.stage homology.submit homology.resume_start homology.check_handoff homology.sample homology.extract homology.coverage homology.errors',
     'scientific_algorithm', 'Legacy job_launch/job_monitor/job_results, or existing local HomologyResourceAdapter launch_local/results; no direct ordinary registry grant.',
-    [('gene_annotation_episode/homology_episodes.py', 'HomologyEpisodes'), ('gene_annotation_episode/homology_jobs.py', 'HomologyJobs'),
+    [('gene_annotation_episode/homology_episode.py', 'HomologyEpisode'), ('gene_annotation_episode/homology_jobs.py', 'HomologyJobs'),
      ('gene_annotation_episode/resource_episodes.py', 'LocalHomologyResource')],
     [('gene_annotation_episode/homology_results.py', 'HomologyResults'), ('gene_annotation_episode/phmmer_result_worker.py', 'extract'),
      ('gene_annotation_episode/phmmer_format.py', 'hit_rows'), ('gene_annotation_episode/phmmer_format.py', 'alignment_rows'),

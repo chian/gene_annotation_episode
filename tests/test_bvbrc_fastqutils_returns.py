@@ -22,7 +22,7 @@ from gene_annotation_episode.communication import validate_form
 from gene_annotation_episode.execution_contracts import canonical, digest
 
 spec = importlib.util.spec_from_file_location('fastq_return_fixtures',
-    Path(__file__).parent / 'fixtures/bvbrc_fastqutils/bundle/fixture_support.py')
+    Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/bundle/fixture_support.py')
 f = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(f)
 

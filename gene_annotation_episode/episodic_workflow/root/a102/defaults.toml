@@ -1,0 +1,52 @@
+
+[models.connection]
+command = ["codex", "app-server", "--stdio"]
+
+
+[models.FAST]
+model = "gpt-6-luna"
+reasoning_effort = "low"
+
+
+[models.REASONING]
+model = "gpt-6-sol"
+reasoning_effort = "medium"
+
+
+[models.routing]
+decide = "REASONING"
+child_interpretation = "REASONING"
+
+
+[controller]
+cost = 0.001
+uncertainty_alpha = 0.05
+
+
+[scientific_progress]
+# Provisional information units, independent of annotation-support hypervolume.
+# Existing knowledge belongs to the caller; resume restores its original set.
+finding_unit = 1
+loss_preview_size = 24
+initial_known_record_refs = []
+
+
+[restoration]
+# Own-decision metadata rows supplied to a new provider conversation.
+# This controls transport preview size, never Episode work or continuation.
+preview_size = 24
+
+
+# Operational configuration restored to this private module's actual consumers.
+# CPU/RAM are machine bounds, not scientific continuation rules.
+[local_tools]
+minimap2_cpu = 1
+
+[local_jobs]
+memory_bytes = 5368709120
+scratch_bytes = 4294967296
+
+[local_resources]
+cpu_threads = 1
+memory_bytes = 5368709120
+scratch_bytes = 4294967296

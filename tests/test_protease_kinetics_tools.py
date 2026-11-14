@@ -31,7 +31,7 @@ from gene_annotation_episode.runtime import ActionFailure, Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_protease_kinetics_measurements import supplied_fixture
-from tests.test_molecular_sequence_tools_native import _controller, _credit
+from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_tools_native import _controller, _credit
 from tests.test_runtime import ScriptedProvider
 
 
@@ -659,7 +659,7 @@ def _protease_native_assemble(store, directory, proof, provider):
 
 
 def _protease_native_checkpoint(store, proof, path):
-    from tests.test_molecular_sequence_n_glycosylation_native import _checkpoint
+    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _checkpoint
     _checkpoint(store, proof, path)
 
 
@@ -681,7 +681,7 @@ class _ProteaseNativeChoices:
         from gene_annotation_episode.decision_context import state_frame
         from gene_annotation_episode.evidence_axis_instructions import instruction_view
         from tests.test_homer_motif_saved_workflow import _encode
-        from tests.test_molecular_sequence_n_glycosylation_native import _files
+        from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files
         context = plain(context)
         if context.get("feedback"):
             raise RuntimeError("unexpected_protease_action_feedback:" + json.dumps(context["feedback"], sort_keys=True))
@@ -776,7 +776,7 @@ class _ProteaseNativeChoices:
 def _protease_native_verify(store, workflow, registry, proof):
     from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
     from tests.test_homer_motif_saved_workflow import _archive
-    from tests.test_molecular_sequence_n_glycosylation_native import _history
+    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _history
     history = _history(store, proof["run_id"])
     episodes = sorted(history["runtime_episodes"], key=lambda row: len(json.loads(row["path"])))
     assert len(episodes) == 2 and all(row["state"] == "yielded" and row["completion"] and row["archive"] for row in episodes)
@@ -906,7 +906,7 @@ class _ProteaseNoNewDecisions:
 def _protease_native_closed_replay(store, directory, proof, monkeypatch):
     from gene_annotation_episode.runtime import ReturnedActionUnit
     from tests.test_homer_motif_saved_workflow import _archive, _archive_value
-    from tests.test_molecular_sequence_n_glycosylation_native import _files, _history
+    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history
     before_tables, before_files = _tables(store), _files(directory)
     before_artifacts = _files(store.path / "artifacts")
     history = _history(store, proof["run_id"])
@@ -1007,7 +1007,7 @@ def test_genuine_current_protease_native_saved_typed_parent_and_closed_replay(tm
     from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
     from tests.test_homer_motif_saved_workflow import _archive_value
-    from tests.test_molecular_sequence_n_glycosylation_native import _sqlite_pins
+    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _sqlite_pins
     tag = os.environ.get("HMMER_NATIVE_ORACLE_ORDINARY_PROTEASE_KINETICS_ATTEMPT_ID")
     assert tag and Path(tag).name == tag and tag not in (".", "..")
     case = tmp_path / ("protease-kinetics-" + tag)
@@ -1215,7 +1215,7 @@ def _protease_retained_load():
 
 def _protease_retained_original(store, original):
     from tests.test_homer_motif_saved_workflow import _archive
-    from tests.test_molecular_sequence_n_glycosylation_native import _history
+    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _history
     history = _history(store, original["run_id"])
     assert history == original["history"]
     episodes = sorted(history["runtime_episodes"], key=lambda row: len(json.loads(row["path"])))
@@ -1459,7 +1459,7 @@ def test_retained542_protease_current_admission_typed_receiver_and_closed_replay
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
     from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
     from tests.test_homer_motif_saved_workflow import _archive, _archive_value
-    from tests.test_molecular_sequence_n_glycosylation_native import _files, _history, _sqlite_pins
+    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history, _sqlite_pins
     if not os.environ.get("HMMER_NATIVE_ORACLE_PROTEASE_RETAINED_PROOF"):
         pytest.skip("requires the explicitly pinned terminal542 retained ordinary protease evidence")
     assert os.environ.get("HMMER529_ATTEMPT"), "requires the selected bounded retained-data runtime"
@@ -1567,7 +1567,7 @@ def _protease_retained_verify_completed(store, workflow, registry, proof, origin
     """Authenticate completed records and replay them; never acquire another result."""
     from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
     from tests.test_homer_motif_saved_workflow import _archive, _archive_value
-    from tests.test_molecular_sequence_n_glycosylation_native import _files, _history
+    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history
     private = {reference for source in original["publications"]
         for reference in (source["artifact_ref"], source["request_ref"], *source["auxiliary_artifact_refs"])}
     history = _history(store, proof["run_id"])
@@ -1644,7 +1644,7 @@ def _protease_retained_verify_completed(store, workflow, registry, proof, origin
 def test_retained545_protease_completed_delivery_postcheck_without_new_actions(tmp_path, monkeypatch):
     import os
     import shutil
-    from tests.test_molecular_sequence_n_glycosylation_native import _files, _history, _sqlite_pins
+    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history, _sqlite_pins
     configured = os.environ.get("HMMER_NATIVE_ORACLE_PROTEASE_COMPLETED_RECEIVER_PROOF")
     if not configured:
         pytest.skip("requires the explicitly pinned completed545 Workflow and its preserved failed verifier")

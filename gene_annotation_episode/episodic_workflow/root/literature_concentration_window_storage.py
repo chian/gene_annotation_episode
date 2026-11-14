@@ -1,0 +1,527 @@
+"""Selected concentration windows with immutable typed returns and cold custody.
+
+Only population reads/interprets/calculates sources. Cold reconstruction checks
+the original receipts and copies their frozen rows without numerical work.
+"""
+from copy import deepcopy
+import hashlib
+import json
+from pathlib import Path
+
+from .communication import plain
+from gene_annotation_episode.domain import ContractError, canonical, identity, validate_schema
+from .literature_rate_storage import LiteratureRateRepository
+from .literature_concentration_window_release import (VERSION as _RELEASE_VERSION,
+    HISTORICAL_VERSION as _HISTORICAL_RELEASE_VERSION,
+    prospective as _release_prospective, retained as _release_retained,
+    retained_v2 as _release_retained_v2, retained_v3 as _release_retained_v3)
+
+PROVIDER='literature.a105.concentration_window'
+VERSION='literature_concentration_window_record_v1'
+from gene_annotation_episode.episodic_workflow.root.library.literature_concentration_window_metadata import POPULATION
+NAMESPACE='literature_concentration_window_cells'
+REQUESTED='requested_concentration_window_components'
+VIEW='concentration_window_components'
+from gene_annotation_episode.episodic_workflow.root.library.literature_concentration_window_metadata import SCOPE, OPERATION
+
+# Frozen exact released resources are inserted here, never loaded from research.
+from gene_annotation_episode.episodic_workflow.root.library.literature_concentration_window_contracts import ORIGINAL_SCHEMAS
+COMPONENT_SCOPE = json.loads('{"substrate_start":{"formula":"selected_native_token*unit_multiplier","unit":"uM","meaning":"Native source operand; not an experimental reliability score.","operands":["substrate_start"],"population":"source","covariance_required":false},"substrate_end":{"formula":"selected_native_token*unit_multiplier","unit":"uM","meaning":"Native source operand; not an experimental reliability score.","operands":["substrate_end"],"population":"source","covariance_required":false},"total_product_start":{"formula":"selected_native_token*unit_multiplier","unit":"uM","meaning":"Native source operand; not an experimental reliability score.","operands":["total_product_start"],"population":"source","covariance_required":false},"total_product_end":{"formula":"selected_native_token*unit_multiplier","unit":"uM","meaning":"Native source operand; not an experimental reliability score.","operands":["total_product_end"],"population":"source","covariance_required":false},"fate_product_start":{"formula":"selected_native_token*unit_multiplier","unit":"uM","meaning":"Native source operand; not an experimental reliability score.","operands":["fate_product_start"],"population":"source","covariance_required":false},"fate_product_end":{"formula":"selected_native_token*unit_multiplier","unit":"uM","meaning":"Native source operand; not an experimental reliability score.","operands":["fate_product_end"],"population":"source","covariance_required":false},"coordinate_start":{"formula":"selected_native_token*unit_multiplier","unit":"s","meaning":"Native source operand; not an experimental reliability score.","operands":["coordinate_start"],"population":"source","covariance_required":false},"coordinate_end":{"formula":"selected_native_token*unit_multiplier","unit":"s","meaning":"Native source operand; not an experimental reliability score.","operands":["coordinate_end"],"population":"source","covariance_required":false},"substrate_loss":{"formula":"S0-S1","unit":"uM","meaning":"Signed observed change over the selected common window.","operands":["substrate_start","substrate_end"],"population":"source","covariance_required":false},"total_product_gain":{"formula":"T1-T0","unit":"uM","meaning":"Signed observed change over the selected common window.","operands":["total_product_start","total_product_end"],"population":"source","covariance_required":false},"fate_product_gain":{"formula":"F1-F0","unit":"uM","meaning":"Signed observed change over the selected common window.","operands":["fate_product_start","fate_product_end"],"population":"source","covariance_required":false},"coordinate_span":{"formula":"t1-t0","unit":"s","meaning":"Released coordinate separation, not automatically elapsed time.","operands":["coordinate_start","coordinate_end"],"population":"source","covariance_required":false},"chemical_discrepancy":{"formula":"(S0-S1)/nuS-(T1-T0)/nuT","unit":"uM_reaction_equivalents","meaning":"Signed disagreement between matched chemical readouts under declared stoichiometry.","operands":["substrate_start","substrate_end","total_product_start","total_product_end"],"population":"source","covariance_required":false},"chemical_ratio":{"formula":"((S0-S1)/nuS)/((T1-T0)/nuT)","unit":"dimensionless","meaning":"Relative agreement of matched substrate loss and total-product gain.","operands":["substrate_start","substrate_end","total_product_start","total_product_end"],"population":"source","covariance_required":false},"chemical_relative_discrepancy":{"formula":"chemical_ratio-1","unit":"dimensionless","meaning":"Signed relative mismatch of the same chemical readouts.","operands":["substrate_start","substrate_end","total_product_start","total_product_end"],"population":"source","covariance_required":false},"fate_fraction":{"formula":"((F1-F0)/nuF)/((T1-T0)/nuT)","unit":"dimensionless","meaning":"Specific measured product fate relative to total measured cleavage; not enzyme attribution.","operands":["total_product_start","total_product_end","fate_product_start","fate_product_end"],"population":"source","covariance_required":false},"substrate_depletion_fraction":{"formula":"(S0-S1)/S0","unit":"fraction","meaning":"Fractional depletion, which can limit an initial-regime interpretation.","operands":["substrate_start","substrate_end"],"population":"source","covariance_required":false},"source_interval_average_substrate":{"formula":"60*substrate_loss/coordinate_span","unit":"uM/min","meaning":"Interval-average concentration change; never initial rate, Vmax or kcat.","operands":["substrate_start","substrate_end","coordinate_start","coordinate_end"],"population":"source","covariance_required":false},"scenario_interval_average_substrate":{"formula":"60*substrate_loss/coordinate_span","unit":"uM/min","meaning":"Interval-average concentration change; never initial rate, Vmax or kcat.","operands":["substrate_start","substrate_end","coordinate_start","coordinate_end"],"population":"scenario","covariance_required":false},"source_interval_average_total_product":{"formula":"60*total_product_gain/coordinate_span","unit":"uM/min","meaning":"Interval-average concentration change; never initial rate, Vmax or kcat.","operands":["total_product_start","total_product_end","coordinate_start","coordinate_end"],"population":"source","covariance_required":false},"scenario_interval_average_total_product":{"formula":"60*total_product_gain/coordinate_span","unit":"uM/min","meaning":"Interval-average concentration change; never initial rate, Vmax or kcat.","operands":["total_product_start","total_product_end","coordinate_start","coordinate_end"],"population":"scenario","covariance_required":false},"source_interval_average_fate_product":{"formula":"60*fate_product_gain/coordinate_span","unit":"uM/min","meaning":"Interval-average concentration change; never initial rate, Vmax or kcat.","operands":["fate_product_start","fate_product_end","coordinate_start","coordinate_end"],"population":"source","covariance_required":false},"scenario_interval_average_fate_product":{"formula":"60*fate_product_gain/coordinate_span","unit":"uM/min","meaning":"Interval-average concentration change; never initial rate, Vmax or kcat.","operands":["fate_product_start","fate_product_end","coordinate_start","coordinate_end"],"population":"scenario","covariance_required":false},"substrate_loss_variance":{"formula":"gradient(substrate_loss)^T*C*gradient(substrate_loss)","unit":"(uM)^2","meaning":"Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.","operands":["substrate_start","substrate_end"],"population":"source","covariance_required":true},"total_product_gain_variance":{"formula":"gradient(total_product_gain)^T*C*gradient(total_product_gain)","unit":"(uM)^2","meaning":"Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.","operands":["total_product_start","total_product_end"],"population":"source","covariance_required":true},"fate_product_gain_variance":{"formula":"gradient(fate_product_gain)^T*C*gradient(fate_product_gain)","unit":"(uM)^2","meaning":"Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.","operands":["fate_product_start","fate_product_end"],"population":"source","covariance_required":true},"coordinate_span_variance":{"formula":"gradient(coordinate_span)^T*C*gradient(coordinate_span)","unit":"(s)^2","meaning":"Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.","operands":["coordinate_start","coordinate_end"],"population":"source","covariance_required":true},"chemical_discrepancy_variance":{"formula":"gradient(chemical_discrepancy)^T*C*gradient(chemical_discrepancy)","unit":"(uM_reaction_equivalents)^2","meaning":"Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.","operands":["substrate_start","substrate_end","total_product_start","total_product_end"],"population":"source","covariance_required":true},"chemical_ratio_variance":{"formula":"gradient(chemical_ratio)^T*C*gradient(chemical_ratio)","unit":"(dimensionless)^2","meaning":"Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.","operands":["substrate_start","substrate_end","total_product_start","total_product_end"],"population":"source","covariance_required":true},"fate_fraction_variance":{"formula":"gradient(fate_fraction)^T*C*gradient(fate_fraction)","unit":"(dimensionless)^2","meaning":"Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.","operands":["total_product_start","total_product_end","fate_product_start","fate_product_end"],"population":"source","covariance_required":true},"source_interval_average_substrate_variance":{"formula":"gradient(source_interval_average_substrate)^T*C*gradient(source_interval_average_substrate)","unit":"(uM/min)^2","meaning":"Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.","operands":["substrate_start","substrate_end","coordinate_start","coordinate_end"],"population":"source","covariance_required":true},"source_interval_average_total_product_variance":{"formula":"gradient(source_interval_average_total_product)^T*C*gradient(source_interval_average_total_product)","unit":"(uM/min)^2","meaning":"Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.","operands":["total_product_start","total_product_end","coordinate_start","coordinate_end"],"population":"source","covariance_required":true},"source_interval_average_fate_product_variance":{"formula":"gradient(source_interval_average_fate_product)^T*C*gradient(source_interval_average_fate_product)","unit":"(uM/min)^2","meaning":"Selected-estimate uncertainty; exact linear propagation or explicitly first-order nonlinear propagation.","operands":["fate_product_start","fate_product_end","coordinate_start","coordinate_end"],"population":"source","covariance_required":true},"chemical_standardized_discrepancy":{"formula":"chemical_discrepancy/sqrt(chemical_discrepancy_variance)","unit":"dimensionless","meaning":"Discrepancy relative to justified joint-estimate uncertainty; no p-value or probability.","operands":["substrate_start","substrate_end","total_product_start","total_product_end"],"population":"source","covariance_required":true}}')
+PURE_HASHES = json.loads('{"literature_concentration_window_inputs.py":"ba51755ab35d6c9c3111429832e11ff03060b1d5a311711f6c2444ce33cf907a","literature_concentration_window_calculations.py":"67463406d7745f857944b17145fcd4fc1687bf3ff7c25945cc208498740bfcbc","literature_concentration_window_prompt.py":"013d8d18962b8fe77e1814c8a99892aac0317185793b7a5e9e2b8ee2ef224357"}')
+
+from gene_annotation_episode.episodic_workflow.root.library.literature_concentration_window_contracts import CONCENTRATION_WINDOW_CELLS_SCHEMA_V1
+CONCENTRATION_WINDOW_REQUEST_SCHEMA_V1=ORIGINAL_SCHEMAS['request']
+COMPONENTS=tuple(COMPONENT_SCOPE)
+
+from gene_annotation_episode.episodic_workflow.root.library.literature_concentration_window_contracts import concentration_window_cells_schema
+def concentration_window_operation_schema():return deepcopy(CONCENTRATION_WINDOW_REQUEST_SCHEMA_V1)
+def _fail(code):raise ContractError('concentration_window_'+code)
+def _digest(value):return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode()).hexdigest()
+
+def _fields(value):
+    if isinstance(value,dict):
+        if value.get('kind') in ('text','xlsx_cell_slice') and 'quote' in value:yield value
+        else:
+            for child in value.values():yield from _fields(child)
+    elif isinstance(value,(list,tuple)):
+        for child in value:yield from _fields(child)
+
+def _binding(field):return {k:v for k,v in field.items() if k!='quote'}
+
+def _direct(args):
+    s=args['selection']
+    return list(dict.fromkeys([s['source_ref'],*sorted({f['source_ref'] for f in _fields(s)}),
+        *([s['covariance_source_ref']] if s['covariance_source_ref'] is not None else [])]))
+
+def _scope(component):
+    roles=COMPONENT_SCOPE[component]['operands']
+    analytes=list(dict.fromkeys(r.rsplit('_',1)[0] for r in roles if not r.startswith('coordinate')))
+    cross=['chemical'] if component.startswith('chemical_') else ['fate'] if component.startswith('fate_fraction') else []
+    models=['substrate','total_product'] if cross==['chemical'] else ['fate_product','total_product'] if cross else []
+    return roles,analytes,cross,models
+
+def _context_requests(args):
+    result={}
+    for entry in args['return_context']:
+        path,index=entry['field'],entry['participant_index']
+        if (path=='assay.participants.identity') != (index is not None):_fail('context_participant_index_invalid')
+        key=(path,index)
+        if key in result:_fail('duplicate_context_field')
+        result[key]=entry['windows']
+    return result
+
+def _selected_field(selection,path,index):
+    if path=='assay.participants.identity':
+        if index>=len(selection['assay']['participants']):_fail('context_participant_index_invalid')
+        return selection['assay']['participants'][index]['identity']
+    names=path.split('.')
+    if names[0]=='stoichiometry':
+        model=selection['stoichiometry'][names[1]]
+        if names[2]=='analyte':
+            q=selection['quantities'][names[1]+'_start'];return None if q is None else q['analyte']
+        if model is None:return None
+        if names[2]=='coefficient_token_support':return None if model['number'] is None else model['number']['field']
+        return model[names[2]]
+    node=selection
+    for name in names:
+        if node is None:return None
+        node=node[name]
+    return node
+
+def _span(field,start,end):
+    raw=field['quote'].encode()
+    if not 0<=start<end<=len(raw):_fail('context_window_outside_field')
+    try:prefix=raw[:start].decode();text=raw[start:end].decode()
+    except UnicodeError as error:raise ContractError('concentration_window_context_utf8_boundary_required') from error
+    b=_binding(field)
+    if b['kind']=='text':b.update(start=b['start']+start,end=b['start']+end)
+    else:b.update(decoded_start=b['decoded_start']+len(prefix),decoded_end=b['decoded_start']+len(prefix)+len(text))
+    return b,text
+
+def _overlap(a,b):
+    if any(a.get(k)!=b.get(k) for k in ('source_ref','representation','kind')):return False
+    if a['kind']=='text':return a['start']<b['end'] and b['start']<a['end']
+    return all(a[k]==b[k] for k in ('worksheet_part','sheet_key','sheet_name','cell')) and a['decoded_start']<b['decoded_end'] and b['decoded_start']<a['decoded_end']
+
+def _validate_windows(args):
+    s=args['selection'];numeric=[]
+    for q in s['quantities'].values():
+        if q is None or q['number'] is None:continue
+        n=q['number'];f=n['field']
+        loc,_=_span(f,len(f['quote'][:n['number_start']].encode()),len(f['quote'][:n['number_end']].encode()))
+        numeric.append(loc)
+    requests=_context_requests(args)
+    for (path,index),windows in requests.items():
+        field=_selected_field(s,path,index)
+        if windows and field is None:_fail('context_without_source_field')
+        seen=[]
+        for window in windows:
+            loc,_=_span(field,window['start'],window['end'])
+            if field['source_ref']==s['covariance_source_ref']:_fail('context_overlaps_covariance_document')
+            if any(_overlap(loc,n) for n in numeric):_fail('context_overlaps_observation_token')
+            if any(window['start']<b and a<window['end'] for a,b in seen):_fail('context_windows_overlap')
+            seen.append((window['start'],window['end']))
+    return requests
+
+def _scoped_context_once(args,sheet,component,requests):
+    roles,analytes,cross,models=_scope(component)
+    original=sheet['scientific_context'];context=deepcopy(original)
+    context['usage']='scoped_parent_scientific_context'
+    for name,keys in (('quantities',roles),('stoichiometry',models),('pair_relationships',analytes),('cross_relationships',cross)):
+        context[name]={k:context[name][k] for k in keys}
+    def visit(value,path=(),participant=None):
+        if isinstance(value,dict):
+            if set(value)=={'status','scientific_text','display_status','binding','artifact_ref','source_sha256'}:
+                field_path='.'.join(path);key=(field_path,participant if field_path=='assay.participants.identity' else None)
+                windows=requests.get(key,[]);field=_selected_field(args['selection'],*key) if windows else None
+                fragments=[]
+                for w in windows:
+                    _,text=_span(field,w['start'],w['end']);fragments.append(dict(text=text,**w))
+                value.pop('scientific_text');value['fragments']=fragments
+                value['display_status']='selected_fragments' if fragments else 'not_selected' if value['status']=='not_selected' else 'support_location_only'
+                return
+            for k,child in value.items():visit(child,(*path,k),participant)
+        elif isinstance(value,list):
+            for i,child in enumerate(value):visit(child,path,i if path==('assay','participants') else participant)
+    visit(context)
+    return context
+
+def _withheld(selection,artifacts,sizes):
+    roster={(a['source_ref'],a['representation']):a['artifact_ref'] for a in artifacts};result=[]
+    for f in _fields(selection):
+        artifact=roster[f['source_ref'],f['representation']]
+        loc=dict(source_ref=f['source_ref'],artifact_ref=artifact,representation=f['representation'],
+            start=f['start'] if f['kind']=='text' else 0,end=f['end'] if f['kind']=='text' else sizes[artifact])
+        if loc not in result:result.append(loc)
+    ref=selection['covariance_source_ref']
+    if ref is not None:
+        artifact=roster[ref,'original'];loc=dict(source_ref=ref,artifact_ref=artifact,representation='original',start=0,end=sizes[artifact])
+        if loc not in result:result.append(loc)
+    return result
+
+def _project_once(args,extraction,inputs,sheet,sizes):
+    requests=_validate_windows(args);withheld=_withheld(args['selection'],sheet['source_artifacts'],sizes);rows=[]
+    for cell in sheet['cells']:
+        roles=cell['operand_roles']
+        rows.append(dict(row_version='concentration_window_return_v1',evaluation_scope=SCOPE,
+            evidence_source_ref=args['selection']['source_ref'],component=cell['component'],cell=deepcopy(cell),
+            source_kind=args['selection']['source_kind'],assertion_resolution=sheet['assertion_resolution'],
+            scientific_context=_scoped_context_once(args,sheet,cell['component'],requests),
+            covariance_context=deepcopy(sheet['covariance_context']),
+            estimate_bindings=[deepcopy(b) for b in sheet['estimate_bindings'] if b['role'] in roles],
+            operand_metadata=[dict(role=r,**{k:deepcopy(extraction['quantities'][r][k]) for k in
+                ('status','origin','relation','approximate','unit','reasons')}) for r in roles if extraction['quantities'][r] is not None],
+            source_artifacts=deepcopy(sheet['source_artifacts']),withheld_locations=deepcopy(withheld),
+            limits=[v for v in sheet['limits'] if v!='selected_integration_unimplemented']))
+    return rows
+
+def _validate_context_copy(scoped,original,args,component):
+    """Original retained-value custody only; no source/scientific projection."""
+    def require(condition):
+        if not condition:_fail('saved_context_copy_mismatch')
+    requests=_context_requests(args)
+    roles,analytes,cross,models=_scope(component)
+    require(set(scoped)==set(original) and scoped['usage']=='scoped_parent_scientific_context')
+    expected_keys=dict(quantities=roles,stoichiometry=models,pair_relationships=analytes,cross_relationships=cross)
+    def compare(value,before,path=(),participant=None):
+        if isinstance(before,dict):
+            if set(before)=={'status','scientific_text','display_status','binding','artifact_ref','source_sha256'}:
+                require(set(value)=={'status','display_status','binding','artifact_ref','source_sha256','fragments'})
+                for k in ('status','binding','artifact_ref','source_sha256'):require(value[k]==before[k])
+                field_path='.'.join(path);key=(field_path,participant if field_path=='assay.participants.identity' else None)
+                windows=requests.get(key,[])
+                require(len(value['fragments'])==len(windows))
+                require(value['display_status']==('selected_fragments' if windows else 'not_selected' if before['status']=='not_selected' else 'support_location_only'))
+                if windows:
+                    field=_selected_field(args['selection'],*key)
+                    require(field is not None and _binding(field)==before['binding'])
+                    raw=field['quote'].encode()
+                    for fragment,window in zip(value['fragments'],windows):
+                        a,b=window['start'],window['end']
+                        require(fragment['start']==a and fragment['end']==b and 0<=a<b<=len(raw)
+                            and fragment['text'].encode()==raw[a:b])
+                return
+            keys=expected_keys.get(path[0]) if len(path)==1 else None
+            require(set(value)==set(before if keys is None else keys))
+            for key in value:compare(value[key],before[key],(*path,key),participant)
+        elif isinstance(before,list):
+            require(isinstance(value,list) and len(value)==len(before))
+            for i,(child,old) in enumerate(zip(value,before)):compare(child,old,path,i if path==('assay','participants') else participant)
+        else:require(value==before)
+    for key in scoped:
+        if key!='usage':compare(scoped[key],original[key],(key,))
+
+
+class LiteratureConcentrationWindowRepository(LiteratureRateRepository):
+    provider,record_version,components=PROVIDER,VERSION,COMPONENTS
+    operations_table='literature_concentration_window_operations'
+    received_table='literature_concentration_window_received'
+    binding_fields=()
+
+    def __init__(self,store,run_id):
+        if type(run_id) is not str or not run_id:raise ValueError('explicit_literature_run_required')
+        self.store,self.run_id=store,run_id
+
+    def _installed(self,table):return self.store.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",(table,)).fetchone() is not None
+    def _install(self):super().__init__(self.store,self.run_id)
+
+    def _native_provenance(self,scope,reference):
+        source=super()._native_provenance(scope,reference)
+        record={k:v for k,v in source.items() if k not in ('id','origin','record_type')}
+        if identity('source',dict(origin=source['origin'],record=record))!=reference:_fail('input_source_identity_mismatch')
+        return source
+
+    @staticmethod
+    def _components(values):
+        if not isinstance(values,(list,tuple)) or any(type(v) is not str or v not in COMPONENTS for v in values) or len(values)!=len(set(values)):_fail('component_selection_invalid')
+        return list(values)
+
+    def _ancestors(self,scope,refs):
+        result=list(dict.fromkeys(refs))
+        for ref in result:
+            for parent in self._native_provenance(scope,ref).get('parent_source_refs',()):
+                if parent not in result:result.append(parent)
+        return result
+
+    def _bound_descriptor(self):
+        if not self._installed('runtime_runs'):return None
+        row=self.store.db.execute('SELECT settings FROM runtime_runs WHERE run_id=?',(self.run_id,)).fetchone()
+        if row is None:return None
+        return next((deepcopy(b) for b in json.loads(row['settings']).get('episode_bindings',[]) if b.get('binding_id')=='literature'),None)
+
+    @staticmethod
+    def _implementation_files():
+        return [*PURE_HASHES,'literature_concentration_window_storage.py','literature_concentration_window_render.py',
+            'literature_assay_inputs.py','literature_experimental_contracts.py','literature_product_partition_inputs.py',
+            'literature_rate_native_inputs.py','literature_measurement_validation_inputs.py','literature_partner_source_fields.py','spreadsheet_tools.py',
+            'literature_rate_storage.py','domain.py','communication.py','literature_episodes.py','episode_services.py',
+            'literature_task_selection.py','literature_numerical_contracts.py','literature_numerical_return_presentation.py',
+            'episode_contract_information.py','literature_experimental_prompt.py','literature_reference_parent_prompt.py',
+            'literature_a105_worksheet.py','literature_a105_worksheet_render.py']
+
+    def _original_implementation(self):
+        return _release_prospective(self._bound_descriptor())
+
+    def populate(self,context,arguments,operation_key):
+        if context.run_id!=self.run_id:raise ContractError('literature_run_mismatch')
+        if type(operation_key) is not str or not operation_key:raise ContractError('operation_key_required')
+        args=plain(arguments);validate_schema(args,CONCENTRATION_WINDOW_REQUEST_SCHEMA_V1)
+        components=self._components(context.assignment.get(REQUESTED,[]))
+        if components!=args['selection']['requested_cells']:_fail('assignment_request_roster_mismatch')
+        request=dict(run_id=self.run_id,episode_id=context.episode_id,role=context.role,operation_key=operation_key,
+            scope=plain(context.scope),assignment=plain(context.assignment),received_record_refs=list(context.received_record_refs),
+            arguments=args,components=components)
+        signature=canonical(request)
+        old=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
+            (self.run_id,context.episode_id,operation_key)).fetchone() if self._installed(self.operations_table) else None
+        if old:
+            if old['signature']!=signature:raise ContractError('operation_key_reused_for_different_work')
+            outcome=json.loads(old['outcome']);self.read(outcome['result']['sheet_ref'])
+            for ref in _direct(args):self._native_source(context,ref)
+            return outcome
+        for ref in _direct(args):self._native_source(context,ref)
+        implementation=self._original_implementation()
+        def read_source(ref,representation):
+            source=self._native_source(context,ref)
+            artifact=source['artifact_ref'] if representation=='original' else source.get('text_ref')
+            if artifact is None:raise ContractError('literature_source_representation_unavailable')
+            raw=self.store.get_artifact(artifact)
+            if artifact!='artifact_'+hashlib.sha256(raw).hexdigest():_fail('source_artifact_hash_mismatch')
+            return dict(artifact_ref=artifact,content=raw)
+        from .library.literature_concentration_window_inputs import read_concentration_window_inputs,compile_concentration_window_inputs
+        from .library.literature_concentration_window_calculations import populate_concentration_window
+        extraction=read_concentration_window_inputs(args['selection'],read_source=read_source)
+        inputs=compile_concentration_window_inputs(extraction);sheet=populate_concentration_window(inputs)
+        artifacts=sheet['source_artifacts'];sizes={a['artifact_ref']:self.store.get(a['artifact_ref'])['size'] for a in artifacts}
+        templates=_project_once(args,extraction,inputs,sheet,sizes)
+        direct=_direct(args);parents=self._ancestors(context.scope,direct);source=self._native_source(context,args['selection']['source_ref'])
+        for value,key in ((extraction,'extraction'),(inputs,'inputs'),(sheet,'sheet')):validate_schema(value,ORIGINAL_SCHEMAS[key])
+        with self.store.transaction():
+            self._install()
+            refs={k:self.store.artifact(canonical(v),'application/json') for k,v in
+                (('extraction',extraction),('inputs',inputs),('sheet',sheet),('projection',dict(rows=templates)))}
+            saved=dict(version=VERSION,input_source_ref=source['id'],input_artifact_ref=source['artifact_ref'],
+                direct_input_source_refs=direct,input_source_refs=parents,source_metadata={r:self.store.get(r) for r in parents},
+                original_implementation=implementation,original_schemas=deepcopy(ORIGINAL_SCHEMAS),artifacts=refs)
+            artifact=self.store.artifact(canonical(saved),'application/json');request_ref=self.store.artifact(canonical(request),'application/json')
+            record=dict(provider=PROVIDER,accession=None,uri=None,artifact_ref=artifact,text_ref=artifact,request_ref=request_ref,
+                version=VERSION,retrieved_at=None,parent_source_refs=parents)
+            ref=identity('source',dict(origin='tool',record=record));exists=self.store.db.execute('SELECT 1 FROM records WHERE id=?',(ref,)).fetchone()
+            self.store.put('source',record,origin='tool',scope=plain(context.scope));rows=[dict(sheet_ref=ref,**deepcopy(r)) for r in templates]
+            validate_schema(rows,ORIGINAL_SCHEMAS['rows'])
+            outcome=dict(status='completed',operation_ref=identity('operation',dict(run_id=self.run_id,episode_id=context.episode_id,key=operation_key)),
+                record_refs=[ref],changed_record_refs=[] if exists else [ref],result=dict(sheet_ref=ref,view=VIEW,record_version=VERSION,cells=rows),feedback=None)
+            self.store.db.execute(f'INSERT INTO {self.operations_table} VALUES(?,?,?,?,?)',(self.run_id,context.episode_id,operation_key,signature,canonical(outcome)))
+        return outcome
+
+    def _json(self,ref):
+        raw=self.store.get_artifact(ref)
+        if ref!='artifact_'+hashlib.sha256(raw).hexdigest():_fail('saved_artifact_hash_mismatch')
+        value=json.loads(raw)
+        if not isinstance(value,dict):_fail('saved_object_required')
+        return value
+
+    def read(self,ref):
+        try:return self._read(ref)
+        except ContractError:raise
+        except (KeyError,TypeError,ValueError,OverflowError,AttributeError) as error:raise ContractError('concentration_window_saved_binding_mismatch') from error
+
+    def _read(self,ref):
+        def require(condition):
+            if not condition:_fail('saved_binding_mismatch')
+        source=self.store.get(ref);record={k:v for k,v in source.items() if k not in ('id','origin','record_type')}
+        require(source.get('record_type')=='source' and source.get('origin')=='tool' and source.get('provider')==PROVIDER
+            and source.get('version')==VERSION and identity('source',dict(origin='tool',record=record))==ref)
+        request,saved=self._json(source['request_ref']),self._json(source['artifact_ref'])
+        require(set(request)=={'run_id','episode_id','role','operation_key','scope','assignment','received_record_refs','arguments','components'} and request['run_id']==self.run_id)
+        require(set(saved)=={'version','input_source_ref','input_artifact_ref','direct_input_source_refs','input_source_refs','source_metadata','original_implementation','original_schemas','artifacts'})
+        require(saved['version']==VERSION and source['text_ref']==source['artifact_ref'] and self._installed(self.operations_table))
+        operation=self.store.db.execute(f'SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?',
+            (self.run_id,request['episode_id'],request['operation_key'])).fetchone()
+        require(operation is not None and operation['signature']==canonical(request))
+        schemas=saved['original_schemas'];require(canonical(schemas)==canonical(ORIGINAL_SCHEMAS))
+        require(set(saved['artifacts'])=={'extraction','inputs','sheet','projection'})
+        extraction,inputs,sheet,projection=(self._json(saved['artifacts'][k]) for k in ('extraction','inputs','sheet','projection'))
+        args=request['arguments']
+        for value,key in ((args,'request'),(extraction,'extraction'),(inputs,'inputs'),(sheet,'sheet')):validate_schema(value,schemas[key])
+        require(set(projection)=={'rows'} and args['version']==POPULATION and args['selection']==extraction['selection'])
+        require(request['components']==request['assignment'].get(REQUESTED,[])==args['selection']['requested_cells']==inputs['requested_cells'])
+        require(extraction['selection_digest']==inputs['selection_digest']==_digest(args['selection']) and inputs['extraction_digest']==_digest(extraction))
+        require(sheet['association']==dict(selection_digest=_digest(args['selection']),extraction_digest=_digest(extraction),calculation_inputs_digest=_digest(inputs)))
+        require(inputs['source_kind']==args['selection']['source_kind'] and inputs['covariance_material']==args['selection']['covariance_material'])
+        for name in ('quantities','coefficients','covariance','scientific_context','source_artifacts'):require(inputs[name]==extraction[name])
+        require(sheet['scientific_context']==inputs['scientific_context'] and sheet['source_artifacts']==inputs['source_artifacts'] and sheet['covariance_context']==inputs['covariance_context'])
+        require([c['component'] for c in sheet['cells']]==request['components'])
+        require(saved['input_source_ref']==args['selection']['source_ref'] and saved['direct_input_source_refs']==_direct(args))
+        require(all(r in request['received_record_refs'] for r in saved['direct_input_source_refs']))
+        require(saved['input_source_refs']==source['parent_source_refs']==self._ancestors(request['scope'],saved['direct_input_source_refs']))
+        require(set(saved['source_metadata'])==set(saved['input_source_refs']))
+        for r,metadata in saved['source_metadata'].items():require(canonical(metadata)==canonical(self._native_provenance(request['scope'],r)))
+        require(saved['input_artifact_ref']==saved['source_metadata'][saved['input_source_ref']]['artifact_ref'])
+        for a in extraction['source_artifacts']:
+            metadata=saved['source_metadata'][a['source_ref']];artifact=metadata['artifact_ref'] if a['representation']=='original' else metadata.get('text_ref')
+            require(artifact==a['artifact_ref']=='artifact_'+a['sha256'])
+        receipt=saved['original_implementation']
+        if isinstance(receipt,dict) and receipt.get('version')==_RELEASE_VERSION:
+            _release_retained(receipt,self._bound_descriptor())
+        elif isinstance(receipt,dict) and receipt.get('version')=='concentration_window_root_implementation_v3':
+            _release_retained_v3(receipt,self._bound_descriptor())
+        elif isinstance(receipt,dict) and receipt.get('version')==_HISTORICAL_RELEASE_VERSION:
+            _release_retained_v2(receipt,self._bound_descriptor())
+        else:
+            require(set(receipt)=={'version','files','bound_descriptor'} and receipt['version']=='concentration_window_original_implementation_v1'
+                and receipt['bound_descriptor']==self._bound_descriptor() and set(receipt['files'])==set(self._implementation_files())
+                and all(receipt['files'].get(n)==h for n,h in PURE_HASHES.items())
+                and all(type(h) is str and len(h)==64 and all(c in '0123456789abcdef' for c in h) for h in receipt['files'].values()))
+        templates=projection['rows'];require([r['component'] for r in templates]==request['components'])
+        sizes={a['artifact_ref']:self.store.get(a['artifact_ref'])['size'] for a in extraction['source_artifacts']}
+        for row,cell in zip(templates,sheet['cells']):
+            require(row['cell']==cell and row['evidence_source_ref']==saved['input_source_ref'] and row['source_kind']==args['selection']['source_kind']
+                and row['assertion_resolution']==sheet['assertion_resolution'] and row['covariance_context']==sheet['covariance_context']
+                and row['source_artifacts']==sheet['source_artifacts'])
+            roles=COMPONENT_SCOPE[cell['component']]['operands'];require(cell['operand_roles']==roles)
+            require(row['estimate_bindings']==[b for b in sheet['estimate_bindings'] if b['role'] in roles])
+            for b in row['estimate_bindings']:
+                q=inputs['quantities'][b['role']];require(b=={k:q[k] for k in ('role','owner_key','physical_owner_key','dependency_keys')})
+            require(row['operand_metadata']==[dict(role=r,**{k:extraction['quantities'][r][k] for k in ('status','origin','relation','approximate','unit','reasons')}) for r in roles if extraction['quantities'][r] is not None])
+            _validate_context_copy(row['scientific_context'],sheet['scientific_context'],args,cell['component'])
+            require(len(row['withheld_locations'])==len({canonical(loc) for loc in row['withheld_locations']}))
+            for loc in row['withheld_locations']:
+                require(any((a['source_ref'],a['artifact_ref'],a['representation'])==(loc['source_ref'],loc['artifact_ref'],loc['representation']) for a in extraction['source_artifacts'])
+                    and 0<=loc['start']<loc['end']<=sizes[loc['artifact_ref']])
+            require(row['limits']==[v for v in sheet['limits'] if v!='selected_integration_unimplemented'])
+        rows=[dict(sheet_ref=ref,**deepcopy(r)) for r in templates];validate_schema(rows,schemas['rows'])
+        outcome=json.loads(operation['outcome'])
+        require(set(outcome)=={'status','operation_ref','record_refs','changed_record_refs','result','feedback'} and outcome['changed_record_refs'] in ([],[ref])
+            and outcome['status']=='completed' and outcome['feedback'] is None and outcome['record_refs']==[ref]
+            and outcome['operation_ref']==identity('operation',dict(run_id=self.run_id,episode_id=request['episode_id'],key=request['operation_key']))
+            and canonical(outcome['result'])==canonical(dict(sheet_ref=ref,view=VIEW,record_version=VERSION,cells=rows)))
+        return dict(**saved,extraction=extraction,calculation_inputs=inputs,sheet=sheet,row_templates=templates)
+
+
+    def project_cells(self, sheet_refs, *, permitted_record_refs, components=None):
+        selected = None if components is None else self._components(components)
+        result = []
+        for ref in dict.fromkeys(sheet_refs):
+            if ref not in permitted_record_refs:
+                raise ContractError('literature_sheet_not_received')
+            saved = self.read(ref)
+            by_name = {r['component']: r for r in saved['row_templates']}
+            result.extend({'sheet_ref': ref, **deepcopy(by_name[name])} for name in
+                (list(by_name) if selected is None else selected) if name in by_name)
+        return result
+
+
+    def validate_returned_values(self, cells, *, permitted_record_refs):
+        validate_schema(cells, CONCENTRATION_WINDOW_CELLS_SCHEMA_V1)
+        seen = set()
+        for row in cells:
+            key = row['sheet_ref'], row['component']
+            if key in seen:
+                raise ContractError('duplicate_concentration_window_return_cell')
+            seen.add(key)
+            expected = self.project_cells([row['sheet_ref']], permitted_record_refs=permitted_record_refs, components=[row['component']])
+            if canonical(expected) != canonical([row]):
+                raise ContractError('concentration_window_return_differs_from_saved_cells')
+
+
+    def received_cells(self, context):
+        if context.run_id != self.run_id:
+            raise ContractError('literature_run_mismatch')
+        return super().received_cells(context) if self._installed(self.received_table) else []
+
+
+    def receive_cells(self, context, cells, operation_key):
+        if cells:
+            with self.store.transaction():
+                self._install(); return super().receive_cells(context, cells, operation_key)
+
+
+    def selected_sheet_refs(self, context):
+        if context.run_id != self.run_id:
+            raise ContractError('literature_run_mismatch')
+        if not self._installed(self.operations_table):
+            return []
+        refs = list(dict.fromkeys(json.loads(r['outcome'])['result']['sheet_ref'] for r in self.store.db.execute(
+            f'SELECT outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? ORDER BY rowid', (self.run_id, context.episode_id))))
+        for ref in refs:
+            self.read(ref)
+        return refs
+
+
+    def available_sheet_refs(self, context):
+        return list(dict.fromkeys([*(r for r in self.selected_sheet_refs(context) if r in context.received_record_refs),
+            *(r['sheet_ref'] for r in self.received_cells(context) if r['sheet_ref'] in context.received_record_refs)]))
+
+
+    def has_work(self, context):
+        return bool(self.available_sheet_refs(context))
+
+
+    def validate_empty_return_family(self, context):
+        return None
+
+
+    @staticmethod
+    def cell_record_refs(cells):
+        refs = []
+        def visit(value):
+            if isinstance(value, dict):
+                for name, child in value.items():
+                    if name.endswith('_ref') and isinstance(child, str) and child.startswith(('source_', 'artifact_')):
+                        refs.append(child)
+                    else:
+                        visit(child)
+            elif isinstance(value, (list, tuple)):
+                for child in value:
+                    visit(child)
+        visit(cells)
+        return list(dict.fromkeys(refs))
+
+
+    def receipt_bindings(self):
+        result = {}
+        if not self._installed(self.operations_table):
+            return result
+        for row in self.store.db.execute(f'SELECT outcome FROM {self.operations_table} WHERE run_id=?', (self.run_id,)):
+            ref = json.loads(row['outcome'])['result']['sheet_ref']; source = self.store.get(ref)
+            result[ref] = {'run_id': self.run_id, 'episode_id': self._sheet_owner(ref),
+                'artifacts': [source['artifact_ref'], source['request_ref'], *self._json(source['artifact_ref'])['artifacts'].values()]}
+        return result
+
+
+    def _private_binding(self, ref, artifact=None):
+        bindings = self.receipt_bindings()
+        if ref in bindings:
+            return bindings[ref]
+        for binding in bindings.values():
+            if artifact in binding['artifacts']:
+                return binding
+        source = self.store.get(ref) if ref is not None else {}
+        if source.get('provider') == PROVIDER:
+            raise ContractError('concentration_window_receipt_binding_invalid')
+        return None
+
+
+    def authorize_source_access(self, context, ref, representation, tool_name):
+        source = self.store.get(ref)
+        if source.get('record_type') != 'source':
+            return
+        artifact = (source.get('text_ref') or source['artifact_ref']) if representation == 'text' and tool_name == 'source.read' else (
+            source['artifact_ref'] if representation == 'original' else source.get(representation+'_ref'))
+        binding = self._private_binding(ref, artifact)
+        if binding and (binding['run_id'], binding['episode_id']) != (context.run_id, context.episode_id):
+            raise ContractError('concentration_window_receipt_private')
+
+
+    def authorize_record_access(self, context, record):
+        if record.get('record_type') in {'source', 'artifact'}:
+            return
+        for anchor in (record, record.get('anchor'), record.get('visual_anchor')):
+            if not isinstance(anchor, dict):
+                continue
+            binding = self._private_binding(anchor.get('source_ref'), anchor.get('artifact_ref'))
+            if binding and (binding['run_id'], binding['episode_id']) != (context.run_id, context.episode_id):
+                raise ContractError('concentration_window_receipt_private')
+
+

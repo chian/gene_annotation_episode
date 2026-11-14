@@ -1,0 +1,1 @@
+These files are byte-for-byte retained copies of workload 222's four sealed Infernal 1.1.5 attempts. The original action paths, requests, hashes and failures remain in each bundle.json. No native program was rerun for this worker. NATIVE_SHA256.json records every copied file. Additional adversarial changes in tests are explicitly synthetic and modify temporary copies only.

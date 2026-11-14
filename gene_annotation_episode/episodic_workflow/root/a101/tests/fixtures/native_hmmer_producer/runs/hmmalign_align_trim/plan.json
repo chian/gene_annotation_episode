@@ -1,0 +1,150 @@
+{
+  "version": "native_hmmer_run_plan_v1",
+  "identity": {
+    "run_id": "producer-native-verification-2026-10-24",
+    "episode_id": "no-episode-standalone-verification",
+    "resource_id": "local",
+    "execution_id": "hmmalign_align_trim",
+    "attempt_id": "original",
+    "operation_key": "hmmalign_align_trim",
+    "requested_job_sha256": "eca5d19ba4729c6b855ee7be56b0fc0be9b8ee6885fa3f042aa3f07165d75446"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmalign",
+      "--trim",
+      "--informat",
+      "fasta",
+      "--outformat",
+      "Stockholm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/profile.hmm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/sequences.fa"
+    ],
+    "environment": {},
+    "native_hmmer": {
+      "version": "native_hmmer_job_v1",
+      "program": "hmmalign",
+      "mode": "align",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5/hmmer/src/hmmalign",
+        "sha256": "62ed2fb6121213ca9a74ec4b80d3af69e60ef870b687610bf3c58e91f821ef89",
+        "engine_version": "3.4"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "profile",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/profile.hmm",
+          "format": "hmmer3_ascii",
+          "sha256": "ccad2ee0e0eaa8d4bf88bc0bfd021525c3d8dfbf13d2896395abbc10f17be7df",
+          "size_bytes": 10308,
+          "artifact_ref": "fixture:sha256:ccad2ee0e0eaa8d4bf88bc0bfd021525c3d8dfbf13d2896395abbc10f17be7df"
+        },
+        {
+          "role": "sequences",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_hmmalign_2026-10-24/native/sequences.fa",
+          "format": "fasta",
+          "sha256": "2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3",
+          "size_bytes": 132,
+          "artifact_ref": "fixture:sha256:2adc7239dbf4c090252c1fe4827ee6f92ecd673438214d64033dc899833148f3"
+        }
+      ],
+      "operand_bindings": [],
+      "options": [
+        "--trim"
+      ],
+      "outputs": [
+        {
+          "role": "stockholm",
+          "format": "stockholm",
+          "relative_path": "outputs/stockholm"
+        },
+        {
+          "role": "stderr",
+          "format": "text",
+          "relative_path": "outputs/stderr"
+        }
+      ],
+      "metadata": {
+        "profile": {
+          "name": "test",
+          "length": 20,
+          "alphabet": "amino",
+          "checksum": 1166427327,
+          "map": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        },
+        "sequences": [
+          {
+            "name": "test1",
+            "occurrence": 0,
+            "sequence": "ACDEFGHIKLMNPQRSTVWY",
+            "length": 20,
+            "origin": "new"
+          },
+          {
+            "name": "test2",
+            "occurrence": 0,
+            "sequence": "XXXXACDEFGHIMNXXXPQRSTVWY",
+            "length": 25,
+            "origin": "new"
+          },
+          {
+            "name": "test3",
+            "occurrence": 0,
+            "sequence": "ACDEFGHILMNXXXXXPQRSTVWYXXXX",
+            "length": 28,
+            "origin": "new"
+          },
+          {
+            "name": "test4",
+            "occurrence": 0,
+            "sequence": "XXXACDEFGHIKLMNPQRSTVWYXXX",
+            "length": 26,
+            "origin": "new"
+          }
+        ],
+        "trim": true,
+        "acquisition": {
+          "output_complete": true,
+          "hit_population_complete": true
+        },
+        "native_parameters": {
+          "program": "hmmalign",
+          "trim": true,
+          "mapali": false,
+          "argv": [
+            "--trim"
+          ]
+        }
+      },
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/hmmalign_align_trim/attempt",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

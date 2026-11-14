@@ -1,0 +1,157 @@
+{
+  "artifacts": [
+    {
+      "format": "infernal_stdout",
+      "relative_path": "outputs/stdout",
+      "role": "stdout",
+      "sha256": "c53aecd265eeb0d19ffead0f3a50631bcdfe3fd37178b96870a72c3e20165a70",
+      "size_bytes": 2073
+    },
+    {
+      "format": "infernal_stderr",
+      "relative_path": "outputs/stderr",
+      "role": "stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "format": "infernal_cm_ascii",
+      "relative_path": "outputs/built_models",
+      "role": "built_models",
+      "sha256": "9f315f53b8075a25476c3eaa8ae66116c962da9eb93c58ada7767dc2ad5dad94",
+      "size_bytes": 11014
+    },
+    {
+      "format": "stockholm",
+      "relative_path": "outputs/refined_alignment",
+      "role": "refined_alignment",
+      "sha256": "f22c7133df5667aa682d70b22ce4c35621c0f2d8cd84e0d59c8b2b2886d69408",
+      "size_bytes": 241
+    }
+  ],
+  "environment": {
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_selected_native_mo1/infernal-preparation-attempt/tmp",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_selected_native_mo1/infernal-preparation-attempt/tmp",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_selected_native_mo1/infernal-preparation-attempt/tmp",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_selected_native_mo1/infernal-preparation-attempt/cache"
+  },
+  "failures": [],
+  "finished_at": "2026-10-26T05:36:09.284682+00:00",
+  "identity": {
+    "attempt_id": "82e54a2da637d09f8e6fc8ab31f9e86ff467a8ac352364aacff783bcfd6dcd2e",
+    "episode_id": "selected-local-child",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_selected_native_mo1/native.json",
+    "operation_key": "selected-command",
+    "requested_job_sha256": "739d362018ffe0cf174a0dd38807a8b102e75c7085b6b18785ce7c53f891cb42",
+    "resource_id": "local",
+    "run_id": "producer251-test"
+  },
+  "inputs": [
+    {
+      "artifact_ref": "fixture:alignment:0",
+      "expected_sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd",
+      "expected_size_bytes": 149,
+      "final_sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd",
+      "final_size_bytes": 149,
+      "format": "stockholm",
+      "ordinal": 0,
+      "original_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/seed.sto",
+      "relative_path": "inputs/alignment/0",
+      "role": "alignment",
+      "staged_sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd",
+      "staged_size_bytes": 149
+    }
+  ],
+  "mode": "refine",
+  "operation": {
+    "engine_version": "1.1.5",
+    "mode": "refine",
+    "program": "cmbuild",
+    "settings": {
+      "--hand": true
+    }
+  },
+  "program": "cmbuild",
+  "realized_argv": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild",
+    "--hand",
+    "--informat",
+    "Stockholm",
+    "--refine",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_selected_native_mo1/infernal-preparation-attempt/outputs/refined_alignment",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_selected_native_mo1/infernal-preparation-attempt/outputs/built_models",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_selected_native_mo1/infernal-preparation-attempt/inputs/alignment/0"
+  ],
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild",
+      "--hand",
+      "--informat",
+      "Stockholm",
+      "--refine",
+      "outputs/refined_alignment",
+      "outputs/built_models",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/seed.sto"
+    ],
+    "environment": {},
+    "native_infernal_preparation": {
+      "environment": {},
+      "grading_parameters": {},
+      "key": null,
+      "mode": "refine",
+      "operands": [
+        {
+          "artifact_ref": "fixture:alignment:0",
+          "format": "stockholm",
+          "ordinal": 0,
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/seed.sto",
+          "role": "alignment",
+          "sha256": "eff90adc3595e1d55b8fe9a16da83f87ca03a595bca5d43a6850948089c04bcd",
+          "size_bytes": 149
+        }
+      ],
+      "options": [
+        "--hand"
+      ],
+      "outputs": [
+        {
+          "format": "infernal_stdout",
+          "relative_path": "outputs/stdout",
+          "role": "stdout"
+        },
+        {
+          "format": "infernal_stderr",
+          "relative_path": "outputs/stderr",
+          "role": "stderr"
+        },
+        {
+          "format": "infernal_cm_ascii",
+          "relative_path": "outputs/built_models",
+          "role": "built_models"
+        },
+        {
+          "format": "stockholm",
+          "relative_path": "outputs/refined_alignment",
+          "role": "refined_alignment"
+        }
+      ],
+      "program": "cmbuild",
+      "software": {
+        "engine_version": "1.1.5",
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild",
+        "sha256": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89"
+      },
+      "version": "native_infernal_preparation_job_v1"
+    }
+  },
+  "returncode": 0,
+  "software": {
+    "actual_sha256": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89",
+    "declared_engine_version": "1.1.5",
+    "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmbuild",
+    "expected_sha256": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89"
+  },
+  "started_at": "2026-10-26T05:36:09.204610+00:00",
+  "version": "native_infernal_preparation_bundle_v1",
+  "working_copies": []
+}

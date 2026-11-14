@@ -1,0 +1,24 @@
+"""Selected active-site amount sheets, exact typed subsets and source-free replay."""
+from copy import deepcopy
+from gene_annotation_episode.episodic_workflow.root.a101.domain import obj
+from gene_annotation_episode.episodic_workflow.root.a101.library.retained_input_authority.literature_active_site_inputs import ROLES, LITERAL_FIELDS, INTERPRETATIONS, QUALIFICATIONS, SPREAD_KINDS, SAMPLING
+from gene_annotation_episode.episodic_workflow.root.a101.library.retained_input_authority.literature_active_site_calculations import COMPONENTS, REASONS, CONDITIONS
+NAMESPACE = 'literature_active_site_cells'
+
+def active_site_cells_schema():
+
+    def ref(namespace):
+        return {'type': 'string', 'format': 'reference', 'x-reference-namespace': namespace}
+    witness = obj({'source_ref': ref('source'), 'artifact_ref': ref('artifact'), 'representation': {'type': 'string', 'enum': ['original', 'text']}, 'start': {'type': 'integer', 'minimum': 0}, 'end': {'type': 'integer', 'minimum': 1}, 'quote': {'type': 'string', 'minLength': 1}})
+    meaning = obj({'status': {'type': 'string', 'enum': ['selected', 'not_selected', 'withheld_amount_operand']}, 'witness': {'anyOf': [deepcopy(witness), {'type': 'null'}]}})
+
+    def interpretation(values):
+        return obj({'value': {'type': 'string', 'enum': list(values)}, 'support': {'type': 'array', 'items': deepcopy(meaning)}})
+    nullable_number = {'type': ['number', 'null']}
+    exact_number = {'anyOf': [obj({'numerator': {'type': 'string', 'pattern': '^-?[0-9]+$'}, 'denominator': {'type': 'string', 'pattern': '^[1-9][0-9]*$'}}), {'type': 'null'}]}
+    exact_domain = {'anyOf': [obj({'lower': deepcopy(exact_number), 'upper': deepcopy(exact_number), 'lower_inclusive': {'type': 'boolean'}, 'upper_inclusive': {'type': 'boolean'}}), {'type': 'null'}]}
+    domain = obj({'kind': {'type': 'string', 'enum': ['point', 'finite_interval', 'lower_bounded', 'upper_bounded', 'unbounded', 'unavailable']}, 'lower': deepcopy(nullable_number), 'upper': deepcopy(nullable_number), 'lower_inclusive': {'type': 'boolean'}, 'upper_inclusive': {'type': 'boolean'}, 'projection': {'type': 'string', 'enum': ['none', 'exact', 'outward']}, 'basis': {'type': 'string', 'enum': ['reported_operand', 'reported_operand_algebra']}, 'conditioning': {'type': 'string', 'const': 'nonnegative_amounts_positive_molecular_weight'}, 'failure': {'type': ['string', 'null'], 'enum': [*REASONS, None]}})
+    reading = {'anyOf': [obj({'number': deepcopy(witness), 'raw_unit': {'type': ['string', 'null']}, 'bound': {'type': 'string', 'enum': ['point', 'lt', 'le', 'gt', 'ge']}}), {'type': 'null'}]}
+    operand = obj({'role': {'type': 'string', 'enum': list(ROLES)}, 'meanings': obj({field: deepcopy(meaning) for field in LITERAL_FIELDS}), 'qualification': interpretation(QUALIFICATIONS), 'reading': deepcopy(reading), 'reported_uncertainty': obj({'kind': interpretation(SPREAD_KINDS), 'sampling_basis': interpretation(SAMPLING), 'statement': deepcopy(meaning), 'reading': deepcopy(reading)}), 'measurement_key': {'type': ['string', 'null']}, 'physical_observation_key': {'type': ['string', 'null']}})
+    uncertainty = obj({'value': {'type': 'null'}, 'status': {'type': 'string', 'const': 'unavailable'}, 'reason': {'type': 'string', 'const': 'full_joint_covariance_propagation_not_implemented'}, 'input_state': {'type': 'string', 'const': 'joint_source_error_covariance_not_selected'}, 'source_spreads_are_not_full_joint_uncertainty': {'type': 'boolean', 'const': True}})
+    return {'type': 'array', 'items': obj({'sheet_ref': ref('source'), 'evidence_source_ref': ref('source'), 'component': {'type': 'string', 'enum': list(COMPONENTS)}, 'value': deepcopy(nullable_number), 'unit': {'type': ['string', 'null'], 'enum': ['mg/mL', 'kDa', 'nM', 'dimensionless', None]}, 'status': {'type': 'string', 'enum': ['point', 'bounded', 'unavailable']}, 'unavailable_reason': {'type': ['string', 'null'], 'enum': [*REASONS, None]}, 'origin': {'type': 'string', 'enum': ['reported', 'synthetic', 'derived']}, 'approximate': {'type': 'boolean'}, 'conditional_on': {'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'enum': list(CONDITIONS)}}, 'reported_domain': domain, 'exact_domain': exact_domain, 'evaluation_scope': {'type': 'string', 'const': 'active_site_titration_amount'}, 'experiment': deepcopy(meaning), 'intended_change': deepcopy(meaning), 'other_changes': {'type': 'array', 'items': deepcopy(meaning)}, 'interpretations': obj({field: interpretation(values) for field, values in INTERPRETATIONS.items()}), 'operands': {'type': 'array', 'minItems': 1, 'maxItems': 4, 'items': operand}, 'fraction_uncertainty': uncertainty, 'rate_application_status': {'type': 'string', 'enum': ['not_applied_already_active_normalized', 'not_applied_requires_same_rate_context', 'not_applied_no_rate_selected', 'not_applied_normalization_unknown', 'not_applied_normalization_conflicting']}}), 'x-source': NAMESPACE}

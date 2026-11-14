@@ -9,7 +9,6 @@ from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import json
-import math
 import os
 import re
 import time
@@ -54,18 +53,16 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
 class BVBRCAnalysisClient:
     """Explicit endpoints and optional caller-owned authorization header."""
 
-    def __init__(self, endpoints, *, timeout=90, authorization_env=None,
+    def __init__(self, endpoints, *, authorization_env=None,
                  authorization_origins=()):
         if (not isinstance(endpoints, dict) or not endpoints or set(endpoints) - NAMESPACES
                 or any(not isinstance(key, str) for key in endpoints)):
             raise ValueError('bvbrc_native_endpoints_required')
         self.endpoints = {name: _url(value, endpoint=True) for name, value in endpoints.items()}
-        if type(timeout) not in (int, float) or not math.isfinite(timeout) or timeout <= 0:
-            raise ValueError('bvbrc_native_timeout_invalid')
         if authorization_env is not None and (not isinstance(authorization_env, str)
                 or re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', authorization_env) is None):
             raise ValueError('bvbrc_authorization_environment_invalid')
-        self.timeout, self.authorization_env = timeout, authorization_env
+        self.authorization_env = authorization_env
         if not isinstance(authorization_origins, (tuple, list)):
             raise ValueError('bvbrc_authorization_origins_invalid')
         self.authorization_origins = {_origin(value) for value in self.endpoints.values()}
@@ -234,7 +231,7 @@ class BVBRCAnalysisClient:
             return snapshot
 
         try:
-            with opener.open(native, timeout=self.timeout) as response:
+            with opener.open(native) as response:
                 return capture(response, response.status)
         except urllib.error.HTTPError as error:
             try:

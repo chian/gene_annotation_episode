@@ -12,7 +12,7 @@ from gene_annotation_episode.rna_structure_comparison_operands import (
 )
 from gene_annotation_episode.state import Store
 
-SPEC = importlib.util.spec_from_file_location("rna_comparison_e_fixture", Path(__file__).parent / "fixtures/rna_comparison_results_371/helpers.py")
+SPEC = importlib.util.spec_from_file_location("rna_comparison_e_fixture", Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_comparison_results_371/helpers.py")
 E = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(E)
 

@@ -16,8 +16,8 @@ from gene_annotation_episode import native_events as events
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode._local_job_worker import atomic_json
 from gene_annotation_episode.acquisition import AcquisitionError
-from gene_annotation_episode.homology_episodes import HomologyEpisodes
-from gene_annotation_episode.homology_jobs import FileAsset, HomologyJobs, OUTPUTS, digest
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
+from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import FileAsset, HomologyJobs, OUTPUTS, digest
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 
 
@@ -225,7 +225,7 @@ def test_registry_reads_are_side_effect_free_and_recovery_filters_actual_run_dir
 
 def test_selected_failure_keeps_registered_target_and_clone_does_not_mutate_caller(tmp_path, monkeypatch):
     service = jobs(tmp_path)
-    original = HomologyEpisodes(service, parser_policy=LocalJobPolicy(64*1024**2, 4*1024**2),
+    original = HomologyEpisode(service, parser_policy=LocalJobPolicy(64*1024**2, 4*1024**2),
         credit_projector=lambda *a, **k: 0, credit_binding={'fixture': 1},
         monitoring_projector=lambda *a, **k: 0, monitoring_binding={'fixture': 1})
     before = original.as_record()
@@ -242,7 +242,7 @@ def test_selected_failure_keeps_registered_target_and_clone_does_not_mutate_call
         def interrupted(handle):
             events.ensure_native_event_target(handle.path)
             raise AcquisitionError('local_job_boundary_unavailable', phase='local_preflight')
-        monkeypatch.setattr('gene_annotation_episode.homology_jobs.start_prepared', interrupted)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a101.homology_jobs.start_prepared', interrupted)
         outcome = asyncio.run(view.execute(source, 'homology.submit', {}, operation_key='irrelevant:any:owner'))
         assert outcome['status'] == 'failed' and len(outcome['native_event_targets']) == 1
         assert service.native_event_binding(job).owner_episode_id == source.episode_id
@@ -287,7 +287,7 @@ def test_invalid_receipt_and_changed_native_request_remain_specific_failures(tmp
     (ValueError('native_event_binding_identity_conflict'), 'native_event_identity_conflict')])
 def test_metadata_lookup_failure_is_structured_without_changing_native_outcome(tmp_path, monkeypatch, failure, code):
     service = jobs(tmp_path)
-    original = HomologyEpisodes(service, parser_policy=LocalJobPolicy(64*1024**2, 4*1024**2),
+    original = HomologyEpisode(service, parser_policy=LocalJobPolicy(64*1024**2, 4*1024**2),
         credit_projector=lambda *a, **k: 0, credit_binding={'fixture': 1},
         monitoring_projector=lambda *a, **k: 0, monitoring_binding={'fixture': 1})
     view = original.with_native_events(events.NativeEventProvider(tmp_path/'executions', run_id='ours', resource_id='local'))

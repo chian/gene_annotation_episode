@@ -439,7 +439,8 @@ def _provider_content(operation, snapshot, *, artifact_ref):
     policy = transport.get("request_policy")
     timeout = policy.get("timeout_seconds") if type(policy) is dict else None
     try:
-        valid_timeout = type(timeout) in (int, float) and math.isfinite(timeout) and timeout > 0
+        valid_timeout = ((type(policy) is dict and "timeout_seconds" not in policy)
+            or (type(timeout) in (int, float) and math.isfinite(timeout) and timeout > 0))
     except OverflowError:
         valid_timeout = False
     _require(type(policy) is dict and policy.get("automatic_redirects") is False and valid_timeout,

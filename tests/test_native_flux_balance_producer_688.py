@@ -320,7 +320,7 @@ def test_storage_immutable_confined_and_changed_identity(tmp_path):
 
 
 def test_retained677_native_point_no_new_solve():
-    packet = ATTEMPT / "source_snapshot/verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe"
+    packet = ATTEMPT / "source_snapshot/tests/fixtures/flux_balance/native_contract_probe"
     summary = read_json(packet / "probe_summary.json")
     assert summary["model_optimize_calls"] == 1
     assert summary["fluxes"] == {"IN": 7.0, "AB": 6.0, "OUT": 6.0}

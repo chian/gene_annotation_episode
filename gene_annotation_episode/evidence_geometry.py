@@ -136,10 +136,10 @@ def _observation_extent(store, observation):
     reusing their reported query start/end numbers.
     """
     if observation.get('native_blast_standard_database') is not None:
-        from .native_blast_standard_database_result_publication import validate_standard_blast_database_observation
+        from .episodic_workflow.root.a101.native_blast_standard_database_result_publication import validate_standard_blast_database_observation
         validate_standard_blast_database_observation(store, observation)
     if observation.get('native_blast_database') is not None:
-        from .native_blast_database_result_publication import validate_native_blast_database_observation
+        from .episodic_workflow.root.a101.native_blast_database_result_publication import validate_native_blast_database_observation
         validate_native_blast_database_observation(store, observation)
     footprint = _mapped_coverage(store, observation["subject_refs"])
     if observation["kind"] not in {"alignment", "profile_match", "comparison", "structure_match"}:
@@ -198,10 +198,10 @@ def _observation_extents(store, observation):
     and their derivatives do not supply any original-input footprint.
     """
     if observation.get('native_blast_standard_database') is not None:
-        from .native_blast_standard_database_result_publication import validate_standard_blast_database_observation
+        from .episodic_workflow.root.a101.native_blast_standard_database_result_publication import validate_standard_blast_database_observation
         validate_standard_blast_database_observation(store, observation)
     if observation.get('native_blast_database') is not None:
-        from .native_blast_database_result_publication import validate_native_blast_database_observation
+        from .episodic_workflow.root.a101.native_blast_database_result_publication import validate_native_blast_database_observation
         validate_native_blast_database_observation(store, observation)
     intervals = observation.get("operand_intervals")
     if observation.get("origin") != "tool" or intervals is None:

@@ -17,7 +17,7 @@ from gene_annotation_episode.bvbrc_msa_xmfa_inputs import (
 from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / 'verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/native_examples'
+NATIVE = ROOT / 'tests/fixtures/bvbrc/msa_xmfa_boundaries/native_examples'
 SAVED = ROOT / 'verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples'
 
 

@@ -1,0 +1,26 @@
+--- pin_002/tests/test_literature_partner_operand_bindings.py
++++ tests/test_literature_partner_operand_bindings.py
+@@ -129,6 +129,23 @@
+         assert all(row['subject_ref'] is None and row['reference_condition_ref'] is None for row in rows)
+         assert outcome['result']['assay_interpretation']['subject'] is None
+         assert outcome['result']['assay_interpretation']['selected_scope_subject']['value'] == 'SubjectS'
++
++
++@pytest.mark.parametrize('missing', [False, True])
++def test_valid_two_arm_contrast_keeps_its_subject_when_third_arm_cannot_share_it(tmp_path, missing):
++    store, context, args, records = fixture(tmp_path)
++    with store:
++        raw = store.get_artifact(records['data']['artifact_ref'])
++        if missing:
++            args['arms']['addback'] = None
++        else:
++            args['arms']['addback']['subject'] = witness(records['data'], raw, 'PartnerP')
++        _, outcome, rows = rows_for(store, context, args)
++        assert rows[4]['value'] == .8 and label(store, rows[4]['subject_ref']) == 'SubjectS'
++        assert rows[5]['value'] is None and rows[5]['subject_ref'] is None
++        assert rows[5]['unavailable_reason'] == ('arm_unreported' if missing else 'subject_mismatch')
++        assert label(store, rows[2]['subject_ref']) == (None if missing else 'PartnerP')
++        assert outcome['result']['assay_interpretation']['subject'] is None if not missing else True
+ 
+ 
+ def test_markerless_historical_selection_replays_exactly_without_rebinding(tmp_path, monkeypatch):

@@ -21,7 +21,7 @@ from gene_annotation_episode.bvbrc_metacats_calculation_contracts import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / 'verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases'
+NATIVE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_native/cases'
 BACKEND = {'name': 'scipy_chi2_integer_df_logtail_v1', 'version': scipy.__version__}
 PARAMS = {'alphabet': 'aa', 'epsilon': .001, 'nucleotide_padding': 'ACGT_at_variable_sites',
           'omnibus_continuity': 'r_default_2x2_min_delta', 'pair_df_policy': 'native_source',

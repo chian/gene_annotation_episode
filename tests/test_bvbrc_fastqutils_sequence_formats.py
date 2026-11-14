@@ -121,7 +121,7 @@ def test_null_name_and_caller_version_do_not_invent_native_producer():
 
 
 def test_retained_handcrafted_sequence_fixture_bytes():
-    directory=Path(__file__).parent/"fixtures/bvbrc_fastqutils/sequence"
+    directory=Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/sequence"
     for name,count,scope in (("multiline.fastq",2,"complete"),("empty.fastq",0,"complete"),
                              ("concatenated.fastq.gz",2,"complete"),("truncated.fastq.gz",2,"partial")):
         raw=(directory/name).read_bytes()

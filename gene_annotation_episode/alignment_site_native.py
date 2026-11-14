@@ -9,7 +9,7 @@ import json
 from copy import deepcopy
 
 from .domain import ContractError, identity
-from .episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 
 
 def immutable_record(record):
@@ -36,16 +36,16 @@ def immutable_record(record):
 
 def source_descriptor(store, source, alignment):
     if alignment.get('native_blast_standard_database') is not None:
-        from .native_blast_standard_database_result_publication import validate_standard_blast_database_observation
+        from .episodic_workflow.root.a101.native_blast_standard_database_result_publication import validate_standard_blast_database_observation
         validate_standard_blast_database_observation(store, alignment)
         raise ContractError('native_blast_standard_database_biological_reference_unavailable')
     if alignment.get('native_blast_database') is not None:
-        from .native_blast_database_result_publication import validate_native_blast_database_observation
+        from .episodic_workflow.root.a101.native_blast_database_result_publication import validate_native_blast_database_observation
         validate_native_blast_database_observation(store, alignment)
         raise ContractError('native_blast_database_biological_reference_unavailable')
     provider = source['provider']
     if provider == 'episode.execution_result':
-        from .native_blast_hsp_views import native_blast_pairwise_hsp
+        from .episodic_workflow.root.a101.native_blast_hsp_views import native_blast_pairwise_hsp
         bound = native_blast_pairwise_hsp(store, alignment)
         if not EpisodeReturnRecords._equal(source, bound['source']):
             raise ContractError('site_native_source_conflict')
@@ -366,7 +366,7 @@ def read_selected_reference_alignment(store, context, alignment_ref, *, before_d
 
 def read_quality(store, query_ref):
     """Return the bound original read member's quality and declared encoding."""
-    from . import materials_packing as packing
+    from gene_annotation_episode import materials_packing as packing
     query = store.get(query_ref)
     if query['record_type'] != 'read_subject':
         return None, 'unspecified'
@@ -520,24 +520,24 @@ def reference_grading(store, alignment, selection, *, sequence_reader, grade_res
 
 
 def _blast_result(native, arguments):
-    from .blast_hsp_site_inputs import extract_blast_hsp_columns
-    from .blast_hsp_site_calculators import calculate_blast_hsp_column_components
+    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_hsp_site_inputs import extract_blast_hsp_columns
+    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_hsp_site_calculators import calculate_blast_hsp_column_components
     sheet = extract_blast_hsp_columns(native, **arguments)
     return {'sheet': sheet, 'scores': calculate_blast_hsp_column_components(sheet)}
 
 
 def blast_grading(store, observation, source, reference, native, offset, limit, *, grade_result):
-    from .blast_search import PROGRAM_UNITS
+    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_search import PROGRAM_UNITS
     if observation.get('native_blast_standard_database') is not None:
-        from .native_blast_standard_database_result_publication import validate_standard_blast_database_observation
+        from .episodic_workflow.root.a101.native_blast_standard_database_result_publication import validate_standard_blast_database_observation
         validate_standard_blast_database_observation(store, observation)
         raise ContractError('native_blast_standard_database_biological_reference_unavailable')
     if observation.get('native_blast_database') is not None:
-        from .native_blast_database_result_publication import validate_native_blast_database_observation
+        from .episodic_workflow.root.a101.native_blast_database_result_publication import validate_native_blast_database_observation
         validate_native_blast_database_observation(store, observation)
         raise ContractError('native_blast_database_biological_reference_unavailable')
     if observation.get('native_blast_pairwise'):
-        from .native_blast_hsp_views import native_blast_pairwise_hsp
+        from .episodic_workflow.root.a101.native_blast_hsp_views import native_blast_pairwise_hsp
         bound = native_blast_pairwise_hsp(store, observation)
         if any(not EpisodeReturnRecords._equal(value, bound[key]) for key, value in (
                 ('source', source), ('reference', reference), ('native_hsp', native))):
@@ -564,7 +564,7 @@ def blast_grading(store, observation, source, reference, native, offset, limit, 
         source=descriptor,
         original_mappings=original_mappings(store, operands))
     if observation.get('native_blast', {}).get('shared_projection') is not None:
-        from .blast_result_views import _original_hsp, retained_hsp_component
+        from gene_annotation_episode.episodic_workflow.root.a101.library.blast_result_views import _original_hsp, retained_hsp_component
         checked, checked_source, checked_reference, checked_native = _original_hsp(
             store, observation['id'], [observation['id']], None)
         if any(not EpisodeReturnRecords._equal(left, right) for left, right in (

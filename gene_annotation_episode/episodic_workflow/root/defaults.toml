@@ -1,0 +1,24 @@
+[models.connection]
+command = ["codex", "app-server", "--stdio"]
+
+[models.FAST]
+model = "gpt-6-luna"
+reasoning_effort = "low"
+
+[models.REASONING]
+model = "gpt-6-sol"
+reasoning_effort = "medium"
+
+[models.routing]
+decide = "REASONING"
+child_interpretation = "REASONING"
+
+[controller]
+cost = 0.001
+uncertainty_alpha = 0.05
+
+[restoration]
+# Own-decision metadata rows supplied to a new provider conversation.
+# This controls transport preview size, never Episode work or continuation.
+preview_size = 24
+

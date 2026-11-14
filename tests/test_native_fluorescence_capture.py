@@ -4,14 +4,14 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.fluorescence_execution_common import canonical, digest, identity
-from gene_annotation_episode.native_fluorescence_capture import capture_fluorescence_native_files
-from gene_annotation_episode.native_fluorescence_contracts import validate_fluorescence_native_capture
-from gene_annotation_episode.native_fluorescence_observations import fluorescence_observed_files, read_fluorescence_output
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical, digest, identity
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_capture import capture_fluorescence_native_files
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import validate_fluorescence_native_capture
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_observations import fluorescence_observed_files, read_fluorescence_output
 from gene_annotation_episode.native_file_capture import NativeFileCaptureError
 from gene_annotation_episode.state import Store
 from test_native_fluorescence_contracts import plan, parsed_batch
-from gene_annotation_episode import fluorescence_event_contracts as core
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
 
 
 def selected_files(original):
@@ -65,14 +65,14 @@ def test_capture_preserves_actual_wrong_original_bytes_for_worker_qualification(
 def test_capture_storage_failure_is_not_reported_as_missing_producer(tmp_path, monkeypatch):
     original = plan(tmp_path)
     def failure(*args, **kwargs): raise NativeFileCaptureError('retained_artifact_unavailable')
-    monkeypatch.setattr('gene_annotation_episode.native_fluorescence_capture.capture_native_file', failure)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_capture.capture_native_file', failure)
     with pytest.raises(NativeFileCaptureError, match='retained_artifact_unavailable'):
         captured(None, original)
 
 
 def test_capture_contract_failure_precedes_file_access(tmp_path, monkeypatch):
     original = plan(tmp_path)
-    monkeypatch.setattr('gene_annotation_episode.native_fluorescence_capture.capture_native_file',
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_capture.capture_native_file',
         lambda *args, **kwargs: pytest.fail('file capture before contract validation'))
     with pytest.raises(ValueError): captured(None, original, driver_started=1)
 

@@ -16,10 +16,10 @@ import json
 import re
 
 from .acquisition import SourceSnapshot
-from .api_services import event, object_schema, validate_service_configuration, validate_value
-from .execution_contracts import digest
-from .rfam_batch_contracts import REQUEST_SCHEMA, SELECTOR_SCHEMA, validate_rfam_result_selector
-from .rfam_discovery import BASE_URL, result_url, validate_result_url
+from .api_services import event, object_schema, validate_fresh_service_configuration, validate_value
+from gene_annotation_episode.execution_contracts import digest
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import REQUEST_SCHEMA, SELECTOR_SCHEMA, validate_rfam_result_selector
+from gene_annotation_episode.episodic_workflow.root.library.rfam_discovery import BASE_URL, result_url, validate_result_url
 
 
 EMPTY = object_schema({})
@@ -54,12 +54,11 @@ class RfamBatchService:
     selector_schema = SELECTOR_SCHEMA
 
     def __init__(self, tool_registry, configuration=None, *, client=None):
-        self.configuration = validate_service_configuration(self.service, configuration or {})
+        self.configuration = validate_fresh_service_configuration(self.service, configuration or {})
         self.tools = tool_registry
         if client is None:
             from .rfam_batch_transport import RfamBatchHTTP
-            timeout = self.configuration.get("timeout", getattr(tool_registry.clients, "timeout", None))
-            client = RfamBatchHTTP(timeout_seconds=timeout)
+            client = RfamBatchHTTP()
         self.client = client
 
     def validate_request(self, request, scope):
@@ -367,7 +366,7 @@ class RfamBatchService:
         submission = self.decode(submitted, submission_snapshot)
         if submission["native_handle"] != self._handle(handle) or not submission["handoff_ready"]:
             raise ValueError("rfam_original_handle_conflict")
-        from .rfam_batch_publication import publish_rfam_batch_result
+        from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_publication import publish_rfam_batch_result
         return publish_rfam_batch_result(self.tools, request=request, selector=selector,
             snapshot=snapshot, scope=scope, operation_key=operation_key,
             submission_snapshot=submission_snapshot, handle=handle)

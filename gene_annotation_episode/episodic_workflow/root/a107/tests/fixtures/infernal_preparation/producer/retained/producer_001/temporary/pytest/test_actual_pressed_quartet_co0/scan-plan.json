@@ -1,0 +1,121 @@
+{
+  "version": "native_infernal_run_plan_v1",
+  "identity": {
+    "run_id": "producer251-test",
+    "episode_id": "selected-local-child",
+    "resource_id": "local",
+    "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_pressed_quartet_co0/native.json",
+    "operation_key": "separately-selected-scan",
+    "attempt_id": "b8cba42a6394c2df3d3a58a7bba73155061db046f0cb840bb3781a56fc133191",
+    "requested_job_sha256": "91501a7492197ffbe9edc97ebdce3f15bee952f27387a09ed9ebd5c9687725d4"
+  },
+  "requested_job": {
+    "argv": [
+      "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmscan",
+      "--cpu",
+      "1",
+      "--max",
+      "--tblout",
+      "tblout.out",
+      "--fmt",
+      "1",
+      "--qformat",
+      "fasta",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_pressed_quartet_co0/infernal-preparation-attempt/work/models.cm",
+      "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_pressed_quartet_co0/query.fa"
+    ],
+    "environment": {},
+    "native_infernal": {
+      "version": "native_infernal_job_v1",
+      "program": "cmscan",
+      "software": {
+        "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmscan",
+        "sha256": "d9fdb57c1e630321c6697e013f0d62266fe02a01cb5d2d59acf46cace455c215",
+        "engine_version": "1.1.5"
+      },
+      "environment": {},
+      "operands": [
+        {
+          "role": "models",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_pressed_quartet_co0/infernal-preparation-attempt/work/models.cm",
+          "format": "infernal_ascii",
+          "size_bytes": 10256,
+          "sha256": "065c714857a4563ed9691fe7478c81c16e3d28b83319b6f41bf1856cce3ac514",
+          "artifact_ref": "fixture251:models"
+        },
+        {
+          "role": "sequences",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_pressed_quartet_co0/query.fa",
+          "format": "fasta",
+          "size_bytes": 25,
+          "sha256": "ab5a0c1c1a81a4cbfbae1e95b84ad7c8acf7eeaad4399d6ad9a98f30406cb92d",
+          "artifact_ref": "fixture251:sequences"
+        },
+        {
+          "role": "models_i1f",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_pressed_quartet_co0/infernal-preparation-attempt/work/models.cm.i1f",
+          "format": "infernal_i1f",
+          "size_bytes": 6252,
+          "sha256": "1f4d62d4134e5558f0266f4a8baf5f2b510e8583cdaa00e3c55ab2b55a7b480f",
+          "artifact_ref": "fixture251:models_i1f"
+        },
+        {
+          "role": "models_i1i",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_pressed_quartet_co0/infernal-preparation-attempt/work/models.cm.i1i",
+          "format": "infernal_i1i",
+          "size_bytes": 368,
+          "sha256": "e49e1c9f122d8c9ae6217582d9c7be7e4e00344f9d0ea5007550715e108b7036",
+          "artifact_ref": "fixture251:models_i1i"
+        },
+        {
+          "role": "models_i1m",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_pressed_quartet_co0/infernal-preparation-attempt/work/models.cm.i1m",
+          "format": "infernal_i1m",
+          "size_bytes": 7040,
+          "sha256": "37ecfb47b4ff73c41e41f84730c2e06c6125c75011cc3f4cbe54ccf70e172a69",
+          "artifact_ref": "fixture251:models_i1m"
+        },
+        {
+          "role": "models_i1p",
+          "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_pressed_quartet_co0/infernal-preparation-attempt/work/models.cm.i1p",
+          "format": "infernal_i1p",
+          "size_bytes": 2279,
+          "sha256": "e20add8335358ebc7a3fc58991fdf43270fdb3555e1e67edf5ce2bb83af59a43",
+          "artifact_ref": "fixture251:models_i1p"
+        }
+      ],
+      "operand_bindings": [],
+      "options": [
+        "--cpu",
+        "1",
+        "--max"
+      ],
+      "outputs": [
+        {
+          "role": "stdout",
+          "format": "infernal_stdout",
+          "relative_path": "stdout.out"
+        },
+        {
+          "role": "stderr",
+          "format": "text",
+          "relative_path": "stderr.out"
+        },
+        {
+          "role": "tblout",
+          "format": "infernal_tblout",
+          "relative_path": "tblout.out"
+        }
+      ],
+      "table_format": 1,
+      "metadata": {},
+      "grading_parameters": {}
+    }
+  },
+  "attempt_directory": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_001/temporary/pytest/test_actual_pressed_quartet_co0/separately-selected-cmscan",
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  }
+}

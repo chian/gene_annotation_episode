@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.evidence_axis_scoring import score_axis
+from gene_annotation_episode.episodic_workflow.root.evidence_axis_scoring import score_axis
 
 
 PUBLICATION=Path(__file__).resolve().parents[1]/'research/slotted_process_library/publications/2026-10-23-002'

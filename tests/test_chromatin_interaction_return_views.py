@@ -18,7 +18,7 @@ from gene_annotation_episode.communication import (
 
 
 EXAMPLES = Path(__file__).resolve().parents[1] / (
-    "verification/tool_graders_chromatin_interaction_contract_2026-10-27_439/WORKED_RECORDS.json")
+    "gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/WORKED_RECORDS.json")
 
 
 @pytest.fixture(scope="module")

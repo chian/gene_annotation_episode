@@ -14,7 +14,7 @@ from gene_annotation_episode.xmfa_sources import bind_xmfa_sources, validate_xmf
 from gene_annotation_episode.xmfa_source_contracts import (
     validate_xmfa_source_inputs, validate_xmfa_source_bindings, validate_xmfa_original_map)
 
-BASE=Path(__file__).resolve().parents[1]/'verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/native_examples'
+BASE=Path(__file__).resolve().parents[1]/'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_xmfa_boundaries/native_examples'
 
 
 def artifact(data,name):

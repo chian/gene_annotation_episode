@@ -1,0 +1,252 @@
+..........F..FFFF....                                                    [100%]
+=================================== FAILURES ===================================
+_ test_absent_binding_model_retains_native_contrast_without_publication_claim __
+
+    def test_absent_binding_model_retains_native_contrast_without_publication_claim():
+        source = sheet(100, 200)
+        result = binding.populate_binding_model(source, None)
+        old = baseline('literature_binding_models').populate_binding_model(source, None)
+        assert result['cells']['log_parameter_contrast'] == old['cells']['log_parameter_contrast']
+        assert result['model'] is None
+        assert all(cell['unavailable_reason'] == 'binding_sampling_model_not_supplied'
+                   for name, cell in result['cells'].items() if name != 'log_parameter_contrast')
+>       assert source['cells']['parameter_ratio']['value'] == 2
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'parameter_ratio'
+
+tests/test_literature_missing_input_semantics_177.py:98: KeyError
+_ test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts[binding_known] _
+
+obj = <module 'gene_annotation_episode.literature_quantity_storage' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_quantity_storage.py'>
+name = 'populate_quantity_sheet'
+ann = 'gene_annotation_episode.literature_quantity_storage'
+
+    def annotated_getattr(obj: object, name: str, ann: str) -> object:
+        try:
+>           obj = getattr(obj, name)
+                  ^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'gene_annotation_episode.literature_quantity_storage' has no attribute 'populate_quantity_sheet'
+
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:95: AttributeError
+
+The above exception was the direct cause of the following exception:
+
+name = 'binding_known'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x726f89655340>
+
+    @pytest.mark.parametrize('name', sorted(LEGACY))
+    def test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts(name, monkeypatch):
+        item = LEGACY[name]
+        cls = LiteratureTransportRepository if item['kind'] == 'transport' else LiteratureBindingModelRepository
+        schema = transport_response_cells_schema if item['kind'] == 'transport' else binding_model_cells_schema
+        path = HERE / 'legacy' / name
+        before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in path.rglob('*') if p.is_file()}
+        # Block before constructing the repository, including upstream calculators.
+        for module, names in {
+            'literature_transport_storage': ('read_transport_inputs', 'populate_transport_response', '_quantity_key'),
+            'literature_binding_model_storage': ('read_binding_model', 'populate_binding_model', 'binding_model_operand_keys'),
+            'literature_binding_storage': ('read_binding_parameter_table', 'populate_binding_contrast'),
+            'literature_quantity_storage': ('populate_quantity_sheet',),
+            'literature_prose_reader': ('read_jats_quantity',),
+        }.items():
+            for function in names:
+>               monkeypatch.setattr(f'gene_annotation_episode.{module}.{function}', forbid)
+
+tests/test_literature_missing_input_semantics_177.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:109: in derive_importpath
+    annotated_getattr(target, attr, ann=module)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+obj = <module 'gene_annotation_episode.literature_quantity_storage' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_quantity_storage.py'>
+name = 'populate_quantity_sheet'
+ann = 'gene_annotation_episode.literature_quantity_storage'
+
+    def annotated_getattr(obj: object, name: str, ann: str) -> object:
+        try:
+            obj = getattr(obj, name)
+        except AttributeError as e:
+>           raise AttributeError(
+                f"{type(obj).__name__!r} object at {ann} has no attribute {name!r}"
+            ) from e
+E           AttributeError: 'module' object at gene_annotation_episode.literature_quantity_storage has no attribute 'populate_quantity_sheet'
+
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:97: AttributeError
+_ test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts[binding_missing] _
+
+obj = <module 'gene_annotation_episode.literature_quantity_storage' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_quantity_storage.py'>
+name = 'populate_quantity_sheet'
+ann = 'gene_annotation_episode.literature_quantity_storage'
+
+    def annotated_getattr(obj: object, name: str, ann: str) -> object:
+        try:
+>           obj = getattr(obj, name)
+                  ^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'gene_annotation_episode.literature_quantity_storage' has no attribute 'populate_quantity_sheet'
+
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:95: AttributeError
+
+The above exception was the direct cause of the following exception:
+
+name = 'binding_missing'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x726f89a7faa0>
+
+    @pytest.mark.parametrize('name', sorted(LEGACY))
+    def test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts(name, monkeypatch):
+        item = LEGACY[name]
+        cls = LiteratureTransportRepository if item['kind'] == 'transport' else LiteratureBindingModelRepository
+        schema = transport_response_cells_schema if item['kind'] == 'transport' else binding_model_cells_schema
+        path = HERE / 'legacy' / name
+        before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in path.rglob('*') if p.is_file()}
+        # Block before constructing the repository, including upstream calculators.
+        for module, names in {
+            'literature_transport_storage': ('read_transport_inputs', 'populate_transport_response', '_quantity_key'),
+            'literature_binding_model_storage': ('read_binding_model', 'populate_binding_model', 'binding_model_operand_keys'),
+            'literature_binding_storage': ('read_binding_parameter_table', 'populate_binding_contrast'),
+            'literature_quantity_storage': ('populate_quantity_sheet',),
+            'literature_prose_reader': ('read_jats_quantity',),
+        }.items():
+            for function in names:
+>               monkeypatch.setattr(f'gene_annotation_episode.{module}.{function}', forbid)
+
+tests/test_literature_missing_input_semantics_177.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:109: in derive_importpath
+    annotated_getattr(target, attr, ann=module)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+obj = <module 'gene_annotation_episode.literature_quantity_storage' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_quantity_storage.py'>
+name = 'populate_quantity_sheet'
+ann = 'gene_annotation_episode.literature_quantity_storage'
+
+    def annotated_getattr(obj: object, name: str, ann: str) -> object:
+        try:
+            obj = getattr(obj, name)
+        except AttributeError as e:
+>           raise AttributeError(
+                f"{type(obj).__name__!r} object at {ann} has no attribute {name!r}"
+            ) from e
+E           AttributeError: 'module' object at gene_annotation_episode.literature_quantity_storage has no attribute 'populate_quantity_sheet'
+
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:97: AttributeError
+_ test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts[transport_known] _
+
+obj = <module 'gene_annotation_episode.literature_quantity_storage' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_quantity_storage.py'>
+name = 'populate_quantity_sheet'
+ann = 'gene_annotation_episode.literature_quantity_storage'
+
+    def annotated_getattr(obj: object, name: str, ann: str) -> object:
+        try:
+>           obj = getattr(obj, name)
+                  ^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'gene_annotation_episode.literature_quantity_storage' has no attribute 'populate_quantity_sheet'
+
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:95: AttributeError
+
+The above exception was the direct cause of the following exception:
+
+name = 'transport_known'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x726f89ada9f0>
+
+    @pytest.mark.parametrize('name', sorted(LEGACY))
+    def test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts(name, monkeypatch):
+        item = LEGACY[name]
+        cls = LiteratureTransportRepository if item['kind'] == 'transport' else LiteratureBindingModelRepository
+        schema = transport_response_cells_schema if item['kind'] == 'transport' else binding_model_cells_schema
+        path = HERE / 'legacy' / name
+        before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in path.rglob('*') if p.is_file()}
+        # Block before constructing the repository, including upstream calculators.
+        for module, names in {
+            'literature_transport_storage': ('read_transport_inputs', 'populate_transport_response', '_quantity_key'),
+            'literature_binding_model_storage': ('read_binding_model', 'populate_binding_model', 'binding_model_operand_keys'),
+            'literature_binding_storage': ('read_binding_parameter_table', 'populate_binding_contrast'),
+            'literature_quantity_storage': ('populate_quantity_sheet',),
+            'literature_prose_reader': ('read_jats_quantity',),
+        }.items():
+            for function in names:
+>               monkeypatch.setattr(f'gene_annotation_episode.{module}.{function}', forbid)
+
+tests/test_literature_missing_input_semantics_177.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:109: in derive_importpath
+    annotated_getattr(target, attr, ann=module)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+obj = <module 'gene_annotation_episode.literature_quantity_storage' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_quantity_storage.py'>
+name = 'populate_quantity_sheet'
+ann = 'gene_annotation_episode.literature_quantity_storage'
+
+    def annotated_getattr(obj: object, name: str, ann: str) -> object:
+        try:
+            obj = getattr(obj, name)
+        except AttributeError as e:
+>           raise AttributeError(
+                f"{type(obj).__name__!r} object at {ann} has no attribute {name!r}"
+            ) from e
+E           AttributeError: 'module' object at gene_annotation_episode.literature_quantity_storage has no attribute 'populate_quantity_sheet'
+
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:97: AttributeError
+_ test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts[transport_missing] _
+
+obj = <module 'gene_annotation_episode.literature_quantity_storage' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_quantity_storage.py'>
+name = 'populate_quantity_sheet'
+ann = 'gene_annotation_episode.literature_quantity_storage'
+
+    def annotated_getattr(obj: object, name: str, ann: str) -> object:
+        try:
+>           obj = getattr(obj, name)
+                  ^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'gene_annotation_episode.literature_quantity_storage' has no attribute 'populate_quantity_sheet'
+
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:95: AttributeError
+
+The above exception was the direct cause of the following exception:
+
+name = 'transport_missing'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x726f89ad9370>
+
+    @pytest.mark.parametrize('name', sorted(LEGACY))
+    def test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts(name, monkeypatch):
+        item = LEGACY[name]
+        cls = LiteratureTransportRepository if item['kind'] == 'transport' else LiteratureBindingModelRepository
+        schema = transport_response_cells_schema if item['kind'] == 'transport' else binding_model_cells_schema
+        path = HERE / 'legacy' / name
+        before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in path.rglob('*') if p.is_file()}
+        # Block before constructing the repository, including upstream calculators.
+        for module, names in {
+            'literature_transport_storage': ('read_transport_inputs', 'populate_transport_response', '_quantity_key'),
+            'literature_binding_model_storage': ('read_binding_model', 'populate_binding_model', 'binding_model_operand_keys'),
+            'literature_binding_storage': ('read_binding_parameter_table', 'populate_binding_contrast'),
+            'literature_quantity_storage': ('populate_quantity_sheet',),
+            'literature_prose_reader': ('read_jats_quantity',),
+        }.items():
+            for function in names:
+>               monkeypatch.setattr(f'gene_annotation_episode.{module}.{function}', forbid)
+
+tests/test_literature_missing_input_semantics_177.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:109: in derive_importpath
+    annotated_getattr(target, attr, ann=module)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+obj = <module 'gene_annotation_episode.literature_quantity_storage' from '/home/chia/repos/gene_annotation_episode/gene_annotation_episode/literature_quantity_storage.py'>
+name = 'populate_quantity_sheet'
+ann = 'gene_annotation_episode.literature_quantity_storage'
+
+    def annotated_getattr(obj: object, name: str, ann: str) -> object:
+        try:
+            obj = getattr(obj, name)
+        except AttributeError as e:
+>           raise AttributeError(
+                f"{type(obj).__name__!r} object at {ann} has no attribute {name!r}"
+            ) from e
+E           AttributeError: 'module' object at gene_annotation_episode.literature_quantity_storage has no attribute 'populate_quantity_sheet'
+
+.venv/lib/python3.12/site-packages/_pytest/monkeypatch.py:97: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_literature_missing_input_semantics_177.py::test_absent_binding_model_retains_native_contrast_without_publication_claim
+FAILED tests/test_literature_missing_input_semantics_177.py::test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts[binding_known]
+FAILED tests/test_literature_missing_input_semantics_177.py::test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts[binding_missing]
+FAILED tests/test_literature_missing_input_semantics_177.py::test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts[transport_known]
+FAILED tests/test_literature_missing_input_semantics_177.py::test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts[transport_missing]
+5 failed, 16 passed in 6.47s

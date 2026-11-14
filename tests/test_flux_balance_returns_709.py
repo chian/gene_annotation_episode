@@ -78,12 +78,12 @@ class Fixture:
         self.boundary = FluxBalanceReturns(SimpleNamespace(store=store, run_id=self.run_id, native_flux_balance_results=self.host))
         self.root = self.context((('annotation', 'root'),), {}, None)
         root = Path(__file__).resolve().parents[1]
-        core = json.loads((root / 'verification/tool_graders_flux_balance_core_2026-10-29_679/VERIFIED_NUMERICAL_EXAMPLE_001.json').read_text())
+        core = json.loads((root / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/VERIFIED_NUMERICAL_EXAMPLE_001.json').read_text())
         raw = canonical(core['sheet']).encode()
         reference = store.artifact(raw, 'application/json')
         self.sheet = {'artifact_ref': reference, 'sha256': reference[9:], 'size_bytes': len(raw), 'format': 'flux_balance_sheet_v1'}
         self.parameters = core['calculations']['parameters']
-        self.projection = json.loads((root / 'verification/tool_graders_flux_balance_result_projection_2026-10-29_693/RECORDED_679_PROJECTION_001.json').read_text())['run']
+        self.projection = json.loads((root / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/RECORDED_679_PROJECTION_001.json').read_text())['run']
         self.failures = [deepcopy(self.projection['qualification_issues'][0]['issue'])]
 
     def persist(self, context):
@@ -464,7 +464,7 @@ def test_saved_selector_and_received_reference_permission_are_independent_requir
 def test_original688_projection_numbers_are_forwarded_verbatim_without_new_science(fixture, profile):
     f = fixture
     path = (Path(__file__).resolve().parents[1] /
-        ('verification/tool_graders_flux_balance_result_projection_2026-10-29_693/AUTHENTIC_688_' + profile + '_CHAIN_001.json'))
+        ('gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/AUTHENTIC_688_' + profile + '_CHAIN_001.json'))
     f.projection = json.loads(path.read_text())['projection']
     child = f.child(f.root, form_schema(PROJECTION_SOURCE)); f.own(child)
     form = f.returned(f.root, child)

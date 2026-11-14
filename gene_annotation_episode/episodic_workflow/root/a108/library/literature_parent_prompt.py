@@ -1,0 +1,2 @@
+"""A108 contextual-source discovery instructions for the literature parent."""
+SOURCE_DISCOVERY = 'The caller supplied target material and no contextual source. Use a literature investigation to establish candidate functional hypotheses and organism/context from the supplied material, then discover relevant organism physiology, environment, availability or localization sources. Preserve uncertainty in the sequence-to-organism and sample correspondence.'

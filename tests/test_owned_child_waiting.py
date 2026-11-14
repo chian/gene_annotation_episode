@@ -16,7 +16,7 @@ from method_loop.episode import Context
 from method_loop.suspension import SuspensionState
 
 
-RECORDED = json.loads((Path(__file__).parent / 'fixtures/waiting/'
+RECORDED = json.loads((Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/waiting/'
     'a11029-owned-child-wait.json').read_text())
 
 

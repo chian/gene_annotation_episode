@@ -1,0 +1,60 @@
+--- pin_002/literature_episodes.py
++++ workspace/literature_episodes.py
+@@ -276,6 +276,7 @@
+                          "literature_reaction_storage.py", "literature_reaction_prompt.py",
+                          "literature_context_inputs.py", "literature_context_calculations.py",
+                          "literature_context_storage.py", "literature_context_prompt.py",
++                         "literature_context_meanings.py", "literature_context_meanings_render.py",
+                          "literature_figure_measurements.py", "literature_figure_inputs.py",
+                          "literature_figure_storage.py", "literature_figure_prompt.py",
+                          "literature_partner_calculations.py", "literature_partner_inputs.py",
+@@ -931,7 +932,7 @@
+         from .literature_perturbation_summary_storage import perturbation_summary_cells_schema
+         from .literature_structure_storage import structure_cells_schema
+         from .literature_reaction_storage import reaction_cells_schema
+-        from .literature_context_storage import context_cells_schema
++        from .literature_context_storage import context_cells_schema, context_semantic_cells_schema
+         from .literature_figure_storage import figure_cells_schema
+         from .literature_partner_storage import partner_cells_schema
+         from .literature_amount_storage import amount_cells_schema
+@@ -980,6 +981,9 @@
+             "literature_context_cells": {"type": "array", "meaning":
+                 "Saved organism/sample compatibility bounds with the original capability-versus-coverage question, actual context frame, weights, pairing, mapping and domain qualifications. Unpaired fractions use bounds; unexamined biological situations remain unknown. Conditional Hoeffding sampling is separate from logical domains and requires the actual independent context design. Source assay observations are not additional biological samples, target-transfer weights or annotation credit.",
+                 "report_schema": context_cells_schema()},
++            "literature_context_semantic_cells": {"type": "array", "meaning":
++                "The same A108 numerical components with distinct scoped requirements and alternative routes, source-supported entity/property/biological-setting/function meanings, exact route membership and joint-scope evidence. Missing meanings remain unknown; unnamed handles assert no substance or independent evidence. Logical domains, source relations and capability-versus-coverage distinctions retain their existing conditional meanings. This is a closed return view, not another sheet or axis.",
++                "report_schema": context_semantic_cells_schema()},
+             "literature_figure_cells": {"type": "array", "meaning":
+                 "Saved native experimental graph ordinates and signed differences with both molecule/partner arms, endpoint/normalization, source representation relationships and repeat/spread meanings. Bounds describe conditional pixel digitization, not SD or confidence intervals. Coupled product or partner-swap differences do not establish upstream-only activity, partner necessity, target correspondence or annotation credit.",
+                 "report_schema": figure_cells_schema()},
+@@ -1065,6 +1069,8 @@
+                  REACTION_COMPONENTS, self.services.literature_reaction_repository),
+                 ("literature_context_cells", "requested_context_components", CONTEXT_PROVIDER,
+                  CONTEXT_COMPONENTS, self.services.literature_context_repository),
++                ("literature_context_semantic_cells", "requested_context_components", CONTEXT_PROVIDER,
++                 CONTEXT_COMPONENTS, self.services.literature_context_repository().semantic_projection),
+                 ("literature_figure_cells", "requested_figure_components", FIGURE_PROVIDER,
+                  FIGURE_COMPONENTS, self.services.literature_figure_repository),
+                 ("literature_partner_cells", "requested_partner_components", PARTNER_PROVIDER,
+@@ -1103,6 +1109,11 @@
+                     if namespace in {"literature_perturbation_cells", "literature_perturbation_summary_cells"}:
+                         if row.get("version") not in {"literature_perturbation_record_v1", "literature_perturbation_record_v2"}:
+                             raise ContractError("literature_perturbation_projection_version_mismatch")
++                        if row.get("version") != adapter.record_version:
++                            continue
++                    if namespace in {"literature_context_cells", "literature_context_semantic_cells"}:
++                        if row.get("version") not in {"literature_context_record_v1", "literature_context_record_v2"}:
++                            raise ContractError("literature_context_projection_version_mismatch")
+                         if row.get("version") != adapter.record_version:
+                             continue
+                     selected.append(reference)
+@@ -1206,6 +1217,9 @@
+                             and not rows and context.assignment.get("requested_rate_components") not in ([], ())):
+                         repository().validate_empty_return_family(context)
+                     if (namespace in {"literature_perturbation_cells", "literature_perturbation_summary_cells"}
++                            and not rows and context.assignment.get(requested_field) not in ([], ())):
++                        repository().validate_empty_return_family(context)
++                    if (namespace in {"literature_context_cells", "literature_context_semantic_cells"}
+                             and not rows and context.assignment.get(requested_field) not in ([], ())):
+                         repository().validate_empty_return_family(context)
+                     # This hook validates the REPORTING episode (also when C4

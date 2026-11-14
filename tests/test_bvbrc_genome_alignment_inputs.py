@@ -472,7 +472,7 @@ def test_retained_native_v4_counts_survive_missing_source_identity_in_actual_con
 
 def test_retained_source_default_is_labelled_expectation_not_deployment():
     task, _, handoff, data = fixture(recipe=...)
-    source = Path('verification/tool_graders_bvbrc_application_artifacts_2026-10-24/sources/p3_mauve/scripts/p3-mauve.js').read_bytes()
+    source = Path('gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/application_artifacts/sources/p3_mauve/scripts/p3-mauve.js').read_bytes()
     binding = content(source, 'actual-retained-source')
     data[binding['artifact_ref']] = source
     supplied = metadata({'kind': 'genome_alignment_producer', 'original_task_id': task['task_id'],

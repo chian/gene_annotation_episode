@@ -29,16 +29,16 @@ from fluorescence_flowio_test_support import (
 # pytest invocation fails collection rather than running unbounded or skipping.
 require_bounded_runtime()
 
-from gene_annotation_episode import fluorescence_event_calculations as calculations
-from gene_annotation_episode import fluorescence_fcs_reader as reader
-from gene_annotation_episode.fluorescence_event_contracts import (
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations as calculations
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_fcs_reader as reader
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import (
     FluorescenceContractError, canonical, validate_event_parse_result,
 )
-from gene_annotation_episode.fluorescence_event_readers import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_readers import (
     parse_fluorescence_csv, parse_fluorescence_table_snapshot,
 )
-from gene_annotation_episode.fluorescence_event_sheet import populate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_result_views import project_fluorescence_result
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_sheet import populate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views import project_fluorescence_result
 
 
 PACKET548_VALUES = [90, 100, 125, 150, 200, 250, 300, 350]
@@ -632,5 +632,5 @@ def test_encoded_parser_has_no_preprocessing_or_second_calculation_entrypoint(fl
                                         node.func.attr in forbidden) or
                 (isinstance(node.func, ast.Name) and node.func.id in forbidden)]
     assert calculations.calculate_fluorescence_sheet.__module__ == \
-        "gene_annotation_episode.fluorescence_event_calculations"
+        "gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations"
     assert Path(flowio.__file__).is_relative_to(require_bounded_runtime() / "source_snapshot" / SOURCE_RELATIVE)

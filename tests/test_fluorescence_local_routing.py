@@ -12,14 +12,14 @@ import base64
 
 import pytest
 
-from gene_annotation_episode import native_fluorescence_local as fluorescence
+import gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_local as fluorescence
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.fluorescence_execution_common import canonical, digest, identity
-from gene_annotation_episode.native_fluorescence_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical, digest, identity
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import (
     OPERATIONS, POLICY, fluorescence_environment, fluorescence_output_files,
     requested_job_from_fluorescence,
 )
-from gene_annotation_episode.native_fluorescence_storage import immutable_json, read_json
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_storage import immutable_json, read_json
 from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
 from test_native_fluorescence_contracts import event_input, job
 

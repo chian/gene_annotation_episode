@@ -23,7 +23,7 @@ from test_runtime import FixtureController, obj, reason
 from test_scientific_process_prompt_delivery import ScientificWire, OUTPUT_SCHEMA
 
 
-FIXTURES = Path(__file__).parent / 'fixtures' / 'native_infernal_episode'
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/native_infernal_episode'
 TABLE = {'version': 'own_decision_yield_table_v1', 'rows': []}
 METRICS = (
     'bitscore', 'evalue', 'bias_bits', 'gc_fraction', 'model_span_length',

@@ -18,7 +18,7 @@ from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
-F = import_module('verification.tool_graders_chromatin_hic_workflow_2026-10-27_459.fixture_helpers')
+F = import_module('gene_annotation_episode.episodic_workflow.root.tests.fixtures.chromatin.hic_workflow_459.fixture_helpers')
 
 
 def deny(*args, **kwargs):

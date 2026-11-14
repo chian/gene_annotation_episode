@@ -16,7 +16,7 @@ from gene_annotation_episode.bvbrc_proteome_sheet_contracts import validate_prot
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXAMPLES = ROOT / "verification/tool_graders_bvbrc_proteome_sheet_contract_2026-10-25_165"
+EXAMPLES = ROOT / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/proteome_sheet_contract"
 IDENTITY = "native_first_hsp_alignment_identity_fraction"
 ENDPOINT = "native_subject_endpoint_difference_fraction"
 
@@ -88,7 +88,7 @@ def replace_fraction(sheet, name, value, *, presence="value", lexeme=None, key="
 
 def with_saved_tsv_projection():
     """Copy declared cells from a pre-existing synthetic A projection; no parser."""
-    path = ROOT / "verification/tool_graders_bvbrc_proteome_native_2026-10-25/SYNTHETIC_PROJECTIONS_001.json"
+    path = ROOT / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/proteome_native/SYNTHETIC_PROJECTIONS_001.json"
     result = json.loads(path.read_text())[1]["result"]
     sheet = saved_sheet()
     primary = result["value"]
@@ -641,7 +641,7 @@ def test_saved_sheet_recalculation_has_no_io_parsing_scientific_execution_or_sto
     import socket
     import subprocess
     from gene_annotation_episode import bvbrc_proteome_native, bvbrc_proteome_inputs
-    from gene_annotation_episode import blast_pairwise_grader
+    from gene_annotation_episode.episodic_workflow.root.a101 import blast_pairwise_grader
     sheet, options = saved_sheet(), parameters()
     initial = calculators.calculate_native_components(sheet, parameters=options)
 

@@ -138,12 +138,3 @@ review confirmed its specific remaining immutable-assignment ordering defect
 closed after correction. A separate broader runtime/findings/scientific/context
 group passed 71 checks; these are focused engineering groups, not a full-suite
 or configured-model scientific completion claim.
-A fresh configured-model verification run now uses this binding in
-`cases/gene_001/runs/investigation_004` with provisional explicit finding unit 1.
-Its first reasoning commit recorded two findings and progress 2; the following
-decision received progress 2 separately from annotation support 0. Scientific
-correctness, actual child receipt and the full native lifecycle still require
-verification in this run. The numerical unit is not user-approved.
-
-The separate historical investigation_003 retains its saved hypervolume-based
-yield signal. Its scores, histories and live bindings have not been rewritten.

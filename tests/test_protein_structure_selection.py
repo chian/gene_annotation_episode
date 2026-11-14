@@ -15,7 +15,7 @@ from gene_annotation_episode.protein_structure_selection import (
     protein_structure_result_selector_schema, validate_protein_structure_result_selector,
 )
 
-FIXTURES = Path(__file__).resolve().parents[1] / "verification/tool_graders_protein_structure_result_worker_2026-10-27_393/fixtures"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_result_worker_393/fixtures"
 
 
 def native(name="held_out"):

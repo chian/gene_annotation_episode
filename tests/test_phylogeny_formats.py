@@ -52,7 +52,7 @@ def codes(result):
 
 def native_root():
     for directory in Path(__file__).resolve().parents:
-        candidate = directory / "verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24"
+        candidate = directory / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries"
         if candidate.is_dir():
             return candidate
     raise AssertionError("Retained native fixtures missing; do not silently skip native verification")

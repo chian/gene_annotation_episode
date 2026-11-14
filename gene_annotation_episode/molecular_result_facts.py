@@ -50,10 +50,10 @@ def _sources(fact_source):
         from .esm_gene_embedding_contracts import esm_gene_embedding_fact_sources
         return esm_gene_embedding_fact_sources()
     if fact_source == "protein_phylogeny_outcomes":
-        from .protein_phylogeny_result_contracts import phylogeny_fact_sources
+        from gene_annotation_episode.episodic_workflow.root.library.protein_phylogeny_result_contracts import phylogeny_fact_sources
         return phylogeny_fact_sources()
     if fact_source == "protein_conservation_outcomes":
-        from .protein_conservation_result_contracts import conservation_fact_sources
+        from gene_annotation_episode.episodic_workflow.root.library.protein_conservation_result_contracts import conservation_fact_sources
         return conservation_fact_sources()
     if fact_source == "primer_placement_outcomes":
         from .primer_placement_result_contracts import ordinary_primer_placement_fact_sources
@@ -144,7 +144,7 @@ def validate_molecular_fact(value, *, fact_source):
         except ValueError as error:
             raise ContractError(prefix + "return_invalid") from error
     if fact_source == "protein_phylogeny_outcomes":
-        from .protein_phylogeny_result_contracts import validate_phylogeny_return
+        from gene_annotation_episode.episodic_workflow.root.library.protein_phylogeny_result_contracts import validate_phylogeny_return
         from .communication import plain
         try:
             return validate_phylogeny_return(plain(value))
@@ -158,7 +158,7 @@ def validate_molecular_fact(value, *, fact_source):
         except ValueError as error:
             raise ContractError(prefix + "return_invalid") from error
     if fact_source == "protein_conservation_outcomes":
-        from .protein_conservation_result_contracts import validate_conservation_return
+        from gene_annotation_episode.episodic_workflow.root.library.protein_conservation_result_contracts import validate_conservation_return
         from .communication import plain
         try:
             return validate_conservation_return(plain(value))
@@ -237,7 +237,7 @@ def validate_molecular_fact(value, *, fact_source):
         from .circular_dichroism_contracts import validate_circular_dichroism_return
         return validate_circular_dichroism_return(value)
     from jsonschema import Draft202012Validator, validators
-    from . import liftover_contracts as core
+    from gene_annotation_episode import liftover_contracts as core
     value = core._copy(value)
     strict = validators.extend(Draft202012Validator, type_checker=
         Draft202012Validator.TYPE_CHECKER.redefine("integer", lambda _checker, item: type(item) is int))
@@ -363,7 +363,7 @@ def own_molecular_facts(registry, context, *, read_received, fact_source):
             elif fact_source == "protein_phylogeny_outcomes":
                 from .protein_phylogeny_publication import read_protein_phylogeny_action_result as read_action_result
             elif fact_source == "protein_conservation_outcomes":
-                from .protein_conservation_publication import read_protein_conservation_action_result as read_action_result
+                from gene_annotation_episode.episodic_workflow.root.library.protein_conservation_publication import read_protein_conservation_action_result as read_action_result
             elif fact_source == "protein_disorder_outcomes":
                 from .protein_disorder_tools import read_protein_disorder_action_result as read_action_result
             elif fact_source == "arsenic_speciation_outcomes":

@@ -1,0 +1,18 @@
+{
+  "entry_version": "evidence_axis_instruction_v1",
+  "id": "A108",
+  "slot": "evidence_axis",
+  "name": "Organism and sample-context evidence",
+  "description": "Assess whether proposed protein functions fit the actual organism physiology, environment, molecular availability and cellular localization using literature and database observations.",
+  "investigation_instructions": "Assess whether proposed protein functions fit the actual organism and sample biology. Start from the supplied sequence, selected record or region, or snippets and any received candidate functions. Establish the actual organism and available strain/sample context from supplied or acquired records. Candidate functions may emerge from received evidence; retain their origin and uncertainty.\n\nSearch literature and organism/sample database records for relevant physiology, habitat and growth conditions, substrate/cofactor availability, and cellular localization. Select the questions that bear on the actual proposed function. A documented organism-level physiological property can be useful contextual evidence without extracting an assay curve. Preserve the exact organism, strain, sample, condition and compartment to which each observation applies, and the supported relationship connecting it to the target.\n\nUse the applicable purpose-specific subscoring sheets to assess supporting, conflicting and unresolved source-observation relationships. Return numerical evidence components through the main A108 evidence scoring sheet. Preserve the original observation and source attribution when a paper and database entry or several publications repeat the same finding. Retain conditional evidence, qualified transfer and missing context links explicitly. The evidence score describes the assessed sources and their biological fit; it is not a probability that the annotation is correct.",
+  "evidence": [
+    {
+      "case_group": "a108_organism_context_instructions",
+      "case_id": "a108_organism_context_instructions",
+      "source_url": "docs/A108_MAIN_EVIDENCE_SCORING_PLAN.md",
+      "source_locator": "docs/A108_MAIN_EVIDENCE_SCORING_PLAN.md",
+      "observation": "User-defined scope: assess proposed protein function against the actual organism physiology, environment, substrate/cofactor availability and localization. Use source-specific numerical subscoring sheets and return assessed evidence to the main evidence scoring sheet.",
+      "limit": "Instruction provenance only. This is not biological evidence, a benchmark answer, a completed workflow or a claim that numerical source observations have already been discovered."
+    }
+  ]
+}

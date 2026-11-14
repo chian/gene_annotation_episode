@@ -1,0 +1,31 @@
+{
+  "record_type": "targeted_authentic_nested_profile_644_v1",
+  "runner_attempt": "check102d_blast_profile_native",
+  "qualification": "One separately selected RPS call on an exact retained nested PssmWithParameters object; no field edits, new measurements or search validation. Original26-row failure remains unchanged.",
+  "source": "verification/tool_graders_blast_iteration_native_records_2026-10-26_315/sources/webpsi.2ndround.ss.asn",
+  "source_manifest": "verification/tool_graders_blast_iteration_native_records_2026-10-26_315/SOURCE_MANIFEST.json",
+  "schema": "verification/tool_graders_blast_iteration_native_records_2026-10-26_315/sources/blast.asn",
+  "original_profile_list_bytes": "inputs/webpsi.2ndround.pssm.asn\n",
+  "case": {
+    "id": "01_rps_existing28row_profile",
+    "program": "makeprofiledb",
+    "arguments": [
+      "-in",
+      "profiles.list",
+      "-dbtype",
+      "rps",
+      "-out",
+      "profiles",
+      "-blastdb_version",
+      "5",
+      "-index",
+      "true",
+      "-threshold",
+      "9.82",
+      "-force",
+      "-max_smp_vol",
+      "2500"
+    ],
+    "verification_helper": false
+  }
+}

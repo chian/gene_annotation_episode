@@ -1,0 +1,97 @@
+def task_case(frame, tmp_path, monkeypatch):
+    from gene_annotation_episode.episodic_workflow.root.tests.hpc_planning_allocation_task_behavior import PlanningAllocationTaskBehavior
+    monkeypatch.setattr(frame.owner, 'credit_view', lambda context, selection: {'credit': 0.0})
+    value = SimpleNamespace(binding=frame.owner, context=frame.child,
+        c={'objective': 'Preserve the original Results action and outcome'})
+    adapter = SimpleNamespace(setup=lambda path: value, module=own_module)
+    return PlanningAllocationTaskBehavior.fixture(adapter, tmp_path)
+
+
+@pytest.mark.parametrize('status', ['completed', 'invalid', 'failed', 'unavailable'])
+def test_results_task_retains_complete_returned_outcome_and_single_replay(frame, tmp_path, monkeypatch, status):
+    import asyncio
+    case = task_case(frame, tmp_path, monkeypatch)
+    payload = {'status': status, 'record_refs': [frame.result_ref], 'changed_record_refs': [],
+        'result': {'selected_windows': [{'path': 'original-output.txt', 'offset': 0, 'size': 1}],
+            'failed_windows': [{'path': 'missing-output.txt', 'code': 'unavailable'}]},
+        'feedback': {'category': 'controlled_original_return', 'code': 'retained-' + status}}
+    calls = []
+    async def returned(source, name, arguments, **kwargs):
+        calls.append((name, deepcopy(arguments), kwargs['operation_key']))
+        return deepcopy(payload)
+    case.task.workflow.execute = returned
+    selected = {'kind': 'tool', 'tool': 'execution.results.read',
+        'arguments': {'path': 'original-output.txt', 'offset': 0, 'limit': 1}}
+    result = asyncio.run(case.task.execute(selected, 5))
+    assert result == {'index': 5, 'credit': 0.0}
+    assert asyncio.run(case.task.execute(selected, 5)) == result
+    assert calls == [('execution.results.read', selected['arguments'], f'{frame.run_id}:{case.task.episode_id}:5')]
+    assert case.receipts == [(5, status)] and len(case.projections) == 1
+    assert json.loads(case.saved[5]['action']) == selected
+    assert json.loads(case.saved[5]['result']) == payload
+    assert case.runtime.observes_action_outcome('tool', status)
+
+
+@pytest.mark.parametrize('kind,status', [('wait', 'completed'), ('wait', 'failed'), ('reason', 'completed')])
+def test_results_task_preserves_historical_action_and_original_credit(frame, tmp_path, monkeypatch, kind, status):
+    import asyncio
+    case = task_case(frame, tmp_path, monkeypatch)
+    selected = {'kind': kind, **({'condition': {'original': 'saved'}} if kind == 'wait' else {'reasoning': {'original': 'saved'}})}
+    payload = {'status': status, 'record_refs': [], 'changed_record_refs': [],
+        'result': {'preserved': 'full original payload'}, 'feedback': {'code': 'original-code'}}
+    case.saved[9] = {'episode_id': case.task.episode_id, 'decision_index': 9,
+        'action': case.runtime._json(selected), 'result': case.runtime._json(payload), 'credit': 7.25}
+    if kind == 'wait' and status == 'failed':
+        with pytest.raises(case.runtime.ActionFailure):
+            asyncio.run(case.task.execute(selected, 9))
+    else:
+        assert asyncio.run(case.task.execute(selected, 9)) == {'index': 9, 'credit': 7.25}
+    assert json.loads(case.saved[9]['action']) == selected
+    assert json.loads(case.saved[9]['result']) == payload
+    assert case.executions == case.receipts == case.projections == []
+
+
+def test_results_task_unfinished_wait_returns_once_without_new_credit(frame, tmp_path, monkeypatch):
+    import asyncio
+    case = task_case(frame, tmp_path, monkeypatch)
+    selected = {'kind': 'wait', 'condition': {'original': 'pending'}}
+    case.saved[6] = {'episode_id': case.task.episode_id, 'decision_index': 6,
+        'action': case.runtime._json(selected), 'result': None, 'credit': None}
+    waits = []
+    async def wait(source, condition, index):
+        waits.append((deepcopy(condition), index))
+        return {'status': 'completed', 'record_refs': [], 'changed_record_refs': [], 'result': {'ready': True}}
+    case.task.workflow.perform_selected_wait = wait
+    case.task.workflow.last_observed_credit = lambda source: 4.5
+    assert asyncio.run(case.task.execute(selected, 6)) == {'index': 6, 'credit': 4.5}
+    assert asyncio.run(case.task.execute(selected, 6)) == {'index': 6, 'credit': 4.5}
+    assert waits == [(selected['condition'], 6)]
+    assert case.receipts == [(6, 'completed')] and case.executions == case.projections == []
+
+
+def test_original_runtime_build_selects_results_source_type(frame, tmp_path, monkeypatch):
+    from gene_annotation_episode.episodic_workflow.root.tests.hpc_planning_allocation_task_behavior import PlanningAllocationTaskBehavior
+    monkeypatch.setattr(frame.owner, 'credit_view', lambda context, selection: {'credit': 0.0})
+    value = SimpleNamespace(binding=frame.owner, context=frame.child,
+        c={'objective': 'Preserve the actual Results runtime build'})
+    adapter = SimpleNamespace(role='results', setup=lambda path: value, module=own_module)
+    PlanningAllocationTaskBehavior.test_original_runtime_build_selects_this_binding_task(adapter, tmp_path, monkeypatch)
+
+
+@pytest.mark.parametrize('reason,wait', [(False, False), (False, True), (True, True)])
+def test_results_task_private_instruction_composition_matches_original(frame, tmp_path, monkeypatch, reason, wait):
+    case = task_case(frame, tmp_path, monkeypatch)
+    prompt = own_module('runtime_prompt')
+    monkeypatch.setattr(frame.owner, 'instructions', lambda context: 'Original selected A104 Results goal.')
+    workflow = case.task.workflow
+    workflow.specialist = lambda source: frame.owner
+    workflow.binding_context = lambda source: frame.child
+    workflow.is_job_source = lambda source: False
+    workflow.permits_common_action = lambda source, action: (reason if action == 'reason' else wait if action == 'wait' else False)
+    workflow.knowledge = SimpleNamespace(instructions='\nOriginal selected source instructions.')
+    workflow.launch_instructions = SimpleNamespace(instructions='\nOriginal selected Launch instructions.')
+    workflow.native_event_information = object()
+    workflow.decision_protocol = 'decision_exchange_v1'
+    workflow.services = SimpleNamespace(instructions=prompt.instructions)
+    context = {'tool_knowledge': {}, 'launch_instruction_library': {}}
+    assert case.task.instructions(context) == prompt.instructions(case.task, context)

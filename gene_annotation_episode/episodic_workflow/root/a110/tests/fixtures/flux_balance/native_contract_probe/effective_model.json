@@ -1,0 +1,169 @@
+{
+  "cobra_json": {
+    "metabolites": [
+      {
+        "id": "A_c",
+        "name": "fixture A",
+        "compartment": "c",
+        "charge": 0,
+        "formula": "C"
+      },
+      {
+        "id": "B_c",
+        "name": "fixture B",
+        "compartment": "c",
+        "charge": 0,
+        "formula": "C"
+      }
+    ],
+    "reactions": [
+      {
+        "id": "IN",
+        "name": "fixture input",
+        "metabolites": {
+          "A_c": 1.0
+        },
+        "lower_bound": -10.0,
+        "upper_bound": 8.0,
+        "gene_reaction_rule": "",
+        "objective_coefficient": 0.25
+      },
+      {
+        "id": "AB",
+        "name": "fixture conversion",
+        "metabolites": {
+          "A_c": -1.0,
+          "B_c": 1.0
+        },
+        "lower_bound": 0.0,
+        "upper_bound": "inf",
+        "gene_reaction_rule": "one and two"
+      },
+      {
+        "id": "OUT",
+        "name": "fixture output",
+        "metabolites": {
+          "B_c": -1.0
+        },
+        "lower_bound": 0.0,
+        "upper_bound": "inf",
+        "gene_reaction_rule": "",
+        "objective_coefficient": -1.0
+      }
+    ],
+    "genes": [
+      {
+        "id": "one",
+        "name": "fixture gene one"
+      },
+      {
+        "id": "two",
+        "name": "fixture gene two"
+      }
+    ],
+    "id": "engineering_fba_677",
+    "name": "Explicit tiny interface fixture",
+    "compartments": {
+      "c": "fixture compartment"
+    },
+    "version": "1"
+  },
+  "sbml_metadata": {
+    "model.id": "engineering_fba_677",
+    "level": 3,
+    "version": 1,
+    "packages": {
+      "fbc": 2
+    },
+    "creators": [],
+    "created": null,
+    "notes": {},
+    "annotation": {},
+    "info": "<engineering_fba_677> SBML L3V1, fbc-v2"
+  },
+  "compartments": [
+    [
+      "c",
+      "fixture compartment"
+    ]
+  ],
+  "all_compartment_descriptions": {
+    "c": "fixture compartment"
+  },
+  "genes": [
+    {
+      "id": "one",
+      "name": "fixture gene one",
+      "annotation": {},
+      "notes": {}
+    },
+    {
+      "id": "two",
+      "name": "fixture gene two",
+      "annotation": {},
+      "notes": {}
+    }
+  ],
+  "reactions": [
+    {
+      "id": "IN",
+      "gpr": "",
+      "gene_ids_in_model_order": [],
+      "stoichiometry": [
+        {
+          "metabolite_id": "A_c",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AB",
+      "gpr": "one and two",
+      "gene_ids_in_model_order": [
+        "one",
+        "two"
+      ],
+      "stoichiometry": [
+        {
+          "metabolite_id": "A_c",
+          "coefficient": {
+            "value": -1.0,
+            "state": "finite",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0"
+          }
+        },
+        {
+          "metabolite_id": "B_c",
+          "coefficient": {
+            "value": 1.0,
+            "state": "finite",
+            "native_token": "1.0",
+            "float_hex": "0x1.0000000000000p+0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "OUT",
+      "gpr": "",
+      "gene_ids_in_model_order": [],
+      "stoichiometry": [
+        {
+          "metabolite_id": "B_c",
+          "coefficient": {
+            "value": -1.0,
+            "state": "finite",
+            "native_token": "-1.0",
+            "float_hex": "-0x1.0000000000000p+0"
+          }
+        }
+      ]
+    }
+  ]
+}

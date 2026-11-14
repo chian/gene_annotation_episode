@@ -5,14 +5,14 @@ import hashlib
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import intervention_analysis_native as native
-from gene_annotation_episode import bvbrc_intervention_contracts as contracts
-from gene_annotation_episode import bvbrc_intervention_bundle_adapter as shared
-from gene_annotation_episode import bvbrc_tnseq_bundle_adapter as tnseq
-from gene_annotation_episode import bvbrc_rnaseq_bundle_adapter as rnaseq
-from gene_annotation_episode import bvbrc_application_returns as returns
-from gene_annotation_episode.bvbrc_appservice_adapters import bind_adapters
-from gene_annotation_episode.execution_contracts import canonical
+from gene_annotation_episode.episodic_workflow.root.a106 import intervention_analysis_native as native
+from gene_annotation_episode.episodic_workflow.root.a106 import bvbrc_intervention_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.a106 import bvbrc_intervention_bundle_adapter as shared
+from gene_annotation_episode.episodic_workflow.root.a106 import bvbrc_tnseq_bundle_adapter as tnseq
+from gene_annotation_episode.episodic_workflow.root.a106 import bvbrc_rnaseq_bundle_adapter as rnaseq
+from gene_annotation_episode.episodic_workflow.root.a106.library import bvbrc_application_facts as returns
+from gene_annotation_episode.episodic_workflow.root.a106.bvbrc_appservice_adapters import bind_adapters
+from gene_annotation_episode.episodic_workflow.root.a106.execution_contracts import canonical
 from test_bvbrc_annotation_bundle_adapter import arguments as annotation_arguments
 
 TRANSIT = (b"#Resampling\n#Normalization: TTR; pseudocount=1\n"

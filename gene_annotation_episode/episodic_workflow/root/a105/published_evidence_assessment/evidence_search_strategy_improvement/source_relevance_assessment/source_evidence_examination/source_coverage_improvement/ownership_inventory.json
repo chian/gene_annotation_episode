@@ -1,0 +1,3432 @@
+{
+  "binding_path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+  "role": "literature_ordered",
+  "original_methods": {
+    "episode": [
+      "__init__",
+      "_a105_aggregation_repository",
+      "_active_site_repository",
+      "_assay_grading_repository",
+      "_assay_grading_source_cells",
+      "_binding_interaction_model_repository",
+      "_channel_repository",
+      "_compiled_assay_repository",
+      "_compiled_assay_v2_repository",
+      "_compiled_assay_v3_repository",
+      "_completion_time_repository",
+      "_concentration_window_display_context",
+      "_concentration_window_repository",
+      "_controlled_response_bindings",
+      "_controlled_response_repository",
+      "_enabled",
+      "_endpoint_signal_display_context",
+      "_endpoint_signal_repository",
+      "_gel_bindings",
+      "_gel_display_context",
+      "_gel_repository",
+      "_ion_discrimination_repository",
+      "_kinetic_model_repository",
+      "_measurement_comparison_display_context",
+      "_measurement_comparison_repository",
+      "_measurement_validation_repository",
+      "_native_rate_display_context",
+      "_native_rate_domain_display_context",
+      "_native_rate_meaning_display_context",
+      "_native_rate_meaning_repository",
+      "_owned_population_task_sources",
+      "_parent_depletion_repository",
+      "_population_routes",
+      "_population_task_context",
+      "_product_coupling_repository",
+      "_product_partition_repository",
+      "_rate_grid_repository",
+      "_ratio_source_repository",
+      "_received_fact_display_context",
+      "_required_grading_repository",
+      "_role",
+      "_stoichiometric_balance_repository",
+      "_summary_precision_display_context",
+      "_summary_precision_repository",
+      "accept_reasoning_action_schema",
+      "allowed_children",
+      "as_record",
+      "catalog",
+      "child_roles",
+      "contract_information_configuration",
+      "contract_information_profile",
+      "decision_context",
+      "execute",
+      "execute_reasoning",
+      "initial_decision_context",
+      "instructions",
+      "literature_amount_repository",
+      "literature_assay_repository",
+      "literature_binding_interaction_repository",
+      "literature_binding_model_repository",
+      "literature_binding_repository",
+      "literature_calibration_recovery_repository",
+      "literature_controlled_response_repository",
+      "literature_figure_repository",
+      "literature_gel_repository",
+      "literature_kinetic_repository",
+      "literature_optical_repository",
+      "literature_quantity_repository",
+      "literature_rate_observation_repository",
+      "literature_rate_replicate_repository",
+      "literature_rate_repository",
+      "literature_ratio_repository",
+      "literature_ratio_source_repository",
+      "literature_transport_repository",
+      "permitted_common_actions",
+      "reasoning_action_schema",
+      "reasoning_has_task_content",
+      "reference_evidence"
+    ],
+    "requests": [
+      "_materialize_text_arguments",
+      "_tool_arguments",
+      "_validate_assignment",
+      "_validate_page",
+      "assignment_schema",
+      "child_assignment_schema",
+      "prepare_assignment"
+    ],
+    "returns": [
+      "_artifact",
+      "_complete_requested_received_arrays",
+      "_rate_fact_sources",
+      "_rate_facts",
+      "_require",
+      "_within_source",
+      "current_report_facts",
+      "fact_sources",
+      "facts",
+      "received_evidence_tokens",
+      "received_form_references",
+      "received_report_facts",
+      "received_report_sources",
+      "resolve",
+      "validate_received_report",
+      "validate_report"
+    ]
+  },
+  "method_destinations": {
+    "__init__": "configuration.py",
+    "reference_evidence": "configuration.py",
+    "as_record": "binding_record.py",
+    "instructions": "goal.py",
+    "initial_decision_context": "internal_summary.py",
+    "decision_context": "internal_summary.py",
+    "_owned_population_task_sources": "internal_summary.py",
+    "_population_task_context": "internal_summary.py",
+    "_concentration_window_display_context": "internal_summary.py",
+    "_measurement_comparison_display_context": "internal_summary.py",
+    "_summary_precision_display_context": "internal_summary.py",
+    "_endpoint_signal_display_context": "internal_summary.py",
+    "_controlled_response_bindings": "internal_summary.py",
+    "_gel_bindings": "internal_summary.py",
+    "_gel_display_context": "internal_summary.py",
+    "_received_fact_display_context": "internal_summary.py",
+    "_native_rate_display_context": "internal_summary.py",
+    "_native_rate_domain_display_context": "internal_summary.py",
+    "_native_rate_meaning_display_context": "internal_summary.py",
+    "literature_rate_repository": "scientific_records.py",
+    "literature_calibration_recovery_repository": "scientific_records.py",
+    "literature_rate_observation_repository": "scientific_records.py",
+    "literature_rate_replicate_repository": "scientific_records.py",
+    "literature_quantity_repository": "scientific_records.py",
+    "literature_assay_repository": "scientific_records.py",
+    "literature_amount_repository": "scientific_records.py",
+    "literature_optical_repository": "scientific_records.py",
+    "literature_kinetic_repository": "scientific_records.py",
+    "literature_binding_interaction_repository": "scientific_records.py",
+    "literature_ratio_repository": "scientific_records.py",
+    "literature_binding_repository": "scientific_records.py",
+    "literature_binding_model_repository": "scientific_records.py",
+    "literature_transport_repository": "scientific_records.py",
+    "literature_figure_repository": "scientific_records.py",
+    "literature_ratio_source_repository": "scientific_records.py",
+    "literature_controlled_response_repository": "scientific_records.py",
+    "literature_gel_repository": "scientific_records.py",
+    "_required_grading_repository": "scientific_records.py",
+    "_endpoint_signal_repository": "scientific_records.py",
+    "_concentration_window_repository": "scientific_records.py",
+    "_measurement_comparison_repository": "scientific_records.py",
+    "_summary_precision_repository": "scientific_records.py",
+    "_rate_grid_repository": "scientific_records.py",
+    "_compiled_assay_repository": "scientific_records.py",
+    "_compiled_assay_v2_repository": "scientific_records.py",
+    "_compiled_assay_v3_repository": "scientific_records.py",
+    "_product_coupling_repository": "scientific_records.py",
+    "_measurement_validation_repository": "scientific_records.py",
+    "_ion_discrimination_repository": "scientific_records.py",
+    "_channel_repository": "scientific_records.py",
+    "_completion_time_repository": "scientific_records.py",
+    "_active_site_repository": "scientific_records.py",
+    "_assay_grading_source_cells": "scientific_records.py",
+    "_assay_grading_repository": "scientific_records.py",
+    "_a105_aggregation_repository": "scientific_records.py",
+    "_parent_depletion_repository": "scientific_records.py",
+    "_stoichiometric_balance_repository": "scientific_records.py",
+    "_product_partition_repository": "scientific_records.py",
+    "_binding_interaction_model_repository": "scientific_records.py",
+    "_kinetic_model_repository": "scientific_records.py",
+    "_ratio_source_repository": "scientific_records.py",
+    "_controlled_response_repository": "scientific_records.py",
+    "_gel_repository": "scientific_records.py",
+    "_native_rate_meaning_repository": "scientific_records.py",
+    "_population_routes": "scientific_records.py",
+    "permitted_common_actions": "task.py",
+    "reasoning_action_schema": "task.py",
+    "accept_reasoning_action_schema": "task.py",
+    "reasoning_has_task_content": "task.py",
+    "execute_reasoning": "task.py",
+    "catalog": "task.py",
+    "execute": "task.py",
+    "assignment_schema": "from_parent.py",
+    "_validate_page": "from_parent.py",
+    "_validate_assignment": "from_parent.py",
+    "prepare_assignment": "from_parent.py",
+    "_tool_arguments": "source_operations.py",
+    "_materialize_text_arguments": "source_operations.py",
+    "_require": "source_references.py",
+    "_artifact": "source_references.py",
+    "_within_source": "source_references.py",
+    "fact_sources": "to_parent.py",
+    "facts": "to_parent.py",
+    "current_report_facts": "to_parent.py",
+    "_rate_fact_sources": "to_parent.py",
+    "_rate_facts": "to_parent.py",
+    "validate_received_report": "to_parent.py",
+    "resolve": "to_parent.py",
+    "validate_report": "to_parent.py",
+    "received_report_sources": "received_evidence.py",
+    "received_report_facts": "received_evidence.py",
+    "_complete_requested_received_arrays": "received_evidence.py",
+    "received_form_references": "received_evidence.py",
+    "received_evidence_tokens": "received_evidence.py",
+    "child_assignment_schema": "episode.py",
+    "_enabled": "episode.py",
+    "contract_information_configuration": "episode.py",
+    "contract_information_profile": "episode.py",
+    "_role": "episode.py",
+    "allowed_children": "episode.py",
+    "child_roles": "episode.py"
+  },
+  "limitations": [
+    "Named counterpart messages, binding schema role narrowing, scientific helper ownership, full saved restoration and live science remain separate work."
+  ],
+  "private_task_methods": {
+    "__init__": "task_state.py",
+    "bind_execution_context": "task_state.py",
+    "suspension_changed": "task_state.py",
+    "record_execution_failure": "task_state.py",
+    "call": "task_decision.py",
+    "instructions": "task_decision.py",
+    "conversation_key": "task_decision.py",
+    "interpretation_context": "task_decision.py",
+    "exchange_schema": "task_decision.py",
+    "exchange_response": "task_decision.py",
+    "validate_contract_exchange_request": "task_decision.py",
+    "validate_contract_exchange_history": "task_decision.py",
+    "exchange_decision": "task_decision.py",
+    "next": "task.py",
+    "restore_checkpoint": "task_state.py",
+    "restore": "task_state.py",
+    "record_effect": "task_state.py",
+    "checkpoint": "task_state.py",
+    "apply_response": "task.py",
+    "execute": "task.py",
+    "finish": "task.py"
+  },
+  "runtime_infrastructure": "Axis runtime records, exceptions, schema transport and numerical loop; imported with original type identities.",
+  "fixed_role_narrowing": {
+    "role": "literature_ordered",
+    "removed_branches": [
+      "scientific_process context validation",
+      "job-role instruction selection",
+      "job-role input provider",
+      "job-role receipt bypass",
+      "wait instructions unavailable to literature"
+    ],
+    "preserved_replay": "Original waiting-result replay remains for historical action compatibility."
+  },
+  "incoming_exchange": {
+    "role": "literature_ordered",
+    "parent_request": "to_child_source_coverage_improvement.py",
+    "child_admission": "source_coverage_improvement/from_parent.py",
+    "child_report": "source_coverage_improvement/to_parent.py",
+    "parent_receipt": "from_child_source_coverage_improvement.py",
+    "runtime": "Workflow.selected and Workflow._receive_form; original saved child role selects counterpart for delivery/replay."
+  },
+  "progress_implementation": {
+    "goal_functions": [
+      "_return_components",
+      "_return_sources",
+      "_task_key",
+      "_yield_kind",
+      "commissioned_task",
+      "continuation_task",
+      "required_source",
+      "task_schema",
+      "task_schema_variants",
+      "validate_commission"
+    ],
+    "credit_symbols": [
+      "LiteratureTaskCredit",
+      "_current_assessments",
+      "_resolve",
+      "assembled_answers",
+      "graded_experiment_answers",
+      "lead_dispositions",
+      "lead_return_schema",
+      "lead_schema",
+      "measured_answers",
+      "screening_answers",
+      "screening_schema",
+      "validate_lead"
+    ],
+    "yield_symbols": [
+      "_FiniteLiteratureYieldController",
+      "_RemainingCommissionedCredit",
+      "_private_yield_controller",
+      "validate_yield_bindings"
+    ],
+    "originals": [
+      "literature_task_credit.py",
+      "literature_credit_policy.py"
+    ],
+    "scientific_scores": "Separate unchanged A105 grading and aggregation operands; no invented progress.",
+    "external_remaining": "Axis helper modules still supply schema/report helpers to infrastructure; retirement of now-unused original classes and library placement require caller audit."
+  },
+  "scientific_invocation": {
+    "grading": "grading/experimental_interpretation.py + grading/assay_subscoring.py",
+    "scoring": "scoring/experimental_main_sheet.py",
+    "moves": [
+      {
+        "source": "task.py",
+        "destination": "grading/experimental_interpretation.py",
+        "symbols": [
+          "accept_reasoning_action_schema",
+          "execute_reasoning",
+          "reasoning_action_schema",
+          "reasoning_has_task_content"
+        ],
+        "original_method_sha256": {
+          "reasoning_action_schema": "64218a6da9bea29c98d8d2166a8b7ffcbc579db47d9aca1e39692140652b40d8",
+          "accept_reasoning_action_schema": "f2f80427d0786ce117afe63cace9998918da74f655dd40e52de23e66d4152df4",
+          "reasoning_has_task_content": "8182ca9206b0d2ded36eb3b544c2ed7e5222b7ae8ca123aa2ccce98ed7de18a2",
+          "execute_reasoning": "210fe15e13adbdca9c956bd155d588abcfd9b5023dd4ed6e54b0adb86b641392"
+        }
+      },
+      {
+        "source": "scientific_records.py",
+        "destination": "grading/assay_subscoring.py",
+        "symbols": [
+          "_assay_grading_repository",
+          "_required_grading_repository"
+        ],
+        "original_method_sha256": {
+          "_required_grading_repository": "b2a8860fdcbe8d4ffef0bf676a7d245755e71cda0b5a6466b2ecae655bd33522",
+          "_assay_grading_repository": "846473ce091d040f6b4fcdd40b046854d8e6c482ec6fe912baa7c13df54b176f"
+        }
+      },
+      {
+        "source": "scientific_records.py",
+        "destination": "scoring/experimental_main_sheet.py",
+        "symbols": [
+          "_a105_aggregation_repository"
+        ],
+        "original_method_sha256": {
+          "_a105_aggregation_repository": "70990c63a036def577c6f7b5b1b2400575a9d32d00d7613aff58a214c6e7af43"
+        }
+      }
+    ],
+    "scientific_preservation": "Original same-action interpretation, source/assay correspondence, purpose-specific grading, sheet persistence and typed investigation_finding precede original credit. No formula or unavailable-result semantics changed.",
+    "remaining_dependency_scope": "Reusable scientific calculations/readers/storage and prompts require library ownership classification; existing pilot retains its established independent scientific sources."
+  },
+  "instruction_ownership": {
+    "composer": "task_instructions.py:instructions",
+    "text_library": "library/literature_investigation_prompt.py",
+    "removed_branches": "job-source and wait guidance unavailable to the fourteen original literature roles",
+    "default_fallback": "runtime_prompt.py retains original composition for bindings without private composers",
+    "fingerprint": "private .py sources and selected original scientific instruction text library"
+  }
+,
+  "current_source_ownership_20261113": {
+  "binding_class": "LiteratureEpisode",
+  "binding_path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+  "decision_source_type": "LiteratureTask",
+  "declared_commissioning_parent": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination",
+  "directional_connections": [],
+  "grading_files": [
+    "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/__init__.py",
+    "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/assay_subscoring.py",
+    "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/experimental_interpretation.py"
+  ],
+  "limits": "This is a current source-file and lexical-declaration account, not a runtime import-closure, executed descriptor, workflow-restoration, autonomous-science or full shared-root integration claim. Earlier dated receipts retain their original scopes and outcomes. Existing metadata outside this latest section remains historical where it conflicts with this explicitly listed source scope.",
+  "owned_sources": [
+    {
+      "declarations": [],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/__init__.py",
+      "sha256": "5384bfdb2df380b6557cc7a71d16891415bccaa87699406e236f752c6415389f"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 7,
+          "name": "LiteratureBindingRecord"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 9,
+          "name": "as_record"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/binding_record.py",
+      "sha256": "81bc8de86a31030f36851492c6a6955719ba6db778ae6cad06d3dcfda49c0d08"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 5,
+          "name": "LiteratureConfiguration"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 7,
+          "name": "__init__"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 109,
+          "name": "reference_evidence"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/configuration.py",
+      "sha256": "16e83b24e8b3251f3a4fd00c5fa8c02d55f36b28af8b80abdb98a38c2d881ff6"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 19,
+          "name": "_resolve"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 31,
+          "name": "lead_schema"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 35,
+          "name": "lead_return_schema"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 43,
+          "name": "validate_lead"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 67,
+          "name": "read_source"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 80,
+          "name": "lead_dispositions"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 86,
+          "name": "own"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 90,
+          "name": "received"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 106,
+          "name": "screening_schema"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 109,
+          "name": "_current_assessments"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 116,
+          "name": "screening_answers"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 142,
+          "name": "LiteratureTaskCredit"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 144,
+          "name": "_scientific_credit_invocation"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 169,
+          "name": "as_record"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 173,
+          "name": "__call__"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 193,
+          "name": "_answers"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 212,
+          "name": "measured_answers"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 229,
+          "name": "graded_experiment_answers"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 252,
+          "name": "assembled_answers"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 273,
+          "name": "LiteratureCredit"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 275,
+          "name": "credit_kind"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 279,
+          "name": "credit_view"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 286,
+          "name": "credit_projector"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/credit.py",
+      "sha256": "cf4609f2f35cbcc942a8d6d656136f95d4a444ec322be8ae75ba46fce3588a9f"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 5,
+          "name": "prepare_completed_work"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 11,
+          "name": "decision_yield_table"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/decision_presentation.py",
+      "sha256": "1c582835b449b3c1c07d500765c4cdfc5b70a8c01c0e765b229326b942d2e339"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 26,
+          "name": "LiteratureEpisode"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 35,
+          "name": "_enabled"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 38,
+          "name": "contract_information_configuration"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 41,
+          "name": "contract_information_profile"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 47,
+          "name": "_role"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 52,
+          "name": "allowed_children"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 56,
+          "name": "child_roles"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 60,
+          "name": "child_assignment_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 63,
+          "name": "context_hook_applies"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py",
+      "sha256": "427e9f5020c49efb7330a838aa254999d0ab500b2d85127927702a52a15b4d0b"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "LiteratureAssignment"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "assignment_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 113,
+          "name": "_validate_page"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 121,
+          "name": "_validate_assignment"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 140,
+          "name": "prepare_assignment"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 173,
+          "name": "_parent_page_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 276,
+          "name": "_validate_parent_page"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/from_parent.py",
+      "sha256": "a913f6ecb4544c8ee1d15760d5efd2f025dfbd2a232a089cc158a9223d02dc7f"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 17,
+          "name": "_yield_kind"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 20,
+          "name": "_task_key"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 26,
+          "name": "task_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 30,
+          "name": "task_object"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 36,
+          "name": "_return_sources"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 46,
+          "name": "_return_components"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 57,
+          "name": "commissioned_task"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 92,
+          "name": "continuation_task"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 96,
+          "name": "task_schema_variants"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 101,
+          "name": "required_source"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 110,
+          "name": "validate_commission"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 122,
+          "name": "LiteratureGoal"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 124,
+          "name": "instructions"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 128,
+          "name": "planning_context"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/goal.py",
+      "sha256": "eae89a7e2699f5f8788e81e7cae4d854edecc444d6d25520255d47506cc29509"
+    },
+    {
+      "declarations": [],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "AssaySubscoring"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "_required_grading_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 13,
+          "name": "_assay_grading_repository"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/assay_subscoring.py",
+      "sha256": "fa32f1abe05cda3a1ca5da76b452311f795eb0fe197f57dba0f2cf76cf6fee03"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 15,
+          "name": "ExperimentalInterpretation"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 17,
+          "name": "reasoning_action_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 28,
+          "name": "accept_reasoning_action_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 32,
+          "name": "reasoning_has_task_content"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 43,
+          "name": "execute_reasoning"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/experimental_interpretation.py",
+      "sha256": "e2ad4c02a72407194e33f494a2c960499db82ffeb12845bfeff98dde3ef2503e"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "LiteratureSummary"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "initial_decision_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 40,
+          "name": "decision_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 79,
+          "name": "_owned_population_task_sources"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 115,
+          "name": "_population_task_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 129,
+          "name": "_concentration_window_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 132,
+          "name": "_measurement_comparison_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 138,
+          "name": "_summary_precision_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 144,
+          "name": "_endpoint_signal_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 149,
+          "name": "_controlled_response_bindings"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 167,
+          "name": "_gel_bindings"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 185,
+          "name": "_gel_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 201,
+          "name": "_received_fact_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 223,
+          "name": "_native_rate_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 253,
+          "name": "_native_rate_domain_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 283,
+          "name": "_native_rate_meaning_display_context"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/internal_summary.py",
+      "sha256": "ac175fcbd5bb9fae6a9b6acaaf7a4747349aa6dd62a7751cc658c2acb076fe07"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 5,
+          "name": "LiteratureReceivedEvidence"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 7,
+          "name": "received_report_sources"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 10,
+          "name": "received_report_facts"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 30,
+          "name": "_complete_requested_received_arrays"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 46,
+          "name": "received_form_references"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 136,
+          "name": "received_evidence_tokens"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/received_evidence.py",
+      "sha256": "f3b39ff7ae899f657b2a1452a9fb1348e75fa9362a189c3837dfb06042946f3a"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "LiteratureScientificRecords"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "literature_rate_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 17,
+          "name": "literature_calibration_recovery_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 24,
+          "name": "literature_rate_observation_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 31,
+          "name": "literature_rate_replicate_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 38,
+          "name": "literature_quantity_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 45,
+          "name": "literature_assay_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 52,
+          "name": "literature_amount_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 59,
+          "name": "literature_optical_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 66,
+          "name": "literature_kinetic_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 73,
+          "name": "literature_binding_interaction_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 80,
+          "name": "literature_ratio_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 87,
+          "name": "literature_binding_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 94,
+          "name": "literature_binding_model_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 101,
+          "name": "literature_transport_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 108,
+          "name": "literature_figure_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 115,
+          "name": "literature_ratio_source_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 125,
+          "name": "literature_controlled_response_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 135,
+          "name": "literature_gel_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 145,
+          "name": "_endpoint_signal_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 152,
+          "name": "_concentration_window_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 158,
+          "name": "_measurement_comparison_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 164,
+          "name": "_summary_precision_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 170,
+          "name": "_rate_grid_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 173,
+          "name": "_compiled_assay_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 180,
+          "name": "_compiled_assay_v2_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 183,
+          "name": "_compiled_assay_v3_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 186,
+          "name": "_product_coupling_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 193,
+          "name": "_measurement_validation_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 200,
+          "name": "_ion_discrimination_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 207,
+          "name": "_channel_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 214,
+          "name": "_completion_time_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 221,
+          "name": "_active_site_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 228,
+          "name": "_assay_grading_source_cells"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 245,
+          "name": "_parent_depletion_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 251,
+          "name": "_stoichiometric_balance_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 257,
+          "name": "_product_partition_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 264,
+          "name": "_binding_interaction_model_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 271,
+          "name": "_kinetic_model_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 278,
+          "name": "_ratio_source_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 281,
+          "name": "_controlled_response_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 284,
+          "name": "_gel_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 287,
+          "name": "_native_rate_meaning_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 291,
+          "name": "_population_routes"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/scientific_records.py",
+      "sha256": "c36f00e36a54df7454a58f0bbcffba293f40765f8d4a0c507e52de9fd8887044"
+    },
+    {
+      "declarations": [],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/scoring/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "ExperimentalMainSheet"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "_a105_aggregation_repository"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/scoring/experimental_main_sheet.py",
+      "sha256": "31bd1c691210444aef6e03576b7156bb846952a95798cc9c90dab8422e04b9ec"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 31,
+          "name": "_implementation_path"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 40,
+          "name": "_required_grading_logic"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 47,
+          "name": "_population_catalog"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 56,
+          "name": "_binding_source_bytes"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_contracts.py",
+      "sha256": "7de886aecdc160618601a3c3e2fda41bd626033e6da131393ed4776a93fb343e"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "LiteratureSourceOperations"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "_tool_arguments"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 64,
+          "name": "_materialize_text_arguments"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_operations.py",
+      "sha256": "3127df0e8e5c95b76f816d64cf8c02259edab4f1a8719bd6d308305118368c79"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 5,
+          "name": "LiteratureReferences"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 7,
+          "name": "_require"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 13,
+          "name": "_artifact"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 20,
+          "name": "_within_source"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_references.py",
+      "sha256": "e0fcc21b63a7318b029a9985093ee1208ab526b23a71208a9c2343412097608c"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "LiteratureOperations"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 82,
+          "name": "LiteratureTask"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "permitted_common_actions"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 12,
+          "name": "catalog"
+        },
+        {
+          "indent": 4,
+          "kind": "async def",
+          "line": 38,
+          "name": "execute"
+        },
+        {
+          "indent": 4,
+          "kind": "async def",
+          "line": 85,
+          "name": "next"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 182,
+          "name": "apply_response"
+        },
+        {
+          "indent": 4,
+          "kind": "async def",
+          "line": 240,
+          "name": "execute"
+        },
+        {
+          "indent": 4,
+          "kind": "async def",
+          "line": 296,
+          "name": "finish"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py",
+      "sha256": "4bf1fa60b321762dd0e856451adc10ae723d27e1989f4607fb9d2f53261f4603"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 7,
+          "name": "LiteratureTaskDecision"
+        },
+        {
+          "indent": 4,
+          "kind": "async def",
+          "line": 9,
+          "name": "call"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 115,
+          "name": "instructions"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 118,
+          "name": "decision_completion"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 147,
+          "name": "conversation_key"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 151,
+          "name": "interpretation_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 163,
+          "name": "exchange_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 166,
+          "name": "exchange_response"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 190,
+          "name": "validate_contract_exchange_request"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 220,
+          "name": "validate_contract_exchange_history"
+        },
+        {
+          "indent": 4,
+          "kind": "async def",
+          "line": 263,
+          "name": "exchange_decision"
+        },
+        {
+          "indent": 8,
+          "kind": "async def",
+          "line": 122,
+          "name": "complete_private_decision"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_decision.py",
+      "sha256": "5ce1eb69d8fb41a4a14c675257b3b9ceb7fa264995f458eed60beadd252943b0"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 4,
+          "name": "instructions"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_instructions.py",
+      "sha256": "1d1eff321e929522f8f2170132c041f192272e7ddc0acfeddc88dce405f48917"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 5,
+          "name": "LiteratureTaskState"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 7,
+          "name": "__init__"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 30,
+          "name": "bind_execution_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 33,
+          "name": "suspension_changed"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 38,
+          "name": "record_execution_failure"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 61,
+          "name": "restore_checkpoint"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 70,
+          "name": "restore"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 94,
+          "name": "record_effect"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 100,
+          "name": "checkpoint"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_state.py",
+      "sha256": "58f4add06f692daecb1c19b7352d696a3a38a4cb524a243b65980edeb7729bd1"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 7,
+          "name": "LiteratureReport"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 9,
+          "name": "fact_sources"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 17,
+          "name": "facts"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 30,
+          "name": "current_report_facts"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 41,
+          "name": "_rate_fact_sources"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 117,
+          "name": "_rate_facts"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 194,
+          "name": "validate_received_report"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 315,
+          "name": "resolve"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 319,
+          "name": "validate_report"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/to_parent.py",
+      "sha256": "97c1af9867ded24d2791db5bfd1a28e68345c160cba082a39ee4baa6afdf3b9a"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 4,
+          "name": "LiteratureWaiting"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 7,
+          "name": "supports_wait"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/waiting.py",
+      "sha256": "f45239551330955d2b267514aa11c3222d709668e055beadcea5b5c787b477f7"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 17,
+          "name": "validate_yield_bindings"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 39,
+          "name": "_RemainingCommissionedCredit"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 44,
+          "name": "__call__"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 59,
+          "name": "as_record"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 62,
+          "name": "_private_yield_controller"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 78,
+          "name": "_FiniteLiteratureYieldController"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 81,
+          "name": "__init__"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 85,
+          "name": "transitioned"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 92,
+          "name": "LiteratureYield"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 94,
+          "name": "continuation_task"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 99,
+          "name": "yield_controller"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/yield.py",
+      "sha256": "611d68a9a949bb7bb5e2eca9d19bb0efc35586ce0fe854c7bc619957a0fa7512"
+    }
+  ],
+  "registered_provider_preservation": {
+    "actual_controls": {
+      "actual42": {
+        "inputs": {
+          "path": "runs/main_a105_a108_registered_provider42_binding_01/prepared/INPUTS.json",
+          "sha256": "2db85cb9c396822a11ad4b742ba2af97b2aca30ea1484fe9e8b5b47bc260c1d6"
+        },
+        "post_exit": {
+          "path": "runs/main_a105_a108_registered_provider42_01/post-exit.json",
+          "sha256": "bffcf40fdb66e7ac0f46d1ff51225a372e4ec98efb76eaf6e959fa66db523666"
+        },
+        "verification": {
+          "path": "runs/main_a105_a108_registered_provider42_01/verification.json",
+          "sha256": "2d327644e656e817190fbb345a52a83f46fbc7275ef7d01ad4eddbe1cd4f9305"
+        },
+        "workflow": {
+          "path": "runs/main_a105_a108_registered_provider42_01/workflow-result.json",
+          "sha256": "e7075e47cf7627069d751757b5399689ba0ea0386bf28d01914578933e0695d5"
+        }
+      },
+      "actual42_case_selection": {
+        "path": "runs/main_a105_a108_registered_provider42_binding_01/prepared/SELECTED42.json",
+        "sha256": "3856e3fda5bbe427880cf0085d062bb795f89da085db1272509cbcf054fa675a"
+      },
+      "actual42_source_selection": {
+        "path": "runs/main_a105_a108_registered_provider42_binding_01/prepared/SOURCE_SELECTION.json",
+        "sha256": "e581a51888fac4785c72c45fa38040739b7a81dcb1fb031e9227548b73ca029b"
+      },
+      "actual_policy22_union": {
+        "path": "runs/main_a105_a108_registered_policy22_union_01/prepared/ACTUAL22_UNION.json",
+        "sha256": "c121cfd52fa56faf98f2f35ce4852ccda6d76c42f211c67ff0afaacf074f0e8b"
+      },
+      "actual_retry20": {
+        "inputs": {
+          "path": "runs/main_a105_a108_registered_policy20_binding_03/prepared/INPUTS.json",
+          "sha256": "6d3cd05a5d28ce2273752dae94a96ac8bc1e8dfff8dcf10518f05a39446ba25e"
+        },
+        "post_exit": {
+          "path": "runs/main_a105_a108_registered_policy20_01/post-exit.json",
+          "sha256": "d4b391eb1e11d81fd6de827bce12d2c1b1aa591176f59cae99bad8c2f8619abb"
+        },
+        "verification": {
+          "path": "runs/main_a105_a108_registered_policy20_01/verification.json",
+          "sha256": "9f74a0c3d0e9cb6b2489a955a23731d7fec67ca0c625d70882b4ca0be0a26379"
+        },
+        "workflow": {
+          "path": "runs/main_a105_a108_registered_policy20_01/workflow-result.json",
+          "sha256": "c16572c5a623622afda46ba91b46bacc63c06bd9422520c4c2299c5040ac438e"
+        }
+      },
+      "case_counts": {
+        "affected_retry": 20,
+        "applicable_policy_union": 22,
+        "original_provider_epoch": 42,
+        "retained_cold": 2
+      },
+      "case_selection": {
+        "path": "runs/main_a105_a108_registered_policy20_binding_03/prepared/SELECTED20.json",
+        "sha256": "dbdd200483220d3f0013c7e48aaaf20bfbd5f2e53fa15daccd9269c4580e2c93"
+      },
+      "installation_status_authority": {
+        "completion_requires": "Actual source/test/metadata application and successful installed membership/hash/mode postchecks.",
+        "path": "docs/EVIDENCE_AXIS_LEDGER.md"
+      },
+      "limits": [
+        "Actual nominal registrations and original/current applicable callbacks with explicit Scientific prerequisites.",
+        "No acquired model/native action, foreign-role reassignment or scientific assessment.",
+        "Cold instruction entries prove original prompt module identity and confined selected origins."
+      ],
+      "original_failed22": {
+        "imports": {
+          "path": "runs/main_a105_a108_registered_policy22_01/actual_imports.json",
+          "sha256": "cf5a6b9bd34df92f5c65391f237aa5e4f4a04171474ddfba4bf5cd94f6840136"
+        },
+        "inputs": {
+          "path": "runs/main_a105_a108_registered_policy22_binding_02/prepared/INPUTS.json",
+          "sha256": "29fe1b07c9d1cd7d0c808c04d92ee2f08f632b10933938cbc5e759ecf1a6ca97"
+        },
+        "post_exit": {
+          "path": "runs/main_a105_a108_registered_policy22_01/post-exit.json",
+          "sha256": "c5545daecbd3af8b94daaee6fe12d1c1b60d0ca04d4cf7c195521c1dbfbe49e1"
+        },
+        "verification": {
+          "path": "runs/main_a105_a108_registered_policy22_01/verification.json",
+          "sha256": "92379beeea6f1e1dc737f81f984fc3484a3bd3e285b122a6c44e4e9570e47e13"
+        },
+        "workflow": {
+          "path": "runs/main_a105_a108_registered_policy22_01/workflow-result.json",
+          "sha256": "6f67df0ded85d0d437f8729d4a1886324f79f1a00519fa7bbefcb54a12ea3b64"
+        }
+      },
+      "previous_control_results_reopened": false,
+      "previous_installed204": {
+        "application": {
+          "path": "runs/main_a105_a108_final204_application_02/application/application.json",
+          "sha256": "6ed9356e205934f8dd400c0093445979ae1018dc81563ff233105a341f1d544c"
+        },
+        "inputs": {
+          "path": "runs/main_a105_a108_final204_binding_02/prepared/INPUTS.json",
+          "sha256": "125528fbb67530bda2aee623f15b36fadd033c7915669a78ba036364021cb5e1"
+        },
+        "post_exit": {
+          "path": "runs/main_a105_a108_final204_application_02/post-exit.json",
+          "sha256": "d1f5f888f690806a571d158560b15da614fb085c7d86e7284b9e2df8efd14f8f"
+        }
+      },
+      "prior42_reexecution_or_all192_behavior_claimed": false,
+      "retained_cold2": {
+        "path": "runs/main_a105_a108_registered_policy20_binding_03/prepared/RETAINED_COLD2.json",
+        "sha256": "a0f724b30e37726dcdfa237d73f8ac6b287d175a981bf6e03f0a5f37750ff0aa"
+      },
+      "shared_prerequisite_scope": "Two installed Scientific39 lazy A102/A103 map destinations; own192 production unchanged. Retained cold2 belongs to its original saved source tree; actual20 uses current prerequisites.",
+      "shared_prerequisite_transition": {
+        "path": "runs/main_a105_a108_registered_policy20_binding_03/prepared/CURRENT_PREREQUISITES.json",
+        "sha256": "ba34389e8102b5ad846175dd0d7f37b63e29097651e88aec07eba504699ac265"
+      },
+      "source_selection": {
+        "path": "runs/main_a105_a108_registered_policy20_binding_03/prepared/SOURCE_SELECTION.json",
+        "sha256": "2b36174d12ce204b2883beaed1aba2e1b5d532ef252dabfd7096f8e3fdfa3725"
+      }
+    },
+    "axis_account": {
+      "path": "runs/main_a105_a108_registered_policy68_metadata_01/prepared/a105/PROVIDER_ACCOUNT.json",
+      "sha256": "0b6997e52295f71fd075c77fc1da50b800e8b5e12e2733a329ebff97f3785c86"
+    },
+    "formula_account": {
+      "path": "runs/main_a105_a108_registered_policy68_metadata_01/prepared/a105/SOURCE_FORMULA_ACCOUNT.json",
+      "sha256": "b8cc3e5e90e3e26cc48ed621aed00143ae13fd0a7ef2bf25affa2af8183523fc"
+    },
+    "no_new_episode_role_or_scientific_policy": true,
+    "owned_consumer_targets": [
+      "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/decision_presentation.py",
+      "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py",
+      "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_decision.py",
+      "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_instructions.py",
+      "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_state.py"
+    ],
+    "permanent_axis_authority": "gene_annotation_episode/episodic_workflow/root/a105/ownership_inventory.json",
+    "selected_source_authority": {
+      "path": "runs/main_a105_a108_registered_policy22_binding_02/prepared/PRODUCTION_SOURCES.json",
+      "sha256": "03244f2f3378f840ea57a2c9ead962770203c0115f2e4bd7ffb8c81b5c8daf0a"
+    },
+    "source_proofs": [
+      {
+        "path": "runs/main_a105_a108_registered_providers_generation_01/prepared/PROOF.json",
+        "sha256": "0d94b2111f4e97b4527400d24bc2c02a23a0abe814486d91a23c778941eba44d"
+      },
+      {
+        "path": "runs/main_a105_a108_registered_policy_generation_02/prepared/PROOF.json",
+        "sha256": "4fbda26369115254f8b0ebc3842734a77428c85ec1d3e315610deb0c90b07267"
+      }
+    ]
+  },
+  "responsibility_files": {
+    "credit": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/credit.py",
+    "decision": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_decision.py",
+    "from_parent": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/from_parent.py",
+    "goal": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/goal.py",
+    "instruction_composition": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_instructions.py",
+    "internal_summary": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/internal_summary.py",
+    "invocation_state": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_state.py",
+    "task": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py",
+    "to_parent": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/to_parent.py",
+    "waiting": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/waiting.py",
+    "yield": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/yield.py"
+  },
+  "runtime_policy_dependencies": {
+    "actual_private_consumer": {
+      "home": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+      "private_binding_configuration": {
+        "path": "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py",
+        "sha256": "427e9f5020c49efb7330a838aa254999d0ab500b2d85127927702a52a15b4d0b"
+      },
+      "private_typed_report_owner": {
+        "path": "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/to_parent.py",
+        "sha256": "97c1af9867ded24d2791db5bfd1a28e68345c160cba082a39ee4baa6afdf3b9a"
+      },
+      "schema_caller": {
+        "path": "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py",
+        "sha256": "4bf1fa60b321762dd0e856451adc10ae723d27e1989f4607fb9d2f53261f4603"
+      },
+      "selection": "The existing dynamic Workflow lookup retains overrides. Its original fallback invokes standalone assembly with this actual private source and configured episode binding; no scientific projection or permission definition is moved out of that binding.",
+      "task": {
+        "path": "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py",
+        "sha256": "4bf1fa60b321762dd0e856451adc10ae723d27e1989f4607fb9d2f53261f4603"
+      }
+    },
+    "conditional_dependencies": "Shared child APIs retain original root-policy hooks; the Scientific snapshot helper runs only at its original identity predicate. Listing those reachable providers does not claim this Literature home executes Scientific enrichment.",
+    "descriptor_scope": {
+      "descriptor_execution_claimed": false,
+      "home": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+      "permanent_axis_record": "gene_annotation_episode/episodic_workflow/root/a105/ownership_inventory.json",
+      "section": "current_source_ownership_20261113.schema_report_policy_ownership.descriptor_source_membership_and_external_dependencies"
+    },
+    "direct_report_dispatch": "Private parent return retains the dynamic Workflow.facts call. The current fallback selects recorded_report_fact_assembly, then this binding supplies its original typed projection.",
+    "direct_schema_dispatch": "Private task retains the dynamic Workflow.action_schema call. The current fallback selects the standalone scientific_action_schema assembly using this actual private binding.",
+    "permanent_authority": {
+      "json_pointer": "/current_source_ownership_20261113/current_runtime_policy_dependencies",
+      "meaning": "Permanent current provider/consumer identity; retained run accounts are evidence, not runtime dependencies.",
+      "path": "gene_annotation_episode/episodic_workflow/root/a105/ownership_inventory.json"
+    },
+    "unchanged_private_configuration_and_science": true
+  },
+  "scoring_files": [
+    "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/scoring/__init__.py",
+    "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/scoring/experimental_main_sheet.py"
+  ]
+},
+  "source_ownership_before_registered_provider_policy192_20261113": {
+  "binding_class": "LiteratureEpisode",
+  "binding_path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+  "decision_source_type": "LiteratureTask",
+  "declared_commissioning_parent": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination",
+  "directional_connections": [],
+  "grading_files": [
+    "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/__init__.py",
+    "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/assay_subscoring.py",
+    "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/experimental_interpretation.py"
+  ],
+  "limits": "This is a current source-file and lexical-declaration account, not a runtime import-closure, executed descriptor, workflow-restoration, autonomous-science or full shared-root integration claim. Earlier dated receipts retain their original scopes and outcomes. Existing metadata outside this latest section remains historical where it conflicts with this explicitly listed source scope.",
+  "owned_sources": [
+    {
+      "declarations": [],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/__init__.py",
+      "sha256": "5384bfdb2df380b6557cc7a71d16891415bccaa87699406e236f752c6415389f"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 7,
+          "name": "LiteratureBindingRecord"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 9,
+          "name": "as_record"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/binding_record.py",
+      "sha256": "81bc8de86a31030f36851492c6a6955719ba6db778ae6cad06d3dcfda49c0d08"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 5,
+          "name": "LiteratureConfiguration"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 7,
+          "name": "__init__"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 109,
+          "name": "reference_evidence"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/configuration.py",
+      "sha256": "16e83b24e8b3251f3a4fd00c5fa8c02d55f36b28af8b80abdb98a38c2d881ff6"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 19,
+          "name": "_resolve"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 31,
+          "name": "lead_schema"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 35,
+          "name": "lead_return_schema"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 43,
+          "name": "validate_lead"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 67,
+          "name": "read_source"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 80,
+          "name": "lead_dispositions"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 86,
+          "name": "own"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 90,
+          "name": "received"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 106,
+          "name": "screening_schema"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 109,
+          "name": "_current_assessments"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 116,
+          "name": "screening_answers"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 142,
+          "name": "LiteratureTaskCredit"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 144,
+          "name": "_scientific_credit_invocation"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 169,
+          "name": "as_record"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 173,
+          "name": "__call__"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 193,
+          "name": "_answers"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 212,
+          "name": "measured_answers"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 229,
+          "name": "graded_experiment_answers"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 252,
+          "name": "assembled_answers"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 273,
+          "name": "LiteratureCredit"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 275,
+          "name": "credit_kind"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 279,
+          "name": "credit_view"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 286,
+          "name": "credit_projector"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/credit.py",
+      "sha256": "cf4609f2f35cbcc942a8d6d656136f95d4a444ec322be8ae75ba46fce3588a9f"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 5,
+          "name": "prepare_completed_work"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 12,
+          "name": "decision_yield_table"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/decision_presentation.py",
+      "sha256": "2944259f7f721c831f6d6fe244b1a280fac24720261cd50c71d8860f539a677d"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 26,
+          "name": "LiteratureEpisode"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 35,
+          "name": "_enabled"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 38,
+          "name": "contract_information_configuration"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 41,
+          "name": "contract_information_profile"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 47,
+          "name": "_role"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 52,
+          "name": "allowed_children"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 56,
+          "name": "child_roles"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 60,
+          "name": "child_assignment_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 63,
+          "name": "context_hook_applies"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py",
+      "sha256": "427e9f5020c49efb7330a838aa254999d0ab500b2d85127927702a52a15b4d0b"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "LiteratureAssignment"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "assignment_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 113,
+          "name": "_validate_page"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 121,
+          "name": "_validate_assignment"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 140,
+          "name": "prepare_assignment"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 173,
+          "name": "_parent_page_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 276,
+          "name": "_validate_parent_page"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/from_parent.py",
+      "sha256": "a913f6ecb4544c8ee1d15760d5efd2f025dfbd2a232a089cc158a9223d02dc7f"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 17,
+          "name": "_yield_kind"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 20,
+          "name": "_task_key"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 26,
+          "name": "task_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 30,
+          "name": "task_object"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 36,
+          "name": "_return_sources"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 46,
+          "name": "_return_components"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 57,
+          "name": "commissioned_task"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 92,
+          "name": "continuation_task"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 96,
+          "name": "task_schema_variants"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 101,
+          "name": "required_source"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 110,
+          "name": "validate_commission"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 122,
+          "name": "LiteratureGoal"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 124,
+          "name": "instructions"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 128,
+          "name": "planning_context"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/goal.py",
+      "sha256": "eae89a7e2699f5f8788e81e7cae4d854edecc444d6d25520255d47506cc29509"
+    },
+    {
+      "declarations": [],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "AssaySubscoring"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "_required_grading_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 13,
+          "name": "_assay_grading_repository"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/assay_subscoring.py",
+      "sha256": "fa32f1abe05cda3a1ca5da76b452311f795eb0fe197f57dba0f2cf76cf6fee03"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 15,
+          "name": "ExperimentalInterpretation"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 17,
+          "name": "reasoning_action_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 28,
+          "name": "accept_reasoning_action_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 32,
+          "name": "reasoning_has_task_content"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 43,
+          "name": "execute_reasoning"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/grading/experimental_interpretation.py",
+      "sha256": "e2ad4c02a72407194e33f494a2c960499db82ffeb12845bfeff98dde3ef2503e"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "LiteratureSummary"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "initial_decision_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 40,
+          "name": "decision_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 79,
+          "name": "_owned_population_task_sources"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 115,
+          "name": "_population_task_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 129,
+          "name": "_concentration_window_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 132,
+          "name": "_measurement_comparison_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 138,
+          "name": "_summary_precision_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 144,
+          "name": "_endpoint_signal_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 149,
+          "name": "_controlled_response_bindings"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 167,
+          "name": "_gel_bindings"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 185,
+          "name": "_gel_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 201,
+          "name": "_received_fact_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 223,
+          "name": "_native_rate_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 253,
+          "name": "_native_rate_domain_display_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 283,
+          "name": "_native_rate_meaning_display_context"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/internal_summary.py",
+      "sha256": "ac175fcbd5bb9fae6a9b6acaaf7a4747349aa6dd62a7751cc658c2acb076fe07"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 5,
+          "name": "LiteratureReceivedEvidence"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 7,
+          "name": "received_report_sources"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 10,
+          "name": "received_report_facts"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 30,
+          "name": "_complete_requested_received_arrays"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 46,
+          "name": "received_form_references"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 136,
+          "name": "received_evidence_tokens"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/received_evidence.py",
+      "sha256": "f3b39ff7ae899f657b2a1452a9fb1348e75fa9362a189c3837dfb06042946f3a"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "LiteratureScientificRecords"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "literature_rate_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 17,
+          "name": "literature_calibration_recovery_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 24,
+          "name": "literature_rate_observation_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 31,
+          "name": "literature_rate_replicate_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 38,
+          "name": "literature_quantity_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 45,
+          "name": "literature_assay_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 52,
+          "name": "literature_amount_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 59,
+          "name": "literature_optical_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 66,
+          "name": "literature_kinetic_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 73,
+          "name": "literature_binding_interaction_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 80,
+          "name": "literature_ratio_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 87,
+          "name": "literature_binding_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 94,
+          "name": "literature_binding_model_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 101,
+          "name": "literature_transport_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 108,
+          "name": "literature_figure_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 115,
+          "name": "literature_ratio_source_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 125,
+          "name": "literature_controlled_response_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 135,
+          "name": "literature_gel_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 145,
+          "name": "_endpoint_signal_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 152,
+          "name": "_concentration_window_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 158,
+          "name": "_measurement_comparison_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 164,
+          "name": "_summary_precision_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 170,
+          "name": "_rate_grid_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 173,
+          "name": "_compiled_assay_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 180,
+          "name": "_compiled_assay_v2_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 183,
+          "name": "_compiled_assay_v3_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 186,
+          "name": "_product_coupling_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 193,
+          "name": "_measurement_validation_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 200,
+          "name": "_ion_discrimination_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 207,
+          "name": "_channel_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 214,
+          "name": "_completion_time_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 221,
+          "name": "_active_site_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 228,
+          "name": "_assay_grading_source_cells"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 245,
+          "name": "_parent_depletion_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 251,
+          "name": "_stoichiometric_balance_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 257,
+          "name": "_product_partition_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 264,
+          "name": "_binding_interaction_model_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 271,
+          "name": "_kinetic_model_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 278,
+          "name": "_ratio_source_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 281,
+          "name": "_controlled_response_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 284,
+          "name": "_gel_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 287,
+          "name": "_native_rate_meaning_repository"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 291,
+          "name": "_population_routes"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/scientific_records.py",
+      "sha256": "c36f00e36a54df7454a58f0bbcffba293f40765f8d4a0c507e52de9fd8887044"
+    },
+    {
+      "declarations": [],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/scoring/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "ExperimentalMainSheet"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "_a105_aggregation_repository"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/scoring/experimental_main_sheet.py",
+      "sha256": "31bd1c691210444aef6e03576b7156bb846952a95798cc9c90dab8422e04b9ec"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 31,
+          "name": "_implementation_path"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 40,
+          "name": "_required_grading_logic"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 47,
+          "name": "_population_catalog"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 56,
+          "name": "_binding_source_bytes"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_contracts.py",
+      "sha256": "7de886aecdc160618601a3c3e2fda41bd626033e6da131393ed4776a93fb343e"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "LiteratureSourceOperations"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "_tool_arguments"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 64,
+          "name": "_materialize_text_arguments"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_operations.py",
+      "sha256": "3127df0e8e5c95b76f816d64cf8c02259edab4f1a8719bd6d308305118368c79"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 5,
+          "name": "LiteratureReferences"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 7,
+          "name": "_require"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 13,
+          "name": "_artifact"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 20,
+          "name": "_within_source"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_references.py",
+      "sha256": "e0fcc21b63a7318b029a9985093ee1208ab526b23a71208a9c2343412097608c"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 6,
+          "name": "LiteratureOperations"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 8,
+          "name": "permitted_common_actions"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 12,
+          "name": "catalog"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 38,
+          "name": "execute"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 83,
+          "name": "LiteratureTask"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 86,
+          "name": "next"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 182,
+          "name": "apply_response"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 240,
+          "name": "execute"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 296,
+          "name": "finish"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py",
+      "sha256": "ba98875f7c9e831ca5a04dc127629bf9eab96db46619875d212d8beeef3f5db8"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 8,
+          "name": "LiteratureTaskDecision"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 10,
+          "name": "call"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 112,
+          "name": "instructions"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 115,
+          "name": "decision_completion"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 168,
+          "name": "conversation_key"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 172,
+          "name": "interpretation_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 184,
+          "name": "exchange_schema"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 187,
+          "name": "exchange_response"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 211,
+          "name": "validate_contract_exchange_request"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 241,
+          "name": "validate_contract_exchange_history"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 284,
+          "name": "exchange_decision"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_decision.py",
+      "sha256": "dc015687325255dc154957d085689e7685b63bf85756697361c3abf65daacdd7"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 4,
+          "name": "instructions"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_instructions.py",
+      "sha256": "a5c0b82b57bf5cccbbb106ef20ee4459361dc365a203aab786a0bbd8d0493654"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 5,
+          "name": "LiteratureTaskState"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 7,
+          "name": "__init__"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 30,
+          "name": "bind_execution_context"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 33,
+          "name": "suspension_changed"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 38,
+          "name": "record_execution_failure"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 61,
+          "name": "restore_checkpoint"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 70,
+          "name": "restore"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 94,
+          "name": "record_effect"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 100,
+          "name": "checkpoint"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_state.py",
+      "sha256": "161ee2d2d1326d33913a905fe1fa95bbe5e7647c54b68adc920373bee853d137"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 7,
+          "name": "LiteratureReport"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 9,
+          "name": "fact_sources"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 17,
+          "name": "facts"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 30,
+          "name": "current_report_facts"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 41,
+          "name": "_rate_fact_sources"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 117,
+          "name": "_rate_facts"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 194,
+          "name": "validate_received_report"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 315,
+          "name": "resolve"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 319,
+          "name": "validate_report"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/to_parent.py",
+      "sha256": "97c1af9867ded24d2791db5bfd1a28e68345c160cba082a39ee4baa6afdf3b9a"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 4,
+          "name": "LiteratureWaiting"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 7,
+          "name": "supports_wait"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/waiting.py",
+      "sha256": "f45239551330955d2b267514aa11c3222d709668e055beadcea5b5c787b477f7"
+    },
+    {
+      "declarations": [
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 17,
+          "name": "validate_yield_bindings"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 39,
+          "name": "_RemainingCommissionedCredit"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 44,
+          "name": "__call__"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 59,
+          "name": "as_record"
+        },
+        {
+          "indent": 0,
+          "kind": "def",
+          "line": 62,
+          "name": "_private_yield_controller"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 78,
+          "name": "_FiniteLiteratureYieldController"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 81,
+          "name": "__init__"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 85,
+          "name": "transitioned"
+        },
+        {
+          "indent": 0,
+          "kind": "class",
+          "line": 92,
+          "name": "LiteratureYield"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 94,
+          "name": "continuation_task"
+        },
+        {
+          "indent": 4,
+          "kind": "def",
+          "line": 99,
+          "name": "yield_controller"
+        }
+      ],
+      "path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/yield.py",
+      "sha256": "611d68a9a949bb7bb5e2eca9d19bb0efc35586ce0fe854c7bc619957a0fa7512"
+    }
+  ],
+  "responsibility_files": {
+    "credit": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/credit.py",
+    "decision": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_decision.py",
+    "from_parent": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/from_parent.py",
+    "goal": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/goal.py",
+    "instruction_composition": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_instructions.py",
+    "internal_summary": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/internal_summary.py",
+    "invocation_state": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task_state.py",
+    "task": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py",
+    "to_parent": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/to_parent.py",
+    "waiting": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/waiting.py",
+    "yield": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/yield.py"
+  },
+  "runtime_policy_dependencies": {
+    "actual_private_consumer": {
+      "home": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+      "private_binding_configuration": {
+        "path": "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py",
+        "sha256": "427e9f5020c49efb7330a838aa254999d0ab500b2d85127927702a52a15b4d0b"
+      },
+      "private_typed_report_owner": {
+        "path": "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/to_parent.py",
+        "sha256": "97c1af9867ded24d2791db5bfd1a28e68345c160cba082a39ee4baa6afdf3b9a"
+      },
+      "schema_caller": {
+        "path": "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py",
+        "sha256": "ba98875f7c9e831ca5a04dc127629bf9eab96db46619875d212d8beeef3f5db8"
+      },
+      "selection": "The existing dynamic Workflow lookup retains overrides. Its original fallback invokes standalone assembly with this actual private source and configured episode binding; no scientific projection or permission definition is moved out of that binding.",
+      "task": {
+        "path": "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py",
+        "sha256": "ba98875f7c9e831ca5a04dc127629bf9eab96db46619875d212d8beeef3f5db8"
+      }
+    },
+    "conditional_dependencies": "Shared child APIs retain original root-policy hooks; the Scientific snapshot helper runs only at its original identity predicate. Listing those reachable providers does not claim this Literature home executes Scientific enrichment.",
+    "descriptor_scope": {
+      "descriptor_execution_claimed": false,
+      "home": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+      "permanent_axis_record": "gene_annotation_episode/episodic_workflow/root/a105/ownership_inventory.json",
+      "section": "current_source_ownership_20261113.schema_report_policy_ownership.descriptor_source_membership_and_external_dependencies"
+    },
+    "direct_report_dispatch": "Private parent return retains the dynamic Workflow.facts call. The current fallback selects recorded_report_fact_assembly, then this binding supplies its original typed projection.",
+    "direct_schema_dispatch": "Private task retains the dynamic Workflow.action_schema call. The current fallback selects the standalone scientific_action_schema assembly using this actual private binding.",
+    "permanent_authority": {
+      "json_pointer": "/current_source_ownership_20261113/current_runtime_policy_dependencies",
+      "meaning": "Permanent current provider/consumer identity; retained run accounts are evidence, not runtime dependencies.",
+      "path": "gene_annotation_episode/episodic_workflow/root/a105/ownership_inventory.json"
+    },
+    "unchanged_private_configuration_and_science": true
+  },
+  "scoring_files": [
+    "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/scoring/__init__.py",
+    "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/scoring/experimental_main_sheet.py"
+  ]
+}
+,
+  "explicit_callback_compatibility_20261113": {
+   "active_external_family_owners" : [
+      {
+         "callback" : {
+            "line" : 8,
+            "path" : "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/internal_summary.py",
+            "sha256" : "ef13582d3fbeeaeb2e199402b6f52864e6556c5a0a5cbfce3f31263e19f0f38d",
+            "symbol" : "initial_decision_context"
+         },
+         "context_filter" : {
+            "line" : 67,
+            "path" : "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/episode.py",
+            "sha256" : "6a979408b6d9dd1e42c717a06c8f3fe0f70eed76f05798f93eba6033eb84ab13",
+            "symbol" : "context_hook_applies"
+         },
+         "home" : "published_evidence_assessment"
+      },
+      {
+         "callback" : {
+            "line" : 8,
+            "path" : "gene_annotation_episode/episodic_workflow/root/a105/scientific_process/published_evidence_assessment/internal_summary.py",
+            "sha256" : "3137caefc2fcd23125498e32788c85b042ccf75d69fdf622341e759677232ee9",
+            "symbol" : "initial_decision_context"
+         },
+         "context_filter" : {
+            "line" : 67,
+            "path" : "gene_annotation_episode/episodic_workflow/root/a105/scientific_process/published_evidence_assessment/episode.py",
+            "sha256" : "6cd093576c155cf57bd824225d08b2bf909d270df57ef96d4678b968451d6c5c",
+            "symbol" : "context_hook_applies"
+         },
+         "home" : "scientific_process/published_evidence_assessment"
+      }
+   ],
+   "applicable_result" : "An empty mapping for the own-role context selected by the registry.",
+   "binding_path" : "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+   "callback" : {
+      "line" : 8,
+      "path" : "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/internal_summary.py",
+      "sha256" : "ac175fcbd5bb9fae6a9b6acaaf7a4747349aa6dd62a7751cc658c2acb076fe07",
+      "symbol" : "initial_decision_context"
+   },
+   "compatibility_reason" : "The original explicit-call annotation-parent initial_decision_context API remains present. Actual registry context_hook_applies dispatch restricts this child to its own role, for which the original callback returns an empty mapping. Removing the callback changes attribute/explicit-call availability; replacing its body with an empty mapping changes explicit annotation-context calls and potential subclass super calls. These are compatibility implementations, not active foreign-role task dispatch. No removal, direct-child external-call validation, or runtime/restoration result is claimed.",
+   "consumer_scope" : "Source search found these direct calls on the standalone A105 literature parent, not on these child implementations. Registry callers and potential external/subclass callers are not asserted to be an exhaustive runtime consumer set.",
+   "context_filter" : {
+      "line" : 63,
+      "path" : "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py",
+      "sha256" : "427e9f5020c49efb7330a838aa254999d0ab500b2d85127927702a52a15b4d0b",
+      "symbol" : "context_hook_applies"
+   },
+   "known_direct_parent_consumers" : [
+      {
+         "binding_owner" : "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment",
+         "line" : 195,
+         "path" : "gene_annotation_episode/episodic_workflow/root/a105/tests/test_literature_active_site_integration.py",
+         "scope" : "Existing direct parent callback consumer; does not exercise a non-literature child with an external annotation context.",
+         "sha256" : "6a9aec1f137d0cd4e0476516711a8e8d444f019a13e6bda41f30df5346bb3cfa",
+         "symbol" : "test_enabled_reference_parent_keeps_complete_active_site_task"
+      },
+      {
+         "binding_owner" : "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment",
+         "line" : 142,
+         "path" : "gene_annotation_episode/episodic_workflow/root/a105/tests/test_literature_optical_integration.py",
+         "scope" : "Existing direct parent callback consumer; does not exercise a non-literature child with an external annotation context.",
+         "sha256" : "fc782deab76c5d8dcee702780234ae0d08b9a0cd842976a76bbcc06a4de27666",
+         "symbol" : "test_actual_receiving_provider_text_excludes_unrequested_operand_numbers"
+      }
+   ],
+   "own_role" : "literature_ordered",
+   "registry" : {
+      "behavior" : "Registry selects context-compatible bindings, obtains the optional initial_decision_context callback and merges returned mappings; absent callbacks are skipped.",
+      "invocation" : {
+         "line" : 200,
+         "path" : "gene_annotation_episode/episodic_workflow/root/a105/episode_bindings.py",
+         "sha256" : "32472521cc24dff939ec0ff2ab65dbd4bbe9e628f6510b4a9b169c27af6bb73a",
+         "symbol" : "initial_decision_context"
+      },
+      "selection" : {
+         "line" : 176,
+         "path" : "gene_annotation_episode/episodic_workflow/root/a105/episode_bindings.py",
+         "sha256" : "32472521cc24dff939ec0ff2ab65dbd4bbe9e628f6510b4a9b169c27af6bb73a",
+         "symbol" : "_context_bindings"
+      }
+   }
+}
+}

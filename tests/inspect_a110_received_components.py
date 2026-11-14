@@ -16,7 +16,7 @@ from gene_annotation_episode.communication import plain
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.literature_reaction_storage import LiteratureReactionRepository
+from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository
 from gene_annotation_episode.state import Store
 
 
@@ -70,8 +70,8 @@ def main():
                 'all_original_descriptors_identical': True, 'forged_prefix_rejected': True})
         # Exercise the new adapter on the genuinely received source quantities.
         # Its missing biological prerequisites must stay unknown.
-        from gene_annotation_episode import a110_experimental_qualification as experiment
-        from gene_annotation_episode.a110_qualification import received
+        from gene_annotation_episode.episodic_workflow.root.a110 import a110_experimental_qualification as experiment
+        from gene_annotation_episode.episodic_workflow.root.a110.a110_qualification import received
         ctx = context(args.episode[0])
         root = next(iter({row['target_ref'] for row in store.coverage(ctx.scope['subject_refs'][0])}))
         arguments = {'target_ref': root, 'sheet_ref': args.sheet_ref, 'components': ['ratio_mean'],

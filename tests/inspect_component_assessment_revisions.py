@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 import sqlite3
 
-from gene_annotation_episode.a110_qualification import received
+from gene_annotation_episode.episodic_workflow.root.a110.a110_qualification import received
 from gene_annotation_episode.component_assessment_dependencies import (
     assessment_dependencies, correction_refs, qualification_assessment_changes)
 from gene_annotation_episode.state import Store

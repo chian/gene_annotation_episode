@@ -1,0 +1,221 @@
+........................................................................ [ 12%]
+..............................F......................F.................. [ 25%]
+........................................................................ [ 38%]
+..............F......................................................... [ 51%]
+........................................................................ [ 64%]
+........................................................................ [ 77%]
+........................................................................ [ 90%]
+................................................F...                     [100%]
+=================================== FAILURES ===================================
+_ test_selected_concentrations_and_authoritative_km_supply_common_curve_calculator _
+
+    def test_selected_concentrations_and_authoritative_km_supply_common_curve_calculator():
+        fix = populated()
+        before = deepcopy(fix[:3])
+        parsed = read(fix)
+        assert parsed['values'] == {'substrate_test': 10., 'substrate_reference': 40., 'km': 16.5}
+        assert parsed['km_quantity'] == fix[2] == parsed['primitive_observations']['km']
+        assert parsed['km_quantity']['reported_uncertainty_kind'] == 'unspecified'
+        assert parsed['source_refs'] == [SOURCE, KM_SHEET]
+        assert ('source', KM_ORIGINAL, 'original') not in fix[3]
+        assert ('source', KM_SHEET, 'original') not in fix[3]
+        assert fix[3].count(('quantity', KM_SHEET)) == 1
+        for role in PRIMITIVE_ORDER[:2]:
+            observation = parsed['primitive_observations'][role]
+            assert observation['role'] == role and observation['unit'] == 'uM'
+            assert observation['measurement_key'].startswith('literature_measurement_')
+        sheet = calculate(parsed)
+        assert sheet['cells']['condition_response']['value'] == 113 / 212
+>       assert sheet['cells']['condition_response_variance']['unavailable_reason'] == 'primitive_covariance_unreported'
+E       AssertionError: assert 'primitive_co..._not_supplied' == 'primitive_co...ce_unreported'
+E         
+E         - primitive_covariance_unreported
+E         ?                       --- ^^^
+E         + primitive_covariance_not_supplied
+E         ?                      +++++  ^^^
+
+tests/test_literature_transport_inputs.py:136: AssertionError
+_ test_different_system_blocks_response_but_preserves_supported_native_and_single_arm_cells _
+
+    def test_different_system_blocks_response_but_preserves_supported_native_and_single_arm_cells():
+        fix = populated()
+        fix[0]['curve_contexts']['substrate_reference']['experimental_system'] = witness(TEXT, 'system T')
+        sheet = calculate(read(fix))
+        assert sheet['cells']['condition_response']['value'] is None
+        assert sheet['cells']['condition_response']['unavailable_reason'] == 'different_kinetic_curves'
+        assert sheet['cells']['reference_saturation']['value'] is None
+        assert sheet['cells']['test_saturation']['value'] == 10 / 26.5
+        assert sheet['cells']['substrate_reference']['value'] == 40
+        fix[0]['curve_contexts']['substrate_reference'] = None
+>       assert calculate(read(fix))['cells']['condition_response']['unavailable_reason'] == 'kinetic_curve_identity_unreported'
+E       AssertionError: assert 'kinetic_curv..._not_supplied' == 'kinetic_curv...ty_unreported'
+E         
+E         - kinetic_curve_identity_unreported
+E         ?                         --- ^^^
+E         + kinetic_curve_identity_not_supplied
+E         ?                        +++++  ^^^
+
+tests/test_literature_transport_inputs.py:237: AssertionError
+_ test_selected_transport_response_actual_typed_delivery_and_observation_accounting[False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1957/test_selected_transport_respon0')
+different = False
+
+    @pytest.mark.parametrize('different', [False, True])
+    def test_selected_transport_response_actual_typed_delivery_and_observation_accounting(tmp_path, different):
+        store, context, quantity_args, args = setup_synthetic(tmp_path / 'state', different=different)
+        received, controllers = [], []
+        try:
+            commission = {'selection': {'kind': 'episode_child', 'role': 'literature',
+                'assignment': plain(context.assignment), 'goal': 'Evaluate the source substrate response and actual kinetic curve',
+                'scope': plain(context.scope), 'purpose': 'Return only requested native and conditional response cells',
+                'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
+            quantity = {'selection': {'kind': 'tool', 'tool': 'literature.quantity.populate', 'arguments': quantity_args},
+                        'report_update': {}}
+            def transport(inputs):
+                assert inputs['last_local_outcome']['status'] == 'completed'
+                selected = {**args, 'km_sheet_ref': inputs['last_local_outcome']['result']['sheet_ref']}
+                return {'selection': {'kind': 'tool', 'tool': 'literature.transport.response.populate', 'arguments': selected},
+                        'report_update': {}}
+            def receive(inputs):
+                form, = inputs['child_reports']
+                received.append(form)
+                rows = form['measurements']
+                assert [row['component'] for row in rows] == COMPONENTS
+                assert rows[0]['value'] == 12.
+                assert rows[1]['value'] == (None if different else .55)
+                if different:
+                    assert rows[1]['unavailable_reason'] == 'different_kinetic_curves'
+                    assert rows[1]['test_curve_ref'] != rows[1]['reference_curve_ref']
+                else:
+                    assert rows[1]['test_curve_ref'] == rows[1]['reference_curve_ref'] == rows[1]['km_curve_ref']
+                    assert rows[1]['conditional_on'] == ['same_kinetic_curve', 'michaelis_menten_response']
+                assert rows[3]['value'] is None
+                assert rows[3]['unavailable_reason'] == ('different_kinetic_curves' if different else 'primitive_covariance_not_supplied')
+                assert all(row['reported_km_uncertainty_kind'] == 'unreported' for row in rows)
+                assert all(row['operand_source_kind'] == 'synthetic_fixture' for row in rows)
+                assert all(row['evaluated_scope'] == 'interpreted_source_kinetic_response' for row in rows)
+                assert all(row['covariance_source_ref'] is None for row in rows)
+                source = store.get(quantity_args['source_ref'])
+                raw = store.get_artifact(source['artifact_ref'])
+                start = raw.index(b'FixtureTransporter')
+                commit = {name: [] for name in store.reasoning_schema()['required']}
+                commit['source_subjects'] = [{'alias': 'reported_source', 'reference_type': 'assay',
+                    'source_ref': source['id'], 'label': 'FixtureTransporter', 'anchor': {
+                        'source_ref': source['id'], 'artifact_ref': source['artifact_ref'], 'start': start,
+                        'end': start+len('FixtureTransporter'), 'quote': 'FixtureTransporter'}}]
+                return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
+            def controller(path, initial):
+                value = FixtureController(str(path), initial, 2)
+                controllers.append(value)
+                return value
+            scorer = ScientificFindingProgress(FindingProgressPolicy(1))
+>           summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+                provider=ScriptedProvider([commission, quantity, transport, receive]), run_dir=tmp_path / 'run',
+                controller_factory=controller, project_credit=scorer,
+                initial_known_record_refs=list(context.received_record_refs),
+                episode_binding_factories=(partial(LiteratureEpisodes, rate_population=True),),
+                binding_definitions={'credit': scorer.as_record()}))
+
+tests/test_literature_transport_integration.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4270: in run_workflow
+    return await _run_bound_workflow(store, tools, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:4592: in _run_bound_workflow
+    record = await root.run_async(workflow.context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1258: in run_async
+    record = await self._run_loop_async(ctx, scope)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+method_loop/episode.py:1551: in _run_loop_async
+    item = await item
+           ^^^^^^^^^^
+gene_annotation_episode/runtime.py:1483: in next
+    response, index, actual_context, schema = await self.call(context, schema)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/runtime.py:1075: in call
+    response = await self.workflow.provider.complete(self.episode_id, "REASONING", instructions,
+tests/test_runtime.py:186: in complete
+    return response(context) if callable(response) else deepcopy(response)
+           ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+inputs = {'available_report_facts': {'changed_annotation_refs': {'meaning': 'Actual changed annotation revision references from..., 'covariance_origin': None, ...}]}], 'controller': {'credit': 0.0, 'decision': {'stop': False}, 'scores': [0.0]}, ...}
+
+    def receive(inputs):
+        form, = inputs['child_reports']
+        received.append(form)
+        rows = form['measurements']
+        assert [row['component'] for row in rows] == COMPONENTS
+        assert rows[0]['value'] == 12.
+        assert rows[1]['value'] == (None if different else .55)
+        if different:
+            assert rows[1]['unavailable_reason'] == 'different_kinetic_curves'
+            assert rows[1]['test_curve_ref'] != rows[1]['reference_curve_ref']
+        else:
+            assert rows[1]['test_curve_ref'] == rows[1]['reference_curve_ref'] == rows[1]['km_curve_ref']
+            assert rows[1]['conditional_on'] == ['same_kinetic_curve', 'michaelis_menten_response']
+        assert rows[3]['value'] is None
+>       assert rows[3]['unavailable_reason'] == ('different_kinetic_curves' if different else 'primitive_covariance_not_supplied')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 'primitive_co..._not_supplied' == 'primitive_co...ce_unreported'
+E         
+E         - primitive_covariance_unreported
+E         ?                       --- ^^^
+E         + primitive_covariance_not_supplied
+E         ?                      +++++  ^^^
+
+tests/test_literature_transport_integration.py:107: AssertionError
+____ test_primary_without_error_model_preserves_limit_and_specific_unknown _____
+
+tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1957/test_primary_without_error_mod0')
+
+    def test_primary_without_error_model_preserves_limit_and_specific_unknown(tmp_path):
+        store, context, args = setup_primary(tmp_path)
+        try:
+            assignment = plain(context.assignment)
+            assignment['requested_binding_model_components'] = COMPONENTS
+            context = replace(context, assignment=assignment)
+            binding = binding_for(store, context)
+            first = asyncio.run(binding.execute(context, 'literature.binding.populate', args, 'native'))
+            current = replace(context, received_record_refs=(*context.received_record_refs, *first['record_refs']))
+            modeled = asyncio.run(binding.execute(current, 'literature.binding.model.populate', {
+                'source_ref': first['result']['sheet_ref'], 'model_source_ref': None, 'model_witnesses': []}, 'model'))
+            assert modeled['status'] == 'completed', modeled
+            current = replace(current, received_record_refs=(*current.received_record_refs, *modeled['record_refs']))
+            facts = binding.facts(current, {'committed_record_refs': [modeled['result']['sheet_ref']]})
+            form = form_with_facts({}, FORM, facts)
+            binding.validate_report(current, form, FORM)
+            rows = form['measurements']
+            assert rows[0]['value'] == pytest.approx(2.7686748229186446)
+            assert rows[0]['relation'] == 'gt'
+            assert rows[0]['bound_kind'] == 'reported_limit_arithmetic'
+            assert rows[0]['source_uncertainty_basis'] == 'fit_to_averaged_curve'
+            for row in rows[1:]:
+                assert row['value'] is None
+>               assert row['unavailable_reason'] == 'binding_sampling_model_not_supplied'
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: assert 'binding_samp..._not_supplied' == 'binding_samp...el_unreported'
+E                 
+E                 - binding_sampling_model_unreported
+E                 ?                         --- ^^^
+E                 + binding_sampling_model_not_supplied
+E                 ?                        +++++  ^^^
+
+tests/test_literature_binding_model_integration.py:119: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_literature_transport_inputs.py::test_selected_concentrations_and_authoritative_km_supply_common_curve_calculator
+FAILED tests/test_literature_transport_inputs.py::test_different_system_blocks_response_but_preserves_supported_native_and_single_arm_cells
+FAILED tests/test_literature_transport_integration.py::test_selected_transport_response_actual_typed_delivery_and_observation_accounting[False]
+FAILED tests/test_literature_binding_model_integration.py::test_primary_without_error_model_preserves_limit_and_specific_unknown
+4 failed, 552 passed in 332.21s (0:05:32)

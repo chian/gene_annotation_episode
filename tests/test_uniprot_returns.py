@@ -30,7 +30,7 @@ from gene_annotation_episode.uniprot_return_contracts import uniprot_selected_re
 from gene_annotation_episode.uniprot_returns import UniProtReturns, select_received_uniprot_pages
 
 
-FIXTURE = Path(__file__).parent / "fixtures" / "uniprot_native"
+FIXTURE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/uniprot_native"
 SOURCE = "uniprot_selected_returns"
 
 

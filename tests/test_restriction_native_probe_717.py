@@ -10,12 +10,12 @@ import pytest
 
 ATTEMPT = Path(os.environ["HMMER529_ATTEMPT"]) if "HMMER529_ATTEMPT" in os.environ else None
 pytestmark = pytest.mark.skipif(ATTEMPT is None, reason="native probe requires bounded529")
-PACKET = "verification/tool_graders_restriction_native_probe_2026-10-29_717"
+PACKET = "gene_annotation_episode/episodic_workflow/root/tests/support/restriction_mapping"
 
 
 @pytest.fixture(scope="module")
 def native_probe():
-    helper_path = ATTEMPT / "source_snapshot" / PACKET / "probe.py"
+    helper_path = ATTEMPT / "source_snapshot" / PACKET / "probe_717.py"
     spec = importlib.util.spec_from_file_location("restriction_probe717", helper_path)
     helper = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(helper)

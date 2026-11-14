@@ -1,0 +1,4 @@
+class OriginalProviderMethods:
+    def receive_form(self, source, admitted, schema, index, *, redelivery=False, child_role=None):
+        with self.store.transaction():
+            return (_direct_receive_callback := self._receive_form)(source, admitted, schema, index, redelivery=redelivery, **{'child_role': child_role} if child_role is not None and isinstance(_direct_receive_callback, MethodType) and (_direct_receive_callback.__self__ is self) and (_direct_receive_callback.__func__ is Workflow._receive_form) else {})

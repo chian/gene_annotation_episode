@@ -9,15 +9,16 @@ from gene_annotation_episode.chromatin_interaction_contracts import (
     decode_chromatin_json, chromatin_record_digest,
 )
 
+WORKED_RECORDS = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/WORKED_RECORDS.json'
+
 
 def examples():
-    path = Path.cwd() / 'WORKED_RECORDS.json'
-    return {row['example_key']: row['record'] for row in json.loads(path.read_text())['records']}
+    return {row['example_key']: row['record'] for row in json.loads(WORKED_RECORDS.read_text())['records']}
 
 
 class ContractsTest(unittest.TestCase):
     def test_independent_local_root_and_all_scientific_records(self):
-        rows = json.loads((Path.cwd() / 'WORKED_RECORDS.json').read_text())['records']
+        rows = json.loads(WORKED_RECORDS.read_text())['records']
         count = 0
         for row in rows:
             if row['schema_definition'] == 'PopulationSeal':

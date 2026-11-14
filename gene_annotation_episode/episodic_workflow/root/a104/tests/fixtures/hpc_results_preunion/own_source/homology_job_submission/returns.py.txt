@@ -1,0 +1,206 @@
+"""Private job_launch returns behavior for A104."""
+from __future__ import annotations
+from .requests import (AcquisitionError, CHECKED_STATUS_SCHEMA, ContractError, HANDOFF_SCHEMA, RESULT_PROGRESS_SCHEMA, ROLES, SAMPLE_SCHEMA, _result_progress, deepcopy, json, recorded_coverage, recorded_estimate, recorded_forecasts, reference, resource_report_source, sqlite3, subprocess)
+
+class HomologyEpisodeReturns:
+    def fact_sources(self, role):
+        if role not in ROLES:
+            return {}
+        handoff = {**deepcopy(HANDOFF_SCHEMA), 'type': ['object', 'null']}
+        sample = {**deepcopy(SAMPLE_SCHEMA), 'type': ['object', 'null']}
+        values = {
+            'job_ref': (reference('homology_job'), 'The immutable assigned job, not an episode identity.'),
+            'job_cpu': ({'type': 'integer', 'minimum': 1}, 'Assigned CPU threads selected by the parent and retained in the job; not measured consumption.'),
+            'job_handoff': (handoff, 'A freshly functionally checked receiving-interface handoff, or null when unavailable.'),
+            'job_handoff_state': ({'type': 'string', 'enum': ['usable', 'unavailable']}, 'Whether this closure established a usable receiving-interface handoff; no scientific completion claim.'),
+            'job_handoff_failure': ({'type': ['string', 'null'], 'enum': [None,
+                'job_not_submitted', 'submission_unconfirmed', 'native_handle_identity_mismatch',
+                'receiving_interface_unavailable']}, 'The basic reason no usable handoff could be returned; null after a successful receiving-interface check.'),
+            'job_sample': (sample, 'The last actual sample selected by this child, unchanged on replay; null if it selected none.')}
+        if 'search_modes' in self.jobs.config:
+            values['job_search_mode'] = ({'type': 'string', 'enum': list(self.jobs.search_modes)},
+                'The immutable parent-selected search mode. Maximum sensitivity disables heuristic filters; it is not evidence of a specific function or a stronger significance threshold.')
+        sources = {key: {'type': schema['type'], 'meaning': meaning,
+                      'report_schema': {**schema, 'x-source': key}}
+                for key, (schema, meaning) in values.items()}
+        sources['resource_tool_estimates'] = resource_report_source()
+        if role == 'job_launch':
+            sources['job_checked_status'] = {
+                'type': ['object', 'null'],
+                'meaning': ('The status and timestamp of this child\'s last successful selected '
+                    'homology.check_handoff action. This is the recorded check-time state, not a '
+                    'fresh closure poll or a monitoring sample. Null if no selected check succeeded. '
+                    'The parent decides what subsequent work this information warrants.'),
+                'report_schema': {**deepcopy(CHECKED_STATUS_SCHEMA), 'type': ['object', 'null'],
+                    'x-source': 'job_checked_status'}}
+        if self.has_information_channel(role):
+            sources['monitoring_findings'] = self.monitoring_projector.information_report_source()
+            sources['monitoring_information_credit'] = {'type': 'number',
+                'meaning': 'Monitoring information actually obtained by this episode; separate from operational/scientific score and duration estimates. It does not select the controller input.',
+                'binding': self.monitoring_projector.as_record(),
+                'report_schema': {'type': 'number', 'x-source': 'monitoring_information_credit'}}
+        elif role == 'job_monitor' and callable(getattr(self.monitoring_projector, 'report_source', None)):
+            sources['monitoring_findings'] = self.monitoring_projector.report_source()
+        if role == 'job_results':
+            sources['job_result_progress'] = {
+                'type': ['object', 'null'],
+                'meaning': ('Recorded acquisition coverage for the last native snapshot selected by this child. '
+                    'Includes snapshot identity, native/parse completion, parsed/acquired row counts, '
+                    'all_parsed_rows_acquired and explicit parse errors. A complete native result with '
+                    'a finished error-free parser and zero parsed/acquired rows is a completed empty '
+                    'search in the selected database, not evidence of a biological function. '
+                    'Native ordinals are one-based; intervals are half-open. Acquiring a partial parsed prefix '
+                    'is distinct from a complete native result. This is not scientific credit or completion. '
+                    'Null when no snapshot was selected or its coverage could not be read.'),
+                'report_schema': {**deepcopy(RESULT_PROGRESS_SCHEMA), 'type': ['object', 'null'],
+                    'x-source': 'job_result_progress'}}
+            sources['job_result_progress_failure'] = {
+                'type': ['string', 'null'],
+                'meaning': 'Basic coverage-read failure; null when no read failed. Native parse failures remain separate coverage facts.',
+                'report_schema': {'type': ['string', 'null'], 'enum': [None,
+                    'invalid_snapshot_or_scope', 'storage_failure', 'coverage_read_failed'],
+                    'x-source': 'job_result_progress_failure'}}
+        return sources
+
+    def resolve(self, store, scope, value, namespace, *, assignment=None):
+        if assignment is not None and namespace=='subject' and value==assignment.get('query_ref'):
+            # In a native-result contract this is the bound algorithm operand,
+            # which may be an external protein reference. It does not become
+            # an original annotation target or authorize another subject.
+            try:
+                self._query(store,scope,value)
+            except (ValueError,KeyError,ContractError):
+                return False
+            return True
+        if assignment is not None and (
+                namespace in {None, 'homology_job'} and value == assignment['job_ref']
+                or namespace in {None, 'job_sample'}
+                and self.recorded_sample(store, value, assignment) is not None):
+            # This exact assignment and returned sample were already admitted
+            # and recorded. A later registry outage cannot change their identity.
+            try:
+                self._query(store, scope, assignment['query_ref'])
+            except (ValueError, KeyError, ContractError):
+                return False
+            return True
+        if namespace in {'job_execution_estimate', 'execution_class', 'execution_expectation', 'execution_proposal'}:
+            estimate = recorded_estimate(store, value, assignment['job_ref'] if assignment else None,
+                                         namespace=namespace)
+            if estimate is None:
+                return False
+            if estimate['job_ref'] is None or assignment is None and namespace != 'job_execution_estimate':
+                # Typed statistical configuration references carry no job
+                # identity. Check the actual in-scope resource configuration;
+                # retain the recorded snapshot even after history advances.
+                try:
+                    return estimate['execution_class_ref'] in {
+                        execution_class.ref for execution_class in self.prospective_execution_classes(store, scope)}
+                except (ValueError, KeyError, OSError, ContractError):
+                    return False
+            try:
+                query_ref = (assignment['query_ref'] if assignment is not None
+                    and estimate['job_ref'] == assignment['job_ref']
+                    else self.jobs._row(estimate['job_ref'])['query_ref'])
+                self._query(store, scope, query_ref)
+            except (ValueError, KeyError, ContractError, sqlite3.Error):
+                return False
+            return True
+        try:
+            if not self.jobs.resolve(value, namespace):
+                return False
+            if value == self.jobs.config['registry_ref']:
+                return True
+            if self.jobs.resolve(value, 'homology_job'):
+                job_ref = value
+            elif self.jobs.resolve(value, 'job_sample'):
+                job_ref = self.jobs.db.execute('SELECT job_ref FROM samples WHERE sample_ref=?', (value,)).fetchone()[0]
+            else:
+                row = self.jobs.db.execute('SELECT job_ref FROM handoffs WHERE receipt_ref=?', (value,)).fetchone()
+                if row is None:
+                    return False
+                job_ref = row[0]
+            if assignment is not None and job_ref != assignment['job_ref']:
+                return False
+            self._query(store, scope, self.jobs._row(job_ref)['query_ref'])
+        except (ValueError, KeyError, ContractError, sqlite3.Error):
+            return False
+        return True
+
+    def facts(self, source, *, credit_view=None):
+        assignment = self.assignment(source)
+        # Functional communication validation is not a scientific review, a new
+        # selected action or permission to override the continuation decision.
+        try:
+            handoff = self.jobs.handoff(assignment['job_ref'])
+            self.jobs.check_handoff(handoff)
+            failure = None
+        except (sqlite3.Error, subprocess.SubprocessError):
+            # The receiver itself is unavailable. Re-reading its registry to
+            # classify that failure can fail again and lose the child's form.
+            handoff, failure = None, 'receiving_interface_unavailable'
+        except (ValueError, KeyError, OSError, AcquisitionError) as error:
+            handoff = None
+            try:
+                row = self.jobs._row(assignment['job_ref'])
+                handle = self.jobs.directory/assignment['job_ref']/'native.handle.json'
+                unreadable = False
+                try:
+                    prepared = handle.is_file() and json.loads(handle.read_text()).get('stage') == 'prepared'
+                except (OSError, ValueError, TypeError, AttributeError):
+                    prepared, unreadable = False, True
+                failure = ('receiving_interface_unavailable' if unreadable else
+                    'submission_unconfirmed' if prepared else 'job_not_submitted' if not row['submission_requested'] else
+                    'submission_unconfirmed' if not handle.is_file() else
+                    'native_handle_identity_mismatch' if str(error) == 'native_handle_does_not_describe_registered_job'
+                    else 'receiving_interface_unavailable')
+            except (sqlite3.Error, ValueError, KeyError):
+                failure = 'receiving_interface_unavailable'
+        facts = {'job_ref': assignment['job_ref'], 'job_cpu': assignment['cpu'], 'job_handoff': handoff,
+                'job_handoff_state': 'usable' if handoff else 'unavailable',
+                'job_handoff_failure': failure, 'job_sample': self.latest_sample(source),
+                'resource_tool_estimates': recorded_forecasts(source.workflow.store,
+                    run_id=source.workflow.run_id, episode_id=source.episode_id)}
+        if 'search_modes' in self.jobs.config:
+            facts['job_search_mode'] = assignment['search_mode']
+        if source.path[-1][0] == 'job_launch':
+            facts['job_checked_status'] = self.latest_checked_status(source)
+        if self.has_information_channel(source.path[-1][0]):
+            information = self.credit_view(source) if credit_view is None else credit_view
+            facts.update(monitoring_information_credit=information['monitoring_information_credit'],
+                         monitoring_findings=information['monitoring_findings'])
+        elif source.path[-1][0] == 'job_monitor' and callable(getattr(self.monitoring_projector, 'findings', None)):
+            facts['monitoring_findings'] = self.monitoring_projector.findings(source.workflow.store,
+                assignment=assignment, episode_id=source.episode_id, run_id=source.workflow.run_id)
+        if source.path[-1][0] == 'job_results':
+            facts.update(job_result_progress=None, job_result_progress_failure=None)
+            selected = source.workflow.store.db.execute('''SELECT json_extract(result,'$.result.snapshot_ref')
+                FROM runtime_actions WHERE run_id=? AND episode_id=?
+                AND json_extract(action,'$.tool') IN ('homology.extract','homology.coverage')
+                AND json_type(result,'$.result.snapshot_ref')='text'
+                ORDER BY decision_index DESC LIMIT 1''',
+                (source.workflow.run_id, source.episode_id)).fetchone()
+            if selected is not None:
+                try:
+                    coverage = recorded_coverage(source.workflow.store, selected[0],
+                        query_ref=assignment['query_ref'], scope=source.scope,
+                        execution_context={'job_ref': assignment['job_ref'],
+                            'registry_ref': self.jobs.config['registry_ref']})
+                    facts['job_result_progress'] = _result_progress(coverage)
+                except ContractError:
+                    facts['job_result_progress_failure'] = 'invalid_snapshot_or_scope'
+                except (OSError, sqlite3.Error):
+                    facts['job_result_progress_failure'] = 'storage_failure'
+                except (ValueError, KeyError, TypeError):
+                    facts['job_result_progress_failure'] = 'coverage_read_failed'
+        return facts
+
+    def validate_report(self, value, assignment, *, role, store=None, schema=None):
+        """Select the owning job episode's return binding explicitly."""
+        bindings = {
+            'job_launch': self._validate_launch_return,
+            'job_monitor': self._validate_monitor_return,
+            'job_results': self._validate_results_return,
+        }
+        if role not in bindings:
+            raise ValueError('homology_return_role_required')
+        bindings[role](value, assignment, store=store, schema=schema)

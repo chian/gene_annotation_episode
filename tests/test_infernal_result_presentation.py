@@ -13,8 +13,7 @@ from gene_annotation_episode.infernal_result_presentation import infernal_receiv
 
 NATIVE_VERSION = "native_infernal_observation_v1"
 SAVED_CONTEXT = (
-    Path(__file__).parent
-    / "fixtures/native_infernal_episode/scientific-decision-6.json"
+    Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/native_infernal_episode/scientific-decision-6.json"
 )
 
 

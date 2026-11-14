@@ -112,17 +112,15 @@ if any(before.get(item['file']['path']) != item['file'] for item in static_execu
 save('native_library_pins_before.json', list(before.values()))
 save('native_library_resolution.json', resolutions)
 save('native_static_executables.json', static_executables)
-# Historical plans retain their original absolute operand paths. Pin those
-# original retained files as well as their snapshot copies; do not rewrite the
-# historical plan to disguise where its fixture bytes were read.
+# Pin explicitly selected support trees in their original location as well as
+# their snapshot copies. The request records where fixture bytes were read.
 request = json.loads((attempt / 'selected_request.json').read_text())
 original_repo = Path(request.get('repository_root', str(attempt.parents[2])))
 retained_inputs = set()
 for relative in request.get('support_trees', []):
     root = original_repo / relative
-    if relative.startswith('verification/'):
-        retained_inputs.update(p.resolve(strict=True) for p in root.rglob('*')
-            if p.is_file() and not p.is_symlink())
+    retained_inputs.update(p.resolve(strict=True) for p in root.rglob('*')
+        if p.is_file() and not p.is_symlink())
 retained_before = {str(p): pin(p) for p in sorted(retained_inputs)}
 save('original_retained_fixture_pins_before.json', list(retained_before.values()))
 # A separate service supplies only its selected application PYTHONPATH. Check

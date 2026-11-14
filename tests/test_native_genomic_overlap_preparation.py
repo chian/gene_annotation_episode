@@ -26,7 +26,7 @@ from gene_annotation_episode.state import Store
 
 
 ROOT = Path(__file__).resolve().parents[1]
-FIXTURES = ROOT / "verification/tool_graders_genomic_overlap_result_worker_2026-10-27_432/fixtures"
+FIXTURES = ROOT / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/result_worker/fixtures"
 POLICY = LocalJobPolicy(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
 
 

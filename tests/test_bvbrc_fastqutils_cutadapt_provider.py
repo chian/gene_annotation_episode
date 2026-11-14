@@ -13,7 +13,7 @@ from gene_annotation_episode.communication import validate_form
 from test_bvbrc_fastqutils_returns import saved_fixture
 from test_bvbrc_fastqutils_provider import f
 
-_NATIVE_RELATIVE = Path('verification/tool_graders_bvbrc_fastqutils_remaining_formats_2026-10-25_204/native_examples_001/trimgalore_single')
+_NATIVE_RELATIVE = Path('gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/fastqutils_cutadapt')
 ROOT = next(parent for parent in Path(__file__).resolve().parents
             if (parent / _NATIVE_RELATIVE / 'synthetic.fastq_trimming_report.txt').is_file())
 NATIVE = ROOT / _NATIVE_RELATIVE

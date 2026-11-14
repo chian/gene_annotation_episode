@@ -17,7 +17,7 @@ from gene_annotation_episode.bvbrc_fastqutils_native import parse_unsupported_ar
 from gene_annotation_episode.bvbrc_fastqutils_saved_codec import validate_saved_projection, encode_saved_components, encode_failures
 from gene_annotation_episode.bvbrc_fastqutils_projection import project_fastqutils_facts
 
-spec = importlib.util.spec_from_file_location("fixture_support", Path(__file__).parent / "fixtures/bvbrc_fastqutils/bundle/fixture_support.py")
+spec = importlib.util.spec_from_file_location("fixture_support", Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/bundle/fixture_support.py")
 f = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(f)
 
@@ -357,8 +357,7 @@ def test_paired_mapping_resolves_exact_pair_parents_as_four_actual_input_reads()
 def frozen_composition_calculators():
     """Exact pre-extraction pure sources, never a native execution oracle."""
     root = Path(__file__).resolve().parents[1] / (
-        'verification/tool_graders_hmmer_map_verification_2026-10-28_529/'
-        'check264_molecular_result_fixture_corrections/source_snapshot/gene_annotation_episode')
+        'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/frozen_composition')
     modules = {}
     for name, expected in (
             ('sequence_composition_grader', '884dcb1591e6fe2028d3a460b7d813e2bf9834eca983291c6bf6984d231c61b6'),

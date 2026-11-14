@@ -1,8 +1,8 @@
 """Constructed native reaction display rows; no primary scientific evidence."""
 import asyncio
 
-from gene_annotation_episode.literature_experimental_prompt import _received_returns, _source_result
-from test_literature_reaction_native_integration_129 import setup_case, binding_for
+from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import _received_returns, _source_result
+from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_native_integration_129 import setup_case, binding_for
 
 
 def test_own_outcomes_and_typed_native_returns_keep_reaction_meanings(tmp_path):

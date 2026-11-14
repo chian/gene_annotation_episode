@@ -1,0 +1,128 @@
+{
+  "axis": "a107",
+  "original_task": {
+    "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/task.py",
+    "sha256": "f4efab5639e12a23db36797d679c54022f293d4386ddb0f55d4f11dac5323f3a"
+  },
+  "snapshot_function": "def _decision_snapshot(self, view, delivery_ref=None):\n    with self.workflow.store.read_snapshot():\n        state = self.workflow.working_state(self)\n        row = self.workflow.journal.db.execute(\"SELECT CASE\\n                        WHEN json_extract(action,'$.kind')='tool'\\n                         AND json_extract(action,'$.tool')='image.view'\\n                         AND json_extract(result,'$.status')='completed'\\n                        THEN json_extract(result,'$.visual_inputs') ELSE NULL END\\n                        FROM runtime_actions WHERE run_id=? AND episode_id=?\\n                        AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1\", (self.workflow.run_id, self.episode_id)).fetchone()\n        visual_evidence = json.loads(row[0]) if row and row[0] is not None else []\n        subset = getattr(self.workflow.store, 'reference_subset', None)\n        presented_outcome = self.workflow.local_outcome_preview(self.last_outcome, decision_index=self.last_outcome_index)\n        presented_feedback = self.feedback\n        if isinstance(self.last_outcome, Mapping) and self.feedback is self.last_outcome.get('feedback') and isinstance(presented_outcome, Mapping):\n            presented_feedback = presented_outcome.get('feedback')\n        credit_view = self.workflow.source_credit_view(self)\n        annotation_axes = isinstance(credit_view['credit'], Mapping) and credit_view['credit'].get('mode') == 'annotation_axis_credit'\n        forms = [(self.report_values, self.interpret_schema)]\n        if not annotation_axes:\n            forms.extend(((report.as_record(), _plain(report.contract.measurements['schema'])) for report in view.child_reports))\n        controller_state = _plain(view.controller_state)\n        if annotation_axes:\n            state = {}\n            controller_state = {key: controller_state[key] for key in ('arms', 'annotation_credits', 'root_score', 'decision')}\n            if presented_outcome is not None and self.last_outcome_index is not None:\n                prior = self.workflow.journal.row('runtime_actions', self.episode_id, self.last_outcome_index)\n                if prior is not None and json.loads(prior['action']).get('kind') in {'child', 'episode_child', 'job_child'}:\n                    presented_outcome = {'status': presented_outcome.get('status'), 'record_ref_count': len(presented_outcome.get('record_refs') or ()), 'changed_record_ref_count': len(presented_outcome.get('changed_record_refs') or ())}\n                    presented_feedback = None\n        basis = _references_in({'working_state': state, 'last_local_outcome': presented_outcome, 'visual_evidence': visual_evidence}, self.workflow.store.get, forms=forms, reference_subset=(lambda refs: subset(refs, self.scope)) if subset is not None else None)\n        context = view.model_inputs({'goal': self.request.goal.as_record(), 'scope': self.scope, 'working_state': state, 'visible_record_refs': basis, 'current_credit': {'mode': 'annotation_axis_credit', 'root_score': controller_state['root_score']} if annotation_axes else credit_view['credit'], 'current_evidence_vector': credit_view.get('axis_components'), **({'investigation_progress': {key: credit_view[key] for key in ('retained_finding_count', 'inactive_dependencies', 'detail_pages') if key in credit_view}} if self.workflow.receipt_projection(self) else {}), 'credit_binding': self.workflow.source_credit_binding(self), 'time_accounting': self.workflow.journal.elapsed_view(self.episode_id), 'pending_work': self.workflow.pending_work(self), 'last_local_outcome': presented_outcome, 'feedback': presented_feedback, 'visual_evidence': visual_evidence, 'report_deliveries': self.workflow.delivery_status(self.episode_id), 'controller': controller_state, 'controller_binding': self.workflow.controller_binding, 'tools': self.workflow.catalog(self.scope, source=self), 'tool_knowledge': self.workflow.knowledge.context(), 'job_episode_options': self.workflow.job_episode_options(self), 'available_report_facts': {name: {'type': 'number' if name == 'credit' else 'reference_array', 'meaning': FACT_MEANINGS[name]} for name in sorted(FACT_SOURCES)} | self.workflow.extra_report_sources(self), 'requested_report_purpose': self.request.report_contract.decision if self.request.report_contract else None, 'requested_form': self.request.report_contract.schema if self.request.report_contract else None, 'current_report_update': self.report_values, 'current_report_basis_refs': self.report_basis, 'report_lifecycle': 'Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.'}, reports=() if annotation_axes else view.child_reports)\n        if self.workflow.is_scientific_source(self):\n            if annotation_axes:\n                context.update(proposed_annotations=[{key: row[key] for key in ('proposed_annotation_ref', 'subject_ref', 'predicate', 'value', 'context_refs', 'scope', 'score', 'support', 'opposition', 'status')} for row in credit_view['proposed_annotations']], annotation_comparisons=credit_view['comparisons'])\n            else:\n                context.update(self.workflow.annotation_context(self.scope, source=self))\n        if 'monitoring_information_credit' in credit_view:\n            context.update({key: credit_view[key] for key in ('monitoring_information_credit', 'monitoring_information_binding')})\n        specialist = self.workflow.specialist(self)\n        if specialist is not None:\n            context.update(specialist.decision_context(self.workflow.binding_context(self), view))\n        context['_completed_work_axis_results'] = {key: credit_view[key] for key in ('a107_sheet', 'target_sheets', 'tool_attachments', 'source_contributions') if key in credit_view}\n        contract_catalog = getattr(self.workflow.tools, 'model_contract_catalog', None)\n        if callable(contract_catalog):\n            context['available_report_facts'] = contract_catalog(context)\n    schema = self.workflow.action_schema(self)\n    if delivery_ref is not None:\n        context, schema = self.workflow.delivery_resolution_inputs(self, delivery_ref, context)\n    return (context, schema)",
+  "next_function": "async def next(self, view, *, delivery_ref=None):\n    if delivery_ref is None:\n        self._selection_view = view\n        closed = self.workflow.journal.row('runtime_episodes', self.episode_id)\n        if closed is not None and closed['state'] == 'yielded' and (closed['completion'] is not None):\n            completion = json.loads(closed['completion'])\n            if completion['ended_by'] == 'source_failed' and view.units_consumed == completion['actions']:\n                return SourceEnd('source_failed')\n    if self.workflow.inprocess_replay is not None and delivery_ref is None:\n        if not self._restored:\n            self.restore()\n        ready = self.workflow.inprocess_replay.unit(self, view.units_consumed)\n        if ready is not None:\n            return ready\n        self.restore_checkpoint()\n        self._inprocess_replay_ready = True\n        with self.workflow.store.transaction():\n            self.workflow.inprocess_replay.capture(self)\n        if self._unfinished_own_actions:\n            index = self._unfinished_own_actions.pop(0)\n            action = self.workflow.journal.row('runtime_actions', self.episode_id, index)\n            return self.workflow.selected(self, json.loads(action['action']), index)\n    if self.workflow.execution_binding is not None and delivery_ref is None:\n        if not self._restored:\n            self.restore()\n        ready = self.workflow.completions.slot(self.episode_id, view.units_consumed)\n        if ready is not None:\n            return self.workflow.completed_unit(self, ready)\n        self.restore_checkpoint()\n        if self._unfinished_own_actions:\n            index = self._unfinished_own_actions.pop(0)\n            action = self.workflow.journal.row('runtime_actions', self.episode_id, index)\n            return self.workflow.selected(self, json.loads(action['action']), index)\n        ready = self.workflow.next_return(self)\n        if ready is not None:\n            return self.workflow.completed_unit(self, ready)\n        await self.workflow.resolve_pending_deliveries(self, view)\n        ready = self.workflow.completions.slot(self.episode_id, view.units_consumed)\n        if ready is not None:\n            return self.workflow.completed_unit(self, ready)\n    while True:\n        original_call = self.workflow.journal.row('runtime_model_calls', self.episode_id, self.calls)\n        if delivery_ref is None and original_call is None and (self._execution_context is not None):\n            ready = self._execution_context._ready_owned_child(self.path)\n            if ready is not None:\n                return ready\n        original_request = json.loads(original_call['request']) if original_call is not None else None\n        if original_request is not None and (original_call['response'] is not None or 'contract_information' in original_request or 'literature_numerical_contracts' in original_request):\n            context, schema = (original_request['context'], original_request['schema'])\n        else:\n            with self.workflow.store.read_snapshot():\n                state = self.workflow.working_state(self)\n                row = self.workflow.journal.db.execute(\"SELECT CASE\\n                        WHEN json_extract(action,'$.kind')='tool'\\n                         AND json_extract(action,'$.tool')='image.view'\\n                         AND json_extract(result,'$.status')='completed'\\n                        THEN json_extract(result,'$.visual_inputs') ELSE NULL END\\n                        FROM runtime_actions WHERE run_id=? AND episode_id=?\\n                        AND result IS NOT NULL ORDER BY decision_index DESC LIMIT 1\", (self.workflow.run_id, self.episode_id)).fetchone()\n                visual_evidence = json.loads(row[0]) if row and row[0] is not None else []\n                subset = getattr(self.workflow.store, 'reference_subset', None)\n                presented_outcome = self.workflow.local_outcome_preview(self.last_outcome, decision_index=self.last_outcome_index)\n                presented_feedback = self.feedback\n                if isinstance(self.last_outcome, Mapping) and self.feedback is self.last_outcome.get('feedback') and isinstance(presented_outcome, Mapping):\n                    presented_feedback = presented_outcome.get('feedback')\n                credit_view = self.workflow.source_credit_view(self)\n                annotation_axes = isinstance(credit_view['credit'], Mapping) and credit_view['credit'].get('mode') == 'annotation_axis_credit'\n                forms = [(self.report_values, self.interpret_schema)]\n                if not annotation_axes:\n                    forms.extend(((report.as_record(), _plain(report.contract.measurements['schema'])) for report in view.child_reports))\n                controller_state = _plain(view.controller_state)\n                if annotation_axes:\n                    state = {}\n                    controller_state = {key: controller_state[key] for key in ('arms', 'annotation_credits', 'root_score', 'decision')}\n                    if presented_outcome is not None and self.last_outcome_index is not None:\n                        prior = self.workflow.journal.row('runtime_actions', self.episode_id, self.last_outcome_index)\n                        if prior is not None and json.loads(prior['action']).get('kind') in {'child', 'episode_child', 'job_child'}:\n                            presented_outcome = {'status': presented_outcome.get('status'), 'record_ref_count': len(presented_outcome.get('record_refs') or ()), 'changed_record_ref_count': len(presented_outcome.get('changed_record_refs') or ())}\n                            presented_feedback = None\n                basis = _references_in({'working_state': state, 'last_local_outcome': presented_outcome, 'visual_evidence': visual_evidence}, self.workflow.store.get, forms=forms, reference_subset=(lambda refs: subset(refs, self.scope)) if subset is not None else None)\n                context = view.model_inputs({'goal': self.request.goal.as_record(), 'scope': self.scope, 'working_state': state, 'visible_record_refs': basis, 'current_credit': {'mode': 'annotation_axis_credit', 'root_score': controller_state['root_score']} if annotation_axes else credit_view['credit'], 'current_evidence_vector': credit_view.get('axis_components'), **({'investigation_progress': {key: credit_view[key] for key in ('retained_finding_count', 'inactive_dependencies', 'detail_pages') if key in credit_view}} if self.workflow.receipt_projection(self) else {}), 'credit_binding': self.workflow.source_credit_binding(self), 'time_accounting': self.workflow.journal.elapsed_view(self.episode_id), 'pending_work': self.workflow.pending_work(self), 'last_local_outcome': presented_outcome, 'feedback': presented_feedback, 'visual_evidence': visual_evidence, 'report_deliveries': self.workflow.delivery_status(self.episode_id), 'controller': controller_state, 'controller_binding': self.workflow.controller_binding, 'tools': self.workflow.catalog(self.scope, source=self), 'tool_knowledge': self.workflow.knowledge.context(), 'job_episode_options': self.workflow.job_episode_options(self), 'available_report_facts': {name: {'type': 'number' if name == 'credit' else 'reference_array', 'meaning': FACT_MEANINGS[name]} for name in sorted(FACT_SOURCES)} | self.workflow.extra_report_sources(self), 'requested_report_purpose': self.request.report_contract.decision if self.request.report_contract else None, 'requested_form': self.request.report_contract.schema if self.request.report_contract else None, 'current_report_update': self.report_values, 'current_report_basis_refs': self.report_basis, 'report_lifecycle': 'Interpretations are the last actual reasoning basis; later tool outcomes are facts, not a new judgment.'}, reports=() if annotation_axes else view.child_reports)\n                if self.workflow.is_scientific_source(self):\n                    if annotation_axes:\n                        context.update(proposed_annotations=[{key: row[key] for key in ('proposed_annotation_ref', 'subject_ref', 'predicate', 'value', 'context_refs', 'scope', 'score', 'support', 'opposition', 'status')} for row in credit_view['proposed_annotations']], annotation_comparisons=credit_view['comparisons'])\n                    else:\n                        context.update(self.workflow.annotation_context(self.scope, source=self))\n                if 'monitoring_information_credit' in credit_view:\n                    context.update({key: credit_view[key] for key in ('monitoring_information_credit', 'monitoring_information_binding')})\n                specialist = self.workflow.specialist(self)\n                if specialist is not None:\n                    context.update(specialist.decision_context(self.workflow.binding_context(self), view))\n                context['_completed_work_axis_results'] = {key: credit_view[key] for key in ('a107_sheet', 'target_sheets', 'tool_attachments', 'source_contributions') if key in credit_view}\n                contract_catalog = getattr(self.workflow.tools, 'model_contract_catalog', None)\n                if callable(contract_catalog):\n                    context['available_report_facts'] = contract_catalog(context)\n            schema = self.workflow.action_schema(self)\n            if delivery_ref is not None:\n                context, schema = self.workflow.delivery_resolution_inputs(self, delivery_ref, context)\n        if delivery_ref is not None and context.get('pending_child_delivery', {}).get('delivery_ref') != delivery_ref:\n            raise WorkflowError('restored_delivery_resolution_identity_conflict')\n        from gene_annotation_episode.episodic_workflow.root.a107.providers import ModelCallError\n        try:\n            response, index, actual_context, schema = await self.call(context, schema)\n        except ModelCallError as error:\n            from gene_annotation_episode.episodic_workflow.root.a107.episode_source_failure import record_source_failure\n            record_source_failure(self.workflow.store, self.workflow.run_id, self.episode_id, self.calls - 1, error)\n            self.feedback = {'status': 'failed', 'category': 'decision_source', 'exception_type': type(error).__name__, 'detail': str(error)}\n            self.checkpoint()\n            if delivery_ref is not None:\n                raise\n            return SourceEnd('source_failed')\n        with self.workflow.store.transaction() if self.workflow.execution_binding is not None or self.workflow.inprocess_replay is not None else nullcontext():\n            unit = self.apply_response(response, index, actual_context, schema)\n        if unit is not None:\n            return unit",
+  "snapshot_AST_sha256": "3e46f4629e1c77071da85b3fce78dc91c4cbb93aa08861066589bf206008191f",
+  "message_endpoints": [
+    {
+      "child": "execution_job_submission",
+      "request": [
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/to_child_execution_job_submission.py",
+          "sha256": "e04081a4c28b4d45943609d28256cf49cd90875748539ce6e5eaece162b370a7"
+        },
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/execution_job_submission/from_parent.py",
+          "sha256": "3e882bd2f1900a6956af58a3a797e3d44751149d8444cdb58b1d4b42618107f2"
+        }
+      ],
+      "report": [
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/execution_job_submission/to_parent.py",
+          "sha256": "40776c428a8201e8d54ccdd2c5d43a66a67f4de9ca932bb632783e16f3199652"
+        },
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/from_child_execution_job_submission.py",
+          "sha256": "c837a6db9b3e171fcd3b6bd04fda09ef7b63b9837b60c23fb4b275f701928b30"
+        }
+      ]
+    },
+    {
+      "child": "execution_progress_assessment",
+      "request": [
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/to_child_execution_progress_assessment.py",
+          "sha256": "3c5d2c25273fcc62b48bf9ac21de9487a7b6b51c0f5dc7934c4fd4e6770808a6"
+        },
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/execution_progress_assessment/from_parent.py",
+          "sha256": "dc0c95155690a975f92e2387e39883f22e0f71f5f772de4695b4ac2989ef2d6b"
+        }
+      ],
+      "report": [
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/execution_progress_assessment/to_parent.py",
+          "sha256": "2d66c69be77d399810f60dcf8f1c1319c65f0e981ddae6ba29bbf23b302265b3"
+        },
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/from_child_execution_progress_assessment.py",
+          "sha256": "74c742a72865d097504bfbf22bf35ac3e224e127fc4ad33386f46ae7304e0d56"
+        }
+      ]
+    },
+    {
+      "child": "execution_result_acquisition",
+      "request": [
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/to_child_execution_result_acquisition.py",
+          "sha256": "d1f49f86eb2ab6e2399154fc78f3d247533e0aa69c697f2aadee17ed731b2172"
+        },
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/execution_result_acquisition/from_parent.py",
+          "sha256": "d2de2d0a3413ab48eaad6fd72d088552174f885c6e024f58ca2a2e2beece6673"
+        }
+      ],
+      "report": [
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/execution_result_acquisition/to_parent.py",
+          "sha256": "41a90ace6195bf2541f5adedc96f089c6b01f97d107348ed1a73f48fed4e71c7"
+        },
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/from_child_execution_result_acquisition.py",
+          "sha256": "3d9225174de946eb7a37aabbc457c7f38593cf02f12dd3f4b051fdb266080b50"
+        }
+      ]
+    },
+    {
+      "child": "hpc_work_planning",
+      "request": [
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/to_child_hpc_work_planning.py",
+          "sha256": "fcd4b7dfec31bf615771a803369b00984e01bb148c4c589a2a17276b2adde985"
+        },
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/from_parent.py",
+          "sha256": "f535df064cd0de91af99a670e6f6ac005a13bc70c25b0713673c4972bfb3f67b"
+        }
+      ],
+      "report": [
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/to_parent.py",
+          "sha256": "09017b1a12a4ee99329fd7b5ac44b1aa385ad4c9acd479c76612bb3a781cced7"
+        },
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/from_child_hpc_work_planning.py",
+          "sha256": "f955d5c85a721af0702407cea217df5f3202571f927533fe212f0e4a099874c0"
+        }
+      ]
+    },
+    {
+      "child": "published_evidence_assessment",
+      "request": [
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/to_child_published_evidence_assessment.py",
+          "sha256": "eadb7d8677c313512b2a06ea2d159d6f0da6051ed900f2a3eb147975b46ad240"
+        },
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/published_evidence_assessment/from_parent.py",
+          "sha256": "24030ad3413803dea49d58ee42cfd7c0d09653078a6de86a5dceded85b97af9b"
+        }
+      ],
+      "report": [
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/published_evidence_assessment/to_parent.py",
+          "sha256": "8652b4dc3cea6773826dcfd6c503141dbfa930200d9111b645ecb792b9930ab9"
+        },
+        {
+          "path": "gene_annotation_episode/episodic_workflow/root/a107/scientific_process/from_child_published_evidence_assessment.py",
+          "sha256": "38cdde44adf7c4adfd7f6c3d5026f556325352eb4b99ec518d157460b90fccd3"
+        }
+      ]
+    }
+  ],
+  "qualification": "Exact own-axis source fixture; controlled decision inputs do not validate autonomous science or saved-workflow restoration."
+}

@@ -36,8 +36,8 @@ from gene_annotation_episode.chromatin_interaction_result_worker import run_chro
 REPO = Path(os.environ["C3_ORIGINAL_REPO"])
 PACKET = Path(os.environ["C3_PACKET"])
 ATTEMPT = Path(os.environ["C3_ATTEMPT"])
-NATIVE_FIXTURES = REPO / "verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/fixtures"
-WORKED = {r["example_key"]: r["record"] for r in json.loads((REPO / "verification/tool_graders_chromatin_interaction_contract_2026-10-27_439/WORKED_RECORDS.json").read_text())["records"]}
+NATIVE_FIXTURES = REPO / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/cooler"
+WORKED = {r["example_key"]: r["record"] for r in json.loads((REPO / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/WORKED_RECORDS.json").read_text())["records"]}
 
 
 @pytest.fixture(scope="session")

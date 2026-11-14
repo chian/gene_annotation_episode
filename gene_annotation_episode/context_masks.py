@@ -7,7 +7,7 @@ member index is authoritative; no eager read subject inventory is constructed.
 from __future__ import annotations
 import hashlib
 from .domain import ContractError, canonical
-from . import library_targets as libraries
+from gene_annotation_episode import library_targets as libraries
 
 VERSION = "fixed_original_position_set_v1"
 FIELDS = {"subject_refs", "read_selection_refs", "segments"}

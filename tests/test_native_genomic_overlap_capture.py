@@ -26,7 +26,7 @@ from gene_annotation_episode.native_genomic_overlap_contracts import (
 from gene_annotation_episode.state import Store
 
 
-PACKET = Path(__file__).resolve().parents[1] / 'verification/tool_graders_genomic_overlap_native_capture_2026-10-27_433'
+PACKET = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/native_capture'
 ACTION_REF = 'synthetic-fixture-original-selected-action'
 CLOSURE_REF = 'synthetic-fixture-terminal-writer-closure'
 

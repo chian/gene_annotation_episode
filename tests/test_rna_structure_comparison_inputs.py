@@ -12,7 +12,7 @@ from gene_annotation_episode.rna_structure_comparison_contracts import (
 from gene_annotation_episode.rna_structure_comparison_inputs import (
     build_rna_correspondence, populate_rna_comparison_sheet,
 )
-_fixtures = import_module("verification.tool_graders_rna_comparison_inputs_2026-10-26_366.fixture_helpers")
+_fixtures = import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_inputs_366.fixture_helpers")
 absent, comparison, energy_request, failure, feature, member, pair_inputs, scan_request, selector, site, supplied = (
     getattr(_fixtures, name) for name in ("absent", "comparison", "energy_request", "failure", "feature", "member",
         "pair_inputs", "scan_request", "selector", "site", "supplied"))
@@ -306,7 +306,7 @@ def test_saved_input_relationships_reject_forged_maps_and_selections(mutation):
 
 
 def test_all_eight_plan_hand_examples_are_input_cases_only(tmp_path):
-    cases = json.loads((Path(__file__).parent / "fixtures/rna_structure_comparison_inputs_366/hand_examples.json").read_text())["examples"]
+    cases = json.loads((Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_comparison_inputs_366/hand_examples.json").read_text())["examples"]
     retained = []
     for case in cases:
         number = case["number"]

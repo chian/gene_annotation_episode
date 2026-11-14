@@ -1,7 +1,7 @@
 """Original forecast facts through ordinary scientific-child method_loop paths.
 
 Scripted decisions and fixed-length controllers are engineering fixtures. The
-homology variant uses real Store/protein bindings without submitting a job.
+fixture uses a recorded execution history without submitting a job.
 """
 import asyncio
 from copy import deepcopy
@@ -12,34 +12,20 @@ import pytest
 from gene_annotation_episode.execution_expectations import ExecutionExpectations
 from gene_annotation_episode.resource_estimation import ESTIMATE_SCHEMA, ResourceToolEstimator, report_source
 from gene_annotation_episode.runtime import DecisionSource, Record, run_workflow
-from gene_annotation_episode.tools import ToolRegistry
-from test_homology_episode_runtime import Provider, prepared
-from test_runtime import FixtureController, fixture_credit, obj, setup, tool
+from test_runtime import FixtureController, ScriptedProvider, fixture_credit, obj, setup, tool
 from test_runtime_expectations import append, make_history
 
 
-@pytest.fixture(params=['static', 'homology'])
-def bound_case(tmp_path, request):
-    if request.param == 'static':
-        store, tools = setup(tmp_path)
-        scope = {'subject_refs': ['subject_A']}
-        history = tmp_path/'history.sqlite'
-        execution_class = make_history(history)
-        expectations = ExecutionExpectations(history,
-            by_grain={'annotation': [execution_class], 'improvement': [execution_class]})
-        jobs, binding, projector = None, None, fixture_credit
-        action = lambda report=None: tool(report=report)
-    else:
-        store, _, _, scope, jobs, binding = prepared(tmp_path, statistics=True)
-        tools = ToolRegistry(store)
-        execution_class, = binding.prospective_execution_classes(store, scope)
-        history = binding.statistics.history_path
-        append(history, execution_class, 'initial-measured-duration', 2)
-        expectations = ExecutionExpectations.for_homology(jobs, binding.statistics, roles=binding.roles,
-            planning_roles=('annotation', 'improvement'))
-        projector = lambda store, scope: 0
-        action = lambda report=None: {'selection': {'kind': 'tool', 'tool': 'state.query',
-            'arguments': {'kind': 'subject', 'offset': 0, 'limit': 1}}, 'report_update': report or {}}
+@pytest.fixture
+def bound_case(tmp_path):
+    store, tools = setup(tmp_path)
+    scope = {'subject_refs': ['subject_A']}
+    history = tmp_path/'history.sqlite'
+    execution_class = make_history(history)
+    expectations = ExecutionExpectations(history,
+        by_grain={'annotation': [execution_class], 'improvement': [execution_class]})
+    jobs, binding, projector = None, None, fixture_credit
+    action = lambda report=None: tool(report=report)
     case = {'store': store, 'tools': tools, 'scope': scope, 'history': history,
         'execution_class': execution_class, 'expectations': expectations, 'jobs': jobs,
         'binding': binding, 'projector': projector, 'action': action, 'directory': tmp_path/'run'}
@@ -87,7 +73,7 @@ def test_requested_forecast_source_uses_original_own_decision_records(bound_case
         assert context['current_credit'] == 0
         assert 'resource_tool_estimates' not in context['child_reports'][0]
         return case['action']()
-    result = run(case, Provider([choose, first, second, use_return]))
+    result = run(case, ScriptedProvider([choose, first, second, use_return]))
     assert result['completed_actions'] == 2 and result['credit'] == 0
     assert case['store'].db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 4
     saved = [json.loads(row[0]) for row in case['store'].db.execute(
@@ -123,7 +109,7 @@ def test_prospective_forecast_identity_cannot_carry_changed_values(bound_case, f
         assert context['current_credit'] == 0
         return case['action']()
     script = ([bad_initial, correct_initial] if forgery_at == 'initial' else [choose])
-    result = run(case, Provider([*script, first, second, use_return]))
+    result = run(case, ScriptedProvider([*script, first, second, use_return]))
     assert result['completed_actions'] == 2
     assert case['store'].db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 4
 
@@ -156,7 +142,7 @@ def test_final_admission_and_redelivery_use_recorded_facts_without_refresh(bound
         assert context['resource_tool_estimates'][0]['expected_total_seconds'] == 6
         assert context['child_reports'][0]['execution'][0]['expected_total_seconds'] == 2
         return case['action']()
-    result = run(case, Provider([choose, child, repair, use_return]), child_actions=1)
+    result = run(case, ScriptedProvider([choose, child, repair, use_return]), child_actions=1)
     assert result['completed_actions'] == 2 and result['pending_report_deliveries'] == 0
     assert case['store'].db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
     attempts = case['store'].db.execute('SELECT failure,form FROM runtime_report_attempts ORDER BY decision_index').fetchall()
@@ -176,7 +162,7 @@ def test_parent_field_named_estimate_ref_honors_its_declared_scientific_namespac
     def use_return(context):
         assert context['child_reports'] == [report]
         return case['action']()
-    result = run(case, Provider([choose, child, use_return]), child_actions=1)
+    result = run(case, ScriptedProvider([choose, child, use_return]), child_actions=1)
     assert result['completed_actions'] == 2
     assert case['store'].db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
 
@@ -205,6 +191,6 @@ def test_forecast_namespace_protects_an_identity_under_a_parent_chosen_name(boun
     def use_return(context):
         assert context['child_reports'][0]['forecast']['expected_total_seconds'] == 2
         return case['action']()
-    result = run(case, Provider([choose, changed, correct, use_return]))
+    result = run(case, ScriptedProvider([choose, changed, correct, use_return]))
     assert result['completed_actions'] == 2
     assert case['store'].db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 4

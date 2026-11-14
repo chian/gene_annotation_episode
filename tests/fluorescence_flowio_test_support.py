@@ -18,10 +18,10 @@ import urllib.request
 
 
 SOURCE_RELATIVE = Path(
-    "verification/tool_graders_fluorescence_implementation_2026-10-28_557/flowio_source_1_4_0"
+    "gene_annotation_episode/episodic_workflow/root/tests/fixtures/fluorescence/flowio_source_1_4_0"
 )
 UPSTREAM_SOURCE_RELATIVE = Path(
-    "verification/tool_graders_fluorescence_fcs_native_2026-10-28_563/upstream_source"
+    "gene_annotation_episode/episodic_workflow/root/tests/fixtures/fluorescence/upstream_source"
 )
 ARTIFACT_DIRECTORY = "fluorescence_fcs_native_563"
 SOURCE_PINS = {

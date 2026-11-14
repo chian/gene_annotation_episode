@@ -10,7 +10,7 @@ import hashlib
 import json
 
 from .domain import ContractError, canonical, identity
-from . import materials_packing as packing
+from gene_annotation_episode import materials_packing as packing
 
 VERSION = "fixed_original_read_position_measure_v1"
 

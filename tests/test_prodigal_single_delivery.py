@@ -32,7 +32,7 @@ from test_tool_grading_publication import numerical, only_grading, operation_cou
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "verification/tool_graders_batch_001/prodigal"
+DATA = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/prodigal"
 POLICY = {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3}
 
 

@@ -39,7 +39,7 @@ from gene_annotation_episode.scientific_process_setup import prepare_scientific_
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from tests.test_homer_motif_saved_workflow import _archive, _archive_value, _encode
-from tests.test_tf_binding_tools import (
+from gene_annotation_episode.episodic_workflow.root.tests.test_tf_binding_tools import (
     POLICY, PUBLICATION, ROOT, _assemble, _history, _inventory, _pin,
     _sqlite_pins, _tables, _write,
 )

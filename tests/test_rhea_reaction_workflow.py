@@ -28,7 +28,7 @@ from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 
 
-G = import_module('verification.tool_graders_expression_nmf_episode_path_2026-10-27_490.fixture_helpers')
+G = import_module('gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.retained_workflow.verification.tool_graders_expression_nmf_episode_path_2026-10-27_490.fixture_helpers')
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATION = ROOT / 'research/slotted_process_library/publications/2026-10-24-001'
 CAPTURE_SHA = 'a8f987d37abf10904d30b235eaf2cee8481307b8e4ea1105f0dbfabac484e641'

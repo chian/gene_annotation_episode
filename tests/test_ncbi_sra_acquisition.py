@@ -21,7 +21,7 @@ from gene_annotation_episode.acquisition import PublicClients, SourceSnapshot
 from gene_annotation_episode import ncbi_sra_acquisition as sra
 
 
-FIXTURES = Path(__file__).parent / "fixtures/ncbi_sra"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a106/tests/fixtures/ncbi_sra"
 SOURCE = "source_" + "a" * 24
 URL = "https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR6263255/SRR6263255"
 LITE_URL = "https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos12/sra-pub-zq-1214/SRR006/263/SRR6263255.sralite.1"

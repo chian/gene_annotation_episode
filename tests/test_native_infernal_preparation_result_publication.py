@@ -36,7 +36,7 @@ from test_native_infernal_preparation_result_worker import (
 
 
 POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
-COMPILED_INDEX = json.loads((ROOT / "verification/tool_graders_infernal_preparation_2026-10-26_247/NATIVE_COMPILED_INDEX_001.json").read_bytes())
+COMPILED_INDEX = json.loads((ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/compiled/NATIVE_COMPILED_INDEX_001.json").read_bytes())
 
 
 def grade(store, tmp_path, case="consensus"):

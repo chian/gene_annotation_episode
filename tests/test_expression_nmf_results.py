@@ -25,7 +25,7 @@ from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.state import Store
 
 REPO = Path(os.environ['NMF489_REPO'])
-NATIVE = REPO / 'verification/tool_graders_expression_nmf_native_grader_2026-10-27_484/check003'
+NATIVE = REPO / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/expression_nmf'
 POLICY = LocalJobPolicy(21474836480, 4294967296)
 
 

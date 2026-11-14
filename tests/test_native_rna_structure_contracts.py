@@ -16,7 +16,7 @@ from gene_annotation_episode.native_rna_structure_contracts import (
 from gene_annotation_episode.native_rna_structure_tool_info import rna_structure_tool_contracts, rna_structure_tool_information
 
 REPO = Path(__file__).resolve().parents[1]
-PACKET = REPO / "verification/tool_graders_rna_structure_producer_2026-10-26_357"
+PACKET = REPO / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_producer_357"
 
 
 def sha(path):
@@ -54,7 +54,7 @@ def software(*, native=False):
         "worker_source_sha256": sha(REPO / "gene_annotation_episode/native_rna_structure_worker.py"),
         "viennarna_distribution_version": None, "rna_module_sha256": None, "rna_extension_sha256": None}
     if native:
-        observed = json.loads((PACKET / "probe001/probe.json").read_bytes())
+        observed = json.loads((PACKET / "probe.json").read_bytes())
         result.update(viennarna_distribution_version=observed["distribution_version"],
             rna_module_sha256=observed["module_sha256"], rna_extension_sha256=observed["extension_sha256"])
     return result

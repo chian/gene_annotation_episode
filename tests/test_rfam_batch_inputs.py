@@ -10,7 +10,7 @@ from gene_annotation_episode.rfam_batch_contracts import RFAM_CALCULATION_PARAME
 from gene_annotation_episode.rfam_batch_inputs import populate_rfam_batch_json_sheet
 
 
-EXAMPLES = Path(__file__).resolve().parents[1] / "verification/tool_graders_rfam_contract_2026-10-26_232/examples"
+EXAMPLES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/contract/examples"
 LIVE = EXAMPLES.parents[1] / "tool_graders_rfam_transport_2026-10-26_234/live"
 
 

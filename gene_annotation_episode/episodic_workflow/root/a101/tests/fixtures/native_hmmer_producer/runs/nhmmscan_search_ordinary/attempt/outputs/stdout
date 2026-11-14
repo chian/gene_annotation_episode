@@ -1,0 +1,116 @@
+# nhmmscan :: search DNA sequence(s) against a DNA profile database
+# HMMER 3.4 (Aug 2023); http://hmmer.org/
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/inputs/query_sequence.fa
+# target HMM database:             /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/inputs/profile_database.hmm
+# per-seq hits tabular output:     /home/chia/repos/gene_annotation_episode/verification/tool_graders_native_hmmer_producer_2026-10-24/runs/nhmmscan_search_ordinary/attempt/outputs/tblout
+# max ASCII text line length:      unlimited
+# input seqfile format asserted:   fasta
+# multithread parallelization:     1 workers
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       forward  [L=120]
+Scores for complete hit:
+    E-value  score  bias  Model     start    end  Description
+    ------- ------ -----  --------  -----  -----  -----------
+      2e-39  120.9   0.9  model        11    110 
+
+
+Annotation for each hit  (and alignments):
+>> model  
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !  120.9   0.9     2e-39         1       100 []        11       110 ..        11       110 ..       100    0.99
+
+  Alignment:
+  score: 120.9 bits
+    model   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100
+              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg
+  forward  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 110
+              79***********************************************************************************************986 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (240 residues searched)
+Target model(s):                           1  (100 nodes)
+Residues passing SSV filter:             120  (0.5); expected (0.02)
+Residues passing bias filter:            120  (0.5); expected (0.02)
+Residues passing Vit filter:             120  (0.5); expected (0.003)
+Residues passing Fwd filter:             120  (0.5); expected (3e-05)
+Total number of hits:                      1  (0.417)
+# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00
+# Mc/sec: 51.44
+//
+Query:       reverse  [L=120]
+Scores for complete hit:
+    E-value  score  bias  Model     start    end  Description
+    ------- ------ -----  --------  -----  -----  -----------
+      2e-39  120.9   0.9  model       110     11 
+
+
+Annotation for each hit  (and alignments):
+>> model  
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !  120.9   0.9     2e-39         1       100 []       110        11 ..       110        11 ..       100    0.99
+
+  Alignment:
+  score: 120.9 bits
+    model   1 ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100
+              ggcagtggcgtgtcaacctccctttacgataagtccatcactaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg
+  reverse 110 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCACTAACAGTAAGCCTGACGGGGGCAAGATCTCGCTTTTTGGCAGACTCACTCTTCCCATTG 11 
+              79***********************************************************************************************986 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (240 residues searched)
+Target model(s):                           1  (100 nodes)
+Residues passing SSV filter:             120  (0.5); expected (0.02)
+Residues passing bias filter:            120  (0.5); expected (0.02)
+Residues passing Vit filter:             120  (0.5); expected (0.003)
+Residues passing Fwd filter:             120  (0.5); expected (3e-05)
+Total number of hits:                      1  (0.417)
+# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00
+# Mc/sec: 75.03
+//
+Query:       gapped  [L=121]
+Scores for complete hit:
+    E-value  score  bias  Model     start    end  Description
+    ------- ------ -----  --------  -----  -----  -----------
+    1.1e-34  105.7   0.7  model        11    111 
+
+
+Annotation for each hit  (and alignments):
+>> model  
+    score  bias    Evalue   hmmfrom    hmm to     alifrom    ali to      envfrom    env to      mod len      acc
+   ------ ----- ---------   -------   -------    --------- ---------    --------- ---------    ---------    ----
+ !  105.7   0.7   1.1e-34         1       100 []        11       111 ..        11       111 ..       100    0.95
+
+  Alignment:
+  score: 105.7 bits
+   model   1 ggcagtggcgtgtcaacctccctttacgataagtccatca...ctaacagtaagcctgacgggggcaagatctcgctttttggcagactcactcttcccattg 100
+             ggcagtggcgtgtcaacctccctttacgataagtccatca   ctaacagtaagcctgacgggggcaagatct  ctttttggcagactcactcttcccattg
+  gapped  11 GGCAGTGGCGTGTCAACCTCCCTTTACGATAAGTCCATCAgtaCTAACAGTAAGCCTGACGGGGGCAAGATCT--CTTTTTGGCAGACTCACTCTTCCCATTG 111
+             79************************************95444899************************998..599**********************986 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (242 residues searched)
+Target model(s):                           1  (100 nodes)
+Residues passing SSV filter:             121  (0.5); expected (0.02)
+Residues passing bias filter:            121  (0.5); expected (0.02)
+Residues passing Vit filter:             121  (0.5); expected (0.003)
+Residues passing Fwd filter:             121  (0.5); expected (3e-05)
+Total number of hits:                      1  (0.417)
+# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00
+# Mc/sec: 61.31
+//
+[ok]

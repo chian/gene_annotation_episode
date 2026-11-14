@@ -23,7 +23,7 @@ in [resources/local-tools.toml](resources/local-tools.toml).
 | --- | --- |
 | State | [Scientific state](docs/STATE_API.md), [queries](docs/STATE_QUERY.md), [reference resolution](docs/REFERENCE_RESOLUTION.md) |
 | Runtime | [Runtime bindings](docs/RUNTIME_BINDING.md), [credit inspection](docs/EPISODE_CREDIT.md), [yield reports](docs/EPISODE_YIELD_REPORTS.md), [history restoration](docs/BOUNDED_RESTORATION.md) |
-| Execution | [Case execution](docs/CASE_EXECUTION.md), [execution services](docs/EXECUTION_WIRING.md), [local job limits](docs/LOCAL_JOB_LIMITS.md), [execution statistics](docs/NATIVE_EXECUTION_STATISTICS.md) |
+| Execution | [Execution services](docs/EXECUTION_WIRING.md), [local job limits](docs/LOCAL_JOB_LIMITS.md), [execution statistics](docs/NATIVE_EXECUTION_STATISTICS.md) |
 | Instructions | [Tool instruction retrieval](docs/TOOL_KNOWLEDGE.md), [launch instruction retrieval](docs/LAUNCH_INSTRUCTIONS.md) |
 | Materials | [Material intake](docs/MATERIAL_INTAKE.md), [GenBank](docs/GENBANK_INTAKE.md), [packed reads](docs/PACKED_MATERIALS.md), [read-library targets](docs/READ_LIBRARY_TARGETS.md) |
 | Evidence-axis progress | [Central ledger and code appraisal](docs/EVIDENCE_AXIS_LEDGER.md) |
@@ -35,7 +35,6 @@ in [resources/local-tools.toml](resources/local-tools.toml).
 - `gene_annotation_episode/` contains application code and functional instruction libraries.
 - `method_loop/` contains the shared iterative runtime.
 - `tests/` contains automated checks and fixtures.
-- `cases/` contains retained case inputs and execution evidence.
 - `verification/` contains retained artifacts, numerical examples, receipts and verification results.
 - `research/` contains source research, numerical sheets and machine-readable inventories.
 - `reference/` contains external reference checkouts.

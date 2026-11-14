@@ -9,8 +9,8 @@ from dataclasses import replace
 from method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode.a107_tools import A107ToolRegistry
-from gene_annotation_episode.a110_tools import A110ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a107.a107_tools import A107ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a110.a110_tools import A110ToolRegistry
 from gene_annotation_episode.communication import plain
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episode_bindings import BindingContext

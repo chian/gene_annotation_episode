@@ -110,7 +110,7 @@ def _selected_binding(directory):
 
 
 def _input_files(store):
-    archive = ROOT / 'tests/fixtures/homer_v51_selected_region_inputs.zip'
+    archive = ROOT / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/homer_v51_selected_region_inputs.zip'
     assert _pin(archive)['sha256'] == '26b0ff374d31cd3aae34c143d0bd93d36dc6da4e35af8f73ee1a0967af250180'
     inputs, initial = [], []
     with zipfile.ZipFile(archive) as stream:

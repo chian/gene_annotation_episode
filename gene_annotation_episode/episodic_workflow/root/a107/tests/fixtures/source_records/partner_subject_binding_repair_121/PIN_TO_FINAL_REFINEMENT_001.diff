@@ -1,0 +1,25 @@
+--- pin_001/gene_annotation_episode/literature_partner_storage.py
++++ gene_annotation_episode/literature_partner_storage.py
+@@ -303,7 +303,7 @@
+                 source_ref = witness["source_ref"]
+                 attributes.append({"name": "assay_outcome", "value": value})
+             factors.append(remember("context", {"context_type": "assay_condition",
+-                "name": name, "source_ref": source_ref, "attributes": attributes,
++                "name": "condition factor " + name + " level", "source_ref": source_ref, "attributes": attributes,
+                 "related_refs": [factor_ref]}))
+         condition_refs[role + "_condition_ref"] = remember("context", {
+             "context_type": "assay_condition", "name": role + " arm selected conditions ("
+--- pin_001/tests/test_literature_partner_operand_bindings.py
++++ tests/test_literature_partner_operand_bindings.py
+@@ -113,9 +113,9 @@
+         assert rows[4]['unavailable_reason'] == 'normalization_unreported'
+         group = store.get(rows[0]['reference_condition_ref'])
+         factors = [store.get(ref) for ref in group['related_refs'] if store.get(ref)['record_type'] == 'context']
+-        nitrogen = next(row for row in factors if row['name'] == 'nitrogen_source')
++        nitrogen = next(row for row in factors if row['name'] == 'condition factor nitrogen_source level')
+         assert label(store, nitrogen['attributes'][0]['value']['ref']) == 'glutamine'
+-        temperature = next(row for row in factors if row['name'] == 'temperature')
++        temperature = next(row for row in factors if row['name'] == 'condition factor temperature level')
+         assert temperature['attributes'][0]['value']['value'] == 37
+         assert label(store, temperature['attributes'][0]['value']['unit_ref']) == 'degC'
+         assert 'glutamine' in outcome['result']['assay_interpretation']['reference_condition']['value']

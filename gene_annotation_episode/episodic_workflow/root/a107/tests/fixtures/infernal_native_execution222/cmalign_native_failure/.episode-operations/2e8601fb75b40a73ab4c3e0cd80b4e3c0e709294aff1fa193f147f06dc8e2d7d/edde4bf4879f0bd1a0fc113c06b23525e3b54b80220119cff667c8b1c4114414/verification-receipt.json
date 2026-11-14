@@ -1,0 +1,71 @@
+{
+  "observed_at": "2026-10-26T01:22:23.383651+00:00",
+  "driver_returncode": 1,
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmalign_native_failure/.episode-operations/2e8601fb75b40a73ab4c3e0cd80b4e3c0e709294aff1fa193f147f06dc8e2d7d/edde4bf4879f0bd1a0fc113c06b23525e3b54b80220119cff667c8b1c4114414/stdout.log",
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmalign_native_failure/.episode-operations/2e8601fb75b40a73ab4c3e0cd80b4e3c0e709294aff1fa193f147f06dc8e2d7d/edde4bf4879f0bd1a0fc113c06b23525e3b54b80220119cff667c8b1c4114414/stderr.log",
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "exit-code",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "1",
+      "ended": {
+        "at": "2026-10-26T01:22:23.227389+00:00",
+        "monotonic_ns": 791304924718767,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.616964228,
+    "native_returncode": 1,
+    "observed_scratch_bytes": 147456
+  },
+  "native_realized_argv": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmalign",
+    "--cpu",
+    "1",
+    "--sample",
+    "--seed",
+    "42",
+    "-o",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmalign_native_failure/.episode-operations/2e8601fb75b40a73ab4c3e0cd80b4e3c0e709294aff1fa193f147f06dc8e2d7d/edde4bf4879f0bd1a0fc113c06b23525e3b54b80220119cff667c8b1c4114414/infernal-attempt/alignment.sto",
+    "--sfile",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmalign_native_failure/.episode-operations/2e8601fb75b40a73ab4c3e0cd80b4e3c0e709294aff1fa193f147f06dc8e2d7d/edde4bf4879f0bd1a0fc113c06b23525e3b54b80220119cff667c8b1c4114414/infernal-attempt/scores.txt",
+    "--ifile",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmalign_native_failure/.episode-operations/2e8601fb75b40a73ab4c3e0cd80b4e3c0e709294aff1fa193f147f06dc8e2d7d/edde4bf4879f0bd1a0fc113c06b23525e3b54b80220119cff667c8b1c4114414/infernal-attempt/inserts.txt",
+    "--elfile",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmalign_native_failure/.episode-operations/2e8601fb75b40a73ab4c3e0cd80b4e3c0e709294aff1fa193f147f06dc8e2d7d/edde4bf4879f0bd1a0fc113c06b23525e3b54b80220119cff667c8b1c4114414/infernal-attempt/local-ends.txt",
+    "--tfile",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmalign_native_failure/.episode-operations/2e8601fb75b40a73ab4c3e0cd80b4e3c0e709294aff1fa193f147f06dc8e2d7d/edde4bf4879f0bd1a0fc113c06b23525e3b54b80220119cff667c8b1c4114414/infernal-attempt/traceback.txt",
+    "--informat",
+    "fasta",
+    "--outformat",
+    "Stockholm",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmalign_native_failure/.episode-operations/2e8601fb75b40a73ab4c3e0cd80b4e3c0e709294aff1fa193f147f06dc8e2d7d/edde4bf4879f0bd1a0fc113c06b23525e3b54b80220119cff667c8b1c4114414/infernal-attempt/inputs/models.cm",
+    "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_native_execution_2026-10-26_222/runs/cmalign_native_failure/.episode-operations/2e8601fb75b40a73ab4c3e0cd80b4e3c0e709294aff1fa193f147f06dc8e2d7d/edde4bf4879f0bd1a0fc113c06b23525e3b54b80220119cff667c8b1c4114414/infernal-attempt/inputs/sequences.fa"
+  ],
+  "native_returncode": 1,
+  "bundle_sha256": "ba3d950b89b80ebbec40fe62f6486bec0663f5be5ff62eb582489a3dea715819",
+  "scope": "Real native producer and lifecycle bridge; no production episode communication verified."
+}

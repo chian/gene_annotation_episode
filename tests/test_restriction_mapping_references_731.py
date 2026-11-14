@@ -30,7 +30,7 @@ RUN = "restriction731-engineering"
 SOURCE = "restriction_mapping_results"
 PREFIX = "restriction_mapping_reference_"
 SELECTOR = Path(__file__).resolve().parents[1] / (
-    "verification/tool_graders_restriction_registry_2026-10-29_728/SAVED_SELECTOR_001.json")
+    "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/SAVED_SELECTOR_001.json")
 pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="requires bounded529")
 
 

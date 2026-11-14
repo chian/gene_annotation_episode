@@ -8,11 +8,11 @@ from copy import deepcopy
 import asyncio
 import json
 
-from evidence_root_fixture import EvidenceRootCase, REAL
-from gene_annotation_episode.a102_attachments import received_attachments
-from gene_annotation_episode.a102_investigation import initial_report
+from gene_annotation_episode.episodic_workflow.root.tests.evidence_root_fixture import EvidenceRootCase, REAL
+from gene_annotation_episode.episodic_workflow.root.a102.a102_attachments import received_attachments
+from gene_annotation_episode.episodic_workflow.root.a102.a102_investigation import initial_report
 from gene_annotation_episode.decision_context import apply_state_frame
-from gene_annotation_episode.evidence_root import NativeEvidenceRootCredit
+from gene_annotation_episode.episodic_workflow.root.evidence_root import NativeEvidenceRootCredit
 from gene_annotation_episode.numerical import YieldController,YieldEstimate,NumericBand
 
 

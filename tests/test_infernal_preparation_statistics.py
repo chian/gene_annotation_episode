@@ -13,8 +13,8 @@ from gene_annotation_episode.infernal_preparation_statistics import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-OLD = ROOT/'verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native'
-NEW = ROOT/'verification/tool_graders_infernal_preparation_statistics_2026-10-26_249/native'
+OLD = ROOT/'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/boundaries/native'
+NEW = ROOT/'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/statistics/native'
 
 
 def operation(program, mode, **settings):

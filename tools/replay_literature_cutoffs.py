@@ -142,7 +142,7 @@ def main():
             'full_text_sources_acquired': sum(item['first_action'] <= cutoff for item in papers.values()),
         })
 
-    driver = runpy.run_path(str(repo / 'tests/live_a105_database_workflow.py'))
+    driver = runpy.run_path(str(repo / 'gene_annotation_episode/episodic_workflow/root/tests/live_a105_database_workflow.py'))
     factory, definition = driver['build_literature_controller'](args.selected_cost)
     actual = factory(tuple(tuple(part) for part in json.loads(episode['path'])), episode['initial_credit'])
     root = db.execute("SELECT path,initial_credit FROM runtime_episodes WHERE run_id=? AND json_array_length(path)=1",

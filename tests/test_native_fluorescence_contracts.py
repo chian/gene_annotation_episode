@@ -8,10 +8,10 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import fluorescence_event_contracts as core
-from gene_annotation_episode.fluorescence_execution_common import canonical, digest, identity, same, validate_failure
-from gene_annotation_episode.fluorescence_event_readers import parse_fluorescence_csv
-from gene_annotation_episode.native_fluorescence_contracts import (
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical, digest, identity, same, validate_failure
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_readers import parse_fluorescence_csv
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import (
     ATTEMPT_DIRECTORY_NAME, IMPLEMENTATION_NAMES, OPERATIONS, POLICY, fluorescence_environment,
     fluorescence_output_files, requested_job_from_fluorescence, unavailable_fluorescence_input,
     validate_fluorescence_bindings, validate_fluorescence_job, validate_fluorescence_manifest,
@@ -32,7 +32,7 @@ def software(*, fcs=False):
             for name in IMPLEMENTATION_NAMES], 'dependency_roots': [], 'distributions': [],
         'runtime_files': [pin('/declared-software/python/lib/python3.12/json/__init__.py')]}
     if fcs:
-        value['implementation_files'].append(pin(module / 'gene_annotation_episode/fluorescence_fcs_reader.py'))
+        value['implementation_files'].append(pin(module / 'gene_annotation_episode/episodic_workflow/root/library/fluorescence_fcs_reader.py'))
         value['dependency_roots'] = ['/declared-software/dependencies']
         value['distributions'] = [{'name': 'FlowIO', 'version': '1.4.0', 'requires': []}]
         value['runtime_files'].extend([pin('/declared-software/dependencies/flowio/__init__.py'),
@@ -287,7 +287,7 @@ def test_failure_roles_and_indices_have_constrained_meanings(value):
 
 @pytest.mark.parametrize('access', [None, True, False])
 def test_input_admission_needs_known_receipt_and_exact_store_path(tmp_path, monkeypatch, access):
-    from gene_annotation_episode import fluorescence_operands as operands
+    from gene_annotation_episode.episodic_workflow.root.library import fluorescence_operands as operands
     from gene_annotation_episode.state import Store
     selected = job(tmp_path)
     binding = selected['inputs'][0]

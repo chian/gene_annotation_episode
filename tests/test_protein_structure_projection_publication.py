@@ -15,8 +15,8 @@ from gene_annotation_episode.protein_structure_result_views import project_prote
 from gene_annotation_episode.state import Store
 
 
-HELPERS = import_module("verification.tool_graders_protein_structure_inputs_2026-10-27_386.fixture_helpers")
-FIXTURES = Path(__file__).resolve().parents[1] / "verification/tool_graders_protein_structure_result_worker_2026-10-27_393/fixtures"
+HELPERS = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_result_worker_393/fixtures"
 
 
 def forbidden(*args, **kwargs):

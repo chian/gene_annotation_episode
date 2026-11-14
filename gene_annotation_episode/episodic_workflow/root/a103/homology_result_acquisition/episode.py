@@ -1,0 +1,27 @@
+"""Private job_results episode behavior for A103."""
+from __future__ import annotations
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.to_parent import AcquisitionReport
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.from_parent import AcquisitionAssignment
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.execution_operations import AcquisitionOperations
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.native_event_observation import AcquisitionNativeEvents
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.credit_binding import AcquisitionCreditBinding
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.execution_planning import AcquisitionPlanning
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.internal_summary import AcquisitionSummary
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.goal import AcquisitionGoal
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.binding_record import AcquisitionBindingRecord
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.configuration import AcquisitionConfiguration
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.credit import HomologyEpisodeCredit
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.waiting import HomologyEpisodeWaiting
+
+from importlib import import_module
+
+class HomologyEpisode(AcquisitionConfiguration, AcquisitionBindingRecord, AcquisitionGoal, AcquisitionSummary, AcquisitionPlanning, AcquisitionCreditBinding, AcquisitionNativeEvents, AcquisitionOperations, AcquisitionAssignment, AcquisitionReport, HomologyEpisodeCredit, HomologyEpisodeWaiting):
+    yield_controller = staticmethod(import_module(__package__ + '.yield').yield_controller)
+    binding_path = 'legacy_annotation/homology_result_acquisition'
+    commissioning_parent = 'legacy_annotation'
+    entry_roles = ('job_results',)
+    roles = ('job_results',)
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.task import HomologyAcquisitionTask
+from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisition.decision_presentation import present_job_results_task
+HomologyEpisode.decision_source_type = HomologyAcquisitionTask
+HomologyEpisode.decision_prompt_renderer = staticmethod(present_job_results_task)

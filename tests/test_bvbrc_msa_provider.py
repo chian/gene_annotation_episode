@@ -15,10 +15,10 @@ from gene_annotation_episode.bvbrc_msa_format_contracts import frequency_header
 from gene_annotation_episode.bvbrc_msa_xmfa_inputs import verify_xmfa_source_inputs, extract_msa_xmfa_bindings
 
 ROOT=Path(__file__).resolve().parents[1]
-NATIVE=ROOT/'verification/tool_graders_bvbrc_msa_metacats_boundaries_2026-10-25/native_examples'
-ASSOCIATIONS=ROOT/'verification/tool_graders_bvbrc_alignment_associations_2026-10-25/EXAMPLES_001'
-XMFA=ROOT/'verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/native_examples'
-SOURCES=ROOT/'verification/tool_graders_bvbrc_xmfa_sources_2026-10-25/saved_examples'
+NATIVE=ROOT/'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_metacats_boundaries/native_examples'
+ASSOCIATIONS=ROOT/'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/alignment_associations/EXAMPLES_001'
+XMFA=ROOT/'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_xmfa_boundaries/native_examples'
+SOURCES=ROOT/'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/xmfa_sources/saved_examples'
 
 
 def artifact(data,name):
@@ -432,7 +432,7 @@ def first_block_projection_operands():
 
 def source_example_operands(case):
     """Consume complete C1 saved records without modifying their original files."""
-    base=ROOT/'verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004'
+    base=ROOT/'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_provider/source_examples_004'
     saved=json.loads((base/(case+'.inputs.json')).read_text())
     answer=json.loads((base/(case+'.answer.json')).read_text())
     op,p=xmfa_operands(with_sources=False)
@@ -495,7 +495,7 @@ def test_saved_object_key_order_does_not_change_native_dna_field_identity():
 
 def unbound_source_operands(source_format):
     import base64
-    base=ROOT/'verification/tool_graders_bvbrc_msa_provider_2026-10-25/source_examples_004'
+    base=ROOT/'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_provider/source_examples_004'
     record=json.loads((base/'combined_native.inputs.json').read_text())
     source=record['operands']; source['inputs']['files'][0]['format']=source_format
     source['source_readers']=[]

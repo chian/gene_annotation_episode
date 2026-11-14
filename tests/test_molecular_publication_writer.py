@@ -22,9 +22,7 @@ from gene_annotation_episode.tool_grading_artifacts import source_tool_grading_e
 from gene_annotation_episode.tools import ToolRegistry
 
 
-RETAINED = Path(__file__).resolve().parents[1] / (
-    "verification/tool_graders_hmmer_map_verification_2026-10-28_529/"
-    "check268_itc_ordinary_tool_delivery/temporary/pytest/test_registered_itc_fit_same_e0/store")
+RETAINED = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/itc_parameter_delivery/store"
 SOURCE = "source_4f6a6927cc1b155c54974cb7"
 NATIVE = "aa029c30f55e2f408c3bcf85297e2e0d96232e900f31454ea17479bcbc68ccd4"
 CONTROL = "d45f9bf127d816428197bb79e8a134887fecd481dd583fbd8b8228d24559eb14"

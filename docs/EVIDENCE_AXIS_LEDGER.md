@@ -1,9 +1,7163 @@
 # Evidence-axis progress ledger
 
-Initial appraisal 2026-11-05 UTC, with scoped code/result updates through 2026-11-09 UTC.
+Initial appraisal 2026-11-05 UTC, with scoped code/result updates through 2026-11-14 UTC.
 This is the central progress record for evidence axes. Individual implementation
 documents and dated run reports supply detail; they do not independently set an
 axis's current status.
+
+## 2026-11-14 — original organizational goal complete
+
+Main accepts all 584 existing homes and all 34 original organizational requirements.
+A103's final 75-home receipt (`a16f4125`), crosswalk (`db843a18`) and
+independent peer review (`907e2d49`) are accepted. Root's 159-inventory
+application (`06636fe3`), full 9,252-file map (`b81782ba`) and independent
+readback (`0957d8b4`) close the shared current-asset scope. No local or shared
+organizational work remains.
+
+Final integration completed in session 76957 with exit 0, producing the join
+(`b324fd62`), roster (`6f138ed2`) and requirement account (`1f51cd9f`),
+with workflow receipt `68d35e26` and complete-exit receipt `5076f3d6`.
+Main reviewed all 34 dispositions and the actual local, shared, package and
+cold-import evidence. All 584 declarations and paired records have final
+installed authorities. The 583 inventory stat observations match; the single
+unchanged A106 inventory has a direct current hash/mode confirmation
+(`ddd8cc5e`). Its original missing-stat qualification remains literal.
+Four A103 physical moves preserve logical IDs.
+
+[The completed audit](EPISODE_PRIVATE_IMPLEMENTATION_AUDIT.md) and
+[Main's central acceptance receipt](../runs/main_final584_integration_join_01/CENTRAL_ACCEPTANCE.json)
+record final scope and evidence. Zero episode installations, local reviews,
+shared integration or final audit stages remain for the original organizational
+goal. Retained baseline failures, scientific operands, unsupported contexts,
+full-restoration and autonomy limits remain separate and unchanged. No new
+full-suite, remote scientific or autonomous result is claimed.
+
+The prior canonical audit (`950a6b57`) is retained exactly at
+`runs/root_final_cross_axis_readset_01/ORIGINAL_AUDIT34_20261113.md`; historical
+receipts retain their old path/hash. Earlier pending/preparation flags are not
+rewritten into completion receipts.
+
+## 2026-11-13–14 current report/schema checks and commissioning successors
+
+Root159's current-asset companion completed22424/0 in
+`runs/main_root_current_cold159_application_02/`: application06636fe3,
+full9252 postmapb81782ba, workflow27c6174d and complete exit217db151.
+Main read all159 completed targets/full-file postcheck, zero errors/rollback,
+zero created directories and successful322-event journal end. The entire Main
+workload exited, supervisor699110 absent. Only159 existing JSON records changed;
+the shared current-helper metadata now matches the installed successor and
+passed single cold check. Earlier invocation failure remains literal.
+All global actual references are now present in ACTUALS_COMPLETE01.jsonc38021e8;
+A10375 final peer and the final584/all34 join/central acceptance remain pending.
+
+Root159's first application invocation completed61336/1 before reading its
+inputs or creating an application directory: the wrapper changed cwd and the
+relative input resolved beneath the run instead of the repository. No canonical
+mutation or journal began. Actual workflow1d7edd01 and separate complete
+exit1d5504c7 preserve the failure and raw drain=false. Main confirmed the entire
+workload exited, then launched22424 in `runs/main_root_current_cold159_application_02/`
+with the absolute input path. Installeraf000210, wrapperb78382f5, bound94e2806e
+and159-only scope are unchanged. This is an invocation correction, not a source
+or behavior regression, and no test or binding was repeated.
+
+A103's independent native reconciliation completed59049/0 in Fourth's stable
+window: `runs/fourth_a103_hierarchy1211_reconciliation_01/`, resultf80da3de,
+workflowc5220575 and actual full exitfbf29ce6. Main read and rehashed the result
+and exact application/input/workflow/exit associations. All1211 operations,
+1024 backups,187 creates,128 retirements/full130 absences,3265 sources,
+150 records,2576 guards,172 retained assets and2434 journal events/four
+directories pass with no rollback/errors. No tests or inverses were repeated.
+Final A10375/all34 local receipt and peer review are being sealed separately.
+
+Root159 binding31201/0 produced INPUTS94e2806e, workflow501aefd3/full exitead9e6f9.
+Main read its9252 before/after maps and159-only mutation scope and accepted
+independent bound revieweef2cc0e. Main's sole workflow61336 now applies those
+159 existing JSON records in `runs/main_root_current_cold159_application_01/`.
+All9093 other Root files, including159 paired Markdown records, remain guards;
+260 external guards include the actual package and current cold origins.
+No source, test, package or additional episode is written by this companion.
+
+The one current cold-entry check completed53772/0 in
+`runs/main_root_current_cold_entry_01/`: RESULTd1434821, workflow9659bd4d and
+complete exitbf368205. Main read the actual successful import, all four original
+identity checks and70 imported-file origin/hash/mode guards. The separate
+nonimporting comparison preserves all30 historical cases and changes only the
+current fixed A103 commissioning entry. Historical entries were not rerun.
+Main's sole workflow31201 now binds the already-reviewed159 Root JSON updates
+in `runs/main_root_current_cold159_binding_01/`, using actual A103 completion
+and cold receipts. The application will update current helper-asset references;
+it adds no homes and reopens no Root production implementation.
+
+All584 episode homes are now installed. A1031211 completed56899/0 with
+applicationc141a9ff, workflow07ff9fb4 and complete exit790effd6. Main read
+actual1211 completed operations/128 retirements, full3265 source map3b8afb38,
+150 current-record map5a328c07, four created directories and zero rollback or
+journal errors. Both full postcheck flags passed; serviceinactive/PID0,
+recursive slice empty and supervisor696624 absent. Final local75 acceptance
+still awaits native reconciliation and peer closeout, so509 remain locally closed.
+Fourth owns the prepared read-only native1211 check after this complete exit;
+Main's only new workflow53772 is the single current cold-entry/membership check
+in `runs/main_root_current_cold_entry_01/`. Root159's current-asset companion
+and global34 acceptance remain pending, without adding episode homes.
+
+Main now runs A103's actual1211 installation56899 in
+`runs/main_a103_hierarchy1211_application_01/`, with bound INPUTS1088cc94.
+Binding62428/0, workflowbfbedd3c/full exit40f0b45e, completed before launch.
+Main read the actual count/maps/manifest/evidence references; independent peer
+reported all23 finite association checks passed. Scope is1083 writes and128
+retirements,3246→3265 sources,152→150 records,2576 unchanged guards and3388
+immutable references. The only external writes are the authorized Root cold
+helper and A103 package-data successor. Installation/native output is pending;
+the count remains509 installed/locally closed with75 A103 pending.
+
+A10306 completed61899/0: manifestebb83eb1, proofac853f08, workflow44b7d304 and
+complete exitd1295481. Main read the actual60-method proof and raw0/0/no-failure
+result, semantic review2b9e28d1 and independent bookkeepingbd41a091/reader61a28d59.
+The three moved Homology validators now name current owners; their original
+facts and all historical receipts remain explicit. Exact150 records/75 homes,
+eight retirements, canonical152 versus intermediate152 and unchanged source,
+formula/fixture/control authorities are accepted. No new behavior cohort.
+Main's sole workflow62428 now prepares exact1211 installation inputs with
+reviewed binder05(77b7dddb) in `runs/main_a103_hierarchy1211_binding_01/`.
+Canonical application remains pending bound-output review. The native1211
+reconciler0eaf921b/peer1b4211da and final584 join04ba784430/peer3cd6d687 are
+also source-reviewed; neither has executed or established global completion.
+
+Main accepts A10269's final local organizational/current-record closure after
+reading the complete current narrative/all34 dispositions, semantic138 review,
+independent peer and Fourth acceptance, and rehashing the actual compact receipt
+bf5c5abf, final accountf1faa1bb, narrative6e6b3537, peerd4c2f58e/addendumdbe8a305
+and acceptance2b90d843. Exact69 homes/34 rows have no pending local application
+gates and join actual application4b638d1d/native dfe85ac9. No test was repeated;
+all prior source/control limits remain literal. Now509 of584 homes are both
+installed and locally closed; only A10375 remain in those stages. Root159's
+current-asset companion and whole-tree final acceptance remain pending.
+
+Main's sole workflow61899 now runs A10306 current-record generation in
+`runs/main_a103_hierarchy150_metadata_06/`, producerb00936cc/input9b932603.
+Main read the complete correction, wrapper and peer6d17035e after confirming
+the prior service/slice was empty. The finite75-record census found78 current
+validator facts naming60 methods and53 historical receipt/prose fields; only
+the authenticated seven-field current-method schema bypasses the old exclusion.
+All4065 excluded current-prefix fields were examined for analogous collisions;
+no other direct source/symbol fact was found. Actual05 remains a successful
+generation with a semantic defect; failed01–04 stay literal. No production or
+test change and no new behavior cohort. A103 installation remains pending.
+
+A10305's actual semantic readback found a current
+`parent_exchange.report.validation` source/symbol reference still naming the
+retired Homology submission path. The writer's historical-key exclusion was
+too broad for this current descriptor. The owner is checking analogous current
+validation shapes and preparing a narrow metadata correction while preserving
+historical validation receipts. Generation28746/0 remains successful; semantic
+acceptance and final application are pending. No production/test change or
+installation-count change follows from this finding.
+
+Main read and rehashed Fourth's actual A102754 installation4b638d1d,
+workflowcd2463c3 and full exit81035a06, then its complete native reconciliation
+dfe85ac9: all754 installed targets,2963 source members,138 records,733 backups,
+21 new files, four unchanged guards and two retained absences passed, with no
+journal errors or rollback. The application completed23670/0 and reconciliation
+10602/0; Fourth explicitly released the package/shared-file hold after both
+complete exits. Final installation now covers509 of584 homes; only A10375
+remain uninstalled. A10269's final all34 local closeout is still pending, so
+440 homes remain locally closed. The shared159-record companion and whole-tree
+audit remain separate pending stages.
+
+Main A10305 generation completed28746/0 in
+`runs/main_a103_hierarchy150_metadata_05/`: actual150 records/75 logical homes,
+eight retirements and3265 source members. Manifest3056c1a0 and complete exit
+bbdb3465 are retained. Main's service is inactive and all descendants exited.
+The two assigned agents now review actual semantic content and file/proof
+transitions before final binding/application. No canonical write or new
+behavior-test cohort is claimed from generation.
+
+Main's sole workflow28746 now runs A103 metadata05 in
+`runs/main_a103_hierarchy150_metadata_05/`, producer47ec53f7/input778cfc9a.
+Main read its complete delta, wrapper, actual inputs and peer980306f2. It merges
+the authenticated substantive parent into the compact aggregate entry, retains
+two required oracle fixtures separately from measured snapshot membership,
+refreshes five moved test owners and210 nested current source descriptors,
+and preserves the original raw histories. Source/tests/formulas and1211 future
+mutation count are unchanged. Actual150 output remains pending.
+Fourth's actual A102754 installation launcher is now observed at
+`runs/fourth_a102_final_current_application_01/`, using bound0bdb5d9b after
+native138 review70cfd033 and semantic10845771. No completion is claimed yet;
+Main keeps packagea412 unchanged through Fourth's installation interval.
+
+A10209 final metadata generated51776/0 in
+`runs/fourth_a102_final_provider138_metadata_01/`:138 unique rows/69 homes,
+2963 source members, canonical_written=false. Main read and rehashed manifest
+310a8feb, actual workflowdc840dc8 and complete exitc7f09825; raw0/0/null/drained,
+supervisor684666 absent and Fourth service/slice empty. Proof571639f6 remains
+with the actual output. Fourth owns its semantic/file review, final754
+installation/reconciliation and69 local closure. No installation count changes
+yet:440 installed/closed and144 pending. Shared packagea412 remains held.
+
+A10304 completed36539/1 after74 standalone candidate inventories, before
+aggregate/narratives/final150 manifest. Workflow3fdc6c15 and actual full
+exit369b88c6 are retained in `runs/main_a103_hierarchy150_metadata_04/`.
+The actual aggregate annotation-parent entry is compact, contradicting the
+writer's expanded-record assumption. Its successor must merge authenticated
+standalone parent responsibilities into the final root binding while retaining
+both original records and avoiding a stale retired pointer or self hash.
+The76 retained-path correction passed; no source/control/canonical change is
+inferred. Main has no active workflow after this full exit.
+
+Root159 source peerfd1b00ff accepts the complete binder/applicator scope after
+one receipt-association correction: bind02 now also requires the full-exit
+supervisor identity to equal the actual workflow supervisor. Main read this
+one-line successor4f33460c and wrapper22a08d77; applicatoraf000210 is unchanged.
+Actual A103/cold/159 installation prerequisites remain required.
+
+Main's only active workload36539 is A103 metadata04 in
+`runs/main_a103_hierarchy150_metadata_04/`, producerbd96892e/inputa4b6e7a1.
+The complete reviewed delta authenticates76 exact retained Homology source
+paths against their actual bytes/hash/mode and captured beforeimages before
+passing normalized repository-relative references to the unchanged observer.
+Their literal prior spellings and all three failures remain preserved.
+Fourth acknowledged A10269 and has now launched09 in its own stable window,
+`runs/fourth_a102_final_provider138_metadata_01/`; actual launcher/supervisor
+processes were observed. Packagea412 remains unchanged through that interval.
+No new behavior-test cohort is running in either window.
+
+Main read the complete narrow Root159 binder44c8e3c3, applicatoraf000210,
+full delta and wrappers/HANDOFF797ae354. They require actual A103 installation,
+its exact helper/package rows and actual current import/membership results
+with complete exits. Only159 existing JSON inventories are writable; full
+Root files, paired Markdown and remaining source guards stay checked.
+Preparation/review is accepted; actual binding/application remains pending.
+
+A103 metadata03 completed45210/1 before final150 output, workflow55ebb268
+and separate full exitb9f263b7 in `runs/main_a103_hierarchy150_metadata_03/`.
+Actual import projection/edge checks passed; recursive source-reference refresh
+reached a stored path form rejected by the strict reference reader. Its owner
+is resolving the exact authenticated record schema without relaxing arbitrary
+path admission. No source/test regression or canonical write is inferred.
+Root159 actual output review697de0f9/native40370a5f is accepted within its
+narrow prepared scope:159 exact existing targets/modes and479 changed hunks,
+with historical values retained. Application remains pending A103 and cold check.
+
+Main's only active workflow45210 now generates A103150 metadata03 in
+`runs/main_a103_hierarchy150_metadata_03/`. The reviewed producer2d13b988,
+INPUTS1104f6d2 and peer911852b2 derive actual selected import locations and
+refresh named caller records while retaining original raw fields; complete
+import projections, resolved edges and direct-caller coverage are checked.
+The source/tests/formulas and actual53+32 controls remain unchanged. No final
+metadata output or canonical installation is claimed until actual completion.
+
+Main accepts A104's final62 local organizational closeout after reading its
+complete34-requirement narrative74a6c2ba, compact receipt6f79e8c5,
+independent peer403cf74a and Fourth acceptancef488446a, with machine
+closeout9bc87dfd and the already accepted actual700 installation/native
+reconciliation. All five final artifact hashes match. Installation and local
+closure now both cover440/584 homes;144 remain (A10269 and A10375).
+The whole-tree34-requirement audit remains open. This does not claim full
+saved-workflow restoration or autonomous scientific validation.
+
+Root159 current-test-asset preparation completed72704/0 in
+`runs/main_root_current_cold159_metadata_01/`: manifest53dc346b,
+proof0020526f, workflowc71655e6/full exit129172c0. It generated159 narrow
+inventory updates and one Root own-file identity update without canonical
+mutation. Actual output review/application and the single current import check
+remain pending A103 installation. Main has delegated final A10269 generation09,
+754-target installation and local closeout to Fourth under the user's existing
+work-balancing authorization; Main retains A10375 and shared integration.
+The delegation awaits Fourth acknowledgment. Packagea412 stays unchanged
+through Fourth's A102 interval. No new test cohort is requested.
+
+A104 installed reconciliation45317/0 is now read and accepted by Main:
+RECONCILIATIONeff10e72, workflow25429de0/full exitaf417eac in
+`runs/fourth_a104_final_current_reconciliation_01/`. It independently verifies
+all700 target hashes/modes,689 backups,11 new files,3536 own+28 external
+guards,3901 source members and1404 journal events, with no rollback or errors.
+Its actual full exit is0/0/null/drained; Fourth's shared-file interval is
+finished. Final62 local requirement closeout remains a file-only step, so
+installed440/locallyclosed378 counts remain distinguished at this observation.
+
+A103 metadata02 completed95533/1 before final ownership output in
+`runs/main_a103_hierarchy150_metadata_02/`, workflowb651a1fa/full
+exitb90a6cb6. The direct-consumer schema correction passed; the first current
+source-fact refresh then assumed sparse import records carry a line field.
+The owner is deriving those positions from actual selected import AST rather
+than fabricating locations or omitting caller coverage. Main has started the
+independently reviewed narrow Root159 current-cold-asset preparation72704 in
+`runs/main_root_current_cold159_metadata_01/`, producer51886d88, through a
+pinned Main wrapper. This writes only run outputs; the future companion
+application follows A103's actual helper move. Earlier Root production,
+formulas and actual cold30 evidence remain unchanged.
+
+A10208 exited2142/1 at the complete final current-field audit in
+`runs/main_a102_final_provider138_metadata_05/`, workflowacdb02ff/full
+exit46021f66. The earlier918 issue schemas and ten Resource lineages now pass;
+the retained issue filebfc71231 contains one root support_modules runtime
+descriptor identity afaa2106 requiring its actual source transition to the
+recognized current epochs. The owner is resolving that single authenticated
+chain without bypassing current-field validation. No final138 manifest or
+installation is claimed. Main's sole workflow95533 now runs reviewed A103
+metadata02 in `runs/main_a103_hierarchy150_metadata_02/`.
+
+Main fully read A1031211 bind6da96c72, enginebda293d3/full scope delta and
+durable mutation/rollback branches, plus wrappers and peer147f4fee. Its
+986 production actions,66 test actions,158 metadata actions and one package
+action require actual successful150 output and remain unexecuted. The one
+external test target is the explicit Root cold helper. Main also read its
+current/historical case separationd4d40b82 and the narrow Root159 current
+asset-field writer51886d88/peerc94f853a. Existing actual cold30 stays literal;
+the single current entry and companion application remain required.
+
+A104 final700 installation passed97615/0 in
+`runs/fourth_a104_final_current_application_01/`: applicationf204ff35,
+workflowc4ff759a and actual full exitc973e59b. Main read and rehashed all three;
+700/700 writes and full3901 source postchecks passed with no rollback or journal
+errors, raw0/0/null/drained. Installation coverage is now440/584, leaving144
+uninstalled (A10269/A10375). Local closure remains378 until Fourth's current
+installed62 reconciliation45317 completes. Shared packaginga412 remains held
+through that reconciliation interval. No accepted tests were repeated.
+
+A103 metadata01 exited77084/1 after source/formula/packaging/evidence output,
+before final ownership rows: workflow0b1f2433/full exite5e869b8. The direct
+consumer authority contains complete source rows, not target strings. Main
+read02 delta5d200b87, INPUTS0fb3315f, wrapper37eadb59 and peerfb2f52c9:
+each of the six rows is authenticated against actual policy12 and selected
+hash/mode before deriving the target; all eight nominal source/class entries
+are also checked. Actual source/tests/formulas remain unchanged;02 is queued.
+Main's sole current workflow2142 runs A10208 final138 preparation in
+`runs/main_a102_final_provider138_metadata_05/`.
+
+A10207 exited9433/1 in `runs/main_a102_final_provider138_metadata_04/`,
+workflowbf2ea4a9/full exitfe37cf61. The strict lineage preflight passed; output
+account reuse then found the control-selection dictionary named observed
+shadowed the observed() file-authentication helper. Main reviewed08 producer
+4cf6be86: exactly that dictionary name and its one reference change, with all
+formulas/source/schema/helper logic unchanged. INPUTSa48da55a retains the
+literal failure. The08 run remains pending while A103 metadata runs.
+
+Main fully read sealed A103 final150 producerbce76af5, formulase1bc08f8,
+INPUTSb0d050e5, wrapper1cc8b67f and actual53+32 union. It preserves the root
+aggregate and original histories while moving four existing physical homes;
+75 current inventories plus75 narratives and8 retired old records are expected.
+Canonical152 beforeimages remain distinct from uninstalled intermediate152.
+Main's sole workflow77084 is `runs/main_a103_hierarchy150_metadata_01/`.
+
+Final cross-axis review found one concrete companion to the pending A103 move:
+Root/tests/axis_policy_cold_imports.py defaults to the old annotation path.
+Its current default must follow the new path while explicit historical30 input
+cases retain theirs. The exact test-asset successor and affected current asset
+references are being prepared; this is a targeted integration dependency,
+not a new scientific feature or a broad cold30 rerun. No canonical Root
+change has yet occurred and the pending A103 move remains uninstalled.
+
+A103 affected32 passed41115/0 in `runs/main_a103_hierarchy32_retry_01/`:
+verification15794708, workflowb41f493a and full exitd7711c8b. All32 calls/96
+phases and563 confined imports passed; no new cold entries and source guards
+unchanged. Only the actual fixture self-nesting declaration and authentic
+defaults.toml snapshot operand changed. The separate retained53 certification
+now joins these32 in actual evidence union9278c216, generated60323/0 with
+workfloweba77eb6/full exit426aa4f3. It records85 unique cases/255 accepted
+phases while preserving the original failed85, its unexecuted runner checks,
+and the separate original cold evidence. Earlier48 was not repeated.
+
+Main read A10207 producerdceab17f (docstring-only successor), explicit input
+c81581cd, helper784c345d, wrappere1fb7401 and native10-lineage accountf828675d.
+Only the already-existing feedback stagef3b63520 and its ordered association
+are added to the strict source-lineage graph; current-field and formula logic
+are unchanged. Main's sole current workflow9433 runs this138-record preparation
+in `runs/main_a102_final_provider138_metadata_04/` after complete union exit.
+
+A107/A110112 local closure is now accepted: installed closeoutd7c795e1,
+proseef48fdfa and native reconciliation86ee3e62 in
+`runs/root_a107_a110_goal_completion_review_01/`. Main read the complete
+closeout against the actual1178 application/full exit and prior all34 source
+and224 semantic reviews. Exact prepared/completed/observed targets,1128
+backups,50 creates,2372 journal events and full5246/224 postcheck maps agree;
+16 current critical hash/mode checks also pass. No concrete organizational
+defect remains in its59+53-home scope. Totals are now378/584 installed and
+locally closed,206 pending (A10269/A10375/A10462), with the final whole-tree
+34-requirement integration audit still open. Inherited scientific/restoration
+limitations remain explicit and are not newly unfinished homes.
+
+A102 metadata06 completed7370/1 before final138 output in
+`runs/main_a102_final_provider138_metadata_03/`, workflow72cdb15e and actual
+full exit52c4ea8c. Strict lineage validation found ten missing Resource task
+transitions (five ordinary/Scientific pairs). The existing feedback stage
+f3b63520 supplies the omitted edge between responsibilities and report-schema
+epochs; the owner is preparing an explicit input-lineage successor. No source
+test failure or production regression is inferred.
+
+A103 exact32 binding completed26354/0 in
+`runs/main_a103_hierarchy32_retry_binding_01/`, INPUTSb75ffa3b,
+selection08a21ac2/test sources183f5e6a/cases21d7a130, workfloweb9289a8/full
+exitf8e87ad9. Main read its emitted runner delta and complete inverse. The
+only Main active workflow is the affected32 test41115 in
+`runs/main_a103_hierarchy32_retry_01/`. It does not repeat the certified53
+passes or the earlier48 provider cases.
+
+A107/A110 final1178 installation completed55321/0 in
+`runs/main_a107_a110_final1178_application_01/`: applicationc6bf7434,
+workflow55f3c0a6 and separately observed full exiteb5d6095. All1178 targets,
+the full5246 source postcheck6023ee64 and224 current-record postcheck1995ddd1
+passed, with no deletions, rollback or journal errors. This raises final
+installation coverage to378/584, leaving206 uninstalled (A102/A103144,
+A10462). Local closure remains266 pending the new112 installed reconciliation;
+the final whole-tree34-requirement audit remains separate. The owning service
+and recursive slice were empty before Main started A102138 metadata06 in
+`runs/main_a102_final_provider138_metadata_03/` (session7370).
+
+A103 retained53 certification3c224401/readbackcdc25110 independently verifies
+the exact159 passing phases, full3506-file original snapshot,1125 traced
+origins and two original cold records. The raw85 failure and its unexecuted
+runner checks remain literal. Main read REVIEW3a9b300b and the sealed exact32
+retry binderb6d0dc7e: only the required self_nesting fixture keyword and authentic
+axis defaults.toml snapshot asset change. The32-case retry is still pending.
+
+A103 affected85 completed28080/1 in `runs/main_a103_hierarchy85_01/`:
+verification9e9be025, workflow92fa57a8 and complete exitb78b2946. All255
+phases completed, with53 passing calls and32 failures; setup/teardown and
+source guards passed. Thirty-one failures occur before the original/current
+comparison because the fixture omits EpisodeTree.self_nesting for its declared
+improvement recursion. The remaining Homology fixture fails because authentic
+axis defaults.toml is missing from the selected snapshot. Both concrete causes
+are test prerequisites; no production regression is established by these
+failures. The failed raw85 result stays literal. Only32 affected cases are
+being prepared for retry; retained53 imports/cold origins require their own
+explicit readback because the runner stopped at the JUnit failure assertion.
+
+Fourth's final A104124 metadata generated84463/0 in
+`runs/fourth_a104_final_current_metadata_05/`: sources147f3bb6,
+proofc35b26ca, workflow11bb9518 and separate complete exit35685d04. Main
+inspected those actual hashes,124-row manifest and0/0/null/drained receipt;
+there was no OOM. V8 addresses the demonstrated metadata helper's inability
+to resolve the qualified Workflow.selected method, retaining its exact source/
+AST/body identity and all other guards. This is current metadata preparation;
+independent semantic review and final700 installation remain separate. Actual34
+controls retain their accepted boundary, without a repeated run.
+
+A107/A110 final224 metadata generated39085/0 in
+`runs/main_a107_a110_final_descriptor224_metadata_01/`: RESULT0d222815,
+sourcesf5376465, proof926a2de1, evidence893a25f4, workflow1d371b01 and
+complete exitc96ced8b. The274-second run completed within the unchanged
+resource bounds, without OOM. It joins actual906 sources and48 assets while
+retaining56/22/4 as separate measured versions. Independent semantic readback
+dee7643c accepts the224 unique records and complete59/53 descriptor accounts;
+Main read that review and the all34 source disposition7077bf96. Binding55923/0
+then produced exact1178 INPUTS9d3ad31d, complete exitc828dfdb:906 production
+targets,48 new assets,224 metadata replacements, no writes outside A107/A110.
+Actual installation and complete postchecks remain required before closure.
+
+A103 affected85 controls and packaging generated chunk23000b/0 in
+`runs/main_a103_hierarchy85_controls_generation_01/`: test sourcesa0679eca,
+casesfc47bfc9, selection8c8678c6, packagingd870498a, proofd397ade5 and complete
+exiteb8ba7ee. The package candidate preserves the actual hierarchy move and
+adds only its two required fixture patterns; canonical packaging is unchanged.
+Binding22244/0 produced INPUTSf3a938d2/selectionbb68e30c, complete exit33926bb0.
+Main read all12 templates and the complete binder/runner delta:85 cases in
+seven modules,255 phases,120 new snapshot retirements plus two prior absences.
+This is preparation; the actual controlled run is not yet a passing result.
+
+A107/A110 descriptor4 passed5102/0 in
+`runs/main_a107_a110_descriptor4_01/`: verification1811c6bd,
+workflowd770c511 and complete exit361c5b08. All4 calls/12 phases and234
+confined application imports passed with unchanged source guards. The actual
+original/current methods for all32 maps used copied authentic source bytes,
+minimal/complete supplied configuration, policy-only byte changes and exact
+restoration. No constructor, new cold entry, saved restoration, native or
+scientific execution is claimed. Final224 metadata is being regenerated from
+this906-source version; earlier56 and22 remain separate accepted evidence.
+
+A102 descriptor4 passed88788/0 in `runs/main_a102_hpc_descriptor4_01/`:
+verificationbb9128a4, workflow25425881 and complete exitacf72c63. All4
+calls/12 phases and17 confined application imports passed with unchanged
+source guards. Each actual HPC descriptor changed only its implementation
+digest when the copied policy bytes changed, and returned to the complete
+original record on restoration. Binding02 completed chunkec34fd/0 with
+INPUTS01c25486, selection6c191c0f and complete exit38bb299b. The accepted11/48
+tests were not repeated. Current138 metadata and final installation remain open.
+
+A107/A110's descriptor-source successor generated successfully, terminal
+chunk7706c1/0, in `runs/main_a107_a110_hpc_descriptor32_generation_02/`:
+sources4e322fbd, proofe12b2300, selectionf1756815, workflow4675a904 and
+fresh complete exit7aac1ac9. Exactly32 existing source maps append the moved
+policy library, giving906 proposed production targets and unchanged5,246
+members. Complete method AST and byte inverses preserve all other fields and
+formula operations. Scientific's existing recursive formula already includes
+the library; original configuration-only records remain unchanged. This is
+source preparation, with no canonical installation or behavior result.
+
+The preceding source generation01 stopped before output, chunkab5b8a/1,
+because its account reader treated contribution records as explicit file-map
+operands. Its complete exit5bdb4c39 is retained separately from the raw failed
+receipt. Source02 explicitly selects and validates the actual file-map schema.
+Descriptor4 assets then generated chunk5fdd08/0 (RESULTc1478a42,
+test sourcesa647e8c5, complete exit9ff720e2); binding69322/0 produced
+INPUTS6ab935ec and selection5df6eabd, complete exit4ca5b0b9. Neither preparation
+is a test pass, and prior22/56 evidence remains at its own measured versions.
+
+A102 descriptor4 binding01 stopped before tests, chunk7b3dd9/1,
+in `runs/main_a102_hpc_descriptor4_binding_01/`. Its runner inverse used an
+ambiguous replacement count: the new four-case assertion collided with an
+existing four-retirement assertion. Complete exitda9623de is recorded. The
+successor retains the identical forward transformation and restores exact
+edited spans; no production/test semantics or accepted11/48 result changes.
+
+A102's actual focused11 controls passed5268/0 in
+`runs/main_a102_hpc_contract11_01/`: verification525a4bd0, workflow937fc7a8
+and fresh complete exit58f07534. All11 calls/33 phases,176 confined application
+imports and two cold entries passed with source guards unchanged. Binding
+33252/0 produced INPUTSe9e9963d and selectiona8c7bcd5 before that run.
+Subsequent source-only descriptor generation passed chunk04e161/0 in
+`runs/main_a102_hpc_descriptor14_generation_01/`: composed14 sourcese558dd36,
+full2,963 selection41c15f4c, proof6dd1b851, workflowc5288ea5 and complete
+exit773e3e2d. Four existing HPC maps add the actual library operand with
+complete AST/byte inverses; configuration-only Launch records remain unchanged.
+Actual11 remains at source10, and descriptor sensitivity checks are separate.
+
+A103's source-only twelve-row successor passed chunkb98fa6/0 in
+`runs/main_a103_request_policy12_generation_01/`: sources34462892,
+proof7ea97ba7, workflowd97587f5 and complete exit7891bc0b. Six new outgoing
+request owners now select the single same-axis policy at its original guard
+position, preserving their full request-body inverses. Six existing descriptor
+files add that moved source operand: root parent, improvement and four HPC
+maps; Resource aggregation and Scientific recursive membership retain their
+original formulas. Configuration-only Execution records remain unchanged.
+Actual286 plus12 remains uninstalled and awaits affected controls/current150.
+
+A107/A110's224 ownership generation passed95334/0 in
+`runs/main_a107_a110_final_policy224_metadata_01/`: RESULTf24f0294,
+sourcesa53ce222, proof2a96dd4d, workflow7740b58f and complete exit538cf0ea.
+It authenticates source874/22 and retained870/56 separately and joins40 assets.
+The131-second run completed without OOM. This output remains uninstalled:
+Main's executable fingerprint review found explicit source maps still hashing
+the old runtime but omitting the moved policy library. The owner confirmed
+32 affected map operands across the two axes and is preparing exact additions
+and descriptor sensitivity checks, without repeating accepted22/56 controls.
+Metadata/current-source reconciliation must include that successor before
+application; source preparation is not final installation.
+
+Fourth's A104 focused34 passed36754/0 in
+`runs/fourth_a104_hpc_handoff34_01/`: verification9e83aa0f,
+workflowcb4b2752 and complete exitc9d2668e. Main inspected those actual receipt
+fields and hashes:34 passing calls/102 phases,316 confined application imports,
+four cold orders and unchanged guards. Fourth's reviewed source includes the
+affected descriptor operands. Its124 current records and final installation
+remain pending; no native/HPC, full-task, restoration or autonomy claim is added.
+
+A103's four-home hierarchy/exchange source generation passed73281/0 in
+`runs/main_a103_hierarchy_exchange_generation_01/`: sourcesfdfddcd0,
+proofed6baccc, captured inputs0147bfda, workflowb63a07fa and fresh complete
+exitd6d3a87d. The actual286 operation rows comprise139 creates,27 replacements
+and120 retirements, preserving75 logical homes. Main read the full source
+producer, native-global analysis helper, exact custom-selection successor and
+emitted parent/member/exchange/library implementations. Explicit root-parent
+source membership excludes unrelated axis infrastructure; import/fixture and
+descriptor correspondences are retained. This generated candidate remains
+uninstalled and its affected behavior controls and150 current metadata records
+remain pending. No previously accepted48 result is relabeled or repeated.
+
+A107/A110's actual focused22 controls passed79313/0 in
+`runs/main_a107_a110_hpc_contract22_01/`: verificationd0e4b35a,
+workflow711a70b0 and fresh complete exitc695c3ef. All22 calls/66 phases,
+318 confined application imports and four cold entries passed with unchanged
+source guards. The exact selected sources22b30a46 include the actual874
+proposal and eight new permanent assets38cd3439. The corrected declaration
+resolver authenticated all ROLE/ROLES operands; its generation passed
+chunk46fdae/0, and binding73951/0 completed before this controlled run.
+Native getter/cache/error/callback and private-selection checks support this
+changed boundary. Prior56 retains its separate870 epoch. No full scientific,
+native execution, full-task or saved-restoration claim is added. Final224
+current records and combined application remain pending; no repeat22/56 is
+scheduled. The shared packaging hold is released after actual complete exit.
+
+A102 focused11 assets generated successfully, chunk965167/0, in
+`runs/main_a102_hpc_contract11_controls_generation_01/`: four permanent assets
+7493e04c, cases52c74dae, proof328c9e74, workflow4f39f095 and complete exit985cc599.
+They retain the exact original A102 runtime fixture and actual ten-target
+successor. Behavior execution still awaits its source binding. Package-data
+a412c04a now also includes the two required A102 fixture patterns.
+
+A102's late-HPC policy source generation completed with terminal chunk1321ed,
+exit0, in `runs/main_a102_hpc_contract10_generation_01/`. Actual ten-target
+manifest e1ea4202, proof522344eb, full2,963-source selection50b33b3e,
+workflow2a2c51e3 and fresh complete exit668886f0 are retained. The new axis-local
+validator is selected by eight private tasks at the original runtime guard
+position; native Name getters and literal custom fallback are preserved.
+Main read the complete producer and actual emitted policy. This is source
+generation, with no behavior execution or canonical installation claim.
+
+A107/A110 focused22 asset preparation stopped before tests, terminal
+chunkaf6e3d/exit1, in `runs/main_a107_a110_hpc_contract22_controls_generation_01/`.
+Its declaration resolver expected a literal roles tuple but encountered the
+authentic module constant `ROLES`. Fresh complete exitd423edcc confirms the
+workload exited; the failed raw receipt remains unchanged. The source-only
+resolver successor will authenticate that constant. Source874 and prior56
+evidence remain unchanged. Package-data now includes the two actual new HPC
+fixture patterns for each axis (pyproject8dd55613); no package-build claim.
+
+A107/A110 late-HPC policy source generation completed42646/0 in
+`runs/main_a107_a110_hpc_report_contract20_generation_01/`: sources385dc9a3,
+prooff2c6407c, full selectionbb7dc438, workflow00f29719 and complete exitd1c76515.
+The actual20 changes add two substantive axis-local policy owners, connect16
+private task consumers and adjust the two callers at the original guard position.
+Flattened proposal is874 targets/5246 production members. Complete AST
+normalization, byte inverses, source-only compilation and unchanged input guards
+passed; no application imports or behavior controls executed in this generation.
+Two early native Name getters per runtime preserve the original provider/builtin
+lookup mechanism without moving the scientific policy back into the runtime.
+Actual callback/error/builtin-cache and cold-entry controls remain pending before
+final metadata and installation; the earlier56/224/1126 epochs remain literal.
+
+A102 metadata05 completed its traversal but rejected the final manifest57710/1
+in `runs/main_a102_final_provider138_metadata_02/`: workflow4d561eb5 and fresh
+complete exit4245d9c4. It retained918 record-level findings in7b85b926 across
+five categories:756 formula/source-evidence classifications,88 older source
+identities,56 declaration/alias references,16 hash-map operands and2 metadata
+self-references. These are record occurrences, not episodes or918 new code
+defects. The import-consumer accountbab46570 is retained. Main independently
+confirmed the Scientific map's stored credit.py hash is the axis-root credit.py,
+not scientific_process/credit.py; its relative operand domain needs correction.
+The full failed result/drain-false remain literal; fresh complete exit is separate.
+No OOM occurred and no final138 manifest or canonical write is claimed. The owner
+is resolving all groups from their source/schema provenance, without waiving
+unknown identities or reclassifying real source gaps as historical by name alone.
+
+A101's42-home final local requirement review is accepted: crosswalkf4a05e20
+and closeout07e1c704 in `runs/fourth_a101_final_requirement_review_01/` join all34
+requirements to the actual444+retirement1 installation and the subsequently
+installed eight-document compatibility clarification. Main read the complete
+crosswalk/closeout and inspected application263e5522, workflow7580f970,
+complete exit29af47ac and independent native readback67cad716. All8 metadata
+writes passed with no rollback/journal errors; the full1,876-source map remains
+byte-identical4f48a4c0. Earlier13/24/72 controls were not repeated. Five inherited
+external test imports, nested-credit, missing automatic judgment and full
+restoration/scientific limitations remain explicit at their actual scope.
+Local closure now covers266 of584 homes;318 remain in A102/A103144, A10462 and
+A107/A110112. Final installed home count remains266.
+
+A107/A110 metadata224 generation39930/0 completed in
+`runs/main_a107_a110_final_provider224_metadata_01/`: sources046fb222,
+RESULT1fb04e07, proofbff3ca71, workflow9294a8d2 and complete exitd625b1b2.
+The writer retained own-axis formulas/history and actual870/32/provider56 scope;
+bounded semantic readbackc9ea7bd9 found no additional output defect. Binding75971/0
+then produced exact1126 INPUTSa32fd9a1, workflowfae725b0 and complete exit0e1bd2c2:
+870 source replacements,32 new assets,224 metadata replacements, full5244 source
+maps,26 retained assets and32 unchanged guards. This package remains unapplied.
+
+The pending-axis source audit identified a specific additional policy placement:
+A102 and A107/A110 ordinary private HPC/Allocation→Launch and HPC-ancestry
+Launch→NativeHPC paths still evaluate the required handoff report-contract guard
+in shared Workflow.selected. Their owners are moving that original policy to
+an axis-local reusable validator with explicit private consumers at the same
+evaluation point, retaining late operands, actual errors and custom fallback.
+A103 includes the analogous seam in its finite successor; Fourth is tracing
+A104's actual corresponding path. Existing provider48/56 results remain valid
+for their measured epochs. These concrete original-goal omissions require
+targeted corrections/affected checks before final records and installation;
+the previous two-stage scheduling estimate no longer describes all known work.
+No extra episode or scientific capability is introduced.
+
+A103 aggregate continuation completed97767/0 in
+`runs/main_a103_final_provider152_metadata_02/`: metadata152 dfa4fa75,
+proof8aab9fa6, workflow68856871 and complete exit1dfeb384. All75 completed
+standalone inventories were authenticated and reused, with zero regeneration;
+the six account artifacts matched their original bytes. The new aggregate's
+7,141 edits and complete inverse passed (stream account420f4ed5), and76 narratives
+complete the152-row manifest. The191.6-second workflow reached the unchanged
+5GiB limit without OOM and exited successfully with descendants drained.
+This is an actual intermediate source/metadata epoch; the separately identified
+hierarchy/exchange/current-relationship obligations below still prevent A103
+original-goal closure. No canonical installation occurred.
+
+The final A103 original-requirement review identified concrete unclosed
+organization work in hierarchy and parent exchanges. Main read
+`a103/homology_service_setup.py::legacy_parent_types`, the registry's
+`_child_binding`/`for_path`, and `Workflow.build`: `legacy_annotation` is the
+actual private annotation parent, while eight declared child roots sit beside
+its directory. This is not merely an unused framework alias. Main also read
+`legacy_annotation/child_message_owners.py` and `Workflow.selected`: only the
+Resource pair, Literature and Scientific have selected private parent exchange
+owners; the permitted alternative Execution pair, HPC and Monitor still use
+the original shared branch. The owner is preparing a faithful hierarchy and
+endpoint correction, preserving actual role/capability checks and saved identity.
+Existing scientific and provider48 results remain at their accepted scopes;
+successful152 serialization alone will not close requirements3,10 or33.
+No previously closed local scope is reopened by this finding.
+
+A102 final138 streaming generation78989/1 stopped on a current-field
+classification error: an imported `annotations` name was sent to the
+defining-symbol resolver. Actual workflow5aabb9aa in
+`runs/main_a102_final_provider138_metadata_01/` records no OOM and a3,076,202,496-byte
+peak; the raw drain-false field remains literal. Fresh complete exit30bd65ff
+confirms the service and complete workload have exited. No final138 manifest
+or installation is claimed. The owner is distinguishing imported references
+from defining-symbol facts; the accepted provider48 behavior result is unchanged.
+Main continued with independent A103 aggregate-only generation97767, retaining
+the already-emitted75 standalone inventories under catalogue960080f1.
+
+A107/A110 final provider56 passed32115/0 in
+`runs/main_a107_a110_provider56_01/`: verification3084d626,
+workflow379911f4 and complete exitbbfce527. All56 calls/168 phases,
+1,359 confined imports and16 cold entries passed with unchanged source guards.
+The actual selection54d29c2c uses the870-source proposal and32 permanent assets;
+the selected-input hold is released after the recorded full exit. No repeat
+of this accepted cohort is scheduled. Final224 ownership records and combined
+installation remain pending; full task/restoration/scientific execution is
+outside this controlled result.
+
+A106's31-home original-requirement closeout is accepted at its actual installed
+epoch: `runs/fourth_a106_final_requirement_review_01/FINAL31_REQUIREMENT_CLOSEOUT.md`
+(07119791), full home crosswalk76ddbc1a and native installed reconciliation
+5fcb76b8. Main read the closeout and inspected the retained passed reconciliation:
+all357 targets,293 backups and full1,541-source membership match, with zero
+journal/rollback errors. It joins all34 requirements to the final357 application
+and separate41/69 controlled evidence; no tests were repeated. Its inherited
+default-catalog, receipt-enabled annotation, nested-credit and larger
+restoration/scientific limitations remain explicit.
+
+Earlier snapshot, superseded by the A101 closure and correction entries above:
+266 of584 homes had their final source packages installed;
+318 await A102/A103144, A10462 and A107/A110112. Local requirement closure now
+covers224 homes (Root159, A105/A10834, A10631), leaving360 for final closure,
+including installed A10142. A101 also has eight prepared ownership-only
+compatibility clarifications awaiting installation. Two planned stages remain:
+finish current records/final installation, then reconcile all34 requirements
+across584 homes. All currently scheduled behavior cohorts have passed at their
+own stated epochs; a concrete new finding may still require a focused correction.
+These installation/review counts overlap and do not measure remaining effort.
+Earlier entries below retain their historical state.
+
+A107/A110 final56 asset preparation completed40901/0 in
+`runs/main_a107_a110_provider56_controls_generation_03/`:32 permanent assets
+9f998c1c, cases66770026, proofbd08b184 and complete exit5c8988cb.
+The actual output contains all eight authenticated private HPC receipt oracles,
+preserves24 earlier assets byte-for-byte and all56 case identities, and retains
+432 complete original/current method comparisons. Main accepted the full
+controls04/binder03 source deltas and actual870 output review. Binding and
+behavior execution remain separate from successful asset preparation.
+
+A103 final152 metadata generation61692/1 failed while processing its637MiB
+aggregate, after emitting75 standalone inventories and their transitions.
+`runs/main_a103_final_provider152_metadata_01/workflow-result.json` (406d35cc)
+records driver-9, one actual OOM kill and the5GiB memory peak. Its raw
+KeyboardInterrupt/drain-false fields remain literal; fresh complete exit98f0e559
+separately confirms inactive service, absent supervisor and empty recursive
+slice. No final152 manifest or installation is claimed. The successor will
+retain the emitted75 and use streaming aggregate/inverse handling within the
+unchanged memory bound. Main moved to the independent queued provider56 work.
+
+Current structural reconciliation in
+`runs/main_final_cross_axis_account_01/STRUCTURAL_ROSTER.json` (0be5b895)
+matches all584 current declaration-file homes to rosterd9dbf615, with no
+missing or extra homes. All584 have ownership.md and exactly one established
+machine inventory; the six Root Homology homes use implementation_inventory.json.
+Nine numerical-iterator declarations and three retained fixture declarations
+are explicitly excluded from the596 episode.py files. The native read-only
+account records each actual declaration hash and paired paths. It verifies
+current structural scope/presence only, not inventory content, runtime behavior
+or whole-goal completion.
+
+A101's final444 application and one guarded retirement completed38733/0 in
+`runs/fourth_a101_final_current_application_01/`: application8c877058,
+workflow3257e3c2, complete exit1fb8ae29 and final source map4f48a4c0.
+All444 writes, retirement of the superseded improvement task_state.py, and
+the complete1,876-source membership/hash/mode postcheck passed, with no
+rollback or journal errors. Main verified the actual receipts, retirement,
+installed goal owner and improvement's direct internal-summary connection.
+No tests were repeated. Final installations now cover266 of584 homes;
+318 remain in A102/A103144, A10462 and A107/A110112. Local requirement
+closure remains193, with A10142 and A10631 installation-to-review joins
+pending. Whole-tree reconciliation is separate.
+
+A finite native manifest join in
+`runs/main_final_cross_axis_account_01/ROOT_EXTERNAL_OPERANDS.md` finds zero
+intersections between Root writer07's193 recorded external operands and
+the final A101444, A106357, A104573 source/asset targets, A102/A1031366 or
+A107/A110870 production targets. These mutations do not stale those particular
+Root provider identities. This is a source-account observation, not a new
+behavior check or whole-tree transitive validation.
+
+A106's final357 application completed1126/0 in
+`runs/fourth_a106_final_current_application_01/`: application8382f3f8,
+workflowf3ce6b9e, complete exit33724281 and final source mapd5eb2d56.
+All357 writes and the complete1,541-source membership/hash/mode postcheck
+passed, with no rollback or journal errors. Main inspected the actual receipts
+and installed private goal/assignment bodies. This installs234 production
+changes,63 permanent assets and60 current records; the two improvement records
+remain unchanged. No behavior tests were repeated. The owner is joining the
+31-home original-requirement review to these actual installation receipts.
+Final installations now cover224 of584 homes;360 await final installation
+in A10142, A102/A103144, A10462 and A107/A110112. Local requirement closure
+is recorded for193 homes, with A106's31-home closure join still pending.
+These are installation/review counts, not counts of unwritten implementations.
+
+A107/A110's finite eight-receiver successor completed45542/0 in
+`runs/main_a107_a110_hpc_receipt_provider_generation_01/`: combined870
+sourcesf77d8680, proof463f5ac3, selection5e655700 and complete exit7aac5566.
+The actual proposal preserves the original862 rows and adds the eight
+authenticated private HPC receivers, with2,750 definition accounts and
+unchanged canonical guards. The corrected exact A110 allocation prefix was
+reviewed before execution; the unexecuted predecessor remains retained.
+No canonical installation or56-case behavior execution is claimed here.
+
+Fourth's A104 affected3 passed69524/0 in
+`runs/fourth_a104_homology_inputs3_01/`: resultb5b643c7,
+verification20e83071, workflow44ecc32a and complete exitc05d1b41.
+Three calls/nine phases and214 confined imports passed with unchanged guards.
+Its preparation048bb36e preserves the original26 passing identities and28
+cold observations, changes only the false nonempty-child fixture assumption,
+and keeps the original genuine empty Homology child roles. Main inspected the
+actual results, exit and affected-source account. No production or permission
+change, new cold order, or repeat of the26 accepted calls was introduced.
+Explicit evidence union, current124 ownership records and installation remain
+separate from these successful affected checks.
+
+A107/A110 corrected56 asset preparation completed11715/0 in
+`runs/main_a107_a110_provider56_controls_generation_02/`:28 assetsac03b2cb,
+cases0ae1c339, proofbff57a6f, workflowdbdc634e and full exit53443298.
+No56 behavior test has run. Subsequent actual-output review and Main's
+executable-source reads found eight HPC prediction/allocation receivers outside
+the receive_report-only selection: their inserted runtime import captures
+providers before progress callbacks. The existing862 proposal remains literal;
+a finite870 source/fixture successor is required before56 execution. This is
+an actual original-goal omission, not a reopened previously accepted cohort.
+
+A102/A103 provider48 passed17518/0 in
+`runs/main_a102_a103_provider48_01/`: verification82453943,
+workflow4396856d and complete exitc1324894. All48 calls/144 phases,
+1,916 confined application imports and16 actual cold-entry records passed;
+source/snapshot guards remained unchanged. The measured selection6da794b8
+uses the combined1,366-source proposal and37 permanent assets, including all
+eight added private HPC receipt oracles, with packaging1179. The test scope is
+the named original-provider, callback/order, constructor and import boundaries;
+full task/restoration/scientific behavior remains explicitly unclaimed.
+Final290 ownership records and the combined installation remain pending.
+
+A102/A103 provider48 assets generated11900/0: sourcesd7d48d3b,
+casescb28a2d6, proof3239b749, workflow48806e76 and complete exit5a52c24a in
+`runs/main_a102_a103_provider48_controls_generation_03/`. The actual37 assets
+retain all48 case identities, six private constructor guards and eight added
+private HPC receipt oracles in the existing loop. Binding63346/0 produced
+INPUTS91a0abdb, selection6da794b8 and complete exit96c2a810 in
+`runs/main_a102_a103_provider48_binding_01/`:6,251 selected files,48 cases,
+three modules and16 cold entries, with no A101/A104/A106 source operands.
+Actual behavior execution is separate from these successful preparations.
+
+Packaging1179ec8b adds exactly the A107/A110 library.tests original-provider
+JSON/Python-source fixture rows. All previous rows remain unchanged; the exact
+ae8c preimage is under `main_a107_a110_provider_fixture_packaging_01/`.
+Both actual services were inactive before editing, Fourth's recursive slice
+was empty and its selected affected3 account contains no pyproject operand.
+The subsequent provider48 binder parsed/selected1179. No package-build claim.
+
+A107/A110 provider56 asset preparation41858/1 stopped before output in
+`runs/main_a107_a110_provider56_controls_generation_01/` (workflow6362c99e,
+full exit7ee4bd08). The original Workflow.build has its request-assembler
+branch after a two-statement selection prelude; the fixture reader wrongly
+assumed it was first. The narrow producer/helper02 selects the authenticated
+actual branch while retaining the full original fixture,56 identities and
+assertions. No source862 change or actual test result follows that failure.
+
+A102/A103's eight private HPC receipt successors and combined1,366-source
+proposal completed 21465/0 in
+`runs/main_a102_a103_hpc_receipt_provider_generation_01/`: sourcesd80a5810,
+receipt8 manifest48da4b6a, proof848eb24a, workflow90251a73 and full exit655ccf18.
+Both authentic extraction recipes reconstruct all eight private beforeimages;
+the correction removes their inserted runtime-import capture while retaining
+the original private HPC progress fallback, saved-admission and timing bodies.
+All1,358 prior payload rows remain literal, and eight definition accounts
+replace their prior no-global-load disposition; the other3,634 are unchanged.
+Actual inverses and unchanged guards passed. The pending48 controls will use
+this combined source once, with eight authentic private-oracle rows added to
+the existing receipt loop. No tests or canonical writes occurred here.
+
+A107/A110 provider03 source generation completed 5074/0 in
+`runs/main_a107_a110_registered_provider_generation_01/`: sources02c37819,
+proofe09de883, selectiona34c5b73, workflow27a0690b and full exitf751f743.
+The actual proposal has 862 replacements (461 A107, 401 A110), 2,742
+definition accounts, 20,711 exclusions and all 2,003 census-candidate
+dispositions. Forty-two accounts authenticate inserted own-runtime import
+prefixes separately from original local imports. Full AST/prefix inverses and
+unchanged canonical guards passed; private bodies and definition-time surfaces
+are retained. Focused provider/callback controls, current ownership and
+installation remain pending. These are source counts, not episode completion.
+
+Root's final938 application completed 72370/0 in
+`runs/main_root_final938_application_01/`: application9a7ff435,
+workflow64000735, full exitb6410299 and final file mapbb3477d5. All 938
+operations and the complete 9,252-file own-Root membership/hash/mode postcheck
+passed, with no rollback or journal errors. This installs 606 production
+changes, 14 permanent assets and 318 current records for all 159 own-Root
+homes. The nine axis subtrees are excluded from its writes.
+
+Together with installed coupledScientific39, actual writer07 output and its
+bounded semantic acceptance, this fulfills the remaining installation and
+current-record obligations in Root's original34 requirement reviewb15d62ee
+(`root_final_policy_ownership_preparation_01/ROOT159_REQUIREMENT_REVIEW.md`).
+Its actual policy29+3/message27+1 unions and older configured/scientific scopes
+remain at their measured epochs. The inherited pre-Nov11 PBS test limitation,
+full saved-workflow restoration and autonomous science remain separate claims.
+This closes Root's final local integration/review, not the whole584-home goal.
+Root159 plus A105/A10834 now have final installation/local review; the other
+391 homes remain in five groups awaiting final integration/reconciliation.
+Those 391 are not an asserted count of homes requiring further code changes.
+
+Fourth's A106 current metadata60 generation completed 75980/0 in
+`runs/fourth_a106_final_current_metadata_01/`: sourcesb262ca46,
+preparation resulte914d3e6, workflow91de1cc8 and full exit87ac20d1.
+Main inspected its actual preparation and exit records. Output acceptance,
+binding and installation remain separate; this is not new behavior validation.
+
+Root's narrow ownership successor completed 52831/0 in
+`runs/main_root_final318_metadata_06/`: RESULTa20c0b76, metadata0e579b71,
+proofa842eb6f, workflow60064e59 and complete exitfc26be2c. The 606 source
+changes and 14 assets are byte-identical to the preceding joined selection.
+Actual-output reviewe89824d4 confirms both canonical/digest defining associations
+in all six Homology records; the concrete omission is closed. Binding81215/0
+produced INPUTS6c49630c with complete exit0eb95d5e. Installation is separate.
+
+Fourth's A10429 successor completed 12665/1 with all 28 cold import orders
+passing, 26 passing calls and three failed Homology-input calls. Actual result
+36bb7475, verification6648ea30, workflowed22401e and full exit983f1aaf in
+`runs/fourth_a104_registered29_02/` retain 87 phases, 917 confined imports
+and unchanged guards. The three failures are being compared against original
+child applicability before an affected correction; no permission or scientific
+behavior change follows from a fixture expectation. The accepted 26 calls and
+28 cold observations remain tied to that exact source selection. Main inspected
+the retained records; the whole29 scope is not passing or installed.
+
+A105/A108's final local 34-requirement crosswalk is recorded in
+`runs/root_a105_a108_goal_closure_03/CLOSURE.md` (e4c1c0d5). It accounts for
+all 17 existing homes per axis, installed276 and its full2,221-source
+postcheck, provider42 and the explicit retained2+retry20 union. No additional
+confirmed original-goal defect was found beyond the installed corrections.
+This is a source/retained-evidence review, not new scientific or saved-workflow
+execution, and it does not close the other axes or the whole-tree audit.
+
+Root938 binding completed 93064/0 with INPUTS28eaf32a and complete exit
+5b81258c in `runs/main_root_final938_binding_01/`. Application is withheld
+because bounded review of the actual generated ownership records found one
+Homology association omitted: the function-name `digest` was treated as a
+hash field. Review685cfe9c and source successor helper88fffb7f/writer0e4fd595
+preserve that exact defining-function object and assert both serializer owners.
+The original generated records and successful binding remain literal; neither
+is an installation claim. No runtime source or accepted control changes.
+
+Root's corrected final ownership generation completed 76768/0 in
+`runs/main_root_final318_metadata_05/`: RESULT 8f65057c, metadata 094ca349,
+proof 81f0bce9, workflow abed235c and complete exit 62ec2581 retain 318
+prepared records for all 159 Root homes. The actual seven-family counts are
+1 Root, 23 Scientific/Literature, 99 operational, 15 conditional Literature
+children, 6 Homology, 9 monitors and 6 terminal homes. Every original input
+matches the all-159 diagnostic; source-keyed descriptions and missing nested
+owner semantics are retained with actual selected-file associations. Exact
+class-header preservation is eca06544. The combined preparation remains
+606 source changes, 14 permanent assets and 318 metadata records; binding
+and installation are separate until their actual receipts are recorded.
+
+A105/A108 provider/policy276 is installed. Application 11921/0 in
+`runs/main_a105_a108_registered_policy276_application_01/` passed all 276
+writes and the complete 2,221-source membership/hash/mode postcheck:
+application 47394adc, workflow fd3bbd57, complete exit 679802e9 and source
+map 79fcb9d3. There were no rollback or journal errors. The installed scope
+is 192 production changes, 16 permanent assets and 68 ownership records
+covering the existing 17 homes per axis. This closes that combined installation,
+not the whole-goal audit or full scientific/restoration execution.
+
+Its exact affected20 passed 34178/0: verification 9f74a0c3, workflow c16572c5
+and complete exit d4b391eb retain 20 calls, 60 phases and 1,392 confined
+imports with unchanged guards. Explicit retained2+retry20 union c121cfd5
+completed inline0 (complete exit 0cedb6c4), preserving the failed22 literally.
+Metadata generation completed 94837/0 with 68-record manifest a0f1181f,
+proof 8feebcab and complete exit 5f4eb82a. Binding 76113/0 produced INPUTS
+332f4b89 and complete exit 36f2b8a1. Original provider42 evidence remains at
+its original tested source version; no accepted cohort was repeated.
+
+Packaging ae8c3478 adds only the requested A101/A106 original-provider TXT
+fixtures and A102/A103 original-provider JSON/Python-source fixtures to four
+existing package-data rows. All earlier patterns remain. The exact 0aec
+preimage is retained in `runs/main_registered_provider_fixture_packaging_01/`.
+Main's application fully exited and Fourth's actual service was inactive
+before the edit; no packaging consumer was active. This is configuration
+evidence, not a package-build result. Earlier executions retain their own
+packaging versions.
+
+A105/A108 affected20 binding03 completed inline0 in
+`runs/main_a105_a108_registered_policy20_binding_03/`: INPUTS 6d3cd05a,
+selection 2b36174d and complete exit b1f9deb2 retain the exact 20-case retry.
+RETAINED_COLD2 a0f724b3 independently authenticates the original two passing
+cases, actual import origins and all 30 original cold records. The two Root
+prerequisite changes are joined through installed Scientific39 in ba34389e;
+the old evidence remains tied to its original saved tree. Binding02's
+11669/1 variable-shadowing failure is retained with full exit bce9b014;
+successor03 changes only that local variable name. Actual20 execution remains
+separate from this preparation result.
+
+A102/A103 provider48 generation02 completed 36861/1 before asset output
+(`runs/main_a102_a103_provider48_controls_generation_02/`, full exit
+4e807ee2). Its complete paired-method check identifies six private A103
+legacy Homology constructors that differ from the generic original, across
+both legacy parents and their monitoring/submission/acquisition children.
+Their genuine private guards and suitable fixture prerequisites are being
+examined; no generic equality bypass or production change is inferred.
+
+Fourth's new A10172 and A10669 controlled scopes pass. A101 completed
+30889/0 with verification 554228fe, workflow 5e96b4ed and independent full
+exit ac67e407: 72 calls, 216 phases, 1,213 confined imports and four cold
+orders. A106 completed 95318/0 with verification 44b4c558, workflow 671d4a64
+and independent full exit dddfa94f: 69 calls, 207 phases, 1,010 confined
+imports and seven cold orders. Main read their actual result, verification,
+workflow and full-exit records; source guards remain unchanged. Current
+ownership and installation of those successors remain pending. These are
+provider/presentation/report boundary checks, not scientific execution or
+full saved-workflow restoration.
+
+Two new Main preparations stopped before tests or canonical writes. A105/A108
+affected20 binding completed 79664/1 in
+`runs/main_a105_a108_registered_policy20_binding_01/` (full exit d606f0aa):
+the prior selected Root return-admission source had legitimately changed in
+the installed Scientific39 package. A successor must authenticate the prior
+saved snapshot separately and join the exact current prerequisites through
+that application. The original failed22 and its two passing cold cases remain
+literal; no affected20 test has executed.
+
+A102/A103 provider48 asset generation completed 60931/1 in
+`runs/main_a102_a103_provider48_controls_generation_01/` (full exit 7be73c36).
+The exact-original-oracle assertion rejected A102 HPC allocation's private
+`HPCWorkTaskDecision.exchange_response`. The selected original/private
+dispositions require review before a corrected asset generator; the failure
+does not establish a production regression or invalidate prior accepted scopes.
+
+Root's all-159 inventory-schema diagnostic completed 74970/0 in
+`runs/main_root_final_inventory_schema_diagnostic_02/`. DIAGNOSIS e253ebb7,
+streamed semantic sections 0e75c5ae, schema account 8ee0d354 and complete
+exit 3de95c87 retain 15 failures of the existing ownership reader, with all
+318 canonical metadata guards unchanged. This identifies the complete set of
+unsupported records for a source-grounded reader correction; it does not
+accept newly selected semantics or install ownership records. The unused
+diagnostic_01 directory came from a launcher rejection before Python began.
+
+A107/A110's installed-source census completed with workflow return code zero
+in `runs/main_a107_a110_provider_census_01/`: census 8bb26a66 and workflow
+287cfee3 account for 112 homes and 5,244 installed production sources. The
+2,003 candidate definitions in 706 modules require actual applicability and
+original-provider review; they are not defect or unfinished-episode counts.
+Session 21077's terminal result was lost across context recovery; it remains
+null. Fresh complete-exit observation f14264e4 confirms the inactive service,
+empty recursive slice and absent supervisor independently. No source changed.
+
+Root final318 preparation03 stopped20361/1 on Main's missing `ast` import
+in the newly added PBS syntax check (complete exit12ff022e); writer05 adds
+only that import. Preparation04 then stopped59680/1 on an actual older
+conditional-parent ownership schema not recognized by the helper's four-key
+responsibility assertion (complete exit23ac5f71). All159 semantic schemas are
+being examined together before another writer successor. Neither attempt
+installed ownership records or changed the completed Scientific39 scope.
+
+Root final318 preparation02 stopped11675/1 before ownership output because
+its inherited-PBS check expected dotted import text. Complete exitbbf02b66
+is retained. The actual current and pre-goal helper both use
+`from gene_annotation_episode import practical_pbs_operations as pbs`.
+Writer04 verifies that actual import AST; the pre-existing limitation and
+all source/evidence/ownership scopes are unchanged.
+
+The coupled Scientific39 installation passed51110/0 in
+`runs/main_a102_a103_coupled_scientific39_application_01/`:
+application5ee2a3f2, workflowb9234592 and complete exit65bcd71a retain all39
+operations, including24 production writes, four obsolete wrapper retirements,
+ten permanent assets and one existing test caller. The full6210-source
+membership/hash/mode postcheck passed with no rollback/journal errors; both
+Root callers match their actual Scientific16-tested successors
+(root-callers-afteracc9adaa). Binding54825/0 used INPUTSb2876e6c and complete
+exit2831785e. All608 prior ownership records remain byte/mode-identical at
+their authenticated earlier epochs. Their current-source refresh is explicitly
+pending the final provider and Root ownership updates; integration is not closed.
+
+Root final318 preparation01 stopped inline1 before candidate generation on
+a malformed60-character policy-union pin (complete exit3ad0a6da). Main checked
+the unchanged actual32-case union and corrected only that constant in writer03:
+the actual hash is82c8be746d569e6132db6b9a7334cc2e100c379d0dc734d644d767665b2d6916.
+The original failed attempt and writer02 remain retained; this did not alter
+the union, prior tests, source or installed ownership documents.
+
+A105/A108 policy22 execution completed15687/1 in
+`runs/main_a105_a108_registered_policy22_01/`: verification92379bee,
+workflow6f67df0d and complete exitc5545dae retain66 phases, two passing cold
+tests and20 failures before selected-method execution. All20 encounter the same
+duplicate-Literature child error while constructing the fixture's Workflow.
+Source guards remain unchanged. The original failed receipt is retained;
+fixture/baseline review and an affected20 successor remain pending. The cold
+records and import origins need explicit retained-evidence authentication
+because the aggregate runner stopped before those final acceptance checks.
+
+A102/A103 provider source04 preparation passed85055/0 in
+`runs/main_a102_a103_registered_provider_generation_02/`: sourcesce4e2bae,
+proofcc6271a0 and complete exite9efd34c retain1358 generated file changes
+(586 A102,772 A103),3642 definition accounts and18475 excluded definitions.
+The emitter preserves full function AST/string values through class-aware
+rendering. This is source preparation, with account review and focused behavior
+checks still pending; these file/definition counts are not episode counts.
+
+A105/A108 registered-policy source02 passed6979/0 in
+`runs/main_a105_a108_registered_policy_generation_02/`: sourcesfe77be53,
+proof4fbda263 and complete exitce4c5af4 retain90 prepared changes.
+The successor recognizes the actual omitted-middle and folded-literal receipt
+conditions and restores only their original predicate; the pilot's existing
+original condition remains intact. Controls preparation then passed inline0
+(eight assets8eb6640e, casesf95ee12e, complete exit177ef150). Binding22_01
+stopped53689/1 on four unresolved eager dynamic imports in the new test helper
+(complete exit7857c155), before tests ran. The fixture import spelling is being
+made explicit; no production correction or prior42 result is reopened.
+
+Packaging0aec949a adds the required A105/A108 registered-policy JSON fixtures
+and A105 pilot-source fixtures to their existing library.tests declarations.
+Theba74 preimage is retained in `runs/main_registered_policy_fixture_packaging_01/`.
+Both actual window services were inactive when Main made the additive edit;
+Fourth's current handoff identified no packaging consumer. This records the
+configuration change, not a package-build or test result.
+
+Two independent source preparations stopped before candidate installation:
+A105/A108 registered-policy generation43683/1 assumed a two-item receipt
+condition where actual selected syntax differed (complete exit54561e2f);
+A102/A103 registered-provider generation13804/1 rejected its own module AST
+inverse at the A102 API decision-contract owner (complete exit794a11fb).
+Both actual failures are retained in their named generation01 runs. The
+generators are being corrected against actual source; neither changed
+canonical code or invalidates the previously accepted installation scopes.
+
+A102 final294 installation passed69003/0 in
+`runs/main_a102_final294_application_01/`: application0dc70697,
+workflow0940facf and separate complete exitf898a954 retain all294 writes
+and the complete2960-source membership/hash/mode postcheck. There were no
+rollback or journal errors. Its148 production files, eight permanent assets
+and138 ownership records are installed. The separate Scientific placement
+and provider-preservation corrections remain pending; this does not close the
+whole-axis requirement audit or claim new scientific/restoration execution.
+
+A102 ownership generation08 passed40947/0 in
+`runs/main_a102_final_policy_metadata_08/`: manifest12e51043 contains138
+records for69 homes, workflow953a2893 and separate complete exitb57c74c2.
+It preserves the exact authenticated historical authority object and keeps
+current source/formula checks strict. Binding08 then passed38046/0
+(INPUTS8f47bfe0, complete exita3e5c3bf), preparing148 production changes,
+eight permanent assets and138 ownership records against current packagingba74.
+Installation is separate until its actual application receipt is recorded.
+
+Fourth's A101 Scientific24 passed49466/0 in
+`runs/fourth_a101_scientific24_02/`: verification44119205,
+workflowcd340d37 and complete exite9ad32a1 retain24 calls/72 phases,
+95 confined imports and eight cold orders. A106 goal/Scientific41 passed17645/0
+in `runs/fourth_a106_goal_scientific41_01/`: verification620e1f8b,
+workflowf4755644 and complete exit788070c6 retain41 calls/123 phases,
+143 confined imports and ten cold orders. Both retain unchanged source guards.
+These are the stated provider/path/goal boundary checks on prepared source,
+not installation or autonomous scientific execution. Main inspected their
+actual verification, workflow and complete-exit records.
+
+Packagingba74ea71 adds only the required A101/A106 Scientific-test
+fixtures/*.txt declarations from Fourth's reviewed recipe. Previous78c29876
+is retained under `runs/main_fourth_scientific_fixture_packaging_01/`.
+Main's Root1 and evidence-join workflows had fully exited, and Fourth reported
+no active configuration consumer. Existing fixture declarations are unchanged;
+this records package-data configuration, not a package-build result.
+
+Root's exact terminal1 retry passed8551/0 in
+`runs/main_root_message1_retry_01/`: verification605f0699, workflow96d5352a
+and complete exitab9a5168 retain1 passing call/3 phases/189 confined imports
+and unchanged guards. Preparation38739/0 (INPUTSa2591a50, retained2734d1aade,
+complete exitd1fa2b62) authenticated all2045 original import origins and the
+original27 passing cases. The corrected fixture supplies actual constructor
+role declarations, and the snapshot adds the existing terminal owner plus
+its dependencies. Production and test assertions are unchanged. The explicit
+27+1 union passed inline0 in `runs/main_root_message28_evidence_union_01/`:
+CASE_UNION28.json4c3ce920 retains the original failed28 receipt literally.
+
+A102's complete remaining-reference diagnostic02 passed12486/0 in
+`runs/main_a102_remaining_references_02/`: accountbb568df4,
+workflowc301a091 and complete exit2f8e2083. Across69 inventories,408830 objects
+and16459 source aliases, exactly18 unresolved references remain, all within
+one historical results_source_authority record; all18 retained source bytes
+authenticate. No other unresolved alias kind was found under the producer's
+traversal rules. Diagnostic01 failed39781/1 on its own inappropriate scalar
+fingerprint assumption (complete exit42a01df2);02 matches the producer's
+actual formula applicability. Neither diagnostic changes canonical files.
+
+The A105/A108 per-home review in
+`runs/root_a105_a108_goal_completion_audit_02/DISPOSITION.md` distinguishes
+the already prepared160 provider correction from additional instruction
+namespace/probe timing and model-context corrections. In particular the actual
+Workflow.job_episode_options call was replaced with None in private context
+assembly despite supported configured job descriptions. Foreign-role action
+bodies remain excluded according to actual binding/schema applicability.
+The next source corrections will be grouped before another68-record ownership
+generation. Deferred scientific/native execution is not itself an additional
+organizational requirement or a required test count.
+
+2026-11-14 UTC filename reconciliation found no missing roster home and no
+additional application home among current `episode.py` files. All584 roster
+directories match; the other12 of596 filenames are nine `method_loop`
+infrastructure modules and three retained test fixtures. The exact exclusions
+are recorded in `runs/main_episode_roster_filename_review_01/REPORT.md`.
+This is structural membership evidence, not runtime-registration completeness,
+an unfinished-home count or a whole-goal completion verdict.
+
+Root message28 completed41654/1 in `runs/main_root_message28_01/`:
+verificationebee8e46, workflowb75a0580 and complete exit4457185d retain27 passing
+calls and one failed nominal terminal case, all84 phases and unchanged source
+guards. The existing Root/local_job_execution/episode.py dependency was missing
+from the test snapshot; the canonical file exists. The actual-import log has
+2045 records, but execution stopped at the JUnit assertion before its import
+confinement check; that check remains required for retained27 evidence.
+An exact affected1 retry is being prepared. Descriptor generation passed inline0
+(source26564d5c, complete exitd985e66e), controls generation passed inline0
+(RESULT0c12cfc4, complete exitc6f2a06c), and binding39259/0 selected3404 files
+(INPUTSb995df1f, complete exit0ca34ad5). No source installation occurred.
+
+A102 metadata07 failed5650/1 at an older source-authority reference inside
+the dated private_results_tasks_20261112 stage record; complete exit6fcccee3
+is retained in `runs/main_a102_final_policy_metadata_07/`. No canonical files
+changed. The remaining stage/reference families are being classified together
+before another metadata attempt, separately from valid current-source aliases.
+
+A103's final320 installation completed86284/0 in
+`runs/main_a103_final320_application_01/`: application2fc14e5d,
+workflow59bc140a and separate complete exita4f048a3. All159 production files,
+9 permanent assets and152 ownership records are installed; the full source
+postcheck passed with no rollback or journal errors. Its canonical source base
+is now3241. Fourth's preceding metadata04 generation passed12609/0
+(manifestde3f028b, workflow0865923e, complete exit4e94ef91) within the unchanged
+5-GiB bound, with no OOM kill. Earlier failed metadata attempts remain literal.
+The later Scientific owner placement and provider-preservation corrections
+remain separate, unfinished scopes; this installation is not whole-axis closure.
+
+A102/A103's Scientific owner-placement16 execution passed17260/0 in
+`runs/main_a102_a103_scientific_owner16_01/`: verification3c116c71,
+workflowfa63a99a and complete exitce2669a7 retain16 passing calls/48 phases,
+307 confined imports and unchanged guards. Source installation, four retired
+axis helpers and the two Root caller changes remain pending. A102's dependency
+reference diagnostic also passed48554/0 (accountdd896703, exit700b6597):
+1092 references differ from final source, but only28 also differ from the
+installed source, all tied to one authenticated older runtime snapshot. These
+are references, not missing implementations; metadata07 is prepared to retain
+the exact historical/current distinction.
+
+A105/A108's new provider42 execution passed74959/0 in
+`runs/main_a105_a108_registered_provider42_01/`: verification2d327644,
+workflowe7075e47 and complete exitbffcf40f retain42 passing calls/126 phases,
+1295 confined application imports,18 checked cold-import records and unchanged
+source guards. This validates the explicitly selected original/current
+provider boundaries on source1606b3a46c6. Current ownership and installation
+of that correction remain pending. Binding9520/0 retains INPUTS2db85cb9,
+3150-file selectione581a518 and complete exit9f7bbae4. No scientific/native
+execution or whole-workflow restoration is inferred from these controls.
+
+Root's explicit29+3 evidence union is now recorded as CASE_UNION32.json
+82c8be74 in `runs/root_final_policy_ownership_preparation_01/`. The original
+failed32 receipt and actual passing3 remain literal; the union covers32 unique
+cases with unchanged production333. Its separate message-callback proposal
+generated273 targets successfully78864/0 in
+`runs/main_root_message_callback_sources_01/`: source02e1cf38, proof86c9bca2,
+census141d1473 and complete exitcd58be72. It examines338 endpoint files and49
+private declaration files. Those counts are source coverage, not executed
+behavior or additional episodes; focused message controls remain pending.
+
+A102/A103's Scientific owner-placement16 controls generated ten permanent
+assets successfully inline0 in
+`runs/main_a102_a103_scientific_owner_controls_generation_01/`: source95ede4ec,
+cases3d36a6f7, proof8c3636e8 and complete exite62644ea. Execution remains pending.
+Packaging78c29876 adds only those private fixture patterns and A105/A108
+provider-consumer JSON patterns; previous b199 is retained under
+`runs/main_provider_fixture_packaging_01/`. The original source movement and
+its actual execution controls remain separate claims.
+
+Root's actual32 execution completed79590/1 with29 passing calls and three
+fixture failures, all96 setup/call/teardown phases retained and source guards
+unchanged. Verificationeaf14288 and complete exit832fa631 are in
+`runs/main_root_policy32_01/`. The inherited Scientific-binding property was
+not initialized through its real backing field, and the declarations fixture
+also assigned a read-only property. The corrected fixture uses the actual
+setter. Exact affected3 preparation02 passed inline0 (INPUTS50f1ec1d,
+retained2939d03674, complete exit0a3d89cd). Actual retry3 passed56745/0:
+verification78ffd573, workflowf564371b and complete exita1fb5895 in
+`runs/main_root_policy3_retry_01/`, with all9 phases and unchanged source
+guards. The original29 and passing3 retain their separate execution receipts;
+their explicit union record is pending. Preparation01 failed on pytest's
+current-directory symlink aliases before any test, with complete exit84115964.
+
+A105/A108's separate live-runtime-provider correction generated160 source
+targets successfully53771/0 in
+`runs/main_a105_a108_registered_providers_generation_01/`: source6b3a46c6,
+proof0d94b211 and complete exitbddb6ee9. This restores original lookup timing
+within explicitly selected extracted definitions; original private baselines
+are excluded. Its42 controls are generated (assets153350d8, cases499a5901,
+proof115944f7, complete exit2df8446b) in
+`runs/main_a105_a108_registered_provider_controls_generation_01/`;
+execution, installation and ownership update remain pending.
+It does not reopen the previously completed204-target installation scope or
+establish whole-workflow scientific behavior.
+
+A102 metadata05 failed78938/1 at a historical monitor descriptor snapshot
+(complete exit3fedf109). Successor06 preserves the descriptor-at/before snapshot
+families while retaining strict current aliases and formulas; actual06 then
+failed15854/1 at an older runtime snapshot reference inside dependency
+ownership (complete exit83889450). Both are retained preparation failures,
+with no canonical changes. Current-versus-historical reference classification
+must be resolved before the next metadata application. A103 metadata04 is
+delegated to Fourth's next available serial slot; no successful04 result is
+claimed here.
+
+A103 metadata03 ended28041/1 after the kernel killed the driver at the existing
+5-GiB memory bound. Workflow7f022faf records driver-9 and one OOM kill; complete
+exitd6f31ff7 confirms the subsequent empty owning service/slice. All75 private
+inventories and the combined candidate were written, but the combined transition
+record and final manifest were not completed. None is installed. Successor04
+streams the same inverse JSON after releasing rendered bytes; validation of its
+actual resource use remains pending. No resource bound was raised.
+
+Root32 binding01 failed58019/1 before any test execution because four imported
+test-only files from old Root20 were incorrectly used as current dependency
+seeds. Complete exit9f1cc480 remains in `runs/main_root_policy32_binding_01/`.
+The reviewed successor excludes only those authenticated unused old test seeds;
+all actual production paths, new tests and required dependencies remain.
+A102 metadata04 failed12947/1 (complete exit9fbd0e06) on an unproved assumption
+that all six HPC inventories were unchanged since the older capture. Its next
+authority must incorporate actual installed144 metadata replacements. No
+canonical files were changed by either failed preparation.
+
+Root source generation03 passed86682/0: source9b49fe06, proofb6a16d8c and
+complete exit2e58654e in `runs/main_root_final_policy_source_generation_03/`.
+It prepares333 production targets and318 direct consumers across159 known Root
+homes; this is source preparation, not installation. Root32 controls preparation
+also passed inline0 (assetsa40309b5, cases94295091, resulta21afda1 and complete
+exit61fc80c1) in `runs/main_root_policy32_controls_generation_01/`; ten assets
+are prepared, with no test execution claimed yet.
+
+A103 metadata02 failed10235/1 (complete exit0a274a82) when a named provenance
+JSON reference inherited the surrounding Python source hint. Successor03
+resolves explicit reference paths independently and retains non-source artifact
+references literally. A102 metadata03 failed29185/1 (exitbe08c0ce) at an HPC
+allocation top-level stored implementation digest outside its exact six Monitor
+credit-alias correction. Both failed outputs remain literal; neither wrote
+canonical files or changed the passed control scopes.
+
+A107/A110 final379 installation passed38300/0 in
+`runs/main_a107_a110_final379_application_01/`: applicationa8c5476c,
+workflow212e2b80 and complete exit0fc10d37. All129 production targets,
+26 permanent assets and224 ownership records were installed, with the complete
+5244-source membership/hash/mode postcheck passing; no rollback/journal errors.
+Actual binding88679/0 (INPUTS6f7952a3, exitfeb33dda) had no write/immutable or
+write/unchanged-guard overlap. Actual38/20/98/50 retain their distinct measured
+scopes; no new test/scientific/restoration result is claimed by installation.
+
+After both sessions' relevant consumers exited and Fourth released its shared
+hold, Main added only Root test fixture patterns root_policy_original/*.json
+and *.py.source to pyproject, nowb199ae06. Preimage816f670e and the exact diff
+are retained under `runs/main_root_policy_fixture_packaging_01/`. This is a
+package-data declaration, not a package-build result. A102 metadata02's separate
+complete-exit observationc600b759 preserves its raw false drain flag and lost
+terminal result while recording the freshly empty owning service/slice and
+absent supervisor; no terminal exit code was invented.
+
+A104's final228 application is installed: actual receipt16cecbba in
+`runs/fourth_a104_parent_application_01/` records all228 completed targets,
+the full3898-source postcheck, no rollback and no journal errors. Workflow
+39a9e4d6 records driver/workflow return codes0; separate full exit7ef4e61b
+records inactive/PID0, empty recursive slice and absent supervisor. Main
+inspected these literal records. The original-goal audit remains separate.
+
+Root source generation02 failed7865/1 before candidate output on its added
+assumption that the two retirement lists had subset membership. Its actual
+workflow and complete exit7444f038 are retained in
+`runs/main_root_final_policy_source_generation_02/`; the source33 membership
+is being inspected for a narrow reader correction. No canonical change occurred.
+A102 metadata02 likewise stopped with recorded driver/workflow codes1 at the
+current credit descriptor in execution_progress_assessment. This is distinct
+from the historical prompt descriptor fixed in02: the stored current value
+needs an authenticated stored/before/final account. Its failed files remain in
+`runs/main_a102_final_policy_metadata_02/`; no canonical change occurred.
+
+A107/A110 final224 ownership generation07 passed1353/0 in
+`runs/main_a107_a110_final_metadata07_01/`: metadata0f55bca1,
+productiona7b5f963, permanent-assets28c37cc5, workflowf8c97a51 and complete
+exit0e512a74. The actual manifests contain129 production targets,26 permanent
+assets and224 ownership records, including the authenticated two runtime
+derivation links and the original descriptor formulas. Final379 application is
+being bound separately; this is preparation, not installation.
+
+Root's policy source generation01 stopped75156/1 before output when its source
+reader expected a flat sha256 field in the older installed source33 row schema.
+The failed artifacts and separate complete-exit observation remain in
+`runs/main_root_final_policy_source_generation_01/`. The source reader is being
+adapted to the authentic installed-selection schema; no canonical source was
+changed and the existing installed Root scope remains intact.
+
+Fourth's final A10197 application passed32188/0 in
+`runs/fourth_a101_policy_application_01/` (applicationbf3071a1,
+workflow888068b9, complete exit30f4b0e9): all97 targets and the complete1877
+production-source postcheck pass, with no rollback or journal errors. Final
+A106153 likewise passed87994/0 in `runs/fourth_a106_application_01/`
+(applicationa31713dc, workflowf1e48528, complete exit0fa62397): all153 targets
+and the complete1540-source postcheck pass without rollback or journal errors.
+Main inspected the literal application/workflow/exit records. These scopes are
+installed; the whole-axis original-goal requirement review remains separate.
+
+Three metadata preparation failures remain literal and did not write canonical
+source. A107/A11006 failed24158/1 at a missing intermediate runtime derivation
+in its stage composition (complete exit40ed6872);07 authenticates that exact
+two-row intermediate and preserves final-source equality. A10301 failed37224/1
+on an existing current HPC fingerprint differing from its actual source formula
+(complete exitcf6e24b7); the stored value predates this policy split and must be
+recorded separately from the recomputed before/final values. A10201 failed27589/1
+when traversing an explicitly historical prompt-validation descriptor as current
+(complete exitb0c3026e);02 preserves that snapshot and its historical formula
+definition while retaining current-source checks.
+
+A10233 passed79253/0 in `runs/main_a102_policy33_01/`:
+verificationc71a401b, workflow20b1180d and complete exit74d15bdc. All33
+calls/99 phases and152 confined imports pass with unchanged source guards.
+This is the actual final148 production and corrected helper04 epoch; the
+previous binding failure remains separate. Final current ownership/application
+is still pending.
+
+The explicit A107/A110 actual48+2 evidence join passed16247/0 in
+`runs/main_a107_a110_policy50_evidence_join_01/`, union7ef08bce. It joins
+the original48 passing identities to the actual two-case property-fixture retry,
+preserving the original failed50, both actual import maps, source byte/mode
+guards and the independently authenticated original cold records. It is not a
+single successful50 run. Final224 ownership generation is now underway.
+
+Final A105/A108204 installation is complete. Application02 passed8026/0 in
+`runs/main_a105_a108_final204_application_02/`: application6ed9356e,
+workflowf4e56980 and complete exitd1f5f888. All104 production files,32 permanent
+assets and68 ownership documents were installed; the full2221-file production
+membership/hash/mode postcheck and all unchanged/external guards passed.
+Rollback and journal errors are empty. Binder04 retained the56 mutable metadata
+preimages as immutable backups and produced zero mutable/immutable overlap.
+The earlier failed application remains recorded below. This closes this final
+two-axis installation scope, preserving the distinct90/36, policy30 and
+commissioning36 behavior evidence; it does not claim full scientific autonomy
+or whole-goal completion.
+
+After the application fully exited, Main added the required A106
+`fixtures/recursive_scientific_parent/*.txt` package-data pattern, preserving
+the two existing implicit-parent patterns. Current pyproject is816f670e;
+preimage1ca6c226 and the single-line diff are retained under
+`runs/main_a106_recursive_fixture_packaging_01/`. Fourth confirmed its active
+metadata generations did not consume packaging; later application binding must
+use the current value. This declaration is not a package-build result.
+
+A103 commissioning16 passed72505/0 in
+`runs/main_a103_commissioning16_01/` (verification4914d4b9,
+workflow768daedf, complete exitc740ddd1). All16 calls/48 phases and142
+confined imports pass with unchanged source guards on the final159 prepared
+source. These exercise the commissioning interfaces with real private tasks,
+Store/Journal and supplied Workflow/provider ports. Earlier report13 and cold30
+keep their separate scopes; final ownership and installation remain pending.
+
+A102's corrected eight permanent assets generated inline0 in
+`runs/main_a102_policy33_controls_generation_02/` (sources e066656c,
+case selection08a34b6b). Only the four helper import expressions changed;
+the unchanged33 cases and final148 production source are ready for binding.
+
+The first final A105/A108204 application completed70581/1 in
+`runs/main_a105_a108_final204_application_01/` (application201b4d47,
+workflow3caa46c0, complete exit9f80979c). All204 writes were attempted and
+observed, but the final immutable-input check incorrectly included56 canonical
+ownership documents that were explicit write targets. The installer restored
+all204 own changes with no journal errors. No installation success is claimed.
+Prepared binder04 preserves those exact authenticated preimages as immutable
+run backups while retaining canonical preimage and replacement checks; no
+application or scientific source change is needed for this correction.
+
+Final Root source review confirms a remaining original-goal ownership gap:
+`root/report_validation.py`'s `ReportValidation.facts` contains shared report
+assembly and the Scientific-only completion snapshot at its late specialist
+guard. `root/action_catalog.py` also mixes common scientific schema construction
+with Root-only tool policy. Root and legacy report producers still reach these
+through dynamic `workflow.facts`. A substantive split is in preparation while
+preserving overrides, callback timing and private binding policy. This does not
+reopen the accepted installed159 behavior scope or assert a new regression.
+
+The exact A107/A110 wait2 retry passed 15076/0 in
+`runs/main_a107_a110_wait2_01/`: verification f92a5fc1, workflow c2d0711c,
+complete exit ec678e67. Both calls/all six phases and 431 confined imports
+pass, with unchanged source guards and the qualified module-absence check.
+Only the two fixture property assignments changed; production source did not.
+The explicit actual48+2 evidence join remains pending; this does not turn the
+original failed50 receipt into a successful run. Its binding completed with
+raw returncode0 and fresh complete-exit observation 8d7e98d7; session37020's
+terminal result was lost and is not reconstructed as an observed terminal code.
+
+A10233's first binding stopped before emitting INPUTS or executing tests:
+the eager-source scoper resolved four test helper imports against the helper's
+package instead of the supplied runtime package. The actual failed binding
+78907/1 and complete exit cf28485b remain in
+`runs/main_a102_policy33_binding_01/`. A narrow prepared helper uses the four
+equivalent explicit same-axis imports; the 33 identities, assertions,
+production code and scoper remain unchanged.
+
+The whole original organizational goal remains incomplete. Its explicit
+[34-requirement audit](EPISODE_PRIVATE_IMPLEMENTATION_AUDIT.md) distinguishes
+the known 584-home scope from a verified completed/remaining count. Structural
+405/405 task connections and installed parent packages retain their narrower
+accepted scopes. Remaining report, schema and commissioning ownership work is
+part of the original goal; no new autonomous-science requirement is inferred.
+
+A105/A108's new policy30 completed 65013/0 in
+`runs/main_a105_a108_policy30_01/`: verification a67974a3, raw 11ece00d and
+complete exit db3caf90. All 30 calls, 90 phases and 1420 confined application
+imports pass with unchanged source guards. This evidence belongs to the actual
+100-target policy source, not its later commissioning successor. Earlier 90/36
+parent scopes remain separately retained.
+
+A103's report/schema13 completed 13323/0 in
+`runs/main_a103_report_schema13_01/`: verification 6e006d51, raw 47851a56 and
+complete exit af793383. All 13 calls, 39 phases and 136 confined application
+imports pass with unchanged source guards. This tests runtime-first entry and
+the selected policy interfaces. Subsequent source review found a direct-entry
+import cycle; these passing cases do not establish the untested import order.
+
+The seven-owner A102/A103 import-order correction was generated inline 0 in
+`runs/main_report_schema_import_order_generation_01/` (sources 91914765,
+raw 4db6741e, complete exit 255544d7). It moves module imports after definitions
+while preserving function bodies and import order. Final commissioning source
+selections were then generated: A103159 in
+`runs/main_a103_commissioning_policy_generation_02/` (8eac8e09, proof 0852ca50,
+raw 2ababaa2, complete exit a87a5ff2), and A102148 in
+`runs/main_a102_commissioning_policy_generation_01/` (58bfbaf9, proof 87f24530,
+raw 6dd6fa9c, complete exit 18e0f4c8). These are prepared sources, with fresh
+import, commissioning checks, current ownership and installation still pending.
+
+The actual A107/A11098 evidence join completed 23022/0 in
+`runs/main_a107_a110_improvement98_evidence_join_01/`: union bb1f9cc4, raw
+2137a8ee and complete exit 403f8ce3. It authenticates 86 retained passing cases
+plus the actual corrected 12, including their source and import evidence. The
+original failed98 run remains unchanged; this is not a single successful98 run
+and does not validate the later policy split.
+
+A107/A110's 12-target root-policy source was generated inline 0 in
+`runs/main_a107_a110_root_policy_generation_01/` (425ac462, proof 9f99c7a7,
+raw 6083855e, complete exit 57fa5100). Actual functions precede the live runtime
+import; original root admission, return, catalogue and replay branches retain
+their inverses. Policy24 permanent assets also generated 58081/0 in
+`runs/main_a107_a110_policy24_controls_generation_02/` (fd52d3e3, cases 8e4d94fe,
+raw 958f90fa, complete exit 3df9ffe2). No cases or canonical installation are
+claimed from either preparation. The prior packaging failure remains retained.
+
+Two A105/A108 commissioning preparation attempts stopped before a complete
+selection or canonical writes: `main_a105_a108_commissioning_policy_generation_01`
+on shared syntax-tree nodes in the handled-return inverse, and `_02` on passing
+an already live-bound schema function through the strict transformer again.
+Raw failures 2687abcd and 582354f5 retain their failed drain flags; separate
+actual complete-exit observations aa12915e and 6b462490 confirm the owned service
+and recursive slice were empty. Narrow producer successors preserve both strict
+guards. Neither preparation failure reopens accepted scientific behavior.
+
+The corrected A105/A108104 commissioning source then generated 78439/0 in
+`runs/main_a105_a108_commissioning_policy_generation_03/`: RESULT 6f497613 and
+complete exit d56d5b40. The already live-bound schema filter is preserved
+exactly, separately from the unbound-function transformation. Actual focused36
+completed 69591/0 in `runs/main_a105_a108_commissioning36_01/`: verification
+fd686a16, raw 23ed80b2 and complete exit ee4be8c2. All 36 calls, 108 phases,
+260 confined application imports and unchanged source guards pass. The cases
+cover original/current commissioning interfaces, handled return values,
+fresh/saved admission and four actual cold entries. They use supplied callback
+ports and do not establish full workflow construction, restoration or native
+science. Final current ownership and canonical installation remain pending.
+
+A107/A110's combined50 source/test package generated inline 0 in
+`runs/main_a107_a110_policy50_controls_generation_01/`: source 1fedeafc,
+cases c9c80477, tests 4e654f60 and complete exit c4a9e4da. It contains the
+unexecuted policy24 and root26 scopes, with their original identities and eight
+permanent assets. No behavior result is claimed from source preparation.
+
+A103 commissioning16 preparation stopped before emitting test assets when the
+original-method AST guard detected a changed multiline docstring after removing
+class indentation. `runs/main_a103_commissioning16_controls_generation_01/`
+retains inline exit1 and separate complete exit 06a0a351. Exact indented method
+spans in a fixture class are the intended correction; the original equality
+guard remains. Its narrow permanent fixture package-data declaration is added
+to pyproject (9b639e59); this declaration is not a test or installation result.
+
+Actual A102/A103 cold30 completed 69317/0 in
+`runs/main_policy_cold30_01/`: verification bfcf0907, raw e3c62e1e and complete
+exit 0b62ee9e. All 30 calls/90 phases and all three complete snapshot guards
+pass. Four original entries import successfully; eleven entries reproduce the
+actual intermediate circular-import failure; fifteen corrected entries import
+successfully and retain the actual method/runtime identities. The corrected
+entries include final A102148 and A103159 commissioning owners. Intermediate
+child failures remain actual returncode1 observations, not successful imports.
+This resolves the identified direct-entry regression in prepared source; it
+does not install those sources or establish full workflow behavior.
+
+A107/A110 policy50 completed 45802/1 in
+`runs/main_a107_a110_policy50_01/`: verification 4e8f77c7, raw 8131cada and
+complete exit 20aa9880. Its 150 phases contain 48 passing calls and two failures
+before the baseline policy invocation, both caused by assigning the read-only
+Literature supports_wait property in the fixture. Source guards pass. The
+runner's JUnit gate precedes its import/cold checks; those checks are not claimed
+from the failed runner. An exact two-helper property correction and affected2
+retry are prepared; the other 48 identities must be retained through explicit
+source and import evidence, not a full rerun or relabelled50 success.
+
+A105/A108 current ownership68 generated 4651/0 in
+`runs/main_a105_a108_policy_ownership68_generation_02/`: sources b285b9a0,
+proof a519b436, raw 79e06570 and complete exit ce12871f. It joins the actual104
+source and accepted30/36 controls, updating 12 parent documents plus 56 documents
+for existing Literature homes' current dependencies. Each child points to a
+permanent axis provider/consumer account. Existing source, grading, history and
+descriptor formulas are preserved. Actual A105 and A108 source-enumeration
+formulas are recorded separately; this generation does not execute or invent
+descriptor values. The earlier failed generation01 assumed an A105-only helper
+existed in A108; its failure and complete exit 43efde4f remain retained. No
+canonical application has occurred from this final ownership preparation.
+
+The corrected A10316 permanent original fixture generated inline 0 in
+`runs/main_a103_commissioning16_controls_generation_02/` (assets 482fa095,
+cases 8e302614, complete exit 8f168f16). A10233 also generated inline 0 in
+`runs/main_a102_policy33_controls_generation_01/` (assets 2b397550,
+cases 9f3c4eff, complete exit 15c95784). Both preserve exact indented original
+method spans in inert fixture classes; neither generation is a test result.
+A102's two required library-test fixture patterns are now declared in pyproject
+(1ca6c226), alongside the preceding A103 patterns.
+
+Fourth's current A10417 passes in `runs/fourth_a104_policy17_02/`
+(verification 876cf81d, workflow-result f654cc47, separate complete-exit
+observation 7d497b7b): 17 calls/51 phases/220 confined imports and source guards.
+Its previous missing-test-initializer collection failure remains separate.
+A10120 also passes in `runs/fourth_a101_policy20_01/`
+(verification 582f9031, workflow-result 774843b1, complete-exit observation
+5906e1b5): 20 calls/60 phases/223 confined imports, six fresh import orders and
+source guards. These qualify their new policy sources; they do not reopen or
+repeat earlier accepted cohorts and do not establish canonical installation.
+
+## 2026-11-13 A107/A11098 outcome and remaining policy ownership
+
+### Report/schema source successors prepared; validation pending
+
+A103 source generation completed inline 0 in
+`runs/main_a103_report_schema_generation_01/`: sources 469ed47b, workflow
+6a288a96 and complete exit d76bcf21. It prepared 157 production targets
+(150 direct private consumers, the runtime definition change and six actual
+owners), plus four permanent assets and 13 selected boundary checks.
+Original method/statement and whole-file inverses passed during generation.
+The proposed source is not yet behavior-tested or installed. Required fixture
+patterns for its library test package were added before future test binding.
+
+A105/A108 generation02 also completed inline 0 in
+`runs/main_a105_a108_policy_ownership_generation_02/`: RESULT e8803280,
+workflow f56f2117 and complete exit 16e286ee. The final source selection contains
+100 targets across the two axes. Each Scientific snapshot body has one private
+owner and three original late guarded consumers; common scientific schema
+policy has an explicitly named axis-library owner. The earlier failed producer
+remains retained. This generation is source-only; focused validation, final
+ownership composition and application remain pending, separately from the
+accepted earlier 90/36 connection evidence.
+
+### Exact A107/A110 affected 12 now pass
+
+`runs/root_a107_a110_callback12_01/` completed 46348/0: all 12 affected
+calls and 36 phases passed, with 255 confined application imports, unchanged
+source guards and verified absence of the two qualified inherited modules.
+Verification 8e464e35, workflow 2e215f26 and complete exit 0b6b9f8b retain
+the actual result. The original 86P12F run remains unchanged; its retained 86
+and this successful 12 require an explicit evidence join, not a fictitious
+single successful 98-case run. Only the two helper argument names changed.
+
+The first ten-target A107/A110 report/action policy source preparation also
+completed 51671/0 in `runs/main_a107_a110_report_action_policy_generation_01/`
+(sources 45d634d0, proof 9d8fd0a0, complete exit 937c160c). This is uninstalled,
+untested source preparation. The corresponding Scientific fragment in existing
+private report owners is being checked before the final source/control scope
+is bound; prior behavior evidence is not extended to this source merely by
+its successful generation.
+
+### A101 parent installation and A106 affected validation
+
+Fourth's explicitly delegated A101 parent application completed 45664/0 in
+`runs/fourth_a101_parent_application_01/`. Application b300551d, workflow
+4be4cd7b and complete-exit observation cd7419a3 retain the actual result.
+All 183 targets (82 production sources, 17 permanent test assets and 84
+ownership documents) were installed; the full 1873-source postcheck passed
+with no rollback or journal errors. Independent receipt reconciliation
+c6c42c71 joins the bound rows, staged states, backups, journal and postcheck.
+This closes that parent installation scope. The subsequent source review found
+remaining action-schema and Scientific snapshot ownership work in the original
+goal; this installation does not claim whole-axis completion.
+
+Fourth's exact A106 affected 14 retry also passed 81150/0 in
+`runs/fourth_a106_retry14_01/`: verification 1543eb9a, workflow 0922229a and
+complete exit b4f5001b. Its 14 calls and 42 phases passed with 1165 confined
+imports and unchanged source guards. Earlier six passes and five cold import
+orders are retained separately; no complete cohort was rerun. Metadata and
+installation remain distinct from those controlled results.
+
+After the A101 application had fully exited, Main added the reviewed required
+Root/A103 fixture paths and A106 fixture patterns to `pyproject.toml`
+(af0b3ef2). This is a package-data declaration change, not a wheel validation
+or new behavior result. The prior A101 packaging preimage remains in its
+retained receipt.
+
+The qualified98 run completed97438/1 in
+`runs/root_a107_a110_improvement98_01/`:86 calls passed and12 failed, with294
+phases and unchanged source guards. Verificationf18e589a, raw73759120 and
+separate complete exit67e59bfe retain the actual result. All12 failures are the
+two test helpers' duplicate `callback` parameter, before either application
+observation executes. The runner stops on JUnit failures before validating
+imports/nonimport, so those checks are not claimed from this run. Exact affected
+retry preparation separately authenticates the recorded imports and preserves
+the86 passes; it changes only the helper callable parameter/local use.
+
+The original-goal source review also identifies remaining report/action-schema
+ownership work. A103 private callers still reach multi-role report/schema policy
+in Workflow; actual private binding policies and reusable assembly must be
+distinguished and placed explicitly. A102, A105/A108 and A107/A110 already
+dispatch nominal parent facts to substantive private owners, but their action
+schema assembly still needs explicit private/axis-library placement. Existing
+installation and tested connection scopes remain valid; these are original-goal
+organization omissions, not introduced scientific regressions or reopened old
+test failures. The whole-tree requirement audit remains incomplete.
+
+## 2026-11-13 A102 final parent package installed
+
+A102's complete annotation/Scientific/improvement parent package is installed
+in `runs/main_a102_parent_application_01/`, terminal54287/0. Applicationb06594f5,
+workflow9fab5d3c and complete exitb18bcb2d retain the actual result. All144
+targets (73 production,19 permanent test/fixture assets,52 ownership documents)
+passed application and postchecks. Exact membership/hash/mode of all2953
+production files passed, alongside2900 unchanged guards and22 absent old
+proposal names. There were no rollback or journal errors. Old proposed names
+were never installed and were not deleted.
+
+The actual52-document generation completed44894/0 (sourcesdb3cc572,
+proof0f61fc7c, exit44ce11e6), then application binding15951/0 selected
+INPUTS0e0258af (exitfb518b99). The installed inventories preserve historical
+values, explicit source/test owners and eighteen real directional exchanges;
+they identify this ledger as current installation authority. Actual60/20/36/39
+and final3 controls keep their distinct scopes and the20 missing-terminal
+qualification. This installation executes no additional scientific workflow,
+autonomy or saved-workflow restoration. Final whole-tree requirement audit is
+still open. Remaining parent integration is in A101/A104/A105/A106/A107/A108/A110.
+
+Shared pyproject package-data now additionally declares the actual A101
+source-request/recursive text fixtures, A102 annotation-parent JSON, and
+A105/A108 implicit-parent JSON/source fixtures. Existing patterns are preserved.
+These declarations are packaging changes, not new behavior validation.
+
+## 2026-11-13 A105/A108 affected30 passes
+
+The exact affected30 run in `runs/root_a105_a108_improvement30_02/` passes
+all30 cases/90 phases/256 confined imports with unchanged source guards.
+Verification04af2127 and raw workflow55ae62a1 retain the result; the separate
+complete-exit record555db6ee confirms inactive service, PID0, an empty recursive
+slice and absent supervisor. The launch tool result was lost across context
+recovery, so terminal handle and terminal exit remain explicitly null. Raw
+driver/workflow returns are both zero with completed descendant drain.
+The original34 run and its failures remain; its retained6 plus the28 affected
+passes and two default-rejection cases establish36 distinct tested identities,
+not a repeat of all34. These fixtures preserve the original contextual-credit
+port and default rejection; they do not establish default nested capability.
+Final source, permanent assets, ownership and Root reference integration remain.
+
+## 2026-11-13 final A1023 and A107/A110 Scientific20 pass
+
+A102's final affected3 completed71024/0 in `runs/root_a102_improvement3_01/`:
+verification3477786b, workflowe8af9e94 and complete exit88bda05f. All3 cases,
+9 phases,156 confined imports and source guards pass against final73/c477daf7
+and11 permanent assets/f0aa8c80. Two cases preserve original custom-operand
+callback order; the third checks descriptive private imports, saved role/path
+identity and both actual parent request owners. Actual39 remains separately
+retained through finite compatibility; no39 rerun occurred. Current ownership
+capture and final application remain open.
+
+A107/A110's exact Scientific20 schema retry completed89656/0 in
+`runs/root_a107_a110_scientific20_02/`: verificationb237e10b, workflow18cee547
+and complete exit6aa8fb65. All20 cases/60 phases/274 confined imports and source
+guards pass. The original all20 fixture failures remain literal. This validates
+the twenty changed Scientific live-global boundaries; conditional improvement
+controls and final current ownership/application remain separate.
+
+Source-only descriptive generations also completed: A105/A108 RESULT4222b1c8
+(workflow85905ec6, exit0a8c43c5),47 selected files per axis; A107/A110 named44
+b861e06b (exit93ac538d). The latter's guard4c216c048 was emitted before its Perl
+packager failed255; failed workflow/full exit6fe0d154 remains. Exact native
+argument-parsing successor05 then generated12 test assets/98 IDs successfully
+(tests6a92dbaa, cases e04712cc, full exit083a69d2). No98 behavior result follows.
+
+Roster reconciliation02 completed70153/0, rosterd9dbf615/workflowd74c42c6 and
+complete exita01c3e9b, in `runs/main_improvement_roster_reconciliation_02/`.
+It preserves576 prior rows and authenticates eight distinct original improvement
+identities, giving584 known homes. This is a scope account, not an exhaustive
+completion audit or an unfinished-episode count. A106's absent
+annotation_improvement/from_parent.py is an explicit unresolved organization
+qualification: actual incoming work is spread between its task initializer,
+goal and shared envelope. Fourth owns its trace and correction; prior accepted
+behavior is not reopened without a change.
+
+## 2026-11-13 A102 improvement39 passes; remaining whole-goal scope
+
+`runs/root_a102_improvement39_01/` completed76353/0 with39 passing cases,
+117 phases,192 confined application imports and unchanged source guards.
+Verificationd70527e1, workflow16fece03 and complete exitafc937a2 retain the
+actual result. This completes the tested nominal improvement/callback scope;
+the narrow custom-operand guard, descriptive physical names, final identity
+checks and current ownership/application remain separate. Earlier60/20/36
+accepted scopes remain complete; they are not repeated by this result.
+
+Scientific20's exact schema retry binding has also completed in
+`runs/main_a107_a110_scientific20_schema_binding_01/`: INPUTS528450a2,
+workflowc3af1c9c and fresh complete exitfd88c468. The terminal result was lost
+across recovery, so that exit record explicitly leaves its terminal code null;
+successful retained workflow output and empty actual processes establish binding
+completion. This is preparation, not a passing Scientific20 result.
+
+Whole-goal work remains across A101/A102/A104/A105/A106/A107/A108/A110:
+finish outstanding implementation, focused behavior validation, final source
+and ownership integration, then audit the original requirements across the tree.
+These four stages overlap. Root159 and A103 parent integration remain installed.
+The known576 historical roster and eight identified omitted improvement hosts
+do not yet provide a verified unfinished-episode count or completion percentage.
+
+## 2026-11-13 A105/A10890 outcome; A103 metadata and Scientific20 preparation
+
+### Later actual results: A103 installed and A105/A10840 passes
+
+A103 parent application completed20653/0 in `runs/root_a103_parent_application_01/`:
+application56fb3745, workflowba5f0851 and full exit12e8e3a4. All89 targets
+(15 production,8 permanent test assets,66 ownership records) are installed;
+the complete3233-source membership/hash/mode postcheck passed, with zero
+rollback or journal errors. Actual18 and36 behavior evidence retains its
+separate scope. This closes this parent source/ownership integration, without
+claiming new scientific execution or complete saved-workflow restoration.
+
+Fourth's exact40 retry passed71970/0 in `runs/fourth_a105_a108_retry40_01/`:
+verificationd13c59f1, workflow0b84fb17 and full exit7a231709. All40 cases,
+120 phases,1376 confined imports and source guards pass. Retained50a0fe953c
+authenticates the original50 passes and1370 imports separately; together these
+are one90-case acceptance set. The original50P40F result below remains literal.
+
+Conditional improvement source preparation now also succeeded for A105/A108
+(actual18 RESULT e4aea0e8, workflow053116ba, full exit50da1a8b) and A107/A110
+(44 targets85ad7abf, workflowaeb52bf7, full exit9e70cb2e). These are source-only
+results. A105/A108's new premature delivery lookup was found during review and
+requires its narrow runtime successor plus34 controls. A107/A110's own-host
+controls remain pending. These distinct omissions do not reopen completed
+annotation/Scientific or child validation scopes.
+
+The narrow A105/A108 receiver successor19 subsequently generated successfully:
+RESULTd044f59b, workflowa119d9da and full exitcc361de8. Only two runtime dispatch
+guards changed; the complete original private receive tails are unchanged.
+The34 meaningful improvement controls are being bound separately.
+
+Their actual first run subsequently completed72624/1:6 passed,28 failed,
+102 phases and unchanged source guards (verification988e29ee, workflow9e234a2c,
+fresh complete exitdc8dadb5). The observed original nested-construction path
+requires a declared contextual credit task before the fixture's later controlled
+credit port is installed. Exact failed-case interpretation and focused fixture
+correction are pending. The original default rejection must remain explicit;
+this run does not establish supported default nested execution. The six passing
+cases retain their actual scope, separate from accepted annotation/Scientific90.
+
+Actual A107/A110 Scientific20 then completed6739/1 with20 failed calls/60 phases,
+unchanged source guards, verification929fe672 and workflow9f0a0408. All failures
+occur at the original typed-contract compiler because the shared fixture's
+qualification string lacks a declared semantic type/code, before the intended
+boundary calls. Raw drainfalse remains; fresh exit63d4e9ef proves full exit.
+The two fixture corrections preserve existing unresolved values, production
+and case IDs. No passing Scientific20 result or production regression is claimed.
+
+A102's39 binding53841 failed255 before any tests: its earlier33 native checker
+found an original controller body account that omitted the final relative-import
+relocation already present in source. Original51 source check1b076526 passed;
+workflowc6588c7c/full exit64108553 are retained. The owner prepares the exact
+proof/checker correction without changing production or39 controls. Its existing
+60/20/36 accepted scopes remain complete.
+
+Actual90 in `runs/root_a105_a108_parent90_01/` completes12822/1 with50 passes,
+40 failures and270 phases; verification7e20da51 retains unchanged source guards.
+All40 failures arise while the original connected fixture constructs duplicate
+Literature entry roles, before the intended boundary calls. Raw531192e7 retains
+1/1/null/drainfalse; fresh exit0272ed2e proves inactive/PID0/empty and absent
+supervisor. The fixture successor supplies the public constructor's explicit
+unique annotation child roles at two connected call sites, preserving all15
+bindings and assertions. The exact40 retry and original-run import account
+remain pending; the first result is not relabelled a pass.
+
+A10366 ownership preparation passed in Fourth, sources384b146a, workflow52721d77
+and actual exitb4b1b2f7. A finite union of the actual Scientific18 and Legacy36
+permanent assets is being joined before guarded installation; no repeated
+behavior cohort is required. Scientific/Legacy formulas and source scope remain
+3233. A103 already has a substantive legacy_improvement home.
+
+A107/A110's separate20 existing Scientific global-lookup repairs are now
+generated in `runs/root_a107_a110_scientific_globals_generation_01/`22254/0:
+sources23d2b787, proofea21f5fd, raw855298c2 and complete exitd107d3f8.
+Complete original body correspondence and source inverses are retained;
+focused behavior, current ownership and installation remain pending.
+Their conditional improvement hosts are also confirmed existing ownership
+omissions and are assigned to their current owner. No completed child scope
+is reopened by these distinct obligations.
+
+## 2026-11-13 A102 remaining Scientific36 passes; conditional hosts remain
+
+`runs/root_a102_scientific36_01/` completes50362/0 with36 passing controls,
+108 phases,367 confined application imports and unchanged source guards:
+verificationfa4e18f4, workflow0a45e397, actual complete exitc25ea857.
+This covers the four additional configured Execution/HPC/Monitor parent routes
+on final51 source selectione161b4a0. Earlier60 and20 retain their separate
+passing scopes; no unchanged cohort was repeated.
+
+Complete original-role review now confirms a separate supported unregistered
+`improvement` grain in A102, A105 and A108, alongside annotation, when the
+Scientific binding is absent. Its original action-schema, explicit-role and
+recursive-construction predicates still reach public DecisionSource, so
+preserving that fallback alone does not meet the private-implementation goal.
+Owners are completing its substantive home and actual counterparts. This is
+an identified omission in whole-goal ownership, not a regression in the tested
+annotation/Scientific scopes. The known576 roster has not yet been reconciled
+with these additional confirmed responsibilities and is not an exhaustive
+completion count.
+
+## 2026-11-13 Root ownership installation completes
+
+All318 ownership records for the installed159 Root homes are now applied in
+`runs/root_complete_metadata_application_01/`: application80417d75 confirms
+318 completed targets, full source postcheck, zero rollback and no tests run by
+the installer. Raw workflow7c1ed28e records0/0, no failure and completed drain;
+fresh exitcc9cbe16 confirms inactive/PID0, recursive empty slice and absent
+supervisor452314. The launch tool handle/return were lost across context
+recovery and remain explicitly unclaimed; the retained application, raw result
+and actual process observation establish completion.
+
+This closes the Root318 metadata installation over source3359e57f and actual
+installed159 observation84b43311. It does not close the remaining axis parent
+changes, six affected A105/A108 references, saved-workflow restoration or
+autonomous scientific validation. The original34-requirement audit remains
+open against the complete576-home known scope.
+
+## 2026-11-13 A107/A110 two-case retry passes
+
+The focused instruction retry passes57975/0 in
+`runs/root_a107_a110_instruction2_01/`: verificatione9be4e06,
+workflow312599a1 and actual complete exit18423823. Both cases, all six phases
+and222 confined application imports pass with unchanged source guards. Only
+the two instruction test bodies supply the original absent native-event port;
+all production bytes, preceding test-module bytes and27949 other snapshot rows
+remain unchanged. Binding5956e912 retains those exact compatibility facts and
+the36 passing IDs from the original38 attempt. Native account63d2d04a separately
+completes import confinement/membership for that original run's225 modules.
+
+Together these support one38-case preservation set, not40 cases or a relabelled
+first run. The original two failures and raw drainfalse remain unchanged;
+separate complete exit observations prove their actual process termination.
+Current ownership, remaining parent responsibility disposition and guarded
+application remain pending; full science/native execution/restoration is not
+claimed by these controlled boundaries.
+
+## 2026-11-13 A105/A108 final56 source preparation succeeds
+
+The sequential source-only census and final composition pass55755/0 in
+`runs/main_a105_a108_final56_generation_01/`: RESULTb977e856,
+workflow89211a33 and actual complete exit66067a95. Each axis now has28 selected
+source targets (A105a9f285be, A1085d177026). Four existing Scientific outgoing
+files regain their original live runtime lookups after complete correspondence
+with authenticated original request extraction; proofdcc3700e retains whole
+byte inverses. The source census3fb757da records200 A105 and195 A108 branches
+and callbacks with actual factory operands and explicit infrastructure/custom
+fallback dispositions. These are source accounts, not executed case counts.
+
+No application modules or canonical writes occur in this preparation. Focused
+parent behavior controls, six affected current external references, ownership
+and guarded source installation remain pending. Earlier parent09/endpoint11
+preparation and failed attempts retain their original scopes and outcomes.
+
+## 2026-11-13 A107/A11038 outcome and complete parent-policy review
+
+The38-case preservation run completes80818/1 in
+`runs/root_a107_a110_parent38_01/`:36 cases pass and two instruction cases fail,
+with all114 phases and unchanged source guards. Verification1b795e15 and raw
+workflowaf4be474 remain literal; the raw descendant-drain flag is false. Fresh
+complete exit5db87cec independently confirms inactive/PID0, an empty recursive
+slice and supervisor442591 absent. Each failure occurs in the original prompt's
+read of the fixture's missing `native_event_information`, before the changed
+implementation is called. A focused two-case fixture correction/retry is being
+prepared; no full38 success or new production regression is inferred.
+
+The complete A103 Scientific policy census (84645c31/88072f90) distinguishes
+eight declared alternatives from the two roles actually admitted by its
+invocation-time whitelist. Final15 owns both admitted request/saved/nonreceipt
+exchanges. Excluded Execution/HPC/Monitor alternatives need no new endpoints;
+generic persistence, typed receiving and iterator transport remain explicit
+infrastructure. Final ownership and installation remain pending.
+
+A102's independent source censusde7a1eb1 confirms a different actual policy:
+all eight configured choices remain admissible. Four exchanges are covered by
+the existing60/20 scopes; four additional Execution/HPC/Monitor parent exchanges
+require a nine-target successor. It adds no episode or role and preserves
+generic persistence/iterator transport and existing progress ownership.
+
+## 2026-11-13 A102 Scientific20 controls pass
+
+The additional20 A102 Scientific recursion/Literature controls pass in
+`runs/root_a102_scientific20_01/`: verification7deab951, workflow316e4913
+and actual complete exitf3779e11. All60 phases and166 confined application
+imports pass with unchanged source guards. The retained workflow reports
+returncode0, driver_returncode0, no failure and completed descendant draining.
+After context recovery the tool no longer retained session72145; its missing
+terminal return is explicitly null, not reconstructed. Fresh observation
+confirms inactive/PID0, an empty recursive slice and supervisor439559 absent.
+
+The earlier60 host/Resource cases retain their separate successful scope.
+These20 use real typed exchanges with controlled scientific, preparation and
+credit ports; full task behavior and full workflow restoration remain
+unclaimed. Final source application and ownership remain pending. A subsequent
+source census identifies configured Execution/HPC children and Monitor paths
+whose full selected request/saved/nonreceipt bodies still need private parent
+ownership. This is an outstanding original-goal responsibility, not a reopening
+of completed child implementation or a failure of these20 cases.
+
+## 2026-11-13 A10336 parent-exchange retry passes
+
+The same36 A103 cases now pass in `runs/root_a103_parent36_02/`:
+verification12b5d08a, workflow33cf0742 and actual complete exita85b0461,
+terminal87989/0. All108 phases and263 confined application imports pass with
+unchanged source/snapshot/mode guards. The15-target production selection3a5520c6
+is unchanged; four fixture targets correct the original constructor dependency
+and retain its real custom-registry event before checking the new selection
+boundary. The initial28-fail/eight-pass run remains literal history, and those
+eight passes are not added again to coverage.
+
+These36 cases exercise the four existing Legacy annotation child routes;
+the earlier Scientific18 retains its separate two-exchange scope. Actual
+Store/Journal, tasks, registry and typed report handling use controlled science,
+preparation and credit ports. Full Workflow initialization, native execution,
+autonomous science and full restoration remain unclaimed. Final current
+ownership and guarded installation are still pending.
+
+## 2026-11-13 Four parent source preparations now succeed
+
+Helper09 passes the expanded actual-shape validation in
+`runs/main_a105_a108_live_globals09_validation_01/`: validationc60ddfe2,
+workfloweadd258a, complete exitbe6e7215, terminal79969/0. It covers281 captured
+groups,562 class-wrapped groups using the six emitters,12 inert original/current
+examples and three actual-annotation rejection cases. Captured application
+bodies are not executed by these compiler checks.
+
+A105/A108 full source generation then succeeds79074/0 in
+`runs/main_a105_a108_source_generation09_01/`: RESULT1e1925d1,
+A10526-target source13e168e0, A10826-target sourcecf11ab76,
+workflowe92a225d and full exitf8b3d364. The subsequent five-target-per-axis
+receiver/selector correction also succeeds in
+`runs/main_a105_a108_endpoint_generation11_01/`: sourcese33fb227/a354c026,
+workflow0409bc7f and full exitd193e4ee. The preceding endpoint10 literal-indent
+failure is retained unchanged. These are staged source preparations, not
+behavior passes or canonical installation.
+
+A107/A110 generation02 succeeds26229/0 with55 source targets
+(c0abb8ec, workflow99d7fced, full exit25675c06). It restores identified late
+provider/report behavior while recording the already-original A110 child-policy
+assignment unchanged. Earlier330-target installation and188 scoped controls
+remain retained; this successor still requires its focused behavior checks,
+current ownership and guarded application.
+
+The first A10336 run retained28 failed and eight passed cases across108 phases
+(ca72e072, workflow77324bb7, complete exit531abc68). Failures identify a missing
+required role in the old27 constructor fixture and an incorrect expectation
+that real task construction produces no custom-registry event. Four permanent
+fixture targets now preserve that actual constructor event separately and
+compare selection at its own boundary, retaining full original/current event
+comparisons. The same36 retry is underway; no production change or additional
+eight-case coverage is inferred. A102's earlier60 remains scoped to its host
+and Resource exchanges; its separately identified Scientific recursion and
+Literature admission ownership is now being completed.
+
+## 2026-11-13 A102 private-parent controls pass; parent generation still open
+
+The actual A10260 run passes in `runs/root_a102_parent60_01/`:
+verification5a939847, workflow0d318e11 and complete exit603f9791,
+terminal16243/0. All60 cases/180 phases and551 confined application imports
+pass; source/snapshot/mode guards are unchanged. Selected production7ca03e51
+and seven permanent test assets exercise original/current parent exchanges,
+saved outcomes, task/report/credit behavior and original/custom selector
+ordering. Actual persistence, typed contracts and nominal constructors are
+used with controlled preparation/scientific/provider ports. This does not
+establish complete Workflow initialization, autonomous science or full
+restoration. Final ownership and guarded source installation remain pending.
+
+The subsequent A107/A110 source-only generation stops before manifest output
+on an incorrect preparation assumption: the current allowed-child assignment
+already equals its original (stderr9252f8d9, workflowb90b7f6a, complete
+exit30b2dd44, terminal86924/1). No behavior regression follows from that equality.
+The A105/A108 INPUTS08 generation then reaches a further compiler annotation
+scope in a class-wrapped method: a synthetic free `__classdict__` accompanies
+the already accounted `.format`. Its complete exita7fd3206 is retained in
+`runs/main_a105_a108_source_generation08_01/`. Earlier281-group/11-example
+helper validation remains valid at its tested scope; actual emitted class
+wrappers need coverage. Neither failed generation changed canonical sources.
+
+## 2026-11-13 Parent source helper validated; final Root ownership prepared
+
+The actual helper08 validation passes in
+`runs/main_a105_a108_live_globals08_validation_01/`: validatione21c12e0,
+workflow74a6a5d8, separate complete exitf5ab9e24, terminal19254/0. All281
+captured source groups pass both scope accounting and selected global-load
+rewriting/compilation; eleven inert original/current examples preserve values,
+callback order and actual comprehension kinds. The correction analyzes
+comprehension scopes without changing emitted comprehension types. Captured
+application code is not executed. This resolves the observed generator-helper
+failure; full parent generation, behavior checks and installation remain open.
+Earlier failed generation receipts are unchanged.
+
+Fourth's final Root ownership preparation also completed91947/0: handoff5d58eaea,
+final318 manifestcf72bc16, workflow4d891f48 and actual exit23434ff3. All318
+documents for159 homes include authenticated installed-source33 observations.
+Main's guarded metadata installation remains pending; these are ownership
+records for the existing Root homes, not additional episodes or new behavior
+tests. The six existing annotation parents and other identified parent repairs
+remain within the incomplete original goal.
+
+## 2026-11-13 Installed Root159 and recursive parent24 checks pass
+
+Installed-mode Root observation now passes in
+`runs/root_configured159_installed_01/`: verification84b43311,
+descriptorsd418ff71, workflow9938222d and actual exit92c04ea8. Terminal72213
+returned0;159 homes,10 profile cases,4866 confined imports, six Homology and
+nine Monitor formulas pass with unchanged source/snapshot/mode guards. The
+separate exit confirms inactive/PID0/empty recursive slice and421638 absent.
+This observer uses the actual installed source33 and does not execute a full
+scientific workflow. Fourth's strict final318 ownership join remains active.
+
+The two existing A101/A106 recursive Scientific exchanges now pass24 paired
+original/current controls in `runs/root_a101_a106_recursive24_01/`:
+verificationab4650da, workflow705a09c0, actual exita9543912, terminal37229/0.
+All72 phases and261 confined application imports pass with unchanged source
+guards. Actual state/journal/typed receiving cover valid/invalid requests,
+preparation failures, returned and saved success/failure, mutable runtime
+providers, callback/error order, progress and redelivery. Scientific preparation,
+credit and receipt-output ports are controlled; full task behavior, autonomous
+science and full saved-workflow restoration remain unclaimed. Source602e6e02
+and permanent test assets remain staged pending parent composition/ownership
+and guarded application. Main independent source check4f1691f7 confirms22
+ordered mutations/18 targets, six whole-module inverses, eight moved bodies
+and four original-method fixtures before actual control execution.
+
+A105/A108 parent generation remains separate. Actual Python3.14 helper failures
+are retained, including Main07's missing comprehension scope and its complete
+exit1a1c0c47. Source-only diagnostic e16e3e7c inventories281 method/groups and
+compiler examples:203 complete helper accounts and78 inlined-comprehension
+scope failures. This is diagnostic evidence, not203 application test passes.
+The helper owner is preparing a precise compiler-scope correction; no canonical
+parent files were changed by these failed generations.
+
+## 2026-11-13 Root source application complete; installed observation underway
+
+Root source33 has been applied in `runs/root_complete_source_application_01/`.
+The actual application receipt3359e57f records all6377 operations complete,
+6339 create/replace targets and38 retirements, with full_source_postcheck_passed,
+no rollback and no journal errors. The exact post-state is2ada2b57. Raw
+workfloweed00b33 retains0/0/null/drained; terminal23944 returned0. Separate
+actual exit4ca99db8 confirms inactive/PID0, an empty recursive slice and
+supervisor409771 absent. The unchanged source33/evidence binding707c429d retains
+the472 scoped passing Root controls; the installer ran no additional tests.
+
+The prebound installed159/profile10 observer is now running in
+`runs/root_configured159_installed_01/`, terminal72213, inputsdbf1bad4. Its
+outcome remains unclaimed. The final318 current ownership records and the
+six affected A105/A108 current references still require integration. This
+source application does not close the six private parents, other identified
+parent repairs or the full34-requirement audit.
+
+## 2026-11-13 Reconciled full-goal scope: 576 known homes
+
+The finite roster reconciliation has now executed successfully in Fourth's
+existing bounded serial slot. `runs/fourth_scope576_reconciliation_01/prepared/ROSTER576.json`
+(96bf8d78) preserves all570 previous distinct memberships and adds six actual
+existing annotation parents: A101,A102,A104,A105,A106,A108. Exact producer056d42ca,
+workflow41f5735b, actual complete exit335bfe03 and terminal84288/0 are retained
+in that run's FOURTH_RECEIPT.json. The raw result is0/0/null/drained; the separate
+exit observation confirms inactive/PID0/empty recursive slice and416270 absent.
+There were no canonical writes or application imports in this reconciliation.
+
+The known scope is576 homes:159 in the Root installation batch and417 outside
+that batch. These are scope partitions, not completed/remaining totals. The
+full runtime audit and34-requirement goal audit remain incomplete. Four stages
+remain open: private parent and identified exchange/report/preservation work,
+focused validation, source and ownership integration, and final goal audit.
+Preserve already completed child, installation and test scopes separately.
+
+## 2026-11-13 Parent preservation review and source-generation evidence
+
+Main/peer review of the A105/A108 parent producer identifies three concrete
+corrections before behavior or installation: moved functions freeze originally
+mutable runtime globals, selector equality can call a custom provider early,
+and original annotation report projection in Workflow.facts is still shared.
+The source owner is preparing explicit successors. Independent review is in
+`runs/root_a105_a108_implicit_parent_peer_review_01/REVIEW.md` (f4cb5b41).
+
+Fourth's source-only INPUTS02 generation already ran before the review hold and
+exited unsuccessfully in `runs/fourth_a105_a108_source_generation_01/`:
+raw workflowff63669c and complete exit59dd79e3. A105 emitted25 candidate targets;
+A108 stopped on a checked source mismatch: its actual outgoing bodies lack
+the A105-derived `send_request is not None` residue. Source tracing also confirms
+the corresponding two incoming `receive is not None` demands do not apply to
+A108. Exact original behavior must determine the successor. No canonical
+sources, scientific operations or behavior tests ran in this generation.
+
+The installed A107/A110 parent review confirms the same live-global limitation
+in actual current continuation owners (A107 ExecutionContextController; both
+axes' Record lookups) and remaining annotation reporting in runtime.facts.
+Their earlier330-target installation and188 scoped controls remain retained;
+these newly traced responsibilities require a finite preservation/report
+successor, not an invented episode or a reopened child/scientific milestone.
+Main's A103 agent now owns that successor and meaningful original/current
+controls. The final full-goal audit remains open.
+
+## 2026-11-13 Full-goal inventory correction and current execution
+
+The earlier570-home catalogue omitted six actual annotation hosts: A101,A102,
+A104,A105,A106,A108. Their public entry/build/registry paths use existing runtime
+implementations without complete private parent homes. These are required
+original-goal implementations; the exact roster successor remains to be joined.
+Do not present570 as exhaustive or159 Root locations as the whole remainder.
+Completed child-component and scientific milestones remain unchanged.
+
+Exact source accounts: A101/A106 two parents and15 outgoing edges are retained in
+`runs/root_a101_a106_recursive_parent_preparation_01/implicit_parent_account/ACCOUNT.json`
+(aac1a57f); A102 and the seven applicable A102/A103 parent exchanges are in
+`runs/root_original_goal_audit_01/G3_REMAINING40.md` and its source pinsf64015af;
+A104/A105/A108 current source and entry/build/receiving spans are retained in
+`runs/root_a104_a105_a108_head_audit_01/ACCOUNT.json` (f4cb5a3f).
+Separate A101/A106 Scientific recursion repairs are staged at source602e6e02.
+The remaining Scientific admission responsibilities in A104/A105/A108 also
+remain required; existing private endpoints and actual role availability stand.
+
+The A103 Scientific parent's two-exchange repair now passes18 scoped
+original/current controls in `runs/root_a103_parent_exchange18_01/`:
+verification93f328fc, workflowf99d33a5, actual exit63f2e279, terminal51056/0.
+All54 phases and224 confined imports pass with unchanged guards. Actual state,
+journal, typed boundary and saved/failure behavior are exercised with controlled
+scientific preparation/credit ports. The repair remains staged, not installed.
+
+The Root LUMPY retry passes21 cases/63 phases/98 confined imports in
+`runs/root_lumpy_fresh21_02/`: verification28eaa9b0, workflow20b76713,
+actual exit23b0cdd4, terminal14963/0. Eleven unchanged canonical A101 dependencies
+were added to the isolated test operands; the original failed collection is
+retained separately. Source33 account12cb0202 now retains472 actual scoped
+passing Root controls. Mocked native execution does not establish physical
+LUMPY/HPC execution or autonomous scientific validation.
+
+Root source application is active in `runs/root_complete_source_application_01/`,
+terminal23944, with binding707c429d. Its initial application record confirms6377
+targets and application_completed=false; durable staging is progressing. No
+installation completion is claimed. After actual source application and full
+exit, the prebound installed159 observation and final318 ownership join remain.
+Six current A105/A108 source references require the finite qualified refresh.
+The full34-requirement audit remains open after these known implementation,
+validation and integration tasks. Later sections retain earlier dated evidence.
+
+## 2026-11-13 Original-goal audit: A103 scientific parent ownership
+
+The requirement audit identifies unfinished original-goal work in A103's existing
+`scientific_process` parent: request preparation and saved/nonreceipt admission
+for recursive Scientific and nested `published_evidence_assessment` still reside
+in the shared axis runtime. These are two existing exchanges, not additional
+episode homes. The completed A103 child-component scopes remain closed.
+Evidence: `runs/root_original_goal_audit_01/MATRIX.md` and its source witnesses.
+
+Four substantive directional owners, a private identity selector and mechanical
+runtime dispatch are prepared. Main's independent source check5f81bb19 verifies
+the six targets, actual preimages, complete runtime inverse and six moved-body
+inverses. Relevant paired original/current controls and current ownership are
+pending; no installation or behavior pass is claimed for this repair. Evidence:
+`runs/root_a103_scientific_parent_directional_preparation_01/` and
+`runs/main_a103_parent_review_01/SOURCE_CHECK.json`.
+
+Root source33 preserves source30 production and completes the permanent LUMPY
+test placement/import successors. Its additional21-case run failed during
+collection because the isolated snapshot omitted the real canonical A101
+`homology_jobs` dependency of shared `progress_records`. The original failure
+and complete process exit are retained in `runs/root_lumpy_fresh21_01/`;
+no cases passed in that run. The actual dependency exists and is being included
+as an unchanged test operand. This does not reopen the earlier451 passing
+scoped controls or establish a production regression.
+
+## 2026-11-13 Root LUMPY identity and updated configuration checks
+
+The updated source30 passes the unchanged configured159/profile10 observation:
+all159 homes, ten profiles and4866 confined imports, with unchanged guards.
+Verification055f4ebf, workflow53d270db and actualpost1368ac32 retain raw
+0/0/null/drained, terminal12031/0, inactive/PID0, an empty recursive slice and
+supervisor402166 absent. Actual descriptors12e156d3 reflect the selected source;
+the earlier source29 result remains historical. Evidence:
+`runs/root_configured159_observation_03/`.
+
+Fifteen distinct LUMPY controls now pass all45 setup/call/teardown phases, with
+75 confined imports and unchanged source guards. The actual source is source30
+plus two permanent baseline-test/provenance successors and one permanent host
+test. Verificationa9db807f, workflow637f15db and actualpost546cac78 retain raw
+0/0/null/drained, terminal12416/0, inactive/PID0, an empty recursive slice and
+supervisor402674 absent. These checks exercise the actual selected source
+walker, supplied/current identity admission, and real private PracticalState
+host admission/readback. New legacy-worker reservations reject before control
+writes or native reservation; an explicitly engineered existing legacy record
+retains original readback. No native scientific process is launched.
+Evidence: `runs/root_lumpy_identity15_01/`.
+
+The genuine check513 records remain byte-identical. Their obsolete policy field
+already conflicts with the canonical original strict two-field policy before
+relocation, as established by source predicate accountc0c68b2a. No compatible
+newer record was found among the eight retained plan files. The initial positive
+fixture expectation was never executed; its successor tests the inherited
+rejection and preserves literal job/request identities. Current-policy proposals
+and positive host controls are explicitly engineered, not historical successful
+workflows. No obsolete policy admission or runtime maximum was introduced.
+
+There are now451 distinct passing scoped Root control identities across their
+retained execution epochs (436 earlier plus15 here). The finite final-source
+compatibility join, six older test callers, two explicit public retirements,
+318 ownership records and canonical installation remain open. The remaining
+integration batch stays159 of570 locations. Full saved-workflow restoration and
+autonomous scientific validation are not established by these controls.
+
+## 2026-11-13 Root molecular controls and remaining scientific caller repairs
+
+Configured159/profile10 now passes on actual prepared source29. The observer
+constructs all159 declared homes, verifies six Homology and nine Monitor
+formulas and ten profile selections, and records4866 confined imports with no
+violations. Verification4393fdb1, workflowbfd03520 and actualpost9dc925cd retain
+unchanged guards, raw0/0/null/drained, inactive/PID0/empty recursive slice and
+supervisor398079 absent after terminal87414/0. Actual descriptorsffb756cb are
+available for ownership reconciliation. The earlier observation failed before
+any home because its actual credit provider was absent; the original complete
+provider body and direct imports now supply it. No numerical scientific,
+native operation, complete iterator or saved-workflow restoration is inferred.
+Evidence: `runs/root_configured159_observation_02/` and
+`runs/root_configured159_fixture_successor_01/`.
+The separate LUMPY lifecycle-owner gap, final source integration, ownership
+records and actual installation remain open;159 of570 homes remain uninstalled.
+
+Whole-source syntax validation now passes all6630 selected Python files in
+source29, after closing one omitted parenthesis in each of two ATAC/chromatin
+receipt predicates. Every original operand/comparison is retained. Actual
+syntax result7bee497b, workflow8a91fe3a and actualpost22c8b209 bind the6677-file
+selection and unchanged source guards; terminal3717/0 and empty owning slice
+confirm completion. The previous two failures remain in syntax28. No selected
+application code was imported or executed by this syntax check. Evidence:
+`runs/root_complete_source_syntax29_01/` and
+`runs/main_worker_receipt_syntax_repair_01/owners/PROOF.json`.
+
+Routing18 now has all18 distinct controlled cases passing:10 retained original
+passes plus8 successful retries after authentic same-version dependency metadata
+was restored. The two replacement Python module bodies match their original
+installed bodies; no application guard or assertion changed. Retry verification
+da702f77, workflow014853dc and actualpost10c9a2be retain24 passing phases,
+47 confined imports, unchanged source guards and a fully exited workload.
+The explicit case account5705e4ba retains the original failures and both actual
+execution epochs. Accepted scoped Root coverage is now436 cases. These checks
+cover reservation routing, supplied inventories, transient output/error handling
+and one harmless script; native scientific operations remain controlled.
+Evidence: `runs/root_scientific_routing8_retry_01/` and
+`runs/main_routing8_retry_preparation_01/CASE_ACCOUNT.json`.
+The remaining installation count stays159 of570 identified homes.
+
+Routing18 subsequently executes all54 phases:10 calls pass,8 fail with the same
+dependency-file-inventory admission error before native preparation. Actual
+verification137b73f2 preserves all source guards; workflowa935f879 retains its
+raw1/1/null/drainfalse and separate actualpost273b89d3 proves the whole workload
+exited after terminal95035/1. A read-only diagnostic769e28c1 identifies genuine
+system typing-extensions4.15.0 and jsonpointer2.4 packages without distribution
+file inventories; the retained mandatory dependencies are valid. Authentic
+suppliers are pending for the8 affected cases. No application guard or test
+assertion is weakened, and the10 passing cases remain retained. Evidence:
+`runs/root_scientific_routing18_01/` and `runs/root_routing8_metadata_diagnostic_01/`.
+
+The four remaining parent-direction exchanges now pass all20 focused calls and
+60 phases, with176 confined application imports on exact source22 and unchanged
+source guards. Verification79afe259, workflowa706d31e and actualposta060b0ab
+retain raw0/0/null/drained, inactive/PID0/empty recursive slice and the absent
+recorded supervisor after terminal78155/0. These compare actual Root/improvement
+and Root/Scientific request/return boundaries with their retained original
+methods, including failed returned actions and original credit handling.
+Scientific preparation/context and controller ports are controlled. The20 do
+not establish saved-workflow restoration, model/native execution or autonomy.
+Evidence: `runs/root_parent_directional20_01/`. Current accepted scoped Root
+case count is418, while159 of570 homes still await final integration/installation.
+
+Native HOMER11 subsequently passes all11 calls/33 phases with32 confined imports
+on exact source20 and its genuine retained test operands. Verificationd9e3eb5e,
+workflowe18d45ef and actualpostc5ffbfe2 retain unchanged6567 source guards,
+raw0/0/null/drained and inactive/PID0/empty recursive slice after terminal30390/0;
+supervisor388398 is absent. Checks cover original/current supplied native plan,
+argv, replay and preflight errors at a controlled reservation port; no native
+HOMER job or complete physical deployment is established. Main reads the full
+test/helper and runner delta; independent source review91ab1ad6/check834f3cd3
+also authenticates exact source/test inverses. Evidence:
+`runs/root_homer_native_identity11_01/` and
+`runs/root_homer_tf_a103_review_01/REVIEW.md`.
+
+The scoped molecular13 run passes all13 calls/39 phases with52 confined
+application imports. Verification3deb2b86, workflowa409c6e9 and separate actual
+exit0c977376 retain unchanged source guards, raw0/0/null/drained and an inactive
+service/PID0/empty recursive slice after terminal86756/0; supervisor381892 is
+absent. Scope: four original saved-sheet driver controls, six actual Root and
+shared-custodian reservation controls, two changed-module rejections and the
+actual shared exception identity. Native scientific execution, publication
+success and full restoration are not established. Evidence:
+`runs/root_molecular_worker_boundary13_01/`.
+
+The subsequent actual caller review found seven other current scientific routes
+still selecting public workers despite existing private implementations, and
+nine operations whose scientific owners remained public. These are repairs
+within the same159 remaining Root homes, not additional episodes or reopened
+completed axes. Main and the second session are placing the actual ITC,
+Liftover, circular-dichroism, HOMER, TF, somatic and ESM bodies and direct callers.
+The original all-import source inventory also exposed pure serialization and
+file-identity imports drawing unrelated scientific modules into worker closure;
+their exact defining functions are being split while preserving shared objects.
+
+Main has prepared seven substantive somatic/ESM owners, paired historical/current
+worker selection and three direct storage joins. Whole-source inverses and13
+original storage-callable comparisons pass natively. These are source-preparation
+claims, not installation or runtime validation. The actual original ESM command
+and pins remain selected for supplied historical deployments; the private worker
+requires its explicit current module pair and actual physical path. Evidence:
+`runs/main_conditional_scientific_owners_01/` (owners73ee96cd,
+worker_routes9d32e0d8, storage_joinb2fcd840). Nine focused ESM controls subsequently
+pass all27 phases with71 confined imports on exact source19 plus three unchanged
+original controls. Verificationa6c2d97d, workflow54f0dcc3 and actualpostedb91766
+retain unchanged guards, raw0/0/null/drained and inactive/PID0/empty slice with
+supervisor386268 absent after terminal1242/0. The actual original/private workers
+are checked through the model-import boundary with physical-runtime verification
+controlled; the actual Root dispatcher is checked at its captured custodian
+call. No model execution, actual deployment, process-custody completion or
+publication success is claimed. Evidence: `runs/root_esm_worker_placement9_01/`
+and `runs/main_conditional_scientific_owners_01/ACCEPTANCE.md`.
+Final configured159/profile10 observation, source
+application and318 ownership records remain open. Current remaining count is
+159 of570 identified homes; the original405 structural milestone stays closed.
+
+## 2026-11-13 installed A107/A110 parents and completed Literature45 controls
+
+The two existing implicit annotation parents are now installed. Main application
+receipt73807935 completes330 exact targets:98 production files,4 permanent test
+modules,8 fixtures and220 ownership documents. All5775 final source/metadata
+guards pass; independent native canonical postcheck06125a0f confirms all330
+installed bytes/modes. Workflowaa34656e returns0/0/null/drained; actual exit
+fb566373 records inactive/PID0, empty recursive slice and supervisor380607 absent
+after terminal91858/0. Source/metadata plans and accepted188-case evidence retain
+their original identities; accepted A10757/A11051 child scopes stay closed.
+Evidence: `runs/main_implicit_parent_application_01/` and
+`runs/main_implicit_parent188_review_01/APPLICATION_REVIEW.md`.
+
+The remaining integration batch is now159 of570 identified implementation homes,
+all in shared Root. Original405 structural coverage remains closed. This parent
+installation establishes the reviewed private organization and scoped parent
+connections, not full saved-workflow restoration or autonomous science.
+
+Literature45 now has all45 distinct controlled identities passing across an
+explicit36+9 union, account8c0b29f6 (file `CASE_ACCOUNT.json` below). The actual45
+run had39 passing and6 failing calls, all setups/teardowns passing and3397
+confined application imports. Its six original-side request fixtures supplied
+no return information and were rejected before the intended child-build port.
+The one-helper successor6cdb7732 requests the actual declared handoff/result
+source without changing mandatory-source requirements, production or assertions.
+All9 callers were retried, including3 previously passing rejection checks:
+9calls/27phases pass with3392 confined imports. The other36 passing cases remain
+on their original unchanged execution epoch. Original failures/rawfalse drain
+are retained. New verificationeb8ddcc0/workflow913c88b1/actual exit87d56faf follow
+terminal14966/0; Main slice is empty and supervisor379803 absent. These checks
+cover actual conditional Literature15 commissioning, messages, identities and
+state/cache boundaries, with native/process/provider ports excluded.
+Evidence: `runs/root_literature_execution15_boundaries45_04/`,
+`runs/root_literature_request_affected9_01/` and
+`runs/main_literature45_request_fixture_01/CASE_ACCOUNT.json`.
+
+## 2026-11-13 current Root source identities and implicit-parent controls
+
+The finite25 supplied-record/command/source-pin controls all pass, with75 actual
+phases and65 confined imports on the selected67-file snapshot. These compare
+the original ATAC/chromatin admission behavior, retained HMMER program bytes,
+current command/source correlation, original restriction command fallback and
+real inert source-file pin checks. They execute no native scientific operation.
+Main reads the full test/runner sources before execution. Verificationd9f05b2d
+and workflowc9ceae1d retain unchanged source guards and successful full drain;
+actual exit508028f1 proves inactive/PID0, empty recursive slice and370587 absent.
+Evidence: `runs/root_library_source_identity25_01/`.
+
+The two implicit A107/A110 parent control scopes now have an authenticated
+188-case union:168 unaffected original passes plus20 corrected fixture cases.
+Main reads the actual test responsibilities and fixture corrections and joins
+each accepted case's three passing phases to account1c88a85f. The original run
+remains180 passes/eight failures with raw drain=false; its actual exit is retained
+separately. Successor verificationec0d9d8c/workflowb8d5b512/post62da15fd covers20
+passing calls/60 phases. These exercise real source/registry/request/saved-action
+boundaries with explicit controlled external ports, not a full saved Workflow
+or autonomous scientific run. Final ownership and canonical application remain
+open; completed A10757/A11051 child scopes are not reopened. Review:
+`runs/main_implicit_parent188_review_01/REVIEW.md`.
+
+## 2026-11-13 Root helper placement and retained protein identities
+
+The first Root.library placement proposal has independent native whole-source
+inverse checks for 1,027 Python afterimages and exact equality for eight required
+assets. Its 207 proposed retirements include four currently existing fluorescence
+files; the remaining proposals are absent. This verifies the reviewed import,
+module-name and path edits, not final organization or runtime preservation.
+Review: `runs/main_root_library_placement_review_01/REVIEW.json` (467aeabd).
+The selected source also contains 139 unchanged top-level Python suppliers;
+their actual scientific dependencies require separate placement review. The
+initial mutation-only audit does not establish complete dependency ownership.
+
+An actual retained protein producer record exposes a relocation regression in
+the supplied-record schema. Four original controls pass; the uncorrected moved
+implementation rejects the saved producer, changes the missing-source-pin error,
+and prevents original command reconstruction. Those three failures and six
+passing moved controls remain recorded. The two-file repair accepts only the
+exact original or relocated driver/worker pair, retains the saved source pins
+and command module, and continues rejecting mixed or unassigned pairs. All nine
+candidate controls pass using the same permanent checks and literal original
+producer fixture, with 15 confined imports and unchanged snapshot/canonical
+guards. The successful workflow is drained without OOM; an independent actual
+exit check finds inactive/PID0, an empty recursive slice and supervisor359808
+absent. Evidence: `runs/main_root_protein_saved_identity_controls_01/`
+(verificationab3b33b5, workflowd08648fe, post-exitfc9dc069). Prepared source and
+fixture manifest17d71718 and tests c0ede8c3 are retained under
+`runs/main_root_protein_saved_identity_preparation_01/`.
+
+These results cover producer schema/validation and saved command construction
+on prepared sources. Canonical installation, complete saved-workflow restoration
+and scientific/native execution remain separate. Root source13 is provisional:
+remaining global scientific suppliers and other saved worker identities still
+require their concrete ownership and preservation successors.
+
+The BLAST producer identity successor also has controlled preservation evidence.
+Six original controls pass using the unchanged retained native6 bundle and actual
+loaded module paths. Uncorrected relocation produces six failures; accepting old
+manifest names alone leaves one additional runtime-identity defect: a manifest
+can name the original driver while the new driver reports a match. Correlating
+the running driver and contracts paths with the manifest's exact declared entry
+resolves it. All11 repaired controls pass, including mixed path groups, changed
+recorded checks and an unassigned entry. Inventory and file-verification ports
+are explicitly controlled in the live-path checks; no BLAST operation runs and
+no deployment or historical Store restoration is claimed. Snapshot/canonical
+guards remain unchanged; successful workflowcc759d99 is drained without OOM and
+actual exita4032e1f finds inactive/PID0, empty recursive slice and362291 absent.
+Evidence: `runs/main_root_blast_producer_identity_controls_01/`
+(verification370d55d3). Sourceab1ce097 and test3d47cb17 manifests are retained
+under `runs/main_root_blast_producer_identity_preparation_01/`.
+
+The separate30 RNA/genomic/flux/NMF reader controls remain pending. Their first
+moved-source phase runs all30 calls with67 confined imports, but an inconsistent
+current RNA fixture yields eight failures instead of seven: its worker field
+and command were updated while its serialized software argument retained the
+old worker. The raw failed workflow52812fd0 and verification6564932f remain
+retained, with final canonical/source guards unchanged. Actual exit61412065
+proves inactive/PID0, empty recursive slice and362633 absent; it does not rewrite
+the raw drain=false failure. No repaired phase has run yet. The unchanged-source
+27-case account and affected RNA current cases require explicit reconciliation
+with the fixture successor. Evidence:
+`runs/root_saved_worker_identity_controls30_01/`. Independent native review
+`runs/main_saved_worker_reader_review_01/REVIEW.json` (863204f9) authenticates all
+13 source inverses, including the separately superseded BLAST row; it is not a
+candidate runtime pass.
+
+The corrected reader successor subsequently passes all three affected current
+RNA baseline cases and all30 repaired-reader controls. Its runner authenticates
+the original27 unaffected outcomes, all6,262 old snapshot files and actual
+imports, then requires the exact disjoint30-case baseline union. Only the
+fixture's literal software argument changes; the cases and assertions remain
+unchanged. Main reviews this source delta and reuse validation before execution.
+Verification866a2acb records unchanged source/canonical guards; workflowa171ff03
+is0/0/null/drained without OOM, and actual post-exitbd99b7af finds inactive/PID0,
+an empty recursive slice and supervisor363583 absent. Evidence:
+`runs/root_saved_worker_identity_controls30_02/`. The12 non-BLAST production
+successors and corrected permanent helper are accepted for composition. These
+are record/intent compatibility controls on prepared sources, not native
+execution, canonical installation or full saved-workflow restoration.
+
+Fluorescence compatibility remains open. Its eight original controls pass;
+uncorrected relocation reproduces the two expected request/worker identity
+failures. The corrected candidate passes13 of16 controls, while three current
+worker cases stop in the real source-closure reader with
+`native_dependency_unavailable`, before their intended identity validation.
+Those failures require the actual missing-source diagnosis; they are not
+evidence that the new worker can be prepared. Main reviewed the concrete source
+changes, original fixture provenance and unchanged checks, and found a retained
+Perl proof-array aliasing error before launch. Corrected proof84311915 independently
+reverses the same five unchanged payloads; the original incorrect proof remains
+history. Run `runs/root_fluorescence_identity_controls_01/` has verification
+b415e818 and raw workflowa9a321cf (1/1, drain=false, no OOM). Independent actual
+post-exitd67a5719 finds inactive/PID0, empty recursive slice and supervisor364504
+absent. No native fluorescence operation or canonical installation runs.
+
+The three fluorescence cases subsequently pass after extracting the actual
+terminal-plan identity calculation into a standalone Root.library owner.
+The real source walker is unchanged. Main independently verifies the four
+original/current function segments and both complete changed-file inverses
+(reviewe09864d9). The retry retains all six permanent test assets and all
+assertions. Retained account61aeaf94 authenticates the original8, moved8 and
+candidate13 passing outcomes, every prior snapshot/mode and actual imports;
+the three previously failing controls now pass with unchanged source/canonical
+guards. This establishes the scoped16-case union, without rewriting the original
+failed workflow. Verification7ea32d9c and workflow4b8d5f03 succeed/drain without
+OOM; actual exitfb4de6db proves inactive/PID0, empty recursive slice and366802
+absent. Evidence: `runs/root_fluorescence_identity_controls_retry3_01/`.
+The same source stage redirects seven current terminal profile dispatches to
+their actual library owners; their separate dispatch controls await final source
+composition. No native lifecycle, scientific calculation, canonical installation
+or full restoration is established by the fluorescence identity controls.
+
+The separate current protein-worker source guard now also passes its three
+focused controls. The import-joined predecessor rejects the actual new grading
+modules, wrongly accepts old grading-module pins and begins observing runtime
+sources for an old worker declaration. The one-file successor requires the
+current worker identity and the two actual imported grading definers before
+source attribution. Current interpreter, dependency versions and source bytes
+are observed directly; only the rejection-order case uses fail-if-called
+observation sentinels. All three repaired controls pass, with23 confined imports
+per phase and unchanged snapshot/canonical guards. Verification5c79c57a and
+workflow8ec6c2a4 succeed/drain without OOM; actual exit783734d2 proves inactive/
+PID0, empty recursive slice and367134 absent. Evidence:
+`runs/root_protein_live_owner_controls3_01/`. This validates the named live-source
+guard, not a protein calculation or native job. The accepted nine saved-software
+reader/command controls remain separately valid in their stated scope.
+
+## 2026-11-13 current shared Root public-boundary validation
+
+The prepared Root public-caller and canonical native-measurement changes now
+have all17 scoped cases accounted for. Original recording baseline3 reproduces
+the actual Store TypeError `typed_native_measurement_required`; its raw failure
+is retained. Candidate17 initially produces four complete passes and13 missing
+privacy-helper failures. The corrected snapshot adds exactly three authentic,
+unchanged helper modules and preserves all6227 prior source rows and test
+assertions. Only the13 failed identities are rerun: all13 cases/39phases pass.
+The runner independently reauthenticates the original four complete passes,
+exact phase/JUnit identities, all6227 original snapshot bytes/modes and321
+actual confined imports before recording the17-case union. Main reviews the
+runner and evidence account, actual results and successful drained receipt.
+Workflow7e0ae65b is0/0/null/drained with no OOM; actual post-exit35e2687b proves
+inactive/PID0, recursive slice empty and supervisor353506 absent. The original
+failed receipts remain unchanged. These checks establish the named CLI/case,
+Homology received-measurement and recovery/replay connections on prepared
+sources. Default construction, source installation, full saved restoration and
+autonomous scientific execution remain separate. Evidence:
+`runs/root_public_recording_baseline3_01/`,
+`runs/root_public_callers17_01/`,
+`runs/root_public_callers13_repair_01/` (verificationa4bf33bf).
+
+The separate actual default ToolRegistry constructor subsequently passes its
+one case and all three phases on prepared sources. The original baseline
+reproduces the exact unsupported `work_dir` argument at Root tool_configuration;
+the acquisition-only correction adds explicit work-directory handling while
+preserving existing transport behavior. Its first candidate reaches an omitted
+snapshot dependency, workflow_budget; that raw failure is retained. Adding the
+unchanged actual module makes the constructor case pass, with88 confined imports
+and unchanged source guards. Workflow9aa8c808 succeeds and drains without OOM;
+actual exit37222fa4 proves inactive/PID0, recursive slice empty and354444 absent.
+The case constructs the real registry/client and checks zero tool operations
+and provider jobs. Provider dispatch, scientific execution and installation
+remain unestablished. Evidence: `runs/root_default_tools_baseline1_01/`,
+`runs/root_default_tools_candidate1_01/` and
+`runs/root_default_tools_candidate1_02/` (verification824e680d).
+
+The affected14 operational controls also complete with14 passing calls and42
+passing phases, exact160-case successor collection and146 deselected identities.
+Independent reconciliationd7446b5c authenticates3782 snapshot files,3341 actual
+confined imports, all phases/JUnit identities and unchanged canonical guards.
+Workflowaa998bf7 succeeds and drains without OOM; actual exite0d28bfc proves
+the owning window inactive/PID0, recursive slice empty and354517/354520/354522
+absent. Main reviews the fixture/runner/source-consumption and actual result
+accounts. The159 unchanged original identities plus the separately named
+Resource negative control preserve the original refusal before submission;
+the earlier failed positive is retained. Prior146 passes remain attached to
+their original source epoch, not a new full160 execution. Genuine Scientific
+construction/registration uses real descriptors and explicit empty catalogue
+ports. No positive Resource/HPC route, scientific task, native job or full
+saved restoration is established. Evidence:
+`runs/root_operational99_successor14_01/` and
+`runs/fourth_root160_successor_execution_review_01/`.
+
+Final organization review still holds Root source installation. Source11
+contains scientific calculator/helper bodies staged at old global paths,
+including Minhash grading and NMF calculations. The prior foundation's generic
+'not an episode' rationale does not satisfy the requested scientific ownership
+placement. Their exact consumers and genuine reusable infrastructure exceptions
+are being accounted for before the Root.library/direct-caller transition.
+Prepared test/import success does not close this unresolved placement scope.
+
+## 2026-11-12 root private runtime placement and controlled iterator checks
+
+The explicit root workflow's three corrected failure-path controls now pass
+with a successful drained receipt. The test-only successor retains the original
+iterator's source_failed/yielded state, pending decision and zero executed
+actions/observations. Saved-summary reopening preserves rows without retry, and
+changed recorded policy still refuses before provider execution. Primary checks
+the one installed test afterimage, actual application/postcheck references,
+loaded owners and retained JUnit/result hashes. The original three failed
+expectations remain retained. This validates those controlled failure/reopening
+boundaries, not default topology, complete restoration or autonomous science.
+Evidence: `runs/fifth_root_explicit_failure_connected3_01/`, result
+`85ed640846bf70a37f44076eda722335a1bed59d1aa08e51552bdeaf76ecfd20`
+and workflow `7a494f4a6b803b8edb22108b62f993bf64bb1c990ea9d7115346f463bebf5a30`.
+
+The canonical native-resource helper now treats requested threads as metadata.
+Its exact two-file application removes the requested-thread admission predicate
+and adds seven required controls; the independent installed postcheck and all
+seven controls pass with successful drained receipts. Primary verifies the exact
+one-line production diff, all six guarded current source hashes, actual loaded
+owners and all seven JUnit identities. Requests for 1, 4 and 64 threads pass under
+the real one-CPU window; memory, run-directory and owner-identity checks remain
+effective. The original five-pass/two-failure baseline is retained. No native
+worker or scientific execution is established by these controls. Historical
+consumer source hashes remain literal and require their explicit reader transition.
+Evidence: `runs/fifth_canonical_native_cpu_metadata_application_01/`,
+`runs/fifth_canonical_native_cpu_metadata_postcheck_01/` and
+`runs/fifth_canonical_native_cpu_metadata_installed7_01/`.
+
+The separate shared resource-capacity update subsequently installs exactly
+three files and passes its independent postcheck and all56 ordinary cases.
+Primary verifies the actual production/default diffs, retained before/after
+bytes, installed modes,14 guarded sources,30 evidence copies/references,
+JUnit, loaded owners and all three successful drained receipts. New admission
+uses memory/scratch arithmetic; requested threads and authenticated historical
+CPU/job counts remain metadata. Saved settings retain their exact identities,
+and the effective memory view respects the actual launcher bound. The one-CPU,
+5-GiB/no-swap launcher is unchanged. These cases cover the tested reservation,
+reopening and observer boundaries; complete consumer closure and native
+scientific execution remain separate. Evidence:
+`runs/fifth_global_byte_capacity_application_01/`,
+`runs/fifth_global_byte_capacity_postcheck_01/` and
+`runs/fifth_global_byte_capacity_installed56_01/`.
+
+The coordinated shared parser/custody scope also completes its31-path application,
+independent postcheck and all40 ordinary cases. It adds three shared parsers,
+five root library helpers, two reusable tests and20 original required assets;
+provider_jobs changes only its BLAST parser import to the original shared owner.
+Primary verifies all31 installed/candidate bytes,41 selected sources, actual
+postcheck/plan equality, all40 distinct case identities, JUnit/loaded-owner
+records and successful drained receipts. Original parser behavior and provider
+response identity/byte checks are exercised without transport or scientific
+publication. Full ToolRegistry and consumer import closure remain separate.
+Evidence: `runs/fifth_tool_parser31_application_01/`,
+`runs/fifth_tool_parser31_postcheck_01/` and
+`runs/fifth_tool_parser31_installed40_01/`.
+
+The shared provider-response scope subsequently installs two infrastructure
+modules and two reusable tests. Its independent postcheck and all 83 ordinary
+reader/contract cases pass with successful drained receipts. Primary verifies
+the four installed/candidate byte pairs and modes, 14 selected sources, 57 input
+guards, 13 loaded owners, actual case identities/multiplicities and retained
+JUnit/result hashes. The complete original module bodies differ only in accepting
+absent historical timeout metadata; present legacy values retain their original
+validation. Literal source identity, response custody, completeness, null/zero
+values and original failure qualifications remain exercised. The existing HPA
+fixture is unchanged. Transport, Store publication, scientific authority and
+complete consumer integration remain separate. Evidence:
+`runs/fifth_shared_provider_response_application_01/`,
+`runs/fifth_shared_provider_response_postcheck_01/` and
+`runs/fifth_shared_provider_response_installed83_01/`.
+
+The corresponding A107/A110 thread-metadata correction completes its exact
+eight-file application, independent installed audit and typed complete source
+transition. All76 scoped controls pass with no failures, errors or skips and a
+successful drained receipt. Primary verifies the eight current afterimages,
+actual application/audit/transition records, retained result and JUnit hashes.
+These controls cover capacity admission, original/default reconstruction,
+requested thread metadata, fixed new-dispatch quota and authenticated legacy
+child quota under the actual bounded ancestor. The original failing baseline
+remains retained. Controlled dispatch and saved-handle checks do not establish
+native worker execution or scientific results. Evidence:
+`runs/fourth_own_axis_thread_apply_01/`,
+`runs/fourth_own_axis_thread_applied_audit_01/`,
+`runs/fourth_own_axis_thread_transition_01/` and
+`runs/fourth_own_axis_thread_checks_01/`.
+
+The shared native-operation lock is subsequently installed as its own generic
+infrastructure module, with eight exact consumer import changes and one required
+test. The independent postcheck proves the complete original lock body and
+whole-consumer reversal. All six actual locking, cancellation, exception and
+symlink controls pass, with successful drained receipts. Primary checks the
+actual ten installed hashes, five application references, loaded owners and
+JUnit/manifest hashes. This removes those consumers' private A101 lock dependency;
+complete consumer import closure and scientific execution remain separate.
+Evidence: `runs/fifth_shared_native_operation_lock_application_01/`,
+`runs/fifth_shared_native_operation_lock_postcheck_01/` and
+`runs/fifth_shared_native_operation_lock_connected6_01/`.
+
+The root saved-publication implementation also completes its exact ten-path
+application and independent postcheck. All eight publication, identity-conflict,
+reopening and interrupted-publication recovery cases pass. Primary authenticates
+the ten installed hashes, actual application/postcheck receipts, loaded owners
+and JUnit/manifest hashes. All three workflows succeed and drain. These cases
+establish the tested publication/reopening boundaries; complete saved-workflow
+restoration remains open. The original pre-write executor failure is retained.
+Evidence: `runs/fifth_root_saved_publication_application_02/`,
+`runs/fifth_root_saved_publication_postcheck_01/` and
+`runs/fifth_root_saved_publication_connected_01/`.
+
+The root historical scientific-binding and finding-progress placement then
+completes its five-path application and independent postcheck. All thirty
+installed cases pass with no errors or skips and successful drained receipts.
+Primary authenticates the five current afterimages, actual evidence references,
+loaded owners and JUnit/manifest hashes. The cases cover recorded-policy
+reconstruction, preserved original refusals, typed qualifications, finding
+deduplication/corrections/withdrawals and unchanged scientific score on page
+reads. They do not establish a complete saved workflow or autonomous science.
+Evidence: `runs/fifth_root_historical_scientific_application_01/`,
+`runs/fifth_root_historical_scientific_postcheck_01/` and
+`runs/fifth_root_historical_scientific_connected_01/`.
+
+The reviewed root runtime and substantive private task responsibilities are now
+installed. The application records 72 writes, including three required test
+modules; the independent postcheck authenticates 77 candidate files and retains
+the eight previously installed support candidates, five prior tests and original
+return reader unchanged. The primary coordinator independently rehashed the
+written files, protected files and all referenced preparation/audit evidence.
+The live suite finishes with 74 passes and a successful drained receipt: these
+are the previous 51 support cases plus 23 task/iterator cases, not 74 additional
+cases. Controlled outcomes exercise the original iterator and action identity,
+including failed, invalid and unavailable returns without invented progress.
+
+The global Store's original native-measurement import is also repaired to the
+canonical actual class and units. Independent whole-module byte/AST reversal
+passes, own-axis State modules are unchanged, and thirteen live Store checks
+pass with a successful drained receipt. Those checks cover actual artifact
+admission, reopening/idempotence, mismatches, units/nulls and foreign type
+rejection; no native job or scientific investigation runs.
+
+The later declaration correction now explicitly selects the actual private
+AnnotationTask. Its independent postcheck preserves the other 75 prior
+candidates and both progress modules; the live declaration/iterator suite has
+38 passes and a successful drained receipt. Primary confirms the executable
+declaration and actual JUnit/launcher results. Default constructor, nine-axis
+head composition and descriptor gaps remain separate. These checks do not
+establish a complete root workflow, scientific scoring or restoration.
+Duplicate identity retirement subsequently passes its independent installed
+postcheck and all ten original boundary cases. Exactly two superseded root
+files are removed and one required test is added, preserving the canonical
+owners, callers and 42 assets. The corrected verifier accounts explicitly for
+the concurrent A104 helper addition and two A107/A110 protein-export repairs;
+the earlier failed checks remain retained. Both final receipts succeed and
+drain. Root ownership metadata reconciliation, nine-axis composition and full
+restoration remain separate. Evidence:
+`runs/fifth_root_duplicate_retirement_postcheck_02/` and
+`runs/fifth_root_duplicate_retirement_connected_01/`.
+The original public native-root factory is subsequently restored and its eight
+installed cases pass with a successful drained receipt. Primary independently
+checks the actual JUnit result, fifteen retained receipt hashes and all 783
+current guarded source hashes. The cases use the actual A102 projector and
+native receipts in an explicit engineering topology. The separate ordinary
+default-constructor diagnostic still fails at missing root.literature_episodes;
+its failed receipt and later exit observation remain separate. The subsequent
+ownership reconciliation is recorded below; full tree/restoration remains open. Evidence:
+`runs/fifth_root_native_factory_connected_01/` and
+`runs/fifth_root_native_factory_default_01/`.
+
+Root current ownership is subsequently reconciled in exactly two metadata
+files. Primary reviews the complete application/verifier source and explicitly
+delegates that disjoint metadata operation to Fifth's own window. Both actual
+application and independent installed verification succeed and drain. Primary
+checks the actual commands, receipts, installed hashes and full candidate byte
+equality. The inventory is now SHA256
+`52e91082effa84f92656938de1b5b478d3f5140c5c09994157df95eb9ae86fa1`.
+It records 101 current AST module rows and preserves the complete original JSON
+and Markdown history, including 28 historical support rows and all 40 unrelated
+inventory fields. All 783 guarded source files and 42 assets remain unchanged;
+no new runtime or scientific validation is claimed. Evidence:
+`runs/fifth_root_current_metadata_apply_01/custody/` and
+`runs/fifth_root_current_metadata_verify_01/verification.json`.
+
+The selected private setup subsequently installs seven exact paths and passes
+its installed verification and ten controlled connection cases. Its genuine
+root/A105 constructor then exposes an incompatible private iterator terminal
+type. The separate canonical iterator transition now installs 85 paths
+(69 application paths, 15 existing test imports and one new test) and passes
+its independent 83-module reversal and installed source check. Primary rehashes
+all 85 installed files; the twelve canonical iterator files remain unchanged.
+The unchanged constructor now passes, followed by all eight source/identity
+cases and all sixteen original presentation, saved-context and assessment
+publication cases, with no skips and successful drained receipts. The assay
+cases retain typed findings and saved sheets before credit. The constructor
+executes no scientific unit, action, observation, model or tool call. The
+original failed constructor remains retained; complete root execution, exception
+closure and saved workflow restoration remain separate. Evidence:
+`runs/fifth_root_selected_private_setup_connected_01/`,
+`runs/fifth_root_canonical_iterator_postcheck_01/`,
+`runs/fifth_root_canonical_iterator_constructor_01/`,
+`runs/fifth_root_canonical_iterator_new8_01/` and
+`runs/fifth_root_canonical_iterator_original16_01/`.
+
+The later root/A105 application-boundary transition installs 501 exact paths:
+499 application modules and two required tests. Independent whole-module
+reversal and installed verification pass. Primary rehashes all 501 installed
+paths and verifies the actual application, postcheck and validation receipts.
+The same 35 cases now all pass, resolving the original 23 ordinary failures
+while preserving the twelve previously passing cases. The unchanged original
+constructor also passes. Actual JUnit, loaded-owner and constructor diagnostic
+hashes agree with their reports; both validation workflows succeed and drain,
+with unchanged guarded source maps. These checks establish the selected type,
+context and construction boundaries; they execute no scientific unit and do
+not establish full saved restoration or autonomous science. Evidence:
+`runs/fifth_root_application_boundary_application_01/`,
+`runs/fifth_root_application_boundary_postcheck_01/`,
+`runs/fifth_root_application_boundary_installed35_01/` and
+`runs/fifth_root_application_boundary_constructor_01/`.
+
+Execution-memory continuity remains separately open. The two permanent forensic
+test/helper inputs are installed and independently checked; their first ordinary
+21-case run actually reports5PASS/16FAIL. The original failed receipt and later
+limited exit observation remain intact. Both real SQLite/OS-lock cases passed;
+sixteen cases were blocked by an overbroad same-UID visibility classification.
+The proposed narrow replacement preserves unknown observations, real linked
+process refusals and original lock/copy protections. Its V2 source audit now
+passes with a successful drained workflow; primary verifies the complete source
+freeze, all16 actual failed-case JSON joins and the actual receipt. The first
+replacement attempt then publishes the two exact helper/test afterimages but
+fails before adding the fixture because tests/fixtures itself is absent. Primary
+verifies the two live afterimages, preserved original bytes, four publication
+events and failed receipt adec950a; separate exit25f21911 reports its owning
+service inactive and slice empty. The original failed drain field stays false.
+The fixture-only recovery then succeeds, followed by its separate independent
+postcheck. Primary verifies successful drained receipts, exact recovery commands,
+all three final installed bytes and modes. The failed original attempt remains
+failed. The ordinary25 validation subsequently passes all25 cases, with no
+errors or skips and a successful drained receipt. Primary verifies the actual
+case identities, JUnit, all three installed inputs, exact command and launcher
+budget binding. These controlled cases include actual SQLite writer/OS-lock
+refusals, preserved unknown visibility and source-copy protections.
+This placement defect and recovery are separate from the source audit.
+Neither genuine execution-memory database has been inspected by these stages;
+default-path changes and continuity resolution remain open. Evidence:
+`runs/execution_memory_forensics_controlled21_01/` and
+`runs/execution_memory_visibility_source_audit_01/`,
+`runs/execution_memory_visibility_application_01/` and its later-exit observation,
+and `runs/execution_memory_visibility_controlled25_01/`.
+
+The separate isolated API storage-custody suite passes33 cases and all99 phase
+reports in a guarded399-file copy, with successful drained workflow3122c5b3.
+Resultdbb87d7c and JUnit3161cab1 agree with the original frozen case ledger.
+Independent review90476932 verifies884 source/evidence hashes, complete395-source
+plus four-addition inverse,43 retained references and source57=11 custody methods
+plus46 held methods. Primary reads that full review, verifies its seal and actual
+result/JUnit/workflow hashes, exact command/owner/bounds and reported outcomes.
+Real Store/Journal persistence, immutable inputs, selected records and artifact
+close/reopen are exercised. The31-owner census authenticates canonical package
+prefixes; arbitrary copied-source aliases are outside its scope. Test-selected
+actions retain result=None and credit=None; no full API host, commission,
+provider execution, publication, iterator progress or scientific credit is proved.
+No canonical installation occurs. The raw successful/drained receipt is retained;
+additional inactive/empty OS observations survive only in the contemporaneous
+status note, with no separately archived raw sidecar. The distinct terminal33
+candidate03 remains18-pass/15-fail with its failed receipt and later exit evidence;
+terminal94 and its later paired runs remain separate. Evidence:
+`runs/fifth_api_custody_behavior33_01/` and
+`runs/fifth_api_custody33_20261112_independent_review/REVIEW.md`
+(90476932; review freeze05eb0410).
+
+The distinct terminal33 candidate05 now passes all33 original cases and99
+ordinary setup/call/teardown reports, with successful drained workflowaa874085.
+Primary reads independent reconciliationd1b4598b, verifies review/freezes and
+actual result5093d973, JUnit2985ebee, complete producer/budget/owner joins and
+scoped outcome flags. The peer verifies both whole snapshots (601/680 files),
+their full597-source inverse,265 loaded owners,75 handoff references and retained
+raw exit observations. Candidate03's18P/15F, candidate04's29P/4F and baseline06's
+zero-case/two-collection-error receipt remain unchanged. The controlled cases
+exercise real terminal tasks, factory construction, invalid child delivery,
+both iterator observations and same-source saved replay. Parent scientific
+credit is an inert fixture; native execution, historical-fingerprint migration
+and full scientific workflow behavior are not established. The actual candidate
+matches the proposed99-target placement (96 writes), but no canonical placement,
+installed33 execution or source-hold release follows. Evidence:
+`runs/fifth_terminal33_candidate_05/` and
+`runs/fifth_terminal33_candidate05_20261112_independent_reconciliation/REVIEW.md`
+(review freezef1fde002).
+
+The transferred thirteen shared-native source audits have now all executed
+serially. Six pass: terminal support, fixed children, capture custody, execution
+collaborators, database policy and tool information. Seven original audits fail
+and remain failed. Five lexical checks flag comprehension variables; the genomic
+check separately flags compiler-generated `__conditional_annotations__`, confirmed
+by an actual source-only symbol observation with no corresponding AST Name.
+The effective-context stage fails the delegated parser's whole-module/delta
+inventory check and requires separate diagnosis. No application candidate is
+promoted by these source checks. All workloads actually exited; failed receipts'
+drainfalse fields remain unchanged and separate process observations establish
+inactive services, empty owning slices and absent supervisors. Exact actual
+commands, result/receipt hashes and original errors are retained in
+`runs/a104_source_candidates_20261112_execution/FIFTH_SOURCE13_ACTUAL.json`
+(`8f14725f436ab8ce825ab2440fa9f35891330c0a6c9b05492e067bf126c3f41e`).
+The genomic observation is
+`runs/fifth_native_genomic_overlap_symbol_observation_01/audit/symbols.json`
+(`00c6af2f162784eb8bd48a86fbf00a14a1fe89b86f6ccba1126baa7735ca5d4f`).
+The effective-context failure is subsequently corrected by immutable tooling
+successor966e5c4. Its two complete auditor inverses replace representation-based
+dictionary sorting with exact before/after pair sorting and authenticate the
+real delegated auditor. Actual resultd83ab7aa and drained workflowe8b630cf pass,
+preserving the original failed packet/receipt and all candidate bytes. Primary
+reads all456 tooling lines and peer review, verifies the six-member packet,
+17 actual references and14 candidate source references. Five original test
+suites and204 assets are source-accounted, not executed or promoted. The absent
+global context owner remains a proposed destination, not an installed reference.
+Evidence: `runs/fifth_native_context_effective_source_02/`.
+This source-only progress changes neither task connections nor runtime status.
+
+The later native9 executor and effective public-transport33 source results are
+independently reconciled in review5ac34527. Primary verifies the complete review
+freeze35d54e00, principal input hashes and49 proof/target references. Native9
+auditfabcfbed/workflow45518ed3 and transport audit44183545/workflowa25afc7a both
+succeed and drain. The review accounts for complete native source inverses,
+original129-case inventory and the transport's four explicit supersessions.
+Nine-file installation, runtime checks, shared-clock continuity, fresh factory
+authority and complete caller integration remain open. Later transport36 is a
+separate source transition. Evidence:
+`runs/a104_fifth_native_transport_20261112_independent_review/`.
+
+Native9 subsequently installs the exact nine additions and passes independent
+postchecke12a7934, with successful drained application/postcheck workflows
+45ebfd10/852ca605. The installed original129-case suite passes with result962001f7
+and drained workflow10b3f038. Primary reads the actual runner/postcheck, checks
+all nine current bytes,14 selected source hashes,176 source-authority hashes,
+and exact equality of all129 collection/result/JUnit identities with no failures,
+errors or skips. The six defining owners and three test modules load from their
+canonical paths. These are pure contract tests, not native execution, full schema
+closure or completed episode connections. The three new tests establish a later
+source epoch for future broad serializer scans; historical audits stay intact.
+Evidence: `runs/fifth_native9_application_01/`, `runs/fifth_native9_postcheck_01/`,
+`runs/fifth_native9_installed129_01/` and
+`runs/root_native9_20261112_primary_reconciliation/`.
+
+The later isolated immutable-I/O19 and Enrichr reader11 runs also pass at their
+declared engineering scope. Primary reads independent reviewfd2bfa39 and checks
+its613 finite source/evidence hashes. Exact source-enumerated, collected and
+JUnit identities agree for all30 cases, with all90 phase reports passing. The
+three-file I/O copy preserves strict JSON publication, failures and inode replay;
+the543-file reader copy preserves real Store/Journal/context/receipt identities
+and explicitly controlled constructor ports. All46 recorded canonical modules
+match their copied files. That runner's canonical-prefix census does not prove
+absence of every possible alternate module name. Context reconstruction occurs
+within one Store session; full database/workflow reopening is untested. The
+five actual source/snapshot/test workflows succeed and drain. No promotion,
+successful Enrichr publication, provider work, full serializer migration or
+terminal integration follows. Evidence: `runs/fifth_immutable_io_behavior_01/`,
+`runs/fifth_enrichr_reader_snapshot_01/`,
+`runs/fifth_enrichr_reader_behavior_01/` and
+`runs/fifth_io_enrichr30_20261112_independent_review/`.
+
+The remaining six lexical source audits subsequently pass with unchanged
+application candidates. The immutable dbb3cfc5 successor accounts for module
+comprehension bindings and separately identifies the generated annotation
+symbol; it authenticates all17 complete modules and the original external-name
+guards. Its first proof fails because a negative-control global declaration
+follows an annotation using that name. The original failed receipt fbec64ff
+and separate actual-exit observation remain intact. Proof-only successor
+45d852e7 moves that declaration before its first use, preserves the intended
+negative control and passes its independent inverse audit28eb8d0a followed by
+the complete proof087e0384. All six actual source commands then pass and drain;
+their exact producers, commands and result hashes are retained in
+`runs/a104_source_candidates_20261112_execution/FIFTH_LEXICAL6_ACTUAL.json`
+(`ca1aad91fa20c070578209814fc8c370a70beb21e29cccf61e31257f18d41ef6`).
+Together with the effective-context correction, all thirteen source families
+now have passing source checks. The original seven failures remain retained;
+no application placement or behavior-test pass is inferred.
+
+The separate BLAST reservation compatibility proposal passes its source-only
+audit e426be1c with drained receiptc257fb83. Primary reads the complete peer
+review and auditor, verifies the22-member freeze25d6028e and actual result.
+The whole-module byte/AST inverse recovers both the effective predecessor and
+original owner. The original legacy request comparison remains intact; the
+proposed owned-request branch derives its two environment keys from the actual
+recorded owner file and requires full request equality. No current owner or
+resource allocation is invented for historical records. Fourteen real-reservation
+tests remain proposed; application, archived ownerless runtime compatibility and
+native execution remain unvalidated. Evidence:
+`runs/fifth_native_blast_compatibility_source_01/` and
+`runs/root_native_blast_compatibility_20261112_independent_review/`.
+
+The separate actual-A106 serializer composition source audit fails at its strict
+`no_remaining_selected_old_import` guard before producing a passing report.
+Primary reads the707-line tooling and independent review, verifies the19-member
+freeze3a2a3b1c and runs its exact command from a fresh owning run. Actual
+receipt393cdbef retains returncode1 and drainfalse; separate observationd71cee23
+records inactive service, empty owning slice and absent original supervisor.
+No application candidate is installed or historical map rewritten. The omitted
+caller/strict-source coverage diagnosis remains correction work, distinct from
+the already completed A106 relocation. Evidence:
+`runs/fifth_serializer_a106_actual_source_01/`.
+The immutable completion successor1c4bff55 then passes source audit6f7d75cf
+with drained workflow7db23648. The failed guard correctly found one omitted
+mixed `plain` import in enrichr_reference_privacy.py; the original discovery
+had recorded only its digest import. The correction preserves the original
+lazy scope and ReportBoundaryError owner and proves both complete predecessor
+inverses. The strict absence guard remains unchanged. Primary reads the complete
+new transition/main auditor, six explicit tooling intervals, candidate diff and
+independent review6236f0f6, verifies all15 frozen members and byte equality of
+the three unchanged auditors. Actual source checks cover139 imports across91
+callers,93 complete production inverses,325 test/helper inverses,16 retained
+fixtures and13 loaders. The effective439 paths retain438 candidates from the
+actual-A106 composition, including its three original compositions; the1190
+test scan and original failed receipt remain intact. Eighteen proposed semantic
+cases, the separate81 axis caller handoff and application remain pending.
+Evidence: `runs/fifth_serializer_import_completion_source_01/`.
+
+The finite root context/serializer eight-file composition subsequently passes
+actual static auditc459c3d9/workflowe044d3c4. Independent reconciliation3f053fa9/
+sealf9ed0376 checks all nine original import sites, sixteen complete forward/
+inverse byte transformations, eight parent-row joins,37 packet members and81
+finite manifest references. Primary reads the full review and verifies its seal
+and five retained input lists. All14 producer budget fields, literal command
+and eight raw exit records agree. The nine sites retain their original module
+or lazy scopes. Canonical BindingContext changes nominal class identity; subclass
+eligibility and saved compatibility are not established by preserved syntax.
+MACS2/LUMPY terminal partitions remain separate layers, so these eight candidates
+are not the final joint afterimages. No application, runtime or connection-count
+change follows. Evidence:
+`runs/fifth_root_context_serializer_eight_source_01/` and
+`runs/sixth_root_context_serializer8_independent_review_01/`.
+
+The two root RNA renderers also pass their actual source auditc766ea8a with
+drained workflow489f2e46. Independent review281a269a/sealc07efd22 accounts for
+all510 candidate lines, four plus ten functions, the extracted requested-return
+helper, complete parent/remainder inverses and thirteen declared dependencies.
+Primary reads that review and verifies its sealed65 finite inputs. The actual
+16-member packet,45 source guards, literal command/full14-field budget and eight
+raw exit records agree. Original20GiB/4GiB settings remain preserved source;
+they are not permission to exceed the execution environment. Four historical
+suites and five assets are provenance, not promoted or executed inputs. Root
+default presentation, full dependency closure, canonical placement, runtime and
+scientific validation remain separate. Evidence:
+`runs/fifth_root_rna_results_renderers_source_01/` and
+`runs/a104_root_rna_renderers_20261112_independent_review/`.
+
+The RNA required-input successor subsequently passes static auditb7e1c438/
+workflow325f31f0. Its19 target dispositions retain eight additions, two path/import
+replacements and nine unchanged dependencies. Four whole test inverses, four
+complete donor reconstructions/selected AST comparisons and five Git asset
+identities pass. Primary reads independent reviewf9664e49, verifies its19-member
+seal,61 references and120 packet members, then checks the actual producer,
+14 budget fields and measured exitc9cf3558. The short stage has no active child
+capture. No application imports or RNA cases execute. Eight missing production
+operands and the held45-source context remain explicit; no replacement class or
+new runtime readiness is inferred. Evidence:
+`runs/root_rna_required_inputs_20261112_independent_review/` and
+`runs/sixth_root_rna_required_inputs_source_handoff_01/`.
+
+The four-row private RNA instructions successor6c00f472 then passes source
+audita0a816de/workflowc85d5d68. Both actual A107 Results owners recover the complete
+original instructions method with only four helper-import qualifications; the
+two instruction-only fixture callers select the real scientific Results class.
+Four whole-module byte/AST inverses, the complete19-input reversal and all seven
+mutation controls pass. Primary reads the full source and independent peer9cf6c4c2,
+verifies26 members/32 inputs, all14 typed budget fields and actual exit ebc3faf3.
+The run is0/0/drained; its short duration supplied no active child capture.
+No application imports, constructors or RNA cases execute. Seven other production
+seams, actual helper-epoch behavior and Fourth's fresh final-family extraction
+remain separate. Evidence: `runs/root_a107_rna_instructions_source_01/` and
+`runs/third_orchestrator_coordination/a102_reader_review/a107_rna_instructions_peer_01/`.
+
+The subsequent five-import source successor d78c1833 passes actual auditd67a89a9/
+workflow45a25de7 in Seventh's genuine window. Five test/import accounts and five
+original-owner proofs retain whole byte/AST inverses; the complete19-input inverse,
+incoming6c00 result and36 source guards pass. Primary reads the unchanged auditor,
+both peer reports and exact five-Git-identity metadata correction; verifies eight
+members/91 pins, actual command and14 budget/result fields, empty stderr and
+separate measured exit70c009b4. The actual supervisor3487625/driver3487632 were
+captured live and later absent from the inactive empty owning slice. Original6078
+was rejected during source review for five trailing LF characters and was never
+executed. No test assertion or owner implementation changed in that correction.
+Two root renderer seams remain; application imports, RNA behavior, full dependency
+closure and installation are not established. Evidence:
+`runs/seventh_rna5_source_handoff_20261112/` and
+`runs/seventh_rna_five_imports_source_01/`.
+
+The root ModelPresentation pure-owner successor also passes source auditd268fe22/
+workflow2512ce60. Five exact import sites select genuine defining helpers while
+preserving the entire remaining module, signature, dispatch priority and original
+eager component-renderer import. Whole byte/AST reversal and finite dependencies
+are independently reviewed9bdae44b; Primary reads the source/peer, verifies the
+six-member seal and actual14-field producer/exit records. Candidate54eb0fe7 stays
+uninstalled until the original finite-five installed26 verification has consumed
+its current68bf703d source operand. The unresolved renderer and default runtime
+closure remain separate. Evidence:
+`runs/fifth_root_model_presentation_pure_owner_source_01/`.
+
+The Enrichr canonical-context pair subsequently retains13 passes/four failures
+on the original snapshot and17 passes on its candidate, with the same17 case
+identities and51 phases. Baselineada0a34a/workflowec40a1a6 remains1/1/drainfalse;
+candidatea3266944/workflow352cd9d5 is0/0/drained. Independent reconciliation
+7d13e30e verifies the same capture, exact privacy replacement plus serializer
+addition,41 canonical loaded owners, JUnit/failure identities and all14 budget
+fields. Primary reads its full checker/report and verifies actual stage references
+and90 finite snapshot references. Four original failures identify the intended
+canonical-subclass eligibility change; the two added receipt cases reach their
+later changed-request denials only on the candidate. Separate measured exits
+remain distinct from receipts. The classifier is controlled and the serializer
+is not loaded in these17 cases. Passive309-module/319-open-path observations are
+not a captured external environment. No publication, scientific execution,
+canonical placement or global-class retirement follows. Evidence:
+`runs/fifth_orchestrator_coordination/root_enrichr_semantic17_actual_independent_review_01/`.
+
+The separate Enrichr form11 comparison retains3 passes/eight failures on prepared
+90bf63ec and11 passes on prepared139b03bb. Both use the same11 cases,33 phases and
+ten normally named copied owners; canonical communication3cee was captured but
+not executed. Independent reconciliation22b8ff0a/seal9b71e19c verifies the sole
+snapshot delta, full original test/runner inverses, XML identities, all14 budget
+fields and actual exits. Primary reads both complete reviews and verifies retained
+artifact/source pins. The original result096ec42c/workflow3935cdcf stays1/1 with
+drainfalse; candidateec0e1a44/workflowc4c295d0 stays0/0/drained. Original eight
+failures are the missing Enrichr import; candidate reaches all unchanged assertions.
+Historical truncated process-cgroup fields and absent active samples remain
+explicit. This validates only the Enrichr form branch, with a controlled resolver;
+nine other import edits, publication and canonical placement remain separate.
+Evidence: `runs/root_enrichr_form11_actual_20261112_reconciliation/`.
+
+The separate numeric27, registered five-family52 and retained-file19 scopes
+are reconciled in00e48f93/seal9af122a7. Numeric27 preserves27 passes in both
+reconstructed snapshots,81 phases each and seven-to-eight normally named
+owners; it is not an installed baseline. Registered52 preserves the prepared
+21-pass/31-failure predecessor and52-pass candidate,156 phases each and39
+owners, with only communication90bf63ec-to139b03bb changed. All31 original
+obsolete-import failures remain recorded; later assertions run on the candidate.
+Retained-file19 is candidate-only, with19 passes/57 phases/seven owners and the
+original six-function reader. Primary reads the full reconciliation and verifies
+its seal/artifact references; five exact JUnit/child collections,114 finite
+artifacts and12 complete typed14-field workflow joins are accounted for. The
+failed registered predecessor stays1/1/drainfalse with its separate empty-slice
+exit and explicit historical outside-cgroup limitation. Historical absent-path
+guards are not current absence claims. No canonical installation, native worker,
+default renderer, saved-workflow restoration or scientific validation follows.
+Evidence: `runs/fifth_root_27_52_19_20261112_reconciliation/`.
+
+The retained-file helper subsequently reaches its permanent root/library owner.
+Exact four-path application f88007c3 adds the unchanged helper and permanent test
+and updates only the two root ownership documents. Independent postcheck bed99360
+passes; installed result250435c3 passes all 19 cases and 57 ordinary phases through
+seven canonical owners. The original copied19 remains distinct. Primary reads
+the full actual handoff and independent reconciliation c575e32a, checks its
+74 evidence references, four current afterimages and all three original
+workflow/budget joins. Exact nine-path maps, modes, two metadata beforeimages,
+four intent/completion pairs and separate actual exits are retained. All three
+workflows return0/0/null/drained. Root5 and saved-descriptor acceptance remain
+separate: the two new Python files change genuine current fingerprints, and
+historical absence guards remain historical. Evidence:
+`runs/fifth_orchestrator_coordination/root_retained_file_standalone_actual_independent_review_01/`.
+
+The separate Receipt21 prepared comparison is reconciled in e38e63c6/seal623d3263.
+Both runs use the same 54-file map, 21 cases/63 phases and 53 normally named
+owners; only the prepared return-record reader changes c8c9034d to e05e7450.
+All 21 predecessor calls fail with the retained 13 source_admission_before and
+eight decision_witnesses AttributeErrors; all candidate phases pass. Primary
+reads the full reconciliation and its existing complete source peer b8176900,
+verifies actual refs, complete budget/command joins and ordered XML identities.
+The predecessor remains1/1/drainfalse with its limited owning-slice exit; the
+candidate remains0/0/drained with its separate eight-file exit evidence. This
+validates the controlled source-admission/witness boundary, not a current-original
+baseline, canonical reader installation or broader scientific/runtime closure.
+Earlier absent-path maps are not replayed after the legitimate helper placement.
+Evidence: `runs/root_receipt21_paired_actual_20261112_reconciliation/`.
+
+The alignment39 copied candidate also passes its exact 39 cases and 117 phases,
+result519a6b98/workflowe79bb54f. Independent reconciliation865ff583/seala07b5b27
+joins all exact parameter/JUnit identities, ten copied files/normal owners,
+62 retained refs and four complete producer/budget/exit chains. Primary reads
+the full review and verifies its seal and actual references. This cohort is the
+three selected original direct-presentation cases plus 36 codec controls; two
+other original presentation cases remain held. There is no original39 baseline.
+The checks cover supplied-number/qualification presentation and reference codec
+semantics, not installation, full RNA/default-priority behavior or scientific
+validation. External observations remain final-byte evidence. Evidence:
+`runs/root_alignment39_actual_20261112_independent_review/`.
+
+The Data7 copied candidate subsequently passes all645 cases and1935 ordinary
+phase reports, result64b974f8/workflow5e1c5832. Its original baseline953cbd64/
+workflowe9e29514 remains an ordinary seven-error missing-owner collection
+failure with zero cases/phases and drainfalse; it is not a passing645 baseline.
+Independent reconciliationbb462f96/c0f94f35 proves the same actual71-file capture,
+same seven test afterimages and exact ten application additions to81 files.
+Primary reads the full review/checker, verifies all623 finite source/evidence
+pins, exact645 identities and1935 phases,26 recorded owners, JUnit645/0/0/0,
+both full14-field budget joins and literal producer commands. Both separate
+measured exits remain; only the candidate has a genuine active-process sample.
+These results validate the seven selected schema/view/query/reader/calculator/
+sequence/molecular suites. They do not install the candidates or establish the
+whole service, network/native work, private-axis context integration, saved
+restoration or autonomous science. Evidence:
+`runs/fifth_bvbrc_data7_baseline71_01/`,
+`runs/fifth_bvbrc_data7_candidate81_01/` and
+`runs/fifth_orchestrator_coordination/bvbrc_data7_actual_independent_reconciliation_01/`.
+
+The FBA outer-error baseline proposal separately passes source preparation
+588a2292 and independent audit1e17f45b, with drained receiptsed1b298b/11e5e190.
+It authenticates three proposed controls, exact current/prior failure-hook
+identity and the explicit absence of that hook from original355. These are
+source proofs, not executed FBA-owner or private Results tests. The subsequent
+five actual-owner plus three unchanged-hook controls have an independently
+reviewed source packet35f6749d. Review0d2a38d6 identifies a concrete copied-runner
+rootdir/finder/census defect supported by Fourth's actual alias observations;
+runtime checks await a separate immutable tooling correction. No failure receipt,
+original action identity or progress definition is changed by this preparation.
+Evidence: `runs/root_fba_outer_error_baseline_prepare_01/`,
+`runs/root_fba_outer_error_baseline_audit_01/` and
+`runs/a110_fba_owner_outer_iterator_20261112_independent_a104_review/`.
+
+The separate canonical78 copied-source suite passes all78 exact cases, followed
+by independent observation audit89ae5f88. Observation3b332592 and successful
+drained workflowse5f85532/c9e99e95 retain242 canonical module entries, unchanged
+six permanent tests,13 control assets,45 genuine-fixture entries and process
+environment. Primary reads independent reviewa91e38a1 and rechecks its reviewed
+hashes and68 finite linked references. The review independently compares all78
+source-derived/JUnit/audit identities and rehashes241 copied source modules.
+Controlled service/layout/transport ports and the declared copied domain remain
+explicit; this establishes neither an actual unfinished worker nor private
+Results commissioning, production installation or full restoration. The separate
+context-preservation5013 audit a99f98f2/workflowb333533a passes ten source inverses
+only; final family candidates and their60 connected callback controls remain
+unexecuted.
+Evidence: `runs/fourth_fba_canonical_import_78_checks_01/`,
+`runs/fourth_fba_canonical_import_78_observation_audit_01/`,
+`runs/fourth_fba78_20261112_independent_review/` and
+`runs/fourth_context_preservation_revision_audit_01/`.
+
+The original35f packet's source audit2666402a, copied preparation75280a48 and
+independent copy audit77861f15 then pass with three successful drained receipts.
+Primary reads all source/copy tools, the235-line proposed owner test and the
+selected-domain authority. Seven complete owner/runtime/iterator bodies remain
+identical across3698 current and3715 proposed copied files; all65 candidate rows
+and eight declared cases are accounted. The two copied trees include explicit
+controlled native I/O and genuine fixture assets but have not executed those
+cases. Actual service/slice exit is confirmed before any subsequent workflow.
+Evidence: `runs/root_fba_owner_outer_source_audit_01/`,
+`runs/root_fba_owner_outer_copy_prepare_01/` and
+`runs/root_fba_owner_outer_copy_audit_01/`.
+The subsequent canonical-runner29b6 source revision audit fails before its
+controls because it requires the retained GNU unified diff to equal Python
+difflib's exact textual hunk layout. The complete patch reversals have not yet
+run in that failed workflow. Original receipt8014b911 remains returncode1 and
+drainfalse; separate actual-exit observation44185abf confirms inactive service,
+empty owning slice and absent original supervisor. The following copy re-audit
+and eight runtime cases were not launched. This is an auditor-formatting
+boundary, not evidence of an application regression; an immutable correction
+must retain full forward/reverse byte/AST and context checks. Evidence:
+`runs/root_fba_owner_outer_canonical_revision_audit_01/`.
+
+The immutable proof-only correction30a04 subsequently passes source audit9c62cb1f
+and successful drained workflow428d61b5. Primary reads the full independent
+correction proof and peer review3f5c1235, verifies all packet/input pins and22
+retained evidence references. All17 original isolated import checks and eight
+literal patch controls pass. Both complete patch renderings recover exact source
+bytes forward and backward; the actual runner's first hunk differs between GNU
+diff and difflib, while the observer renderings are identical. The runner,
+observer, eight proposed cases and prepared copies remain unchanged. Original
+failed workflow8014b911 remains failed. This establishes the corrected source
+proof, not execution of the eight behavior cases. Evidence:
+`runs/root_fba_owner_outer_patch_semantics_audit_01/`.
+The unchanged canonical copy auditor subsequently succeeds with drained workflow
+56742b59. Its full result is byte-identical to original audit77861f15, retaining
+both complete copied maps without regeneration or refresh. The actual current
+eight-case workflow subsequently completes with one pass and seven failures.
+Observation fefd5cf8 and failed workflow4c421ae8 preserve the canonical import
+and source guards. Two tests use an unsupported Journal indexed-table lookup;
+five ordinary-owner cases reach the original software-registration refusal
+`fba_implementation_closure_incomplete`. The old check355 capsule names flat
+implementation paths while the current A110 validator requires own-axis paths;
+the copied files are present. Separate observation c1f50442 confirms complete
+workload exit without rewriting the failed receipt. No candidate65 test runs.
+The immutable fixture successor780bb6ec proposes full-key SQL reads and a new,
+explicitly registered copied-source selection, preserving the old capsule and
+refusal. Its independent review75ea8a4b and primary source review are complete.
+Actual source audita12e092c and corrected copy preparationfef88398 pass with
+drained workflows3f97ecba/e0739848. The exact copied maps contain3700/3717 entries;
+the independent copy auditd48bbbe9 subsequently passes with workflow2223f0da,
+returncode0 and completed descendant drain. Primary verifies the actual receipt,
+manifest link, full-copy inverse flag, phase counts and inactive empty root slice
+with both original processes absent. This remains source-copy evidence, with
+runtime_executed and production_applied false. The subsequent one-row shared
+ownership change eb397625 to4ff13330 requires its separate explicit metadata
+transition before corrected runtime execution. No corrected current8 or candidate65
+result is claimed. Evidence:
+`runs/root_fba_owner_outer_canonical_copy_audit_01/`,
+`runs/root_fba_owner_outer_canonical_current8_01/` and
+`runs/a110_fba_owner_outer_iterator_20261112_fixture_successor/`.
+
+The explicit metadata-envelope successor30c25071 subsequently passes its source
+audit5fe1ff60 with actual workflow3503c971, returncode0 and completed descendant
+drain. Primary verifies the command, real root owner, resource bounds and both
+artifact hashes. The source proof preserves the two retained copied trees and
+authenticates the one-key ownership append separately. Actual envelope preparation
+then completes as8d986da4 with successful drained workflowb1a48fed. Primary verifies
+the complete envelope inverse to retainedfef88398, unchanged3700/3717 phase maps,
+3656 selected inputs, actual predecessor/audit references and whole budget/result
+join. Both original preparation processes are absent before the next audit starts.
+The independent envelope audit90de218e subsequently succeeds with actual
+workflowdede8c85, returncode0 and completed descendant drain. Primary checks
+the complete budget/result join, real command/owner, exact envelope reference,
+3700/3717 phase counts and complete-original-copy inverse. Both original audit
+processes are absent before the next runtime stage. Runtime execution and
+production application remain false in this audit; corrected current8/candidate65
+outcomes remain separate and no old failed result is rewritten. Evidence:
+`runs/root_fba_shared_metadata_source_audit_01/` and
+`runs/root_fba_shared_metadata_prepare_01/`, with independent copy evidence in
+`runs/root_fba_shared_metadata_audit_01/`.
+
+The corrected-source current phase subsequently executes all eight cases and
+returns one pass/seven failures: observatione282f04d and workflow7b5e1299 retain
+returncode1/drainfalse. Complete copied-origin/ancestor checks, live source
+guard and restored process environment remain true. Separate actual exit
+observationde121fae retains an inactive service, empty recursive slice and
+absent original supervisor2782928/driver2782934; it does not rewrite the failed
+receipt. Two hook cases reach the selected-error/iterator assertions but compare
+a plain dictionary with the unchanged runtime.Record wrapper. All five owner
+cases retain the same generated traceback: the fixture's empty child form is
+rejected because the parent must declare returned information, before child
+acquisition. Primary checks all five retained archive errors and the original
+Record.as_record and report-contract sources. These are finite fixture-boundary
+failures; no production repair or new passing result is inferred. The proposed
+fixture correction must preserve all eight identities and scientific/credit/
+iterator/native assertions. The current observation auditor and candidate phase
+remain unexecuted. The candidate phase also uses these eight cases; candidate65
+is its source-phase name, not a 65-test result. Evidence:
+`runs/root_fba_shared_metadata_current8_01/` and
+`runs/root_fba_current8_failure_analysis_02/`.
+
+The immutable Record/report-contract fixture correction482ccbe6 subsequently
+passes source audit2fccdd8b with drained workflow2b358144. Primary verifies the
+actual literal command, root owner, complete budget and output, after reviewing
+the six complete source inverses. The correction uses the existing Record
+conversion and declares the parent-requested control field; all eight identities,
+scientific/credit/iterator assertions and original failed outcomes remain.
+The3700/3717 copied-phase counts and3656 live guard are unchanged. This is a
+source result; preparation, independent copy validation and both actual
+eight-case phases remain separate. Evidence:
+`runs/root_fba_record_contract_source_audit_01/` and
+`runs/root_fba_record_contract_20261112_review/`.
+
+The same correction's actual preparation and independent copy audit subsequently
+pass with drained workflows5d73896d and1c24cdcf. Manifest60d9eac9 and audited69bbbb
+retain the complete3700/3717 copied maps, exact three fixture-file changes in
+each phase and whole shared-envelope/source-descriptor inverses. Primary checks
+both actual commands, full budget/result joins, output hashes and scoped flags,
+and observes the recorded supervisor/driver absent with its own window inactive
+and slice empty before proceeding. No canonical source or runtime result is
+supplied by these copied-source stages. The new current eight-case workflow is
+then launched; its eventual observation and candidate comparison remain separate.
+Evidence: `runs/root_fba_record_contract_prepare_01/` and
+`runs/root_fba_record_contract_copy_audit_01/`.
+
+The corrected current8 then completes with three passes and five failures,
+observation0367702f/workflowe83338b1, preserving unchanged source and exact case
+identities. Its failed receipt retains driver1 and drainfalse; separate measured
+exitc51b798e confirms the owning slice is empty. A one-case unchanged-source
+diagnostic captures scientific_task_credit_not_declared:improvement during child
+construction, before worker acquisition. Original tracked runtime and its explicit
+undeclared-child rejection test retain that same requirement. The fixture has no
+declared child binding; it needs a supported explicit test binding before the
+five intended operational cases can establish their outcome. No runtime admission,
+credit definition or original iterator is relaxed. Original1P/7F remains retained;
+candidate8 and a passing current result audit remain unexecuted. Evidence:
+`runs/root_fba_record_contract_current8_01/` and
+`runs/a110_fba_child_credit_20261112_source_diagnosis/`.
+
+The explicit child-credit fixture successor subsequently completes source audit,
+copy preparation and independent copy audit with three successful drained Root
+workflows. Sourcec5d85d79, manifest7d401349 and copy audit109635b8 retain the
+original eight identities, real scientific progress/services, complete supported
+child binding and original iterator assertions. Only the required test body and
+its authenticated source descriptor differ in each3700/3717 copy; the3656
+canonical guard and all earlier failures remain unchanged. Primary verifies
+the actual producer commands, complete budget/result joins, map equality and
+whole-copy/source inverses, then observes the owning service inactive, recursive
+slice empty and recorded supervisors absent. These are source/copy results;
+focused execution, both full-eight phases and private Results commissioning are
+not established. Evidence: `runs/root_fba_child_credit_source_audit_01/`,
+`runs/root_fba_child_credit_prepare_01/`,
+`runs/root_fba_child_credit_copy_audit_01/` and
+`runs/root_fba_child_credit_source_actual_20261112/post-exit.txt`.
+
+The retained-runtime focused no_handle case then fails after acquiring its child,
+with no worker call. Observationadbdad11/workflowf198f8f5 and separate complete
+exitd6de2b9d remain unchanged. The returned tool outcome is invalid
+ordinary_fba_selected_file_not_received with zero credit; the original child and
+parent iterators account for that outcome. Source tracing identifies the fixture's
+saved type-only schema where the real receiving boundary requires the original
+selection schema. The selected sheet was already supplied; no receipt is invented.
+The separate receiving-frame correctiona8cf4b0c now passes source audit012ea45b,
+copy preparation97d60466 and independent copy auditf9dddab3, with drained workflows
+447f3893/76c711c8/35901b5a. Primary verifies literal commands, full budget joins,
+actual outputs and separate complete exits. Fourteen source controls and the
+whole six-span fixture inverse preserve68 original assertions; only the fixture
+and source descriptor change in each3700/3717 map. The corrected focused runtime,
+full-eight phases, application and private Results commissioning remain separate.
+Evidence: `runs/root_fba_retained_runtime_focused_01/`,
+`runs/root_fba_received_frame_source_01/`,
+`runs/root_fba_received_frame_prepare_01/` and
+`runs/root_fba_received_frame_audit_01/`.
+
+The corrected focused case subsequently reaches the controlled worker and real
+memory refusal, then passes its child/parent iterator, report and same-index
+replay checks. It still fails at the final equality between the cached tool
+result and runtime action result: the original runtime adds its pending-work
+snapshot after caching. Observation4eadd2b6/workflow130b08cd retain code1 and
+drainfalse; source guards remain true. Primary checks the actual failure,
+14-field budget join and separate empty/inactive exitd8a81040. A two-span test
+candidate compares the complete tool result plus that explicitly validated,
+empty pending-work-v2 snapshot; it is unexecuted. This is no full-eight,
+application, private Results commission or scientific success claim. Evidence:
+`runs/root_fba_received_frame_focused_01/` and
+`runs/root_fba_pending_snapshot_20261112_diagnosis/`.
+
+The pending-snapshot successor then passes source audit8ef2a78b, copy
+preparation468cfaf1 and copy audit2e622813, with successful drained workflows
+4ad87478/74702b31/c4ea0255 and separately retained complete exits. Its exact
+two-span fixture change preserves68 original assertions and validates the
+runtime's complete pending snapshot. The focused ordinary-owner case passes
+those assertions and all preceding behavior checks, then fails while saving
+its diagnostic parent record: the original record contains an ArchivedRecord,
+which plain() leaves unexpanded. Observation893c83e4/workflowb31b93fd retain
+the failed call, successful setup/teardown, code1 and drainfalse. Primary checks
+all14 budget fields, unchanged-source guard and separate empty/inactive
+exit0179494c. A narrow fixture successor uses the original archive.iter_json
+integrity-preserving expansion for that parent record; it is not yet executed.
+No production change or full-eight, private Results or scientific pass follows.
+Evidence: `runs/root_fba_pending_snapshot_source_01/`,
+`runs/root_fba_pending_snapshot_prepare_01/`,
+`runs/root_fba_pending_snapshot_audit_01/` and
+`runs/root_fba_pending_snapshot_focused_01/`.
+
+The archive-projection successor then completes actual source audit39ebfb1a,
+copy preparationff492279 and independent copy audit1c496a5c, with successful
+drained workflows9866c8ee/dddf9d4a/7fc1109a. Primary reads the complete changed
+source and independentc95b09b7/sealcf285e7f, verifies all29 members/257 inputs,
+full14-field budget joins, literal commands and separately observed complete
+exits. The copier preserves3700/3717 maps and changes only each fixture and its
+own source descriptor; whole predecessor inverses pass. All72 assertions and
+eight IDs remain. Actual six-ref input153c4c01 binds these genuine new producers.
+Focused and full-eight runtime acceptance remain separate from this source/copy
+milestone. Evidence: `runs/root_fba_archive_projection_source_01/`,
+`runs/root_fba_archive_projection_prepare_01/`,
+`runs/root_fba_archive_projection_audit_01/` and
+`runs/root_fba_archive_projection_actual_inputs_01/inputs.json`.
+
+Its focused ordinary-owner no_handle test then passes all three phase reports,
+observation309b47ae/workflow01922ad8. Strict report serialization now completes
+through the original archive API while the worker/refusal, iterator, credit,
+report, replay and snapshot assertions remain. Primary verifies full14-field
+budget/command joins, unchanged-source guard and measured empty/inactive
+exite9760acc. The short run completed before external active-child capture.
+This is one controlled case; full-eight and private Results commissioning
+remain separate. Evidence: `runs/root_fba_archive_projection_focused_01/`.
+
+The complete corrected current8 and candidate8 then both pass all eight cases
+and24 phase reports. Observations2b682be3/c4de0847 have successful drained
+workflows5a57d278/b31d838d; independent observation auditsde7b6deb/4a01c4a8 also
+pass with workflows5d031fc4/ea7e1255. The candidate retains the exact successful
+current operands and semantic projection. Primary checks actual case/phase
+counts, commands, all14 budget fields, canonical module/ancestor and unchanged
+source guards, live supervisor/driver captures for both runtime stages and
+separate measured complete exits. Short audit stages have no invented active
+driver capture. These are five real ordinary-owner cases using a controlled
+worker and actual memory refusal, plus the original three controls. They do
+not supply a live pending worker, original355 execution, private Results
+commissioning, installation or native scientific success. Earlier failed
+fixture and report-serialization attempts remain unchanged. Evidence:
+`runs/root_fba_archive_projection_current8_01/`, its current8_audit counterpart,
+`runs/root_fba_archive_projection_candidate8_01/` and its candidate8_audit counterpart.
+
+Independent retained-pair reviewc9dfad0e/sealbf30c1da subsequently reconciles
+all exact case identities, all ten original owner/parent/credit/replay rows,
+both recomputed five-owner projections and every139/136 recorded module origin
+against the selected maps. Primary reads the review and verifies its seal and
+59 retained inputs. Seven full14-field command/budget joins and separate measured
+exits preserve the same controlled-worker scope and earlier failures. Evidence:
+`runs/root_fba_archive_projection_pair_20261112_independent_review/`.
+
+The separate FBA intermediate owner connection subsequently passes its source
+audit1fd06fa6/workflow56305d06 and prepares manifest478b30c8/workflow2f8cd8ca.
+The reviewed7a7ef2ea packet composes the actual core15/caller29 outputs onto the
+genuine3,717-file candidate65 base:44 source rows, one flat-host retirement and
+13 explicit required inputs. Baseline/intermediate copies contain3,730/3,743
+files. All ten destructive-map rejection controls pass. Primary reads the new
+tools and constructor controls, verifies18 members/45 input pins and both scoped
+peer reviews including the final-seal addendum. Both actual workflows succeed
+and drain; separate measured exits are retained. The independent copied-map
+audit and proposed50-case behavior pair remain separate. No installation,
+private Results commissioning, native science or task-count closure follows.
+Evidence: `runs/root_fba_intermediate_connection_source_01/` and
+`runs/root_fba_intermediate_connection_prepare_01/`.
+
+Its independent copied-map audit6b48c2ac/workflow281b22a6 then passes. The same
+50 cases pass on both baseline and intermediate copies:26 actual constructor
+cases,18 original callback cases and six catalogue/backend cases, each with150
+phase reports. Baselinee4ec0878/workflow0177106f and intermediateada31bb8/
+workflow6d0915b2 retain445/458 loaded origins respectively and exact copied-source
+guards. Observation audits67d9ccd6/c7a37445 and comparisoncac030df/workflow95adbc5b
+authenticate the same case identities and all equal outcomes. Primary reads the
+actual results, verifies the complete producer-budget joins and observes separate
+inactive/empty exits after every stage; both runtime stages have actual active
+supervisor/driver start captures. These checks use new test-owned Store/Journal,
+real constructors and declared controlled callback ports. They establish those
+connection boundaries, not native acquisition, private Results commissioning,
+saved-progress restoration, final-family placement or canonical installation.
+Evidence: `runs/root_fba_intermediate_connection_pair_01/`.
+
+The separate two-path continuation proposal also completes copied preparation
+9b67ad36, independent copy auditf453f409, controlled checksf7a98e09 and results
+auditf15d67ba. All49 cases/147 phases pass: original24, controlled17 and source8.
+Independent reconciliationcec68983/sealc902daf9 verifies four typed14-field
+producer joins and literal commands, exact JUnit/incremental identities,42 module
+records,71 selected reads and the complete3717→3739 inverse for two production
+replacements plus22 required inputs. Primary reads the handoff/reconciliation
+and verifies their seals,25 reference rows and producer pins. All four workflows
+succeed/drain with separate measured exits; only the checks retain an active
+child sample. The17 cases exercise the real helper and an extracted caller up to
+its closed check; their successful continuation ports are controlled. Complete
+receipt-tail preservation is a source inverse, not execution. No native worker,
+positive355 admission, database history, Store/iterator restoration or canonical
+placement is inferred. Evidence:
+`runs/sixth_fba_continuation_execution_handoff_01/` and
+`runs/third_orchestrator_coordination/a102_reader_review/sixth_fba49_reconciliation_01/`.
+
+The final outgoing-adapter V2 source revision and controlled filesystem checks
+also complete in three successful drained workflows. Primary verifies all
+twelve artifact/budget/workflow/exit references, literal commands, full budget
+joins and actual owner. The source proof accounts for42 inherited members:
+four exact line changes with full inverses and38 unchanged members. All37 path
+controls and ten transaction controls pass. The latter retain the intended
+partial five-write and final-inventory failures as observed mirror outcomes,
+alongside complete44 publication, prewrite denials and temporary-file controls.
+No canonical application, genuine family authority, installed transition,
+connected60 result or source-hold release follows from these source controls.
+Evidence: `runs/sixth_final44_v2_source_controls_handoff_01/` (223c12ef),
+`runs/sixth_final44_v2_transaction_controls_01/` (175d6bb6; workflow3cf1d97b)
+and `runs/root_final44_v2_controls_20261112_primary/`.
+
+The terminal96 retained-source accessor successor0933a93b subsequently passes
+its actual source audit93da0036 with drained workflow21b76888. Independent peer
+4c14cb7c and primary source/evidence checks confirm the prior mutable-manifest
+and unchecked-return-buffer defect is addressed. The accessor binds copied
+immutable expected records and verifies the same returned buffer against the
+observed regular descriptor and manifest digest. All original fifteen map
+controls and nineteen new accessor controls pass, along with the complete
+three-module source inverse and twenty unchanged members. Primary verifies
+the four actual references, full budget/command/owner join and measured exit.
+This is source validation only: no terminal capture/application, installed33,
+connected60 outcome or source-hold release follows. Evidence:
+`runs/sixth_terminal96_accessor_source_handoff_01/` (f05ef488) and
+`runs/root_terminal96_accessor_source_20261112_primary/`.
+
+The separate private Results core source preparation52c34c25 and audit6624666d
+pass with drained workflows65da269d/481240f5. Primary reads the complete tooling
+and independent reviewb64f9deb and verifies its source and authority hashes.
+Fifteen candidates account for all50 original methods:14 host and36 receipt
+methods across six private Results owners, two shared receiving owners and
+their required historical prefix/type input. Six complete body reversals and
+the receiving-owner self-call closure pass. These are source candidates; caller
+connection, placement, runtime checks, fingerprints and restoration remain open.
+Evidence: `runs/root_a110_private_fba_owners_prepare_01/` and
+`runs/root_a110_private_fba_owners_audit_01/`.
+
+The original-epoch caller preparation4375a947 and independent audit0d9ebdc8
+subsequently pass with drained workflows0c50955a/026cf17b and confirmed workload
+exit. Primary reads all481 tooling lines, the complete proposed raw-dispatch
+test and peer reviewaff14d38, and verifies16 packet members,28 authority pins
+and1248 current source hashes. All29 complete caller/index inverses pass;26
+literal constructor connections preserve18 non-Results raw contexts, six sibling
+Results owners and two shared record consumers. The three required permanent
+test inputs retain the original catalog oracle and archived original host data.
+They remain separate from the logical production map. Final family composition,
+installation, actual18 callback cases and genuine Results commissioning remain
+open. Evidence: `runs/root_a110_private_fba_callers_prepare_01/` and
+`runs/root_a110_private_fba_callers_audit_01/`.
+
+Sixth's ten original-epoch generic/LocalFile source stages subsequently complete
+with ten successful drained receipts. Independent reconciliation507ddcad verifies
+the actual20-reference object81dde6cc, complete literal V2 profile3 producers,
+whole budgets and retained exit observations. It also checks the original1248
+source map, four candidate trees30/8/37/67, complete caller/index/oracle inverses,
+the expected1291-path final composition and all six prepared required inputs.
+Primary reads the complete review, verifies its seal and all20 actual artifact/
+workflow hashes, and checks each real owner, bounds and successful drain. The
+old incompatible queue705070 was unexecuted; V2a5c8/3e19 corrects its environment
+without changing the accepted producer grammar. Final composition6f04c018 and
+audit897bf91b remain source candidates: application_ready and runtime_validated
+are false. Results360 execution, permanent input promotion, final-family
+integration and installation remain separate; no task connection is counted.
+Evidence: `runs/a110_ten_source_stages_20261112_independent_reconciliation/REVIEW.md`
+(507ddcad; review freezecd52da0b) and
+`runs/sixth_a110_source_queue_execution_01/actual-source-inputs.json`.
+
+The separate original Results baseline then completes all360 cases and1080
+passing setup/call/teardown reports. Observation788534f5 and independent
+audita6ed12eb have genuine drained workflowsb0d8bec9/075ff6e4. Reconciliation
+65734507 verifies the exact168 generic plus192 LocalFile identities, complete
+1248-own/2040-selected/2042-copied maps,61 assets and289 canonical origins.
+Its3024 trace outputs include864 expected caught exceptions, not failed cases.
+Primary reads that complete review and verifies its seal97e79a38 and actual
+references. Raw V2 exitsdb23511c/ff1a1222 retain measured original process
+absence at18:04:25/18:04:38 UTC. These are controlled original Store/Journal
+cases; intermediate/final behavior, native/scientific execution, installation
+and source-hold release remain separate. Evidence:
+`runs/seventh_result_owner_original360_20261112_reconciliation/REVIEW.md`.
+
+The intermediate composition subsequently passes the same360 cases and1080
+phase reports, observationc0f15a69 and independent auditb0614cb4. Final comparison
+88ea6392/workflow6d5eba58 preserves exact case outcomes/error identities; both
+cohorts pass with3024 retained trace outputs each. Independent reconciliation
+13a2b475/seald97e490c authenticates65 retained references,126 raw-exit references,
+ten complete budget/result joins and seven measured V2 exits. Primary reads the
+review and scope/map joins and verifies its seal and retained reference lists.
+The original1248/current2040 maps and61 assets remain; all289/302 recorded module
+owners join their respective2042/2088 copied maps. The distinct generated Stores
+and outputs are not claimed to be identical saved carriers. The final measured
+exit2c3e6e0b at20:40:14 records inactive service, empty owning slice and absent
+original supervisor/driver. The first three source stages retain their original
+raw postflight records only. This validates controlled owner publication,
+receipt, replay and file custody; final-family adaptation, installation, actual
+parent commissioning, native/scientific work, iterator evidence and complete
+saved restoration remain separate. No connection count or other source hold
+changes. Evidence: `runs/seventh_result_owner_comparison_01/` and
+`runs/third_orchestrator_coordination/a102_reader_review/seventh_results360_reconciliation_01/`.
+
+The separate original raw-callback baseline now passes all60 cases:42 A107 and
+18 A110. Observationf1dcd0c9 retains all180 passing setup/call/teardown reports,
+632 canonical copied modules and real ancestors, unchanged source maps and
+restored process environment. Workflow44f74b28 succeeds and drains; primary
+observes the inactive empty slice and absent original supervisor/driver before
+the independent result audit. That audit07bc0144 also passes with drained
+workflowa5369ea1 and exactly the same60 identities. Primary checks the actual
+commands, receipt hashes, complete case-set equality and all180 outcomes.
+This validates the declared controlled callbacks against the original selected
+source copy. Final-family connected behavior, private Results commissioning,
+native production, scientific credit and full restoration remain separate;
+application_ready and connected_runtime_validated are false. Evidence:
+`runs/root_raw_callback60_original_checks_01/` and
+`runs/root_raw_callback60_original_observation_audit_01/`.
+
+The Existing24 continuation and raw60 family readers also complete their
+separate source audits in Sixth's real window. Audit9660d26a/workflowf17128fb
+preserves the complete producer inverse,15 original members and four whole
+source copies;19 domain denials, eight positive exit-diagnostic shapes and27
+diagnostic denials pass. Initial-application authority, actual four48-case
+flows, application and runtime remain unbound/unexecuted by this audit.
+Family-reader audit2956004e/workflowc9d81c8e checks two exact producer grammars,
+26 named negatives (including two redundant command probes) and a complete-map
+positive control. It imports no application and observes no actual family
+artifacts or final connected runtime. Primary reads the handoff/source reviews,
+verifies all eight artifact/receipt/budget/exit references, and checks the full
+budget joins, actual commands and successful drain. Retained exit observations
+show inactive services, empty slices and absent supervisors; these short stages
+did not individually capture child PIDs. This is source-tooling validation,
+not installation or a source-hold release. Evidence:
+`runs/sixth_reader_source_audits_handoff_01/`,
+`runs/sixth_existing24_successor_source_audit_01/` and
+`runs/sixth_family_readers_source_audit_01/`.
+
+The permanent raw60 input sequence then succeeds in three actual drained
+workflows: source audita6ca1adf, preparation57c81a94 and independent candidate
+audit8a4ad6ad. The source controls include62 named rejections; the candidate
+retains exactly nine original inputs. Its independent audit checks214 whole
+original modules,406 original callbacks, seven template inverses, two fixture
+records,60 literal identities and the complete historical3656+9 inverse.
+current_before_map remains null and installation/final-epoch/runtime flags
+remain false. No canonical applier or present source-hold release follows.
+
+The concrete initial5360→Existing24 source binding also passes as0b4df7ef with
+drained workflow2507a94c. Its original inverses,19 domain denials, eight positive/
+27 negative wrapper shapes,11 source adversaries and26 replacement/six unchanged
+byte routes with11 routing denials complete. It consumes no actual installed
+initial transition. The closed connected60 runner source auditf91520a4 likewise
+passes with drained workflow3eb05a3b, preserving both whole original runner/
+observer inverses and genuine failure comparisons. All three final-source ports
+remain closed; no connected execution or final-map admission occurs. Primary
+reads the source reviews/handoffs, verifies both sealed execution inventories
+and all20 artifact/budget/workflow/exit references, and independently checks all
+five literal commands, real Sixth owner/bounds and retained exit observations.
+Short stages explicitly lack individually captured child PIDs; preparation's
+observed supervisor/child are retained absent. Evidence:
+`runs/sixth_raw60_permanent9_execution_handoff_01/`,
+`runs/sixth_initial_connected60_source_handoff_01/` and
+`runs/root_five_source_stages_20261112_reconciliation/`.
+
+The separate Fourth V7 initial candidate and four source/preservation stages
+reconcile in independent review38112c06: composea4639452, candidate auditfd55fe14,
+decoder revisione986a47e, mixed controls0edecb42 and loader controls5aabf7ee all
+have genuine successful drained receipts. The complete6718→7497 regular-map
+inverse has1176 operations (876 additions/203 replacements/97 retirements),
+1027 production-source changes,2074 directories,48 literal links and two FIFOs.
+The independent review rehashes3363 production sources,300 preimages,14 tests
+and43 support paths, and checks95 nested references. Database entries are
+map-only in that review; the actual independent candidate auditor supplies its
+broader all-regular-byte evidence. All47 composition conflicts and54 execution
+consumers remain accounted. Mixed15 and loader12 are source controls, separate
+from initial5360's required20+20. Primary reads the full review, verifies its
+seal and all ten actual artifact/workflow hashes. Retained process notes are
+contemporaneous one-line inactive/empty observations, not raw PID proofs.
+Graph survey/audit/disposition, application, final-family integration and runtime
+remain separate. Evidence:
+`runs/fourth_initial_joint_v7_20261112_independent_reconciliation/REVIEW.md`
+(38112c06; review freeze1f47ac76).
+
+The actual V7 graph survey subsequently completes with successful drained
+workflowf5fca0a0 and surveyffb36d9e. Independent reconciliation6db8e1ff checks
+the complete6718→7497 maps,3363 physical candidate production hashes,81 nested
+references, actual source origins/history and the exact producer/budget/window.
+Primary reads the full review, verifies its seal and those retained references,
+and independently joins the actual command and complete budget to the result.
+The four static graphs retain48438 unresolved rows versus46563 historical rows;
+the1875 net difference is not a count of unique new bugs. All213 priority
+missing-module/export rows remain exact historical row matches at changed
+positions. Conditional API/fluorescence and saved LUMPY/MACS2 hazards remain
+unresolved;28 descriptor records establish source identity only. Event-audit
+completion, finite dispositions, application and runtime are not proved by this
+survey. Its later inactive/empty note remains bounded corroboration, not raw
+current-process evidence. Evidence:
+`runs/fourth_joint_v7_graph_20261112_independent_reconciliation/REVIEW.md`
+(6db8e1ff; review freezefde7fcdc).
+
+The later event audit4d727559/workfloweef29684 and obligation inventory5283ae3b/
+workflow0cf48c87 also complete with successful drained receipts. Independent
+review4591b753 verifies the complete ordered95029 obligations and independently
+recomputes every encoded ID:48438 current rows,46563 historical rows and28
+descriptor footprints remain distinct, without deduplication or acceptance.
+It checks50 inventory references,71 event references, the source freezes and
+prior candidate/map evidence. Primary reads that complete review, verifies its
+seal and independently joins both actual commands, full budgets, real owners
+and scoped artifact flags. The event audit accounts for its defined AST events;
+it is not independent points-to analysis or complete dependency closure. The
+inventory assigns no disposition and its unclassified draft has empty groups
+and no review. Both original inactive/empty notes remain bounded corroboration,
+without raw supervisor-absence evidence. Classification, conditional hazards,
+application and runtime remain open. Evidence:
+`runs/fourth_joint_v7_event_inventory_20261112_independent_reconciliation/`
+(4591b753; review freeze7b08ede8) and
+`runs/root_fourth_v7_event_inventory_20261112_primary/`.
+
+The V7 data binder subsequently completes with assemblyb2cff4fb and drained
+workflowa2b4915f. Independent reconciliation04ceeac0 proves faithful materialization
+of the previously reviewed policy: all95029 ordered original obligations,
+25152 complete source groups and82 explicit cells match, with1332 authenticated
+input references and the original unclassified draft unchanged. Primary reads
+the full reconciliation, verifies its sealc47e904a and actual output/parent hashes.
+The recorded zero blocking groups describes that policy's data, not application
+readiness. Subsequent actual source comparison confirms an introduced defect in
+both scientific heads and28 literature candidates: original provider.complete
+dispatch was replaced by preference for an inherited presentation hook that can
+bypass subclass/instance complete overrides. The earlier binder output remains
+retained and cannot admit that defect. Its correction, source transition and
+override-preservation checks are required before application. Existing24 bound
+monitor/HPC helpers are also being composed into the same scoped correction;
+their earlier finite validation results are not relabeled. Evidence:
+`runs/fourth_joint_v7_binding_actual_20261112_independent_reconciliation/REVIEW.md`,
+the retained V6 runtime and V7 private decision bodies, and the separate
+`runs/fourth_private_presentation_dispatch_preparation/` source proposal.
+
+The explicit V2 successor later passes its tooling inverse91799774 and148
+controlled dispatch comparisons7505f58d, under genuine drained Fifth workflows
+c7b458c3/5023212c. Independent147ca24b and primary hash reconciliation verify
+the two producer/command/budget joins, exact comparison identities, six source
+afterimages and separate raw exits. Original/current/fixed observations retain
+their actual differences and deliberate exception identities. The harness uses
+authenticated method bodies with controlled ports; it does not execute a real
+provider, renderer content, transport or science. The separate raw Monitor/HPC
+presentation difference and shared-root provider interface remain outside this
+pass; application and full runtime remain open. Evidence:
+`runs/fifth_shared_dispatch_v2_20261112_independent_reconciliation/`.
+
+The separate shared-root transport proposal then passes its actual two-file
+source audit, stdoutbf5b744a/workflowbb3ca1a0. Primary reads both callback
+protocols, the complete changed methods/auditor and independent review3b225750,
+and verifies both frozen source layers, actual receipt/budget/command and raw
+exit sidecarsf51e788b. The proposed hook preserves the original five-operand
+default completion while carrying a selected private presentation callback at
+the existing session boundary; no scientific renderer is copied into root.
+Both whole-file inverses and unchanged default/method comparisons pass. This
+does not install the hook, activate private selectors or validate transport.
+The separate root selection and private context/operation/credit/yield delivery
+interfaces still require their concrete connected changes and checks. Earlier
+own-axis passes do not establish those root routes. Evidence:
+`runs/fifth_orchestrator_coordination/root_shared_provider_source_handoff_01/`
+and `runs/root_shared_provider_source_20261112_primary/`.
+
+The later copied root transport checks pass as baseline2 ad4d2582 and candidate26
+6d001a0a, with drained workflowsafe56f03/f25f9e8c. These are different cohorts,
+with6 and78 passing setup/call/teardown records, not a26-case before/after pair.
+Primary reads independent reconciliationbfa1a0be, verifies its seal710d4bc6 and
+all209+23 retained artifact hashes, and checks the exact two-file comparison.
+Both snapshots use the same genuine23-source capture plus the same test; only
+providers.py and model_session.py differ. All24 required copied owners, source
+guards, original source/tooling inverses and full14-field command/budget joins
+pass. Retained actual supervisor/coordinator/pytest chains and later non-atomic
+inactive/empty observations authenticate separate complete exits. These cases
+exercise the actual completion methods with controlled lifecycle/RPC/presentation
+ports, including saved inputs, response parsing, exception propagation, images,
+cancellation and retirement. They do not run an OS provider, validate the real
+default renderer, install the hook or prove private-axis/scientific integration.
+Evidence: `runs/fifth_root_provider_transport_baseline2_01/`,
+`runs/fifth_root_provider_transport_candidate26_01/` and
+`runs/root_shared_provider_transport_20261112_independent_review/`.
+
+Separate read-only application readiness2af0ef1b/workflow021dd8e3 also passes.
+Primary reads reviewb8d59503 and verifies seal74661f1c and its reviewed evidence:
+the exact two replacements preserve0664 modes, all source/evidence guards and
+full command/budget joins remain, and the measured20:08:03 exit is retained.
+The two-file publication is individually atomic and explicitly retains partial
+failure; readiness performs no publication or behavior reexecution. Application,
+postcheck and a genuine downstream installed-source reader remain required.
+The proposed finite root2 relation has seven null future references and does
+not satisfy Fourth's separate own-axis transition or release any writer hold.
+Evidence: `runs/fifth_root_provider_application_readiness_01/` and
+`runs/root_shared_provider_application_20261112_independent_review/`.
+
+Permanent-test ownership review then identifies an explicit installation-scope
+gap: the two-file installer and its reader preserve the root26 test's absence
+through their whole24-member epoch. An uncomposed later test addition would
+invalidate that admission. Neither installer nor installed reader has run.
+The proposed installation therefore expands to five file operations: the same
+two production afterimages, the unchanged reusable test and two ownership
+documents. Source assetsa917e93e/manifesta4c5a872 and independent reviewf88ab3ea
+prepare that exact three-asset addition to the existing pair. Primary reads the
+manifest, precise insertion/prefix, provenance and review, verifies their sealed
+identities, and retains the peer's complete byte/JSON inverse evidence. The
+inventory gains one scoped test/defining-owner row180→181; every prior JSON byte,
+native-stage date/count and the complete previous Markdown document is preserved.
+The test has no run-only helper or required asset. This is a concrete uninstalled
+payload; the finite five-operation writer/postcheck/reader successor and actual
+installation remain pending. Earlier two-file source/readiness and copied2/26
+results remain valid for their original scopes. Evidence:
+`runs/root_provider_permanent26_20261112_assets/` and
+`runs/root_provider_permanent26_20261112_independent_review/`.
+
+The finite five-operation successor61248c29 then passes actual source/readiness
+5506b0e4/workflow99b684be. Primary reads all six modules and independent review
+beb9d2a2, verifies seal7bea1f6e and retained source/actual-evidence hashes. The
+original24-member history expands to an exact26-member before/after map through
+the two metadata operands; precisely the five authorized paths change. The
+original production pair, unchanged permanent test, whole metadata inverses,
+exclusive test creation, durable partial-publication evidence and independent
+postcheck remain explicit. All14 budget fields, literal command and separate
+raw exit993b5e29 reconcile. Large-inventory review uses bounded slices plus the
+actual whole-inverse source audit and retained asset proof, not a newly claimed
+full physical parse or hash pass. No application, installed reader or installed26
+behavior has executed in this readiness scope. Original-context producers,
+Sixth and other canonical source holds remain. Evidence:
+`runs/fifth_root_provider_five_source_01/` and
+`runs/root_provider_five_20261112_independent_review/`.
+
+The exact five-file installed-reader source90381a05 and its17 partial controls
+also reconcile in independent reviewa5a51228/seal6637f442. Primary reads the
+complete reader and review and verifies36 source/14 actual references. The
+reader binds seven genuine future application/postcheck operands, complete
+five-path custody and final26-member state, reusing the real postcheck twice;
+its byte API still exposes only the production pair. Actual controls820b1812
+and measured exitd19f0019 pass with complete command/budget joins. Positive
+installed admission, publication-image/event mutation and stale-reader behavior
+remain unexecuted. The separate installed26 runner source2a512cd5 passes static
+audita6019b36/workflow74686464, reconciled in223c96ec/seald250a997. Exact original
+passive observation, canonical24 owners plus protected metadata2, ordinary26
+case selection and78 phase requirements are preserved. Those are future
+requirements, not observed installed passes. Primary reads its loader/runtime
+source and review and verifies80 source/14 actual references. All seven future
+receipt operands remain null and every canonical hold remains. Evidence:
+`runs/root_provider_five_reader_20261112_independent_review/` and
+`runs/root_provider_five_installed26_20261112_independent_review/`.
+
+The separate six-file root binding-delivery proposal also passes its actual
+source audit, stdouta4363005/workflow7a392f0c. It inserts the two exact reviewed
+operation/controller selectors at ChildSelection and changes five existing
+call sites, retaining six whole-file inverses and35 original methods. Independent
+reconciliationd2288cd9 and Primary verify the18-member freeze,27 manifest refs,
+actual direct auditor command, full budget/result join and eight raw exit files.
+The successful drain and later non-atomic inactive/empty observationf9660a84
+remain separate evidence. Context conversion and private-selector integration
+are explicitly false: the private context-class mismatch, real selected-body
+execution, descriptor transitions, installation and scientific validation are
+not resolved by this mechanical source proof. Evidence:
+`runs/fifth_root_binding_operation_delivery_source_01/` and
+`runs/root_binding_operation_delivery_actual_20261112_reconciliation/`.
+
+The original initial-application tooling5360 also completes its actual source
+audit2855d98f/workflow716244fa, twenty core controls6ee4a456/workflow102288e7
+and twenty loader controls527f3642/workflowcfa2ad02. Independent reconciliation
+11949081 checks every literal command, complete fourteen-field budget, actual
+owner/source freeze and all forty expected outcomes. It independently restores
+the complete original auditor and examines the actual partial-write journal
+and mirror bytes. Primary reads that full report, verifies its sealed evidence
+and all six original result/workflow references. Original per-stage exit notes
+remain short inactive/empty observations; the later separate process inspection
+is not substituted for historical driver evidence. These are source and
+controlled-helper passes, not genuine candidate verification, application,
+route disposition, Raw60/Results360 readiness or source-hold release. Evidence:
+`runs/fourth_initial_joint_source_controls_handoff_01/`,
+`runs/sixth_initial5360_source_controls_reconciliation_01/`
+(11949081; seal89036660) and
+`runs/root_initial5360_controls_20261112_primary/`.
+
+The current installed task-connection count is405 of405, leaving zero in the
+original catalogue. Actual final application1ee699f9 completes41 stages and1407
+actions, with all4990 selected A102/A103 production sources,172 ownership files
+and the two installed fixture guards verified. Census8c54027f accounts for all
+410 current implementation homes:405 minus three retired shared homes plus six
+parent-private children and two parents. It adds19 original connections, loses
+none, and separately reports nine method_loop infrastructure files. The census
+recognizes explicit module-level task assignments as well as class-body ones;
+that predicate extension is disclosed. Complete responsibility splitting,
+shared-root integration and saved-workflow restoration remain separate open work.
+
+The preceding installed milestone was386 of405, leaving19: A10215 and A1034.
+Fourth's actual2334-operation application adds76 A107/A110 private
+task connections; the fresh original405 census verifies all76 additions with
+no lost connections. Their behavioral validation is partial: the Scientific2
+original204 cohort has202 distinct complete passes, one original skip and one
+unresolved RNA fixture failure across retained runs. Native saved-workflow
+validation is following correction of an actual earlier organization regression
+in internal launch-schema dispatch. The previous310/95 milestone corrected the
+earlier304/101 count, which omitted six already
+installed A103 Results connections with their retained installed666 pass; that
+earlier six-home change was bookkeeping, not a new installation.
+Of the preceding28 Resource/Direct
+installations, the eight Direct implementations now have312 distinct controlled
+installed cases passing across retained initial/corrected runs, with32 unchanged
+yield records. The twenty Resource implementations' checks remain incomplete;
+dated2026-11-13 entries retain the receipts and precise validation scopes.
+All sixty A104 connections were already included. Shared Root integration and
+complete responsibility ownership remain separate from this original405-home
+installation metric.
+
+The earlier270-of405 milestone left135: A10231, A10320, A10745 and A11039.
+That increment was twelve A103 native-task connections. Their actual
+393-record application completes with a successful drained receipt. Primary
+checks all 369 current afterimages, all 24 retired paths, the twelve own NativeTask
+imports/declarations and twelve task classes. The preceding complete census
+was 258; this addition makes 270. The independent installed source audit then
+passes with a successful drained receipt, preserving all twelve homes, complete
+source/default assets and exact Launch parents. Primary checks that actual
+audit and receipt. Connected behavior and shared ownership integration are
+tracked separately.
+Evidence: `runs/third_a103_native_v5_apply_01/application/application.json` and
+its actual `workflow-result.json`, with the 24 task/episode hashes in
+`runs/third_orchestrator_coordination/a103_native_v5_expected_connection_afterimages.SHA256SUMS`.
+Installed source evidence: `runs/third_a103_native_v5_installed_audit_01/`.
+The subsequent installed native suite passes all324 expected cases; actual
+JUnit aa84137c and complete execution identity1dbe9b1d preserve exact before/after
+application, test, asset and dependency maps. Comparisonfd5cb705 separately
+checks all twelve actual owners against the original probe, allowing only the
+declared task_type/private_task changes. Primary reads the full comparator,
+runner and identity verifier, authenticates all27 retained evidence hashes and
+independently compares every complete owner payload and the324 case records.
+Both actual receiptsa9756374/d6519273 succeed and drain. This validates those
+controlled native-task connections; it adds no new connection count or autonomous
+native production claim. The historical runner uses repository-relative command
+operands and does not enforce a run-owned cwd; future commands must correct that
+tooling detail without relabeling or rerunning this retained result solely for
+bookkeeping. Shared ownership and full saved restoration remain separate.
+Evidence: `runs/third_a103_native_v5_installed_tests_01/` and
+`runs/third_a103_native_v5_compare_01/`.
+The actual V11 application and independent installed audit succeed and drain,
+authenticating 2,093 own-axis candidate rows, 128 retirements, two shared root
+selectors and the complete 3,316-file Python/TOML map. The retained source
+observation establishes 48 new connections and no removed connection. Its first
+counter recognizes only relative task imports and therefore misses thirteen
+A105 and fourteen A108 existing absolute imports. Primary checks all 27 against
+their exact own-home task modules and concrete LiteratureTask declarations;
+these are intact existing connections, not new work or an implementation
+regression. Both original failed counting receipts and the complete observations
+remain retained. Evidence: `runs/a104_private_union_20261112_v11_apply/`,
+`runs/a104_private_union_20261112_v11_applied_audit/`,
+`runs/a104_task_connection_census_20261112_diagnostic/census.observed.json` and
+`runs/a104_task_connection_absolute_imports_20261112_review/`.
+The exact absolute-import correction subsequently passes its independent source
+audit and complete installed census. It retains every original count and custody
+check, reproduces all 810 original diagnostic rows and verifies seven import
+controls. The actual successful drained census confirms 210 before, 258 after,
+48 additions, no removals and 147 remaining, with unchanged observed source.
+Evidence: `runs/a104_task_connection_census_20261112_absolute_source_audit/` and
+`runs/a104_task_connection_census_20261112_absolute_installed/`.
+This counts own task imports and matching episode decision declarations in
+executable source, not complete organization or full-workflow validation. The twelve
+new A102 native connections are installed by the completed 393-path application;
+its receipt succeeds and drains, and primary independently checks all 24 task
+and episode afterimage hashes. The installed 360-case suite subsequently passes,
+with identical before/after source maps and a successful drained receipt. The
+twelve-owner comparison also passes, preserving all original observations apart
+from the declared task type/private-task selection. Primary checks the actual
+JUnit result, all comparison evidence hashes and successful receipts. Controlled
+ordinary-tool boundaries remain explicit; full native execution, restoration
+and ownership integration remain separate. Validation evidence:
+`runs/third_a102_native_v3_installed_tests_01/` and
+`runs/third_a102_native_v3_compare_01/`. Application evidence:
+`runs/third_a102_native_v3_apply_01/application/application.json` and its parent
+`workflow-result.json`. The six previously added A103 Launch connections
+are now present in executable source; their application and independent installed
+audit succeed and drain. Their original 204-case baseline and installed 204-case
+behavioral run both pass; primary confirms the installed run's unchanged source
+map and successful drained receipt. Ownership integration remains a separate
+scope. Evidence:
+`runs/third_a103_launch_v7_apply_01/` and
+`runs/third_a103_launch_v7_installed_audit_01/`, with installed behavior at
+`runs/third_a103_launch_v7_installed_tests_01/`.
+The corresponding 48-document Launch ownership stage is subsequently integrated
+into the shared root inventory. Primary reviews the complete 398-line append
+implementation, checks all frozen inputs and independently compares the full
+candidate value, prior JSON and byte prefix. Third's reserved single-file
+application and independent applied audit both succeed and drain. All 44 prior
+fields and the Markdown remain unchanged, and all seven adverse mutations are
+rejected. Primary confirms the installed inventory equals the reviewed candidate,
+SHA256 `ac47742590cd345a0cfc605ffd41a7779b6adff875a52bd4e1436ed26dc72a12`.
+This is shared ownership integration of the already counted six Launch tasks;
+it adds no task connections or full workflow claim. Evidence:
+`runs/third_a103_launch_shared_v1_apply_01/` and
+`runs/third_a103_launch_shared_v1_postaudit_01/`.
+The 2026-11-12 source-family placement
+adds fourteen A103 connections and the later Launch placement adds six A102
+connections. The A102 Launch installed suite now passes all 252 exact cases
+with identical before/after source maps and a successful drained receipt at
+`runs/third_a102_launch_v5_installed_tests_01/`. Its separate six-owner comparison
+and sixteen own-axis metadata updates also pass their audits; their shared-root
+metadata integration is complete as recorded below.
+This counts a private task file plus its
+episode declaration, not complete organization or full-workflow validation.
+The six additional A102 API connections are present in executable source;
+their installed validation is tracked separately by their owning coordinator.
+Declaration evidence: `runs/fifth_root_declaration_application_01/`,
+`runs/fifth_root_declaration_postcheck_01/` and
+`runs/fifth_root_declaration_connected_01/`. Earlier evidence:
+`runs/fifth_root_runtime_application_01/custody/`,
+`runs/fifth_root_runtime_postcheck_01/`,
+`runs/fifth_root_runtime_connected_01/`,
+`runs/fifth_root_native_state_audit_01/` and
+`runs/fifth_root_native_receipt_connected_01/`.
+
+## 2026-11-12 A103 shared metadata and A104 retained validation reconciled
+
+The fourteen-task A103 source-family stage and six-task A102 Launch stage are
+now appended sequentially to the shared root inventory. All eight actual
+preparation, independent audit, application and applied-audit workflows succeed
+and drain. Each append preserves the complete prior JSON and byte prefix and
+rejects all seven negative mutations. Primary independently confirms the final
+inventory equals its candidate and both added values equal their complete
+original proposals. Final inventory SHA256 is
+`0ab0ac88346fef981959517e1963c7c5d284b93790d91ed26fc74a22ce6a24fc`.
+
+The original A103 attempt stopped at a shell checksum guard before Python or
+any write: completed A102 Launch metadata had changed exactly two consumed
+inventories. Its immutable V2 authenticates those two changes through all
+sixteen original document reversals and actual producer receipts, preserving
+the other 2,620 input pins and the original A103 candidate bytes. The dependent
+A102 V2 verifies the actual fresh A103 preparation/application/audits rather
+than attributing old receipts to new scripts. Both original producer validators
+remain complete, with their original case counts and unresolved limitations.
+This adds shared ownership integration, not further task connections or full
+workflow restoration. Evidence:
+`runs/root_a103_source_family_metadata_20261112_v2_applied_audit/` and
+`runs/root_a102_launch_metadata_20261112_v2_applied_audit/`. Primary confirms the
+final supervisor absent, inactive service and empty recursive owning slice
+before releasing the two axes' temporary metadata holds.
+
+The later 24-file A102/A103 instruction-callback stage is also reconciled into
+the shared root inventory. All four root preparation/audit/application/applied-
+audit workflows succeed and drain. Independent verification rechecks the actual
+392 cases, complete 2,784-file source transition, 56 axis ownership documents,
+66 original negative checks and five additional root-history checks. Exactly one
+absent shared stage is appended; every previous JSON field and byte prefix is
+preserved. Current scientific-parent fingerprints and axis inventory hashes are
+authenticated separately from historical root descriptors. This is instruction
+dispatch and ownership integration, not new task connections or full restoration.
+Evidence: `runs/root_existing_callbacks_metadata_20261112_apply/` and
+`runs/root_existing_callbacks_metadata_20261112_applied_audit/`. Primary confirms
+the final supervisor absent, service inactive and recursive owning slice empty.
+
+The exact A102 six-API-task stage is also now appended to the shared root
+inventory. Its independent applied audit recovers the entire previous JSON and
+byte prefix and revalidates the retained 216 cases, six-owner comparison,
+complete source transition and 28 actual axis metadata files. Only one root
+metadata file changes; application and test code do not. The first root
+preparation failed because the historical verifier assumed the executing
+window owned the historical receipts. The separately audited successor changes
+only two verifier operands to the authenticated original Third-window identity;
+the actual root environment, launcher identity and all old receipts remain
+unchanged. All five successor/application workflows complete successfully and
+drain. Evidence: `runs/root_a102_api5_metadata_20261112_apply_v2/` and
+`runs/root_a102_api5_metadata_20261112_applied_audit_v2/`.
+
+The exact two A103 API and instruction-service stages from the reviewed shared
+proposal are now installed in the root inventory. A104's inventory and ownership
+note separately record the retained 60 passing protected-reference checks and
+the actual current required-test digest. Exactly three metadata files changed;
+application and test code did not change in this reconciliation. Both inventory
+audits reverse the full JSON changes and preserve all historical stages,
+including the original failed test record and its historical digest.
+
+The V3 preparation, candidate audit, application and applied audit all finish
+with return code zero and complete descendant drain. Primary rehashes all three
+installed targets and confirms the inactive service and empty owning slice.
+The two earlier failed preparation checks remain intact: the first compared an
+axis stage with its smaller shared projection, and the second hashed that
+projection where the original producer hashed the complete prior axis stage.
+V3 authenticates the exact original producer operand and preserved historical
+catalogs; it does not rewrite those failures or claim new scientific validation.
+Evidence: `runs/root_a103_a104_metadata_20261112_prepare_v3/prepared/manifest.json`,
+`runs/root_a103_a104_metadata_20261112_apply_v3/applied/application.json`, and
+`runs/root_a103_a104_metadata_20261112_applied_audit_v3/audit/audit.json`.
+
+The later exact A103 Native stage is now also appended to shared root ownership.
+Actual application5e41352c and independent postaudit a7a0e17d complete with
+successful drained workflows6dd320ff/be00ed56. Primary verifies the actual
+commands and reader records, complete equality of the postaudit to candidate
+audit05bf4f25 after reverting only its applied/application-reference fields,
+and byte equality of the installed root JSON to candidate4ff13330. All46 prior
+fields and their byte prefix remain preserved; root Markdown18fbd81c is unchanged.
+The original324-case producer validation and48 own-axis metadata records retain
+their prior scope. Only one shared metadata file changes; no application/test
+code or new task connection is added. Historical failed preparation stays failed.
+Evidence: `runs/third_a103_native_shared_v1_apply_01/` and
+`runs/third_a103_native_shared_v1_postaudit_01/`. The FBA consumer needs its
+separate explicit transition from the earlier eb397625 metadata before further
+execution; this append does not rewrite that historical source map.
+
+## 2026-11-12 A104 execution preparation and original literature boundaries
+
+The native connected family now passes all192 original cases, including the
+four original unknown-role failures and twelve original mappingproxy parent
+admission failures. Its collected identities and original yield identities
+remain equal; no inherited failures or unaccounted changed cases remain.
+The subsequent independent combined audit authenticates340 distinct passing
+cases: native192, non-HPC100 and parent48. It preserves all original failed
+baselines, checks3316 source hashes and164 linked evidence references, and makes
+zero application mutations. Primary verifies the actual results and successful
+drained receipts, then confirms the inactive service and empty owning slice.
+These are controlled connection and parent-contract checks; generic saved
+restoration and full scientific iteration remain separate. The270/405 task
+connection count is unchanged. Evidence:
+`runs/a104_union_connected_20261112_native192/checks/evidence.json`
+(`756807085edd627eeb301a314836aa4f71c4a41f3facb9cefa678043636ff2a3`),
+workflow `b642f211cd019d1462990b701ff73f76d68dce40f5a59344332f3cb43e84bea4`,
+and `runs/a104_connected_native_parent_repairs_20261112_audit/audit/audit.json`
+(`043e840d2e3a5dbf5ecfc8fbf4595cd39d54e9581b0fc0196303786e0a7021c4`),
+workflow `92c2b0b8518f8fc41e27918828e42d7e58f69f92e75f57ca0837fcf0e6bace7a`.
+
+The complete non-HPC Launch/Results connected family now passes all100 original
+case identities, with six recorded baseline failures resolved and no inherited
+failure remaining. Primary checks all100 call outcomes and exact collected IDs,
+the successful drained receipt, the unchanged3316 own-source map and three
+external fixture hashes. The original baseline and precise repair transition
+remain retained. These are controlled Store/Journal/binding/runtime boundaries;
+native/provider acquisition, complete restoration and autonomous science remain
+separate. Evidence: `runs/a104_union_connected_20261112_non_hpc100/`.
+
+The separate HPC launch-presentation family also passes all56 original cases
+with a successful drained receipt. Primary verifies all168 phase reports, the
+exact56 collected identities and56 observation records against the original
+baseline, and all3324 current source/input hashes. The complete3316 source map
+is unchanged and equals the installed V11 map. These are presentation and
+configuration controls, not evidence of a native job or autonomous workflow.
+Evidence: `runs/a104_union_connected_20261112_launch56/checks/checks.json`
+(`e4ab3084eb8e5b8c53b1b447fcab87992962eb907c325a3132e9b1c016e24467`)
+and workflow `3fd0cb8feb040d1bc33451237a976b8980642c37a89dd55455a706c734dc1d58`.
+
+Three later source-tooling authority audits now also pass: API96c6 produces
+4d19b47c/workflow6e367fb7, registry4108 producesfd5b6b53/workflow11170137,
+and native4891 producesfcf6ea89/workflow3bc820c6. Primary verifies their actual
+producer commands, run-owned working-directory sidecars, successful drained
+receipts, unchanged wrapper inventories and161/22/67 distinct linked references.
+The wrapper inventories cover A107/A110, not A104; no broader source-map claim
+is inferred from them. The reviewed whole-module reversals retain the original
+test/source bodies and actual owner ordering. These results authorize the stated
+source-tooling scope only: candidate promotion and runtime checks remain separate.
+Evidence: `runs/a104_api_owner_source_index_authority_20261112_source_audit/`,
+`runs/a104_saved_registry_source_index_owner_20261112_source_audit/`, and
+`runs/a104_native_results_source_index_authority_20261112_source_audit/`.
+
+The native integration metadata successor49fcf07c now passes independent
+successor auditde23df2c and tooling auditac65b907 with successful drained
+workflows6400bd5e/0ec872e7. It corrects the unexecuted predecessor's omitted
+20 ownership entries by accounting for all24 required inputs, including16
+inert assets, plus the changed existing reader test. Primary reads the new
+proof, four complete patches and source auditor, verifies frozen inputs and
+actual evidence references. Full reversal preserves the original source
+algorithms, source maps and417 required case identities. The11 adverse metadata
+examples are controlled in-memory checks, not promotion or native observations.
+Actual application,417 behavior cases and positive native/scientific results
+remain separate. Evidence:
+`runs/a104_native_results_application_20261112_metadata_successor_audit/` and
+`runs/a104_native_results_application_20261112_tooling_audit_v2/`.
+
+The original CORE78 required-input preparation2d422782 and independent
+auditb1483bbb also pass with drained workflowsd4df737f/b0e49739. Primary verifies
+all nine candidate bytes, two Python helpers and seven retained original assets,
+and the unchanged3316 source map. These are unpromoted required inputs, not
+78 runtime passes. Evidence: `runs/a104_native_result_owners_20261112_inputs/`
+and `runs/a104_native_result_owners_20261112_inputs_audit/`.
+
+The later public65 source-tooling failure is resolved by immutable identity
+successor eb4f4633. Exactly one provider literal changes to the provider already
+declared by the original and corrected observer templates. Six expected IDs are
+corrected,59 remain unchanged, and all65 test templates/bodies remain unchanged.
+Its independent correction auditc26f193e and original runner audit069c255c pass
+with drained workflowsf8e55b08/03cd86b4. Primary reads the full correction and
+runner auditors, verifies frozen inputs, actual result references and commands.
+The original d151babc failed receipt and separate later exit observation remain
+intact. This is source-tooling validation only; the65 behavior cases have not
+run. Evidence: `runs/a104_public_acquisition_promotion_20261112_identity_source_audit/`
+and `runs/a104_public_acquisition_promotion_20261112_source_audit_02/`.
+
+Five public-acquisition source stages also succeed with drained receipts:
+canonical-tooling reversal, five-module deadline candidate audit, eleven required
+test inputs, their independent audit and the two-template observer-restoration
+source audit. Primary verifies all five results/receipts, eleven candidate bytes,
+the exact original3316 map and unchanged wrapper inventories. The65 declared
+cases have not executed. Exact later input composition, promotion, behavior,
+fingerprints and cancellation remain pending. Evidence:
+`runs/fourth_a104_public_source_results_01/REPORT.md` and its five linked runs.
+
+The Results224 V2 tooling successor passes its source-only audit with a
+successful drained receipt. Primary checks the actual report and receipt hashes,
+all sixteen referenced canonical-transition artifacts, and the complete frozen
+tooling. The audit recovers seven complete original tools, preserves the original
+224 test identities and requires actual reader application/audit/focused/full
+evidence before later stages. No Results test promotion or behavior pass follows
+from this source audit. Evidence:
+`runs/a104_hpc_results_validation_20261112_v2_source_audit/`.
+
+The separate Source728 three-fixture V2 source audit also succeeds with a
+successful drained receipt. Primary checks all26 frozen files,21 input pins,
+three candidate afterimages and3316 current beforeimages. Complete original
+test reversals, four grading-test ASTs and the real assay factory remain
+authenticated. The original673 passing and55 failing outcomes are retained;
+this source audit neither applies the candidates nor reruns728 cases.
+Evidence: `runs/sixth_a104_source_behavior_fixture_candidate_audit_02/`.
+
+The separate Source728 promotion/runner tooling audit also passes with a
+successful drained receipt. Primary verifies the actual command and receipt,
+frozen97ec2fc9 tooling and linked inputs. The audit recovers the complete
+original runner, its original pytest exception handling and full outcome/identity
+tail after exactly two patch hunks. All728 connected identities and the original
+362 identities remain explicit. It performs no canonical write or test run;
+required-input promotion and the connected728 rerun remain pending. Evidence:
+`runs/a104_source728_fixture_application_20261112_tooling_audit/`.
+
+The separate API-owner retirement preparation fails before producing its
+candidate because the proposed removal leaves an import in
+`a104/bvbrc_homology_returns.py` pointing at `a104.bvbrc_appservice_publication`.
+The current live module is still present; this is an incomplete candidate
+composition, not a regression in the installed task connections. The original
+failed receipt, unchanged source comparison and separate observed process exit
+are retained. Retirement and its dependent composition stages await a source
+correction. Evidence: `runs/a104_api_owner_retirement_20261112_prepare/`.
+
+The corrected homology import later passes, but the next actual retirement
+preparation exposes57 retiring source-list entries in each of four private
+planning/allocation descriptors. The failed candidate remains uncreated and its
+receipt remains failed. A separate four-list successor now passes its source
+tooling audit with a successful drained receipt. Primary reviews the complete
+602-line tooling/patches and verifies14 frozen files,29 input pins and the actual
+audit/receipt. Each tuple preserves unrelated order and complete method bodies,
+replacing the57 entries with43 authenticated owners (37 newly added). Original
+full-source scans and the central descriptor finalizer remain required. The
+subsequent V3 preparation, independent full-source audit and linked tooling audit
+now succeed with drained receipts. Primary verifies all 112 candidate hashes,
+119 planned retirements, exact four index records, preserved Homology transition,
+the unchanged 3316-source preimage and actual commands/results. The linked audit
+retains the same source proof and names these genuine candidate/audit artifacts.
+Mapping, dependencies, finalization and API release remain pending; no canonical
+source or test file is changed by these source stages. Evidence:
+`runs/a104_api_owner_retirement_20261112_prepare_v2/` and
+`runs/a104_api_retirement_source_indices_20261112_tooling_audit/`, followed by
+`runs/a104_api_owner_retirement_20261112_prepare_v3/`,
+`runs/a104_api_owner_retirement_20261112_audit_v3/` and
+`runs/a104_api_retirement_source_indices_20261112_linked_audit/`.
+
+The original scientific68 and API168 families each have a complete post-union
+source transition and independent transition audit. Primary verifies the shared
+3316 current hashes and 2735 linked evidence hashes, each original baseline map,
+the exact audit/transition pairing and all four successful drained receipts.
+These source proofs introduce no mutation and do not establish completion of
+the separately running scientific or API behavior suites. Evidence:
+`runs/a104_union_connected_20261112_scientific68_transition/`, its
+`scientific68_transition_audit` counterpart, and the corresponding
+`api_all_transition` and `api_all_transition_audit` runs.
+
+Scientific68 subsequently passes all68 original cases and204 phase reports.
+Primary reads independent reviewd3c6e5d4, its complete JQ comparator and recorded
+map reconstructions, then verifies every reviewed input, workflow and20 captured
+metadata hashes. All68 complete original observations compare equal after
+checking exactly40 fresh descriptors against the authenticated old/new source
+digests; saved descriptors are never rewritten. The separate connected reopen20
+also succeeds: all17 original controlled carriers preserve closed requests,
+context validation, strict new-dispatch refusal and cached action/form replay;
+the three original commissioning denials remain identical. All17 generic reopen
+attempts still return the original `unavailable_binding` failure. The complete
+1560/1561 baseline maps reconstruct the same3316-file installed map through
+their separate named transitions. Actual science/reopen receipts1274627d and
+a926e634 succeed and drain. These are controlled private-task, iterator,
+receipt and replay checks, with controlled engineering/provider ports; full
+generic restoration and autonomous scientific selection remain open. Evidence:
+`runs/a104_union_connected_20261112_scientific68/`,
+`runs/a104_scientific_connected_20261112_independent_a104_review/` and its
+linked connected reopen evidence8c21d501 at
+`runs/a104_union_connected_20261112_scientific_reopen20/`.
+
+The separate retained API commissioning comparison now passes preparation
+798762d3 and audit9cd64c2f with successful drained workflows4568d9c0/0366ae76.
+All four retained comparisons and100 negative controls pass. Primary reads the
+complete comparator and independent review61d5d910 and verifies its source and
+evidence pins. Complete results, admission and build records remain equal;
+the four original unordered block iterations preserve full block contents,
+multiplicity and internal order. Two declaration events and one exact helper
+rename are separately accounted. The original installed168-case result remains
+164 passes/four failures; its failed receipt is unchanged and no168 rerun is
+claimed. Seven reusable test inputs are prepared but not promoted. Evidence:
+`runs/a104_api_commission_comparison_20261112_prepare/` and
+`runs/a104_api_commission_comparison_20261112_audit/`.
+
+The post-union source-family suite finishes with 673 passes and 55 failures
+across all 728 expected cases, with no errors or skips. Its 3,377 source hashes,
+eight required inputs and runner package remain equal before and after. The
+failed receipt retains return code one and its original false drain flag;
+the separate post-exit observation records the inactive service, empty owning
+slice and absence of the original process identities. Primary checks the actual
+result, JUnit hash, receipt and exit records. Fixture/expectation corrections
+remain separate, unapplied work; this result does not establish full connected
+source validation or reopen the completed task-connection census. Evidence:
+`runs/a104_source_behavior_20261112_connected/`.
+
+The separate descriptor diagnostic retains all320 observations, with271 returns
+and49 raised outcomes. Its comparison fails on eight schema expectations;
+the complete source/helper maps stay unchanged. The actual failed receipt and
+separate verified exit remain retained. The source-grounded comparison successor
+and its independent audit subsequently pass with successful drained receipts.
+Primary verifies the actual artifacts, linked original evidence, all3377 current
+source/asset hashes and equality of the3316 Python/TOML map with installed V11.
+The retained observations account for196 restored and70 preserved configurations,
+28 constructor refusals,14 generic reopening failures and12 schema boundaries
+(five returns/seven rejections). Exactly eight schema expectations are resolved
+against the authenticated original schema; no schema/helper changes or new
+observations occur, and the original failed workflow remains failed. Complete
+descriptor restoration remains open. Evidence:
+`runs/a104_source_descriptor_20261112_connected/`,
+`runs/sixth_a104_descriptor_schema_comparison_01/` and
+`runs/sixth_a104_descriptor_schema_comparison_audit_01/`.
+
+The later selected-dependency preparation now produces ten candidate files and
+passes complete original-body auditing. Its first static-closure audit reports
+a false missing `name`: a module comprehension target shares its spelling with
+local schema-function parameters, which the checker incorrectly counts as
+module loads. The retained failed run and separate observed process exit remain
+unchanged. An audit-only successor passes the original eleven and twelve added
+scope controls, both complete affected modules and four actual missing-global
+mutations. Static closure then passes for all eight Python candidates. Candidate
+and application bytes remain unchanged; this proves static source closure,
+not runtime recovery. Evidence: `runs/a104_dependency_modules_20261112_prepare/`,
+`runs/a104_dependency_modules_20261112_body_audit/`,
+`runs/a104_dependency_lexical_scope_20261112_source_audit/` and
+`runs/a104_dependency_modules_20261112_closure_audit_v2/`.
+
+Seven further source-preparation/audit workflows succeed and drain: the exact
+enclosing-package fingerprint correction, 33 original proteome owner files,
+eight original partner owner files and two proteome publication owners. Their
+complete original-body and whole-current-module reversal checks pass. These
+are unapplied candidates; configured service callbacks, historical producer
+pins, saved readers and runtime behavior remain open. Evidence:
+`runs/a104_proteome_packages_20261112_successor_audit/`,
+`runs/a104_proteome_owners_20261112_body_audit/`,
+`runs/a104_partner_owners_20261112_body_audit/` and
+`runs/a104_proteome_publication_20261112_body_audit/`.
+
+Combined static closure subsequently passes for all 51 candidates, including
+44 Python modules. A separately audited checker correction recognizes original
+module-level tuple-loop bindings without admitting function/class locals.
+The earlier four-name failure remains retained with its later process-exit
+observation. No missing direct export or global remains in this scoped scan;
+the original producer dependency pins and asset closure are accounted for.
+Application and runtime closure remain unproved. Evidence:
+`runs/a104_proteome_module_bindings_20261112_source_audit/` and
+`runs/a104_proteome_partner_20261112_closure_audit_v2/`.
+
+The four HPC Results homes now have an independently audited 201-row source
+candidate after the exact optional-receiver tooling correction. All original
+task, binding, presentation and exchange audits and the final integrated audit
+finish with successful drained receipts. Eight existing references to the
+missing own-axis `bvbrc_proteome_tool_info` and `hpc_launch_authentication`
+modules remain recorded; the final audit finds no newly missing module,
+undefined candidate global or surviving import of a retired candidate file.
+The candidate remains unapplied and still requires its request-identity,
+yield, task-service and complete runtime composition. Evidence:
+`runs/a104_hpc_results_20261112_prepare/` and
+`runs/a104_hpc_results_20261112_audit/`, with their separate `_workflow` receipts.
+
+The fresh original head probe also completes successfully with unchanged
+1,556-file source/test map and exactly the original twelve observations and
+descriptor. Its existing self-compatibility failure and three execution-admission
+identity failures remain reproduced. After current HPC Launch source
+preparation and preservation audit, the singular-v10 correction is installed
+and independently audited. All 42 descriptor controls pass with unchanged
+post-repair sources: self-compatibility becomes true and all three original
+execution-admission checks return successfully. Historical/current hash
+mismatches remain rejected, complete other probe payloads match, and the
+original generic-reopen refusal remains unchanged. This is a one-file version
+acceptance repair, not restored saved workflows or scientific validation. Evidence:
+`runs/a104_head_recheck_20261112_probe/`,
+`runs/a104_scientific_version_20261112_prepare/`, and
+`runs/a104_scientific_version_20261112_controls/`, with corresponding applied
+and applied-audit receipts. Primary confirms the final supervisor absent,
+service inactive and recursive owning slice empty.
+
+The four HPC Launch homes' actual 160-row candidate remains unchanged through
+the final preservation audit. That audit succeeds and drains after independently
+proving four exact inherited BVBRC tool-info imports and their unchanged complete
+original methods. Its distinct preservation status keeps those missing imports
+explicit and dependency closure false; it does not relabel the earlier failed
+full audit as successful. Original descriptor bodies, protected-reference
+constructors/resolvers, task methods and presentation policies remain accounted.
+Evidence: `runs/a104_hpc_launch_current_20261112_prepare_v2/`,
+`runs/a104_hpc_launch_current_20261112_import_successor_audit/`, and
+`runs/a104_hpc_launch_current_20261112_audit_v3/`. Full runtime composition,
+applicable missing-dependency recovery and behavior checks remain required.
+
+Four required scientific-head test/helper files are promoted and independently
+audited, with successful drained receipts. The first one-case baseline then
+fails before building the head: its fixture passes an immutable context scope
+to the original Store validator, which requires a dictionary with list-valued
+subject references. The failed result remains retained; a separate post-exit
+observation confirms the original supervisor absent and owning slice empty.
+The full 68-case suite has not run. A narrow fixture successor is being prepared;
+this does not reopen the independently passing singular-v10 repair. Evidence:
+`runs/a104_scientific_head_tests_20261112_applied_audit/` and
+`runs/a104_scientific_head_20261112_one_baseline/`.
+
+The exact fixture successor is subsequently applied and independently audited:
+one use of the existing plain-value conversion supplies the same concrete scope
+to the four original callers; all other helper bytes, three other test files and
+application sources stay unchanged. Its corrected one-case baseline passes with
+an unchanged source map and successful drained receipt. The complete 68-case run
+then finishes with 62 passes and six fixture/expectation failures, including
+commissioned-scope failures for standalone
+panel-identity, alignment-suitability and robustness credit calculation. The
+twenty build cases have finished with seventeen returns and those three denials.
+Primary verifies complete byte identity of the original/current scientific-credit
+service method and the three projector class bodies: their original contracts
+require a parent commission, while the other six named tasks/default permit
+standalone operation. The universal positive fixture expectation is therefore
+incorrect for those three cases. The two instruction cases already match the
+original text and lookup order but incorrectly expect one lookup instead of
+three. The mixed-publication fixture duplicates a canonical source-index slot.
+The failed receipt and separate actual process-exit proof remain intact. A
+two-test-file successor is applied and independently audited after complete
+byte/AST reversal; the focused six cases pass with an unchanged source map and
+successful drained receipt. It preserves all 68 case
+identities, the three original denials and unchanged application sources.
+The corrected full suite subsequently passes all 68 cases with an unchanged
+source map and successful drained receipt. Primary confirms the supervisor
+absent, inactive service and empty recursive owning slice. No application
+relaxation is made. Evidence:
+`runs/a104_head_commission_boundary_20261112_all_baseline/`.
+The required saved-carrier helper is then promoted through five successful
+drained preparation/audit/application stages. Its first capture stops before
+any completed carrier: the actual action-schema catalog requires a saved
+parent context absent from the fixture (`shared_information_saved_context_required`).
+The original failed receipt and a separate actual post-exit observation are
+retained. Capture and reopening remain unvalidated; this does not reopen the
+68 passing head checks. Evidence:
+`runs/a104_scientific_saved_carriers_20261112_v3_capture/`.
+The real-parent fixture successor is then promoted and independently audited,
+changing only the existing saved-carrier helper. Its capture constructs the
+actual saved annotation parent but stops before the first completed carrier:
+the fixture expects exactly two initial references, while the original receipt
+implementation correctly records their five-reference dependency closure.
+Read-only inspection of the retained SQLite database confirms those five
+initial receipts and the active parent row. Application code is unchanged;
+the original failed receipt and separate actual post-exit observation remain
+retained. A narrow fixture correction is required before capture/reopen can be
+claimed. Evidence:
+`runs/a104_scientific_carrier_parent_20261112_applied_audit/` and
+`runs/a104_scientific_carrier_parent_20261112_capture/`.
+The separate run-local candidate diagnostic first corrects the exact receipt
+closure, then exposes an invalid hand-built completion label. That failed
+diagnostic and its actual non-stopping controller observation remain retained.
+A second candidate uses the original iterator lifecycle over an explicitly
+finite engineering source containing the already returned action. It passes
+all twenty observations: seventeen saved controlled captures and the three
+original standalone denials. All seventeen use the real callbacks, preserve
+the original action row, and end by source exhaustion with stop=false; all ten
+parented cases retain the exact five-reference closure. Candidate and installed
+sources stay unchanged, and the workflow succeeds and drains. This is explicitly
+candidate-only evidence; permanent helper promotion and installed capture/reopen
+remain required. Evidence:
+`runs/a104_scientific_carrier_receipt_closure_20261112_diagnostic_02/`.
+The unchanged candidate subsequently reopens all twenty observations: seventeen
+copied-Store saved-action/form replays and the same three original denials.
+Exact parent/child receipt closure, saved rows, strict new-dispatch rejection
+and all captured bytes are preserved. The actual workflow succeeds and drains;
+primary confirms its supervisor absent and owning slice empty. This remains
+candidate-only evidence, not installed validation or full iterator restoration.
+The formal helper source audit also passes its complete original-body/runner
+reversal with no application mutation. Evidence:
+`runs/a104_scientific_carrier_candidate_reopen_20261112_diagnostic_01/` and
+`runs/a104_scientific_carrier_receipt_closure_20261112_source_audit/`.
+
+The formal receipt-closure helper is subsequently installed and independently
+verified. All five preparation/audit/application stages succeed and drain;
+the only installed change is the required helper, now SHA256
+`3450c694e1ee49166363d2505bf02b18d307095cb0dfc2d48288adbb661c13b6`.
+Fresh official installed capture and reopen runs each pass twenty observations:
+seventeen closed controlled carriers and three original standalone denials.
+Both preserve their source maps and complete with successful drained receipts.
+The saved-action/form replay retains exact parent/child receipt closure and
+rejects mismatched new dispatch. These are controlled connection and replay
+checks; both reports explicitly leave full iterator restoration unestablished
+and make no scientific, model or native-producer claim. Earlier failed and
+candidate-only runs remain retained. Evidence:
+`runs/a104_scientific_carrier_receipt_closure_20261112_applied_audit/`,
+`runs/a104_scientific_carrier_receipt_closure_20261112_capture/` and
+`runs/a104_scientific_carrier_receipt_closure_20261112_reopen/`.
+
+Four further required tests are promoted through their original audited
+promoters, without application-source changes. The original HPC Launch
+presentation baseline passes all 56 cases with an unchanged source map and
+successful drained receipt; primary confirms the supervisor absent, service
+inactive and recursive owning slice empty. Evidence:
+`runs/a104_hpc_launch_presentation_20261112_baseline/`.
+The independent non-HPC runner source audit also passes complete original-byte
+and AST reversal and accounts for its 22 Launch plus 78 Results cases at
+`runs/a104_non_hpc_union_checks_20261112_source_audit/`.
+The original native baseline subsequently completes all 192 cases: 176 pass
+and 16 fail. Twelve fail at a fixture's deepcopy of an immutable assignment;
+four direct/scientific runtime-selection cases fail with
+`unknown_execution_episode_role`. All twelve binding observations and twelve
+yield/replay records are retained. The complete source map is unchanged.
+Its original return-code-one receipt remains intact; a separately retained
+post-exit observation authenticates the inactive service, empty recursive slice
+and absent original supervisor/payload. Primary checks the actual evidence,
+receipt and all three raw observation hashes. Evidence:
+`runs/sixth_a104_native_baseline_01/`.
+The separate original 100-case non-HPC baseline subsequently finishes with
+94 passes and six failures: two immutable-assignment fixture comparisons, two
+native-parent role rejections and two Results runtime fixtures that forbid an
+actual initialization read. All four binding records and the complete original
+1,565-file source map remain unchanged. Its return-code-one receipt remains
+intact; the separate post-exit record authenticates the original supervisor and
+payload absent, inactive service and empty recursive slice. Evidence:
+`runs/a104_non_hpc_union_checks_20261112_baseline/`.
+These measured failures require explicit fixture and native-parent repairs;
+neither source auditing nor test promotion establishes their resolution.
+
+The original Homology tests and owner-boundary tests are subsequently promoted
+through eight successful preparation, audit and application stages. The first
+focused case actually fails because its standalone Workflow constructor omits
+the required explicit binding-factory tuple. Its failed receipt and later exit
+observation are retained. A four-stage successor changes only that constructor
+operand to `episode_binding_factories=()` and preserves the complete remaining
+test bodies and application source. The corrected focused case passes, followed
+by all 51 original and owner-boundary cases. The full run has an unchanged
+1,567-file source map and a successful drained receipt; primary independently
+confirms both original processes absent, inactive service and empty owning slice.
+These are controlled task/controller, outcome, callback, identity and replay
+boundaries, not completed Homology private placement or full workflow restoration.
+Evidence: `runs/a104_homology_fixture_20261112_original_focus/`,
+`runs/a104_homology_fixture_20261112_repair_applied_audit/`,
+`runs/a104_homology_fixture_20261112_corrected_focus/` and
+`runs/a104_homology_fixture_20261112_baseline/`.
+
+Eleven additional source/probe workflows also succeed and drain: V7/V8 union
+authority audits, preparation and independent audits of the historical producer,
+partner and proteome-role fixtures, preparation/audit of the retained real Store,
+and its read-only SQLite probe. The latter authenticates the original archived
+publication, inputs, bundle, sheet and components without modifying the 185-file
+candidate. The archive retains seven episodes, 21 actions, five forms, six model
+calls and five report attempts. It has no original runtime settings records;
+none are manufactured. This authenticates retained controlled producer material,
+not current reader acceptance or restored workflow execution. Evidence:
+`runs/a104_private_union_20261112_authority_v8_audit/`,
+`runs/a104_proteome_historical_pin_20261112_audit/`,
+`runs/a104_partner_saved_fixture_relocation_20261112_audit/`,
+`runs/a104_proteome_role_fixture_20261112_audit/` and
+`runs/a104_proteome_retained_store_20261112_probe/`.
+No further task connection or final union integration is claimed by these checks.
+
+The substantive API owner core also completes its four source-only workflows
+with successful drained receipts. It accounts for all 139 current methods
+across 76 proposed modules and independently checks 3,778 inherited/configured
+method references with no missing method. The original Git comparison retains
+147 historical methods and every actual difference; it explicitly leaves
+original recovery incomplete. The 248 dynamic inspection boundaries and
+external dependency closure remain unproved. These candidates are unapplied;
+configured runtime connections, proteome recovery, retirement, behavior and
+saved workflow restoration remain required. Evidence:
+`runs/sixth_a104_api_core_original_01/`,
+`runs/sixth_a104_api_core_prepare_01/`,
+`runs/sixth_a104_api_core_audit_01/` and
+`runs/sixth_a104_api_core_closure_01/`.
+
+The configured API-owner connection candidate subsequently passes preparation
+and independent reversal of all 32 complete modules. It preserves configured
+service construction and adds the explicit monitor-observer connection while
+retaining the absent-argument behavior for other callers. The four-home native
+parent-contract correction also passes preparation and whole-module byte/AST
+auditing in both current-source and extracted candidate representations. Its
+eight-row union correction remains unapplied. Evidence:
+`runs/a104_api_owner_connections_20261112_audit/` and
+`runs/a104_native_parent_contract_20261112_audit/`.
+
+Three required historical producer provenance inputs are now installed and
+independently audited; all nine archived members match their originals, and
+the original failed producer receipt remains failed. The first reader attempt
+stops before collection because the reporting hook uses the wrong pytest
+parameter name. A narrow harness successor recovers the full original runner
+bytes and corrects that hook without changing any test or reader behavior.
+The actual five-case run then returns two transport-denial passes and three
+failures at original owner construction: the fixture opens a read-only SQLite
+database before the genuine progress-provider constructor creates its tables.
+No positive saved-reader acceptance is established, and the full 92-case run
+has not run. Both failed receipts and separate later exit observations are
+retained; a disposable-copy fixture correction is pending. Evidence:
+`runs/a104_retained_reader_inputs_20261112_applied_audit/`,
+`runs/a104_retained_reader_hook_20261112_audit/` and
+`runs/a104_retained_reader_20261112_focused_v2/`.
+
+The disposable-copy correction is subsequently installed and independently
+audited. Exactly two canonical test imports/constructor-seal calls change, and
+one reusable fixture helper is added; all 92 test identities and assertions
+remain unchanged. Actual source audit, application and installed audit succeed
+and drain. The helper uses real Store and episode constructors, preserves
+historical schema, values and row identities, and seals the copy read-only
+before authentication. The own-axis map becomes 1,580 Python/TOML files.
+The focused run completes with three passes and two failures. Both transport
+denials and the protein reader's saved grants, denials and reopening pass;
+both fluorescence cases fail at the real constructor's read-only database
+exception. Their copied shared-memory files are observed with mode0444.
+The original failed receipt remains unchanged; a separate exit observation
+confirms both original processes absent, inactive service and an empty owning
+slice. The complete 1,580-path source map remains unchanged. Evidence:
+`runs/sixth_a104_retained_reader_fixture_candidate_audit_01/`,
+`runs/a104_retained_reader_fixture_20261112_apply/`,
+`runs/a104_retained_reader_fixture_20261112_applied_audit/` and
+`runs/a104_retained_reader_fixture_20261112_focused/`.
+
+The V2 helper-only correction is subsequently installed and independently
+audited, with successful drained receipts. It makes the disposable database
+and existing WAL/SHM files writable before the real constructor; original
+archives and both canonical tests remain unchanged. Complete helper reversal,
+all 92 test identities/assertions and the exact 1,580-path transition are
+verified. Its focused five-case run finishes with three passes and two failures
+in genuine saved fluorescence receipt validation. The database constructors now
+succeed; the remaining failures expose a missing original v2 schema initializer.
+The original failed receipt and independently observed complete process exit are
+retained. No full 92-case execution is claimed. Evidence:
+`runs/sixth_a104_retained_reader_fixture_v2_candidate_audit_01/`,
+`runs/a104_retained_reader_fixture_20261112_v2_apply/`,
+`runs/a104_retained_reader_fixture_20261112_v2_applied_audit/` and
+`runs/a104_retained_reader_fixture_20261112_v2_focused/`.
+
+The exact original eight declarations and one schema update are prepared and
+independently audited as a single library-module candidate. V11's composition
+tooling passes its source audit while preserving the existing fifteen components.
+Four required test files are subsequently
+promoted with exact source-map transitions, bringing the A104 map to 1,584 files.
+The new fifteen-case schema baseline reproduces twelve v2 failures and three
+passing v1/isolation controls. The final installed-service baseline independently
+reproduces twelve injected-service failures and thirteen passes. Both baselines
+retain unchanged source maps, original nonzero receipts and observed complete
+exit. These establish regression baselines, not successful repair or additional
+task connections. Evidence:
+`runs/a104_fluorescence_job_v2_schema_20261112_audit/`,
+`runs/a104_private_union_20261112_authority_v11_audit/`,
+`runs/a104_fluorescence_schema_20261112_baseline/` and
+`runs/a104_installed_task_services_20261112_baseline/`.
+
+The complete sixteen-component V11 union is subsequently finalized, independently
+audited, released, installed and independently audited in its installed state.
+Each actual workflow succeeds and drains. The schema restoration is included in
+that installation. Its same fifteen connected controls now all pass, with all
+45 setup/call/teardown reports, an unchanged complete source map and a successful
+drained receipt. This resolves the twelve original missing-schema failures;
+the separate retained-reader five/92 checks and other family validations remain
+in progress or pending. Full restoration, later ownership integration and
+autonomous scientific validation are not established by this installation.
+Evidence: `runs/a104_private_union_20261112_v11_final_audit/`,
+`runs/a104_private_union_20261112_v11_release_audit/`,
+`runs/a104_private_union_20261112_v11_applied_audit/` and
+`runs/a104_fluorescence_schema_20261112_connected/`.
+
+The original installed instruction-service suite then passes all 25 cases,
+resolving its twelve genuine injected-service failures. Its independent source
+transition and transition audit authenticate the exact baseline and complete
+installed union. All 24 original callback records compare successfully: default
+text/order remain exact and each custom return/error preserves the requested
+object identity and call order. Source remains unchanged and the actual receipt
+succeeds and drains. This is the tested service boundary, not full saved-tree
+restoration. Evidence: `runs/a104_installed_task_services_20261112_union_bridge/`,
+`runs/a104_installed_task_services_20261112_union_bridge_audit/` and
+`runs/a104_installed_task_services_20261112_connected/`.
+
+The same 48 native parent-contract cases subsequently all pass after the union,
+resolving the original 24 unknown-role failures. Primary checks all 48 call
+reports, the successful drained receipt and every current hash in the unchanged
+3,316-file source map. These checks exercise actual private schema, admission,
+registry and initialization with Store/Journal and a controlled Workflow.build
+facade; they execute no native work and do not establish a full workflow.
+Evidence: `runs/a104_union_connected_20261112_parent48/`.
+
+The separate retained-reader focused suite finishes with three passes and two
+fluorescence failures. Saved controls, sheet authentication and direct fluorescence
+access succeed, but the combined reference resolver reaches the original native
+target check with an Aurora-only test resource configuration; the archived native
+receipt identifies its original local resource. The existing identity check
+rejects that mismatch. All 3,316 source paths and fifteen inputs remain unchanged;
+the failed receipt and separately verified process exit are retained. The full
+92-case reader suite has not run. An authenticated original-resource fixture
+correction is being prepared separately; neither the schema repair nor earlier
+reader milestones are reopened by this later boundary. Evidence:
+`runs/a104_retained_reader_union_20261112_focused/` and
+`runs/sixth_a104_connected_reader_resource_observation_01/`.
+
+The separate A104 thread-metadata resource proposal passes its exact successor
+source audit, four-file candidate preparation and independent complete-source
+reversal audit in Fourth's explicitly delegated window. All three actual receipts
+succeed and drain. Primary checks the receipt identities, all four current
+beforeimages and prepared candidate hashes. The candidate preserves original
+default/rejected-reopen database state, treats requested thread counts as metadata,
+retains byte admission and separates new CPU quota from historical child-quota
+identity. It remains unapplied: required-test promotion, behavior validation and
+actual owner/registry/canonical transitions are still required. No native work or
+resource-policy runtime success is established by these source audits. Evidence:
+`runs/a104_thread_metadata_20261112_successor_audit/`,
+`runs/a104_thread_metadata_20261112_prepare/` and
+`runs/a104_thread_metadata_20261112_candidate_audit/`.
+
+The exact proteome role fixture's ten test/helper modules and fifteen original
+assets are also installed through four successful audited stages, with no
+application-source changes. The separate native parent-contract regression test
+is installed and audited as one further required input. The resulting own-axis
+map contains 1,579 Python/TOML files. These promotions establish required input
+ownership, not passing proteome66 or native48 behavior. Evidence:
+`runs/a104_proteome_role_inputs_20261112_applied_audit/` and
+`runs/a104_native_parent_tests_20261112_applied_audit/`.
+
+The actual native parent-contract baseline now completes all 48 cases: 24 pass
+and 24 fail at the same original `unknown_execution_episode_role` boundary.
+The source map remains unchanged. Its failed receipt remains intact, and a
+separate later observation confirms the two originally observed processes
+absent, inactive service and empty recursive slice. The Results runtime fixture
+is then replaced through its independent audited transition after its two
+candidate cases pass; all original Results tests and the original failed
+100-case evidence remain retained. Two separate typed-assignment fixture
+expressions are also corrected and independently audited. Neither transition
+changes application source or claims a passing combined suite. Evidence:
+`runs/a104_native_parent_contract_20261112_baseline/`,
+`runs/a104_results_fixture_20261112_applied_audit/` and
+`runs/a104_typed_fixture_corrections_20261112_applied_audit/`.
+
+The registry successor's three source-only workflows pass with successful
+drained receipts: four candidate files preserve 57 explicit owner identities,
+and the registry module reverses except its explicit legacy-parent fallback
+repair. Its 164 proposed tests consist of 101 descriptor/denial cases, eighteen
+literal carriers, eighteen actual registration/settings cases and 27 lineage
+cases. None has executed, and no historical settings are invented. These source
+results do not establish application or saved runtime restoration. Evidence:
+`runs/sixth_a104_saved_registry_audit_01/` and
+`runs/sixth_a104_saved_registry_test_source_audit_01/`.
+
+Evidence:
+`runs/a104_head_scope_fixture_20261112_applied_audit/`,
+`runs/a104_scientific_head_20261112_one_scope_fixed/`, and
+`runs/a104_scientific_head_20261112_all_baseline/`. The latter is the retained
+earlier failed full suite, distinct from the corrected passing run above.
+Source comparison is retained in
+`runs/a104_head_commission_boundary_20261112_successor/SOURCE_REVIEW.md`.
+The actual successor promotion and applied audit are retained under
+`runs/a104_head_commission_boundary_20261112_apply/` and
+`runs/a104_head_commission_boundary_20261112_applied_audit/`.
+
+All eighteen remaining non-HPC source-preparation/audit stages now finish with
+successful drained receipts. The Results assembly accounts for 96 candidate
+files across its two homes, retaining four original missing-module references
+and false dependency closure. Launch and Results each have independently audited
+yield and task/service overlays. These candidates remain unapplied; the separate
+100-case baseline and final private runtime composition remain required.
+Evidence: `runs/a104_non_hpc_remaining_20261112_execution/`,
+`runs/a104_non_hpc_results_20261112_assembly_audit/`, and the corresponding
+`runs/a104_non_hpc_remaining_20261112_*_workflow/` receipts.
+
+The fourteen-source-home original behavior baseline now passes all362 exact
+module/case identities with an unchanged complete non-test source/asset/metadata
+map and unchanged test inputs/package. Its successful workflow drains completely.
+The first run also passed362 pytest cases but failed the harness's exact-ID gate
+because the installed pytest default abbreviated long parameters. That failed
+receipt remains intact with a separate actual post-exit proof. The successful
+retry uses the identical frozen runner/tests and explicitly records
+`PYTEST_ADDOPTS='-o parametrize_long_str_id_strategy=legacy'` in its launcher
+command; the exact-ID assertion is unchanged.
+
+The separate actual320 descriptor diagnostic completes with269 returned and51
+raised observations on the same full non-test source map. Among the returned
+constructor comparisons,196 lose accepted configuration on serialization. Raised
+boundaries retain14 reference-source errors,14 contract-profile errors,9 schema
+representation errors and14 unavailable-binding composition errors. These are
+observations, not320 passes or completed saved-workflow restoration. The exact
+one-helper and eight-input promotions are retained; source-family application
+and728 connected checks remain pending. Evidence:
+`runs/a104_source_behavior_20261112_baseline_full_ids/checks/checks.json`,
+`runs/a104_source_descriptor_20261112_baseline/observations/boundaries.json`, and
+their actual launcher receipts. The original failed harness evidence is under
+`runs/a104_source_behavior_20261112_baseline/`.
+
+All five source-family candidate stages and their independent audits now finish
+successfully with complete descendant drain. The final fourteen-home component
+contains424 candidate files,29 explicit current retirements, the preserved
+original task bodies and twelve exchanges, and the retained362/320 evidence.
+Its descriptor audit accounts for1,386 source/asset dependencies and explicitly
+leaves24 dynamic import operands for applicability review. The component remains
+unapplied and requires the final shared runtime/provider/service composition,
+final descriptor lists,728 connected checks and separate restoration evidence.
+Evidence: `runs/a104_source_family_20261112_component_prepare/prepared/manifest.json`
+and `runs/a104_source_family_20261112_component_audit/audit.json`.
+
+The subsequent source-only dynamic-import audit accounts for all 24 sites,
+113 literal literature catalog rows and 39 native/profile module operands.
+The final 424-file component preserves all 423 original descriptor candidate
+hashes, 1,386 dependency hashes and 24 operands; its extra file is the original
+assay-grading JSON asset. Three declared original modules remain omitted:
+`literature_partner_storage`, `native_blast_database_tool_info`, and
+`native_blast_standard_database_tool_info`. Saved adapter/factory records and
+native environment imports also require actual runtime evidence. The audit
+completes successfully and drains but explicitly establishes neither schema
+construction nor dynamic runtime closure. Evidence:
+`runs/a104_source_dynamic_imports_20261112_audit/` and
+`runs/a104_source_dynamic_imports_20261112_component_comparison/`.
+
+The original request-port baseline now has 30 passes, with the complete
+1,548-file source/test map unchanged and a successful drained receipt. Its
+strict original build signatures, actual Store/Journal and selection/admission
+paths retain nonparticipating/declining assemblers, invalid declarations and
+failure without publication. Only the required test was added; application
+code is unchanged. Evidence: `runs/a104_request_port_20261112_baseline/`.
+
+The post-union request-port run subsequently passes all30 cases and all90 phase
+reports, preserving every original ordered case and observation. Primary verifies
+the baseline comparison, actual result and successful drained transition/audit/run
+receipts, all3316 current source hashes, six inputs and2735 transition-linked
+hashes. This establishes the tested request/admission/publication boundaries;
+no native, HTTP or model execution occurs. Evidence:
+`runs/a104_union_connected_20261112_port30/`,
+`runs/a104_union_connected_20261112_port30_transition/` and
+`runs/a104_union_connected_20261112_port30_transition_audit/`.
+
+A separate unchanged-helper diagnostic locates all eighteen original API
+saved-action replay assertions at the expected empty scheduler queue. Actual
+queue contents are [0]; the original execute call preserves the queue, while
+the original next method owns removing that entry. The preceding cached-action,
+payload and credit comparisons succeed, but the fixture's direct replay does
+not establish full iterator restoration. Original captures, helper bytes and
+failed observations remain intact. Generic descriptor reopening separately
+retains its unavailable-binding result. A separately scoped helper is being
+prepared; no application queue mutation is justified by this diagnostic.
+Evidence: `runs/a104_api_replay_20261112_diagnostic/`.
+The separately audited cached-replay helper is subsequently installed as the
+sole required-test addition. Its actual baseline has eighteen successful closed
+credit reads and eighteen successful original cached request/action/payload/
+credit replays, with [0] queues preserved, unchanged logical rows and original
+capture files, unchanged 1,550-file source map and successful drained receipt.
+This does not establish scheduler/iterator completion or generic restoration.
+Evidence: `runs/a104_api_cached_replay_20261112_baseline/` and its corresponding
+prepare, candidate_audit, apply and applied_audit runs.
+
+The original scientific-head diagnostic retains twelve actual observations:
+construction, preparation, context and both Workflow builds return; its own
+descriptor is incompatible, and three execution admissions raise the identity
+mismatch. Generic reopening retains its explicit unavailable-binding result.
+At that original probe, the singular scientific_process_episode_v10 version
+was absent from the accepted plural-version list. The subsequent one-file
+repair and 42 actual controls above resolve that version-acceptance defect;
+the retained original observations remain unchanged. Original evidence:
+`runs/a104_head_probe_20261112_original/`.
+
+API candidate preparation stops in the binding audit on a generated result
+schema. The source-only symbol diagnostic identifies exactly comprehension
+variables key/value, marked global/local/comp_iter by Python 3.14.4, as the
+unaccounted names. This is an auditor classification defect, not evidence of
+missing application globals. The failed preparation receipt remains unchanged;
+its separate post_exit records establish actual process exit. Evidence:
+`runs/a104_api_source_20261112_prepare/` and
+`runs/a104_api_source_20261112_symbol_diagnostic/`.
+The immutable auditor successor subsequently passes eleven parser controls and
+the actual missing-dependency negative control; all twenty other original bundle
+files remain exact. All ten candidate preparation/audit stages and the final
+411-row source union audit succeed with drained receipts. A later preservation
+check rejects six metadata lists whose ordering depends on set iteration. The
+narrow follow-up authenticates each exact four-entry permutation and every other
+manifest field, preserving both actual orders and complete original candidate
+bytes. Its final receipt succeeds and drains. No application source changes.
+Evidence: `runs/a104_api_source_20261112_prepare_v2/`,
+`runs/a104_api_source_20261112_candidate_audit_v2/`,
+`runs/a104_api_source_20261112_order_delta_audit/` and
+`runs/a104_api_source_20261112_candidate_preservation_v3/`. The original failed
+checks and their separate post-exit observations remain retained.
+
+The original Homology preparation and 75-candidate audit also succeed, followed
+by all ten private-owner source preparation/audit stages. Independent review
+then finds that the new outer dispatcher reads source.path before an original
+injected execution callback; the original outer function permits that callback
+without this extra lookup. The unapplied candidates are held for a narrow
+successor with explicit unknown/missing-path controls. This is a concrete
+preservation defect, not a passing Homology behavior claim. Evidence:
+`runs/a104_homology_private_20261112_source_audit/`,
+`runs/a104_homology_owners_20261112_source_prepare/` and its primary review.
+
+The later installed Homology51 check exposes a separate circular-import
+regression:48 cases pass and three setup errors reference partially initialized
+modules. Its failed observationb80c8291/workflow52ef76ec and separate actual
+exitf85ac7b3 remain retained; the original51-pass baseline is unchanged. The
+exact18-file import-deferral repair then passes source preparationc3267a6c,
+candidate audit74578ef6 and driver source audit4f740ce3. Primary reads the full
+application/epoch contract, complete driver deltas and two independent reviews,
+checks all protocol/input pins and the3316 current source preimage.
+
+Actual application5c420eb7 and independent installed audit58376dcf now pass
+with drained workflowsfa0def8e/7c0eb5d7. Primary rechecks all3316 installed hashes,
+exactly18 changed paths and full equality of prepared/application/epoch source
+maps and metadata. Actual epochd84065f8 preserves runtime and three episode
+assemblies, one unchanged authenticated JSON asset and all14 ordered descriptor
+footprints. Their2111 dependency hashes and base fingerprints are independently
+rederived; configured tails and saved descriptors are not rewritten. The genuine
+baseline-to-current transition79a61836 and independent auditce894767 subsequently
+pass with drained workflows12176d92/144c96a2. Primary verifies all2761 retained
+transition references, the exact before/after map equality between both reports,
+and the complete18-change reconstruction with no unaccounted changes. Evidence:
+`runs/sixth_a104_homology18_application_01/`,
+`runs/sixth_a104_homology18_applied_audit_01/`,
+`runs/sixth_a104_homology18_transition_01/`,
+`runs/sixth_a104_homology18_transition_audit_01/` and
+`runs/root_homology18_20261112_primary_review/`.
+
+All four subsequent cold controls and the original51 connected cases now pass.
+The actual connected evidencec7ea459c/workflow6e8cf890 records51 passed cases,
+zero failures/errors/skips and completed descendant drain. Independent source
+and evidence review87dd1f58 verifies exact original/source/JUnit identities,
+39 stable declaration comparisons, the3316-path transition and193 canonical
+own-axis origins; each separate cold run records153 own-axis origins. Primary
+reads that full review, verifies its sealed artifacts and checks the actual
+command, owner, bounds and result. The original runner and assertions remain
+unchanged; full UUID-bearing replay equality is asserted within each case,
+while cross-run comparison uses stable declarations and initial controller
+state. This validates the controlled unsubmitted-job, failed-action/replay,
+callback and import boundaries. Native execution, positive submitted histories,
+parent commissioning and full saved restoration remain open. Earlier48-pass/
+3-setup-error and cwd failures remain distinct retained outcomes. No new task
+connection is counted. Evidence:
+`runs/sixth_a104_homology18_connected51_01/` and
+`runs/a104_homology18_post51_20261112_independent_review/REVIEW.md`
+(87dd1f58; review freezec42628e2).
+
+The three Homology job owners use a separate saved-job interface and correctly
+remain outside the 57-entry C7 constructor catalog. Current runtime accepts one
+of the three exact private singleton classes; its factory returns all three in
+a dictionary that no own-axis caller consumes. Original tracked code accepted
+one explicit family with all three roles and a different saved descriptor shape.
+The original exact saved-record comparison remains, so private singleton
+construction does not restore that original family. Existing controlled action
+replay tests do not establish registry close/reopen or full run resume. Primary
+confirms these current/tracked source boundaries; real singleton resume controls
+and the original-family connection remain separate required work. The original
+default worker's refusal of non-null saved jobs remains intentional. Evidence:
+`runs/a104_homology_saved_restoration_20261112_review/REVIEW.md`. This does not
+reopen prior scientific validation or claim a new runtime observation.
+
+The separate parent/saved-family Homology proposal subsequently completes all
+fourteen source preparation/audit stages, with genuine successful drained
+receipts and separately retained exits. Primary authenticates the complete
+execution record37a524a5 against the transferred queue: all commands, fourteen
+budget fields per stage, real owner/cgroups,84 retained references and actual
+artifact/receipt/exit equality. The combined43-row candidate retains the full
+3316-to3305 source-map inverse, including fifteen retirements and four additions;
+all candidate and retained preimage bytes verify. Seven uninstalled required
+inputs declare90 distinct cases. No copied90 runtime, canonical placement,
+permanent-input promotion or saved-family restoration has executed in this
+scope. Evidence: `runs/second_a104_homology_source_execution_01/`, component
+manifest2272b60d/audit286f3cab, input manifestdeb42b17/audite1c0a578 and
+`runs/root_homology_source14_20261112_primary/`.
+
+The corrected requested-role fixture subsequently completes its three source
+stages: audit4c30586f, seven-input preparationd19d7c09 and independent audit2b47fd7d,
+all with successful drained workflows. Primary reads reconciliation8681cea1 and
+verifies its seal30263243. Complete3316 source/path and204 domain checks remain
+exact; six inputs retain their original bytes and the seventh reverses to the
+whole original fixture with only the reviewed typed requested_role operands
+changed. The original14/source43 and all90 declared IDs remain retained. Exit
+notes corroborate inactive/empty ownership but do not retain individual driver
+PID or timestamp evidence. Corrected copy preparation/audit subsequently uses
+these actual inputs; runtime90 and application52 remain separate. Evidence:
+`runs/fourth_homology_source_three_handoff_01/` and
+`runs/homology_source3_copy2_20261112_reconciliation/RESULT.md`.
+
+The corrected copied trees are now prepared as b2f15d57 and independently
+audited as e2b6284e, with successful drained workflows306f4360/3338b6e9.
+Primary verifies the actual handoff and input seals, exact producer/budget joins,
+whole3527/3516 map inverse, all43 source operations and the same seven required
+inputs and90 declared IDs. Retained exit notes establish inactive/empty ownership
+but do not contain individual driver snapshots. The separate current90 run has
+started with its actual active supervisor/driver snapshots retained; it has no
+completed outcome yet. Copy preparation supplies neither runtime success nor
+application52, installed validation or saved-family restoration. Evidence:
+`runs/fourth_homology_copies_two_handoff_01/` and
+`runs/root_a104_homology_current90_20261112_handoff/`.
+
+The current90 baseline subsequently finishes with55 passes, six failed calls
+and29 setup errors. Independent reconciliation bf2158c3 verifies all90 identities,
+241 phase records,35 exact exceptions, unchanged source/copied maps and actual
+producer/receipt joins. The original51 private-owner cases pass. The29 setup
+errors and four public-resume failures encounter the absent current
+homology_binding_family module; two factory calls encounter the absent
+create_homology_family function. Runtime receipt79d789f6 remains failed with
+drain=false. Separate retained process observations establish its complete exit;
+observation auditcb27f707/workflowa5c2d856 succeeds and drains without changing
+that outcome. Candidate90, application52 and saved-family restoration remain
+separate. Evidence: `runs/fourth_homology_copied90_current_01/`,
+`runs/fourth_homology_copied90_current_audit_01/` and
+`runs/a104_homology_current90_20261112_independent_reconciliation/`.
+
+The candidate90 subsequently finishes with88 passes and two failed calls,
+with270 phase records and unchanged3316 canonical/3516 copied maps. Independent
+reconciliationc53aeb41 and comparison addendum095a753f verify the actual identities,
+seven inputs, full43-row inverse,196 module origins, producer/budget joins and
+separate measured exits. Comparison28abc3cc preserves the original51 outcomes,
+declarations and exceptions, but accepted_copied90 remains false. Runtime7e17f2ad
+and comparison81b4abbf remain code1/drainfalse; observation auditc57ab8ba succeeds
+without rewriting either. Both public saved-run tests fail before their reopen
+assertions. Their retained exception archives show the fixture's blanket Popen
+guard rejects the genuine read-only systemctl resource inventory before any
+provider call; yielded/source_failed summaries are not reconstruction evidence.
+Primary reads and hashes both original traces. A corrective fixture and its
+actual intended-boundary/reopen checks remain required; no application52 or
+installed validation follows. Evidence:
+`runs/fourth_homology_copied90_candidate_01/`,
+`runs/fourth_homology_copied90_comparison_01/`,
+`runs/a104_homology_candidate90_20261112_independent_reconciliation/` and
+`runs/fourth_homology_copied90_final_handoff_01/`.
+
+The inventory/interruption fixture correction then completes actual source
+audit8622c201, seven-input preparationc6bf5a99 and independent audit04f167d1,
+with drained workflowsb07abd72/ad78f651/94a36fae. Primary reads all source and
+both independent reviews, verifies the39-member/115-input successor, all seven
+payload hashes, actual commands and full14-field budget joins, and separately
+observes each supervisor absent with an inactive service and empty owning slice.
+The three short stages completed before external active-child capture; no such
+capture is claimed. Twenty-five inventory/interruption controls and eight patch
+corruption controls pass. Three fixtures change, four other inputs and all90 IDs
+remain exact. The original checker failure349dbfac is retained; its successor
+validates complete patch application/inversion rather than diff-renderer text.
+Readonly inventory is admitted narrowly, and an explicit KeyboardInterrupt
+tests the original interrupted/reassembly path. The latter is a source-supported
+fixture choice, distinct from the observed earlier inventory refusal. Corrected
+focused reopening, full90 acceptance, installation and scientific work remain
+unexecuted here. Evidence: `runs/root_homology_inventory_fixture_source_02/`,
+`runs/root_homology_inventory_fixture_prepare_01/`,
+`runs/root_homology_inventory_fixture_audit_01/` and
+`runs/root_homology_inventory_fixture_actual_20261112/actual.json`.
+
+The corrected focused reopening subsequently passes both original cases and
+all six phase reports, evidencee5cc150e/workflow0fb092e6. Independent observation
+auditea5c34ef/workflowb53cdb91 also passes. Primary verifies their exact source,
+copy and runtime operands, full14-field budget joins, literal commands, unchanged
+source/copy guards and separately retained actual exits. The public workflow
+registration/resumption reaches its controlled provider with the original typed
+reopened registry and saved callables; completed_actions remains zero and neither
+completed scientific work nor independent worker restoration is claimed. The
+separate full90 adapter source audit7f1bf6c0/workflow363002c3 then passes and
+releases the existing corrected tree to Fourth for the original90-case run and
+original51 comparison. No fresh copy or baseline rerun is required. Full90
+acceptance and installation remain pending; the earlier55P/6F/29setup and88P/2F
+records remain unchanged. Evidence: `runs/fourth_homology_inventory_focused2_01/`,
+`runs/fourth_homology_inventory_focused2_audit_01/`,
+`runs/fourth_homology_inventory_full90_source_01/` and
+`runs/root_homology_inventory_full90_20261112_handoff/`.
+
+The full corrected candidate then passes all90 cases/270 phases as24a3c29e,
+with drained workflow278630bf. Independent audit411fea32/workflow187c4fcc and
+original51 comparison946f453e/workflow40dcbff0 pass. Independent reconciliation
+b843b703/seal5e45c4ac verifies exact identities/XML, all153 original51 phase
+outcomes, declarations and exceptions, complete three-fixture then43-production
+map inverses, all14 budget fields and distinct real producer/exit records.
+Primary reads that review and its map/command/comparison joins and verifies the
+sealed retained references. accepted_copied90 and original51_preserved are true;
+same_full_fixture_epoch remains false. Runtime exit9ff2f313 includes genuine
+active-to-absent PID/start evidence; the audit/comparison retain their own
+post-exit schemas without invented live-driver captures. Old55P/6F/29setup and
+88P/2F results remain unchanged. This completes copied-test acceptance only;
+installation, positive native work, independent-worker restoration and full
+scientific iteration remain separate. Evidence:
+`runs/fourth_homology_inventory_full90_comparison_01/` and
+`runs/third_orchestrator_coordination/a103_guard_metadata_reviews/homology_full90_01/`.
+
+The distinct application52 source audit also passes as16f2394f, with drained
+workflow4d9fe91f. Primary verifies the exact command, full budget/owner join,
+actual result, fourteen map/history controls, fifty receipt-profile controls
+and original XML/read/origin body preservation. Raw exit sidecars corroborate
+its contemporaneous inactive service and empty own slice; the observation is
+explicitly non-atomic. This source check consumes the genuine original14/source43
+evidence and no copied90 result. It establishes no candidate application,
+installed runtime or correction of the separately identified provider defect.
+Evidence: `runs/fifth_homology_application52_source_audit_01/`.
+
+New executable-source inspection identifies a distinct introduced provider
+dispatch regression in all60 installed A104 private complete_decision helpers.
+They prefer any complete_with_presentation method, while the inherited own-axis
+ModelConnection implementation calls _complete_serial directly. A subclass or
+instance override of complete can therefore be bypassed, unlike the original
+runtime's direct provider.complete call. This includes the three current
+Homology helpers and the scientific head; root/task_decision.py still calls
+provider.complete directly. Correction and meaningful override-preservation
+checks are required before complete behavioral preservation can be claimed.
+Earlier scoped passing results remain valid for their tested providers. Current
+evidence is the actual A104 providers.py and private task_decision.py/
+scientific_process/decision_delivery.py bodies; no new runtime result is claimed.
+The same before/after call sites also move provider.complete selection and
+episode_id evaluation after schema/request operands by introducing the asynchronous
+three-argument helper. The correction must preserve the original five-operand
+call order as well as callback identity. No successful correction or new
+behavioral test result is implied by identifying either source defect.
+
+The specific dispatch correction subsequently completes three source stages:
+tooling inverse573c8f04, preparation9f8feec4 and independent audit81d53ec7, with
+genuine drained workflowsf0a49c49/549b36c9/1c3a3909. Primary verifies the complete
+producer/budget/command joins, raw separate exit observations, both61 source
+views and all122 candidate hashes. The full module inverses preserve original
+five-operand call order; the three Homology substitutions remain planned only.
+This supplies no93-control runtime outcome, permanent fixtures, ownership
+integration, canonical placement or new task connection. Evidence:
+`runs/root_a104_dispatch_v2_actual_20261112_primary/`.
+
+A separate source inspection finds12 Monitor/HPC episode declarations still
+select raw library renderers through _declared_presentation. That path changes
+the original context recognition, JSON fallback, cache handling and renderer
+priority. The dispatch correction alone does not fix those differences. Existing
+Launch/Results complete private presentation functions retain their separate
+scope. The12 bindings need their own complete private presentation layer and
+corresponding validation/ownership changes; no new runtime failure is claimed.
+Evidence: `runs/root_a104_monitor_hpc_presentation_20261112_source_finding/`.
+
+The required provider fixture source preparation132ea356 and independent
+audit1e1dee8d subsequently pass with drained workflowsfb2f658a/58a3d82c.
+Four existing test replacements retain their original assertions and cases;
+one reusable provider helper and two permanent dispatch-control modules complete
+the seven candidate files. The original outer provider remains real, with
+controlled session/serial ports. Primary verifies the seven afterimages,
+complete budget/command joins and actual inactive empty window after both
+stages. This source milestone does not execute the93 controls or the changed
+existing cases. Evidence: `runs/root_a104_provider_fixture7_prepare_01/` and
+`runs/root_a104_provider_fixture7_audit_01/`.
+
+The twelve-home presentation layer also passes source preparation539eda26 and
+independent audit1ed12345, with drained workflowsfaf3ecba/e08b5247. Its24 source
+rows contain twelve substantive private presentation modules and twelve exact
+episode import/binding changes; a separate required module declares52 controls.
+Primary verifies all25 afterimages, original policy and binding inverses,
+actual budget/command joins and the inactive empty window after both stages.
+At that source milestone the52 cases were unexecuted; the later copied outcomes
+are recorded below. Descriptor/source-index closure, ownership metadata,
+shared-root provider integration and canonical application remain separate.
+Evidence: `runs/root_a104_monitor_hpc_presentation24_prepare_01/` and
+`runs/root_a104_monitor_hpc_presentation24_audit_01/`.
+
+The actual copied provider159 comparison subsequently records81 failures/78
+passes before and3 failures/156 passes after:78 failures become passes,78
+passes remain, and no prior pass regresses. The three unchanged collision-key
+cases fail while inserting their fixture key, before invoking production; their
+separate fixture correction has no result in this comparison. The presentation52
+comparison records38 failures/14 passes before and52 passes after. Each run
+retains its exact cases, parameters, three ordinary phases, complete guarded
+source maps, loaded origins and original failed or successful workflow receipt.
+Primary reads independent reconciliation78dfe750, verifies its seal875e18e3 and
+all20 actual result/workflow/budget/XML/exit hashes, and checks its complete map
+and outcome joins. The separate later exit observations do not repair failed
+drain fields. These are controlled copied-provider and presentation boundaries;
+installation, complete restoration and autonomous science remain separate.
+Evidence: `runs/fifth_a104_provider_original159_02/`,
+`runs/fifth_a104_provider_candidate159_02/`,
+`runs/fifth_a104_policy_original52_02/`,
+`runs/fifth_a104_policy_candidate52_02/` and
+`runs/a104_provider159_policy52_20261112_independent_reconciliation/`.
+
+The separately corrected collision comparison subsequently records three actual
+production failures7419abd8 before and three passing calls90d630bc after, with
+nine ordinary phases in each. The fixture first permits isolated dictionary
+construction, then arms the same adversarial key before the original production
+call; the baseline failures now reach complete_decision/getattr in Launch,
+Monitor and Homology. The candidate preserves the exact original assertions.
+Source1a920341 and copier34af2b18 retain the sole corrected fixture transition
+over both recorded3534 maps and original3316 guard. Independent reconciliation
+ffa56c8a/seale1364b1f verifies63 finite artifacts, all ordered IDs/parameters,
+164 recorded owners/read paths, complete map inverses and all four literal
+command/full14-field budget joins. Primary reads that review, verifies its seal
+and retained hashes, and relies on the authenticated copier/observer for physical
+map guards; an incomplete redundant review rehash is explicitly not counted.
+The baseline workflow9837d2fd remains code1/drainfalse, candidate98e33af1 passes
+and drains, and separate non-atomic exits are retained. Candidate/source stages
+have no retrospective active-driver capture. Original159 and policy52 results
+remain unchanged; this is a separate3-to3 comparison with corrected fixture
+operands, not a rewritten159 pass. Installation and scientific validation remain
+open. Evidence: `runs/fifth_a104_provider_collision_original3_01/`,
+`runs/fifth_a104_provider_collision_candidate3_01/` and
+`runs/a104_provider_collision_pair_20261112_independent_review/`.
+
+The A104 dispatch metadata V4 preparation80897cb8 and independent audite557a019
+subsequently pass with genuine drained workflows9682f3f7/b6c243c6. Primary reads
+the independent reconciliation ce33b330 and verifies its retained evidence seal
+and actual producer hashes. All88 candidate/before document pairs,44 JSON and44
+Markdown inverses, the61-source/seven-fixture map inverse and all40 source
+controls reconcile. The real catalogue retains59 task_decision helpers and the
+scientific head's decision_delivery helper. Earlier failed preparations remain
+failed. These are uninstalled metadata candidates: runtime validation,
+permanent-input promotion, presentation composition and saved restoration remain
+separate. Evidence: `runs/second_a104_provider_metadata_dispatch_prepare_01/`,
+`runs/second_a104_provider_metadata_dispatch_audit_01/` and
+`runs/third_orchestrator_coordination/a102_reader_review/a104_metadata_v4_actual_reconciliation_01/`.
+
+The separate A104 receiving-context source preparation02cf348d and auditb2325e74
+also complete with drained workflows7072ab2c/96cc185b. Primary reads the complete
+source transformation, independent inverse checks and required-input candidate;
+verifies all57 candidate/before pairs, full3316-map inversion, actual commands
+and budget joins; and observes inactive/empty ownership after each stage. The
+proposal removes the duplicate class, redirects43 imports in41 modules and adds
+the four actual defining-source operands to28 fingerprint accounts. Seven source
+mutation checks and four external-operand sensitivity checks pass. The nominal
+class/equality change is explicit; original exact-type predicates and eight
+constructor values remain. Fourteen value/type cases are prepared, unexecuted
+and unpromoted. Presentation/Homology composition, runtime custody, metadata,
+installation and saved compatibility remain separate. Evidence:
+`runs/root_a104_context_owner_prepare_01/`,
+`runs/root_a104_context_owner_audit_01/` and source4e975528 with independent
+reviewa8615e52/restoration addendumef89adb2. The original input-drift finding is
+retained; original pinned inputs were restored without silently changing them.
+
+The childless presentation successor84af2d74 subsequently completes genuine
+source audit0d50d271, preparation1392b75e and independent audit33515f77, with
+drained workflowc894cde1/2339c269/74597115. Eight parents retain their two real
+callback bodies; six childless leaves require empty child declarations and no
+invented callbacks. Four callback rejection controls and all23 original source
+controls pass. The69 candidate rows comprise13 source changes,28 metadata
+replacements and28 additions, with106 complete source operations,116-to88
+metadata reversal and60 unchanged documents. Independent handoff49bb8825/
+sealc49b9cfb reconciles all three actual commands,14-field budgets and separate
+exits. Primary reads it and verifies both retained hash lists. This is source
+accounting; runtime, installed descriptor acceptance and canonical placement
+remain separate. Evidence: `runs/second_a104_presentation_childless_audit_01/`
+and `runs/root_a104_combined_childless_actual_inputs_20261112/`.
+
+The combined childless authority4534c3a8 also passes its finite tooling audit
+9461206b/workflowcc652b20: two whole module inverses,17 exact inherited members,
+literal84af authority and the unchanged six-null input template verify. Its
+full14-field producer budget and measured empty/inactive exit092efe92 are
+retained. No combined candidate is produced by that audit. The subsequent
+actual six-ref input9f184e24 exposes a concrete reader mismatch before launch:
+source audit and preparation retain distinct literal input paths with identical
+2b9c72ff bytes, while the reader requires their complete authority objects equal.
+Primary confirms every other authority field equal and both exact file bytes.
+The genuine source3 and4534 tooling result remain valid for their scopes; a
+separate exact two-path authority correction is required before combined
+preparation. No failed workflow is invented and no producer path is rewritten.
+Evidence: `runs/a104_context_family_presentation_childless_source_audit_01/`
+and the actual-input handoff's `AUTHORITY_MISMATCH.json`.
+
+The exact input-reference successor7abbc037 then passes source audit0d148670/
+workflow5381d1f3, including eight path/hash/byte/authority rejection controls and
+the four real producer joins. Primary verifies its complete source and independent
+peerad59d5a0. Actual combined preparation subsequently fails at
+join_authority.py126, comparing the fourteen source-local identities. Its retained
+workflowd9f243e2 has driver/overall returncode1 and drainfalse; the separate
+21:17:42 observation1effb223 proves the actual supervisor/driver absent and own
+slice empty. No candidate manifest was produced. This is a new consumer failure;
+the earlier successful source results remain valid. A narrow identity comparison
+correction is in progress, without changing original scientific implementations.
+Evidence: `runs/root_a104_combined_input_reference_source_01/` and
+`runs/root_a104_combined_input_reference_prepare_01/`.
+
+The separate identity-serialization successord947096b passes source audit019be2d7/
+workflow65860e8f. It projects only the original roles, entry_roles and declared
+child-role tuples to their JSON arrays, retaining complete typed identity equality.
+Fourteen focused rejection controls pass; two whole-module inverses and29 unchanged
+members preserve the original full identity calculation in normal preparation.
+Primary reads all new source and independent peer80863c3a, verifies40 members/
+1018 inputs and the retained failure history. The source stage succeeds/drains
+with measured exit0236e5ba; it does not produce a combined candidate or establish
+runtime behavior. Evidence: `runs/root_a104_combined_identity_source_01/`.
+
+The subsequent genuine d947 combined preparation reaches the existing 5-GiB
+memory bound and is killed before proof.json or a candidate manifest is written.
+Workflow60e905c7 retains overall returncode1, driver-9, KeyboardInterrupt and
+drainfalse; its memory events record one OOM kill. Primary verifies all14 budget
+fields and observes the actual3421132/3421135 processes absent with an inactive,
+empty owning slice in separate exit01ed3c70. Partial candidate/before files are
+retained as failed output. No successful combined preparation or audit follows
+from them. A memory-efficient tooling correction is being investigated without
+changing resource bounds or reducing source checks. The earlier identity source
+audit remains valid. Evidence: `runs/root_a104_combined_identity_prepare_01/`.
+
+The first streamed-tooling proposal6546b86c then fails its own Unicode roundtrip
+control before candidate preparation: workflow139ae09e retains1/1/nullfailure/
+drainfalse and separate exitb478a7a3. The narrow stdlib diagnostic20c93d77 succeeds
+and confirms that adjacent surrogate pairs in string values and keys change
+Python equality on JSON decoding, while separated surrogates and actual scalars
+roundtrip. The corrected immutable successor4fc2cb2a passes source audit0e34c3c8/
+workflow7752faa3: ten byte-equivalence cases,15 denials and complete three-plus-six
+module inverses. Primary reads its full source and peer15fe32fc/seale67b5437,
+verifies60 members/1131 inputs and the actual14-field budget/empty exitceb2e426.
+The prior encoder bytes, failed Unicode operand and OOM history stay retained.
+This establishes corrected source controls, not successful combined preparation
+or measured memory fit. Evidence: `runs/root_a104_combined_string_source_01/`.
+
+The genuine4fc2 combined preparation subsequently succeeds: manifest8cbf3e74,
+workflowfdd77a6c, budgetcf597504 and complete streamed proof584c6f8e. The proof is
+1,714,593,357 bytes;297 candidate files and312 change records are retained without
+canonical writes or application authority. Overall and driver return0, draintrue,
+null failure and unchanged OOM counters distinguish this outcome from the prior
+d947 failure. The workflow reaches the existing5-GiB memory peak without a new OOM
+kill. Primary checks the manifest, complete artifact hashes and actual receipt,
+then records separate exit9ccf6e13 at22:04:29 UTC: supervisor3453714/driver3453720
+absent, serviceinactive and recursive owning slice empty. Full independent
+combined audit is the next actual stage; its outcome, bridge memory behavior,
+installation and runtime validation remain separate. Evidence:
+`runs/root_a104_combined_string_prepare_01/`.
+
+The original full independent4fc audit subsequently passes59916eae/workflow
+33bee925, with all nine source-inverse denials,27 defining-source fingerprints,
+four external-operand sensitivities and the required-input sensitivity. It
+confirms297 candidates/312 changes,116 metadata accounts and complete selected
+source inverses. All14 budget fields match; overall/driver0, null failure and
+draintrue accompany unchanged OOM counters at the existing5-GiB peak. Separate
+exitc7c3159d at22:19:29 UTC records3488034/3488037 absent, inactive service and
+empty recursive owning slice. Preparation and this source audit are complete;
+canonical writes, application authority and runtime validation remain absent.
+Evidence: `runs/root_a104_combined_string_audit_01/`.
+
+The distinct A104 shared-root provider bridgea9101b96 is prepared for61 selector/
+capture edits,15 defining-source formula extensions and116 ownership updates.
+Primary reads its800 lines, templates and independent peerf0f97449, and verifies
+30 members/1291 inputs. Its first genuine pure source audit then fails in
+closure.py19: a comprehension target's Store AST context was compared to an eval
+expression's Load context. Workflow38e8e7d4 remains1/1/drainfalse; separate
+measured exit564684bd records its completed process. The failure precedes the
+two61-view loop and audit output. No combined refs are invented, no candidate or
+successful bridge audit is claimed, and the original packet stays unchanged.
+A narrow immutable checker correction is being prepared. Evidence:
+`runs/sixth_a104_root_provider_source_handoff_01/`.
+
+The immutable generator-context successor3787a317 subsequently passes actual
+source audit20525194/workflowae710f54. Its one-line Name/id/Store predicate
+correction preserves29 inherited members and the genuine failed source01.
+Both61-source views pass complete inverses and eight rejection controls each;
+all15 defining-source formulas retain their original operations/order. Primary
+reads the full correction, source peer a7e3cf80 and retained reconciliation
+a0e2a1aa/seal031a5e76, verifies finite artifact/ancestor/root references and the
+literal command/full14-field budget. Actual0/0/drained output and measured
+active3438450/3438453-to-absent exit5d56bcf2 remain distinct from source01's failure.
+Four future combined refs are still null. No combined preparation, renderer
+behavior, installation or saved-descriptor acceptance follows. Evidence:
+`runs/sixth_a104_root_provider_source_handoff_02/` and
+`runs/third_orchestrator_coordination/a103_guard_metadata_reviews/a104_root_provider_source02/`.
+
+The bridge memory/actual-exit successor15f156da passes genuine Seventh source
+audit156236c2/workflow643eb7d6 after full68-member/1590-pin and independent
+0cacbaa5/seal2a71d455 review. Five complete memory-layer and two exact exit-layer
+inverses preserve the original two61-source views, eight denials per view and15
+formula accounts. Four chunk patterns and11 projection denials pass. The exact
+exit check uses actual active process/start identities and the full retained
+preparation exit; no nonexistent workflow driver field is fabricated. Primary
+reconciles the actual result, all14 budget fields, exact command and distinct
+live-to-absent exit2f5ab918. The pure source stage does not decode/hash the huge
+upstream proof. It establishes source controls only; combined bridge memory
+behavior, candidate application and runtime remain unexecuted. Direct final
+composition may consume genuine4fc results and this source proof while retaining
+real intermediate artifacts under its own actual producer.
+Evidence: `runs/seventh_a104_bridge_source_handoff_20261112/`.
+
+The direct bridge-plus-None composition packet4a2a4a8c subsequently passes its
+original pure source stage in genuine Second ownership: report adeb38f6,
+workflow ebf4f2bb, budget1e07e72b and separate exit38895181. Primary reads all
+677 executable lines/three patches and independent peer2620ee80/sealeed3bca7,
+verifies22 members/1973 pins, and reconciles the actual14-field command/budget
+join. The three whole tooling inverses and all60 selected source derivations
+pass; the actual selection is57 specialist plus three planned Homology forms.
+The original bridge build/verify/controls and complete metadata inverse remain
+literal algorithms. This source result does not compose a candidate or prove
+memory fit. The subsequent full producer must retain both actual proof artifacts
+and complete independent audit; no standalone intermediate receipt is invented.
+Evidence: `runs/second_a104_no_binding_composite_source_01/`.
+
+The original complete4a2 composition subsequently finishes in Fifth's genuine
+window: prepare02 manifest984f4ed6/workflow812818c2 and independent auditd881a855/
+workflowa52a613d both return0/0/null/drained. Primary reads the actual audit and
+handoff, verifies report/prepare/producer references, exact commands, full14
+typed budget joins and raw successful exit observationa7040599. Original audit
+PIDs3637292/3637299 are absent in the retained process snapshot; the observed
+service is inactive/MainPID0 and the recursive owning slice is empty. The audit
+peaks at5195526144 bytes with zero new max/OOM/kill events; preparation's exact
+5-GiB peak and1129 max events remain its own result, with no OOM and no claim of
+spare memory. Both complete stage artifacts and original controls are checked,
+including60 selected derivations,116 documents,16 required inputs,15 formulas,
+33 shapes,27 plus independent fingerprints and complete source/map inverses.
+This is validated source composition, with no canonical writes or runtime claim.
+The original invocation-only prepare01 failure remains unchanged. All eight
+genuine final4a2/owner3 references are now retained in separate API input143fec9b;
+the newer API producer still requires its own actual source/prepare/audit stages.
+Evidence: `runs/fifth_orchestrator_coordination/a104_no_binding_composite_actual_01/ACTUAL_RESULTS.md`.
+
+The later API post-family source packet3255bf96 reaches its final source-map
+cardinality assertion and fails before emitting an audit. Raw workflowb34b6037
+retains1/1/null-failure/drain-false; separate actual exit62ff7663 records inactive
+service, MainPID0, absent supervisor and an empty recursive owning slice. All14
+budget fields match, and no OOM event or canonical write occurs. This failed
+source execution does not invalidate accepted predecessor source results.
+Independent source accounting identifies seven required API JSON assets omitted
+from the Python/TOML-versus-asset count; a finite immutable correction remains
+to be reviewed and executed. Evidence:
+`runs/root_a104_api_post_family_source_01/`.
+
+The immutable asset successor0f657788 then passes its original source audit
+b68dd8bf/workflowbea8d6bb in Sixth's genuine window. Primary reads the complete
+six tooling patches/two new helpers and peer77ae4beb/efbfbad2, verifies43 source
+members/3466 inputs, and independently checks the actual report, exact command,
+full14 typed budget join and separate measured exitfd9b7781. The raw result is
+0/0/null/drained with no OOM; captured3740057/3740064 are absent at the retained
+23:11:10 UTC inactive/MainPID0/empty observation. Exact3311 Python/TOML plus
+seven original schema JSON assets and two archived inputs yields3320;116
+documents retain the full3436 domain. All five finite asset rejections, six
+complete tooling inverses,22 unchanged members and original source/policy/
+saved-owner/19-input checks pass. The original3255 failure remains history.
+This establishes the explicit v2 source account, not a prepared candidate,
+canonical placement, saved-owner behavior or runtime. The original prepare and
+independent audit remain separate, with genuine eight-reference input143fec9b.
+Evidence: `runs/sixth_a104_api_post_family_asset_source_01/`.
+
+The required literature-test input audit also succeeds with a drained receipt.
+Its 362 original and 728 connected case identities are declared source scope,
+not executed test counts. Evidence:
+`runs/a104_source_behavior_20261112_input_audit/`.
+
+All twenty source preparation/audit steps complete successfully for the twelve
+local/HPC execution homes, with a successful drained receipt. The two six-home
+assemblies retain their complete module and lexical audits; their reports
+explicitly do not prove complete import dependency closure. These are unapplied
+candidates, not twelve additional connected tasks. Evidence:
+`runs/a104_native_execution_20261112_source_audits/`.
+
+The original fourteen-home literature diagnostic retains all 45 observations
+with unchanged application sources and a successful drained receipt. All 28
+default/configured constructors and the actual seven-binding factory return.
+Five import/selection/formatter boundaries fail on the missing original assay
+selection symbol. Six schema operands also fail representation validation;
+their synthetic reference strings do not satisfy the original REF syntax, so
+these six failures do not isolate scientific task-schema applicability. The
+unchanged baseline remains retained for separately corrected fixture operands.
+The provider call returns, which alone does not prove that it rendered the
+missing experimental context. No science, credit, transport or native operation
+executes. Evidence: `runs/a104_source_family_20261112_helper_promotion/` and
+`runs/a104_source_family_20261112_baseline/observations/boundaries.json`.
+
+The required API test successor and bounded-estimator helper are now promoted
+after their independent source audits. The API installed audit authenticates
+all five test/helper files and the complete 1,546-file source/test map. The first
+actual API owner baseline finishes with 28 passes, 140 deselections, unchanged
+sources and a successful drained receipt. It exercises the existing HPC-planning
+API owner with actual Store/Journal, original iterator outcomes, controlled
+service/provider calls, controller identities, saved response/replay, typed
+redelivery and the complete selected/build admission path. It does not run
+remote/native/model work or validate the unapplied task split. The later all-home
+baseline passes all 168 controlled cases with unchanged 1,546-file source/test
+map and a successful drained receipt. Primary observes the service inactive,
+its entire slice empty and the original supervisor/driver absent. Full-baseline evidence:
+`runs/a104_api_20261112_all_baseline/`. Earlier evidence:
+`runs/a104_api_tests_20261112_applied_audit/` and
+`runs/a104_api_20261112_one_home_baseline/`.
+
+All eighteen original API/Launch/Results state captures are subsequently saved
+and reopened through the original supported constructors. Every closed credit
+read returns its original view; original capture bytes and logical Store rows
+remain unchanged. All eighteen saved-action replay observations raise an empty
+`AssertionError`, while descriptor composition separately raises
+`unavailable_binding/private_binding_reopen_pending`. The successful diagnostic
+receipts mean observation completed, not that saved-action restoration passed.
+Both workflows retain the original 1,546-file source map. Evidence:
+`runs/a104_api_20261112_original_capture/` and
+`runs/a104_api_20261112_original_reopen/`.
+
+The required callback test is then the sole source-map addition, after independent
+candidate and corrected-runner audits. Its original 55 cases pass, with 54
+retained custom/default records, unchanged 1,547-file map and successful drained
+receipt. Primary confirms the exact one-file addition, current hashes and empty
+owning slice. Application task/service corrections remain unapplied; this is a
+controlled original callback baseline, not scientific or saved-restoration
+validation. Evidence: `runs/a104_task_service_20261112_baseline/` and the
+corresponding `test_prepare`, `test_audit`, `test_apply` and `runner_audit` runs.
+
+Both actual estimator-helper cases also pass with successful drain in
+`runs/a104_yield_helper_20261112_tests/`: the scalar API estimator retains its
+actual contextual callback, and the bounded Launch estimator records that no
+such callback exists while retaining its real binding estimator. This is
+controlled callback/replay evidence, not scientific forecast validation.
+
+Source review also identified an instruction-dispatch preservation defect in
+the unapplied task candidates: direct composition bypasses the original custom
+services.instructions callback. A separate successor must preserve that callback
+and select the private composer only in the default service. Earlier source
+audits remain evidence of their stated transformations, not proof that this
+callback boundary was preserved. Application stays pending this correction and
+its actual behavior checks.
+
+Further actual-source inspection finds the same callback bypass in the twelve
+already connected A104 monitor/HPC planning/allocation/prediction tasks. Their
+separate repair must preserve installed default-composer behavior and restore
+supplied service precedence. This is a scoped integration regression; previous
+scientific and controlled-boundary milestones remain unchanged. Source review
+also finds that the three unapplied Homology candidates retain multiple roles'
+methods and branches, so their first extraction is intermediate rather than
+complete private organization. Evidence and required follow-up are recorded in
+`runs/a104_private_task_service_20261112_primary_review/REVIEW.md`.
+
+## 2026-11-12 current private binding reconstruction in A102 and A103
+
+Additional source scope, 2026-11-13: connected post-context ownership V6
+306957d7 and independent peer557b0db9 complete Primary bounded source review.
+The five new context/pipeline modules preserve full Root36/context226/document
+joins, reconcile existing current aliases and retain unresolved operands.
+All34 source members/exact domain and42 peer members verify. Full proofs occur
+once per identity with compact row references. Actual original-stage inputs,
+execution and metadata installation remain separate. Evidence:
+`runs/root_post_g7_context_v6_review_01/REVIEW.md`.
+
+The later A103 API stage now installs six private central tasks and six named
+parent receivers. Its original and installed suites each pass the same162
+controlled case identities; these are not324 distinct checks. The actual six-owner
+diagnostic covers local BLAST preparation, invalid selection, Journal/replay and
+private runtime dispatch. It does not prove remote native custody, complete
+saved-workflow restoration or autonomous science. The supplied instruction-service
+callback bypass is subsequently corrected by seven exact source changes. Actual
+observations retain twelve failed custom return/exception checks before the
+correction and twelve preserved identities afterward; six default compositions
+and both ordinary fallbacks remain exact. The separate focused suite passes
+26 cases, with successful drained receipts.
+
+The primary inspected the retained baseline/installed XML and successful drained
+installed-test receipt, verified all1382 current own-axis source hashes,13 required
+test/helper hashes,27 installed ownership-record hashes and all shared-delta
+evidence hashes. The independent metadata post-audit succeeds with a drained
+receipt. The shared root catalog addition remains queued under its separate
+ownership hold. The subsequent fifteen-record metadata correction adds explicit
+current validation, preserving the original API stage and histories. Its
+independent audit rejects all 27 negative mutations. Primary rechecks the exact
+seven-source and fifteen-metadata transitions, complete current 1,382-source
+path/hash map, fourteen required test/helper hashes, 27 current ownership records
+and all linked evidence hashes. Both stages remain separately identified in
+`runs/third_a103_api_combined_metadata_01/shared_proposal.json`; shared-root
+application remains queued. These checks do not establish broader workflow or
+scientific completion. Original evidence:
+`runs/third_a103_api_v2_installed_tests_01/`,
+`runs/third_a103_api_v2_connected_01/probe/api-task-probe.json`,
+`runs/third_a103_api_metadata_prepare_01/candidates/` and
+`runs/third_a103_api_metadata_postaudit_01/`.
+
+Each axis now reconstructs the explicit 43-binding diagnostic inventory from
+literal private descriptors. The original baseline reached all 43 direct
+constructors but composition raised `private_binding_reopen_pending`; the
+connected probes return all 43 descriptors with their actual private types.
+The applied whole-module audit accounts for both composition changes and
+unchanged constructor sources. The required suite has 125 passing cases and
+one intentional A102 skip for A103-only historical compatibility. Its successful
+workflow receipt confirms complete descendant drain.
+
+These checks use actual Store, Journal, saved instruction libraries and backend,
+with controlled service/ToolRegistry ports and forbidden credit callbacks.
+They exercise exact descriptors, constructor selection, tamper/foreign/duplicate
+rejection, saved library identity and caller-owned credit requirements. They do
+not execute scientific credit or prove full factory/workflow restoration,
+receiving authority, private task completion or autonomous scientific work.
+Capability aggregation and other unexamined descriptor families remain open.
+
+Eight own-axis ownership records pass the independent applied audit. The shared
+root catalog now contains the exact reviewed stage addition. Its application
+rechecks all 2,544 recorded source hashes, the two composition/test/dependency
+sets, eight installed metadata records and retained evidence. Whole-document
+reversal verifies that unrelated metadata is unchanged, and the workflow
+receipt succeeds with complete descendant drain. Current composition hashes,
+actual probe results, suite XML and drained receipts have been inspected by the
+primary coordinator. Evidence: `runs/third_private_reconstruction_applied_audit_01/`,
+`runs/third_a102_reconstruction_connected_01/`,
+`runs/third_a103_reconstruction_connected_01/`,
+`runs/third_private_reconstruction_tests_01/` and
+`runs/third_reconstruction_records_applied_audit_01/` and
+`runs/private_reconstruction_shared_catalog_20261112_apply/`.
+
+## 2026-11-12 canonical root identity consumers repaired
+
+The root return reader now imports `EpisodeRef` from its actual method-loop
+identity module; scientific process records use that same module's structural
+path normalizer. Only those two imports change. Independent complete-module
+reversal and original identity-declaration accounting pass, and their current
+source hashes match the application receipt. The focused baseline's two type
+identity failures and one saved-context pass become three passing checks with
+a successful drained workflow receipt. The actual SQLite test retains immutable
+context reconstruction and rejects changed saved assignments.
+
+The duplicate root library identity module has not yet been retired; its full
+consumer/descriptor audit and ownership reconciliation remain separate work.
+No root runtime construction, scientific scoring or full saved-workflow
+restoration follows from these focused checks. Evidence:
+`runs/fifth_root_identity_supported_baseline_01/`,
+`runs/fifth_root_identity_apply_01/`,
+`runs/fifth_root_identity_applied_audit_01/` and
+`runs/fifth_root_identity_connected_01/`.
+
+## 2026-11-12 root support modules and registry connected checks
+
+Seven root support modules and the private binding registry are now installed,
+with five required test files. They provide typed communication and validation,
+Journal persistence, source-failure records, retained parent assignments,
+contract information and saved numerical contracts. The registry preserves the
+actual commissioning parent when selecting a private child; a legacy role-only
+parent cannot acquire an unrelated private child through a unique role match.
+
+The primary coordinator verified all thirteen installed hashes against the
+application receipts, the six referenced source-audit hashes, and successful
+drained source-audit/application receipts. The connected suite has 51 passes,
+zero failures and zero skips, with a successful drained receipt. These 51
+include the three earlier canonical-identity cases; they are not 54 distinct
+checks. Actual Store/Journal checks cover persistence, reopening, rollback and
+original-action failure retention. Controlled binding fixtures cover parent
+selection and ambiguity rejection; they do not execute scientific work.
+
+The later runtime placement and 74-case scope are recorded above. Complete
+workflow restoration, duplicate identity retirement and ownership reconciliation
+remain open. This support increment adds no connected episode to the task census. Evidence:
+`runs/fifth_root_support_source_audits_01/`,
+`runs/fifth_root_support_application_apply_01/applied/` and
+`runs/fifth_root_support_connected_01/`.
+
+## 2026-11-12 root annotation source extraction and actual constructor boundary
+
+The current root constructor actually raises
+`combined_root_private_runtime_binding_unavailable`; the retained probe invokes
+no scientific projector or continuation controller. The reviewed V2 preparation
+produces 23 candidate modules, accounting for all 21 original task methods,
+23 complete original declarations and four current message bodies. Independent
+whole-body reversal and compiler lexical accounting pass with zero missing
+globals. All four preparation/baseline/audit workflow receipts succeed and drain.
+
+These files remain candidates: 49 import boundaries are missing, the own-root
+Workflow is absent and the immediate axis entry heads are unresolved. No root
+runtime connection, scientific scoring, saved-workflow reconstruction or private
+task completion follows from these source audits. The V1 omitted yield helper is
+preserved as a source-review finding and corrected only in separately frozen V2.
+
+Evidence: `runs/fifth_root_constructor_baseline_01/`,
+`runs/fifth_root_candidate_prepare_01/`, `runs/fifth_root_candidate_audit_01/`
+and `runs/fifth_root_candidate_lexical_01/`.
+
+## 2026-11-12 A103 original negative bundle guards restored
+
+Thirty execution owners again exclude all eleven original typed native bundle
+versions before generic parsing and ordinary reference resolution. Independent
+whole-module byte/AST audits preserve the existing practical/API handoff denial
+and account for the complete 1,298-source map. The actual thirty-owner diagnostic
+records 330 bundle returns, 330 resolver denials, zero generic-parser calls and
+ordinary-source visibility for all thirty owners. These are malformed-bundle
+negative-routing fixtures, not positive native receipt custody.
+
+The thirty required cases pass. A second execution uses the original long
+parameter-name format for exact metadata identity; it repeats those same thirty
+cases and does not double the coverage. The original unauthenticated-context
+baseline, its actual masking-context trace and the later metadata name rejection
+remain retained. The fixture correction binds an actual Journal/EpisodeRef/
+receipt context without changing the original guard assertions.
+
+Sixty-three own-axis metadata records pass an independent applied audit, retaining
+historical descriptors and the current scientific-parent fingerprint. The shared
+catalog receives only the exact reviewed stage addition, with current thirty
+source hashes, required tests, own-axis inventory and retained evidence hashes
+verified before application; reversal recovers all unrelated metadata. This
+catalog update does not establish runtime integration or saved restoration.
+
+Evidence: `runs/third_a103_negative_{applied_audit,connected,tests}_01/`,
+`runs/third_a103_negative_tests_named_02/`,
+`runs/third_a103_guard_records_applied_audit_01/` and
+`runs/a103_guard_shared_catalog_20261112_apply/`.
+Private task completion, positive native custody, complete reader restoration
+and autonomous scientific validation remain separate unfinished work.
+
+## 2026-11-12 A107 original RNA context and Infernal schema restored
+
+Thirty A107 execution owners regain the exact original RNA received-context
+branch. Independent candidate and applied audits authenticate the tracked Git
+source and reverse each complete module; the retained full source maps account
+for only those thirty changes. The same actual eight-owner/four-role probe now
+delivers both original nonempty RNA payloads in all sixteen annotation and
+scientific-process contexts. Launch and Results retain their original absence
+behavior. Before repair neither formatter was visited in any of the thirty-two
+observations. The adapters' already-authenticated received values are controlled
+ports; these checks do not authenticate scientific evidence or run native work.
+
+Evidence: `runs/a107_original_rna_context_20261111_{baseline,candidate_audit,apply,applied_audit,repaired_probe,transition}/`.
+The exact source transition is retained for the later private-information split.
+
+Thirty private return implementations also regain the complete original
+`_infernal_reference_source` static helper. Independent candidate and applied
+audits preserve every other module AST and the complete preceding source map.
+All sixteen actual received/fact schema callbacks now return the original schema;
+the identical baseline recorded sixteen missing-helper AttributeErrors.
+Configured adapter presence is the controlled port; no Infernal operation or
+scientific evidence executes. Evidence:
+`runs/a107_original_infernal_schema_20261111_{baseline,candidate_audit,apply,applied_audit,repaired_probe,transition}/`.
+
+Thirty masking-selector staticmethod descriptors are also restored to their
+original source. Candidate and applied complete-module audits pass, and the
+current thirty file hashes match the applied audit. Evidence:
+`runs/a107_original_masking_static_20261111_{candidate_audit,apply,applied_audit}/`.
+The actual constructor/31-binding registry retry completed with all four Launch
+constructors built and all four bound masking selectors returning their original
+False value. Four Launch admissions also return; four HPC-native admissions still
+raise `unknown_execution_episode_role`, and the separate initial-context field
+conflicts remain. No native or model operation executes. Evidence:
+`runs/a107_original_masking_static_20261111_repaired_probe/`, with a successful
+drained receipt and exact source transition under `..._transition/`.
+Its reusable original helpers and separate driver have been promoted under
+root/tests with whole-byte/AST reversal audits in
+`runs/launch_diagnostics_required_helpers_20261111_{audit,apply,applied_audit}/`.
+
+Thirty-three JSON inventories and thirty-three ownership documents now account
+for the ninety restorations across sixty source files. Independent applied
+audits verify the complete 1,255-source chain, actual scientific fingerprint
+expression, unchanged historical descriptors and retained diagnostic/helper
+custody. The first preparer incorrectly assumed axis catalogs embed complete
+home inventories; V2 preserves the original catalog entries and their exact
+home references, changing only current method/source fields and new evidence.
+The initial failure and later process-exit observation remain retained. A separate
+audit invocation omitted its applied-state flag; the corrected invocation passes
+without any additional source or metadata change. Evidence:
+`runs/a107_original_repairs_metadata_20261111_{prepare02,candidate_audit,apply,applied_audit02}/`
+and `runs/a107_original_repairs_docs_20261111_{prepare,candidate_audit,apply,applied_audit}/`.
+The current source fingerprint is
+`6650de4ec1d79a5a936f0dd153f5b15e78dbb37848f518f2e87b51e1355dbd05`;
+this expression/source proof does not establish saved-workflow reconstruction.
+
+The later original-information baseline constructs full and partial registries
+with 43 and 31 bindings and preserves the original callback payload at all 66
+observed contexts. Both nonempty BLAST-progress and BV-BRC typed-admission
+checks return. The workflow nevertheless fails: all three RNA receipt cases
+stop in fixture preparation because the original 20 GiB native policy exceeds
+the current 5 GiB machine bound. No RNA custody is reached and no bound is weakened.
+The registry observations separately expose missing fixture HPC initialization
+and placeholder Launch assignments, alongside existing duplicate-field conflicts.
+Frozen fixtures and all failures remain retained for a scoped correction.
+Evidence: `runs/a107_initial_information_20261111_original_baseline/`.
+The receiving-source inventory also accounts for all six original callback
+copies and their direct method closure across 30 A107 and 24 A110 consumers in
+`runs/a107_a110_received_callback_inventory_20261111_prepare/`; it is preparation
+evidence, with no receiving-host application or integration claim.
+
+MinHash and wider received-reader restoration, private tasks, saved-workflow restoration and shared
+root integration remain separate unfinished work. Earlier scientific milestones
+are unchanged.
+
+## 2026-11-12 A104 original input validator and applicable default restored
+
+A104 now retains the complete tracked execution-input validator in its own
+library, with thirty direct consumers rebased. Independent applied audits recover
+the original module and every caller byte-for-byte and by AST. The original
+protected-reference checks are retained. The actual thirty-owner diagnostic
+returns for all empty input lists but raises the same missing
+`_atac_reference_access` callback for every ordinary nonempty input. The omitted
+ATAC/chromatin/protein owner callbacks and original provenance-reader closure
+remain an actual integration defect. Empty-input success does not resolve it.
+Further source comparison confirms that the original constructor also installs
+fluorescence result/return hosts unconditionally; the restored validator's
+conditional host lookup currently skips this omitted protection. Both original
+received-reference and ordinary resolution paths enforce the same protections.
+The exact original sources and read-authority requirements are retained in
+`runs/a104_protected_reference_closure_20261111_preparation/ORIGINAL_GUARD_ACCOUNTING.md`.
+The later sixty-case actual-owner baseline confirms both omissions: thirty
+nonempty input checks raise missing `_atac_reference_access` and thirty invalid
+fluorescence-control checks raise missing `_fluorescence_reference_access`.
+All 1,476 captured source hashes remain unchanged. The failed receipt is retained
+with a separate later inactive-service, empty-slice and absent-PID observation.
+No earlier scientific milestone is reopened by this separate relocation finding.
+The subsequent source-only restoration preparation accounts for thirty selected
+original reader modules and ninety-one private integration changes across thirty
+owners, with no application mutation. Independent selected-body review finds
+differences at eight of twenty-one existing dependency boundaries, including
+removed protein/fluorescence typed-schema checks. Full dependency reconciliation
+and genuine saved-receipt behavior remain required; symbol availability alone
+does not establish preservation. Candidate evidence is retained in
+`runs/a104_protected_reference_closure_20261111_candidate_audit02/`,
+`runs/a104_protected_reference_guards_20261111_candidate_audit02/` and
+`runs/a104_protected_reference_closure_20261111_boundary_review/`.
+The two earlier preparer/auditor defects and failed receipts remain separate;
+their corrected versions do not change application source or candidate guards.
+The saved-reader boundary V2 six-file audit, seven-file historical-policy read
+audit and three-file terminal-profile audit also pass. They preserve the original
+schema mutations, authenticate exact historical producer policy shapes as saved
+data, and restore the two original profile labels with explicit library owners.
+The five linked stages are now applied in their audited order: base30,
+private91, boundary6, policy7 and terminal3. They make 137 writes across 125
+distinct source files. Independent applied audits preserve each overlapping
+stage before its successor, and the final actual 1,770-file axis map has no
+unrelated changes. All four additional complete-module applied AST audits pass;
+every launcher receipt succeeds and drains. Native execution policies remain
+unchanged. The behavioral retry finishes with sixty identical import-time
+`KeyError: 'RawAtomRow'` failures: the selected protein contract extraction
+omitted types looked up through the original dynamic schema name table. This
+restoration regression blocks owner construction and requires the complete
+original schema dependency set; no protected-reference behavior passes yet.
+All 1,537 captured source hashes remain unchanged. The failed workflow receipt
+and separate actual inactive/empty-slice/absent-PID observation are retained.
+
+Ownership reconciliation now passes both candidate and installed audits for
+96 metadata records, thirty homes, 125 changed sources and fifteen required
+test/helper/fixture files. It preserves each earlier transition, old descriptors
+and both sixty-failure runs. The actual scientific-parent fingerprint expression
+was evaluated against that stage's source map; this is not reopening evidence.
+Evidence: `runs/a104_protected_readers_20261111_guard_connected/` and
+`runs/a104_protected_readers_20261111_records_{prepare,candidate_audit,apply,applied_audit}/`.
+The follow-on repair restores the entire original pure protein contract module,
+including 37 omitted classes, all 73 public schema names, original definition
+ordering and later action contracts. Independent candidate and installed audits
+recover its complete original bytes and ordered AST except one canonical
+own-axis import. All thirteen actual schema/annotation/detachment/invalid-input
+checks pass, with 1,539 source hashes unchanged and a successful drained receipt.
+The unchanged sixty-case owner suite finishes against that exact retained
+snapshot with thirty passing fluorescence invalid-control denial cases and
+thirty protein fixture failures. All protein cases construct their actual owner
+and pass the ordinary nonempty/version-conflict checks before the fixture tries
+to create a second root problem in one Store and receives `problem_already_exists`.
+Later protected grants and saved reopening assertions are not reached. All
+1,539 source hashes remain unchanged; the failed workflow receipt and separate
+actual inactive-service/empty-slice/absent-PID observation are retained.
+This one-module/two-test-input follow-on now has five ownership records applied
+and independently audited, including both catalogs and the actual scientific
+fingerprint. The four serial metadata workflows succeed and drain; the audit
+retains the thirteen schema passes and all sixty guard outcomes without adding
+a behavior claim. Evidence:
+`runs/a104_protein_dynamic_schema_20261111_records_{prepare,candidate_audit,apply,applied_audit}/`.
+The exact fixture-only correction is now applied and independently audited. It
+uses the ordinary evidence-material APIs for the second sequence while retaining
+all sixty cases and every original assertion, with complete AST/byte reversal.
+The first auditor incorrectly assumed one Store block; its failure is retained.
+The separately preserved V2 selects the block containing the outside-scope
+assignment and also accounts for the original saved-reopening block through full
+module equality. All other 1,538 Python/TOML sources remain unchanged.
+The full sixty-case successor has completed under
+`runs/a104_protected_readers_20261112_guard_fixture_connected/`: thirty fluorescence
+invalid-control checks pass, and all thirty protein cases fail the same expected
+outside-scope rejection. The replacement created an ordinary evidence reference,
+which remains visible under the original reference-scope rules. All 1,539 source
+hashes remain unchanged. Its failed receipt is retained unchanged; a separate
+actual post-exit observation confirms inactive service, empty owning slice and
+absent supervisor/driver. A proper unassigned input subject requires two actual
+problem inputs and a scope selecting only one. The two-target fixture successor
+is now applied after independent candidate and installed whole-module AST/byte
+audits, with all original assertions and sixty case identities retained.
+The runner audit also preserves the original pytest options and incremental
+failure capture. All four audit/application workflows succeed and drain.
+The complete original protein function passes for the actual
+`hpc_work_planning/execution_job_submission/api_job_execution` owner, including
+nonempty validation, independent grants, both Store lifetimes and tamper denial.
+Read-only post-test SQLite corroboration separately confirms two actual input
+records with sequences MACDEFGH/WACDEFGH and first-input-only scope; database
+bytes remain unchanged. The one-home receipt succeeds and drains, with the full
+1,539-file current source map unchanged. The gated full sixty-case successor now
+finishes with sixty passes, covering all thirty actual owners with every original
+case identity retained. Its post-test source/evidence checks succeed, all1,539
+source hashes remain unchanged, and the workflow receipt succeeds with complete
+descendant drain. Primary inspection separately confirms the inactive service,
+empty owning slice and absent original supervisor/driver, retained under
+`runs/a104_guard_two_target_fixture_20261112_full60/post_exit/`.
+This establishes the tested nonempty input validation, independent protein
+grants, supported Store reopening, tamper rejection and invalid fluorescence
+control denial. Positive native producer/receipt custody and full workflow
+restoration remain separate. Application scope rules are unchanged. Evidence:
+`runs/a104_guard_two_target_fixture_20261112_full60/`.
+Evidence: `runs/a104_guard_two_target_fixture_20261112_{prepare,candidate_audit,runner_audit,apply,applied_audit,one_home}/`.
+Earlier fixture
+source evidence is retained in
+`runs/a104_guard_fixture_successor_20261112_{prepare,candidate_audit02,apply,applied_audit}/`.
+The fluorescence result
+establishes invalid-control denial, not positive saved-sheet custody.
+Evidence: `runs/a104_protein_dynamic_schema_20261111_{prepare,candidate_audit,apply,applied_audit,contract_checks}/`
+and `runs/a104_protected_readers_20261111_guard_schema_connected/`.
+Full saved-reader checks remain pending. The terminal reader's call to a missing base `_commission` method is
+a separate inherited call-path defect awaiting an actual installed baseline.
+Evidence: `runs/a104_protected_readers_20261111_guard_baseline/` and
+`runs/a104_protected_readers_20261111_{chain_prepare,apply_base30,audit_base30,apply_private91,audit_private91,ast_private91,apply_boundary6,audit_boundary6,ast_boundary6,apply_policy7,audit_policy7,ast_policy7,apply_terminal3,audit_terminal3,ast_terminal3}/`.
+Evidence: `runs/a104_saved_reader_boundaries_20261111_candidate_audit02/`,
+`runs/a104_retained_policy_compatibility_20261111_candidate_audit/` and
+`runs/a104_terminal_reader_profiles_20261111_candidate_audit/`.
+Required positive-receipt inputs are now preserved under A104 tests: two
+original049 fluorescence cases (298 original files) and one original336 protein
+case (124 files, three original control chains). Independent archive/source
+audits and applied hashes preserve original records and producer identities.
+The protein case belongs to the original A101/P01 mixed execution owner; these
+are saved-read fixtures, not new A104 scientific results. Two fluorescence
+transport-denial tests pass; the full saved-reader tests remain unexecuted.
+Evidence: `runs/a104_retained_fluorescence_20261111_fixture_{prepare,audit,apply}/`,
+`runs/a104_retained_protein_20261111_fixture_{prepare,audit,apply}/` and
+`runs/a104_retained_fluorescence_20261111_transport_checks/`.
+Evidence: `runs/a104_execution_input_versions_20261111_{apply,applied_audit,actual_probe}/`.
+
+The independently audited A104 default repair restores only the original
+applicable `local_tools.minimap2_cpu` default. Existing configuration tables and
+explicit native choices remain unchanged. The actual default-resource diagnostic
+now returns at all eleven observed boundaries, including the ToolRegistry that
+previously raised `KeyError: local_tools`. No native or provider work executes;
+these constructor observations are not a passing-test count. Evidence:
+`runs/workflow_resource_policy_20261111_a104_defaults_{apply,applied_audit}/`
+and `runs/workflow_resource_policy_20261111_a104_after_defaults/`.
+A102 defaults and the separate existing count-policy gates are still open.
+The separate publication syntax repair now changes only the misindented proof
+guard. Its V2 candidate/applied audits preserve both complete original guards and
+recover every other current byte; the failed earlier single-guard audit remains
+retained. Evidence: `runs/hpc_launch_private_20261111_a104_indentation_{audit02,apply,applied_audit}/`.
+The required twelve-home native-contract suite completed with **76 passing
+cases**. It exercises original parent contracts, actual runtime commissioning
+through four Launch parents, rejected mutations, full invalid/failed/unavailable
+outcomes and exact saved-credit replay, and nonempty graded-BLAST request
+operands through actual ToolRegistry/API preparation. Construction/outcome ports
+are controlled; no native or provider dispatch occurs. Immutable input-version
+lists remain empty, so this does not validate nonempty protected inputs. The
+retained source map is unchanged across the run; the successful workflow receipt
+and inactive service/empty process observation confirm completion and drain.
+Evidence: `runs/hpc_launch_private_20261111_a104_native_contract_checks/`.
+Ownership reconciliation for this follow-on is complete: sixty-five records
+cover thirty affected homes, the restored helper, axis/root catalogs, two
+required test/diagnostic files and the actual scientific-parent fingerprint.
+Independent candidate and applied audits verify the exact thirty-two-Python /
+one-TOML source delta against the preceding stage, preserve unrelated metadata
+and historical fingerprints, and retain the unresolved diagnostic failures.
+Evidence: `runs/hpc_launch_private_20261111_a104_dependency_records_{prepare,audit,apply,applied_audit}/`.
+Private task connections, protected nonempty inputs, full saved restoration,
+shared-root integration and autonomous science remain incomplete.
+
+## 2026-11-12 A104 selector and native admission repairs reconciled
+
+A104 restores thirty original staticmethod descriptors and four imports to the
+actual commissioning-parent authentication functions. Twelve native children
+now use private parent-launch contract helpers with their own singleton schemas
+and credit callbacks preserved. Independent applied whole-module audits account
+for all fifty-eight source files, including the original graded-BLAST union and
+immutable-input constraints. The same actual diagnostic constructs four Launch
+owners and thirty-one bindings; all four bound masking selectors now return.
+The four Launch and four HPC-native admissions advance to the separate missing
+`execution_input_versions` dependency. Context conflicts remain unchanged.
+These are controlled constructor/admission observations, not a passing-test count.
+
+Sixty-four ownership records covering thirty homes pass candidate and applied
+consistency audits. The actual scientific-parent descriptor expression is checked
+against the current complete source map, while historical descriptors and earlier
+test evidence remain retained. The first preparation failed on a relative-path
+calculation before mutation; its failed receipt remains separate from the
+successful corrected preparation and audits.
+
+Evidence: `runs/hpc_launch_private_20261111_a104_{static_auth,native}_applied_audit/`,
+`runs/hpc_launch_private_20261111_a104_after_admission_repairs/` and
+`runs/hpc_launch_private_20261111_a104_admission_records_{prepare02,audit,apply,applied_audit}/`.
+Input validation and its original protected-reference checks, default configuration,
+private tasks, complete saved restoration and shared-root integration remain open.
+This stage does not establish autonomous scientific validation.
+
+## 2026-11-12 canonical workflow-resource ownership repaired
+
+A102/A103/A104/A107/A110 now import the actual canonical machine-resource checker.
+Thirty-one consumer files change only fifty-one import destinations; five
+redundant checker copies are removed with their complete original bytes retained.
+Independent whole-file and AST reversal audits account for every change, all
+static consumers and the unchanged dynamic-loader sources. The canonical checker,
+launcher, one-CPU/5-GiB/no-swap bounds and authentication guards are unchanged.
+
+The actual five-axis baseline records nineteen raised boundaries: three A102
+missing-default errors and sixteen supervisor-identity errors across four axes.
+After repair and retirement, eight default Policy/Resources constructors and
+three ToolRegistries return. Four independent configuration errors remain:
+A102 lacks `local_jobs`/`local_resources`, and A104's registry now exposes missing
+`local_tools`. Each run uses actual Stores and the real launcher/owner guards;
+these observations are not a passing-test count or a scientific workflow.
+All five axes retain their own Policy and AcquisitionError identities.
+
+The applied metadata audit verifies twenty-two records, thirty-one current
+consumer catalogs, five retired catalogs retained historically, 240 current
+binding dependency updates and all five actual scientific-parent fingerprints.
+Complete pre-stage source maps prove the exact import/removal delta. One older
+A107 source delta is retained separately and receives no new behavior claim.
+The two required diagnostic helpers are cataloged at their tested hashes.
+
+Evidence: `runs/workflow_resource_infrastructure_20261111_{baseline,prepare,candidate_audit,import_apply,import_audit,after_imports,retire_apply,retired_audit,after_retirement}/`
+and `runs/workflow_resource_infrastructure_20261111_records_{prepare,candidate_audit,apply,applied_audit}/`.
+The separate real-checker observation in `..._cpu_baseline/` accepts a one-thread
+argument and rejects two without launching native work. This existing argument
+ceiling, related reservation/count gates and the missing defaults remain separate
+open policy/configuration repairs; this import change introduces no new limits.
+
+The identical A103 parent-context probe now completes with forty-three bindings,
+thirty-eight contexts and six nonempty received-BLAST contexts. Eighteen ordinary
+contexts conflict, fourteen lose original execution information and six Results
+contexts preserve it. All six received annotation/scientific views conflict,
+while the original registry method with the current own-axis provider retains
+one original job through accepted, waiting and aged-without-new-observation
+states. The API host/publication path is actual with controlled transport; no
+native command or live provider request executes. Evidence:
+`runs/hpc_launch_private_20261111_a103_parent_context_after_resources/`.
+Private task completion, context preservation, full saved restoration,
+shared-root integration and autonomous scientific validation remain open.
+
+## 2026-11-12 second-team private implementation stages
+
+A108's fifteen existing homes now select private tasks and responsibility files;
+fourteen named parent-child exchanges and thirty-eight scientific library modules
+have scoped ownership records. The final source audit verifies the task/MRO
+connections, current literature descriptors, retired imports and required input
+retention. The subsequent ownership refresh records fifteen inventories and 556
+current source owners. Original pending notes remain historical, not current
+ownership. The typed finding, original observation identities, qualifications and
+required saved grading before credit remain part of the original scientific
+path. This is a private implementation stage, not full shared-root integration.
+
+A105 currently declares fifteen private tasks; A101 and A106 declare forty and
+twenty-nine respectively, including previously extracted operational episodes.
+Their source, message, progress, scientific-library and restoration increments
+are recorded separately by the second team. Wider scientific/helper moves,
+provider applicability and final ownership reconciliation remain open. These
+declaration counts do not establish that every requirement is complete.
+
+The six A106 homes added since the earlier twenty-three-home census represent
+the original optional Literature-to-Launch/Results/API branch beneath the two
+eligible Literature parents. Four retained originals match tracked Git bytes;
+the original capability gates, child commission and ordinary iterator are
+explicit. All six current bindings select their own task implementation. The
+source audit accounts for 558 original methods and 148 responsibility files;
+the successful application and focused twelve-case exchange retry retain drained
+workflow receipts. The first larger suite's twelve fixture failures remain
+retained separately. This establishes the branch's original episode provenance
+and scoped connection evidence, not complete native execution or restoration.
+Evidence: `runs/second_orchestrator_coordination/A106_SIX_HOME_PROVENANCE.md`,
+`runs/second_orchestrator_a106_analysis_children_connect_01/`,
+`runs/second_orchestrator_a106_analysis_children_post_01/` and
+`runs/second_orchestrator_a106_analysis_exchange_custody_post_01/`.
+
+The retained receipt index reports selected, overlapping historical stage unions:
+A108 has 361 distinct latest-passing identities; A105 has 507; A101 has 866 plus
+57 skips; A106 has 759 plus 18 skips. Repeated executions are excluded from those
+identity counts. They are not one suite run against one final source revision,
+and older A105 failures outside the selected index remain unresolved. Actual
+local publication, typed receipt/replay and authenticated current-descriptor
+reconstruction checks are distinguished from their controlled provider ports.
+These receipts do not establish full saved-workflow or autonomous validation.
+
+Evidence: `runs/second_orchestrator_a108_final_sources_audit_01/`,
+`runs/second_orchestrator_a108_ownership_refresh_02/` and
+`runs/second_orchestrator_candidate_receipts_01/candidate_receipt_counts.json`.
+The receipt index names each included execution and its cases; the detailed
+stage accounting is retained in
+`runs/second_orchestrator_coordination/CANDIDATE_LEDGER_ENTRY.md`.
+Full-root runtime assembly, nonempty parent/sibling context preservation,
+complete restoration and the full root-and-every-episode goal remain open.
+Earlier scientific milestones are unchanged.
+
+The later A101 mixed-return placement retains44 installed files, comprising41
+existing files and three pure-library additions. Its original405 return and59
+data/frame cases now pass after the separately retained one-import initializer
+repair. Primary reads the complete post auditor, verifies all21 linked evidence
+hashes and44 current afterimages, and inspects the actual commands, successful
+drained receipts and zero-failure/error/skip JUnit summaries. The audit compares
+the complete original case sets and exact selection commands. The first failed
+collection and its separate exit record remain intact. These464 controlled cases
+support the selected return/dataframe behavior, not native/provider execution,
+complete restoration or the separate remaining30 move. Evidence:
+`runs/second_orchestrator_a101_mixed_returns_post_03/`,
+`runs/second_orchestrator_a101_data_frames_post_02/`,
+`runs/second_orchestrator_a101_mixed_post_proof_03/audit.json` (a068ebf3),
+drained audit workflow89eb0bc1 and
+`runs/root_a101_mixed464_20261112_primary_reconciliation/REVIEW.md`.
+
+The separate remaining30 placement is now installed and independently audited.
+Applicationf13669ac and installed audit95d850e3 have successful drained workflows
+c83e3736/fe946059. The independent source reconciliation verifies264 current
+afterimages,1935 protected inputs,264 saved originals,528 proposal/original
+entries,92 linked evidence references and all30 absent retired paths. Its full
+ordered events and source proofs account for262 A101 writes and exactly the two
+released external test import/selector changes; no assertion changes or other
+shared writes are in that installation. Primary reads the complete review,
+verifies its sealed evidence and actual application/audit commands and receipts.
+The subsequent finite post-move comparison is recorded below. Original failed
+profile, registry and broad-collection baselines stay intact; mixed464 remains
+separate.
+This is installed placement, not final ownership/fingerprint reconciliation,
+complete saved restoration, scientific validation or a task-count increment.
+Evidence: `runs/a101_remaining30_20261112_independent_reconciliation/REVIEW.md`
+(5d19f300) and its review freezec7b84f47.
+
+All seven original selections have now been rerun and independently compared.
+Comparisonc5b46eeb and auditd0bf7d94 pass with drained workflows9f1871d0/c42eefcf;
+primary verifies the actual hashes, commands, owner and resource bounds, and
+reads sealed independent reviewd0c4d6d8. It authenticates3091 retained inputs,
+all14 original/post JUnit and workflow pairs and exact identity multisets.
+There are231 distinct records with22 overlapping identities across selections:
+224 passing records, one retained registry fixture ImportError and six collection
+errors. These are not231 passing tests. The profile group improves27-pass/6-fail
+to33-pass, and registry24-pass/2-fail to25-pass/1-fail. Five collection error bodies
+are unchanged; the sixth differs only in the source-supported traceback line23
+to21. Failed test workflows remain failed with separate complete-exit records.
+The later five own-test changes are explicitly a different source epoch and do
+not revise these historical outcomes. This establishes the selected placement/
+behavior comparison, with no complete restoration or scientific-workflow claim.
+Evidence: `runs/second_orchestrator_coordination/REMAINING30_POST_ACTUAL_20261112.md`
+and `runs/a101_remaining30_post_20261112_independent_reconciliation/REVIEW.md`
+(d0c4d6d8; review freeze6c40c548).
+
+## 2026-11-12 targeted execution dependency and admission repairs
+
+A104 now retains five omitted masking publication/calculation modules in its own
+library, with two direct consumers updated and two required test files restored.
+The seven application files and complete original test bodies have independent
+source audits. **71 checks pass**, covering retained-byte calculations, saved
+result projection/replay, tamper rejection and the original exception/policy
+identities. These are local fixtures with no native or provider execution.
+The next actual constructor probe still fails in all four HPC Launch homes on
+the separate missing `native_blast_masking_returns` dependency. Reader dependency
+closure was then restored in a separate eleven-file change: eight original
+library modules and three direct consumers. Complete source/test audits account
+for the moves and explicitly preserve five unrelated missing lazy tool-contract
+imports. The reader suite has **72 distinct passing cases** across 71 initial
+passes and one focused retry. The initial failure was an unchanged original V1
+test assertion against the already expanded V2 fact-source set; original views
+are byte-identical to the tracked source, and the test-only correction retains
+both contracts. The failed run remains retained. All thirteen reader identities,
+six installer configurations, four Launch constructors and all thirty-one
+registry bindings now construct. That diagnostic exposed separate missing
+authentication imports, native-role rejection, missing selector staticmethods
+and duplicate context fields. The later fifty-eight-file stage above repairs the
+first three and retains the actual next input-validator failure; duplicate
+context fields remain open. No full workflow restoration is
+established by these dependency checks.
+
+Twenty-four native children beneath the eight A102/A103 HPC Launch homes now
+validate their parent's original launch contract through a private
+`parent_launch_contract.py`. Their own singleton role schemas and credit
+callbacks are unchanged. The complete requests ASTs are independently recovered
+after reversing the one helper import/call change. The same eight focused
+API/local/HPC parent-contract and original runtime-commission cases fail with
+`unknown_execution_episode_role` before repair and **pass after repair**. These
+behavior cases cover the first HPC Launch home of each axis; the source audit
+covers all twenty-four repaired children. Child construction and provider ports
+are controlled. This does not establish the complete eight-home Launch suite.
+
+Evidence: `runs/hpc_launch_private_20261111_a104_{masking_prepared02,masking_apply,masking_tests,after_masking}/`,
+`runs/hpc_launch_private_20261111_a102_a103_native_{candidates,audit,apply,applied_audit}/`
+and `runs/hpc_launch_private_20261111_native_contract_{baseline,recheck}/`.
+Reader evidence is in `runs/hpc_launch_private_20261111_a104_reader_{closure,baseline}/`,
+`runs/hpc_launch_private_20261111_a104_readers_{prepared,prepared02,apply,tests}/`,
+`runs/hpc_launch_private_20261111_a104_schema_test_{prepare,audit,apply,retry}/`
+and `runs/hpc_launch_private_20261111_a104_after_readers/`.
+Scoped ownership refreshes now pass independent applied audits. A102/A103's
+twenty-four native inventories account for 192 current sources and retain the
+eight focused passing identities. Six root/scientific-parent records preserve
+their historical descriptors, current complete source fingerprints, and the
+distinction between the tested Launch helper and its later untested revision.
+Thirty restored A103 staticmethod decorators have source evidence; their behavior
+retry remains pending. A104's seventeen refreshed metadata files account for
+eighteen application sources and five required test/helper files, with current
+callers and the exact 71-plus-one reader evidence retained. Evidence:
+`runs/hpc_launch_private_20261111_a102_a103_native_records_{prepare,apply,audit}/`,
+`runs/hpc_launch_private_20261111_root_records_{prepare,candidate_audit,apply,applied_audit}/`
+and `runs/hpc_launch_private_20261111_a104_records_v2_{prepare,audit,apply,applied_audit}/`.
+
+The actual A102 parent-context baseline constructs all forty-three bindings.
+Across thirty-eight contexts, eighteen raise duplicate-field conflicts and
+fourteen monitor/prediction contexts lose the original execution information;
+six Results contexts retain it. The comparison executes the original registry
+aggregation with the current own-axis provider, not the complete historical
+application. A103's initial identical probe failed before registry construction because
+its copied resource checker expects a different supervisor module from the
+canonical launcher. The canonical-resource stage above repairs that startup
+failure and retains the actual follow-up context diagnostic. The context defects
+remain distinct from earlier scientific milestones. Initial evidence:
+`runs/hpc_launch_private_20261111_a102_parent_context_baseline/` and
+`runs/hpc_launch_private_20261111_a103_parent_context_baseline/`.
+
+Private Launch tasks, full-registry
+context preservation, whole-workflow reopening, shared-root integration and
+autonomous scientific validation remain open. Earlier validated milestones are
+unchanged. The source recount is still 153 of 399 homes with both `task.py` and
+a declared decision source; that is a task-connection count, not a completion
+count for the full requirement.
+
+## 2026-11-11 parent-specific HPC allocation messages
+
+Ten HPC planning parents in A102, A103, A104, A107 and A110 now own
+substantive `to_child_hpc_allocation_execution.py` and
+`from_child_hpc_allocation_execution.py` implementations. Their original children
+retain independent `from_parent.py` admission and `to_parent.py` reports. Parent
+selection uses the original saved action and report-attempt child identity,
+including redelivery. The outgoing request preserves the original commission,
+owner and schema checks; the child still enforces its private yield requirements.
+
+Each incoming implementation preserves its own axis's effective receipt body:
+cached admission, declared references, typed-form operation keys, progress,
+attribution and timing where originally present. A110's original receipt path
+has no timing block; the other four retain theirs. The shared owner ledger still
+measures accepted-obligation credit, and receiving or redelivering an allocation
+report does not add that credit again. All five runtimes and all ten allocation
+children are unchanged in this step.
+
+The corrected pre-change baseline has **290 distinct passing checks** across two
+nonoverlapping runs. The post-change run has **300 passes**: 140 allocation,
+120 prediction and 40 monitor exchange checks, including ten new named-receiver
+selection checks. These totals overlap older exchange checks and are not added
+to them as new coverage. The first baseline exposed a missing scientific ancestor
+in the new test registry: its A102 receipt has 51 passes and seven failures.
+The fixture now includes the actual scientific-process binding, with controlled
+instruction-library configuration. The interrupted original run and the corrected
+ancestry checks remain retained; the failed run is not counted as passing.
+
+Checks use actual local ledgers, journals, original typed contracts and reference
+custody, with controlled provider/receipt/cache/child-construction ports. They
+verify the named connection and replay behavior, not live HPC or autonomous
+scientific work. Three source audits reconstruct the outgoing child-admission
+derivation, original effective receipt bodies and mechanical parent connectors.
+Final consistency verifies 800 current private hashes, 40 directional endpoint
+paths, twenty retained historical descriptors, ten unchanged child descriptors
+and source sets, and five scientific-parent fingerprints. Ownership inventories,
+catalog callers and current implementation identities agree.
+
+The first consistency check exposed ten existing monitor exchange tests and their
+shared helper missing from earlier catalogs. Their entries are now recorded;
+application and test source are unchanged. The failed check and additive catalog
+correction are retained separately.
+
+Evidence: `runs/hpc_allocation_messages_20261111_{baseline_ancestor,baseline_remaining,connected,audit_a102_a103,audit_a104,audit_a107_a110,records,catalog_correction,consistency02}/`.
+Initial failed fixture evidence remains in the corresponding `baseline_tests/`
+run. This resolves the planning-to-allocation named-message limitation for these
+ten exchanges. Complete Launch/results exchanges, dependency review, repairs to
+earlier relocation defects, full saved-workflow restoration, shared-root
+integration and the full root-and-every-existing-episode goal remain open.
+Earlier scientific implementation and validation milestones are unchanged.
+
+## 2026-11-11 private HPC planning and allocation bindings/tasks
+
+Twenty existing HPC planning and allocation episodes in A102, A103, A104,
+A107 and A110 now have private goal, task, assignment, report, decision state,
+instructions, operations, ledger credit, continuation and waiting implementations.
+The original runtime selects each declared task; no task inherits the mixed-role
+`DecisionSource`. Each binding explicitly selects its separate axis formatter.
+Original child collection, typed report repair, selected waits, checkpoints,
+returned invalid/failed/unavailable outcomes and saved-action replay remain on
+their original paths. Allocation instructions no longer direct it to commission
+an unavailable prediction child. Scientific graders are not owned by these
+operational episodes; original result acceptance remains distinct from scientific
+assessment and numerical evidence scores.
+
+Forty superseded requests/returns modules are removed. Their applicable contents
+now live in assignment/report, state, evidence, operational and directional Launch
+helper files. Eighty-four admission callers import the original authentication
+helper directly from its actual parent. Monitor and prediction exchanges retain
+their previously connected endpoints. Complete planning-to-allocation, Launch and
+result-acquisition exchanges still need named endpoint wiring; moving the Launch
+preparation/custody helpers does not establish that connection.
+
+The corrected pre-change binding baseline covers **380 distinct passing checks**.
+The initial new fixture incorrectly expected a forecast version key; its twenty
+failures and the correction are retained. After the binding split, **600 checks
+pass**: 380 binding checks and 220 original-runtime task baseline checks. After
+task extraction, **730 checks pass**: 300 private task/presentation checks and
+430 existing monitor, prediction and calculation boundary checks. This gives
+**1,110 distinct current passing checks across the two post-change runs**; the
+220 task baseline checks are not counted again. Test-owned SQLite objects are
+released between completed axis suites. The inherited application connection
+lifecycle defect remains unchanged and open.
+
+Tests exercise actual local plans, frozen forecasts, authenticated allocation
+identities, result observations, ledgers, credit and continuation, plus task
+selection, failed outcomes, waiting and replay. Provider decisions, external
+transport, publication, child construction and receipt ports use controlled
+fixtures. These checks do not establish live HPC/provider operation, full saved-
+workflow reopening or autonomous scientific validation.
+
+The binding audit preserves 800 original methods,
+accounts for 260 role/dispatch changes and twenty
+fingerprint changes, and reconstructs all twenty operation dispatchers. It
+verifies 1008 unchanged caller functions.
+The task audit accounts for 420 original runtime
+methods, reconstructs decision-state/input extraction and verifies all twenty
+instruction composers. 580 binding files
+remain byte-identical through task extraction. Five runtime files and five
+original prompt composers are unchanged; exception identities are retained.
+Final consistency verifies 780 private source hashes,
+all twenty descriptors/configurations, all 84 changed caller hashes, actual library
+consumers and five scientific-parent fingerprints.
+
+Ownership inventories retain historical sources/descriptors separately from the
+current executable files. Scoped records for the 84 affected admission callers
+explicitly leave their complete implementation review open. The initial binding
+audit's duplicate-name assumption about predictor binding/task methods was fixed
+in the auditor. The first task audit omitted `importlib.util`; adding that import
+resolved it without an application change. Failed and corrected receipts remain
+retained.
+Evidence: `runs/hpc_planning_allocation_private_20261111_{baseline_tests,baseline_tests02,binding_and_task_baseline,task_connected,audit02,task_audit02,records,consistency}/`.
+
+The parent/allocation binding/task limitation recorded in earlier entries is
+resolved for these twenty homes. Remaining message/dependency review, A104's
+inherited closed-HPC reference omission, wider recorded syntax defects, full
+restoration, shared-root integration and the full root-and-every-existing-episode
+goal remain open. Earlier scientific milestones are unchanged.
+
+## 2026-11-11 HPC calculation and continuation-estimator ownership
+
+The prediction/resource mathematics in A102, A103, A104, A107 and A110 now live
+in each axis's separate `library/hpc_prediction.py` and
+`library/hpc_resource_prediction.py`. Each axis's unchanged
+`HPCContinuationEstimator` lives in `library/hpc_continuation.py`. Thirty
+planning, prediction and allocation bindings select these implementations with
+their original operands and private ledger verifiers. The superseded calculation
+files and estimator copies are removed; callers use the new homes directly.
+
+Original distributions, measured resource units, censored/missing observations,
+model/record identities, signed credit, continuation costs and numerical settings
+are preserved. The existing monitoring controller, exception and scheduler remain
+in `hpc_monitoring.py`; prediction's remaining indirect dependency validates the
+parent's supplied monitor policy. It adds no monitoring or waiting action.
+All thirty binding fingerprints include the actual library paths, while binding
+identity and configuration remain unchanged.
+
+The pre-change baseline has **155 passes**. The expanded validation has
+**795 distinct passing checks across the original run and failed-check retry**,
+covering actual mathematics, shared ledger custody,
+private estimator selection and original numerical-controller replay, plus the
+previous prediction task/prompt/message and monitor checks. Provider, child
+construction and receipt ports retain their documented controlled fixtures.
+The original expanded run has 784 passes and eleven file-descriptor exhaustion
+failures. All eleven pass in a fresh-process retry with application code unchanged.
+The original failures remain retained. Source comparison and a captured-connection
+check confirm that all five original `HPCLedger.open_existing` implementations
+leave their read-only SQLite connection without explicit closure; this inherited
+lifecycle defect remains open. The retry does not establish that the full suite
+passes in one process.
+Source comparison verifies 110 calculation/estimator functions, 1,424 caller functions across 161 files apart from imports/fingerprint paths, and 176 changed module imports. Five retained mathematical result vectors
+remain identical. Inventories, direct caller/consumer lists, thirty current
+descriptors and five scientific-parent fingerprints agree. Receipts are under
+`runs/hpc_calculation_ownership_20261111_{baseline,combined,retry,audit,records02,consistency02}/`; the behavior receipt is `runs/hpc_calculation_ownership_20261111_combined/pytest.xml`.
+The initial metadata pass assumed a dependency field absent from some parent
+inventories. Its failure and partial output are retained in the corresponding
+`records/` run; the corrected `records02/` pass adds a scoped dependency field.
+The first consistency check also exposed twenty existing allocation-monitor
+endpoints missing from the axis catalogs. Their entries and callers are now
+recorded; application code is unchanged. Correction receipts are in `catalog/`.
+
+This resolves the calculator/estimator placement limitation of the preceding
+prediction work. Remaining dependency review, planning/allocation task splits,
+A104's inherited closed-HPC reference omission, full saved-workflow restoration,
+autonomous scientific validation, shared-root integration and the full root-and-
+every-existing-episode goal remain open. Earlier scientific milestones are unchanged.
+
+## 2026-11-11 private HPC prediction instructions and rendering
+
+All ten prediction children now own instruction composition and explicitly select
+their separate axis's library formatter. Original goal and selected library
+guidance are retained; unselectable child-report repair advice is removed.
+Ordinary and exchange decisions use the existing optional presentation interface,
+with the original structured-call fallback for other providers. Child fingerprints
+include the selected library; superseded formatter files are removed and callers
+updated directly.
+
+The final check has **410 passes**: 180 prompt/dispatch checks and 230 existing
+binding/task checks. The baseline has 130 passes. A missing scope in the new
+exchange fixture caused 20 focused failures, all resolved without application
+changes. Actual local journals/replay and transport rendering use controlled
+provider/input ports. Audit verifies 250 imports, 200 byte-identical private files,
+590 preserved private functions, 1,331 preserved runtime/provider functions apart
+from imports, and 40 preserved formatter functions. All 15 retained input/axis
+renderings remain byte-identical. Inventories, descriptors, source hashes and
+scientific-parent fingerprints agree. Receipts are under
+`runs/hpc_prediction_prompt_20261111_{baseline,focused,combined,audit,records,consistency}/`.
+
+Shared calculator/continuation-estimator ownership was subsequently resolved
+as recorded above. Remaining dependency review, parent/sister task splits and
+full saved restoration remain open. A104's inherited
+closed-HPC reference omission is unchanged. These controlled checks do not change
+autonomous-science, shared-root or full-tree completion status; prior scientific
+milestones remain valid.
+
+## 2026-11-11 parent-specific HPC prediction messages
+
+All ten existing commissioning parents in A102, A103, A104, A107 and A110 now
+own named prediction request and receipt implementations. Runtime selects the
+original parent's handler using saved action/report-attempt child identities,
+including redelivery. Child admission, typed reports, original reference custody,
+shared-ledger credit and receipt keys remain on their original paths. Other
+bindings and children retain the complete default receipt implementation.
+
+The final retained check has **160 passes**, comprising 120 prediction exchange
+checks and 40 existing monitor exchange checks; the pre-change baseline has
+90 passes. These use actual local ledgers, journals and typed contracts with
+controlled receipt/provider ports, cached admission results and child construction.
+Source comparison preserves 240 child modules byte-for-byte, 630 parent functions,
+1,120 runtime functions and all five original default receipt bodies. Ten parent
+request connectors are extended, ten private receipt selectors added and five
+runtimes mechanically dispatch to the selected parent. All 110 parent modules
+import; fingerprints include both new message files with unchanged configuration.
+The first audit's empty-resource fixture failure and corrected audit are retained.
+Receipts are under
+`runs/hpc_prediction_messages_20261111_{baseline_tests,focused,combined,audit,audit02,records,catalog,consistency02}/`.
+The original consistency failure is also retained: 20 existing monitor endpoint
+files were missing from the axis source catalogs and now have current entries.
+
+This resolves the named-parent-message limitation of the preceding prediction
+split. Prediction prompts were subsequently connected as recorded above.
+Calculator library placement was subsequently resolved above. Parent task/mixed-role
+separation and remaining dependency review are still open. A104 already lacks
+the closed-history HPC-model reference branch found in the other four runtimes;
+the child custody check does not establish that inherited restoration path.
+Whole-workflow reopening, autonomous science, shared-root integration and the
+full-tree goal remain unfinished. Earlier scientific-axis milestones are unchanged.
+
+## 2026-11-11 HPC prediction private bindings and tasks
+
+The ten existing prediction children in A102, A103, A104, A107 and A110 now have
+private responsibility files and central task classes selected by the original
+runtime construction path. Parent-ledger custody, model/history identities,
+signed operational credit, prediction continuation and original action replay
+are retained. Inapplicable allocation/launch/monitoring/parsing/publication copies
+were removed from these children; their existing owners remain unchanged.
+
+The combined retained check has **230 passes**. These cover actual local model
+and ledger behavior, invalid outcomes, saved-action credit/replay, controlled
+failed/unavailable acquisitions, decision dispatch, runtime task selection and
+exception identity. Baselines and corrected fixture/extraction failures are
+retained. Source audit accounts for 240 imported private modules, 220 unchanged
+binding methods, 150 binding changes, 160 removed inapplicable method copies,
+70 unchanged applicable operation branches, 140 unchanged task methods and
+70 task changes. Five runtimes, 25 calculation/ledger modules and 20 existing
+parent/allocation owners are unchanged. Receipts are under
+`runs/hpc_prediction_private_20261111_{baseline_tests,task_baseline,task_baseline02,combined,audit,records}/`.
+The current-catalog consistency receipt is in the corresponding `consistency02`
+directory. Its wider caller scan retains three already recorded syntax defects
+outside this scope: A103/A107 `execution_progress.py` and A104
+`bvbrc_appservice_publication.py`. They are excluded from static caller tracing;
+all selected private prediction modules parse and import successfully.
+
+The named parent message endpoints were subsequently connected as recorded above.
+Private prompt composition/selection was subsequently resolved as recorded
+above. Shared calculator library placement was subsequently resolved above;
+remaining dependency review is unfinished. This is neither complete per-episode
+ownership nor full-tree completion, saved-workflow restoration, autonomous
+science or shared-root integration. Scientific-axis milestones and prior blockers
+remain unchanged.
+
+## 2026-11-11 monitor information-credit calculator ownership
+
+All 34 monitors now select their axis-local received-information calculator from
+private `credit.py`, using the caller's explicit reader and information unit.
+Seven separate library copies retain their applicable original calculations.
+Eight service-setup paths use that private selection. The existing custom
+projector callback remains unchanged, including its context, receiver selection
+and returned credit shape. Monitor fingerprints include both selected libraries.
+
+A104's missing calculator was recovered from the original shared dependency
+identified by its original service factory; the source matches Git HEAD.
+A107's incompatible copied job-status branch was removed after checking its
+actual episode/resource progress contract. Four stale reader imports now point
+to the existing public axis reader. Unused execution-class imports were removed;
+actual execution construction remains with its original factories.
+
+The expanded suite has 1,302 passes and the same two A106 Store failures, with
+matching test identities/messages. Another 34 checks connect actual returned
+outcomes to runtime credit projection and saved replay; all pass. Source review
+accounts for 34 unchanged calculator functions, one specifically narrowed A107
+fact-extraction function, 1,942 unchanged monitor functions, 34 fingerprint
+updates, 45 unchanged setup functions and eight mechanical selection changes.
+Receipts are under `runs/monitor_credit_ownership_20261111_{baseline,baseline02,behavior,connection02,audit02,records}/`.
+
+These are controlled connections, not autonomous science or complete real
+service construction. Current projector names identify library classes;
+historical names and fingerprints remain provenance. No saved-reopening override
+was introduced. Caller-specific credit presentation, missing legacy parents,
+whole-workflow restoration and the full-tree goal remain open. Scientific-axis
+and shared-root completion status are unchanged.
+
+## 2026-11-11 monitor instructions and declared prompt rendering
+
+All 34 monitors now compose applicable instructions privately and explicitly
+select their axis's standalone monitor formatter. Exact goal, report, history,
+resource-estimate, progress-component, waiting and delivery guidance is retained.
+Scientific commit/assessment and unrelated axis-selection instructions no longer
+precede monitor decisions. Each axis keeps its own renderer in `library/`, with
+its consumers recorded; the superseded root formatter was removed. Monitor
+fingerprints include the selected library source.
+
+Provider transport accepts an optional declared renderer and retains exact wire
+input and renderer identity. Its default behavior and worker lifecycle remain
+unchanged. Both ordinary and exchange monitor decisions use the private path;
+providers without the interface keep their original structured arguments.
+
+The expanded suite has 1,032 passes and the same two inherited A106 Store
+failures. All 340 affected instruction/dispatch checks pass after preserving
+the final applicable guidance. Source audit verifies 818 imports, 1,772 unchanged
+monitor functions, 136 accounted monitor method changes, 246 unchanged provider
+functions and 21 mechanical provider extensions with default bodies preserved.
+Receipts are under `runs/monitor_prompt_ownership_20261111_{baseline02,behavior,recheck,audit02,records}/`.
+
+This resolves the monitor instruction/rendering ownership limitation recorded
+below. Caller credit-shape review, missing legacy parents, whole-workflow
+reopening and the full-tree private-implementation goal remain open. These
+controlled checks change neither autonomous validation nor scientific-axis or
+shared-root completion status.
+
+## 2026-11-11 monitor tasks narrowed and decision state extracted
+
+All 34 monitors now call private decision-state and fresh-input modules.
+The snapshot extraction preserves its body exactly. Inapplicable scientific
+reasoning, job-child, result/read-mapping and shared-grading branches were
+removed where present; their active implementations remain with existing axis
+consumers. Nineteen remaining copies of unimplemented MACS2 hooks were removed.
+Fresh literature numerical preparation and HPC-specific history were removed
+where present; saved validation, actual outcome handling, credit, waiting and
+continuation remain on their original paths.
+
+The new controlled baseline has 272 passes. The expanded run has 698 passes
+and the same two A106 Store failures, with exact failing identities/messages
+matched to the prior monitor run. Source audit accounts for 174 changed methods,
+1,666 unchanged functions and 784 imported modules, plus preserved snapshot
+construction, descriptor configuration and exception identities. Receipts are
+under `runs/monitor_task_narrowing_20261111_{baseline02,behavior,audit,records}/`.
+
+The instruction/rendering limitation at this stage is resolved by the later
+entry above. Configured credit presentation, missing legacy parents and
+whole-workflow reopening remain unfinished. The full private-implementation request remains
+active; scientific-axis milestones and autonomous/shared-root validation status
+are unchanged.
+
+## 2026-11-11 remaining named monitor parents connected
+
+All 27 existing scientific/HPC commissioning parents now have named outgoing
+monitor requests and incoming progress receipts; the latest step adds 26.
+Source comparison preserves all 715 existing methods in those 26 parents.
+Only the progress-receipt block of six axis runtimes changes. Parent identity
+comes from the original saved action and report attempt, including redelivery.
+All 26 current descriptors construct with unchanged configuration and updated
+implementation fingerprints; HPC fingerprints now include both message files.
+
+The expanded run has 504 passes and 28 failures. Twenty-six failures were an
+incorrect test expectation: the unchanged form boundary raises
+`ReportBoundaryError`, not `ContractError`. After correcting only the assertion,
+all 26 affected cases pass. The combined retained review accounts for 530
+passing checks and the same two reproduced A106 Store failures. Raw outcomes
+are retained under `runs/monitor_parent_tree_20261111_{behavior,recheck}/`;
+`runs/monitor_parent_tree_20261111_records/validation.json` identifies the exact
+rechecks, and its `source_identity.json` records preservation and descriptors.
+
+The new tests use actual axis journal/progress tables over a controlled SQLite
+fixture. Seven missing legacy parent homes, remaining monitor applicability
+and credit ownership, the parents' larger task divisions, full saved-workflow
+restoration and the full-tree organization remain open. No scientific-axis
+milestone or autonomous/shared-root validation status changes.
+
+## 2026-11-11 monitor tree extraction and original parent receipt
+
+All 34 existing progress-monitor homes now have substantive private task,
+goal, decision exchange, state/replay, operations, summary, report, credit,
+yield, waiting and recursive message implementations. The 33 additional homes
+retain their own axis source and settings. Source checks account for 693 binding
+methods and 693 task methods, with 694 module imports. Of 693 unused-provider
+methods, 687 match the active providers; six A107 `observe` copies additionally
+contained an unused legacy job-status branch. Runtime already constructs the
+active axis provider. Removing the unused copies resolves the six A107 monitor
+binding import failures; it does not establish all A107 dependency closure.
+
+The expanded check has 426 passes and two A106 Store-initialization failures.
+The retained pre-split A106 binding reproduces the same missing
+`materials_packing.install_tables` error before monitor receipt execution.
+Source, behavior, baseline reproduction and ownership receipts are under
+`runs/monitor_tree_20261111_{baseline,audit,behavior,a106_baseline,ownership03}/`.
+A101's scientific-parent monitor request and receipt now have connected named
+endpoints; its focused run has 98 passes, including original-action/redelivery
+counterpart checks. Its unbound MACS2 hooks were removed after inspection.
+
+The other existing named monitor-parent endpoints were subsequently connected
+as recorded above. Missing legacy parent homes, copied presentation/hook
+applicability, caller credit and whole-workflow restoration remain open. The full private episode
+organization is incomplete. These results change implementation organization
+and controlled connection status only; earlier scientific-axis milestones,
+shared-root integration and autonomous validation remain separate.
+
+## 2026-11-11 A101 monitor private task and responsibility split
+
+The scientific-process `execution_progress_assessment` episode now connects its
+private task, decision exchange, state, operations, goal, internal summary,
+report, credit and yield modules. Recursive dependency requests and progress
+receipts have directional implementations. The scientific parent's message
+split was subsequently completed as recorded above; remaining applicability
+review is still open. This is not full
+episode or whole-tree organizational completion.
+
+The focused check has 91 passes, including ten monitor tests and the 81
+nine-axis routing checks. Tests establish private task selection, invalid-action
+observation, completed-action replay without re-execution, and compatible
+Store-backed receipt/redelivery behavior. A source audit accounts for 21 binding
+methods, 21 task methods under fixed monitor specialization, 21 removed unused
+provider methods, 22 imported modules, exception identity and the current
+fingerprint. Evidence is retained under
+`runs/monitor_responsibilities_20261111_final/` and
+`runs/monitor_responsibilities_20261111_audit02/`.
+This changes code organization and tested connections, not scientific-axis
+completion, autonomous monitoring or whole-workflow reopening.
+
+## 2026-11-11 private parent identity: controlled runtime connections
+
+All nine axis registries now distinguish predefined implementations by their
+declared commissioning paths, allowing different parents to register the same
+role. Core runtime task selection, credit, continuation, child assignment and
+contract discovery use the original invocation/parent path. Legacy bindings
+without this interface preserve unique-role selection. The nine scientific
+process connectors declare their existing identity explicitly; their method
+bodies are unchanged.
+
+The retained check in `runs/private_binding_identity_20261111_final/` has 184
+passes and 23 failures. All 23 failing identities and messages match the prior
+A105 example baseline. Controlled tests cover all nine registries/runtimes and
+the complete example suite. They do not prove autonomous scientific work or
+whole-workflow restoration. Remaining resource-route, native replay and saved
+composition gaps are recorded in
+[the full-scope progress audit](EPISODE_PRIVATE_IMPLEMENTATION_PROGRESS.md).
+The earlier role-only registration blocker is resolved at these tested
+boundaries; complete runtime integration and the full private implementation
+organization remain incomplete. Earlier scientific-axis milestones are unchanged.
+
+## 2026-11-12 A106 library relocation and scoped installed validation
+
+The exact candidate07 relocation is installed and independently audited after
+Primary and Fifth clear the 17 shared-file changes. Independent review verifies
+all 477 installed/candidate/original byte sets and 4,042 complete forward/inverse
+edits: 226 Python modules and one asset move, with all 227 old paths absent.
+The remaining 1,093 owned files and complete 1,552-file Python inventory match
+the expected transformation. The original source auditor accounts for 157,893
+original literals and the explicit import/loader changes. Open caller-selected
+factory interfaces remain scoped, rather than being certified arbitrarily.
+
+The 17 shared files contain 33 exact import or test-callable edits. Both root
+production readers change only their A106 import; the A104 selection and other
+bytes remain intact. The old A104 V11 receipts and full source maps remain
+historical and unchanged. The separate external-epoch record names the real
+A106 application/audit/posts; it does not replace an A104 transition or authorize
+an unrelated consumer. Primary reads the independent report, checks the actual
+application/audit and test receipts, and verifies its retained review and epoch
+references. Evidence: `runs/a106_relocation_20261112_independent_evidence_review/`
+and `runs/second_orchestrator_a106_library_candidate_07/`.
+
+Core62 and dynamic97 pass the exact original case identities and outcomes.
+Intervention17 also passes, giving 176 distinct completed post cases. All five
+application/audit/test workflows succeed and drain under the unchanged resource
+bounds. The matching older intervention selection retains its three failures;
+it is not relabeled as a passing immediate baseline or attributed to relocation.
+The subsequent shared50 post now completes with the same38 passes/12 failures
+and exact original case identities. Comparison8ce3a2bb succeeds with drained
+workflow29b4a556. Primary reads its actual comparator, verifies all eight retained
+input hashes and independently checks each of nine complete traceback edits:
+two relocate the table path, seven relocate the inputs path and145-to141 line;
+all failure attributes remain unchanged. The other three failure records are
+byte-for-byte equal. The original failed baseline and post receipt59a519fe both
+remain failed; the post's separate actual exit observation establishes inactive
+service, empty slice and absent supervisor without rewriting drainfalse.
+This verifies preservation of the selected shared baseline, not repair of its
+twelve failures. Evidence: `runs/second_orchestrator_a106_shared_behavior_comparison_01/`
+and `runs/second_orchestrator_a106_library_shared_callers_post_01/`. Controlled
+tests and scripted judgments do not establish autonomous scientific selection
+or full commissioning.
+
+The later exact A106 exception-owner repair replaces only the private copied
+ContractError declaration with its original canonical import. The required new
+five-case test and eleven original selected cases change from thirteen failures
+and three passes to all sixteen passes, with identical case identities/order.
+Primary reads the independent reviewe15cc697 and test/source boundary, verifies
+its24-member seal,481 inputs and six additional references, then independently
+joins all twelve actual budgets/results and ten separately retained exits.
+The original two preparation/audit roots have successful drained receipts but
+no separate exit sidecars; no observations are invented. Baseline workflow
+4d8e23e7 remains return1/drainfalse with its separate measured exit; post
+workflowacf81548 succeeds and drains. Whole-module and ownership-document
+inverses preserve the unrelated source and historical fields. These controlled
+exception/catch and admission results do not establish full scientific or saved
+workflow behavior. The domain, two ownership replacements and new test form
+an explicit later source epoch; historical copied14 evidence remains unchanged.
+Evidence: `runs/second_orchestrator_a106_exception_identity_candidate_01/`,
+`runs/second_orchestrator_a106_exception_post_01/`,
+`runs/a106_exception_actual_20261112_independent_review/` and
+`runs/root_a106_exception_actual_20261112_primary/`.
+
+The separate four-path perturbation fixture proposal passes source preparation
+1017afa0 and independent audit9ad330fd, with successful drained receipts
+ed06b2b9/a6c21bd2. Two complete module reversals preserve the original eleven
+test cases and scientific assertions; the extracted source/fixture functions
+and scientific fixture body remain exact. Three additional controls retain
+missing commissioning operands as denials. No canonical file or saved catalogue
+is changed. The copied-test runner's immutable V2 passes source inverse audit
+e0cb1140/workflow2b0b107c after making its cwd run-owned, its two selected-test
+paths absolute and its pytest root explicit. This proves those mechanical edits
+only; copied import identity, actual fourteen-case execution, promotion and
+the required current-source/catalogue transition remain pending. Evidence:
+`runs/a106_perturbation_operands_20261112_prepare/`,
+`runs/a106_perturbation_operands_20261112_audit/` and
+`runs/a106_perturbation_runner_root_20261112_v2_source_audit/`.
+The separate canonical-import V3 source audit15c004a0/workflow251206e4 now
+passes28 isolated controls:15 accepted,12 rejected and one observed original
+lookup failure. Primary reads all576 tooling lines and authenticates its source
+references. The complete runner inverse preserves all fourteen test identities,
+scientific fixtures and source maps; the real copied-package parent lookup and
+full copied-origin census reject aliases and repository fallback. No application
+or copied test body is imported by these controls. A separate complete old-map
+preflight subsequently finds89 changed hashes:41 A101 source paths and48 A103
+metadata paths. Their actual transitions and applicable dependency scope must
+be established before copied execution; the old21489 map is not silently
+refreshed and no completed axis work is reopened. Evidence:
+`runs/a106_perturbation_runner_import_20261112_v3_source_audit/`.
+
+The selected-domain successor d0dd4844 is then reviewed with peerf0d39ece, but
+its actual preparation fails at `unexamined_project_dependency`: the original
+annotation_bundle_fixtures imports flat bvbrc_annotation_contracts. Workflow
+deb6e61c and stderr2702c5c1 retain that failure; separate exit observation7c3c2bc9
+confirms an inactive service and empty owning slice. No domain or following audit
+is produced. The required original shared-fixture dependency closure remains
+unresolved; this does not reopen the completed A106 relocation or refresh the
+old21489 source map. Evidence:
+`runs/a106_perturbation_selected_domain_20261112_prepare/`.
+
+The immutable selected-domain V2 successor8a321b32 then completes its actual
+source audit, domain preparation/audit and original/candidate snapshots. Its
+domain4d379637 retains all1467 own-A106 non-test descriptor sources,1508 original
+files and1510 candidate files; the original21489-map partition remains explicit.
+The added22 historical flat dependencies close the conservatively selected
+helper import graph without making the four lazy RCSB/AlphaFold imports available.
+
+The copied candidate now passes all14 exact selected engineering cases and42
+phase reports: evidence43445eab, JUnit5cf8940b and drained workflow857a5204.
+All248 canonical copied identities and1470 observed copied reads match the
+authenticated snapshot; source guards remain unchanged and no identity/domain
+failure or read denial is reported. Independent review0fed548d verifies all
+seven real commands/budgets/owners,28 stage references, full copied pathsets,
+fixture inverses, case/JUnit identities and retained exit observations. Primary
+reads that complete review, verifies its52-member seal and74 input pins, and
+independently reconciles actual receipts, phases, origins and original failure.
+The original collection still returns2 with zero collected cases because its
+line8 imports absent flat communication; its drainfalse receiptb468c6fb and
+separate measured exit2618c9dd are preserved. No passing original baseline is
+invented. Evidence:
+`runs/sixth_a106_v2_candidate_checks_01/`,
+`runs/sixth_a106_v2_outcome_peer_review_01/` and
+`runs/root_a106_v2_20261112_primary_reconciliation/`.
+
+These results cover copied fixture/operand/custody and missing-commission
+controls. The fourth fixture proposal file's broader summary suite is uncollected;
+lazy providers, scientific workflow and historical external environment are not
+validated. The Python read observer is not an OS-level sandbox. All four fixture
+paths remain uninstalled. Their future placement must account separately for
+the exact root catalogue, commissioned-reopening and A106 independent-execution
+fingerprints, which include affected tests; the successful copied run does not
+authorize rewriting saved descriptors or waiving their exact comparisons.
+
+The exact four-fixture promoter5a2a62ca subsequently passes its source audit
+b7b07ed0/workflowdf29abe8 and run-owned filesystem controls377f4216/workflow
+55a88a6c. Primary verifies both actual commands, complete fourteen-field budget
+joins, genuine owning window/cgroups/bounds, successful drained receipts and
+separate retained exit observations. The source audit preserves the original
+collection failure and fourteen-case copied result, authenticates thirty retained
+references, two whole fixture inverses and five unchanged infrastructure modules.
+The controls exercise two replacements/two exclusive additions in a disposable
+mirror, six filesystem denials, an honestly incomplete journal and synthetic
+fingerprint changes with an exact inverse. The three broad test-inclusive
+identities change in those synthetic controls; the non-test literature identity
+stays unchanged. No scientific cases or canonical application run in these two
+stages. Actual epoch capture, a genuine plan, four-file placement and installed
+validation remain separate. Evidence:
+`runs/sixth_a106_fixture_source_audit_02/`,
+`runs/sixth_a106_fixture_controls_01/` and
+`runs/root_a106_fixture_source_controls_20261112_reconciliation/`.
+
+The following full catalogue capture is invalidated by actual concurrent source
+changes. Its first retained file predates Second's new exception-control test
+and the subsequent A106/domain.py exception-owner repair. The latter changes
+the fixed own non-test source guard fromca628562 to8799c08d as well as the broad
+catalogue. After preserving that evidence, the owning window interrupts only
+this invalidated capture. Actual workflowf0b253ec retains return1, driver-15,
+drainfalse and KeyboardInterrupt; separate exite1c08c11 records the inactive
+service, empty owning slice and absence of both observed processes. No complete
+capture, epoch or plan is produced, and no application or silent recapture is
+inferred. The successful earlier source/control stages and historical copied14
+remain unchanged. The real exception-repair epoch requires explicit downstream
+source accounting before the four-fixture promotion/installed verification.
+Evidence: `runs/sixth_a106_fixture_epoch_capture_01/` and
+`runs/sixth_a106_fixture_epoch_invalidation_01/`.
+
+The explicit exception-epoch successors then complete their three source/control
+workflows. Promoter a79d5a82 passes its six inherited full-module byte/AST inverses,
+twelve unchanged modules and ten new negative controls. Its original four-row
+mirror/denial/partial-journal checks also pass. Installed-reader14dff296 passes
+three new and three earlier whole-source inverses, all26 original isolated
+controls and eight new origin-map denials. Independent source reviewsaed0d0f4
+and91ce47b6 are complete; the separate correction8d91a97d supersedes stale copied
+old5a2 instructions while preserving both frozen packets. Primary reads the
+reviewed changes/correction and verifies all three actual literal commands,
+fourteen-field budget/result joins, real owner/cgroups, scope fields and separate
+measured exits. Workflows5beee4ef,c4277bcb and55c87767 all succeed and drain.
+The genuine Second12-workflow/10-exit/16-case repair and prior failed capture
+remain explicit. Expected249 origins/1471 reads are source-derived requirements,
+not a new runtime observation. Fresh stable catalogue capture, four-fixture
+placement and installed14 remain unexecuted and separately required. Evidence:
+`runs/sixth_a106_exception_source_controls_handoff_01/` (3e071c45),
+`runs/a106_exception_epoch_document_correction_20261112/` and
+`runs/root_a106_exception_source3_20261112_primary/`.
+
+The repaired-epoch four-file transaction subsequently completes. Genuine capture
+6af2861b, plan8dad445c, application2adffb19, applied audit56850115 and transition
+2f8061f5 agree on exactly two replacements and two additions, with complete
+19490-to19492 catalogue forward/reverse equality. Independent review2e0c49cb/
+seal712b7937 checks all four installed hashes/modes, eight literal producer and
+fourteen-field budget joins,55 artifact references and209 retained inputs;
+primary reads the review and verifies both sealed lists. No source hold is
+released by this reconciliation.
+
+The first installed attempt remains failed ad322ca5/workflowa6d64d03, zero cases
+and phases, return1/driver1/drainfalse: the guard rejects two existing canonical
+bytecode reads. The unchanged frozen runner's existing environment grammar
+then accepts PYTHONPYCACHEPREFIX beneath the fresh run directory. With -B and
+the original guards unchanged, actual evidence7456ccba/workflow649d461a passes
+all14 cases and42 phases, with249 canonical origins,1471 selected reads and zero
+denials. Final independent auditd6de275b/workflowf04f90cb verifies the exact
+copied-case/phase preservation and installed source transition. All eight stages
+retain separately measured exits. The capture's active evidence records PIDs
+only; its missing saved driver-start snapshot is not reconstructed. Evidence:
+`runs/sixth_a106_exception_transaction_handoff_01/`,
+`runs/sixth_a106_exception_installed_checks_cache_01/` and
+`runs/a106_exception_transaction_20261112_independent_review/`.
+These are installed synthetic operand/custody and fixture-owner controls. The
+broader summary suite, lazy providers, complete saved restoration, autonomous
+science and shared-root integration remain separate; connection counts do not
+change through this transaction.
+
+The completed cold checks validate retained saved-payload reads/projections
+without reacquisition through their tested port. Their read-only SQLite guard
+and change counter start after Store construction, so constructor-wide absence
+of durable effects is not proved. The amount capture remains a current
+pre-repair capture, not an original-release Store. No original execution-memory
+database was inspected for this review. Full organization, broader runtime
+integration and complete saved scientific restoration remain separate.
+
+## 2026-11-12 A105 capacity and native CPU-policy boundaries
+
+The private A105 capacity update and independent installed audit are complete.
+The exact same 40 case identities change from 25 passes/15 failures to 40 passes,
+with no errors or skips. Primary reads the actual resource/default diffs and
+preservation controls, verifies installed bytes/modes, retained evidence and
+successful drained receipts. Admission uses memory/scratch quantities; historical
+CPU/job counts remain inert typed metadata. Saved byte views, exact configuration
+and reservation rows, constructor-first initialization and original rejection
+behavior are preserved. The real launcher independently enforces one CPU,
+5 GiB RAM and no swap; a larger saved accounting view does not grant more RAM.
+
+The subsequent native policy update changes only private native_lifecycle.py
+and passes its complete module-inverse audit. The same 11 cases change from
+three passes/eight failures to 11 passes, with no errors or skips. New dispatch
+uses the actual one-CPU child quota independently of requested thread metadata;
+legacy saved quotas remain authenticated under the real bounded ancestor.
+Direct resume checks the owning workflow before its early return. Primary
+verifies the sole source change, 15 current selected sources, exact case
+identities, JUnit and successful drained application/audit/post receipts.
+The earlier capacity result retains its literal pre-native source map.
+
+These tests control child service observations and exercise real saved SQLite
+rows and the actual enclosing workflow boundary. They establish no native worker
+or scientific execution. Malformed quota markers and all cleanup paths are not
+claimed covered. Original failed receipts and separate exit observations remain
+retained. The independent scientific comparison dependency mismatch, complete
+organization, shared-root integration and saved scientific restoration remain
+open. Evidence: `runs/second_orchestrator_a105_capacity_transition_02/`,
+`runs/second_orchestrator_a105_capacity_post_01/`,
+`runs/second_orchestrator_a105_native_transition_01/` and
+`runs/second_orchestrator_a105_native_post_01/`.
+
+## 2026-11-11 A105 source-examination responsibility example
+
+One existing `literature_page` binding beneath
+`a105/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/`
+now has separate goal, task, credit, yield, internal summary, directional
+messages, grading and scoring implementations. Its connector selects a private
+task source through a mechanical runtime hook. The episode's README and ownership
+map record the actual files and retained shared infrastructure.
+
+All 246 private implementation modules import. Body comparison preserves 214
+scientific helper modules after import relocation and an explicit numerical
+extraction. The local test run has 103 passes and 23 failures; the 23 failing
+test identities and messages match the unchanged A105 implementation. Receipts
+are in `runs/source_episode_pilot_20261111_final/`, including
+`comparison.json`. This is a file-organization and controlled-behavior example,
+not autonomous workflow validation, combined-root completion or a changed
+scientific-axis milestone. The broader integration gaps below remain open.
+
+Later organizational cleanup, 2026-11-13: the private source-examination task
+and decision method no longer carry their two inapplicable scientific-head
+guards. Exact3 application4996b339 installs the two reviewed source files plus
+their own current inventory0144cedd. The current two source rows contain rebuilt
+AST/line/call facts; all historical inventory bytes and248 other owned sources
+remain unchanged. Original generic/head validation and all grading, finding,
+credit, failure and replay logic remain intact. The proof covers declared
+private construction/restoration, with manual wrong-role construction outside
+its scope. This source/ownership correction adds no new scientific validation
+or cross-release restoration claim. Evidence:
+`runs/root_a105_guard_application_01/`.
+
+## 2026-11-11 episode-directory placement complete; runtime integration open
+
+The structural pass is complete under the original
+`gene_annotation_episode/episodic_workflow/root/` package. The temporary package
+rename was reversed following the user's corrected goal. All nine ownership
+containers remain, including former A111 within A102 and no A109. Root/axis
+ownership inventories account for all 49 original axis classes and the
+annotation root in 399 private singleton-role homes. Actual commissioning
+parents have independent children; missing axis heads, scientific-process and
+monitor recursion, and legacy improvement recursion remain explicit.
+
+The final retained method comparison verifies 25,885 role-method copies across
+all 398 axis bindings, plus equivalence of all 19 original root functions.
+Root scientific combination and task-credit projection remain separate.
+Imports succeed for 387 bindings; 214 descriptors and 18 separate seven-role
+literature registries construct. All 41 focused existing BLAST grading/A108
+context tests pass. Ten episode-specific tests/helpers and 157 common binding
+tests/helpers have their recorded episode/root homes, with required assets
+preserved. Evidence is in `runs/episode_scope_review_20261111/review.json` and
+the check receipts referenced by `root/RELOCATION_REVIEW.md`.
+
+Runtime integration remains open: two baseline dependency gaps affect 12
+private bindings, four baseline syntax failures remain, and the role-only
+registry rejects duplicate parent-specific roles. Saved reopening, combined
+root construction and legacy homology composition remain unavailable. The
+root inventory additionally lists 29 statically missing application module
+names and unavailable legacy test imports. This is source-placement and
+preservation validation, not a new scientific workflow, biological result or
+change to earlier scientific-axis milestones. Later task-specific divisions
+remain recorded separately.
+
+## 2026-11-11 episode-directory relocation history (superseded above)
+
+The subsequent literature/root extraction replaces each axis's seven-role
+literature class with seven private, singleton-role bindings beneath its
+scientific-process parent (63 bindings). All use the recorded commissioning
+tree. Direct factories assemble independent instances; receipt fingerprints
+name the replacement files. Single-workflow checks in
+`runs/episode_literature_checks_20261111/` confirmed imports, construction,
+assignment schemas, child roles, credit kinds, waiting declarations and
+registration of all seven roles for each axis, plus preservation of 4,151
+method copies. This is structural/contract validation, not a scientific run.
+
+The existing annotation root now has `episode.py`, `requests.py`, `returns.py`,
+`credit.py`, `yield.py` and `scoring.py`. Its scientific combination remains
+separate from received-axis investigation credit. The root extraction check in
+`runs/episode_root_checks_20261111/` verified 18 unchanged functions and the
+complete original result reader after inlining its extracted credit block;
+all six modules import. The combined root constructor still reports its prior
+unavailable private-runtime binding. Operational binding relocation, remaining
+support/dependency and test ownership, and final scope verification remain open.
+
+The gathered package has moved to `gene_annotation_episode/episodic_workflow/root/`.
+All nine axis ownership containers are preserved, including former A111 within
+A102 and no A109. The nine generic scientific-process bindings now live at
+`aNNN/scientific_process/episode.py`, with their existing assignment, return,
+task-credit and yield methods extracted into local responsibility files. Names
+and destinations were recorded in ownership files before relocation. The generic
+role and recursive edge remain; no dedicated axis-head binding has been invented.
+The full episode-directory pass remains incomplete: other current bindings,
+their multiple roles and parent-specific copies, supporting dependencies, and
+test placement still require work.
+
+Single-workflow checks retained under `runs/episode_relocation_*_20261111/`
+verified preservation of 412 scientific-process methods after import/path
+normalization. The compatible-dependency baseline imported 47 of 49 binding
+modules. A106 execution references missing `native_protein_structure_contracts`;
+A107 monitoring references missing `JOB_STATUS_SCHEMA`. A broader syntax check
+also found empty loop bodies in A101/A103/A107 execution-progress modules and
+an over-indented conditional in A104 AppService publication; those statements
+were unchanged by relocation. These are current gather/registration limitations,
+not reversals of earlier scientific validation milestones. No scientific run or
+combined-workflow validation is claimed. Root and axis ownership files retain
+the concrete paths and unresolved work.
+
+## 2026-11-11 private-axis gather completion
+
+The physical gather of the existing nine-axis implementation is complete under `gene_annotation_episode/episodic_workflow/root/`: A101, A102 (including former A111), A103, A104, A105, A106, A107, A108 and A110. Each axis has independently placed applicable implementation, source/worker assets and directly bound private dependencies. The final pass also split the remaining scientific contribution helpers, corrected six A104 ancestor imports, and placed the retained A105 ITC/protease calculations, workers, contracts and publication primitives privately. Per-axis ownership files record origins, current callers and retained unbound functions; the root map records removed shared originals. Binding/continuation packages and identified single-task or policy helpers are outside library. Schema notes remain suggestions only.
+
+This completion is source placement, not scientific workflow validation. The user deferred tests and static suites; no parse/import checks, Python commands, investigations or jobs were run. Saved-descriptor reopening, old combined/default/example entry points and combined workflow assembly remain explicitly unavailable for the later binding pass. Retained standalone extensions outside the nine configured catalogs remain unregistered; their original files are preserved where other such extensions still depend on them. No private axis uses those originals as a behavioral fallback. Prior scientific validation milestones and retained results are unchanged.
+
+## 2026-11-11 remaining-original placement correction
+
+The previous entry-path completion statement was narrower than the full gather objective. A subsequent read of the remaining originals found obsolete combined policy/parser files, retained tool implementations still outside the axes, and root scalar imports in A103, A107, A110 and retained assay aggregators in A104/A106. The scalar helpers are now extracted privately and their callers rebound. Thirty-four old combined policy/parser/scientific-contract modules have been retired after their independent copies were placed. Every private iterator package has moved from `library/method_loop/` to `method_loop/` because it contains binding and continuation behavior. The subsequent source pass also placed and retired 94 A103 tool files/assets and 49 A101/A102/A107 originals, with independent A101 copies of its applicable GenomeComparison code. Single-task and policy helpers were moved out of library. The retained raw-assay molecular-worker boundary was subsequently split privately; see the completion entry above. No tests, parse/import checks, jobs or workflows were run. Prior scientific milestones remain unchanged.
+
+## 2026-11-11 evidence-axis code ownership gather
+
+All nine axes now have independent private tool registries and WorkflowServices. Runtime constructs each service through the supplied private registry, and uses its private provenance, tool-invocation, instruction-library, retrieval and semantic-receipt ports. The old mixed episode_services.py and scientific_process_provenance.py were removed. Preparation/revision readers have explicit current/parent paths without owner selection. Default investigation/action-delivery and decision-exchange prompts are private copies. Applicable scientific facts, findings, grading and native custody remain in each axis; unrelated copied return adapters and global API catalog injection were removed. A105/A108 retained-publication replay utilities are separate files beside their tests; the mixed script was removed. A105/A106/A108 finding-credit helpers are private.
+
+All nine axes have private runtime/parser and Store/material/context copies. Numerical/statistics and native execution dependencies have also been copied into each axis. All nine now have private providers and applicable prompt/work-report renderers. Private waiting/completion and vendored episode-loop copies are now written for all nine axes, with direct private worker/import bindings. The execution/service dependency passes for A101, A102, A103, A104 and A107 now have independent API/AppService/custody files and directly rebound callers. A105's remaining parent-information and assay-database measurement dependencies were copied privately. A106 now has its independent intervention AppService execution binding, monitor, factory and presentation, including original TnSeq/RNASeq result parsing and typed return paths. Root receiving, typed-return and receipt dependencies now have independent root copies. The known shared receipt/API/practical/execution-setup originals have been retired. The final source-placement pass has now addressed the identified missing private helpers, worker/snapshot paths, receipt-source fallbacks and caller mappings for all nine axes. A105 contribution helpers and remaining iterator imports were also split privately. No identified placement blocker remains in the reviewed entry paths; this does not establish runtime dependency closure. Saved-run reconstruction retains explicit unavailable-binding paths rather than new integration logic. This records source placement only; execution validation is deferred. No tests, parse/import checks, jobs or workflows were run; earlier scientific validation records are unchanged.
+
+The mixed top-level runtime, ToolRegistry/tool constructor, provider/authentication, scientific/execution/HPC/monitor prompts, work report, RNA prompts, receipt/parent-information modules, saved-construction modules, API/AppService dispatch, practical/HPC custody modules and execution setup/progress originals have been removed after their applicable private copies were written. Root continuation, record-value, received-result validation and subject-geometry helpers now have independent root copies. The generic CLI tool/catalog/run entry and the two root workflow constructors report explicit unavailable private bindings; no combined replacement assembly was introduced. Old case/default/independent/local-example callers of retired top-level modules remain unavailable pending the later binding pass.
+
+Earlier placement notes (superseded by the service-wiring update above where applicable):
+
+A106 now has its own source registry and clients, including GEO and SRA operations explicitly present in its literature catalog. Their source request, selected-file, publication and replay helpers are private; the intervention graders and typed finding/iterator path are unchanged. Its `services.execute_tool` construction boundary remains unresolved. This is code placement, not evidence of a validated workflow.
+
+A102 and A110 now import private base registries: structural preparation/publication and AlphaFold/RCSB/EMDB sources remain A102-local; chemical Rhea/ChEBI/KEGG/Reactome/PubChem and FBA paths remain A110-local. A105 and A108 have independently copied source registries tailored to their declared operations. A105 retains its experimental source readers; A108 excludes those undeclared acquisition branches and retains its organism/sample context source tools. Their generic service construction remains unresolved. No tests or workflow execution were run.
+
+A101 has a standalone private source/sequence/homology registry and clients. A103 and A104 now bind their separate private base registries directly, retaining their own genomic and evolutionary operations respectively. A103 owns STRING/UCSC/Ensembl source handling and recovered the missing database worker dependencies; A104 owns conservation/phylogeny execution and worker publication mechanics. A101 production construction remains caller-supplied, with no axis-specific default constructor found. Root Store/material/resource/timing/runtime services remain explicit dependencies. A102 monitoring information/record validation is private, and A107 native receipt/scoring views no longer use configured-axis selection or receipt filters. None of these placements has been executed or validated by tests.
+
+A110 execution setup now lives privately in `a110/execution_service_setup.py`, binds its concrete execution/monitor/HPC classes and configures only flux balance. Its monitoring credit/progress schemas, FBA invocation, native file capture and immutable file controls are private copies. The old axis-membership/ToolRegistry type enforcement in A110ServiceFactory was removed. The common root runtime/service and A110 source registry remain incomplete; no run or validation is claimed.
+
+A107 now binds `A107GenomicToolRegistry` with private locus, neighborhood and detection requests. The copied A103 tool/request files and inherited contrast, fusion, cooccurrence, channels and context-attachment branches were removed. Existing applicable native record identities are retained; its base ToolRegistry, broader copied genomic helpers and snapshot dependencies still need splitting.
+
+Native grading custody, alignment correspondence and applicable attribution helpers now have private copies for A101, A102, A103, A104, A107 and A110. The remaining shared `sequence_attribution.py` was removed after its actual callers were rewired. A107 and A110 source identity scanners, received sequence extraction and packed-byte digest readers are private. A110 native receipt views and current scoring-sheet projection no longer select an axis at runtime. A103 native snapshot paths and launch modules now name its own package; missing database worker dependencies are recorded in its ownership file. A104 masking and BV-BRC phylogeny return readers are private. This remains an incomplete placement pass with no execution, parse or import validation.
+
+A101, A103 and A104 practical execution and capture files now contain private applicable homology/generic mechanics; separate A103 gene-context and A104 phylogeny paths remain. The mixed root component execution-context fallback was removed. A107 and A110 source-identity qualification, sequence correspondence and native correspondence scoring now have independent private implementations. Their sequence readers no longer borrow the root ToolRegistry method; other root dependencies remain unfinished. No tests or parse/import validation were run.
+
+Continuation of the placement pass found remaining mixed root behavior after
+the earlier episode-file reduction. The multiple-inheritance combined tool
+registry and paired partner/chemical registry were removed; their individual
+axis catalogs and configuration methods remain private. The combined CLI now
+reports `combined_genome_private_tool_bindings_unavailable`. Source-access
+feedback is connected through private A107 and A110 bindings, replacing
+the root axis lookup and global runtime injection. Copied practical execution
+helpers still require dependency splitting. A102 received private copies of
+123 dependency modules, including worker and parser import targets, but broad
+private helpers still retain dormant nonstructural branches. Practical
+operations, records and file capture are now narrowed to structure in A102 and
+flux balance in A110, with generic execution mechanics retained. A107 practical
+helpers retain its homology/RNA and coexpression paths. A107 and A110 component workflows
+no longer run copied A102/A111 catalog migration or select an axis at runtime.
+Their private literature descriptors no longer expose an unused rate mode.
+The earlier execution reduction removed applicable A107 NMF hooks; constructor,
+schema, input custody, result, report, credit and completion hooks have now been
+restored from the original implementation with private dependencies. This
+restoration has not been executed. Source inspection views now also live in
+private A107 and A110 copies, with the mixed root catalog union removed.
+The full ownership goal remains
+incomplete; no new execution validation is claimed.
+
+The nine evidence-axis directories now live under
+gene_annotation_episode/episodic_workflow/root/. The old combined
+literature_episodes.py, shared literature prompt, task-credit, sheet-update,
+task-selection and report files were removed from the root path. Each axis
+that uses a literature episode has a private singular literature_episode.py
+binding; A101 and A102 have private singular resource bindings. This is an
+implementation placement update, not scientific validation.
+
+The nine private literature episode files have been narrowed to their own
+source work, with owner-based axis routing removed. Root provider prompt
+selection and saved-binding owner dispatch were also removed. Scientific
+process owner checks and the empty conditional schema were removed from each
+private binding. Root literature repository methods and their remaining
+production callers now use direct private repository bindings. A107 partner
+and A110 reaction storage no longer inherit copied A105 rate storage. The six
+private execution bindings have been narrowed to their axis paths. Saved-descriptor
+reopening and combined workflow integration remain unresolved. The combined workflow is explicitly unavailable
+during this placement pass. No new test or full-run receipt was produced
+because the user directed checking to wait until the next step. Earlier
+validated axis implementations retain their prior scientific status; these
+moves do not change earned credit.
+
+## 2026-11-11 final source-placement corrections
+
+The final pass supplied missing applicable helpers and worker dependencies in A101, A102, A103, A104, A105, A107 and A110, and removed remaining identified parent/top-level receipt fallbacks in A104, A105 and A106. A108 reviewed entry paths required no further copies. Private numerical vendors now use their own iterator packages, including the root receiving package. Worker module names, source fingerprints and HPC snapshots were rebound to private files; ownership records describe actual callers or explicitly retained unused functions. A105 aggregation now uses its own contribution-record helpers rather than root scalar functions. These changes close the identified placement gaps in the reviewed paths. Saved-binding reopening and combined workflow integration remain unavailable and belong to the later binding step. No tests, static suites, Python commands or workflow runs were performed; prior scientific validation status is unchanged.
 
 ## 2026-11-10 NC_001560.1 combined full-run retry
 
@@ -108,6 +7262,43 @@ A101 contribution. Full-genome annotation and autonomous root switching are
 still unvalidated.
 
 ## Current goal
+
+As of2026-11-13, the active goal is the user's complete private implementation
+and organization of the existing Root/A101–A108/A110 episode tree, as specified
+in the retained `pasted-text-1.txt` objective. The final assessed40 A102/A103
+organization homes are installed and reconciled (bcb1232a). The reconciled
+current organizational roster contains570 distinct homes, with159 shared Root
+homes in the open integration batch. The two existing implicit A107/A110
+parents are installed by application73807935 and canonical postcheck06125a0f.
+The arithmetic is410 current structural-catalogue homes plus159 Root
+homes, minus their single Root overlap, plus the two parents. This differs
+from the earlier129 remainder in the original405 structural-connection census;
+that milestone subsequently closed at405/405. It is not a full-workflow pass.
+Of the159 Root declarations,158 are not yet installed and one already exists;
+all159 remain in this integration batch. Source preparation, installation,
+connected validation and ownership reconciliation retain separate status.
+The two installed implicit A107/A110 annotation parent implementations cover12
+entry boundaries. Their accepted188-case scope and final ownership application
+are separate from the completed57/51 child scopes. Account5dbb1010 identifies their real
+runtime/registry locations; those flags are not12 missing scientific children.
+The public17 scoped controls and actual default ToolRegistry constructor pass
+on prepared sources, as recorded above. Full saved-workflow restoration and
+autonomous scientific validation remain separately qualified. The historical
+scientific-goal pause below is a dated record of a different objective, not the
+current organization goal's service status.
+
+2026-11-13 count correction: the earlier statement "161 episodes left to
+install" conflated an integration batch with missing declarations. The open
+batch was161 of570 currently identified implementation homes (about28%);
+160 declarations are new and one existing Root home still needs integration.
+No completed axis scope is reopened. Fresh file comparison finds all820
+catalogued episode/task files present; current source scans and unchanged
+accepted A105 source identities preserve the structural connection account.
+No behavior tests or HPC work were run for this count reconciliation. Evidence:
+`runs/main_remaining_count_reconciliation_20261113_01/REPORT.md` and its
+`CURRENT_COMPARISON.json` and `CURRENT_CONNECTION_SCAN.json`.
+
+### 2026-11-09 scientific-goal status retained as history
 
 Goal-service status: `paused`, confirmed on 2026-11-09 UTC after completing the
 requested OAuth correction. The user requested stopping jobs; scientific
@@ -2982,6 +10173,22 @@ selection/scoring in that catalog; A109 is not assigned.
 
 ## A107/A110 validation coverage
 
+Current organizational validation, 2026-11-13: the sixteen HPC homes complete
+their controlled connected checks: A107 Launch124 and Results124, A110
+Launch116 and Results116, for480 original case identities. All64 saved yield
+files match their original baseline bytes. Cross-axis verificationd6e59473
+authenticates the original and connected results, imported sources,2679 export
+rows and shared nine inputs. Main independently checks its referenced receipts
+and the30 installed internal launch-schema repair afterimages. The original
+eight Launch failures were organization regressions and remain in their original
+receipts; their corrected cases now pass. All four connected workflows and the
+evidence join succeed and drain, with separate empty-window observations.
+The joint validation freeze is explicitly released. This completes this
+controlled engineering scope; live HPC execution, autonomous scientific
+validation and whole saved-workflow restoration are not established here.
+Evidence: `runs/fifth_current_hpc16_cross_axis_join_01/` and
+`runs/fourth_current_hpc16_a110_pair_verification_01/`.
+
 This table tracks evidence for the implementation objective; it defines no
 runtime gate, approval step or scientific stopping rule. Graders and their
 subscoring sheets automatically determine the receiver's current scientific
@@ -3194,6 +10401,584 @@ the shared-information issue now has source implementation, with validation
 still deferred. No previous
 axis validation milestone is reopened or upgraded by these presentation edits.
 
+## 2026-11-12 A107/A110 provider and context source composition
+
+Current execution qualification, 2026-11-13: the separate post-Root graph event
+fcf331c7 and corrected runtime90 cdb25351 both fail with actual OOM at the
+unchanged5GiB bound. Full typed receipts and measured empty exits b586a978/
+56f34aa8 verify; event produces no audit and runtime retains only its initial
+pending report. Neither establishes graph or runtime acceptance. Earlier scoped
+source/control/survey results remain valid. A source-reviewed event-only
+lifetime correction5f4ea40b preserves all checks and original failure history;
+its execution and Fourth's separate runtime remedy remain open. Evidence:
+`runs/root_post_root_oom_reconciliation_01/REVIEW.md`.
+
+The corrected event's separate V3 source audit now passes a197e08d/workflow
+1e901516 with actual exit8239f0a8, full14 typed custody and original source
+inverses. The event itself later fails as recorded below. Fourth's two new admission/
+application source audits also pass ba376c2c/c8333a5d; independent reconciliation
+26775b5a checks full receipts, raw exits and complete source scopes. They retain
+the old runtime actor's failed result; a new runtime actor requires explicit
+later consumer binding. No candidate, application or runtime90 acceptance is
+implied. Evidence: `runs/fourth_dual_source_audits_20261113_independent_reconciliation/REVIEW.md`.
+
+Fourth's distinct runtime-memory source b7945f82 subsequently passes its source
+audit6ed8dc6d/workflow08381a86/budget1aaad7aa, with measured exit3b5d1950.
+Independent reviewf8d53a71/seal83b8c081 verifies25 members/26 inputs,21 complete
+donor equations, six whole forward/reverse modules and15 unchanged members.
+Primary reads the complete review and both lifetime-changing modules and
+rehashes its27 outputs/72 referenced sources/results. Checked manifest rereads
+release large objects around the genuine ff75 opening/end guards; both full
+identity comparisons and every original byte/domain comparison remain. The
+source workflow is0/0/null/drained, peak101928960 and zero memory events with
+separate actual inactive/empty exit. This is source validation only; the original
+ninety-case runtime is separate, and memory fit/application are not established.
+The old OOM remains failed. Evidence:
+`runs/root_fourth_runtime_memory_20261113_review/REVIEW.md`.
+
+The separate runtime-verification paths58aeef5e also complete Primary source
+review: all750 lines/twelve modules,19 members/17 input pins and five complete
+native donor/target inverses. Original904c and actualb794 observation paths
+retain full original outcome, receipt, source and current-context checks with
+distinct new producer provenance. Checked rereads release intermediate objects;
+there is no reduced test selection or required passing outcome. Source execution,
+actual runtime admission, memory fit and final artifact/application integration
+remain separate; the old OOM remains failed. Evidence:
+`runs/root_fourth_runtime_memory_lanes_review_01/REVIEW.md`.
+
+Subsequent actual outcomes, 2026-11-13: V3 eventc69196f7 and b794 runtimefa5dbf9d
+both end with raw1/-9/KeyboardInterrupt/drainfalse and peak5368709120. Their
+respective OOM/kill increments are1/1; complete14-field joins and separately
+observed empty exits112509ee/35458262 are reconciled. Event has no audit artifact;
+runtime retains only initial reportea720052, with no executed-case count proved.
+The exact killed operations remain unknown. Successful source scopes remain
+accepted; neither run establishes event/runtime acceptance or memory fit. No
+unchanged retry or bound change is authorized by these failures. Evidence:
+`runs/root_final_graph_source_and_oom_reconciliation_20261113/REVIEW.md`.
+
+The root-selector candidate823f8d9f and independent audite4f6bd29 complete with
+drained workflows948e816d/ff668f90. All54 selector and two provider-capture inverses
+preserve the actual original branches, callers and five operands. The subsequent
+context candidate2b294d0c completes workflow4ad52b21, retaining7521 regular paths,
+9645 total namespace nodes and the complete112-row immediate inverse. Its1326
+original-to-final operations preserve prior retirements and typed nonregular
+entries. The56 descriptor updates retain four explicit external operands and
+the24 Existing24 predecessor overlaps.
+
+The independent context audit actually fails with workflowa15a213e,1/1 and
+drainfalse. The unchanged checker expects a comprehension variable named p;
+four authentic PredictionBindingRecord originals use path, while eight mapping
+originals use p. Their expressions are unchanged by the context transformation.
+Independent reviewbfd6bc2b/seal43fc876c reconciles the four actual producer/budget/
+sampled-exit joins and exact twelve descriptor operands. Primary reads that
+review and verifies its retained source/artifact lists. A separate narrow checker
+successor is in preparation; no accepted context audit, runtime/graph result or
+root-five installation release is inferred. Evidence:
+`runs/a104_fourth_selector_context_20261112_independent_review/`.
+
+The corrected2b48 source audit55f1f7f and descriptor/provenance controls02ef4d86
+subsequently pass. Its distinct full candidate audit70194a8a/workflow13707559 also
+passes against unchanged2b294 and the original4ad52 composition. All112 module
+inverses and the full9645-node typed namespace verify;56 positive descriptors
+equal the full audit, and100 descriptor plus ten provenance denials pass.
+Independent reconciliationb3e4c0a/sealdd9504bf preserves the original failed audit,
+all five actual typed14-field budget/command joins and measured exit limitations.
+Primary reads the report/finite joins and verifies retained artifact/producer/
+namespace lists. Successful candidate exitf7da88e8 remains source-level evidence;
+runtime, graph, application and saved identity remain separate. The newly found
+missing-binding selector fallback requires its exact source correction before
+affected selectors' fresh initial application; the separate root-five scope gains
+no new hold. Evidence:
+`runs/third_orchestrator_coordination/a102_reader_review/fourth_context_namespace_reconciliation_01/`.
+
+The missing-binding correction subsequently completes its source/comparison
+queue in Second's window. Successful119-view candidate2e04aeb3 is reused after
+the original auditor fails its unanchored indentation reconstruction; raw failed
+workflowc1dce178 and separate empty exit83516ca9 stay retained. The immutable
+5466843c auditor fixes only exact whole-line deletion and the check's explicit
+auditor import. Corrected audite3a2284c/workflowdfa5236d verifies nine templates,
+119 complete module inverses and four mutation denials. Actual report484e60b6/
+workflow0d1cdd2f passes38 distinct comparisons: all six absent-binding cases
+recover the original public result, while the other32 preserve old/new outcomes,
+single binding evaluation and zero truthiness evaluation. Primary reads the
+complete controls/correction/peerf0ca3898, verifies12 retained artifact references,
+both full14-field command/budget joins and separate empty exits0e73734a/d6645d52.
+Both corrected workflows return0/0/null with drainage. These comparisons compile
+original source with controlled own serial and root file/lifecycle/RPC ports;
+they do not establish installed provider behavior or scientific execution.
+The119 rows remain separate views, not one installation map. Fourth54, Second16
+and A104's explicit source/fingerprint compositions and later normal controls
+remain required; the root-five scope gains no new hold. Evidence:
+`runs/second_orchestrator_coordination/ROOT_NO_BINDING_COMPLETE_ACTUAL_20261112.md`.
+
+The54-view Fourth composition packetbb7b1cf2 then passes its two original
+source stages in Root's genuine window: source9a5fe697/workflowd485942a accounts
+for28 modules, seven inherited/adapted inverses and the corrected Root helper;
+controlsdcf8d00e/workflow25b10b3c verifies54 unique whole byte/AST inverses, nine
+templates and all ten denials in a controlled map. Both return0/0/null/drained
+with complete14-field budget joins and separate inactive/empty exitsd80fc9f9 and
+9fe2a96a. The short stages have no invented active-driver sample. The genuine
+preinstall composition is a separate later workflow; candidate admission,
+installed relation, memory fit and runtime are not established by these source
+results. Evidence:
+`runs/episode_orchestration_20261111/ROOT_NEW54_SOURCE_ACTUAL_20261112.md`.
+
+After the separate full composition OOM, the completed-reader consumer successor
+68bb96cd passes its complete source inverse a4429383/workflow63720449 and source
+audit a7bd7246/workflowc14b4d70. Primary reads all five changed modules, the added
+helper, full eight-member patch, independent checker and peer72ab70e8 with final
+binding5468bfbc; all39+7 source members and39+5 input pins verify. The actual
+checker recovers all38 original members and confirms30 unchanged members;
+the source audit preserves seven inherited inverses and all54 task transforms.
+Only preinstall selection uses the genuine947a reader and its complete typed
+current relation; original historical claims, full rechecks and the distinct
+installed factory remain. Both receipts are0/0/null/drained, with full14 budget
+joins and separate actual empty exits0055bc3c/a24fcf1a. These short source stages
+have no observed active child sample. Original54/ten controls are retained
+without another cohort. Candidate composition, full-workload memory fit,
+installation and runtime remain separate. Evidence:
+`runs/root_fourth_no_binding_memory_revision_01/` and
+`runs/root_fourth_no_binding_memory_source_01/`.
+
+The subsequent actual composition02 fails at its first pre-output input recheck: local
+root_outputs.recheck(context) shadows the imported zero-argument records recheck,
+so its recheck() call raises TypeError. Primary reads the source and traceback:
+compose.py23 fails before output admission and directory creation on line24.
+Workflowbc10e01e remains1/1/null/drain-false; all14 budget fields join, peak is
+5003923456 bytes, and no new max/OOM/kill event occurs. Separate measured
+exitba0a1b8d at23:16:58 UTC records inactive service, MainPID0 and an empty
+recursive slice; both observed supervisor3700989 and driver3700995 are absent.
+Original live capture remains separate from that exit record. No manifest or
+accepted composition results. Accepted source evidence remains scoped; Fourth
+owns an immutable binding correction preserving all original checks/history.
+Evidence: `runs/root_fourth_no_binding_compose_02/`.
+
+The immutable3c740984 correction names the original records recheck explicitly.
+Its separate source proof04b4716a/workflow3b537902 passes all seven finite binding
+checks, the complete39-member byte/AST inverse and36 unchanged members. Primary
+reads the complete correction/checker and final peerb5e7788e, verifies source and
+evidence lists, and checks the14-field budget join and separate empty exit9e50cf7b.
+The raw receipt is0/0/null/drained. The original failed composition is unchanged;
+this proof is not a candidate admission or a rerun of original54/ten controls.
+Evidence: `runs/root_fourth_no_binding_recheck_revision_01/`.
+
+The distinct installed completed-reader sourceff75ab2f passes source audit
+8284f53b/workflow2b1d0a14 and its original12 lifecycle controls1ae2bd1d/workflow
+5573700d. The source retains seven donor modules,21 whole-module inverses and
+four success assignments; the controls retain two successes and ten failures,
+including ordering and late-failure swap behavior. Primary reads the new reader,
+source revision/inverse, installed-record and lifecycle code and final peer,
+verifies27 members/15 pins, and reconciles both actual14-field joins and empty
+exits6f96747a/8c393811. Both receipts are0/0/null/drained. No actual candidate or
+installed transition was consumed, and no installation, memory-fit or runtime
+claim follows. Original14 controls are not repeated. Evidence:
+`runs/fourth_installed_completed_context_source_audit_01/` and
+`runs/fourth_installed_completed_context_lifecycle_controls_01/`.
+
+The distinct genuine947a graph consumer V7b1e3f903 subsequently passes its
+source audit504adb77/workflow042163ec. Primary reads the complete binding,
+revision checker, five caller deltas, original peer and additive peer4ae12c92;
+all42 members and234 input pins verify. The recursive source census correction
+preserves the whole original36-member inverse,28 unchanged members, all15
+control bodies,138 ordered roots and35/42/77 root/caller/reference account.
+Current947a source and historical2b48 proof remain distinct; all13 upstream
+inputs are authenticated before output admission. The actual report/command/
+owner and14 typed budget fields agree, with0/0/null/drained and no new OOM.
+Separate exit2a17e320 and raw23:15:04 observations record inactive/empty ownership
+and absent supervisor; this short stage has no observed active child sample.
+The original V5 OOM remains failed. Actual15 controls, graph survey/event audit,
+memory fit and installation remain separate. Evidence:
+`runs/sixth_context_graph_completed_reader_source_01/`.
+
+The later post-Root5 event census now has a distinct module-scoped source
+implementation25075554, sealeddb743df1 and independently revieweda7b2a654.
+It retains all four complete graphs, original definitions/events, source and
+asset checks, edge multiplicities, call uniqueness and result summaries.
+Only integer counts escape each module helper; collection after that frame
+returns also releases the unchanged recursive definitions closure. Whole-file
+forward/reverse source accounting passes. The actual consumer must explicitly
+bind this new engine and retain its complete final custody recheck. This is
+source implementation and review, not proof of memory fit or successful event
+execution; the later V5 OOM and earlier completed scopes remain distinct.
+Evidence: `runs/root_module_scoped_event_census_20261113_preparation/HANDOFF.md`
+and `runs/root_module_scoped_event_census_20261113_independent_review/REVIEW.md`.
+
+
+The separate Fourth fe8e copied-runtime preparation later fails with kernel OOM
+at 22:24:20 UTC. Its supervisor is also killed, so there is no original
+workflow-result.json or completed manifest. The wrapper's exit2 comes from
+reading that absent receipt; it is not a known driver status. Primary reads
+the failure account and verifies native/raw evidence list357d8e43, including
+original budget/live identities, journal OOM, exact5-GiB native peak and separate
+inactive/empty process observations. Partial staged files are not an accepted
+copy, and no copy audit or runtime90 follows. This does not reopen the completed
+context source audit or streaming source controls. Remaining full-reader payload
+retention is being investigated; the exact killing allocation is unknown.
+Evidence: `runs/fourth_orchestrator_coordination/STREAMING_PREPARE_ACTUAL_OOM_20261112.md`
+and `runs/fourth_streaming_runtime_prepare_01/FAILURE_EVIDENCE_SHA256SUMS`.
+
+The genuine completed-reader runtime preparation later returns successfully:
+manifest4916ac11, workflowe209656d and source12177310. Primary hashes the complete
+346368590-byte manifest, verifies all27 source members/19 pins and the full14
+budget/command join, and reads its retained authority summary and actual exits.
+Raw0/0/null/drained and separate exit61b803de plus captured-process observation
+050314a2 establish completion and absence of the originally observed supervisor
+and driver. Peak exactly5GiB and8280 memory-max events with zero OOM/kill deltas
+show this workload completed at the limit; no headroom guarantee follows.
+This prepares the copied source tree only. Independent copy audit, original90
+runtime cases, installed validation and scientific execution remain separate.
+The earlier failed OOM is retained, not relabelled. Evidence:
+`runs/fourth_completed_runtime_prepare_01/ACTUAL_RESULT_REVIEW.md`.
+
+## 2026-11-12 A102 six Results implementations installed; validation pending
+
+The original199-row application completes with artifact7eaf392c and workflow
+38235dd1, raw0/0/null/drained. Independent reconciliation02496f04 verifies all
+current afterimages against genuine candidate7b144a23:168 additions,19
+replacements and12 absent retirements. Ordered observed rows equalfe3c3da8.
+Primary reads the full reconciliation and exact original producer/operand joins,
+verifies its source/evidence lists and the actual14 typed budget fields,
+command and owner. All five original prerequisite producer joins and the366
+baseline identities remain intact. Separate exit92889adb at23:18:20 UTC records
+an empty process-table sample, inactive/dead service and MainPID0; its sampled
+shell text is retained with its collection limitations, separately from the
+successful drain receipt. Earlier failures remain unchanged.
+
+This establishes physical installation of the six Results homes. The original
+installed audit subsequently passesb48f7866/workflow27187c09, verifying six homes,
+486 binding methods,126 task methods and1990 sources, including complete AST,
+imports, bases, order, original yield/instructions and mixins. Primary checks
+the actual14-field budget/command join and separate sampled exit12a5defb;
+the raw receipt is0/0/null/drained. This audit does not execute behavior.
+The original installed probe also completes27b368c5/workflow130bde2e and full
+comparison16c8de1c: all six homes retain the same observations, complete MSA/
+MetaCATS contracts and actual schema identity at each source stage; source/helper
+hashes stay unchanged. Primary checks the full14-field join, entry/artifact
+hashes and separate sampled empty exita32ead51. This probe uses an explicit
+inactive ordinary-tool fixture boundary: no production constructor, independent
+native handoff or external scientific work is established. The unchanged366-case
+run and final verifier remain subsequent work. Full directional parent ownership,
+restoration and scientific behavior
+remain separate. No authoritative405-home census update is inferred here.
+Evidence: `runs/third_a102_results_v10_apply_01/` and
+`runs/a102_results199_application_20261112_independent_reconciliation/REVIEW.md`.
+
+## 2026-11-12 A103 original666 baseline and distinct global import failure
+
+Additional source scope, 2026-11-13: the distinct191-target restoration writer
+SOURCE03 (5301ef44) completes Primary and independent source review
+(0ddbdc04/seal1870bb95). Exact Op-domain custody, exhaustive nested-test
+partition, all191 initial preimages and run-owned cwd resolve the recorded
+source findings. Actual restoration, its Results/Meta5/capture/Op4 prerequisites
+and later ownership integration remain separate; no new test cohort or task
+connection is claimed. Evidence:
+`runs/root_a103_restoration_writer_review_01/SOURCE03_ACCEPTANCE.md`.
+
+Its distinct ownership/Resource consumer ef4525d8 (13 members) and downstream4
+4d1a15fc (11 members) subsequently pass bounded cross-interface review330db0db,
+sealef846a1e (17 members/57 inputs). Primary reads that full review and the actual
+receipt/projection, Resource transition/direct Meta compile, source views and
+pipeline code, and rehashes the source/peer lists. Exact191 targets/278 writes/
+87 joins, original Op Python/default domain and separate external2 are retained;
+neither Op6 nor science28 intersects those targets. Genuine SOURCE03 retained
+and current readers are called separately, preserving original Op receipts and
+full Resource successor checks. Existing later FinalMeta owns the proposed
+restoration ownership writes; ResourceMeta1 retains its original36/84 scope.
+This confirms source interfaces only. Actual restoration and the original
+Resource/Meta phases remain unexecuted. Evidence:
+`runs/a103_restoration_source03_cross_interface_20261113_review/REVIEW.md`.
+
+The missing original Resource/Meta command handoff is now concrete6958fd86:
+twelve Resource and five metadata slots, with unchanged1510/43 cases and
+shared130 readiness. Independent command-interface reviewed92de69/sealcd171f7a
+checks all225 shell lines, exact six members/eleven inputs and original parsers.
+Primary reads that review and rehashes its11 outputs/56 references. Genuine
+global-pair and restoration releases remain distinct; the same authenticated
+three-field restoration object enters the original four-field producer and
+five-field wrapper. All actual prerequisites, writer outcomes and execution
+remain pending. No extra cohort or convenience workflow is introduced. Evidence:
+`runs/root_a103_resource_execution_handoff_20261113_review/REVIEW.md`.
+
+The finite followup-context continuation6e4aea7b then completes Primary review
+of all318 current Python lines/eight source members and peerb292fe12/seal8d3e13ca.
+It snapshots authenticated A103 restoration fields and loads from retained
+state after original Resource/Op postchecks, and binds the four original
+followup readers to genuine Seventh result/budget paths and complete receipt
+checks. Exact source/AST inverse code is retained. The new followup entry has
+its own source epoch; no old followup sidecar compatibility is claimed. Existing
+Resource/Op/Results history and13/11 source remain intact. All four followups
+are still unexecuted; no extra cohort or task-count increment follows. Evidence:
+`runs/root_a103_followup_context_review_01/REVIEW.md`.
+
+The next SourceFamily parent adapter737f451c also completes Primary source
+review of652 lines/12 members and independent owner reviewb7d17a61/seal10f4d53a.
+It connects the genuine direct-compiled reader and active6e4 policy context,
+retaining exact Third full14 custody and genuine Seventh policy full14/exit18.
+Current capture and later retained checks remain distinct. All nine original
+CLI phases,752 cases and58 guards remain unchanged; no extra execution stage or
+cohort is introduced. Actual policy/SourceFamily completion and later Head
+integration remain separate. Evidence:
+`runs/root_a102_source_family_parent_review_01/REVIEW.md`.
+
+Current scoped update, 2026-11-13: original apply02 has completed its208 writes
+(application2a5e8831/workflow3f76ea17/actualexite453c22e). Primary verifies all2209
+own current sources, exact208 candidate afterimages and full typed receipt/exit
+joins. Companion writere956619c and independent combined postcheckddde6195 then
+complete the209-path placement, with original workflow5194ff8e and measured
+empty exit3ff73884. The original installed audit now also completes5a98543f/
+workflowdd2cc1c3, with measured empty exit78a43a80. Primary reads the full original
+auditor and verifies exact2209 current paths/hashes, defaults, all14 typed
+receipt fields and18 raw exit references. Six homes retain546 binding methods,
+126 task methods and six receiving bases; behavior_executed is false. Installed
+probe/666 and final verification remain pending; this adds no connected-episode
+count. Evidence: `runs/root_a103_installed_audit_reconciliation_01/REVIEW.md`.
+The original installed probe subsequently completes55287106/stage06e1ac6b/
+workflow584e9638 with actual empty exitd4793a07. Primary verifies all2209 current
+sources, full14 typed receipt fields and18 raw exit references. Native comparison
+of all six complete observations against genuine baseline1ec6ea5c permits only
+their private task module and14 instruction-composer owner changes per home;
+all other observations agree. The original comparison9b3c6e3a is complete.
+External work and independent Native handoff authentication remain false.
+Installed666 and final verification remain separate; no count increment follows.
+Evidence: `runs/root_a103_installed_probe_reconciliation_01/REVIEW.md`.
+The following baseline
+and earlier failure history are retained. Detailed evidence:
+`runs/root_a103_apply02_reconciliation_01/REVIEW.md`.
+
+The corrected original suite completes666 passes with no errors, failures or
+skips: artifact0b3be3bf, JUnit1ccb96ac and workflow1ba23e2f. All666 unique expected
+identities equal verified identities, and source/assets remain unchanged.
+Primary verifies the original entry, full14 typed budget/command join and raw
+0/0/null/drained receipt, plus actual exit1b72feb7 with both recorded processes
+absent, inactive service and recursive empty slice.
+
+The following global collector fails separately: collection9c86ba5f and raw
+workflow2121a932 retain1/1/null/drain-false. Its genuine census c0a6c79b contains
+20559 source hashes,41 literal rows,48 assigned aliases and995 unresolved dynamic
+calls. These counts do not establish arbitrary dynamic closure. The semantic
+operation fails on the missing old global bvbrc_appservice_contracts import in
+bvbrc_fastqutils_tool_info.py; no semantic-baseline artifact is produced. Separate
+exit5a9c9301 records both observed processes absent, inactive service and an empty
+slice without rewriting the failure. Primary reads the full handoff and raw
+failure and verifies its16 evidence references. Original eight factory cases
+and the208-row application remain unexecuted. The completed666 baseline is not
+downgraded by this later import failure. Evidence:
+`runs/seventh_a103_corrected_baseline_handoff_20261112/REPORT.md`.
+
+Independent census review3bc5e29f/seal8afe0315 accounts for every retained row:
+34 literal imports in22 own208 replacement files, six in retired returns files
+and one global importer. Of995 dynamic rows,993 remain unresolved; one exact
+A102 stage selector and one local callback alias collision are source-explained.
+All48 aliases remain retained. Primary reads the full review and verifies its14
+members,95 artifact pins and519 current row-site source hashes. This bounded
+classification does not establish universal dynamic closure. The proposed
+direct own-A103 contract import remains a separate source repair with explicit
+collector/pair successors; no execution is implied by its source review.
+
+The concrete one-line repair is then applied in canonical source: application
+observation873a1706 retains complete before/after bytes, exact ece31fdf→f53a221b
+hashes, unchanged file mode and unchanged selected A103 module/schema. Only the
+contract_schema import changes; the original Results requests import remains.
+Primary reads the complete repair composer/inverse and peer737ec807, checks
+all10 members/26 pins before the write, and reads fresh guard review6ca71494
+for the actual3c740984/947a Root composition. Its seven live guard paths and
+retained A107/A110 domains do not intersect the singleton or selected A103
+dependencies. No Python or semantic validation is claimed by this native write.
+Original666 and failed collector01 remain unchanged. The reviewed collector02
+and unchanged factory8 handoff use explicit new source epochs and genuine
+Seventh execution; their outcomes remain separate. Evidence:
+`runs/root_a103_contract_schema_repair_01/application.json`.
+
+## 2026-11-12 A104 combined registry/Native/Terminal source
+
+Additional source scope, 2026-11-13: the original installed-Root registry4ff
+preparation completes with manifest3471a420/workflowd2202091/budget23870461.
+It emits688 candidate hashes and830 changes. Raw0/0/null/drained, the full typed
+budget join and separate exit3f1326a9 establish completion; the measured own
+service is inactive with an empty recursive slice and both original processes
+absent. Peak5285978112 bytes and zero memory-event increments remain recorded.
+The original independent audit subsequently passes3f94c0fd under workflow
+55060730/budgetf02bec5f, with actual empty exit519878db. Primary checks the
+complete manifest/report relation, original auditor,688 candidate hashes,
+574 retained preimages, all3404 current before-map entries and the complete
+retained proof. Raw0/0/null/drained and full14 typed fields agree. The audit
+reaches5GiB with781 memory-max events and zero OOM/kill increments; later
+resource fit is not inferred. Actual supervisor407721/driver407729 are absent.
+This accepts the source pair; final composition, application and runtime remain
+separate, with no added task connection. Evidence:
+`runs/root_a104_registry_installed_root_pair_reconciliation_01/REVIEW.md`.
+
+Additional source scope, 2026-11-13: the installed-Root successor API5d7
+preparation completes with manifest6d471300, workflow3f4031c3, budget7b0a3285
+and measured actual exit4e3bd262. Its629 changes/495 payloads retain3311 source
+entries,116 metadata records and19 required inputs. The full typed receipt join
+passes with raw0/0/null/drained, peak3929665536 bytes and zero memory-event
+deltas. The existing independent audit subsequently passes beac7d04 under
+workflow3b1fd503/budget60cd878b, with measured empty exited4f8753. Primary reads
+the exact auditor and verifies its complete rebuilt-record/candidate/preimage/
+proof checks, all495 candidate and463 beforeimage hashes, actual references and
+full14-field join. Raw0/0/null/drained, peak4306993152 and zero memory events
+confirm this successful source pair. Genuine four-ref input6705cab5 now feeds
+the original4ff preparation; its outcome, application and runtime remain
+separate. Original failed auditc11c remains unchanged. Evidence:
+`runs/root_a104_api_installed_root_prepare_01/` and
+`runs/root_a104_api_installed_root_audit_01/`, reconciled in
+`runs/root_a104_api_installed_root_pair_reconciliation_01/REVIEW.md`.
+
+Current scoped update, 2026-11-13: the required-input source projection is
+generated and independently audited, manifest011c2f49/auditc605718c with actual
+workflows4794d1a7/728d3354 and measured exits8220849f/799d416e. Primary verifies
+the original source/peer, sealed handoff, typed receipts and whole common-map
+equality. Its1679 payloads retain original required tests/assets and genuine
+beforeimages; no reader5/92, Results224 or Source728 behavior run is implied.
+Final composition, one canonical placement and runtime remain separate.
+Evidence: `runs/root_a104_required_projection_reconciliation_01/REVIEW.md`.
+
+Coherent sourcef92cf103 passes audit22ffa6af/workflowb466642f. Primary reads all12
+source modules, original obligations and complete peer07da7c38; verifies23 members
+and4118 input pins; and reconciles the14-field budget join and separate empty
+exit0e156b3c. Actual receipt0/0/null/drained, original observed processes absent
+and no OOM establish this source execution. All three ordered stage inverses,
+policy/Source14, complete Native/Terminal bodies and API inputs are preserved.
+This does not prepare a final candidate, install3518 sources or validate runtime.
+Actual API producer references and the original applicable behavior cohorts
+remain distinct later work. Evidence:
+`runs/root_a104_registry_native_terminal_source_01/`.
+
+The prerequisite API preparation itself produces manifest8dc0eb24 under workflow
+45da0719, with0/0/null/drained and actual exit e5550e20. Its following original
+independent audit fails at the full rebuilt-record equality, before candidate/
+proof comparison or an audit artifact: workflowc11c4378 retains1/1/null/drainfalse
+and stderr0502316c. Primary reads the producer/auditor/record construction and
+actual traceback, verifies both14-field budget joins, hashes the genuine
+manifest, and checks the separate raw exits. Failure exit099212d4 records the
+owning slice empty/inactive; its accompanying process sample has neither actual
+supervisor3853737 nor driver3853744. Peak3564736512 and no new memory events do
+not explain the equality failure. Preparation is retained as actual source
+output, not an accepted API pair or valid f92 input. The exact differing field
+is under investigation; no unchanged rerun or scientific failure is inferred.
+Evidence: `runs/fifth_orchestrator_coordination/a104_api_post_family_asset_actual_01/ACTUAL_RESULTS.md`.
+
+## 2026-11-12 A107 LocalFile31 private source preparation
+
+Additional source scope, 2026-11-13: complete generic composition0c4a0b6e and
+independent new-adapter peer3eb95b91/seal8b274ca5 pass Primary source review.
+All1658 source lines,30 members/958 inputs and actual upstream314-member seal
+are accounted. Six existing Results owners and thirty caller objects use132
+source/metadata operations with126 preimages; a separate full typed-domain
+inverse preserves every unchanged file and nonregular node. Actual Native,
+LocalFile and generic producer results remain required. No task-count increment
+or runtime claim follows. Evidence:
+`runs/root_a107_generic_typed_adapter_review_01/REVIEW.md`.
+
+The distinct application byte/domain port subsequently completes source review:
+7b54969d, eight modules/589 lines,24 members/1046 input pins, independent peer
+f763ba0b/seal140533c2. Primary reads all source and the genuine predecessor API,
+verifies the whole member domain and hashes, and compares both retained complete
+forward/inverse modules. It derives original V6 from actual a6 and final bytes
+from genuine generic0c4, retaining original97 plus actual family retirements,
+four indices, all raw operation history and complete regular/directory inverses.
+All48 literal links and both FIFO records remain unchanged. No physical root,
+historical mode or accepted graph/runtime result is fabricated. Actual generic
+inputs remain absent. Fourth's explicit Evidence/writer and final-source graph
+composition remain separate; the initial-source graph must not be relabelled.
+Evidence: `runs/root_a107_generic_application_port_review_01/REVIEW.md`
+(bb692b4a). This is source implementation, not installed episode completion.
+
+The separate final-source graph composition902562cb completes Primary review
+of all614 lines/seven modules,14 source members/1406 input pins and two complete
+producer byte inverses. Genuine00df live and4892 retained Inputs join the actual
+7b549 SourcePort through complete initial history/source/V6/input identities;
+final authority, indices, roots, provenance and rechecks remain explicit.
+Source composition is accepted for source audit and Fourth consumer work.
+Compatibility of actual final-family operations with the unchanged constructor,
+caller, method and selector predicates remains under source examination; strict
+rejection alone would not prove support for the intended candidate. No actual
+final graph, event, installation, memory fit or episode-count claim follows.
+Evidence: `runs/root_final_generic_graph_review_01/REVIEW.md` and its independent
+`native_inverses.json`. Original initial-graph and failed-run evidence is intact.
+
+The protected-caller intersection is subsequently addressed in sourceab0586fa:
+20 members/nine modules/1433 pins, reviewed by Primary and Fourth e51f6f1c.
+A genuine LocalFile three-receiver transform and complete positioned inverse
+join the initial caller to the final generic buffer. Original35 conditional
+identities,42 ordered calls/77 references, five caller methods, constructor and
+selector predicates remain. Initial proof and final caller evidence have
+distinct fields. Primary independently reconstructs all14 old members and the
+entire root engine in both directions. Actual source audit subsequently passes
+c436a729/workflow8d20d0c3/budget8f38e51b, with measured exit6228e87b. Primary
+rehashes all handoff23 references, checks full14 typed fields and the exact
+source/command, and reads every reported boolean/numeric proof claim. Raw0/0/
+null/drained, peak149929984 and zero memory events establish source execution.
+The actual final candidate, graph/event, application and runtime remain
+unexecuted by that audit. Evidence:
+`runs/root_final_generic_graph_v2_review_01/REVIEW.md`.
+
+The outer-family source02 workflow also passes and is independently reconciled:
+report8e6feb68/workflowcc7e5ecd/budgeta3e3f6fd/exit567393fe, peer0afa1c18/
+sealb0d545a4. Primary reads the actual producer and complete peer, checks all314
+source members,685 report references, six handoff references and the full14
+typed receipt join. Its177 Python files/thirteen inverse checks and actual
+inactive/empty exit support only source-workflow completion. The failed source01
+membership check and seven byte-preserved relocated scratch files remain intact;
+no predicate or original packet bytes changed. No actual family input, candidate,
+installation or runtime result is supplied by this source pass. Evidence:
+`runs/fourth_outer_source02_20261113_independent_reconciliation/REVIEW.md`.
+
+Source55e0ec6c prepares manifest3d0c7043/workflowb7b5dc2f and passes independent
+audit5185f369/workflow0b9ce1fe. Primary reads all five tools and the complete peer,
+verifies82 members/87 input pins, and reconciles both actual14-field joins and
+empty exitsd4ffeba5/af49d417. Both receipts are0/0/null/drained, with no OOM.
+The43-row source delta has36 replacements and seven additions, preserving all31
+complete methods, six module inverses,35 caller/index inverses,30 constructors,
+24 non-Results raw callbacks and the two receiving paths. Final-family source
+composition, actual installation and runtime remain separate; this source pair
+does not establish a final-family epoch or new connected-episode count.
+Evidence: `runs/root_a107_local_file_owners_prepare_01/` and
+`runs/root_a107_local_file_owners_audit_01/`.
+
+## 2026-11-12 A101 native Results baseline and policy-owner installation
+
+The scoped three-test application30107532 and independent installed audit1f674edf
+place exactly three absent test files under A101/tests, with no production edits.
+The original-production baseline passes53 cases/159 phases, workflow25be4719 and
+reader9adc2ed1. Independent review16255c22/seal478e3188 verifies all53 collected,
+call and JUnit identities,74 observed canonical origins and original host MROs,
+the88-source recorded guard and six full producer/budget/exit joins. Primary
+reads the review and finite joins and verifies its21 members/75 input pins.
+
+Actual transitiona0889fb5 and auditc1ccc012 add exactly those three hashes to the
+historical2147-source context map, with a complete2150→2147 inverse and48 unchanged
+typed symlink metadata records. Their targets remain unread. The historical plan
+and audit are not rewritten or replayed as current. These are controlled policy/
+late-lookup baselines; post-extraction comparison, descriptor materialization,
+parent commissioning, native/scientific execution and production placement remain
+separate. Evidence:
+`runs/a101_native_three_test_actual_20261112_independent_review/`.
+
+The exact four-file policy extraction subsequently installs with application
+e58c010d and independent installed audit cea859f8. Two existing BLAST/HMMER hosts
+retain their eleven other methods while facts, credit_view and completion move
+to two own-axis library policy classes. The complete recorded map transition
+944668a1 changes 2150 to 2152 entries with all48 typed fixture records unchanged.
+The original same53 cases pass again, with identical159 phase records and ordered
+JUnit identities; reader72ce3158 has no issues or pending comparison. Loaded
+owners change74 to76 only through the two new policies and two changed hosts.
+
+Primary reads full reconciliation10897032/sealf1f80cdf, source peer84f821b6 and
+the complete V3-to-V4 command/inverse correction, verifies finite actual/history
+references and current four files/three tests, and accepts its exact map/write/
+JUnit joins. All eight actual V4 workflows have matching14-field budgets,
+0/0/null/drained receipts and separate inactive/empty exits. The original V2
+stage failurea9f7490a remains1/1/drainfalse; V3 was unexecuted. Eleven ordered
+write records retain preflight, original bytes, four intents and four completion
+prefixes; no atomic transaction is claimed. These checks validate the selected
+installed policy-owner and late-lookup boundaries. Arbitrary former-host global
+rebinding, native execution, full restoration and autonomous science remain
+outside this scope. Later context additions remain a separate transition; no
+episode is added to the task-connection count by this extraction. Evidence:
+`runs/a101_native_four_installed_20261112_reconciliation/`.
+
 ## A101 — confirmed code path
 
 [a101_investigation.py](../gene_annotation_episode/a101_investigation.py)
@@ -3216,6 +11001,312 @@ These demonstrate the native-credit path under that recorded scope, not a
 guarantee of autonomous functional identification from every sequence.
 
 ## A102 — completed subtree and shared-root milestone
+
+Current broader organization update,2026-11-13: remaining40 candidate838 passes
+65d5f525 and source667 is installed by989770ad/workflow92b1ced4, including the
+ten remaining A102 Resource homes. Ownership24 generation8ec8fd85 is installed
+within the combined120 application03. Independent completion reconciliation
+bcb1232a/workflowca661819 succeeds and drains, with actual empty exitf2d5a9e2.
+It authenticates all120 writes, exact current6106 production sources/61 assets,
+and the retained current/history checks. Main's independent byte/mode review
+a607a2c0 also passes. These final ten A102 homes are now closed; the assessed
+A102 organization remainder is zero. The original installer's final-summary
+failure is preserved separately and does not invalidate the completed writes.
+Shared Root integration, inherited parent gaps and scientific/restoration
+validation remain separate. No source or838-test repetition was performed.
+
+2026-11-13 finite execution30 organization join is complete. Actual generation
+42589b08/sources7411e8f7/workflowe7b86a60 supplies64 current records; combined
+metadata128 application4cc338e8/workflowe5296333 installs them successfully and
+drains. Main independently verifies all128 installed metadata hashes/modes,
+5728 unchanged production hashes and63 unchanged assets, and observes the empty
+service/slice with288901/288904 absent. Independent proofd8210603 preserves
+inverses/history; current evidence528bcce5 joins the original scientific formulas
+to both retained43-binding probes. Together with sourcefcf27f41, candidate620
+and source assessment5f9b381a this closes these30 own organization homes.
+A102's known unfinished organization count is now10. Other unassessed scopes,
+upstream-parent duties, full saved restoration and autonomous science remain
+separate. Evidence: `runs/root_execution60_metadata128_application_01/REPORT.md`.
+
+2026-11-13 execution30 source/test installation: combined applicationfcf27f41
+installs all720 production and eight permanent test targets, with complete5728
+source/63-asset postchecks. Main independently checks every installed target's
+hash/mode and the complete current maps. Workflowb7a2b1db succeeds/drains; actual
+empty Main service/slice and absent285354/285357 precede metadata generation.
+The source component is installed; current ownership64 and the finite-home
+completion join remain pending. Evidence:
+`runs/root_execution60_source_application_01/REPORT.md`.
+
+2026-11-13 execution30 candidate validation: combined620/1860 passes with
+verificatione569382f/workflowddb37c2f, exact unchanged25700-file snapshot and
+zero import violations. The actual A10243-binding probe2ec3a0c1 confirms2761
+selected sources and scientific identityf25dee13. Source assessment5f9b381a
+finds no additional own responsibility gap in these30; upstream-parent duties
+remain separate. Canonical source application and current ownership metadata
+remain required before closing these homes. No live provider/native/HPC or
+full saved-workflow restoration is claimed. Evidence:
+`runs/root_execution60_candidate620_01/REPORT.md` and
+`runs/root_a102_execution30_closure_assessment_01/ASSESSMENT.md`.
+
+2026-11-13 permanent test assets: Main adds fixtures/source_request_assembly/*.txt
+to the A102 tests package-data entry in pyproject.toml331699fe. The actual original
+runtime fixture598a42ab and its boundary-test consumer are inspected. This is
+static distribution configuration, without a wheel-build or broader episode
+completion claim. See `runs/root_execution60_verification_preparation_03/PACKAGE_ASSET_UPDATE.md`.
+
+2026-11-13 outgoing-request candidate validation: corrected baseline51_03 has
+33 passing behavior controls and exactly18 expected missing-private-owner
+failures. Candidate51_01 then passes all51 cases/153 phases with identical test
+assets, reviewed24-source plan1ca6cbd6 and actual Workflow.selected/build routing.
+Verificationa228dbf0/workflow182ea346 retain successful/drained execution, an
+unchanged25323-file snapshot and zero import violations. Main separately observes
+complete process exit. Earlier invalid-fixture baselines remain failed evidence.
+This validates the controlled request boundary, with no native/provider work,
+canonical installation, broader task validation or whole-home count reduction.
+Evidence: `runs/root_a102_launch6_candidate51_01/REPORT.md` and
+`runs/root_a102_launch6_baseline51_03/REPORT.md`.
+
+2026-11-13 ownership52 is now installed within combined applicationb2e3ac16.
+Generation69231f47/sourcesd312ace8 and independent proof9191e294 preserve current
+source facts, whole inverses and all12 retired support rows. Actual scientific
+94025496 agrees with the candidate332 runtime probe. Full5338 production/43
+assets remain unchanged, and Main independently checks all80 combined metadata
+afterimages. Workflowc23f0be1 succeeds/drains; actual Main service/slice empty and
+267566/267569 absent are observed. This closes the named responsibility/ownership
+component. The current18 API/Native task-context/scientific-enrichment residuals
+remain concrete (assessmentef2e87f4), alongside the six Launch outgoing gaps and
+separate Results/Resource work. No subtraction of18 whole homes is justified.
+Evidence: `runs/root_next36_metadata80_application_01/REPORT.md` and
+`runs/root_a102_execution24_remaining_assessment_01/ASSESSMENT.json`.
+
+2026-11-13 execution24 source installation: application8e6231da now installs the
+sealed A102546-operation component within the combined next36 plan. The actual
+before/after cohorts both pass332 cases/996 phases with identical phase reports;
+candidate2fe2cfee has an unchanged25297-file snapshot and41 clean import records.
+All646 combined targets are applied (634 creates/replacements,12 retirements),
+and full5338 production/43 assets pass checks. Main independently hashes the
+canonical sources/assets and verifies the12 absent retired paths. Source workflow
+cccb9ffb succeeds/drains; actual empty Main service/slice and absent264635/264638
+are observed. A102 ownership52 is installed as recorded above; the six Launch
+outgoing-request gaps and broader40-home organization scope remain open.
+Evidence: `runs/root_next36_candidate332_01/REPORT.md` and
+`runs/root_next36_source_application_01/REPORT.md`.
+
+2026-11-13 organization census: the complete67-home classification identifies40
+concrete mixed-role homes: execution24 plus Results6 and Resource10. Fifteen
+substantive inline placement candidates require further judgment; twelve thin
+policy/boundary homes are not declared failed or complete from method presence.
+Current task wiring, accepted SourceFamily behavior and earlier implementation
+milestones remain separate. The execution24 source candidate is now sealed as
+546 operations/438 targets, including162 additions and12 authenticated retired
+Results-copy modules; the subsequent tested installation is recorded above.
+This source component does not establish full-home organization. Evidence:
+`runs/root_a102_organization67_census_01/CENSUS_V2.json` and
+`runs/root_a102_execution24_final_preparation_01/HANDOFF.md`.
+
+Current organizational installation, 2026-11-13: final application1ee699f9 now
+installs the selected SourceFamily14/scientific-head implementation and associated
+guards, presentation, received-evidence, tests and current ownership. The complete
+selected A102/A1034990-source map and172 metadata afterimages pass postchecks.
+Fresh census8c54027f finds all67 A102 task connections present. Prior staged
+behavior receipts retain their original epochs; this installation does not claim
+full organizational, restoration or autonomous scientific completion. Evidence:
+`runs/root_final19_canonical_apply_02/` and
+`runs/root_final19_postinstall_census_01/`.
+
+2026-11-13: Main installs the two implicit A107/A110 parents through reviewed
+manifest7b8030e0 after actual stage0663dfcf. Application73807935 and independent
+canonical postcheck06125a0f verify330 changed targets, including220 ownership
+documents; all5775 guarded states pass. Rawaa34656e succeeds/drains and actual
+postfb566373 confirms full exit. Remaining integration batch decreases161→159
+within the same570-home roster. The separately completed Literature45 boundary
+scope is36 retained passing cases plus9 actual corrected-fixture cases, joined
+by8c0b29f6. No completed axis is reopened and no full restoration, native/HPC
+execution or autonomous scientific validation is inferred.
+
+2026-11-13: Fluorescence identity retry3 completes the scoped16-case union:
+13 authenticated retained candidate passes plus three new passes after the
+pure terminal-plan identity extraction. Verification7ea32d9c/workflow4b8d5f03
+and actual exitfb4de6db retain unchanged guards and complete workload exit.
+Protein live-owner3 also completes, verification5c79c57a/workflow8ec6c2a4 and
+actual exit783734d2, using actual current source observations and explicit
+rejection-order sentinels. These are prepared-source compatibility checks;
+they do not establish installation, native science or full restoration.
+The source14 static relative-import census a37a6c6c separately identifies51
+unresolved sites after excluding three valid namespace-package imports.
+Actual owner/caller composition remains in progress. The159 prepared Root
+homes and two implicit parents remain awaiting final integration/completion.
+
+2026-11-13: Source-identity25 passes all25 calls/75 phases, verificationd9f05b2d,
+workflowc9ceae1d and actual exit508028f1. Main prepares32 further concrete
+scientific library owners and exact direct-import successors (134b6a9d,
+9d1e5406, f869fe81) without changing scientific bodies. Shared publication
+custody/current callers and final application remain separate. Main also accepts
+the scoped implicit-parent188 union1c88a85f after checking actual retained/new
+phases and reading tests; final parent metadata/application remains open.
+
+2026-11-13: Main completes the prepared RNA/genomic/flux/NMF reader30 successor
+with all30 controls passing after the independent three-case RNA fixture
+correction. Verification866a2acb retains the disjoint27+3 original baseline
+account; workflowa171ff03 succeeds/drains and actual post-exitbd99b7af confirms
+the entire window workload exited. Source-only placement review5d3e2a74 also
+checks604 whole-file inverses across the remaining scientific-owner and caller
+stages. Fluorescence original8 and the two expected moved failures are confirmed;
+candidate13/16 pass, with three real source-closure failures still under repair
+(verificationb415e818, workflowa9a321cf, actual empty exitd67a5719). These results
+advance Root integration prerequisites without closing additional episode homes,
+installing final Root sources or establishing native scientific execution.
+
+2026-11-13: Main's A102 ownership24 generation02 succeeds without canonical
+writes or new tests, generation8ec8fd85/sources58ee0549/workflow675fa900.
+Separate actual exitbdd2bb3c records an empty Main service/slice. A10396 attempt01
+then fails on exactly two embedded pointer-only inventory records after all32
+standalone endpoint updates; raw workflowe5093993/stderr380521ab remain unchanged.
+Separate actual post-exitb0fddb6f observes inactive/PID0, empty recursive slice and
+absent337233/337236. Writer07 7d8847b8 preserves both authenticated pointer records
+and their history, referring to the generated standalone inventories; installer07
+edbcecac verifies those aliases while retaining all32 ordinary endpoint checks.
+Main reviews the full paired changes and starts fresh96 generation02. A10224,
+source667 and candidate838 remain reusable; no test/source repetition. Current
+ownership120 installation/reconciliation remains pending, so assessed remaining40
+is unchanged. Evidence: `runs/root_a102_resource10_metadata_generation_02/`,
+`runs/root_a103_remaining30_metadata_generation_01/`,
+`runs/root_a103_remaining30_metadata_preparation_07/` and
+`runs/root_remaining40_metadata120_application_preparation_07/`.
+
+2026-11-13: A10396 generation02 stops without canonical writes on six compact
+embedded Homology records lacking the standalone fingerprint object expected by
+the generator. Raw workflow43b71920 is retained as1/1/drainfalse; actual separate
+exitfee68f44 records inactive/PID0, empty recursive slice and338969/338972 absent.
+The complete aggregate record-shape census is being used for the next writer
+and checker correction. The two endpoint-alias corrections and successful A10224
+remain valid; no source or behavioral regression is inferred. Current metadata
+application is pending, so assessed remaining40 is unchanged.
+
+2026-11-13: Fourth's seven-library preparation supplies four exact successors
+and three uninstalled proposal retirements, source planf465b8ee. Main reads the
+complete verifier and actual35 resultd8a390c0, authenticates its nine evidence
+pins and twelve source/loaded-file pairs, and retains scope in reviewa99992dd.
+Workflow4df8ab8c succeeds/drains, with separate empty exit9154ec09. Real receiving
+classes/SQLite use a controlled scope-validation port; package initializer bypass
+and original AST-bound comparisons remain explicit. Source/private caller and
+definition-list composition remains Main-owned; no Root installation or complete
+runtime/restoration is claimed. Evidence:
+`runs/root_fourth_library_successor_review_01/REVIEW.md`.
+
+2026-11-13: Root160 attempt01 collects all160 selected cases but its shared
+fixture fails before every call on an omitted actual artifact-privacy module.
+Raw verification66a7d88f/workflow4b2996ee preserve160 setup failures and160 teardown
+passes; later actual exitd376e37d records the empty Fourth slot. The concrete
+3555-plus-three unchanged-source correction preserves privacy checks, case IDs,
+assertions and runner bytes. Main reads its exact two-operand driver change and
+source account, rehashes the three added files, and selects corrected inputb4c7cc5b
+for Fourth's next serial attempt. No case pass or full import closure is inferred.
+Evidence: `runs/root_operational99_boundaries160_01/` and
+`runs/fourth_root160_prerequisite_correction_01/`.
+
+2026-11-13: Root160 attempt05 reaches all160 calls with146 passes and14
+failures, alongside160 passing setups/teardowns; its raw source guards remain
+unchanged. Fourth reconciliation9275bb68 retains3574 selected source files and
+3271 confined imports. This is not a passing whole cohort. The failures expose
+missing snapshot dependencies, invalid baseline request fixtures and an
+inherited Resource-under-HPC contract incompatibility. Main reads the actual
+phase summary and full semantic source review; independent reviewf5bafbaf
+authenticates the committed original runtime/Resource definitions and all12
+applicable current private requests. The original role-only guard already
+requires Execution reference strings where Resource supplies structured handoff
+objects. No new contract repair is made in this organizational pass. The failed
+positive expectation remains historical; a separately identified authentic
+negative preservation control is required. A positive Resource-under-HPC path
+is not claimed. Actual Scientific registration operands are separately supplied
+by joinf877ca6b, with296 mandatory operands and the original optional A106 report
+branch preserved; this is source preparation, not descriptor execution.
+Evidence: `runs/root_operational99_boundaries160_05/`,
+`runs/root_resource_hpc_guard_review_01/` and
+`runs/root_scientific_registration_operand_join_01/`.
+
+2026-11-13: A103 ownership96 generation03 succeeds with generation55b22ee2,
+sources0917b2ca and workflowdc66ee59 (0/0/null/drained). Main reviews writer08,
+paired checker08 and the complete30-owner/head/support schema account83ab4c99;
+peer73093acc independently confirms the six compact aliases. Actual full exit
+d16307f5 records inactive/PID0, empty recursive slice and342648/342651 absent.
+The successful A10224 is reused. Metadata120 attempt01 then stops in preflight
+because its generic input traversal mistakes one historical fixture beforeimage
+for a current canonical file. Raw18778dfb and actual empty exit9d21f1b0 remain
+separate; no application output or canonical write occurs. The actual source667
+receipt pins both retained old695ddb2a and installed13665cdd helper versions.
+An installer-only reference correction is in progress; neither generation nor
+the completed838 cohort needs repetition. Assessed remaining40 stays open until
+actual current ownership installation/reconciliation. Evidence:
+`runs/root_a103_remaining30_metadata_generation_03/` and
+`runs/root_remaining40_metadata120_application_01/`.
+
+2026-11-13: The separate A103 existing12 internal-reorganization baseline now
+passes all134 selected existing cases with exactly402 passing phases. Main
+verifies selection9821fb48, unchanged original production authorityffa67c33,
+snapshotcf6883dd, verificationf634e34f, JUnite6056916 and phase reportsb5312386.
+The original88 diagnostic retains8 passes/80 setup errors:68 missing-helper-method
+errors and12 errors from the snapshot's omitted original examples input. Its raw
+failure/drainfalse is preserved. The three corrected helpers bind the actual
+Workflow.legacy_parent_for_path method with unchanged assertions; identical
+repaired assets are selected for the before/after comparison. Corrected baseline
+workflow6f655f0a succeeds/drains; actual Main inactive/PID0, empty recursive slice
+and245506 absent are independently observed after terminal16689.
+
+The unchanged native-bundle guard callable also succeeds for its fixed24 A103
+owners on that same original-production snapshot, resultbcfad825/workflowb2255bbd.
+Ten pending homes intersect; the two API homes are outside this probe. Main reads
+the actual result, unchanged source/provenance record and clean drained receipt,
+then verifies the empty slice and247192 absent after terminal97873. These are
+controlled malformed-source checks using real Store/Journal/receipt initialization,
+not authenticated native scientific results or positive archived-credit custody.
+Neither baseline applies or validates the proposed new production arrangement.
+The405/405 installation milestone remains closed; internal responsibility/role
+specialization, current shared-root integration and full restoration remain
+separate. Evidence: `runs/root_a103_existing12_baseline88_01/`,
+`runs/root_a103_existing12_baseline134_02/` and
+`runs/root_a103_existing12_baseline_guard24_01/`.
+
+Earlier organizational successors, 2026-11-13: generated ownershipf38185ad accounts
+for12 declared-child branch removals; subsequentba5bed84 accounts for the42-source
+presentation split and403-source selection. All14 homes now have separate private
+presentation-selection implementations and updated candidate fingerprints.
+Current message endpoints and historical validation retain their actual source
+epochs. The28 shared instruction/diagnostic dependency explanations8335e7db now
+have generated metadata successora86be887. The later accepted14 received-evidence
+corrections and current test-helper selection have actual28-document successor
+0e97e78c, with updated genuine fingerprints and2726 import records. Its generation
+and independent payload hashes are verified; it supplies aggregate current
+ownership composition, without a new behavioral pass or canonical installation.
+These packages are incorporated in the completed final application above; the
+original14-home generation below remains historical provenance, not a new
+scientific validation claim.
+
+Subsequent scoped behavior evidence is now complete for Sixth's original staged
+cohort: tests10 passes208 cases, including all14 accepted received-evidence
+modules, and authentic retained witnesses complete1780 original cases. Review
+1c30274a/uniond64131d1 preserve their actual source epochs; later final-source
+changes require their own applicable evidence and are not covered merely by this
+count. Aggregate03 generated current ownership but still contains inherited stale
+current records; explicit04 corrects those records before installation. These
+record defects do not reopen delivered scientific behavior.
+
+Separate organizational follow-up, 2026-11-13: Main generates28 concrete
+ownership candidates for the14 pending private SourceFamily homes, manifest
+18573086. The creator checks389 selected source pins,380 own Python files,
+actual method/import facts and14 genuine implementation fingerprints. Both
+endpoints of14 parent exchanges and12 internal child edges are recorded.
+Existing tests/helpers/fixtures and eight prior receipt directories retain their
+original scope; no new tests execute. External dependency review86a9d101 accounts
+for2724 imported-symbol sites,35 modules and70 fingerprint-only byte operands.
+Its106 unresolved home/group dispositions explicitly retain copied foreign-role
+presentation, instruction, invalid-action repair and head-request branches.
+These are implementation follow-ups, not106 episodes or failed tests. Workflow
+967fccdd succeeds and drains; actual service is inactive/PID0, recursive slice
+empty and supervisor209041 absent. The28 candidates are not installed and no
+new scientific, restoration or whole-ownership completion is claimed.
+Evidence: `runs/root_a102_source_family_ownership_generate_01/` and
+`runs/root_a102_source_family_dependency_review_01/`.
 
 The subtree is complete in implementation. Its earlier composition with A101
 under a shared parent is also completed work. Do not replace either milestone
@@ -3293,6 +11384,220 @@ not authorization to substitute B or controller progress.
 
 ## A103 — confirmed code path and separate HPC scope
 
+Current broader organization update,2026-11-13: remaining40 candidate838 passes
+65d5f525 and source667 is installed by989770ad/workflow92b1ced4, including the
+thirty remaining A103 Resource/SourceFamily/Homology homes. Current ownership96
+generation55b22ee2 is installed within shared application03. Independent
+completion reconciliationbcb1232a/workflowca661819 succeeds and drains, with
+actual empty exitf2d5a9e2. All120 current documents and their history proofs,
+6106 production sources and61 test assets are authenticated; Main's separate
+6287-file byte/mode reviewa607a2c0 agrees. These final30 A103 homes are now closed;
+the assessed A103 organization remainder is zero. The original installer's final
+summary-write failure remains explicit. Native/scientific capability, inherited
+parent gaps and shared Root restoration remain separate from this controlled
+organizational evidence.
+
+2026-11-13: Metadata120 attempt02 using reviewed installer09 stops during
+candidate current-reference checks, before creating its applied output or
+writing canonical files. The rejected operand is A103 legacy_annotation's
+from_child_homology_job_submission.py. Raw workflow6c19e5cd retains1/1/drainfalse;
+separate actual exite792dbdf records inactive/PID0, an empty recursive slice and
+absent supervisor345663. The source/reference representation is under review;
+neither generated ownership set nor the completed838 tests is reopened without
+an actual defect. Assessed remaining40 is unchanged. Evidence:
+`runs/root_remaining40_metadata120_application_02/`.
+
+2026-11-13: Metadata120 application03 records every120 replacement and passes
+the full current/source/fixture postchecks. Journaleb3f1fc2 sequence243 pins
+postcheck91191470 for6106 production sources and61 assets; sequence244 records
+applied:true. Current evidencecdc5574a and all120 independent history proofs
+are retained. Its final summary write then fails with FileExistsError because
+the exclusive-create writer targets its own initial application.json. That
+initial file and raw workflow361572dd remain unchanged, including1/1/drainfalse;
+actual exitb0fb9cfb separately proves inactive/PID0, an empty recursive slice and
+absent348915/348918. This is completed writes with failed final reporting, not
+a successful raw workflow or a reason to reinstall. A fresh read-only current
+reconciliation/finalization receipt is required before closing remaining40.
+Evidence: `runs/root_remaining40_metadata120_application_03/`.
+
+2026-11-13: The final40 assessed axis organization homes close (A10210/A10330).
+Fresh read-only reconciliationbcb1232a authenticates all244 original application
+journal events,120 replacement pairs and their retained originals/payloads,
+the completed120 history/current checks and exact6287 current file states.
+Its postcheck bytes equal original91191470; it performs no canonical writes,
+reinstallation, rollback or test repetition. Workflowca661819 is0/0/null/drained
+without OOM; actual exitf2d5a9e2 records inactive/PID0, recursive slice empty and
+supervisor351511 absent after terminal85209. Main independently verified all120
+generated afterimages,6106 unchanged production sources,61 unchanged test assets
+and all6287 modes in reviewa607a2c0. The original raw361572dd failure and initial
+preparing summary remain immutable; the distinct successful reconciliation
+records the actual completed installation. Together with source667 and the
+retained838 controlled cases, this closes the assessed40 scope. Shared Root
+integration and12 inherited parent edges remain separate; no full restoration,
+native/HPC or autonomous scientific completion follows. Evidence:
+`runs/root_remaining40_metadata120_reconciliation_01/` and
+`runs/root_remaining40_installed_bytes_review_01/`.
+
+2026-11-13 finite execution30 organization join is complete. Actual generation
+fdd197ae/sourcesb39e6684/workflowf15c0bd3 supplies64 current records; combined
+metadata128 application4cc338e8/workflowe5296333 installs them successfully and
+drains. Main independently verifies all128 installed metadata hashes/modes,
+5728 unchanged production hashes and63 unchanged assets, and observes complete
+Main process exit. Independent proofd8210603/current evidence528bcce5 join
+preserved inverses/history and original scientific formulas to the actual
+43-binding probes. Together with sourcefcf27f41, candidate620 and corrected
+source assessment52aed5fb this closes these30 own organization homes.
+A103's known unfinished organization count is now30. Upstream-parent duties,
+other unassessed scopes, full saved restoration and autonomous science remain
+separate. Evidence: `runs/root_execution60_metadata128_application_01/REPORT.md`.
+
+2026-11-13 execution30 source/test installation: combined applicationfcf27f41
+installs all720 production and eight permanent test targets, with complete5728
+source/63-asset postchecks. Main independently checks every installed target's
+hash/mode and the complete current maps. Workflowb7a2b1db succeeds/drains; actual
+empty Main service/slice and absent285354/285357 precede metadata generation.
+The source component is installed; current ownership64 and the finite-home
+completion join remain pending. Evidence:
+`runs/root_execution60_source_application_01/REPORT.md`.
+
+2026-11-13 execution30 candidate validation: combined620/1860 passes with
+verificatione569382f/workflowddb37c2f, exact unchanged25700-file snapshot and
+zero import violations. The actual A10343-binding probec2764b11 confirms2967
+selected sources and scientific identity5bbc601b. Corrected source assessment
+52aed5fb finds no additional own responsibility gap in these30; task admission
+and rejection handling remain legitimate central-task work, and upstream-parent
+duties stay separate. Canonical source application and current ownership metadata
+remain required before closing these homes. No live provider/native/HPC or
+full saved-workflow restoration is claimed. Evidence:
+`runs/root_execution60_candidate620_01/REPORT.md` and
+`runs/root_a103_execution30_closure_assessment_01/ASSESSMENT.md`.
+
+2026-11-13 permanent test assets: Main adds fixtures/source_request_assembly/*.txt
+to the A103 tests package-data entry in pyproject.toml331699fe, after inspecting
+the actual original runtime fixture0bec5b33 and its boundary-test consumer.
+Immutable runtime snapshots retain their original configuration; no wheel build
+or new organizational completion is inferred from this static change. See
+`runs/root_execution60_verification_preparation_03/PACKAGE_ASSET_UPDATE.md`.
+
+2026-11-13 ownership28 is installed within combined applicationb2e3ac16, from
+generationc171b050/sources3a6ae416. Whole inverses/history and current scientific
+aliases pass9191e294/22ebf493; scientific5e85277e agrees with the actual43-binding
+candidate probe. The successful workflowc23f0be1 drains, with actual complete
+Main process exit independently observed. This completes the named HPC-child12
+responsibility/ownership component, without declaring whole-home organization.
+
+Main's full-scope review contradicts the earlier zero-additional-gap account
+863ba87b: all12 HPC-child task.py files still construct substantial model context
+inside next at61, with scientific enrichment at86 despite their actual operational
+credit_kind and runtime.is_scientific_source2343-2345. The same concrete residual
+exists in the six older root/scientific API/local/HPC children. Corrected account
+ea5690b6 preserves the earlier account as superseded;18 child homes remain open
+for their own task responsibilities, separate from the six parents' outgoing
+gaps. Those older six add to the previously counted54:60 identified A103 homes
+have organization work. Accepted source/metadata/test components are not reopened.
+Evidence: `runs/root_a103_execution18_decision_state_preparation_01/CORRECTED_SCOPE_ACCOUNT.json`
+and `runs/root_next36_metadata80_application_01/REPORT.md`.
+
+2026-11-13 HPC-child12 source installation: application8e6231da installs the
+sealed364-operation component together with A10224. Both actual332-case cohorts
+pass with identical996 phases. The final A103 map has2727 sources and the real
+candidate43-binding reconstruction records scientific fingerprint5e85277e.
+Main verifies the full combined5338 canonical hashes and43 unchanged assets,
+with successful/drained workflowcccb9ffb and complete actual Main process exit.
+The separate ownership28 installation is recorded above; six Launch outgoing
+gaps, other organization work and full shared-root integration remain explicit.
+Evidence: `runs/root_next36_source_application_01/REPORT.md`.
+
+2026-11-13 parent-message follow-up: six Launch homes from the installed twelve
+still assemble outgoing child requests in the shared runtime. Main confirms the
+six current child_commissioning.py files have child eligibility/report selectors
+but no child_request_assembler, and traces the existing Workflow.selected/build
+hook and fallback. Their completed responsibility/ownership component remains
+accepted; whole-home organization was not established by that component. The
+separate reviewed proposal b3bd86ee adds eighteen substantive outgoing owners
+and six selectors; it is not included in the current332-case candidate. Thus54
+A103 homes have identified organization work: the48 below plus these six.
+Evidence: `runs/root_a103_launch6_outgoing_preparation_01/HANDOFF.md` and
+`runs/root_a103_launch6_outgoing_peer_review_01/REVIEW.json`.
+
+2026-11-13 full75-home finite organization census a7cbb248 classifies12 installed
+specializations,12 separately prepared HPC children,36 additional organization/
+disposition homes and15 with no further gap identified by that census. The36 are
+Results6, Resource10, SourceFamily14 and legacy Homology children6; the latter
+retain a three-role own-report validator dispatch. Earlier partial16/30 counts
+are superseded for counting, while completed task/credit behavior stays accepted.
+With the installed12 ownership closure below,48 identified A103 homes remain in
+these organization scopes. This source census is not exhaustive scientific or
+full-restoration verification. Evidence:
+`runs/root_episode_residual_inventory_01/a103_whole_axis/CENSUS75.json`.
+
+Current existing12 organization, 2026-11-13: source application4ff0287b installs
+the reviewed368-operation chain across212 production targets plus three shared
+test helpers. All215 afterimages/modes and the complete5088-source A102/A103 map
+pass the installer checks; Main independently rehashes every installed target.
+The candidate passes all134 existing cases and402 phases, verification87cce6c3,
+with byte-identical phase reports to the passing baseline. The unchanged fixed24
+negative-bundle callable also succeeds, resultef2bdfdc. Both tested snapshots
+remain unchanged with no imported-source violation. Actual candidate reconstruction
+records scientific descriptorf47159a1; twelve fixture instances each reconstruct43
+bindings because the original selection interleaves modules. That repetition is
+accounted explicitly and does not create extra distinct test cases.
+
+The candidate, guard and application workflows all succeed/drain; Main separately
+observes the inactive/PID0 service, empty recursive slice and absent respective
+supervisors before each next workflow. Ownership successor57 is now installed:
+generation5b5d979d/sourcesf2daf260 and application3fed8904 complete all57 targets.
+Independent proof0af9d03e authenticates all60 ordered metadata transitions and
+their full byte inverses/history; current-evidenceafdca0cb confirms the actual
+scientific fingerprint and12 probe records. All5088 sources and fixture3 remain
+unchanged. Main independently rehashes all57 canonical metadata afterimages.
+Generation41d01b71 and installation8098fb6a both succeed/drain without OOM;
+actual Main service/slice empty and supervisors251579/254217 absent precede the
+next workflow. This closes this twelve-home responsibility/ownership component;
+the six additional parent-message gaps recorded above remain separate.
+The next36 homes (A10224 and A103 HPC-child12) have the separately recorded
+source installation and ownership52+28 recorded above;
+the broader75/67-home censuses identify further work beyond that assigned batch.
+Original405/current410 connections remain complete.
+Controlled tests do not establish positive archived native-credit custody, full
+restoration, native/HPC execution or autonomous science. Evidence:
+`runs/root_a103_existing12_candidate134_01/`,
+`runs/root_a103_existing12_candidate_guard24_01/` and
+`runs/root_a103_existing12_source_application_01/`, plus
+`runs/root_a103_existing12_metadata_generation_01/` and
+`runs/root_a103_existing12_metadata_application_01/`.
+
+Later scoped organizational validation, 2026-11-13: the retained qualified496
+case union is complete (486 prior passes plus the corrected10 cases), authenticated
+by checkerd831be69 at its actual source epochs. The subsequent three private
+counterpart guard checks also pass at their separate12-source epoch. These
+controlled results supersede the earlier pending-behavior statement below, while
+the selected canonical installation and172-file current ownership composition
+are now applied by1ee699f9. Broader responsibility splitting remains separate.
+They do not establish full saved-workflow restoration or autonomous science.
+The original405-home count now has zero A103 connections outstanding. Actual
+census8c54027f verifies all75 current A103 homes, including the six parent-private
+children and two parents replacing the older shared arrangement.
+
+Sixth's additional tests10 completes52 original A103 head cases within its exact
+208-case selection, with authentic1780 original-cohort coverage across retained
+runs (review1c30274a). This is staged-source evidence, separate from the496
+Homology cohort and the final installed epoch. Current inventory repair also
+accounts for six already-installed Results homes' complete34-file catalogues
+and original12 request/return retirements, authenticated by applied split2a5e8831
+and review8a6ec287. It changes ownership records rather than reopening those six
+delivered connections; their old666 validation retains its original source scope.
+
+Earlier organization checkpoint, 2026-11-13: the separate annotation and
+standalone-improvement parents, each with three private Homology children, have
+been materialized in an isolated source tree. Composition57eb16e0 preserves the
+original119 stages and applies private248, shared8 and the one-file saved-report
+redelivery correction. This is prepared implementation, pending canonical
+installation and behavioral results. The original405 installation census still
+has four A103 connections remaining. The relocated original487 cases and three
+additional saved-counterpart cases are selected for the current isolated run;
+no pass, full saved-workflow restoration or autonomous science is claimed.
+
 [a103_investigation.py](../gene_annotation_episode/a103_investigation.py)
 provides `A103Subtree`, `A103ServiceFactory`, receipt-aware return records and
 the parent report resolver. [a103_tools.py](../gene_annotation_episode/a103_tools.py)
@@ -3321,6 +11626,112 @@ decisions and scripted parent/native execution. The newly added HPC request,
 allocation worker and automatic admission have not been executed for validation.
 
 ## A104 — confirmed code path
+
+2026-11-13 finite60 organization completion: source1398 applicatione9af6401,
+candidate235 verificationca7cc6bd and current metadata122 application3e4aacf1
+are now joined to source assessmentad68520a. Metadata workflowc28f2ccf succeeds
+and drains; Main separately observes inactive/PID0, empty recursive slice and
+310688/310691 absent after terminal16053. Native current joinbc609fdb verifies
+all122 installed hashes/modes and retained copies,3829 production members,
+92 assets, eight context operands,61 inventories and122 inverse/history checks.
+The235-case receipt remains exact and successful without another test run.
+Original generator/installer failures are retained. The earlier pending notes
+below are historical observations superseded for this finite scope. Root/shared
+integration, full saved-workflow restoration, later Root-context fingerprint
+changes and autonomous scientific validation remain separate.
+Evidence: `runs/root_a104_all60_final_reconciliation_01/REPORT.md`.
+
+2026-11-13 all60 source installation completes all1398 targets:1350 writes and
+48 retirements, applicatione9af6401/workflowd1d7dd0b (0/0, drained, no failure).
+Main independently checks full3829 production membership/hashes, all1398 target
+hashes/modes/absences and92 assets, then observes actual complete process exit.
+The subsequent metadata122 generator fails before final publication on a base
+symbol lookup in current_facts.py; raw workflow2feacea1 retains1/1/drainfalse,
+and Main separately observes inactive service/empty slice/absent295690. Source
+installation and candidate235 remain complete. Current ownership application
+and the finite60 completion join remain pending; known assessed remainder192
+is unchanged. Evidence: `runs/root_a104_all60_source_application_01/REPORT.md`
+and `runs/root_a104_all60_metadata_generation_01/REPORT.md`.
+
+2026-11-13 all60 candidate validation passes235 cases/705 phases, verification
+ca7cc6bd/workflowec332e25, with successful drained execution and actual complete
+Main process exit. Baseline accountdf5def09 joins181 original passes and54
+corrected passes; the54 original fixture failures remain explicit. Candidate
+snapshot64da1e2b has26323 unchanged files, the same92 selected test assets and
+the reviewed3829-source implementation. This is scoped controlled boundary and
+descriptor evidence. Source installation/current metadata122 and finite home
+closure remain subsequent joins; no whole scientific/HPC workflow is claimed.
+Evidence: `runs/root_a104_all60_candidate235_01/REPORT.md`.
+
+2026-11-13 static required-asset packaging: Main adds the selected A104 test
+JSON/TXT/XML fixture patterns, A104 instruction-library Markdown and shared
+HPC-prediction JSON patterns to pyproject.toml986f1629. Exact required paths are
+listed in `runs/root_a104_connected_test_preparation_01/HANDOFF.md`. This is
+distribution configuration, not a wheel build or test execution. The required
+resource JSON's test-only relocation is being prepared separately; its example
+and existing A104 fixture bytes are identicala929d640. Canonical shared test
+helper changes await the current execution60 metadata guard's completion.
+
+2026-11-13 organization assessment refinement: all60 existing homes now have
+identified unfinished organizational work. The previous44 are joined by six
+HPC, six Monitor, three Homology and the scientific head. Main checks the actual
+combined task/provider/contract methods in the fifteen task_decision modules and
+the head's inline decision snapshot in ScientificTask.next. Prepared remaining16
+plan4eba8256 records those responsibilities and genuine message endpoints; it
+is source preparation, without installation or new behavioral validation. The
+accepted recovery, ownership and scoped validation components remain complete.
+Evidence: `runs/root_a104_remaining16_preparation_01/HANDOFF.md` and its
+`final/CURRENT_CENSUS.json` (b212dd9b). The earlier44-home census below is historical.
+
+2026-11-13 current organization census ACCOUNT70e28de7 identifies44 concrete
+unfinished homes among the60 installed task homes: execution30 and Literature14.
+Twenty-eight execution homes retain literal-dead branches, two Launch homes
+retain Results-only progress methods requiring final caller disposition, and
+fourteen Literature homes retain broad role assignment/inline presentation work.
+Sixteen other homes remain unassessed for full organizational completion. The
+native census checks all2439 direct-source pins,60 inventories/pages and current
+axis metadata; all current per-home source hashes/memberships agree. These are
+source specialization/splitting findings rather than stale catalogue repairs.
+The accepted102-source/64-document recovery, status64, Homology2 join and scoped
+12-case validation remain complete. Execution30 preparation is source-only;
+no new application or behavioral result is claimed. Evidence:
+`runs/root_a104_organizational_census_01/REPORT.md` and its sealed ACCOUNT.json.
+
+Current organizational application, 2026-11-13: receipt48f66550 installs all102
+selected source targets and64 ownership documents with complete postchecks and
+independently matching canonical hashes. Original recovery/import/guard proofs
+retain their scopes. The12 existing parent-contract cases then pass against
+installed sources (resulta12f01e3); they perform no native/network dispatch and do
+not cover every recovered callable or full workflow. Both workflows succeed and
+fully exit. The earlier generation-only statement below is historical preparation,
+not the current installation status. The subsequent64-document status application
+74dff34b now records that distinction canonically, retaining exact prior proposal
+history without changing Python or source fingerprints; all64 hashes match and
+workflow50c4539d succeeds and fully exits. Evidence:
+`runs/root_a104_combined_application_02/` and
+`runs/root_a104_import_boundary_existing12_01/`, plus
+`runs/root_a104_installed_status_application_01/`.
+
+The subsequent two-document Homology axis join is also installed: application
+a991ec25/postcheck2ccacf1e, with both canonical afterimages independently matched.
+It links the six actual private ownership documents and corrected parent exchange
+endpoints. All3289 guarded states pass before/after checks; source, scientific
+head and fingerprint values remain unchanged. Workflow7f821e7f succeeds/drains;
+actual Main service/slice are empty and236116 absent. This closes the finite
+ownership-reference gap, without extending the12-case runtime evidence. See
+`runs/root_a104_homology_axis_join_application_02/`.
+
+Separate organizational repair, 2026-11-13: exact59 import-only changes and four
+original-owner recovery operations compose with40 earlier guard edits into102
+unique selected source targets. Generated plan0eab44da supplies64 sparse ownership
+transitions across30 homes, preserving original/history values and accounting for
+two new same-axis library owners. Scientific fingerprint5a5b555d follows the
+actual source-digest formula over3212 resulting axis files and seven unchanged
+Root operands. Workflowe6e344f7 succeeds and drains; actual service/slice are empty
+and supervisor214120 absent. This is prepared source/ownership repair, awaiting
+application and runtime checks; it does not reopen the earlier scientific results
+below or establish complete current import closure. Evidence:
+`runs/root_a104_combined_metadata_generation_01/`.
 
 [a104_investigation.py](../gene_annotation_episode/a104_investigation.py)
 constructs the subtree and typed parent report.
@@ -3649,6 +12060,18 @@ expectation in the existing availability fixture was corrected. These are
 source-only changes; no Python, tests or workflows were run for this repair.
 
 ## A106 — implemented path, broader completion still open
+
+2026-11-13 organizational increment: 28 existing private decision tasks now own
+their substantive decision-presentation functions. The 113-file application
+`3efef9b9` is installed, with the original source inventory advancing from 1564
+to 1592 files. The same 184 controls pass before and after the split; retained
+post result `df996537` confirms identical case identities, no collection errors
+and exit zero. Credit-state presentation, completed-work preparation and yield
+table presentation keep their original behavior and direct private callers.
+This adds presentation ownership, not new task connections or scientific
+validation. The separate Root delivery failures remain explicit. Evidence:
+`runs/second_a106_presentation_install_direct_01/output/application.json` and
+`runs/second_a106_presentation_post_direct_01/result.json`.
 
 [literature_intervention_inputs.py](../gene_annotation_episode/literature_intervention_inputs.py)
 and the perturbation readers consume source measurements or authenticated
@@ -4530,6 +12953,63 @@ classified as failures. This audit correction is also unrun.
 
 ## A107 — existing experimental path, incomplete broader axis
 
+2026-11-13 owned organization completion: Fourth's49-home successor is installed
+and reconciled with its full57-home scope. Current map6fd5de8e covers2735
+production modules and747 installed targets, with92 retired originals retained.
+Main's independent native join719425cd and the source/canonical/metadata
+receipts close this finite ownership scope. The broader scientific and Root
+limitations below are unchanged. See `runs/root_fourth_final_organization_reconciliation_01/REPORT.md`.
+
+2026-11-13 required-asset packaging: Main applies the reviewed two-axis package
+data addition in pyproject3b77aac1, preserving all prior986f1629 settings.
+A107 test data now includes its organization_original and organization_preservation
+JSON fixtures. This is static packaging configuration, not a package build or
+source/metadata installation claim. Evidence:
+`runs/episode_orchestration_20261111/FOURTH_PACKAGING_APPLIED_20261113.md`.
+
+2026-11-13 directional census refinement: the known open-home count is49.
+Main checks four actual identity-only Results request selectors at planning,
+allocation, scientific planning and scientific allocation. Each still returns
+its assignment without owning the full request envelope. These add four concrete
+homes to the earlier45; accepted outgoing-message and HPC480 scopes remain
+complete. Fourth owns their repair. Evidence:
+`runs/fourth_remaining76_application_preparation_01/FOURTH_ORGANIZATION_REMAINDER_20261113.md`
+and the four current `to_child_execution_result_acquisition.py` implementations.
+
+2026-11-13 organization count refinement: Fourth's current remainder account
+identifies45 A107 homes with work:30 execution,14 literature and the scientific
+parent. Main confirms the parent's actual ScientificTask.next still constructs
+its substantive decision snapshot inline at task.py63–101. Its completed outgoing
+message boundary remains accepted; that component did not establish whole-home
+completion. The12 HPC/monitor homes have separate responsibility and integration
+dispositions and are not silently added to this count. Source candidates and
+controlled checks remain distinct from canonical completion. Evidence:
+`runs/fourth_remaining76_application_preparation_01/FOURTH_ORGANIZATION_REMAINDER_20261113.md`
+and `gene_annotation_episode/episodic_workflow/root/a107/scientific_process/task.py`.
+
+2026-11-13 shared fixture integration: Main adds the actual permanent
+tests/fixtures/organization_original/*.source inputs to this axis's package-data
+entry in pyproject.toml49440e93. The authenticated workflow_build.py.source
+fixture517d58ab and its actual test consumer are verified statically. Fourth's
+canonical parent-message checks34da305b report46 passing cases across A107/A110;
+this package configuration edit does not claim a wheel build or broader episode
+completion. Evidence: `runs/fourth_remaining76_application_preparation_01/PRIMARY_SHARED_TEST_ASSETS_APPLIED_20261113.md`.
+
+2026-11-13 finite retained-owner integration: Fourth's final199-path cohort is
+installed and its final validation-metadata map9917b078 is current. Main reads
+the full handoff and independently verifies all199 installed targets plus the
+complete2656-production-file map. Actual checks9761642a pass92 controlled cases
+without failures/errors/skips,100 queued named imports and18 consumer probes;
+the two original source-record consumers report2048/2073 entries, with zero
+loaded project modules outside canonical sources. Workflow1ddd3d7b succeeds
+and drains. The earlier cohorts and HPC480 retain their own source epochs;
+they are not repeated or relabeled. This closes the owned finite import queue,
+not a census of complete per-home organization, shared-root acceptance, saved
+restoration or autonomous science. Evidence:
+`runs/fourth_remaining76_application_preparation_01/FOURTH_A107_FINAL_RETAINED_OWNERS_INSTALLED_20261113.md`,
+`runs/fourth_a107_final_canonical_checks_01/` and
+`runs/fourth_a107_final_validation_account_01/current_sources.json`.
+
 2026-11-07 source correction and custody checks: the requirement adapter previously
 checked subject/partner and shared paper without checking the selected sheet's
 experiment identity. It now requires an explicit observation-to-experiment
@@ -4813,6 +13293,64 @@ No targeted tests were run. Shared-root numerical integration is a separate scop
 
 ## A110 — finite implemented components, incomplete broader axis
 
+2026-11-13 owned organization completion: Fourth's43-home successor is installed
+and reconciled with its full51-home scope. Current map2699e4b3 covers2398
+production modules and622 installed targets, with68 retired originals retained.
+Main's independent native join719425cd closes this finite ownership scope with
+the original source/canonical/metadata receipts. It does not complete shared
+Root integration, full restoration or autonomous science. See
+`runs/root_fourth_final_organization_reconciliation_01/REPORT.md`.
+
+2026-11-13 required-asset packaging: Main applies the reviewed two-axis package
+data addition in pyproject3b77aac1, preserving all prior986f1629 settings.
+A110 test data now includes its organization_original and organization_preservation
+JSON fixtures. This is static packaging configuration, not a package build or
+source/metadata installation claim. Evidence:
+`runs/episode_orchestration_20261111/FOURTH_PACKAGING_APPLIED_20261113.md`.
+
+2026-11-13 directional census refinement: the known open-home count is43.
+Main checks four actual identity-only Results request selectors at planning,
+allocation, scientific planning and scientific allocation. Each still returns
+its assignment without owning the full request envelope. These add four concrete
+homes to the earlier39; accepted outgoing-message and HPC480 scopes remain
+complete. With A10240/A10360/A10460/A10749 this gives252 known unfinished homes,
+a lower bound rather than an exhaustive global total. Source preparation and
+candidate checks do not subtract homes before completed installation and review.
+Evidence: `runs/fourth_remaining76_application_preparation_01/FOURTH_ORGANIZATION_REMAINDER_20261113.md`
+and the four current `to_child_execution_result_acquisition.py` implementations.
+
+2026-11-13 organization count refinement: Fourth identifies39 A110 homes with
+work:24 execution,14 literature and the scientific parent. Main confirms the
+current parent's substantial inline decision snapshot in ScientificTask.next,
+alongside its separate internal_summary implementation. The earlier outgoing
+message component stays complete. Together with A10745 and Main's A10240,
+A10360 and A10444, this yields228 identified unfinished homes, a lower bound
+rather than an audited global total. Evidence:
+`runs/fourth_remaining76_application_preparation_01/FOURTH_ORGANIZATION_REMAINDER_20261113.md`
+and `gene_annotation_episode/episodic_workflow/root/a110/scientific_process/task.py`.
+
+2026-11-13 shared fixture integration: Main adds the actual permanent
+tests/fixtures/organization_original/*.source inputs to this axis's package-data
+entry, preserving fixtures/received_execution_original/*.source. Both the
+fixture517d58ab and its actual test consumer are verified; pyproject.toml is now
+49440e93. This is static distribution configuration, without a wheel-build or
+whole-home completion claim. Evidence:
+`runs/fourth_remaining76_application_preparation_01/PRIMARY_SHARED_TEST_ASSETS_APPLIED_20261113.md`.
+
+2026-11-13 finite callback/native-form integration: Fourth's119-path successor
+is installed with final validation-metadata mape47b0f29. Main reads the complete
+handoff and independently verifies every119 installed target and the full2349
+production map. Actual checks8606d0ef pass69 cases without failures/errors/skips,
+resolve all268 queued named imports and authenticate2070 records in each of the
+two source consumers; no loaded project module is outside canonical source.
+Workflow94cc721b succeeds/drains. The original controlled failing baselines and
+historical identity/custody records remain retained. This closes the finite owned
+callback/import scope, not complete per-home organization, shared-root workflow
+acceptance, saved restoration or autonomous science. Evidence:
+`runs/fourth_remaining76_application_preparation_01/FOURTH_A110_CALLBACK_FORMS_INSTALLED_20261113.md`,
+`runs/fourth_a110_callback_canonical_checks_01/` and
+`runs/fourth_a110_callback_validation_account_01/current_sources.json`.
+
 Initial 2026-11-07 public-chemistry handoff review, before the correction below:
 the ordinary registry imports
 authenticated Rhea participants and ChEBI formula/charge records through
@@ -4975,10 +13513,1228 @@ failure sets match exactly in
 These existing failures and deferred per-axis validation remain separate.
 No frozen workflow was restarted or reconfigured for this integration.
 
+## 2026-11-13 actual Root provider placement and new private source owners
+
+Root Native state source54 passes Main's whole-module comparison95650db8 for
+18 proposed homes, preserving actual intent/receipt/replay and signed factual
+credit bodies. Subsequent actual construction/dispatch review finds nested
+adapter copies are not yet selected through shared `_practical`; private runtime
+selection remains unfinished with A102 and independent A103 review. No installed
+axis is reopened and no Root home is counted complete from these source copies.
+Evidence: `runs/root_native_state_owner_review_01/CURRENT_SELECTION_FINDING.md`.
+
+Root fixture packaging now includes the two private Monitor/Homology test
+packages in pyproject8c873d07. Main authenticates all19 selected asset source
+hashes and exact additive configuration equality. Permanent fixture installation,
+package assembly and full Root integration remain pending; no episode count
+changes. Evidence: `runs/root_fourth_test_asset_packaging_01/REPORT.md`.
+
+Latest Terminal controlled evidence: Fourth run04 passes all48 cases/144 phases
+with verification8cd7b3d7, successful drained workflow03ceca77 and recorded actual
+exit5c335715. Main's native join5116f7ae independently authenticates exact case
+identities,245 source members and actual import origins. Metadata12 successor
+fee108cb attaches these receipts while retaining source_prepared_not_installed.
+No full Workflow dispatch, mixed-owned Scientific crossing, native execution,
+saved-process restoration or autonomous-science claim follows. Earlier runner
+directory/dependency/origin failures remain raw evidence.
+Evidence: `runs/root_terminal48_final_reconciliation_01/REPORT.md`.
+
+Earlier 2026-11-13 Terminal preparation: the six actual parent-private homes
+now have twelve prepared ownership documents, manifest899765af. Each records
+21 private source files, actual current method destinations, original move
+accounts and both parent exchange endpoints. These records are explicitly
+source preparation, with no installation or controlled48 result yet. Exact
+plain-import successora64c1e78 binds the existing Root communication function;
+the six Homology serializer-import proposal44c02841 binds the existing global
+execution_contracts definer after its concrete missing-import correctionfec9f629.
+No replacement serialization facade or new scientific behavior is introduced.
+The finite Terminal test selection70a5163d includes the latest lineage03
+registry but does not establish owned Scientific crossing or full Workflow
+message dispatch. Root integration and the full-goal count remain open.
+Evidence: `runs/root_terminal_ownership_preparation_01/HANDOFF.md` and
+`runs/root_terminal_dependency_selection_preparation_02/HANDOFF.md`.
+
+Latest source integration update: Root scientific services12 now pass independent
+source review (`runs/seventh_root_scientific_services_peer_01/REVIEW.md`);
+the actual scientific binding has a completed 21-file source proposal and awaits
+the shared installation/integration. Component native
+received/profile2, component reports/context2 and component instructions1 have
+complete original source partitions. The six-file A110 schema primitive change
+reproduces both original circular-import failures and passes both corrected
+import orders with the same schema digest in
+`runs/root_a110_schema_import_boundary_01/checks/result.json`. Its ordinary
+launcher result is 0/0, no failure, descendants drained, peak21,733,376 bytes,
+with the unchanged one-CPU/5-GiB/no-swap bounds. This is a focused import and
+source-inventory check, not full episode or HPC execution.
+
+The complete Root return-record reader now has all13 original class methods and
+both nested equality functions in a source proposal, with genuine homology
+handoff/query dependencies. Root's original report parser pairing is restored;
+the complete `_attempt` body matches the original. A focused comparison passes
+all13 saved-record and canonical-identity cases against the corrected source,
+while reproducing eight failures in the current reader. Final caller composition
+and full episode integration remain pending.
+Complete molecular, protein structure, phylogeny, retrieval, execution progress
+and local practical operations owners are prepared for the shared Root source
+composition; their missing transitive owners remain explicit. Monitor/HPC72,
+partner16, RNA30, RFAM7, ATAC/chromatin34 and BLAST utility/masking37 now have
+concrete source proposals. The subsequent nine-row result-information/progress
+proposal `dd186678` also restores complete fluorescence information and its
+direct progress imports. Resource86 and Homology54 now supply five and three
+fixed private episode implementations respectively, with original tasks,
+directional responsibilities and actual caller selections. The Homology family
+retains shared mutable custody and host-local native-event copy semantics;
+its generic role forwarders are removed. These source families still await
+installed integration. The original 33-module staged check collected 265 cases
+and stopped on 28 collection errors; no case ran. The newly prepared Resource
+and Homology families address missing code exposed at that boundary; original
+test import/owner corrections and the next integrated run remain separate.
+The standalone scalar `improvement` entrypoint is a distinct original supported
+host now being restored privately. Its supplied root credit is different from
+the original unresolved nested-improvement credit path; no new credit rule is
+being invented to make that nested route work.
+Those Root source additions did not change the earlier276/405 connections.
+Subsequent actual installation adds20 A102/A103 Resource tasks and8 A107/A110
+Launch/Results tasks. The fresh405-home census corrects the former304/101
+arithmetic to310 installed/95 remaining: six already installed A103 Results
+connections were omitted, with their installed666 pass retained separately.
+Fourth's later actual76-home installation and the new original405 census now
+establish386 installed/19 remaining, all in A102/A103. The76 new connections'
+behavioral checks remain pending and do not imply full organization or science.
+The eight Direct tasks now have312 distinct installed controlled cases passing
+and32 byte-identical original yield records; the twenty Resource tasks' checks
+remain incomplete. Installation, integrated behavior, saved restoration and
+autonomous scientific validation remain separate. The existing Aurora SSH
+master has been reused successfully; this is transport verification only.
+
+The subsequent Root presentation source split now has22 substantive modules
+and59 original definitions in V3c2a3827c. Its actual independent AST/scope
+inspectiona139c58b/workflow0d67481c/exitb090ec06 succeeds with full typed joins,
+24 scopes,222 literal import statements, whole original/caller inverses and no
+unbound globals. No application is imported. The separate original-policy
+direct-owner proposalda215, three API/RNA import successorsfec100 and corrected
+seven private provider/policy source checkpoint retain their finite peer checks.
+Primary verifies the actual source and evidence references. Concrete missing
+Root attribution helpers83222675 and observation schema getters9cadc9ef are
+source-qualified for explicit composition. Full dependencies, descriptors,
+application, runtime and saved restoration remain open; source drafts add no
+verified episode connection. Evidence:
+`runs/root_presentation_source_reconciliation_20261113/REVIEW.md`.
+
+Root literature source composition also gains Seventh's complete A105 repository
+and calculator da7c6cd2 and eight A108 storage/input/calculation owners17e95772.
+Primary qualifies all ten source rows through their complete byte inverses,
+literal defining-import changes and verified source/parent hashes, retaining
+the existing grader declarations and explicit revision7a211613→0aae8dbb.
+The separate Root scalar afterimage is an explicit dependency addition, not an
+edit of those packets' historical missing-owner records. The full reusable
+RFAM adapter e23cfbea places595 original lines/18 definitions in Root library,
+with two direct lazy table-import changes; independent peercdf22cda verifies
+whole source recovery and actual error/type/import boundaries. Its two legacy
+validators remain outside that first source scope. These are source proposals;
+installation, complete descriptors and runtime remain required. Evidence:
+`runs/root_literature_repository_source_review_20261113/REVIEW.md` and
+`runs/root_rfam_source_adapter_20261113_independent_review/REVIEW.md`.
+
+The original full no-binding candidate audit completes successfully with
+audit9cb0dc16/workflow299ce064 and measured exit64bcb375. Primary verifies the
+exact original source/command/actor, all14 typed fields, genuine compose03
+manifest7a51 and full typed namespace/inverse predicates. Raw0/0/null/drained,
+absent original4008941/4008953 and empty own service/slice establish completion.
+The54 selected source changes remain source evidence, not graph/application or
+runtime validation. The separate failed Fourth90 keeps its genuine1/1/null/
+drainfalse and independently measured empty exit8a1bbc41; ending that consumer
+interval does not relabel its failure.
+
+The subsequent five-file Root placement is now actually installed and
+independently postchecked: pland598d25d/application9f978d6e/workflowa8290256/
+exit539d48c7, then postcheck09aac184/workflow960564c7/exit53ab38cf. Primary checks
+all seven actual references,28 current hashes, five file modes, full14 typed
+joins and both raw empty exit observations. Provider5196484b and session6d118158
+are canonical. Actual inpute629b4a5 supplies the original640f installed reader;
+historical source maps remain unchanged. Original canonical installed26 then
+passes: parent3806e495/child517c09e1/workflowf5e065b7/exit529eec38. Primary verifies
+exact26 identities,78 passed phase pairs, JUnit26/0/0/0,24 canonical loaded
+owners, real640f admission/final guards, full14 receipt and raw empty exit.
+Full private-axis integration, arbitrary saved-descriptor compatibility and
+autonomous science are not implied.
+Evidence: `runs/root_provider_five_installed_reconciliation_01/REVIEW.md`.
+
+The separate original RNA delivery44 copied suite now passes against the
+authenticated installed-Root5 source composition: parentdcff262d/child466f6d13,
+workflowf97e8465/budget00bfd9f4/actualexitf11f741c. Primary reads the547-line
+runner,140-line input adapter and all ten original test bodies, verifies49 source
+members and18 handoff references, all344 snapshot files/exact domain,335 regular
+owner files and182 current operands plus162 absences. All44 unique IDs match
+their ten original function counts;132 ordinary phases pass, JUnit44/0/0/0
+matches, all17 required owners and three asset reads pass. Parent/child full
+Root5 opening/closing proofs agree and final source/snapshot guards succeed.
+Raw0/0/null/drained, peak2306584576/events0 and actual inactive/empty exit are
+retained. These are controlled presentation/update/lookup/fallback checks in a
+341-Python/three-asset copy. They do not install the162 absent targets, execute
+native RNA science or establish complete Root/private-axis restoration. Original
+9-pass/7-fail/28-error history remains unchanged. No connection-count increment.
+Evidence: `runs/root_rna44_after_root5_reconciliation_01/REVIEW.md` (f05e221a).
+
+Sixth's two original source audits for the explicit None-binding correction
+pass: HPC6db1fa0d/59960f9c/exit11dfcd8e and Native075a0208/12901d81/exit7a4aa50b.
+Primary reads original source/peer/parent and verifies actual hashes, exact
+commands, full14 typed receipts and measured empty exits. HPC13 whole inverses
+and46 unchanged members, Native five inverses and25 unchanged members preserve
+the original38 controls as retained history; no new cohort ran. Candidate,
+final-family composition, application and runtime remain separate.
+
+The A104 final runtime/application source packetb3d0c0dc passes its finite source
+audit6708b90d/workflow4e6c2f69. Primary verifies the complete source/peer and actual
+64-module proof, five exact donors,16 full inverses, full14 typed fields and
+separate actual empty observationdd0e989e with its raw evidence. The live driver
+exited before start-tick sampling; the packet-specific full exit triple is not
+claimed. Source success is retained without rerunning solely for that sample.
+Actual final composition, placement and behavioral validation remain separate.
+Evidence: `runs/root_completed_source_reconciliation_20261113_0037/REVIEW.md`.
+
+The first actual final-copy preparation then fails before creating its output:
+workflow46d682b7/budgeta4e5e963/actualexit594e41a3 retain raw1/1/null/drainfalse.
+Its consumer assumes all51 required tests have the flat A104/tests prefix;
+the authenticated scientific_process/tests/test_head_task.py is the one
+exception, with the correct audited after-hash9daa53bc. This is a preparation
+path predicate defect, not a failed scientific test or a downgrade of the
+accepted registry source pair. Primary reviews successor0426413c: only that
+exact private test path is additionally admitted, all51 audited hashes and
+own-axis checks remain,63 other Python files compare byte-identically and all
+119 source members/4837 inputs verify. The original donor checker records the
+whole changed-file inverse. The next original prepare command uses actual
+successor source and unchanged input9ef4f8be in fresh copy_prepare_02; its
+workflow is active with an actual driver/start capture, without a completion
+claim. No new cohort or additional prerequisite to episode implementation is
+introduced. Evidence: `runs/a104_final_native_runtime_20261113_private_test_successor/SUCCESSOR_HANDOFF.md`
+and `runs/root_a104_final_native_copy_prepare_01/actual-exit.json`.
+
+The corrected seven-private-literature factory and40 original input migrations
+also have finite source review3bbbad01/seal0fc58690. Primary reads the complete
+reference-family construction and peer findings, verifies all132 source pins,
+and confirms the reference factory calls the original head classmethod once
+before attaching the six concrete children. Original209 test names/72 parameter
+blocks and both historical holds remain source identities, not executed cases.
+Of22 semantic context pins, only the later mutable IMPLEMENTATION_STATUS.md
+differs; the original peer remains unchanged and that later status is not
+used as the reviewed source authority. All other21 semantic pins verify.
+Actual family dependencies, descriptors, installation and behavior remain open.
+Evidence: `runs/root_literature_commissioning_20261113_independent_review/required_inputs/REVIEW.md`.
+
+The corrected original A104 preparation02 subsequently completes successfully:
+manifest32451d22, complete-source91ba597e, workflow310a87dc, budgetb1a23bfd,
+and actual full-exit observationee7cf598. Raw0/0/null/drained, peak4220379136
+bytes and zero memory-max/OOM increments are retained. Actual live driver/start
+capture and post-exit checks establish that664209/664269 are gone and the own
+slice is empty. Three original prefix trees contain5306/5296/5294 files. These
+are source/input copies, not installed final episodes or passed behavior tests.
+The planned original independent copy audit then passescdfbf603 with workflow
+56db2246, budget3645e57a and actual full-exit observationc835b3db. It recovers
+the complete original map and repeats whole source composition; canonical
+writes and runtime validation remain false. Raw0/0/null/drained and actual
+absence of721574/721587 are retained. Peak memory reaches5368709120 with757
+memory-max events and no OOM increments. Its collector runs once after the
+genuine terminal return. Failed preparation01 and successful predecessor source
+audits remain separate. Original API168 now runs from actual base9ebb3c3c and
+request358c41d8. That original batch subsequently finishes all168 cases:
+152 pass and16 fail (12 declared prompt-renderer cases and four HPC-parent
+admission cases). The runner additionally fails its retained source-read
+observation assertion during cleanup; origin_observation remains null. The
+original failed evidencef2c816e1, JUnit92f1dd20 and workflow2d646064 remain
+unchanged. Raw launcher/driver codes are1/1 with no OOM and peak2828005376
+bytes. The collector runs once after the genuine terminal return and records
+actual empty exit852e4236, with both798287/798296 absent and the own service
+inactive. This is a retained baseline failure, not completed final validation;
+introduced versus inherited behavior still requires comparison. One source
+agent investigates these failures while episode implementation continues.
+
+Root literature source composition gains final compiled6 b27447d2,
+product/native-kinetic10 61ad11d3, measurement21 6b814fdc and ratio5 f6b4dce5.
+Primary qualifies their finite source scope from the complete independent
+reviews, actual new receipt branches, whole-source inverse evidence and literal
+selected file checks. The rejected optical predecessor remains retained; the
+corrected555-byte declaration supplies the actual compiled dependency successor.
+Ratio's actual five Git originals/six full inverses verify independently, and
+its remaining whole prose reader stays unselected. The separate four gel owners
+79b65f55 also receive independent review40b2b821 and Primary qualification of
+their actual21-path descriptor, selected types and source maps. These46 source
+rows do not add verified episode connections. Evidence:
+`runs/root_literature_source_families_review_20261113/REVIEW.md` and
+`runs/root_literature_source_families_review_20261113/GEL_REVIEW.md`.
+
+Primary also implements the complete Root partner family and three missing
+supporting helpers: nine original modules/2274 lines, source8f957f5c followed by
+explicit two-import successorb6725116. The successor selects the genuine
+witness-schema definition directly; seven other modules and all scientific
+bodies are unchanged. Complete source inverses and pins verify. Independent
+source review4338f31c/sealb75eaddf now qualifies all nine payloads. Its separate
+authoring-tool cwd correction294bb250/seal299813e6 is now qualified in Primary
+review4ffdc229: both exact tools use absolute reads and fresh run-owned output;
+actual native regeneration preserves all nine payloads in each version and the
+genuine prior producer references. No
+canonical placement, Python execution or runtime outcome is asserted. The
+existing Root service remains the real constructor. Evidence:
+`runs/root_literature_partner_runtime_20261113_successor/SOURCE_SCOPE.md`.
+
+The distinct complete reported-ratio family now supplies its three substantive
+owners under sourcefea8de76/seale7df7ced, including the previously held reader.
+Primary reads all555 candidate lines, verifies three whole Git originals and
+seven complete source/caller inverses, and reuses the genuine pure53dc0968 and
+lexical7aac3db3 owners. The five real caller routes and original conditional
+descriptor operands remain explicit. Primary additionally supplies two complete
+binding readers731 lines under sourced21701f2/seal9030bfa3, byte-identical to
+the genuine originals, with the actual a0bd6b0d exception owner. No extracted
+binding return definitions are duplicated. These five source owners are joined
+into the seven-private-episode proposal; no installed or behavioral claim is
+made. Evidence: `runs/root_literature_ratio_partner_review_20261113/REVIEW.md`
+and `runs/root_literature_binding_readers_20261113_preparation/HANDOFF.md`.
+
+The complete channel family subsequently gains three qualified source owners
+fc837e9d/sealc261afa6. Primary examines the full authoring tool and five changed
+import spans, verifies three genuine Git originals and seven complete source /
+caller inverses, and checks19 members/47 inputs. The numerical calculator stays
+the exact held original remainder; genuine pure5ef7b345 and Rate549a2364 remain
+selected. Six caller sites and five conditional descriptor positions are
+explicit. The three original tests and dated eLife asset are required inputs,
+not executed claims. Evidence:
+`runs/root_literature_ratio_partner_review_20261113/CHANNEL_REVIEW.md` bf37efe2.
+
+The original A103 installed666 test workflow also completes successfully.
+Primary reconciles testb7c0699f/JUnit0ca2e459, workflowdea3d03e and actual
+exit41982876 against the retained baseline's exact ordered666 identities,
+2209 unchanged before/after source entries and unchanged asset map. All14
+budget fields and18 raw exit references verify; raw0/0/null/drained and peak
+1894227968 are retained. The subsequent original final verifier remains
+separate. This does not add episode connections, establish full restoration or
+claim autonomous science. Evidence:
+`runs/root_a103_installed666_reconciliation_01/REVIEW.md`.
+
+Further Root literature source composition now has35 qualified defining owners:
+transport3, task/work3, corrected controlled-response9, completion-time3,
+reaction11 and depletion/balance6. Transport and completion-time retain exact
+full native inverses; the task/work, controlled and reaction/depletion packets
+have complete independent body/dependency reviews and actual final file checks.
+The controlled predecessor's misplaced INPUT_VERSION import remains a retained
+source rejection; successor37f483f3 corrects its actual defining import without
+changing scientific bodies. Reaction's six callable proposals do not add entries
+to the original36-entry assay registry, and the original A110 report branch
+keeps its meaning. A107 has explicitly joined264 helpers at61f17893, with202
+original import lines accounted and110 still unjoined; reaction/depletion joins
+are next. These are source connections, not additional verified episodes.
+Evidence: `runs/root_literature_ratio_partner_review_20261113/TRANSPORT_REVIEW.md`,
+`runs/root_task_work_source_review_20261113/REVIEW.md`, and
+`runs/root_controlled_completion_source_review_20261113/`.
+
+Primary also prepares the three complete concentration-window source bodies
+74cd0694/sealb8c4f49c:1558 original lines, eight import changes, six complete
+source/caller inverses, existing pure9e086b97 and metadata2e112115 reused.
+The exact original historical producer and saved predicate remain unchanged.
+The explicit current-release receipt is still unimplemented because its25
+logical slots require the actual final private source tuple/definition_inputs.
+No old digest is aliased to new bytes and no runtime pending stub is added.
+Two original tests and ten exact original inputs are retained; actual private
+fixture migration remains separate. Independent source review2fc831fd now passes
+the complete1558-line/three-owner scope, all six original inverses,43 defining
+joins, five caller/descriptor positions and exact historical receipt methods.
+Primary reads the full peer and verifies its seven-member seal1f330c04. Current
+release integration remains explicitly pending; A107 may join the source bodies.
+Evidence: `runs/root_literature_concentration_window_runtime_20261113_preparation/HANDOFF.md`.
+
+The actual API168 baseline failure now has a reviewed source correction3e096e3e:
+the declared fixture uses the genuine own ModelConnection serial fixture, and
+four missing existing HPC helper/queue inputs enter copied custody. All168
+assertions remain unchanged. The unknown prior read-denial cause remains open;
+the finalizer now records actual denied/read paths without relaxing the guard.
+Primary reads all changed source bodies/spans and independent final review,
+verifies140 source members/4988 inputs, then begins original fresh preparation03
+after observing complete own-window exit. Actual971298/971307 are captured live
+under the existing bounds. No corrected API pass or installed result follows
+from this active preparation. Evidence:
+`runs/root_controlled_completion_source_review_20261113/API168_SUCCESSOR_REVIEW.md`.
+
+Primary's subsequent complete rate-observation input source c05a6384/seale61fed4f
+accounts for all528 original lines. The executable reader eab5bb05 reuses both
+already selected schema owners28850086/8b5536fc and actual exceptiona0bd6b0d;
+only the domain/Workbook import paths additionally change. Seven complete
+native transformations, nineteen pure spans and three original test witnesses
+are verified. Independent source reviewda346409/sealea72862c now passes the
+complete reader/contract/caller scope; Primary reads its full report and checks
+the six-member seal. Actual private input migration remains pending. A107's
+later concrete composition1e8538c2 selects298 helpers and237
+original imports, with descriptor4a77304a supplying183/249 original slots and
+all266 ordered reads. It includes independently reviewed common4, measurement4,
+endpoint and concentration sources; final current-release receipt construction
+still needs the actual remaining private sources. These are implementation
+connections in a source proposal, not additional installed or verified episodes.
+Evidence: `runs/root_literature_rate_observation_inputs_20261113_preparation/HANDOFF.md`
+and `runs/root_literature_commissioning_20261113_preparation/SOURCE_CONTINUATIONS_05.md`.
+
+The corrected original API preparation03 subsequently succeeds with manifest
+ddd2e653, workflow65d0b7e7 and actual empty exit72289b5d. Its real launcher and
+driver return0/0, failure is null, descendants drain and no OOM occurs under
+the original5GiB bound. Its independent copy audit03 subsequently succeeds
+acc50f55/workflow76143064 with measured empty exite6e9db51. Actual1081447/1081453
+fully exit; raw0/0/null/drained and no OOM are retained. The original API168
+baseline successor then starts with those genuine four inputs, actual
+1208634/1208641 and session3848. This is completed copy validation and an active
+behavioral suite, not a corrected API168 pass or canonical installation.
+
+Primary prepares six complete figure owners855565cb/sealadd6e694: four original
+modules totaling1049 lines, two separate contract owners,27 original blocks,
+seven full native inverses, four lazy callers and five descriptor positions.
+The entire repository class and all four original export declarations remain
+exact. An unsealed predecessor misplaced the trailing export declaration and
+was rejected before execution/admission; the explicit successor fixes that
+source boundary. Seven genuine primary inputs and two helpers are preserved.
+No original fingerprint gate existed and none is added. Independent review
+02d539f5/seal677dfa75 now passes: all original bodies and exports,68 direct
+symbol joins, four callers and five descriptor positions are accounted for.
+Primary reads the full review and verifies all seven sealed peer files. A107
+may select these exact reviewed sources; final integration, private test/input
+placement and installed execution remain separate. Evidence:
+`runs/root_literature_figure_runtime_20261113_successor/HANDOFF.md` and
+`runs/seventh_root_figure_peer_01/REVIEW.md`.
+
+The restriction/UniProt three-owner source5baaad69 now passes Primary independent
+reviewf9678824/sealc637e863. All25 source members/25 inputs and five full source
+edges verify, including the complete unchanged1757-line UniProt module. The
+five original lazy imports preserve actual Root exception identities. Two
+explicit shared-root afterimages197716→3c189 and3cee→859 require actual later
+composition; old dependency pins are not silently refreshed. A107 has also
+joined the reviewed observation and product sources, reaching309 helpers,
+246 original import lines and196/249 descriptor operands at4cb87525. These
+are proposed executable source connections, not additional verified episodes.
+Evidence: `runs/root_contract_selection_source_review_20261113/REVIEW.md` and
+`runs/root_literature_commissioning_20261113_preparation/trace/OBSERVATION_PRODUCT_HELPER_SOURCE_JOIN.json`.
+
+A107's six complete private acquisition/publication owners and30 same-instance
+caller ports are now generated and independently source-audited: manifest
+5081bac7/workflowf8b1e238/exitcba0c3cd, audit814f0365/workflow5116dade/exit0e468426.
+Both actual workloads succeed and completely exit. Full caller/owner byte and
+AST inverses, original nine lexical providers and97 current source operands
+are checked. These36 candidate paths are not canonical installation and add no
+connected-episode count. The real final Direct/HPC/Native import, descriptor,
+source-index and ownership integration is being implemented explicitly.
+Evidence: `runs/root_a107_generic_acquisition_actual_01/HANDOFF.md`.
+
+The later LocalFile final-family operand reader has a reviewed finite source
+correction385ed6bc, with independent peer53fe3f23. It preserves the genuine four
+receiving-context external keys and private ScientificBindingRecord owner,
+then accounts for the actual subsequent HPC Launch and Native source updates
+in their original order. Primary reads the changed tools, proof and authentic
+generators and verifies the12/40 source pins plus peer seal. The historical
+b205 adjacency limitation remains explicit; no executed failure is fabricated
+and no earlier completed LocalFile source scope is downgraded. Genuine final
+Native/LocalFile preparation, typed whole-domain admission and application
+remain pending. Evidence:
+`runs/root_a107_local_file_final_operands_review_01/REVIEW.md`.
+
+The original ten-entry Fourth source queue also completes: five source audits
+and the existing16/20/20/15/19 controlled-boundary cohorts. Primary reads the
+producer/control implementations and every actual control identity/outcome,
+independently checks all50 evidence hashes, full14 typed receipt fields, exact
+commands and retained empty-exit observations. All original stages succeed and
+drain; the loader's expected negative outcomes remain explicit rejections.
+These90 source/filesystem/loader controls are separate from the corrected
+90-case runtime, and admit no actual candidate, graph, application or science.
+No controls are repeated. Evidence:
+`runs/root_fourth_installed_source_queue_reconciliation_01/REVIEW.md`.
+
+A102/A103's additional goal/action source contributionb1176e9a is reviewed:
+36 payloads across18 existing homes contain12 goal replacements,12 Launch
+connectors and12 private action modules. Primary reads all463 tooling lines,
+the interface and full independent peer, and verifies182 source members and the
+peer seal. Original branches, lazy global lookups, actual callers/MRO and full
+module inverses remain explicit. The genuine parent composition, ownership,
+post-context fingerprints, installation and runtime remain pending; there is
+no new connected-episode count or test cohort. Evidence:
+`runs/root_goal_actions_source_review_01/REVIEW.md`.
+
+A101/A108's remaining97 source paths are now canonically placed and independently
+audited: applicatione79adb9f/workflow6038491f and auditd4c7f086/workflowd903ab4d.
+Primary reads both original producers and checks the exact97 pending plan rows,
+all97 intent/completed pairs,131 current hashes/modes,192 retained before/after
+images,234 referenced artifacts and68 source-tool members. Both full14 typed
+receipts succeed and drain; actual recorded empty exits join the original
+receipts and observer, with original supervisors absent. The32 A101/65 A108
+paths comprise95 replacements and2 additions. Original34 promotion and failed
+baselines retain their separate histories. Behavior comparisons, root delivery,
+descriptor/ownership work and final transition remain pending; no additional
+episode-completion or scientific claim is made. Evidence:
+`runs/root_a101_a108_provider97_reconciliation_01/REVIEW.md`.
+
 ## Change history
+
+2026-11-13: A103 same36 retry passes all108 phases/263 confined imports with
+unchanged guards (12b5d08a, raw33cf0742, full exita85b0461). Four fixture repairs
+leave the15 production targets unchanged; retain initial28-fail/eight-pass
+history without double counting. Current ownership/application remain open.
+
+2026-11-13: Expanded helper09 class-shape validationc60ddfe2 passes, followed
+by actual A105/A108 source09 and endpoint11 preparation and A107/A11055-source
+generation02. Keep behavior/application claims pending. Retain initial A10336
+28-fail/8-pass outcome, correct only the four affected fixture targets and start
+the same36 retry. A10260 is preserved while two further original Scientific
+parent responsibilities receive their own focused successor.
+
+2026-11-13: A10260 passes all180 phases/551 imports with unchanged source guards
+(5a939847, raw0d318e11, full exit603f9791); ownership/application remain open.
+Retain separate A107/A110 already-preserved-assignment preparation failure and
+A105/A108 class-method compiler-scope failure without reopening earlier child
+or installed-parent evidence. Both workloads fully exited; neither wrote
+canonical sources.
+
+2026-11-13: Corrected source helper08 passes all281 captured groups and11 inert
+semantic comparisons (e21c12e0, raw74a6a5d8, full exitf5ab9e24). Full parent
+generation and behavior remain separate. Fourth completes final318 ownership
+preparationcf72bc16 against actual installed Root source33 (raw4d891f48,
+full exit23434ff3); guarded metadata installation remains pending.
+
+2026-11-13: Installed Root159/profile10 passes84b43311 with actual complete
+exit92c04ea8; final318 ownership join proceeds separately. A101/A106 recursive24
+passesab4650da (72 phases/261 imports) with full exita9543912, preserving its
+explicit controlled-science limits. Source-only compiler diagnostice16e3e7c
+identifies78 comprehension-account failures and is not behavioral pass evidence.
+
+2026-11-13: Root source33 application completes6377 operations with actual
+full postcheck,38 retirements and no rollback/journal errors (3359e57f,
+post-state2ada2b57). Workfloweed00b33 and full exit4ca99db8 confirm23944/0 and
+an empty owning slice. Start the prebound installed159 observation72213;
+ownership318 and the separate parent/full-goal obligations remain open.
+
+2026-11-13: Record executed576-home scope reconciliation96bf8d78, successful
+workflow41f5735b and actual complete exit335bfe03. Preserve570 earlier memberships
+and six source-authenticated omitted parents. The159/417 partition does not
+measure completion; the four remaining work stages and full34-requirement audit
+remain open. No source installation or scientific validation is inferred.
+
+2026-11-13: Record concrete parent live-global/selector/report review findings
+and Fourth's retained source-only A108 residue mismatch. Preserve prior scoped
+installation/tests while assigning finite corrections, including the actual
+A107/A110 continuation/report source findings. No behavior or canonical
+application success is inferred from the emitted parent candidates.
+
+2026-11-13: Correct the exhaustive570/remaining159 interpretation after exact
+source accounts establish six omitted existing annotation parents. Preserve
+completed child scopes and record separate parent communication obligations.
+Retain actual A10318 and Root LUMPY21 retry passes and original failed collection;
+Root account now includes472 scoped identities. Main source application23944 is
+active, with installation and final ownership/observation still unclaimed.
+
+2026-11-13: Main source667 application completes all627 production and40 test
+targets, with6106 source/61 asset postchecks, no rollback or journal errors.
+Application989770ad/workflow92b1ced4 succeed; terminal77520 returns0 and actual
+full exit is retained in00e05733. Shared metadata evidence6ab45324 binds actual
+source/candidate receipts and the two existing43-binding probes. Metadata24
+attempt01 fails before output on362 authenticated absolute selected-source paths;
+rawbefc82c3/d234b057 remain, with actual exit7c5188e0. Adapter05 6938b022 narrowly
+normalizes those operands after canonical in-root/runs checks, retaining the
+ordinary evidence rule and whole-source hashes. READY71c37882/A10207 9cdfe5be/
+A10306 e69a05e6/metadata12005 30dd2263 only repin that correction. Main starts
+fresh metadata24 generation02 after full exit; no candidate or source repeat.
+Remainder40 stays open until actual current ownership application/reconciliation.
+
+2026-11-13: Main accepts Fourth's recursive Monitor successor a9e7fbc7 for Root
+composition after reviewing complete source/test/metadata producers and checking
+361 source and226 actual import hashes. Actual90 controls ac58ac29/wffa103394
+preserve predicate/error order and24-member fingerprints across9 homes. Prior
+333 rows and historical evidence remain unchanged;18 metadata successors and one
+permanent test accompany9 endpoint changes. Review96f1ce2f retains namespace,
+full runtime/restoration/native limitations. Semantic35 reviews identify actual
+duplicate helpers and private policy boundaries; the same Fourth session now
+owns seven disjoint paired library corrections while Main's writer owns actual
+private callers/policies and48 ownership documents. No Root completion claimed.
+
+2026-11-13: Main remaining40 candidate838 completes all838 passing calls and
+2514 passing phases over the selected6106-source candidate. Verification65d5f525
+authenticates exact case/phase/JUnit coverage, unchanged snapshots/canonical
+guards and actual import origins. Workflow8033e8e2 returns0/0/null/drained;
+terminal3259 exits0 and Main separately observes inactive/PID0, recursive empty
+slice and all three absent process IDs, retained in post-exit9829c702. The actual
+baseline union67007faa remains820 passes/18 original missing-owner failures.
+Main then launches reviewed source667 application05 on the actual candidate
+receipts after full exit. Source application and metadata24+96/120 are not yet
+complete; assessed remainder40 is unchanged. No Root/native/HPC or complete
+workflow restoration claim follows from this controlled cohort.
+Evidence: `runs/root_remaining40_candidate838_01/verification.json` and
+`runs/root_remaining40_candidate838_01/post-exit.json`.
+
+2026-11-13: Main independently compares all54 Native-state successor modules
+against complete pinned original bodies and exact import changes, CHECK95650db8.
+The18 same-home state/credit pairs preserve identities, intent ordering, replay,
+context transitions, qualified signed credit and completion proofs. A subsequent
+actual-caller review confirms only annotation adapter classes are currently
+constructed into shared `_practical`, leaving nested private copies dormant.
+A102 owns the concrete private-owner route correction; A103 reviews original
+transport/cache/fallback preservation and its six new Literature Native homes.
+No Python, runtime success or canonical Native application is claimed. Root's
+48 parent/Literature ownership documents are now explicitly assigned to the
+shared writer; checkpoint34 was source preparation only. Main candidate838
+continues separately, and the source667 launcher is prepared but unexecuted.
+Evidence: `runs/root_native_state_owner_review_01/REVIEW.md` and
+`runs/root_native_state_owner_review_01/CURRENT_SELECTION_FINDING.md`.
+
+2026-11-13: Main applies exactly two additive Root package-data entries,
+pyprojectfa5d05b3→8c873d07, after checking all19 source asset hashes in manifest
+bcb5c571 and the complete patch. Existing package entries remain byte-identical.
+The19 permanent fixture targets remain part of future Root source installation;
+this configuration change supplies no package-build or integration evidence.
+Main candidate838 remains active and its frozen sources/guards are unaffected.
+The assessed remainder stays40, plus Root and12 inherited parent edges.
+Evidence: `runs/root_fourth_test_asset_packaging_01/REPORT.md`00615da9.
+
+2026-11-13: Terminal48 succeeds under the corrected isolated test runner, with
+unchanged production245/test48/driver sources. Native reconciliation5116f7ae
+joins verification8cd7b3d7/workflow03ceca77/recorded-exit5c335715 and exact
+selected/collected/phase/import/snapshot evidence. Metadatafee108cb adds that
+bounded evidence to twelve prepared ownership documents with complete inverse
+preservation. No Root-home completion is inferred. Separately, native source
+review9a561939 accepts the Root99 outgoing message domain specialization52f99b6a:
+396 exact transformations and99 unchanged incoming bodies, retaining applicable
+predicate evaluation and typed error/replay order. Newly found dead private
+assignment/policy suites remain separate unfinished Root work. Main candidate838
+continues with no completed-result claim yet.
+
+2026-11-13: Root native caller sourcec69807bd passes Main's bounded native
+review7f67a75d: six target pins, ten complete edit inverses, five whole original
+beforeimages, two unchanged current global callers and complete original
+NativeEventInformation/ExecutionMemory bodies after explicit definer imports.
+Lazy worker publication order, actual event/statistics type identity and the
+matching emitted/caught DurableExecutionError remain intact. Full native
+publication, Root import closure and saved restoration remain untested for
+this source epoch. Terminal ownership12 also passes peer review423f74da; this
+does not establish canonical installation or controlled48 success. Evidence:
+`runs/root_native_owner_callers_review_01/REVIEW.md` and
+`runs/root_terminal_ownership_peer_review_01/REVIEW.md`.
+
+2026-11-13: Corrected remaining40 baseline repair270_02 completes all270 calls
+and810 phases with exact selection, JUnit, snapshot/import and canonical source
+guards. Verification2a55b1d5/workflow0d2e0d12 succeed; terminal97106 exits0 and
+actual inactive/PID0, empty recursive slice and all three absent process IDs
+are retained in post-exitffe2ac1b. The actual next candidate838_01 authenticates
+baseline union67007faa:568 untouched original outcomes plus270 repaired passes,
+for820 passing calls and18 genuine expected missing-owner failures. Original
+fixture failures remain raw diagnostics. Candidate838 is now running against
+6106 prepared production sources; no candidate or episode-completion claim
+precedes its actual result. Known assessed remainder40 remains unchanged.
+
+2026-11-13: Main prepares Terminal ownership12 for six actual private homes,
+manifest899765af, after exact source selection70a5163d and native method review
+ab05db06. Required parent endpoints are authenticated separately from the
+controlled-test import closure. The records retain unresolved shared runtime,
+final source identity and execution evidence, and assert no installation.
+Terminal48 is delegated to Fourth's next available serial slot via its existing
+coordination file; no launch or result is inferred from that delegation.
+Fourth's separate controlled715 report7b968ce5 records715 passes, unchanged
+sources and no unaccounted imports under seal28903290/closurea88dac97; workflow
+4ed2da51 succeeds and drains. Its namespace-initializer bypasses and controlled
+ports remain explicit, so these are not full Root import/restoration or native
+execution results. Main's remaining40 repair270 continues separately.
+
+2026-11-13: A104's finite60 organization scope closes after metadata122
+application3e4aacf1/workflowc28f2ccf and independent current joinbc609fdb.
+All122 documents,3829 sources,92 assets, eight formula/context operands and
+122 original/history checks pass; actual full process exit is observed. Source
+1398 and controlled235 evidence remain separate authentic receipts, with no
+new scientific execution or repeated test suite. Known assessed remainder
+100→40: A10210/A10330; Root and12 inherited parent edges remain additional.
+Main then starts corrected repair270_02 through reviewed runner04, after the
+previous Python workload and native reconciliation have exited. No repair
+outcome is claimed before that workflow completes.
+Evidence: `runs/root_a104_all60_final_reconciliation_01/REPORT.md`.
+
+2026-11-13: Root Terminal source preparation adds literal six-parent-child
+catalogueae4e4188 and actual saved/fresh owner selector1a59b7a6. New construction
+selects the predefined parent-specific classes; recorded descriptors retain
+their exact parent subset. Credit selection uses actual contextual instances.
+These are source-only stages pending shared caller composition and behavioral
+checks. An inherited direct-entry task path guard is identified against the
+original runtime and is being corrected separately; no Root-home completion
+count follows from prepared declarations.
+
+2026-11-13: Main reconciles Fourth's completed A107/A110 organization: actual
+receiptc7ae4894, source compositiond5248b42, census66127cc1 and native current
+join719425cd. All5133 production sources,1369 targets/modes,160 retained
+retirements,220 current metadata documents and4056 actual canonical import
+origins match. Candidate/installed JUnit have the same1742 ordered testcase
+names and2630 suite observations including888 subtests; canonical XML omits
+module-qualified class names, an explicit receipt limitation. The source-pinned
+runner selects41 actual test modules. Successful source/check/metadata workflows
+and recorded empty exits remain distinct. Known assessed remainder192→100:
+A10210/A10330/A10460, with Root and12 inherited parent edges additionally open.
+Evidence: `runs/root_fourth_final_organization_reconciliation_01/REPORT.md`.
+
+2026-11-13: A104 metadata generation03 succeeds for122 documents after literal
+role-constant resolution, generationb2ebc800/workflow0a3523db. Its application01
+then fails before any canonical write in the independent historical JSON-path
+checker; application3128854a/workflowc3733f5f preserve the failure and empty
+attempt/commit lists. Actual full exits are separately observed. Source1398 and
+candidate235 remain complete; the finite60 ownership join remains pending.
+
+2026-11-13: The original remaining40 baseline terminates with550 passing calls,
+68 failing calls and220 setup failures across2294 phases. Actual raw workflow
+0de3442c and phase log76c6b607 are retained. Five test-fixture corrections affect
+270 existing cases;568 original outcomes remain reusable after an explicit
+disjoint account. The first repair runner stops before tests on a create-row
+before_mode schema assumption; no repaired case outcome is claimed. Root source
+work meanwhile produces Terminal43 plus96 parent-family/message rows and four
+nested-entry corrections, still pending catalogue/runtime/ownership validation.
+
+2026-11-13: Main adds the selected remaining40 original Resource/Homology and
+source-investigation fixture patterns to the two A102/A103 test package-data
+entries. Exact two-entry diff and actual canonical hash match retained afterimage
+fa5d05b3, from3b77aac1. No package build, test pass or episode completion is
+claimed. Evidence: `runs/root_remaining40_packaging_preparation_01/REPORT.md`.
+
+The still-running original remaining40 baseline exposes two fixture defects:
+six Homology rejection cases omit authentic persistence/saved-call prerequisites;
+Resource setup reads the obsolete top-level max_cpu field after constructing the
+current v3 registry. Test-only successors preserve the scientific/decision
+assertions and actual production bytes. Their exact affected selection is256
+existing cases, with838 overall identities unchanged. Original failed outcomes
+remain retained; no corrected pass, terminal union or source completion is
+claimed. Main will repair only affected cases after actual complete process exit.
+
+2026-11-13: Main reads and joins the finite accepted99-home reconciliation
+report187a8089 (A10140/A10515/A10629/A10815), successful seal0eff0e87 and
+corrected raw seal8644e2a2. Current5400 source modules and final82/60/64 metadata
+afterimages match their existing scoped installations. Thirteen authenticated
+before/after control pairs preserve their individual case identities and original
+limitations; they are not a new combined test run. These99 homes were already
+outside the known192 remainder, so this reconciliation does not subtract them
+again. The earlier raw seal mistakenly hashed an unclosed output stream; it is
+preserved as invalid, and actual closed-file observations316ae33b are separately
+sealed. Evidence: `runs/root_remaining_axes_root_integration_review_01/REPORT.md`.
+
+The same finite source inspection identifies current Root imports for absent
+literature, terminal aggregate and optional A102-resource owners. Draft23's
+inherited-plus-incoming Root selection is only a proposal inventory:1473 absent
+modules are not automatically required restorations,60 newer current Root
+owners must carry forward, and received_fact_declaration retirement requires
+its actual caller/parser proof. Staged mixed Launch returns and dependency
+ownership still need substantive resolution. Root source preparation continues
+against the original goal; no new exhaustive remaining-home count or complete
+Root/restoration/scientific claim follows from that inventory.
+
+2026-11-13: Main installs Fourth's exact shared package-data successor2f3c68c3:
+pyproject986f1629 becomes3b77aac1 by adding only four JSON pattern strings to
+the existing A107/A110 test entries. Full candidate byte equality is checked.
+This adds no package-build or episode-completion claim; actual owned fixture
+installation remains Fourth's work. Current Main test snapshots are unchanged.
+
+2026-11-13: A104 source1398 installation succeeds, applicatione9af6401 and
+workflowd1d7dd0b, with actual full exit and independent3829/1398/92 checks.
+Metadata generation01 then fails in source-symbol resolution; workflow2feacea1
+and traceabled26f5fc6 remain unchanged. No canonical metadata is installed,
+no production regression is inferred, and the known assessed count stays192.
+The successor must resolve the actual defining symbol and retain its alias
+relationship before resuming generation; accepted235 tests are not repeated.
+
+2026-11-13: Corrected A10454 passes54/162, verification5de5ac4a/workflowedbd7707;
+Main observes full exit before candidate235. Actual uniondf5def09 recomputes
+181+54 passing baseline cases while preserving all earlier fixture diagnostics.
+Candidateca7cc6bd/workflowec332e25 then passes235/705 with unchanged26323-file
+snapshot64da1e2b and actual complete exit before source application. No further
+tests are needed for this finite source cohort absent a concrete new issue.
+Source and ownership installation remain separate pending steps.
+
+2026-11-13: Original A104235 baseline488a6478/workflow3b62b111 records181 passes
+and54 fixture failures across all705 phases. Canonical3212 guard passes; raw
+failure receipts remain unchanged and Main independently observes complete exit.
+The54 comprise22 uninitialized Store contexts,30 invalid unrestricted report
+strings and two obsolete instruction/provider fixture boundaries. Successor03
+corrects only three test assets, retaining exact assertions and case identities;
+the affected54 will be rerun separately from the181 retained observations.
+No candidate source or new A104 organization completion is claimed. Evidence:
+`runs/root_a104_all60_baseline235_01/REPORT.md`.
+
+2026-11-13: Execution60's actual metadata128 installation completes the finite
+source/validation/current-ownership join: application4cc338e8, successful drained
+workflowe5296333, independent proofd8210603 and current evidence528bcce5.
+Main independently checks128 canonical metadata hashes/modes,5728 production
+hashes and63 assets; actual service/slice are empty and288901/288904 absent.
+The known unfinished-home lower bound decreases by60 from252 to192:
+A10210/A10330/A10460/A10749/A11043. This counts the assessed own organization
+scope; it does not close unassessed homes, upstream-parent responsibilities,
+full saved-workflow restoration, shared-root integration or autonomous science.
+Evidence: `runs/root_execution60_metadata128_application_01/REPORT.md`.
+
+2026-11-13: Main adds exact selected A104/shared test fixture and instruction
+package-data patterns in pyproject986f1629, following the verified input list.
+No wheel build or A104 execution result is claimed. Required resource JSON
+relocation remains a separate staged test-input successor.
+
+2026-11-13: Source728 applicationfcf27f41 installs the tested execution60 sources
+and permanent test assets. Full5728/63 postchecks and Main's independent canonical
+hash/mode checks pass; workflowb7a2b1db succeeds/drains and actual complete exit
+is observed before ownership generation. No additional test workflow is run.
+Metadata128 and finite home completion remain separate pending components.
+
+2026-11-13: Execution60 candidate620 passes all620 cases and1860 phases after the
+authenticated disjoint baseline332/282/6. Verificatione569382f/workflowddb37c2f
+retain zero failures, a successful drained workflow,25700 unchanged snapshot
+files and one imported process with no provenance violations. Both actual43-binding
+probes return current scientific identities (A102f25dee13/A1035bbc601b). Main
+observes the inactive service, empty recursive slice and absent279595/279598/279679
+before source application. This is controlled task/message/outcome/descriptor
+validation; source installation and metadata updates are separate subsequent work.
+Evidence: `runs/root_execution60_candidate620_01/REPORT.md`.
+
+2026-11-13: Main reconciles the newly assessed A104 sixteen homes and Fourth's
+eight newly identified HPC parent request-envelope defects with current source.
+The known unfinished-home lower bound is252: A10240/A10360/A10460/A10749/A11043.
+The increase of24 from228 reflects additional assessed work; no accepted source,
+metadata, HPC or scoped workflow component is reopened by this count refinement.
+
+2026-11-13: Execution60's actual original baseline selects620 exact identities
+and ends296 passing calls/36 expected missing-owner failures/288 Results setup
+errors. The latter are a test-fixture output-root error caused by copied AGENTS,
+with no candidate production applied. Main retains744ef6f5/workflow4038cda7 and
+actual full exit, then runs only the affected Results cases after correcting
+root discovery. Separately, package configuration331699fe now includes the two
+permanent A102/A103 original-runtime text fixtures; no wheel build is claimed.
+
+2026-11-13: Main completes the focused A102 parent-request comparison. Corrected
+baseline33 pass/18 expected missing-owner failures becomes candidate51/51 pass
+with identical assets and exact153 phases. Candidatea228dbf0/workflow182ea346
+succeeds and drains; actual empty service/slice and absent272892 are observed.
+The24 source changes remain a validated candidate. The known unfinished-home
+count stays228; no full episode completion or native scientific run is claimed.
+
+2026-11-13: Main reconciles Fourth's current open-home count84 (A10745/A11039)
+with both actual scientific-parent task implementations. Their still-inline
+decision snapshots add two identified unfinished homes to the previous226,
+giving228 including Main144. Earlier outgoing-message boundary completions
+remain accepted. This is a source-grounded count refinement, not a regression
+claim, new execution result or exhaustive global census.
+
+2026-11-13: Combined ownership80 applicationb2e3ac16 installs A10252/A10328 from
+generations69231f47/c171b050. Proof9191e294 checks all80 inverses/history and12
+exact retired rows; current-evidence22ebf493 joins two real43-binding probes and
+four current head/axis records. Full5338 source/43 assets stay unchanged. Main
+independently hashes every80 afterimage and verifies actual complete exit after
+successful/drained workflowc23f0be1. The tested component is complete. Actual
+task/provider responsibility residuals remain; corrected A103 accountea5690b6
+supersedes the unsupported zero-gap conclusion863ba87b. Six older A103 child
+homes add to the known count, making Main144 (A10240+A10360+A10444); Fourth's
+separately reported82 makes a known lower bound226, not an audited global total.
+
+2026-11-13: Next36 baseline3975fb7b and candidate2fe2cfee both pass332 cases/996
+phases, with identical phase bytes58dfb229. Candidate snapshot6ed1126b remains
+unchanged25297 files,41 import records/no violations. Application8e6231da installs
+all646 distinct source targets from planfb65d833, including12 retirements; full
+5338 source and43 asset guards pass. Main independently checks canonical hashes
+and absent12, then actual complete exit. Workflowcccb9ffb succeeds/drains without
+OOM. Ownership52+28 follows separately; no full36-home or science completion is
+claimed. Source report: `runs/root_next36_source_application_01/REPORT.md`.
+
+2026-11-13: Main applies Fourth's two required original parent-request fixture
+package-data entries to pyproject.toml, b06e6f50→49440e93. Both permanent fixture
+inputs hash517d58ab and both actual test consumers are inspected. Existing A110
+fixture inclusion is preserved. This closes the named configuration handoff;
+distribution execution and broader organization remain separate.
+
+2026-11-13: Main confirms six A103 Launch parents still use runtime outgoing
+assembly after their accepted responsibility/ownership component. The reviewed
+separate24-target proposal b3bd86ee remains unapplied and is outside the current
+next36 validation. Identified A103 organization work is54 homes, not48; this
+adds a previously uncounted responsibility rather than reopening accepted work.
+The current Main lower bound is138: A10240, A10354, A10444. Other axes and
+unassessed scopes remain separate; this is not a verified global total.
+
+2026-11-13: A103 existing12 ownership generation5b5d979d and composed57 sources
+f2daf260 are installed by application3fed8904. Independent proof0af9d03e checks
+all60 metadata actions, exact57 flattening, original/history retention and full
+inverses; all5088 production sources/fixture3 remain unchanged. Main independently
+hashes every57 canonical afterimage. Workflows41d01b71/8098fb6a succeed/drain
+without OOM, with actual empty Main service/slice and absent supervisors observed.
+This closes the current12 responsibility/ownership batch; broader organization,
+shared-root integration, restoration and autonomous science remain separate.
+
+2026-11-13: Main reconciles Fourth's completed A107199/A110119 finite owned
+successors with actual final current maps9917b078/e47b0f29. Every318 installed
+target and all5005 production source hashes match. Canonical checks9761642a/
+8606d0ef pass92/69 cases and100/268 named import edges, with successful drained
+workflows1ddd3d7b/94cc721b. Full per-home organization, shared-root integration,
+saved restoration and autonomous science remain separate; no HPC cases rerun.
+
+2026-11-13: A103 existing12 candidate134 completes all134 cases/402 phases with
+verification87cce6c3/workflowb1165b7b, followed by successful unchanged guard24
+resultef2bdfdc/workflowce56c332. Source application4ff0287b/workflowcf3925c2 then
+installs all215 source/fixture targets with complete5088-source postcheck. All
+three workflows succeed/drain, with actual Main process exit checked separately.
+Ownership successor57 remains a separate pending generation/application; no new
+connection, whole-root, restoration or scientific completion is inferred.
+
+2026-11-13: Primary implements the distinct module-scoped event census25075554
+with whole original inverse5a5ce144 and seven-member sealdb743df1. All original
+four-graph predicates, syntax domains, import multiplicities, call uniqueness,
+asset checks and summary fields are retained. Per-module helper frames return
+only integer counts; explicit cyclic collection also releases the unchanged
+recursive definitions closure. Independent source peera7b2a654/seala593ef4d
+finds no source blocker. Sixth owns its explicit distinct consumer binding;
+original event acceptance and5GiB memory fit remain unproven. Historical V5
+OOM and old physical engine authority are unchanged. Evidence:
+`runs/root_module_scoped_event_census_20261113_preparation/HANDOFF.md` and
+`runs/root_module_scoped_event_census_20261113_independent_review/REVIEW.md`.
+
+2026-11-13: Original copy audit03 completesacc50f55/workflow76143064 and measured
+empty exite6e9db51, then original API168 baseline02 starts from the genuine
+successful four inputs. Primary also reconciles existing A106subscore and
+binding saved-read source workflows against362 retained references, full typed
+receipts, complete source packets and exact producer commands. Qualified source
+statuses, pending dependency epochs and historical failed archives remain
+distinct; no runtime or episode-count increase follows. Evidence:
+`runs/root_literature_actual_source_reconciliation_20261113/REVIEW.md`.
+
+2026-11-13: Figure source855565cb completes independent review02d539f5 with
+sealed peer677dfa75. Primary verifies the peer seal and unchanged original
+source/body scope. The actual A107 binding source rosterb683ee32 now contains
+332 selected helper rows; this is source composition, not an increase to the
+276 verified episode connections. Implementation continues alongside the
+original active copy audit03. Completed source families are handed directly
+to their integration owner, while measurement-validation, numerical-contract
+factory routes and the original required-asset path successor have separate
+implementation owners. No additional testing gate or cohort is introduced.
+
+2026-11-13: Corrected original copy preparation03 succeeds65d0b7e7 and fully
+exits72289b5d; its original copy audit03 is active. Primary completes figure6
+source855565cb with original class/export preservation and qualifies contract3
+plus explicit shared-root caller transitionsf9678824. Rate-input independent
+reviewda346409 passes. A107 source composition reaches309 helpers and196/249
+descriptor slots; verified episode connections remain276/405. Full scientific
+intervention ownership is explicitly being moved under Root, preserving old
+global source receipts as historical evidence rather than final placement.
+
+2026-11-13: Primary prepares the complete528-line rate-observation input owner
+c05a6384/eab5bb05, reusing the genuine schema28850086 and operation8b5536f
+owners. Seven complete native inverses preserve both readers and their source,
+context, missingness and identity checks. Source seal e61fed4f covers12 members;
+independent review, private fixture placement and current-release provenance
+remain separate. A107's concrete helper composition now selects298 owners,
+237 original literal imports and183/249 original descriptor operands, retaining
+all266 ordered reads. Its actual final definition_inputs remains absent.
+Ion4 and summary-precision3 have finished source packets and independent peers
+are assigned; their authors continue observation storage/calculations and
+product partition. The corrected original API preparation03 remains active.
+No test prerequisite blocks further implementation, and verified episode
+connections remain276/405. Evidence:
+`runs/root_literature_rate_observation_inputs_20261113_preparation/HANDOFF.md`
+and `runs/root_literature_commissioning_20261113_preparation/SOURCE_CONTINUATIONS_05.md`.
+
+2026-11-13: Root literature gains35 qualified source owners across transport,
+task/work, controlled-response, completion-time, reaction and depletion/balance.
+Primary prepares concentration-window3 complete bodies with explicit unfinished
+current-release provenance. A107 selects264 helpers and continues original
+descriptor/import composition; private episode count remains276/405. Corrected
+API168 source3e096 preserves original168 assertions and failure history; its
+original fresh preparation03 is active with genuine process capture. Source
+implementation continues independently and no additional test gate is imposed.
+
+2026-11-13: Original A104 API168 baseline finishes152 passed/16 failed; runner
+cleanup also retains an origin-read assertion. Workflow2d646064 and actual
+empty exit852e4236 establish complete own-window exit without altering the
+failure evidence. Failure analysis is assigned to one agent; new episode
+implementation and composition continue independently. No remaining test in
+this batch or new test prerequisite blocks source implementation. Verified
+episode connections remain276/405; no final validation pass is claimed.
+
+2026-11-13: Original A104 copy audit passescdfbf603/56db2246 with measured
+empty exitc835b3db; original API168 begins from actual base9ebb3c3c. Primary
+qualifies reported-ratio3, completes binding readers2 and resolves the partner
+authoring-tool cwd issue without changing payloads. A107 joins these into235
+selected helpers, while controlled9/channel3 and full task/work remainders
+continue implementation. Original A103 installed666 passes and is reconciled
+4f3fd13d with full retained receipts. Verified connections remain276/405;
+source proposals, installed behavior and final organization stay separate.
+
+2026-11-13: Channel3 source qualifiesbf37efe2 with seven complete native
+inversesed3100bf, and its author proceeds to transport3. Controlled9 and
+task/work/work_results continue; available sibling source agents receive
+remaining binding/model, interaction/model, reaction and depletion/balance
+families. No new test prerequisite or changed episode count follows.
+
+2026-11-13: Corrected A104 preparation02 succeeds32451d22/310a87dc with actual
+empty exitee7cf598, then its original independent audit begins using literal
+producer references. No behavioral result or final placement follows yet.
+Primary implements partner9/2274 lines and qualifies37 Seventh source owners,
+five ratio owners and four gel owners for explicit source composition. Actual
+source/review evidence stays distinct from installed or scientific validation;
+verified private connections remain276/405,129 remaining.
+
+2026-11-13: Final A104 copy preparation01 fails on its flat-test-path assumption
+before output creation, retained under46d682b7/594e41a3. Primary reviews exact
+one-path successor0426413c and starts original preparation02 with genuine
+9ef4f8be inputs after confirming complete own-window exit. No additional test
+cohort, source-pair regression, canonical placement or completed runtime claim.
+Seven literature episodes continue implementation concurrently; their corrected
+reference factory and40 original inputs receive finite source review3bbbad01.
+
+2026-11-12: Root current ownership reconciliation is installed and independently
+verified in two metadata files, preserving full historical bytes and all guarded
+executable sources/assets. A104's original native baseline completes 176 passes
+and 16 retained failures with separate actual exit evidence. Its API core
+source preparation and independent audits account for 139 current methods in
+76 unapplied modules. These changes do not increase the task-connection census
+or establish final runtime/restoration completion.
+
+2026-11-12: Fresh executable-source census confirms 198/405 private task
+connections, leaving 207. A103's installed Launch suite passes all 204 cases
+with unchanged source. A104's formal saved-carrier helper is installed and
+its official capture/reopen runs each pass the original twenty observations;
+its 56-case HPC presentation baseline also passes. All completed workflows
+have successful drained receipts. The native192 and non-HPC100 baselines
+remain running at this checkpoint; full union integration and saved iterator
+restoration remain separate unfinished scopes.
+
+2026-11-12: A102's six installed Launch tasks pass the exact 252-case suite with
+unchanged sources and a successful drained receipt. A104's selected ten-file
+dependency candidate passes original-body and corrected static-closure audits;
+the original failed lexical check remains retained. Its separate 33-file
+proteome, eight-file partner and two-file publication candidates pass their
+body/reversal audits without application writes. Carrier parent-fixture source
+preparation and candidate audit also pass; promotion/capture remain pending.
+No task-connection count, runtime-restoration or autonomous-science completion
+is inferred from these source-only checks.
+
+2026-11-12: Corrected A104 head baseline completes with 68 passing cases,
+unchanged source and successful drained receipt. All five saved-carrier helper
+stages also succeed and drain, but the first capture exposes a missing saved
+parent context in its fixture before any completed carrier. The original
+failure and separate actual process-exit observation remain intact; no capture,
+reopening or full-restoration success is claimed. The exact documentary
+consumer auditor also succeeds and drains, preserving all four original missing
+imports and false dependency closure without application mutations.
+
+2026-11-12: Fresh executable-source census increases to 192/405 task connections,
+leaving 213, after the six A102 Launch connections are installed. Their installed
+suite remains underway at this entry. A103's source-family independent final
+audit records 540 connected cases and 58 instruction cases, preserving fourteen
+original missing-projector boundaries and excluding scientific-credit repair.
+This changes placement and scoped validation, not full-workflow completion.
+
+2026-11-12: Fresh executable-source census is 186/405 task connections, leaving
+219, after fourteen A103 source-family connections are installed. This is a
+placement count; installed validation and full-workflow integration are separate.
+A104's complete original head suite records 62 passes and six fixture/expectation
+failures with an unchanged source map. Its exact two-test-file correction is
+applied and independently audited; all six focused behavior checks pass with
+an unchanged source map and successful drained receipt. The full suite is running.
+All eighteen remaining non-HPC source-preparation/audit stages succeed and drain,
+including the 96-file Results assembly and both families' yield/task overlays.
+Those source candidates remain unapplied and runtime checks remain open.
+
+2026-11-12: Current HPC Launch160 preservation audit now succeeds/drains while
+retaining four original missing imports and false dependency closure. Its exact
+original failed audits remain preserved. The singular-v10 repair is then
+installed and independently audited; all42 controls pass, self-compatibility
+and three original execution admissions are repaired, and historical-hash
+denials plus generic-reopen refusal remain intact. The non-HPC Launch110 source
+assembly also completes all ten preparation/audit stages successfully, still
+unapplied. Full private integration, non-HPC100 behavior, saved restoration and
+autonomous science remain separate obligations.
+
+2026-11-12: Root's exact A102 API5 inventory stage is installed and independently
+audited after the historical-window verifier correction. All five workflows
+succeed/drain, the prior whole root document reverses, and retained216-case/
+six-owner/28-metadata evidence stays exact. Third's temporary hold is released.
+A104's fresh original head probe reproduces all12 observations; the one-file
+version candidate passes source audit but remains unapplied. HPC Results201
+preparation/audit, four selected-request corrections, their complete successor,
+four yield-owner corrections and four task/service corrections all pass source
+audits with drained receipts, still unapplied. The24-site dynamic source audit
+also completes and explicitly retains three omitted original modules and
+saved/environment runtime obligations. HPC Launch160 prepares successfully
+after the exact historical receipt-schema correction; its full audit retains a
+new failure on four unchanged original missing BVBRC tool-info imports. Both
+earlier Launch failures keep their original rc1/drainfalse receipts and separate
+actual post-exit proofs. None of these source stages proves full integration,
+saved restoration or autonomous scientific work.
+
+2026-11-12: A104's complete fourteen-home source candidate and independent audit
+now pass, authenticating all five predecessor stages and actual362/320 results.
+All424 candidate files and29 retirements remain unapplied;24 dynamic import
+operands, final union integration,728 connected cases and restoration are still
+separate obligations. The fresh seven-test head recheck source preparation/audit
+also pass on1,556 Python/TOML files; its actual probe and version repair remain
+pending. Task-connection count remains172/405,233 remaining.
+
+2026-11-12: A104 original362 behavior checks pass with exact full case IDs and a
+successful drained workflow after an explicit pytest ID configuration retry;
+the first harness failure remains unchanged. Actual320 descriptor observations
+retain269 returns/51 exceptions and196 configuration-loss comparisons on the
+same complete source map. Source component application/connected728 and generic
+restoration remain separate. Task census is unchanged at172/405,233 remaining.
+
+2026-11-12: Fresh executable-source census confirms 172/405 private task
+connections, leaving 233 after six A102 API declarations land. Their installed
+validation and the full organizational/restoration goal remain separate.
+The three-file A103/A104 metadata reconciliation now passes actual application
+and applied audit, with complete JSON reversals, retained historical failures,
+successful drained receipts and freshly verified installed hashes. The A103
+source/metadata hold is released.
+
+2026-11-12: A104 API candidate preparation now completes all ten source stages
+and its411-row union audit after the independently tested Python3.14 auditor
+correction. A final narrowly audited comparison accounts for six exact metadata
+list permutations while preserving every candidate byte and other manifest
+field; original failed checks remain retained. These are unapplied candidates,
+not additional task connections or full integration. The current count remains
+166/405 task connections and239 remaining.
+
+2026-11-12: A104's separately scoped cached-replay helper passes all eighteen
+original saved carriers' closed reads and cached action/payload/credit replay
+boundaries with unchanged queues, rows, captures and1,550-file source map.
+Its original eighteen empty-queue failures remain historical; complete iterator
+and generic restoration remain unverified. Homology's original75-candidate audit
+and ten successor source stages pass, but independent review then identifies an
+outer callback-order regression. Those unapplied candidates are held for a
+narrow successor; no Homology behavior completion is inferred.
+
+2026-11-12: Root's explicit AnnotationTask declaration is installed, independently
+postchecked and covered by 38 passing controlled declaration/iterator cases.
+The fresh source census is 166/405 task connections, 239 remaining; complete
+root/default-axis composition and restoration remain separate. A104's original
+30 request-port checks pass with unchanged sources. Actual replay diagnostics
+isolate the eighteen empty-queue fixture assertions without changing original
+failures; the twelve-observation scientific-head probe isolates the singular
+version admission mismatch. Failed API preparation and its separate exit proof
+remain retained; a Python 3.14 symbol diagnostic identifies the audit defect.
+The literature input audit passes without claiming its proposed behavior cases
+have executed. Evidence and exact scopes are recorded in the current entries
+above; no new autonomous-science completion claim.
+
+2026-11-12: A104 required API tests are promoted and independently verified with
+the complete1,546-source map. The first owner's original28 cases pass, with
+unchanged sources and successful drain; full168 and original-carrier baselines
+remain pending. Source review identifies direct private instruction composition
+bypassing an injected services.instructions callback. The unapplied families
+require a separate correction; their earlier source receipts remain historical.
+
+2026-11-12: Root private runtime placement passes its independent postcheck and
+the live 74-case support/task/iterator suite (51 previous cases plus 23), with
+successful drained receipts. Primary independently verifies all application,
+protected-source and linked evidence hashes. The exact original global Store
+native-measurement import repair passes whole-module reversal and thirteen
+actual Store receipt/type cases. Constructor gaps, root episode declaration,
+identity retirement and full workflow/scientific validation remain separate.
+Evidence: fifth_root_runtime_application_01, postcheck_01, connected_01 and
+fifth_root_native_state_audit_01/native_receipt_connected_01 under runs/.
+
+2026-11-12: A104 native preparation completes all twenty source/audit steps for
+twelve unapplied homes. The original literature diagnostic retains 45 boundaries:
+all 28 constructor configurations and the seven-binding factory return, five
+import/selection/formatter boundaries raise the missing assay symbol, and six
+schema operands fail representation validation. Invalid synthetic reference
+syntax prevents the latter six from isolating scientific applicability. Original
+sources stay unchanged; receipts succeed/drain. These are source preparation
+and diagnostic observations, not additional connected episodes or science.
+
+2026-11-12: The unchanged sixty-case A104 guard matrix now passes for all thirty
+owners after the audited two-input fixture correction. Exact case identities,
+all1,539 unchanged sources and post-test custody checks verify; original receipt
+is0/drained, and separately retained actual service/slice/PID observations prove
+exit. The result resolves this tested protected-reference boundary, not positive
+native receipt custody or full restoration. Required-test inventory reconciliation
+remains separate; its earlier outcomes and fingerprints remain historical.
+
+2026-11-12: Seven root support modules, the corrected private binding registry
+and five tests are installed; primary verification matches all thirteen current
+hashes and six referenced source audits to retained receipts. The connected
+suite has51 passes including the earlier3 identity cases, with complete drain.
+Actual Store/Journal persistence and controlled registry boundaries are checked;
+root task/runtime integration and full restoration remain open. Fresh source
+census remains159/405 connected task homes,246 remaining; support work does not
+increase that count.
+
+2026-11-12: A104 fixture successor finished with30 fluorescence denial passes and
+30 exact protein outside-scope expectation failures; all1539 source hashes are
+unchanged. Failed receipt retained with separate observed complete process exit.
+The proper two-input fixture is reviewed and in preparation. The exact A102/A103
+reconstruction shared catalog addition is applied after all2544 recorded source
+hashes and eight own metadata records verify; complete JSON reversal and a
+successful drained receipt preserve unrelated metadata and scoped claims.
+
+2026-11-12: Primary verified the two current A102/A103 composition hashes,
+actual 43-binding reconstruction results per axis, complete applied source audit,
+125-pass/one-skip suite and successful drained receipts. Eight own-axis metadata
+records are audited; shared catalog integration is pending. Separately verified
+the two root canonical identity imports and three passing local identity/context
+checks against their retained baseline and source audit. Neither change proves
+whole-workflow restoration, task completion or scientific execution.
+
+2026-11-12: Actual root constructor unavailability retained without scientific
+callback execution. V2 produces23 candidate modules; independent full-body
+accounting covers21 task methods/23 declarations/4 message bodies and lexical
+audit has zero missing globals. The49 missing import boundaries and absent
+own-root Workflow/axis heads keep runtime integration incomplete. Current A104
+full60 has eight observed scope-expectation fixture failures; ordinary evidence
+reference visibility is preserved and a two-input fixture is being prepared.
+
+2026-11-12: Exact A104 protein fixture-only correction applied with independent
+whole-module byte/AST reversal; all original sixty cases and assertions remain.
+Initial auditor's two-Store-block selection defect and failed receipt retained;
+separate V2 candidate/applied audits pass. The source-guarded full60 successor is
+now running, with exactly one required test-file delta and no application edits.
+Its protected-grant/reopen outcomes remain to be observed.
+
+2026-11-12: A104's full sixty-case schema retry completes with thirty fluorescence
+invalid-control passes and thirty protein fixture failures after owner/nonempty
+input checks. All1,539 source hashes remain unchanged. The five-record schema
+ownership follow-on now passes candidate and installed audits with successful
+drained receipts. A103's thirty original negative guards and sixty-three own
+metadata records are applied and audited; the shared catalog has the exact
+stage addition independently reversed against its prior document. Thirty distinct
+A103 cases pass; their long-name rerun is repeated coverage. Full implementation,
+positive saved custody, runtime restoration and autonomous validation stay open.
+
+2026-11-12: Complete original A104 protein contract schema restored after the
+actual sixty-case import failure. Whole-byte/AST audits pass for one application
+module and two required test inputs; thirteen focused behavior checks pass with
+1,539 unchanged source hashes. Full sixty-case owner retry is active; its
+verified prior source snapshot is reused without changing the tests. Follow-on
+ownership reconciliation and full saved-reader validation remain pending.
+
+2026-11-12: A104 protected-reader retry finishes with sixty identical dynamic
+schema import failures; all 1,537 captured sources remain unchanged. The exact
+failed receipt and actual process exit are retained. Independent installed
+ownership audits reconcile 96 metadata records and the five-stage source chain
+without claiming a behavioral pass. Complete original protein schema restoration
+is the next repair; saved-reader and full-workflow validation remain open.
+
+2026-11-12: Verified the original commissioning and iterator provenance of six
+A106 private operational homes, reconciling the current 405-home census with
+the earlier 399-home inventory. The source and retained execution evidence are
+listed in the second-team scope above. No new scientific completion claim.
 
 | Date (UTC) | Scope | Confirmed finding / bookkeeping action |
 |---|---|---|
+| 2026-11-12 | A104 retained-reference closure source evidence | Complete original source comparison identifies unconditional protein and fluorescence result/return readers, configuration-dependent ATAC/chromatin readers, and checks on both received-reference and ordinary resolution paths. Current A104 lacks the protein/fluorescence hosts and callbacks; the actual thirty-owner input diagnostic separately proves the first missing ATAC callback. Nine original files, SHA-256 custody and exact method requirements are retained in runs/a104_protected_reference_closure_20261111_preparation/. This defines the remaining restoration scope; it is not a protected-operand behavioral pass or a downgrade of older scientific milestones. |
+| 2026-11-12 | A104 publication syntax repair | One proof-guard indentation corrected; independent V2 candidate and applied audits recover all other current bytes and both exact original proof-guard ASTs. The first auditor incorrectly assumed one guard and failed before mutation; it and its receipt are retained. Evidence: runs/hpc_launch_private_20261111_a104_indentation_{audit02,apply,applied_audit}/. Required twelve-home native-contract suite is promoted/running; no completed result or full workflow claim. |
+| 2026-11-12 | A104 original input validator and applicable default restored | Full original validator plus thirty direct imports pass applied byte/AST reversal. Actual thirty-owner diagnostic returns for thirty empty inputs and raises missing _atac_reference_access for all thirty ordinary nonempty inputs; original protected-reference closure remains open. Original minimap2 default restored with independent applied audit; all eleven actual resource/default-construction boundaries now return, including ToolRegistry. Evidence: runs/a104_execution_input_versions_20261111_{apply,applied_audit,actual_probe}/ and runs/workflow_resource_policy_20261111_a104_defaults_{apply,applied_audit}/ plus a104_after_defaults/. No new test-pass count or full integration claim; follow-on ownership reconciliation remains pending. |
+| 2026-11-12 | A104 selectors and native admission reconciled | Thirty original staticmethods, four parent-authentication imports and twelve private native-parent helpers account for 58 applied sources. Actual applied audits preserve complete original bodies and graded-BLAST constraints. The same diagnostic constructs four Launch owners/31 bindings and returns four masking selectors; eight admissions advance to the separate missing input validator. Sixty-four metadata records over thirty homes and the actual scientific-parent fingerprint pass applied consistency. Evidence: runs/hpc_launch_private_20261111_a104_{static_auth,native}_applied_audit/, after_admission_repairs/ and admission_records_{prepare02,audit,apply,applied_audit}/ with the common prefix. Initial preparation failure remains retained. No new passing-test total, complete restoration, shared-root or autonomous-science claim. |
+| 2026-11-11 | Private module placement records | Added original-module destination/caller rows for previously unnamed private copies across all nine axes; existing symbol-specific split notes remain authoritative. A106 intervention/AppService return originals retired after their private replacements were written. Remaining unexamined placement/entry relationships are not counted as verified completion. No tests or workflow execution. |
+| 2026-11-11 | A106 completion of assigned placement and retirement of originals | A106 intervention execution/monitor/factory/presentation now private. Retired shared saved-construction, API/AppService, practical/HPC custody, numerical/timing and setup/progress originals; retired obsolete top-level A102, A104, A107 and A110 implementation locations after private module accounting. Fixed actual private worker paths, missing helpers and assets encountered while moving files. Full gather accounting remains incomplete; no tests or workflow validation. |
+| 2026-11-11 | A107 service placement and root receiving separation | A107 actual RNA/Infernal/HMMER/NMF/API dependencies are privately bound. Root receiving/result/receipt helpers and retained-value/subject-geometry contracts have independent copies. A103 missing ordinary execution-input reader added. A106 actual intervention execution remains underway; shared receipt/API retirement and complete dependency closure remain unfinished. No tests or workflow execution. |
+| 2026-11-11 | Execution/service placement and mixed entry retirement | A101/A102/A103/A104 private API/custody passes written and rebound; A105 remaining assay/parent-information dependencies copied. A106 actual intervention execution and A107 execution splits continue. Mixed top-level runtime/tools/provider/prompt/report originals retired; combined constructors explicitly unavailable. Root receiving dependencies remain in progress; no execution validation claimed. |
+| 2026-11-11 | Private presentation placement and remaining dependency splits | All nine private provider/prompt/rendering copies are written. Known execution/service dependency work remains in A101, A102, A103, A104 and A107, followed by remaining mixed root behavior removal. Full isolation is not yet confirmed for any axis; no tests or workflow validation were run. |
+| 2026-11-11 | Waiting and iterator dependency placement | Private waiting/completion and independently copied method_loop packages are written for all nine axes. A102/A107 retain actual resource progress; their unsupported legacy homology event routes were removed. Remaining provider, construction and helper dependencies keep the gather incomplete; no validation run. |
+| 2026-11-11 | Private infrastructure and presentation dependency placement | Store/material placement now written for all nine axes. Numerical/native execution copies added; independent provider/prompt/report rendering written for A105, A106, A108 and A110. Waiting, loop and saved-construction dependencies continue; original scientific validations unchanged and no new execution claim. |
+| 2026-11-11 | Private runtime/parser and Store dependency placement | Nine private runtime/parser copies; Store/material copies written for seven axes, with A103/A110 ongoing. Source frame/storage/numerical callers now use local implementations; execution/wait/construction helpers remain unfinished. No execution validation; older scientific scopes unchanged. |
+| 2026-11-11 | Nine private services, runtime prompts, libraries and receipts | All nine registries now construct local WorkflowServices; runtime calls local provenance, tool-invocation, instruction-library, retriever and semantic-receipt implementations. Independent runtime/decision prompt files replace shared instruction text. Mixed root service/provenance and retained-publication replay modules were removed after private copies/callers were wired. A105/A106/A108 finding-credit helpers are private. Runtime no longer borrows A105 numerical contracts: each actual numerical binding supplies its own narrowed declarations; A104 keeps only legacy namespaces its own callers use. Store/domain/communication, runtime message parsing, numerical/execution infrastructure, return-frame readers, saved-descriptor reopening and other dependencies remain unfinished. No tests, static validation, replay or workflow execution run; older scientific validation scopes are unchanged. |
+| 2026-11-11 | A107 private registry; nine registry implementations placed | A107GenomicToolRegistry now imports its own base and source clients. Applicable RNA/Rfam and expression-source APIs retained privately; orphan unrelated molecular-sequence initialization removed while original NMF result/return lifecycle remains. Nine private registry files exist, but four production-construction boundaries and broader shared runtime/service/material/helper dependencies remain unresolved. This does not establish complete axis separation or workflow validity. No tests or jobs run. |
+| 2026-11-11 | A106 private intervention-source registry | Added independent registry/clients and applicable source helpers, preserving its explicitly exposed GEO/SRA receipt/replay paths. Local literature catalog import updated; intervention grading, subscoring sheets, findings and iterator remain unchanged. Runtime/service construction remains unresolved; no tests or execution run. |
+| 2026-11-11 | Private A102/A105/A108/A110 base registries | A102 and A110 tool subclasses now import independent local implementations with their own structural or chemical/FBA hooks. A105 and A108 have independent source-only registries matching their declared source operations; evidence grading/finding paths remain intact. A105/A108 service construction and common runtime/Store infrastructure remain unresolved; no execution validation performed. |
+| 2026-11-11 | Private A101/A103/A104 tool registries | Copied/narrowed standalone registry implementations with private clients/source/sequence dependencies. A103ToolRegistry and A104ToolRegistry now inherit their own local implementations; A103 genomic sources and A104 conservation/phylogeny handlers are private. A101 has no dedicated production construction caller to rebind, so its creation wiring remains open. Root infrastructure/runtime/service dependencies remain; no tests or execution validation run. |
+| 2026-11-11 | A102 monitoring and A107 native views | Copied A102 monitoring information-credit/progress record implementations and rewired actual local callers. Removed A107 native receipt/scoring axis filters, configured-axis projection and redundant registry type enforcement, preserving applicable native receipt/qualification semantics. Other service/report parameterization remains open. No validation run. |
+| 2026-11-11 | A110 private execution setup and FBA custody | Split the execution factory to flux-balance configuration with concrete local execution/monitor/HPC bindings. Copied received progress credit and status schemas, native FBA invocation, immutable file controls, capture and digest storage; direct A110 imports updated. Removed shared ToolRegistry/axis-membership enforcement. Root runtime/services and source registry are still incomplete. No tests, Python or parse/import validation run. |
+| 2026-11-11 | A107 applicable genomic tool binding | Replaced copied A103ToolRegistry inheritance with private A107GenomicToolRegistry and a107_genomic_requests. Removed foreign context operations/attachment refresh, copied A103 tools/request files and assignment-axis guard. Preserved locus/neighborhood/detection HPC request and receipt paths. Root base registry/services and broader copied genomic dependencies remain; no tests or execution run. |
+| 2026-11-11 | Private native attribution and source readers | Split applicable grading custody/correspondence readers into A101/A102/A103/A104/A107/A110 copies; removed shared sequence_attribution after direct rewiring. A107/A110 identity byte readers and scanners now use private helpers. A110 native result views/current scoring-sheet projection no longer dispatch or filter by axis selection. A103 HPC/native source paths are local with unresolved database dependencies recorded; A104 masking and BV-BRC saved-return readers are private. Root tools/services and broader copied branches remain unfinished. No tests or parse/import validation run. |
+| 2026-11-11 | Private execution branches and source correspondence | Narrowed A101/A103/A104 practical execution and copied capture dependencies while preserving separate context/phylogeny paths. Removed mixed root component execution context and source-identity/sequence-correspondence modules; A107/A110 use private qualification, correspondence, scoring and sequence-reader copies. Owner-only deletion was insufficient: foreign branches and shared callees required separation. Packed-byte custody, broader root dependencies and HPC snapshot paths remain; the gather goal is incomplete and no validation was run. |
+| 2026-11-11 | Private practical execution and workflow cleanup | Narrowed A102 practical execution/capture to structure, A110 to FBA, and A107 practical execution to its homology/RNA/coexpression paths. Restored A107 NMF execution lifecycle code lost during earlier pruning. Removed A102/A111 migration and unused axis/rate configuration from A107/A110 private workflow constructors; copied source inspection views privately and removed the root union. Ownership records updated. Generic root dependencies and broader helper cleanup remain; no tests or parse/import validation run. |
+| 2026-11-11 | Remaining mixed root behavior | Removed AllEvidenceToolRegistry and PartnerChemicalToolRegistry after locating their private axis catalog/configuration implementations. Removed the root source-access axis lookup and its global runtime injection; private A107/A110 feedback wiring is in place. A102 received 123 private dependency copies. Practical helper branches and copied catalog migrations remain unfinished. Combined CLI explicitly reports unavailable private tool composition. Full gather completion remains unproven; no tests or import validation run. |
+| 2026-11-11 | Nine-axis physical ownership gather | Moved the package directory to gene_annotation_episode/episodic_workflow, removed mixed root episode and prompt files, and created private singular bindings under the axis directories. Narrowed all private literature and execution bindings, moved literature repository methods out of root services, and removed axis-owner routing from root provider presentation and scientific-process bindings. A107 partner and A110 reaction storage now own their receipt custody without copied A105 rate-storage inheritance. Saved-descriptor reopening and combined integration remain open. This is code placement only; no new test or scientific run was performed at the user's direction. |
 | 2026-11-10 | Combined A101 BLAST job scheduling and root status | The pilot's blocking direct BLASTX path was stopped. The combined catalog now selects saved API handoffs when NCBI BLAST is configured; the BLAST service records submission time and a provisional remaining-time estimate at each actual status observation. A scientific owner and the root can read saved status for handoffs received through their parent path; root input is compact by annotation/A101/subject. An unresolved original job makes that arm's forecast unavailable rather than a false zero-gain stop. Focused offline checks pass 31/31 in `runs/blast_compact_root_focus_20261110`; autonomous cross-axis switching and whole-genome annotation remain unverified. Whole-contig BLASTX still does not directly satisfy the protein-target A101 credit projector. |
 | 2026-11-10 | A102 and A104 local task credit for resolved native results | `functional_feature_geometry` counts distinct resolved physical features from graded received native sheets whose `function_ref` is the commissioned proposed annotation; `functional_contrast` counts witnessed panels with that same function, including a valid zero. A104 `robustness` counts distinct evaluated comparisons with a current received assessment linking them to the commissioned annotation and scope; opposing/zero results still earn investigation credit. Saved-result focused tests pass. A broader three-file selection recorded 75 passes and one A104 report-schema failure at `function_scope` validation; that failure was not resolved here. A102 reference/trait/interface tasks and A104 panel/alignment preparation need separate local credit rules. |
 | 2026-11-10 | Episode-owned continuation binding replaces central policy | Delete the live `investigation_policy.py`, its fixed-case `assembled_case_policy.py` setup, and tests dedicated to that setup. The combined CLI now binds root credit, signed scores, and per-axis forecast settings in `SignedRootEpisodeBinding`; child runtime delegation asks the episode owner for its own controller. Scientific tasks validate their exact task and credit definition; literature tasks save yield settings with the original commission. HPC episodes can select their own settings from an authenticated durable commission; its current producers still need those settings. Ordinary execution and monitoring remain unresolved, so the combined run is not ready. Historical caller-injected workflows retain their saved controller path. The earlier shared base/role cutoff design in the next row is superseded for the combined run. |
@@ -5926,3 +15682,3372 @@ historical reports.
 | 2026-11-08 | Fresh A107 genomic03 first native commission | At16:58UTC original42121 and service193925 remain live. Actual root0 commissions A107 child1a180... with both component_axis_native_component_records and component_axis_native_execution_records, A107 qualifications and genomic records. Scientific6 completes a pinned Aurora detection request for NC_014034.1;7 commissions the shared HPC ownerf82ec.... Original actions/requests and first-commission review are retained under the common validation directory. Request preparation earns0; no new native result, typed scientific return or parent interpretation is verified yet. Seven other workflows remain unstarted. |
 | 2026-11-08 | A107 genomic03 actual Aurora submission | Native20 submits9052029.aurora-pbs-0001.hostmgmt.cm.aurora.alcf.anl.gov under BioReason-Aurora-Test, return0, empty env, exact517-byte script receipt SHA19418a39d4a29b0f7a733122e84395caa9af1d371ba272ccc799707a401e27a5. Native and Launch yield normally; both62-character forms are admitted without failure. Shared HPC handoff4 is accepted and monitor.wait5 remains active at17:08UTC; original42121/service193925 are live. The launch branch's1 unit is handoff credit, not A107 support or numerical publication. Actual submission/script records are retained under the common validation directory. Scientific calculation, grading, typed scientific return and actual root use remain unverified for this fresh case. |
 | 2026-11-08 | A107 genomic03 positive result reaches scientific owner; contrast remains open | Actual9052029 calculation completes0 on x4202c3s4b0n0 in13.237955s. Admitted native source6c922.../artifactaaa7... has exact full a107_genomic_detection_v1 grade942a.... A107 receipt7 receives it; actual8 qualifies exact sequence detection through sourcef70fc.../artifact1eea.../gradee576..., retaining unknown sample/genomic origin and functional partnership. The native included match spans0..190 on both sequences,372.6bits/E8.6e-114, among382 verifiedCDSs with3uncertain and incomplete inventory. Actual scientific input0049 delivers the complete automatically updated sheet, combined_scientific_score=null. All20 saved-body/grade/job/input/receipt/public-view/wire comparisons and all3 raw native-file hashes/sizes pass. Review files are retained under the common validation directory. Scientific10 requests contrast NC_000913.3 and11 commissions its shared HPC path; contrast24 plans and25 discovery is active at17:20UTC. Original42121/service193925 remain live. Fresh contrast, scientific normal return, actual annotation-root use and whole-axis/goal completion are unverified. No new workflow or code edit. |
+| 2026-11-11 | Episode-directory source ownership complete under the corrected original package name | The final review accounts for 399 private singleton-role homes and all 49 original axis classes; 25,885 role-method copies and 19 root functions retain their original behavior after relocation normalization. 387 binding imports, 214 descriptors, 18 literature registries and 41 focused tests are verified. Remaining dependency, syntax, parent-specific registration and reopening gaps are recorded separately. No new scientific validation or shared-root integration is claimed. |
+| 2026-11-11 | Private monitor responsibilities and named parent exchanges | All 34 existing monitors have connected private task/responsibility files and recursive messages. All 27 existing scientific/HPC parents now own both monitor endpoints; seven missing legacy parent homes remain explicit. Source checks account for 693 newly extracted binding methods, 693 task methods and 715 unchanged existing parent methods. Six A107 binding import failures are resolved by removing unused copied providers; active provider behavior is unchanged. The retained combined check has 530 current passes and two reproduced A106 Store failures, after correcting and rerunning 26 test exception assertions. Current descriptors, fingerprints, exception identities and inventories are retained in runs/monitor_parent_tree_20261111_records/ and runs/monitor_parent_tree_20261111_consistency/. Parent task divisions, monitor applicability/credit work, full-tree organization and saved reopening remain incomplete. No scientific-axis, autonomous-workflow or shared-root completion is claimed. |
+| 2026-11-11 | Monitor task narrowing and private decision state | All 34 monitors now call private decision-state/input modules; inapplicable scientific reasoning, job-child, result/read-mapping, shared-grading and unimplemented-hook branches are accounted for and removed where present. Baseline 272 checks pass; the expanded run has 698 passes and the same two reproduced A106 Store failures. Source audit verifies 784 imports, 1,666 unchanged functions, 174 accounted changed methods, exact snapshot extraction, descriptor configuration and exception identity. Current inventories and historical parent fingerprints are separated. Instruction composition, provider-side presentation, caller credit-shape review, missing legacy parents, saved reopening and the full-tree goal remain incomplete. No autonomous or scientific-axis completion is claimed. |
+| 2026-11-11 | Monitor private instructions and explicit prompt selection | All 34 monitors compose applicable instructions privately and select their axis library formatter explicitly. Exact retained guidance, renderer bodies, default provider behavior, configuration and library-inclusive fingerprints are verified. Expanded validation has 1,032 passes and the same two A106 Store failures; all 340 affected instruction/dispatch rechecks pass. Source audit verifies 818 imports, 1,772 unchanged monitor functions, 136 accounted monitor method changes, 246 unchanged provider functions and 21 mechanical provider extensions. Receipts and current inventories are under runs/monitor_prompt_ownership_20261111_{baseline02,behavior,recheck,audit02,records}/. Caller credit-shape review, missing legacy parents, saved reopening and full-tree organization remain incomplete. No autonomous, scientific-axis or shared-root completion is claimed. |
+| 2026-11-11 | Monitor information-credit calculators privately selected | All 34 monitors select their own axis library calculator with explicit caller operands; eight setup paths use it. Custom projector callbacks and units are preserved. A104's missing original shared dependency is recovered; A107's unsupported job branch is accounted for and removed; four stale reader imports are repaired. Expanded checks have 1,302 passes and the same two A106 Store failures, plus 34 passing actual-outcome/runtime-credit/replay connections. Source audit accounts for 34 unchanged calculator functions, one narrowed fact extractor, 1,942 unchanged monitor functions, 34 fingerprint updates, 45 unchanged setup functions and eight mechanical selection changes. Current library consumer inventories, fingerprints and provenance are retained under runs/monitor_credit_ownership_20261111_{audit02,records}/. Caller-specific credit presentation, missing parents, saved reopening and full-tree organization remain open; no autonomous/scientific-axis/shared-root completion claim. |
+| 2026-11-11 | HPC prediction private binding and central-task extraction | All ten prediction homes in A102/A103/A104/A107/A110 now declare private tasks and own applicable binding responsibilities. The final combined check has 230 passes, covering actual local models/ledgers, signed credit, continuation, returned invalid/failed/unavailable outcomes, replay, exact decision input and runtime selection. Source audit verifies 240 imports, 220 unchanged binding methods, 150 accounted binding changes, 160 inapplicable method removals, 70 unchanged operation branches, 140 unchanged task methods and 70 task changes; five runtimes, 25 calculation/ledger modules and 20 parent/allocation owners are unchanged. Original fixture and extraction failures remain retained and resolved. Current inventories/fingerprints and receipts are under runs/hpc_prediction_private_20261111_{combined,audit,records}/. Named parent endpoints, prompt ownership, calculator library placement and remaining dependency review remain open. No full-tree, restoration, autonomous-science or shared-root completion claim. |
+| 2026-11-11 | Parent-specific HPC prediction request and receipt ownership | All ten parents in A102/A103/A104/A107/A110 now have named prediction endpoints, selected through original saved child identities. The retained final run has 160 passes: 120 prediction exchange checks and 40 existing monitor exchange checks, following a 90-pass baseline. Actual local ledgers/journals and typed contracts use controlled receipt/provider/cache/construction ports. Source audit preserves 240 child modules, 630 parent functions, 1,120 runtime functions and five default receipt bodies; ten outgoing connectors, ten receipt selectors and five dispatch prefixes account for changes. Current fingerprints include both message files, and configuration remains unchanged. Initial audit fixture rejection and corrected audit remain retained under runs/hpc_prediction_messages_20261111_{audit,audit02}/; behavior/ownership/consistency receipts are in the corresponding combined/records/consistency02 directories. A104's pre-existing missing closed-HPC model branch remains explicit. Parent task splits, prediction prompts/calculators/dependencies, full saved restoration, autonomous science, shared-root integration and the full-tree goal remain open. |
+| 2026-11-11 | Private HPC prediction instructions and explicit library rendering | All ten prediction children own instruction composition and select their axis-local formatter through both ordinary and exchange decisions. The final run has 410 passes (180 prompt/dispatch and 230 existing binding/task checks), following a 130-pass baseline. Twenty missing-scope fixture failures are retained and resolved without application changes. Audit verifies 250 imports, 200 unchanged private files, 590 preserved private functions, 1,331 preserved runtime/provider functions apart from imports, 40 preserved formatter functions and 15 byte-identical retained input/axis renderings. Current source hashes, descriptors, configuration and scientific-parent fingerprints agree; receipts are under runs/hpc_prediction_prompt_20261111_{baseline,focused,combined,audit,records,consistency}/. Calculator/estimator ownership, remaining dependency review, parent/sister task splits, A104's inherited closed-HPC reference omission, full saved restoration, autonomous validation, shared-root integration and the full-tree goal remain open. |
+| 2026-11-11 | HPC calculation and continuation-estimator library ownership | Fifteen separate axis libraries replace ten superseded calculation modules and five estimator copies. Thirty private consumers retain their original configuration and ledger operands. Baseline: 155 passes. Expanded checks: 795 distinct passes across the original run and failed-check retry. These exercise local mathematics, ledger custody, estimator selection, numerical replay and prior controlled prediction/monitor connections. The original expanded run has 784 passes and eleven file-descriptor exhaustion failures. All eleven pass in a fresh-process retry with application code unchanged. The original failures remain retained. Source comparison and a captured-connection check confirm that all five original `HPCLedger.open_existing` implementations leave their read-only SQLite connection without explicit closure; this inherited lifecycle defect remains open. The retry does not establish that the full suite passes in one process. Audit verifies 110 calculation/estimator functions, 1,424 caller functions across 161 files apart from imports/fingerprint paths, and 176 changed module imports; five numeric vectors are identical. Current source catalogs, consumers, thirty descriptors and five scientific-parent fingerprints agree. Receipts: runs/hpc_calculation_ownership_20261111_{baseline,combined,retry,audit,records02,consistency02}/ Behavior: runs/hpc_calculation_ownership_20261111_combined/pytest.xml. Remaining dependency review, parent/allocation task splits, inherited A104 restoration omission, full reopening, autonomy, shared-root integration and full-tree completion remain open. |
+| 2026-11-11 | Private HPC planning/allocation binding and task ownership | Twenty fixed-role bindings now select private central tasks, instruction composers and axis formatters. Forty superseded message modules are removed; 84 admission imports use the actual parent authentication helper. Binding baseline: 380 distinct passes. Post-binding/task baseline: 600 passes. Post-task/connected: 730 passes, yielding 1,110 distinct current checks across post-change runs. Actual local operations, ledgers, failed outcomes, waiting and replay use controlled external/provider/child ports. Audits and final inventories preserve source bodies, task extraction, exception/configuration identities and current fingerprints. Initial fixture/auditor failures remain retained and resolved. Receipts: runs/hpc_planning_allocation_private_20261111_{baseline_tests,baseline_tests02,binding_and_task_baseline,task_connected,audit02,task_audit02,records,consistency}/. Full planning/allocation/Launch/results directional exchanges, remaining dependencies, inherited restoration/SQLite defects, full reopening, autonomous science, shared-root integration and full-tree completion remain open. |
+| 2026-11-11 | Parent-specific HPC allocation requests and receipts | Ten planning parents now select their own named allocation exchanges; original child admission, report identities, shared-ledger credit, timing differences and replay are retained. Corrected baseline: 290 distinct passes. Connected checks: 300 passes (140 allocation, 120 prediction, 40 monitor), including ten new receiver-selection cases. Initial ancestry-fixture failures remain retained and corrected. Three source audits account for original bodies and connectors; final consistency verifies 800 private hashes, 40 endpoint paths, twenty historical descriptors, ten unchanged children and five scientific-parent fingerprints. Receipts: runs/hpc_allocation_messages_20261111_{baseline_ancestor,baseline_remaining,connected,audit_a102_a103,audit_a104,audit_a107_a110,records,catalog_correction,consistency02}/. The first consistency check exposed ten omitted existing monitor test entries and their helper; catalog correction is retained separately with application/test source unchanged. Controlled local connections do not establish live HPC/science. Launch/results exchanges, dependencies, earlier relocation defects, full reopening, shared-root integration and full-goal completion remain open. |
+| 2026-11-12 | Targeted masking dependencies and native-parent admission repaired | A104 restores five original library modules and updates two consumers; complete source/test audits and 71 controlled local checks pass. Four HPC Launch constructors still identify a separate omitted return reader. Twenty-four A102/A103 native children now use private parent-launch contracts while preserving own-role schemas and credit. Whole-body source reversal passes; all eight focused cases change from the retained unknown_execution_episode_role baseline failure to passing behavior. Coverage is the first HPC Launch home per axis, with source audit across all twenty-four children. Evidence: runs/hpc_launch_private_20261111_a104_{masking_prepared02,masking_apply,masking_tests,after_masking}/, runs/hpc_launch_private_20261111_a102_a103_native_{candidates,audit,apply,applied_audit}/ and runs/hpc_launch_private_20261111_native_contract_{baseline,recheck}/. Metadata refreshes, private Launch tasks, full context preservation, whole saved restoration and shared-root integration remain open. No autonomous scientific validation is claimed. |
+| 2026-11-12 | Second-team private implementation stages reconciled | A108 final source audit and ownership refresh account fifteen private tasks, fourteen named exchanges, thirty-eight library modules and 556 source owners. Current A105/A101/A106 declaration counts are fifteen/forty/twenty-three; broader implementation and scientific reconciliation remain open. The selected historical receipt index records A108361, A105507, A101866 and A106759 distinct latest-passing identities, plus A10157/A10618 skips; repeated executions and omitted older failures are not silently counted as passing. Evidence: runs/second_orchestrator_a108_{final_sources_audit_01,ownership_refresh_02}/ and runs/second_orchestrator_candidate_receipts_01/. This is scoped private implementation evidence, not one final-source suite, complete saved restoration, shared-root integration or autonomous science. |
+| 2026-11-12 | A104 installed reader closure restored and checked | Eight original library modules and three direct consumers are restored with whole-body audits and three required test/helper files. All thirteen reader identities and six installer branches pass; four HPC Launch constructors and all thirty-one registry bindings now construct. There are 72 distinct passing reader cases across 71 initial passes and one focused retry after a guarded test-only V1/V2 schema correction. The original views bytes and failed assertion predate the repair; the failed receipt remains intact. Five unchanged missing lazy tool-contract imports remain explicit. Evidence: runs/hpc_launch_private_20261111_a104_reader_{closure,baseline}/, corresponding readers_{prepared,prepared02,apply,tests}/, schema_test_{prepare,audit,apply,retry}/ and after_readers/. Authentication imports, native-parent admission, selector decorators, context aggregation, ownership refresh and complete workflow integration remain open. |
+| 2026-11-12 | Scoped execution ownership reconciled; context defects measured | Independent applied audits verify 24 A102/A103 native inventories and 192 current source hashes, six root/scientific-parent records, and 17 A104 metadata files covering 18 application sources and five test/helper sources. Historical descriptors, eight native behavior identities, 71-plus-one reader evidence, thirty A103 source-only decorator repairs and the untested later Launch-helper revision remain distinct. Receipts: runs/hpc_launch_private_20261111_a102_a103_native_records_{prepare,apply,audit}/, root_records_{prepare,candidate_audit,apply,applied_audit}/ and a104_records_v2_{prepare,audit,apply,applied_audit}/. Actual A102 context baseline constructs 43 bindings and finds 18 conflicts, fourteen lost-information contexts and six preserved Results contexts. A103 stops before registry construction on copied resource-checker supervisor identity. These separate integration defects remain open; no full saved restoration, shared-root or autonomous-science claim is added. |
+| 2026-11-12 | Canonical workflow-resource ownership repaired and reconciled | Thirty-one files change only 51 resource-checker imports; five duplicate checkers retire after actual constructor checks and independent whole-file audits. Canonical enforcement/launcher remain unchanged. Nineteen baseline raised boundaries become four separate missing-default errors; eight Policy/Resources and three ToolRegistry constructors now return. These are observations, not a passing-test total. Twenty-two metadata records, 240 binding dependency updates and five actual source fingerprints pass applied consistency; one older A107 delta remains separately attributed. Evidence: runs/workflow_resource_infrastructure_20261111_* and records_*. The identical A103 context retry now completes 43 bindings/38 contexts/six nonempty received views, exposing 18 conflicts, fourteen lost-information returns, six preserved Results and six conflicting BLAST annotation/scientific views. Evidence: runs/hpc_launch_private_20261111_a103_parent_context_after_resources/. Missing defaults, existing CPU/thread-count gates, context preservation, private task completion, full saved restoration, shared-root integration and autonomy remain open. |
+| 2026-11-12 | A104 protected reader chain applied after actual omission baseline | Sixty actual-owner baseline failures divide into thirty missing ATAC callbacks and thirty missing fluorescence callbacks, with1476 source hashes unchanged. The failed receipt and separate verified process exit remain retained. Five audited stages then apply137 writes across125 distinct source files; each overlapping stage has an independent applied audit and the final1770-file axis map has no unrelated changes. Four additional whole-module AST audits pass and all15 workflows succeed/drain. Evidence: runs/a104_protected_readers_20261111_guard_baseline/ and corresponding chain_prepare, apply_STAGE, audit_STAGE and ast_STAGE runs. Native policy is unchanged. Behavioral retry, genuine saved-reader checks, terminal commissioning, remaining families, ownership reconciliation, private tasks, restoration and shared-root integration remain unfinished; no scientific validation claim is added. |
+| 2026-11-12 | Actual two-input A104 guard fixture and one-owner check | Test-only successor uses two real problem inputs and scopes only the first; candidate/installed whole-module audits retain every assertion and all60 identities. Runner preservation audit passes. The complete original protein test passes for the existing HPC-parent API owner, including independent grants, Store reopen and tamper denial; separate read-only SQLite corroboration confirms exact input sequences/scope with unchanged database bytes. Receipt0/drained and all1539 source hashes unchanged. Evidence: runs/a104_guard_two_target_fixture_20261112_{prepare,candidate_audit,runner_audit,apply,applied_audit,one_home}/. Full60 is running; positive saved-reader custody, task organization, full restoration and autonomous science remain separate. |
+| 2026-11-12 | A104 callback and private-role preservation review | Actual source inspection confirms supplied instruction-service bypass in twelve already connected monitor/HPC planning/allocation/prediction tasks; narrow repair is queued while their earlier scientific results remain unchanged. Unapplied API correction V1 wrongly classified async next as synchronous; immutable V2 corrects the two exact parser checks, source-reviewed but unexecuted. The27-home correction runner's incorrect workflow receipt filename requires a separate successor. The three Homology candidates still retain unrelated role methods/branches and require substantive per-owner resolution before organizational completion. Evidence: runs/a104_instruction_composer_20261112_primary_review/REVIEW.md and runs/a104_private_task_service_20261112_primary_review/REVIEW.md. No application or new behavior pass is claimed. |
+| 2026-11-12 | A103 six API task connections and scoped evidence verified | The same162 controlled cases pass before and after, with six actual-owner local BLAST/invalid action Journal/replay comparisons. Primary verifies1382 current own-axis source hashes,13 required test/helper hashes,27 installed ownership records and every shared-delta evidence hash; metadata applied audit and installed suite receipts succeed/drain. Shared catalog delta remains queued. Supplied instruction-service bypass and copied source-proposal validation wording remain explicit pending corrections; no remote native custody, full restoration or autonomous-science completion is claimed. Evidence: runs/third_a103_api_v2_installed_tests_01/, third_a103_api_v2_connected_01/ and third_a103_api_metadata_{prepare,postaudit}_01/. |
+| 2026-11-12 | A104 six-owner original API baseline complete | All168 controlled original-owner cases pass; actual Store/Journal, iterator outcomes, controller identity, selected/build admission and saved response/redelivery are exercised with controlled service/provider ports. Primary rechecks all1546 source/test hashes, successful drained receipt, inactive service, empty owning slice and original PID exit. Original18 capture/reopen remain separate; no unapplied task split or scientific validation claim. Evidence: runs/a104_api_20261112_all_baseline/. |
+| 2026-11-12 | A103 API callback correction and metadata chain verified | Seven source changes restore twelve actual custom-service return/exception identities; six private default compositions and two ordinary fallbacks stay exact. Focused26 tests pass with successful drained receipts. Fifteen metadata changes clarify current validation while preserving the earlier stage/history; all27 negative mutations are rejected. Primary verifies exact7/15 transitions,1382 current source paths/hashes,14 tests,27 metadata and linked artifacts/receipts. Shared-root application remains queued; no full restoration or autonomy claim. Evidence: runs/third_a103_api_combined_metadata_01/shared_proposal.json and third_a103_instruction_v3_verify_01/verified.json. |
+| 2026-11-12 | A104 original saved-state observations and callback baseline retained | Original18 captures complete;18 closed credit reads return with unchanged capture bytes/logical rows, but all18 saved-action replays raise empty AssertionError and descriptor composition separately reports private_binding_reopen_pending. Successful diagnostic receipts do not establish replay. Then exactly one audited required test changes1546→1547 sources;55 original callback cases pass with54 retained records, original test bytes and corrected-runner audit. Actual receipts succeed/drain; primary confirms hashes/path transition and empty slice. Evidence: runs/a104_api_20261112_original_{capture,reopen}/ and runs/a104_task_service_20261112_baseline/. Application corrections and full restoration remain open. |
+
+2026-11-12: Current executable task-connection census remains172/405,233remaining
+(A10249,A10352,A10448,A10745,A11039). Four required A104 scientific-head test
+files are promoted and audited; its first one-case baseline exposes a fixture
+scope-representation mismatch before build. Original rc1 and separate actual
+post-exit evidence remain retained, full68 unexecuted, application validator
+unchanged. This is separate from the completed singular-v10 repair/42controls.
+
+2026-11-12: Exact A102/A103 callback24 stage appended to shared root inventory;
+all four workflows and independent applied audit succeed/drain. Actual392cases,
+2784sources,56metadata and66+5negative checks revalidated. Entire oldrootJSON and
+byte prefix preserved; final supervisor absent and slice empty. Rootinventory
+e810c71531e3978a4693af6338c57e548b4d169345f28f013c9ea48b5eecb03c.
+This adds shared ownership evidence, not task connections or full restoration.
+
+2026-11-12: Exact A104 scope-fixture successor applied/independently audited;
+one required helper changes, application unchanged. Corrected one-case head
+baseline passes0/drained. Full68 is underway with standalone panel_identity and
+alignment_suitability original-commission scope failures; later named cases
+have passed. Preserve complete actual outcomes and investigate original contract
+before changing fixture expectations. No full68 success or restored-carrier claim.
+
+2026-11-12: Original/current byte comparison confirms three named A104 projectors
+require commissioned scope and the scientific-credit service supplies it only
+for a child. The completed20build cases retain17returns/3denials; full68 still
+active. No scope injection or validator relaxation is justified. Separate
+source review accounts for3Homology saved-job owners outside C7's57catalog;
+original family/descriptor connection and true registry/run reopening remain
+unimplemented, distinct from preserved default-worker denial and earlier tests.
+
+2026-11-12: Fresh executable census remains 192/405 task connections, 213 left.
+Root duplicate retirement passes its complete installed postcheck and the same
+10 boundary cases, with successful drained receipts; final ownership metadata
+and full workflow composition remain open. Combined A104 proteome/partner
+static closure passes for 51 candidates/44 Python modules after a narrowly
+verified module-binding checker correction; candidates remain unapplied.
+The actual-parent carrier helper promotion/applied audit succeeds, but capture
+fails before its first carrier on the fixture's two-reference expectation versus
+the original five-reference receipt dependency closure. Original failed output
+and separate process-exit observation are retained; no restoration success is
+claimed. A103 shared metadata application stops before Python or mutation on
+two A102 inventory pins changed by the separately completed Launch metadata
+stage; an exact transition successor is being prepared, without refreshing
+unrelated historical inputs.
+
+2026-11-12: A103 source-family and A102 Launch shared-root appends are complete.
+All eight actual V2 workflows succeed/drain; both whole original stage values,
+prior JSON/prefix bytes, seven negative mutations per append and actual
+predecessor receipts are verified. Final root inventory0ab0ac88. Exact two A102
+metadata input changes are authenticated against the completed Launch16 stage;
+the original pre-Python checksum stop and all prior evidence remain intact.
+This completes these shared inventory stages only; task census, full runtime
+composition, restoration and autonomous-science claims do not change.
+
+2026-11-12: A104 run-local carrier candidate diagnostic02 completes twenty exact
+observations, seventeen controlled saved captures and three original denials,
+through the real iterator callbacks with truthful source exhaustion. Actual
+source/candidate bytes unchanged; receipt0/drained and separate observed exit.
+It remains diagnostic-only, with installed promotion/capture/reopen pending.
+Four separate original fixture preparation/audit stages also succeed/drain:
+29 exact required-asset candidates and11 complete original helper/test modules,
+no missing globals and two explicit dynamic imports for later private-owner
+relocation. No runtime or live-producer proof is inferred from these candidates.
+
+2026-11-12: Fresh executable census reaches198/405 connections,207 remaining,
+after six A103 Launch tasks are installed. Actual application/installed-audit
+receipts succeed/drain; the original204-case baseline passes. Installed behavior
+and new ownership reconciliation remain separate pending work. A104 candidate
+reopen succeeds on17 copied-Store saved-action/form replays plus3 original
+denials, preserving exact receipts, source and capture bytes; formal source
+audit also succeeds/drains, with permanent helper promotion still pending.
+Root native factory's actual8 installed cases pass; primary verifies15 evidence
+hashes and783 current guarded source hashes. Ordinary default construction still
+fails at missing root.literature_episodes; full restoration/science remain open.
+
+2026-11-12: Executable census reaches 210/405 task connections, 195 remaining,
+after twelve A102 native tasks are installed. Primary verifies all 210 matching
+own task imports/declarations and all 24 new task/episode hashes against the
+successful drained application receipt. Installed native behavior and ownership
+integration remain separate. A104's focused typed-fixture diagnostic completes
+with ten passes and four unchanged unknown_execution_episode_role failures;
+all 1,579 source hashes remain unchanged. Original pytest exit1/drainfalse is
+preserved. Separate actual observation confirms both original processes absent,
+inactive service and empty recursive owning slice. Evidence:
+`runs/third_a102_native_v3_apply_01/` and
+`runs/a104_typed_fixture_controls_20261112_diagnostic/`.
+
+2026-11-12: The twelve newly connected A102 native tasks pass their original
+360-case installed suite and strict twelve-owner comparison. Primary verifies
+actual JUnit, unchanged before/after source maps and all retained comparison
+hashes; task census remains210/405,195 left. A104's disposable-reader V1 focused
+run ends3PASS/2FAIL, with immutable failed receipt and separately verified actual
+exit. The exact helper-only V2 permission correction is applied/audited0-drained,
+all1580 source hashes checked; focused5 active and full92 unexecuted. HomologyV2
+source preparation and both original successor audits also pass0-drained,
+preserving the original nineteen candidates apart from four exact callback
+corrections. These source candidates remain unapplied. Full workflow completion,
+ownership integration and saved restoration remain separate open scopes.
+
+2026-11-12: Root/A105 exact501 application and installed postcheck pass; primary
+rehashes every installed path and checks the retained receipts. The original35
+case set now passes entirely, resolving23 ordinary baseline failures; unchanged
+constructor also passes. Scientific execution and complete saved restoration
+remain separate. A104 source components reach11/15 prepared/audited, not applied.
+The execution72 generator's ambiguous signature match is retained as a source
+preparation failure; independent task/head source work continues without changing
+its guarded application map. Focused readerV2 subsequently finishes with three
+passes and two authentic fluorescence job/schema failures after the SQLite fix.
+
+2026-11-12: A104's shared-selector composition successor passes all three source
+stages, preserving 35 candidate files and three explicit retirements. V11 source
+authority passes with the separate original schema component, still unapplied.
+Four required test promotions and the schema15 and installed25 baselines finish;
+the expected outcomes are respectively 3/12 and 13/12 pass/fail with complete
+observed exit and unchanged 1,584-file maps. Combined application and connected
+validation remain pending; the task census stays 210 connected and 195 remaining.
+
+2026-11-12: The complete A104 V11 union installs successfully and passes its
+independent installed audit: 2,093 candidate rows, 128 retirements, two shared
+selectors and complete 3,316-file Python/TOML custody. All fifteen original
+schema controls now pass with unchanged source and a successful drained receipt.
+Task connections reach258/405, leaving147, from48 new A104 connections and none
+removed. The first census tool omitted27 existing absolute own-task imports;
+its genuine failures/complete diagnostic rows remain retained and primary checks
+each exact import and concrete class. This counting-tool defect does not reopen
+completed A105/A108 implementation. Reader/family checks, restoration, final
+ownership and scientific validation remain separate scopes.
+
+2026-11-12: The corrected full405 census and independent source audit both
+succeed with drained receipts, confirming258 connected/147remaining and48 A104
+additions/no removals. All original count assertions and full source checks stay
+intact. Installed-service25 then passes all25 cases and all24 callback-record
+comparisons through an independently audited baseline→union transition; the12
+original injected-service failures resolve, original default behavior stays exact.
+Full workflow/restoration and other family checks remain separate.
+
+2026-11-12: All48 original native parent-contract cases pass after V11, resolving
+the24 original unknown-role failures with unchanged3316 source hashes and a
+successful drained receipt. Separately, retained-reader focused5 finishes3PASS/
+2FAIL at the archived-local-resource/current-test-configuration mismatch. Original
+failed evidence and verified exit remain retained; full92 is unrun and the
+authenticated fixture correction remains unapplied. These are distinct validation
+scopes; the verified task census remains258/405 with147 remaining.
+
+2026-11-12: A104's separate thread-metadata candidate completes three actual
+source stages in Fourth's authorized window, all0/drained. Whole candidate and
+original-source reversals pass; original database creation/rejection behavior and
+legacy quota identities remain explicit. All four candidate/current hashes were
+checked by primary. Application and runtime validation remain pending; this is
+not additional private-task completion or a native execution result.
+
+2026-11-12: Canonical native CPU admission correction is installed and independently
+checked; all7 actual-owner controls pass0/drained. Requested1/4/64 thread metadata
+no longer exceeds an artificial count gate; CPU100/5GiB/no-swap and original
+memory/path/owner checks remain intact. Primary confirms exact one-line diff,
+actual six-owner hashes and7 JUnit identities. Original5PASS/2FAIL baseline and
+historical beforeimage remain retained; no native/scientific execution claimed.
+
+2026-11-12: Shared native lock10 and root saved-publication10 applications and
+independent postchecks succeed; their respective6 and8 actual behavior cases
+pass with successful drained receipts. Primary verifies the installed paths,
+actual evidence hashes and loaded owners. Full consumer closure, full saved
+restoration and scientific execution remain separate.
+
+2026-11-12: Actual A104 source728 completes673PASS/55FAIL, no errors/skips, with
+unchanged3377 sources/eight inputs/package. Original failed receipt and separate
+verified process-exit observation remain retained. Corrections are source-only;
+no connected-family success is claimed and the census remains258/405,147left.
+
+2026-11-12: Twelve A103 native connections subsequently install. Actual application
+9fc81468 and workflow3127cf99 complete0/drained; primary authenticates369 current
+afterimages,24 retired paths and all24 task/episode files. The current connection
+count becomes270/405,135remaining (A10231,A10320,A10745,A11039). Installed audit,
+connected behavior and shared ownership integration are pending; original324
+passing baseline does not stand in for these later scopes.
+
+2026-11-12: A103 Native5 installed source audit d5b649fc succeeds with drained
+receipt c535870e. Connected324 and shared ownership remain separate pending
+validation. Root historical-scientific five-path application/postcheck and
+thirty installed controls also pass0/drained; primary verifies current targets,
+actual references, raw JUnit/manifest/loaded-owner evidence. No full restoration
+or autonomous scientific validation is claimed.
+
+2026-11-12: A104 descriptor320 retains271 returned/49 raised observations and
+eight schema comparison failures, unchanged source/helper maps, originalrc1
+receipt and separate actual exit. A reviewed comparison successor preserves
+the original failure; its execution remains pending.
+
+2026-11-12: Exact A107/A110 thread-metadata eight-file application, installed
+audit and full typed transition e637e4e7 are verified. All76 scoped controls pass
+with a successful drained receipt; primary rehashes current changes and retained
+result/JUnit. Historical quota/source identities remain explicit. This is
+controlled resource-boundary validation, not native scientific execution or
+additional task connections.
+
+2026-11-12: Results224 V2 source-only audit 9cf9b5b5 succeeds with drained
+receipt b7c0d77f; primary verifies the actual artifacts, sixteen canonical
+references and full frozen tooling. Reader-prefix completion, required-test
+promotion and both actual224 runs remain pending. Separately, API-owner
+retirement preparation fails before candidate output on the unredirected
+homology-return import. Its original receipt b42c2ea3 and unchanged-source/exit
+records remain retained; a narrow composition successor is in preparation.
+Neither event changes the270/405 task count or claims full restoration.
+
+2026-11-12: Non-HPC Launch/Results connected100 completes successfully, with
+all original identities and six precisely recorded baseline repairs. Primary
+verifies evidencee2a09262, drained workflow07463ab6 and full3319 source/fixture
+hashes. Native192 and the final340 repair audit remain separate pending stages.
+Five independent public-acquisition source workflows also pass; no65-case
+behavior or application claim follows. Task connections remain270/405.
+
+2026-11-12: Explicit root workflow failure-path controls complete3PASS with
+result85ed6408 and drained workflow7a494f4a. Primary verifies the test-only
+application/postcheck, actual installed bytes and retained loaded-owner/JUnit
+evidence. Original iterator failure/yield, saved-summary reopening and early
+policy refusal are preserved. Original failed expectations remain retained;
+full restoration and scientific validation remain separate. Count270/405.
+
+2026-11-12: HPC launch-presentation connected56 passes with identical original
+observations and case identities, no failed phase report and unchanged3316 map.
+Primary verifies checks e4ab3084, drained workflow3fd0cb8f and all3324 current
+source/input hashes. This scoped validation changes no task-connection count
+and establishes no native/scientific execution.
+
+2026-11-12: Source728 V2 source audit83c48ab9/workflowacb431ad passes0/drained.
+Primary verifies26 frozen members,21 source inputs, three candidate bytes and
+the complete3316 beforemap against current V11. Original673/55 results and
+earlier failed auditor remain retained. Promotion/connected728 are still future;
+no additional task connection or scientific-validation completion is claimed.
+
+2026-11-12: Execution-memory visibility V2 source audit62d53209 succeeds with
+drained workflow3fbcb158. Primary verifies all16 frozen members and16 retained
+failed-case JSON joins. The original controlled21 remains5PASS/16FAIL with its
+failed receipt unchanged; replacement/postcheck/ordinary25 remain future.
+No original database inspection, default-path change, continuity resolution,
+task-connection increment or full restoration is claimed.
+
+2026-11-12: Visibility installation fails at missing tests/fixtures parent after
+publishing its exact two helper/test replacements. Primary verifies failed
+workflowadec950a, plan3700eed1, all original/after bytes, four publication events
+and separate limited exit25f21911. The required fixture remains absent. A narrow
+fixture-only recovery and combined postcheck are pending; no25-case success,
+real database inspection or task-connection increment is claimed.
+
+2026-11-12: Exact fixture-only recoveryf56127b1/workflow1bf3e5b0 and independent
+postcheck4390f2ff/workflowa2db47c5 succeed and drain. Primary verifies the actual
+commands, all three installed candidates and fixture/parent modes. Original
+partial failed applicationadec950a remains unchanged. Ordinary25 remains pending;
+no real database census, default switch or full restoration is established.
+
+2026-11-12: Post-union request-port30 completes30PASS/90 successful phase reports,
+with every original observation preserved. Primary verifies evidence20ea8fe4,
+drained workflow2e265b2d, transition/audit receipts,3316 current source hashes,
+six inputs and2735 linked hashes. No native/HTTP/model execution or additional
+task connection is claimed.
+
+2026-11-12: Retained descriptor320 comparison98a0fc77 and independentaudit32f637b6
+succeed with drained workflowsabb81029/09783e51. Primary verifies actual linked
+evidence and3377 current source/asset hashes. The comparison accounts196 restored
+and70 preserved configurations,28 constructor refusals,14 generic reopen failures
+and12 authenticated original schema boundaries. Original failed observations and
+workflow remain unchanged; no new execution or full restoration claim follows.
+Separate Source728 runner/tooling auditebba51a9/workflow616386ba succeeds and
+drains, preserving complete original runner behavior and728 identities without
+test execution or canonical writes. Promotion and connected728 remain pending.
+
+2026-11-12: Ordinary execution-memory visibility25 completes25PASS, no errors or
+skips, evidence01733a6c/JUnitb2223e75/workflowaeaa33d6. Primary verifies actual
+case identities, installed inputs, exact command/budget binding and successful
+drain. Original5PASS/16FAIL and partial installationfailureadec950a remain intact.
+Real database inspection, continuity/default changes and full restoration remain
+separate. Task connections remain270/405, leaving135.
+
+2026-11-12: Shared resource3 application1d18c3f4 and postcheck6acd5214 succeed,
+followed by ordinary56PASS, result84dbe852/workflow75890c97. Primary verifies
+actual source/default diffs, installed bytes/modes, guarded sources, retained
+evidence, loaded owners and JUnit; all receipts succeed and drain. Memory/scratch
+admission and historical metadata remain distinct from the fixed launcher
+resource bounds. No new task connection, full native execution or complete
+restoration claim is added.
+
+2026-11-12: Shared parser31 application4ea84845, postcheck9cd2116a and ordinary
+40PASS resultfeb9bad1 complete with successful drained receipts. Primary verifies
+all31 installed/candidate bytes,41 selected sources, exact40 case identities,
+JUnit and loaded owners. The sole provider_jobs import changes4619f134→d84a9139;
+three shared parsers, five root helpers and required tests/assets are now placed.
+No transport, scientific publication, full ToolRegistry or new task-connection
+completion is claimed.
+
+2026-11-12: Four descriptor source-list correction46e618be passes actual source
+audit a829c418/workflow1829291f, with successful drain. Primary verifies full
+source/patch scope and frozen inputs; the earlier failed preparation remains
+failed. Candidate preparation/audit and later API application are still pending.
+No completed task connection is reopened by this unapplied candidate correction.
+
+2026-11-12: Shared provider-response application2455ae77 and postcheckbf1e6f07
+complete, followed by 83 passing ordinary cases, result6b3ba1eb and workflow
+98538e68. Primary verifies actual production diffs, four installed additions,
+guarded inputs, exact case multiplicities, loaded owners and retained JUnit;
+all three workflows succeed and drain. No transport, scientific publication,
+complete consumer integration or additional task connection is claimed.
+
+2026-11-12: A105 capacity application0694e6c3/inverse6958898f and native
+applicationcd3b5db1/inversef0996505 are verified against current code. Identical
+baseline/post case sets change 25PASS/15FAIL to40PASS and3PASS/8FAIL to11PASS.
+Primary checks actual source diffs, retained evidence, installed modes, selected
+source maps, JUnit and successful drained receipts ed34b84d/f35a6b48. Independent
+post audits22b400db/f4a37398 pass. Original failures and old capacity source epoch
+remain retained. Controlled child observations do not establish native workers,
+scientific execution, full organization or saved scientific restoration.
+
+2026-11-12: Exact retirement46e V3 candidate82b163e0, independent audit22a537d4
+and linked tooling9aeca31b succeed with drained workflowsa63962dd/56a29992/
+66848d28. Primary verifies112 candidate bytes,119 planned retirements, all four
+57-removed/37-added descriptor tuples and unchanged original Homology authority.
+These are unapplied source candidates; original failed attempts remain retained.
+Scientific68 transition82d184c2/audit2b5158cd and API transition918955ce/
+audit240f7774 also pass primary current-source/evidence/receipt verification.
+Behavior suites remain separate and no task-count increment is claimed.
+
+2026-11-12: A106 candidate07 application6d02d8a9 and installed auditb01bc830
+pass, with drained workflows03b45238/d54cb9e6. Independent review560bf810
+verifies all477 outputs,4042 inverse edits,227 retired old paths and1093 unchanged
+owned files; Primary verifies the review and actual epoch references. Core62,
+dynamic97 and intervention17 provide176 distinct passing post cases. Original
+shared50 failures and historical matching intervention failures remain retained.
+Cold read/project checks do not prove constructor-wide zero writes, full
+restoration or autonomous science. A104 historical maps remain unchanged.
+
+2026-11-12: Native192 passes all original cases, result75680708 and drained
+workflowb642f211. Four unknown-role and twelve mappingproxy baseline failures
+are repaired, with exact original case/yield identities and no inherited
+failures. Combined audit043e840d and drained workflow92c2b0b8 authenticate340
+distinct passing native/non-HPC/parent cases,3316 source hashes and164 evidence
+references, preserving original failed baselines with zero mutations. Primary
+confirms actual completion and an empty owning slice. Task connections remain
+270/405,135 remaining; full restoration and scientific iteration are separate.
+
+2026-11-12: Source-tooling authority audits API4d19b47c, registryfd5b6b53 and
+nativefcf6ea89 pass with successful drained receipts; Primary verifies actual
+producer commands, working directories and161/22/67 distinct linked references.
+Original CORE78 nine-input preparation2d422782/auditb1483bbb and all nine bytes
+are verified separately. No candidate promotion, runtime test or new task
+connection is inferred from these source-only results.
+
+2026-11-12: Public65 provider-identity successor eb4f4633 passes correction
+auditc26f193e and runner audit069c255c, with successful drained receipts
+f8e55b08/03cd86b4. One incorrect tooling literal is corrected; all65 templates
+and original failed receipt remain unchanged. No behavior pass or connection
+increment is claimed.
+
+2026-11-12: Native metadata successor49fcf07c passes independent source audits
+de23df2c/ac65b907 with drained receipts6400bd5e/0ec872e7. Full24-input plus
+changed-test ownership is accounted; source bodies/maps and417 future cases
+remain unchanged. Transferred shared-native source13 completes six passes and
+seven retained failures, exact actual record8f14725f. Genomic diagnostic00c6af2f
+observes compiler-generated annotations symbol with no AST Name; other lexical
+and delegated alignment failures remain separate correction work. No promotion,
+runtime validation or task-count increment is inferred.
+
+2026-11-12: A106 selected shared50 post preserves exact50 case identities and
+38PASS/12FAIL outcomes. Primary reads comparator and verifies all eight actual
+inputs, nine exact traceback path/line edits and three unchanged failures.
+Comparison8ce3a2bb/workflow29b4a556 passes; actual post59a519fe remains failed
+with separately verified process exit. No original defect is marked repaired.
+
+2026-11-12: All thirteen shared-native source families now have passing source
+audits. Effective-context resultd83ab7aa follows immutable966e5c4; six lexical
+results are recorded in ca1aad91. Independent proof28eb8d0a and complete
+proof087e0384 pass after the original failed negative-control proof is retained.
+All original seven failed source receipts remain unchanged. BLAST compatibility
+source audite426be1c/workflowc257fb83 also passes; fourteen proposed reservation
+cases and canonical integration remain unexecuted.
+
+2026-11-12: Primary reconciles scientific68 resultcc628d8d and saved-reopen20
+result8c21d501 using full independent reviewd3c6e5d4. Exact68/204 reports and
+complete payloads retain40 authenticated fresh descriptors;17 saved carriers and
+three original denials preserve all tested boundaries. All17 generic reopening
+failures remain unavailable_binding. Separate source maps reconstruct the same
+3316-file installed map; both actual behavior workflows succeed and drain.
+Controlled inputs establish the tested connections, not autonomous science or
+full generic restoration. No task-connection increment follows.
+
+2026-11-12: A106 perturbation proposal preparation1017afa0/audit9ad330fd pass,
+preserving whole-module and scientific fixture bodies. Runner V2 inverse audit
+e0cb1140/workflow2b0b107c also passes. The original eleven cases plus three
+commission-denial controls have not executed; copied importer review and the
+actual source/catalogue epoch remain separate before promotion.
+
+2026-11-12: FBA outer-error source preparation588a2292/audit1e17f45b pass with
+drained receipts. The ordinary-owner extension then passes source audit2666402a,
+copy preparation75280a48 and independent copy audit77861f15, covering seven exact
+owner/runtime bodies,3698/3715 copied files and65 proposed changes. Its five
+actual-owner plus three existing-hook cases remain unexecuted pending the
+independently identified copied-import correction. Private Results commissioning,
+native production and full restoration remain open. Count stays270/405,135 left.
+
+2026-11-12: Primary reconciles A103 native324 actual identity1dbe9b1d/JUnit
+aa84137c and comparisonfd5cb705, including27 evidence hashes, full twelve-owner
+payload equality except declared private-task identity and successful drained
+receiptsa9756374/d6519273. The historical repository-relative runner's cwd
+limitation is recorded for future tooling correction; the actual passing result
+is preserved. Shared metadata and full restoration remain separate, with no
+new task-connection count.
+
+2026-11-12: Actual-A106 serializer composition source audit3a2a3b1c fails the
+remaining-old-import guard. Original stderr0f31b121 and workflow393cdbef remain
+failed; separate actual-exit observationd71cee23 confirms complete workload exit.
+No application mutation or downgrade of completed A106 relocation follows.
+An immutable caller-coverage correction is required before another source audit.
+
+2026-11-12: Serializer completion1c4bff55 passes actual source audit6f7d75cf and
+drained workflow7db23648. The real omitted mixed import is explicitly accounted,
+with strict guard intact,139 sites,439 effective candidates and1190 scan paths.
+Original393c failure remains failed; no semantic-test/application claim follows.
+A106 canonical-import V3 audit15c004a0/workflow251206e4 passes28 isolated source
+controls; later copied tests remain pending an explicit dependency/source epoch.
+FBA29b6 revision source audit8014b911 fails at diff-format equality before controls;
+separate actual-exit44185abf is retained and no following runtime stage launches.
+
+2026-11-12: Immutable FBA proof correction30a04 passes actual source audit9c62cb1f
+and drained workflow428d61b5. All17 isolated import controls and eight literal
+patch controls pass; primary verifies22 evidence references. Original runner,
+observer, copied sources and eight behavior cases remain unchanged and no runtime
+claim follows. The exact GNU/difflib hunk difference is retained; failed8014b911
+is not relabeled. Task count remains270/405,135 left.
+
+2026-11-12: FBA canonical copy re-audit succeeds with drained workflow56742b59;
+its complete result is byte-identical to original77861f15. Both original source
+copies remain unchanged. The subsequent current8 workflow is started, with no
+completed runtime result yet claimed.
+
+2026-11-12: Independent review5ac34527 reconciles native9 source auditfabcfbed /
+workflow45518ed3 and effective transport33 audit44183545 /workflowa25afc7a.
+Primary reads the complete review and verifies its freeze35d54e00, principal
+inputs and49 proof/target references. Both retained workflows succeed and drain.
+The native nine-file placement and original129 runtime cases remain pending.
+Transport33 source proof preserves four explicit predecessor supersessions;
+later36-path composition, shared clock continuity, fresh configuration authority,
+installed import closure and runtime/cancellation checks remain separate.
+
+2026-11-12: FBA current8 finishes one pass/seven failures, observationfefd5cf8 /
+failed workflow4c421ae8; separate actual-exitc1f50442 confirms full exit. Two
+unsupported Journal lookups and five old software-registration refusals require
+an explicit fixture successor; no candidate65 runs. Core15 source52c34c25/6624666d
+and caller29 source4375a947/0d9ebdc8 pass their four drained workflows. All50
+methods and26 literal connections are source-accounted, with three permanent
+test inputs separately prepared. Final composition/application/runtime remain open.
+
+2026-11-12: Retained API comparison798762d3/9cd64c2f passes all four observations
+and100 negative controls with drained workflows4568d9c0/0366ae76. Original164+4
+result and failed receipt remain unchanged. A106 selected-domain preparation
+fails at an unexamined shared-fixture import; workflowdeb6e61c/stderr2702c5c1 and
+separate exit7c3c2bc9 are retained. No following audit or copied behavior executes.
+
+2026-11-12: Native9 exact placement/postcheckc5276cd9/e12a7934 and installed129
+result962001f7 reconcile with their three successful drained workflows. Primary
+checks all nine installed bytes,14 selected source and176 authority hashes and
+all129 exact collection/result/JUnit identities. No native science or new task
+connection follows. Fresh census remains270/405,135 left.
+
+2026-11-12: Canonical78 actual observation3b332592/audit89ae5f88 reconcile with
+drained workflowse5f85532/c9e99e95. Independent reviewa91e38a1 checks all78 exact
+case identities,242 canonical entries, permanent tests/assets and finite evidence
+hashes. Context5013 source proofa99f98f2/b333533a separately passes ten complete
+inverses. Production, unfinished-worker/private-Results and full-restoration
+claims remain false. Fixture successor780bb source audit a12e092c passes with
+drained workflow3f97ecba; subsequent copied preparation is still in progress.
+
+2026-11-12: Homology18 exact repair application5c420eb7/independent audit58376dcf
+pass with drained workflowsfa0def8e/7c0eb5d7 and actual epochd84065f8. Primary
+checks3316 installed hashes, exact18 changes and complete map/metadata joins.
+Prior48PASS/3setupERROR remains failed evidence. Cold/original51 validation is
+still pending. Isolated immutable-I/O19 plus Enrichr reader11 reconcile in
+reviewfd2bfa39 with613 checked finite references and exact30 case identities;
+publication, full serializer migration and saved restoration remain unproved.
+
+2026-11-12: A101 mixed44 original405 return plus59 data/frame cases pass after
+the separately retained one-import repair. Primary reads the post auditor and
+verifies21 retained references,44 current afterimages, exact recorded case counts,
+commands and successful drained receipts. Audita068ebf3/workflow89eb0bc1 retain
+the earlier failed collection and exact original selections. Controlled behavior
+is validated; remaining30 placement, full restoration and science remain open.
+Task connections remain270/405,135 left.
+
+2026-11-12: Shared A103 Native ownership append5e41352c and independent
+postaudit a7a0e17d pass with drained workflows6dd320ff/be00ed56. Primary verifies
+actual commands/reader records, exact candidate/installed bytes and complete
+postaudit reversal to prior05bf4f25. All46 prior fields/prefix and Markdown remain
+unchanged. Homology actual transition79a61836/auditce894767 also reconcile with
+2761 retained references and no unaccounted changes. These are shared ownership
+and source-transition milestones; no task-count increment or runtime pass follows.
+
+2026-11-12: Corrected FBA fixture copy auditd48bbbe9 completes successfully with
+drained workflow2223f0da and actual complete process exit. Its3700/3717 copied
+maps and original-copy inverse are retained; corrected8/65 runtime checks still
+require the separate shared-metadata transition. Raw callback60 successor source
+audit27117ff9, original runner source auditeb5f9e1, nine-input preparationd4fea5d7
+and independent input audit46277980 all pass with successful drained workflows.
+Primary verifies all four receipts and actual empty slice before starting the
+separate original-source copy queue. No60-case runtime result is claimed.
+Fresh authoritative405-home source recount remains270 connected/135 remaining:
+A10231,A10320,A10745,A11039. Organization, integration and restoration stay separate.
+
+2026-11-12: A101 remaining30 actual installationf13669ac and installed audit95d850e3
+reconcile in source review5d19f300 with264 current afterimages,1935 protected
+inputs,30 retirements and exactly two released external test changes. Both actual
+receipts succeed and drain. All original failed baselines remain retained; no
+post-move behavior, restoration or task-count increment is claimed.
+Raw60 original copyc1efd531/audit09fa4e71 also pass, preserving3665 copied files,
+3656 selected current inputs and all60 IDs. Separately, Seventh source audit
+d11323d8, original360 copye602be78 and independent copy audit05db8328 pass with
+successful drained workflowsf4357b3c/0644c205/c80701f3. Primary verifies their
+actual commands, real owner/bounds and artifact/receipt hashes. That copy retains
+1248 original A110 sources,2040 current selected inputs,2 tests and61 instruction
+assets. Runtime results for these newly prepared60/360 suites remain unclaimed;
+intermediate/final-family composition and scientific execution remain separate.
+
+2026-11-12: Original raw60 finishes60PASS with all180 phase reports passing,
+632 canonical copied modules/real ancestors and unchanged source/environment.
+Observationf1dcd0c9/workflow44f74b28 and independent audit07bc0144/workflowa5369ea1
+are successful/drained. Primary verifies exact60 case-set equality, all outcomes,
+actual commands/owner/bounds and complete original workload exit before audit.
+This is the original controlled callback baseline; final-family connected checks,
+private Results commission, scientific execution and full restoration remain open.
+Task connections remain270/405,135 remaining.
+
+2026-11-12: Homology original51 connected evidencec7ea459c/workflow6e8cf890
+and all four cold controls reconcile in independent review87dd1f58. All51 cases
+pass, with unchanged original runner/assertions,39 stable declaration comparisons
+and193 canonical own-axis origins. Primary verifies the review seal and actual
+receipts. Earlier48-pass/3-error evidence remains unchanged; native execution,
+commissioning and full restoration are separate. A101 remaining30 finite post
+comparisonc5b46eeb/auditd0bf7d94 also reconciles in reviewd0c4d6d8:231 distinct
+records comprise224 passes, one retained fixture failure and six collection
+errors, with22 overlaps across selections. Later five-test changes are separate.
+FBA metadata-envelope source audit5fe1ff60/workflow3503c971 passes and drains;
+no corrected current8/candidate65 runtime outcome is inferred. Fresh authoritative
+405-home inventory/source recount remains270 connected/135 remaining:
+A10231,A10320,A10745,A11039. Full goal remains incomplete.
+
+2026-11-12: FBA metadata envelope8d986da4/workflowb1a48fed completes successfully
+and drains, preserving the complete retained3700/3717 maps and3656 selected
+inputs. Primary verifies its whole inverse, actual receipt and original-process
+exit before the independent audit. Corrected current8/candidate65 outcomes remain
+unclaimed. Ten A110 generic/LocalFile source stages also reconcile in independent
+review507ddcad: actual20 refs, ten successful/drained producers, original1248,
+67 final candidates, expected1291 map and six prepared inputs. Primary verifies
+the review seal and actual artifact/workflow references. These are source and
+copy milestones, not installed connections or completed Results360 behavior.
+
+2026-11-12: Isolated API custody33 reconciles in independent review90476932:
+33 cases/99 phases pass,31 canonical-prefix owners and399 copied files verify,
+with actual resultdbb87d7c/JUnit3161cab1/workflow3122c5b3. Primary verifies the
+sealed review, exact actual artifacts/command/bounds and outcomes. Real stored
+assignment/selection/artifact boundaries are covered; full host, commissioning,
+provider/publication and scientific iteration are not. Original terminal33
+18-pass/15-fail remains unchanged. Additional OS completion observations are
+status-note-only beyond the genuine drained receipt; no raw sidecar is invented.
+
+2026-11-12: FBA envelope audit90de218e/workflowdede8c85 succeeds and drains,
+retaining3700/3717 copied phase maps and the exact8d986da4 envelope. Primary
+verifies the actual producer/budget join and old-process exit; corrected runtime
+results remain separate. Existing24 source audit9660d26a/workflowf17128fb and
+raw60 family-reader audit2956004e/workflowc9d81c8e also succeed and drain under
+Sixth's real identity. Their finite source controls do not bind actual later
+family transitions, install candidates or release shared-source holds.
+
+2026-11-12: A106 selected copied-candidate14 completes14PASS/42passing phases,
+248 canonical origins and1470 copied reads, evidence43445eab/JUnit5cf8940b/
+workflow857a5204. Independent review0fed548d and primary reconciliation verify
+all seven producer/receipt/exit joins and exact result identities. Original
+collection rc2/zero cases remains retained with its separate measured exit.
+Four fixture files remain candidates; broad fingerprint transitions, unselected
+summary/provider behavior, installation and scientific runtime remain separate.
+No task connection is added; current count remains270/405,135 remaining.
+
+2026-11-12: Corrected FBA current observatione282f04d/workflow7b5e1299 retains
+one pass/seven failures with unchanged source/identity/environment guards and
+separate measured exitde121fae. Two wrapper-to-dictionary assertions and five
+empty child-report contracts are diagnosed from actual retained failures and
+executable sources. No corrected pass, current result-audit or candidate-source
+runtime is claimed; both phases select the same eight cases.
+
+2026-11-12: Permanent raw60 source/preparation/audit a6ca1adf/57c81a94/8a4ad6ad,
+initial-binding source0b4df7ef and closed connected60 sourcef91520a4 all complete
+with genuine successful/drained workflows. Primary reconciles all five producers,
+real owners, complete budget joins, artifact hashes and retained exits. Nine
+inputs remain run-owned candidates and final connected authority stays closed.
+Fourth V7 compose/candidate audit/revision/mixed15/loader12 independently
+reconcile as38112c06; actual graph/disposition and application remain distinct.
+These milestones add no installed task connections or scientific completion.
+
+2026-11-12: Exact A106 four-fixture source auditb7b07ed0/workflowdf29abe8 and
+filesystem controls377f4216/workflow55a88a6c pass with genuine drained receipts.
+Primary reconciles complete producer/budget/owner joins, thirty retained input
+references, mirror/denial/partial-journal results and synthetic fingerprint scope.
+Original failed collection and copied14/42 remain distinct. Canonical placement,
+actual full epoch/plan and installed checks are not established by these stages.
+
+2026-11-12: Actual Fourth V7 surveyffb36d9e/workflowf5fca0a0 reconciles in
+review6db8e1ff, including full maps/origins and3363 candidate source hashes.
+Its48438 unresolved static rows,213 historical priority hazards and28 descriptor
+identities remain bounded analysis, without event-audit/application/runtime
+completion. Primary verifies the full review seal, references and receipt join.
+
+2026-11-12: A106 full catalogue capture is interrupted only after verifying
+concurrent exception-test/domain source changes. Failed workflowf0b253ec keeps
+return1/driver-15/drainfalse; separate exite1c08c11 confirms complete actual exit.
+No capture/plan or compatibility result exists. Prior source/control/copy passes
+remain historical; the genuine new exception epoch needs an explicit successor.
+
+2026-11-12: Homology parent/saved-family source14 is independently reconciled
+against actual record37a524a5, full commands/budgets/exit references and the43-row
+whole-map inverse. Seven required inputs remain uninstalled candidates; their
+ninety declared cases are not runtime results or saved-family restoration.
+
+2026-11-12: A106 canonical exception identity repair reconciles as the same
+sixteen cases changing13F/3P to16P, with exact production/metadata inverses.
+Twelve real workflows and ten separate exits are preserved; the first two
+successful drained receipts have no separate exit sidecars. New epoch and
+historical copied14 remain distinct; no full-workflow claim is added.
+
+2026-11-12: Final outgoing-adapter V2 source/37 path/ten transaction checks pass
+with three drained receipts and actual exits. Primary verifies complete
+producer/budget joins and intended partial mirror failures. Canonical placement,
+connected60 authority and all existing source holds remain separate.
+
+2026-11-12: FBA Record/report-contract fixture source audit2fccdd8b succeeds
+with drained workflow2b358144, preserving eight identities and old1P/7F outcome.
+Copy preparation and corrected runtime phases remain separate. No task
+connection increment follows from these source/control milestones.
+
+2026-11-12: Terminal96 retained-accessor successor0933a93b passes actual source
+audit93da0036/workflow21b76888 and all original15/new19 controls. Whole-source
+inverses and actual exit are reconciled; no genuine terminal transition,
+canonical placement, connected60 result or hold release is inferred.
+
+2026-11-12: Fourth V7 actual event audit and95029-row inventory reconcile in
+review4591b753. All positional IDs/ordered rows and real producer-budget joins
+verify. Current/history/descriptor populations remain separate; no route
+classification, application readiness or runtime result is supplied.
+
+2026-11-12: Initial5360 tooling source and20 core/20 loader controls reconcile
+in independent11949081. Whole-source preservation, exact outcomes, genuine
+producer-budget joins and original failed mirror outcomes are retained.
+Actual candidate admission, application and connected runtime remain separate.
+
+2026-11-12: Repaired-epoch A106 promoter source, original mirror controls and
+installed-reader source all pass with three genuine drained workflows and
+measured exits. Six/three new complete inverses and original/new controls retain
+the actual Second edge and historical failures. New249/1471 expectations remain
+prospective; catalogue capture, fixture placement and installed14 are separate.
+
+2026-11-12: Terminal33 candidate05 reconciles as33 ordinary passing cases/99
+passing phases, result5093d973/workflowaa874085. Whole paired maps,265 loaded
+owners, real exit sidecars and original failed outcomes remain explicit in
+independentd1b4598b. Exact99 placement inputs match the candidate; canonical
+placement, installed validation and broader restoration remain pending.
+
+2026-11-12: Corrected Homology source3 reconciles in8681cea1 with genuine
+drained receipts, whole3316/204 source checks and the exact seven-input inverse;
+copy/runtime/application stages remain separate. A separate live-source check
+confirms60 A104 private provider helpers can bypass custom complete overrides
+through an inherited presentation hook. That introduced behavior needs a
+specific correction; it does not erase earlier finite validation results.
+
+2026-11-12: V7 actual route bindingb2cff4fb/workflowa2b4915f reconciles faithfully
+in04ceeac0, but a subsequently confirmed private provider-override bypass blocks
+application of the affected candidate. Retained zero blocking groups is an old
+policy output, not proof that the new defect is absent. Homology application52
+source audit16f2394f/workflow4d9fe91f independently passes14+50 controls without
+claiming runtime90, canonical placement or provider-regression correction.
+
+2026-11-12: FBA corrected copy preparation60d9eac9 and independent audited69bbbb
+complete with genuine drained workflows5d73896d/1c24cdcf, preserving full3700/3717
+maps and exact fixture-only changes. The subsequent current8 run starts only
+after actual complete exit; no runtime success is inferred from these source
+results or from its launch.
+
+2026-11-12: Homology corrected copy preparationb2f15d57/audite2b6284e complete
+with genuine drained workflows306f4360/3338b6e9. Primary verifies the retained
+handoff, full3527/3516 inverse,43 operations, seven inputs and90 declared IDs.
+Current90 is separately active, with actual PID custody; no completed runtime,
+application52, installed behavior or saved-family restoration is inferred.
+
+2026-11-12: A104 dispatch R1 tooling inverse573c8f04/preparation9f8feec4/
+audit81d53ec7 pass with three genuine drained receipts. Primary reconciles
+commands, budgets, actual exit custody, both61 views and all candidate hashes.
+Prospective93 fixtures, metadata and application remain separate. A distinct
+source-confirmed12-owner raw Monitor/HPC presentation mismatch needs its own
+private context/cache/JSON behavior correction; prior finite passes remain valid.
+
+2026-11-12: Shared V2 dispatch inverse91799774 and148 controlled comparisons
+7505f58d reconcile in147ca24b, with two genuine drained Fifth workflows and raw
+separate exits. Method/callback/order preservation is tested with controlled
+ports; real renderers, shared-root transport, application and science are separate.
+
+2026-11-12: Corrected FBA current8 records3P/5F as0367702f/workflowe83338b1;
+its genuine failed receipt and separate measured exitc51b798e remain intact.
+A single-case diagnostic identifies the original undeclared improvement-credit
+boundary. A complete explicit fixture binding is required; no admission bypass,
+candidate8 success or altered scientific credit is claimed.
+
+2026-11-12: Original Results360 observation788534f5/audita6ed12eb reconcile in
+65734507 with genuine drained workflows and raw V2 process-exit evidence. All360
+cases/1080 phases pass; controlled original Store/Journal scope remains distinct
+from intermediate/final behavior, installation and scientific autonomy.
+
+2026-11-12: A104 fixture7 source preparation132ea356/audit1e1dee8d and separate
+presentation24 preparation539eda26/audit1ed12345 pass with four genuine drained
+Root workflows. Primary verifies exact candidate bytes, commands/budgets and
+actual post-stage empty window. Required runtime93/52 and changed existing cases,
+metadata/dependency closure and canonical integration remain unexecuted.
+
+2026-11-12: Shared-root selected-presentation source auditbf5b744a succeeds with
+drained workflowbb3ca1a0 and raw separate exitf51e788b. Primary verifies both
+source layers and complete method inverses. Private selector activation, root
+context/operation/credit/yield delivery, installed runtime and science remain
+separate from this two-file source result.
+
+2026-11-12: FBA explicit child-credit source auditc5d85d79, copy manifest7d401349
+and independent audit109635b8 pass with genuine drained workflowc9854407,
+6ee26059 andcb24d314. Primary verifies full producer/budget joins and complete
+map/inverse records, then observes its actual window empty at18:38:39UTC. The
+unchanged8-case definitions and supported fixture binding are prepared; actual
+focused/current/candidate execution remains separate. Earlier3P/5F and its
+original undeclared-credit diagnostic are retained without relabeling.
+
+2026-11-12: Root binding-delivery source audit a4363005/workflow7a392f0c
+reconciles in d2288cd9 with exact18-member source,27 manifest references,
+six full inverses/35 original methods and raw separate exitf9660a84. Primary
+reads the source delta/auditor and full reconciliation. The five call sites
+and two helpers are prepared only; private context compatibility, selected-body
+runtime execution and canonical installation remain separate.
+
+2026-11-12: A104 current90 baseline reconciliation bf2158c3 retains55 passes,
+six failed calls and29 setup errors, all90 identities/241 phases/35 exceptions,
+actual failed runtime79d789f6 and successful observation auditcb27f707. Separate
+raw process observations support complete historical exit; no candidate or
+installed validation follows. The original51 cases still pass.
+
+2026-11-12: A104 metadata V4 actual source preparation80897cb8/audite557a019
+and drained workflows9682f3f7/b6c243c6 reconcile in ce33b330. Primary verifies
+that evidence seal and producer hashes after reading the full reconciliation;
+88 document pairs, full document/source inverses and40 source controls pass.
+Runtime, presentation composition, promotion and installation remain separate.
+
+2026-11-12: A104 receiving-context source2 passes as02cf348d/b2325e74 with
+actual drained workflows7072ab2c/96cc185b and separate primary exit observations.
+Primary verifies57 before/candidate pairs, full3316-map inversion, commands and
+full budget joins; seven source mutation and four external sensitivity controls
+pass. Required14 cases remain unexecuted; no source composition, canonical
+application, runtime custody or saved-compatibility claim follows.
+
+2026-11-12: FBA receiving-frame source3 passes012ea45b/97d60466/f9dddab3,
+with drained447f3893/76c711c8/35901b5a and separate observed complete exits.
+Fourteen source controls and six-span inverse preserve68 assertions; real
+selection schema/report values replace the invalid fixture frame without new
+receipts or credit. Earlier focusedadbd/f198 remains failed. New runtime remains
+separate from this source/copy milestone.
+
+2026-11-12: The receiving-frame focused case then fails as4eadd2b6/workflow
+130b08cd at its final tool/action-result equality. Its preceding actual worker,
+memory-refusal, child/parent iterator, report and same-index replay assertions
+pass; the runtime adds its original pending-work snapshot after caching the tool
+result. Full source guards and budget joins pass, and separate exitd8a81040
+records complete measured exit. The exact validated-snapshot fixture successor
+is prepared only; no full-eight or scientific outcome is claimed.
+
+2026-11-12: Homology candidate90 reconciles as88P/2F, original51 preserved and
+accepted_copied90=false in actualcomparison28abc3cc. Independentc53aeb41/095a753f,
+actual failed receipts and separate exits verified. Both retained traces show
+an earlier fixture Popen refusal of read-only resource inventory, before model
+calls or public reopen assertions. Application and corrected runtime remain open.
+
+2026-11-12: A104 copied provider159 improves81F/78P to3F/156P; all three
+remaining failures are the original fixture insertion boundary. Presentation52
+improves38F/14P to52P. Independent reconciliation78dfe750/seal875e18e3 and all20
+actual producer/exit hashes verify, with exact cases, full maps and no prior-pass
+regression. Corrected collision cases, installation and restoration remain open.
+
+2026-11-12: Homology inventory/interruption source3 passes8622c201/c6bf5a99/
+04f167d1 with drainedb07abd72/ad78f651/94a36fae. Full source/peer reads, seven
+payloads, typed budget joins and measured exits verify. Original25 controls plus
+eight strict-patch controls pass; failed349db source history remains. Three
+fixture changes preserve all90 IDs; actual corrected reopening remains pending.
+
+2026-11-12: Copied root transport baseline2/candidate26 passesad4d2582/6d001a0a,
+with6/78 phases and drainedafe56f03/f25f9e8c. Independentbfa1a0be/seal710d4bc6,
+actual source/command/budget and active-to-exit records reconcile; distinct cohorts
+and controlled lifecycle/RPC scope remain explicit. Separate source-only writer
+readiness2af0ef1b/021dd8e3 reconciles inb8d59503/seal74661f1c. No installation,
+default-renderer closure, private-axis/scientific validation or hold release.
+
+2026-11-12: Corrected collision3 pair reconciles as7419abd8 three production
+failures→90d630bc three passes, all9 phases each. Independentffa56c8a/seale1364b1f
+and63 retained artifact hashes verify exact source/map/command/budget/exit joins.
+Original159156P/3fixtureF remains unchanged; no rerun of its other156 or application
+claim. Failed9837d2fd remains failed, successful98e33af1 and separate measured
+exits retain their actual scope. The unused physical rehash is retained incomplete.
+
+2026-11-12: Permanent root26 test/ownership source assetsa917e93e/a4c5a872 and
+peerf88ab3ea/seal316af5f4 complete. The installation proposal explicitly expands
+from two to five operations because the original24-member epoch requires test
+absence even after root2 placement. Test bytes/cases remain unchanged; one scoped
+inventory row and Markdown prefix preserve complete historical bytes. Actual
+five-operation source tooling/application and installed validation remain open;
+earlier copied2/26 and two-file readiness are not downgraded or relabeled.
+
+2026-11-12: FBA pending-snapshot source3 passes8ef2a78b/468cfaf1/2e622813,
+with drained4ad87478/74702b31/c4ea0255 and separately observed exits. Focused
+893c83e4/b31b93fd passes its prior behavior and snapshot checks, then fails
+strict diagnostic serialization of the original ArchivedRecord. The failed
+call/receipt, unchanged-source guard, full14-field budget join and separate
+exit0179494c remain retained. Narrow original-archive projection successorbdaf9242
+is source-only; full-eight, application and scientific outcomes remain open.
+
+2026-11-12: Corrected Homology focused2 passes e5cc150e/0fb092e6 with all6 phases;
+observation auditea5c34ef/b53cdb91 and measured complete exits reconcile. The
+controlled public reopening reaches its provider and preserves typed registry
+and saved callables; completed_actions stays zero. Full90 source7f1bf6c0/363002c3
+passes, releasing the existing corrected tree to Fourth's unchanged90/51 route.
+Full90 acceptance and application remain pending; earlier failed90 records retain
+their original scope and are not rewritten.
+
+2026-11-12: FBA archive-projection source audit39ebfb1a/workflow9866c8ee passes
+0/0/drained after independentc95b09b7/sealcf285e7f and29/257 pins verify.
+The exact two-span fixture inverse preserves all72 assertions/8 IDs and original
+archive integrity. Primary checks all14 budget fields and measured inactive/
+empty exitbaeb97ac; the short source stage completed before active-child capture.
+Copy/audit and actual focused/full-eight behavior remain separate pending work.
+
+2026-11-12: Finite root five-file source/readiness5506b0e4/99b684be reconciles
+inbeb9d2a2/seal7bea1f6e. Exact5 changes, original24→selected26 accounting,
+source/cohort inverses, whole metadata proof and actual command/budget/exit joins
+verify. No application or installed26 pass follows; original-context producer
+chronology and every existing source hold remain. Historical two-file/copied2/26
+evidence retains its original scope.
+
+2026-11-12: Original/intermediate Results360 comparison88ea6392/workflow6d5eba58
+passes after intermediatec0f15a69/auditb0614cb4: both360PASS/1080phases/3024outputs,
+exact outcomes/error identities, all289/302 recorded owners joined. Independent
+13a2b475/seald97e490c and65+126 retained-reference hashes verify ten budget joins
+and seven measured exits, including final2c3e6e0b. Distinct generated Stores are
+not same saved carriers. Application/final-family/native-science/iterator claims
+remain false; all other source holds and270/405 connection count remain.
+
+2026-11-12: FBA archive-projection source3 completes39ebfb1a/ff492279/1c496a5c,
+with drained9866c8ee/dddf9d4a/7fc1109a, full14-field joins and measured exits.
+Genuine six-ref153c4c01 enables focused309b47ae/workflow01922ad8: one controlled
+owner case passes all3 phases, including strict original-archive serialization.
+Source unchanged and measured exite9760acc verified; no active-driver sample
+invented for the short source/audit/focused stages. Full-eight and private
+Results/native-science acceptance remain separate.
+
+2026-11-12: Corrected FBA current8/candidate8 complete2b682be3/c4de0847,
+both8PASS/24phases. Independent observation auditsde7b6deb/4a01c4a8 and all four
+0/0/drained workflows preserve exact original semantic projection, canonical
+origins, full14-field budgets and separate measured exits. Five controlled-worker
+ordinary-owner cases and three existing controls do not establish a live pending
+worker, original355 runtime, private Results commissioning or installation.
+
+2026-11-12: Homology full90 acceptance24a3c29e/411fea32/946f453e reconciles in
+b843b703/seal5e45c4ac. All90/270 pass; original51's153 phases, declarations and
+exceptions are preserved. Exact3-fixture/43-production inverses, actual3producer
+budgets/commands/exits verify. Earlier failed90 records remain and full fixture
+epoch equality stays false. Installation/native/restoration/science remain open.
+
+2026-11-12: Root five-reader90381/17partial-controls820b1812 reconcile in
+a5a51228/seal6637f442; installed26 static sourcea6019b36/74686464 reconciles in
+223c96ec/seald250a997. Actual command/budget/exit and selected-source lists verify.
+Seven application/postcheck operands remain null; neither positive installed
+admission nor actual26/78 behavior has executed. Canonical holds remain.
+
+2026-11-12: FBA current8/candidate8 retained-pair reviewc9dfad0e/sealbf30c1da
+reconciles exact case identities, all ten owner/parent/credit/replay rows,
+recomputed semantic projections and139/136 recorded origins against selected
+maps. Primary verifies sealed finite inputs. Seven full producer/budget joins
+and separate exits preserve controlled-worker scope and all earlier failures.
+No private Results, installation, native-science or connection-count claim.
+
+2026-11-12: A106 repaired-epoch exact4 transaction2adffb19/56850115 and final
+installed14 auditd6de275b reconcile in2e0c49cb/seal712b7937. Complete19490→19492
+inverse, four current afterimages/modes, eight actual producer/budget joins and
+209 retained inputs verify. Corrected installed7456ccba passes14/42 with249
+origins/1471 reads; original bytecode-read failuread322ca5 remains1/1/drainfalse.
+Only existing run-owned cache-prefix environment changes; frozen guard/runner
+remain. Capture's missing active driver-start snapshot stays explicit. No
+source hold, broader summary/science/restoration or task-count closure follows.
+
+2026-11-12: A104 childless84af source3 completes0d50d271/1392b75e/33515f77,
+with drainedc894cde1/2339c269/74597115 and separate measured exits. Independent
+49bb8825/sealc49b9cfb and primary sealed-reference checks reconcile69rows,
+106source operations,23 original controls and four callback rejections. Combined
+4534 finite authority audit9461206b/cc652b20 passes, but actual six-ref9f184e24
+exposes two byte-identical2b9c72ff input paths rejected by complete-authority
+identity. A narrow successor is required; no combined candidate/runtime or
+canonical placement is claimed and no successful source result is downgraded.
+
+2026-11-12: Root context/serializer8 staticc459c3d9/e044d3c4 reconciles in
+3f053fa9/f9ed0376: nine sites,16whole inverses,eight parent joins and actual
+producer/budget/exit verify. Nominal Context compatibility and terminal partition
+layers remain separate. RNA2 sourcec766ea8a/489f2e46 reconciles281a269a/c07efd22,
+with complete510lines/4+10functions/helper inverses and65 finite pins; original
+resource text and provenance suites/assets do not establish activation/runtime.
+
+2026-11-12: Data7 copied candidate64b974f8/5e1c5832 passes645/1935 with26owners
+and exact JUnit. Primary verifies independentbb462f96/c0f94f35,623 finitepins,
+allcase/phase identities and14-field producer joins. Original953cbd64/e9e29514
+seven-error collection failure remains failed; no passing645 baseline invented.
+Same71capture plus ten additions yields81candidatefiles. Separate exits and
+candidate active sample retained; no canonical/service/native/private/science
+or135-task-count completion follows.
+
+2026-11-12: A104 exact-reference source0d148670/5381d1f3 passes eight denials,
+then genuine combined prepared9f243e2 fails the fourteen-identity comparison.
+No manifest, returncode1/1 and drainfalse are preserved; independent actual
+empty exit1effb223 is recorded separately. Existing source3 stays complete.
+FBA7a7 source1fd06fa6/56305d06 passes ten mutation controls; actual prepared
+478b30c8/2f8cd8ca retains44 rows, one retirement and13 inputs in3,730/3,743 maps.
+Both FBA receipts succeed/drain with measured exits; behavior remains pending.
+Third/Fourth reconfirm69/66 pending connections, still135 total; ready support
+work is assigned without moving active workflows or counting prepared episodes
+as integrated. The exact three-test A101 coordination release2738c45a is a
+separate permission to its existing owner, not an execution/completion claim.
+
+2026-11-12: FBA copied audit6b48c2ac and baseline/intermediate50 both pass:
+e4ec0878/0177106f and ada31bb8/6d0915b2,150 phases each,445/458 actual origins.
+Observation audits67d9ccd6/c7a37445 and comparisoncac030df/95adbc5b preserve exact
+identities/outcomes and full drained receipts/measured exits. Runtime/native/
+saved-result/final-family scope remains explicit; no135-connection decrement.
+RNA input staticb7e1c438/325f31f0 completes four test/helper inverses and five
+Git asset checks with source peerf9664e49; no RNA runtime or application.
+ModelPresentation pure5 staticd268fe22/2512ce60 retains original eager renderer
+and complete inverse; its installation stays after original installed26.
+
+2026-11-12: A101 exact three-test installed30107532/1f674edf and original53-case
+baseline25be4719/9adc2ed1 reconcile in16255c22/seal478e3188; genuine2147+3
+transitiona0889fb5/c1ccc012 preserves48 metadata entries and complete inverse.
+No production extraction or broader runtime claim. Enrichr same17 actual pair
+13P4F→17P reconciles7d13e30e with original failure intact and explicit controlled
+classifier/unloaded serializer scope. A104d947 source019be2d7/65860e8f passes14
+identity controls while preserving actual failed7abb preparation as history.
+
+2026-11-12: Fourth selector823f8d9f/e4f6bd29 succeeds with56 whole inverses;
+context2b294d0c is a genuine prepared candidate but audita15a213e fails1/1 with
+drainfalse. Independentbfd6bc2b verifies exact112-row/map lineage and identifies
+four original PredictionBindingRecord path forms versus eight p forms. Earlier
+successful source results remain valid; corrected audit and original runtime/
+graph obligations remain separate. No root-five or general hold is released.
+
+2026-11-12: Separate FBA continuation49/147 completesf7a98e09/f15d67ba with
+four drained workflows and real exits, reconciledcec68983/sealc902daf9. Complete
+3717→3739 inverse and42 module/71 read records support only its stated controlled
+scope; no native355 admission, original database access or canonical placement.
+A104 root-bridgea910 source audit38e8e7d4 fails its Store-versus-Load AST checker
+before source-view validation/output; raw1/1/drainfalse and separateexit564684bd
+remain unchanged while the narrow successor is authored.
+
+2026-11-12: Genuine A104 d947 combined preparation60e905c7 is OOM-killed at
+the existing5-GiB bound before proof/manifest emission. Raw failure and partial
+files remain; separate observed exit01ed3c70 proves actual full process exit.
+Source audit019be2d7 stays accepted for its existing scope. No resource increase,
+new stopping gate, candidate success or episode-count decrement is inferred.
+
+2026-11-12: Private RNA four-row6c00 source audita0a816de/c85d5d68 passes all
+seven mutations and complete original method/input inverses; runtime/remaining
+seams stay open. Corrected A104 bridge source20525194/ae710f54 passes its full
+two61-view/15-formula scope, independently reconciled a0e2a1aa; no combined or
+provider behavior claim. Enrichr Form11 actual prepared3P8F-to11P is reconciled
+22b8ff0a with distinct canonical capture and original failure/exit limitations.
+
+2026-11-12: Fourth's corrected complete context audit70194a8a/13707559 passes
+112 inverses and9645 typed paths, reconciledb3e4c0a/dd9504bf with actual56/100/10
+controls and preserved original failure. Root's streamed6546 source control fails
+139ae09e; actual Unicode diagnosis20c93d77 informs corrected4fc2 source pass
+0e34c3c8/7752faa3. Combined preparation/memory fit is not yet established.
+
+2026-11-12: Corrected4fc2 combined preparation8cbf3e74/fdd77a6c now succeeds
+with its complete1.714-GB proof, actual0/0/drained receipt, no OOM-event increase
+and measured empty exit9ccf6e13. Independent combined audit remains separate.
+RNA five-import d78c source d67a89a9/45a25de7 passes in genuine Seventh ownership,
+with all five accounts/owners,19-input inverse and36 guards; two renderer seams
+and runtime/installation stay open. Primary releases only Second's exact Native4
+source application under b7490413 after reviewed source/tool evidence; this
+coordination decision is not an installation or new episode-count claim.
+
+2026-11-12: Missing-binding source queue completes119-view preparation2e04,
+corrected audite3a2284c/dfa5236d and38 comparisons484e60b6/0d1cdd2f. Original
+auditor failurec1dc remains intact; corrected workflows genuinely drain and exit.
+Six original fallback results are recovered and32 other outcomes preserved in
+controlled ports. Actual private consumer placement remains separate. Native4
+first staging attempta9f7490a fails before writes on three external initializer
+pins incorrectly looked up in the own2150 map; its narrow source-map correction
+does not reopen the accepted53 baseline or change the exact four-file release.
+
+2026-11-12: Original4fc full combined audit59916eae/33bee925 passes all nine
+source denials and five fingerprint sensitivities, with genuine0/0/drained
+receipt, no new OOM and empty measured exitc7c3159d. Bridge15f source proof
+156236c2/643eb7d6 separately passes its original two61 views/15 formulas and
+memory/exit controls; no bridge candidate or runtime result is inferred.
+Finite27/52/19 reconciliation00e48f93 accepts reconstructed27P-to27P,
+prepared21P31F-to52P and candidate-only19P while retaining original failures,
+actual receipt/exit limits and historical snapshot guards. No task-count change
+or scientific-workflow completion follows.
+
+2026-11-12: Fourth54 successorbb7b source9a5fe697/d485942a and controlled
+dcf8d00e/25b10b3c pass in genuine Root ownership, with28 modules,54 whole inverses,
+nine templates, ten denials, full typed budget joins and actual empty exits.
+Original full preinstall composition remains a separate actual stage; these
+checks add no episode connection, installation or scientific-validation claim.
+
+2026-11-12: Native4 exact application e58c010d and installed audit cea859f8
+complete the two-host/two-policy extraction. Transition944668a1 preserves the
+full2150→2152 inverse and48 typed fixture records. The unchanged53 cases/159
+phases pass; reader72ce3158 has no issues. Primary accepts finite reconciliation
+10897032/f1f80cdf, actual eight producer/exit joins and unchanged historical
+V2 failure/unexecuted V3. No new episode, native execution or scientific claim.
+
+2026-11-12: Standalone retained-file application f88007c3/postcheck bed99360
+and canonical19 result250435c3 complete the exact helper/test/two-metadata scope;
+reconciliation c575e32a preserves all actual custody and chronological limits.
+Receipt21 prepared21F→21P is separately accepted in e38e63c6/623d3263 with its
+sole reader delta, original failures and limited failed-exit evidence. Direct
+A104 composite4a2a source adeb38f6/ebf4f2bb passes three tool inverses/all60
+module derivations in Second; complete composition/audit remain separate.
+
+2026-11-12: Alignment39 candidate519a6b98/e79bb54f is accepted through finite
+reconciliation865ff583/a07b5b27: exact39/117/ten owners, candidate-only, with two
+original held cases unchanged. Fourth fe8e runtime preparation separately ends
+in native OOM with its supervisor killed and no workflow receipt/manifest;
+357d8e43 preserves raw evidence. No copy/runtime success or driver code is
+invented, and accepted source/context results are not downgraded.
+
+2026-11-12: Owner3 scoped source successor e46f4570 completes its original two
+stages: manifest b20dfb51/workflow b3dd951c and audit ae308919/workflow ee07ac55.
+Primary reads the complete source correction, verifies its18 members/78 inputs,
+actual four references, candidate bytes, original fixture dependency, full14
+budget joins, command identities and separate recorded empty exits. Historical
+3316-to3319 maps remain historical; only the actual fixture and three absent
+destinations govern source-input creation. There is no installation, behavioral
+test or episode-count claim. Original c56d0296 failure remains retained.
+Documentary erratum6c94e939/f090155b corrects the unsupported extra final4a2 hold:
+the complete diagnostic current3316 map equals accepted4fc's source before-map,
+and its accepted audit agrees. Existing actual Homology18 chronology relates
+the old API map to that accepted map; no new transition or rerun is required.
+
+2026-11-12: Saved-owner original10 baseline949e9014 retains exactly five passes
+and five failures, including the positive wrong-key traceback. Its original
+one-literal repair b5d2fb20 and candidate audit b3e21555 pass with genuine
+drained receipts. Primary accepts independent reconciliation b7372275/38726e5f,
+verifies15 review members/57 finite pins and reads complete-file/method inverses,
+ten JUnit identities, recorded3472 guards and actual producer/exit joins. The
+failed baseline remains1/1/drain-false with a separate actual empty exit. The
+candidate changes only the persisted getter to original_job_owner; the callable
+name remains unchanged. Reopen fails before its second Store opening and broad
+negative passes do not prove individual refusal reasons. Canonical application,
+unchanged repaired10 behavior and full saved-workflow restoration remain open.
+
+2026-11-12: Completed-context memory source947a419b passes source audit66eaf31a
+and all40 controlled cases13fc0e1a with drained workflows1f0eda99/2a5fbc51.
+Primary reads the new view/reader/loader/binding/control code, complete inherited
+diffs/inverses and independent c34fc877 review; all18 source members/13 inputs
+verify. Actual forty distinct outcomes, null error/empty inventory errors, full14
+budget/report joins and separate recorded empty exits agree. Four assignments
+after original successful guards replace three retained payload dictionaries
+with regular-file/hash/size checked views; complete original eager audits and
+rechecks remain. These are source and controlled lifecycle results. Genuine
+candidate admission, full runtime memory fit and installed-reader integration
+remain separate; original OOM evidence is unchanged.
+
+2026-11-12: Graph memory successor fd2eda68 passes its narrow source audit
+fa1d745f/workflow d21aa1b9, with separate recorded empty exit b564871e. Primary
+reads four caller edits, root projection, complete revision/receipt checks and
+revised Inputs;36 source members/84 finite input pins and full14 budget joins
+verify. It preserves all138 ordered original roots,35 conditional roots/42 caller
+sites/77 references, eleven engines and all15 original control bodies while
+avoiding redundant proof/metadata copies. Original source02 success and later
+ee8f OOM remain distinct. This establishes source preservation only; current
+original controls, survey, event audit and memory fit remain unproven.
+
+The subsequent original15-control workflow9ca18857 is killed at the existing
+5-GiB bound: overall1/driver-9, KeyboardInterrupt and drain-false, with one new
+OOM/kill event and no checks.json. Primary reads the full raw receipt and
+separate exit9d3d6fea, verifies all14 typed budget fields and the exact original
+V5/input command. Raw observations at23:03:29 UTC show inactive service, MainPID0,
+empty recursive slice and absent previously observed supervisor3535850 and
+driver3535857. The checks directory is created after Inputs returns; it proves
+neither a completed control count nor the exact killing allocation. The source
+audit remains accepted. Sixth owns the finite genuine947a reader adaptation;
+there is no unchanged retry, resource increase or successful15-control claim.
+Evidence: `runs/sixth_context_graph_memory_root_controls_01/`.
+
+2026-11-12: Context134 application5f1655e8 and installed audit95d89734 complete
+the original117 production/17 existing test-helper changes. The same217 cases
+move from122 failures/95 passes to217 passes, preserving651 phase identities,
+all2032 observed module identities and the original baseline failure. Primary
+accepts independent2c92e279/f53521b6, reads the full source/case/receipt account
+and verifies143 finite inputs. Whole181-edit inverses, current134 afterimages,
+modes/events and exact declared loaded-source changes agree. Transition66f2e632
+is the genuine later dependency. Fresh descriptors remain tied to their separate
+epochs; no historical migration, new episode or scientific claim follows.
+
+2026-11-12: Root5 after-retained source readiness43ae6827, original17 reader
+controls0c44e949 and installed26 source accounting3050b298 pass in Root with
+drained workflowa91b2d63/121252a7/d24c985c and separate actual empty exits. The
+source relation preserves historical24 and the actual28-path chronological map;
+the future installed suite remains26 cases/78 phases with24 Python owners.
+All seven installation refs remain unset, and no canonical writes, successful
+installed admission or new runtime result follows. The first reader invocation
+failed before cases on an absolute output argument; e60e5a2f remains failed and
+the fresh run changes only that argument. Original full-runtime/graph scope stays.
+
+2026-11-12: Original NEW54 full composition ends in actual OOM93bad89b:
+return1/driver-9/KeyboardInterrupt/drain-false,5GiB peak,oom2/kill1. No candidate
+or manifest was emitted. Separate measured exitc0ecd51a/raw journal and
+e09ea700 retained list establish inactive/empty ownership and absent original
+supervisor/driver without rewriting the failure. Accepted bb7b source/controls
+remain valid. The separately authored947a consumer successor must supply the
+next real composition; no unchanged retry or extra test cohort is inferred.
+
+2026-11-12: NEW54 memory consumer68bb96cd passes whole-source inversea4429383
+and source audita7bd7246 with drained workflows63720449/c14b4d70 and separate
+actual empty exits0055bc3c/a24fcf1a. Primary verifies39+7 source members/39+5
+pins and reads the complete delta/checker/peer final binding. Original38-member
+inverse,30 unchanged members,54 transforms and original full guards remain.
+The genuine947a preinstall reader does not replace the distinct installed reader.
+Original composition OOM remains retained; fresh composition and full memory fit
+are separate. No new episode or scientific result is established.
+
+2026-11-12: A104 API post-family source3255bf96 fails final source classification
+assertion in workflowb34b6037; raw1/1/drain-false and separate empty exit62ff7663
+are retained. No audit output, canonical write or new OOM occurs. The finite
+asset-count diagnosis does not downgrade accepted predecessor source work;
+an immutable correction requires its own actual source observation.
+
+2026-11-12: Sixth original V5 graph15 controls end in OOM9ca18857 at5GiB,
+raw1/-9/KeyboardInterrupt/drain-false, one OOM/kill delta and no checks report.
+Primary reconciles full14 typed budget join6c9f7ca4 and exact original command;
+separate measured exit9d3d6fea preserves inactive/empty/both-processes-absent
+evidence. Directory creation shows Inputs returned, not a passed control count.
+Accepted sourcefa1d745f is unchanged; genuine947a consumer adaptation remains
+Sixth's separate source work, with no new cohort or unchanged rerun.
+
+2026-11-12: Original A102366 baseline completes30a50a21/workflow65c211e8 with
+366 passes, zero errors/failures/skips and JUnit011c8795. Primary independently
+checks exact expected/verified case equality, unchanged before/after source
+maps, raw0/0/null/drained and full14 typed budget joins. Third records actual
+whole exit090d6e2b before starting the already authorized original199/six-home
+application. Baseline success is not installed behavior or a new episode-count
+claim; original installed checks and unchanged366 remain subsequent stages.
+
+2026-11-12: Original A1044a2 complete prepare984f4ed6/812818c2 and independent
+auditd881a855/a52a613d succeed and drain in Fifth. Primary verifies actual
+report/producer references, original checks and full14 typed budget/command
+joins, then raw empty exita7040599 and its retained hashes. Both full stage
+artifacts,60 selectors,116 metadata,16 inputs and original fingerprint/formula
+inverses are checked. Prepare01 invocation failure remains retained. Separate
+API input143fec9b now has all eight genuine refs; API execution/application
+remain separate. No canonical write, runtime or episode-count claim follows.
+
+2026-11-12: A104 asset successor0f657788 source auditb68dd8bf/workflowbea8d6bb
+passes in Sixth with0/0/null/drain, full14 budget join and separate empty
+exitfd9b7781. Primary verifies43 members/3466 pins, complete six-tool/new-helper
+source and peer77ae4beb/efbfbad2. Exact3311+7+2 domain, five asset rejections,
+six inverses/22 unchanged members and original source/saved-owner/input checks
+pass. Original3255 source failure remains; candidate preparation/audit and
+runtime are distinct pending observations. No new episode count follows.
+
+2026-11-12: NEW54 composition02 fails at the first pre-output recheck because local
+root_outputs.recheck(context) shadows imported records.recheck. Primary verifies
+source/traceback/workflowbc10e01e, raw1/1/null/drain-false, full14 budget join and
+5003923456-byte peak with no new OOM. Separate actual exitba0a1b8d preserves
+inactive/empty ownership and absent original supervisor/driver; original live
+capture remains. No manifest, new test cohort or episode-count change follows.
+Fourth owns the narrow immutable correction; source results/earlier OOM remain.
+
+2026-11-12: Genuine947a graph consumer V7b1e3f903 source audit504adb77 passes
+under workflow042163ec, with0/0/null/drain, full14 budget/report join and separate
+empty exit2a17e320. Primary reads new binding/checker/caller edits and complete
+original/additive peers, verifies42/234 source pins, and retains original36
+inverse,15 control bodies and138/35/42/77 scope. Recursive source census now
+includes nested paths. Actual controls/survey/event/fit and installation remain
+separate; the original V5 failed OOM receipt is unchanged.
+
+2026-11-12: Original A102199 application7eaf392c/workflow38235dd1 succeeds and
+drains. Independent02496f04 verifies168 additions/19 replacements/12 retirements
+against original candidate7b144a23; all199 physical rows equalfe3c3da8. Primary
+reads the full review and actual producer/operand joins, verifies evidence pins
+and14 typed budget fields, and retains separate sampled-text exit92889adb with
+its limitations. Six Results implementations are physically installed; original
+installed audit/probe/same366/final verification remain distinct pending stages.
+No final episode census or full-workflow/scientific completion is claimed.
+
+2026-11-12: A102 original installed auditb48f7866/workflow27187c09 passes for
+six Results homes,486 binding methods,126 task methods and1990 source entries.
+Primary verifies14-field budget/command and separate sampled exit12a5defb.
+This is source preservation after the physical199-row installation; installed
+probe, same366 cases and final verification remain distinct behavior work.
+
+2026-11-12: A103 original666 baseline0b3be3bf/workflow1ba23e2f passes all666
+unique expected cases with unchanged source/assets, full14-field join and actual
+empty exit1b72feb7. Later collector9c86ba5f/workflow2121a932 fails on the missing
+global AppService contract import, retaining its raw1/1/drain-false receipt and
+separate empty exit5a9c9301. Census c0a6c79b is real; semantic baseline is absent.
+Original factory8 and208-row application remain unexecuted. No downgrade of666.
+
+2026-11-12: Full actual census review3bc5e29f/8afe0315 reconciles all41 literal
+rows to original208/global preimages and retains995 dynamic/48 alias rows.
+Primary verifies14 members/95 artifact pins/519 row-site files after full read.
+Only two specific dynamic rows are source-explained;993 remain unresolved.
+This is bounded source accounting, not universal import or runtime closure.
+
+2026-11-12: Root applies the exact global AppService-contract import repair,
+ece31fdf→f53a221b, native observation873a1706. Complete before/after match, mode
+and selected A103 source/schema remain unchanged. Fresh actual Root compose03
+guard review6ca71494 proves this singleton disjoint from its seven live root/
+context guards. Original666/failed collector01 remain distinct; no semantic
+validation is claimed by the write. Reviewed collector02/original8 proceed
+with explicit source epochs and no new cohort.
+
+2026-11-12: Actual API prepare8dc0eb24/45da0719 succeeds; original independent
+auditc11c4378 fails rebuilt-record equality before producing audit.json. Primary
+checks full14 joins, genuine manifest hash, exact traceback and separate actual
+exits e5550e20/099212d4 with raw evidence. No OOM occurs. Preparation success is
+not accepted API source/audit or f92 admission; finite diagnosis remains open.
+
+2026-11-12: A102 installed probe27b368c5/130bde2e and comparison16c8de1c complete
+with all six homes' observations and full MSA/MetaCATS contracts preserved.
+Primary verifies source/helper equality, full14 join and sampled empty exita32e.
+The controlled inactive-tool boundary does not exercise production construction
+or independent native handoff. Same366 and final verifier remain separate.
+
+2026-11-12: Fourth completed-reader preparation4916ac11/e209656d completes,
+with full27/19 source pins,14-field budget join and actual exits61b803de/050314a2
+verified by Primary. Whole manifest hash is genuine; its independent copy audit
+is separate. Exact5GiB peak/8280 max-events/zero OOM do not establish headroom.
+Original90 runtime cases, installation and scientific behavior remain pending.
+
+2026-11-12: A104 coherent CORE/Native/Terminal sourcef92cf103 passes audit
+22ffa6af/workflowb466642f with full source/peer review,23 members/4118 pins,
+14-field budget join and empty exit0e156b3c. All original stage inverses and
+scientific bodies remain; candidate preparation, installation and runtime are
+separate. No new connected-episode claim follows.
+
+2026-11-12: A107 LocalFile31 source55e0ec6c completes preparation3d0c7043/
+b7b5dc2f and independent audit5185f369/0b9ce1fe. Primary reads all source and
+peer, verifies82 members/87 pins and both14-field/actual-empty joins. All31
+methods,30 constructors and original caller/module inverses remain. Final-family
+composition, installation and runtime are separate; no episode count changes.
+
+2026-11-12: Installed completed-reader sourceff75ab2f passes audit8284f53b/
+2b1d0a14 and original12 lifecycle controls1ae2bd1d/5573700d, with verified source,
+peer,14-field joins and empty exits6f96747a/8c393811. No actual installed transition
+was consumed. Original14 is not repeated. Separately corrected3c740984 binding
+proof04b4716a/3b537902 passes seven finite checks and its complete source inverse;
+exit9e50cf7b is actually empty. Failed NEW54 composition02 remains unchanged;
+neither source result is candidate admission, installation or full runtime.
+
+2026-11-12: A103 collector02 completes actual censusbcab8337 and semantic713bbd3f,
+collectioncc1f1e38/workflow5fca7dd3. Primary verifies full producer/budget joins,
+actual sources, both successful operations and measured exit341791ea. The full
+20559-path census differs from collector01 only by actual Root repair873a;
+all41 literal and995 dynamic rows retain their exact classifications, with993
+dynamic rows still unresolved. Review885348ee/classification604b3606 preserves
+the original2047 own map and all208 beforeimage/absence operands. The semantic
+helper observes actual schema object identity, complete contracts and unchanged
+assignment. This is a controlled baseline, not installed or scientific behavior.
+
+The subsequent original factory8 invocation fails during module collection at
+the separate global FastqUtils return-reader AppService import. None of the
+eight bodies runs. Primary verifies workflow4698ff36/budget98dacd49, JUnitb27961da
+and actual empty exitc617a31c; raw2/2/null/drain=false remains unchanged. The
+successful666 and semantic baseline are not downgraded by this pre-existing
+dependency scope. Private FastqUtils restoration is separately underway.
+
+2026-11-12: Root issues concrete original A103208/global release84b5084c after
+pair4aa5e8534/stage4 00bfe9c1/execution04 49b77bbe and independent review17db02b8.
+Pair4 corrects the source-only dynamic archive-path omission; no failed pair3
+execution is invented. All34 current208 preimages,174 absences and globalf53a
+are rechecked. The exact209-write scope is disjoint from current A1021990+61
+and the reviewed Root/context guards. Seventh owns actual serial application,
+singleton writer, postcheck and original installed stages. This release is
+execution authorization only; no installation or completion count is claimed.
+Evidence: runs/root_a103_results_global_pair_release_01/release.json.
+
+2026-11-13: Primary reconciles the original A102 installed366 report68a23c41,
+JUnit29c0fb50 and workflowddc3b034. All366 expected case identities equal the
+verified identities; there are zero failures, errors or skips. The complete1990
+source maps match before/after. Full14 typed budget fields and completed genuine
+parent-fixture stage entry agree with the actual command and result; raw outcome
+is0/0/null/drained. These are the same original controlled cases, not a new cohort
+or native scientific execution. The original final verifier remains separate.
+
+2026-11-13: Primary accepts Sixth's completed original15 graph-root controls,
+report7b771258/workflow908631e2/budgetadffc5d0 and measured exitedc6de69. All15
+distinct original mutations are rejected, the positive35 roots/77 source
+references agree, final inventory errors are empty and application mutations
+are zero. Primary reads the original executable control bodies, verifies all42
+handoff references and nine sealed members, full14 typed receipt joins, actual
+command/report equality and retained active/terminal process evidence. Actual
+peak5GiB and memory-max delta9622 with zero OOM are scoped to this run. The
+separate survey/event audit, graph acceptance, installation and runtime remain
+open; prior OOM history is unchanged. No controls are repeated.
+
+2026-11-13: Primary reconciles the successful API record diagnosticc3a4e1d7/
+04fd6c28 and separate exite1f1a5fc. Full14 typed receipt fields, original exact
+producer/arguments and raw exit evidence verify. Its five differences are five
+aliases of the central ownership afterimage hash; no other record field differs.
+It does not compare the internal JSON records or convert failed auditc11c into
+success. Root reads and accepts the finite API5d7/f924ff source successors and
+independent peersd2218ddb/45f9309e, including actual Root640f admission, exact
+metadata ordering and declaration-order scanner corrections. Their actual pure
+source execution is delegated to Fifth; candidate/installation results are not
+yet claimed. The complete original application/runtime obligations remain.
+
+2026-11-13: Primary reconciles Fifth's five completed literature source runs:
+snapshotb159c3a4, endpoint67 62746e02, saved71 80b02729, worksheet103 47987a81 and
+marker fixture77204834. All20 retained artifact hashes, original producer and
+manifest operands, full14 typed receipts and actual sampled exits/raw evidence
+verify. Worksheet103 genuinely invokes the seven original auditors in one
+workflow and retains all seven emitted reports; no separate parent executions
+are invented. Whole helper/caller, renderer, declaration, worksheet and fixture
+preservation is source-only. Runtime closure and canonical application remain
+open. Evidence: runs/fifth_orchestrator_coordination/literature_source_actual_02/.
+
+2026-11-13: Original A103 apply01 stops in prerequisite validation before its
+write loop. Workflowe2824fd3/stderr8a0e6a82 retain raw1/1/null/drain=false;
+stageb907de61 identifies the missing retained prerequisite budget operand.
+Primary reads the original call stack/write ordering, verifies all14 typed
+receipt fields and all18 raw exit references; measured exite5440d9e records
+the genuine3911992/3912022 pair absent and owning service/slice empty. All34
+existing preimages,174 required absences and globalf53a are independently
+rechecked unchanged. No writer ran. Completed666 and semantic713 remain valid
+scoped baseline evidence. Finite source correction covers the actual nested
+instruction/Launch/source-family prerequisite closure; no fresh baseline or
+generic unpinned-reference admission is authorized.
+
+2026-11-13: API5d7's original pure source auditor succeeds, report46b0f4c7/
+workflow40c9410c/budget36015dd3/exit4a4c0661. Primary verifies exact source and
+command, full14 typed fields, raw0/0/null/drained and sampled exit/raw hashes.
+The report executes the exact metadata-loop ordering controls and whole-module
+inverses while retaining original failed auditc11c. Genuine future Root5 custody
+is not consumed and no candidate, application or runtime is claimed. The
+separate f924ff pure source audit follows in Fifth's serial window.
+
+2026-11-13: Root releases fresh original A103 apply02 through release940e8ede,
+pair5 0ad7f8ab, stage5 120bb190 and execution05 ef44c4fd after complete source
+review and independent peer6efdd773. Diagnosis2896c0a0 traces the full original
+seven-reader prerequisite chain. Exactly339 existing nested-map refs plus one
+explicit callback verifier result extend the unchanged5243 capture to5583;
+69 workflow references are eligibility, not successful/executed-call counts.
+Per-call success, commands, full14 fields and original source/current checks
+remain. All340 added hashes and the historical failed baseline remain explicit.
+Root freshly rechecks all208 before/absence operands and the209-path disjoint
+scope. The original666/census are reused without rerun. Actual apply02, paired
+write, installed validation and final task-count change remain unproven.
+
+2026-11-13: The corrected original no-binding compositor completes with manifest
+7a51ef94, workflow91c03b4e and separate measured exita04ee821. Primary checks the
+actual 3c740 source identity, input6f7be34c, exact command/actor and all14 typed
+receipt fields. Raw0/0/null/drained, absent original3859813/3859816 and empty
+owning service/slice confirm complete exit. The candidate retains7521 regular
+files and9645 typed paths with54 selected changes; canonical mutations remain
+zero. Its original independent full audit is now running with genuine two-ref
+inputababc31b. Candidate composition is not graph, installation or runtime
+validation; unchanged original54/ten controls are not repeated.
+
+2026-11-13: Primary reconciles the A104 registry/Native/Terminal4ff pure source
+audit0a182358, workflow26da4480, budgetd86f3514 and separate exitf9cfa32c. All eight
+combined API/registry handoff hashes, full14 typed fields, exact original source
+auditor/command and raw exit-file hashes agree. The seven whole-module inverses,
+unchanged scanner AST and exact fingerprints/source_indexes14 declaration order
+are retained. Raw0/0/null/drained and actual inactive/empty service/slice establish
+completion. No final API producer or Root5 placement is consumed; candidate
+preparation, canonical application and runtime validation remain separate.
+
+2026-11-13: The original A102 final verifier completes successfully: verified
+be5becea/workflow85d84ed6/budget43497944/stage2c426327, measured exit76169437
+at00:19:08 UTC. Primary independently rehashes all1990 current source entries
+and16 distinct referenced artifacts, checks all14 typed budget fields and the
+unchanged original verifier's actual invocation, and reads the six literal homes.
+The prior installed366 cases, application, audit and probe remain the genuine
+evidence. This adds six verified private task connections:276/405 connected,
+129 remaining. Complete directional parent ownership, independent native handoff,
+metadata completion and autonomous science remain explicitly unclaimed.
+Evidence: runs/root_a102_results_verify_reconciliation_01/ and
+runs/third_a102_results_v10_verify_01/.
+
+2026-11-13 scope correction: A102 Resource5's literal ownership_spec.py contains
+ten homes (five entry and five scientific), not twenty. Twenty was the combined
+A102/A103 Resource count. Third confirms seven remaining A102 case-bearing runs:
+74+42+24+88+130+48+1658=2064 cases, plus27 metadata mutation checks, before its
+ten-home application. This is a scoped installation queue, not a prerequisite
+for ongoing source implementation or a project-wide test total. The A103 queue
+is separate; no new cohort or completion-count change follows from this correction.
+
+2026-11-13: Primary reconciles original A103 apply02 application2a5e8831,
+workflow3f76ea17 and measured exite453c22e. Exact208 ordered candidate afterimages,
+all2209 current own source entries, seven application references, full14 typed
+receipt fields and18 raw exit references verify. Both original processes are
+absent and the owning service/slice empty; raw0/0/null/drained is retained.
+The paired global writer, installed666 and final verification remain separate
+pending obligations. No connected-episode count is added. Evidence:
+runs/root_a103_apply02_reconciliation_01/REVIEW.md.
+
+2026-11-13: Primary reconciles A104 required-input source preparation011c2f49/
+4794d1a7 and independent auditc605718c/728d3354, with measured exits8220849f/
+799d416e. Original source/peer, all sealed handoff references, full14 typed
+receipts, exact commands and entire common-map equality verify. Both actual
+workloads succeed and fully exit. The1679 payloads retain17 Python/1662 asset
+homes and genuine existing beforeimages; original tests are preserved source,
+not behavioral results. Genuine four refs feed the final composer. No canonical
+placement, reader/Results/Source728 run or scientific validation is claimed.
+Evidence: runs/root_a104_required_projection_reconciliation_01/REVIEW.md.
+
+2026-11-13: Original full Root candidate audit9cb0dc16 completes with actual
+workflow299ce064/exit64bcb375. All previous live before-provider consumers have
+ended; failed Fourth90 remains failed. Primary releases existing09e3 through
+runs/root_provider_five_actual_release_20261113_01/RELEASE.md. Genuine five-file
+application9f978d6e and independent postcheck09aac184 then complete with actual
+empty exits539d48c7/53ab38cf. Primary authenticates all seven refs/current28/five
+modes/full14/raw exits; actuale629b4a5 enables original640f consumers. Installed26
+and consumer-specific runtime validations remain separate pending evidence.
+
+2026-11-13: Primary reconciles Sixth HPC/Native None source audits6db1fa0d/
+075a0208 and Fifth A104 final runtime source audit6708b90d. All have genuine
+0/0/null/drained receipts; the respective scope and actual exit evidence are
+recorded above. A104's missing live driver start-tick sample stays explicit,
+with no fabricated packet exit or source-only runtime claim. Original controls
+are reused, not repeated. Detailed review: root_completed_source_reconciliation_20261113_0037.
+
+2026-11-13: Primary completes the original A107 generic acquisition prepare/audit
+pair5081bac7/814f0365 through its real serial launcher. Thirty full caller and
+six full owner inverses,97 sources and nine lexical providers verify; both
+actual workloads exit successfully. Final family integration remains open and
+is assigned to the same source author in coordination with Fourth's outer
+owner. No canonical write, new cohort or episode-count increment follows.
+
+2026-11-13: Original A103 companion writer completes the exact global import
+transitionf53a221b→2de061cf, artifacte956619c/workflow1b670d45/exiteec70652.
+Primary verifies the one-line whole-file diff, actual entry/command/release,
+full14 fields and18 raw exit references. Paired independent postcheck, installed
+666 and final verification remain pending; combined_installed stays false in
+the writer artifact. The earlier208 application and original failures retain
+their separate scopes, and no connected-episode count is added.
+
+2026-11-13: Root's original installed26 completes after the actual five-file
+placement. Parent3806e495/child517c09e1 and workflowf5e065b7 pass, with separate
+actualexit529eec38. Primary reads the unchanged runner and verifies the original
+26-case census, all78 successful phases/no skip-xfail, JUnit26/0/0/0,24 actual
+canonical owners, full14 typed receipt and raw actual empty exit evidence.
+Genuine640f admission and complete final guards succeed. Existing dependent
+consumers receive the genuine results; full root/axis/scientific validation is
+not claimed. Evidence: root_provider_five_installed_reconciliation_01/REVIEW.md.
+
+2026-11-13: Original A103 combined postcheckddde6195 succeeds under workflow
+5194ff8e with actualexit3ff73884. Primary reads the unchanged producer and checks
+full14 typed fields/exact command, all failure fields null, exact208 own rows
+plus global2de061cf and18 raw exit references. This completes the209-path paired
+placement; original installed audit/probe/666/final verification remain separate.
+No source-only Fastq/reader proposal or episode count is promoted by this result.
+
+2026-11-13: Primary completes independent reconciliation of Fourth's ten
+original source workflows, including16/20/20/15/19 controlled cases, all50
+artifact hashes, full typed receipts and recorded actual empty exits. No
+workflow is repeated and the separate corrected runtime remains unclaimed.
+The additional A102/A103 b117 goal/action contribution also completes Primary
+source review; its36 payloads and18 homes remain awaiting genuine composition,
+ownership/fingerprint integration and original runtime validation. Evidence:
+root_fourth_installed_source_queue_reconciliation_01 and
+root_goal_actions_source_review_01.
+
+2026-11-13: Primary reconciles the actual remaining97 A101/A108 application
+e79adb9f and independent installed auditd4c7f086, all131 current rows/modes,
+192 retained images,234 artifact references,97 complete write-event pairs and
+both full typed receipts/recorded actual empty exits. Exact original plan and
+baseline histories remain intact. This is accepted canonical source placement;
+subsequent original behavior/descriptor/metadata validation remains separate.
+Evidence: root_a101_a108_provider97_reconciliation_01/REVIEW.md.
+
+2026-11-13: The LocalFile final-family source operand correction385ed6bc and
+peer53fe3f23 complete Primary source review. Complete authentic generator order
+resolves the newly identified b205 context-adjacency and Launch-glob mismatch;
+the scientific private-owner and earlier shadow corrections remain intact.
+This is source compatibility review only, with actual final Native/LocalFile
+producer results still absent. Generic adaptation now has a separate sole
+author and independent reviewer for its new typed-domain code. No test cohort,
+application result or episode-completion count is added.
+
+2026-11-13: Primary verifies the actual installed-Root API preparation6d471300/
+3f4031c3/7b0a3285 and separate actual exit4e3bd262. The original independent
+audit follows in the same window, with no overlapping Python or new cohort.
+Candidate preparation remains separate from accepted composition and execution.
+
+2026-11-13: A103 restoration writer SOURCE03 5301ef44 and independent peer
+0ddbdc04/seal1870bb95 complete Primary source review. Original findings are
+resolved by explicit source corrections; actual predecessor results and later
+restoration remain required. No canonical write or count increment occurs.
+
+2026-11-13: The original A103 installed audit5a98543f/workflowdd2cc1c3 completes
+and is independently reconciled with exact2209 current paths/hashes, defaults,
+full14 typed receipts and18 raw exit references. It preserves546 binding and126
+task methods across six homes. Original probe/installed666/final verification
+remain separate; no task-count increment or behavioral completion is claimed.
+
+2026-11-13: Post-Root eventfcf331c7 and corrected runtime90 cdb25351 fail with
+actual OOM and genuine measured empty exits. Neither's initial/absent output is
+accepted as a result. The source-evidenced event lifetime correction5f4ea40b and
+independent peerc8f834a3 preserve full comparisons/rechecks and original history;
+actual outcome and separate runtime remedy remain unproven.
+
+2026-11-13: Generic source0c4a0b6e completes full Primary review and independent
+new-adapter peer3eb95b91. Exact30/958, upstream314, source/body/metadata and full
+typed-domain preservation are source-only evidence. Seven original-author
+review outputs are preserved outside b205, restoring exact sealed membership
+without changing its bytes or admission predicates. Actual producer results and
+the distinct final application byte/domain port remain open.
+
+2026-11-13: Event V3 source audita197e08d/workflow1e901516 completes with full
+typed custody and actualempty8239f0a8; the original event remains separate.
+Fourth new baec/4892 source audits ba376c2c/c8333a5d are independently reconciled
+in26775b5a. No old controls repeat and no runtime/application result is inferred.
+
+2026-11-13: Post-context ownership V6 source306957d7 and peer557b0db9 complete
+Primary bounded review of the new496-line context/pipeline layer and inherited
+entry/loader contracts. Exact source/peer hashes and domain verify; actual final
+inputs, installation and original runtime validation remain separate.
+
+2026-11-13: Final generic application source port7b54969d completes full Primary
+source reviewbb692b4a and independent peerf763ba0b. Exact24/1046 and both complete
+native forward/inverse artifacts verify. Actual original-V6/final-generic bytes,
+retirements and chronology are connected in code; actual inputs, Fourth writer,
+final graph and runtime remain separate. No episode-count increment occurs.
+
+2026-11-13: Outer-family source02 report8e6feb68/workflowcc7e5ecd is reconciled
+through peer0afa1c18, full14-field joins,314 source members/685 report references
+and genuine empty exit567393fe. All177 Python sources/thirteen inverses retain
+source-only scope; source01 failure and scratch relocation remain unchanged.
+
+2026-11-13: The installed-Root API independent auditbeac7d04/workflow3b1fd503
+completes and is reconciled with actual empty exited4f8753,495 candidate and463
+preimage hashes, full14 receipts and complete source/proof equality. Original
+coherent4ff preparation starts with actual four-ref input6705cab5 after complete
+own exit; no source-audit or behavior rerun. No canonical/runtime count claim.
+
+2026-11-13: SOURCE03's finite Resource/ownership consumer ef4525d8 and
+downstream4 4d1a15fc pass bounded cross-interface peer330db0db/sealef846a1e.
+Primary confirms source interfaces and exact191/278/87, original defaults,
+dependency custody and Meta direct compilation. Actual restoration, original
+Resource/Meta phases and later FinalMeta ownership writes remain separate.
+
+2026-11-13: Fourth runtime-memory source b7945f82 and actual source audit6ed8dc6d/
+08381a86 are independently reconciled in f8d53a71/seal83b8c081. Full21 equations,
+six complete inverses, original checks and full14 typed/actualexit joins remain.
+Primary confirms source/result hashes and lifetime changes; runtime90, memory
+fit and installation are separate. The genuine original OOM is not rewritten.
+
+2026-11-13: Original A103 Resource/Meta command handoff6958fd86 is independently
+reviewed in ed92de69/sealcd171f7a. All17 existing slots, distinct releases and
+genuine Source03/ef45/4d1 inputs are explicit; no new cohort or actual execution.
+
+2026-11-13: Original RNA44 copied successor finishes dcff262d/466f6d13 with
+workflowf97e8465 and measured exitf11f741c. Primary reconciliationf05e221a verifies
+all44 IDs/132 phases, full current/snapshot/source/owner custody and actual
+Root5 guards. The162 absent targets are not installed, historical failed44 is
+unchanged, and native/scientific/full-restoration completion remains separate.
+
+2026-11-13: Final-source graph composition902562cb completes Primary full-source
+review,14/1406 hash checks and both complete native producer inverses. Genuine
+initial/final factory custody and original graph/event engines are retained.
+Actual final protected-root compatibility remains distinct from source acceptance;
+source execution, final graph/event, Fourth integration and runtime remain open.
+Evidence: `runs/root_final_generic_graph_review_01/REVIEW.md`.
+
+2026-11-13: Separate runtime-verification paths58aeef5e complete Primary
+full750-line source review,19/17 hashes and five whole native inverses. Original
+outcome algorithms and failed-history distinctions remain intact. Actual source
+execution/runtime admission and later artifact/application integration remain
+open. Evidence: `runs/root_fourth_runtime_memory_lanes_review_01/REVIEW.md`.
+
+2026-11-13: Finite A103 followup-context source6e4aea7b and corrected peerb292fe12
+complete Primary full318-line/eight-member review. Retained restoration state,
+exact actual Seventh result/run association and original postcheck ordering are
+connected. Four future followups and installed/runtime results remain separate;
+old Resource/Op/Results sources and actual histories are preserved. Evidence:
+`runs/root_a103_followup_context_review_01/REVIEW.md`.
+
+2026-11-13: Final graph LocalFile caller correctionab0586fa completes Primary
+and Fourth source review. Whole14-member and six-span original-root byte
+inverses preserve initial/final proof distinctions and all original call
+predicates. Actual graph/event/application remain open. Evidence:
+`runs/root_final_generic_graph_v2_review_01/REVIEW.md`.
+
+2026-11-13: Original A103 installed probe55287106/workflow584e9638 is reconciled
+against six complete baseline observations,2209 sources, full14 typed receipt
+fields and18 actual-exit references. Only exact task/instruction owner changes
+differ; controlled diagnostic scope remains separate from native/scientific
+validation and installed666. Evidence:
+`runs/root_a103_installed_probe_reconciliation_01/REVIEW.md`.
+
+2026-11-13: SourceFamily parent adapter737f451c completes Primary full652-line
+review and independent owner/consumer reviewb7d17a61. Exact direct-compilation,
+actual result/run and current-versus-retained policy seams are connected in
+source; original nine phases/752 cases/58 guards remain unexecuted and no new
+cohort is added. Evidence: `runs/root_a102_source_family_parent_review_01/REVIEW.md`.
+
+2026-11-13: Primary prepares the original Root received-information display
+split in `runs/root_received_presentation_partition_20261113_v2/`, manifest
+793f8de9. Twenty substantive library modules retain49 original definitions from
+the actual selected scientific-prompt sourcef35927d7, with two direct receiving
+renderer import successors. Whole original/caller byte inverses and an acyclic
+lexical dependency graph pass natively. Independent review found the original
+protein-disorder helper's missing opaque-reference predicate in V1; V2 includes
+the exact original predicate and prefix constant, with V1 retained. Full Python
+global/import review and execution remain pending. These are display helpers,
+not new scientific episode owners or a completed default provider repair.
+Separate original frame/cache/lookup infrastructure is staged in
+`runs/root_decision_frame_presentation_20261113/`, manifest096a6587; full original
+frame and policy byte inverses pass, while the mixed default afterimage is held
+only for source accounting. Private presentation selection, complete external
+dependencies, installation, saved identity and behavior remain required.
+
+2026-11-13: Original A104 registry4ff preparation3471a420 completes under
+workflowd2202091 and measured empty exit3f1326a9, with raw0/0/null/drained,
+688 candidates and830 changes. The original independent audit starts with the
+actual manifest/receipt after complete own exit. No audit pass, application,
+runtime validation or increase to276 verified private connections is inferred.
+
+2026-11-13: Final graph sourceab058 passes actual auditc436a729 under workflow
+8d20d0c3 and measured exit6228e87b; Primary reconciles full14 fields, exact command,
+23 reference hashes and retained inverse scopes. The separate V3 eventc69196f7
+and b794 runtimefa5dbf9d fail with actual5GiB OOM and empty exits112509ee/35458262.
+No graph/event/runtime acceptance, case count or memory fit is inferred; prior
+source acceptance remains intact. Evidence:
+`runs/root_final_graph_source_and_oom_reconciliation_20261113/REVIEW.md`.
+
+2026-11-13: Primary reconciles V3c2a3827c actual source inspectiona139c58b/
+workflow0d67481c/exitb090ec06, full14 typed joins and six retained references.
+Its22 modules59 definitions/24 scopes222 literal imports pass without importing
+application code. Default-policyda215, rendererfec100 and corrected private7
+provider source checkpoints retain finite source reviews, with original order
+and exact helper transitions. Two original Root attribution functions83222675
+and two observation getters/three constants9cadc9ef now have substantive source
+homes and literal consumers. None is a full installed episode, saved workflow
+or scientific validation claim; count remains276/405,129 remaining. Evidence:
+`runs/root_presentation_source_reconciliation_20261113/REVIEW.md`.
+
+2026-11-13: Complete original Root A105 two-file and A108 eight-file source
+proposals da7c6cd2/17e95772 are qualified for explicit composition, preserving
+full original bytes outside their recorded owner-import/declaration extraction
+changes. The separately restored scalar helpers supply their literal missing
+source operands only when explicitly selected. Primary also implements the
+full595-line RFAM adapter45b024f1 and two-import table successor1ade5b32;
+independent peercdf22cda verifies the exact13-row selection and full inverses.
+No canonical installation, extra cohort, scientific result or episode-count
+increment is claimed. The actual seven-episode private factory/test-input
+transition continues separately. Evidence:
+`runs/root_literature_repository_source_review_20261113/REVIEW.md` and
+`runs/root_rfam_source_adapter_20261113_independent_review/REVIEW.md`.
+
+2026-11-13: Original installed-Root A104 registry/Native/Terminal audit3f94c0fd
+completes under workflow55060730 and actual empty exit519878db. Primary checks
+the full rebuilt source record, all688 candidates/574 preimages/3404 current
+before hashes, retained proof and full14 typed receipt join. Raw0/0/null/drained,
+5GiB peak/781 max events/no OOM preserve the actual outcome. Its genuine four
+refs now satisfy the already-reviewed final source/input composition dependency;
+no canonical application or runtime/connection-count increment follows yet.
+Evidence: `runs/root_a104_registry_installed_root_pair_reconciliation_01/REVIEW.md`.
+
+2026-11-13: The Root measurement-validation fresh-release source correction is
+qualified by independent reviewe0518cce/seal3d6c6231. Prepared storage194e286c
+and new library helpera57586df authenticate the actual three relocated source
+owners and emit a distinct v2 receipt. The exact historical v1 saved predicate,
+original replay shortcut and scientific calculation/delivery remain preserved;
+full-file inverses and ten input references pass. Primary reads the final review
+and helper and verifies its sealed members. Final composition/application and
+runtime validation remain separate; this adds no verified task connection.
+Evidence: `runs/root_measurement_validation_current_release_20261113_preparation/`
+and `runs/root_measurement_validation_current_release_20261113_independent_review/`.
+
+2026-11-13: Corrected A104 API baseline02 records all168 collected cases passing
+(504 successful phase reports, no exceptions, pytest exit0), but its final
+file-access guard records13 denied paths and the outer workflow exits1. The
+workflow's descendant_drain_completed remains false; its separate later actual
+empty-exit observation is not a successful workflow receipt. This is a wrapper
+validation defect under investigation, not a passing full workflow or a change
+to the original cases. Episode implementation continues independently. Evidence:
+`runs/root_a104_final_api168_baseline_02/checks/evidence.json` and
+`runs/root_a104_final_api168_baseline_02/workflow-result.json`.
+
+2026-11-13: Endpoint current-release source485e8322/seal3d6b7428 passes independent
+review6c7add47/sealfe98b795. Two complete storage intervals preserve the original
+saved v1 predicate, replay and all scientific code; new storagee24ff0b1 and
+helper2d1ab75c authenticate the original twelve logical source slots through178
+actual defining files, including the complete155 private owners and actual
+literal definition module682d463b. Saved v2 checks the exact release without
+source IO or recalculation. Primary reads the final review and checks its seal.
+The ion correction likewise passes independent review1dcccdeb/sealedd5776b:
+storage69521b9e/helper719f76fc preserve the historical v1 predicate and original
+four-file scope through five genuine owners after the input split. These are
+source implementations, not installation, runtime or new task connections.
+Evidence: `runs/root_endpoint_current_release_20261113_preparation/`,
+`runs/seventh_root_endpoint_release_peer_01/` and
+`runs/root_literature_ion_current_release_20261113_independent_review/`.
+
+2026-11-13: The distinct module-census V6 source auditfb80790a passes under
+workflow10a3c56c with actual empty exit054a8021. Primary checks the two sealed
+handoff members,16 referenced files, full14 typed budget joins, exact window,
+source command and unchanged one-CPU/5-GiB/no-swap bounds. All26 predecessor
+members and the complete current engine/caller inverses retain the original
+formulas; the actual V5 OOM and53 phase records remain failed history. This is
+source validation only: the separate original event execution, memory fit and
+full graph acceptance are not established by this result. Evidence:
+`runs/sixth_post_root_event_v6_source_handoff_01/` and
+`runs/sixth_post_root_event_v6_source_01/`.
+
+2026-11-13: Interaction saved-adapter release v3 source audite5c3e9bf passes with
+workflowa3256ba9 and actual empty exitaada906d. Primary reads the actual result,
+source review, authority and saved dependency paths, verifies13 sealed members,
+the retained actual handoff, full14 typed receipt joins and explicit source-only
+flags. The exact two afterimages change seven intervals:24 native/32 effective
+sources preserve21/28 rows respectively and all three authentic historical
+scientific maps. The unopened Root v1/v2 proposals are not invented saved
+releases. The original private historical helper remains an explicit separate
+limitation. No application, scientific behavior or restoration follows from
+this source audit. Evidence:
+`runs/fifth_root_literature_binding_interaction_adapter_release_source_01/` and
+`runs/fifth_orchestrator_coordination/literature_binding_interaction_adapter_release_source_actual_01/`.
+
+2026-11-13: The original A104 API168 baseline rerun passes all168 calls and504
+phases, with pytest0, outer0/0/null/drained and no denied reads or exceptions.
+Evidence1652c215, workflow23b2be08 and actual empty exit179d6917 retain the genuine
+copy03, unchanged source/application inventories and full14 typed launcher joins.
+Primary checks the actual driver/supervisor absence and empty owning slice;
+the collector runs once after exit. Peak4635308032 bytes and zero OOM delta
+respect the original1-CPU/5-GiB/no-swap bounds. Failed baseline02 remains failed.
+This validates the original controlled baseline, not final installed behavior
+or an additional episode connection. Evidence:
+`runs/root_a104_final_api168_baseline_03/checks/evidence.json` and
+`runs/a104_final_native_runtime_control/root_complete_api168_baseline_03/exit-observation/actual-exit.json`.
+
+2026-11-13: Root source ownership advances independently of the serial runtime
+queue. Alignment presentation269223a7 and its two genuine reference codecs
+4a0be42a/b8fdb1a7 pass Primary review5d792b92/seal51220f65, preserving all97
+display lines, six complete original functions and their direct caller.
+The complete HPC receipt owner77172887 and resource declaration owner9efa39cf
+pass independent review0252e733/sealc25e5733: six defining import changes,
+two full-file inverses, genuine Root EpisodeRef/receipt identity and unchanged
+callers. The selected shared serializer is not claimed installed. HPC has88
+original lines; the earlier94-line handoff count is a documentation error.
+These source selections add no verified episode connections. Evidence:
+`runs/root_alignment_result_presentation_20261113_primary_review/` and
+`runs/seventh_root_hpc_resource_service_peer_01/`.
+
+2026-11-13: Corrected summary-precision sources5a46d30f/seal440f53ad pass
+reviewea5e2946/sealf6a2f3c0; corrected concentration-window sourcesb2f77554/
+seal9e3c91f6 pass review under sealc8a40317. Primary reads both final reviews,
+checks both seals and inspects the new fresh/saved helpers. Exact original
+18/25 logical source scopes map to186/206 defining files respectively; original
+historical predicates and complete populate hooks remain preserved. The old
+188/193-file rejected proposals remain history. New saved validation performs
+no source IO; concentration retains its original bound descriptor. Final
+composition, installation and runtime validation remain separate. Evidence:
+`runs/seventh_root_summary_precision_release_successor_peer_01/` and
+`runs/seventh_root_concentration_window_release_peer_01/`.
+
+2026-11-13: RNA six-row source64cf88c4/seal731b8104 passes independent
+review899ac9c6/seal15defe2d. Primary reads the complete review and checks the
+seal. Three complete helpers630lines, two complete schemas1690lines and the
+unchanged result view retain nine import changes, five whole inverses and104
+literal symbol joins; the original lazy validation cycles remain lazy. The
+presentation38 selection6a9220b5/seal33bc9b26 likewise passes reviewb53df470/
+sealaef9b0c7, read and checked by Primary: actual NMF original186-line inverse,
+ten native branch modules and the genuine latest HMMER eight-row successor.
+These qualify source selections only; application, full runtime/native closure
+and additional episode connections remain unclaimed. Evidence:
+`runs/seventh_root_rna_value_dependency_peer_01/` and
+`runs/seventh_root_presentation_closure_peer_01/`.
+
+2026-11-13: The original copied proteome66 and shared2 baselines both exit2
+before any case executes, reproducing the exact original missing
+bvbrc_proteome_bundle_adapter import boundary. Evidencef37d2a9a/4aa983fd and
+workflows6634066a/72733c13 retain unchanged sources and no denied reads; their
+actual empty exitsa4fd4291/d55d2507 were collected once after each workload.
+These are failed collection baselines, not66/2 passing tests. The subsequent
+original owner30 attempt fails before collection: pytest3 reads its copied
+default cache path, the source guard rejects that read, JUnit is consequently
+absent and outer workflow exits1/1/null/drainfalse. Evidence68955918,
+workflow7ce74df3 and actual empty exit1b334f35 retain the failure. The precise
+runner correction is to select its run-owned pytest cache, preserving guard
+permissions and original tests. No scientific regression or task-count change
+is inferred. Evidence:
+`runs/root_a104_final_proteome66_baseline_01/`,
+`runs/root_a104_final_shared2_baseline_01/` and
+`runs/root_a104_final_owner30_baseline_01/`.
+
+2026-11-13: Primary implements a twelve-row scientific source/asset proposal
+0ce1a700/seald01d32b7: five complete original Root services1399lines with19
+import changes, five complete original report-generation functions beneath
+the private scientific episode, the original recipe reader and five exact
+original instruction assets. Native reconstruction preserves five entire
+service originals, the entire327-line report partition and seven unchanged
+existing validator functions;50 referenced files verify. The actual private
+scientific binding remains an explicit pending defining-owner join, now assigned
+to Seventh. Independent source review subsequently passed, as recorded below.
+No canonical installation, runtime
+validation or additional task connection is claimed. Evidence:
+`runs/root_scientific_services_20261113_preparation/HANDOFF.md`.
+
+2026-11-13: Independent scientific-services review9500b8e4 accepts all12 source
+and asset rows with seal a6e44fdd, whole original service/report partitions and
+actual defining imports; final private binding and runtime remain separate.
+Primary also finalizes component native received/profile sources56ae1708,
+component report/context sourcesffc00347 and the six A110 schema dependency
+sourcesd055bb24. The retained import check reproduces both original failures
+and validates both corrected import orders; its workflow exits0/0 with no
+failure and drained descendants. Endpoint, summary and concentration receipt
+source successors retain their original scientific formulas and await the
+single final factory/caller composition. Root receipt restoration remains a
+source draft pending the actual saved-parser join. No extra episode connection
+or historical workflow restoration is claimed. Evidence:
+`runs/root_a110_schema_import_boundary_01/`,
+`runs/root_component_native_received_20261113_preparation/`,
+`runs/root_component_received_reports_20261113_preparation/`, and
+`runs/root_return_records_complete_ports_20261113_preparation/`.
+
+2026-11-13: Root saved-report restoration advances from source inspection to a
+focused behavioral check. Qualified sourcesb356dccf select complete reader23e3d909
+and two genuine homology helpers, preserving the earlier e05/ade4 proposals.
+Root C4 expansion, construction and delivery already use its own genuine parser;
+the reader again uses that same parser, with the complete `_attempt` body byte
+exact to its original. The unused assignment-based router is explicitly listed
+for removal. Actual SQLite records and the unchanged identity/context test prove
+13 passing cases, compared with eight failures and five passes on the old reader.
+Resultdbc833ea/workflow69c28daf retain0/0, null failure, drained descendants,
+peak757657600 bytes and the unchanged machine bounds; actual service and cgroup
+were checked empty. Earlier runner01 lacked pytest and runner02 lacked the base
+source tree beneath the composition overlay; both failures remain recorded.
+The new regression tests live with Root tests. This check does not execute
+scientific tools, the episode iterator, file-admission branches or HPC work.
+Final installed integration and the276/405 connection count remain unchanged.
+Evidence: `runs/root_saved_report_boundary_03/` and
+`runs/root_return_records_complete_ports_20261113_preparation/final/ownership.md`.
+
+2026-11-13: Source implementation continues after the finite receipt check.
+Partner hierarchy16 sourcesd36a3784 preserve the genuine shared registry bases,
+full source-access/schema/request responsibilities and original sequence
+attribution functions. Native protein dependency21 sources604841eb provide real
+receipt/operand/scientific/native owners and coherent current5GiB versus recorded
+historical-policy handling. Monitor/HPC72 sources03be5e5a declare four fixed
+private bindings, actual commissioning paths, substantive responsibility files
+and the separately authored28 private decision-task files. Scientific21 final
+sources929230bb preserve original54 binding and21 task methods with actual
+definition-source mapping. These are prepared source implementations; no new
+verified episode connection is counted before final installation/integration.
+Primary's seven full result-description/view originals and successive direct
+progress imports are recorded in
+`runs/root_progress_descriptions_20261113_preparation/HANDOFF.md`. Missing native
+dependencies remain explicitly assigned. No additional test or HPC execution
+claim follows from these source packets.
+
+2026-11-13: Primary completes the eight-row result-information/progress source
+join0504f66f: seven whole original information/view owners plus progressa08adc2a.
+The three final current BLAST description sites preserve the complete a558
+predecessor; genomic0373/protein47b5 retain the original digest corrections and
+import actual defining symbols. The seven owners have47 named imports in30
+repository import statements; this does not establish transitive runtime closure.
+Two actual generic native infrastructure originals are also prepared in
+root_native_event_statistics_20261113_preparation: execution_recording333lines
+and native_events221lines, retaining single nominal types for existing native
+lifecycle/worker consumers. Their one changed normalization import awaits the
+actual Homology input owner's source pin. No canonical installation or new
+workflow test is claimed. Third's original33 staged result has265 collected and
+28 collection errors; no tests executed. Missing Resource/Homology families
+are being implemented, without repeating unrelated historical audit gates.
+
+2026-11-13: A106's substantive presentation split is installed:113 application
+paths,28 new private presentation homes, inventory1564 to1592. The same184
+controls pass on both sides; postdf996537 records unchanged case identities,
+zero collection errors and returncode0. Primary inspected retained application
+3efef9b9, the actual private presentation/caller source and the original result.
+The completed scope is presentation ownership; Root delivery failures, whole
+workflow integration and autonomous scientific validation remain separate.
+Evidence: runs/second_a106_presentation_install_direct_01/output/application.json
+and runs/second_a106_presentation_post_direct_01/result.json.
+
+2026-11-13: Main's finite statistics boundary check completes with six passing
+corrected cases versus four passing/two failing original cases. Requested2/64
+threads now remain positive integer execution statistics without changing
+caller configuration or creating history; zero/negative/boolean requests still
+fail. The actual original HomologyStatistics/ExecutionClass and query normalizer
+execute over controlled configuration; no native job or scientific operation
+runs. Result95f5a177/workflow08b0caee record0/0, null failure, drained descendants
+and peak696672256bytes under unchanged1CPU/5GiB/no-swap. Actual service/slice
+were checked empty. Sourcesd4a85db5 select statistics59ec5231; the separate
+Jobs/execution policy successora01387c7 and Resource capabilityfab99a32 retain
+configuration identities while removing requested-thread ceilings. These other
+boundary paths are not claimed tested by the statistics six. Evidence:
+`runs/root_homology_statistics_cpu_metadata_01/` and the reusable Root test
+`test_homology_statistics_cpu_metadata.py`.
+
+2026-11-13: Resource86 sources61a70979 and Homology54 sources7d725ae6 are actual
+private implementations, with five and three fixed tasks respectively. Their
+original family/scientific bodies and mutable custody are accounted for;
+Main's helper3 e5d47a60, estimator caller4 58f5c762 and runtime caller7 d1b78055
+compose twelve distinct targets. Generic family role forwarders are removed;
+runtime and resource adapters select the private implementations. Complete
+original Homology native14 sources87841a8c and its explicit policy successor
+are also prepared. Third owns installation/composition and the original33
+behavior suite. Historical descriptors, missing real retained native-result
+fixtures and the separate standalone-improvement owner remain explicit.
+These prepared sources do not add installed task connections.
+
+2026-11-13: Second installs A105 runtime assets and fifteen affected binding
+records; its original sixteen failed controls now all pass, with no collection
+errors. A106's32-file unreachable-tail removal and28-file compiler-driven split
+also install; the same24 and62 controls respectively pass before and after.
+Sixteen compiler-held tails remain explicit. These are concrete organizational
+increments, not added scientific results or complete saved restoration.
+Evidence: `runs/second_a105_assets_post_direct_01/result.json`,
+`runs/second_a106_safe32_post_direct_01/result.json`, and
+`runs/second_a106_compiler44_post_direct_01/result.json`.
+
+2026-11-13: Actual installed task connections reach304/405, leaving101 to
+install in the original405-home census. Seventh's completed application has
+439 writes and20 A102/A103 private Resource task homes (ten each); Fourth's
+completed application has352 operations and8 A107/A110 private Launch/Results
+homes. Main independently hashes all28 current task.py files against these
+application afterimages. These disjoint homes were previously outstanding.
+Their behavioral checks remain pending; the earlier276 verified task
+connections are not relabeled as304 passing episodes. Root integration,
+remaining responsibility splits, saved restoration and autonomous science
+remain separate. A104's latest2490-row installation adds no task or episode
+homes already represented in this census. Evidence:
+`runs/seventh_private_resource_apply_01/results/result.json` and
+`runs/fourth_direct8_application_01/application.json`.
+
+2026-11-13: Third's next staged original33-module run collects387 cases and
+stops on19 collection errors; none execute. Five errors come from the omitted
+Root progress_observations._TEXT import in execution_monitoring/credit; one
+comes from Homology's monitoring-credit dependency retaining the removed
+communication import. Thirteen come through stale test-helper imports.
+Source fixes are being made at the actual owners. The original unsuccessful
+receipt and its drain=false observation remain retained; a separate measured
+empty-window result confirms subsequent complete exit. No scientific result,
+missing measurement or completed older axis scope is downgraded from these
+collection failures. Evidence: `runs/third_root_literature_original33_candidate_02/`.
+
+2026-11-13: Fifth completes the actual A104 private-source application with
+2490/2490 rows applied,5185 selected afterimages, canonical_writes=true and
+failure=null. The retained application explicitly records runtime_validated=false;
+installed behavior checks are a subsequent scope. No task.py or episode-home
+addition is inferred, so the existing60 A104 task connections are counted once.
+Evidence: `runs/fifth_a104_private_application_01/application/application.json`.
+
+2026-11-13: The two concrete Root collection fixes now have complete source
+successors. Monitor52 sources96b99464 adds the actual progress_observations._TEXT
+import in nine assignment-schema owners, restores the whole original monitoring
+credit implementation under Root/library and updates41 actual production imports.
+Native-information5 sourcesa96cdcc4 restores the complete440-line original
+information owner,17 methods and6 helpers, with two direct caller corrections.
+The actual global NativeEventProvider nominal type is preserved. These fixes
+are selected in immutable Root final04 sourcesba72a061 (1987 rows), alongside
+standalone20, two-parent Homology70, the Root scientific catalog callback and
+its actual private-axis callbacks. Source inverses and resolved imports do not
+establish behavioral success; the subsequent original33 and focused7 checks
+are separate running workflows in their owning windows. No new installed
+original-census task count follows from these source proposals.
+
+2026-11-13: A106 API report28 is installed; its original71 post cases all pass,
+with no collection errors and matching case identities. The A105/A108 private
+catalog8 installation and subsequent private scientific services6 installation
+each retain seven passing original constructor/applicability cases. Main reads
+the actual results: exit0, no suite errors, source and test hashes unchanged
+through each post run. These existing cases do not exercise every new dispatch
+branch or establish shared Root restoration. The Main Root catalog check
+uses the immutable eight-file callback release; the later six-file service
+successor remains explicit for subsequent integration. Evidence:
+`runs/second_a106_api_report_post_direct_01/result.json`,
+`runs/second_a105_a108_library_post_direct_01/output/result.json`, and
+`runs/second_a105_a108_services_post_direct_01/output/result.json`.
+
+2026-11-13: Main's Root/private catalog boundary completes: corrected7/7 pass,
+compared with6 passing and one original callback-not-invoked failure. The
+comparison changes only the exact catalog branch; baseline d37d93c7 retains
+the latest Homology caller changes and corrected sourceae060a91 is final04's
+actual combined implementation. Genuine Root/A105 construction and original
+libraries exercise private callback invocation, absent-callback fallback,
+literal retrieval rejection and failed/invalid/completed metadata outcomes.
+Action/observation/model rows remain unchanged, with no provider, native,
+iterator or scientific execution. The immutable private callback8 release is
+used; later service6 and full saved restoration remain separate. Resultdbd4a234
+and workflowb452a14f retain0/0/null, drained descendants, no OOM and peak
+1074749440bytes. Main checks actual inactive service/MainPID0 and empty recursive
+slice after exit. The four new reusable cases are now in
+Root/tests/test_scientific_catalog_operation.py (d024c2ff); three existing
+metadata cases are unchanged. Evidence:
+`runs/root_scientific_catalog_boundary_01/`. No task-count increment follows.
+
+2026-11-13: Primary executes Seventh's original prepared SourceFamily14 generator
+in Primary's otherwise empty window while Seventh's Resource checks continue.
+The actual candidate has379 rows:349 production writes,28 explicit retirements
+and two original reusable test files. Fourteen private literature homes and
+12 response receivers retain the original752-case test inventory. Generator
+source reads are checked against88 current donors. No canonical file changes
+and no tests execute in this generation workflow. Actual sources5a50bd55,
+manifest586a7e56 and workflow23c14df6 retain0/0/null/drained, peak977063936;
+Primary checks inactive service/MainPID0 and empty recursive slice. Seventh
+owns subsequent installation/behavior checks; the installed census remains
+304/405,101 left. Evidence: `runs/root_a102_source_family_generate_01/`.
+
+2026-11-13: Root original33 candidate03 now collects606 cases with three
+collection errors, all through global episode_progress_credit's old
+progress_records import; no test executes. The prior19 collection problems
+are resolved in this source selection. Third owns the finite direct-import
+successor and retains unsuccessful workflow7623c14a/JUnit9380872f plus its
+separate actual empty-window observation. The next1997-row final05 source
+includes this fix, the later A105/A108 service6 and all six Homology
+monitoring-credit fingerprint successors. No passing full-suite result or
+regression in previously completed scientific scopes is inferred.
+
+2026-11-13: A104's installed Native/parent checks pass all240 original cases.
+Main checks retained JUnit2e9c3675: errors0, failures0, skips0, tests240; workflow
+4c66c94c records0/0/null, drained descendants and peak2465329152bytes. This
+validates the controlled installed Native/parent scope after the2490-row
+application. Saved-owner checks are a separate subsequent workflow; no live
+scientific producer or autonomous workflow is established by these240 cases.
+Evidence: `runs/fifth_a104_native_installed_01/`.
+
+2026-11-13: Primary installs nineteen genuine global BV-BRC API and Root-library
+owners from the selected final05 sources. Application cb302223 and workflow
+140d0171 retain successful execution and drained descendants; these are source
+placement receipts, not an API-constructor or scientific-workflow pass. The
+original API primitive suite subsequently records ten passing call phases and
+44 setup failures at the missing homology adapter import before interruption.
+The registry requires nine missing scientific adapters. The earlier static
+closure claim was incorrect because it treated `from . import missing_module`
+as package availability. Its explicit correction is retained in
+`runs/root_bvbrc_global_api_placement_20261113_preparation/closure_correction_01/`.
+Primary interrupts the repeated prerequisite failures and resumes episode
+source generation. The partial test result remains incomplete, including the
+subsequent pytest KeyError during interrupted shutdown. Raw workflow c9392e11
+is1/1/null with descendant_drain_completed=false; a separate actual observation
+records inactive service, MainPID0, empty recursive slice and absent supervisor
+and driver. Evidence: `runs/root_bvbrc_global_api_install_01/` and
+`runs/root_bvbrc_api_primitive_tests_01/`. No installed task count is added.
+
+2026-11-13: Primary completes A102 scientific-head source generation after
+preserving its three actual factories and correcting symbol discovery for
+schema subscript mutations. Manifest d44c810f contains26 file transitions;
+workflow6921bbaf is0/0/null with drained descendants, and actual window emptiness
+is checked. The earlier factory/symbol assertion failures remain unsuccessful
+source-generation history. The separately completed A103 candidate4ac07367 is
+retained without regeneration. Neither candidate is installed or behaviorally
+validated. Evidence: `runs/root_private_a102_head_source_generate_03/` and
+`runs/root_private_a103_head_source_generate_01/`.
+
+2026-11-13: Primary completes the current Native30 source candidate for eighteen
+A107 and twelve A110 homes. Sources527a764d records550 transitions,422 new files
+and128 replacements, including thirty actual task implementations. It reuses
+the five completed A107 source stages from the unsuccessful first run, then
+executes its remaining two stages and all seven A110 stages. Actual-parent HPC
+authorization remains private; only the four genuinely equal request bodies
+enter each axis library. Original failed receipt931c2699 remains unchanged.
+New workflow6fda4bd4 is0/0/null with drained descendants, peak2108588032bytes;
+Primary checks actual inactive service/MainPID0, empty recursive slice and
+absent supervisor. Canonical application and behavioral/restoration checks
+remain with Fourth. The original installed census stays304/405,101 remaining.
+Evidence: `runs/root_current_native30_generate_02/`.
+
+2026-11-13: Primary completes current Literature28 source generation after the
+recorded head composition fix. Private sources9001ce45 retain860 source rows
+and818 operations; the separate actual import successor has45 files b38dd5d5
+and ownership output has56 files0244bc53. Workflow4760dc41 is0/0/null with drained
+descendants and peak2069368832bytes; actual inactive service/MainPID0, empty
+recursive slice and absent supervisor107996 are checked. These are source
+candidates for fourteen homes per axis, not installed or executed episodes.
+Required own-axis libraries remain part of subsequent composition. The separate
+four-library generator failed because its uniform two-helper assumption was
+false for A110; actual per-axis definitions must be retained. Its unsuccessful
+raw receipt is not relabeled by the later empty-window observation. Evidence:
+`runs/root_current_literature28_generate_02/` and
+`runs/root_current_scientific_libraries4_generate_01/`.
+
+2026-11-13: Primary completes A102 Outgoing27 and Role104 source transitions
+on the actual composed SourceFamily/Head candidates. Outgoing manifest33cf3f58
+retains fourteen request endpoints. Role manifestb57ca7db retains fourteen
+homes and six child-owned parent validators. Original reusable test sources
+are also generated: four Outgoing files ac348bd6 with345 cases and three Role
+files198e76d7 with490 cases. Those tests have not executed. Workflow17622ebf
+is0/0/null with drained descendants, peak3625701376bytes; actual inactive
+service/MainPID0 and empty recursive slice are checked. Canonical integration
+remains with Seventh; original installed census304/405 is unchanged. Evidence:
+`runs/root_private_a102_outgoing_source_generate_01/` and
+`runs/root_private_a102_role_source_generate_01/`.
+
+2026-11-13: Primary reads the actual corrected A104 saved-terminal JUnit and
+workflow:32 cases pass with zero failures/errors/skips (f566dbeb), and60625b77
+records0/0/null with drained descendants. The three-file correction uses the
+actual AppService custody owner, preserves the applicable protein identity
+schema, and supplies the existing generic command assignment in the controlled
+transport fixture. The original32 failures remain retained separately; the
+prior240 Native/parent and105 registry/native-result passes are not rerun or
+recounted. No live producer, autonomous science or new episode connection is
+claimed. Evidence: `runs/fifth_a104_saved_terminal_correction_01/`.
+
+2026-11-13: Primary completes the corrected four-library source generator with
+explicit actual A107 two-helper/A110 one-helper sets. Source2485623c contains
+the four original scientific presentation/instruction owners; workflow0a2bf434
+is0/0/null with drained descendants. The unsuccessful uniform-helper run remains
+separate. Primary then composes the actual Literature28 private/import/ownership
+and library candidates into989 guarded operations (manifest26ddbe7e,
+workflow44332cd8,0/0/null/drained). Both runs have separate actual inactive0,
+empty-slice and absent-supervisor observations. No canonical application or
+behavioral test is inferred. Evidence:
+`runs/root_current_scientific_libraries4_generate_02/` and
+`runs/root_current_literature28_composition_01/`.
+
+2026-11-13: Primary executes Fifth's current-source Scientific2 generator for
+both axes. A107 manifest850ac852 and A110 manifestcd4f0d22 each contain32 source
+transitions,51 original binding methods and21 original task methods. Actual
+current Direct8 callbacks, dynamic predicates and five-argument captured
+completion are preserved. The scientific child's real prepare_invocation
+boundary remains whole; no nonexistent Workflow.build hook is asserted.
+Workflowsb3d1a47d/afb79e16 are0/0/null with drained descendants, with actual
+inactive0/empty-slice/absent-supervisor observations. The required common
+library composition, shared consumers, current descriptors/inventories and
+connected behavior remain explicit integration work with Fourth. These source
+candidates add no installed episode count. Evidence:
+`runs/root_current_a107_scientific_head_generate_01/` and
+`runs/root_current_a110_scientific_head_generate_01/`.
+
+2026-11-13: Primary runs the unchanged original BV-BRC API primitive suite on
+Third's complete retained final08 workspace after the genuine adapter closure
+is composed. All62 cases pass (JUnit99d1391a). Original test556a06ee is unchanged;
+provenancedecc2dcf records191 loaded modules and zero application imports outside
+the candidate workspace. Workflowa13c1193 is0/0/null with drained descendants,
+peak3898576896bytes; actual service inactive/MainPID0, empty recursive slice and
+absent supervisor116248/driver116251 are checked. The earlier interrupted
+canonical10-pass/44-setup-error run remains unsuccessful. This is controlled API
+primitive behavior, not live BV-BRC, scientific adapter grading, host custody,
+closed episode flow or canonical installation of the entire Root candidate.
+Evidence: `runs/root_bvbrc_api_candidate_tests_01/`.
+
+2026-11-13: Primary completes current HPC16 source generation on the actual
+Native550 scratch overlay. The first run completed Launch8 extraction but failed
+when the refiner looked for assignment_schema in the old child class. Its failed
+receipt and partial refinement remain retained. The additive refiner selects
+Native550's actual from_parent.NativeParentRequests owner, authenticates the
+private child connection, preserves complete admission methods and guards, and
+reuses only the completed original Launch first stage with exact input equality.
+Fresh Launch refinement/parent fingerprints and Results8 capture/refinement
+then complete. Combined manifest6b45422a contains1218 net operations against
+original canonical sources:978 creations,208 replacements and32 retirements.
+It already includes Native550 and must not be applied after it without explicit
+ordered predecessor composition. Workflow2f6a7f69 is0/0/null with drained
+descendants, peak4184842240bytes; actual inactive0/empty-slice/absent121321 are
+checked. No canonical application, HPC transport or behavioral result is claimed.
+Evidence: `runs/root_current_hpc16_generate_01/` and
+`runs/root_current_hpc16_generate_02/`.
+
+2026-11-13 count correction: Primary rechecks the actual current sources of all
+405 homes in the original authenticated inventory universe using the same
+relative/absolute own-task import, direct class decision declaration and concrete
+sibling task-class predicate. Census9a305f89 finds310 connected/95 remaining,
+with no lost connection from the retained258 reference and unchanged observed
+sources. Remaining homes are A10215, A1034, A10741 and A11035. Workflow34fc7ac5
+is0/0/null with drained descendants; actual inactive service/MainPID0, empty
+recursive slice and absent supervisor125559 are checked. The earlier304/101
+count omitted six A103 execution_result_acquisition homes, not newly completed
+work. Each current declaration selects its own concrete ResultsTask; all six
+current task files hashf3af61a0. The original208-row application2a5e8831 is
+retained at root_a103_apply02_reconciliation_01, and the actual installed666
+JUnit0ca2e459 has zero failures/errors/skips with workflowdea3d03e0/0/null/drained.
+Earlier completed Results work is not reopened. This metric still measures task
+connections, not complete organization, full restoration or autonomous science.
+Evidence: `runs/root_current_task_census_01/`,
+`runs/root_a103_apply02_reconciliation_01/` and
+`runs/seventh_a103_results_v6_installed_tests_01/`.
+
+2026-11-13: Primary completes the current A103 Homology source chain on the
+retained actual HEAD23 afterimages. Monitor29 manifestb69f17fd is composed into
+the disposable source tree before Directions8 manifest484dac23; that afterimage
+is then the input to Siblings59 manifest040861ef. Every scratch composition
+authenticates original operands and before/after bytes. The three workflow
+receipts c5324ff8,36695449,d06c1f96 are0/0/null with drained descendants;
+actual inactive service/MainPID0, empty recursive slice and absent supervisors
+128271,128608,128740 are checked between runs. Original transformations and
+test inventories remain retained. This completes candidate source generation
+for the three Homology homes, not canonical application or behavioral checks.
+Seventh retains their ordered integration. The installed count stays310/405.
+Evidence: `runs/root_a103_homology_monitor_generate_01/`,
+`runs/root_a103_homology_directions_generate_01/`,
+`runs/root_a103_homology_siblings_generate_01/` and the resulting scratch tree
+`runs/root_a103_homology_source_composition_01/tree/`.
+
+2026-11-13: Primary executes the combined A107/A110 remaining76 source
+composition. Manifestb0ac115b contains2259 distinct production paths:2136
+afterimages and123 explicit retirements, each retaining its earliest canonical
+beforeimage and ordered source chain. Its actual inputs include Native30 and
+HPC16 together as1218 net operations, Literature959 production rows from989
+(the30 excluded test rows are explicitly listed), Scientific2, library4 and
+the prepared direct import successors. Native550 is not applied twice.
+Workflow5628b153 is0/0/null with drained descendants; actual service inactive,
+MainPID0, recursive slice empty and supervisor128873 absent are checked.
+The output explicitly declares source_only=true and application_ready=false:
+Fourth's final inventories, reconstruction and source indices remain separate,
+as do Third's coordinated Root2 return imports. Thirty-seven remaining prompt
+consumers are enumerated; their owners remain intact while the applicable
+direct imports and eight HPC parent source footprints are prepared. No
+canonical write, imported application, behavioral test, saved restoration or
+autonomous scientific validation is claimed by this composition.
+Evidence: `runs/root_current_remaining76_composition_01/`.
+
+2026-11-13: Primary reads and independently joins Fourth's completed Direct8
+evidence. There are312 distinct installed controlled cases, A107160 and A110152:
+288 passes from the original run plus exactly24 originally failing identities
+passing after fixture corrections. The full suite was not repeated. The scope
+is256 private-task controls,32 yield controls and24 provider-selector controls;
+sixteen corrected provider controls also pass against the original implementation.
+All32 installed yield records are byte-identical to their original baseline
+records. Original failures remain: relative-workspace fixture errors, absent
+existing-session history_preview, a spy on the wrong imported callback alias,
+and omitted required:[] in the controlled schema. Corrections preserve the
+original assertions and production behavior. Raw failed drain=false receipts
+remain unchanged, with actual later exit observations retained separately.
+Successful corrected baseline/installed/verification workflows34ab739b,
+5749254d,b9032b7f are0/0/null with drained descendants.
+
+The Direct8 source epoch authenticates356 production operations, comprising344
+present afterimages and12 retirements. All352 original application operations
+still match current canonical sources. Four source-index successors explicitly
+chain through the later reconstruction application6f5d6bf9, whose beforeimages
+match Direct8 and whose afterimages add the three genuine reconstruction modules
+per axis. That later extension does not invalidate the retained Direct8 result
+or inherit its behavior proof. Verificationd3ce3e91 and independent review
+aab3a025 retain exact identities, sources, results and joins. No full scientific
+workflow, provider transport, native/HPC execution, nonempty scientific result
+processing, receipt-enabled child-return flow or durable saved restoration is
+established by this cohort. No installed-home count is added.
+Evidence: `runs/fourth_direct8_validation_01/` and
+`runs/root_direct8_evidence_review_01/` (seal53e05b77).
+
+2026-11-13: Primary completes the additive remaining76 source composition with
+the43 direct-import/source-footprint successors. Actual manifestf7540930 retains
+the2259 predecessor unchanged and produces2264 distinct paths,2141 afterimages
+and123 retirements. Thirty Native instruction modules and five API/RNA prompt
+consumers now import their existing symbols from the true own-axis defining
+libraries, preserving all scientific function bodies and text. Eight current
+HPC parent fingerprints add the instruction library, presentation library and
+private scientific task decision source using actual child-import witnesses;
+the hash algorithm, binding schema and historical saved fingerprints remain
+unchanged. Both legitimate service instruction fallbacks remain. Workflow
+0e512900 is0/0/null with drained descendants; actual inactive0, empty recursive
+slice and absent supervisor130292 are checked. This remains a source candidate
+with application_ready=false until Fourth's final helper/index/test integration.
+Third releases the two shared Root caller files to Fourth for their guarded
+four-literal change in the same coherent application as the Scientific2 family.
+No canonical installation, behavioral result or count increment follows from
+this composition. Evidence:
+`runs/root_current_remaining76_prompt_composition_01/`.
+
+2026-11-13: Primary completes the separate old-prompt retirement composition
+against the preserved actual2264 candidate. Source inspection accounts for all
+69 original functions at their current private or own-axis library owners and
+finds no remaining production import of the two obsolete prompt modules. Their
+remaining current references are footprint/index inputs, not implementation
+consumers. The34-source successor retires both modules and updates32 binding
+footprints:24 child builders add the three actual defining dependencies and
+remove the old prompt path, while8 parent builders retain those already-added
+dependencies and remove the obsolete path. Original hash algorithms, schemas,
+configuration and historical saved hashes/fixture bytes remain unchanged.
+Actual manifest83b26196 has2274 distinct paths,2149 afterimages and125 retirements,
+retaining the original beforeimages and every intermediate source chain.
+Workflowa782a52b is0/0/null with drained descendants; actual Main inactive0,
+empty recursive slice and absent132104 are checked. Fourth still owns the four
+final current indices and atomic integration with its tests/reconstruction and
+the authorized shared Root caller changes. No canonical deletion/application,
+behavioral pass, restoration result or installed-count increment is claimed
+by this source composition. Evidence:
+`runs/root_current_remaining76_retirement_composition_01/` and
+`runs/root_obsolete_prompt_retirement_20261113_preparation/`.
+
+2026-11-13: The current Homology source review identifies an unresolved
+parent-private organization requirement beyond the completed three-role source
+split. Actual annotation and standalone-improvement Grains are distinct existing
+commissioning parents. The role-only Homology factory and Workflow.build select
+the same three classes through self.job_episodes for both, bypassing the
+parent-aware binding registry. Their descriptors are parent-neutral, all three
+declare legacy_annotation as parent, and their directories sit beside that
+parent rather than beneath it. Actual saved action paths and message custody
+remain preserved; these do not establish separate predefined child identities.
+The original repeated-invocation descriptor assertion is within one parent and
+does not contradict private children for two different parents.
+
+Review02abf5da joins all92 latest generated targets (86 present,6 retired) and
+the genuine original two-parent controls. No new execution result is claimed.
+The original119 source stages and prepared487-case harness remain immutable;
+the long candidate test run is deferred until the final parent-specific source
+epoch is selected. Main and Seventh agree on actual legacy_annotation and
+legacy_improvement parent homes, each with its three existing descriptive
+Homology child names directly beneath it. Actual parent implementations and
+identity must be materialized, with private extraction and shared runtime/
+factory/descriptor joins assigned to separate authors. The inherited unbound
+nested-improvement credit failure remains explicit and must not be repaired by
+inventing credit. Standard saved reconstruction currently rejects job_episodes;
+full durable restoration remains unproven. This records a remaining requirement,
+not a regression in earlier Results validation or completed source generation.
+Evidence: `runs/root_a103_homology_parent_identity_review_01/`
+(source2b6beaa5, seal e6660bc8) and
+`runs/root_a103_homology_candidate_preparation_01/` (unexecuted).
+
+2026-11-13: Fourth actually installs the coherent A107/A110 remaining76 batch.
+Applicationa4a2b33f records2334 completed operations: the actual2274 production
+candidate83b26196, two coordinated shared Root callers,52 valid test/document
+rows, four current source indices and two reconstruction catalogs. Original
+source chains, beforeimages and retirements are retained. The two Native saved
+child test sources and additional Literature private-task tests remain explicitly
+pending; they do not gate this complete source application or gain a pass claim.
+Workflowd30a125c is0/0/null with drained descendants. The installed shared Root
+returns hash is103b56d9 and admission hash0e21951f; later Root composition must
+respect these successors rather than overwrite them from an older snapshot.
+
+Primary then runs the same original405-home source census and predicate against
+the actual installed tree. Census9d323871 finds386 connections and19 remaining,
+exactly76 added since census9a305f89 and no loss. Remaining homes are A10215
+and A1034; all original57 A107 and51 A110 homes have their own declared task
+connections. Observed episode/task sources remain unchanged through the check.
+Workflow24bd7834 is0/0/null with drained descendants; actual Main service
+inactive/MainPID0, recursive slice empty and supervisor134579 absent are checked.
+This is verified structural installation, not validation of all new behavior,
+complete responsibility organization, saved-workflow restoration or autonomous
+scientific execution. The Homology two-parent source identity gap remains a
+separate original requirement beyond this task-connection metric.
+Evidence: `runs/fourth_remaining76_application_01/` and
+`runs/root_current_task_census_02/`.
+
+2026-11-13: Third's actual original33-suite run on immutable final10 completes
+646 cases:402 passed,219 failed,25 skipped and no collection errors. Primary
+reads the complete JUnitd72675ba and failed workflowaaf407bd (1/1/null,
+descendant_drain_completed=false). Separate actual-exit8546ac44 records inactive
+service/MainPID0, empty recursive cgroup and absent original supervisor; it does
+not rewrite the raw failed receipt. The failures are retained and grouped by
+actual tracebacks for source/fixture repair. No whole Root runtime or autonomous
+completion is inferred from the402 passes.
+
+One distinct family is the original37-case Root episode-composition cohort:
+18 passed and19 failed because its test imported top-level method_loop exception,
+backend and Episode identities while the actual composer uses Root-owned ones.
+Primary corrects only the two test imports, preserving every assertion, complete
+AST outside those imports and a whole-file byte inverse. No production source
+changes. The same37 exact cases then all pass against a complete isolated copy
+of the retained final10 workspace; all19 former failures resolve. Resultdf6388f3
+records632 loaded application modules with zero import escapes and unchanged
+original/copied source inventories. JUnit477eccef has37 passes with no failures,
+errors or skips. Workflow40aa17ae is0/0/null with drained descendants, no OOM,
+and the unchanged one-CPU/5-GiB/no-swap boundary; actual Main inactive0, empty
+recursive slice and absent137981/137984 are checked. The test-only successor
+9da78816 is delivered to Third for its next source selection, not installed here.
+This establishes the controlled descriptor/composition boundary, not scientific
+execution, native/provider transport, a full saved workflow or the whole646
+cohort passing. Evidence: `runs/third_root_literature_original33_candidate_09/`,
+`runs/root_episode_composition_nominal_tests_01/` and
+`runs/root_episode_composition_nominal_preparation_01/`.
+
+2026-11-13: Primary materializes the complete A103 parent-private source epoch.
+Composition57eb16e0 and sources96acf534 retain376 ordered operations over291
+distinct targets: original119, private248, shared8 and saved-report redelivery1.
+The output includes19749 production/test-asset files,20 actual canonical
+retirements and66 intermediate files created then retired within the chain.
+Workflow7a00ff2f returns0/0/null with drained descendants and no OOM. Actual
+Main inactive/MainPID0, empty recursive slice and absent supervisor144221 are
+observed before the next workload. No canonical installation occurred.
+
+The403 Perl print warnings are specifically accounted for by399 correctly
+empty output files and four correctly empty preimages in targeted receipt
+527cc891. A redundant standalone full-file scan is interrupted because the
+unchanged test overlay and snapshot runner already perform full byte checking.
+Its raw workflowb582304e remains-2/-2/null with drainfalse, with a separate
+actual inactive/empty/146651-and146654-absent observation before the next launch;
+that unfinished scan receives no pass claim.
+
+Test successor1d87191b supplies eight afterimages and four retirements without
+recreating obsolete application packages. The explicit node-ID bijection
+e049ed14 retains all487 original function/parameter identities and adds only
+three genuine saved-counterpart repair cases, one per Homology role. Those
+cases wrap and call the actual private parent receiver at a distinct saved
+redeliver_report index and retain the actual wrong-parent rejection. They do
+not establish whole-action redelivery execution, close/reopen restoration or
+scientific progress. Original nested-improvement credit failure and unsupported
+standard job-binding reconstruction remain explicit. The490-case workload is
+launched against the immutable composed source; results are pending. The
+verified original installation count remains386/405,19 remaining.
+Evidence: `runs/root_a103_parent_private_composition_generate_01/`,
+`runs/root_a103_parent_private_composition_verification_01/actual_exit.json`,
+`runs/root_a103_parent_private_test_ports_preparation_01/` and
+`runs/root_a103_parent_private_behavior_01/`.
+
+2026-11-13: Primary reconciles the actual Scientific2 reports by original case
+identity and all three pytest phases. Initial reports215aa0be contain204
+original identities:129 passes, two call failures,72 setup errors and one
+original skip. The corrected73 reports997b161e resolve72 cases and retain one
+A110 custody failure. Actual custody application3ed9bb84 uses the authentic
+LiteratureReactionRepository._sheet_origin_episode reader; it records owned or
+admitted custody from the real saved owner and does not backfill historical
+receipts. Focused reportsc1a59d09 then pass that original A110 case and one new
+owned/admitted-subset/replay regression case. Workflowc5dcfd96 is0/0/null with
+drained descendants and a separate actual inactive/empty/150906-absent record.
+The union is202 complete original passes, one original skip and one unresolved
+RNA fixture failure; the extra regression pass is separate. Failed initial
+workflow6c8482e4 and corrected39ed2667 remain1/1/null/drainfalse, with their own
+separate actual-exit observations. This is combined coverage, not one successful
+204-case run or complete autonomous scientific validation.
+
+RNA source reviewf97782b2 proves the controlled worker and exact failing test
+are unchanged from retained pre-Scientific2 sources, and the complete rejecting
+reader is byte-identical. The failure occurs before received-information
+presentation: the controlled worker supplies no authentic20-GiB cgroup receipt.
+The genuine historical385 fixture has different request, worker, policy and
+result identities and cannot supply this receipt unchanged. The failure stays
+explicit; no guard, resource bound, scientific identity or test assertion is
+weakened. Evidence: `runs/root_scientific2_rna_failure_attribution_01/`,
+`runs/fourth_scientific2_connected_01/`, `runs/fourth_scientific2_corrected_01/`
+and `runs/fourth_literature_custody_checks_01/`.
+
+2026-11-13: Original-source tracing corrects the classification of the Native
+internal-launch failure. It was already present immediately before Native550,
+but it is an earlier organization regression. The committed pre-organization
+ExecutionEpisodes atfb1e4d9 registers launch among its actual roles; the private
+Native owner registers only its native child role while retaining a virtual
+internal assignment_schema('launch') call into the public role guard. Source
+packet31f678b2 corrects exactly30 private request owners to select the genuine
+same-axis internal launch-schema function, retaining original bound callbacks,
+subsequent validators and strict public Native schema/credit methods. Arbitrary
+historical custom public-launch overrides are explicitly distinguished from
+the private internal contract; no blanket dynamic-dispatch equivalence is
+claimed. Full original-source inverses and original factory/registry/runtime
+provenance are retained. Fourth actually applies all30 through application
+e77a5054/workflowb9db0019,0/0/null/draintrue. Corrected saved-workflow validation
+is pending; previous immediate-pre-Native parity is not whole-goal correctness.
+Evidence: `runs/root_native_internal_launch_schema_20261113_preparation/` and
+`runs/fourth_native_launch_correction_01/`.
+
+2026-11-13: Actual A103 behavior01 collects the exact490 intended node IDs but
+stops after46 fixture failures and an interrupted case, with zero passes. The
+common fixture called Store.targets before problem initialization. Test-only
+successore3ee8f44 uses the real Store.problem/create_problem interface and
+handles only the exact uninitialized error. Behavior02 reaches child assignment
+and reveals a separate fixture boundary: check_handoff opens a genuine second
+connection to the same registry, outside the original single-instance native
+operation controls. It stops after11 such failures and an interrupted case,
+again with zero passes. Production and assertions are unchanged. Both copied
+snapshots remain unchanged with zero import escapes (96 then289 application
+modules). Raw workflowsc63e37ac and7be5eeb4 remain1 and2 respectively with
+drainfalse; separate actual-exit files record inactive/empty/absent processes.
+The diagnostic support correction now retains null interrupted-JUnit identities
+instead of raising a sorting error. A single original direction case will
+verify the common fixture repair before larger coverage resumes. These failures
+do not change the verified386/405 installation count. Evidence:
+`runs/root_a103_parent_private_behavior_01/`,
+`runs/root_a103_direction_fixture_initialization_preparation_01/` and
+`runs/root_a103_parent_private_behavior_02/`.
+
+2026-11-13: After the actual Native30 correction, a later test-only saved-return
+reader call is updated to supply the same required failure_prefix as runtime.
+Both original representative saved-child cases, A107 and A110 under
+hpc_work_planning, then pass all three pytest phases in reportfe4928f4.
+Workflowb607fb85 is0/0/null/draintrue; its separate exit observation records
+inactive/MainPID0, empty recursive cgroup and absent supervisor157123. These
+cases exercise real admission, controlled returned states, typed parent
+receipt, Store close/reopen, descriptor/request/outcome/credit preservation and
+replay with live work forbidden. This is saved-workflow engineering evidence
+with controlled native ports, not executed scientific search or autonomous
+work. The other six original parent placements are checked separately; this
+entry does not claim all eight passed. Evidence:
+`runs/fourth_native_saved_representatives_01/` and
+`runs/fourth_native_saved_context_reader_01/`.
+
+2026-11-13: Third's selected15 passes the original wired setup/tool-catalog
+case after the actual global request-binding and Root progress-owner import
+corrections. Workflowfd763171 is0/0/null/draintrue, and its separate actual exit
+records inactive/empty and absent original processes. JUnit72870666 contains
+the one successful original case. This establishes the constructed catalog
+boundary on selected15, not the complete Root suite or native/scientific
+execution. The Root-nominal MACS2/LUMPY request adapters still lack current
+ownership under Root: the finite review finds actual Root consumers and only
+historical inventory references. Their authorized placement in Root/library,
+all direct callers and current ownership records are therefore being prepared
+together; import success alone does not close organization. Evidence:
+`runs/third_root_assembled_catalog_candidate15_01/` and
+`runs/third_orchestrator_coordination/a103_guard_metadata_request_binding_ownership_01/`.
+
+2026-11-13: The remaining six original NativeSaved cases also pass, in
+reports11572b80/workflowc8c62da0. Primary compares the two representative and
+six remaining node sets against the actual original eight: disjoint, no
+missing cases and no extras. Both successful workflows retain separate actual
+exit observations; the remaining run records inactive/empty and absent159753.
+This completes all eight original HPC-parent Native saved-child engineering
+cases under their controlled native ports. It does not cover the other22
+Native closed paths, full autonomous iteration or native/scientific execution.
+The original30 reconstruction passes remain separate evidence. Evidence:
+`runs/fourth_native_saved_representatives_01/` and
+`runs/fourth_native_saved_remaining_01/`.
+
+2026-11-13: The A103 single original direction case passes after receiver
+fixturef9a8c2fe. The fixture controls only the same genuine registry/config/job
+row's handoff/status ports, while receive/check_handoff and their real schemas
+remain active. JUnit80ef9d1b and case inventory453a8557 contain exactly the
+one selected original node; snapshot bytes remain unchanged, with263 actual
+application modules and zero import escapes. Workflowf05ae7b4 is0/0/null,
+drained, without OOM; actual inactive/empty and absent157897/157900/157904 are
+checked. This verifies the common fixture repair on the pre-policy source.
+The full490 and six existing policy cases await the coherent policy12 source
+and combined run; no completed large-cohort claim is made. Evidence:
+`runs/root_a103_direction_fixture_receiver_case_01/` and
+`runs/root_a103_direction_fixture_receiver_preparation_01/`.
+
+2026-11-13: A103 combined behavior03 is executing the exact original490 plus
+six existing selected-thread policy cases on snapshot0f346138. Its harness
+5dd64c05 preserves separate original490/policy6 outcome accounting and the
+complete unfiltered496 identities. The first41 call outcomes pass; the full
+result and post-run checks remain pending. This is not an application or a
+completed-cohort claim. A separate test-only helper915dcd15 extends the same
+three paired-parent cases to close/reopen actual Store and jobs databases
+through the unchanged explicit Workflow constructor. It preserves exact saved
+parent/child descriptors, requests and pending null outcomes/credit. That
+extension is prepared only, pending execution after behavior03; standard
+independent-worker rejection of job_episodes remains unchanged. Evidence:
+`runs/root_a103_parent_private_behavior_03/` and
+`runs/root_a103_parent_reopen_test_extension_20261113_preparation/`.
+
+2026-11-13: The MACS2 whole-function golden discrepancy is traced to changes
+already present in committed pre-organization HEAD. Both current defining
+function bodies (_task and _steering) are byte-identical from HEAD through the
+authenticated extraction predecessor to selected15/16. The old expected hashes
+match genuine older check411/check444 sources; their substantive presentation
+differences cannot be normalized as an import move. Source reporte8a3b1f2 and
+evidence0f8b10d2 retain exact diffs and complete owner reconstruction. The
+assertion remains unresolved and unchanged; this source comparison neither
+claims a historical full-suite run nor passes the assertion. Evidence:
+`runs/root_macs2_presentation_lineage_01/`.
+
+2026-11-13: Actual selected16 runtime059 and three custody failures expose an
+introduced model-presentation import defect. Their retained exception archives
+name the nonexistent Root.rna_structure_comparison_presentation; provider
+presentation fails before the first scripted reply, with no actions or
+observations. Source successord8027619 corrects exactly three relative RNA
+imports in current Root/model_presentation473e014a to the actual selected
+global defining owners, producingabf800d7. The original pre-organization
+providers resolves those same global owners; current library joins and all
+function bodies remain unchanged. Primary reads the real traceback, full
+source account and exact diff. The successor is prepared for Third's next
+composition; no passing result or canonical application is claimed. Credit,
+fixture assertions and the separate catalog-equality discrepancy are unchanged.
+Evidence: `runs/root_model_presentation_rna_imports_20261113_preparation/`.
+
+2026-11-13: A103 behavior03 completes all65 original Direction cases in setup,
+call and teardown, then reveals the same old initialization guard in the
+separate monitor fixture. Twelve monitor setup failures all have the genuine
+problem_not_initialized cause. Primary stops its own runner on that established
+cause; the interrupted pytest cleanup KeyError remains in the raw result.
+Workflow00843240 is1/1/null/drainfalse, noOOM. A separate actual_exit records
+inactive/MainPID0, empty recursive cgroup and absent original processes. The
+full selected snapshot remains unchanged, with293 imported modules and zero
+escapes (epoch4243dec0). Exact65 complete passes are retained as6715e37c from
+reports9a37a622; collected496 and unfiltered JUnit2d33778c are unchanged. No
+full496 pass is claimed. The test-only monitor correction will resume the
+remaining431, including the same three reopened-parent cases, with production
+unchanged and explicit retained-case source proof. Evidence:
+`runs/root_a103_parent_private_behavior_03/`.
+
+2026-11-13: Second installs the final A101 current ownership metadata across
+40 declared homes,82 records, from candidate71868291. Application1cfe4bb3 and
+workflowa79371c5 retain0/0/null/draintrue; separate exit evidence records the
+inactive/empty owning window and absent167804. Primary reads the handoff,
+application and exit evidence and verifies all82 current file hashes against
+the actual application. The inventory records1798 source modules,385 test or
+helper modules,5577 assets and55 existing scoped receipts, with31 internal
+connections,10 external-parent boundaries and explicit recursive reuse. No new
+test cohort was run for metadata. Historical HMMER39 failures, older saved-input
+limitations and unavailable original Homology files remain explicit; this
+metadata installation does not prove shared Root integration, historical
+restoration or autonomous science. Evidence:
+`runs/second_a101_final_ownership_install_direct_01/` and
+`runs/second_orchestrator_coordination/SECOND_IMPLEMENTATION_HANDOFF_20261113.md`.
+
+2026-11-13: Root16's catalog equality and worker059 failures are separately
+attributed to pre-organization fixture/interface incompatibilities. Report
+1d3dd5b5/evidence5fa31c2b preserves the original raw concentration-window
+contract and independently records its three existing model-facing location
+projection differences; the original assertion compares raw and projected
+forms. Reviewa1540afe/evidence7b200256 proves the original fresh-root guard and
+the two tests' missing commissioned credit context already coexist before
+organization. No mirrored runtime oracle, fabricated default binding or
+weakened assertion is introduced. These are source attributions, not historical
+full-workflow execution claims or current passes. Separately, source selection
+620caffa supplies two genuine already-extracted IQ-TREE/MUSCLE parameter owners
+omitted from selected16; existing direct caller imports are already correct.
+That correction is prepared for later composition, not yet validated. Evidence:
+`runs/root_contract_information_catalog_diagnosis_01/`,
+`runs/root_contract_worker_credit_attribution_01/` and
+`runs/root_phylogeny_parameter_owner_selection_01/`.
+
+2026-11-13: Fourth's private Literature28 engineering selection now has570
+distinct original cases passing across retained runs. Primary reads the
+actual reports0c083dde/f7810c74 and checks that556 complete original passes
+plus exactly the14 original failed nodes form a disjoint, complete570 union;
+all setup/call/teardown phases are accounted. The sole fixture correction adds
+the actual pending decision index alongside restored public exchanges, matching
+the unchanged private task's frame producer/validator. Current helperd96c226a
+matches application evidence. Raw original failurea574ff52 is retained; corrected
+workflow4185191d is0/0/null/draintrue. Separate exit observations show inactive
+and empty owning slices before subsequent work. These checks exercise28 private
+owners with controlled task/presentation/admission inputs and original scientific
+fixture templates; they do not establish whole-Workflow saved reconstruction
+or autonomous science. Evidence: `runs/fourth_literature28_connected_02/`,
+`runs/fourth_literature_restoration_fixture_01/` and
+`runs/fourth_literature28_corrected_01/`.
+
+2026-11-13: Fresh final-tree Direct carriers pass for all eight A107/A110
+placements through both the actual factory and saved-descriptor reopening
+paths. Primary reads carrierd9ca1278: each axis captures and reads four closed
+carriers, and both reopening paths recover the exact request, completed outcome
+and closed credit for the same four private homes. Workflow966573fd is
+0/0/null/draintrue; separate exit observation records inactive/empty and absent
+170062. These captures contain no native/model actions and do not establish
+autonomous scientific execution. The final read-only evidence join10f11834
+reconciles these records with the already retained Literature570, reconstruction30,
+NativeSaved8, DirectReceipt8 and Scientific202/204 scopes without repeating
+tests or suppressing the original RNA limitation. Latest actual source export
+is06/31e9b275,2679 paths. HPC16 remains separately owned by Fifth; Fourth now
+takes its explicitly released, unstarted A104 policy queue while retaining the
+A107/A110 production freeze. Evidence: `runs/fourth_direct8_final_carriers_01/`
+and `runs/fourth_final_evidence_join_01/`.
+
+2026-11-13: The released A104 policy queue is actually installed and validated.
+Four production changes remove count-based admission/guidance ceilings while
+retaining byte bounds, selected operands, saved V1 identities and the real
+one-CPU/5-GiB/no-swap enclosing workflow. Primary checks all four current hashes
+against applicationcac33105 and independently compares baseline/post reports:
+the exact same30 IDs change from13 passes/17 failures to30 complete three-phase
+passes. The selection is20 original policy cases plus10 guidance cases, with
+the latter kept separate. Workflow4ce1be4f is0/0/null/draintrue, noOOM; separate
+exit observation records inactive/empty and absent172674. Native child service
+observations are controlled; no scientific worker, provider or remote execution
+is claimed. Current source map3d6c5495 contains four production and five test
+files; only affected current ownership references are being reconciled.
+Evidence: `runs/fourth_a104_policy_application_01/`,
+`runs/fourth_a104_policy_baseline_01/`, `runs/fourth_a104_policy_checks_01/`
+and `runs/fourth_a104_policy_verification_01/`.
+
+2026-11-13: A103 remaining431 reaches the original monitor credit-identity case
+and exposes a stale test expectation that launch/results callbacks also belong
+to the private monitor. Actual private sibling credit files already own those
+unchanged callbacks. Test-only successor3cba8f25 redirects the two original
+lexical identity assertions to those real sibling instances and defining
+modules, and checks the monitor has no foreign callbacks. Its monitoring
+identity, descriptor, initial-credit and wrong-role assertions are unchanged;
+no foreign production methods are restored. The active test snapshot remains
+unchanged and its failure is retained; this successor has not been executed.
+Evidence: `runs/root_a103_monitor_credit_owner_test_preparation_01/`.
+
+2026-11-13: A103 remaining431 ends with51 complete monitor passes, one stale
+sibling-credit assertion failure and11 Head fixture invalid_scope failures.
+Primary independently counts the three-phase passes from reportsb1c92988.
+Together with the original65 Direction passes this retains116 unique original
+cases, leaving380. Workflow6a2a31ca remains2/2/null/drainfalse after interruption
+on the repeated fixture cause; separate actual_exit5c337082 records inactive,
+MainPID0, empty recursive slice and all five original processes absent. The
+whole selected snapshot remains unchanged (epoch9bf2a241), with no import
+escapes. The Head test-only successor1b7b825f adds the genuine own-axis
+plain(context.scope) conversion already present in both current and original
+production services. Primary reads the full source account and exact one-line
+diff; credit calculations, strict validation and assertions are unchanged.
+Both fixture successors are prepared for the remaining380; no complete496
+pass, canonical application or scientific execution is claimed. Evidence:
+`runs/root_a103_remaining431_01/` and
+`runs/root_a103_head_plain_scope_test_preparation_01/`.
+
+2026-11-13: A104's affected current ownership records are reconciled in exactly
+two metadata files after the30-case policy validation. Primary reads application
+c19ecb51, successful drained workflow57193a97 and separate inactive/empty exit,
+and independently verifies current inventorye8697aa6 and Markdown0714d53d.
+Six localized inventory patches update three support modules, one configuration,
+five required test/helper entries and the dated policy/source-input account;
+reversal retains the complete original24bba868 inventory, including historical
+receipts. Existing Source14 lists and runtime traversal already cover the
+affected files, so their executable formulas are unchanged. Combined actual
+source mapf9c10a7b contains11 paths. No further test cohort or new scientific
+validation is claimed. The older Root test snapshot has different metadata
+preimages and must retain its own explicit source selection; this canonical
+inventory is not a blind successor for that snapshot. Evidence:
+`runs/fourth_a104_metadata_application_01/`.
+
+2026-11-13: Root selected16 finishes its700 selected cases with533 passes,
+142 failures and25 skips, plus three collection errors. Primary reads the
+actual final output, failed workflow12e4e4b1 and post-execution source check
+deb95104: selected16 and its selected15 predecessor remain unchanged. Raw
+receipt1/1/null/drainfalse remains literal; a separate actual-exit observation
+records inactive/MainPID0, empty recursive cgroup and absent original processes.
+This is incomplete Root integration, not an organization-completion claim.
+Corrections are being composed against the exact retained source selection.
+Evidence: `runs/third_root_candidate16_checks_01/`.
+
+2026-11-13: Root's A105 assembly failure is traced to a stale test monkeypatch
+namespace after relocation of its required helper. Source3d2650dd changes only
+that namespace to the actual module defining parent_fixture's two_experiments.
+Primary reads the full report, exact one-line diff and genuine helper body.
+The existing target-specific synthetic fixture, grading inputs, strict target
+guard and0-to7-to0 assertions are unchanged; no scientific support is invented.
+The same module's other12 cases, including both quantity variants, passed all
+three phases in16. The source correction is prepared for17; no new passing
+assembly outcome or canonical installation is claimed. Evidence:
+`runs/root_a105_assembly_target_operand_review_01/`.
+
+2026-11-13: The separate runtime059 all_nineteen assertion is one failed case,
+not19 observed failing contracts. Report6977a70a/evidence43bd6411 traces its
+first schema-list mismatch to the same inherited raw-versus-model projection
+already recorded in1d3dd5b5. Original and current catalogs have28 matching
+ordered operations; the later decoding loop was not reached. The embedding
+preserves that schema difference and derives different content identities.
+Primary reads the complete source attribution. No assertion or production
+change is justified, and no historical whole-test pass is claimed. Evidence:
+`runs/root_contract_runtime_catalog19_diagnosis_01/`.
+
+2026-11-13: Root17's A104 policy metadata selection is a finite snapshot-only
+port1af36690 onto the actual older16 inventory. Primary reads its source account,
+successful drained preparationc0a1d7cc and separate empty-exit observation.
+The exact nine policy code/test afterimages are required; unrelated16 ownership
+and historical bytes remain unchanged. It expressly forbids canonical
+application. Current canonical A104 metadata remainsf9c10a7b and is not replaced
+by this older snapshot-derived record. No additional test cohort or Root17
+runtime validation is claimed. Evidence:
+`runs/fourth_a104_root16_policy_metadata_port_01/`.
+
+2026-11-13: Source review closes the three demonstrated current receipt-map
+joins for the pending Root17 selection. Summaryv4c4a23359 retains the exact
+selected16v3 predicate and originalv1/v2 branches; concentrationv30c3e1158 and
+endpointv35494f18a retain exact priorv2 receipts and originalv1 branches.
+Primary reads actual producer/reader diffs and complete source accounts;
+independent reviews verify whole inverses, current operands and historical
+predicate independence. Science, record schemas, original replay order and
+credit are unchanged. These are explicit new current identities, with saved
+history kept separate. Actual frozen17ccda8128 subsequently passes native source
+proof7b178cff for all186/206/178 operands and18/25/12 slots. Runtime tests are
+just starting; neither saved-restoration success nor canonical application is
+claimed. Evidence: `runs/root_summary186_transition_review_01/`,
+`runs/root_concentration_release_v3_review_01/`,
+`runs/root_endpoint_receipt_transition_preparation_01/` and
+`runs/third_orchestrator_coordination/a102_dependency_review/final17_release_source_check_01/`.
+
+2026-11-13: A102 test helper's two own constructors retain an earlier global
+population keyword after their binding moved to A102. Source successore4bbb606
+changes only those two sites to the actual structure_population option,
+following672183c7. Primary reads the exact diff and original/current feature
+proof: both tested operations are structure.populate with unchanged schema,
+inputs and scientific assertions. Root's valid broader keyword and setup-only
+consumers remain unchanged. Four existing affected cases are selected separately
+in Second's Root17 invocation. No new test, passing result or canonical write
+is claimed for this source correction. Evidence:
+`runs/root_a102_structure_fixture_flags_preparation_01/`.
+
+2026-11-13: The bounded adjacent live-map reviewd41becb3 confirms71 matching
+operand entries across five other current helpers against actual16 and the
+pinned22-authority overlay. It also identifies a concrete, still-open placement
+gap: measurement_comparison_storage's fresh receipt producer hashes31 original
+flat filenames,22 absent from the relocated tree. Its method is unchanged from
+the original commit and all20 originalv3 pure hashes are genuine. Primary reads
+the actual producer and saved validator. Historicalv1/v2/v3 pins must remain
+unchanged while a separately versioned current receipt follows the genuine
+split owners. This required correction is reserved to Main and remains outside
+active17, whose selected cases do not invoke fresh measurement comparison.
+No executed failure or completed fix is asserted from the source audit alone.
+Evidence: `runs/root_live_source_map_adjacent_review_01/`.
+
+2026-11-13: A103 remaining380 finishes with370 complete three-phase passes
+and10 call failures, with all380 setup and teardown phases passing. Actual
+collected and JUnit identities match the selected380. Epoch b515c656 confirms
+the frozen snapshot remains unchanged, with862/102/102 imported modules and
+zero escapes. Raw workflow d6668c19 records1/1/null and drainfalse; independent
+actual exit ae269fdc records inactive/MainPID0 and an empty recursive slice.
+The10 failures all reach the same sibling helper raw-result assertion, across
+eight returned-outcome variants and two saved-source restoration cases.
+Second's read-only copied-database diagnostic f188910a proves the latter two
+retain original failed outcomes, zero credit and authentic pending_work_after_action
+metadata. The proposed correction instruments the real producer in the test
+helper; no production or credit change is established. The370 new passes and
+116 retained passes do not establish complete496 success, canonical application,
+or autonomous scientific validation. The original installation count remains
+386/405,19 pending. Evidence: `runs/root_a103_remaining380_01/`,
+`runs/root_a103_remaining380_terminal_review_01/` and
+`runs/second_a103_saved_source_feedback_01/`.
+
+2026-11-13: The remaining measurement source proposal now has its finite
+communication join prepared. Packet13ac95ce changes four current receipt
+helpers to the actual communication successor d327906f and updates two current
+ownership files. Independent source review checks186/178/206/202 current
+operands, whole inverses, the unchanged historical receipt predicates and the
+original104 ownership support rows. The measurement storage producer/reader
+proposal b2e4edd0 preserves its original saved v1/v2/v3 validator51c2163c;
+custody9 be53664b retains actual17's accepted releases. The pending versions
+remain summary5, concentration4, endpoint4 and measurement4. Primary reads
+the complete handoff, exact selected rows and native review results. Coherent
+Root composition, its explicit definition_inputs allowance, runtime validation
+and canonical application remain outstanding. This source work does not change
+the installed episode count. Evidence:
+`runs/root_measurement_receipt_communication_join_01/` and
+`runs/episode_orchestration_20261111/PRIMARY_HANDOFF_AFTER_TRANSPORT_RECOVERY.md`.
+
+2026-11-13: A103's focused ten-case continuation now passes all ten original
+failed cases in setup, call and teardown. The one helper-only successor1dd763ea
+captures the real pending-work producer's exact returned snapshot; the native
+port remains the explicit controlled fixture. Saved-result equality, original
+action identity, single execution/replay and zero credit remain checked. No
+production source changes. Original checker d831be69 authenticates the exact
+490+6 case union from486 retained actual passes and these10 passes, with no
+missing, extra or skipped IDs. Workflow edd0c91e succeeds and drains; separate
+actual exit c4272170 confirms inactive service, empty recursive slice and absent
+193741/193744. Epoch c89c37d2 is unchanged,266 imported modules and zero escapes.
+The first preparation failure occurred before pytest while replacing its own
+read-only clone; its error and runner source are retained. These results prove
+the tested controlled boundaries, not canonical installation, complete mixed-role
+organization, full saved-workflow restoration or autonomous science. The original
+installation count remains386/405,19 pending. Evidence:
+`runs/root_a103_saved_outcome_fixture_preparation_01/`,
+`runs/root_a103_remaining10_01/` and `runs/root_a103_remaining10_02/`.
+
+2026-11-13: Primary reads both terminal Root17 subset reports and checks actual
+case records. Third62 has17 complete passes and45 failures; Second99 has44
+complete passes,39 failures and16 original skips. Both exact assigned lists ran
+without collection errors, with selected17 and parent16 unchanged. Third raw
+workflow0c3a485f and Second cf0477d1 retain their false drain fields; independent
+actual exits c8e0cb0f and13eac69c record inactive services and empty recursive
+slices. These are separate subset outcomes, not a full Root17 pass. Existing
+failures remain attributed only where direct source/archive evidence proves
+their causes; additional import/metadata repairs and saved-feedback diagnoses
+remain in Third's owned continuation. Evidence:
+`runs/third_root_candidate17_subset_01/` and
+`runs/second_root_candidate17_subset_01/`.
+
+2026-11-13: The mixed-role completion audit finds concrete copied foreign-role
+branches still requiring organizational cleanup. Read-only AST census b0337555
+examines all386 installed task.py files and finds60 literal-false scientific-head
+checks,30 each in A102/A103. There are no parse errors or changed source hashes;
+workflow98785c5d succeeds and drains. This is a finite source omission, not a
+new runtime failure or reversal of earlier passing connection checks. Source
+family proposal883d71e6 separately removes28 literal-false copies in14 pending
+A102 homes; its source identities and ownership still require reconciliation.
+Evidence: `runs/root_private_role_branch_census_02/` and
+`runs/root_a102_mixed_role_source_review_01/`.
+
+2026-11-13: The six parent-specific A103 Homology children receive a prepared
+twelve-file successor9ae13812 deleting24 lines: the scientific-head execution
+and decision-call guards. Actual constructors reject that role, retain their
+genuine parent and concrete binding checks, and Journal rows guarantee the
+response field. All other module bytes are preserved; genuine head guards stay
+with the head. A134-file home scan finds no remaining same role guard. Primary
+reviews the exact source deletions and runs only the three existing counterpart
+cases covering all six children and both parents. All3 pass in all phases;
+workflow48bda9ad succeeds and drains, actual exit00e40503 records an empty slot,
+epoch a5f62f39 is unchanged with266 imported modules and zero escapes. Source
+fingerprints change as recorded; eight-home ownership reconciliation remains
+pending. This does not claim cross-release restoration, a new full496 run,
+canonical installation or complete mixed-role cleanup elsewhere. Evidence:
+`runs/root_a103_private_role_guard_preparation_02/` and
+`runs/root_a103_role_guard_focus_01/`.
+
+2026-11-13: Primary independently verifies the exact source-only cleanup in
+180 files across SourceFamily28, literal140 and Homology12. Result3d4ff9ac
+checks each pinned before/after image, exactly one two-line guard removal,
+unchanged remaining AST and successful compilation without application imports
+or execution. Workflow216440e succeeds and drains; actual exitd80f0f0f is
+inactive/empty. The later114-file packet f8372450 separately passes the same
+mechanical check (result20c8caad,228 removed lines, workflow9d59f309, actual
+exit5d783599 inactive/empty and absent supervisor200517). Together these are
+294 distinct source successors, not294 episodes or new behavioral tests.
+Literal-false branches need no constructor assumption. For the variable-path
+A103/A107/A110 successors, the proof covers the actual declared construction,
+dispatch and restoration routes; arbitrary wrong-role direct construction is
+explicitly outside that proof. Genuine scientific-head owners remain intact.
+Canonical application and coherent current ownership/identity updates remain
+pending, and prior runtime results retain their original source identities.
+Evidence: `runs/root_private_role_successor_verification_01/` and
+`runs/root_private_declared_successor_verification_01/`.
+
+2026-11-13: The eight genuine A103 parent/child ownership homes now have a
+prepared18-file metadata packet61c0f8bf. Envelope-only normalizationafcd5866
+supplies exact replacement preimages and null create preimages without changing
+payloads; subsequent wording-only packet293c2c68 corrects two parent descriptions.
+Current records account for eight bindings and171 source rows, while the three
+former bindings and19 support rows remain explicit historical provenance.
+The finite transition must be composed after the installer's current Resource
+metadata instead of replacing a newer whole-axis inventory with a stale copy.
+No canonical installation follows from this preparation. A fresh read of all19
+previously unconnected episode declarations finds unchanged declaration hashes
+and absent task.py files: the original installation census remains386/405,
+with15 A102 and4 A103 outstanding. Evidence:
+`runs/root_a103_private_role_guard_ownership_preparation_01/`,
+`runs/root_a103_private_role_guard_ownership_preparation_02/` and
+`runs/root_current_task_census_02/census.json`.
+
+2026-11-13: Primary verifies the additional A105 private source-examination
+cleanup e9efe4cc: exactly two two-line scientific-head guards removed, all
+remaining AST and source bytes unchanged, syntax compiles. Result8e70ff67 and
+workflowfea1cfea succeed; separate actual exit0c1cc716 records an empty slot.
+The proof follows the declared literature_page construction/restoration routes;
+arbitrary manual wrong-role construction is outside it. Original generic/head
+checks remain. Grading-before-credit, typed findings, invalid/failed outcomes
+and replay remain byte-identical. This is source preparation; current ownership
+and identity reconciliation precede application. It adds no installed episodes
+and claims no new behavioral tests or scientific validation. Evidence:
+`runs/root_a105_source_head_guard_preparation_01/` and
+`runs/root_a105_guard_successor_verification_01/`.
+
+2026-11-13: Main completes source review of Third's two-file Root18 metadata
+successor3ea8ccc1 after exact Main13ac95ce. Independent resultf3cf10e2 reconstructs
+both metadata afterimages using only the finite edits, verifies whole inverses,
+all five keyed current LUMPY references and nine actual defining-owner source
+authorities/consumer hashes. Other record fields and prior provenance remain
+unchanged. Workflowab51b364 succeeds and drains; actual exit70d94e8e is empty.
+This clears the finite source selection for Third's composition. It does not
+establish complete dependency closure, runtime validation, canonical application
+or release of the active A107/A110 connected-run source freeze. Evidence:
+`runs/root_root18_metadata_verification_01/` and
+`runs/third_orchestrator_coordination/PRIMARY_ROOT18_METADATA_REVIEW_20261113.md`.
+
+2026-11-13: A105's finite private-guard cleanup is now actually installed.
+Metadata generationa06861e8 produces manifest2885997a: two rich current source
+rows, six exact byte splices and one own-home inventory candidate, with a full
+inverse and no axis replacement. Exact3 application4996b339 then installs those
+two source files and inventory0144cedd. Workflow44cd261c succeeds and drains;
+actual exit05f9dd26 records an empty slice, and an independent installed SHA
+check matches all three reviewed afterimages. The installer verifies248 other
+owned Python files unchanged, retains backups/journal/full inverses and has no
+intersection with2686 actual frozen targets. The genuine head's execution and
+decision checks remain in source. No tests or application imports run; source
+preservation is supported by the exact deletion/AST proof8e70ff67. Prior runtime
+and scientific results retain their own epochs. No episode connection is added
+to the original386/405 count. Evidence:
+`runs/root_a105_guard_current_ownership_generation_01/` and
+`runs/root_a105_guard_application_01/`.
+
+2026-11-13: The A104/A107/A110 current metadata generation completes for100
+proposed source changes in50 homes. Plan e99ac204 contains112 sparse document
+transitions, rebuilt current module/method/line/import/call facts and genuine
+scientific-head source fingerprint accounts ee2ce76a. It evaluates the exact
+pinned digest helper functions/expression on7786 axis sources and seven A104
+Root operands; it imports no application modules and executes no workflow or
+tests. Workflow044624a0 succeeds and drains; actual exit253594c5 is empty.
+Historical/unselected bytes retain their original spans and inverse hashes.
+These are prepared transitions, not canonical installation or whole-axis
+afterimages. Fourth retains integration after its existing connected-run source
+freeze; the three missing A104 Homology ownership homes remain separate.
+Evidence: `runs/root_nonhead_guard_metadata_generation_01/`.
+
+2026-11-13: HPC16 controlled connected validation completes on export07/50ed842e
+with fixture correction02/025ce867. A107 Launch/Results each pass124; A110
+Launch/Results each pass116. Cross-axis joind6e59473 verifies all480 original
+case identities, imported-file origins and hashes, unchanged own-axis sources,
+all2679 export rows, shared nine inputs and all64 original saved yield bytes.
+Main independently authenticates every referenced result/JUnit/workflow and
+workspace manifest, reads the four successful drained connected receipts, and
+verifies all30 canonical launch-schema repair hashes. The original120P4F and
+112P4F Launch baselines remain unchanged; the actual internal-schema repair
+resolves those eight organization regressions while preserving public guards.
+Earlier Results fixture failures remain separately retained; corrected original
+Results baselines pass124/116. Join workflow8275c7f1 succeeds and drains with
+no OOM; retained actual process observations show both windows empty and
+original workers absent. The explicit joint freeze release permits later
+owner-coordinated integration. No tests are repeated for this review. This
+adds no live HPC/native execution, autonomous science, full saved-workflow
+restoration or installed-episode increment. Evidence:
+`runs/fifth_current_hpc16_cross_axis_join_01/`.
+
+2026-11-13: Main executes the sealed standalone A102 SourceFamily14 ownership
+creator, inputsa77caf93. Manifest18573086 contains28 absent-target candidates;
+source identity covers389 selected files/380 own Python files/14 homes, and
+the actual source descriptor fingerprints match all14 independently selected
+values. AST import tuples match the native dependency review exactly; the
+original five extra descriptor operands per home retain their declared order.
+Test ownership74cbde4d preserves21 selected assets, exact existing case identities
+and eight prior receipts, excluding tests09 execution. Dependency86a9d101 retains
+explicit external reasons and106 unresolved role-disposition rows. Plan33's
+two added test targets have zero selected production-source intersections.
+Workflow967fccdd is0/0/null/drained, with actual empty service/slice and absent
+supervisor209041. Main independently verifies all28 candidate hashes. This is
+source-only ownership generation, without tests, application imports or
+canonical writes; the installation census remains386/405,19 pending.
+Evidence: `runs/root_a102_source_family_ownership_generate_01/`.
+
+2026-11-13: Primary independently verifies two finite source proposals in one
+serial source-only workflow. A104 c22e6354 changes63 import locations in59
+current files, resolving35 of the37 original Root17 edges and28 equivalent
+current sites. Every complete byte transformation matches; ASTs differ only
+in the declared import module/level, and each target symbol is defined in the
+authenticated same-axis owner. The newer execution-binding reader changes
+remain intact. Two missing helper owners still require original-source recovery.
+A102893764dc removes exactly12 three-line foreign-head branches from the
+selected private child assemblers; all other bytes/AST and callback signatures
+remain exact. The proof follows each declared child-role dispatcher and the
+unchanged same-name runtime callback. Arbitrary wrong-name/custom direct calls
+are outside this proof. Syntax compiles for all71 candidates. Result07a4604d
+and workflow0e8d7290 succeed and drain; actual Main service/slice are empty and
+supervisor209670 absent. No application imports, tests or canonical writes
+occur. Current ownership/fingerprints must compose the exact successors before
+application; no installed-count or whole-workflow completion follows.
+Evidence: `runs/root_import_and_child_source_verification_01/`.
+
+2026-11-13: A104's two remaining missing-owner candidates are recovered from
+the actual committed pre-organization sources. Successor6af71403 follows
+direct59/c22e6354: complete homology tool information moves into its A104
+library with three import-owner substitutions; two original FBA version-check
+functions receive a narrow own-axis library home; two direct callers change
+only their import locations. The explicit optional witness contract, signatures,
+original text, errors and byte-validation behavior remain unchanged. Main
+authenticates the three actual Git originals and independently verifies whole
+homology bytes/AST except those imports, both extracted declaration bytes/AST,
+the caller edits, syntax and genuine own-axis direct definitions. Result48f59745
+and workflow062dfc86 succeed and drain; actual service/slice are empty and
+supervisor210165 absent. Final62 selection0621ea7e covers the9 queued A104
+missing names, but no runtime closure, application or behavioral test is
+claimed. Combined current ownership/fingerprint preparation also includes40
+earlier guard edits; old fingerprints and historical receipts are not rewritten.
+Evidence: `runs/root_a104_missing_owner_recovery_preparation_01/` and
+`runs/root_a104_recovery_verification_01/`.
+
+2026-11-13: Main generates SourceFamily14's current ownership successor after
+the12 source-verified declared-child branch removals. Manifestf38185ad contains
+28 replacements against exact generated18573086 beforeimages. Transition
+account92cfc8a7 regenerates12 current module records and24 request-sender endpoint
+records across both sides of the12 child exchanges;8 genuine fingerprints change
+and6 remain exact. All other source records, tests/helpers/fixtures, historical
+validation fields and original/history JSON value bytes remain unchanged.
+The current dependency account removes8 foreign-head groups/12 import symbols,
+repins96 surviving imports and explicitly retains98 unresolved home/group rows.
+Workflow6a5f74bd succeeds and drains, with actual Main service/slice empty and
+supervisor210307 absent; all28 output hashes independently match. This is
+metadata generation without tests, application imports or canonical changes.
+No episode installation or whole-ownership completion is inferred. Evidence:
+`runs/root_source_family_child_head_metadata_generate_01/`.
+
+2026-11-13: Main generates the SourceFamily14 ownership successor for the exact
+42-source private presentation split. Manifestba5bed84 replaces28 exactf38185ad
+candidate beforeimages. Selection42b3e124 contains403 sources/394 own Python
+files;14 new selector records,28 replaced source records and14 fingerprints are
+accounted for. Message endpoints and historical test/source receipt fields remain
+unchanged. Workflow52ab2aca is0/0/null/drained; actual service/slice are empty and
+212829 absent at completion, and all28 output hashes independently match. This
+metadata generation executes no application imports/tests or canonical writes.
+The later source-only dependency delta8335e7db preserves these source operands;
+its28 explanations are a separate current-record successor, not retroactive
+changes to this generated package. Evidence:
+`runs/root_source_family_presentation_metadata_generate_01/` and
+`runs/root_a102_source_family_shared_library_disposition_01/`.
+
+2026-11-13: A104 combined102-source ownership generation completes with plan
+0eab44da and64 sparse document transitions across30 homes. The exact source
+selection combines59 direct import repairs, four recovery operations (one caller
+has two ordered changes) and40 earlier private guard removals. It adds two
+original recovered library owners, records20 static consumer changes and follows
+the actual scientific implementation digest over3210 before/3212 after axis files
+plus seven unchanged Root context operands. Original/history JSON values remain
+exact; current records and descriptive parent identities follow selected sources.
+Workflowe6e344f7 is0/0/null/drained, with no OOM; actual Main service inactive/PID0,
+recursive slice empty and supervisor214120 absent are independently checked.
+All64 transition hashes match the plan. No application imports, canonical writes,
+runtime closure or installed-episode increase follows. The166-write installer is
+being prepared against these concrete inputs. Evidence:
+`runs/root_a104_combined_metadata_generation_01/`.
+
+2026-11-13: Main authenticates Third's completed three-file somatic candidate
+receipt ff7d61ba, postcheck d8986f6f, JUnit 829f2b73 and phase evidence 9d7e801a.
+The two original engineering modules have 49 unique cases and 147 passing
+setup/call/teardown phases. The actual baseline failed collection on the retired
+native_flux_balance_storage import; that is a relocation blocker, not evidence
+of an original pre-organization failure. All 22,298 parent Python identities and
+4,817/4,820 selected references pass retained source checks. Workflow 3225d4af
+succeeds and drains; actual-exit 6ee025fe records an empty Third window. Controlled
+native rejection boundaries forbid native subprocess execution. No canonical
+application, pending measurement-producer coverage, full Root composition or
+saved-workflow restoration follows. Evidence:
+`runs/third_root17_somatic_candidate_01/`.
+
+2026-11-13: Main's first focused70 presentation run stops before pytest because
+cp-a preserved read-only snapshot directories. Original workflow 4f2a1e72 records
+1/1/null/drainfalse and stderr eff5aefe preserves PermissionError. The subsequent
+actual-exit observation confirms inactive/PID0, an empty recursive slice and all
+three observed worker PIDs gone. No test or application import ran. A fresh
+retry uses preparation 58894a7b, which changes only copied destination directory
+permissions and replacement of the copied manifest. Original snapshot, source
+selection, 70 test identities and assertions remain unchanged; the failed receipt
+and copy remain retained. A retry's live state is not a passing result. Evidence:
+`runs/root_source_family_presentation_focused70_01/` and
+`runs/root_source_family_presentation_focused70_preparation_02/`.
+
+2026-11-13: Main's corrected SourceFamily presentation run passes all70 selected
+existing cases, with exactly210 successful phases and70 matching JUnit identities.
+Case result51cb2646/final7db37adb retain the fresh outcomes. Source postcheck
+fc6e8fe6 proves copied epoch5d7dfb1e unchanged, all14 private presentation selectors
+imported and541 application modules with zero import-provenance violations.
+Original snapshot09 and all selected403 plus26 external operands remain unchanged.
+The exact selected cases cover provider presentation/cache/replay and instruction
+composition/service contracts; they do not establish all standalone specialized
+renderers, native work, production callback use or full autonomous science.
+Workflow45f7f867 succeeds and drains without OOM; actual Main service/slice are
+empty and218179/218182 absent after terminal20768. The failed permission-only
+attempt remains retained. No canonical installation or episode-count increment
+follows. Evidence: `runs/root_source_family_presentation_focused70_02/`.
+
+2026-11-13: Final SourceFamily direct-dependency metadata generation completes.
+Manifest a86be887 and dependency authority3065f649 apply the28 exact shared-data
+and schema-diagnostic explanations to ba5bed84 predecessors. All28 candidate
+hashes match. Current403 sources, source records, fingerprints, both message
+endpoints and historical test fields remain unchanged; the scope is the reviewed
+direct contracts, not a complete transitive ownership claim. Workflow629d405b is
+0/0/null/drained; actual Main service/slice are empty and221793 absent. No new
+behavioral test or canonical installation occurs. The existing focused70 result
+remains at its actual unchanged source epoch. Evidence:
+`runs/root_source_family_library_disposition_metadata_generate_01/`.
+
+2026-11-13: The first A104166 installer attempt fails its initial source-map
+membership check before creating its application output or changing canonical
+files. The authenticated source snapshot nests3210 paths under source_sha256.a104;
+the installer mistakenly read the outer object. Raw workflow29245a4a and traceback
+84d0ab93 retain the failure and drainfalse. Separate actual inspection confirms
+inactive/PID0, empty recursive slice and absent220588 after terminal91071.
+Separate preparation02 changes only that lookup, retains all original guards,
+and verifies actual key membership natively. No application is claimed by that
+correction. Evidence: `runs/root_a104_combined_application_01/` and
+`runs/root_a104_combined_application_preparation_02/`.
+
+2026-11-13: Implementation-only Resource20 ownership generation succeeds without
+waiting for final behavioral tests. Manifestc9fb00c5 supplies44 exact candidates:
+20 private home inventories/documents and two axis inventory/document pairs.
+The producer rechecks all439 already-installed non-test afterimages,446 selected
+source operands including400 owned Python files, original fingerprint expressions
+and both profile branches, plus19 existing suite/helper/fixture/default assets.
+Current AST/source ownership and declared exchange owners follow those actual
+bytes. Original/history field bytes and retired support-row values remain exact;
+all44 generated candidate hashes independently match. Tests05 remains only its
+pinned unfinished observation; no final original3168 union or new test pass is
+claimed. Workflow069ffe47 is0/0/null/drained with no OOM and3.30GB peak memory.
+Actual Main service/slice are empty and222160 absent after terminal30158.
+The aggregate writer can consume these candidates without a separate canonical
+Resource metadata application. Original19 uninstalled episodes remain unchanged.
+Evidence: `runs/root_resource20_implementation_metadata_generation_01/`.
+
+2026-11-13: A104 combined source and ownership application completes. Actual
+receipt48f66550 records102 source targets (100 replacements/two original-owner
+additions) and64 metadata documents, all166 observed, no rollback/failure, and
+completed whole-source postchecks b40cd292. Main independently verifies every
+canonical target against its prepared afterimage. Workflow411b86ff succeeds and
+drains without OOM; actual service inactive/PID0, recursive slice empty and223265
+absent after terminal69586. Original3210 axis membership becomes3212; all seven
+Root context operands are unchanged. The earlier preflight-only failure remains
+retained. This is actual organizational repair and current ownership installation,
+not an episode-count increase or successful whole Root import closure. Evidence:
+`runs/root_a104_combined_application_02/`.
+
+2026-11-13: Twelve existing A104 native-parent contract cases pass against those
+installed sources. Resulta12f01e3, phases1c09002b and JUnit2e676dfe show12 distinct
+cases with36 successful phases. All3228 guarded source/helper/fixture inputs and
+1226 executed application sources remain unchanged; no forbidden native/network
+dispatch occurs. Coverage is real own-axis Store/plan/ledger/private constructors,
+query identity and BLAST parent requirement/rejection boundaries. The recovered
+homology-tool and explicit FBA-witness callables remain source-equivalence evidence;
+no full102 behavior, HPC access, autonomous science or saved restoration follows.
+Workflow517e4038 succeeds/drains with no OOM; actual Main service/slice are empty
+and225119 absent after terminal26499. Evidence:
+`runs/root_a104_import_boundary_existing12_01/`.
+
+2026-11-13: The accepted14 A102 received-evidence corrections now have an actual
+28-document ownership successor0e97e78c, dependency authority1d16b237 and current
+import accountd9467c3a. Generationbf23c9a9 verifies14 current module descriptors,
+14 genuine fingerprints,14 added imports and14 current helper selections across
+2726 external import records. Message endpoints and historical test receipts are
+unchanged. Main independently checks all28 payload hashes. Workflowb9a3f003
+succeeds and drains without OOM; terminal96298 and separate actual inactive/PID0,
+empty recursive slice and absent226726 precede the next workflow. This is staged
+ownership, with no canonical writes or new behavioral pass. Earlier focused70
+evidence retains its own source identity. All19 pending episode declarations are
+again unchanged and lack task.py; the installed census remains386/405. Evidence:
+`runs/root_source_family_received_evidence_metadata_generate_01/`.
+
+2026-11-13: A104's64 ownership documents now record the completed installation
+accurately. Generated successor0d7d3229 retains exact prior proposal markers/text
+and separately scoped12-case/36-phase evidence. Actual application74dff34b and
+postcheck02b64b1b complete all64 replacements; Main independently verifies every
+canonical afterimage. Source files and implementation fingerprints are unchanged.
+Workflow50c4539d succeeds/drains without OOM, and actual Main service/slice empty
+plus229584/229587 absent are observed after terminal21940. This is a metadata
+status correction, not additional runtime validation or an episode-count increase.
+Evidence: `runs/root_a104_installed_status_generation_01/` and
+`runs/root_a104_installed_status_application_01/`.
+
+2026-11-13: Aggregate A102/A103 ownership generation02 rejects a stale helper
+membership assumption before creating prepared output or writing canonical
+files. Raw workflow4f0b65a4 exits1/drainfalse; separate actual exit confirms Main
+inactive/PID0, recursive slice empty and229280 absent. Selected A103 head sources
+are23, established by original19 split afterimages plus4 unchanged endpoints,
+with all61 original method destinations present and no later source difference.
+Exact helper successor3ff2669a validates full A10228/A10323 filename sets; its
+other algorithms and endpoint producers remain unchanged. This helper correction
+does not reopen scientific implementation or assert a new behavioral result.
+Evidence: `runs/root_a102_a103_aggregate_ownership_generate_02/`,
+`runs/root_final19_application_preparation_02/A103_HEAD_MEMBERSHIP.json` and
+`runs/root_scientific_head_facts_membership_preparation_01/`.
+
+2026-11-13: Aggregate03 ownership generation completes102 staged documents,
+sources8675d76d/workflowca11abe1, successful/drained with actual empty Main
+service/slice and230568/230571 absent. Current-record review finds stale hashes
+and retired paths inherited from before the source snapshot, including six A103
+acquisition homes; this is an ownership-record correction, not a new executable
+regression. The generated package and dependent final41 compositionc22c63db are
+retained but not accepted for canonical installation. Explicit04 is being
+prepared against the unchanged selected production epochffa67c33. All19 pending
+declarations still match census02 and lack task.py, so the original405 count
+remains386 installed/19 pending. Evidence:
+`runs/root_a102_a103_aggregate_ownership_generate_03/` and
+`runs/root_final19_metadata_composition_01/`.
+
+2026-11-13: Resource05 ends with1990 complete passes,10 failed cases and341
+uncompleted cases, with827 earlier passes retained separately. Raw workflow
+273a1301 retains failure/drainfalse; actual Seventh service/slice exit was checked
+separately. Seventh's actual fixture-only successor9f5b1ec7 is installed by
+application2c47b589/workflow42b36dc3; source review4a0bede8 verifies both canonical
+afterimages, original assertions and case declarations,58 selection inputs and
+446 current source hashes. Exact351 selected cases are the10 failures plus341
+uncompleted, including all20 affected fixture cases. Tests06 is active; neither
+its completion nor reuse after final19 source changes is claimed. Production
+publication guards, original action identities and credit are unchanged. Evidence:
+`runs/seventh_private_resource_installed_tests_05/`,
+`runs/seventh_private_resource_receipt_fixture_apply_01/` and
+`runs/root_resource06_owner_fixture_review_01/`.
+
+2026-11-13: A104 Homology axis2 ownership join is generated as3ed13918 under
+successful/drained workflowb4f3446a. Both payload hashes independently match;
+actual Main service inactive/PID0, recursive slice empty and233690 absent after
+terminal66127. The two documents link six actually installed owner records and
+corrected parent exchange endpoints. Source, scientific head and fingerprints
+are unchanged. Canonical application is still pending; no new runtime validation
+or episode connection is inferred. Evidence:
+`runs/root_a104_homology_axis_join_generation_01/`.
+
+2026-11-13: A104's generated Homology axis join is now canonically installed by
+applicationa991ec25/postcheck2ccacf1e. Both replacements match their generated
+hashes; the full3289-state source/context/metadata guard passes, with no source
+or head edits, fingerprint changes or new tests. Workflow7f821e7f succeeds and
+drains without OOM, and separate actual inspection observes Main inactive/PID0,
+empty recursive slice and236116 absent after terminal11229. Attempt01 was only
+a launcher rejection of Main's precreated output directory; it ran no Python or
+canonical writes. Corrected02 uses the same reviewed installer and inputs.
+Evidence: `runs/root_a104_homology_axis_join_application_02/`.
+
+2026-11-13: Sixth tests10 completes its exact208 cases, all setup/call/teardown
+phases passing, with clean208-case JUnit48ebbe25 and successful/drained workflow
+bfb7c91c. Main independently joins the raw phase count, JUnit and nine result,
+snapshot, selection and exit pins; review1c30274a also authenticates1572 retained
+original-case witnesses and exact1780 uniond64131d1. All14 corrected received
+evidence modules and their one required helper are loaded with accepted hashes.
+This evidence belongs to snapshota17663f5/epochbe664795. Final-source comparison
+c4c9f6ed identifies235 changed,184 added and18 retired production files, including
+80 changed and18 retired modules loaded by tests10. The1780 coverage therefore
+does not establish the later final19 installed behavior; its affected boundaries
+are being joined to existing relevant evidence. Separate focused11 remains
+separate. Evidence: `runs/root_sixth_tests10_accounting_review_01/` and
+`runs/sixth_a102_a103_candidate_tests_10/`.
+
+2026-11-13: Seventh Resource06 completes all351 selected cases with complete
+setup/call/teardown passes and no failed report. Actual workflowa24a0769 is
+0/0/null/drained; Main observes its stable service inactive/PID0. The actual
+selection is the10 prior failures plus341 uncompleted cases, including all20
+affected fixture cases. The separate2817 retained original-case witnesses and
+complete recursive exit are being joined by the peer; this completion does not
+establish behavior after the final40 source application. Evidence:
+`runs/seventh_private_resource_installed_tests_06/`.
+
+2026-11-13: Current catalogue alignment04 completes24 metadata successors,
+sources6b0b87b1/workflow772f573d, successful/drained with actual Main empty and
+238175 absent. Main checks all24 payload hashes; native review8ce361ed verifies
+exact inverse/history preservation,337 regenerated source facts,4978 current
+support rows plus12 explicit framework sources, six Results34 catalogues and
+actual fixture2 references. Composition0278538cfd joins these after aggregate03
+into172 final metadata targets, preserving source40 and all payload bytes.
+The first canonical application stops before any write on the old applier's
+unsupported eight-row create/before:null test schema. Raw2f65e8b7/drainfalse is
+retained; actual Main empty/239418 absent and all1097 unchanged initial paths
+are separately verified byf1c5baaf. An explicit strict applier successor is being
+prepared. This is an installer adapter defect, not an application regression or
+completed installation. The original count remains386/405,19 pending. Evidence:
+`runs/root_a102_a103_current_catalogue_alignment_generate_04/`,
+`runs/root_alignment24_generated_review_01/`,
+`runs/root_final19_metadata_composition_02/` and
+`runs/root_final19_canonical_apply_01/`.
+
+2026-11-13: The strict applier successor admits only the eight authenticated
+create/before:null test rows in original manifestf41fe209. Existing SHA aliases,
+source40, composition02 and all payload bytes are unchanged. Native audit13fdd836
+accounts for all1407 rows and no other unsupported shape. Fresh application02
+completes all41 stages, receipt1ee699f9/ordered receipte8b74e21. All4990 selected
+production sources,172 metadata afterimages and actual installed fixture2 guards
+pass postchecks; Main independently matches all172 metadata hashes. Workflow
+5d35b632 succeeds/drains without OOM; actual Main inactive/PID0, recursive empty
+and240205 absent are separately observed after terminal27605. Source/test assets
+and retired originals retain the applier's before/candidate backups.
+
+The following canonical census8c54027f finds405/405 original coverage, zero
+remaining and no loss since386/405, plus410/410 current implementation homes.
+Each replaced original requires both actual parent-private successors connected;
+the two new parents are counted separately. Explicit module-level task assignments
+are recognized and disclosed as a predicate extension. The nine physical
+method_loop declarations outside the catalogue are separately recorded as
+infrastructure, not hidden or counted as scientific episodes. Census workflow
+1b938bab succeeds/drains; actual Main empty and240527 absent follow terminal74018.
+This closes structural task installation. Internal responsibility splits, current
+shared-root integration, restoration and autonomous scientific validation are
+not inferred. Evidence: `runs/root_final19_canonical_apply_02/` and
+`runs/root_final19_postinstall_census_01/`.
+
+2026-11-13: Updated Root source30 passes configured159/profile10 on its actual
+6691-file observer snapshot: verification055f4ebf/workflow53d270db/actualpost
+1368ac32, all159 homes/ten profiles/4866 confined imports, unchanged guards and
+complete exit after terminal12031/0. Separate LUMPY15 passes all45 phases and75
+confined imports on source30 plus three concrete permanent test/provenance
+successors: verificationa9db807f/workflow637f15db/actualpost546cac78, complete
+exit after terminal12416/0. Actual source discovery and real private-state host
+boundaries are covered. Authentic old513 records retain source-confirmed prior
+policy rejection; current-policy/readback proposals are explicitly engineered.
+No native scientific operation, physical-runtime verification, full restoration
+or canonical installation is claimed. Passing scoped Root identities total451
+across retained epochs; final compatibility, test callers, two retirements,
+318 ownership documents and159-location installation remain open. Evidence:
+`runs/root_configured159_observation_03/`, `runs/root_lumpy_identity15_01/`, and
+`runs/root_lumpy_owner_preparation_01/BASELINE_FIXTURE_ACCOUNT.json`.
+
+2026-11-13: Full original-goal audit records A103 scientific parent's two existing
+directional ownership gaps separately from completed child scopes. Prepared
+six-target source has independent complete-inverse check5f81bb19; execution,
+current ownership and installation remain open. Root source33's additional21
+mocked-worker run exits before collection on a missing snapshot-only A101
+dependency; actualpost7e3e5594 follows terminal28553/1 and confirms empty owned
+process state. No passing case or native/scientific claim is added. Evidence:
+`runs/root_original_goal_audit_01/`, `runs/main_a103_parent_review_01/`, and
+`runs/root_lumpy_fresh21_01/`.

@@ -1,0 +1,78 @@
+"""A104 original presentation defining responsibilities."""
+from __future__ import annotations
+from .library.live_runtime_functions import bind_functions as _bind_functions
+
+def prepare_model_request(self, context, schema, index, profile):
+    resource_context = self.workflow.resource_context(self)
+    if resource_context is not None:
+        context = {**context, 'resource_context': resource_context}
+    shared_context = self.workflow.shared_information_context(self)
+    if shared_context is not None:
+        context = {**context, 'shared_information_context': shared_context}
+    context = {**context, 'launch_instruction_library': self.workflow.launch_instructions.context()}
+    selected_instructions = self.workflow.launch_instructions.materialize(self.request.message.as_record().get('episode_assignment', {}).get('launch_instructions'))
+    if selected_instructions is not None:
+        context['selected_launch_instructions'] = selected_instructions
+    if self.workflow.available_child_roles(self):
+        context['child_options'] = child_option_information(self.workflow, self)['text']
+    supplied_initial = self.workflow.episode_bindings.initial_decision_context(self.workflow.binding_context(self))
+    if set(supplied_initial).intersection(context):
+        raise ValueError('initial_binding_context_field_conflict')
+    context = {**context, **supplied_initial}
+    work_results = context.pop('_completed_work_axis_results', {})
+    if 'literature_completed_work' not in context and (not (isinstance(context.get('current_credit'), Mapping) and context['current_credit'].get('mode') == 'annotation_axis_credit')):
+        from .episode_work_report import completed_action_reports
+        context['completed_action_reports'] = completed_action_reports(self.workflow, self, context, before=index, received_axis_results=work_results)
+    from .library.hpc_prompt import is_hpc_context
+    if is_hpc_context(context):
+        from .episode_work_report import requested_action_history
+        context['requested_action_history'] = requested_action_history(self.workflow, self, before=index)
+    if 'pending_work' not in context:
+        context = {**context, 'pending_work': self.workflow.pending_work(self)}
+    binding = self.workflow.execution_expectations
+    if binding is not None and binding.applies(self.path[-1][0]):
+        planning_scopes = ()
+        if self.path[-1][0] in binding.planning_roles and self.workflow.job_episodes is not None:
+            jobs = self.workflow.job_episodes
+            if 'search_modes' in jobs.jobs.config:
+                options = jobs.prospective_execution_options(self.workflow.store, self.scope)
+                planning_scopes = list({value['execution_class'].ref: value['execution_class'] for value in options}.values())
+                context = {**context, 'job_execution_options': [{key: value[key] for key in ('query_ref', 'cpu', 'search_mode')} | {'execution_class_ref': value['execution_class'].ref} for value in options]}
+            else:
+                planning_scopes = jobs.prospective_execution_classes(self.workflow.store, self.scope)
+        context = {**context, 'execution_expectations': binding.capture(self.path[-1][0], assignment=self.request.message.as_record().get('job_assignment'), planning_scopes=planning_scopes)}
+    if self.workflow.resource_estimator is not None:
+        if self.workflow.is_job_source(self):
+            estimates = self.workflow.resource_estimator.estimate(context.get('execution_expectations'), job_ref=self.workflow.job_episodes.assignment(self)['job_ref'], sample=self.workflow.job_episodes.latest_sample(self, include_inherited=True))
+        elif 'execution_expectations' in context:
+            estimates = self.workflow.resource_estimator.estimate_context(context['execution_expectations'])
+        else:
+            estimates = None
+        if estimates is not None:
+            context = {**context, 'resource_tool_estimates': estimates}
+    native_expectations = self.workflow.native_estimation_context(self, context)
+    if native_expectations is not None:
+        context = {**context, 'native_execution_expectations': native_expectations}
+        if self.workflow.resource_estimator is not None:
+            native_estimates = self.workflow.resource_estimator.estimate_context(native_expectations)
+            context['resource_tool_estimates'] = [*context.get('resource_tool_estimates', []), *native_estimates]
+    if self.workflow.native_event_information is not None:
+        context['native_event_targets'] = self.workflow.native_event_information.read(self.workflow.binding_context(self))
+    if self.workflow.permits_common_action(self, 'wait'):
+        context['waiting_support'] = self.workflow.waiting_support(self, context)
+    if profile is not None:
+        context = {**context, 'contract_information_profile': profile}
+    saved = {'context': context, 'schema': schema}
+    if profile is None:
+        frozen = self.workflow.freeze_literature_numerical_contracts(self, context, schema)
+        if frozen is not None:
+            saved['literature_numerical_contracts'] = frozen
+    return (context, saved)
+
+
+def _bind_original_runtime(namespace):
+    definitions = {name: globals()[name] for name in ['prepare_model_request']}
+    globals().update(_bind_functions(namespace, definitions, runtime_module='gene_annotation_episode.episodic_workflow.root.a104.runtime', qualified_names={'prepare_model_request': 'prepare_model_request'}))
+
+from . import runtime as _original_namespace
+_bind_original_runtime(vars(_original_namespace))

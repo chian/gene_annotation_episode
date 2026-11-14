@@ -5,8 +5,8 @@ values and fixed predictions are constructed software-test inputs.
 """
 import pytest
 
-from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
-from test_literature_perturbation_source import covariance_arguments, extract, summary_grading_parent_return
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_experimental_contracts import ExperimentalContractError
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_source import covariance_arguments, extract, summary_grading_parent_return
 
 
 @pytest.mark.parametrize("endpoint,covariance,canonical", [

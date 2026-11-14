@@ -6,11 +6,6 @@ nor validates a native producer, grants references or imports scientific facts.
 """
 import json
 
-from .episode_bindings import BindingContext
-from .episode_receipts import EpisodeReceipts
-from .episode_return_records import EpisodeReturnRecords
-
-
 _PROFILES = {
     'detect_and_annotate_somatic_mutations': ('ordinary_somatic_variant_result_v1', True, 'tool',
         'detect_and_annotate_somatic_mutations', ('completed', 'partial')),
@@ -126,9 +121,9 @@ def molecular_capture_reference_restriction(store, context, reference, namespace
             elif provider == "detect_and_annotate_somatic_mutations":
                 from .somatic_variant_contracts import validate_somatic_arguments as _arguments
             elif provider == "analyze_protein_phylogeny":
-                from .protein_phylogeny_result_contracts import validate_phylogeny_arguments as _arguments
+                from gene_annotation_episode.episodic_workflow.root.library.protein_phylogeny_result_contracts import validate_phylogeny_arguments as _arguments
             elif provider == "analyze_protein_conservation":
-                from .protein_conservation_result_contracts import validate_conservation_arguments as _arguments
+                from gene_annotation_episode.episodic_workflow.root.library.protein_conservation_result_contracts import validate_conservation_arguments as _arguments
             else:
                 from .tf_binding_tools import _arguments
             arguments = _arguments(selected["arguments"])
@@ -157,7 +152,7 @@ def _providers(value):
 
 def _published_fba_file(store, reference):
     """An explicit File publication is public metadata, never a receipt grant."""
-    from .flux_balance_contracts import validate_flux_balance_record
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_contracts import validate_flux_balance_record
     from .native_file_capture import NativeFileCaptureError, _metadata
     for field, modes, formats in (("saved_sheets", ("solve", "calculate_saved"), {"flux_balance_sheet_v1"}),
             ("edited_models", ("edit",), {"sbml", "cobra_json"})):
@@ -261,10 +256,13 @@ def molecular_reference_restriction(store, context, reference, namespace, *, pri
     minhash_result_source = (kind == "source" and namespace == "execution_result"
         and any(source["id"] == reference and source["provider"] == "bvbrc_minhash"
             for source in sources))
+    from .episode_bindings import BindingContext
     if (namespace not in (None, kind) and not minhash_result_source
             or not isinstance(context, BindingContext)):
         return False
     try:
+        from .episode_return_records import EpisodeReturnRecords
+        from .episode_receipts import EpisodeReceipts
         EpisodeReturnRecords(store, context.run_id, failure_prefix="molecular_reference_").authenticate(context)
         receipts = EpisodeReceipts.__new__(EpisodeReceipts)
         receipts.store, receipts.db, receipts.run_id = store, store.db, context.run_id

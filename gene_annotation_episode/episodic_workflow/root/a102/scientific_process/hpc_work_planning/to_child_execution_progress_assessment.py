@@ -1,0 +1,12 @@
+"""Prepare the HPC parent's original progress question."""
+from gene_annotation_episode.episodic_workflow.root.a102.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a102.domain import validate_schema
+from .execution_progress_assessment.contracts import _ASSIGNMENT
+
+
+def prepare_request(assignment):
+    # Preserve the selected target, known observations, requested fields and
+    # permitted records. This parent requests information; it never polls here.
+    value = plain(assignment)
+    validate_schema(value, _ASSIGNMENT)
+    return value

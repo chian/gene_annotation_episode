@@ -32,10 +32,10 @@ from gene_annotation_episode.chromatin_interaction_inputs import (
 from gene_annotation_episode.chromatin_interaction_calculations import calculate_chromatin_components
 
 
-REPO = Path('/home/chia/repos/gene_annotation_episode')
-FIXTURES = Path(os.environ.get('HIC_FIXTURE_ROOT', REPO / 'verification/tool_graders_chromatin_hic_native_2026-10-27_454'))
-V8 = Path(os.environ.get('HIC_V8_FIXTURE', REPO / 'verification/tool_graders_chromatin_hic_contract_2026-10-27_452/prerequisite002/testBp.hic'))
-EXAMPLES = Path.cwd() / 'WORKED_RECORDS.json'
+REPO = Path(__file__).resolve().parents[1]
+FIXTURES = Path(os.environ.get('HIC_FIXTURE_ROOT', REPO / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/hic_native'))
+V8 = Path(os.environ.get('HIC_V8_FIXTURE', REPO / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/hic_native/testBp.hic'))
+EXAMPLES = REPO / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/WORKED_RECORDS.json'
 
 
 def example(name):
@@ -69,7 +69,7 @@ def request_for(raw, *, weighted=False, chromosome='chrA', length=40, resolution
 
 def extract(raw, request, label='native'):
     key = hashlib.sha256(json.dumps(request, sort_keys=True).encode() + raw).hexdigest()
-    directory = Path.cwd() / 'hic_cases' / key
+    directory = REPO / 'runs/chromatin_hic_cases' / key
     directory.mkdir(parents=True, exist_ok=True)
     (directory / 'input.hic').write_bytes(raw)
     (directory / 'request.json').write_text(json.dumps(request, indent=2) + '\n')
@@ -124,7 +124,7 @@ def calculate(sheet, streams, directory, *, insulation=False, parameters=None):
 
 def changed(raw, offset, replacement, name):
     value = raw[:offset] + replacement + raw[offset + len(replacement):]
-    directory = Path.cwd() / 'mutations' / hashlib.sha256(value).hexdigest()
+    directory = REPO / 'runs/chromatin_hic_mutations' / hashlib.sha256(value).hexdigest()
     directory.mkdir(parents=True, exist_ok=True)
     (directory / 'input.hic').write_bytes(value)
     (directory / 'mutation.json').write_text(json.dumps({'name': name, 'source_sha256': hashlib.sha256(raw).hexdigest(),
@@ -157,7 +157,7 @@ def changed_payload(raw, audit, change, name, *, compressed_suffix=b''):
     struct.pack_into('<i', value, block_entry + 12, len(encoded))
     master_position = audit['footer_position'] + delta + 8 + 4 + len(matrix['key'].encode()) + 1
     struct.pack_into('<q', value, master_position, matrix['position'] + delta)
-    directory = Path.cwd() / 'mutations' / hashlib.sha256(value).hexdigest()
+    directory = REPO / 'runs/chromatin_hic_mutations' / hashlib.sha256(value).hexdigest()
     directory.mkdir(parents=True, exist_ok=True)
     (directory / 'input.hic').write_bytes(value)
     (directory / 'before.payload').write_bytes(before)
@@ -181,7 +181,7 @@ def absent_master_entry(raw, audit):
     struct.pack_into('<q', value, footer, audit['footer_nbytes_v5'] - entry_size)
     nvi_field = raw.index(b'\0', 16) + 1
     struct.pack_into('<q', value, nvi_field, audit['normalization_index_position'] - entry_size)
-    directory = Path.cwd() / 'mutations' / hashlib.sha256(value).hexdigest()
+    directory = REPO / 'runs/chromatin_hic_mutations' / hashlib.sha256(value).hexdigest()
     directory.mkdir(parents=True, exist_ok=True)
     (directory / 'input.hic').write_bytes(value)
     (directory / 'mutation.json').write_text(json.dumps({'name': 'remove exact master entry; valid absence, not zero',
@@ -552,7 +552,7 @@ class HicNativeInputsTest(unittest.TestCase):
         import sys
         raw, _ = fixture('native004/four.hic')
         request = request_for(raw)
-        with tempfile.TemporaryDirectory(dir=Path.cwd()) as tmp:
+        with tempfile.TemporaryDirectory(dir=REPO / 'runs') as tmp:
             path = Path(tmp) / 'source.hic'
             path.write_bytes(raw)
             with path.open('rb') as source:

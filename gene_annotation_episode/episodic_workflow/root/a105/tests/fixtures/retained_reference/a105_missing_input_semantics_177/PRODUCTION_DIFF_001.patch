@@ -1,0 +1,141 @@
+--- baseline/literature_binding_model_storage.py
++++ gene_annotation_episode/literature_binding_model_storage.py
+@@ -36,7 +36,10 @@
+ def _model_metadata(sheet):
+     model = sheet["model"]
+     return {
+-        "model_kind": "known_normal_log_parameters" if model is not None else "unreported",
++        # Preserve the exact old projection. A missing selected input in v2
++        # establishes no claim about absence from the underlying publication.
++        "model_kind": ("known_normal_log_parameters" if model is not None else
++                       "unreported" if sheet["version"] == "binding_model_sheet_v1" else "not_supplied"),
+         "variance_status": model["variance_status"] if model is not None else "not_supplied",
+         "censoring_model": model["censoring_model"] if model is not None else "not_supplied",
+         "model_origin": model["origin"] if model is not None else "not_supplied",
+@@ -46,7 +49,8 @@
+ class LiteratureBindingModelRepository(LiteratureBindingRepository):
+     provider = PROVIDER
+     components = COMPONENTS
+-    record_version = "literature_binding_model_record_v1"
++    record_version = "literature_binding_model_record_v2"
++    readable_record_versions = ("literature_binding_model_record_v1", record_version)
+     operations_table = "literature_binding_model_operations"
+     received_table = "literature_binding_model_received"
+ 
+@@ -232,7 +236,7 @@
+         "parameter_kind": {"type": "string", "enum": list(PARAMETER_KINDS)},
+         "contrast_meaning": {"type": "string", "enum": ["test_parameter_exceeds_reference"]},
+         "evaluated_scope": {"type": "string", "enum": ["interpreted_source_parameter_contrast"]},
+-        "model_kind": {"type": "string", "enum": ["unreported", "known_normal_log_parameters"]},
++        "model_kind": {"type": "string", "enum": ["unreported", "not_supplied", "known_normal_log_parameters"]},
+         "variance_status": {"type": "string", "enum": ["not_supplied", "known", "estimated", "unknown"]},
+         "censoring_model": {"type": "string", "enum": ["not_supplied", "none", "threshold_of_log_estimate", "unknown"]},
+         "model_origin": {"type": "string", "enum": ["not_supplied", "reported", "derived", "synthetic"]},
+--- baseline/literature_binding_models.py
++++ gene_annotation_episode/literature_binding_models.py
+@@ -18,7 +18,7 @@
+ from . import literature_binding_calculations as native
+ from .literature_experimental_contracts import ExperimentalContractError
+ 
+-VERSION = "binding_model_sheet_v1"
++VERSION = "binding_model_sheet_v2"
+ MODEL_VERSION = "known_normal_log_binding_v1"
+ COMPONENTS = (
+     "log_parameter_contrast", "log_contrast_noise_variance", "log_contrast_noise_sd",
+@@ -32,7 +32,7 @@
+     "source_signed_index": "tanh(source_profile_log_ratio/2)",
+ }
+ REASONS = tuple(dict.fromkeys((*native.REASONS,
+-    "binding_sampling_model_unreported", "known_log_covariance_required",
++    "binding_sampling_model_unreported", "binding_sampling_model_not_supplied", "known_log_covariance_required",
+     "covariance_status_unknown", "binding_censoring_mechanism_unreported",
+     "two_censored_observations_unsupported", "numerical_model_range")))
+ CONDITIONAL_CODES = ("supplied_log_covariance", "known_normal_log_parameters",
+@@ -279,7 +279,7 @@
+         for name in COMPONENTS[1:]:
+             cells[name] = _cell(name, reason=base_reason, conflict=conflict)
+         return result
+-    reason = ("binding_sampling_model_unreported" if model is None else
++    reason = ("binding_sampling_model_not_supplied" if model is None else
+               "covariance_status_unknown" if model["variance_status"] == "unknown" else None)
+     if reason:
+         for name in COMPONENTS[1:]:
+--- baseline/literature_transport_calculations.py
++++ gene_annotation_episode/literature_transport_calculations.py
+@@ -16,7 +16,7 @@
+ from .literature_experimental_contracts import ExperimentalContractError
+ 
+ 
+-VERSION = "a105_transport_response_v1"
++VERSION = "a105_transport_response_v2"
+ PRIMITIVE_ORDER = ("substrate_test", "substrate_reference", "km")
+ COMPONENTS = ("substrate_test", "substrate_reference", "apparent_km",
+               "test_saturation", "reference_saturation", "condition_response",
+@@ -126,12 +126,12 @@
+ 
+ def _reason(inputs, names):
+     if any(inputs["values"][name] is None for name in names):
+-        return "concentration_inputs_unreported"
++        return "concentration_inputs_not_supplied"
+     if any(inputs["values"][name] <= 0 for name in names):
+         return "positive_concentration_required"
+     keys = [inputs["curve_keys"][name] for name in names]
+     if any(key is None for key in keys):
+-        return "kinetic_curve_identity_unreported"
++        return "kinetic_curve_identity_not_supplied"
+     if any(key != keys[0] for key in keys):
+         return "different_kinetic_curves"
+     if inputs["observation_model"] != "michaelis_menten":
+@@ -176,7 +176,7 @@
+     cells = {}
+     for primitive, name in zip(PRIMITIVE_ORDER, COMPONENTS[:3]):
+         cells[name] = _cell(values[primitive], "uM", primitive,
+-                            reason="concentration_unreported" if values[primitive] is None else None,
++                            reason="concentration_not_supplied" if values[primitive] is None else None,
+                             origin=inputs["origin"])
+     for substrate, name in (("substrate_test", "test_saturation"),
+                             ("substrate_reference", "reference_saturation")):
+@@ -206,10 +206,10 @@
+ 
+     variance_reason = reason
+     if variance_reason is None and matrix is None:
+-        variance_reason = "primitive_covariance_unreported"
++        variance_reason = "primitive_covariance_not_supplied"
+     if variance_reason is None and any(
+             inputs["measurement_keys"][name] is None for name in PRIMITIVE_ORDER):
+-        variance_reason = "primitive_measurement_identity_unreported"
++        variance_reason = "primitive_measurement_identity_not_supplied"
+     if variance_reason is None and inputs["variance_status"] == "unknown":
+         variance_reason = "primitive_variance_status_unknown"
+     variance = uncertainty = None
+--- baseline/literature_transport_storage.py
++++ gene_annotation_episode/literature_transport_storage.py
+@@ -25,6 +25,9 @@
+             "test_curve_ref": "reference", "reference_curve_ref": "reference",
+             "km_curve_ref": "reference"}
+ REASONS = ("concentration_unreported", "concentration_inputs_unreported",
++           "concentration_not_supplied", "concentration_inputs_not_supplied",
++           "kinetic_curve_identity_not_supplied", "primitive_covariance_not_supplied",
++           "primitive_measurement_identity_not_supplied",
+            "positive_concentration_required", "kinetic_curve_identity_unreported",
+            "different_kinetic_curves", "observation_model_unspecified",
+            "primitive_covariance_unreported", "primitive_measurement_identity_unreported",
+@@ -46,7 +49,8 @@
+ class LiteratureTransportRepository(LiteratureRateRepository):
+     provider = PROVIDER
+     components = COMPONENTS
+-    record_version = "literature_transport_response_record_v1"
++    record_version = "literature_transport_response_record_v2"
++    readable_record_versions = ("literature_transport_response_record_v1", record_version)
+     operations_table = "literature_transport_operations"
+     received_table = "literature_transport_received"
+     binding_fields = tuple(BINDINGS)
+@@ -232,7 +236,7 @@
+         source = self.store.get(sheet_ref)
+         request = json.loads(self.store.get_artifact(source["request_ref"]))
+         args = request["arguments"]
+-        if (source["version"] != self.record_version or saved["km_sheet_ref"] != args["km_sheet_ref"]
++        if (source["version"] not in self.readable_record_versions or saved["km_sheet_ref"] != args["km_sheet_ref"]
+                 or saved["covariance_source_ref"] != args["covariance_source_ref"]
+                 or self.store.get(saved["input_source_ref"])["artifact_ref"] != saved["input_artifact_ref"]):
+             raise ContractError("literature_transport_sheet_source_mismatch")

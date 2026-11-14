@@ -13,10 +13,10 @@ import re
 import struct
 import sys
 
-from .blast_fasta_record_identity import parse_blast_fasta_source_records
-from .bvbrc_alignment_values import diagnostic, numeric_cell, validate_numeric_cell
+from gene_annotation_episode.episodic_workflow.root.a101.library.blast_fasta_record_identity import parse_blast_fasta_source_records
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import diagnostic, numeric_cell, validate_numeric_cell
 from .domain import ContractError, parse_sequences
-from . import phylogeny_calculation_contracts as locations
+from gene_annotation_episode import phylogeny_calculation_contracts as locations
 
 
 OPERATION = 'identify_transcription_factor_binding_sites'

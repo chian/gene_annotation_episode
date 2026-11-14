@@ -1,0 +1,679 @@
+{
+  "version": "a105_ion_discrimination_sheet_v1",
+  "axis": "A105",
+  "route": "compiled_activity_pair",
+  "cells": {
+    "preferred_activity": {
+      "component": "preferred_activity",
+      "value": 0.9,
+      "threshold": null,
+      "unit": "per_min",
+      "status": "populated",
+      "origin": "synthetic",
+      "meaning": "native_selected_activity_or_limit",
+      "formula_code": "selected_preferred_activity_or_limit",
+      "reported_domain": null,
+      "estimator_domain": {
+        "meaning": "derived_estimator_domain",
+        "lower": 0.9,
+        "upper": 0.9,
+        "lower_inclusive": true,
+        "upper_inclusive": true,
+        "lower_unbounded": false,
+        "upper_unbounded": false,
+        "lower_exact": {
+          "numerator": "9",
+          "denominator": "10"
+        },
+        "upper_exact": {
+          "numerator": "9",
+          "denominator": "10"
+        }
+      },
+      "nominal_domain": null,
+      "physical_domain": null,
+      "relation": "point",
+      "approximation": "not_explicitly_qualified",
+      "quantity_kind": "ion_specific_rate",
+      "scientific_applicability": "estimator_comparison_only",
+      "unavailable_reasons": [],
+      "limitations": [],
+      "dependencies": [
+        {
+          "role": "preferred",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_35af1308cec0b2124464d3fa",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_9e9fd78773f8ba8da7ec13a7",
+            "physical_source_span_f79ef640a7eb66b4e82893b3",
+            "physical_source_span_d54b184a7ce494a48b292ea5",
+            "physical_source_span_5cc51547230f5c59108c52e3",
+            "physical_source_span_f0b76da79932c68ff90f356c",
+            "physical_source_span_a98521a80885c17797954aad"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        }
+      ],
+      "variance_status": "unknown",
+      "zero_denominator_case": "not_applicable",
+      "derivation": "selected_compiled_activity",
+      "source_qualifications": [],
+      "annotation_credit": null
+    },
+    "alternative_activity": {
+      "component": "alternative_activity",
+      "value": 0.15,
+      "threshold": null,
+      "unit": "per_min",
+      "status": "populated",
+      "origin": "synthetic",
+      "meaning": "native_selected_activity_or_limit",
+      "formula_code": "selected_alternative_activity_or_limit",
+      "reported_domain": null,
+      "estimator_domain": {
+        "meaning": "derived_estimator_domain",
+        "lower": 0.15,
+        "upper": 0.15,
+        "lower_inclusive": true,
+        "upper_inclusive": true,
+        "lower_unbounded": false,
+        "upper_unbounded": false,
+        "lower_exact": {
+          "numerator": "3",
+          "denominator": "20"
+        },
+        "upper_exact": {
+          "numerator": "3",
+          "denominator": "20"
+        }
+      },
+      "nominal_domain": null,
+      "physical_domain": null,
+      "relation": "point",
+      "approximation": "not_explicitly_qualified",
+      "quantity_kind": "ion_specific_rate",
+      "scientific_applicability": "estimator_comparison_only",
+      "unavailable_reasons": [],
+      "limitations": [],
+      "dependencies": [
+        {
+          "role": "alternative",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_27747689baf9903c9aae69d8",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_72d6bcf19ea7a872b9198203",
+            "physical_source_span_41473f4b8ac8f54e73103bb0",
+            "physical_source_span_6f9be3742b0c0eb04042fbb8",
+            "physical_source_span_cff39e45a8a9ff7f5eda91f5",
+            "physical_source_span_f8bfcc549821c8ab95fa85b3",
+            "physical_source_span_e77921b3fe0196216e48a6cd"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        }
+      ],
+      "variance_status": "unknown",
+      "zero_denominator_case": "not_applicable",
+      "derivation": "selected_compiled_activity",
+      "source_qualifications": [],
+      "annotation_credit": null
+    },
+    "activity_ratio": {
+      "component": "activity_ratio",
+      "value": 6.0,
+      "threshold": null,
+      "unit": "dimensionless",
+      "status": "populated",
+      "origin": "synthetic",
+      "meaning": "ion_specific_rate_ratio",
+      "formula_code": "preferred_activity/alternative_activity",
+      "reported_domain": null,
+      "estimator_domain": {
+        "meaning": "derived_estimator_domain",
+        "lower": 6.0,
+        "upper": 6.0,
+        "lower_inclusive": true,
+        "upper_inclusive": true,
+        "lower_unbounded": false,
+        "upper_unbounded": false,
+        "lower_exact": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "upper_exact": {
+          "numerator": "6",
+          "denominator": "1"
+        }
+      },
+      "nominal_domain": null,
+      "physical_domain": null,
+      "relation": "point",
+      "approximation": "not_explicitly_qualified",
+      "quantity_kind": "source_activity_estimator_ratio",
+      "scientific_applicability": "supported_for_selected_comparison",
+      "unavailable_reasons": [],
+      "limitations": [
+        "no_annotation_credit",
+        "no_independence_from_distinct_refs"
+      ],
+      "dependencies": [
+        {
+          "role": "preferred",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_35af1308cec0b2124464d3fa",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_9e9fd78773f8ba8da7ec13a7",
+            "physical_source_span_f79ef640a7eb66b4e82893b3",
+            "physical_source_span_d54b184a7ce494a48b292ea5",
+            "physical_source_span_5cc51547230f5c59108c52e3",
+            "physical_source_span_f0b76da79932c68ff90f356c",
+            "physical_source_span_a98521a80885c17797954aad"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        },
+        {
+          "role": "alternative",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_27747689baf9903c9aae69d8",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_72d6bcf19ea7a872b9198203",
+            "physical_source_span_41473f4b8ac8f54e73103bb0",
+            "physical_source_span_6f9be3742b0c0eb04042fbb8",
+            "physical_source_span_cff39e45a8a9ff7f5eda91f5",
+            "physical_source_span_f8bfcc549821c8ab95fa85b3",
+            "physical_source_span_e77921b3fe0196216e48a6cd"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        }
+      ],
+      "variance_status": "unknown",
+      "zero_denominator_case": "selected_estimator_nonzero",
+      "derivation": "derived_activity_ratio",
+      "source_qualifications": [],
+      "annotation_credit": null
+    },
+    "log_activity_ratio": {
+      "component": "log_activity_ratio",
+      "value": 1.791759469228055,
+      "threshold": null,
+      "unit": "dimensionless",
+      "status": "populated",
+      "origin": "synthetic",
+      "meaning": "log_ion_specific_rate_ratio",
+      "formula_code": "ln(activity_ratio)",
+      "reported_domain": null,
+      "estimator_domain": {
+        "meaning": "derived_estimator_domain",
+        "lower": 1.791759469228055,
+        "upper": 1.791759469228055,
+        "lower_inclusive": true,
+        "upper_inclusive": true,
+        "lower_unbounded": false,
+        "upper_unbounded": false,
+        "lower_exact": {
+          "numerator": "358351893845611",
+          "denominator": "200000000000000"
+        },
+        "upper_exact": {
+          "numerator": "358351893845611",
+          "denominator": "200000000000000"
+        }
+      },
+      "nominal_domain": null,
+      "physical_domain": null,
+      "relation": "point",
+      "approximation": "not_explicitly_qualified",
+      "quantity_kind": "source_activity_estimator_ratio",
+      "scientific_applicability": "supported_for_selected_comparison",
+      "unavailable_reasons": [],
+      "limitations": [
+        "no_annotation_credit",
+        "no_independence_from_distinct_refs"
+      ],
+      "dependencies": [
+        {
+          "role": "preferred",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_35af1308cec0b2124464d3fa",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_9e9fd78773f8ba8da7ec13a7",
+            "physical_source_span_f79ef640a7eb66b4e82893b3",
+            "physical_source_span_d54b184a7ce494a48b292ea5",
+            "physical_source_span_5cc51547230f5c59108c52e3",
+            "physical_source_span_f0b76da79932c68ff90f356c",
+            "physical_source_span_a98521a80885c17797954aad"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        },
+        {
+          "role": "alternative",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_27747689baf9903c9aae69d8",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_72d6bcf19ea7a872b9198203",
+            "physical_source_span_41473f4b8ac8f54e73103bb0",
+            "physical_source_span_6f9be3742b0c0eb04042fbb8",
+            "physical_source_span_cff39e45a8a9ff7f5eda91f5",
+            "physical_source_span_f8bfcc549821c8ab95fa85b3",
+            "physical_source_span_e77921b3fe0196216e48a6cd"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        }
+      ],
+      "variance_status": "unknown",
+      "zero_denominator_case": "selected_estimator_nonzero",
+      "derivation": "derived_activity_ratio",
+      "source_qualifications": [],
+      "annotation_credit": null
+    },
+    "activity_ratio_variance": {
+      "component": "activity_ratio_variance",
+      "value": 0.36,
+      "threshold": null,
+      "unit": "dimensionless_squared",
+      "status": "populated",
+      "origin": "synthetic",
+      "meaning": "first_order_ratio_variance",
+      "formula_code": "J_R*C*J_R_transpose",
+      "reported_domain": null,
+      "estimator_domain": {
+        "meaning": "derived_estimator_domain",
+        "lower": 0.36,
+        "upper": 0.36,
+        "lower_inclusive": true,
+        "upper_inclusive": true,
+        "lower_unbounded": false,
+        "upper_unbounded": false,
+        "lower_exact": {
+          "numerator": "9",
+          "denominator": "25"
+        },
+        "upper_exact": {
+          "numerator": "9",
+          "denominator": "25"
+        }
+      },
+      "nominal_domain": null,
+      "physical_domain": null,
+      "relation": "point",
+      "approximation": "not_explicitly_qualified",
+      "quantity_kind": "source_activity_estimator_ratio",
+      "scientific_applicability": "supported_for_selected_comparison",
+      "unavailable_reasons": [],
+      "limitations": [
+        "first_order_joint_covariance",
+        "no_reliability_probability"
+      ],
+      "dependencies": [
+        {
+          "role": "preferred",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_35af1308cec0b2124464d3fa",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_9e9fd78773f8ba8da7ec13a7",
+            "physical_source_span_f79ef640a7eb66b4e82893b3",
+            "physical_source_span_d54b184a7ce494a48b292ea5",
+            "physical_source_span_5cc51547230f5c59108c52e3",
+            "physical_source_span_f0b76da79932c68ff90f356c",
+            "physical_source_span_a98521a80885c17797954aad"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        },
+        {
+          "role": "alternative",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_27747689baf9903c9aae69d8",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_72d6bcf19ea7a872b9198203",
+            "physical_source_span_41473f4b8ac8f54e73103bb0",
+            "physical_source_span_6f9be3742b0c0eb04042fbb8",
+            "physical_source_span_cff39e45a8a9ff7f5eda91f5",
+            "physical_source_span_f8bfcc549821c8ab95fa85b3",
+            "physical_source_span_e77921b3fe0196216e48a6cd"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        }
+      ],
+      "variance_status": "known",
+      "zero_denominator_case": "selected_estimator_nonzero",
+      "derivation": "first_order_activity_covariance",
+      "source_qualifications": [],
+      "annotation_credit": null
+    },
+    "activity_ratio_standard_uncertainty": {
+      "component": "activity_ratio_standard_uncertainty",
+      "value": 0.6,
+      "threshold": null,
+      "unit": "dimensionless",
+      "status": "populated",
+      "origin": "synthetic",
+      "meaning": "first_order_ratio_standard_uncertainty",
+      "formula_code": "sqrt(activity_ratio_variance)",
+      "reported_domain": null,
+      "estimator_domain": {
+        "meaning": "derived_estimator_domain",
+        "lower": 0.6,
+        "upper": 0.6,
+        "lower_inclusive": true,
+        "upper_inclusive": true,
+        "lower_unbounded": false,
+        "upper_unbounded": false,
+        "lower_exact": {
+          "numerator": "3",
+          "denominator": "5"
+        },
+        "upper_exact": {
+          "numerator": "3",
+          "denominator": "5"
+        }
+      },
+      "nominal_domain": null,
+      "physical_domain": null,
+      "relation": "point",
+      "approximation": "not_explicitly_qualified",
+      "quantity_kind": "source_activity_estimator_ratio",
+      "scientific_applicability": "supported_for_selected_comparison",
+      "unavailable_reasons": [],
+      "limitations": [
+        "first_order_joint_covariance",
+        "no_reliability_probability"
+      ],
+      "dependencies": [
+        {
+          "role": "preferred",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_35af1308cec0b2124464d3fa",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_9e9fd78773f8ba8da7ec13a7",
+            "physical_source_span_f79ef640a7eb66b4e82893b3",
+            "physical_source_span_d54b184a7ce494a48b292ea5",
+            "physical_source_span_5cc51547230f5c59108c52e3",
+            "physical_source_span_f0b76da79932c68ff90f356c",
+            "physical_source_span_a98521a80885c17797954aad"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        },
+        {
+          "role": "alternative",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_27747689baf9903c9aae69d8",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_72d6bcf19ea7a872b9198203",
+            "physical_source_span_41473f4b8ac8f54e73103bb0",
+            "physical_source_span_6f9be3742b0c0eb04042fbb8",
+            "physical_source_span_cff39e45a8a9ff7f5eda91f5",
+            "physical_source_span_f8bfcc549821c8ab95fa85b3",
+            "physical_source_span_e77921b3fe0196216e48a6cd"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        }
+      ],
+      "variance_status": "known",
+      "zero_denominator_case": "selected_estimator_nonzero",
+      "derivation": "first_order_activity_covariance",
+      "source_qualifications": [],
+      "annotation_credit": null
+    },
+    "log_activity_ratio_variance": {
+      "component": "log_activity_ratio_variance",
+      "value": 0.01,
+      "threshold": null,
+      "unit": "dimensionless_squared",
+      "status": "populated",
+      "origin": "synthetic",
+      "meaning": "first_order_log_ratio_variance",
+      "formula_code": "J_log*C*J_log_transpose",
+      "reported_domain": null,
+      "estimator_domain": {
+        "meaning": "derived_estimator_domain",
+        "lower": 0.01,
+        "upper": 0.01,
+        "lower_inclusive": true,
+        "upper_inclusive": true,
+        "lower_unbounded": false,
+        "upper_unbounded": false,
+        "lower_exact": {
+          "numerator": "1",
+          "denominator": "100"
+        },
+        "upper_exact": {
+          "numerator": "1",
+          "denominator": "100"
+        }
+      },
+      "nominal_domain": null,
+      "physical_domain": null,
+      "relation": "point",
+      "approximation": "not_explicitly_qualified",
+      "quantity_kind": "source_activity_estimator_ratio",
+      "scientific_applicability": "supported_for_selected_comparison",
+      "unavailable_reasons": [],
+      "limitations": [
+        "first_order_joint_covariance",
+        "no_reliability_probability"
+      ],
+      "dependencies": [
+        {
+          "role": "preferred",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_35af1308cec0b2124464d3fa",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_9e9fd78773f8ba8da7ec13a7",
+            "physical_source_span_f79ef640a7eb66b4e82893b3",
+            "physical_source_span_d54b184a7ce494a48b292ea5",
+            "physical_source_span_5cc51547230f5c59108c52e3",
+            "physical_source_span_f0b76da79932c68ff90f356c",
+            "physical_source_span_a98521a80885c17797954aad"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        },
+        {
+          "role": "alternative",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_27747689baf9903c9aae69d8",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_72d6bcf19ea7a872b9198203",
+            "physical_source_span_41473f4b8ac8f54e73103bb0",
+            "physical_source_span_6f9be3742b0c0eb04042fbb8",
+            "physical_source_span_cff39e45a8a9ff7f5eda91f5",
+            "physical_source_span_f8bfcc549821c8ab95fa85b3",
+            "physical_source_span_e77921b3fe0196216e48a6cd"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        }
+      ],
+      "variance_status": "known",
+      "zero_denominator_case": "selected_estimator_nonzero",
+      "derivation": "first_order_activity_covariance",
+      "source_qualifications": [],
+      "annotation_credit": null
+    },
+    "log_activity_ratio_standard_uncertainty": {
+      "component": "log_activity_ratio_standard_uncertainty",
+      "value": 0.1,
+      "threshold": null,
+      "unit": "dimensionless",
+      "status": "populated",
+      "origin": "synthetic",
+      "meaning": "first_order_log_ratio_standard_uncertainty",
+      "formula_code": "sqrt(log_activity_ratio_variance)",
+      "reported_domain": null,
+      "estimator_domain": {
+        "meaning": "derived_estimator_domain",
+        "lower": 0.1,
+        "upper": 0.1,
+        "lower_inclusive": true,
+        "upper_inclusive": true,
+        "lower_unbounded": false,
+        "upper_unbounded": false,
+        "lower_exact": {
+          "numerator": "1",
+          "denominator": "10"
+        },
+        "upper_exact": {
+          "numerator": "1",
+          "denominator": "10"
+        }
+      },
+      "nominal_domain": null,
+      "physical_domain": null,
+      "relation": "point",
+      "approximation": "not_explicitly_qualified",
+      "quantity_kind": "source_activity_estimator_ratio",
+      "scientific_applicability": "supported_for_selected_comparison",
+      "unavailable_reasons": [],
+      "limitations": [
+        "first_order_joint_covariance",
+        "no_reliability_probability"
+      ],
+      "dependencies": [
+        {
+          "role": "preferred",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_35af1308cec0b2124464d3fa",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_9e9fd78773f8ba8da7ec13a7",
+            "physical_source_span_f79ef640a7eb66b4e82893b3",
+            "physical_source_span_d54b184a7ce494a48b292ea5",
+            "physical_source_span_5cc51547230f5c59108c52e3",
+            "physical_source_span_f0b76da79932c68ff90f356c",
+            "physical_source_span_a98521a80885c17797954aad"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        },
+        {
+          "role": "alternative",
+          "source_ref": "source_194b194b194b194b194b194b",
+          "component_ref": "source_27747689baf9903c9aae69d8",
+          "namespace": "literature_compiled_assay_cells",
+          "component": "corrected_activity",
+          "physical_keys": [
+            "physical_source_span_72d6bcf19ea7a872b9198203",
+            "physical_source_span_41473f4b8ac8f54e73103bb0",
+            "physical_source_span_6f9be3742b0c0eb04042fbb8",
+            "physical_source_span_cff39e45a8a9ff7f5eda91f5",
+            "physical_source_span_f8bfcc549821c8ab95fa85b3",
+            "physical_source_span_e77921b3fe0196216e48a6cd"
+          ],
+          "opaque_dependency_keys": [],
+          "physical_identity_status": "partly_canonical",
+          "origin": "synthetic"
+        }
+      ],
+      "variance_status": "known",
+      "zero_denominator_case": "selected_estimator_nonzero",
+      "derivation": "first_order_activity_covariance",
+      "source_qualifications": [],
+      "annotation_credit": null
+    },
+    "reported_selectivity": {
+      "component": "reported_selectivity",
+      "value": null,
+      "threshold": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "origin": "derived",
+      "meaning": "source_reported_selectivity_limit",
+      "formula_code": "selected_original_reported_selectivity",
+      "reported_domain": null,
+      "estimator_domain": null,
+      "nominal_domain": null,
+      "physical_domain": null,
+      "relation": "none",
+      "approximation": "not_explicitly_qualified",
+      "quantity_kind": "unknown",
+      "scientific_applicability": "unresolved",
+      "unavailable_reasons": [
+        "route_not_applicable"
+      ],
+      "limitations": [],
+      "dependencies": [],
+      "variance_status": "unknown",
+      "zero_denominator_case": "not_applicable",
+      "derivation": "not_applicable",
+      "source_qualifications": [],
+      "annotation_credit": null
+    },
+    "nominal_threshold_ratio": {
+      "component": "nominal_threshold_ratio",
+      "value": null,
+      "threshold": null,
+      "unit": "dimensionless",
+      "status": "unavailable",
+      "origin": "derived",
+      "meaning": "nominal_reported_threshold_division",
+      "formula_code": "preferred_threshold/alternative_threshold",
+      "reported_domain": null,
+      "estimator_domain": null,
+      "nominal_domain": null,
+      "physical_domain": null,
+      "relation": "none",
+      "approximation": "not_explicitly_qualified",
+      "quantity_kind": "unknown",
+      "scientific_applicability": "unresolved",
+      "unavailable_reasons": [
+        "route_not_applicable"
+      ],
+      "limitations": [],
+      "dependencies": [],
+      "variance_status": "unknown",
+      "zero_denominator_case": "not_applicable",
+      "derivation": "not_applicable",
+      "source_qualifications": [],
+      "annotation_credit": null
+    }
+  },
+  "overall_quality_grade": null,
+  "annotation_credit": null
+}

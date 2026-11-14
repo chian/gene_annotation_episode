@@ -12,7 +12,7 @@ from gene_annotation_episode import phylogeny_calculators, phylogeny_formats
 from gene_annotation_episode import phylogeny_calculation_contracts as numerical_contracts
 
 
-FIXTURE = Path(__file__).parent / "fixtures/protein_conservation/supplied_alignment.json"
+FIXTURE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/protein_conservation/supplied_alignment.json"
 FIXTURE_SHA256 = "09fca54ed15e79114e7f8d167ada2b6dad584d30b9aa67554b9c6ab1454b12be"
 SOURCE = "source_" + "a" * 24  # Lexical DTO operand only; no Source is created.
 

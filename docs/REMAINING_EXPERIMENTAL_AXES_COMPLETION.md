@@ -55,7 +55,7 @@ The checks preserve useful partial results. A106 can retain measured summaries w
 
 These are reported limits of available evidence and established scoring definitions, not newly imposed completion requirements. No new cross-experiment weighting or scoring theory was introduced.
 
-Prior evidence reviewed includes the retained Cas2/YeaG, CsiD, IscR 4HF1 and partner omission/addback examples, together with the existing [A106 summary results](../verification/literature_reference_evidence_2026-10-25_001/a106_primary_summary_example_122/FINAL_RESULTS_001.json) and [A110 finite-route audit](../verification/literature_reference_evidence_2026-10-25_001/a110_native_parent_review_132/FINAL_REQUIREMENT_AUDIT_002.md). Existing evidence counted; no new paper collection or autonomous model benchmark was required.
+Prior evidence reviewed includes the retained Cas2/YeaG, CsiD, IscR 4HF1 and partner omission/addback examples, together with the existing [A106 summary results](source_evidence/axis_summaries/a106/FINAL_RESULTS_001.json) and [A110 finite-route audit](source_evidence/axis_summaries/a110/FINAL_REQUIREMENT_AUDIT_002.md). Existing evidence counted; no new paper collection or autonomous model benchmark was required.
 
 ## Verification results
 

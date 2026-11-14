@@ -10,7 +10,7 @@ from gene_annotation_episode.bvbrc_fastqutils_saved_codec import encode_failures
 from gene_annotation_episode.bvbrc_fastqutils_metadata import extract_fastqutils_metadata
 from gene_annotation_episode.bvbrc_fastqutils_sheet import populate_fastqutils_sheet
 
-spec = importlib.util.spec_from_file_location("fixture_support", Path(__file__).parent / "fixtures/bvbrc_fastqutils/bundle/fixture_support.py")
+spec = importlib.util.spec_from_file_location("fixture_support", Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/bundle/fixture_support.py")
 f = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(f)
 

@@ -18,7 +18,7 @@ from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
-F = import_module('verification.tool_graders_chromatin_workflow_2026-10-27_451.fixture_helpers')
+F = import_module('gene_annotation_episode.episodic_workflow.root.tests.fixtures.retained_workflow.verification.tool_graders_chromatin_workflow_2026-10-27_451.fixture_helpers')
 
 
 def deny(*args, **kwargs):
@@ -655,7 +655,7 @@ def test_selected_weighted_cooler_received_saved_and_closed_workflow(tmp_path, s
     first['population_keys'] = ['p1']
     saved = deepcopy(first)
     saved['parameters']['contact']['fold_threshold'] = 0.5
-    native = (F.ROOT / 'verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/fixtures/four-bin-raw-weighted.cool').read_bytes()
+    native = (F.ROOT / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/cooler/four-bin-raw-weighted.cool').read_bytes()
     case = selected_mode_case(tmp_path / 'selected_weighted', selected_mode_software, request=request,
         native_bytes=native, first_selector=first, saved_template=saved,
         objective='Measure the supplied weighted contacts for E-P and E-Q in selected population p1, then test fold threshold0.5 from the received saved sheet.')
@@ -711,7 +711,7 @@ def test_selected_insulation_without_elements_received_domains_saved_and_closed_
     for key in ('samples', 'contact_sample_links', 'dependence_groups', 'native_attribute_bindings', 'supplied_uncertainty'):
         metadata[key] = []
     first, saved = deepcopy(F.WORKED['insulation.selector']), deepcopy(F.WORKED['domains.selector'])
-    native = (F.ROOT / 'verification/tool_graders_chromatin_native_prerequisites_2026-10-27_440/fixture_generation/fixtures/six-bin-all-full-windows.cool').read_bytes()
+    native = (F.ROOT / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/cooler/six-bin-all-full-windows.cool').read_bytes()
     case = selected_mode_case(tmp_path / 'selected_insulation', selected_mode_software, request=request,
         native_bytes=native, first_selector=first, saved_template=saved,
         objective='Measure the supplied six-bin cross-window insulation heuristic with all full one-bin windows and return its domains from the received saved sheet; no elements are supplied.')

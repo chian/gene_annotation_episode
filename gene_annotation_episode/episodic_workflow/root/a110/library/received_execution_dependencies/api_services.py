@@ -1,0 +1,125 @@
+from __future__ import annotations
+from copy import deepcopy
+import json
+import math
+from typing import Protocol
+from jsonschema import Draft202012Validator
+from gene_annotation_episode.episodic_workflow.root.a110.acquisition import SourceSnapshot
+
+def object_schema(properties, required=()):
+    return {'type': 'object', 'properties': properties, 'required': list(required), 'additionalProperties': False}
+
+def validate_value(value, schema, code):
+    """Validate a JSON value without inserting defaults or changing operands."""
+    try:
+        value = json.loads(json.dumps(value, allow_nan=False))
+        Draft202012Validator(schema).validate(value)
+    except Exception as error:
+        raise ValueError(code) from error
+    return value
+
+def event(kind, state, *, native_handle=None, handoff_ready=False, result_available=False, facts=None, failure_code=None):
+    return {'kind': kind, 'state': state, 'native_handle': native_handle, 'handoff_ready': bool(handoff_ready), 'result_available': bool(result_available), 'facts': dict(facts or {}), 'failure_code': failure_code}
+
+class APIServicePrimitive(Protocol):
+    service: str
+    request_schema: dict
+    selector_schema: dict
+
+    def capabilities(self):
+        ...
+
+    def validate_request(self, request, scope):
+        ...
+
+    def launch_catalog(self, request):
+        ...
+
+    def result_catalog(self, request, selector):
+        ...
+
+    def prepare(self, name, request, arguments, *, scope, previous_events, handle=None, selector=None):
+        ...
+
+    def invoke(self, prepared) -> SourceSnapshot | None:
+        ...
+
+    def decode(self, prepared, snapshot):
+        ...
+
+    def publish(self, request, selector, snapshot, scope, operation_key, *, submission_snapshot=None, handle=None):
+        ...
+
+    def prepare_observation(self, request, handle, *, scope):
+        ...
+
+def validate_service_configuration(service, configuration):
+    if service == 'enrichr':
+        from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.api_enrichr import validate_enrichr_configuration
+        return validate_enrichr_configuration(configuration)
+    if service == 'bvbrc_appservice':
+        from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_information.historical_appservice_contracts import validate_contract
+        return validate_contract('ServiceConfiguration', configuration)
+    if service not in {'uniprot', 'bvbrc_data', 'ncbi_blast', 'bvbrc_minhash', 'rfam_batch', 'sequence_support'}:
+        raise ValueError('api_service_unknown')
+    if not isinstance(configuration, dict):
+        raise ValueError('api_service_configuration_invalid')
+    allowed = {'kind', 'service'}
+    if service == 'bvbrc_data':
+        allowed |= {'base_url', 'timeout'}
+    if service == 'bvbrc_minhash':
+        allowed |= {'endpoint', 'timeout', 'authorization_env', 'authorization_origins'}
+    if service == 'rfam_batch':
+        allowed |= {'timeout'}
+    if set(configuration) - allowed or configuration.get('kind', 'api') != 'api' or configuration.get('service', service) != service:
+        raise ValueError('api_service_configuration_invalid')
+    if service == 'rfam_batch' and 'timeout' in configuration:
+        timeout = configuration['timeout']
+        if type(timeout) not in (int, float) or not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError('api_service_configuration_invalid')
+    return deepcopy(configuration)
+
+def _construct_service(service, configuration, tool_registry, *, _received_configuration=False):
+    if service == 'enrichr':
+        from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.api_enrichr import EnrichrService
+        return EnrichrService(tool_registry, configuration=configuration)
+    if service == 'bvbrc_appservice':
+        from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.api_bvbrc_appservice import BVBRCAppServiceService
+        return BVBRCAppServiceService(tool_registry, configuration=configuration, _received_configuration=_received_configuration)
+    if service == 'uniprot':
+        from gene_annotation_episode.episodic_workflow.root.a110.api_uniprot import UniProtService
+        return UniProtService(tool_registry, configuration=configuration)
+    if service == 'ncbi_blast':
+        from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.api_blast import NCBIBlastService
+        return NCBIBlastService(tool_registry, configuration=configuration)
+    if service == 'bvbrc_minhash':
+        from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.api_bvbrc_minhash import BVBRCMinhashService
+        return BVBRCMinhashService(tool_registry, configuration=configuration, _received_configuration=_received_configuration)
+    if service == 'rfam_batch':
+        from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.api_rfam import RfamBatchService
+        return RfamBatchService(tool_registry, configuration=configuration, _received_configuration=_received_configuration)
+    if service == 'sequence_support':
+        from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.api_sequence_support import SequenceSupportService
+        return SequenceSupportService(tool_registry, configuration=configuration)
+    from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.api_bvbrc import BVBRCDataService
+    return BVBRCDataService(tool_registry, configuration=configuration, _received_configuration=_received_configuration)
+
+def validate_fresh_service_configuration(service, configuration):
+    """Validate fresh construction without changing saved configuration readers."""
+    configuration = validate_service_configuration(service, configuration)
+    if 'timeout' in configuration:
+        raise ValueError('transport_timeout_configuration_not_supported')
+    return configuration
+
+def build_service(service, configuration, tool_registry):
+    configuration = validate_fresh_service_configuration(service, configuration)
+    return _construct_service(service, configuration, tool_registry)
+
+def build_received_service(service, configuration, tool_registry):
+    """Bind original saved configuration for receiving and authentication.
+
+    Legacy transport fields remain literal authenticated metadata. They never
+    configure new deadlines; validation and original constructor effects remain.
+    """
+    configuration = validate_service_configuration(service, configuration)
+    return _construct_service(service, configuration, tool_registry, _received_configuration=True)

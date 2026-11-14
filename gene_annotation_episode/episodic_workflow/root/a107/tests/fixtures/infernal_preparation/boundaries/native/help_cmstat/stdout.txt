@@ -1,0 +1,19 @@
+# cmstat :: display summary statistics for CMs
+# INFERNAL 1.1.5 (Sep 2023)
+# Copyright (C) 2023 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Usage: cmstat [-options] <cmfile>
+
+Options:
+  -h          : show brief help on version and usage
+  -E <x>      : print bit scores that correspond to E-value threshold of <x>
+  -P <x>      : print bit scores that correspond to E-value threshold of <x>
+  -T <x>      : print E-values that correspond to bit score threshold of <x>
+  -Z <x>      : set database size in *Mb* to <x> for E-value calculations  [10]
+  --cut_ga    : print E-values that correspond to GA bit score thresholds
+  --cut_nc    : print E-values that correspond to NC bit score thresholds
+  --cut_tc    : print E-values that correspond to TC bit score thresholds
+  --key <s>   : only print statistics for CM with name or accession <s>
+  --hmmonly   : print filter HMM bit scores/E-values, not CM ones
+  --nohmmonly : print CM bit scores/E-values, even for models with 0 basepairs

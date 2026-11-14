@@ -35,7 +35,7 @@ def _file(store, value, format):
 
 @pytest.fixture
 def documents(tmp_path, monkeypatch):
-    fixture = json.loads((Path(__file__).parent / "fixtures/protein_conservation/supplied_alignment.json").read_bytes())
+    fixture = json.loads((Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/protein_conservation/supplied_alignment.json").read_bytes())
     assert fixture["provenance"]["kind"] == "supplied_engineering_json"
     assert fixture["provenance"]["producer_authenticated"] is False
     with Store(tmp_path / "store") as store:

@@ -60,7 +60,7 @@ def engineering_runtime(directory):
     directory = Path(directory)
     directory.mkdir(parents=True)
     script = directory / 'engineering_callpeak.py'
-    shutil.copyfile(Path(__file__).resolve().parent / 'fixtures/macs2/engineering_callpeak.py', script)
+    shutil.copyfile(Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/macs2/engineering_callpeak.py', script)
     site = directory / 'site'
     files = [script]
     for relative in ('MACS2/callpeak_cmd.py', 'MACS2/bdgdiff_cmd.py',

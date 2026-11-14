@@ -47,8 +47,8 @@ from gene_annotation_episode.protein_structure_result_worker import run_protein_
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry, SequenceWork
 
-F = import_module("verification.tool_graders_protein_structure_execution_2026-10-27_390.fixture_helpers")
-A = import_module("verification.tool_graders_protein_structure_inputs_2026-10-27_386.fixture_helpers")
+F = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390")
+A = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 GROUPS = ("execution_protein_structure_projections", "execution_protein_structure_saved_sheets",
     "execution_protein_structure_sequences", "execution_protein_structure_failures")
 USES = ["sequence_align", "structure_correspondence"]

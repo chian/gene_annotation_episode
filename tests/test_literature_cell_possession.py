@@ -13,9 +13,9 @@ import pytest
 from gene_annotation_episode.communication import ReportBoundaryError, plain
 from gene_annotation_episode.domain import ContractError, canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.literature_rate_storage import LiteratureRateRepository
+from gene_annotation_episode.episodic_workflow.root.a105.literature_rate_storage import LiteratureRateRepository
 from gene_annotation_episode.state import Store
-from test_literature_rate_episode_integration import service_binding
+from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_episode_integration import service_binding
 
 
 CASES = {
@@ -27,7 +27,7 @@ CASES = {
     "binding_model": ("test_literature_binding_model_storage", "fixture", "BindingModel", "binding_model_cells_schema"),
     "transport": ("test_literature_transport_storage", "fixture", "Transport", "transport_response_cells_schema"),
     "perturbation": ("test_literature_perturbation_integration", "setup_case", "Perturbation", "perturbation_cells_schema"),
-    "structure": ("test_literature_structure_storage", "fixture", "Structure", "structure_cells_schema"),
+    "structure": ("gene_annotation_episode.episodic_workflow.root.a102.tests.test_literature_structure_storage", "fixture", "Structure", "structure_cells_schema"),
     "reaction": ("test_literature_reaction_storage", "fixture", "Reaction", "reaction_cells_schema"),
     "figure": ("test_literature_figure_storage", "fixture", "Figure", "figure_cells_schema"),
     "partner": ("test_literature_partner_storage", "fixture", "Partner", "partner_cells_schema"),
@@ -61,7 +61,7 @@ def ratio_case(path):
 def selected_case(kind, path):
     if kind == "ratio":
         store, context, args = ratio_case(path)
-        module = importlib.import_module("gene_annotation_episode.literature_ratio_storage")
+        module = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a105.literature_ratio_storage")
         repo_type, schema = module.LiteratureRatioRepository, module.ratio_cells_schema()
     else:
         fixture_module, fixture, class_part, schema_name = CASES[kind]

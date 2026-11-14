@@ -1,0 +1,240 @@
+"""Pure raw GSC/BLOSUM operands for the shared HMMER alignment-map calculator.
+
+The retained source profile is Infernal 1.1.5's Easel implementation: digital
+``esl_dst_XPairId``, ``esl_tree_UPGMA``/``cluster_engine``,
+``esl_tree_SetCladesizes``, ``esl_cluster_SingleLinkage``, and the pre-normalization
+parts of ``esl_msaweight_GSC``/``esl_msaweight_BLOSUM``. Inputs have already been
+digitized by the common caller. These helpers neither normalize weights nor
+calculate occupancy, maps, scientific scores, or biological phylogenies.
+
+Array positions refer to original source-row ordinals. Tree nodes use Easel's
+root=0, internal-child>0, taxon=-row-ordinal convention (taxon 0 is therefore 0).
+Branches are auxiliary weighting-distance units; all other weights and pair
+identities are dimensionless. The shared caller owns ordered Kahan summation,
+divide-then-scale normalization, row-key joins, and the retained sheet.
+"""
+from __future__ import annotations
+
+import math
+
+
+def _validated_residues(sequences: list[str], residue_symbols: str) -> frozenset[str]:
+    """Validate the narrow, already-digitized input port without re-digitizing."""
+    if (not isinstance(residue_symbols, str) or not residue_symbols
+            or any(not "A" <= symbol <= "Z" for symbol in residue_symbols)
+            or len(set(residue_symbols)) != len(residue_symbols)):
+        raise ValueError("settings_invalid")
+    residues = frozenset(residue_symbols)
+    if not isinstance(sequences, list) or not sequences:
+        raise ValueError("alignment_invalid")
+    if any(not isinstance(sequence, str) for sequence in sequences):
+        raise ValueError("alignment_invalid")
+    width = len(sequences[0])
+    allowed = residues | frozenset("-~*")
+    if (not width or any(len(sequence) != width for sequence in sequences)
+            or any(set(sequence) - allowed for sequence in sequences)):
+        raise ValueError("alignment_invalid")
+    return residues
+
+
+def _native_pair_identity(first: str, second: str, residues: frozenset[str]) -> float:
+    """Easel XPairId: equal residue codes / min(each row's residue count).
+
+    Degenerate codes match only themselves. Gap, missing and nonresidue symbols
+    do not count toward either total or the numerator. A zero denominator has
+    native value 0.0; this is not identity over alignment columns or paired sites.
+    The public entrypoints have already validated equal, positive widths.
+    """
+    identical = first_count = second_count = 0
+    for left, right in zip(first, second):
+        left_residue = left in residues
+        right_residue = right in residues
+        if left_residue:
+            first_count += 1
+        if right_residue:
+            second_count += 1
+        if left_residue and right_residue and left == right:
+            identical += 1
+    denominator = min(first_count, second_count)
+    return identical / denominator if denominator else 0.0
+
+
+def _check_raw_weights(weights: list[float]) -> None:
+    if any(not math.isfinite(weight) or weight < 0.0 for weight in weights):
+        raise ValueError("weight_invalid")
+
+
+def _upgma_tree(sequences: list[str], residues: frozenset[str]) -> dict:
+    """Port the retained cluster_engine's UPGMA scan, swaps and arithmetic."""
+    count = len(sequences)
+    distance = [[0.0] * count for _ in range(count)]
+    for row in range(count):
+        for column in range(row + 1, count):
+            value = 1.0 - _native_pair_identity(sequences[row], sequences[column], residues)
+            distance[row][column] = value
+            distance[column][row] = value
+    indices = [-row for row in range(count)]
+    members = [1] * count
+    heights = [0.0] * (count - 1)
+    children = [[0, 0] for _ in range(count - 1)]
+    branches = [[0.0, 0.0] for _ in range(count - 1)]
+
+    for active in range(count, 1, -1):
+        minimum = distance[0][1]
+        first, second = 0, 1
+        for row in range(active):
+            for column in range(row + 1, active):
+                if distance[row][column] < minimum:
+                    minimum = distance[row][column]
+                    first, second = row, column
+
+        node = active - 2
+        left, right = indices[first], indices[second]
+        children[node] = [left, right]
+        height = minimum / 2.0
+        heights[node] = height
+        branches[node] = [
+            max(0.0, height - heights[left]) if left > 0 else height,
+            max(0.0, height - heights[right]) if right > 0 else height,
+        ]
+
+        # Source order matters: move j to N-1, then i to N-2. Each move
+        # swaps columns before rows, and swaps the index/clade-size entries.
+        for selected, destination in ((second, active - 1), (first, active - 2)):
+            if selected == destination:
+                continue
+            for row in range(active):
+                distance[row][destination], distance[row][selected] = (
+                    distance[row][selected], distance[row][destination])
+            for column in range(active):
+                distance[destination][column], distance[selected][column] = (
+                    distance[selected][column], distance[destination][column])
+            indices[selected], indices[destination] = indices[destination], indices[selected]
+            members[selected], members[destination] = members[destination], members[selected]
+
+        first, second = active - 2, active - 1
+        for column in range(active):
+            distance[first][column] = (
+                members[first] * distance[first][column]
+                + members[second] * distance[second][column]
+            ) / (members[first] + members[second])
+            distance[column][first] = distance[first][column]
+        members[first] += members[second]
+        indices[first] = node
+
+    clade_sizes = [0] * (count - 1)
+    for node in range(count - 2, -1, -1):
+        left, right = children[node]
+        clade_sizes[node] = (clade_sizes[left] if left > 0 else 1)
+        clade_sizes[node] += clade_sizes[right] if right > 0 else 1
+    return {"children": children, "branches": branches, "clade_sizes": clade_sizes}
+
+
+def gsc_raw_weights(sequences: list[str], *, residue_symbols: str) -> dict:
+    """Return native GSC raw weights and the exact auxiliary UPGMA tree.
+
+    The raw weights are the native values immediately before DNorm/DScale.
+    Identical residue rows can yield all-zero raw weights, which the shared
+    normalizer must retain as its native zero-sum case. Singleton native GSC
+    returns 1.0 before building a tree; its derived diagnostic arrays are empty.
+    Invalid inputs/settings/weights raise only the contract's closed ValueError
+    codes. No resource limit, alternate algorithm or normalization is selected.
+    """
+    residues = _validated_residues(sequences, residue_symbols)
+    count = len(sequences)
+    if count == 1:
+        return {"raw_weights": [1.0], "tree": {
+            "children": [], "branches": [], "clade_sizes": []}}
+    tree = _upgma_tree(sequences, residues)
+    children, branches, clade_sizes = tree["children"], tree["branches"], tree["clade_sizes"]
+    accumulated = [0.0] * (count - 1)
+
+    # Postorder: accumulated holds total branch length below each node.
+    for node in range(count - 2, -1, -1):
+        left, right = children[node]
+        accumulated[node] = branches[node][0] + branches[node][1]
+        if left > 0:
+            accumulated[node] += accumulated[left]
+        if right > 0:
+            accumulated[node] += accumulated[right]
+
+    # Preorder: overwrite only the visited node's children with inherited
+    # weight. Descendant branch totals are still available when read.
+    weights = [0.0] * count
+    accumulated[0] = 0.0
+    for node in range(count - 1):
+        left, right = children[node]
+        left_branch, right_branch = branches[node]
+        left_total, right_total = left_branch, right_branch
+        if left > 0:
+            left_total += accumulated[left]
+        if right > 0:
+            right_total += accumulated[right]
+        if left_total + right_total == 0.0:
+            left_share = (accumulated[node] * (clade_sizes[left] / clade_sizes[node])
+                          if left > 0 else accumulated[node] / clade_sizes[node])
+            right_share = (accumulated[node] * (clade_sizes[right] / clade_sizes[node])
+                           if right > 0 else accumulated[node] / clade_sizes[node])
+        else:
+            # Preserve C's multiply-then-divide association.
+            left_share = accumulated[node] * left_total / (left_total + right_total)
+            right_share = accumulated[node] * right_total / (left_total + right_total)
+        if left <= 0:
+            weights[-left] = left_share + left_branch
+        else:
+            accumulated[left] = left_share + left_branch
+        if right <= 0:
+            weights[-right] = right_share + right_branch
+        else:
+            accumulated[right] = right_share + right_branch
+
+    _check_raw_weights(weights)
+    return {"raw_weights": weights, "tree": tree}
+
+
+def blosum_raw_weights(
+    sequences: list[str], *, residue_symbols: str, identity_cutoff: float,
+) -> dict:
+    """Return 1/cluster-size raw weights and native single-linkage assignments.
+
+    A pair links at identity >= cutoff, including equality and endpoints 0/1.
+    Cluster IDs follow esl_cluster_SingleLinkage's actual stack/swap traversal;
+    they are not relabeled by minimum source-row ordinal. Singleton diagnostics
+    explicitly describe its one cluster although native weighting returns early.
+    """
+    residues = _validated_residues(sequences, residue_symbols)
+    if (type(identity_cutoff) not in (int, float)
+            or not 0.0 <= identity_cutoff <= 1.0
+            or not math.isfinite(identity_cutoff)):
+        raise ValueError("settings_invalid")
+    cutoff = float(identity_cutoff)
+    count = len(sequences)
+    if count == 1:
+        return {"raw_weights": [1.0], "clusters": {
+            "assignment": [0], "sizes": [1], "identity_cutoff": cutoff}}
+
+    # esl_cluster_SingleLinkage: a reverse-initialized available stack and a
+    # connected-but-unextended stack. Delete by swapping with the active tail.
+    available = list(range(count - 1, -1, -1))
+    connected: list[int] = []
+    assignment = [-1] * count
+    cluster_count = 0
+    while available:
+        connected.append(available.pop())
+        while connected:
+            vertex = connected.pop()
+            assignment[vertex] = cluster_count
+            for index in range(len(available) - 1, -1, -1):
+                candidate = available[index]
+                if _native_pair_identity(sequences[vertex], sequences[candidate], residues) >= cutoff:
+                    available[index] = available[-1]
+                    available.pop()
+                    connected.append(candidate)
+        cluster_count += 1
+    sizes = [0] * cluster_count
+    for cluster in assignment:
+        sizes[cluster] += 1
+    weights = [1.0 / sizes[cluster] for cluster in assignment]
+    _check_raw_weights(weights)
+    return {"raw_weights": weights, "clusters": {
+        "assignment": assignment, "sizes": sizes, "identity_cutoff": cutoff}}

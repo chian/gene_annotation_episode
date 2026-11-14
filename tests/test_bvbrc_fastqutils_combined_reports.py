@@ -12,7 +12,7 @@ from test_bvbrc_fastqutils_provider import f
 
 
 def test_sra_and_both_samstat_versions_preserve_distinct_native_populations():
-    fixtures = Path(__file__).parent / 'fixtures'
+    fixtures = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures'
     originals = {
         'sra': ((fixtures / 'bvbrc_fastqutils/sra/native_selected_run.json').read_bytes(), 'sra_metadata'),
         'legacy': ((fixtures / 'bvbrc_fastqutils_samstat_legacy/mixed.sam.samstat.html').read_bytes(), 'samstat_html'),

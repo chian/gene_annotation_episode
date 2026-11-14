@@ -1,0 +1,44 @@
+{
+  "authority": {
+    "runs/second_a101_a108_provider_selector_v3_candidate_01/manifest.json": "0146f7ebb7cee3f6cef42f81b1652281e35dd61370375f09ab59e43996f51da3",
+    "runs/second_a101_a108_root_selector_extension_candidate_01/candidate/manifest.json": "93d12baf6987cb5b9441a755a379639699d35c2da1322668958925ffa38e8139",
+    "runs/second_a108_context_provider_virtual_candidate_01/candidate/manifest.json": "ce232a095ec332ba83c4584ef73296ce4c3200b42f0d052de086b5781407b540"
+  },
+  "axis": "a101",
+  "call_shapes": {
+    "execution_progress_assessment": {
+      "call": [
+        "Call(func=Attribute(value=Name(id='self', ctx=Load()), attr='complete_decision', ctx=Load()), args=[Name(id='instructions', ctx=Load()), Name(id='context', ctx=Load()), Call(func=Name(id='_action_generation_schema', ctx=Load()), args=[Name(id='schema', ctx=Load())])])",
+        "Call(func=Call(func=Attribute(value=Name(id='self', ctx=Load()), attr='decision_completion', ctx=Load())), args=[Attribute(value=Name(id='self', ctx=Load()), attr='episode_id', ctx=Load()), Constant(value='REASONING'), Name(id='instructions', ctx=Load()), Name(id='context', ctx=Load()), Call(func=Name(id='_action_generation_schema', ctx=Load()), args=[Name(id='schema', ctx=Load())])])"
+      ],
+      "exchange_decision": [
+        "Call(func=Attribute(value=Name(id='self', ctx=Load()), attr='complete_decision', ctx=Load()), args=[Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='instructions'), ctx=Load()), Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='context'), ctx=Load()), Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='output_schema'), ctx=Load())])",
+        "Call(func=Call(func=Attribute(value=Name(id='self', ctx=Load()), attr='decision_completion', ctx=Load())), args=[Attribute(value=Name(id='self', ctx=Load()), attr='episode_id', ctx=Load()), Constant(value='REASONING'), Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='instructions'), ctx=Load()), Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='context'), ctx=Load()), Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='output_schema'), ctx=Load())])"
+      ]
+    },
+    "scientific_process/execution_progress_assessment": {
+      "call": [
+        "Call(func=Attribute(value=Name(id='self', ctx=Load()), attr='complete_decision', ctx=Load()), args=[Name(id='instructions', ctx=Load()), Name(id='context', ctx=Load()), Call(func=Name(id='_action_generation_schema', ctx=Load()), args=[Name(id='schema', ctx=Load())])])",
+        "Call(func=Call(func=Attribute(value=Name(id='self', ctx=Load()), attr='decision_completion', ctx=Load())), args=[Attribute(value=Name(id='self', ctx=Load()), attr='episode_id', ctx=Load()), Constant(value='REASONING'), Name(id='instructions', ctx=Load()), Name(id='context', ctx=Load()), Call(func=Name(id='_action_generation_schema', ctx=Load()), args=[Name(id='schema', ctx=Load())])])"
+      ],
+      "exchange_decision": [
+        "Call(func=Attribute(value=Name(id='self', ctx=Load()), attr='complete_decision', ctx=Load()), args=[Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='instructions'), ctx=Load()), Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='context'), ctx=Load()), Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='output_schema'), ctx=Load())])",
+        "Call(func=Call(func=Attribute(value=Name(id='self', ctx=Load()), attr='decision_completion', ctx=Load())), args=[Attribute(value=Name(id='self', ctx=Load()), attr='episode_id', ctx=Load()), Constant(value='REASONING'), Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='instructions'), ctx=Load()), Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='context'), ctx=Load()), Subscript(value=Name(id='request', ctx=Load()), slice=Constant(value='output_schema'), ctx=Load())])"
+      ]
+    }
+  },
+  "classes": {
+    "execution_progress_assessment": "MonitorTaskDecision",
+    "scientific_process/execution_progress_assessment": "MonitorTaskDecision"
+  },
+  "files": {
+    "providers.py.txt": "9f9f5d92db85af0c93c99ab3f66c1b0432ec74769aae1ba2a7352f0c3da9a059",
+    "runtime.py.txt": "3bea2e19d127f06d57875e5e3e5a6a28d3650159d1507cd85392c74604b6d807"
+  },
+  "homes": [
+    "execution_progress_assessment",
+    "scientific_process/execution_progress_assessment"
+  ],
+  "source_scope": "original runtime call and provider presenter; no runtime fixture from runs",
+  "version": "a101_a108_root_delivery_controls_v1_assets"
+}

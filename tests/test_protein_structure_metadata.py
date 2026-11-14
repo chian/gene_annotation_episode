@@ -6,7 +6,7 @@ from gene_annotation_episode.protein_structure_contracts import canonical
 from gene_annotation_episode.protein_structure_formats import parse_pdb_structure
 from gene_annotation_episode.protein_structure_sequences import extract_structure_sequence
 from gene_annotation_episode.protein_structure_metadata import extract_native_structure_metadata
-f = import_module("verification.tool_graders_protein_structure_inputs_2026-10-27_386.fixture_helpers")
+f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 
 
 def declared_metadata(parsed, seq, semantics):

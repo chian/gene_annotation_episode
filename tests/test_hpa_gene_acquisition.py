@@ -25,7 +25,7 @@ OPERATION = "public.hpa.gene"
 GENE = "ENSG00000141510"
 ARGUMENTS = dict(gene_id=GENE, max_bytes=8388608)
 SOURCE_SYNTAX = "source_" + "a" * 24
-FIXTURES = Path(__file__).parent / "fixtures/hpa"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/hpa"
 RAW_SHA256 = "ab75a8987ac2754757cd4f11406b535a1e33c8cae6823c387b9eb63310842146"
 METADATA_SHA256 = "aa5dacb230452d1bb4e8fe5531c8cf5b009b768a932ba9645072a254c0185966"
 

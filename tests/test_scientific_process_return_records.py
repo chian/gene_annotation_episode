@@ -23,7 +23,7 @@ from gene_annotation_episode.scientific_process_reports import (RETURN_VERSION,
 from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
 
 
-FIXTURES = Path(__file__).parent / "fixtures/scientific_process_returns"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/scientific_process_returns"
 LEGACY_SCHEMA_SHA256 = "6db9bce2b5a6526b4f3000166eed409fe3675e72cdcd266e392ec7a261fcd308"
 PATH = (("annotation", "root"), ("scientific_process", "child"))
 METADATA = {"credit_kind": "scientific", "credit_binding": {

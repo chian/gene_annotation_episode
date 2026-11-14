@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 import sys
 
-from .execution_recording import NativeStatistics, _sha
+from .episodic_workflow.root.execution_recording import NativeStatistics, _sha
 from .run_statistics import ExecutionClass, _resource
 
 
@@ -42,7 +42,7 @@ class OrdinaryExecutionStatistics:
 
     def alignment_class(self, arguments, policy):
         from Bio.Align import _pairwisealigner
-        from . import sequence_ops, sequence_worker
+        from gene_annotation_episode import sequence_ops, sequence_worker
         from .native_lifecycle import VERSION as lifecycle_version
         # Bind the same arguments/defaults used by the native operation, rather
         # than maintaining another set of algorithm settings in the recorder.
@@ -72,7 +72,7 @@ class OrdinaryExecutionStatistics:
                                         recovery_directory=self.recovery_directory)
 
     def spreadsheet_class(self, path, operation, arguments, policy):
-        from . import spreadsheet_tools, spreadsheet_worker
+        from gene_annotation_episode import spreadsheet_tools, spreadsheet_worker
         from .native_lifecycle import VERSION as lifecycle_version
         if operation == 'sheets':
             if arguments:
@@ -117,7 +117,7 @@ class OrdinaryExecutionStatistics:
         condition. This never submits native work or rewrites episode history.
         Completed receipt bodies and scientific archives are not materialized.
         """
-        from .execution_recording import recover_native_measurement
+        from .episodic_workflow.root.execution_recording import recover_native_measurement
         summary = {'scan_state': 'available', 'pending': 0, 'recorded': 0, 'unavailable': 0, 'invalid': 0,
             'failures': {'history_unavailable': 0, 'identity_conflict': 0,
                          'receipt_invalid': 0, 'receipt_unavailable': 0}}

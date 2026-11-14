@@ -11,7 +11,7 @@ import pytest
 from gene_annotation_episode.bvbrc_fastqutils_contracts import FastqUtilsContractError, validate_native_document
 from gene_annotation_episode.bvbrc_fastqutils_samstat_legacy import parse_samstat_html_2_2_3
 
-FIXTURES = Path(__file__).parent / 'fixtures/bvbrc_fastqutils_samstat_legacy'
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils_samstat_legacy'
 
 
 def context(raw, *, version=None, transfer='complete', fmt='samstat_html', identity='handcrafted_synthetic'):

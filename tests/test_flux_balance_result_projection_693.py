@@ -30,8 +30,8 @@ from gene_annotation_episode.flux_balance_return_views import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = ROOT / "verification/tool_graders_flux_balance_core_2026-10-29_679/VERIFIED_NUMERICAL_EXAMPLE_001.json"
-EMISSIONS = ROOT / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions"
+BASE = ROOT / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/VERIFIED_NUMERICAL_EXAMPLE_001.json"
+EMISSIONS = ROOT / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/producer_emissions"
 pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="application checks require bounded529")
 
 

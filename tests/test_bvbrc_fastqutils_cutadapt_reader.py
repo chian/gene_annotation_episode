@@ -480,7 +480,7 @@ def test_saved_sheet_calculates_exact_retention_without_parsing_acquisition_or_p
     from gene_annotation_episode import bvbrc_fastqutils_native, bvbrc_fastqutils_cutadapt_reader
     # Reuse an original task shape solely as synthetic metadata. No sample,
     # reference, stage completion or remote execution is inferred from it.
-    template = json.loads((Path(__file__).parent / 'fixtures/bvbrc_fastqutils/reports/saved_native_sheet.json').read_text())
+    template = json.loads((Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/reports/saved_native_sheet.json').read_text())
     saved = []
     for case, base in [('cutadapt_single', INITIAL), ('cutadapt_filtered', INITIAL), ('zero_bases', WARNINGS)]:
         doc = parse(native(case, base))

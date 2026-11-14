@@ -769,7 +769,7 @@ def test_live_retained_sra_accession_search_ordinary_acquisition(tmp_path, monke
     if os.environ.get("HMMER_NATIVE_ORACLE_SRA_METADATA") != "1":
         pytest.skip("requires explicit one-request SRA metadata acquisition")
 
-    fixture_root = Path(__file__).parent / "fixtures/bvbrc_fastqutils/sra"
+    fixture_root = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils/sra"
     native_path = fixture_root / "native_selected_run.json"
     origin_path = fixture_root / "SOURCE_RECEIPT.json"
     assert _live_pin(native_path)["sha256"] == "64e2f99d807691af2536df4287d93cef70b76a83c5ad6c1ce83f42533db68051"

@@ -18,7 +18,7 @@ from gene_annotation_episode.rna_structure_comparison_contracts import (
 )
 from gene_annotation_episode.rna_structure_comparison_inputs import populate_rna_comparison_sheet
 
-f = importlib.import_module("verification.tool_graders_rna_comparison_calculations_2026-10-26_367.fixture_helpers")
+f = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_calculations_367.fixture_helpers")
 
 
 def calculated(sheet):
@@ -337,7 +337,7 @@ def test_topology_only_retains_known_different_models_without_selecting_energy()
 
 def _retained(name):
     """Saved 357 outputs; this helper never executes/imports ViennaRNA."""
-    path = Path(__file__).parent / "fixtures/rna_structure_comparison_calculations_367/retained357" / (name + ".json")
+    path = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_comparison_calculations_367/retained357" / (name + ".json")
     packet = json.loads(path.read_bytes())
     if "sheet" in packet:
         return packet["sheet"], packet["bundle"]["software"]

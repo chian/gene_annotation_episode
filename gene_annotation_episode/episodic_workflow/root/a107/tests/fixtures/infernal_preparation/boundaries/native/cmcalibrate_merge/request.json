@@ -1,0 +1,50 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate",
+    "--merge",
+    "--ptot",
+    "2",
+    "--proot",
+    "part",
+    "-L",
+    "0.02",
+    "--tailp",
+    "0.1",
+    "model.cm"
+  ],
+  "environment": {
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_merge/cache",
+    "OMP_NUM_THREADS": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_merge",
+  "binary_sha256": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be",
+  "inputs": [
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+      "path": "model.cm",
+      "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+      "path": "original.cm",
+      "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_partition_1/scores.dat",
+      "path": "part.1",
+      "sha256": "28041ed6f532c9c708dc47ece5f56c90ffe066e32fbd3998ff3e29df1115ef5a"
+    },
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmcalibrate_partition_2/scores.dat",
+      "path": "part.2",
+      "sha256": "3b16c5fc69ad84ce9203ca230bf76e2326f4a73b251a0e041a3dab9f6885d617"
+    }
+  ],
+  "started_at": "2026-10-26T04:41:36.055064+00:00"
+}

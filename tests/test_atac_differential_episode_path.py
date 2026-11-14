@@ -17,7 +17,7 @@ from gene_annotation_episode.communication import plain
 from gene_annotation_episode.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
-F = import_module('verification.tool_graders_atac_episode_path_2026-10-27_478.fixture_helpers')
+F = import_module('gene_annotation_episode.episodic_workflow.root.tests.fixtures.atac.workflow_478.fixture_helpers')
 
 
 def deny(*args, **kwargs):

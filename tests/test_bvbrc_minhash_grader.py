@@ -19,7 +19,7 @@ from gene_annotation_episode.bvbrc_minhash_grader import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / "verification/tool_graders_bvbrc_native_rpc_contract_2026-10-24/sources"
+NATIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/native_rpc_contract/sources"
 
 
 @pytest.fixture(autouse=True)

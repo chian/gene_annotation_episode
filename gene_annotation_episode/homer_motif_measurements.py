@@ -8,8 +8,8 @@ import hashlib
 import math
 import re
 
-from . import homer_motif_contracts as c
-from .bvbrc_alignment_values import native_number, numeric_cell
+from gene_annotation_episode import homer_motif_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import native_number, numeric_cell
 
 
 _FILE_KEYS = {'role', 'native_relative_path', 'content', 'artifact', 'capture'}

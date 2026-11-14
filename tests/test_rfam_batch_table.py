@@ -18,7 +18,7 @@ from gene_annotation_episode.rfam_batch_table import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / "verification/tool_graders_rfam_transport_2026-10-26_234/live/multi"
+NATIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/transport/live/multi"
 
 
 def digest(content):

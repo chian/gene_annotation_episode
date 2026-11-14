@@ -30,7 +30,7 @@ from test_flux_balance_execution_inputs_704 import selected
 pytestmark = pytest.mark.skipif('HMMER529_ATTEMPT' not in os.environ, reason='requires bounded529')
 REAL_PREPARE = native.prepare_job
 ROOT = Path(__file__).resolve().parents[1]
-SAVED = ROOT / 'verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions/sbml'
+SAVED = ROOT / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/producer_emissions/sbml'
 
 
 @pytest.fixture

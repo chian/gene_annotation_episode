@@ -1,0 +1,1374 @@
+{
+  "parse_result": {
+    "status": "partial",
+    "value": {
+      "schema_version": "bvbrc_msa_sheet_v1",
+      "tool": "C-L204-MSA",
+      "analysis": {
+        "analysis_id": "analysis",
+        "mode": "ordinary_new_alignment",
+        "alignment_id": "aligned#alignment",
+        "frequency_table_id": null,
+        "consensus_alignment_id": null,
+        "tree_id": null,
+        "full_xmfa_slot_id": null,
+        "xmfa_document_id": null,
+        "segment_ids": [],
+        "reference": null,
+        "output_role_evidence": []
+      },
+      "inputs": [],
+      "run": {
+        "original_task_id": "task",
+        "settings": [],
+        "commands": [],
+        "versions": [],
+        "conflicts": [],
+        "completeness": "unknown"
+      },
+      "documents": [
+        {
+          "kind": "alignment",
+          "value": {
+            "alignment_id": "aligned#alignment",
+            "artifact": {
+              "raw_artifact_ref": "aligned",
+              "source_ref": "source:aligned",
+              "sha256": "074e9bd8d194b7807740a79d7dd2e2fa2ff447b3b3a1ca85e988379d7a545a5c"
+            },
+            "format": "aligned_fasta",
+            "layout": "fasta",
+            "id_rule": "first_whitespace_token",
+            "encoding": "ascii",
+            "declared_row_count": null,
+            "declared_column_count": null,
+            "observed_row_count": 2,
+            "observed_column_count": null,
+            "completeness": "partial",
+            "rows": [
+              {
+                "row_index": 0,
+                "raw_header": "a",
+                "member_label": "a",
+                "sequence": "ACT",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "aligned",
+                    "source_ref": "source:aligned",
+                    "sha256": "074e9bd8d194b7807740a79d7dd2e2fa2ff447b3b3a1ca85e988379d7a545a5c"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 7,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              {
+                "row_index": 1,
+                "raw_header": "b",
+                "member_label": "b",
+                "sequence": "A",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "aligned",
+                    "source_ref": "source:aligned",
+                    "sha256": "074e9bd8d194b7807740a79d7dd2e2fa2ff447b3b3a1ca85e988379d7a545a5c"
+                  },
+                  "byte_start_0based": 7,
+                  "byte_end_0based_exclusive": 12,
+                  "line_start_1based": 3,
+                  "line_end_1based_inclusive": 4,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "read_outcomes": [],
+      "associations": {
+        "original_members": [],
+        "inline_inputs": [],
+        "row_members": [],
+        "transformations": [],
+        "correspondences": [],
+        "feature_genomes": [],
+        "source_records": [],
+        "functions": [],
+        "function_equivalences": [],
+        "taxonomy": [],
+        "member_entities": [],
+        "dependence_groups": [],
+        "requirements": [],
+        "diagnostics": []
+      },
+      "populations": {
+        "alignments": [
+          {
+            "population_id": "all",
+            "alignment_id": "aligned#alignment",
+            "row_indices": [
+              0,
+              1
+            ],
+            "columns_0based": [
+              0,
+              1,
+              2
+            ],
+            "completeness": "partial",
+            "evidence": []
+          }
+        ],
+        "composition": [],
+        "taxonomy": [],
+        "leaves": []
+      },
+      "segments": [],
+      "tree_bindings": [],
+      "consensus_associations": [],
+      "native_observations": [],
+      "native_tree_measurements": [],
+      "support_observations": [],
+      "xmfa_bindings": [],
+      "requirements": [
+        {
+          "requirement_id": "msa/analysis/run/alignment_deployed_version_unproven",
+          "kind": "scientific_metadata",
+          "role": "run",
+          "source_refs": [],
+          "reason_code": "alignment_deployed_version_unproven"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "alignment_deployed_version_unproven",
+          "phase": "association",
+          "path": "/run",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "diagnostics": [
+      {
+        "code": "alignment_deployed_version_unproven",
+        "phase": "association",
+        "path": "/run",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  },
+  "components": {
+    "schema_version": "bvbrc_msa_components_v1",
+    "analysis_id": "analysis",
+    "parameters": {
+      "version": "bvbrc_msa_components_v1",
+      "requests": [
+        {
+          "kind": "msa_entropy",
+          "request_id": "msa_entropy",
+          "population_id": "all",
+          "alphabet": "dna",
+          "case_policy": "uppercase",
+          "terminal_gap": "-",
+          "observed_table_id": null,
+          "native_rounding": "binary64_fixed_2_ties_to_even"
+        },
+        {
+          "kind": "alignment",
+          "request_id": "alignment",
+          "population_id": "all",
+          "alphabet": "dna",
+          "case_policy": "uppercase",
+          "pairs": [
+            [
+              0,
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    "results": [
+      {
+        "request_id": "msa_entropy",
+        "kind": "msa_entropy",
+        "status": "partial",
+        "value": {
+          "status": "partial",
+          "analysis_id": "analysis",
+          "population_id": "all",
+          "alignment_id": "aligned#alignment",
+          "method_parameters": {
+            "alphabet": "dna",
+            "case_policy": "uppercase",
+            "terminal_gap": "-",
+            "native_rounding": "binary64_fixed_2_ties_to_even"
+          },
+          "sites": [
+            {
+              "column_0based": 0,
+              "included_row_indices": [
+                0,
+                1
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "A",
+                  "count": 2
+                }
+              ],
+              "strict_majority_consensus": null,
+              "native_observation_ids": [],
+              "eligible_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "internal_gap_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "terminal_gap_excluded_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "literal_entropy_bits": {
+                "value": null,
+                "state": "missing",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "missing",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 1,
+              "included_row_indices": [
+                0
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "C",
+                  "count": 1
+                }
+              ],
+              "strict_majority_consensus": null,
+              "native_observation_ids": [],
+              "eligible_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "internal_gap_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "terminal_gap_excluded_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "literal_entropy_bits": {
+                "value": null,
+                "state": "missing",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "missing",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            },
+            {
+              "column_0based": 2,
+              "included_row_indices": [
+                0
+              ],
+              "excluded_terminal_row_indices": [],
+              "symbol_counts": [
+                {
+                  "symbol": "T",
+                  "count": 1
+                }
+              ],
+              "strict_majority_consensus": null,
+              "native_observation_ids": [],
+              "eligible_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_eligible_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "internal_gap_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_internal_gap_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "terminal_gap_excluded_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_terminal_gap_excluded_count_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "literal_entropy_bits": {
+                "value": null,
+                "state": "missing",
+                "unit": "bits",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "native_score_recalculated": {
+                "value": null,
+                "state": "missing",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_literal_entropy_binary64_fixed2_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": [
+                  "bvbrc_msa/analysis/all/incomplete_alignment"
+                ]
+              },
+              "score_residual": {
+                "value": null,
+                "state": "not_measured",
+                "unit": "hundredths_of_bit",
+                "origin": "calculated",
+                "numerator": null,
+                "denominator": null,
+                "population_id": "all",
+                "method_id": "msa_observed_minus_selected_population_score_v1",
+                "evidence": [],
+                "uncertainty": null,
+                "requirement_ids": []
+              }
+            }
+          ],
+          "requirements": [
+            {
+              "requirement_id": "bvbrc_msa/analysis/all/incomplete_alignment",
+              "kind": "output_bytes",
+              "role": "final_alignment",
+              "source_refs": [
+                "source:aligned"
+              ],
+              "reason_code": "bvbrc_msa_incomplete_alignment"
+            }
+          ],
+          "diagnostics": [
+            {
+              "code": "bvbrc_msa_incomplete_alignment",
+              "phase": "association",
+              "path": "",
+              "severity": "qualification",
+              "evidence_refs": [
+                "aligned"
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "requirement_id": "bvbrc_msa/analysis/all/incomplete_alignment",
+            "kind": "output_bytes",
+            "role": "final_alignment",
+            "source_refs": [
+              "source:aligned"
+            ],
+            "reason_code": "bvbrc_msa_incomplete_alignment"
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "bvbrc_msa_incomplete_alignment",
+            "phase": "association",
+            "path": "",
+            "severity": "qualification",
+            "evidence_refs": [
+              "aligned"
+            ]
+          }
+        ]
+      },
+      {
+        "request_id": "alignment",
+        "kind": "alignment",
+        "status": "partial",
+        "value": {
+          "population_id": "all",
+          "alignment_id": "aligned#alignment",
+          "member_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "rows",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "selected_row_count",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "site_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "columns",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "selected_column_count",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "cell_count": {
+            "value": null,
+            "state": "missing",
+            "unit": "characters",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "selected_cell_count",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "sites": [
+            {
+              "column_0based": 0,
+              "symbol_counts": [
+                {
+                  "symbol": "A",
+                  "count": 2
+                }
+              ],
+              "gap_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "gap_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "canonical_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "ambiguity_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "ambiguity_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "stop_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "stop_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "other_nongap_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "other_nongap_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "gap_fraction": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "site_gap_fraction",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_fraction": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "site_canonical_fraction",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_majority_fraction": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "canonical_majority_fraction",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_entropy_bits": {
+                "value": null,
+                "state": "missing",
+                "unit": "bits",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "canonical_entropy_bits",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              }
+            },
+            {
+              "column_0based": 1,
+              "symbol_counts": [
+                {
+                  "symbol": "C",
+                  "count": 1
+                }
+              ],
+              "gap_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "gap_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "canonical_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "ambiguity_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "ambiguity_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "stop_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "stop_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "other_nongap_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "other_nongap_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "gap_fraction": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "site_gap_fraction",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_fraction": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "site_canonical_fraction",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_majority_fraction": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "canonical_majority_fraction",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_entropy_bits": {
+                "value": null,
+                "state": "missing",
+                "unit": "bits",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "canonical_entropy_bits",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              }
+            },
+            {
+              "column_0based": 2,
+              "symbol_counts": [
+                {
+                  "symbol": "T",
+                  "count": 1
+                }
+              ],
+              "gap_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "gap_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "canonical_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "ambiguity_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "ambiguity_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "stop_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "stop_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "other_nongap_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "other_nongap_symbol_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "gap_fraction": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "site_gap_fraction",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_fraction": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "site_canonical_fraction",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_majority_fraction": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "canonical_majority_fraction",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "canonical_entropy_bits": {
+                "value": null,
+                "state": "missing",
+                "unit": "bits",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "canonical_entropy_bits",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              }
+            }
+          ],
+          "rows": [
+            {
+              "row_index": 0,
+              "nongap_count": {
+                "value": 3,
+                "state": "available",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "row_nongap_count",
+                "evidence": [],
+                "requirement_ids": []
+              },
+              "matrix_occupancy": {
+                "value": 1.0,
+                "state": "available",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": 3,
+                "denominator": 3,
+                "population_ref": "all",
+                "method": "row_matrix_occupancy",
+                "evidence": [],
+                "requirement_ids": []
+              }
+            },
+            {
+              "row_index": 1,
+              "nongap_count": {
+                "value": null,
+                "state": "missing",
+                "unit": "characters",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "row_nongap_count",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "matrix_occupancy": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "row_matrix_occupancy",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              }
+            }
+          ],
+          "pairs": [
+            {
+              "row_a": 0,
+              "row_b": 1,
+              "identical_positions": {
+                "value": null,
+                "state": "missing",
+                "unit": "columns",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "pairwise_identical_positions",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "substitutions": {
+                "value": null,
+                "state": "missing",
+                "unit": "columns",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "pairwise_substitutions",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "both_gap_positions": {
+                "value": null,
+                "state": "missing",
+                "unit": "columns",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "pairwise_both_gap_positions",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "a_gap_only_positions": {
+                "value": null,
+                "state": "missing",
+                "unit": "columns",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "pairwise_a_gap_only_positions",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "b_gap_only_positions": {
+                "value": null,
+                "state": "missing",
+                "unit": "columns",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "pairwise_b_gap_only_positions",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "unpaired_nongap_ambiguous_positions": {
+                "value": null,
+                "state": "missing",
+                "unit": "columns",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "pairwise_unpaired_nongap_ambiguous_positions",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              },
+              "identity_fraction": {
+                "value": null,
+                "state": "missing",
+                "unit": "fraction",
+                "origin": "derived",
+                "numerator": null,
+                "denominator": null,
+                "population_ref": "all",
+                "method": "pairwise_canonical_identity",
+                "evidence": [],
+                "requirement_ids": [
+                  "phylogeny/all/alignment_population_incomplete"
+                ]
+              }
+            }
+          ],
+          "identical_sequence_groups": [],
+          "gap_cells": {
+            "value": null,
+            "state": "missing",
+            "unit": "characters",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "gap_symbol_count",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "gap_fraction": {
+            "value": null,
+            "state": "missing",
+            "unit": "fraction",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "gap_cell_fraction",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "canonical_cells": {
+            "value": null,
+            "state": "missing",
+            "unit": "characters",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "canonical_symbol_count",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "canonical_fraction": {
+            "value": null,
+            "state": "missing",
+            "unit": "fraction",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "canonical_cell_fraction",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "ambiguity_cells": {
+            "value": null,
+            "state": "missing",
+            "unit": "characters",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "ambiguity_symbol_count",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "ambiguity_fraction": {
+            "value": null,
+            "state": "missing",
+            "unit": "fraction",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "ambiguity_cell_fraction",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "stop_cells": {
+            "value": null,
+            "state": "missing",
+            "unit": "characters",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "stop_symbol_count",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "stop_fraction": {
+            "value": null,
+            "state": "missing",
+            "unit": "fraction",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "stop_cell_fraction",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "other_nongap_cells": {
+            "value": null,
+            "state": "missing",
+            "unit": "characters",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "other_nongap_symbol_count",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          },
+          "other_nongap_fraction": {
+            "value": null,
+            "state": "missing",
+            "unit": "fraction",
+            "origin": "derived",
+            "numerator": null,
+            "denominator": null,
+            "population_ref": "all",
+            "method": "other_nongap_cell_fraction",
+            "evidence": [],
+            "requirement_ids": [
+              "phylogeny/all/alignment_population_incomplete"
+            ]
+          }
+        },
+        "requirements": [
+          {
+            "requirement_id": "phylogeny/all/alignment_population_incomplete",
+            "kind": "output_bytes",
+            "role": "alignment",
+            "source_refs": [],
+            "reason_code": "alignment_population_incomplete"
+          }
+        ],
+        "diagnostics": []
+      }
+    ],
+    "requirements": [
+      {
+        "requirement_id": "bvbrc_msa/analysis/all/incomplete_alignment",
+        "kind": "output_bytes",
+        "role": "final_alignment",
+        "source_refs": [
+          "source:aligned"
+        ],
+        "reason_code": "bvbrc_msa_incomplete_alignment"
+      },
+      {
+        "requirement_id": "phylogeny/all/alignment_population_incomplete",
+        "kind": "output_bytes",
+        "role": "alignment",
+        "source_refs": [],
+        "reason_code": "alignment_population_incomplete"
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "bvbrc_msa_incomplete_alignment",
+        "phase": "association",
+        "path": "",
+        "severity": "qualification",
+        "evidence_refs": [
+          "aligned"
+        ]
+      }
+    ]
+  },
+  "changed_components": null
+}

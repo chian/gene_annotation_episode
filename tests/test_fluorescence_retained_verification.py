@@ -115,7 +115,7 @@ def _retained_fluorescence_case(stack, directory, operation, checks):
 def _retained_fluorescence_deliveries(case, receipts, checks):
     """Authenticate actual Results→SCI→annotation forms and their frozen rows."""
     from gene_annotation_episode.communication import validate_form
-    from gene_annotation_episode.fluorescence_return_views import (
+    from gene_annotation_episode.episodic_workflow.root.library.fluorescence_return_views import (
         PROJECTION_SOURCE, CONTEXT_SOURCE, requested_fluorescence_sources, select_fluorescence_return_facts,
     )
 
@@ -156,11 +156,11 @@ def test_original049_complete_sheet_hash_and_both_typed_deliveries_with_one_shar
         pytest.skip("requires explicitly pinned original049 metadata and the exact recovered047 Sheet")
     from fluorescence_flowio_test_support import require_bounded_runtime
     require_bounded_runtime()
-    from gene_annotation_episode import fluorescence_event_contracts as core
-    from gene_annotation_episode import fluorescence_event_calculations as calculations
-    from gene_annotation_episode.fluorescence_event_sheet import validate_fluorescence_sheet
-    from gene_annotation_episode.fluorescence_result_views import project_fluorescence_result
-    from gene_annotation_episode.fluorescence_context_views import project_fluorescence_context
+    import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
+    import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations as calculations
+    from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_sheet import validate_fluorescence_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views import project_fluorescence_result
+    from gene_annotation_episode.episodic_workflow.root.library.fluorescence_context_views import project_fluorescence_context
     import test_fluorescence_saved_prepared_case as checks
 
     def forbidden(*args, **kwargs):
@@ -179,7 +179,7 @@ def test_original049_complete_sheet_hash_and_both_typed_deliveries_with_one_shar
         ("fluorescence_fcs_reader", ("parse_fluorescence_fcs", "decode_selected_fcs")),
         ("fluorescence_native_reports", ("parse_fluorescence_native_reports",)),
         ("native_fluorescence_driver", ("run_fluorescence_driver",)),
-        ("native_fluorescence_results", ("capture_fluorescence_native_files", "prepare_fluorescence_result_worker")),
+        ("episodic_workflow.root.library.original_native_fluorescence_results", ("capture_fluorescence_native_files", "prepare_fluorescence_result_worker")),
     ):
         for name in names:
             monkeypatch.setattr("gene_annotation_episode." + module + "." + name, forbidden)
@@ -190,7 +190,7 @@ def test_original049_complete_sheet_hash_and_both_typed_deliveries_with_one_shar
         calls.append(deepcopy(parameters))
         return original_calculator(sheet, parameters=parameters)
     monkeypatch.setattr(calculations, "calculate_fluorescence_sheet", once)
-    fixture = Path(__file__).parent / "fixtures/fluorescence/retained_complete_sheet.json"
+    fixture = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/fluorescence/retained_complete_sheet.json"
     raw = fixture.read_bytes()
     assert len(raw) == 11208 and hashlib.sha256(raw).hexdigest() == SHEET_SHA256
     source047 = Path(os.environ["HMMER_NATIVE_ORACLE_FLUORESCENCE_SOURCE047_SHEET"])

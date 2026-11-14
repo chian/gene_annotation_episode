@@ -25,7 +25,7 @@ from copy import deepcopy
 import json
 import math
 
-from . import sequence_composition_counts as composition_counts
+from gene_annotation_episode import sequence_composition_counts as composition_counts
 
 
 SHEET_SCHEMA = "sequence_composition_sheet_v1"

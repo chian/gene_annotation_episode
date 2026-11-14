@@ -7,12 +7,12 @@ from dataclasses import replace
 
 import pytest
 
-from gene_annotation_episode.literature_experimental_contracts import ExperimentalContractError
-from gene_annotation_episode.literature_intervention_storage import LiteratureInterventionRepository
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_experimental_contracts import ExperimentalContractError
+from gene_annotation_episode.episodic_workflow.root.a106.library.literature_intervention_storage import LiteratureInterventionRepository
 from gene_annotation_episode.state import Store
-from test_literature_intervention_storage import intervention_fixture
-from test_literature_perturbation_integration import source, witness
-from test_literature_perturbation_source import covariance_arguments, extract, summary_grading_parent_return
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_intervention_storage import intervention_fixture
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_integration import source, witness
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_source import covariance_arguments, extract, summary_grading_parent_return
 
 
 @pytest.mark.parametrize("endpoint,covariance,prediction", [

@@ -8,21 +8,21 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import fluorescence_event_contracts as core
-from gene_annotation_episode.fluorescence_event_calculations import calculate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_event_sheet import validate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_native_report_contracts import (
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_sheet import validate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_native_report_contracts import (
     FACS_PROFILE, CYTOKINE_LOG_PROFILE, CYTOKINE_CSV_PROFILE, PROFILE_SOURCES,
     make_fluorescence_report_binding, validate_report_input, validate_report_parse_result,
 )
-from gene_annotation_episode.fluorescence_native_reports import parse_fluorescence_native_reports
-from gene_annotation_episode.fluorescence_result_views import project_fluorescence_result
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_native_reports import parse_fluorescence_native_reports
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views import project_fluorescence_result
 from test_fluorescence_event_calculations import (
     _batch, _cell, _control_sheet, _file, _gate, _parameters, _request, _sheet,
 )
 
 
-FIXTURES = Path(__file__).resolve().parents[1] / "verification/tool_graders_fluorescence_native_reports_2026-10-28_590"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/fluorescence/native_reports"
 
 
 def _input(batch, *, basename=None):

@@ -21,7 +21,7 @@ from gene_annotation_episode.sequence_ops import compare_sites
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / "verification/tool_graders_minimap2_2026-10-24"
+NATIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/minimap2"
 
 
 def operand(length, unit="aa", subject="input:query", molecule=None):

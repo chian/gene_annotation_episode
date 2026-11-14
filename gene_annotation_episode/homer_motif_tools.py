@@ -18,7 +18,7 @@ from .domain import ContractError, identity, obj
 from .episode_receipts import EpisodeReceipts
 from .episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
-from .flux_balance_tools import _action_lock
+from .native_operation_lock import _action_lock
 from .homer_motif_contracts import OPERATION, ROLES, validate_homer_selector
 from .homer_motif_result_contracts import (SOURCE_VERSION, CAPTURE_VERSION, PACKET_VERSION,
     validate_homer_motif_return, validate_homer_motif_value, homer_motif_return, homer_motif_fact_sources)

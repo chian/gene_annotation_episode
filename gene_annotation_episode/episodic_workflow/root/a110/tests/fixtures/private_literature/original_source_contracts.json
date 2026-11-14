@@ -1,0 +1,1860 @@
+[
+  {
+    "binding_path": "published_evidence_assessment",
+    "role": "literature",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "question_context_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "source_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "version": {
+          "const": "literature_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "question_context_refs",
+        "source_refs"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "published_evidence_assessment",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "64e632166df4ed9637ce8542620d3efbdf8de9091f9f4d551806827d8cd99a1b",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "published_evidence_assessment/evidence_search_strategy_improvement",
+    "role": "literature_strategy",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "prior_search_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "question_context_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "version": {
+          "const": "strategy_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "question_context_refs",
+        "prior_search_refs"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "published_evidence_assessment/evidence_search_strategy_improvement",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "d72f6a9156d9325b21554e554b168f52a1b28a3178d16cd6e66d5393323a1a3c",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment",
+    "role": "literature_search",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "question_context_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "search_result_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "version": {
+          "const": "search_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "question_context_refs",
+        "search_result_refs"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "99aa04b3359ba09b0c93c5fd82727acbacd4fa813c98826b364e2ff5efb48233",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination",
+    "role": "literature_page",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_ref": {
+          "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+          "maxLength": 256,
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "type": "string"
+        },
+        "prior_delivery_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "question_context_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "representation": {
+          "enum": [
+            "text",
+            "original",
+            "stdout",
+            "stderr"
+          ],
+          "type": "string"
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "source_ref": {
+          "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+          "maxLength": 256,
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "type": "string"
+        },
+        "version": {
+          "const": "page_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "source_ref",
+        "representation",
+        "artifact_ref",
+        "question_context_refs",
+        "prior_delivery_refs"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "4e31a93dd4f664bb4bdbbfca01c329db76a7cdc75b0163a635beb155a125c5ac",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction",
+    "role": "literature_table",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "additionalProperties": false,
+          "properties": {
+            "artifact_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "prior_delivery_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "question_context_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ],
+              "type": "string"
+            },
+            "source_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "version": {
+              "const": "page_assignment_v1"
+            }
+          },
+          "required": [
+            "version",
+            "source_ref",
+            "representation",
+            "artifact_ref",
+            "question_context_refs",
+            "prior_delivery_refs"
+          ],
+          "type": "object"
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "selection": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "header_row": {
+                  "minimum": 1,
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "limit": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "offset": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "sheet_key": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "source_ref": {
+                  "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                  "maxLength": 256,
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "type": "string"
+                },
+                "where": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "case_sensitive": {
+                      "type": "boolean"
+                    },
+                    "column": {
+                      "pattern": "^[A-Z]+$",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "match": {
+                      "enum": [
+                        "equals",
+                        "contains"
+                      ]
+                    },
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "column",
+                    "match",
+                    "value",
+                    "case_sensitive"
+                  ],
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "source_ref",
+                "sheet_key",
+                "offset",
+                "limit",
+                "header_row",
+                "where"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "limit": {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "offset": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "representation": {
+                  "enum": [
+                    "text",
+                    "original",
+                    "stdout",
+                    "stderr"
+                  ],
+                  "type": "string"
+                },
+                "source_ref": {
+                  "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                  "maxLength": 256,
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "offset",
+                "limit"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "version": {
+          "const": "reading_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "page",
+        "selection"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "405c32148c50d19a9aeca967190f5538d9ae983f5cc47c73ee4634cad2fbd166",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+    "role": "literature_ordered",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "additionalProperties": false,
+          "properties": {
+            "artifact_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "prior_delivery_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "question_context_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ],
+              "type": "string"
+            },
+            "source_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "version": {
+              "const": "page_assignment_v1"
+            }
+          },
+          "required": [
+            "version",
+            "source_ref",
+            "representation",
+            "artifact_ref",
+            "question_context_refs",
+            "prior_delivery_refs"
+          ],
+          "type": "object"
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "selection": {
+          "additionalProperties": false,
+          "properties": {
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ],
+              "type": "string"
+            },
+            "source_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref",
+            "representation",
+            "offset",
+            "limit"
+          ],
+          "type": "object"
+        },
+        "version": {
+          "const": "reading_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "page",
+        "selection"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "5e918ab6f57c989a7f91eba9684f04541066a69a770e89d6e351a33dd54b60ed",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction",
+    "role": "literature_targeted",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "additionalProperties": false,
+          "properties": {
+            "artifact_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "prior_delivery_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "question_context_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ],
+              "type": "string"
+            },
+            "source_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "version": {
+              "const": "page_assignment_v1"
+            }
+          },
+          "required": [
+            "version",
+            "source_ref",
+            "representation",
+            "artifact_ref",
+            "question_context_refs",
+            "prior_delivery_refs"
+          ],
+          "type": "object"
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "selection": {
+          "additionalProperties": false,
+          "properties": {
+            "spans": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "limit": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "offset": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "representation": {
+                    "enum": [
+                      "text",
+                      "original",
+                      "stdout",
+                      "stderr"
+                    ],
+                    "type": "string"
+                  },
+                  "source_ref": {
+                    "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                    "maxLength": 256,
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "offset",
+                  "limit"
+                ],
+                "type": "object"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "spans"
+          ],
+          "type": "object"
+        },
+        "version": {
+          "const": "reading_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "page",
+        "selection"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "08e0e6270a171df7872b2e80eaeb4694575784748a96f0524c1210888938a45f",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "scientific_process/published_evidence_assessment",
+    "role": "literature",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "question_context_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "source_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "version": {
+          "const": "literature_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "question_context_refs",
+        "source_refs"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "scientific_process/published_evidence_assessment",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "6f5ee41eac0a94013532fbaad0dbadcd1bddf1acb4bba9f8670234607d69f97a",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement",
+    "role": "literature_strategy",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "prior_search_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "question_context_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "version": {
+          "const": "strategy_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "question_context_refs",
+        "prior_search_refs"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "fdbeae13d11b8f1e38ebbcd7c97de1abcb6e619caa7591ebd132a0c206e5ee82",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment",
+    "role": "literature_search",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "question_context_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "search_result_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "version": {
+          "const": "search_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "question_context_refs",
+        "search_result_refs"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "314ba93f8f7f78208aad34b57bae05cb65fe109e2d987a25139475d0b8520d33",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination",
+    "role": "literature_page",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_ref": {
+          "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+          "maxLength": 256,
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "type": "string"
+        },
+        "prior_delivery_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "question_context_refs": {
+          "items": {
+            "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+            "maxLength": 256,
+            "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "representation": {
+          "enum": [
+            "text",
+            "original",
+            "stdout",
+            "stderr"
+          ],
+          "type": "string"
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "source_ref": {
+          "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+          "maxLength": 256,
+          "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+          "type": "string"
+        },
+        "version": {
+          "const": "page_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "source_ref",
+        "representation",
+        "artifact_ref",
+        "question_context_refs",
+        "prior_delivery_refs"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "1d5f8a67d401aac3914c281b6975148ab2639691d41f2bdc6714d8158b1903d9",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction",
+    "role": "literature_table",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "additionalProperties": false,
+          "properties": {
+            "artifact_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "prior_delivery_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "question_context_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ],
+              "type": "string"
+            },
+            "source_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "version": {
+              "const": "page_assignment_v1"
+            }
+          },
+          "required": [
+            "version",
+            "source_ref",
+            "representation",
+            "artifact_ref",
+            "question_context_refs",
+            "prior_delivery_refs"
+          ],
+          "type": "object"
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "selection": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "header_row": {
+                  "minimum": 1,
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "limit": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "offset": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "sheet_key": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "source_ref": {
+                  "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                  "maxLength": 256,
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "type": "string"
+                },
+                "where": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "case_sensitive": {
+                      "type": "boolean"
+                    },
+                    "column": {
+                      "pattern": "^[A-Z]+$",
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "match": {
+                      "enum": [
+                        "equals",
+                        "contains"
+                      ]
+                    },
+                    "value": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "column",
+                    "match",
+                    "value",
+                    "case_sensitive"
+                  ],
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "source_ref",
+                "sheet_key",
+                "offset",
+                "limit",
+                "header_row",
+                "where"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "limit": {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "offset": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "representation": {
+                  "enum": [
+                    "text",
+                    "original",
+                    "stdout",
+                    "stderr"
+                  ],
+                  "type": "string"
+                },
+                "source_ref": {
+                  "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                  "maxLength": 256,
+                  "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "source_ref",
+                "representation",
+                "offset",
+                "limit"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "version": {
+          "const": "reading_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "page",
+        "selection"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "31837923b2c8c221d38621db86785bd27b6f06075954751f958dace09d014d64",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+    "role": "literature_ordered",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "additionalProperties": false,
+          "properties": {
+            "artifact_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "prior_delivery_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "question_context_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ],
+              "type": "string"
+            },
+            "source_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "version": {
+              "const": "page_assignment_v1"
+            }
+          },
+          "required": [
+            "version",
+            "source_ref",
+            "representation",
+            "artifact_ref",
+            "question_context_refs",
+            "prior_delivery_refs"
+          ],
+          "type": "object"
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "selection": {
+          "additionalProperties": false,
+          "properties": {
+            "limit": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ],
+              "type": "string"
+            },
+            "source_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "source_ref",
+            "representation",
+            "offset",
+            "limit"
+          ],
+          "type": "object"
+        },
+        "version": {
+          "const": "reading_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "page",
+        "selection"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "e2f1b874b55f0164463284f46357de53142676521055c5ae0a0a7f10078e33e4",
+      "version": "literature_episode_binding_v1"
+    }
+  },
+  {
+    "binding_path": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction",
+    "role": "literature_targeted",
+    "assignment_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "additionalProperties": false,
+          "properties": {
+            "artifact_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "prior_delivery_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "question_context_refs": {
+              "items": {
+                "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                "maxLength": 256,
+                "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "representation": {
+              "enum": [
+                "text",
+                "original",
+                "stdout",
+                "stderr"
+              ],
+              "type": "string"
+            },
+            "source_ref": {
+              "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+              "maxLength": 256,
+              "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+              "type": "string"
+            },
+            "version": {
+              "const": "page_assignment_v1"
+            }
+          },
+          "required": [
+            "version",
+            "source_ref",
+            "representation",
+            "artifact_ref",
+            "question_context_refs",
+            "prior_delivery_refs"
+          ],
+          "type": "object"
+        },
+        "requested_reaction_components": {
+          "items": {
+            "enum": [
+              "ratio_mean",
+              "claim_nominal_squared_error",
+              "claim_mean_squared_error",
+              "reaction_comparison",
+              "reaction_comparison_lower",
+              "reaction_comparison_upper",
+              "resource_capacity",
+              "resource_capacity_lower",
+              "resource_capacity_upper",
+              "resource_coverage",
+              "resource_coverage_lower",
+              "resource_coverage_upper",
+              "resource_comparison",
+              "resource_comparison_lower",
+              "resource_comparison_upper"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "requested_reaction_native_positions": {
+          "items": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "const": "all",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "selection": {
+          "additionalProperties": false,
+          "properties": {
+            "spans": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "limit": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "offset": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "representation": {
+                    "enum": [
+                      "text",
+                      "original",
+                      "stdout",
+                      "stderr"
+                    ],
+                    "type": "string"
+                  },
+                  "source_ref": {
+                    "description": "Copy an existing persistent record ID exactly as supplied. In a reasoning commit only, @name refers to an earlier successfully processed row declared with alias name in this same commit. Ordinary tool calls require existing persistent IDs.",
+                    "maxLength": 256,
+                    "pattern": "^(?:[a-z][a-z_]*_[a-f0-9]{24,64}|@[A-Za-z][A-Za-z0-9_]*)$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "source_ref",
+                  "representation",
+                  "offset",
+                  "limit"
+                ],
+                "type": "object"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "spans"
+          ],
+          "type": "object"
+        },
+        "version": {
+          "const": "reading_assignment_v1"
+        }
+      },
+      "required": [
+        "version",
+        "page",
+        "selection"
+      ],
+      "type": "object"
+    },
+    "descriptor": {
+      "binding_id": "scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction",
+      "configuration": {
+        "outcome_page_size": 8
+      },
+      "implementation_sha256": "a1ae7db3d7d71e7182e874a5515babdddb2b974d4feeac7a706e48897150e033",
+      "version": "literature_episode_binding_v1"
+    }
+  }
+]

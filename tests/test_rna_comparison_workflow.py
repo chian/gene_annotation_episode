@@ -15,7 +15,7 @@ from gene_annotation_episode.rna_structure_comparison_views import PROJECTION_SO
 from test_native_rna_structure_results_integration import history
 
 SPEC = importlib.util.spec_from_file_location('rna_shared372',
-    Path(__file__).parent / 'fixtures/rna_comparison_shared_372/helpers.py')
+    Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_comparison_shared_372/helpers.py')
 F = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(F)
 

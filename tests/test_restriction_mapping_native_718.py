@@ -18,9 +18,7 @@ from gene_annotation_episode.restriction_mapping_contracts import (
 
 ATTEMPT = Path(os.environ["HMMER529_ATTEMPT"]) if "HMMER529_ATTEMPT" in os.environ else None
 pytestmark = pytest.mark.skipif(ATTEMPT is None, reason="requires bounded529")
-BASELINE = Path(__file__).resolve().parents[1] / (
-    "verification/tool_graders_hmmer_map_verification_2026-10-28_529/"
-    "check181b_restriction717/native-restriction-probe/native-probe.json")
+BASELINE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/native-probe.json"
 
 
 def binding(sequence):

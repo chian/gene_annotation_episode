@@ -1,0 +1,329 @@
+{
+  "origin": "constructed_supplied_input_and_expected_contract_values_not_production_reader_output",
+  "raw_input_utf8": ">  dup  first description\t\r\nacde\r\n>dup second\nAA-?1\n>empty\n",
+  "expected_inventory": {
+    "version": "bvbrc_proteome_inventory_proposal_v1",
+    "inventory_key": "synthetic-input-002",
+    "format": "protein_fasta_utf8_v1",
+    "source": {
+      "content": {
+        "source_ref": "synthetic-input-source-for-contract-002",
+        "artifact_field": "artifact_ref",
+        "artifact_ref": "synthetic-input-bytes-for-contract-002",
+        "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+        "byte_count": 59
+      },
+      "body_complete": true,
+      "object_complete": "yes"
+    },
+    "molecule": "aa",
+    "normalization": "ascii_whitespace_removed_uppercase_no_symbol_substitution_v1",
+    "records": [
+      {
+        "record_ordinal": 0,
+        "byte_start": 0,
+        "byte_end_exclusive": 34,
+        "header": "  dup  first description\t",
+        "identifier": "dup",
+        "description": "  first description\t",
+        "sequence": "ACDE",
+        "sequence_symbol_count": 4,
+        "sequence_sha256": "f50b9a1db8767fb7cdc8b89cf1a78c9fac1e0e2d5bb5367aeec14709396d5c5e",
+        "sequence_md5": "973eb56c8acaa2458cd7beae3af41781",
+        "record_complete": true,
+        "valid_sequence": true,
+        "source_field": {
+          "source_ref": "synthetic-input-source-for-contract-002",
+          "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+          "pointer": "/records/0",
+          "row_ordinal": 0,
+          "field_name": null
+        },
+        "diagnostics": []
+      },
+      {
+        "record_ordinal": 1,
+        "byte_start": 34,
+        "byte_end_exclusive": 52,
+        "header": "dup second",
+        "identifier": "dup",
+        "description": " second",
+        "sequence": "AA-?1",
+        "sequence_symbol_count": 5,
+        "sequence_sha256": "f1a3ec70df0a1ca6a7f255a64aa82fe1fec7eb4ab55673b4cc29501ec47333e3",
+        "sequence_md5": "7d537aa8ab3d1a661e46488ca89b831b",
+        "record_complete": true,
+        "valid_sequence": false,
+        "source_field": {
+          "source_ref": "synthetic-input-source-for-contract-002",
+          "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+          "pointer": "/records/1",
+          "row_ordinal": 1,
+          "field_name": null
+        },
+        "diagnostics": [
+          {
+            "code": "fasta_sequence_invalid",
+            "severity": "error",
+            "path": "/records/1",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/1",
+                "row_ordinal": 1,
+                "field_name": null
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "record_ordinal": 2,
+        "byte_start": 52,
+        "byte_end_exclusive": 59,
+        "header": "empty",
+        "identifier": "empty",
+        "description": "",
+        "sequence": "",
+        "sequence_symbol_count": 0,
+        "sequence_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sequence_md5": "d41d8cd98f00b204e9800998ecf8427e",
+        "record_complete": true,
+        "valid_sequence": false,
+        "source_field": {
+          "source_ref": "synthetic-input-source-for-contract-002",
+          "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+          "pointer": "/records/2",
+          "row_ordinal": 2,
+          "field_name": null
+        },
+        "diagnostics": [
+          {
+            "code": "fasta_empty_sequence",
+            "severity": "error",
+            "path": "/records/2",
+            "scope": {
+              "track_key": null,
+              "reference_row_ordinal": null,
+              "association_key": null,
+              "protein_key": null,
+              "report_key": null,
+              "query_ordinal": null,
+              "hit_ordinal": null,
+              "hsp_ordinal": null
+            },
+            "source_fields": [
+              {
+                "source_ref": "synthetic-input-source-for-contract-002",
+                "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+                "pointer": "/records/2",
+                "row_ordinal": 2,
+                "field_name": null
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "observed_header_count": 3,
+    "complete_record_count": 3,
+    "valid_complete_record_count": 1,
+    "duplicate_identifier_groups": [
+      {
+        "identifier": "dup",
+        "record_ordinals": [
+          0,
+          1
+        ]
+      }
+    ],
+    "sequence_groups": [
+      {
+        "molecule": "aa",
+        "normalization": "ascii_whitespace_removed_uppercase_no_symbol_substitution_v1",
+        "sequence_sha256": "f50b9a1db8767fb7cdc8b89cf1a78c9fac1e0e2d5bb5367aeec14709396d5c5e",
+        "sequence_symbol_count": 4,
+        "members": [
+          {
+            "inventory_key": "synthetic-input-002",
+            "record_ordinal": 0
+          }
+        ]
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "fasta_sequence_invalid",
+        "severity": "error",
+        "path": "/records/1",
+        "scope": {
+          "track_key": null,
+          "reference_row_ordinal": null,
+          "association_key": null,
+          "protein_key": null,
+          "report_key": null,
+          "query_ordinal": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null
+        },
+        "source_fields": [
+          {
+            "source_ref": "synthetic-input-source-for-contract-002",
+            "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+            "pointer": "/records/1",
+            "row_ordinal": 1,
+            "field_name": null
+          }
+        ]
+      },
+      {
+        "code": "fasta_empty_sequence",
+        "severity": "error",
+        "path": "/records/2",
+        "scope": {
+          "track_key": null,
+          "reference_row_ordinal": null,
+          "association_key": null,
+          "protein_key": null,
+          "report_key": null,
+          "query_ordinal": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null
+        },
+        "source_fields": [
+          {
+            "source_ref": "synthetic-input-source-for-contract-002",
+            "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+            "pointer": "/records/2",
+            "row_ordinal": 2,
+            "field_name": null
+          }
+        ]
+      }
+    ]
+  },
+  "incomplete_header_record_shape": {
+    "record_ordinal": 2,
+    "byte_start": 52,
+    "byte_end_exclusive": 59,
+    "header": null,
+    "identifier": null,
+    "description": null,
+    "sequence": null,
+    "sequence_symbol_count": null,
+    "sequence_sha256": null,
+    "sequence_md5": null,
+    "record_complete": false,
+    "valid_sequence": false,
+    "source_field": {
+      "source_ref": "synthetic-input-source-for-contract-002",
+      "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+      "pointer": "/records/2",
+      "row_ordinal": 2,
+      "field_name": null
+    },
+    "diagnostics": [
+      {
+        "code": "fasta_empty_sequence",
+        "severity": "error",
+        "path": "/records/2",
+        "scope": {
+          "track_key": null,
+          "reference_row_ordinal": null,
+          "association_key": null,
+          "protein_key": null,
+          "report_key": null,
+          "query_ordinal": null,
+          "hit_ordinal": null,
+          "hsp_ordinal": null
+        },
+        "source_fields": [
+          {
+            "source_ref": "synthetic-input-source-for-contract-002",
+            "sha256": "383c666c9cb9f39537d6ee1ca7d573d95522600bb001b7c3d5bd07d47a55692c",
+            "pointer": "/records/2",
+            "row_ordinal": 2,
+            "field_name": null
+          }
+        ]
+      }
+    ]
+  },
+  "metadata_validity_cases": [
+    {
+      "case": "feature_id_only",
+      "supplied": {
+        "feature_id": "feature:1"
+      },
+      "expected_identity_usable": true
+    },
+    {
+      "case": "patric_id_only",
+      "supplied": {
+        "patric_id": "fig|1.1.peg.1"
+      },
+      "expected_identity_usable": true
+    },
+    {
+      "case": "neither_feature_id",
+      "supplied": {
+        "product": "source assignment"
+      },
+      "expected_identity_usable": false
+    },
+    {
+      "case": "zero_length",
+      "field": "aa_length",
+      "value": 0,
+      "expected_valid": true
+    },
+    {
+      "case": "negative_length",
+      "field": "aa_length",
+      "value": -1,
+      "expected_valid": false
+    },
+    {
+      "case": "fractional_taxon",
+      "field": "taxon_id",
+      "value": 562.5,
+      "expected_valid": false
+    },
+    {
+      "case": "zero_taxon",
+      "field": "taxon_id",
+      "value": 0,
+      "expected_valid": false
+    },
+    {
+      "case": "unknown_coordinate",
+      "field": "start",
+      "value": -2,
+      "convention": "unknown",
+      "expected_valid": true,
+      "qualification": "coordinate_convention_unknown"
+    },
+    {
+      "case": "known_one_based_negative_coordinate",
+      "field": "start",
+      "value": -2,
+      "convention": "one_based_closed",
+      "expected_valid": false
+    }
+  ],
+  "witness_outcomes": {
+    "locator_only_exact_execution": "execution_witness_interface_unavailable",
+    "locator_only_occurrence_mapping": "occurrence_witness_interface_unavailable"
+  }
+}

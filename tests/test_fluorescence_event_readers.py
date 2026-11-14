@@ -6,17 +6,17 @@ import json
 
 import pytest
 
-from gene_annotation_episode.fluorescence_event_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import (
     FluorescenceContractError,
     PARSE_SCHEMA,
     TABLE_SCHEMA,
     validate_event_parse_result,
 )
-from gene_annotation_episode.fluorescence_event_readers import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_readers import (
     parse_fluorescence_csv,
     parse_fluorescence_table_snapshot,
 )
-from gene_annotation_episode.fluorescence_event_sheet import populate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_sheet import populate_fluorescence_sheet
 
 
 def _identity(raw, format_name):
@@ -495,7 +495,7 @@ def test_reader_does_not_acquire_files_or_import_table_packages(monkeypatch):
 
 
 def test_csv_and_snapshot_use_the_same_sheet_and_calculator_for_packet548():
-    from gene_annotation_episode.fluorescence_event_calculations import calculate_fluorescence_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
     populations = [dict(key="all", sample_key="sample", kind="all", event_ordinals=None)]
     gates = [dict(key="selected", sample_key="sample", parent=dict(kind="population", key="all"),
                   kind="threshold", domain_key="domain", channel_key="domain_channel_0",

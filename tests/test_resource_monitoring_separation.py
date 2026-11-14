@@ -8,7 +8,7 @@ import pytest
 
 from gene_annotation_episode.communication import validate_closed_schema, validate_form, ReportBoundaryError
 from gene_annotation_episode.execution_expectations import ExecutionExpectations
-from gene_annotation_episode.homology_episodes import HomologyEpisodes
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.monitoring_credit import MonitoringInformationCredit
 from gene_annotation_episode.resource_estimation import ESTIMATE_SCHEMA, ResourceToolEstimator, recorded_estimate, report_source
 from gene_annotation_episode.runtime import Journal, _compile_form
@@ -160,7 +160,7 @@ def test_identity_is_not_permission_to_invent_forecast_values(tmp_path):
     planning = estimator.estimate(context, job_ref='job_fixture')[0]
     Journal(store, 'run_fixture').save('runtime_model_calls', {'episode_id': 'monitor', 'call_index': 0,
         'purpose': 'decision', 'request': json.dumps({'context': {'resource_tool_estimates': [planning]}}), 'response': None})
-    binding = object.__new__(HomologyEpisodes)
+    binding = object.__new__(HomologyEpisode)
     binding.validate_report(planning, {'job_ref': 'job_fixture'}, store=store, schema=ESTIMATE_SCHEMA)
     forged = deepcopy(planning)
     forged['expected_total_seconds'] = 0

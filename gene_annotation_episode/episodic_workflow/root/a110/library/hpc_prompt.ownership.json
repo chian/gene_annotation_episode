@@ -1,0 +1,62 @@
+{
+  "module": "library/hpc_prompt.py",
+  "original": "hpc_prompt.py",
+  "reason": "Standalone exact operand/report formatting reused by operational episodes within this axis; separate implementation retained across axes.",
+  "explicit_private_consumers": [
+    "hpc_work_planning",
+    "hpc_work_planning/hpc_allocation_execution",
+    "hpc_work_planning/hpc_resource_prediction",
+    "scientific_process/hpc_work_planning",
+    "scientific_process/hpc_work_planning/hpc_allocation_execution",
+    "scientific_process/hpc_work_planning/hpc_resource_prediction"
+  ],
+  "direct_callers": [
+    "hpc_work_planning/decision_inputs.py",
+    "hpc_work_planning/episode.py",
+    "hpc_work_planning/hpc_allocation_execution/decision_inputs.py",
+    "hpc_work_planning/hpc_allocation_execution/episode.py",
+    "hpc_work_planning/hpc_resource_prediction/decision_inputs.py",
+    "hpc_work_planning/hpc_resource_prediction/episode.py",
+    "providers.py",
+    "runtime.py",
+    "scientific_process/hpc_work_planning/decision_inputs.py",
+    "scientific_process/hpc_work_planning/episode.py",
+    "scientific_process/hpc_work_planning/hpc_allocation_execution/decision_inputs.py",
+    "scientific_process/hpc_work_planning/hpc_allocation_execution/episode.py",
+    "scientific_process/hpc_work_planning/hpc_resource_prediction/decision_inputs.py",
+    "scientific_process/hpc_work_planning/hpc_resource_prediction/episode.py"
+  ],
+  "other_consumers": "Existing runtime outcome views and provider fallback for remaining Launch/unfinished bindings; prediction, planning and allocation select the formatter privately.",
+  "functions_preserved": true,
+  "source_audit": "runs/hpc_prediction_prompt_20261111_audit/audit.json",
+  "validation": {
+    "baseline": "runs/hpc_prediction_prompt_20261111_baseline/pytest.xml",
+    "baseline_passes": 130,
+    "behavior": "runs/hpc_prediction_prompt_20261111_combined/pytest.xml",
+    "passes": 410,
+    "prompt_checks": 180,
+    "existing_binding_task_checks": 230,
+    "source_audit": "runs/hpc_prediction_prompt_20261111_audit/audit.json",
+    "current_catalog_consistency": "runs/hpc_prediction_prompt_20261111_consistency/consistency.json",
+    "scope": "Actual private task call/exchange and SQLite journal/replay with controlled input/provider ports; actual formatter and transport frames. Existing local ledger/calculation/outcome checks retained. No live provider, native work or full saved-workflow restoration.",
+    "resolved_fixture_failure": "Focused run has 30 passes and 20 failures because its new exchange fixture omitted task.scope. Supplying the original task scope resolves all affected checks without application changes; the failed run remains under runs/hpc_prediction_prompt_20261111_focused/."
+  },
+  "planning_allocation_selection_20261111": {
+    "validation": {
+      "binding_baseline": [
+        "runs/hpc_planning_allocation_private_20261111_baseline_tests/",
+        "runs/hpc_planning_allocation_private_20261111_baseline_tests02/"
+      ],
+      "binding_baseline_scope": "380 distinct checks; the first run had twenty incorrect version-key fixture assertions. Corrected assertions and 100 added cases pass before application edits.",
+      "post_binding_and_original_task_baseline": "runs/hpc_planning_allocation_private_20261111_binding_and_task_baseline/",
+      "post_binding_and_original_task_baseline_passes": 600,
+      "post_private_task_and_connected_checks": "runs/hpc_planning_allocation_private_20261111_task_connected/",
+      "post_private_task_and_connected_passes": 730,
+      "distinct_current_checks": 1110,
+      "count_scope": "380 binding checks after binding split plus 730 task and connected checks after task split. Source audit verifies binding bodies unchanged between these runs. The 220 original-task baseline checks are not counted twice.",
+      "binding_source_audit": "runs/hpc_planning_allocation_private_20261111_audit02/audit.json",
+      "task_source_audit": "runs/hpc_planning_allocation_private_20261111_task_audit02/audit.json",
+      "scope": "Actual local planning, allocation, ledger, forecast, collection, credit, continuation, task execution, waiting, failed outcomes and replay. External transport, provider decisions, publication, child construction and receipt ports use controlled fixtures. No live HPC/provider, full saved-workflow reopening or autonomous science claim."
+    }
+  }
+}

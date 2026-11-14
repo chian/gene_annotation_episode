@@ -31,7 +31,7 @@ from gene_annotation_episode import phylogeny_formats as formats
 
 
 STAGING = Path(__file__).resolve().parents[1]
-BOUNDARIES = STAGING / "verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24"
+BOUNDARIES = STAGING / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries"
 NATIVE = BOUNDARIES / "official_example" / "test9_genome_dir"
 BASE = "test9_genome_8taxa_10cds_10proteins_codonAndProteins"
 Q_KEYS = {"value", "state", "unit", "origin", "numerator", "denominator", "population_ref", "method", "evidence", "requirement_ids"}

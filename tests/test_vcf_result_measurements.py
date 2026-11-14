@@ -18,7 +18,7 @@ import pytest
 from gene_annotation_episode import vcf_result_measurements as core
 
 
-FIXTURES = Path(__file__).parent / "fixtures" / "vcf_results"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/vcf_results"
 NATIVE_NAME = "expected.testExposureOfSmithWatermanParameters.M2.gatk4.vcf"
 NATIVE_SHA256 = "5a143a78f9a29c7f3abefecfcbbb97764a4517db6af7f7f1d7012c36f48f3ff0"
 RESULT_SOURCE = "source_" + "a" * 24

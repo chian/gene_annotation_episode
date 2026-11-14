@@ -22,7 +22,7 @@ from gene_annotation_episode.genomic_overlap_contracts import canonical_genomic_
 from gene_annotation_episode.native_genomic_overlap_contracts import genomic_overlap_output_files
 
 
-PACKET = Path(__file__).resolve().parents[1] / 'verification/tool_graders_genomic_overlap_result_worker_2026-10-27_432'
+PACKET = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/result_worker'
 
 
 def canonical(value, newline=False):

@@ -11,7 +11,7 @@ from gene_annotation_episode.native_flux_balance_storage import file_pin, read_j
 
 ATTEMPT = Path(os.environ["HMMER529_ATTEMPT"]) if "HMMER529_ATTEMPT" in os.environ else None
 pytestmark = pytest.mark.skipif(ATTEMPT is None, reason="requires bounded529")
-HELPER = Path(__file__).resolve().parents[1] / "verification/tool_graders_flux_balance_selected_software_2026-10-29_714/prepare_software.py"
+HELPER = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a110/tests/support/flux_balance/prepare_software.py"
 spec = importlib.util.spec_from_file_location("selected_software714", HELPER)
 preparation = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(preparation)

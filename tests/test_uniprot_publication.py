@@ -56,8 +56,7 @@ def publish(store, native, operation, arguments, key="publication"):
 
 
 def test_authentic_retained_record_publication_keeps_full_native_associations(harness):
-    archive = (Path(__file__).parents[1] / "verification/api_service_expansion_2026-10-23_001/"
-               "live_public_002/uniprot/state/artifacts")
+    archive = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/uniprot_publication"
     raw = (archive / "dc/dc1e11907d2d7a9ea423dd90e9f6bea7393cdf21669d139b1b04e1a8647d0e3e").read_bytes()
     custody = json.loads((archive / "c2/c2c89095b2d4c9662cf65535768b4720a8dc094ffa3426bb54e4d933ada1c952").read_text())
     native = replace(snapshot({}, custody["request"]), content=raw, transport=custody["transport"])

@@ -17,7 +17,7 @@ from gene_annotation_episode.native_genomic_overlap_contracts import BATCH_FILEN
 from gene_annotation_episode.genomic_overlap_calculations import calculate_genomic_overlap_components
 from gene_annotation_episode.genomic_overlap_result_views import project_genomic_overlap_result
 
-f = import_module('verification.tool_graders_genomic_overlap_native_driver_2026-10-27_427.fixture_helpers')
+f = import_module('gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.retained_workflow.verification.tool_graders_genomic_overlap_native_driver_2026-10-27_427.fixture_helpers')
 
 
 @pytest.fixture(autouse=True)

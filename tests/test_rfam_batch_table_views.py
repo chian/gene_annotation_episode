@@ -160,7 +160,7 @@ def test_native_model_span_and_bias_are_available_without_inventing_alignment_or
 
 
 def test_old_saved_table_calculation_keeps_its_original_requested_view(monkeypatch):
-    directory = Path(__file__).resolve().parents[1] / "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001"
+    directory = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/live_workflow"
     parsed = json.loads((directory / "parse.json").read_text())
     original = json.loads((directory / "calculation.json").read_text())
     expected = json.loads((directory / "publication.json").read_text())["projection"]

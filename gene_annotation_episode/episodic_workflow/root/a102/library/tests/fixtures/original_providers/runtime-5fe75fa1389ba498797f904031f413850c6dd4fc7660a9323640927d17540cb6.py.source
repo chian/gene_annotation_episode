@@ -1,0 +1,25 @@
+class OriginalProviderMethods:
+    def exchange_response(self, response, *, lookup_contract=None):
+        """Validate the exchange envelope; ordinary action admission stays intact.
+
+        The existing action path deliberately admits independent valid reasoning
+        rows and preserves scientific work when report values need repair. Do
+        not replace those rules with a whole-action schema gate here.
+        """
+        if not isinstance(response, dict) or set(response) != {'response'}:
+            raise ValueError('decision_response_envelope_required')
+        body = response['response']
+        if not isinstance(body, dict):
+            raise ValueError('decision_response_object_required')
+        kind = body.get('response_type')
+        if kind == 'request_context':
+            if set(body) != {'response_type', 'lookup'}:
+                raise ValueError('invalid_request_context_response')
+            Draft202012Validator(lookup_contract if lookup_contract is not None else
+                composition_lookup_schema(self.workflow, self)).validate(body['lookup'])
+        elif kind == 'select_action':
+            if set(body) != {'response_type', 'selection', 'report_update'}:
+                raise ValueError('invalid_select_action_response')
+        else:
+            raise ValueError('unknown_decision_response_type')
+        return body

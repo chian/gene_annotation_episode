@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P07",
+  "name": "Distinguish restoration from bypass, compensation and reduced demand",
+  "description": "An improved endpoint can repair the proposed molecular relationship, use another route, reduce demand or change downstream consequences. Compare those explanations before treating rescue as mechanistic equivalence.",
+  "use_when": "Complementation, suppressors, adaptive recovery or supplementation improve an endpoint after a focal loss.",
+  "live_alternatives": [
+    "The original molecular contribution is restored.",
+    "Another route reaches the endpoint.",
+    "Demand for the contribution is reduced.",
+    "Only a downstream consequence improves."
+  ],
+  "decision_guidance": [
+    "Name the molecular defect rescue is supposed to repair, then seek a comparison separating repair from endpoint compensation.",
+    "Multi-step bypass, reintroduced lost functions and separate molecular readouts can distinguish the alternatives.",
+    "Restrict equivalence to the contribution/conditions restored; donor expression does not establish ordinary native role."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Endpoint recovers while proposed catalytic defect persists",
+      "then_consider": "Retain compensation or bypass rather than claim molecular repair."
+    },
+    {
+      "if_observed": "Replacement bypasses several steps or changes cofactor demand",
+      "then_consider": "Assign the alternative route instead of copying the missing-enzyme name."
+    },
+    {
+      "if_observed": "Only some outcomes are restored",
+      "then_consider": "Represent partial/conditional substitution."
+    }
+  ],
+  "boundary": "The starting observation is an endpoint improved by rescue, suppression or compensation. The unknown is whether the original molecular contribution was restored. P19 starts from output that never disappeared after focal loss; P05 starts from an unassigned requirement. Positive rescue does not by itself establish isolated chemistry or full reference-function equivalence.",
+  "evidence": [
+    {
+      "case_group": "replacement_bioZ",
+      "case_id": "replacement_bioZ",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7645780/",
+      "source_locator": "Case-record observation; inspected scope: Main relevant Results/Methods read; no independent raw spectral or isotope analysis.",
+      "observation": "BioZ bypassed both BioC and BioH through another pimeloyl-ACP entry route.",
+      "limit": "All native and biochemical tests are author-performed."
+    },
+    {
+      "case_group": "replacement_folA_bypass",
+      "case_id": "replacement_folA_bypass",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6828540/",
+      "source_locator": "Case-record observation; inspected scope: Relevant full Results/Methods and figure descriptions read; no evolution, raw sequencing or omics reanalysis.",
+      "observation": "Some trajectories partially restored DHFR; others changed thyA/deoB and retained supplement dependence.",
+      "limit": "Suppressor lineages were not all supplement-independent; evolution was not rerun."
+    },
+    {
+      "case_group": "cellular_yihI",
+      "case_id": "cellular_yihI",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3754568/",
+      "source_locator": "Case-record observation; inspected scope: 2010 primary abstract and indexed Results snippets checked; 2013 primary full Results, rescue and competition experiments examined. Original full 2010 article not obtained.",
+      "observation": "YihI improved derT57I growth without restoring the tested purified GTPase defect.",
+      "limit": "No unique compensating mechanism was established."
+    },
+    {
+      "case_group": "replacement_cobY",
+      "case_id": "replacement_cobY",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC101920/",
+      "source_locator": "Case-record observation; inspected scope: Complete main Results and relevant Methods read; reported assay negatives remain condition-bounded.",
+      "observation": "CobY replaced guanylyltransferase demand but not the kinase demand of the tested salvage route.",
+      "limit": "This does not establish bifunctional CobU equivalence."
+    }
+  ]
+}

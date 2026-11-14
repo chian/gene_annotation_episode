@@ -20,8 +20,8 @@ from test_bvbrc_metacats_associations import metacats_fixture, extracted, auto_f
 from test_bvbrc_alignment_associations import binding, forbid_io
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / 'verification/tool_graders_bvbrc_metacats_native_execution_2026-10-25/cases'
-OLD = ROOT / 'verification/tool_graders_bvbrc_msa_metacats_implementation_2026-10-25'
+NATIVE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_native/cases'
+OLD = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/metacats_inputs'
 CASES = ('official_na', 'aa_two_groups', 'aa_three_groups', 'native_pair_tail_underflow', 'metadata_only_first_group', 'all_missing', 'twelve_groups')
 BACKEND = {'name': 'scipy_chi2_integer_df_logtail_v1', 'version': scipy.__version__}
 

@@ -19,7 +19,7 @@ from gene_annotation_episode.molecular_provider_acquisition import (
 
 SOURCE = "source_" + "a" * 24
 IDS = ["9606.ENSP00000269305", "9606.ENSP00000266970"]
-HPA_RAW = (Path(__file__).parent / "fixtures/hpa/ENSG00000141510.json").read_bytes()
+HPA_RAW = (Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/hpa/ENSG00000141510.json").read_bytes()
 assert len(HPA_RAW) == 9225 and hashlib.sha256(HPA_RAW).hexdigest() == "ab75a8987ac2754757cd4f11406b535a1e33c8cae6823c387b9eb63310842146"
 ARGUMENTS = {
     "public.string.network": {"string_ids": IDS, "taxon_id": 9606,

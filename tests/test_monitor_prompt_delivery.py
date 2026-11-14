@@ -9,7 +9,7 @@ from gene_annotation_episode.monitor_prompt import is_monitor_context, render_mo
 from gene_annotation_episode.providers import _SessionConnection
 
 
-FIXTURE = Path(__file__).parent / 'fixtures/hpc/a107-genomic05-monitor-context.json.gz'
+FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/hpc/a107-genomic05-monitor-context.json.gz'
 
 
 def wire():

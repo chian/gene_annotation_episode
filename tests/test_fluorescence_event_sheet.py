@@ -6,13 +6,13 @@ import json
 
 import pytest
 
-from gene_annotation_episode.fluorescence_event_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import (
     COMPONENTS_SCHEMA, PARSE_SCHEMA, SHEET_SCHEMA, TABLE_SCHEMA, VIEW_SCHEMA,
     FluorescenceContractError, canonical, digest, finite, issue,
     validate_calculation_parameters, validate_components, validate_csv_request,
     validate_event_parse_result, validate_selection, validate_snapshot_request,
 )
-from gene_annotation_episode.fluorescence_event_sheet import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_sheet import (
     populate_fluorescence_sheet, validate_fluorescence_sheet,
 )
 

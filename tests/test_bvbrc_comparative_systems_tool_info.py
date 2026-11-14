@@ -13,7 +13,7 @@ from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
 from gene_annotation_episode.runtime import Workflow, _compile_form
 from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
 from types import SimpleNamespace
-from test_bvbrc_homology_tool_info import factory
+from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homology_tool_info import factory
 from test_bvbrc_comparative_systems_episode_flow import query, result_selector
 from test_api_bvbrc_appservice import CONFIG
 from test_bvbrc_appservice_custody import api_assignment

@@ -25,8 +25,8 @@ from gene_annotation_episode.rna_structure_comparison_views import (
     project_rna_comparison, rna_comparison_fact_sources, validate_rna_comparison_projection,
 )
 
-f = importlib.import_module("verification.tool_graders_rna_comparison_calculations_2026-10-26_367.fixture_helpers")
-a = importlib.import_module("verification.tool_graders_rna_comparison_inputs_2026-10-26_366.fixture_helpers")
+f = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_calculations_367.fixture_helpers")
+a = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_inputs_366.fixture_helpers")
 REPO = Path(__file__).resolve().parents[1]
 KEYS = {"result_receipt_key": "rna_comparison_receipt:" + "1" * 64,
     "calculation_key": "rna_comparison_calculation:" + "2" * 64}

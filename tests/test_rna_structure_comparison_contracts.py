@@ -10,7 +10,7 @@ from jsonschema import Draft202012Validator
 
 import gene_annotation_episode.rna_structure_comparison_contracts as contracts
 from gene_annotation_episode.rna_structure_comparison_inputs import populate_rna_comparison_sheet
-_fixtures = import_module("verification.tool_graders_rna_comparison_inputs_2026-10-26_366.fixture_helpers")
+_fixtures = import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_inputs_366.fixture_helpers")
 comparison, empty_components, energy_request, feature, member, pair_inputs, parameters, scan_request, selector, site, supplied = (
     getattr(_fixtures, name) for name in ("comparison", "empty_components", "energy_request", "feature", "member",
         "pair_inputs", "parameters", "scan_request", "selector", "site", "supplied"))

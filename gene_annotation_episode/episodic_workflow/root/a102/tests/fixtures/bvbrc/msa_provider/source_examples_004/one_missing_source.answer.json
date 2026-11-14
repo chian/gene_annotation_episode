@@ -1,0 +1,1138 @@
+{
+  "verification": {
+    "supplied_inputs": {
+      "schema_version": "mauve_xmfa_source_inputs_v1",
+      "invocation": {
+        "mode": "multiple_files_concatenated",
+        "ordered_file_ids": [
+          "equCab1.fa",
+          "canFam2.fa",
+          "mm9.fa"
+        ],
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "source:fixture-declared-invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "fixture-declared-invocation",
+              "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+              "byte_count": 99
+            },
+            "pointer": ""
+          }
+        ]
+      },
+      "files": [
+        {
+          "file_id": "equCab1.fa",
+          "native_path_token": "equCab1.fa",
+          "artifact": {
+            "raw_artifact_ref": "equCab1.fa",
+            "source_ref": "source:equCab1.fa",
+            "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60"
+          },
+          "format": "FastA",
+          "record_completeness": "complete",
+          "path_binding_evidence": [
+            {
+              "content": {
+                "source_ref": "source:equCab1.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "equCab1.fa",
+                "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60",
+                "byte_count": 60
+              },
+              "pointer": ""
+            }
+          ],
+          "records": [
+            {
+              "record_id": "row:0",
+              "entry_1based": 1,
+              "header": "equCab1",
+              "sequence": "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "equCab1.fa",
+                  "source_ref": "source:equCab1.fa",
+                  "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 60,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            }
+          ]
+        },
+        {
+          "file_id": "canFam2.fa",
+          "native_path_token": "canFam2.fa",
+          "artifact": {
+            "raw_artifact_ref": "canFam2.fa",
+            "source_ref": "source:canFam2.fa",
+            "sha256": "3fd0ee956fc142f2367e73a62ad2d976f6e509bd146046fd700c5a95b26755e8"
+          },
+          "format": "FastA",
+          "record_completeness": "complete",
+          "path_binding_evidence": [
+            {
+              "content": {
+                "source_ref": "source:canFam2.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "canFam2.fa",
+                "sha256": "3fd0ee956fc142f2367e73a62ad2d976f6e509bd146046fd700c5a95b26755e8",
+                "byte_count": 59
+              },
+              "pointer": ""
+            }
+          ],
+          "records": [
+            {
+              "record_id": "row:0",
+              "entry_1based": 1,
+              "header": "canFam2",
+              "sequence": "CAAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTTC",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "canFam2.fa",
+                  "source_ref": "source:canFam2.fa",
+                  "sha256": "3fd0ee956fc142f2367e73a62ad2d976f6e509bd146046fd700c5a95b26755e8"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 59,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            }
+          ]
+        },
+        {
+          "file_id": "mm9.fa",
+          "native_path_token": "mm9.fa",
+          "artifact": {
+            "raw_artifact_ref": "mm9.fa",
+            "source_ref": "source:mm9.fa",
+            "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd"
+          },
+          "format": "FastA",
+          "record_completeness": "complete",
+          "path_binding_evidence": [
+            {
+              "content": {
+                "source_ref": "source:mm9.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "mm9.fa",
+                "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd",
+                "byte_count": 47
+              },
+              "pointer": ""
+            }
+          ],
+          "records": [
+            {
+              "record_id": "row:0",
+              "entry_1based": 1,
+              "header": "mm9",
+              "sequence": "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "mm9.fa",
+                  "source_ref": "source:mm9.fa",
+                  "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 47,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      ],
+      "original_maps": []
+    },
+    "source_readers": [
+      {
+        "file_id": "equCab1.fa",
+        "reader": "fasta_records_for_xmfa_v1",
+        "id_rule": "first_whitespace_token",
+        "encoding": "ascii"
+      },
+      {
+        "file_id": "canFam2.fa",
+        "reader": "fasta_records_for_xmfa_v1",
+        "id_rule": "first_whitespace_token",
+        "encoding": "ascii"
+      },
+      {
+        "file_id": "mm9.fa",
+        "reader": "fasta_records_for_xmfa_v1",
+        "id_rule": "first_whitespace_token",
+        "encoding": "ascii"
+      }
+    ],
+    "verified_inputs": {
+      "schema_version": "mauve_xmfa_source_inputs_v1",
+      "invocation": {
+        "mode": "multiple_files_concatenated",
+        "ordered_file_ids": [
+          "equCab1.fa",
+          "canFam2.fa",
+          "mm9.fa"
+        ],
+        "evidence": [
+          {
+            "content": {
+              "source_ref": "source:fixture-declared-invocation",
+              "artifact_field": "artifact_ref",
+              "artifact_ref": "fixture-declared-invocation",
+              "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+              "byte_count": 99
+            },
+            "pointer": ""
+          }
+        ]
+      },
+      "files": [
+        {
+          "file_id": "equCab1.fa",
+          "native_path_token": "equCab1.fa",
+          "artifact": {
+            "raw_artifact_ref": "equCab1.fa",
+            "source_ref": "source:equCab1.fa",
+            "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60"
+          },
+          "format": "FastA",
+          "record_completeness": "complete",
+          "path_binding_evidence": [
+            {
+              "content": {
+                "source_ref": "source:equCab1.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "equCab1.fa",
+                "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60",
+                "byte_count": 60
+              },
+              "pointer": ""
+            }
+          ],
+          "records": [
+            {
+              "record_id": "row:0",
+              "entry_1based": 1,
+              "header": "equCab1",
+              "sequence": "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "equCab1.fa",
+                  "source_ref": "source:equCab1.fa",
+                  "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 60,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            }
+          ]
+        },
+        {
+          "file_id": "mm9.fa",
+          "native_path_token": "mm9.fa",
+          "artifact": {
+            "raw_artifact_ref": "mm9.fa",
+            "source_ref": "source:mm9.fa",
+            "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd"
+          },
+          "format": "FastA",
+          "record_completeness": "complete",
+          "path_binding_evidence": [
+            {
+              "content": {
+                "source_ref": "source:mm9.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "mm9.fa",
+                "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd",
+                "byte_count": 47
+              },
+              "pointer": ""
+            }
+          ],
+          "records": [
+            {
+              "record_id": "row:0",
+              "entry_1based": 1,
+              "header": "mm9",
+              "sequence": "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "mm9.fa",
+                  "source_ref": "source:mm9.fa",
+                  "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 47,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      ],
+      "original_maps": []
+    },
+    "files": [
+      {
+        "file_id": "equCab1.fa",
+        "artifact": {
+          "raw_artifact_ref": "equCab1.fa",
+          "source_ref": "source:equCab1.fa",
+          "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60"
+        },
+        "format": "FastA",
+        "reader": {
+          "file_id": "equCab1.fa",
+          "reader": "fasta_records_for_xmfa_v1",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii"
+        },
+        "state": "verified",
+        "requirements": [],
+        "diagnostics": []
+      },
+      {
+        "file_id": "canFam2.fa",
+        "artifact": {
+          "raw_artifact_ref": "canFam2.fa",
+          "source_ref": "source:canFam2.fa",
+          "sha256": "3fd0ee956fc142f2367e73a62ad2d976f6e509bd146046fd700c5a95b26755e8"
+        },
+        "format": "FastA",
+        "reader": {
+          "file_id": "canFam2.fa",
+          "reader": "fasta_records_for_xmfa_v1",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii"
+        },
+        "state": "missing_bytes",
+        "requirements": [
+          {
+            "requirement_id": "xmfa_verified_source:1e822fd893e2c3d5d23c232002f881d71d68844473de99f5b4c2ca19fd41acba",
+            "kind": "input_bytes",
+            "role": "xmfa_staged_source",
+            "source_refs": [
+              "source:canFam2.fa"
+            ],
+            "reason_code": "xmfa_source_bytes_required"
+          }
+        ],
+        "diagnostics": [
+          {
+            "code": "xmfa_source_bytes_required",
+            "phase": "association",
+            "path": "/source_inputs",
+            "severity": "qualification",
+            "evidence_refs": [
+              "source:canFam2.fa"
+            ]
+          }
+        ]
+      },
+      {
+        "file_id": "mm9.fa",
+        "artifact": {
+          "raw_artifact_ref": "mm9.fa",
+          "source_ref": "source:mm9.fa",
+          "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd"
+        },
+        "format": "FastA",
+        "reader": {
+          "file_id": "mm9.fa",
+          "reader": "fasta_records_for_xmfa_v1",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii"
+        },
+        "state": "verified",
+        "requirements": [],
+        "diagnostics": []
+      }
+    ],
+    "status": "partial",
+    "requirements": [
+      {
+        "requirement_id": "xmfa_verified_source:1e822fd893e2c3d5d23c232002f881d71d68844473de99f5b4c2ca19fd41acba",
+        "kind": "input_bytes",
+        "role": "xmfa_staged_source",
+        "source_refs": [
+          "source:canFam2.fa"
+        ],
+        "reason_code": "xmfa_source_bytes_required"
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "xmfa_source_bytes_required",
+        "phase": "association",
+        "path": "/source_inputs",
+        "severity": "qualification",
+        "evidence_refs": [
+          "source:canFam2.fa"
+        ]
+      }
+    ]
+  },
+  "binding": {
+    "document_id": "mauve_xmfa:a42ac199a3343cf98484efd30b3e698853c0d0a451ba591ad258e34fb6176499",
+    "source_comparison": "case_insensitive_iupac_exact",
+    "verification": {
+      "supplied_inputs": {
+        "schema_version": "mauve_xmfa_source_inputs_v1",
+        "invocation": {
+          "mode": "multiple_files_concatenated",
+          "ordered_file_ids": [
+            "equCab1.fa",
+            "canFam2.fa",
+            "mm9.fa"
+          ],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:fixture-declared-invocation",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "fixture-declared-invocation",
+                "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+                "byte_count": 99
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        "files": [
+          {
+            "file_id": "equCab1.fa",
+            "native_path_token": "equCab1.fa",
+            "artifact": {
+              "raw_artifact_ref": "equCab1.fa",
+              "source_ref": "source:equCab1.fa",
+              "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60"
+            },
+            "format": "FastA",
+            "record_completeness": "complete",
+            "path_binding_evidence": [
+              {
+                "content": {
+                  "source_ref": "source:equCab1.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "equCab1.fa",
+                  "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60",
+                  "byte_count": 60
+                },
+                "pointer": ""
+              }
+            ],
+            "records": [
+              {
+                "record_id": "row:0",
+                "entry_1based": 1,
+                "header": "equCab1",
+                "sequence": "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "equCab1.fa",
+                    "source_ref": "source:equCab1.fa",
+                    "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 60,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              }
+            ]
+          },
+          {
+            "file_id": "canFam2.fa",
+            "native_path_token": "canFam2.fa",
+            "artifact": {
+              "raw_artifact_ref": "canFam2.fa",
+              "source_ref": "source:canFam2.fa",
+              "sha256": "3fd0ee956fc142f2367e73a62ad2d976f6e509bd146046fd700c5a95b26755e8"
+            },
+            "format": "FastA",
+            "record_completeness": "complete",
+            "path_binding_evidence": [
+              {
+                "content": {
+                  "source_ref": "source:canFam2.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "canFam2.fa",
+                  "sha256": "3fd0ee956fc142f2367e73a62ad2d976f6e509bd146046fd700c5a95b26755e8",
+                  "byte_count": 59
+                },
+                "pointer": ""
+              }
+            ],
+            "records": [
+              {
+                "record_id": "row:0",
+                "entry_1based": 1,
+                "header": "canFam2",
+                "sequence": "CAAGCCCTGCGCGCTCAGCCGGAGTGTCCCGGGCCCTGCTTTCCTTTTC",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "canFam2.fa",
+                    "source_ref": "source:canFam2.fa",
+                    "sha256": "3fd0ee956fc142f2367e73a62ad2d976f6e509bd146046fd700c5a95b26755e8"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 59,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              }
+            ]
+          },
+          {
+            "file_id": "mm9.fa",
+            "native_path_token": "mm9.fa",
+            "artifact": {
+              "raw_artifact_ref": "mm9.fa",
+              "source_ref": "source:mm9.fa",
+              "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd"
+            },
+            "format": "FastA",
+            "record_completeness": "complete",
+            "path_binding_evidence": [
+              {
+                "content": {
+                  "source_ref": "source:mm9.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "mm9.fa",
+                  "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd",
+                  "byte_count": 47
+                },
+                "pointer": ""
+              }
+            ],
+            "records": [
+              {
+                "record_id": "row:0",
+                "entry_1based": 1,
+                "header": "mm9",
+                "sequence": "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "mm9.fa",
+                    "source_ref": "source:mm9.fa",
+                    "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 47,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        ],
+        "original_maps": []
+      },
+      "source_readers": [
+        {
+          "file_id": "equCab1.fa",
+          "reader": "fasta_records_for_xmfa_v1",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii"
+        },
+        {
+          "file_id": "canFam2.fa",
+          "reader": "fasta_records_for_xmfa_v1",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii"
+        },
+        {
+          "file_id": "mm9.fa",
+          "reader": "fasta_records_for_xmfa_v1",
+          "id_rule": "first_whitespace_token",
+          "encoding": "ascii"
+        }
+      ],
+      "verified_inputs": {
+        "schema_version": "mauve_xmfa_source_inputs_v1",
+        "invocation": {
+          "mode": "multiple_files_concatenated",
+          "ordered_file_ids": [
+            "equCab1.fa",
+            "canFam2.fa",
+            "mm9.fa"
+          ],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:fixture-declared-invocation",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "fixture-declared-invocation",
+                "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+                "byte_count": 99
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        "files": [
+          {
+            "file_id": "equCab1.fa",
+            "native_path_token": "equCab1.fa",
+            "artifact": {
+              "raw_artifact_ref": "equCab1.fa",
+              "source_ref": "source:equCab1.fa",
+              "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60"
+            },
+            "format": "FastA",
+            "record_completeness": "complete",
+            "path_binding_evidence": [
+              {
+                "content": {
+                  "source_ref": "source:equCab1.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "equCab1.fa",
+                  "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60",
+                  "byte_count": 60
+                },
+                "pointer": ""
+              }
+            ],
+            "records": [
+              {
+                "record_id": "row:0",
+                "entry_1based": 1,
+                "header": "equCab1",
+                "sequence": "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "equCab1.fa",
+                    "source_ref": "source:equCab1.fa",
+                    "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 60,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              }
+            ]
+          },
+          {
+            "file_id": "mm9.fa",
+            "native_path_token": "mm9.fa",
+            "artifact": {
+              "raw_artifact_ref": "mm9.fa",
+              "source_ref": "source:mm9.fa",
+              "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd"
+            },
+            "format": "FastA",
+            "record_completeness": "complete",
+            "path_binding_evidence": [
+              {
+                "content": {
+                  "source_ref": "source:mm9.fa",
+                  "artifact_field": "artifact_ref",
+                  "artifact_ref": "mm9.fa",
+                  "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd",
+                  "byte_count": 47
+                },
+                "pointer": ""
+              }
+            ],
+            "records": [
+              {
+                "record_id": "row:0",
+                "entry_1based": 1,
+                "header": "mm9",
+                "sequence": "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "mm9.fa",
+                    "source_ref": "source:mm9.fa",
+                    "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd"
+                  },
+                  "byte_start_0based": 0,
+                  "byte_end_0based_exclusive": 47,
+                  "line_start_1based": 1,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              }
+            ]
+          }
+        ],
+        "original_maps": []
+      },
+      "files": [
+        {
+          "file_id": "equCab1.fa",
+          "artifact": {
+            "raw_artifact_ref": "equCab1.fa",
+            "source_ref": "source:equCab1.fa",
+            "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60"
+          },
+          "format": "FastA",
+          "reader": {
+            "file_id": "equCab1.fa",
+            "reader": "fasta_records_for_xmfa_v1",
+            "id_rule": "first_whitespace_token",
+            "encoding": "ascii"
+          },
+          "state": "verified",
+          "requirements": [],
+          "diagnostics": []
+        },
+        {
+          "file_id": "canFam2.fa",
+          "artifact": {
+            "raw_artifact_ref": "canFam2.fa",
+            "source_ref": "source:canFam2.fa",
+            "sha256": "3fd0ee956fc142f2367e73a62ad2d976f6e509bd146046fd700c5a95b26755e8"
+          },
+          "format": "FastA",
+          "reader": {
+            "file_id": "canFam2.fa",
+            "reader": "fasta_records_for_xmfa_v1",
+            "id_rule": "first_whitespace_token",
+            "encoding": "ascii"
+          },
+          "state": "missing_bytes",
+          "requirements": [
+            {
+              "requirement_id": "xmfa_verified_source:1e822fd893e2c3d5d23c232002f881d71d68844473de99f5b4c2ca19fd41acba",
+              "kind": "input_bytes",
+              "role": "xmfa_staged_source",
+              "source_refs": [
+                "source:canFam2.fa"
+              ],
+              "reason_code": "xmfa_source_bytes_required"
+            }
+          ],
+          "diagnostics": [
+            {
+              "code": "xmfa_source_bytes_required",
+              "phase": "association",
+              "path": "/source_inputs",
+              "severity": "qualification",
+              "evidence_refs": [
+                "source:canFam2.fa"
+              ]
+            }
+          ]
+        },
+        {
+          "file_id": "mm9.fa",
+          "artifact": {
+            "raw_artifact_ref": "mm9.fa",
+            "source_ref": "source:mm9.fa",
+            "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd"
+          },
+          "format": "FastA",
+          "reader": {
+            "file_id": "mm9.fa",
+            "reader": "fasta_records_for_xmfa_v1",
+            "id_rule": "first_whitespace_token",
+            "encoding": "ascii"
+          },
+          "state": "verified",
+          "requirements": [],
+          "diagnostics": []
+        }
+      ],
+      "status": "partial",
+      "requirements": [
+        {
+          "requirement_id": "xmfa_verified_source:1e822fd893e2c3d5d23c232002f881d71d68844473de99f5b4c2ca19fd41acba",
+          "kind": "input_bytes",
+          "role": "xmfa_staged_source",
+          "source_refs": [
+            "source:canFam2.fa"
+          ],
+          "reason_code": "xmfa_source_bytes_required"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "xmfa_source_bytes_required",
+          "phase": "association",
+          "path": "/source_inputs",
+          "severity": "qualification",
+          "evidence_refs": [
+            "source:canFam2.fa"
+          ]
+        }
+      ]
+    },
+    "bindings": {
+      "schema_version": "mauve_xmfa_source_bindings_v1",
+      "document_id": "mauve_xmfa:a42ac199a3343cf98484efd30b3e698853c0d0a451ba591ad258e34fb6176499",
+      "status": "partial",
+      "invocation_mode": "multiple_files_concatenated",
+      "member_registry_completeness": "partial",
+      "members": [
+        {
+          "member_number": 1,
+          "metadata_indices": [
+            1,
+            2
+          ],
+          "state": "resolved",
+          "file_id": "equCab1.fa",
+          "native_file_token": "equCab1.fa",
+          "entry_1based": null,
+          "source_length": 50,
+          "source_sequence": "GAAAAGGAAAGTACGGCCCGGCCACTCCGGGTGTGTGCTAGGAGGGCTTA",
+          "components": [
+            {
+              "file_id": "equCab1.fa",
+              "record_id": "row:0",
+              "entry_1based": 1,
+              "member_interval_0based_half_open": [
+                0,
+                50
+              ],
+              "record_length": 50,
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "source:fixture-declared-invocation",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "fixture-declared-invocation",
+                    "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+                    "byte_count": 99
+                  },
+                  "pointer": ""
+                },
+                {
+                  "content": {
+                    "source_ref": "source:equCab1.fa",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "equCab1.fa",
+                    "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60",
+                    "byte_count": 60
+                  },
+                  "pointer": ""
+                }
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:fixture-declared-invocation",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "fixture-declared-invocation",
+                "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+                "byte_count": 99
+              },
+              "pointer": ""
+            },
+            {
+              "content": {
+                "source_ref": "source:equCab1.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "equCab1.fa",
+                "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60",
+                "byte_count": 60
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "member_number": 2,
+          "metadata_indices": [
+            3,
+            4
+          ],
+          "state": "missing",
+          "file_id": null,
+          "native_file_token": "canFam2.fa",
+          "entry_1based": null,
+          "source_length": null,
+          "source_sequence": null,
+          "components": [],
+          "evidence": []
+        },
+        {
+          "member_number": 3,
+          "metadata_indices": [
+            5,
+            6
+          ],
+          "state": "resolved",
+          "file_id": "mm9.fa",
+          "native_file_token": "mm9.fa",
+          "entry_1based": null,
+          "source_length": 41,
+          "source_sequence": "GAAGAGGAAAAGTAGATCCCTGGCGTCCGGAGCTGGGACGT",
+          "components": [
+            {
+              "file_id": "mm9.fa",
+              "record_id": "row:0",
+              "entry_1based": 1,
+              "member_interval_0based_half_open": [
+                0,
+                41
+              ],
+              "record_length": 41,
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "source:fixture-declared-invocation",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "fixture-declared-invocation",
+                    "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+                    "byte_count": 99
+                  },
+                  "pointer": ""
+                },
+                {
+                  "content": {
+                    "source_ref": "source:mm9.fa",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "mm9.fa",
+                    "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd",
+                    "byte_count": 47
+                  },
+                  "pointer": ""
+                }
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:fixture-declared-invocation",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "fixture-declared-invocation",
+                "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+                "byte_count": 99
+              },
+              "pointer": ""
+            },
+            {
+              "content": {
+                "source_ref": "source:mm9.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "mm9.fa",
+                "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd",
+                "byte_count": 47
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "source_checks": [
+        {
+          "record": {
+            "block_index": 0,
+            "record_index": 0
+          },
+          "member_number": 1,
+          "state": "match",
+          "compared_bases": 50,
+          "mismatch_columns_0based": [],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:fixture-declared-invocation",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "fixture-declared-invocation",
+                "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+                "byte_count": 99
+              },
+              "pointer": ""
+            },
+            {
+              "content": {
+                "source_ref": "source:equCab1.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "equCab1.fa",
+                "sha256": "96df47e8199046a8c473f1828f48c90bb0ae0e637e6aef190af50db41fb07f60",
+                "byte_count": 60
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "record": {
+            "block_index": 0,
+            "record_index": 1
+          },
+          "member_number": 2,
+          "state": "not_checked",
+          "compared_bases": 0,
+          "mismatch_columns_0based": [],
+          "evidence": []
+        },
+        {
+          "record": {
+            "block_index": 0,
+            "record_index": 2
+          },
+          "member_number": 3,
+          "state": "match",
+          "compared_bases": 19,
+          "mismatch_columns_0based": [],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:fixture-declared-invocation",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "fixture-declared-invocation",
+                "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+                "byte_count": 99
+              },
+              "pointer": ""
+            },
+            {
+              "content": {
+                "source_ref": "source:mm9.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "mm9.fa",
+                "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd",
+                "byte_count": 47
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "record": {
+            "block_index": 1,
+            "record_index": 0
+          },
+          "member_number": 3,
+          "state": "match",
+          "compared_bases": 22,
+          "mismatch_columns_0based": [],
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:fixture-declared-invocation",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "fixture-declared-invocation",
+                "sha256": "a25e5959a0143ec5ad6c185aa2952d27c39088a497925f70f5a897b8db82e3c6",
+                "byte_count": 99
+              },
+              "pointer": ""
+            },
+            {
+              "content": {
+                "source_ref": "source:mm9.fa",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "mm9.fa",
+                "sha256": "f5c49aff73d4c1a4d20ee2c749ebc529ad1f49a23ab2683d16748b3d8ff674cd",
+                "byte_count": 47
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "original_maps": [],
+      "requirements": [
+        {
+          "requirement_id": "xmfa_source:bfb2f2a1542bb532414dfbe9930c3cb542062b595230da1ba82b5d2ddc6a4c37",
+          "kind": "input_bytes",
+          "role": "xmfa_staged_input",
+          "source_refs": [],
+          "reason_code": "xmfa_source_binding_missing"
+        },
+        {
+          "requirement_id": "xmfa_source:eaa1719a5f352af458ac257a3bc2cd7e3d4bbd9978fa3e590fb0f50983ea0b11",
+          "kind": "input_metadata",
+          "role": "xmfa_input_records",
+          "source_refs": [],
+          "reason_code": "xmfa_input_population_partial"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "xmfa_source_binding_missing",
+          "phase": "association",
+          "path": "/members/2",
+          "severity": "qualification",
+          "evidence_refs": []
+        },
+        {
+          "code": "xmfa_input_population_partial",
+          "phase": "association",
+          "path": "/members",
+          "severity": "qualification",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "state": "partial",
+    "evidence": [],
+    "requirements": [
+      {
+        "requirement_id": "xmfa_verified_source:1e822fd893e2c3d5d23c232002f881d71d68844473de99f5b4c2ca19fd41acba",
+        "kind": "input_bytes",
+        "role": "xmfa_staged_source",
+        "source_refs": [
+          "source:canFam2.fa"
+        ],
+        "reason_code": "xmfa_source_bytes_required"
+      },
+      {
+        "requirement_id": "xmfa_source:bfb2f2a1542bb532414dfbe9930c3cb542062b595230da1ba82b5d2ddc6a4c37",
+        "kind": "input_bytes",
+        "role": "xmfa_staged_input",
+        "source_refs": [],
+        "reason_code": "xmfa_source_binding_missing"
+      },
+      {
+        "requirement_id": "xmfa_source:eaa1719a5f352af458ac257a3bc2cd7e3d4bbd9978fa3e590fb0f50983ea0b11",
+        "kind": "input_metadata",
+        "role": "xmfa_input_records",
+        "source_refs": [],
+        "reason_code": "xmfa_input_population_partial"
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "xmfa_source_bytes_required",
+        "phase": "association",
+        "path": "/source_inputs",
+        "severity": "qualification",
+        "evidence_refs": [
+          "source:canFam2.fa"
+        ]
+      },
+      {
+        "code": "xmfa_source_binding_missing",
+        "phase": "association",
+        "path": "/members/2",
+        "severity": "qualification",
+        "evidence_refs": []
+      },
+      {
+        "code": "xmfa_input_population_partial",
+        "phase": "association",
+        "path": "/members",
+        "severity": "qualification",
+        "evidence_refs": []
+      }
+    ]
+  }
+}

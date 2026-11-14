@@ -16,10 +16,10 @@ from gene_annotation_episode.bvbrc_proteome_directional_geometry import (
 )
 
 
-FIXTURES = Path(__file__).parent / "fixtures" / "bvbrc_proteome_directional"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_proteome_directional"
 ROOT = next(p for p in Path(__file__).resolve().parents if
-            (p / "verification/tool_graders_bvbrc_proteome_directional_calculation_contract_2026-10-25_177").is_dir())
-EXAMPLES = ROOT / "verification/tool_graders_bvbrc_proteome_directional_calculation_contract_2026-10-25_177/NUMERICAL_NATIVE_EXAMPLES_001.json"
+            (p / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/proteome_directional_calculation").is_dir())
+EXAMPLES = ROOT / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/proteome_directional_calculation/NUMERICAL_NATIVE_EXAMPLES_001.json"
 DEFAULT_KEY = dict(report_ordinal=0, query_ordinal=0, subject_ordinal=0, hsp_ordinal=0, block_ordinal=0)
 
 

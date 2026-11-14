@@ -4,11 +4,11 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.fluorescence_event_calculations import calculate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_event_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import (
     canonical, control_comparison_files, issue, validate_components,
 )
-from gene_annotation_episode.fluorescence_result_views import project_fluorescence_result
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views import project_fluorescence_result
 from test_fluorescence_event_calculations import _cell, _control_sheet, _parameters
 
 

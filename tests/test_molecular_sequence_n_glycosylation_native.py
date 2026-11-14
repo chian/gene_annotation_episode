@@ -39,7 +39,7 @@ from gene_annotation_episode.scientific_process_setup import prepare_scientific_
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from tests.test_homer_motif_saved_workflow import _archive, _archive_value, _encode
-from tests.test_molecular_sequence_tools_native import _pin, _write, _tables
+from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_tools_native import _pin, _write, _tables
 from tests.test_runtime import FixtureController
 
 

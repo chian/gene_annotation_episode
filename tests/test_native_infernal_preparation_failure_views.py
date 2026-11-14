@@ -11,8 +11,7 @@ from gene_annotation_episode.native_infernal_preparation_failure_views import pr
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CASE = ROOT / ('verification/tool_graders_infernal_preparation_2026-10-26_247/'
-    'workflow_remaining_003/temporary/pytest/test_partial_acquisition_retur1')
+CASE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/failed_view'
 
 
 def retained():

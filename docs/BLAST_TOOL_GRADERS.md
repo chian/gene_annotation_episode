@@ -98,15 +98,16 @@ without re-extracting those already saved data.
 
 ## Examples and verification
 
-The reproducible examples are in
-`verification/w04_blast_graders_2026-10-24_001`. Run from the repository root:
+The reproducible examples and retained native pair input are in
+`docs/source_evidence/blast_graders`. Run each command from the repository root
+as a separate local workflow:
 
 ```
-PYTHONPATH=. .venv/bin/python verification/w04_blast_graders_2026-10-24_001/write_examples.py
-.venv/bin/python -m gene_annotation_episode.blast_graders \
+bash tools/one_workflow.sh runs/blast-examples -- .venv/bin/python docs/source_evidence/blast_graders/write_examples.py runs/blast-examples
+bash tools/one_workflow.sh runs/blast-pair -- .venv/bin/python -m gene_annotation_episode.blast_graders \
   --mode pairwise --resource local --format json2 \
-  --input verification/w04_blast_graders_2026-10-24_001/native_pair/result.json \
-  --output verification/w04_blast_graders_2026-10-24_001/native_pair/graded.json
+  --input docs/source_evidence/blast_graders/native_pair/result.json \
+  --output runs/blast-pair/graded.json
 ```
 
 The actual native two-sequence BLAST+ 2.17.0 test yields 243 paired residues,
@@ -118,8 +119,9 @@ The synthetic database case yields .8/.2 before representation adjustment and
 .5/.5 using supplied whole-database counts 200/50. Recalculating the saved sheet
 at temperature 2 gives approximately .4142/.5858 after adjustment. No new BLAST
 run or extraction is involved. API and HPC-format fixtures exercise the same
-data and calculations. Actual live API status and exact test evidence are in
-that directory's `VERIFICATION.md`; fixture parsing is not an HPC deployment.
+data and calculations. The retained [verification summary](source_evidence/blast_graders/VERIFICATION.md)
+records the original live API status and test evidence; fixture parsing is not
+an HPC deployment.
 
 Format/field authorities: [NCBI native BLAST schema](https://www.ncbi.nlm.nih.gov/IEB/ToolBox/CPP_DOC/asn_spec/blastxml2.asn.html),
 [BLAST output formats](https://www.ncbi.nlm.nih.gov/books/NBK279684/),

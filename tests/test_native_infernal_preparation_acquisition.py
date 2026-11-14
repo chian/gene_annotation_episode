@@ -11,20 +11,25 @@ from pathlib import Path
 import shutil
 import socket
 import subprocess
+from types import SimpleNamespace
 
 import pytest
 
 from gene_annotation_episode import native_infernal_preparation_acquisition as acquisition
+from gene_annotation_episode import native_infernal_driver as native_driver
+from gene_annotation_episode import native_infernal_preparation_driver as preparation_driver
 from gene_annotation_episode.native_infernal_contracts import native_infernal_digest as digest
 from gene_annotation_episode.native_infernal_preparation_contracts import (
     compile_native_infernal_preparation_job, requested_job_from_infernal_preparation,
 )
 from gene_annotation_episode.practical_execution_state import canonical
+from gene_annotation_episode.native_infernal_preparation_local import prepare_local_infernal_preparation
+from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.state import Store
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PRODUCER = ROOT / "verification/tool_graders_infernal_preparation_producer_2026-10-26_251"
+PRODUCER = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/producer"
 PREFIX = "native_infernal_preparation_"
 
 
@@ -447,7 +452,7 @@ def test_saved_intent_cannot_substitute_a_new_target(tmp_path, monkeypatch):
             acquisition.capture_local_bundle(store, target=target, directory=tmp_path / "capture")
 
 
-NATIVE_CASES = sorted(p for p in (PRODUCER / "producer_001/temporary/pytest").glob(
+NATIVE_CASES = sorted(p for p in (PRODUCER / "retained/producer_001/temporary/pytest").glob(
     "test_actual_selected_native_mo*/plan.json") if not p.parent.is_symlink())
 NATIVE_INDEX = json.loads((PRODUCER / "NATIVE_PRODUCER_INDEX_001.json").read_bytes())
 
@@ -455,7 +460,7 @@ NATIVE_INDEX = json.loads((PRODUCER / "NATIVE_PRODUCER_INDEX_001.json").read_byt
 @pytest.mark.parametrize("plan_path", NATIVE_CASES, ids=lambda p: p.parent.name)
 def test_true_retained_native_mode_pure_validation(plan_path, monkeypatch):
     plan = json.loads(plan_path.read_bytes())
-    bundle = json.loads((Path(plan["attempt_directory"]) / "bundle.json").read_bytes())
+    bundle = json.loads((plan_path.parent / "infernal-preparation-attempt/bundle.json").read_bytes())
     for name in ("open", "stat", "resolve", "read_bytes"):
         monkeypatch.setattr(Path, name, forbidden)
     monkeypatch.setattr(subprocess, "run", forbidden)
@@ -479,12 +484,57 @@ def indexed_json(row):
     return json.loads(raw)
 
 
-@pytest.mark.parametrize("case", NATIVE_INDEX["reservations"], ids=lambda c: c["case"])
-def test_true_native_original_reservation_capture_and_replay(tmp_path, monkeypatch, case):
-    target, plan, bundle = (indexed_json(case[k]) for k in ("target", "plan", "bundle"))
-    assert target["assignment"] == indexed_json(case["assignment"])
+def relocated_reservation(tmp_path, case):
+    """Reseal selected native bytes under a new test-owned local reservation."""
+    original_target, original_plan, original_bundle = (
+        indexed_json(case[key]) for key in ("target", "plan", "bundle"))
+    assert original_target["assignment"] == indexed_json(case["assignment"])
     indexed_json(case["native_handle"])
     indexed_json(case["native_receipt"])
+    original_action = (ROOT / case["plan"]["path"]).parent
+    original_attempt = original_action / "infernal-preparation-attempt"
+    job = deepcopy(original_plan["requested_job"]["native_infernal_preparation"])
+    native_root = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/boundaries/native"
+    for operand in job["operands"]:
+        original = Path(operand["path"])
+        relocated = native_root / original.parts[-2] / original.name
+        assert hashlib.sha256(relocated.read_bytes()).hexdigest() == operand["sha256"]
+        operand["path"] = str(relocated)
+    request = requested_job_from_infernal_preparation(job)
+    assignment = deepcopy(original_target["assignment"])
+    workspace = tmp_path / "retained-preparation-workspace"
+    workspace.mkdir()
+    assignment["workspace"] = str(workspace)
+    assignment["requested_job"] = request
+    identity = original_plan["identity"]
+    action = workspace / ".episode-operations" / digest({
+        "run": identity["run_id"], "episode": identity["episode_id"]}) / digest(identity["operation_key"])
+    state = SimpleNamespace(assignment=assignment, run_id=identity["run_id"], episode_id=identity["episode_id"])
+    prepare_local_infernal_preparation(state, identity["operation_key"], root=action,
+        policy=LocalJobPolicy(**original_plan["policy"]))
+    plan = json.loads((action / "infernal-preparation-plan.json").read_bytes())
+    attempt = action / "infernal-preparation-attempt"
+    shutil.copytree(original_attempt, attempt, dirs_exist_ok=True)
+    bundle = deepcopy(original_bundle)
+    bundle["identity"] = deepcopy(plan["identity"])
+    bundle["requested_job"] = deepcopy(request)
+    for row, operand in zip(bundle["inputs"], job["operands"]):
+        row["original_path"] = operand["path"]
+    compiled = preparation_driver._compile(job, attempt)
+    bundle["realized_argv"] = compiled["argv"]
+    bundle["operation"] = compiled["operation"]
+    bundle["environment"] = {**compiled["environment"],
+        **{key: str(attempt / "tmp") for key in ("TMPDIR", "TMP", "TEMP")},
+        "XDG_CACHE_HOME": str(attempt / "cache")}
+    (attempt / preparation_driver.OWNER_NAME).write_bytes(native_driver._encoded(plan))
+    (attempt / "bundle.json").write_bytes(native_driver._encoded(bundle))
+    assert acquisition.validate_original_bundle(bundle, plan) == bundle
+    return target_for(plan, assignment), plan, bundle
+
+
+@pytest.mark.parametrize("case", NATIVE_INDEX["reservations"], ids=lambda c: c["case"])
+def test_relocated_native_bytes_capture_with_new_sealed_reservation(tmp_path, monkeypatch, case):
+    target, plan, bundle = relocated_reservation(tmp_path, case)
     monkeypatch.setattr(subprocess, "run", forbidden)
     monkeypatch.setattr(subprocess, "Popen", forbidden)
     monkeypatch.setattr(socket, "socket", forbidden)

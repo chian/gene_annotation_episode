@@ -1,0 +1,398 @@
+"""Private scientific-process episode behavior for A104."""
+from __future__ import annotations
+from .requests import (ContractError, EVIDENCE_AXIS_VERSION, INSTRUCTION_VERSION, LEGACY_SELECTION_VERSION, Path, ROLE, ROLES, ReportBoundaryError, SELECTION_VERSION, VERSION, _COMMON_TOOLS, _LEGACY_REVISION_ARGUMENTS, _REVISION_ARGUMENTS, _object, deepcopy, evidence_axis_instruction_view, hashlib, identity, inspect, instruction_view, plain, requested_molecular_fact_fields, requested_molecular_fact_sources, scientific_digest, scientific_invocation_ref, selection_fields, selector_selection, support_observation_kinds, validate_child_selection, validate_frozen_molecular_return, validate_revision_origin, validate_schema, validate_selection)
+from .requests import ScientificProcessRequests
+from .returns import ScientificProcessReturns
+from .credit import ScientificProcessCredit
+from importlib import import_module as _import_module
+ScientificProcessYield = _import_module(".yield", __package__).ScientificProcessYield
+
+
+from .to_child_execution_progress_assessment import prepare_request as prepare_monitor_request
+from .from_child_execution_progress_assessment import receive_progress as receive_monitor_progress
+
+class ScientificProcessEpisode(ScientificProcessRequests, ScientificProcessReturns, ScientificProcessCredit, ScientificProcessYield):
+    """One recursive C7 role with parent-selected A/P and actual tool assignment data."""
+
+    binding_path = 'scientific_process'
+    commissioning_parent = 'legacy_annotation'
+
+    roles = ROLES
+
+    entry_roles = ROLES
+
+    def __init__(self, services, *, library, tool_library, child_roles, tool_retrieval=None,
+                 contract_information_profile=None, yield_bindings=None):
+        if (not isinstance(child_roles, (tuple, list)) or not child_roles
+                or any(not isinstance(role, str) or not role for role in child_roles)
+                or len(set(child_roles)) != len(child_roles) or ROLE not in child_roles):
+            raise ContractError("scientific_child_roles_invalid")
+        self.services, self.library, self.tool_library = services, library, tool_library
+        self._child_roles = tuple(child_roles)
+        self._library_record = _object(library.as_record(), "scientific_library_invalid")
+        self._tools_record = _object(tool_library.as_record(), "scientific_tool_library_invalid")
+        axes = [header['option_ref'] for header in library.headers()
+                if header['option_ref']['slot'] in ('evidence_axis', 'annotation_distinction')]
+        # This existing runtime capability is binding-wide. Opt in only for a
+        # wholly instruction-only publication; legacy and mixed catalogs retain
+        # their original default instruction composition.
+        self.replaces_default_instructions = bool(axes) and all(
+            library.resolve(reference).get('entry_version') == INSTRUCTION_VERSION
+            for reference in axes)
+        from gene_annotation_episode.episodic_workflow.root.a104.scientific_tool_retrieval import configuration
+        self.tool_retrieval = configuration(tool_retrieval)
+        from gene_annotation_episode.episodic_workflow.root.a104.composition_information import CONTRACT_INFORMATION_PROFILE
+        if contract_information_profile not in (None, CONTRACT_INFORMATION_PROFILE):
+            raise ContractError('unsupported_scientific_contract_information_profile')
+        self._contract_information_profile = contract_information_profile
+        self._yield_bindings = (None if yield_bindings is None else
+            _object(yield_bindings, 'scientific_yield_bindings_invalid'))
+        if self._yield_bindings is not None:
+            if not isinstance(self._yield_bindings, dict):
+                raise ContractError('scientific_yield_bindings_invalid')
+            from gene_annotation_episode.episodic_workflow.root.a104.numerical import (BoundedYieldController, CompletionYieldController,
+                YieldController, YieldParameters)
+            for task, declaration in self._yield_bindings.items():
+                if (not isinstance(task, str) or ':' not in task
+                        or not isinstance(declaration, dict)
+                        or set(declaration) != {'kind', 'cutoff', 'parameters',
+                                                'credit_definition'}
+                        or declaration['kind'] not in {'accumulation', 'bounded_quality', 'completion'}
+                        or not isinstance(declaration['parameters'], dict)
+                        or set(declaration['parameters']) != {'uncertainty_alpha'}
+                        or not isinstance(declaration['credit_definition'], dict)
+                        or not declaration['credit_definition']):
+                    raise ContractError('scientific_yield_task_binding_invalid:' + str(task))
+                try:
+                    parameters = YieldParameters(**declaration['parameters'])
+                    if declaration['kind'] == 'bounded_quality':
+                        BoundedYieldController('configuration', 0, declaration['cutoff'], 1., parameters)
+                    elif declaration['kind'] == 'completion':
+                        CompletionYieldController('configuration', 0, declaration['cutoff'], parameters)
+                    else:
+                        YieldController('configuration', 0, declaration['cutoff'], parameters)
+                except (TypeError, ValueError) as error:
+                    raise ContractError('scientific_yield_task_binding_invalid:' + task) from error
+
+    def as_record(self):
+        implementation = scientific_digest({str(path.relative_to(Path(__file__).parent.parent)): hashlib.sha256(path.read_bytes()).hexdigest() for path in Path(__file__).parent.parent.rglob("*.py") if "tests" not in path.parts})
+        return {"version": VERSION, "binding_id": ROLE,
+            "implementation_sha256": implementation, "configuration": {
+                "library": deepcopy(self._library_record),
+                "tool_library": deepcopy(self._tools_record),
+                "child_roles": list(self._child_roles),
+                **({"tool_retrieval": deepcopy(self.tool_retrieval)} if self.tool_retrieval else {}),
+                **({'contract_information_profile': self._contract_information_profile}
+                   if self._contract_information_profile is not None else {}),
+                **({'yield_bindings': deepcopy(self._yield_bindings)}
+                   if self._yield_bindings is not None else {})}}
+
+    def contract_information_profile(self, context):
+        """Expose frozen contract information to scientific commissioning parents."""
+        return (self._contract_information_profile
+                if context.role in ('annotation', ROLE) else None)
+
+    @staticmethod
+    def _role(role):
+        if role != ROLE:
+            raise ContractError("scientific_process_role_not_bound")
+
+    def child_roles(self, role):
+        self._role(role)
+        return self._child_roles
+
+    def permitted_common_actions(self, context):
+        self.validate_context(context)
+        from gene_annotation_episode.episodic_workflow.root.a104.a104_scientific_process_binding import permitted_common_actions
+        return permitted_common_actions()
+
+    def allowed_children(self, parent, caller_capabilities):
+        self.validate_context(parent)
+        from gene_annotation_episode.episodic_workflow.root.a104.a104_scientific_process_binding import allowed_child_roles
+        return allowed_child_roles(self._child_roles)
+
+    def instructions(self, context):
+        self.validate_context(context)
+        selection = context.assignment['selection']
+        axis = self.library.resolve(selection[selection_fields(selection)[0]])
+        axis_guidance = ''
+        if axis.get('entry_version') == INSTRUCTION_VERSION:
+            return (
+                axis_guidance + "Determine what the supplied target does within the parent's assigned question, scope "
+                "and constraints. Start with the supplied sequence, selected file contents or snippets, "
+                "preserving their boundaries, completeness and known context. No initial candidate "
+                "annotation or publicly searchable name is required. Possible functions can emerge "
+                "from the evidence and be compared or revised. Apply the complete selected investigation "
+                "instructions and thought-pattern guidance on every decision. Use actual outcomes and "
+                "received child results to choose and revise your approach. Selected instructions "
+                "describe how to investigate; they are not evidence about this target. Preserve the "
+                "measured subject, conditions, controls, native measurements, uncertainty and limits of "
+                "inference when interpreting evidence. Missing information remains unknown.\n\n"
+                "Choose an available tool action, commit a scientific interpretation through the "
+                "reasoning action, commission a scoped child with its own typed return form, or wait "
+                "for selected pending work when that informs the investigation. Use only the selected "
+                "actual tools and their supplied resource instructions; choose callable operands "
+                "through the declared response contract. Preserve the parent's exact requested result "
+                "meanings and allowed values. Recorded facts come from actual records. Keep inherited "
+                "information distinct from new findings and completed work distinct from attempts. "
+                "Return valid partial findings and specific failures through the requested form.\n\n"
+                "Keep the assigned evidence axis, thought pattern and selected tools for this episode. "
+                "process.revise prepares a different thought pattern and/or tool selection for a new "
+                "child; it does not change this episode or start that child. To commission that "
+                "alternative, copy its selection and revision_origin into a separately selected child "
+                "assignment with the child's job, scope, constraints and typed return. Children own "
+                "their iterative choices. The configured controller "
+                "owns continuation. Waiting and unchanged observations do not manufacture progress.")
+        return ("Investigate the parent's assigned scientific problem iteratively in the shared Episode loop. "
+            "The selected scientific support proposition and operands define the support problem; "
+            "the thought pattern supplies alternatives "
+            "and outcome-sensitive guidance; the selected real tools supply their exact callable contracts. "
+            "Choose your own actions using actual outcomes and received child forms. The selection is no "
+            "prescribed sequence or automatic compatibility verdict. Library sources are instruction "
+            "provenance, not scientific evidence about this target. Inspect actual source subjects, "
+            "conditions and target applicability before interpreting evidence. annotation_support_routes "
+            "describes the actual separately bound annotation policy's kind dispatch. An unmapped kind "
+            "has no base-axis mapping in that known policy. Unavailable metadata means this reader cannot "
+            "declare the bound policy; it is no verdict on evidence or the actual score. Metadata itself "
+            "earns no credit and never replaces or filters the actual projectors, annotation formula or "
+            "continuation rule. Keep the parent's objective, scope, constraints "
+            "and exact typed form; support metadata never adds form fields or scoring axes. Use common reasoning "
+            "to commit scientific interpretations. Keep the originally assigned scientific support, "
+            "thought pattern and selected tool set throughout this episode. Explicit process.revise prepares "
+            "a selection for a new child; a separately selected episode_child action commissions that "
+            "child with its own job, scope, constraints and typed return form. Preparation changes no "
+            "current process and starts no child. Copy both result.selection and revision_origin into "
+            "that child's assignment to identify it as an alternative approach. Request the recorded "
+            "scientific_process_results source in child forms when their process relationships and "
+            "existing closed credit/yield are needed for steering. Only retrieved actual tools are available; "
+            "their descriptions do not grant execution. The configured controller owns continuation.")
+
+    def _information_catalog(self, scope):
+        # Older injected ordinary-only service ports have no resource routes.
+        # This fallback grants no operation beyond their original direct map.
+        callback = getattr(self.services, 'tool_information_catalog', self.services.tool_catalog)
+        return callback(scope)
+
+    def _closed_tool_resolution(self, context, selection):
+        """Read only an authenticated closed invocation’s original frozen contracts."""
+        original = self.restore_closed_process(context)
+        if original is None:
+            return None
+        if scientific_digest(selection) != scientific_digest(original['selection']):
+            raise ContractError('scientific_filled_identity_mismatch')
+        return (self.tool_library.resolve(selection['tools'])
+            if selection['version'] == LEGACY_SELECTION_VERSION else
+            self.tool_library.resolve_invocations(selection['child_tool_info']))
+
+    def _tool_resolution_for(self, selection, scope, *, context=None):
+        if context is not None:
+            if plain(scope) != plain(context.scope):
+                raise ContractError('scientific_filled_identity_mismatch')
+            closed = self._closed_tool_resolution(context, selection)
+            if closed is not None:
+                return closed
+        return (self.tool_library.resolve(selection['tools'], self.services.tool_catalog(scope))
+            if selection['version'] == LEGACY_SELECTION_VERSION else
+            self.tool_library.resolve_invocations(selection['child_tool_info'], self._information_catalog(scope)))
+
+    def _tool_resolution(self, context, selection):
+        entries = self._tool_resolution_for(selection, context.scope, context=context)
+        if any(entry["name"] in {*_COMMON_TOOLS, "process.revise"} for entry in entries):
+            raise ContractError("scientific_primitive_uses_common_tool_name")
+        return entries
+
+    def catalog(self, context):
+        selection = self._original_selection(context)
+        resolved = self._tool_resolution(context, selection)
+        if selection['version'] != LEGACY_SELECTION_VERSION:
+            direct = [row for row in resolved
+                      if row.get('invocation_route', {'kind': 'direct'})['kind'] == 'direct']
+            if self._closed_tool_resolution(context, selection) is not None:
+                resolved = direct
+            else:
+                resolved = self.tool_library.resolve_invocations(
+                    [{'name': row['name'], 'resources': row['resources']} for row in direct],
+                    self.services.tool_catalog(context.scope))
+        entries = [{key: deepcopy(value) for key, value in row.items()
+                    if key not in {'instructions', 'invocation_route'}} for row in plain(resolved)]
+        description = (
+            "Prepare a pinned thought pattern and selected actual tools for a new child using the original "
+            "scientific support and library. Return its selection for a separately selected episode_child "
+            "commission with the child's job, scope, constraints and typed form. Copy result.selection "
+            "and revision_origin into that assignment; request scientific_process_results in the form "
+            "when process provenance and existing closed results are needed. Changes no current "
+            "process, starts no child and records no biological observation. Supply the actual tool names "
+            "returned by process.tools for the desired alternative investigation.")
+        axis = self.library.resolve(selection[selection_fields(selection)[0]])
+        if axis.get('entry_version') == INSTRUCTION_VERSION:
+            description = (
+                "Prepare a different thought pattern and/or selected actual tools for a new child "
+                "investigating the same evidence axis. Return its selection for a separately selected "
+                "episode_child commission with the child's job, scope, constraints and typed return "
+                "form. Copy result.selection and revision_origin into that assignment. Changes no "
+                "current process, starts no child and records no biological observation. Select the "
+                "actual tool/resource choices returned by process.tools for the desired investigation.")
+        entries.append({"name": "process.revise", "description": description,
+            "input_schema": deepcopy(_LEGACY_REVISION_ARGUMENTS
+                if selection['version'] == LEGACY_SELECTION_VERSION else _REVISION_ARGUMENTS)})
+        if getattr(self.services, 'workflow', None) is not None and self.tool_library.supports_tool_info:
+            from gene_annotation_episode.episodic_workflow.root.a104.execution_planning import catalog
+            entries.extend(catalog())
+        return entries
+
+    def common_tool_names(self, context):
+        # Runtime applies this after adding its helpers, so retain selected
+        # primitives and the child-selection preparation as well as retrieval.
+        return (*_COMMON_TOOLS, *(entry["name"] for entry in self.catalog(context)))
+
+    def decision_context(self, context, current_view):
+        selection = self._original_selection(context)
+        annotation, thought = (self.library.resolve(selection[key]) for key in selection_fields(selection)[:2])
+        resolved = self._tool_resolution(context, selection)
+        def selected_fields(entry, names):
+            return {name: deepcopy(entry[name]) for name in names if name in entry}
+        fields = selection_fields(selection)
+        current = selection['version'] == SELECTION_VERSION
+        assignment = plain(context.assignment)
+        if current:
+            assignment = {**assignment, 'selection': selector_selection(selection)}
+        published = annotation.get('entry_version') == INSTRUCTION_VERSION
+        if published:
+            axis_view = instruction_view(annotation)
+        elif annotation.get('entry_version') == EVIDENCE_AXIS_VERSION:
+            axis_view = evidence_axis_instruction_view(annotation)
+        else:
+            axis_view = selected_fields(annotation, ("id", "name", "description", "support"))
+        return {"scientific_process": {"selection": selector_selection(selection),
+            "initial_selection_sha256": scientific_digest(plain(context.assignment["selection"])),
+            ('evidence_axis' if current else 'annotation'): axis_view,
+            **({} if published else {"annotation_support_routes": self.services.scientific_support_routes(context,
+                observation_kinds=support_observation_kinds(annotation))}),
+            ('thought_pattern' if current else 'thought'): selected_fields(thought, ("id", "name", "description", "use_when",
+                "live_alternatives", "decision_guidance", "outcome_contingencies", "boundary")),
+            **({'child_tool_info': deepcopy(selection[fields[2]])} if current else {'tools': deepcopy(resolved)}),
+            "assignment": assignment, "permitted_children": list(self.allowed_children(context,None))}}
+
+    async def execute(self, context, tool_name, arguments, operation_key):
+        self.validate_execution_context(context)
+        selection = validate_selection(context.assignment['selection'])
+        try:
+            if not isinstance(operation_key, str) or not operation_key:
+                raise ContractError("operation_key_required")
+            entries = {entry["name"]: entry for entry in self.catalog(context)}
+            if tool_name not in entries:
+                raise ContractError("scientific_operation_unavailable")
+            axis = self.library.resolve(selection[selection_fields(selection)[0]])
+            from gene_annotation_episode.episodic_workflow.root.a104.a104_scientific_process_binding import validate_tool_name
+            validate_tool_name(tool_name)
+            arguments = _object(arguments, "scientific_arguments_invalid")
+            validate_schema(arguments, entries[tool_name]["input_schema"])
+            if tool_name == 'process.execution':
+                from gene_annotation_episode.episodic_workflow.root.a104.execution_planning import read
+                return {'status': 'completed', 'record_refs': [], 'changed_record_refs': [],
+                        'result': read(self, context, arguments)}
+            if tool_name in {'material.from_source', 'material.parse', 'material.read',
+                             'source.read', 'source.locate'}:
+                self.services.authenticate_source_byte_operands(context, tool_name, arguments)
+            if tool_name == "process.revise":
+                proposed = self._proposed_selection(selection, arguments, selection['version'], context.scope)
+                self._tool_resolution(context, proposed)
+                child_selection = validate_child_selection({
+                    "version": "scientific_process_child_selection_v1",
+                    "parent_selection_sha256": scientific_digest(selection),
+                    "selection": proposed})
+                operation_ref = identity("operation", {
+                    "key": operation_key, "name": tool_name, "arguments": arguments})
+                origin = validate_revision_origin({"version": "scientific_process_revision_origin_v1",
+                    "parent_invocation_ref": scientific_invocation_ref(context.run_id, context.path),
+                    "preparation_operation_ref": operation_ref})
+                return {"status": "completed", "operation_ref": operation_ref,
+                    "record_refs": [], "changed_record_refs": [], "result": child_selection,
+                    "revision_origin": origin, "feedback": None}
+        except ValueError as error:
+            return {"status": "invalid", "operation_ref": identity("operation", {
+                "key": operation_key, "name": tool_name}), "record_refs": [],
+                "changed_record_refs": [], "result": None,
+                "feedback": {"category": "arguments_or_reference", "code": str(error),
+                    **({"detail": error.detail} if getattr(error, "detail", None) else {})}}
+        outcome = self.services.execute_tool(tool_name, arguments,
+            scope=context.scope, operation_key=operation_key,
+            **({'permitted_record_refs': context.received_record_refs}
+               if tool_name in {'result.blast.hsp', 'source.locate'} else {}))
+        return await outcome if inspect.isawaitable(outcome) else outcome
+
+    def _component_scoring_facts(self, context):
+        return {}
+
+    def current_report_facts(self, context):
+        return self._component_scoring_facts(context)
+
+    def initial_decision_context(self, context):
+        if context.role not in {'annotation', ROLE}:
+            return {}
+        workflow = getattr(self.services, 'workflow', None)
+        result = self._component_scoring_facts(context)
+        return result
+
+    def _validate_component_axis_report(self, context, form, schema):
+        return
+
+    def _validate_molecular_report(self, context, form, schema):
+        for source in requested_molecular_fact_sources(plain(schema)):
+            fields = requested_molecular_fact_fields(plain(schema), fact_source=source)
+            label, missing_code = {
+                'protein_conservation_outcomes': ('literal conservation', 'protein_conservation_facts_not_frozen'),
+                'protein_phylogeny_outcomes': ('native protein phylogeny', 'protein_phylogeny_facts_not_frozen'),
+            }[source]
+            try:
+                frozen = self.services.molecular_frozen_facts(context, fact_source=source)
+                if frozen is None:
+                    raise ValueError(missing_code)
+                validate_frozen_molecular_return(plain(form), plain(schema), frozen, fact_source=source)
+            except ReportBoundaryError:
+                raise
+            except ValueError as error:
+                raise ReportBoundaryError(f'Return differs from the frozen {label} facts',
+                    code=str(error), field=fields[0]) from error
+
+
+    def prepare_child_request(self, parent, role, assignment):
+        if role == 'monitor':
+            return prepare_monitor_request(assignment)
+        return assignment
+
+    def receive_child_progress_for_role(self, context, role, form, schema, operation_key, provider):
+        if role != 'monitor':
+            return False
+        receive_monitor_progress(context, form, schema, operation_key, provider)
+        return True
+
+
+def create_execution_bindings(*args, **configuration):
+    """Construct private bindings with this caller's existing operands."""
+    from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.execution_job_submission.episode import ExecutionEpisode as Private0
+    from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.execution_job_submission.api_job_execution.episode import ExecutionEpisode as Private1
+    from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.execution_job_submission.local_job_execution.episode import ExecutionEpisode as Private2
+    from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.execution_job_submission.hpc_job_execution.episode import ExecutionEpisode as Private3
+    from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.execution_result_acquisition.episode import ExecutionEpisode as Private4
+    return (
+        Private0(*args, **configuration),
+        Private1(*args, **configuration),
+        Private2(*args, **configuration),
+        Private3(*args, **configuration),
+        Private4(*args, **configuration),
+    )
+
+
+def create_hpc_bindings(*args, **configuration):
+    """Construct private bindings with this caller's existing operands."""
+    from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.hpc_work_planning.episode import HPCEpisode as Private0
+    from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.hpc_work_planning.hpc_resource_prediction.episode import HPCEpisode as Private1
+    from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.hpc_work_planning.hpc_allocation_execution.episode import HPCEpisode as Private2
+    return (
+        Private0(*args, **configuration),
+        Private1(*args, **configuration),
+        Private2(*args, **configuration),
+    )
+
+

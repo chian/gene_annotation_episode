@@ -10,7 +10,7 @@ from pathlib import Path
 
 from gene_annotation_episode.state import Store
 
-F = import_module('verification.tool_graders_atac_episode_path_2026-10-27_478.fixture_helpers')
+F = import_module('gene_annotation_episode.episodic_workflow.root.tests.fixtures.atac.workflow_478.fixture_helpers')
 
 
 def test_original_actual_worker_controls_match_shared_binding(monkeypatch):

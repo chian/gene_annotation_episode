@@ -20,7 +20,7 @@ def legacy_modules():
     if name not in sys.modules:
         package = ModuleType(name)
         package.__path__ = [
-            str(Path(__file__).parent / "fixtures" / "protein_structure_legacy_schema"),
+            str(Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_legacy_schema"),
             str(Path(science.__file__).parent),
         ]
         sys.modules[name] = package

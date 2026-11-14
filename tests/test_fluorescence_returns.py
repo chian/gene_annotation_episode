@@ -19,10 +19,10 @@ from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episode_journal import Journal
 from gene_annotation_episode.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.fluorescence_return_views import (FACT_SOURCES, PROJECTION_SOURCE, CONTEXT_SOURCE, SAVED_SOURCE,
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_return_views import (FACT_SOURCES, PROJECTION_SOURCE, CONTEXT_SOURCE, SAVED_SOURCE,
     FAILURE_SOURCE, fluorescence_fact_sources, requested_fluorescence_sources)
-from gene_annotation_episode.fluorescence_returns import FluorescenceReturns
-from gene_annotation_episode.fluorescence_result_receipts import FluorescenceResultReceipts
+from gene_annotation_episode.episodic_workflow.root.library.original_fluorescence_returns import FluorescenceReturns
+from gene_annotation_episode.episodic_workflow.root.library.original_fluorescence_result_receipts import FluorescenceResultReceipts
 from gene_annotation_episode.native_file_capture import retained_native_file
 from gene_annotation_episode.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
@@ -79,7 +79,7 @@ class Fixture:
         self.root = self.context((('annotation', 'root'),), {}, None)
         # Real retained bytes for a synthetic saved-sheet custody fixture.
         # This boundary test neither calculates nor claims measured biology.
-        from gene_annotation_episode.fluorescence_event_contracts import canonical as numerical_canonical
+        from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import canonical as numerical_canonical
         sheet = dict(schema='fluorescence_event_population_sheet_v1', input_sources=[], samples=[], channels=[],
             measurement_domains=[], events=[], population_definitions=[], gate_definitions=[], control_pairs=[],
             native_reports=[], issues=[])
@@ -155,7 +155,7 @@ def fixture(tmp_path, monkeypatch):
     def forbidden(*args, **kwargs):
         pytest.fail('Typed return authority attempted acquisition or calculation')
     for target in ('socket.socket', 'subprocess.Popen',
-            'gene_annotation_episode.fluorescence_result_worker.execute_fluorescence_worker'):
+            'gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_worker.execute_fluorescence_worker'):
         monkeypatch.setattr(target, forbidden)
     with Store(tmp_path / 'store') as store:
         f = Fixture(store)

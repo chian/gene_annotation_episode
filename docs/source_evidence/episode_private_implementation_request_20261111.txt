@@ -1,0 +1,115 @@
+Complete each episode's private implementation and organization throughout the existing episode tree
+
+Organize all episode-related code under `gene_annotation_episode/episodic_workflow/root/` so each episode's directory contains its complete, predefined implementation: goal planning, central task, loop bindings, instructions, internal information handling, tools, communication, grading, scientific scoring, credit, yield, waiting, state persistence, tests, and required assets.
+
+Apply this to the root and every existing episode under A101, A102, A103, A104, A105, A106, A107, A108, and A110. A102 includes former A111 work; there is no A109. Keep the package named `episodic_workflow`.
+
+Each episode is implemented beforehand for its particular specification. Its functions, permitted actions, available children, prompts, contracts, and bindings are explicit in the source. During execution it chooses work, supplies requests, uses returned information, revises its approach, and may select or compose applicable library instructions or prompts. Runtime execution must not invent episode implementations or substitute a generic episode whose behavior is determined by unrelated role switches.
+
+Preserve each episode's particular behavior and settings throughout this organizational work.
+
+Directory placement follows the actual commissioning hierarchy. Keep the established `<task_subject>_<iterative_outcome>` naming convention in snake_case, preserving meaningful existing names. Place each child episode directly beneath its commissioning parent. Different parents have separate private child implementations, even when those children perform similar work or use the same framework role. Repeated invocations of one predefined child reuse its source directory.
+
+Directory names describe the episode's iterative task. Filenames describe the actual work or message responsibility they contain. Framework callback names do not automatically become application filenames. Do not introduce vague names such as `open_source.py` or `build_child.py` when they obscure the responsibility.
+
+The entire directory implements the episode. `episode.py` connects its pieces; the goal, central task, grading, scoring, credit, and yield must have explicit implementation homes.
+
+| File or directory | Responsibility |
+| :--- | :--- |
+| `episode.py` | Declare the episode and connect its private implementations to `method_loop`, its available actions, and its predefined children. Make the binding relationships traceable. |
+| `goal.py` | Interpret the commissioned objective and plan what this episode seeks to improve. Identify the intended result, unresolved questions, and what counts as progress, consistently with the episode's credit definition. |
+| `task.py` | Implement the central work: choose and carry out an approach, perform the necessary steps and tool calls, commission permitted child work, interpret outcomes, and revise the approach. |
+| `from_parent.py` | Interpret the incoming assignment, supplied information, scope, constraints, and requested result. Perform the applicable private parsing, validation, and deterministic preparation of typed-response enforcement. |
+| `to_parent.py` | Produce the requested report, including findings, results, qualifications, references, and applicable progress, expected additional credit, waiting information, and dependencies. |
+| `to_child_<child_name>.py` | Prepare this parent's request to that specific child: question, supplied information, scope, constraints, and required typed result. |
+| `from_child_<child_name>.py` | Admit and interpret that child's response, including how received information changes this parent's state, available evidence, and subsequent decisions. |
+| `internal_summary.py` | Present the decision-relevant account of the goal, assignment, actions, actual outcomes, received results, findings, grades, scores, progress, pending work, and unresolved questions. |
+| `grading/` | Contain the applicable, descriptively named graders and their contracts, graded outputs, and subscoring-sheet handling. |
+| `scoring/` | Contain the descriptively named calculations and sheet updates that combine applicable graded outputs into scientific scores. |
+| `credit.py` | Measure actual progress toward this episode's goal, retaining its particular units, definition, parameters, and treatment of revisions or incomplete results. |
+| `yield.py` | Estimate further attainable credit and apply this episode's settings and interpretation of that estimate for continuation. |
+| `waiting.py` | Handle this episode's waiting observations, expected remaining wait, and related status used internally or communicated through its message files. |
+| `tests/` | Contain episode-specific tests and reusable test helpers, with required inputs under `tests/fixtures/`. |
+
+Use the child's actual directory name in its parent's directional filenames.
+
+Create files and subdirectories for responsibilities that exist. Where an implementation is substantial, split it further using names that describe the work—for example, task decision presentation, task state, source reading, or saved scientific records. Preserve meaningful scientific filenames. Do not create empty files merely to satisfy the table.
+
+The goal, task, credit, and yield form a connected iterative process: the commissioned objective gives progress its meaning; work produces outcomes; those outcomes inform progress measurement, further planning, and expected additional progress. The task can contain multiple steps and calls.
+
+Grading and scientific scoring are also part of that process. Preserve the relationship `graders -> subscoring sheets -> scoring sheets`, including how the resulting assessments inform decisions and credit under the particular episode's definition. These responsibilities do not imply a compulsory sequence of separate episodes.
+
+Move and split the complete implementation. Trace each episode from registration through its actual executable functions and dependencies. Include behavior currently located in axis-level modules, runtime classes, services, inherited classes, prompt renderers, parsers, readers, calculators, and other helpers.
+
+Split existing `requests.py` and `returns.py` by message direction and counterpart. Separate internal decision presentation, goal planning, central task execution, tool behavior, credit, yield interpretation, waiting, and scientific assessment wherever they are interleaved in oversized classes or modules.
+
+The resulting responsibility files must contain substantive implementations. Update callers directly. Do not leave the old implementation active behind forwarding modules, create duplicate implementations with unclear ownership, or substitute empty templates for completed work.
+
+Inspect copied classes for methods and branches belonging to other roles. A singleton registration does not establish private implementation when the class still contains several roles' behavior. Account for each method and branch, place applicable behavior with its actual episode, and remove obsolete branches only after their destinations or lack of applicability are established.
+
+Splitting files is part of the work. Do not stop at reporting that a file contains mixed responsibilities.
+
+Keep ownership and reuse explicit. Episode-specific functions belong with their episode. A standalone function reused by multiple episodes within one axis may live in that axis's `library/`, with its consumers recorded. Each consuming episode privately selects and configures its use.
+
+Keep separate implementations across axes, including prompts, parsing, graders, scoring, and libraries. Do not collapse axis-specific scientific behavior into a common implementation during this pass.
+
+Distinguish episode-specific behavior from reusable infrastructure such as the numerical iteration mechanism, provider transport, database mechanics, and general source acquisition. Record external dependencies and why they remain external.
+
+Determine the applicable dependency set after examining the episode's actual responsibilities. The example's 214 copied scientific helpers are evidence of its existing dependency footprint, not a template requiring every episode to copy every axis helper.
+
+Preserve the scientific implementation and its meaning. Retain descriptive graders, subscoring sheets, scoring sheets, calculators, scientific contracts, evidence identities, qualifications, and source provenance. Place them with the episode that owns their invocation and updates; record any standalone calculations retained in the axis library.
+
+Grading and automatic sheet updates remain functions unless an actual existing iterative episode owns that work. Do not turn a calculator, grader, or sheet update into a new episode merely to fit the directory hierarchy.
+
+Keep scientific evidence scores distinct from episode-progress credit. Preserve the existing credit definitions, yield settings, and waiting behavior.
+
+For A105 and A108, retain the required coupling between scientific interpretation and saved grading. An accepted interpretation must retain its typed `investigation_finding` and required subscoring sheet before receiving credit. Missing measurements, controls, uncertainty, or correspondence remain partial or unresolved scientific information. Acquisition or processing failure must not become evidence absence, and unavailable evidence must not acquire an invented numerical score.
+
+Preserve the original iterator's treatment of executed actions, including failed, invalid, or unavailable outcomes. Reorganization must not silently omit an executed result or invent progress for it.
+
+Use code with caution.
+Connect the runtime to the reorganized implementation. The example showed that moving binding methods can leave the central task executing elsewhere. Follow the actual runtime path and verify that the selected episode uses its own declared goal, task, decision presentation, credit, yield, grading, scoring, and message functions.
+Where a runtime interface needs adjustment to reach those private implementations, make the necessary mechanical change. Keep episode-specific decisions in the episode. Preserve the behavior of bindings that do not use a newly introduced interface.
+Follow child commissioning through outgoing assignment preparation, child admission, execution, typed response, and parent receipt. Follow replay and redelivery through the original saved action and counterpart. Parent-specific episode implementations must retain their identities through registration, dispatch, persistence, and restoration; a shared role name must not silently select a different parent's implementation.
+Account for implementation fingerprints, source inventories, contract assets, saved binding descriptions, and restoration references. They must identify the files actually used after the split. Preserve historical provenance fields that describe an earlier release, while distinguishing them from the current executable implementation.
+Check exception and type identities across relocated modules. The example exposed an exception-import mismatch that would not have been detected by successful imports alone.
+Apply the convention according to each episode's work. Preserve these placement examples without imposing an identical structure on every episode:
+• A parent commissioning homology_job_monitoring owns to_child_homology_job_monitoring.py and from_child_homology_job_monitoring.py. The child owns its assignment and report handling, internal summary, central monitoring task, credit, yield, waiting functions, and specifically named job-observation operations. The parent requests information; the child chooses its permitted monitoring actions.
+• A parent commissioning hpc_resource_prediction owns that request and response exchange. The prediction child owns its goal planning, prediction task, instructions, calculations, progress measurement, yield interpretation, and report. Allocation execution retains its separate implementation and message exchange.
+• An experimental-evidence episode owns its source-examination task, scientific interpretation, applicable grader invocation, saved-sheet handling, and typed finding. Its internal summary presents what has ben learned and remains unresolved. Its outgoing report provides the requested findings and numerical results, preserving the distinction between scientific scores and task progress.
+Maintain a complete ownership record. For each episode, update ownership.md and the corresponding machine-readable inventory with:
+• Its task, commissioned objective, parent, children, and runtime/binding identity.
+• Original files and symbols, their destination files, and any intentional splits or removals.
+• Its private method_loop bindings and the functions implementing them.
+• Goal, task, grading, scoring, credit, yield, waiting, persistence, and internal-summary ownership.
+• Prompt, tool, reader, parser, schema, calculator, and required-asset ownership.
+• Library and infrastructure dependencies, including their consumers and reasons for remaining external.
+• Tests, fixtures, retained validation evidence, and known limitations.
+Record both endpoints of every parent-child exchange:
+parent/to_child_<name>.py -> child/from_parent.py
+child/to_parent.py -> parent/from_child_<name>.py
+These records must describe the executable arrangement. Update them when implementation moves; do not leave superseded paths presented as current ownership.
+Validate preservation and connected behavior. Establish the relevant pre-change baseline before interpreting failures. Use source/function comparisons where appropriate to account for moved scientific code, together with tests that exercise changed boundaries.
+Check the applicable paths for:
+• Imports, direct callers, registration, and selection of the correct private implementation.
+• Goal and progress-definition consistency.
+• Central task execution, including multiple-step work and actual outcome handling.
+• Child requests, child responses, counterpart selection, and typed-contract enforcement.
+• Internal-summary inputs and updates.
+• Required grading and saved-sheet ordering before credit.
+• Scientific calculations, sheet updates, and qualified findings.
+• Credit, yield, waiting, and continuation behavior.
+• State persistence, completed-action replay, redelivery, and restoration.
+• Implementation fingerprints, required assets, and obsolete references.
+Tests that replace scientific operations with controlled fixtures establish the behavior of the tested connection. Report that scope explicitly. Successful imports or preserved function bodies alone do not establish a functioning episode or autonomous scientific workflow.
+Resolve regressions introduced by the reorganization. For pre-existing failures, retain enough evidence to distinguish them from new failures; where possible, compare failing test identities and error messages, as in the example. Do not suppress failures to make the organizational pass appear complete.
+Run checks through the existing single-workflow launcher, with one workload at a time in this Codex window, retaining the established one-CPU, 5-GiB RAM, and no-swap bounds. Keep disposable outputs under runs/. Do not introduce elapsed-time, token, action-count, turn-count, or cumulative-usage stopping budgets.
+Keep the organizational scope and its completion claims precise. Preserve existing scientific behavior, request meanings, task boundaries, credit definitions, yield settings, and waiting behavior. Record missing axis heads, unresolved task divisions, and inherited runtime defects with their locations and required follow-up. Do not invent missing scientific behavior as part of arranging files.
+Complete the organizational goal when:
+• Every existing episode's implementation and required assets are accounted for under its directory or an explicitly justified library/infrastructure dependency.
+• Its goal planning, central task, scientific assessment, progress measurement, continuation, and communication have identifiable implementation homes.
+• Every message exchange has both endpoints recorded and connected.
+• Mixed-role classes and superseded files have been resolved with their contents accounted for.
+• Imports, callers, runtime connections, ownership inventories, and implementation identities reflect the final arrangement.
+• Appropriate preservation and behavior checks have been run, introduced regressions have been resolved, and retained results support the stated completion scope.
+Report organizational completion, runtime integration, saved-workflow restoration, and autonomous scientific validation separately. An inherited integration blocker must remain explicit; the existence of an episode directory must never stand in for verification of its implementation.

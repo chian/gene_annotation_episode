@@ -27,7 +27,7 @@ from gene_annotation_episode.bvbrc_comparative_systems_calculation_contracts imp
 from gene_annotation_episode.bvbrc_comparative_systems_calculators import calculate_comparative_systems_components as calculate
 from gene_annotation_episode.bvbrc_comparative_systems_handoff_contracts import canonical_sha256, schema, validate_shape
 
-_FIXTURE = Path(__file__).parent / "fixtures/bvbrc_comparative_systems_calculators/saved_examples.json"
+_FIXTURE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_comparative_systems_calculators/saved_examples.json"
 
 
 @pytest.fixture
@@ -544,7 +544,7 @@ def test_every_frozen_quantity_has_an_exercised_request(examples):
 # These cases use the actual N parser/builder. The new joined fixture is output
 # of the unchanged pinned producer on synthetic inputs (see evidence_c_review).
 # Other edits below are explicitly synthetic malformed/contradictory artifacts.
-_N_FIXTURES = Path(__file__).parent / "fixtures/bvbrc_comparative_systems_native"
+_N_FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_comparative_systems_native"
 _JOIN_WITNESS = _FIXTURE.parent / "dependency_precision/joined_metadata_subsystems_tables.json"
 _FORMULAS = ("pathway_ec_conservation", "pathway_gene_conservation",
              "subsystem_role_conservation", "subsystem_gene_conservation", "subsystem_prop_active")

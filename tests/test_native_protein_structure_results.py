@@ -29,10 +29,10 @@ from gene_annotation_episode.protein_structure_result_views import project_prote
 from gene_annotation_episode.state import Store
 from test_protein_structure_record_publication import case as retained_case, file_for, retain
 
-RUNTIME = import_module("verification.tool_graders_protein_structure_result_host_2026-10-27_407.fixture_helpers")
+RUNTIME = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.result_host_407")
 
 REPO = Path(__file__).resolve().parents[1]
-FIXTURES = REPO / "verification/tool_graders_protein_structure_result_worker_2026-10-27_393/fixtures"
+FIXTURES = REPO / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_result_worker_393/fixtures"
 POLICY = LocalJobPolicy(memory_bytes=21474836480, scratch_bytes=4294967296)
 
 

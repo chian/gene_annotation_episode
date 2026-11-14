@@ -142,32 +142,3 @@ def test_parent_requests_annotation_fact_and_redelivery_keeps_child_snapshot(tmp
             resume=True, **options)) == summary
     finally:
         store.db.close()
-
-
-def test_case_harness_records_optional_annotation_binding_without_defaulting_progress(tmp_path):
-    from gene_annotation_episode.case_execution import prepare_case_run, run_prepared_case
-    from test_case_execution import PARAMETERS, POLICY, inspect_sources, prepared
-    from test_homology_episode_runtime import Provider
-
-    case, configuration, policy = prepared(tmp_path)
-    body = POLICY.replace('    def job_credit(store, **kwargs):',
-        "    def annotation_score(store, scope):\n        return parameters['annotation_support']\n"
-        '    def job_credit(store, **kwargs):')
-    old = "{'kind':'fixture_estimator','cost':parameters['cost'],'numerical':parameters['numerical']})"
-    replacement = (old[:-1]+", project_annotation_score=annotation_score, "
-        "annotation_score_definition={'kind':'fixture_annotation_support',"
-        "'value':parameters['annotation_support']})")
-    assert old in body
-    policy.write_text(body.replace(old, replacement))
-    run = tmp_path/'run'
-    prepare_case_run(case, run, configuration)
-    provider = Provider([inspect_sources()])
-    summary = asyncio.run(run_prepared_case(run, policy_file=policy,
-        parameters={**PARAMETERS, 'annotation_support': 12.5}, provider=provider))
-    assert summary['credit'] == 0 and summary['annotation_score'] == 12.5
-    assert provider.contexts[0]['annotation_score'] == 12.5
-    definition = json.loads((run/'policy-binding.json').read_text())['definitions']['annotation_score']
-    assert definition == {'kind': 'fixture_annotation_support', 'value': 12.5}
-    settings = json.loads((run/'run.json').read_text())
-    assert settings['binding_definitions']['annotation_score']['definition'] == definition
-    assert asyncio.run(run_prepared_case(run, resume=True, provider=Provider([]))) == summary

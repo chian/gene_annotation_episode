@@ -43,7 +43,7 @@ def main():
     from gene_annotation_episode.workflow_budget import active_budget
     request = load_request(args.run, args.episode, args.call)
     state = request["context"]
-    from gene_annotation_episode.literature_a106_render import split_reports
+    from gene_annotation_episode.episodic_workflow.root.a106.library.literature_a106_render import split_reports
     reports = state.get("child_reports", [])
     ordinary, results = split_reports(reports)
     for result in results:

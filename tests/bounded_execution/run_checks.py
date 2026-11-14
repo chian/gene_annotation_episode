@@ -106,7 +106,6 @@ def runtime_pin_rows(rows):
 PACKET = Path(__file__).resolve().parent
 REPO = PACKET.parents[1]
 RUNS = REPO / 'runs'
-LEGACY_PACKET = REPO / 'verification/tool_graders_hmmer_map_verification_2026-10-28_529'
 
 
 def pin(path):
@@ -225,7 +224,6 @@ parser.add_argument('--stdlib-from', type=Path)
 parser.add_argument('--test', action='append', required=False)
 parser.add_argument('--support-file', action='append', default=[])
 parser.add_argument('--support-tree', action='append', default=[])
-parser.add_argument('--no-default-fixtures', action='store_true')
 parser.add_argument('--native-executable', action='append', default=[])
 parser.add_argument('--existing-native-executable', action='append', default=[])
 parser.add_argument('--native-library', action='append', default=[])
@@ -244,10 +242,9 @@ if args.operation == 'launch':
     RUNS.mkdir(exist_ok=True)
 attempt_parent = RUNS if args.attempt_parent is None else args.attempt_parent
 attempt_parent = attempt_parent.resolve(strict=True)
-allowed_roots = (RUNS.resolve(),) if args.operation == 'launch' else (
-    RUNS.resolve(), LEGACY_PACKET.resolve())
+allowed_roots = (RUNS.resolve(),)
 if not attempt_parent.is_dir() or not any(attempt_parent.is_relative_to(root) for root in allowed_roots):
-    parser.error('new runs must stay under runs; existing legacy handles may be observed in place')
+    parser.error('workflow attempts must stay under runs')
 attempt = attempt_parent / args.attempt
 working_root = attempt if args.working_root is None else args.working_root.resolve(strict=True)
 if not any(working_root.is_relative_to(root) for root in allowed_roots) or not attempt.is_relative_to(working_root):
@@ -322,17 +319,6 @@ if args.operation == 'launch':
     save(attempt / 'selected_tests.json', selected_tests)
     shutil.copytree(REPO / 'tests', snapshot / 'tests', ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
     fixture_roots, fixture_files = [], []
-    if not args.no_default_fixtures:
-        fixture_roots.extend([
-            'research/slotted_process_library/publications/2026-10-24-001',
-            'verification/tool_graders_hmmer_preparation_contracts_2026-10-26_259',
-            'verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005/temporary',
-            'verification/tool_graders_hmmer_preparation_capture_2026-10-26_270/check005/temporary',
-            'verification/tool_graders_hmmer_preparation_grading_2026-10-26_271/modes001',
-            'verification/tool_graders_hmmer_preparation_results_2026-10-26_273/check003/temporary',
-        ])
-        fixture_files.append(
-            'verification/tool_graders_hmmer_preparation_producer_2026-10-26_267/check005_native_cases.json')
     fixture_roots.extend(args.support_tree)
     fixture_files.extend([*args.support_file, *args.native_executable])
     skipped_fixture_entries = []
@@ -477,7 +463,6 @@ if args.operation == 'launch':
     save(attempt / 'selected_request.json', {'argv': argv, 'environment': env, 'mode': args.mode,
         'repository_root': str(REPO), 'working_root': str(working_root),
         'tests': selected_tests, 'support_files': args.support_file, 'support_trees': args.support_tree,
-        'default_hmmer_fixtures': not args.no_default_fixtures,
         'native_executables': args.native_executable,
         'existing_native_executables': existing_executables,
         'selected_python_source_pin': selected_python_pin,

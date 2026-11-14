@@ -28,7 +28,7 @@ from gene_annotation_episode.state import Store
 
 
 REPO = Path(__file__).resolve().parents[1]
-PACKET = REPO / "verification/tool_graders_protein_structure_capture_2026-10-27_392"
+PACKET = REPO / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_capture_392"
 EXAMPLES = PACKET / "FILLED_CAPTURE_EXAMPLES_001.json"
 
 

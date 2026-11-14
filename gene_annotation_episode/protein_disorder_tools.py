@@ -26,7 +26,7 @@ from .communication import plain
 from .domain import ContractError, identity
 from .episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
-from .flux_balance_tools import _action_lock
+from .native_operation_lock import _action_lock
 from .local_jobs import LocalJobPolicy
 from .molecular_measurement_tools import (
     MolecularOperationUnpublished, _publication_bytes, _recorded_molecular_action_details,

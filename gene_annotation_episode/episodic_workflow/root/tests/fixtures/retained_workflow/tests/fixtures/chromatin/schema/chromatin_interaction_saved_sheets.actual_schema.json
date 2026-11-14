@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "NativeFileIdentity": {
+      "type": "object",
+      "properties": {
+        "artifact_ref": {
+          "type": "string",
+          "pattern": "^artifact_[0-9a-f]{64}$",
+          "format": "reference",
+          "x-reference-namespace": "artifact"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "format": {
+          "enum": [
+            "chromatin_contact_tables_v1:bins",
+            "chromatin_contact_tables_v1:contacts",
+            "chromatin_contact_tables_v1:weights",
+            "chromatin_contact_tables_v1:cell_states",
+            "chromatin_contact_tables_v1:dense_values"
+          ]
+        }
+      },
+      "required": [
+        "artifact_ref",
+        "sha256",
+        "size_bytes",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "SavedSheetBundle": {
+      "type": "object",
+      "properties": {
+        "sheet": {
+          "$ref": "#/$defs/ChromatinSavedSheetIdentity"
+        },
+        "tables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeFileIdentity"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "sheet",
+        "tables"
+      ],
+      "additionalProperties": false
+    },
+    "ChromatinSavedSheetIdentity": {
+      "type": "object",
+      "properties": {
+        "artifact_ref": {
+          "type": "string",
+          "pattern": "^artifact_[0-9a-f]{64}$",
+          "format": "reference",
+          "x-reference-namespace": "artifact"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "format": {
+          "const": "chromatin_interaction_sheet_v1"
+        }
+      },
+      "required": [
+        "artifact_ref",
+        "sha256",
+        "size_bytes",
+        "format"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/SavedSheetBundle"
+  },
+  "x-source": "chromatin_interaction_saved_sheets",
+  "$id": "urn:gene-annotation:chromatin:return:3c59bfb40181590201fe697182de4b5606df0f033a245fb3ca7b205179174f1b"
+}

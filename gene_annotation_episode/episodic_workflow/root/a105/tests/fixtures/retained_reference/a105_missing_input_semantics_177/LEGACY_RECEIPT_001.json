@@ -1,0 +1,4502 @@
+{
+  "binding_known": {
+    "arguments": {
+      "model_source_ref": "source_914e0e332541bffa0c93a33f",
+      "model_witnesses": [
+        {
+          "end": 62,
+          "quote": "Known joint natural-log covariance for the selected estimates.",
+          "representation": "original",
+          "source_ref": "source_90743b21a17bb55add5a79dd",
+          "start": 0
+        }
+      ],
+      "source_ref": "source_2681a2884b2b563f2bd8a8e2"
+    },
+    "context": {
+      "assignment": {},
+      "episode_id": "model-child",
+      "path": [
+        [
+          "literature_table",
+          "fixture"
+        ]
+      ],
+      "received_record_refs": [
+        "source_2681a2884b2b563f2bd8a8e2",
+        "source_745c6814297a349d4a186ab8",
+        "source_8fa3aede4f4b69016fe02abf",
+        "source_90743b21a17bb55add5a79dd",
+        "source_914e0e332541bffa0c93a33f",
+        "source_91def4c28bb8a3cbbe68bd79",
+        "source_9592922f6c6a94b0dc466c22",
+        "source_e9e43117b0f61f4a40a5db72"
+      ],
+      "request": {},
+      "role": "literature_table",
+      "run_id": "synthetic-model-run",
+      "scope": {
+        "subject_refs": [
+          "input_6171cab31afa0ba24f1102b2"
+        ]
+      }
+    },
+    "context_provenance": "verification-only context; original selected request/signature/outcome retained in SQLite",
+    "kind": "binding",
+    "outcome": {
+      "changed_record_refs": [
+        "source_745c6814297a349d4a186ab8"
+      ],
+      "feedback": null,
+      "operation_ref": "operation_cd5ac4beb7cd85cef3a55b9b",
+      "record_refs": [
+        "source_745c6814297a349d4a186ab8",
+        "source_2681a2884b2b563f2bd8a8e2",
+        "source_91def4c28bb8a3cbbe68bd79",
+        "source_9592922f6c6a94b0dc466c22",
+        "source_914e0e332541bffa0c93a33f",
+        "source_8fa3aede4f4b69016fe02abf",
+        "source_90743b21a17bb55add5a79dd",
+        "reference_3a9db6bcb739bb47604c6315",
+        "reference_91ace2919fabef8d5485dcc2",
+        "reference_6634cbe99869284c7c0c51da",
+        "reference_f8c014e94bc4a639a87ba657",
+        "reference_c05d919ab5fedce4e3b5b724"
+      ],
+      "result": {
+        "cells": {
+          "log_contrast_noise_sd": {
+            "bound_kind": null,
+            "conditional_on": [
+              "supplied_log_covariance"
+            ],
+            "confidence_bound": null,
+            "formula": "sqrt(log_contrast_noise_variance)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.33166247903553997
+          },
+          "log_contrast_noise_variance": {
+            "bound_kind": null,
+            "conditional_on": [
+              "supplied_log_covariance"
+            ],
+            "confidence_bound": null,
+            "formula": "Crr+Ctt-2*Crt",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "log_parameter_squared",
+            "value": 0.11
+          },
+          "log_parameter_contrast": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "ln(test_parameter)-ln(reference_parameter)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.693147180559945
+          },
+          "source_profile_log_ratio": {
+            "bound_kind": null,
+            "conditional_on": [
+              "supplied_log_covariance",
+              "known_normal_log_parameters"
+            ],
+            "confidence_bound": null,
+            "formula": "sup_mu_test_ge_reference_log_likelihood-sup_mu_test_le_reference_log_likelihood",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 2.1838773359918227
+          },
+          "source_signed_index": {
+            "bound_kind": null,
+            "conditional_on": [
+              "supplied_log_covariance",
+              "known_normal_log_parameters"
+            ],
+            "confidence_bound": null,
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.7975846370428173
+          }
+        },
+        "censoring_model": "none",
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "known_normal_log_parameters",
+        "model_origin": "synthetic",
+        "model_source_ref": "source_914e0e332541bffa0c93a33f",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_kind": "ic50",
+        "sheet_ref": "source_745c6814297a349d4a186ab8",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "variance_status": "known"
+      },
+      "status": "completed"
+    },
+    "payload": {
+      "binding_sheet": {
+        "annotation_credit": null,
+        "cells": {
+          "log_native_parameter_ratio": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "ln(test_parameter)-ln(reference_parameter)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.693147180559945
+          },
+          "native_parameter_ratio": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "test_parameter/reference_parameter",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 2.0
+          },
+          "reference_parameter": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "reference_row.value",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "nM",
+            "value": 10.0
+          },
+          "reference_relative_spread": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "reference_reported_spread/abs(reference_parameter)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "reported_spread_unavailable",
+            "unit": "fraction",
+            "value": null
+          },
+          "reference_reported_spread": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "reference_row.reported_spread",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "reported_spread_unavailable",
+            "unit": "nM",
+            "value": null
+          },
+          "source_profile_log_ratio": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "applicable_joint_binding_observation_model",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_observation_model_unimplemented",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "source_signed_index": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_observation_model_unimplemented",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "test_parameter": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "test_row.value",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "nM",
+            "value": 20.0
+          },
+          "test_relative_spread": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "test_reported_spread/abs(test_parameter)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "reported_spread_unavailable",
+            "unit": "fraction",
+            "value": null
+          },
+          "test_reported_spread": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "test_row.reported_spread",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "reported_spread_unavailable",
+            "unit": "nM",
+            "value": null
+          }
+        },
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "parameter_kind": "ic50",
+        "reference_rows": [
+          {
+            "experiment": "synthetic-binding",
+            "ligand": "reference",
+            "origin": "synthetic",
+            "relation": "eq",
+            "reported_spread": null,
+            "source": {
+              "artifact_ref": "artifact_8368b8c1357f90310864973eda6b7a8d1f8944bf0ca77433564ffd10c5389d17",
+              "expression": "10",
+              "locator": {
+                "column": "IC50",
+                "row_index": 0
+              },
+              "representation": "synthetic_fixture",
+              "row_index": 0,
+              "source_ref": "source_91def4c28bb8a3cbbe68bd79",
+              "table_id": "SyntheticTable"
+            },
+            "state": "apo",
+            "subject": "SyntheticProtein",
+            "value": 10.0
+          }
+        ],
+        "test_rows": [
+          {
+            "experiment": "synthetic-binding",
+            "ligand": "test",
+            "origin": "synthetic",
+            "relation": "eq",
+            "reported_spread": null,
+            "source": {
+              "artifact_ref": "artifact_8368b8c1357f90310864973eda6b7a8d1f8944bf0ca77433564ffd10c5389d17",
+              "expression": "20",
+              "locator": {
+                "column": "IC50",
+                "row_index": 1
+              },
+              "representation": "synthetic_fixture",
+              "row_index": 1,
+              "source_ref": "source_91def4c28bb8a3cbbe68bd79",
+              "table_id": "SyntheticTable"
+            },
+            "state": "apo",
+            "subject": "SyntheticProtein",
+            "value": 20.0
+          }
+        ],
+        "uncertainty_basis": "fit_to_averaged_curve",
+        "unit": "nM",
+        "version": "binding_parameter_sheet_v1"
+      },
+      "comparison": {
+        "design": "unknown",
+        "experiment": "synthetic-binding",
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand": "reference",
+        "state": "apo",
+        "subject": "SyntheticProtein",
+        "test_ligand": "test"
+      },
+      "direct_input_source_refs": [
+        "source_2681a2884b2b563f2bd8a8e2",
+        "source_914e0e332541bffa0c93a33f",
+        "source_8fa3aede4f4b69016fe02abf",
+        "source_90743b21a17bb55add5a79dd"
+      ],
+      "experimental_bindings": {
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724"
+      },
+      "input_artifact_ref": "artifact_34a8608b072dc0db9812e4d7f49fdfc924aec2c88e40f16fdf2967b8e3cad0f4",
+      "input_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+      "input_source_refs": [
+        "source_2681a2884b2b563f2bd8a8e2",
+        "source_91def4c28bb8a3cbbe68bd79",
+        "source_9592922f6c6a94b0dc466c22",
+        "source_914e0e332541bffa0c93a33f",
+        "source_8fa3aede4f4b69016fe02abf",
+        "source_90743b21a17bb55add5a79dd"
+      ],
+      "model_source_provenance": {
+        "artifact_ref": "artifact_1e46fe5f94478c56fc16d21f492e49ec53279d601c8225193b28c7567550f968",
+        "source_ref": "source_914e0e332541bffa0c93a33f"
+      },
+      "model_source_ref": "source_914e0e332541bffa0c93a33f",
+      "model_witnesses": [
+        {
+          "artifact_ref": "artifact_a55ff64e4067c72b0a54ab848c36b8f5dc89f66b03ef211814ad3dfb9d9e074b",
+          "end": 62,
+          "quote": "Known joint natural-log covariance for the selected estimates.",
+          "representation": "original",
+          "source_ref": "source_90743b21a17bb55add5a79dd",
+          "start": 0
+        }
+      ],
+      "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+      "sheet": {
+        "annotation_credit": null,
+        "cells": {
+          "log_contrast_noise_sd": {
+            "bound_kind": null,
+            "conditional_on": [
+              "supplied_log_covariance"
+            ],
+            "confidence_bound": null,
+            "formula": "sqrt(log_contrast_noise_variance)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.33166247903553997
+          },
+          "log_contrast_noise_variance": {
+            "bound_kind": null,
+            "conditional_on": [
+              "supplied_log_covariance"
+            ],
+            "confidence_bound": null,
+            "formula": "Crr+Ctt-2*Crt",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "log_parameter_squared",
+            "value": 0.11
+          },
+          "log_parameter_contrast": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "ln(test_parameter)-ln(reference_parameter)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.693147180559945
+          },
+          "source_profile_log_ratio": {
+            "bound_kind": null,
+            "conditional_on": [
+              "supplied_log_covariance",
+              "known_normal_log_parameters"
+            ],
+            "confidence_bound": null,
+            "formula": "sup_mu_test_ge_reference_log_likelihood-sup_mu_test_le_reference_log_likelihood",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 2.1838773359918227
+          },
+          "source_signed_index": {
+            "bound_kind": null,
+            "conditional_on": [
+              "supplied_log_covariance",
+              "known_normal_log_parameters"
+            ],
+            "confidence_bound": null,
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.7975846370428173
+          }
+        },
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "diagnostics": {
+          "boundary_detected_mean_shift": null,
+          "boundary_log_cdf": null,
+          "boundary_log_likelihood": null,
+          "boundary_standardized_detected_mean_shift": null,
+          "conditional_censored_noise_sd": null,
+          "likelihood_case": "two_points"
+        },
+        "independent_preparation_count": null,
+        "measurement_keys": {
+          "reference": "binding_measurement_ec2469377161bad6ef32ed01107c185fa1516fc5f7624b44c7983453cc691e88",
+          "test": "binding_measurement_455cf42856291b4fa88b4f15e5d6348eeb88384a2b6725c3a861a8580a4f2eb2"
+        },
+        "minimum_experiment_count": 2,
+        "model": {
+          "censoring_model": "none",
+          "log_basis": "natural_log_nM",
+          "log_covariance": [
+            [
+              0.04,
+              0.01
+            ],
+            [
+              0.01,
+              0.09
+            ]
+          ],
+          "measurement_keys": [
+            "binding_measurement_ec2469377161bad6ef32ed01107c185fa1516fc5f7624b44c7983453cc691e88",
+            "binding_measurement_455cf42856291b4fa88b4f15e5d6348eeb88384a2b6725c3a861a8580a4f2eb2"
+          ],
+          "measurement_order": [
+            "reference",
+            "test"
+          ],
+          "origin": "synthetic",
+          "parameter_kind": "ic50",
+          "variance_status": "known",
+          "version": "known_normal_log_binding_v1"
+        },
+        "parameter_kind": "ic50",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "version": "binding_model_sheet_v1"
+      },
+      "version": "literature_binding_model_record_v1"
+    },
+    "projected": [
+      {
+        "bound_kind": null,
+        "censoring_model": "none",
+        "component": "log_parameter_contrast",
+        "conditional_on": [],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_log_parameter_contrast_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "known_normal_log_parameters",
+        "model_origin": "synthetic",
+        "model_source_ref": "source_914e0e332541bffa0c93a33f",
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "eq",
+        "sheet_ref": "source_745c6814297a349d4a186ab8",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "populated",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.693147180559945,
+        "variance_status": "known"
+      },
+      {
+        "bound_kind": null,
+        "censoring_model": "none",
+        "component": "log_contrast_noise_variance",
+        "conditional_on": [
+          "supplied_log_covariance"
+        ],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_log_contrast_noise_variance_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "known_normal_log_parameters",
+        "model_origin": "synthetic",
+        "model_source_ref": "source_914e0e332541bffa0c93a33f",
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "eq",
+        "sheet_ref": "source_745c6814297a349d4a186ab8",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "populated",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": null,
+        "unit": "log_parameter_squared",
+        "value": 0.11,
+        "variance_status": "known"
+      },
+      {
+        "bound_kind": null,
+        "censoring_model": "none",
+        "component": "log_contrast_noise_sd",
+        "conditional_on": [
+          "supplied_log_covariance"
+        ],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_log_contrast_noise_sd_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "known_normal_log_parameters",
+        "model_origin": "synthetic",
+        "model_source_ref": "source_914e0e332541bffa0c93a33f",
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "eq",
+        "sheet_ref": "source_745c6814297a349d4a186ab8",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "populated",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.33166247903553997,
+        "variance_status": "known"
+      },
+      {
+        "bound_kind": null,
+        "censoring_model": "none",
+        "component": "source_profile_log_ratio",
+        "conditional_on": [
+          "supplied_log_covariance",
+          "known_normal_log_parameters"
+        ],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_source_profile_log_ratio_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "known_normal_log_parameters",
+        "model_origin": "synthetic",
+        "model_source_ref": "source_914e0e332541bffa0c93a33f",
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "eq",
+        "sheet_ref": "source_745c6814297a349d4a186ab8",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "populated",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 2.1838773359918227,
+        "variance_status": "known"
+      },
+      {
+        "bound_kind": null,
+        "censoring_model": "none",
+        "component": "source_signed_index",
+        "conditional_on": [
+          "supplied_log_covariance",
+          "known_normal_log_parameters"
+        ],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_source_signed_index_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "known_normal_log_parameters",
+        "model_origin": "synthetic",
+        "model_source_ref": "source_914e0e332541bffa0c93a33f",
+        "origin": "proposed",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "eq",
+        "sheet_ref": "source_745c6814297a349d4a186ab8",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "populated",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.7975846370428173,
+        "variance_status": "known"
+      }
+    ],
+    "received_subset": [
+      {
+        "bound_kind": null,
+        "censoring_model": "none",
+        "component": "log_parameter_contrast",
+        "conditional_on": [],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_log_parameter_contrast_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "known_normal_log_parameters",
+        "model_origin": "synthetic",
+        "model_source_ref": "source_914e0e332541bffa0c93a33f",
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "eq",
+        "sheet_ref": "source_745c6814297a349d4a186ab8",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "populated",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.693147180559945,
+        "variance_status": "known"
+      },
+      {
+        "bound_kind": null,
+        "censoring_model": "none",
+        "component": "log_contrast_noise_variance",
+        "conditional_on": [
+          "supplied_log_covariance"
+        ],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_log_contrast_noise_variance_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "known_normal_log_parameters",
+        "model_origin": "synthetic",
+        "model_source_ref": "source_914e0e332541bffa0c93a33f",
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "eq",
+        "sheet_ref": "source_745c6814297a349d4a186ab8",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "populated",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": null,
+        "unit": "log_parameter_squared",
+        "value": 0.11,
+        "variance_status": "known"
+      }
+    ],
+    "receiver": {
+      "assignment": {},
+      "episode_id": "synthetic-receiver",
+      "path": [
+        [
+          "literature_table",
+          "fixture"
+        ]
+      ],
+      "received_record_refs": [
+        "source_2681a2884b2b563f2bd8a8e2",
+        "source_745c6814297a349d4a186ab8",
+        "source_8fa3aede4f4b69016fe02abf",
+        "source_90743b21a17bb55add5a79dd",
+        "source_914e0e332541bffa0c93a33f",
+        "source_91def4c28bb8a3cbbe68bd79",
+        "source_9592922f6c6a94b0dc466c22",
+        "source_e9e43117b0f61f4a40a5db72"
+      ],
+      "request": {},
+      "role": "literature_table",
+      "run_id": "synthetic-model-run",
+      "scope": {
+        "subject_refs": [
+          "input_6171cab31afa0ba24f1102b2"
+        ]
+      }
+    },
+    "run_id": "synthetic-model-run",
+    "schema": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "bound_kind": {
+            "enum": [
+              null,
+              "reported_limit_arithmetic"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "censoring_model": {
+            "enum": [
+              "not_supplied",
+              "none",
+              "threshold_of_log_estimate",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "component": {
+            "enum": [
+              "log_parameter_contrast",
+              "log_contrast_noise_variance",
+              "log_contrast_noise_sd",
+              "source_profile_log_ratio",
+              "source_signed_index"
+            ],
+            "type": "string"
+          },
+          "conditional_on": {
+            "items": {
+              "enum": [
+                "supplied_log_covariance",
+                "known_normal_log_parameters",
+                "threshold_censoring_of_log_estimate"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "confidence_bound": {
+            "type": "null"
+          },
+          "contrast_meaning": {
+            "enum": [
+              "test_parameter_exceeds_reference"
+            ],
+            "type": "string"
+          },
+          "design": {
+            "enum": [
+              "equilibrium_competition",
+              "direct_binding_isotherm",
+              "other",
+              "unknown",
+              "conflicting"
+            ],
+            "type": "string"
+          },
+          "evaluated_scope": {
+            "enum": [
+              "interpreted_source_parameter_contrast"
+            ],
+            "type": "string"
+          },
+          "evidence_source_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "experiment_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "formula_code": {
+            "enum": [
+              "binding_model_log_parameter_contrast_v1",
+              "binding_model_log_contrast_noise_variance_v1",
+              "binding_model_log_contrast_noise_sd_v1",
+              "binding_model_source_profile_log_ratio_v1",
+              "binding_model_source_signed_index_v1"
+            ],
+            "type": "string"
+          },
+          "independent_preparation_count": {
+            "type": "null"
+          },
+          "minimum_experiment_count": {
+            "minimum": 1,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "model_kind": {
+            "enum": [
+              "unreported",
+              "known_normal_log_parameters"
+            ],
+            "type": "string"
+          },
+          "model_origin": {
+            "enum": [
+              "not_supplied",
+              "reported",
+              "derived",
+              "synthetic"
+            ],
+            "type": "string"
+          },
+          "model_source_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "source"
+          },
+          "origin": {
+            "enum": [
+              "derived",
+              "proposed"
+            ],
+            "type": "string"
+          },
+          "original_evidence_source_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "parameter_identification_bound": {
+            "type": "null"
+          },
+          "parameter_kind": {
+            "enum": [
+              "ic50",
+              "reported_hill_kd"
+            ],
+            "type": "string"
+          },
+          "protein_arrangement": {
+            "enum": [
+              "single_preparation",
+              "separate_preparations",
+              "protein_mixture",
+              "unknown",
+              "conflicting"
+            ],
+            "type": "string"
+          },
+          "reference_ligand_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "relation": {
+            "enum": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "unreported"
+            ],
+            "type": "string"
+          },
+          "sheet_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "source_uncertainty_basis": {
+            "enum": [
+              "fit_to_averaged_curve",
+              "between_independent_fitted_parameters",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "state_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "status": {
+            "enum": [
+              "populated",
+              "reported_limit",
+              "unavailable",
+              "conflicting"
+            ],
+            "type": "string"
+          },
+          "subject_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "test_ligand_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "unavailable_reason": {
+            "enum": [
+              null,
+              "missing_reference_arm",
+              "missing_test_arm",
+              "conflicting_source_identity",
+              "ambiguous_reference_arm",
+              "ambiguous_test_arm",
+              "source_measurement_unavailable",
+              "reported_spread_requires_point_operand",
+              "reported_spread_unavailable",
+              "nonfinite_calculation",
+              "calculation_underflow",
+              "two_censored_operands_unsupported",
+              "comparison_context_mismatch",
+              "binding_observation_model_unimplemented",
+              "binding_sampling_model_unreported",
+              "known_log_covariance_required",
+              "covariance_status_unknown",
+              "binding_censoring_mechanism_unreported",
+              "two_censored_observations_unsupported",
+              "numerical_model_range"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "dimensionless",
+              "log_parameter_squared"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "variance_status": {
+            "enum": [
+              "not_supplied",
+              "known",
+              "estimated",
+              "unknown"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sheet_ref",
+          "evidence_source_ref",
+          "original_evidence_source_ref",
+          "model_source_ref",
+          "subject_ref",
+          "state_ref",
+          "experiment_ref",
+          "reference_ligand_ref",
+          "test_ligand_ref",
+          "component",
+          "value",
+          "relation",
+          "unit",
+          "status",
+          "formula_code",
+          "origin",
+          "unavailable_reason",
+          "bound_kind",
+          "confidence_bound",
+          "parameter_identification_bound",
+          "conditional_on",
+          "parameter_kind",
+          "contrast_meaning",
+          "evaluated_scope",
+          "model_kind",
+          "variance_status",
+          "censoring_model",
+          "model_origin",
+          "source_uncertainty_basis",
+          "minimum_experiment_count",
+          "independent_preparation_count",
+          "design",
+          "protein_arrangement"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "x-source": "literature_binding_model_cells"
+    }
+  },
+  "binding_missing": {
+    "arguments": {
+      "model_source_ref": null,
+      "model_witnesses": [],
+      "source_ref": "source_2681a2884b2b563f2bd8a8e2"
+    },
+    "context": {
+      "assignment": {},
+      "episode_id": "model-child",
+      "path": [
+        [
+          "literature_table",
+          "fixture"
+        ]
+      ],
+      "received_record_refs": [
+        "source_2681a2884b2b563f2bd8a8e2",
+        "source_91def4c28bb8a3cbbe68bd79",
+        "source_9592922f6c6a94b0dc466c22",
+        "source_dba3db4ea6333cf78b903eb4",
+        "source_e9e43117b0f61f4a40a5db72"
+      ],
+      "request": {},
+      "role": "literature_table",
+      "run_id": "synthetic-model-run",
+      "scope": {
+        "subject_refs": [
+          "input_6171cab31afa0ba24f1102b2"
+        ]
+      }
+    },
+    "context_provenance": "verification-only context; original selected request/signature/outcome retained in SQLite",
+    "kind": "binding",
+    "outcome": {
+      "changed_record_refs": [
+        "source_dba3db4ea6333cf78b903eb4"
+      ],
+      "feedback": null,
+      "operation_ref": "operation_cd5ac4beb7cd85cef3a55b9b",
+      "record_refs": [
+        "source_dba3db4ea6333cf78b903eb4",
+        "source_2681a2884b2b563f2bd8a8e2",
+        "source_91def4c28bb8a3cbbe68bd79",
+        "source_9592922f6c6a94b0dc466c22",
+        "reference_3a9db6bcb739bb47604c6315",
+        "reference_91ace2919fabef8d5485dcc2",
+        "reference_6634cbe99869284c7c0c51da",
+        "reference_f8c014e94bc4a639a87ba657",
+        "reference_c05d919ab5fedce4e3b5b724"
+      ],
+      "result": {
+        "cells": {
+          "log_contrast_noise_sd": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "sqrt(log_contrast_noise_variance)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_sampling_model_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "log_contrast_noise_variance": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "Crr+Ctt-2*Crt",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_sampling_model_unreported",
+            "unit": "log_parameter_squared",
+            "value": null
+          },
+          "log_parameter_contrast": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "ln(test_parameter)-ln(reference_parameter)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.693147180559945
+          },
+          "source_profile_log_ratio": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "sup_mu_test_ge_reference_log_likelihood-sup_mu_test_le_reference_log_likelihood",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_sampling_model_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "source_signed_index": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_sampling_model_unreported",
+            "unit": "dimensionless",
+            "value": null
+          }
+        },
+        "censoring_model": "not_supplied",
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "unreported",
+        "model_origin": "not_supplied",
+        "model_source_ref": null,
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_kind": "ic50",
+        "sheet_ref": "source_dba3db4ea6333cf78b903eb4",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "variance_status": "not_supplied"
+      },
+      "status": "completed"
+    },
+    "payload": {
+      "binding_sheet": {
+        "annotation_credit": null,
+        "cells": {
+          "log_native_parameter_ratio": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "ln(test_parameter)-ln(reference_parameter)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.693147180559945
+          },
+          "native_parameter_ratio": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "test_parameter/reference_parameter",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "fraction",
+            "value": 2.0
+          },
+          "reference_parameter": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "reference_row.value",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "nM",
+            "value": 10.0
+          },
+          "reference_relative_spread": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "reference_reported_spread/abs(reference_parameter)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "reported_spread_unavailable",
+            "unit": "fraction",
+            "value": null
+          },
+          "reference_reported_spread": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "reference_row.reported_spread",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "reported_spread_unavailable",
+            "unit": "nM",
+            "value": null
+          },
+          "source_profile_log_ratio": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "applicable_joint_binding_observation_model",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_observation_model_unimplemented",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "source_signed_index": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_observation_model_unimplemented",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "test_parameter": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "test_row.value",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "nM",
+            "value": 20.0
+          },
+          "test_relative_spread": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "test_reported_spread/abs(test_parameter)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "reported_spread_unavailable",
+            "unit": "fraction",
+            "value": null
+          },
+          "test_reported_spread": {
+            "bound_kind": null,
+            "confidence_bound": null,
+            "formula": "test_row.reported_spread",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "reported_spread_unavailable",
+            "unit": "nM",
+            "value": null
+          }
+        },
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "parameter_kind": "ic50",
+        "reference_rows": [
+          {
+            "experiment": "synthetic-binding",
+            "ligand": "reference",
+            "origin": "synthetic",
+            "relation": "eq",
+            "reported_spread": null,
+            "source": {
+              "artifact_ref": "artifact_8368b8c1357f90310864973eda6b7a8d1f8944bf0ca77433564ffd10c5389d17",
+              "expression": "10",
+              "locator": {
+                "column": "IC50",
+                "row_index": 0
+              },
+              "representation": "synthetic_fixture",
+              "row_index": 0,
+              "source_ref": "source_91def4c28bb8a3cbbe68bd79",
+              "table_id": "SyntheticTable"
+            },
+            "state": "apo",
+            "subject": "SyntheticProtein",
+            "value": 10.0
+          }
+        ],
+        "test_rows": [
+          {
+            "experiment": "synthetic-binding",
+            "ligand": "test",
+            "origin": "synthetic",
+            "relation": "eq",
+            "reported_spread": null,
+            "source": {
+              "artifact_ref": "artifact_8368b8c1357f90310864973eda6b7a8d1f8944bf0ca77433564ffd10c5389d17",
+              "expression": "20",
+              "locator": {
+                "column": "IC50",
+                "row_index": 1
+              },
+              "representation": "synthetic_fixture",
+              "row_index": 1,
+              "source_ref": "source_91def4c28bb8a3cbbe68bd79",
+              "table_id": "SyntheticTable"
+            },
+            "state": "apo",
+            "subject": "SyntheticProtein",
+            "value": 20.0
+          }
+        ],
+        "uncertainty_basis": "fit_to_averaged_curve",
+        "unit": "nM",
+        "version": "binding_parameter_sheet_v1"
+      },
+      "comparison": {
+        "design": "unknown",
+        "experiment": "synthetic-binding",
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand": "reference",
+        "state": "apo",
+        "subject": "SyntheticProtein",
+        "test_ligand": "test"
+      },
+      "direct_input_source_refs": [
+        "source_2681a2884b2b563f2bd8a8e2"
+      ],
+      "experimental_bindings": {
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724"
+      },
+      "input_artifact_ref": "artifact_34a8608b072dc0db9812e4d7f49fdfc924aec2c88e40f16fdf2967b8e3cad0f4",
+      "input_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+      "input_source_refs": [
+        "source_2681a2884b2b563f2bd8a8e2",
+        "source_91def4c28bb8a3cbbe68bd79",
+        "source_9592922f6c6a94b0dc466c22"
+      ],
+      "model_source_provenance": null,
+      "model_source_ref": null,
+      "model_witnesses": [],
+      "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+      "sheet": {
+        "annotation_credit": null,
+        "cells": {
+          "log_contrast_noise_sd": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "sqrt(log_contrast_noise_variance)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_sampling_model_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "log_contrast_noise_variance": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "Crr+Ctt-2*Crt",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_sampling_model_unreported",
+            "unit": "log_parameter_squared",
+            "value": null
+          },
+          "log_parameter_contrast": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "ln(test_parameter)-ln(reference_parameter)",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "eq",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.693147180559945
+          },
+          "source_profile_log_ratio": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "sup_mu_test_ge_reference_log_likelihood-sup_mu_test_le_reference_log_likelihood",
+            "origin": "derived",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_sampling_model_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "source_signed_index": {
+            "bound_kind": null,
+            "conditional_on": [],
+            "confidence_bound": null,
+            "formula": "tanh(source_profile_log_ratio/2)",
+            "origin": "proposed",
+            "parameter_identification_bound": null,
+            "relation": "unreported",
+            "status": "unavailable",
+            "unavailable_reason": "binding_sampling_model_unreported",
+            "unit": "dimensionless",
+            "value": null
+          }
+        },
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "diagnostics": {
+          "boundary_detected_mean_shift": null,
+          "boundary_log_cdf": null,
+          "boundary_log_likelihood": null,
+          "boundary_standardized_detected_mean_shift": null,
+          "conditional_censored_noise_sd": null,
+          "likelihood_case": "none"
+        },
+        "independent_preparation_count": null,
+        "measurement_keys": {
+          "reference": "binding_measurement_ec2469377161bad6ef32ed01107c185fa1516fc5f7624b44c7983453cc691e88",
+          "test": "binding_measurement_455cf42856291b4fa88b4f15e5d6348eeb88384a2b6725c3a861a8580a4f2eb2"
+        },
+        "minimum_experiment_count": 2,
+        "model": null,
+        "parameter_kind": "ic50",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "version": "binding_model_sheet_v1"
+      },
+      "version": "literature_binding_model_record_v1"
+    },
+    "projected": [
+      {
+        "bound_kind": null,
+        "censoring_model": "not_supplied",
+        "component": "log_parameter_contrast",
+        "conditional_on": [],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_log_parameter_contrast_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "unreported",
+        "model_origin": "not_supplied",
+        "model_source_ref": null,
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "eq",
+        "sheet_ref": "source_dba3db4ea6333cf78b903eb4",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "populated",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.693147180559945,
+        "variance_status": "not_supplied"
+      },
+      {
+        "bound_kind": null,
+        "censoring_model": "not_supplied",
+        "component": "log_contrast_noise_variance",
+        "conditional_on": [],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_log_contrast_noise_variance_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "unreported",
+        "model_origin": "not_supplied",
+        "model_source_ref": null,
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "unreported",
+        "sheet_ref": "source_dba3db4ea6333cf78b903eb4",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "unavailable",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": "binding_sampling_model_unreported",
+        "unit": "log_parameter_squared",
+        "value": null,
+        "variance_status": "not_supplied"
+      },
+      {
+        "bound_kind": null,
+        "censoring_model": "not_supplied",
+        "component": "log_contrast_noise_sd",
+        "conditional_on": [],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_log_contrast_noise_sd_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "unreported",
+        "model_origin": "not_supplied",
+        "model_source_ref": null,
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "unreported",
+        "sheet_ref": "source_dba3db4ea6333cf78b903eb4",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "unavailable",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": "binding_sampling_model_unreported",
+        "unit": "dimensionless",
+        "value": null,
+        "variance_status": "not_supplied"
+      },
+      {
+        "bound_kind": null,
+        "censoring_model": "not_supplied",
+        "component": "source_profile_log_ratio",
+        "conditional_on": [],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_source_profile_log_ratio_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "unreported",
+        "model_origin": "not_supplied",
+        "model_source_ref": null,
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "unreported",
+        "sheet_ref": "source_dba3db4ea6333cf78b903eb4",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "unavailable",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": "binding_sampling_model_unreported",
+        "unit": "dimensionless",
+        "value": null,
+        "variance_status": "not_supplied"
+      },
+      {
+        "bound_kind": null,
+        "censoring_model": "not_supplied",
+        "component": "source_signed_index",
+        "conditional_on": [],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_source_signed_index_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "unreported",
+        "model_origin": "not_supplied",
+        "model_source_ref": null,
+        "origin": "proposed",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "unreported",
+        "sheet_ref": "source_dba3db4ea6333cf78b903eb4",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "unavailable",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": "binding_sampling_model_unreported",
+        "unit": "dimensionless",
+        "value": null,
+        "variance_status": "not_supplied"
+      }
+    ],
+    "received_subset": [
+      {
+        "bound_kind": null,
+        "censoring_model": "not_supplied",
+        "component": "log_parameter_contrast",
+        "conditional_on": [],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_log_parameter_contrast_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "unreported",
+        "model_origin": "not_supplied",
+        "model_source_ref": null,
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "eq",
+        "sheet_ref": "source_dba3db4ea6333cf78b903eb4",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "populated",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.693147180559945,
+        "variance_status": "not_supplied"
+      },
+      {
+        "bound_kind": null,
+        "censoring_model": "not_supplied",
+        "component": "log_contrast_noise_variance",
+        "conditional_on": [],
+        "confidence_bound": null,
+        "contrast_meaning": "test_parameter_exceeds_reference",
+        "design": "unknown",
+        "evaluated_scope": "interpreted_source_parameter_contrast",
+        "evidence_source_ref": "source_2681a2884b2b563f2bd8a8e2",
+        "experiment_ref": "reference_3a9db6bcb739bb47604c6315",
+        "formula_code": "binding_model_log_contrast_noise_variance_v1",
+        "independent_preparation_count": null,
+        "minimum_experiment_count": 2,
+        "model_kind": "unreported",
+        "model_origin": "not_supplied",
+        "model_source_ref": null,
+        "origin": "derived",
+        "original_evidence_source_ref": "source_91def4c28bb8a3cbbe68bd79",
+        "parameter_identification_bound": null,
+        "parameter_kind": "ic50",
+        "protein_arrangement": "unknown",
+        "reference_ligand_ref": "reference_91ace2919fabef8d5485dcc2",
+        "relation": "unreported",
+        "sheet_ref": "source_dba3db4ea6333cf78b903eb4",
+        "source_uncertainty_basis": "fit_to_averaged_curve",
+        "state_ref": "reference_6634cbe99869284c7c0c51da",
+        "status": "unavailable",
+        "subject_ref": "reference_f8c014e94bc4a639a87ba657",
+        "test_ligand_ref": "reference_c05d919ab5fedce4e3b5b724",
+        "unavailable_reason": "binding_sampling_model_unreported",
+        "unit": "log_parameter_squared",
+        "value": null,
+        "variance_status": "not_supplied"
+      }
+    ],
+    "receiver": {
+      "assignment": {},
+      "episode_id": "synthetic-receiver",
+      "path": [
+        [
+          "literature_table",
+          "fixture"
+        ]
+      ],
+      "received_record_refs": [
+        "source_2681a2884b2b563f2bd8a8e2",
+        "source_91def4c28bb8a3cbbe68bd79",
+        "source_9592922f6c6a94b0dc466c22",
+        "source_dba3db4ea6333cf78b903eb4",
+        "source_e9e43117b0f61f4a40a5db72"
+      ],
+      "request": {},
+      "role": "literature_table",
+      "run_id": "synthetic-model-run",
+      "scope": {
+        "subject_refs": [
+          "input_6171cab31afa0ba24f1102b2"
+        ]
+      }
+    },
+    "run_id": "synthetic-model-run",
+    "schema": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "bound_kind": {
+            "enum": [
+              null,
+              "reported_limit_arithmetic"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "censoring_model": {
+            "enum": [
+              "not_supplied",
+              "none",
+              "threshold_of_log_estimate",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "component": {
+            "enum": [
+              "log_parameter_contrast",
+              "log_contrast_noise_variance",
+              "log_contrast_noise_sd",
+              "source_profile_log_ratio",
+              "source_signed_index"
+            ],
+            "type": "string"
+          },
+          "conditional_on": {
+            "items": {
+              "enum": [
+                "supplied_log_covariance",
+                "known_normal_log_parameters",
+                "threshold_censoring_of_log_estimate"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "confidence_bound": {
+            "type": "null"
+          },
+          "contrast_meaning": {
+            "enum": [
+              "test_parameter_exceeds_reference"
+            ],
+            "type": "string"
+          },
+          "design": {
+            "enum": [
+              "equilibrium_competition",
+              "direct_binding_isotherm",
+              "other",
+              "unknown",
+              "conflicting"
+            ],
+            "type": "string"
+          },
+          "evaluated_scope": {
+            "enum": [
+              "interpreted_source_parameter_contrast"
+            ],
+            "type": "string"
+          },
+          "evidence_source_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "experiment_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "formula_code": {
+            "enum": [
+              "binding_model_log_parameter_contrast_v1",
+              "binding_model_log_contrast_noise_variance_v1",
+              "binding_model_log_contrast_noise_sd_v1",
+              "binding_model_source_profile_log_ratio_v1",
+              "binding_model_source_signed_index_v1"
+            ],
+            "type": "string"
+          },
+          "independent_preparation_count": {
+            "type": "null"
+          },
+          "minimum_experiment_count": {
+            "minimum": 1,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "model_kind": {
+            "enum": [
+              "unreported",
+              "known_normal_log_parameters"
+            ],
+            "type": "string"
+          },
+          "model_origin": {
+            "enum": [
+              "not_supplied",
+              "reported",
+              "derived",
+              "synthetic"
+            ],
+            "type": "string"
+          },
+          "model_source_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "source"
+          },
+          "origin": {
+            "enum": [
+              "derived",
+              "proposed"
+            ],
+            "type": "string"
+          },
+          "original_evidence_source_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "parameter_identification_bound": {
+            "type": "null"
+          },
+          "parameter_kind": {
+            "enum": [
+              "ic50",
+              "reported_hill_kd"
+            ],
+            "type": "string"
+          },
+          "protein_arrangement": {
+            "enum": [
+              "single_preparation",
+              "separate_preparations",
+              "protein_mixture",
+              "unknown",
+              "conflicting"
+            ],
+            "type": "string"
+          },
+          "reference_ligand_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "relation": {
+            "enum": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "unreported"
+            ],
+            "type": "string"
+          },
+          "sheet_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "source_uncertainty_basis": {
+            "enum": [
+              "fit_to_averaged_curve",
+              "between_independent_fitted_parameters",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "state_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "status": {
+            "enum": [
+              "populated",
+              "reported_limit",
+              "unavailable",
+              "conflicting"
+            ],
+            "type": "string"
+          },
+          "subject_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "test_ligand_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "unavailable_reason": {
+            "enum": [
+              null,
+              "missing_reference_arm",
+              "missing_test_arm",
+              "conflicting_source_identity",
+              "ambiguous_reference_arm",
+              "ambiguous_test_arm",
+              "source_measurement_unavailable",
+              "reported_spread_requires_point_operand",
+              "reported_spread_unavailable",
+              "nonfinite_calculation",
+              "calculation_underflow",
+              "two_censored_operands_unsupported",
+              "comparison_context_mismatch",
+              "binding_observation_model_unimplemented",
+              "binding_sampling_model_unreported",
+              "known_log_covariance_required",
+              "covariance_status_unknown",
+              "binding_censoring_mechanism_unreported",
+              "two_censored_observations_unsupported",
+              "numerical_model_range"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "dimensionless",
+              "log_parameter_squared"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "variance_status": {
+            "enum": [
+              "not_supplied",
+              "known",
+              "estimated",
+              "unknown"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sheet_ref",
+          "evidence_source_ref",
+          "original_evidence_source_ref",
+          "model_source_ref",
+          "subject_ref",
+          "state_ref",
+          "experiment_ref",
+          "reference_ligand_ref",
+          "test_ligand_ref",
+          "component",
+          "value",
+          "relation",
+          "unit",
+          "status",
+          "formula_code",
+          "origin",
+          "unavailable_reason",
+          "bound_kind",
+          "confidence_bound",
+          "parameter_identification_bound",
+          "conditional_on",
+          "parameter_kind",
+          "contrast_meaning",
+          "evaluated_scope",
+          "model_kind",
+          "variance_status",
+          "censoring_model",
+          "model_origin",
+          "source_uncertainty_basis",
+          "minimum_experiment_count",
+          "independent_preparation_count",
+          "design",
+          "protein_arrangement"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "x-source": "literature_binding_model_cells"
+    }
+  },
+  "transport_known": {
+    "arguments": {
+      "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+      "curve_contexts": {
+        "km": {
+          "analyte": null,
+          "curve": {
+            "end": 31,
+            "quote": "Synthetic common kinetic curve.",
+            "representation": "original",
+            "source_ref": "source_a8c0b7f380f2c92187d8de1a",
+            "start": 0
+          },
+          "endpoint": null,
+          "experimental_system": null,
+          "molecule": null,
+          "preparation": null
+        },
+        "substrate_reference": {
+          "analyte": null,
+          "curve": {
+            "end": 31,
+            "quote": "Synthetic common kinetic curve.",
+            "representation": "original",
+            "source_ref": "source_a8c0b7f380f2c92187d8de1a",
+            "start": 0
+          },
+          "endpoint": null,
+          "experimental_system": null,
+          "molecule": null,
+          "preparation": null
+        },
+        "substrate_test": {
+          "analyte": null,
+          "curve": {
+            "end": 31,
+            "quote": "Synthetic common kinetic curve.",
+            "representation": "original",
+            "source_ref": "source_a8c0b7f380f2c92187d8de1a",
+            "start": 0
+          },
+          "endpoint": null,
+          "experimental_system": null,
+          "molecule": null,
+          "preparation": null
+        }
+      },
+      "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+      "model_witnesses": [
+        {
+          "end": 44,
+          "quote": "Conditional Michaelis-Menten response model.",
+          "representation": "original",
+          "source_ref": "source_166aabccfa25e92cb0fecb1a",
+          "start": 0
+        }
+      ],
+      "observation_model": "michaelis_menten",
+      "primitives": {
+        "substrate_reference": {
+          "number_end": 2,
+          "number_start": 0,
+          "unit_end": 5,
+          "unit_start": 3,
+          "witness": {
+            "end": 12,
+            "quote": "40 uM",
+            "representation": "original",
+            "source_ref": "source_e28ae3e751e4a868407dcf7c",
+            "start": 7
+          }
+        },
+        "substrate_test": {
+          "number_end": 2,
+          "number_start": 0,
+          "unit_end": 5,
+          "unit_start": 3,
+          "witness": {
+            "end": 5,
+            "quote": "10 uM",
+            "representation": "original",
+            "source_ref": "source_e28ae3e751e4a868407dcf7c",
+            "start": 0
+          }
+        }
+      },
+      "source_kind": "synthetic_fixture",
+      "source_ref": "source_a8c0b7f380f2c92187d8de1a",
+      "variance_status": "known"
+    },
+    "context": {
+      "assignment": {},
+      "episode_id": "transport-child",
+      "path": [
+        [
+          "literature",
+          "fixture"
+        ]
+      ],
+      "received_record_refs": [
+        "source_166aabccfa25e92cb0fecb1a",
+        "source_833bedc9ae45fe3863ca6e7e",
+        "source_a8c0b7f380f2c92187d8de1a",
+        "source_abc8e1a7c30f6074cb58f35b",
+        "source_b6e780618d05bcd85c9bfedc",
+        "source_d8c29327b5b4fee90d735d5d",
+        "source_e28ae3e751e4a868407dcf7c",
+        "source_e9e43117b0f61f4a40a5db72"
+      ],
+      "request": {},
+      "role": "literature",
+      "run_id": "synthetic-transport-run",
+      "scope": {
+        "subject_refs": [
+          "input_6171cab31afa0ba24f1102b2"
+        ]
+      }
+    },
+    "context_provenance": "verification-only context; original selected request/signature/outcome retained in SQLite",
+    "kind": "transport",
+    "outcome": {
+      "changed_record_refs": [
+        "reference_fbaf31cbe43266ca4daa54e9",
+        "source_b6e780618d05bcd85c9bfedc"
+      ],
+      "feedback": null,
+      "operation_ref": "operation_be050c935ba9428275e65525",
+      "record_refs": [
+        "source_b6e780618d05bcd85c9bfedc",
+        "source_a8c0b7f380f2c92187d8de1a",
+        "source_e28ae3e751e4a868407dcf7c",
+        "source_166aabccfa25e92cb0fecb1a",
+        "source_833bedc9ae45fe3863ca6e7e",
+        "source_abc8e1a7c30f6074cb58f35b",
+        "source_d8c29327b5b4fee90d735d5d",
+        "reference_aca131770f9c3c37c9903e4f",
+        "term_d028a6b29ec02ec82bc5f6a4",
+        "reference_fbaf31cbe43266ca4daa54e9"
+      ],
+      "result": {
+        "cells": {
+          "apparent_km": {
+            "conditional_on": [],
+            "formula": "km",
+            "origin": "synthetic",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "uM",
+            "value": 16.5
+          },
+          "condition_response": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_test*(km+substrate_reference)/(substrate_reference*(km+substrate_test))",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.5330188679245284
+          },
+          "condition_response_standard_uncertainty": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response",
+              "first_order_covariance_propagation"
+            ],
+            "formula": "sqrt(condition_response_variance)",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.03412772578285913
+          },
+          "condition_response_variance": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response",
+              "first_order_covariance_propagation"
+            ],
+            "formula": "Jh*covariance*Jh_transpose; Jh=h*[km/(St*(km+St)),-km/(Sr*(km+Sr)),1/(km+Sr)-1/(km+St)]",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless_squared",
+            "value": 0.0011647016671100278
+          },
+          "log_condition_response": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "log(condition_response)",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": -0.6291984559596719
+          },
+          "reference_saturation": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_reference/(km+substrate_reference)",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.7079646017699115
+          },
+          "substrate_reference": {
+            "conditional_on": [],
+            "formula": "substrate_reference",
+            "origin": "synthetic",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "uM",
+            "value": 40.0
+          },
+          "substrate_test": {
+            "conditional_on": [],
+            "formula": "substrate_test",
+            "origin": "synthetic",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "uM",
+            "value": 10.0
+          },
+          "test_saturation": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_test/(km+substrate_test)",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.37735849056603776
+          }
+        },
+        "covariance_origin": "synthetic",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "reported_km_uncertainty_kind": "unspecified",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "variance_status": "known"
+      },
+      "status": "completed"
+    },
+    "payload": {
+      "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+      "direct_input_source_refs": [
+        "source_a8c0b7f380f2c92187d8de1a",
+        "source_e28ae3e751e4a868407dcf7c",
+        "source_166aabccfa25e92cb0fecb1a",
+        "source_833bedc9ae45fe3863ca6e7e",
+        "source_abc8e1a7c30f6074cb58f35b"
+      ],
+      "experimental_bindings": {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9"
+      },
+      "extraction": {
+        "covariance": [
+          [
+            1.0,
+            0.1,
+            0.0
+          ],
+          [
+            0.1,
+            4.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.25
+          ]
+        ],
+        "covariance_origin": "synthetic",
+        "curve_contexts": {
+          "km": {
+            "analyte": null,
+            "curve": {
+              "artifact_ref": "artifact_e7c31a383e379bb9fb868da35fff6eb5665d63551c06afd7bea7396d3d89976c",
+              "end": 31,
+              "quote": "Synthetic common kinetic curve.",
+              "representation": "original",
+              "source_ref": "source_a8c0b7f380f2c92187d8de1a",
+              "start": 0
+            },
+            "endpoint": null,
+            "experimental_system": null,
+            "molecule": null,
+            "preparation": null
+          },
+          "substrate_reference": {
+            "analyte": null,
+            "curve": {
+              "artifact_ref": "artifact_e7c31a383e379bb9fb868da35fff6eb5665d63551c06afd7bea7396d3d89976c",
+              "end": 31,
+              "quote": "Synthetic common kinetic curve.",
+              "representation": "original",
+              "source_ref": "source_a8c0b7f380f2c92187d8de1a",
+              "start": 0
+            },
+            "endpoint": null,
+            "experimental_system": null,
+            "molecule": null,
+            "preparation": null
+          },
+          "substrate_test": {
+            "analyte": null,
+            "curve": {
+              "artifact_ref": "artifact_e7c31a383e379bb9fb868da35fff6eb5665d63551c06afd7bea7396d3d89976c",
+              "end": 31,
+              "quote": "Synthetic common kinetic curve.",
+              "representation": "original",
+              "source_ref": "source_a8c0b7f380f2c92187d8de1a",
+              "start": 0
+            },
+            "endpoint": null,
+            "experimental_system": null,
+            "molecule": null,
+            "preparation": null
+          }
+        },
+        "curve_keys": {
+          "km": "transport_curve_ce5042419b2f0732e6910ca2cb12350b508dd46b266a516112d130d93e2e8f4a",
+          "substrate_reference": "transport_curve_ce5042419b2f0732e6910ca2cb12350b508dd46b266a516112d130d93e2e8f4a",
+          "substrate_test": "transport_curve_ce5042419b2f0732e6910ca2cb12350b508dd46b266a516112d130d93e2e8f4a"
+        },
+        "km_quantity": {
+          "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+          "input_source_ref": "source_d8c29327b5b4fee90d735d5d",
+          "measurement_key": "transport_quantity_14915bf37dbf4af46e6acbdeb7ed4887dd766d8399d28dd87c7f3b7c9a76dcc7",
+          "origin": "synthetic",
+          "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+          "reported_uncertainty_kind": "unspecified",
+          "sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+          "unit": "uM",
+          "value": 16.5
+        },
+        "measurement_keys": {
+          "km": "transport_quantity_14915bf37dbf4af46e6acbdeb7ed4887dd766d8399d28dd87c7f3b7c9a76dcc7",
+          "substrate_reference": "literature_measurement_8a05efebbe04e9895b218861",
+          "substrate_test": "literature_measurement_6dbc4f27371a30f56e732509"
+        },
+        "model_witnesses": [
+          {
+            "artifact_ref": "artifact_4c8836379ebe3f8b1aa26512cefe50711d4f2ae377686652ba65ad87d9ba7d7e",
+            "end": 44,
+            "quote": "Conditional Michaelis-Menten response model.",
+            "representation": "original",
+            "source_ref": "source_166aabccfa25e92cb0fecb1a",
+            "start": 0
+          }
+        ],
+        "observation_model": "michaelis_menten",
+        "primitive_observations": {
+          "km": {
+            "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+            "input_source_ref": "source_d8c29327b5b4fee90d735d5d",
+            "measurement_key": "transport_quantity_14915bf37dbf4af46e6acbdeb7ed4887dd766d8399d28dd87c7f3b7c9a76dcc7",
+            "origin": "synthetic",
+            "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+            "reported_uncertainty_kind": "unspecified",
+            "sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+            "unit": "uM",
+            "value": 16.5
+          },
+          "substrate_reference": {
+            "measurement_key": "literature_measurement_8a05efebbe04e9895b218861",
+            "multiplier": 1.0,
+            "number_end": 2,
+            "number_start": 0,
+            "raw_number": "40",
+            "raw_unit": "uM",
+            "role": "substrate_reference",
+            "unit": "uM",
+            "unit_end": 5,
+            "unit_start": 3,
+            "value": 40.0,
+            "witness": {
+              "artifact_ref": "artifact_e39547fe97584fe0209a527c8db1b194bf54d0d4ab6cf6fe4ab558a4489009f2",
+              "end": 12,
+              "quote": "40 uM",
+              "representation": "original",
+              "source_ref": "source_e28ae3e751e4a868407dcf7c",
+              "start": 7
+            }
+          },
+          "substrate_test": {
+            "measurement_key": "literature_measurement_6dbc4f27371a30f56e732509",
+            "multiplier": 1.0,
+            "number_end": 2,
+            "number_start": 0,
+            "raw_number": "10",
+            "raw_unit": "uM",
+            "role": "substrate_test",
+            "unit": "uM",
+            "unit_end": 5,
+            "unit_start": 3,
+            "value": 10.0,
+            "witness": {
+              "artifact_ref": "artifact_e39547fe97584fe0209a527c8db1b194bf54d0d4ab6cf6fe4ab558a4489009f2",
+              "end": 5,
+              "quote": "10 uM",
+              "representation": "original",
+              "source_ref": "source_e28ae3e751e4a868407dcf7c",
+              "start": 0
+            }
+          }
+        },
+        "primitive_order": [
+          "substrate_test",
+          "substrate_reference",
+          "km"
+        ],
+        "source_kind": "synthetic_fixture",
+        "source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "source_refs": [
+          "source_a8c0b7f380f2c92187d8de1a",
+          "source_e28ae3e751e4a868407dcf7c",
+          "source_166aabccfa25e92cb0fecb1a",
+          "source_833bedc9ae45fe3863ca6e7e",
+          "source_abc8e1a7c30f6074cb58f35b"
+        ],
+        "values": {
+          "km": 16.5,
+          "substrate_reference": 40.0,
+          "substrate_test": 10.0
+        },
+        "variance_status": "known",
+        "version": "a105_transport_inputs_v1"
+      },
+      "input_artifact_ref": "artifact_e7c31a383e379bb9fb868da35fff6eb5665d63551c06afd7bea7396d3d89976c",
+      "input_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+      "input_source_refs": [
+        "source_a8c0b7f380f2c92187d8de1a",
+        "source_e28ae3e751e4a868407dcf7c",
+        "source_166aabccfa25e92cb0fecb1a",
+        "source_833bedc9ae45fe3863ca6e7e",
+        "source_abc8e1a7c30f6074cb58f35b",
+        "source_d8c29327b5b4fee90d735d5d"
+      ],
+      "km_payload": {
+        "experimental_bindings": {
+          "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+          "condition_ref": null,
+          "endpoint_ref": "term_c0c082f684f941dfab4c7205",
+          "experiment_ref": null,
+          "normalization_ref": "term_c69e30bdede0373428e8d230",
+          "quantity_ref": "term_522e6e4b3c0126fe5efb2ea0",
+          "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f"
+        },
+        "input_artifact_ref": "artifact_c2634dbbe3304915e2f41a64ad6b6c819ffdb2bf44eb19f1e3dc5b8ac319b44a",
+        "input_source_ref": "source_d8c29327b5b4fee90d735d5d",
+        "sheet": {
+          "annotation_credit": null,
+          "axis": "A105",
+          "cells": {
+            "corrected_activity": {
+              "conditional_on": [],
+              "formula": "(q-g)*v/(k*E*u)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "per_min",
+              "value": null
+            },
+            "effect_precision": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "1/effect_variance",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "min_squared",
+              "value": null
+            },
+            "effect_standard_uncertainty": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "sqrt(effect_variance)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "per_min",
+              "value": null
+            },
+            "effect_variance": {
+              "conditional_on": [
+                "first_order_covariance_propagation"
+              ],
+              "formula": "J*covariance*J_transpose+distinct_residual_variance",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "per_min_squared",
+              "value": null
+            },
+            "relative_reported_spread": {
+              "conditional_on": [],
+              "formula": "reported_spread/abs(reported_value)",
+              "origin": "derived",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "dimensionless",
+              "value": 0.3878787878787879
+            },
+            "reported_spread": {
+              "conditional_on": [],
+              "formula": "literal_source_plus_minus_spread",
+              "origin": "synthetic",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "uM",
+              "value": 6.4
+            },
+            "reported_value": {
+              "conditional_on": [],
+              "formula": "literal_source_value_with_explicit_unit_conversion",
+              "origin": "synthetic",
+              "status": "populated",
+              "unavailable_reason": null,
+              "unit": "uM",
+              "value": 16.5
+            },
+            "source_presence_index": {
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ],
+              "formula": "tanh(source_profile_log_ratio/2)",
+              "origin": "proposed",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "dimensionless",
+              "value": null
+            },
+            "source_profile_log_ratio": {
+              "conditional_on": [
+                "first_order_covariance_propagation",
+                "known_variance",
+                "known_normal_nonnegative_presence"
+              ],
+              "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+              "origin": "derived",
+              "status": "unavailable",
+              "unavailable_reason": "quantity_not_activity_rate",
+              "unit": "dimensionless",
+              "value": null
+            }
+          },
+          "correction": {
+            "cells": {
+              "corrected_activity": {
+                "conditional_on": [],
+                "formula": "(q-g)*v/(k*E*u)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "per_min",
+                "value": null
+              },
+              "effect_precision": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "1/effect_variance",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "min_squared",
+                "value": null
+              },
+              "effect_standard_uncertainty": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "sqrt(effect_variance)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "per_min",
+                "value": null
+              },
+              "effect_variance": {
+                "conditional_on": [
+                  "first_order_covariance_propagation"
+                ],
+                "formula": "J*covariance*J_transpose+distinct_residual_variance",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "per_min_squared",
+                "value": null
+              },
+              "source_presence_index": {
+                "conditional_on": [
+                  "first_order_covariance_propagation",
+                  "known_variance",
+                  "known_normal_nonnegative_presence"
+                ],
+                "formula": "tanh(source_profile_log_ratio/2)",
+                "origin": "proposed",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "dimensionless",
+                "value": null
+              },
+              "source_profile_log_ratio": {
+                "conditional_on": [
+                  "first_order_covariance_propagation",
+                  "known_variance",
+                  "known_normal_nonnegative_presence"
+                ],
+                "formula": "max(0,corrected_activity)^2/(2*effect_variance)",
+                "origin": "derived",
+                "status": "unavailable",
+                "unavailable_reason": "quantity_not_activity_rate",
+                "unit": "dimensionless",
+                "value": null
+              }
+            },
+            "inputs": {
+              "covariance": null,
+              "distinct_residual_variance": null,
+              "observation_model": "none",
+              "values": {
+                "E": null,
+                "g": null,
+                "k": null,
+                "q": null,
+                "u": null,
+                "v": null
+              },
+              "variance_status": "unknown"
+            },
+            "primitive_order": [
+              "q",
+              "g",
+              "k",
+              "E",
+              "u",
+              "v"
+            ],
+            "version": "a105_corrected_activity_v2"
+          },
+          "extraction": {
+            "analyte": "pyruvate",
+            "normalization": "none",
+            "origin": "synthetic",
+            "quantity": "apparent_km",
+            "source": {
+              "artifact_ref": "artifact_c2634dbbe3304915e2f41a64ad6b6c819ffdb2bf44eb19f1e3dc5b8ac319b44a",
+              "expression": "apparent Km = 16.5 \u00b1 6.4 uM for pyruvate",
+              "expression_end": 61,
+              "expression_start": 21,
+              "paragraph_id": "p",
+              "paragraph_text": "SyntheticProtein has apparent Km = 16.5 \u00b1 6.4 uM for pyruvate.",
+              "representation": "synthetic_fixture",
+              "section_id": "s",
+              "source_ref": "source_d8c29327b5b4fee90d735d5d"
+            },
+            "subject": "SyntheticProtein",
+            "uncertainty": {
+              "count": null,
+              "kind": "unspecified",
+              "magnitude": 6.4,
+              "sampling_basis": "unspecified"
+            },
+            "unit": "uM",
+            "value": 16.5,
+            "version": "a105_jats_quantity_v1"
+          },
+          "interpretation_limits": [
+            "subject_token_presence_is_not_experimental_attribution",
+            "reported_specific_activity_does_not_establish_product_identity",
+            "reported_spread_with_unspecified_meaning_is_not_SEM_or_SD",
+            "apparent_km_is_not_affinity_or_an_activity_rate"
+          ],
+          "scope": "reported_source_quantity",
+          "source_conditions": null
+        },
+        "version": "literature_source_quantity_record_v2"
+      },
+      "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+      "sheet": {
+        "cells": {
+          "apparent_km": {
+            "conditional_on": [],
+            "formula": "km",
+            "origin": "synthetic",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "uM",
+            "value": 16.5
+          },
+          "condition_response": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_test*(km+substrate_reference)/(substrate_reference*(km+substrate_test))",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.5330188679245284
+          },
+          "condition_response_standard_uncertainty": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response",
+              "first_order_covariance_propagation"
+            ],
+            "formula": "sqrt(condition_response_variance)",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.03412772578285913
+          },
+          "condition_response_variance": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response",
+              "first_order_covariance_propagation"
+            ],
+            "formula": "Jh*covariance*Jh_transpose; Jh=h*[km/(St*(km+St)),-km/(Sr*(km+Sr)),1/(km+Sr)-1/(km+St)]",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless_squared",
+            "value": 0.0011647016671100278
+          },
+          "log_condition_response": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "log(condition_response)",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": -0.6291984559596719
+          },
+          "reference_saturation": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_reference/(km+substrate_reference)",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.7079646017699115
+          },
+          "substrate_reference": {
+            "conditional_on": [],
+            "formula": "substrate_reference",
+            "origin": "synthetic",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "uM",
+            "value": 40.0
+          },
+          "substrate_test": {
+            "conditional_on": [],
+            "formula": "substrate_test",
+            "origin": "synthetic",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "uM",
+            "value": 10.0
+          },
+          "test_saturation": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_test/(km+substrate_test)",
+            "origin": "derived",
+            "status": "populated",
+            "unavailable_reason": null,
+            "unit": "dimensionless",
+            "value": 0.37735849056603776
+          }
+        },
+        "inputs": {
+          "covariance": [
+            [
+              1.0,
+              0.1,
+              0.0
+            ],
+            [
+              0.1,
+              4.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.25
+            ]
+          ],
+          "curve_keys": {
+            "km": "transport_curve_ce5042419b2f0732e6910ca2cb12350b508dd46b266a516112d130d93e2e8f4a",
+            "substrate_reference": "transport_curve_ce5042419b2f0732e6910ca2cb12350b508dd46b266a516112d130d93e2e8f4a",
+            "substrate_test": "transport_curve_ce5042419b2f0732e6910ca2cb12350b508dd46b266a516112d130d93e2e8f4a"
+          },
+          "measurement_keys": {
+            "km": "transport_quantity_14915bf37dbf4af46e6acbdeb7ed4887dd766d8399d28dd87c7f3b7c9a76dcc7",
+            "substrate_reference": "literature_measurement_8a05efebbe04e9895b218861",
+            "substrate_test": "literature_measurement_6dbc4f27371a30f56e732509"
+          },
+          "observation_model": "michaelis_menten",
+          "origin": "synthetic",
+          "values": {
+            "km": 16.5,
+            "substrate_reference": 40.0,
+            "substrate_test": 10.0
+          },
+          "variance_status": "known"
+        },
+        "primitive_order": [
+          "substrate_test",
+          "substrate_reference",
+          "km"
+        ],
+        "version": "a105_transport_response_v1"
+      },
+      "version": "literature_transport_response_record_v1"
+    },
+    "projected": [
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "substrate_test",
+        "conditional_on": [],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_substrate_test_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "synthetic",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "uM",
+        "value": 10.0,
+        "variance_status": "known"
+      },
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "substrate_reference",
+        "conditional_on": [],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_substrate_reference_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "synthetic",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "uM",
+        "value": 40.0,
+        "variance_status": "known"
+      },
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "apparent_km",
+        "conditional_on": [],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_apparent_km_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "synthetic",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "uM",
+        "value": 16.5,
+        "variance_status": "known"
+      },
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "test_saturation",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_test_saturation_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.37735849056603776,
+        "variance_status": "known"
+      },
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "reference_saturation",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_reference_saturation_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.7079646017699115,
+        "variance_status": "known"
+      },
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "condition_response",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_condition_response_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.5330188679245284,
+        "variance_status": "known"
+      },
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "log_condition_response",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_log_condition_response_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": -0.6291984559596719,
+        "variance_status": "known"
+      },
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "condition_response_variance",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response",
+          "first_order_covariance_propagation"
+        ],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_condition_response_variance_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "dimensionless_squared",
+        "value": 0.0011647016671100278,
+        "variance_status": "known"
+      },
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "condition_response_standard_uncertainty",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response",
+          "first_order_covariance_propagation"
+        ],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_condition_response_standard_uncertainty_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "dimensionless",
+        "value": 0.03412772578285913,
+        "variance_status": "known"
+      }
+    ],
+    "received_subset": [
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "substrate_test",
+        "conditional_on": [],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_substrate_test_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "synthetic",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "uM",
+        "value": 10.0,
+        "variance_status": "known"
+      },
+      {
+        "analyte_ref": "term_d028a6b29ec02ec82bc5f6a4",
+        "component": "substrate_reference",
+        "conditional_on": [],
+        "covariance_origin": "synthetic",
+        "covariance_source_ref": "source_833bedc9ae45fe3863ca6e7e",
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_substrate_reference_v1",
+        "km_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "km_sheet_ref": "source_abc8e1a7c30f6074cb58f35b",
+        "observation_model": "michaelis_menten",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "synthetic",
+        "reference_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "reported_km_uncertainty_kind": "unspecified",
+        "reported_subject_ref": "reference_aca131770f9c3c37c9903e4f",
+        "sheet_ref": "source_b6e780618d05bcd85c9bfedc",
+        "status": "populated",
+        "test_curve_ref": "reference_fbaf31cbe43266ca4daa54e9",
+        "unavailable_reason": null,
+        "unit": "uM",
+        "value": 40.0,
+        "variance_status": "known"
+      }
+    ],
+    "receiver": {
+      "assignment": {},
+      "episode_id": "synthetic-receiver",
+      "path": [
+        [
+          "literature",
+          "fixture"
+        ]
+      ],
+      "received_record_refs": [
+        "source_166aabccfa25e92cb0fecb1a",
+        "source_833bedc9ae45fe3863ca6e7e",
+        "source_a8c0b7f380f2c92187d8de1a",
+        "source_abc8e1a7c30f6074cb58f35b",
+        "source_b6e780618d05bcd85c9bfedc",
+        "source_d8c29327b5b4fee90d735d5d",
+        "source_e28ae3e751e4a868407dcf7c",
+        "source_e9e43117b0f61f4a40a5db72"
+      ],
+      "request": {},
+      "role": "literature",
+      "run_id": "synthetic-transport-run",
+      "scope": {
+        "subject_refs": [
+          "input_6171cab31afa0ba24f1102b2"
+        ]
+      }
+    },
+    "run_id": "synthetic-transport-run",
+    "schema": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "analyte_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "term"
+          },
+          "component": {
+            "description": "condition_response is test substrate saturation divided by reference substrate saturation under the same fitted kinetic curve. It can divide an appropriate source effect once as a conditional response correction; it is not a reliability grade.",
+            "enum": [
+              "substrate_test",
+              "substrate_reference",
+              "apparent_km",
+              "test_saturation",
+              "reference_saturation",
+              "condition_response",
+              "log_condition_response",
+              "condition_response_variance",
+              "condition_response_standard_uncertainty"
+            ],
+            "type": "string"
+          },
+          "conditional_on": {
+            "items": {
+              "enum": [
+                "same_kinetic_curve",
+                "michaelis_menten_response",
+                "first_order_covariance_propagation"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "covariance_origin": {
+            "enum": [
+              null,
+              "reported",
+              "derived",
+              "synthetic"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "covariance_source_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "source"
+          },
+          "evaluated_scope": {
+            "enum": [
+              "interpreted_source_kinetic_response"
+            ],
+            "type": "string"
+          },
+          "evidence_source_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "formula_code": {
+            "enum": [
+              "transport_substrate_test_v1",
+              "transport_substrate_reference_v1",
+              "transport_apparent_km_v1",
+              "transport_test_saturation_v1",
+              "transport_reference_saturation_v1",
+              "transport_condition_response_v1",
+              "transport_log_condition_response_v1",
+              "transport_condition_response_variance_v1",
+              "transport_condition_response_standard_uncertainty_v1"
+            ],
+            "type": "string"
+          },
+          "km_curve_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "km_sheet_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "source"
+          },
+          "observation_model": {
+            "enum": [
+              "michaelis_menten",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "operand_source_kind": {
+            "enum": [
+              "primary_source",
+              "retained_extraction",
+              "graph_extraction",
+              "synthetic_fixture"
+            ],
+            "type": "string"
+          },
+          "origin": {
+            "enum": [
+              "reported",
+              "derived",
+              "graph_derived",
+              "synthetic"
+            ],
+            "type": "string"
+          },
+          "reference_curve_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "reported_km_uncertainty_kind": {
+            "enum": [
+              "unspecified",
+              "unreported",
+              "not_supplied"
+            ],
+            "type": "string"
+          },
+          "reported_subject_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "sheet_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "status": {
+            "enum": [
+              "populated",
+              "unavailable"
+            ],
+            "type": "string"
+          },
+          "test_curve_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "unavailable_reason": {
+            "enum": [
+              null,
+              "concentration_unreported",
+              "concentration_inputs_unreported",
+              "positive_concentration_required",
+              "kinetic_curve_identity_unreported",
+              "different_kinetic_curves",
+              "observation_model_unspecified",
+              "primitive_covariance_unreported",
+              "primitive_measurement_identity_unreported",
+              "primitive_variance_status_unknown",
+              "numerical_model_range"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "uM",
+              "dimensionless",
+              "dimensionless_squared"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "variance_status": {
+            "enum": [
+              "known",
+              "estimated",
+              "unknown"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sheet_ref",
+          "evidence_source_ref",
+          "km_sheet_ref",
+          "covariance_source_ref",
+          "reported_subject_ref",
+          "analyte_ref",
+          "test_curve_ref",
+          "reference_curve_ref",
+          "km_curve_ref",
+          "component",
+          "value",
+          "unit",
+          "status",
+          "formula_code",
+          "origin",
+          "unavailable_reason",
+          "conditional_on",
+          "variance_status",
+          "observation_model",
+          "operand_source_kind",
+          "covariance_origin",
+          "reported_km_uncertainty_kind",
+          "evaluated_scope"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "x-source": "literature_transport_cells"
+    }
+  },
+  "transport_missing": {
+    "arguments": {
+      "covariance_source_ref": null,
+      "curve_contexts": {
+        "km": null,
+        "substrate_reference": null,
+        "substrate_test": null
+      },
+      "km_sheet_ref": null,
+      "model_witnesses": [],
+      "observation_model": "unknown",
+      "primitives": {
+        "substrate_reference": null,
+        "substrate_test": null
+      },
+      "source_kind": "synthetic_fixture",
+      "source_ref": "source_a8c0b7f380f2c92187d8de1a",
+      "variance_status": "unknown"
+    },
+    "context": {
+      "assignment": {},
+      "episode_id": "transport-child",
+      "path": [
+        [
+          "literature",
+          "fixture"
+        ]
+      ],
+      "received_record_refs": [
+        "source_166aabccfa25e92cb0fecb1a",
+        "source_34e272f404b8501e6f094570",
+        "source_a8c0b7f380f2c92187d8de1a",
+        "source_e28ae3e751e4a868407dcf7c",
+        "source_e9e43117b0f61f4a40a5db72"
+      ],
+      "request": {},
+      "role": "literature",
+      "run_id": "synthetic-transport-run",
+      "scope": {
+        "subject_refs": [
+          "input_6171cab31afa0ba24f1102b2"
+        ]
+      }
+    },
+    "context_provenance": "verification-only context; original selected request/signature/outcome retained in SQLite",
+    "kind": "transport",
+    "outcome": {
+      "changed_record_refs": [
+        "source_34e272f404b8501e6f094570"
+      ],
+      "feedback": null,
+      "operation_ref": "operation_be050c935ba9428275e65525",
+      "record_refs": [
+        "source_34e272f404b8501e6f094570",
+        "source_a8c0b7f380f2c92187d8de1a"
+      ],
+      "result": {
+        "cells": {
+          "apparent_km": {
+            "conditional_on": [],
+            "formula": "km",
+            "origin": "synthetic",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_unreported",
+            "unit": "uM",
+            "value": null
+          },
+          "condition_response": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_test*(km+substrate_reference)/(substrate_reference*(km+substrate_test))",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "condition_response_standard_uncertainty": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response",
+              "first_order_covariance_propagation"
+            ],
+            "formula": "sqrt(condition_response_variance)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "condition_response_variance": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response",
+              "first_order_covariance_propagation"
+            ],
+            "formula": "Jh*covariance*Jh_transpose; Jh=h*[km/(St*(km+St)),-km/(Sr*(km+Sr)),1/(km+Sr)-1/(km+St)]",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless_squared",
+            "value": null
+          },
+          "log_condition_response": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "log(condition_response)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "reference_saturation": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_reference/(km+substrate_reference)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "substrate_reference": {
+            "conditional_on": [],
+            "formula": "substrate_reference",
+            "origin": "synthetic",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_unreported",
+            "unit": "uM",
+            "value": null
+          },
+          "substrate_test": {
+            "conditional_on": [],
+            "formula": "substrate_test",
+            "origin": "synthetic",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_unreported",
+            "unit": "uM",
+            "value": null
+          },
+          "test_saturation": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_test/(km+substrate_test)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          }
+        },
+        "covariance_origin": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "reported_km_uncertainty_kind": "not_supplied",
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "variance_status": "unknown"
+      },
+      "status": "completed"
+    },
+    "payload": {
+      "covariance_source_ref": null,
+      "direct_input_source_refs": [
+        "source_a8c0b7f380f2c92187d8de1a"
+      ],
+      "experimental_bindings": {
+        "analyte_ref": null,
+        "km_curve_ref": null,
+        "reference_curve_ref": null,
+        "reported_subject_ref": null,
+        "test_curve_ref": null
+      },
+      "extraction": {
+        "covariance": null,
+        "covariance_origin": null,
+        "curve_contexts": {
+          "km": null,
+          "substrate_reference": null,
+          "substrate_test": null
+        },
+        "curve_keys": {
+          "km": null,
+          "substrate_reference": null,
+          "substrate_test": null
+        },
+        "km_quantity": null,
+        "measurement_keys": {
+          "km": null,
+          "substrate_reference": null,
+          "substrate_test": null
+        },
+        "model_witnesses": [],
+        "observation_model": "unknown",
+        "primitive_observations": {
+          "km": null,
+          "substrate_reference": null,
+          "substrate_test": null
+        },
+        "primitive_order": [
+          "substrate_test",
+          "substrate_reference",
+          "km"
+        ],
+        "source_kind": "synthetic_fixture",
+        "source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "source_refs": [
+          "source_a8c0b7f380f2c92187d8de1a"
+        ],
+        "values": {
+          "km": null,
+          "substrate_reference": null,
+          "substrate_test": null
+        },
+        "variance_status": "unknown",
+        "version": "a105_transport_inputs_v1"
+      },
+      "input_artifact_ref": "artifact_e7c31a383e379bb9fb868da35fff6eb5665d63551c06afd7bea7396d3d89976c",
+      "input_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+      "input_source_refs": [
+        "source_a8c0b7f380f2c92187d8de1a"
+      ],
+      "km_payload": null,
+      "km_sheet_ref": null,
+      "sheet": {
+        "cells": {
+          "apparent_km": {
+            "conditional_on": [],
+            "formula": "km",
+            "origin": "synthetic",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_unreported",
+            "unit": "uM",
+            "value": null
+          },
+          "condition_response": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_test*(km+substrate_reference)/(substrate_reference*(km+substrate_test))",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "condition_response_standard_uncertainty": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response",
+              "first_order_covariance_propagation"
+            ],
+            "formula": "sqrt(condition_response_variance)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "condition_response_variance": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response",
+              "first_order_covariance_propagation"
+            ],
+            "formula": "Jh*covariance*Jh_transpose; Jh=h*[km/(St*(km+St)),-km/(Sr*(km+Sr)),1/(km+Sr)-1/(km+St)]",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless_squared",
+            "value": null
+          },
+          "log_condition_response": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "log(condition_response)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "reference_saturation": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_reference/(km+substrate_reference)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          },
+          "substrate_reference": {
+            "conditional_on": [],
+            "formula": "substrate_reference",
+            "origin": "synthetic",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_unreported",
+            "unit": "uM",
+            "value": null
+          },
+          "substrate_test": {
+            "conditional_on": [],
+            "formula": "substrate_test",
+            "origin": "synthetic",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_unreported",
+            "unit": "uM",
+            "value": null
+          },
+          "test_saturation": {
+            "conditional_on": [
+              "same_kinetic_curve",
+              "michaelis_menten_response"
+            ],
+            "formula": "substrate_test/(km+substrate_test)",
+            "origin": "derived",
+            "status": "unavailable",
+            "unavailable_reason": "concentration_inputs_unreported",
+            "unit": "dimensionless",
+            "value": null
+          }
+        },
+        "inputs": {
+          "covariance": null,
+          "curve_keys": {
+            "km": null,
+            "substrate_reference": null,
+            "substrate_test": null
+          },
+          "measurement_keys": {
+            "km": null,
+            "substrate_reference": null,
+            "substrate_test": null
+          },
+          "observation_model": "unknown",
+          "origin": "synthetic",
+          "values": {
+            "km": null,
+            "substrate_reference": null,
+            "substrate_test": null
+          },
+          "variance_status": "unknown"
+        },
+        "primitive_order": [
+          "substrate_test",
+          "substrate_reference",
+          "km"
+        ],
+        "version": "a105_transport_response_v1"
+      },
+      "version": "literature_transport_response_record_v1"
+    },
+    "projected": [
+      {
+        "analyte_ref": null,
+        "component": "substrate_test",
+        "conditional_on": [],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_substrate_test_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "synthetic",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_unreported",
+        "unit": "uM",
+        "value": null,
+        "variance_status": "unknown"
+      },
+      {
+        "analyte_ref": null,
+        "component": "substrate_reference",
+        "conditional_on": [],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_substrate_reference_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "synthetic",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_unreported",
+        "unit": "uM",
+        "value": null,
+        "variance_status": "unknown"
+      },
+      {
+        "analyte_ref": null,
+        "component": "apparent_km",
+        "conditional_on": [],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_apparent_km_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "synthetic",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_unreported",
+        "unit": "uM",
+        "value": null,
+        "variance_status": "unknown"
+      },
+      {
+        "analyte_ref": null,
+        "component": "test_saturation",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_test_saturation_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_inputs_unreported",
+        "unit": "dimensionless",
+        "value": null,
+        "variance_status": "unknown"
+      },
+      {
+        "analyte_ref": null,
+        "component": "reference_saturation",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_reference_saturation_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_inputs_unreported",
+        "unit": "dimensionless",
+        "value": null,
+        "variance_status": "unknown"
+      },
+      {
+        "analyte_ref": null,
+        "component": "condition_response",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_condition_response_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_inputs_unreported",
+        "unit": "dimensionless",
+        "value": null,
+        "variance_status": "unknown"
+      },
+      {
+        "analyte_ref": null,
+        "component": "log_condition_response",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response"
+        ],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_log_condition_response_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_inputs_unreported",
+        "unit": "dimensionless",
+        "value": null,
+        "variance_status": "unknown"
+      },
+      {
+        "analyte_ref": null,
+        "component": "condition_response_variance",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response",
+          "first_order_covariance_propagation"
+        ],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_condition_response_variance_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_inputs_unreported",
+        "unit": "dimensionless_squared",
+        "value": null,
+        "variance_status": "unknown"
+      },
+      {
+        "analyte_ref": null,
+        "component": "condition_response_standard_uncertainty",
+        "conditional_on": [
+          "same_kinetic_curve",
+          "michaelis_menten_response",
+          "first_order_covariance_propagation"
+        ],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_condition_response_standard_uncertainty_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "derived",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_inputs_unreported",
+        "unit": "dimensionless",
+        "value": null,
+        "variance_status": "unknown"
+      }
+    ],
+    "received_subset": [
+      {
+        "analyte_ref": null,
+        "component": "substrate_test",
+        "conditional_on": [],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_substrate_test_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "synthetic",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_unreported",
+        "unit": "uM",
+        "value": null,
+        "variance_status": "unknown"
+      },
+      {
+        "analyte_ref": null,
+        "component": "substrate_reference",
+        "conditional_on": [],
+        "covariance_origin": null,
+        "covariance_source_ref": null,
+        "evaluated_scope": "interpreted_source_kinetic_response",
+        "evidence_source_ref": "source_a8c0b7f380f2c92187d8de1a",
+        "formula_code": "transport_substrate_reference_v1",
+        "km_curve_ref": null,
+        "km_sheet_ref": null,
+        "observation_model": "unknown",
+        "operand_source_kind": "synthetic_fixture",
+        "origin": "synthetic",
+        "reference_curve_ref": null,
+        "reported_km_uncertainty_kind": "not_supplied",
+        "reported_subject_ref": null,
+        "sheet_ref": "source_34e272f404b8501e6f094570",
+        "status": "unavailable",
+        "test_curve_ref": null,
+        "unavailable_reason": "concentration_unreported",
+        "unit": "uM",
+        "value": null,
+        "variance_status": "unknown"
+      }
+    ],
+    "receiver": {
+      "assignment": {},
+      "episode_id": "synthetic-receiver",
+      "path": [
+        [
+          "literature",
+          "fixture"
+        ]
+      ],
+      "received_record_refs": [
+        "source_166aabccfa25e92cb0fecb1a",
+        "source_34e272f404b8501e6f094570",
+        "source_a8c0b7f380f2c92187d8de1a",
+        "source_e28ae3e751e4a868407dcf7c",
+        "source_e9e43117b0f61f4a40a5db72"
+      ],
+      "request": {},
+      "role": "literature",
+      "run_id": "synthetic-transport-run",
+      "scope": {
+        "subject_refs": [
+          "input_6171cab31afa0ba24f1102b2"
+        ]
+      }
+    },
+    "run_id": "synthetic-transport-run",
+    "schema": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "analyte_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "term"
+          },
+          "component": {
+            "description": "condition_response is test substrate saturation divided by reference substrate saturation under the same fitted kinetic curve. It can divide an appropriate source effect once as a conditional response correction; it is not a reliability grade.",
+            "enum": [
+              "substrate_test",
+              "substrate_reference",
+              "apparent_km",
+              "test_saturation",
+              "reference_saturation",
+              "condition_response",
+              "log_condition_response",
+              "condition_response_variance",
+              "condition_response_standard_uncertainty"
+            ],
+            "type": "string"
+          },
+          "conditional_on": {
+            "items": {
+              "enum": [
+                "same_kinetic_curve",
+                "michaelis_menten_response",
+                "first_order_covariance_propagation"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "covariance_origin": {
+            "enum": [
+              null,
+              "reported",
+              "derived",
+              "synthetic"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "covariance_source_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "source"
+          },
+          "evaluated_scope": {
+            "enum": [
+              "interpreted_source_kinetic_response"
+            ],
+            "type": "string"
+          },
+          "evidence_source_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "formula_code": {
+            "enum": [
+              "transport_substrate_test_v1",
+              "transport_substrate_reference_v1",
+              "transport_apparent_km_v1",
+              "transport_test_saturation_v1",
+              "transport_reference_saturation_v1",
+              "transport_condition_response_v1",
+              "transport_log_condition_response_v1",
+              "transport_condition_response_variance_v1",
+              "transport_condition_response_standard_uncertainty_v1"
+            ],
+            "type": "string"
+          },
+          "km_curve_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "km_sheet_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "source"
+          },
+          "observation_model": {
+            "enum": [
+              "michaelis_menten",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "operand_source_kind": {
+            "enum": [
+              "primary_source",
+              "retained_extraction",
+              "graph_extraction",
+              "synthetic_fixture"
+            ],
+            "type": "string"
+          },
+          "origin": {
+            "enum": [
+              "reported",
+              "derived",
+              "graph_derived",
+              "synthetic"
+            ],
+            "type": "string"
+          },
+          "reference_curve_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "reported_km_uncertainty_kind": {
+            "enum": [
+              "unspecified",
+              "unreported",
+              "not_supplied"
+            ],
+            "type": "string"
+          },
+          "reported_subject_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "sheet_ref": {
+            "format": "reference",
+            "type": "string",
+            "x-reference-namespace": "source"
+          },
+          "status": {
+            "enum": [
+              "populated",
+              "unavailable"
+            ],
+            "type": "string"
+          },
+          "test_curve_ref": {
+            "format": "reference",
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-reference-namespace": "reference"
+          },
+          "unavailable_reason": {
+            "enum": [
+              null,
+              "concentration_unreported",
+              "concentration_inputs_unreported",
+              "positive_concentration_required",
+              "kinetic_curve_identity_unreported",
+              "different_kinetic_curves",
+              "observation_model_unspecified",
+              "primitive_covariance_unreported",
+              "primitive_measurement_identity_unreported",
+              "primitive_variance_status_unknown",
+              "numerical_model_range"
+            ],
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "uM",
+              "dimensionless",
+              "dimensionless_squared"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "variance_status": {
+            "enum": [
+              "known",
+              "estimated",
+              "unknown"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "sheet_ref",
+          "evidence_source_ref",
+          "km_sheet_ref",
+          "covariance_source_ref",
+          "reported_subject_ref",
+          "analyte_ref",
+          "test_curve_ref",
+          "reference_curve_ref",
+          "km_curve_ref",
+          "component",
+          "value",
+          "unit",
+          "status",
+          "formula_code",
+          "origin",
+          "unavailable_reason",
+          "conditional_on",
+          "variance_status",
+          "observation_model",
+          "operand_source_kind",
+          "covariance_origin",
+          "reported_km_uncertainty_kind",
+          "evaluated_scope"
+        ],
+        "type": "object"
+      },
+      "type": "array",
+      "x-source": "literature_transport_cells"
+    }
+  }
+}

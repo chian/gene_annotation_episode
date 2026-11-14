@@ -5,14 +5,13 @@ import json
 import math
 from pathlib import Path
 
-from gene_annotation_episode.literature_rate_bound_calculations import populate_rate_table_bounds
-from gene_annotation_episode.literature_rate_reader import read_rate_table
-from gene_annotation_episode.literature_optical_validation import validate_optical_selection
+from gene_annotation_episode.episodic_workflow.root.a105.literature_rate_bound_calculations import populate_rate_table_bounds
+from gene_annotation_episode.episodic_workflow.root.a105.literature_rate_reader import read_rate_table
+from gene_annotation_episode.episodic_workflow.root.a105.literature_optical_validation import validate_optical_selection
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CASE = ROOT/'verification/literature_reference_evidence_2026-10-25_001/coupled_redox_case_093'
-DATA = CASE/'generation_002'
+DATA = ROOT/'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/coupled_redox_case'
 
 
 def load(name):
@@ -66,8 +65,8 @@ def test_detached_primary_rate_bounds_reconstruct_without_file_or_source_acquisi
 
 
 def test_actual_optical_partial_validates_detached_without_reading_or_recalculating(monkeypatch):
-    import gene_annotation_episode.literature_optical_inputs as inputs
-    import gene_annotation_episode.literature_optical_calculations as calculations
+    import gene_annotation_episode.episodic_workflow.root.a105.literature_optical_inputs as inputs
+    import gene_annotation_episode.episodic_workflow.root.a105.literature_optical_calculations as calculations
     result = load('OPTICAL_PARTIAL.json')
     def forbidden(*args,**kwargs):raise AssertionError('unexpected source read or recalculation')
     monkeypatch.setattr(builtins,'open',forbidden)

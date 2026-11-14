@@ -1,0 +1,84 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmstat",
+    "model.cm"
+  ],
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "cwd": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmstat_noss_summary",
+  "binary_sha256": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+  "inputs": [
+    {
+      "source": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_noss/built.cm",
+      "path": "model.cm",
+      "sha256": "f88d70d9b14a646e0e77d932e121d3ed75b0d1eab1ec35f00fe748b4708af416",
+      "size_bytes": 9674
+    }
+  ],
+  "started_at": "2026-10-26T04:40:16.623755+00:00",
+  "returncode": 0,
+  "metadata": {
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "enforcement": {
+      "memory": "systemd_cgroup_v2_memory_max",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "filesystem_sandbox": false
+    },
+    "verified_cgroup": {
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "runtime_max": "infinity",
+      "kill_mode": "control-group",
+      "oom_policy": "kill"
+    },
+    "duration_measure": "systemd_service_wall_seconds",
+    "service_exit": {
+      "SERVICE_RESULT": "success",
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "ended": {
+        "at": "2026-10-26T04:40:17.282816+00:00",
+        "monotonic_ns": 803178980141696,
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26"
+      }
+    },
+    "elapsed_seconds": 0.456349506,
+    "native_returncode": 0,
+    "observed_scratch_bytes": 36864
+  },
+  "finished_at": "2026-10-26T04:40:17.408470+00:00",
+  "files": [
+    {
+      "path": "model.cm",
+      "size_bytes": 9674,
+      "sha256": "f88d70d9b14a646e0e77d932e121d3ed75b0d1eab1ec35f00fe748b4708af416"
+    },
+    {
+      "path": "request.json",
+      "size_bytes": 869,
+      "sha256": "97c4851831f30a16ad0cfb931adc084696a50b65a0e6e32e6af7889a26f90a21"
+    },
+    {
+      "path": "stderr.txt",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "stdout.txt",
+      "size_bytes": 796,
+      "sha256": "682b63ee9a686e8fd0113d15b7a4a40b825648997b50d3e98f4503c95d6e9b27"
+    }
+  ]
+}

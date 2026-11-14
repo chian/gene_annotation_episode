@@ -61,7 +61,8 @@ def _resource_id():
 
 def _limits(settings):
     defaults = tomllib.loads(Path(__file__).with_name('defaults.toml').read_text())['local_resources']
-    if not isinstance(settings, dict) or set(settings)-set(defaults):
+    fields = {'memory_bytes', 'scratch_bytes'}
+    if set(defaults) != fields or not isinstance(settings, dict) or set(settings)-fields:
         raise ValueError('invalid_local_resource_settings')
     result = {**defaults, **settings}
     if any(type(value) is not int or value <= 0 for value in result.values()):
@@ -69,8 +70,29 @@ def _limits(settings):
     return result
 
 
+def _saved_limits(limits):
+    """Validate saved CPU/job metadata without turning it into capacity."""
+    if (not isinstance(limits, dict)
+            or set(limits)-{'max_running_jobs', 'cpu_threads', 'memory_bytes', 'scratch_bytes'}):
+        raise ValueError('invalid_local_resource_settings')
+    for key in ('max_running_jobs', 'cpu_threads'):
+        if key in limits and (type(limits[key]) is not int or limits[key] <= 0):
+            raise ValueError('invalid_local_resource_limits')
+    return _limits({key: value for key, value in limits.items()
+                    if key not in {'max_running_jobs', 'cpu_threads'}})
+
+
+def _effective_limits(limits):
+    limits = _saved_limits(limits)
+    from .workflow_budget import ENV, active_budget
+    if os.environ.get(ENV):
+        limits['memory_bytes'] = min(limits['memory_bytes'],
+            active_budget()['environment_bounds']['memory_bytes'])
+    return limits
+
+
 class LocalResources:
-    def __init__(self, directory, settings=None, *, workflow_slice=None):
+    def __init__(self, directory, settings=None, *, workflow_slice=None, _restoring_definition=None):
         if settings is not None and not isinstance(settings, dict):
             raise ValueError('invalid_local_resource_settings')
         self.directory = Path(directory).expanduser().resolve()
@@ -89,6 +111,15 @@ class LocalResources:
                     'directory': str(self.directory), 'limits': _limits(settings or {})}
                 if workflow_slice is not None:
                     definition['workflow_slice'] = workflow_slice
+                # Exact known default formats are retained; all other reopen attempts
+                # initialize original four-field defaults before the original rejection.
+                current = {**definition, 'limits': {**definition['limits'], 'cpu_threads': 1}}
+                historical = {**current, 'limits': {**current['limits'], 'max_running_jobs': 1}}
+                if _restoring_definition is not None:
+                    if _restoring_definition == current:
+                        definition = current
+                    elif _restoring_definition != definition:
+                        definition = historical
                 db.execute('INSERT INTO configuration VALUES(1,?)', (json.dumps(definition, sort_keys=True),))
             else:
                 definition = json.loads(saved[0])
@@ -96,10 +127,22 @@ class LocalResources:
                         or definition.get('directory') != str(self.directory)
                         or definition.get('workflow_slice') != workflow_slice):
                     raise ValueError('local_resource_binding_conflict')
-                _limits(definition['limits'])
+                _saved_limits(definition['limits'])
                 if settings is not None:
-                    requested = {**definition['limits'], **settings}
-                    if _limits(requested) != definition['limits']:
+                    active = _saved_limits(definition['limits'])
+                    supplied = dict(settings)
+                    for key in ('max_running_jobs', 'cpu_threads'):
+                        if key not in supplied:
+                            continue
+                        if key not in definition['limits']:
+                            raise ValueError('invalid_local_resource_settings')
+                        count = supplied.pop(key)
+                        if type(count) is not int or count <= 0:
+                            raise ValueError('invalid_local_resource_limits')
+                        if count != definition['limits'][key]:
+                            raise ValueError('local_resource_limits_conflict')
+                    requested = {**active, **supplied}
+                    if _limits(requested) != active:
                         raise ValueError('local_resource_limits_conflict')
             self.definition = definition
 
@@ -116,7 +159,8 @@ class LocalResources:
 
     @classmethod
     def reopen(cls, definition):
-        value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'))
+        value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'),
+                    _restoring_definition=definition)
         if value.as_record() != definition:
             raise ValueError('local_resource_binding_conflict')
         return value
@@ -184,8 +228,7 @@ class LocalResources:
         if inventory is None or inventory.returncode != 0:
             jobs.append({'reservation_ref': None, 'execution_handle': None,
                 'state': 'capacity_unavailable',
-                'allocation': {key: self.definition['limits'][key]
-                    for key in ('cpu_threads', 'memory_bytes', 'scratch_bytes')}})
+                'allocation': _effective_limits(self.definition['limits'])})
         else:
             for line in inventory.stdout.splitlines():
                 fields = line.split()
@@ -196,19 +239,17 @@ class LocalResources:
                             continue
                     jobs.append({'reservation_ref': None, 'execution_handle': fields[0],
                         'state': 'untracked_running',
-                        'allocation': {key: self.definition['limits'][key]
-                            for key in ('cpu_threads', 'memory_bytes', 'scratch_bytes')}})
+                        'allocation': _effective_limits(self.definition['limits'])})
         return jobs
 
     def _view(self, jobs):
-        limits = self.definition['limits']
+        limits = _effective_limits(self.definition['limits'])
         used = {key: sum(job['allocation'][key] for job in jobs)
-            for key in ('cpu_threads', 'memory_bytes', 'scratch_bytes')}
+            for key in ('memory_bytes', 'scratch_bytes')}
         remaining = {key: max(0, limits[key]-used[key]) for key in used}
-        remaining['job_slots'] = max(0, limits['max_running_jobs']-len(jobs))
         return {'version': VERSION, 'resource_id': self.definition['resource_id'],
             'observed_at': datetime.now(timezone.utc).isoformat(), 'limits': dict(limits),
-            'reserved': {**used, 'job_slots': len(jobs)}, 'available': remaining,
+            'reserved': used, 'available': remaining,
             'state': ('unknown' if any(job['state']=='capacity_unavailable' for job in jobs)
                 else 'busy' if not all(remaining.values()) else 'available'), 'jobs': jobs,
             'admission': 'atomic_shared_host_reservation_before_native_dispatch',
@@ -231,13 +272,13 @@ class LocalResources:
                 raise AcquisitionError('local_job_boundary_unavailable', phase='local_admission',
                     operational={'reason': 'local_capacity_unavailable', 'retryable': True,
                         'local_resources': view})
-            for key, value in requested.items():
+            for key in ('memory_bytes', 'scratch_bytes'):
+                value = requested[key]
                 if value > view['limits'][key]:
                     raise AcquisitionError('local_job_resource_limit', phase='local_admission',
                         operational={'resource': key, 'limit': view['limits'][key], 'requested': value,
                             'retryable': False, 'local_resources': view})
-            if (view['available']['job_slots'] == 0 or any(value > view['available'][key]
-                    for key, value in requested.items())):
+            if any(requested[key] > view['available'][key] for key in ('memory_bytes', 'scratch_bytes')):
                 raise AcquisitionError('local_resource_busy', phase='local_admission', operational={
                     'retryable': True, 'retry_same_prepared_job': True, 'local_resources': view})
             token = 'local_reservation_' + uuid.uuid4().hex

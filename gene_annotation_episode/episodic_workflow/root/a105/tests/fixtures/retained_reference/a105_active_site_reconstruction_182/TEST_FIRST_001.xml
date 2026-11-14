@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="20" time="12.249" timestamp="2026-10-27T18:41:38.463249-05:00" hostname="chia-Z590-UD"><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_authentic_v1_original_payload_rows_and_admitted_subset_without_science[bounded]" time="0.572"><failure message="sqlite3.OperationalError: attempt to write a readonly database">name = 'bounded'
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7790988effb0&gt;
+
+    @pytest.mark.parametrize("name", sorted(LEGACY))
+    def test_authentic_v1_original_payload_rows_and_admitted_subset_without_science(name, monkeypatch):
+        item = LEGACY[name]
+        path = HERE / "legacy" / name
+        before = hashes(path)
+        disable_science(monkeypatch)
+        with readonly(path) as store:
+            saved_artifacts_only(monkeypatch, store)
+            # All scientific operations are disabled before either construction.
+            repo = LiteratureActiveSiteRepository(store, item["run_id"])
+            host, services = services_for(store, item["run_id"])
+            binding = LiteratureEpisodes(services, **item["binding_descriptor"]["configuration"])
+            host.episode_bindings = EpisodeBindingRegistry((binding,))
+            assert binding.as_record()["implementation_sha256"] != item["binding_descriptor"]["implementation_sha256"]
+            assert binding.as_record()["configuration"] == item["binding_descriptor"]["configuration"]
+            ref = item["outcome"]["result"]["sheet_ref"]
+            context, receiver = BindingContext(**item["context"]), BindingContext(**item["receiver"])
+            assert repo.read(ref) == item["payload"]
+            assert repo.populate(context, item["arguments"], "original-v1-selected") == item["outcome"]
+            assert repo.project_cells([ref], permitted_record_refs=[ref]) == item["all_rows"]
+            assert repo.received_cells(receiver) == item["admitted_rows"]
+            assert repo.fact_cells(receiver, [ref], components=repo.components) == item["admitted_rows"]
+&gt;           assert binding.received_report_facts(receiver)["literature_active_site_cells"] == item["admitted_rows"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_active_site_saved_reconstruction_182.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:1514: in received_report_facts
+    for namespace, _, _, _, repository in self._population_routes():
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1348: in _population_routes
+    COMPONENTS, self.services.literature_rate_repository().source_projection),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/episode_services.py:102: in literature_rate_repository
+    self._literature_rate_repository = LiteratureRateRepository(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_rate_storage.LiteratureRateRepository object at 0x779098bf6180&gt;
+store = &lt;gene_annotation_episode.state.Store object at 0x779076d66840&gt;
+run_id = 'active-run'
+
+    def __init__(self, store, run_id):
+        if not isinstance(run_id, str) or not run_id:
+            raise ValueError("explicit_literature_run_required")
+        self.store, self.run_id = store, run_id
+&gt;       store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.operations_table}(
+            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
+            signature TEXT NOT NULL, outcome TEXT NOT NULL,
+            PRIMARY KEY(run_id,episode_id,operation_key))""")
+E       sqlite3.OperationalError: attempt to write a readonly database
+
+gene_annotation_episode/literature_rate_storage.py:48: OperationalError</failure></testcase><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_authentic_v1_original_payload_rows_and_admitted_subset_without_science[missing]" time="0.278"><failure message="sqlite3.OperationalError: attempt to write a readonly database">name = 'missing'
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x779076d65d90&gt;
+
+    @pytest.mark.parametrize("name", sorted(LEGACY))
+    def test_authentic_v1_original_payload_rows_and_admitted_subset_without_science(name, monkeypatch):
+        item = LEGACY[name]
+        path = HERE / "legacy" / name
+        before = hashes(path)
+        disable_science(monkeypatch)
+        with readonly(path) as store:
+            saved_artifacts_only(monkeypatch, store)
+            # All scientific operations are disabled before either construction.
+            repo = LiteratureActiveSiteRepository(store, item["run_id"])
+            host, services = services_for(store, item["run_id"])
+            binding = LiteratureEpisodes(services, **item["binding_descriptor"]["configuration"])
+            host.episode_bindings = EpisodeBindingRegistry((binding,))
+            assert binding.as_record()["implementation_sha256"] != item["binding_descriptor"]["implementation_sha256"]
+            assert binding.as_record()["configuration"] == item["binding_descriptor"]["configuration"]
+            ref = item["outcome"]["result"]["sheet_ref"]
+            context, receiver = BindingContext(**item["context"]), BindingContext(**item["receiver"])
+            assert repo.read(ref) == item["payload"]
+            assert repo.populate(context, item["arguments"], "original-v1-selected") == item["outcome"]
+            assert repo.project_cells([ref], permitted_record_refs=[ref]) == item["all_rows"]
+            assert repo.received_cells(receiver) == item["admitted_rows"]
+            assert repo.fact_cells(receiver, [ref], components=repo.components) == item["admitted_rows"]
+&gt;           assert binding.received_report_facts(receiver)["literature_active_site_cells"] == item["admitted_rows"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_active_site_saved_reconstruction_182.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:1514: in received_report_facts
+    for namespace, _, _, _, repository in self._population_routes():
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1348: in _population_routes
+    COMPONENTS, self.services.literature_rate_repository().source_projection),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/episode_services.py:102: in literature_rate_repository
+    self._literature_rate_repository = LiteratureRateRepository(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_rate_storage.LiteratureRateRepository object at 0x77905390ddc0&gt;
+store = &lt;gene_annotation_episode.state.Store object at 0x779053cda780&gt;
+run_id = 'active-run'
+
+    def __init__(self, store, run_id):
+        if not isinstance(run_id, str) or not run_id:
+            raise ValueError("explicit_literature_run_required")
+        self.store, self.run_id = store, run_id
+&gt;       store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.operations_table}(
+            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
+            signature TEXT NOT NULL, outcome TEXT NOT NULL,
+            PRIMARY KEY(run_id,episode_id,operation_key))""")
+E       sqlite3.OperationalError: attempt to write a readonly database
+
+gene_annotation_episode/literature_rate_storage.py:48: OperationalError</failure></testcase><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_authentic_v1_original_payload_rows_and_admitted_subset_without_science[point]" time="0.315"><failure message="sqlite3.OperationalError: attempt to write a readonly database">name = 'point'
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7790764c60f0&gt;
+
+    @pytest.mark.parametrize("name", sorted(LEGACY))
+    def test_authentic_v1_original_payload_rows_and_admitted_subset_without_science(name, monkeypatch):
+        item = LEGACY[name]
+        path = HERE / "legacy" / name
+        before = hashes(path)
+        disable_science(monkeypatch)
+        with readonly(path) as store:
+            saved_artifacts_only(monkeypatch, store)
+            # All scientific operations are disabled before either construction.
+            repo = LiteratureActiveSiteRepository(store, item["run_id"])
+            host, services = services_for(store, item["run_id"])
+            binding = LiteratureEpisodes(services, **item["binding_descriptor"]["configuration"])
+            host.episode_bindings = EpisodeBindingRegistry((binding,))
+            assert binding.as_record()["implementation_sha256"] != item["binding_descriptor"]["implementation_sha256"]
+            assert binding.as_record()["configuration"] == item["binding_descriptor"]["configuration"]
+            ref = item["outcome"]["result"]["sheet_ref"]
+            context, receiver = BindingContext(**item["context"]), BindingContext(**item["receiver"])
+            assert repo.read(ref) == item["payload"]
+            assert repo.populate(context, item["arguments"], "original-v1-selected") == item["outcome"]
+            assert repo.project_cells([ref], permitted_record_refs=[ref]) == item["all_rows"]
+            assert repo.received_cells(receiver) == item["admitted_rows"]
+            assert repo.fact_cells(receiver, [ref], components=repo.components) == item["admitted_rows"]
+&gt;           assert binding.received_report_facts(receiver)["literature_active_site_cells"] == item["admitted_rows"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_active_site_saved_reconstruction_182.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+gene_annotation_episode/literature_episodes.py:1514: in received_report_facts
+    for namespace, _, _, _, repository in self._population_routes():
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/literature_episodes.py:1348: in _population_routes
+    COMPONENTS, self.services.literature_rate_repository().source_projection),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gene_annotation_episode/episode_services.py:102: in literature_rate_repository
+    self._literature_rate_repository = LiteratureRateRepository(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.literature_rate_storage.LiteratureRateRepository object at 0x779054e1e000&gt;
+store = &lt;gene_annotation_episode.state.Store object at 0x77907623ffb0&gt;
+run_id = 'active-run'
+
+    def __init__(self, store, run_id):
+        if not isinstance(run_id, str) or not run_id:
+            raise ValueError("explicit_literature_run_required")
+        self.store, self.run_id = store, run_id
+&gt;       store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self.operations_table}(
+            run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
+            signature TEXT NOT NULL, outcome TEXT NOT NULL,
+            PRIMARY KEY(run_id,episode_id,operation_key))""")
+E       sqlite3.OperationalError: attempt to write a readonly database
+
+gene_annotation_episode/literature_rate_storage.py:48: OperationalError</failure></testcase><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_original_implementation_demonstrates_the_recalculation_gap" time="0.005" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_old_frozen_descriptor_still_rejects_changed_implementation" time="0.014" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_selected_output_authentication_rejects_corruption[signature]" time="0.116" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_selected_output_authentication_rejects_corruption[outcome_value]" time="0.201" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_selected_output_authentication_rejects_corruption[outcome_meaning]" time="0.251" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_selected_output_authentication_rejects_corruption[outcome_omission]" time="0.176" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_selected_output_authentication_rejects_corruption[outcome_status]" time="0.167" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_selected_output_authentication_rejects_corruption[operation_ref]" time="0.116" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_selected_output_authentication_rejects_corruption[provider]" time="0.109" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_selected_output_authentication_rejects_corruption[origin]" time="0.185" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_selected_output_authentication_rejects_corruption[source_identity]" time="0.166" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_selected_output_authentication_rejects_corruption[unselected_copy]" time="0.117" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_corrupt_saved_artifact_bytes_are_rejected[artifact_ref]" time="0.005" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_corrupt_saved_artifact_bytes_are_rejected[request_ref]" time="0.003" /><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_foreign_run_and_changed_selected_scope_are_rejected" time="0.004"><failure message="KeyError: 'segments'">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1960/test_foreign_run_and_changed_s0')
+
+    def test_foreign_run_and_changed_selected_scope_are_rejected(tmp_path):
+        shutil.copytree(HERE / "legacy/point", tmp_path / "state")
+        item = LEGACY["point"]
+        with Store(tmp_path / "state") as store:
+            ref = item["outcome"]["result"]["sheet_ref"]
+            with pytest.raises(ContractError, match="run_mismatch"):
+                LiteratureActiveSiteRepository(store, "foreign-run").read(ref)
+            context = BindingContext(**item["context"])
+            changed_scope = deepcopy(item["context"]["scope"])
+&gt;           changed_scope["segments"][0]["end"] -= 1
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'segments'
+
+tests/test_literature_active_site_saved_reconstruction_182.py:219: KeyError</failure></testcase><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_genuine_empty_cold_binding_does_not_install_tables" time="1.157"><failure message="sqlite3.OperationalError: attempt to write a readonly database">tmp_path = PosixPath('/tmp/pytest-of-chia/pytest-1960/test_genuine_empty_cold_bindin0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7790536be270&gt;
+
+    def test_genuine_empty_cold_binding_does_not_install_tables(tmp_path, monkeypatch):
+        store, context, _ = setup(tmp_path)
+        store.db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        store.close()
+        before = hashes(tmp_path)
+        disable_science(monkeypatch)
+        with readonly(tmp_path) as store:
+&gt;           host, services = services_for(store, context.run_id)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_literature_active_site_saved_reconstruction_182.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_literature_active_site_saved_reconstruction_182.py:87: in services_for
+    host = SimpleNamespace(store=store, run_id=run_id, tools=ToolRegistry(store))
+                                                             ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;gene_annotation_episode.tools.ToolRegistry object at 0x7790536bf410&gt;
+store = &lt;gene_annotation_episode.state.Store object at 0x779098cbdb20&gt;
+clients = None, provider_poll_interval_seconds = 5, cmsearch_executable = None
+cmsearch_cpu = None, minimap2_executable = None, minimap2_cpu = None
+minimap2_cache_dir = None, pdfinfo_executable = None
+pdftotext_executable = None, pdftoppm_executable = None
+knowledge_library_directory = None, job_limits = None, native_statistics = None
+
+    def __init__(self, store: Any, *, clients: PublicClients | None = None,
+                 provider_poll_interval_seconds: float = 5,
+                 cmsearch_executable: str | Path | None = None, cmsearch_cpu: int | None = None,
+                 minimap2_executable: str | Path | None = None, minimap2_cpu: int | None = None,
+                 minimap2_cache_dir: str | Path | None = None,
+                 pdfinfo_executable: str | Path | None = None,
+                 pdftotext_executable: str | Path | None = None,
+                 pdftoppm_executable: str | Path | None = None,
+                 knowledge_library_directory: str | Path | None = None,
+                 job_limits: dict | None = None, native_statistics=None):
+        self.store = store
+        self.knowledge_library_directory = (None if knowledge_library_directory is None else
+                                            Path(knowledge_library_directory).expanduser().resolve())
+        self.local_job_policy = LocalJobPolicy.from_config(job_limits)
+        if native_statistics is not None:
+            from .ordinary_execution import OrdinaryExecutionStatistics
+            if type(native_statistics) is not OrdinaryExecutionStatistics:
+                raise TypeError('typed_ordinary_execution_statistics_required')
+        self.native_statistics = native_statistics
+        self.clients = clients or PublicClients()
+&gt;       store.db.execute("""CREATE TABLE IF NOT EXISTS tool_operations (
+            operation_key TEXT PRIMARY KEY, id TEXT NOT NULL, name TEXT NOT NULL,
+            arguments TEXT NOT NULL, scope TEXT NOT NULL, result TEXT NOT NULL)""")
+E       sqlite3.OperationalError: attempt to write a readonly database
+
+gene_annotation_episode/tools.py:96: OperationalError</failure></testcase><testcase classname="tests.test_literature_active_site_saved_reconstruction_182" name="test_current_selected_shared_loop_then_cold_readonly_factory_without_calculators" time="7.506" /></testsuite></testsuites>

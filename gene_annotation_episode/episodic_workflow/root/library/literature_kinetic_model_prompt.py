@@ -1,0 +1,11 @@
+"""Scientific instructions for the existing supplemental kinetic model route."""
+
+KINETIC_MODEL_TASK = """For a kinetic parameter comparison, establish which fitted estimates the supplied covariance actually describes. Keep the numerator and denominator's actual molecule, construct, separately assayed substrate, preparation, parameter definition, protocol and physical estimate identities. A comparison under reported protocols is not automatically a preference under common conditions. Higher Km is not automatically stronger activity or affinity.
+
+When an explicit retained kinetic log model is available, examine its source-supported scale, ordered physical estimate owners, full covariance and observation-model meaning. Distinguish known, estimated and unresolved covariance; reported SD, SEM, sample counts or different source labels do not establish covariance or independent fits. Preserve dependence when estimates or preparations are shared across comparisons. An exact source quotation verifies custody, not applicability of the statistical model.
+
+Select the supplemental kinetic model operation only for the committed native kinetic sheet actually received and the scoped model source and exact interpretation witnesses you have received. The native kinetic operation preserves its five descriptive cells; the separate supplemental operation populates the existing precision and conditional parameter-contrast components. Estimated covariance can supply variance and standard uncertainty while the existing known-normal profile/index remain unavailable. Missing models, censoring, approximation and unresolved experimental relationships retain useful partial information and specific limitations. Do not repair them by assuming independence or treating limits as point estimates.
+
+These numerical components describe precision and evidence for the declared parameter contrast. They do not establish overall assay validity, isolated functional specificity, a probability of function or annotation credit. Native contrasts and their log-model representations remain one dependent contribution. Request and return only the numerical components and scientific meanings the parent needs; preserve unrequested operands for explicit scoped source access."""
+
+__all__ = ["KINETIC_MODEL_TASK"]

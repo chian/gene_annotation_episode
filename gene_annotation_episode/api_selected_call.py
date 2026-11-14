@@ -12,9 +12,9 @@ from datetime import datetime, timezone
 
 from .acquisition import SourceSnapshot
 from .bvbrc_appservice_contracts import validate_contract
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .execution_contracts import canonical, digest
-from .practical_execution_state import _immutable, _read
+from .immutable_json_records import _immutable, _read
 
 
 VERSION = 'selected_api_call_v1'

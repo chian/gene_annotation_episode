@@ -10,7 +10,7 @@ from collections import Counter, defaultdict
 from copy import deepcopy
 import math
 
-from . import phylogeny_calculation_contracts as c
+from gene_annotation_episode import phylogeny_calculation_contracts as c
 from .phylogeny_format_contracts import validate_alignment_document, validate_tree_record
 
 

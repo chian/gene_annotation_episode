@@ -17,7 +17,7 @@ from gene_annotation_episode.uniprot_return_contracts import validate_uniprot_se
 from gene_annotation_episode.uniprot_return_projection import project_uniprot_page
 
 
-FIXTURES = Path(__file__).parent / "fixtures" / "uniprot_native"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/uniprot_native"
 MISSING = object()
 
 

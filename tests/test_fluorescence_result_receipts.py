@@ -13,18 +13,18 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.fluorescence_event_contracts import canonical as numerical_canonical
-from gene_annotation_episode.fluorescence_execution_common import canonical, digest, identity
-from gene_annotation_episode.fluorescence_result_contracts import OUTPUTS
-from gene_annotation_episode.fluorescence_result_receipts import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import canonical as numerical_canonical
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical, digest, identity
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_contracts import OUTPUTS
+from gene_annotation_episode.episodic_workflow.root.library.original_fluorescence_result_receipts import (
     FluorescenceResultReceipts, empty_facts, empty_files, failure, immutable,
     qualified_files, read_control,
 )
-from gene_annotation_episode.fluorescence_return_views import (
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_return_views import (
     FACT_SOURCES, PROJECTION_SOURCE, CONTEXT_SOURCE, SAVED_SOURCE, FAILURE_SOURCE,
     fluorescence_fact_sources,
 )
-from gene_annotation_episode.native_fluorescence_results import NativeFluorescenceResults
+from gene_annotation_episode.episodic_workflow.root.library.original_native_fluorescence_results import NativeFluorescenceResults
 from gene_annotation_episode.state import Store
 
 

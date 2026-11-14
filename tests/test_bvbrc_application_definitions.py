@@ -15,7 +15,7 @@ from gene_annotation_episode.bvbrc_analysis_protocol import prepare_rpc_request
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RESEARCH = ROOT / "verification/tool_graders_bvbrc_application_artifacts_2026-10-24"
+RESEARCH = ROOT / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/application_artifacts"
 OUT = {"output_path": "/synthetic@bvbrc/home/Selected folder", "output_file": "Original name"}
 READ = "/synthetic@bvbrc/home/reads.fastq"
 CONTIGS = "/synthetic@bvbrc/home/contigs.fasta"

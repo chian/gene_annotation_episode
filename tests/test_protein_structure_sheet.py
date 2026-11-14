@@ -8,7 +8,7 @@ from gene_annotation_episode.protein_structure_calculations import (
     calculate_protein_structure_components, validate_recorded_protein_structure_components,
 )
 
-f = import_module("verification.tool_graders_protein_structure_calculations_2026-10-27_389.fixture_helpers")
+f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.calculations_389")
 
 
 def test_builder_preserves_detached_native_coordinates_and_metadata():

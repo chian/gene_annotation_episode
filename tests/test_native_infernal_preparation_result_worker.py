@@ -16,7 +16,7 @@ from gene_annotation_episode.state import Store
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CAPTURE = ROOT / "verification/tool_graders_infernal_preparation_capture_2026-10-26_252"
+CAPTURE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/capture"
 EXAMPLES = json.loads((CAPTURE / "NATIVE_CAPTURE_EXAMPLES_002.json").read_bytes())["examples"]
 
 

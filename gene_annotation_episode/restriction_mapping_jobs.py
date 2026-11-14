@@ -15,7 +15,7 @@ import stat
 from .acquisition import AcquisitionError
 from .domain import ContractError, canonical, identity
 from .local_jobs import LocalJobPolicy, run_cancellable_native
-from . import native_lifecycle as native
+from gene_annotation_episode import native_lifecycle as native
 from .native_file_capture import capture_native_file
 from .restriction_mapping_contracts import restriction_canonical, restriction_digest
 from .restriction_mapping_bound_contracts import (

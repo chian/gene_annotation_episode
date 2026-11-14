@@ -33,7 +33,7 @@ from gene_annotation_episode.tools import ToolRegistry
 
 
 pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="requires bounded529")
-FIXTURES = Path(__file__).parent / "fixtures/addgene_sequence_page"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/addgene_sequence_page"
 ENTITY_SHA = "deb0393a4b1c71ae21e438a7dd2a6f410defbc83c3e939c2ce10faf0b4b30c4d"
 METADATA_SHA = "ae1e05538cb541d5e1ad6a6610e690204e8d426066ba6432494c72ef62aa0e06"
 

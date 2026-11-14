@@ -11,7 +11,7 @@ from gene_annotation_episode.chromatin_interaction_calculations import (
     calculate_chromatin_components, calculate_contact_enrichment, calculate_insulation_components,
 )
 from gene_annotation_episode.chromatin_interaction_contracts import chromatin_record_digest
-_fixtures = import_module('verification.tool_graders_chromatin_calculations_projection_2026-10-27_443.fixture_helpers')
+_fixtures = import_module('gene_annotation_episode.episodic_workflow.root.tests.fixtures.chromatin.projection_443.fixture_helpers')
 case, insulation_case, record = _fixtures.case, _fixtures.insulation_case, _fixtures.record
 replace_array, serialize_tables, set_contact = _fixtures.replace_array, _fixtures.serialize_tables, _fixtures.set_contact
 native_case = _fixtures.native_case

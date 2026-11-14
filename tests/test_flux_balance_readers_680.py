@@ -21,7 +21,7 @@ from gene_annotation_episode.flux_balance_readers import (
     parse_cobra_glpk_problem_capture, parse_cobra_glpk_solution_capture, parse_fba_capture,
 )
 
-PROBE = Path(__file__).resolve().parents[1] / "verification/tool_graders_flux_balance_native_contract_2026-10-29_677/probe"
+PROBE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/native_contract_probe"
 UNKNOWN_UNIT = {"native_text": None, "basis": "unknown", "source": None}
 ROLES = ("original_model", "selected_request", "effective_model", "effective_problem", "solution", "flux_csv", "native_log", "manifest")
 

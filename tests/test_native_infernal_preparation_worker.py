@@ -18,7 +18,7 @@ from gene_annotation_episode.native_infernal_preparation_worker import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-INDEX = json.loads((ROOT / "verification/tool_graders_infernal_preparation_2026-10-26_247/NATIVE_COMPILED_INDEX_001.json").read_text())
+INDEX = json.loads((ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/compiled/NATIVE_COMPILED_INDEX_001.json").read_text())
 CASES = INDEX["cases"]
 
 

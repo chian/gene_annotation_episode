@@ -23,7 +23,7 @@ from gene_annotation_episode.bvbrc_proteome_calculators import calculate_native_
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "verification/tool_graders_bvbrc_proteome_data_contracts_2026-10-25/construction_example_001"
+SOURCE = ROOT / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/proteome_data_contracts/construction_example_001"
 
 
 def binding(raw, name):

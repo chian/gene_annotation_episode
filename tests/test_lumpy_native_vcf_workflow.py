@@ -33,7 +33,7 @@ from test_vcf_result_workflow import (
 )
 
 
-FIXTURES = Path(__file__).parent / 'fixtures/lumpy_pe'
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/lumpy_pe'
 QUESTION = (
     'For the supplied native LUMPY paired-end VCF, what record, ALT-token and sample-cell '
     'populations and reported SVTYPE, SVLEN, support counts, confidence intervals and mate labels '

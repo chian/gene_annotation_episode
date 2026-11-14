@@ -5,7 +5,7 @@ import json
 
 from jsonschema import Draft202012Validator
 
-from .communication import plain
+from gene_annotation_episode.episodic_workflow.root.library.record_serialization import plain, canonical, digest
 from .launch_instructions import SELECTION_SCHEMA, validate_selection
 
 
@@ -48,13 +48,8 @@ TARGET_SCHEMA = obj({
 })
 
 
-def canonical(value):
-    return json.dumps(plain(value), sort_keys=True, separators=(',', ':'),
-                      ensure_ascii=False, allow_nan=False)
 
 
-def digest(value):
-    return hashlib.sha256(canonical(value).encode('utf-8')).hexdigest()
 
 
 def checked(value, schema, code):

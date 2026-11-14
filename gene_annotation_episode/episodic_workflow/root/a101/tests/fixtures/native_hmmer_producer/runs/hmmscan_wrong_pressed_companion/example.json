@@ -1,0 +1,46 @@
+{
+  "native_returncode": -6,
+  "failures": [
+    {
+      "code": "native_hmmer_nonzero_returncode",
+      "detail": {
+        "returncode": -6
+      },
+      "role": null,
+      "stage": "execution"
+    }
+  ],
+  "artifacts": [
+    {
+      "format": "hmmer_stdout",
+      "relative_path": "outputs/stdout",
+      "role": "stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "format": "text",
+      "relative_path": "outputs/stderr",
+      "role": "stderr",
+      "sha256": "b48322bcee7cdb2aeddb70c2675ca9247bfda7e3797a3b086b35ba3886e35ef1",
+      "size_bytes": 84
+    },
+    {
+      "format": "protein_tblout",
+      "relative_path": "outputs/tblout",
+      "role": "tblout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "format": "protein_domtblout",
+      "relative_path": "outputs/domtblout",
+      "role": "domtblout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  ],
+  "sealed_failure_replay_equal": true,
+  "meaning": "supplied digests/stems matched; this deliberately incompatible pressed companion caused native failure",
+  "native_stderr": "Fatal exception (source file fwdback.c, line 458):\nforward score underflow (is 0.0)\n"
+}

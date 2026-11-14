@@ -1,0 +1,100 @@
+{
+    "id": "WholeGenomeSNPAnalysis",
+    "label": "Whole Genome SNP Analysis",
+    "script": "App-WholeGenomeSNPAnalysis",
+    "description": "Identify SNP differences in a genome group with genomes of the same species.",
+    "default_memory": "100G",
+    "parameters": [
+        {
+            "desc": "Geneomes can be passed via (genome group / fasta file )",
+            "required": 1,
+            "default": null,
+            "label": "Input Type",
+            "type": "enum",
+            "enum": [
+                "genome_group",
+                "genome_fasta",
+            ],
+            "id": "input_genome_type"
+        },
+        {
+            "id":"majority-threshold",
+            "default": 0.5,
+            "required" : 0,
+            "enum": [
+                0,
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1,
+                ],
+            "desc": "Majority Fraction: Minimum fraction of genomes with locus. This is an optional parameter use dot calcuate a tree based on only SNP loci occuring in at least this fraction of genomes.",
+        },
+        {
+            "id": "min_mid_linkage",
+            "label": "Minimum value for Mid Linkage, also the maximum value for strong linkage.",
+            "required": 0,
+            "default": 10,
+            "desc": "User defined thresholds for snp distance (similar to snp count) and how they want to rate differences between genomes",
+            "type": "int"
+        },
+        {
+            "id": "max_mid_linkage",
+            "label": "Maximum value for Mid Linkage, also the minimum value for weak linkage.",
+            "required": 0,
+            "default": 40,
+            "desc": "User defined thresholds for snp distance (similar to snp count) and how they want to rate differences between genomes",
+            "type": "int"
+        },
+        {
+            "desc": "Analysis type chewbbaca or ksnp4",
+            "required": 1,
+            "default": null,
+            "label": "Analysis Type",
+            "type": "enum",
+            "enum": [
+                "Whole Genome SNP Analysis"
+            ],
+            "id": "analysis_type"
+        },
+        {
+            "id": "input_genome_group",
+            "label": "Genome group",
+            "required": 0,
+            "default": null,
+            "desc": "Name of feature group that defines the gene set ",
+            "type": "string"
+        },
+        {
+            "id": "input_genome_fasta",
+            "required": 0,
+            "default": null,
+            "label": "Gene set FASTA data",
+            "desc": "Nucleotide data in FASTA format",
+            "wstype": "genome_fasta",
+            "type": "wstype"
+        },
+        {
+            "id": "output_path",
+            "label": "Output Folder",
+            "required": 1,
+            "default": null,
+            "desc": "Path to which the output will be written. Defaults to the directory containing the input data. ",
+            "type": "folder"
+        },
+        {
+            "id": "output_file",
+            "label": "File Basename",
+            "required": 1,
+            "default": null,
+            "desc": "Basename for the generated output files. Defaults to the basename of the input data.",
+            "type": "wsid"
+        }
+    ]
+}

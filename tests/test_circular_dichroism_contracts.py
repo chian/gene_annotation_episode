@@ -307,7 +307,7 @@ def test_frozen_summary_schema_is_closed_strict_and_grants_only_its_source(monke
 
 
 def test_retained_original_control_tables_match_without_rerunning_biomni():
-    root = Path(__file__).parent / "fixtures/circular_dichroism_native_control"
+    root = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/circular_dichroism_native_control"
     names = (("supplied_numeric_control_cd_spectrum_analysis.txt", "cc9890bdf6af58a1439c2c8990774ace8d50df64fd08a833c67aa8ba7bd8c193"),
         ("supplied_numeric_control_thermal_denaturation.txt", "5f1ac12c2a48a4231b77ab7ca3c446f951b62b0446b9f79e02786853754993ee"))
     captured = []

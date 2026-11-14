@@ -21,7 +21,7 @@ from gene_annotation_episode.chromatin_interaction_tables import (
 from gene_annotation_episode.chromatin_cooler_inputs import failure
 
 
-EXAMPLES = Path(__file__).resolve().parents[1] / 'verification/tool_graders_chromatin_interaction_contract_2026-10-27_439/WORKED_RECORDS.json'
+EXAMPLES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/WORKED_RECORDS.json'
 
 
 def identity(raw, format):
@@ -356,7 +356,7 @@ def test_retained_native_hic_reader_to_saved_sheet_recalculation(weighted, relat
     from gene_annotation_episode.chromatin_hic_inputs import read_hic_contacts
     from gene_annotation_episode.chromatin_interaction_calculations import calculate_contact_enrichment
     root = Path(__file__).resolve().parents[1]
-    fixture = root / 'verification/tool_graders_chromatin_hic_native_2026-10-27_454' / relative
+    fixture = root / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/chromatin/hic_native' / relative
     source = fixture.read_bytes()
     request, _, _, _, bed = authored_case(weighted=weighted)
     request['contact']['file'] = identity(source, 'hic_binary_v9')
@@ -375,7 +375,7 @@ def test_retained_native_hic_reader_to_saved_sheet_recalculation(weighted, relat
             streams[draft['table_key']] = io.BytesIO(raw)
     sheet, streams = build_case((request, extraction, descriptors, streams, bed))
     # Persist the sheet and exact canonical tables, then deny native reads.
-    directory = Path.cwd() / 'native_hic_saved_examples' / ('divisive' if weighted else 'raw')
+    directory = root / 'runs/chromatin_hic_saved_examples' / ('divisive' if weighted else 'raw')
     directory.mkdir(parents=True, exist_ok=True)
     sheet_bytes = json.dumps(sheet, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()
     (directory / 'sheet.json').write_bytes(sheet_bytes)

@@ -57,7 +57,7 @@ class APIServicePrimitive(Protocol):
 
 def validate_service_configuration(service, configuration):
     if service == "enrichr":
-        from .api_enrichr import validate_enrichr_configuration
+        from .episodic_workflow.root.enrichr_publication_metadata import validate_enrichr_configuration
         return validate_enrichr_configuration(configuration)
     if service == "bvbrc_appservice":
         from .bvbrc_appservice_contracts import validate_contract
@@ -83,8 +83,16 @@ def validate_service_configuration(service, configuration):
     return deepcopy(configuration)
 
 
-def build_service(service, configuration, tool_registry):
+def validate_fresh_service_configuration(service, configuration):
+    """Validate fresh construction without changing saved configuration readers."""
     configuration = validate_service_configuration(service, configuration)
+    if "timeout" in configuration:
+        raise ValueError("transport_timeout_configuration_not_supported")
+    return configuration
+
+
+def build_service(service, configuration, tool_registry):
+    configuration = validate_fresh_service_configuration(service, configuration)
     if service == "enrichr":
         from .api_enrichr import EnrichrService
         return EnrichrService(tool_registry, configuration=configuration)

@@ -1,0 +1,400 @@
+{
+  "axis": "a108",
+  "cold_entries": [
+    {
+      "definitions": [
+        "ScientificTask"
+      ],
+      "family": "task",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.task"
+    },
+    {
+      "definitions": [
+        "ScientificTaskState"
+      ],
+      "family": "task_state",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.task_state"
+    },
+    {
+      "definitions": [
+        "ScientificTaskDecision"
+      ],
+      "family": "task_decision",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.task_decision"
+    },
+    {
+      "definitions": [
+        "build_decision_inputs"
+      ],
+      "family": "decision_inputs",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.decision_inputs"
+    },
+    {
+      "definitions": [
+        "prepare_completed_work",
+        "decision_yield_table"
+      ],
+      "family": "decision_presentation",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.decision_presentation"
+    },
+    {
+      "definitions": [
+        "scientific_frame",
+        "frame_for",
+        "annotation_context",
+        "attach_native_timing"
+      ],
+      "family": "presentation_fields",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.presentation_fields"
+    },
+    {
+      "definitions": [
+        "uses_root_credit_presentation",
+        "standalone_frame",
+        "root_annotation_context",
+        "decision_yield_table"
+      ],
+      "family": "standalone_presentation",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.standalone_presentation"
+    },
+    {
+      "definitions": [
+        "ScientificWaiting"
+      ],
+      "family": "waiting",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.waiting"
+    },
+    {
+      "definitions": [
+        "prepare_request"
+      ],
+      "family": "to_child",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.to_child_evidence_search_strategy_improvement"
+    }
+  ],
+  "inputs": [
+    {
+      "kind": "scientific",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.decision_inputs"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.decision_inputs"
+    }
+  ],
+  "original_runtime": {
+    "path": "gene_annotation_episode/episodic_workflow/root/a108/tests/fixtures/implicit_annotation_parent/pre_split_runtime.py.source",
+    "sha256": "9168f871d073abd473a625cc74147c0fe9af0a1db3c7f0c16dda5640f4e70c13"
+  },
+  "requests": [
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.to_child_evidence_search_strategy_improvement",
+      "role": "literature_strategy",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.to_child_source_relevance_assessment",
+      "role": "literature_search",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.to_child_source_evidence_examination",
+      "role": "literature_page",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.to_child_passage_evidence_extraction",
+      "role": "literature_targeted",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.to_child_source_coverage_improvement",
+      "role": "literature_ordered",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.to_child_table_evidence_extraction",
+      "role": "literature_table",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.to_child_evidence_search_strategy_improvement",
+      "role": "literature_strategy",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.to_child_source_relevance_assessment",
+      "role": "literature_search",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.to_child_source_evidence_examination",
+      "role": "literature_page",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.to_child_passage_evidence_extraction",
+      "role": "literature_targeted",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.to_child_source_coverage_improvement",
+      "role": "literature_ordered",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.to_child_table_evidence_extraction",
+      "role": "literature_table",
+      "task_class": "LiteratureTask"
+    }
+  ],
+  "source_authority": {
+    "path": "runs/main_a105_a108_registered_providers_generation_01/prepared/sources.json",
+    "sha256": "6b3a46c660e7f13871906d8027592cfab66f1f084aeb18fdd2e8e8235127bfd5"
+  },
+  "tasks": [
+    {
+      "episode_class": "ScientificProcessEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/scientific_process",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.task",
+      "task_class": "ScientificTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/published_evidence_assessment",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/published_evidence_assessment/evidence_search_strategy_improvement",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/scientific_process/published_evidence_assessment",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.task",
+      "task_class": "LiteratureTask"
+    },
+    {
+      "episode_class": "LiteratureEpisode",
+      "episode_module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.episode",
+      "home": "gene_annotation_episode/episodic_workflow/root/a108/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.task",
+      "task_class": "LiteratureTask"
+    }
+  ],
+  "yield_consumers": [
+    {
+      "kind": "scientific",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.standalone_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.table_evidence_extraction.decision_presentation"
+    },
+    {
+      "kind": "literature",
+      "module": "gene_annotation_episode.episodic_workflow.root.a108.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.source_coverage_improvement.decision_presentation"
+    }
+  ]
+}

@@ -22,8 +22,8 @@ from gene_annotation_episode import restriction_mapping_worker as worker
 ATTEMPT = Path(os.environ["HMMER529_ATTEMPT"]) if "HMMER529_ATTEMPT" in os.environ else None
 pytestmark = pytest.mark.skipif(ATTEMPT is None, reason="requires bounded529")
 ROOT = Path(__file__).resolve().parents[1]
-ORIGINAL = ROOT / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check182_native718/restriction-native718"
-PINS = ROOT / "verification/tool_graders_restriction_mapping_2026-10-29_718/NATIVE_FIXTURE_PINS_001.json"
+ORIGINAL = ROOT / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/native718"
+PINS = ROOT / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/NATIVE_FIXTURE_PINS_001.json"
 SAVED_CASES = ("ecori_linear_internal", "commercial_linear_internal", "nocut_snai", "engineering_partial_search")
 
 

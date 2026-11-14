@@ -205,7 +205,7 @@ def test_calculator_rechecks_saved_sheet_semantics():
 def test_explicitly_derived_token_mapping_from_retained_native_421(case,count,summed,shared):
     # Actual 421 bytes remain unchanged. This test fixture explicitly replaces
     # legacy A1/B1 tokens with frozen G1 tokens; it is not a new native result.
-    path = ROOT / 'verification/tool_graders_genomic_overlap_native_2026-10-27_421/run002/work'
+    path = ROOT / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/native_work'
     a,b = [(path / f'{case}.{side}.bed').read_bytes() for side in ('A','B')]
     original = (path / f'{case}.stdout').read_bytes()
     request,sets = inputs([a,b])

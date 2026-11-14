@@ -19,7 +19,7 @@ from gene_annotation_episode.atac_differential_inputs import (
 )
 
 
-NATIVE = Path(__file__).resolve().parents[1] / 'verification/tool_graders_atac_differential_plan_2026-10-27_460/native001'
+NATIVE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/atac/native001'
 XLS_HEADER = b'chr\tstart\tend\tlength\tabs_summit\tpileup\t-log10(pvalue)\tfold_enrichment\t-log10(qvalue)\tname\n'
 
 

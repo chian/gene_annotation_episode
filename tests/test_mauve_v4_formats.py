@@ -8,7 +8,7 @@ import pytest
 from gene_annotation_episode.mauve_v4_formats import parse_mauve_v4
 from gene_annotation_episode.mauve_v4_format_contracts import validate_mauve_v4_document
 
-OFFICIAL = Path(__file__).resolve().parents[1] / 'verification/tool_graders_bvbrc_genome_alignment_boundaries_2026-10-25/retained_sources/mauve/testdata/small.mauve'
+OFFICIAL = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/genome_alignment_boundaries/retained_sources/mauve/testdata/small.mauve'
 
 
 def parse(raw, *, encoding='ascii'):

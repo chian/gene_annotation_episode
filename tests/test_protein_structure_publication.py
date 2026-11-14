@@ -14,7 +14,7 @@ from gene_annotation_episode.protein_structure_publication import protein_struct
 from gene_annotation_episode.protein_structure_result_worker import validate_protein_structure_result_worker_result
 
 
-FIXTURES = Path(__file__).resolve().parents[1] / "verification/tool_graders_protein_structure_publication_2026-10-27_399/fixtures/capture_examples.json"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_publication_399/capture_examples.json"
 
 
 def example(name):

@@ -7,7 +7,7 @@ from gene_annotation_episode.protein_structure_contracts import protein_structur
 from gene_annotation_episode.native_protein_structure_contracts import requested_job_from_protein_structure
 from gene_annotation_episode.native_protein_structure_tool_info import protein_structure_tool_contracts, protein_structure_tool_information
 from importlib import import_module
-_f = import_module("verification.tool_graders_protein_structure_execution_2026-10-27_390.fixture_helpers")
+_f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390")
 job, software = _f.job, _f.software
 
 

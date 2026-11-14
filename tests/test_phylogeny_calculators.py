@@ -27,8 +27,8 @@ from gene_annotation_episode import phylogeny_format_contracts as format_checks
 
 STAGING = Path(__file__).resolve().parents[1]
 REPOSITORY = next(path for path in Path(__file__).resolve().parents
-    if (path / "verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24").is_dir())
-BOUNDARIES = REPOSITORY / "verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24"
+    if (path / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries").is_dir())
+BOUNDARIES = REPOSITORY / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries"
 NATIVE = BOUNDARIES / "official_example" / "test9_genome_dir"
 BASE = "test9_genome_8taxa_10cds_10proteins_codonAndProteins"
 Q_KEYS = {"value", "state", "unit", "origin", "numerator", "denominator", "population_ref", "method", "evidence", "requirement_ids"}

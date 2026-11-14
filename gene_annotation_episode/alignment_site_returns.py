@@ -11,7 +11,7 @@ from copy import deepcopy
 import math
 import re
 
-from .blast_search import PROGRAM_UNITS
+from gene_annotation_episode.episodic_workflow.root.a101.library.blast_search import PROGRAM_UNITS
 from .communication import ReportBoundaryError, validate_closed_schema, validate_form
 
 

@@ -1,0 +1,120 @@
+{
+  "command": [
+    "/home/chia/repos/gene_annotation_episode/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_003/temporary/pytest",
+    "--junitxml=/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_003/tests.xml",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_driver.py",
+    "/home/chia/repos/gene_annotation_episode/tests/test_native_infernal_preparation_local.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/chia/repos/gene_annotation_episode",
+    "TEMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_003/temporary",
+    "TMP": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_003/temporary",
+    "TMPDIR": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_003/temporary",
+    "XDG_CACHE_HOME": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_003/cache"
+  },
+  "metadata": {
+    "duration_measure": "systemd_service_wall_seconds",
+    "elapsed_seconds": 26.791124713,
+    "enforcement": {
+      "filesystem_sandbox": false,
+      "memory": "systemd_cgroup_v2_memory_max",
+      "per_file_bytes": "hard_rlimit_fsize_equal_to_scratch_bytes",
+      "process_tree": "systemd_control_group",
+      "scratch": "monitored_visible_allocated_bytes_with_possible_overshoot",
+      "swap": "systemd_memory_swap_max_zero",
+      "wall_time": "unset"
+    },
+    "native_lifecycle_version": "durable_systemd_native_job_v2",
+    "native_returncode": 0,
+    "observed_scratch_bytes": 13176832,
+    "policy": {
+      "memory_bytes": 21474836480,
+      "scratch_bytes": 4294967296,
+      "wall_seconds": null
+    },
+    "service_exit": {
+      "EXIT_CODE": "exited",
+      "EXIT_STATUS": "0",
+      "SERVICE_RESULT": "success",
+      "ended": {
+        "at": "2026-10-26T05:41:43.134547+00:00",
+        "boot_id": "d53ef063-e9a7-4ae1-99ad-c64c17bdff26",
+        "monotonic_ns": 806864831873005
+      }
+    },
+    "verified_cgroup": {
+      "kill_mode": "control-group",
+      "memory_max": 21474836480,
+      "memory_swap_max": 0,
+      "oom_policy": "kill",
+      "runtime_max": "infinity"
+    }
+  },
+  "policy": {
+    "memory_bytes": 21474836480,
+    "scratch_bytes": 4294967296,
+    "wall_seconds": null
+  },
+  "returncode": 0,
+  "source_hashes_after": {
+    "gene_annotation_episode/_local_job_worker.py": "7e41d5cbf6976eea0f8d9ffaf3d2387e6a7d9e970494af2d6ef608f24bb06504",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+    "gene_annotation_episode/native_infernal_contracts.py": "8c9179da9cf1f0d040a4f657ea64f759d9852ad05190d6f643b7de15ea8b6215",
+    "gene_annotation_episode/native_infernal_driver.py": "a899575cc976d37fbdcf434654acc51adcb05f14d48054c70e462d96c9725d67",
+    "gene_annotation_episode/native_infernal_local.py": "e5251ff627b07869bdb356a6f41b4662affa96f2827f5ff94d92c863150cf037",
+    "gene_annotation_episode/native_infernal_preparation_contracts.py": "e8851074d59d1b354348ac6143dd0e1e72f036356afe6d2eb2f9823fd23d9496",
+    "gene_annotation_episode/native_infernal_preparation_driver.py": "af01418dd47e6cc1c28710271a295ade86ce1b2d98a36bfd7fe5dff265fb81fd",
+    "gene_annotation_episode/native_infernal_preparation_local.py": "03ed971b8db1c8b3494bf36357469d2cf577792de2046a70cdc619a118009281",
+    "gene_annotation_episode/native_lifecycle.py": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195",
+    "resources/software/infernal-1.1.5-install/bin/cmalign": "49483f4466d3921be1f356b7061c559d9924c2111d4e1d8d9ae48eeda727c7e1",
+    "resources/software/infernal-1.1.5-install/bin/cmbuild": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89",
+    "resources/software/infernal-1.1.5-install/bin/cmcalibrate": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be",
+    "resources/software/infernal-1.1.5-install/bin/cmconvert": "539db020824def1046a1863b99693b87915b23c2fefb8a63f09433904dce1ed5",
+    "resources/software/infernal-1.1.5-install/bin/cmemit": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+    "resources/software/infernal-1.1.5-install/bin/cmfetch": "a64e95bbf9afb589c0eb8d6472d84c25cc0fcdc60e1d9aacd086bfc8dcf4e7f8",
+    "resources/software/infernal-1.1.5-install/bin/cmpress": "34fa41dc406b2cfcd3451520b704efb29bacec81d8a506c5929780a6ae01ecb4",
+    "resources/software/infernal-1.1.5-install/bin/cmscan": "d9fdb57c1e630321c6697e013f0d62266fe02a01cb5d2d59acf46cace455c215",
+    "resources/software/infernal-1.1.5-install/bin/cmsearch": "36e0dd6955648fbf8a6bdc397801e07e7729282b6fff47f1816629428d9ae7d9",
+    "resources/software/infernal-1.1.5-install/bin/cmstat": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "tests/test_native_infernal_preparation_driver.py": "5940d0db1e0a5eb5ab3dee79fb2b084bc2466b03dbce685018897d97b5eb2baa",
+    "tests/test_native_infernal_preparation_local.py": "d055f9190bed52b5b54877e738b34f144fe3126c1462d1b33b8bba57eb4095c5",
+    "verification/tool_graders_infernal_preparation_2026-10-26_247/NATIVE_COMPILED_INDEX_001.json": "98aacdb7d1b97b76baf6fccd5d105734ecc7e6424a1cdcac49d6d458389ca71c",
+    "verification/tool_graders_infernal_preparation_2026-10-26_247/PRODUCER_HANDOFF_001.md": "0b6f64294b2d57b85d6bb3a44a0fd2cdcb074babd23ba1d720902a096e84f817",
+    "verification/tool_graders_infernal_preparation_producer_2026-10-26_251/run_tests.py": "ccfb96f4ca06104f58c2c7a0048af4f7460786963545175d13c83c2ed0a2c19d"
+  },
+  "source_hashes_before": {
+    "gene_annotation_episode/_local_job_worker.py": "7e41d5cbf6976eea0f8d9ffaf3d2387e6a7d9e970494af2d6ef608f24bb06504",
+    "gene_annotation_episode/local_jobs.py": "4f31bc4713353356fbbf31af4063e77e87aa1bd869be6c145d3f001a268c5452",
+    "gene_annotation_episode/native_infernal_contracts.py": "8c9179da9cf1f0d040a4f657ea64f759d9852ad05190d6f643b7de15ea8b6215",
+    "gene_annotation_episode/native_infernal_driver.py": "a899575cc976d37fbdcf434654acc51adcb05f14d48054c70e462d96c9725d67",
+    "gene_annotation_episode/native_infernal_local.py": "e5251ff627b07869bdb356a6f41b4662affa96f2827f5ff94d92c863150cf037",
+    "gene_annotation_episode/native_infernal_preparation_contracts.py": "e8851074d59d1b354348ac6143dd0e1e72f036356afe6d2eb2f9823fd23d9496",
+    "gene_annotation_episode/native_infernal_preparation_driver.py": "af01418dd47e6cc1c28710271a295ade86ce1b2d98a36bfd7fe5dff265fb81fd",
+    "gene_annotation_episode/native_infernal_preparation_local.py": "03ed971b8db1c8b3494bf36357469d2cf577792de2046a70cdc619a118009281",
+    "gene_annotation_episode/native_lifecycle.py": "7956bc4583baa31237106e1358a9e0f5e6e952b07f78c3bca334979fde276195",
+    "resources/software/infernal-1.1.5-install/bin/cmalign": "49483f4466d3921be1f356b7061c559d9924c2111d4e1d8d9ae48eeda727c7e1",
+    "resources/software/infernal-1.1.5-install/bin/cmbuild": "6e383a9e39ee515546bda2799a00e256d30839c46fd5aace656e985c6d16fb89",
+    "resources/software/infernal-1.1.5-install/bin/cmcalibrate": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be",
+    "resources/software/infernal-1.1.5-install/bin/cmconvert": "539db020824def1046a1863b99693b87915b23c2fefb8a63f09433904dce1ed5",
+    "resources/software/infernal-1.1.5-install/bin/cmemit": "e6ce86ec5fa89157883deed091d9819f6f2469ed4cfe3ef5bcd3688a17fa64fc",
+    "resources/software/infernal-1.1.5-install/bin/cmfetch": "a64e95bbf9afb589c0eb8d6472d84c25cc0fcdc60e1d9aacd086bfc8dcf4e7f8",
+    "resources/software/infernal-1.1.5-install/bin/cmpress": "34fa41dc406b2cfcd3451520b704efb29bacec81d8a506c5929780a6ae01ecb4",
+    "resources/software/infernal-1.1.5-install/bin/cmscan": "d9fdb57c1e630321c6697e013f0d62266fe02a01cb5d2d59acf46cace455c215",
+    "resources/software/infernal-1.1.5-install/bin/cmsearch": "36e0dd6955648fbf8a6bdc397801e07e7729282b6fff47f1816629428d9ae7d9",
+    "resources/software/infernal-1.1.5-install/bin/cmstat": "8026921664009d269955f4ff05bf9a3c55a89cc51313ac434cae502b8bf5ddae",
+    "tests/test_native_infernal_preparation_driver.py": "5940d0db1e0a5eb5ab3dee79fb2b084bc2466b03dbce685018897d97b5eb2baa",
+    "tests/test_native_infernal_preparation_local.py": "d055f9190bed52b5b54877e738b34f144fe3126c1462d1b33b8bba57eb4095c5",
+    "verification/tool_graders_infernal_preparation_2026-10-26_247/NATIVE_COMPILED_INDEX_001.json": "98aacdb7d1b97b76baf6fccd5d105734ecc7e6424a1cdcac49d6d458389ca71c",
+    "verification/tool_graders_infernal_preparation_2026-10-26_247/PRODUCER_HANDOFF_001.md": "0b6f64294b2d57b85d6bb3a44a0fd2cdcb074babd23ba1d720902a096e84f817",
+    "verification/tool_graders_infernal_preparation_producer_2026-10-26_251/run_tests.py": "ccfb96f4ca06104f58c2c7a0048af4f7460786963545175d13c83c2ed0a2c19d"
+  },
+  "stderr_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_003/stderr.log",
+  "stdout_path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_003/stdout.log"
+}

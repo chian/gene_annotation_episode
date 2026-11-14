@@ -196,9 +196,10 @@ def test_interrupted_read_recovery_preserves_outcome_and_supplied_library_versio
 
 def test_every_job_role_can_read_knowledge_without_executing_a_job(tmp_path):
     from types import SimpleNamespace
-    from gene_annotation_episode.homology_episodes import HomologyEpisodes, ROLES
+    from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
+    from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.requests import ROLES
     store, tools = setup(tmp_path)
-    binding = object.__new__(HomologyEpisodes)
+    binding = object.__new__(HomologyEpisode)
     binding.roles = ROLES
     binding.recover_statistics = lambda: {}
     workflow = Workflow(store, tools, ScriptedProvider([]), tmp_path/'run', 'knowledge-fixture',

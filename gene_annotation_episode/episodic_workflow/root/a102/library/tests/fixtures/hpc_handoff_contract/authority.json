@@ -1,0 +1,221 @@
+{
+  "axis": "a102",
+  "runtime_source": {
+    "path": "gene_annotation_episode/episodic_workflow/root/a102/runtime.py",
+    "sha256": "62dd3c9d8be790cd7220d29b57fac8251adfd157d460bd9c11358eb20fe8664e"
+  },
+  "runtime_sha256": "62dd3c9d8be790cd7220d29b57fac8251adfd157d460bd9c11358eb20fe8664e",
+  "selected_AST": "57d7d2bc9fca2addb603c4872624c1253ffe14f3b5dbf1cf7a574a779224f700",
+  "guard_AST": "4dbe6bc9db561912b99c5efbb6e31fd3e920c37bb5e5852ee98f91bd048ca90a",
+  "current_sources": {
+    "path": "runs/main_a102_hpc_contract10_generation_01/prepared/sources.json",
+    "sha256": "e1ea4202e00f0957ea8fb41c2a54b14813d3eda54aaa202a1eabbdf527eb8822"
+  },
+  "current_selection": {
+    "path": "runs/main_a102_hpc_contract10_generation_01/prepared/SOURCE_SELECTION.json",
+    "sha256": "50b33b3ee0d991a3f95a05d941c022c106c7b6c83f02ff6f3d0b750500c23071"
+  },
+  "consumers": [
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a102.hpc_work_planning.execution_job_submission.task",
+      "class": "LaunchTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "hpc",
+          "controlled_0"
+        ],
+        [
+          "launch",
+          "controlled_1"
+        ]
+      ],
+      "role": "launch_hpc",
+      "selected_source": {
+        "path": "runs/main_a102_hpc_contract10_generation_01/prepared/candidate/gene_annotation_episode/episodic_workflow/root/a102/hpc_work_planning/execution_job_submission/task.py",
+        "sha256": "bdc7be32c07372539ba2c414ab58ee7f20d209954bf890bcbfff129596ae77fb"
+      }
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a102.hpc_work_planning.hpc_allocation_execution.execution_job_submission.task",
+      "class": "LaunchTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "hpc",
+          "controlled_0"
+        ],
+        [
+          "hpc_execution",
+          "controlled_1"
+        ],
+        [
+          "launch",
+          "controlled_2"
+        ]
+      ],
+      "role": "launch_hpc",
+      "selected_source": {
+        "path": "runs/main_a102_hpc_contract10_generation_01/prepared/candidate/gene_annotation_episode/episodic_workflow/root/a102/hpc_work_planning/hpc_allocation_execution/execution_job_submission/task.py",
+        "sha256": "bdc7be32c07372539ba2c414ab58ee7f20d209954bf890bcbfff129596ae77fb"
+      }
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a102.hpc_work_planning.hpc_allocation_execution.task",
+      "class": "HPCWorkTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "hpc",
+          "controlled_0"
+        ],
+        [
+          "hpc_execution",
+          "controlled_1"
+        ]
+      ],
+      "role": "launch",
+      "selected_source": {
+        "path": "runs/main_a102_hpc_contract10_generation_01/prepared/candidate/gene_annotation_episode/episodic_workflow/root/a102/hpc_work_planning/hpc_allocation_execution/task.py",
+        "sha256": "ce3004dd33165760ac9a644b09dfd31fccc91c2f7287c5a1ad3a13ca1266d5b7"
+      }
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a102.hpc_work_planning.task",
+      "class": "HPCWorkTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "hpc",
+          "controlled_0"
+        ]
+      ],
+      "role": "launch",
+      "selected_source": {
+        "path": "runs/main_a102_hpc_contract10_generation_01/prepared/candidate/gene_annotation_episode/episodic_workflow/root/a102/hpc_work_planning/task.py",
+        "sha256": "c82ea611f96c405f7741cba2a3d9a885b8753dd3894ebabf684105f3b1e2ba1a"
+      }
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.execution_job_submission.task",
+      "class": "LaunchTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "controlled_0"
+        ],
+        [
+          "hpc",
+          "controlled_1"
+        ],
+        [
+          "launch",
+          "controlled_2"
+        ]
+      ],
+      "role": "launch_hpc",
+      "selected_source": {
+        "path": "runs/main_a102_hpc_contract10_generation_01/prepared/candidate/gene_annotation_episode/episodic_workflow/root/a102/scientific_process/hpc_work_planning/execution_job_submission/task.py",
+        "sha256": "bdc7be32c07372539ba2c414ab58ee7f20d209954bf890bcbfff129596ae77fb"
+      }
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.hpc_allocation_execution.execution_job_submission.task",
+      "class": "LaunchTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "controlled_0"
+        ],
+        [
+          "hpc",
+          "controlled_1"
+        ],
+        [
+          "hpc_execution",
+          "controlled_2"
+        ],
+        [
+          "launch",
+          "controlled_3"
+        ]
+      ],
+      "role": "launch_hpc",
+      "selected_source": {
+        "path": "runs/main_a102_hpc_contract10_generation_01/prepared/candidate/gene_annotation_episode/episodic_workflow/root/a102/scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/task.py",
+        "sha256": "bdc7be32c07372539ba2c414ab58ee7f20d209954bf890bcbfff129596ae77fb"
+      }
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.hpc_allocation_execution.task",
+      "class": "HPCWorkTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "controlled_0"
+        ],
+        [
+          "hpc",
+          "controlled_1"
+        ],
+        [
+          "hpc_execution",
+          "controlled_2"
+        ]
+      ],
+      "role": "launch",
+      "selected_source": {
+        "path": "runs/main_a102_hpc_contract10_generation_01/prepared/candidate/gene_annotation_episode/episodic_workflow/root/a102/scientific_process/hpc_work_planning/hpc_allocation_execution/task.py",
+        "sha256": "ce3004dd33165760ac9a644b09dfd31fccc91c2f7287c5a1ad3a13ca1266d5b7"
+      }
+    },
+    {
+      "module": "gene_annotation_episode.episodic_workflow.root.a102.scientific_process.hpc_work_planning.task",
+      "class": "HPCWorkTask",
+      "path": [
+        [
+          "annotation",
+          "root"
+        ],
+        [
+          "scientific_process",
+          "controlled_0"
+        ],
+        [
+          "hpc",
+          "controlled_1"
+        ]
+      ],
+      "role": "launch",
+      "selected_source": {
+        "path": "runs/main_a102_hpc_contract10_generation_01/prepared/candidate/gene_annotation_episode/episodic_workflow/root/a102/scientific_process/hpc_work_planning/task.py",
+        "sha256": "c82ea611f96c405f7741cba2a3d9a885b8753dd3894ebabf684105f3b1e2ba1a"
+      }
+    }
+  ],
+  "scope": "Real nominal task classes and exact original selected method; supplied workflow ports stop before initial-report acquisition."
+}

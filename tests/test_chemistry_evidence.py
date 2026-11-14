@@ -1250,7 +1250,7 @@ def _selected_chebi_workflow_case(tmp_path, monkeypatch, *, operation, arguments
     initial_records = {row['id']: row for row in [rhea['source_record'], *rhea['reaction_records'],
         *rhea['reaction_references'], *rhea['chemical_references']]}
     assert set(initial_records) == set(rhea['outcome']['record_refs'])
-    G = import_module('verification.tool_graders_expression_nmf_episode_path_2026-10-27_490.fixture_helpers')
+    G = import_module('gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.retained_workflow.verification.tool_graders_expression_nmf_episode_path_2026-10-27_490.fixture_helpers')
     publication = Path(__file__).resolve().parents[1] / 'research/slotted_process_library/publications/2026-10-24-001'
     mode = 'retained' if retained_original is not None else 'live'
     resource = 'search-page2' if prior_original is not None and retained_original is None else 'search' if search else 'compound'

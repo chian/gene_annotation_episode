@@ -13,7 +13,6 @@ from types import MappingProxyType
 
 from .communication import plain
 from .episode_application_services import EpisodeApplicationServices
-from .terminal_execution_episodes import TerminalExecutionEpisodes
 
 
 def _freeze(value):
@@ -40,8 +39,9 @@ class PracticalServiceFactory:
         return {'version': 'practical_service_factory_v1', 'resources': plain(self.resources),
                 'initial_information': plain(self.initial_information)}
 
-    def __call__(self, store, *, run_id, directory, job_episodes=None, resource_estimator=None):
-        binding = TerminalExecutionEpisodes(None, directory=Path(directory),
+    def __call__(self, store, *, run_id, directory, job_episodes=None, resource_estimator=None,
+                 terminal_type):
+        binding = terminal_type(None, directory=Path(directory),
             resources=plain(self.resources), initial_information=plain(self.initial_information))
         # Common composition requires explicit operational bindings. Their
         # valuation operands are the original assignment's named requirements;

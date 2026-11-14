@@ -12,7 +12,7 @@ from gene_annotation_episode.genomic_overlap_contracts import canonical_genomic_
 from gene_annotation_episode.genomic_overlap_result_views import project_genomic_overlap_result
 
 
-PACKET = Path(__file__).resolve().parents[1] / "verification/tool_graders_genomic_overlap_contract_2026-10-27_418"
+PACKET = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/contract"
 
 
 @pytest.fixture

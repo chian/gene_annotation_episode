@@ -26,7 +26,7 @@ from test_mauve_v4_formats import OFFICIAL as V4_NATIVE
 
 
 PREFIX = 'bvbrc_genome_alignment_'
-NATIVE_DIR = Path(__file__).resolve().parents[1] / 'verification/tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25/native_examples'
+NATIVE_DIR = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_xmfa_boundaries/native_examples'
 
 
 def update_acquisition(row, data, *, role=None, fmt=None, path=None, uuid=None,

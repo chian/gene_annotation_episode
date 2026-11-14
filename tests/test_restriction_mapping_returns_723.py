@@ -55,8 +55,8 @@ def record(mapping, *, name="find_restriction_sites", mode="native"):
 @pytest.fixture(scope="module")
 def retained():
     root = Path(__file__).resolve().parents[1]
-    pins = json.loads((root / "verification/tool_graders_restriction_mapping_readers_2026-10-29_719/RETAINED_RESULT_PINS_001.json").read_text())
-    directory = root / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check183b_reader719_native/retained-reader719"
+    pins = json.loads((root / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/RETAINED_RESULT_PINS_001.json").read_text())
+    directory = root / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/restriction_mapping/retained_reader719"
     values = {}
     for pin in pins:
         p = directory / Path(pin["path"]).name

@@ -8,7 +8,7 @@ import pytest
 from gene_annotation_episode.rna_structure_contracts import COORDINATE_SYSTEM, validate_topology
 from gene_annotation_episode.rna_structure_topology import parse_rna_topology
 
-PACKET = Path(__file__).resolve().parents[1] / "verification/tool_graders_rna_structure_core_2026-10-26_354"
+PACKET = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_core_354"
 CASES = json.loads((PACKET / "topology_oracles.json").read_text())
 
 

@@ -21,7 +21,7 @@ from gene_annotation_episode.state import Store
 from test_atac_differential_operands import f, context, make_assignment
 from test_atac_differential_execution_integration import selected
 
-F = import_module('verification.tool_graders_atac_episode_path_2026-10-27_478.fixture_helpers')
+F = import_module('gene_annotation_episode.episodic_workflow.root.tests.fixtures.atac.workflow_478.fixture_helpers')
 
 
 def versions(assignment):

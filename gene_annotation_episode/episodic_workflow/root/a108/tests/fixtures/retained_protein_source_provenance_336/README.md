@@ -1,0 +1,1 @@
+Authenticated original336 source inputs. Files ending .py.txt are inert source evidence; do not import or execute them. Pins preserve original absolute paths. This separate fixture does not modify the existing293-file transport manifest. Historical policy fields are passive recorded data, never current launch options.

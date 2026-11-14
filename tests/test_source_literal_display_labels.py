@@ -8,21 +8,21 @@ import pytest
 
 from gene_annotation_episode.domain import LABEL, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.literature_partner_storage import LiteraturePartnerRepository
-from gene_annotation_episode.literature_reaction_source import populate_source
-from gene_annotation_episode.literature_reaction_storage import LiteratureReactionRepository
+from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_storage import LiteraturePartnerRepository
+from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_source import populate_source
+from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository
 from gene_annotation_episode.state import Store
-from test_literature_partner_integration import setup_case as partner_case
-from test_literature_reaction_integration import setup_case as reaction_case, witness
-from test_literature_reaction_storage import source
+from gene_annotation_episode.episodic_workflow.root.a107.tests.test_literature_partner_integration import setup_case as partner_case
+from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_integration import setup_case as reaction_case, witness
+from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_storage import source
 from test_reaction_source_witness_labels import rebind_sources
 
 
-FIXTURES = Path(__file__).parent / "fixtures"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures"
 
 
 def test_original_a11037_endpoint_selection_publishes_unchanged_science(tmp_path):
-    args = json.loads((FIXTURES / "literature_reaction/a11037-multiline-endpoint.json").read_text())
+    args = json.loads((FIXTURES / "retained_original/literature_reaction/a11037-multiline-endpoint.json").read_text())
     raw = (FIXTURES / "a110_evaluation/declared-reaction-protocol.txt").read_bytes()
     with Store(tmp_path / "state") as store:
         store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein")

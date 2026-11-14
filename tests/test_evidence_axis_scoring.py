@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.evidence_axis_contracts import validate_evidence_axis_entry
-from gene_annotation_episode.evidence_axis_scoring import score_axis, validate_evidence_unit
+from gene_annotation_episode.episodic_workflow.root.evidence_axis_scoring import score_axis, validate_evidence_unit
 from test_evidence_axis_contracts import axis_entry, judgment
 
 

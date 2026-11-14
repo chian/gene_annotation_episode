@@ -10,7 +10,7 @@ import gene_annotation_episode.hmmalign_inputs as readers
 from gene_annotation_episode.hmmalign_grader import calculate_hmmalign_scores
 
 
-FIXTURES = Path(__file__).resolve().parents[1]/"verification/tool_graders_hmmalign_2026-10-24/native"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/hmmalign_native"
 
 
 def sheet(text, inputs=None):

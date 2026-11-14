@@ -25,7 +25,7 @@ from test_atac_differential_sheet import explicit_inputs, native_inputs
 
 ROLES = ('signal1', 'background1', 'signal2', 'background2')
 LIKELIHOODS = ('condition1_vs_background', 'condition2_vs_background', 'condition1_vs_condition2')
-HEADERS = Path(__file__).resolve().parents[1] / 'verification/tool_graders_atac_calculation_bridge_2026-10-27_467/native_headers'
+HEADERS = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/atac/native_headers'
 
 
 def population(start=0, end=500, chromosome='chrToy'):

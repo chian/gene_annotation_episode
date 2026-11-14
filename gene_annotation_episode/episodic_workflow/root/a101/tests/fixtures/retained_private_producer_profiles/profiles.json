@@ -1,0 +1,83 @@
+{
+  "classification": "controlled pre-native private and original-global producer metadata; not historical Stores",
+  "fixed_original_commit": "fb1e4d9bac279edcae98e8f2b3324b73c1679e51",
+  "native_candidate_sha256": "ea4c6245908513369481095b56f98506c631d30c048f4b4035d021f345e6f22c",
+  "original_sources": {
+    "gene_annotation_episode/native_blast_database_contracts.py": "3026741ea1c0d318b47544e783bef4e3c8c85647e625fa8dfc2e6a809a7d2504",
+    "gene_annotation_episode/native_blast_standard_database_contracts.py": "7db4d438fc0f4697688fc91b68b46b99094389a496380d887d07446af6392455"
+  },
+  "passive_manifest_sha256": "914b486d8cefd49bef49b58d31ebb7db2474871fbad6e45a23b06c49d6edc409",
+  "profiles": {
+    "database": {
+      "bundle": "validate_native_blast_database_bundle",
+      "changed_original_functions": [
+        "validate_native_blast_database_producer_manifest",
+        "_validate_producer_verification",
+        "validate_native_blast_database_bundle"
+      ],
+      "current_entry": "gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_driver",
+      "current_required": [
+        "gene_annotation_episode/__init__.py",
+        "gene_annotation_episode/episodic_workflow/root/a101/native_blast_database_contracts.py",
+        "gene_annotation_episode/episodic_workflow/root/a101/native_blast_database_driver.py"
+      ],
+      "family": "native_blast_database",
+      "manifest": "validate_native_blast_database_producer_manifest",
+      "original_entry": "gene_annotation_episode.native_blast_database_driver",
+      "original_path": "gene_annotation_episode/native_blast_database_contracts.py",
+      "original_required": [
+        "gene_annotation_episode/__init__.py",
+        "gene_annotation_episode/native_blast_database_contracts.py",
+        "gene_annotation_episode/native_blast_database_driver.py"
+      ],
+      "path": "gene_annotation_episode/episodic_workflow/root/a101/native_blast_database_contracts.py",
+      "retained_bundle": "validate_retained_native_blast_database_bundle",
+      "retained_manifest": "validate_retained_native_blast_database_producer_manifest"
+    },
+    "standard_database": {
+      "bundle": "validate_standard_blast_database_bundle",
+      "changed_original_functions": [
+        "validate_standard_blast_database_producer_manifest",
+        "_validate_producer_verification",
+        "validate_standard_blast_database_bundle"
+      ],
+      "current_entry": "gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_driver",
+      "current_required": [
+        "gene_annotation_episode/__init__.py",
+        "gene_annotation_episode/episodic_workflow/root/a101/blast_program_context.py",
+        "gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_contracts.py",
+        "gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_driver.py"
+      ],
+      "family": "native_blast_standard_database",
+      "manifest": "validate_standard_blast_database_producer_manifest",
+      "original_entry": "gene_annotation_episode.native_blast_standard_database_driver",
+      "original_path": "gene_annotation_episode/native_blast_standard_database_contracts.py",
+      "original_required": [
+        "gene_annotation_episode/__init__.py",
+        "gene_annotation_episode/blast_program_context.py",
+        "gene_annotation_episode/native_blast_standard_database_contracts.py",
+        "gene_annotation_episode/native_blast_standard_database_driver.py"
+      ],
+      "path": "gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_contracts.py",
+      "retained_bundle": "validate_retained_standard_blast_database_bundle",
+      "retained_manifest": "validate_retained_standard_blast_database_producer_manifest"
+    }
+  },
+  "sources": {
+    "context": {
+      "file": "context.py.txt",
+      "sha256": "2216f686227bc8903b05f8baf4eb153d55c4c107b02ac6e45344eb421fff08a6",
+      "source_path": "gene_annotation_episode/episodic_workflow/root/a101/blast_program_context.py"
+    },
+    "database": {
+      "file": "database.py.txt",
+      "sha256": "df71cba1a927afd52484c0b913a0ae373f397cdb1e652504378bf3e5d005cbb5",
+      "source_path": "gene_annotation_episode/episodic_workflow/root/a101/native_blast_database_contracts.py"
+    },
+    "standard_database": {
+      "file": "standard_database.py.txt",
+      "sha256": "1d87ea7151c0ff9eeb70ded1712132c852683635c8f92efffc6b92e628b59d91",
+      "source_path": "gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_contracts.py"
+    }
+  }
+}

@@ -32,7 +32,7 @@ from gene_annotation_episode.tools import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LIVE = ROOT / "verification/tool_graders_rfam_transport_2026-10-26_234/live"
+LIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/transport/live"
 
 
 def snapshot(mode, action):

@@ -1,0 +1,412 @@
+"""Private job_launch episode behavior for A104."""
+from __future__ import annotations
+from .requests import (AcquisitionError, ContractError, EXECUTION_OBSERVATION_SCHEMA, HomologyJobs, HomologyResults, LocalJobPolicy, Mapping, NativePhmmerInput, REFERENCE_FORMATS, ROLES, ReportBoundaryError, _binding, artifact_path, copy, deepcopy, json, obj, recorded_coverage, reference, sqlite3, subprocess, validate_recorded_estimates)
+from .requests import HomologyEpisodeRequests
+from .returns import HomologyEpisodeReturns
+from .credit import HomologyEpisodeCredit
+from .waiting import HomologyEpisodeWaiting
+
+class HomologyEpisode(HomologyEpisodeRequests, HomologyEpisodeReturns, HomologyEpisodeCredit, HomologyEpisodeWaiting):
+    binding_path = 'homology_job_submission'
+    commissioning_parent = 'legacy_annotation'
+    entry_roles = ('job_launch',)
+
+    roles = ('job_launch',)
+
+    def __init__(self, jobs: HomologyJobs, *, parser_policy: LocalJobPolicy,
+                 credit_projector, credit_binding, monitoring_projector, monitoring_binding, statistics=None):
+        if type(jobs) is not HomologyJobs or type(parser_policy) is not LocalJobPolicy:
+            raise TypeError('explicit_homology_resources_required')
+        if not callable(credit_projector) or not isinstance(credit_binding, dict) or not credit_binding:
+            raise ValueError('explicit_operational_credit_binding_required')
+        self.jobs, self.parser_policy, self._job_credit_calculator = jobs, parser_policy, credit_projector
+        if not callable(monitoring_projector) or not isinstance(monitoring_binding, dict) or not monitoring_binding:
+            raise ValueError('explicit_monitoring_credit_binding_required')
+        self.monitoring_projector = monitoring_projector
+        # The calculators are reusable functions. Each job episode owns its
+        # binding and its selected role-specific invocation.
+        self._role_credit_bindings = {
+            'job_launch': json.loads(json.dumps(credit_binding, allow_nan=False)),
+            'job_monitor': json.loads(json.dumps(monitoring_binding, allow_nan=False)),
+            'job_results': json.loads(json.dumps(credit_binding, allow_nan=False)),
+        }
+        if statistics is not None:
+            from gene_annotation_episode.episodic_workflow.root.a104.execution_recording import HomologyStatistics
+            if type(statistics) is not HomologyStatistics:
+                raise TypeError('typed_homology_statistics_binding_required')
+        self.statistics = statistics
+        self.native_event_provider = None
+
+    def with_native_events(self, provider):
+        """A host-local view; the caller's binding/descriptor stays unchanged."""
+        from gene_annotation_episode.episodic_workflow.root.a104.native_events import NativeEventProvider
+        if type(provider) is not NativeEventProvider:
+            raise TypeError('typed_native_event_provider_required')
+        if self.statistics is not None and self.statistics.resource_id != provider.resource_id:
+            raise ValueError('native_event_resource_identity_conflict')
+        view = copy(self)
+        view.native_event_provider = provider
+        return view
+
+    def recover_native_events(self):
+        summary = {}
+        if self.native_event_provider is not None:
+            for value in self.jobs.recover_native_events(native_event_provider=self.native_event_provider):
+                summary[value['state']] = summary.get(value['state'], 0) + 1
+        return summary
+
+    def bind_job_native_events(self, source, job_ref):
+        provider = self.native_event_provider
+        if provider is None:
+            return None
+        if source.workflow.run_id != provider.run_id:
+            raise ValueError('native_event_run_identity_conflict')
+        original = self.jobs.native_event_binding(job_ref)
+        if original is None and (self.jobs._handle(job_ref).path.exists()
+                or self.jobs._row(job_ref)['submission_requested']):
+            # A new host setting cannot retrofit old work, including an
+            # unconfirmed request whose original reservation is missing.
+            return None
+        return provider.for_job(owner_episode_id=source.episode_id, job_ref=job_ref,
+            registry_ref=self.jobs.config['registry_ref'], original_binding=original)
+
+    def as_record(self):
+        return {'binding_id': 'homology_job_submission', 'version': 'homology_episode_bindings_v4',
+                'registry_directory': str(self.jobs.directory), 'registry_configuration': self.jobs.config,
+                'parser_policy': self.parser_policy.to_dict(),
+                'job_credit_calculator': _binding(self._job_credit_calculator),
+                'monitoring_projector': _binding(self.monitoring_projector),
+                'role_credit_bindings': deepcopy(self._role_credit_bindings),
+                'monitoring_projector_parameters': (self.monitoring_projector.as_record()
+                    if callable(getattr(self.monitoring_projector, 'as_record', None)) else None),
+                'statistics': None if self.statistics is None else self.statistics.as_record()}
+
+    def recover_statistics(self):
+        summary = {}
+        if self.statistics is not None:
+            # Startup needs dispositions, not an in-memory archive of closed
+            # jobs. Each detailed receipt remains at its job-owned disk path.
+            for value in self.jobs.recover_statistics():
+                summary[value['state']] = summary.get(value['state'], 0) + 1
+        return summary
+
+    def instructions(self, role):
+        responsibilities = {
+            'job_launch': 'Establish the execution environment, prepare and submit the assigned detached job, and repair its usable monitoring handoff. Only your submit tool can launch this assigned job.',
+            'job_monitor': 'Improve the requested understanding of the assigned job execution using actual observations. The job may continue after you yield. Repeated unchanged samples are not progress.',
+            'job_results': 'Acquire and extract the requested native evidence, repair extraction problems where possible and return constrained result references. The parent owns scientific integration and annotation.'}
+        return ('You own an iterative scoped job investigation in the shared method_loop. '
+            + responsibilities[role] + ' Revise selected work from actual outcomes. '
+            'Select one of your available ordinary tools. Only the configured yield controller '
+            'owns continuation: no stop action, turn cap, forced sequence or work timeout. '
+            'Use the parent-defined typed report form. Recorded execution facts come from '
+            'declared x-source fields; do not invent them. Interpretive fields use only the '
+            'parent-declared values and meanings. There is no separate report-composition call. '
+            'Global execution expectations are statistical inputs, not scientific findings, '
+            'task progress, another episode\'s yield history or instructions. '
+            'Use episode.history for older own work; do not rerun work merely to see its output.'
+            + (' monitoring_information_credit records execution information learned through your selected '
+               'samples or handoff checks, independently of your current_credit binding. A completed '
+               'duration remains timing information even when learned during launch or acquisition. '
+               'The separate binding does not add itself to operational/scientific credit or choose continuation.'
+               if self.has_information_channel(role) else ''))
+
+    def describe(self):
+        return {role: {'report_facts': self.fact_sources(role), 'responsibility': self.instructions(role)}
+                for role in ROLES}
+
+    def prospective_execution_classes(self, store, scope):
+        """Caller-resource configurations for actual eligible protein records.
+
+        Reading this inventory does not translate a sequence, choose work,
+        create an order, or launch anything. It is recomputed for later
+        decisions so newly acquired protein records can become visible.
+        """
+        return list({value['execution_class'].ref: value['execution_class']
+                     for value in self.prospective_execution_options(store, scope)}.values())
+
+    def prospective_execution_options(self, store, scope):
+        """Local selectable operands and their statistical class, never a choice.
+
+        Query identity stays in the episode's local configuration inventory;
+        it is not added to shared run statistics or credited as a finding.
+        """
+        if self.statistics is None:
+            return []
+        options = []
+        offset = 0
+        while True:
+            page = store.query_records('subject', scope=scope, offset=offset, limit=100)
+            for candidate in page['records']:
+                try:
+                    query = self._query(store, scope, candidate['id'])
+                    symbols = artifact_path(store, query['sequence_ref']).read_text()
+                except (ValueError, KeyError, OSError, ContractError):
+                    continue
+                for cpu in range(1, self.jobs.config['max_cpu']+1):
+                    for mode in self.jobs.search_modes:
+                        execution_class = self.statistics.execution_class_for_query(self.jobs,
+                            query_fasta='>query\n'+symbols+'\n', cpu=cpu, search_mode=mode)
+                        options.append({'query_ref': query['id'], 'cpu': cpu,
+                            'search_mode': mode, 'execution_class': execution_class})
+            if page['next_offset'] is None:
+                return options
+            offset = page['next_offset']
+
+    def working_state(self, source):
+        # No implicit live poll, scientific state dump or private child history.
+        return {'role': source.path[-1][0], 'assignment': self.assignment(source)}
+
+    def binding_for(self, role):
+        if role not in self._role_credit_bindings:
+            raise ValueError('unknown_job_episode_role')
+        return deepcopy(self._role_credit_bindings[role])
+
+    def has_information_channel(self, role):
+        return (getattr(self.monitoring_projector, 'include_handoff_checks', False)
+                and role in getattr(self.monitoring_projector, 'information_roles', ())
+                and callable(getattr(self.monitoring_projector, 'information_view', None)))
+
+    def catalog(self, source):
+        role = source.path[-1][0]
+        empty = obj({})
+        definitions = {
+            'job_launch': [('homology.environment', empty),
+                ('homology.configure', empty),
+                ('homology.stage', empty), ('homology.submit', empty),
+                ('homology.resume_start', empty), ('homology.check_handoff', empty)],
+            'job_monitor': [('homology.sample', empty)],
+            'job_results': [('homology.extract', {'type': 'object', 'properties': {
+                'limit': {'type': 'integer', 'minimum': 0}, 'offset': {'type': 'integer', 'minimum': 0},
+                'snapshot_ref': reference('source'), 'retry_from': reference('source')},
+                'required': ['limit'], 'additionalProperties': False}),
+                ('homology.coverage', obj({'snapshot_ref': reference('source')})),
+                ('homology.errors', obj({'snapshot_ref': reference('source'),
+                    'offset': {'type': 'integer', 'minimum': 0}, 'limit': {'type': 'integer', 'minimum': 0}}))]}
+        descriptions = {
+            'homology.environment': 'Inspect preparation state and caller-owned resources for your assigned job.',
+            'homology.configure': 'Apply and check the parent-selected CPU allocation and executable for the assigned job.',
+            'homology.stage': 'Prepare or repair private snapshots; reuse unchanged inputs.',
+            'homology.submit': 'Submit the assigned detached job once; a replay preserves its identity.',
+            'homology.resume_start': 'Repair the existing submitted service startup without submitting another job.',
+            'homology.check_handoff': 'Exercise a fresh receiver for status, elapsed time, progress and output availability.',
+            'homology.sample': 'Record one actual typed job-state sample. Sample counts and unchanged polling are not progress.',
+            'homology.extract': 'Extract a selected page of actual native measurements; explicit snapshot for later pages and retry_from for an explicit failed-attempt retry. Parent integrates scientific meaning.',
+            'homology.coverage': 'Read recorded acquisition coverage and captured parser/native completeness for one assigned-job snapshot. This does not poll, parse or acquire new rows.',
+            'homology.errors': 'Read a requested page of typed extraction failures without rerunning extraction.'}
+        return [{'name': name, 'input_schema': schema, 'description': descriptions[name]}
+                for name, schema in definitions[role]]
+
+    async def execute(self, source, name, args, *, operation_key):
+        result = await self._execute(source, name, args, operation_key=operation_key)
+        if self.native_event_provider is not None and name in {'homology.submit', 'homology.resume_start'}:
+            from gene_annotation_episode.episodic_workflow.root.a104.method_loop.durable import DurableExecutionError
+            job_ref = self.assignment(source)['job_ref']
+            try:
+                # Failure to establish this host's binding must not expose a
+                # different run/resource's reservation as its own selection.
+                self.bind_job_native_events(source, job_ref)
+                result['native_event_targets'] = self.jobs.native_event_targets(job_ref)
+            except (DurableExecutionError, sqlite3.Error, OSError, ValueError, KeyError, TypeError) as error:
+                result['native_event_targets'] = []
+                storage = (isinstance(error, (sqlite3.Error, OSError)) or isinstance(error, DurableExecutionError)
+                    and error.failure['code'] == 'storage_failure')
+                result['native_event_target_failure'] = {
+                    'code': 'native_event_storage_unavailable' if storage else 'native_event_identity_conflict',
+                    'affected_refs': [job_ref]}
+        if self.statistics is not None:
+            try:
+                exported = list(self.jobs.recover_statistics(self.assignment(source)['job_ref']))
+            except (sqlite3.Error, OSError) as error:
+                exported = [{'job_ref': self.assignment(source)['job_ref'], 'state': 'unavailable',
+                    'code': 'statistics_registry_unavailable', 'exception_type': type(error).__name__}]
+            result['execution_statistics_export'] = exported
+        return result
+
+    async def _execute(self, source, name, args, *, operation_key):
+        if name not in {item['name'] for item in self.catalog(source)}:
+            raise ValueError('tool_not_owned_by_job_role')
+        assignment = self.assignment(source)
+        job_ref = assignment['job_ref']
+        try:
+            row = self.jobs._row(job_ref)
+            if row['cpu'] != assignment['cpu']:
+                raise ValueError('job_assignment_cpu_mismatch')
+            if row['search_mode'] != assignment.get('search_mode', 'native_defaults'):
+                raise ValueError('job_assignment_search_mode_mismatch')
+            if name == 'homology.environment':
+                value = self.jobs.environment(job_ref)
+            elif name == 'homology.configure':
+                value = self.jobs.configure(job_ref, assignment['cpu'])
+            elif name == 'homology.stage':
+                value = self.jobs.stage(job_ref)
+            elif name == 'homology.submit':
+                value = self.jobs.submit(job_ref, statistics=self.statistics,
+                    native_events=self.bind_job_native_events(source, job_ref))
+            elif name == 'homology.resume_start':
+                value = self.jobs.resume_start(job_ref,
+                    native_events=self.bind_job_native_events(source, job_ref))
+            elif name == 'homology.check_handoff':
+                value = self.jobs.check_handoff(self.jobs.handoff(job_ref))
+            elif name == 'homology.sample':
+                value = self.jobs.sample(assignment['handoff'], operation_key=operation_key)
+                return {'status': 'completed', 'record_refs': [], 'changed_record_refs': [],
+                        'operational_sample_ref': value['sample_ref'], 'result': value, 'feedback': None}
+            elif name == 'homology.coverage':
+                value = recorded_coverage(source.workflow.store, args['snapshot_ref'],
+                    query_ref=assignment['query_ref'], scope=source.scope,
+                    execution_context={'job_ref': job_ref, 'registry_ref': self.jobs.config['registry_ref']})
+            else:
+                adapter = HomologyResults(source.workflow.store, policy=self.parser_policy)
+                if name == 'homology.extract':
+                    inputs = NativePhmmerInput.from_job(self.jobs, assignment['handoff'])
+                    return await adapter.extract(inputs, scope=source.scope, **args, attempt_key=operation_key)
+                value = adapter.errors(scope=source.scope, query_ref=assignment['query_ref'],
+                    execution_context={'job_ref': job_ref, 'registry_ref': self.jobs.config['registry_ref']}, **args)
+            return {'status': 'completed', 'record_refs': [], 'changed_record_refs': [],
+                    'result': value, 'feedback': None}
+        except (ValueError, KeyError, OSError, sqlite3.Error, subprocess.SubprocessError,
+                ContractError, AcquisitionError) as error:
+            # Failure is an actionable outcome, not a fabricated completed action.
+            return {'status': 'failed', 'record_refs': [], 'changed_record_refs': [], 'result': None,
+                'feedback': {'code': (error.code if isinstance(error, AcquisitionError)
+                                     else 'job_storage_failed' if isinstance(error, sqlite3.Error)
+                                     else 'job_control_failed' if isinstance(error, subprocess.SubprocessError)
+                                     else str(error) if isinstance(error, ValueError) else 'job_operation_failed'),
+                    'exception_type': type(error).__name__, 'operation': name, 'job_ref': job_ref,
+                    **({'phase': error.phase, **{key: error.operational[key]
+                        for key in ('retryable', 'retry_same_prepared_job', 'local_resources')
+                        if key in (error.operational or {})}}
+                        if isinstance(error, AcquisitionError) else {})}}
+
+    def _validate_launch_return(self, value, assignment, *, store, schema):
+        self._validate_role_return_sources('job_launch', schema)
+        self._validate_recorded_return(value, assignment, store=store, schema=schema)
+
+    def _validate_monitor_return(self, value, assignment, *, store, schema):
+        self._validate_role_return_sources('job_monitor', schema)
+        self._validate_recorded_return(value, assignment, store=store, schema=schema)
+
+    def _validate_results_return(self, value, assignment, *, store, schema):
+        self._validate_role_return_sources('job_results', schema)
+        self._validate_recorded_return(value, assignment, store=store, schema=schema)
+
+    def _validate_role_return_sources(self, role, schema):
+        if schema is None:
+            return
+        allowed = self.fact_sources(role)
+        for node in schema.get('properties', {}).values():
+            source = node.get('x-source')
+            if isinstance(source, str) and source.startswith(('job_', 'monitoring_')) and source not in allowed:
+                raise ReportBoundaryError('Fact does not belong to this job episode',
+                    code='homology_return_source_role_conflict')
+
+    def _validate_recorded_return(self, value, assignment, *, store=None, schema=None):
+        """References and native fact fields must describe their actual record.
+
+        Parent-defined names/interpretations remain allowed. A declared native
+        sample identity cannot be reused to smuggle different recorded values.
+        This does not assess scientific suitability or decide continuation.
+        """
+        validate_recorded_estimates(store, value, schema=schema, job_ref=assignment['job_ref'])
+        reference_namespaces = {'sample_ref': 'job_sample', 'job_ref': 'homology_job',
+            'registry_ref': 'execution_registry'}
+        def declares(actual, expected, keyword=None):
+            # Recognize declared native meanings, not literal schema text.
+            # Additional validation constraints and annotations cannot disable
+            # provenance checks. Enum/type ordering is not semantic ordering.
+            if isinstance(expected, Mapping):
+                if not isinstance(actual, Mapping):
+                    return False
+                for key, child in expected.items():
+                    if keyword != 'properties' and key not in {
+                            'type', 'format', 'x-reference-namespace', 'enum', 'properties', 'items'}:
+                        continue
+                    if key == 'enum' and key not in actual and 'const' in actual:
+                        if actual['const'] not in child:
+                            return False
+                    elif key not in actual or not declares(actual[key], child, key):
+                        return False
+                return True
+            if keyword == 'enum':
+                return isinstance(actual, list) and bool(actual) and all(item in expected for item in actual)
+            if keyword == 'type':
+                allowed = set(expected if isinstance(expected, list) else [expected])
+                if 'number' in allowed:
+                    allowed.add('integer')
+                declared = actual if isinstance(actual, list) else [actual]
+                return bool(declared) and all(item in allowed for item in declared)
+            return actual == expected
+        def known_identity(value, namespace):
+            if namespace == 'homology_job' and value == assignment['job_ref']:
+                return True
+            if namespace == 'job_sample' and store is not None:
+                if self.recorded_sample(store, value, assignment) is not None:
+                    return True
+            try:
+                return self.jobs.resolve(value, namespace)
+            except sqlite3.Error:
+                return False
+        def visit(node, declared):
+            if isinstance(node, Mapping):
+                properties = declared.get('properties', {}) if declared is not None else {}
+                # This is the declared native execution-observation shape, not
+                # a reservation of arbitrary parent-chosen field names.
+                if declares(properties, EXECUTION_OBSERVATION_SCHEMA['properties'], 'properties'):
+                    kind = node['observation_kind']
+                    if kind == 'handoff_check':
+                        if node.get('sample_ref') is not None or node.get('sampled_at_unix_seconds') is not None:
+                            raise ReportBoundaryError('A checked status is not a sample', code='checked_status_identity_mismatch')
+                        if store is None:
+                            raise ReportBoundaryError('Selected checked-status record is unavailable',
+                                                      code='checked_status_record_unavailable')
+                        rows = store.db.execute('''SELECT json_extract(result,'$.result.sample')
+                            FROM runtime_actions WHERE json_extract(action,'$.tool')='homology.check_handoff'
+                            AND json_extract(result,'$.status')='completed'
+                            AND json_extract(result,'$.result.checked_at_unix_seconds')=?
+                            AND json_extract(result,'$.result.sample.job_ref')=?
+                            AND json_extract(result,'$.result.sample.registry_ref')=?''',
+                            (node.get('checked_at_unix_seconds'), assignment['job_ref'], self.jobs.config['registry_ref']))
+                        if not any(all(node[key] == value for key, value in json.loads(row[0]).items())
+                                   for row in rows):
+                            raise ReportBoundaryError('Checked status differs from selected recorded work',
+                                                      code='checked_status_fact_mismatch')
+                    elif (node.get('sample_ref') is None or node.get('sampled_at_unix_seconds') is None
+                          or node.get('checked_at_unix_seconds') is not None):
+                        raise ReportBoundaryError('A sample needs its original sample identity',
+                                                  code='sample_identity_mismatch')
+                identities = {name: field.get('x-reference-namespace') for name, field in properties.items()
+                    if field.get('format') in REFERENCE_FORMATS and node.get(name) is not None}
+                if declared is None:
+                    # Untyped direct consumers can establish identity from the
+                    # registry, without reserving arbitrary parent field names.
+                    identities = {name: namespace for name, namespace in reference_namespaces.items()
+                        if node.get(name) is not None and known_identity(node[name], namespace)}
+                for name, namespace in identities.items():
+                    if namespace == 'homology_job' and node[name] != assignment['job_ref']:
+                        raise ReportBoundaryError('Returned job differs from its assignment', code='job_identity_mismatch')
+                    if namespace == 'execution_registry' and node[name] != self.jobs.config['registry_ref']:
+                        raise ReportBoundaryError('Returned registry differs from its binding', code='registry_identity_mismatch')
+                    if namespace != 'job_sample':
+                        continue
+                    actual = self.recorded_sample(store, node[name], assignment) if store is not None else None
+                    if actual is None:
+                        try:
+                            row = self.jobs.db.execute('SELECT job_ref,body FROM samples WHERE sample_ref=?',
+                                                      (node[name],)).fetchone()
+                        except sqlite3.Error:
+                            row = None
+                        actual = json.loads(row['body']) if row is not None and row['job_ref'] == assignment['job_ref'] else None
+                    if actual is None:
+                        raise ReportBoundaryError('Sample does not belong to the assigned job', code='sample_identity_mismatch')
+                    fields = [key for key in node.keys() & actual.keys()
+                        if properties.get(key, {}).get('format') not in REFERENCE_FORMATS
+                        or properties[key].get('x-reference-namespace') == reference_namespaces.get(key)]
+                    if any(node[key] != actual[key] for key in fields):
+                        raise ReportBoundaryError('Native sample fields differ from their recorded values', code='sample_fact_mismatch')
+                for name, child in node.items():
+                    visit(child, properties.get(name) if declared is not None else None)
+            elif isinstance(node, (list, tuple)):
+                for child in node:
+                    visit(child, declared.get('items') if declared is not None else None)
+        visit(value, schema)

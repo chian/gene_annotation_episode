@@ -13,7 +13,7 @@ from test_api_bvbrc_appservice import CONFIG
 from test_bvbrc_appservice_custody import selector
 from test_bvbrc_genome_alignment_retained_records import fixture
 from test_bvbrc_genome_alignment_bundle_resolution import arguments
-from test_bvbrc_homology_tool_info import factory
+from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homology_tool_info import factory
 
 
 def configuration(bound=True):

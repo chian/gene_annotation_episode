@@ -1,0 +1,312 @@
+{
+  "read_count": {
+    "selection": {
+      "target": {
+        "kind": "measurement",
+        "selector": {
+          "selection": "semantic",
+          "document_id": "reads",
+          "section_key": "fastq_summary",
+          "section_ordinal": 0,
+          "metric": "fastq_read_count",
+          "rows": {
+            "kind": "all"
+          },
+          "axis": {
+            "kind": "exact",
+            "axis": {
+              "kind": "none",
+              "label": null,
+              "lower": null,
+              "upper": null
+            }
+          }
+        }
+      },
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "availability_requirement": "available_value"
+    },
+    "matched_count": 1,
+    "state": "satisfied",
+    "satisfied": true,
+    "records": [
+      {
+        "kind": "measurement",
+        "record_ref": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+        "state": "available",
+        "payload": {
+          "measurement_ref": "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F0",
+          "document_id": "reads",
+          "quantity": "fastq_read_count",
+          "axis": {
+            "kind": "none",
+            "label_ref": null,
+            "lower": null,
+            "upper": null
+          },
+          "state": "available",
+          "value": 2,
+          "unit": "reads",
+          "meaning": "observed_count",
+          "precision": "exact_for_retained_population",
+          "population_ref": "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+          "association_ref": null,
+          "native_token_ref": "bvbrc_fastqutils_label:example195/%2Frecords%2Fbvbrc_fastqutils_cell%3Aexample195~1%252Fdocuments%252Freads%252Fsha256%252Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%252Fcells%252F0%2Fnative_token"
+        },
+        "source_refs": [
+          "source_reads195"
+        ],
+        "requirement_refs": [],
+        "diagnostic_codes": []
+      }
+    ],
+    "requirement_refs": [],
+    "diagnostic_codes": []
+  },
+  "gc_fraction": {
+    "selection": {
+      "target": {
+        "kind": "component",
+        "selector": {
+          "selection": "semantic",
+          "calculation_id": "composition_reads",
+          "metric": "gc_acgt_fraction",
+          "threshold": null
+        }
+      },
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "availability_requirement": "available_value"
+    },
+    "matched_count": 1,
+    "state": "satisfied",
+    "satisfied": true,
+    "records": [
+      {
+        "kind": "component",
+        "record_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone",
+        "state": "available",
+        "payload": {
+          "component_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fcomposition_reads%2Fgc_acgt_fraction%2Fnone",
+          "quantity": "gc_acgt_fraction",
+          "calculation_id": "composition_reads",
+          "state": "available",
+          "value": 0.5555555555555556,
+          "unit": "fraction",
+          "method": "composition_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_reads%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_bases%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F4",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F5",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F6",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F7",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F10"
+          ],
+          "numerator": 5,
+          "denominator": 9,
+          "threshold": null,
+          "meaning": "derived_descriptive",
+          "uncertainty": "not_estimated",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "encoding_basis": null,
+          "lineage_basis": null
+        },
+        "source_refs": [
+          "source_reads195"
+        ],
+        "requirement_refs": [],
+        "diagnostic_codes": []
+      }
+    ],
+    "requirement_refs": [],
+    "diagnostic_codes": []
+  },
+  "expected_errors": {
+    "selection": {
+      "target": {
+        "kind": "component",
+        "selector": {
+          "selection": "semantic",
+          "calculation_id": "quality_reads",
+          "metric": "phred_implied_expected_errors",
+          "threshold": null
+        }
+      },
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "availability_requirement": "available_value"
+    },
+    "matched_count": 1,
+    "state": "satisfied",
+    "satisfied": true,
+    "records": [
+      {
+        "kind": "component",
+        "record_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone",
+        "state": "available",
+        "payload": {
+          "component_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fquality_reads%2Fphred_implied_expected_errors%2Fnone",
+          "quantity": "phred_implied_expected_errors",
+          "calculation_id": "quality_reads",
+          "state": "available",
+          "value": 0.001,
+          "unit": "expected_errors",
+          "method": "quality_phred_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fpopulations%2Ffastq_quality_characters%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Freads%2Fsha256%2Fc2532037b5ef4eb5b7789f9dc205c14bca6b16e170bbefb80448d5fdef1c01da%2Fcells%2F12"
+          ],
+          "numerator": 0.001,
+          "denominator": null,
+          "threshold": null,
+          "meaning": "phred_model_prediction",
+          "uncertainty": "phred_model_only",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "encoding_basis": {
+            "basis": "explicit_source_bound_declaration",
+            "encoding": "phred33",
+            "metadata_id": "encoding_reads",
+            "evidence": {
+              "content": {
+                "source_ref": "source_metadata195",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "artifact_metadata195",
+                "sha256": "51872c20309ba547b34105fe8a00453b0e517ab25fdb0336ac371f97afdf08a9",
+                "byte_count": 451
+              },
+              "pointer": "/declarations/0"
+            },
+            "declaration": {
+              "version": "fastqutils_encoding_declaration_v1",
+              "document_id": "reads",
+              "encoding": "phred33",
+              "basis": "explicit_assumption"
+            },
+            "native_locator": null
+          },
+          "lineage_basis": null
+        },
+        "source_refs": [
+          "source_reads195",
+          "source_metadata195"
+        ],
+        "requirement_refs": [],
+        "diagnostic_codes": [
+          "explicit_encoding_assumption"
+        ]
+      }
+    ],
+    "requirement_refs": [],
+    "diagnostic_codes": []
+  },
+  "retained_native_report": {
+    "selection": {
+      "target": {
+        "kind": "component",
+        "selector": {
+          "selection": "semantic",
+          "calculation_id": "retention_hostile",
+          "metric": "native_report_retention_fraction",
+          "threshold": null
+        }
+      },
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "availability_requirement": "available_value"
+    },
+    "matched_count": 1,
+    "state": "satisfied",
+    "satisfied": true,
+    "records": [
+      {
+        "kind": "component",
+        "record_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone",
+        "state": "available",
+        "payload": {
+          "component_ref": "bvbrc_fastqutils_component:example195/%2Fsheets%2F4c4931edd383d7d342d477d2ce32c99a6eebafc21a128dd52d859ad1024dcc6a%2Fparameters%2F7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e%2Fcalculations%2Fretention_hostile%2Fnative_report_retention_fraction%2Fnone",
+          "quantity": "native_report_retention_fraction",
+          "calculation_id": "retention_hostile",
+          "state": "available",
+          "value": 0.75,
+          "unit": "fraction",
+          "method": "retention_v1",
+          "population_refs": [
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_in%2F0",
+            "bvbrc_fastqutils_population:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fpopulations%2Fhostile_out%2F0"
+          ],
+          "operand_measurement_refs": [
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F0",
+            "bvbrc_fastqutils_cell:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Fcells%2F1"
+          ],
+          "numerator": 6,
+          "denominator": 8,
+          "threshold": null,
+          "meaning": "native_report_derived",
+          "uncertainty": "native_reporting_precision",
+          "parameter_sha256": "7582060dc47b31c45e2fa05bdf933bc2fe561d351e4c82030ac16a5fc21ae33e",
+          "encoding_basis": null,
+          "lineage_basis": {
+            "basis": "native_report",
+            "metadata_id": null,
+            "evidence": null,
+            "declaration": null,
+            "native_lineage_ref": "bvbrc_fastqutils_lineage:example195/%2Fdocuments%2Fhostile%2Fsha256%2Ffe2455bba1d8ada397c2b31780517f5b2da3e98561863d06640ef202f0942798%2Flineage%2F0"
+          }
+        },
+        "source_refs": [
+          "source_hostile195"
+        ],
+        "requirement_refs": [],
+        "diagnostic_codes": []
+      }
+    ],
+    "requirement_refs": [],
+    "diagnostic_codes": []
+  },
+  "qc_status": {
+    "selection": {
+      "target": {
+        "kind": "category",
+        "selector": {
+          "selection": "semantic",
+          "document_id": "qc",
+          "section_key": "fastqc_basic_statistics",
+          "section_ordinal": 0
+        }
+      },
+      "cardinality": "one_target",
+      "expected_cardinality": 1,
+      "availability_requirement": "typed_state"
+    },
+    "matched_count": 0,
+    "state": "satisfied",
+    "satisfied": true,
+    "records": [
+      {
+        "kind": "category",
+        "record_ref": null,
+        "state": "missing",
+        "payload": null,
+        "source_refs": [],
+        "requirement_refs": [
+          "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact"
+        ],
+        "diagnostic_codes": [
+          "missing_artifact"
+        ]
+      }
+    ],
+    "requirement_refs": [
+      "bvbrc_fastqutils_requirement:example195/%2Fdocuments%2Fqc%2Fmissing_artifact"
+    ],
+    "diagnostic_codes": [
+      "missing_artifact"
+    ]
+  }
+}

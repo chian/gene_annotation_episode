@@ -19,7 +19,7 @@ from gene_annotation_episode import bvbrc_comparative_systems_bundle_adapter as 
 from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import validate_saved_comparative_systems_projection
 from gene_annotation_episode.bvbrc_comparative_systems_handoff_contracts import canonical_sha256
 
-FIXTURES = Path(__file__).parent / "fixtures" / "bvbrc_comparative_systems_bundle"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_comparative_systems_bundle"
 INPUTS = json.loads((FIXTURES / "inputs.json").read_text())
 
 

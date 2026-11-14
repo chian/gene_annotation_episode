@@ -19,7 +19,7 @@ from gene_annotation_episode.genomic_overlap_return_views import PROJECTION_SOUR
 from gene_annotation_episode.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
-F = import_module("verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers")
+F = import_module("gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.retained_workflow.verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers")
 
 
 def deny(*args, **kwargs):

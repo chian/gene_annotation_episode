@@ -1,0 +1,49 @@
+class OriginalProviderMethods:
+    def _receive_form(self, source, admitted, schema, index, *, redelivery=False, child_role=None):
+        specialist = self.specialist(source)
+        receiver_for_role = getattr(specialist, 'child_report_receiver', None)
+        if receiver_for_role is not None:
+            from .delivery_counterpart import child_role_for_delivery
+            receiver = receiver_for_role(child_role_for_delivery(self, source, index))
+            if receiver is not None:
+                return receiver(self, source, admitted, schema, index, redelivery=redelivery)
+        if child_role is not None:
+            own_receiver = getattr(specialist, 'execution_child_report_receiver', None)
+            if own_receiver is not None:
+                receive_report = own_receiver(child_role)
+                if receive_report is not None:
+                    return receive_report(self, source, admitted, schema, index, redelivery=redelivery)
+            if specialist is None and len(source.path) == 1 and (source.path[0][0] == 'annotation'):
+                if child_role == 'launch':
+                    from .from_child_execution_job_submission import receive_report
+                    return receive_report(self, source, admitted, schema, index, redelivery=redelivery)
+                if child_role == 'results':
+                    from .from_child_execution_result_acquisition import receive_report
+                    return receive_report(self, source, admitted, schema, index, redelivery=redelivery)
+        if self.receipts is not None and (not redelivery) and (not self.is_job_source(source)):
+            from .episode_return_records import EpisodeReturnRecords
+            references = EpisodeReturnRecords(self.store, self.run_id, failure_prefix='recorded_admission_').recorded_admission_references(self.binding_context(source), admitted, schema, index)
+            if references is not None:
+                return references
+        if self.progress_provider is not None:
+            specialist = self.specialist(source)
+            receive_progress = getattr(specialist, 'receive_child_progress', None)
+            receive_counterpart = getattr(specialist, 'receive_child_progress_for_role', None)
+            handled = False
+            if receive_counterpart is not None:
+                from .delivery_counterpart import child_role_for_delivery
+                handled = receive_counterpart(self.binding_context(source), child_role_for_delivery(self, source, index), admitted, schema, f'{self.run_id}:{source.episode_id}:{index}:typed_form', self.progress_provider)
+            if handled:
+                pass
+            elif receive_progress is None:
+                self.progress_provider.receive_form(source.episode_id, admitted, schema, source.scope, f'{self.run_id}:{source.episode_id}:{index}:typed_form')
+            else:
+                receive_progress(self.binding_context(source), admitted, schema, f'{self.run_id}:{source.episode_id}:{index}:typed_form', self.progress_provider)
+        if self.receipts is None or self.is_job_source(source):
+            return []
+        references = _references_in({}, self.store.get, forms=[(admitted, schema)], reference_subset=lambda refs: self.store.reference_subset(refs, source.scope))
+        references.extend(self.episode_bindings.received_form_references(self.binding_context(source), admitted, schema, f'{self.run_id}:{source.episode_id}:{index}:typed_form'))
+        references = list(dict.fromkeys(references))
+        self.receipts.receive(source.episode_id, references, kind='report_redelivery' if redelivery else 'child_form', source_index=index)
+        references.extend((ref for ref in self.receive_tool_attributions(source, index, kind='report_redelivery' if redelivery else 'child_form') if ref not in references))
+        return references

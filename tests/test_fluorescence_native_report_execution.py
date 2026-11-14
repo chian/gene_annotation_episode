@@ -9,7 +9,7 @@ import json
 import os
 from pathlib import Path
 
-from gene_annotation_episode.fluorescence_execution_common import identity
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import identity
 from test_native_fluorescence_contracts import event_input, job
 
 
@@ -18,8 +18,8 @@ FUNCTION_SHA256 = 'c400891a22aa723c1fb8d42cce9f2c7b9a8241f9a8c16467780c7c2b6e138
 
 
 def test_original_facs_csv_function_numbers_reach_report_parser(tmp_path):
-    from gene_annotation_episode.fluorescence_native_report_contracts import make_fluorescence_report_binding
-    from gene_annotation_episode.fluorescence_native_reports import parse_fluorescence_native_reports
+    from gene_annotation_episode.episodic_workflow.root.library.fluorescence_native_report_contracts import make_fluorescence_report_binding
+    from gene_annotation_episode.episodic_workflow.root.library.fluorescence_native_reports import parse_fluorescence_native_reports
 
     attempt = Path(os.environ['HMMER529_ATTEMPT']).resolve(strict=True)
     snapshot = attempt / 'source_snapshot'

@@ -26,7 +26,7 @@ from gene_annotation_episode.native_genomic_overlap_driver import _immutable
 from gene_annotation_episode.practical_execution_state import PracticalState
 from gene_annotation_episode.practical_execution_records import assess_validations
 
-f = import_module('verification.tool_graders_genomic_overlap_native_driver_2026-10-27_427.fixture_helpers')
+f = import_module('gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.retained_workflow.verification.tool_graders_genomic_overlap_native_driver_2026-10-27_427.fixture_helpers')
 
 
 def selected_state(directory, *, begin=True, tool='practical.job.start', software_change=None, data=None):

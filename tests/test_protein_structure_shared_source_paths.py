@@ -15,8 +15,8 @@ from gene_annotation_episode.native_protein_structure_driver import run_protein_
 from gene_annotation_episode.protein_structure_formats import parse_pdb_structure
 from gene_annotation_episode.protein_structure_sequences import extract_structure_sequence
 
-_a = import_module('verification.tool_graders_protein_structure_inputs_2026-10-27_386.fixture_helpers')
-_c = import_module('verification.tool_graders_protein_structure_execution_2026-10-27_390.fixture_helpers')
+_a = import_module('gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386')
+_c = import_module('gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390')
 
 
 def shared_file_job(tmp_path):

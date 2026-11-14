@@ -1,0 +1,67 @@
+{
+  "slot": "thought_pattern",
+  "id": "P12",
+  "name": "Compare biological consequences over the time that matters",
+  "description": "Choose time/phase contrasts distinguishing transient acceleration, repeated function, adaptation and survival. An early benefit or first product need not predict later outcomes.",
+  "use_when": "Interpretation depends on when an effect appears, how long function is needed or whether operation must repeat.",
+  "live_alternatives": [
+    "Effect is durably beneficial.",
+    "Early acceleration carries a later maintenance/survival cost.",
+    "First event succeeds but repeated operation fails.",
+    "Original observation window missed the relevant phase."
+  ],
+  "decision_guidance": [
+    "Choose intervals from biological alternatives rather than a universal cadence.",
+    "Keep lag, growth, viability and repeated turnover as distinct outcomes.",
+    "Preserve differing early/late conclusions and investigate explanations that predict both."
+  ],
+  "outcome_contingencies": [
+    {
+      "if_observed": "Recovery improves but later survival falls",
+      "then_consider": "Represent both outcomes in their windows."
+    },
+    {
+      "if_observed": "One product forms but repeated turnover fails",
+      "then_consider": "Narrow the missing contribution toward sustained operation."
+    },
+    {
+      "if_observed": "A later phase exposes a phenotype",
+      "then_consider": "Restrict the early nonphenotype without pretending it observed the later result."
+    }
+  ],
+  "boundary": "The competing explanations differ in phase, duration or repeated operation, rather than merely being measured at different times. P13 separates biological units or mixtures at a relevant resolution; P08 tests a prerequisite. A setting-and-time difference such as ex-vivo versus infection does not isolate a temporal effect. This supplies no execution timer or stopping rule.",
+  "evidence": [
+    {
+      "case_group": "yeag",
+      "case_id": "cellular_yeaG",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4664914/",
+      "source_locator": "Recovery, heterogeneity, survival Results; organism/yeag/trace.json route 1.",
+      "observation": "Mutant recovery lag was shorter after starvation, yet prolonged-starvation CFU survival was worse.",
+      "limit": "No raw FCS/CFU reanalysis; internal 24 h/72 h follow-up inconsistency is preserved."
+    },
+    {
+      "case_group": "organism_20_isia",
+      "case_id": "organism_20_isia",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8545134/",
+      "source_locator": "Case-record observation; inspected scope: Complete relevant mutant/spectroscopy/growth Results and growth conditions. No new fluorescence-lifetime analysis.",
+      "observation": "Quenching-defective cells initially grew quickly then bleached/declined under stringent iron deficiency/high light.",
+      "limit": "Other iron/light states differ; no spectroscopy reanalysis."
+    },
+    {
+      "case_group": "causal_tsaE_turnover",
+      "case_id": "causal_tsaE_turnover",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5814804/",
+      "source_locator": "Single/multiple-turnover Results, Methods and Discussion, 2018.",
+      "observation": "Single product and release occur without TsaE; repeated Thermotoga operation needs productive ATPase coupling.",
+      "limit": "Different E. coli endpoint evidence remains unreconciled."
+    },
+    {
+      "case_group": "organism_18_dsdapm",
+      "case_id": "organism_18_dsdapm",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6393727/",
+      "source_locator": "Case-record observation; inspected scope: Relevant growth/urine/motility/CAUTI Results and protocols; no inference that ex-vivo nonphenotype disproves an in-host role.",
+      "observation": "Six-hour ex-vivo urine nonphenotype contrasts with 96-hour infection fitness loss.",
+      "limit": "Both biological setting and duration change, so this is not an isolated time experiment."
+    }
+  ]
+}

@@ -43,7 +43,7 @@ def effect(kind="appservice_submit", **slot):
 
 def test_all_frozen_schemas_are_self_contained_and_exactly_reachable():
     package = Path(__file__).parents[1] / "gene_annotation_episode/bvbrc_appservice_schemas.json"
-    frozen = Path(__file__).parents[1] / "verification/tool_graders_bvbrc_appservice_execution_contract_2026-10-24/CONTRACT_SCHEMA.json"
+    frozen = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/appservice_execution_contract/CONTRACT_SCHEMA.json"
     definitions = json.loads(package.read_text())["$defs"]
     original = json.loads(frozen.read_text())["$defs"]
     assert len(original) == 72
@@ -108,7 +108,7 @@ def test_all_frozen_schemas_are_self_contained_and_exactly_reachable():
 
 
 def test_frozen_shape_examples_still_pass_their_original_expectations():
-    path = Path(__file__).parents[1] / "verification/tool_graders_bvbrc_appservice_execution_contract_2026-10-24/SCHEMA_EXAMPLES.json"
+    path = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/appservice_execution_contract/SCHEMA_EXAMPLES.json"
     examples = json.loads(path.read_text())
     for item in examples["positive"]:
         assert validate_contract(item["schema"], item["value"]) == item["value"]

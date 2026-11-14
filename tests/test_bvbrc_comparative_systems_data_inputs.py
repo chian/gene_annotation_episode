@@ -21,7 +21,7 @@ from gene_annotation_episode.bvbrc_comparative_systems_data_contracts import (
 from gene_annotation_episode.bvbrc_comparative_systems_data_inputs import extract_comparative_systems_data_inputs
 from gene_annotation_episode.execution_contracts import digest
 
-FIXTURES = Path(__file__).parent / "fixtures" / "bvbrc_comparative_systems_data_inputs"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_comparative_systems_data_inputs"
 WRAPPER = json.loads((FIXTURES / "qualified_data_wrapper.json").read_text())["value"]
 SELECTION = json.loads((FIXTURES / "data_population_selection.json").read_text())["value"]
 RAW = (FIXTURES / "SYNTHETIC_DATA_RESPONSE_001.json").read_bytes()

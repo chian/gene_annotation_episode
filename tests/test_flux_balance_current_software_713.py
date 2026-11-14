@@ -11,14 +11,14 @@ import pytest
 
 ATTEMPT = Path(os.environ["HMMER529_ATTEMPT"]) if "HMMER529_ATTEMPT" in os.environ else None
 pytestmark = pytest.mark.skipif(ATTEMPT is None, reason="application validators require bounded529")
-PACKET = "verification/tool_graders_flux_balance_current_software_2026-10-29_713"
-ORIGINAL = "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check151c_producer688/producer-emissions"
+PACKET = "gene_annotation_episode/episodic_workflow/root/a110/tests/support/flux_balance"
+ORIGINAL = "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/producer_emissions"
 
 
 @pytest.fixture(scope="module")
 def preparation():
     root = ATTEMPT / "source_snapshot"
-    spec = importlib.util.spec_from_file_location("fba_software_preparation_713", root / PACKET / "prepare_software.py")
+    spec = importlib.util.spec_from_file_location("fba_software_preparation_713", root / PACKET / "prepare_software_713.py")
     helper = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = helper
     spec.loader.exec_module(helper)

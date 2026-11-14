@@ -32,8 +32,8 @@ from gene_annotation_episode.materials import artifact_path
 from gene_annotation_episode.state import Store
 
 REPO = Path(__file__).resolve().parents[1]
-PACKET = REPO / "verification/tool_graders_protein_structure_preparation_2026-10-27_396"
-FIXTURES = REPO / "verification/tool_graders_protein_structure_result_worker_2026-10-27_393/fixtures"
+PACKET = REPO / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_preparation_396"
+FIXTURES = REPO / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_result_worker_393/fixtures"
 POLICY = LocalJobPolicy(memory_bytes=21474836480, scratch_bytes=4294967296)
 
 
@@ -48,7 +48,7 @@ def _retain(store, raw, format):
 
 
 def _native(store, directory, label="held_out"):
-    path = PACKET / "fixtures/same_file.json" if label == "same_file" else FIXTURES / (label + ".json")
+    path = PACKET / "same_file.json" if label == "same_file" else FIXTURES / (label + ".json")
     raw = path.read_bytes()
     native = json.loads(raw)
     return {"version": "protein_structure_result_worker_plan_v1", "mode": "original_native_result",

@@ -24,7 +24,7 @@ from gene_annotation_episode.molecular_sequence_input_bindings import MolecularS
 from gene_annotation_episode import molecular_sequence_ordinary as ordinary
 from gene_annotation_episode import molecular_sequence_tools as tools
 from tests.test_molecular_sequence_ordinary import selected_call, _lifecycle
-from tests.test_molecular_sequence_ordinary_results import ordinary_owner, _roles
+from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_ordinary_results import ordinary_owner, _roles
 from tests.test_orf_sequence_operand import _external, _feature
 
 

@@ -33,7 +33,7 @@ from gene_annotation_episode.bvbrc_data_views import (
 from gene_annotation_episode.communication import validate_closed_schema, validate_form, form_with_facts
 from gene_annotation_episode.execution_contracts import digest
 
-EVIDENCE = Path(__file__).resolve().parents[1] / "verification/tool_graders_bvbrc_data_contract_2026-10-24"
+EVIDENCE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"
 EXAMPLES = json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())
 FROZEN = json.loads((EVIDENCE / "CONTRACT_SHAPES.json").read_text())
 BASE = "https://www.bv-brc.org/api"

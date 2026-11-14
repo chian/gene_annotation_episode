@@ -1,0 +1,8 @@
+"""Original supplied BV-BRC selected-value discriminators; no parsing or custody."""
+ANNOTATION_VALUE_VERSION = "bvbrc_annotation_selected_field_v1"
+ASSEMBLY_VALUE_VERSION = "bvbrc_assembly_selected_field_v1"
+VARIATION_VALUE_VERSION = "bvbrc_variation_selected_field_v1"
+INFLUENZA_HA_VALUE_VERSION = "bvbrc_influenza_ha_selected_field_v1"
+SUBSPECIES_VALUE_VERSION = "bvbrc_subspecies_selected_field_v1"
+INTERVENTION_VALUE_VERSION = "bvbrc_intervention_selected_field_v1"
+IDENTIFIER_NAMESPACE = "bvbrc_application_field"

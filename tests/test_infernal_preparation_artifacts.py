@@ -13,8 +13,8 @@ from gene_annotation_episode.infernal_preparation_artifacts import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE = ROOT / "verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native"
-OWN = ROOT / "verification/tool_graders_infernal_preparation_models_2026-10-26_248/native"
+NATIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/boundaries/native"
+OWN = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/models/native"
 
 
 def payload(data, role, fmt, ref=None, completeness="complete"):

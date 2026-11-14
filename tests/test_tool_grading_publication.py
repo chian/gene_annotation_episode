@@ -22,7 +22,7 @@ from gene_annotation_episode.tools import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[1]
-META_INPUT = ROOT / "verification/tool_graders_batch_001/prodigal/meta.input.fna"
+META_INPUT = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/prodigal/meta.input.fna"
 
 
 def numerical(observation):
@@ -133,7 +133,7 @@ def test_valid_gap_only_native_fixture_does_not_publish_zero_denominator_identit
     """
     from gene_annotation_episode.domain import canonical
     from gene_annotation_episode.tools import SequenceWork
-    native = json.loads((ROOT / "verification/tool_graders_batch_001/integration/gap_only.native_fixture.json").read_text())
+    native = json.loads((ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/tool_grading/gap_only.native_fixture.json").read_text())
     native_bytes = canonical(native).encode()
     fasta = tmp_path / "pair.fna"
     fasta.write_text(">query\nA\n>reference\nT\n")
@@ -388,7 +388,7 @@ def test_read_batch_grading_failure_preserves_valid_neighbor_and_member_identity
 
 
 def test_offline_api_blast_grading_rejection_retains_native_hsp_and_explicit_failure(tmp_path, monkeypatch):
-    from gene_annotation_episode import blast_graders
+    from gene_annotation_episode.episodic_workflow.root.a101 import blast_graders
     from gene_annotation_episode.api_blast import NCBIBlastService
     from test_api_blast_service import Client, submit
     def reject(*args, **kwargs):

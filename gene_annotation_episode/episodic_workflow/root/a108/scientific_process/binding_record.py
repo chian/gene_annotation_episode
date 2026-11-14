@@ -1,0 +1,13 @@
+"""binding record for this private A108 episode."""
+from __future__ import annotations
+from gene_annotation_episode.episodic_workflow.root.a108.receiving_context_sources import receiving_context_source_fingerprints
+from gene_annotation_episode.episodic_workflow.root.a108.shared_infrastructure_sources import shared_infrastructure_source_fingerprints
+from .scientific_contracts import Path, ROLE, VERSION, deepcopy, hashlib, scientific_digest
+
+from gene_annotation_episode.episodic_workflow.root.a108.runtime_assets import required_runtime_asset_fingerprints
+
+class ScientificBindingRecord:
+
+    def as_record(self):
+        implementation = scientific_digest({**required_runtime_asset_fingerprints(), **{str(path.relative_to(Path(__file__).parent.parent)): hashlib.sha256(path.read_bytes()).hexdigest() for path in Path(__file__).parent.parent.rglob('*.py') if 'tests' not in path.parts}, **receiving_context_source_fingerprints(), **shared_infrastructure_source_fingerprints()})
+        return {'version': VERSION, 'binding_id': ROLE, 'implementation_sha256': implementation, 'configuration': {'library': deepcopy(self._library_record), 'tool_library': deepcopy(self._tools_record), 'child_roles': list(self._child_roles), **({'tool_retrieval': deepcopy(self.tool_retrieval)} if self.tool_retrieval else {}), **({'contract_information_profile': self._contract_information_profile} if self._contract_information_profile is not None else {}), **({'yield_bindings': deepcopy(self._yield_bindings)} if self._yield_bindings is not None else {})}}

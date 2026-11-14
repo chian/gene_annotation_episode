@@ -358,7 +358,7 @@ def sra_fetch_arguments(**changes):
 
 def sra_native_xml():
     from pathlib import Path
-    raw = (Path(__file__).parent / "fixtures" / "ncbi_sra" / "experiment_package.xml").read_bytes()
+    raw = (Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a106/tests/fixtures/ncbi_sra" / "experiment_package.xml").read_bytes()
     assert len(raw) == 7802 and hashlib.sha256(raw).hexdigest() == "e2e72cc189d988194ef9ab9faff6b96132749afd7cdc3293f386902544e45b10"
     return raw
 

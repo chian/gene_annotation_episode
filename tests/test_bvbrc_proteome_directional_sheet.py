@@ -12,7 +12,7 @@ from gene_annotation_episode.bvbrc_proteome_directional_numerical_contracts impo
     DirectionalNumericalContractError, validate_directional_numerical,
 )
 
-FIXTURES = Path(__file__).parent / 'fixtures' / 'bvbrc_proteome_directional'
+FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_proteome_directional'
 FILES = {
     '2011': ('biopython_text_2011L_blastp_002.txt','c122ef42cd2d2da7ae5318045aa88a73c84713572a2c14d15c562117f3eec62d'),
     '2202': ('biopython_text_2202L_blastp_001.txt','c0f5e5d3541500aef1ac93957fe35fbd4481f5788314e3e12ed1ea5f9d16510a'),

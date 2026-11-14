@@ -1,0 +1,218 @@
+--- baseline/literature_active_site_storage.py
++++ gene_annotation_episode/literature_active_site_storage.py
+@@ -4,10 +4,12 @@
+ import json
+ 
+ from .communication import plain
+-from .domain import ContractError, canonical, identity, obj
++from .domain import ContractError, canonical, identity, obj, validate_schema
+ from .literature_active_site_inputs import (ROLES, LITERAL_FIELDS, INTERPRETATIONS, QUALIFICATIONS, SPREAD_KINDS, SAMPLING,
+-    read_active_site_inputs, validate_active_site_extraction, validate_active_site_selection, measurement_location)
+-from .literature_active_site_calculations import COMPONENTS, COMPONENT_ROLES, REASONS, CONDITIONS, populate_active_site_components
++    VERSION as EXTRACTION_VERSION, DEPENDENCY, read_active_site_inputs,
++    validate_active_site_selection, measurement_location)
++from .literature_active_site_calculations import (COMPONENTS, COMPONENT_ROLES, REASONS, CONDITIONS,
++    VERSION as SHEET_VERSION, LIMITS, populate_active_site_components)
+ from .literature_rate_storage import LiteratureRateRepository
+ 
+ PROVIDER = "literature.a105.active_site_population"
+@@ -25,6 +27,133 @@
+     elif isinstance(value, (list, tuple)):
+         for child in value:
+             yield from _witnesses(child)
++
++
++def _saved_extraction_schema():
++    """Describe committed values without parsing or converting them again."""
++    text = {"type": "string", "minLength": 1}
++    nullable = lambda schema: {"anyOf": [schema, {"type": "null"}]}
++    witness = obj({"source_ref": text, "artifact_ref": text,
++        "representation": {"enum": ["original", "text"]},
++        "start": {"type": "integer", "minimum": 0},
++        "end": {"type": "integer", "minimum": 1}, "quote": text})
++    def interpretation(values):
++        return obj({"value": {"enum": list(values)},
++            "witnesses": {"type": "array", "items": witness}})
++    number = obj({"selector": obj({"witness": witness,
++        "number_start": {"type": "integer", "minimum": 0},
++        "number_end": {"type": "integer", "minimum": 1}}),
++        "raw_number": text, "value": {"type": "number"},
++        "relation": {"enum": ["point", "lt", "le", "gt", "ge"]},
++        "approximate": {"type": "boolean"}})
++    quantities = {}
++    units = dict(zip(ROLES, ("mg/mL", "kDa", "nM", "dimensionless")))
++    for role in ROLES:
++        unit = obj({"witness": nullable(witness), "raw_unit": nullable(text),
++            "canonical_unit": {"enum": [units[role], None]},
++            "conflicting_units": {"type": "array", "items": witness}})
++        quantities[role] = nullable(obj({
++            "meanings": obj({field: nullable(witness) for field in LITERAL_FIELDS}),
++            "qualification": interpretation(QUALIFICATIONS), "number": nullable(number),
++            "unit": nullable(unit), "reported_uncertainty": obj({
++                "kind": interpretation(SPREAD_KINDS), "number": nullable(number),
++                "sampling_basis": interpretation(SAMPLING),
++                "statement": nullable(witness), "unit": nullable(unit)}),
++            "exact_value": nullable({"type": "string", "pattern": r"^-?[0-9]+(?:/[1-9][0-9]*)?$"}),
++            "unavailable_reason": {"enum": [None, *REASONS]},
++            "measurement_key": nullable(text), "physical_observation_key": nullable(text),
++            "bound": {"enum": ["none", "lt", "le", "gt", "ge"]},
++            "approximate": {"type": "boolean"},
++            "origin": {"enum": ["reported", "synthetic", "derived"]}}))
++    return obj({"version": {"const": EXTRACTION_VERSION}, "source_ref": text,
++        "source_kind": {"enum": ["primary_source", "retained_extraction", "synthetic_fixture"]},
++        "experiment": nullable(witness), "intended_change": nullable(witness),
++        "other_changes": {"type": "array", "items": witness},
++        "interpretations": obj({field: interpretation(values) for field, values in INTERPRETATIONS.items()}),
++        "quantities": obj(quantities),
++        "source_refs": {"type": "array", "uniqueItems": True, "items": text},
++        "lexical_dependency": {"const": DEPENDENCY}})
++
++
++def _validate_saved_extraction(extraction, selection):
++    """Validate original custody/meaning relationships, never scientific algebra.
++
++    The authenticated payload and original selected outcome retain the numerical
++    results. This check does not turn their printed tokens into numbers, look up
++    unit multipliers, or reconstruct the calculator's domains and fractions.
++    """
++    validate_schema(extraction, _saved_extraction_schema())
++    validate_active_site_selection(selection, extraction)
++    witnesses = list(_witnesses(extraction))
++    if set(extraction["source_refs"]) != {selection["source_ref"], *(w["source_ref"] for w in witnesses)}:
++        raise ContractError("active_site_saved_source_mismatch")
++    for witness in witnesses:
++        if witness["end"] - witness["start"] != len(witness["quote"].encode("utf-8")):
++            raise ContractError("active_site_saved_witness_mismatch")
++    def interpretation(value):
++        unique = {(w["source_ref"], w["artifact_ref"], w["start"], w["end"]) for w in value["witnesses"]}
++        required = 2 if value["value"] == "conflicting" else 0 if value["value"] in ("unknown", "unreported") else 1
++        if len(unique) < required:
++            raise ContractError("active_site_saved_interpretation_mismatch")
++    for value in extraction["interpretations"].values():
++        interpretation(value)
++    for row in extraction["quantities"].values():
++        if row is None:
++            continue
++        for value in (row["qualification"], row["reported_uncertainty"]["kind"], row["reported_uncertainty"]["sampling_basis"]):
++            interpretation(value)
++        for item in (row, row["reported_uncertainty"]):
++            number, unit = item["number"], item["unit"]
++            if number is not None:
++                selector = number["selector"]
++                start, end = selector["number_start"], selector["number_end"]
++                if not 0 <= start < end <= len(selector["witness"]["quote"]) or selector["witness"]["quote"][start:end] != number["raw_number"]:
++                    raise ContractError("active_site_saved_number_selection_mismatch")
++            if unit is not None:
++                conflicts = unit["conflicting_units"]
++                if conflicts:
++                    if (len({(w["source_ref"], w["artifact_ref"], w["start"], w["end"]) for w in conflicts}) < 2
++                            or any(unit[key] is not None for key in ("witness", "raw_unit", "canonical_unit"))):
++                        raise ContractError("active_site_saved_unit_mismatch")
++                elif unit["witness"] is None or unit["raw_unit"] != unit["witness"]["quote"]:
++                    raise ContractError("active_site_saved_unit_mismatch")
++        expected_key = identity("active_site_measurement", measurement_location(row["number"])) if row["number"] else None
++        physical = row["meanings"]["measurement_identity"]
++        expected_physical = identity("active_site_observation", {field: physical[field]
++            for field in ("source_ref", "artifact_ref", "start", "end")}) if physical else None
++        if row["measurement_key"] != expected_key or row["physical_observation_key"] != expected_physical:
++            raise ContractError("active_site_saved_measurement_identity_mismatch")
++        if row["bound"] != (row["number"]["relation"] if row["number"] and row["number"]["relation"] != "point" else "none"):
++            raise ContractError("active_site_saved_number_selection_mismatch")
++        spread = row["reported_uncertainty"]
++        if spread["number"] is not None and (spread["kind"]["value"] == "unreported"
++                or spread["number"]["relation"] != "point" or spread["number"]["approximate"]
++                or spread["number"]["value"] < 0):
++            raise ContractError("active_site_saved_spread_mismatch")
++
++
++def _validate_saved_sheet(saved, sheet_ref):
++    sheet = saved["sheet"]
++    if (set(sheet) != {"version", "axis", "evaluation_scope", "cells", "interpretation_limits",
++            "annotation_credit", "rate_factor_applied", "fraction_uncertainty", "independent_preparation_count"}
++            or sheet["version"] != SHEET_VERSION or sheet["axis"] != "A105"
++            or sheet["evaluation_scope"] != "active_site_titration_amount"
++            or sheet["annotation_credit"] is not None or sheet["rate_factor_applied"] is not False
++            or sheet["independent_preparation_count"] is not None or sheet["interpretation_limits"] != list(LIMITS)
++            or set(sheet["cells"]) != set(COMPONENTS)):
++        raise ContractError("active_site_saved_cells_mismatch")
++    for name, cell in sheet["cells"].items():
++        if (set(cell) != {"value", "unit", "status", "unavailable_reason", "approximate", "origin",
++                "conditional_on", "reported_domain", "exact_domain", "formula", "input_measurement_keys"}
++                or not isinstance(cell["formula"], str) or not cell["formula"]):
++            raise ContractError("active_site_saved_cells_mismatch")
++        expected = [saved["extraction"]["quantities"][role]["measurement_key"] for role in COMPONENT_ROLES[name]
++            if saved["extraction"]["quantities"][role] and saved["extraction"]["quantities"][role]["measurement_key"]]
++        if cell["input_measurement_keys"] != expected:
++            raise ContractError("active_site_saved_measurement_identity_mismatch")
++    rows = _project_saved(saved, sheet_ref, COMPONENTS)
++    validate_schema(rows, active_site_cells_schema())
++    return rows
+ 
+ 
+ def _project_saved(saved, sheet_ref, components):
+@@ -154,7 +283,13 @@
+         content = self.store.get_artifact(reference)
+         if "artifact_" + hashlib.sha256(content).hexdigest() != reference:
+             raise ContractError("active_site_saved_artifact_hash_mismatch")
+-        return json.loads(content)
++        try:
++            value = json.loads(content)
++        except (UnicodeDecodeError, json.JSONDecodeError) as error:
++            raise ContractError("active_site_saved_artifact_json_required") from error
++        if not isinstance(value, dict):
++            raise ContractError("active_site_saved_artifact_object_required")
++        return value
+ 
+     def read(self, sheet_ref):
+         source = self.store.get(sheet_ref)
+@@ -166,6 +301,12 @@
+         request = self._artifact_json(source["request_ref"])
+         if request.get("run_id") != self.run_id:
+             raise ContractError("literature_run_mismatch")
++        if (set(request) != {"run_id", "episode_id", "operation_key", "arguments", "scope"}
++                or any(not isinstance(request.get(field), str) or not request[field]
++                       for field in ("episode_id", "operation_key"))):
++            raise ContractError("active_site_saved_selection_mismatch")
++        original_scope = self.store.validate_scope(request["scope"])
++        self._native_provenance(original_scope, sheet_ref)
+         operation = self.store.db.execute(f"SELECT signature,outcome FROM {self.operations_table} WHERE run_id=? AND episode_id=? AND operation_key=?",
+             (self.run_id, request.get("episode_id"), request.get("operation_key"))).fetchone() if self._installed(self.operations_table) else None
+         if operation is None or operation["signature"] != canonical(request):
+@@ -180,9 +321,19 @@
+                 or outcome.get("operation_ref") != identity("operation", {"run_id": self.run_id,
+                     "episode_id": request["episode_id"], "key": request["operation_key"]})):
+             raise ContractError("active_site_saved_selection_mismatch")
+-        extraction = validate_active_site_extraction(saved["extraction"])
+-        validate_active_site_selection(saved["selection"], extraction)
++        extraction = saved["extraction"]
++        _validate_saved_extraction(extraction, saved["selection"])
+         if extraction["source_refs"] != saved["direct_input_source_refs"]:
++            raise ContractError("active_site_saved_source_mismatch")
++        validate_schema(saved["input_source_refs"], {"type": "array", "uniqueItems": True,
++            "items": {"type": "string", "minLength": 1}})
++        ancestors = list(saved["direct_input_source_refs"])
++        for reference in ancestors:
++            original = self._native_provenance(original_scope, reference)
++            for parent in original.get("parent_source_refs", ()):
++                if parent not in ancestors:
++                    ancestors.append(parent)
++        if saved["input_source_refs"] != ancestors:
+             raise ContractError("active_site_saved_source_mismatch")
+         if self.store.get(saved["input_source_ref"])["artifact_ref"] != saved["input_artifact_ref"]:
+             raise ContractError("active_site_saved_source_mismatch")
+@@ -191,10 +342,11 @@
+             actual = original["artifact_ref"] if witness["representation"] == "original" else original.get("text_ref")
+             if actual != witness["artifact_ref"] or witness["source_ref"] not in saved["direct_input_source_refs"]:
+                 raise ContractError("active_site_saved_source_mismatch")
+-        # Deterministic algebra on committed operands is permitted; original
+-        # scientific bytes are neither opened nor reinterpreted on this path.
+-        if (canonical(saved["sheet"]) != canonical(populate_active_site_components(extraction))
+-                or canonical(outcome["result"]["cells"]) != canonical(_project_saved(saved, sheet_ref, COMPONENTS))):
++        # Authenticate the original selected cells. Replaying the calculator or
++        # unit parser here would reconstruct a new result instead of returning
++        # the committed result. Mechanical typed projection uses no equations.
++        if (outcome.get("status") != "completed" or sheet_ref not in outcome.get("record_refs", ())
++                or canonical(outcome["result"]["cells"]) != canonical(_validate_saved_sheet(saved, sheet_ref))):
+             raise ContractError("active_site_saved_cells_mismatch")
+         return saved
+ 

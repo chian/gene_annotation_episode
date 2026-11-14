@@ -25,7 +25,7 @@ from gene_annotation_episode.phylogeny_calculation_contracts import quantity
 from test_bvbrc_phylogeny_bundle_resolution import fixture, slot, add_artifact, supply, supplemental, evidence
 
 
-BOUNDARY = Path(__file__).resolve().parents[1] / "verification/tool_graders_bvbrc_phylogeny_boundaries_2026-10-24"
+BOUNDARY = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries"
 EXAMPLE = BOUNDARY / "official_example/test9_genome_dir"
 NATIVE_PREFIX = "test9_genome_8taxa_10cds_10proteins_codonAndProteins"
 

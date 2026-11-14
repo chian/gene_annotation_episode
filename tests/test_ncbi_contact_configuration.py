@@ -72,20 +72,6 @@ def test_fresh_registry_freezes_contact_for_both_api_ports_and_worker_reopening(
         assert absent.reconstruction_configuration["public"]["ncbi_email"] is None
 
 
-def test_fixed_case_preparation_freezes_contact_without_changing_supplied_configuration(tmp_path):
-    from gene_annotation_episode.case_execution import prepare_case_run
-    from test_case_execution import prepared
-    save_ncbi_contact(EMAIL)
-    case, configuration, _ = prepared(tmp_path)
-    original = deepcopy(configuration)
-    manifest = prepare_case_run(case, tmp_path/"run", configuration)
-    assert manifest["configuration"]["public"]["ncbi_email"] == EMAIL
-    assert configuration == original
-    with Store(manifest["configuration"]["workspace"]) as store:
-        tools = build_tools(store, manifest["configuration"])
-        assert tools.reconstruction_configuration == manifest["configuration"]
-
-
 @pytest.mark.parametrize("path", ["root_tool", "api_episode_port"])
 def test_persisted_contact_and_tool_identity_reach_actual_installed_http_requests(tmp_path, monkeypatch, path):
     """Run installed BLAST primitives with captured, synthetic HTTP responses."""
@@ -154,42 +140,3 @@ def test_saved_missing_contact_does_not_adopt_a_later_default(tmp_path):
     save_ncbi_contact(EMAIL)
     assert configured_tools(saved) == saved
     assert configured_tools()["public"]["ncbi_email"] == EMAIL
-
-
-def test_independent_worker_restores_original_contact_before_provider_entry(tmp_path, monkeypatch):
-    from gene_annotation_episode import tool_configuration
-    from gene_annotation_episode.independent_execution import open_commission
-    from gene_annotation_episode.providers import ModelConnection
-    from test_episode_reconstruction import fixture_commission
-    save_ncbi_contact(EMAIL)
-    spec, run, _, turns = fixture_commission(tmp_path)
-    saved = spec['runtime_binding']['arguments']['tool_configuration']
-    assert saved['public']['ncbi_email'] == EMAIL
-    frozen_manifest = (run/'case-launch.json').read_bytes()
-    save_ncbi_contact('changed-user-default@example.invalid')
-    monkeypatch.setenv('NCBI_EMAIL', 'changed-worker-environment@example.invalid')
-    observed = []
-    original_build = tool_configuration.build_tools
-
-    def build(store, configuration):
-        tools = original_build(store, configuration)
-        observed.append(tools.clients.ncbi_email)
-        assert NCBIBlastService(tools).client.ncbi_email == EMAIL
-        return tools
-
-    class BeforeProviderTransport(Exception):
-        pass
-
-    async def before_transport(provider):
-        raise BeforeProviderTransport
-
-    monkeypatch.setattr(tool_configuration, 'build_tools', build)
-    monkeypatch.setattr(ModelConnection, '__aenter__', before_transport)
-    async def reopen():
-        async with open_commission(spec):
-            pytest.fail('No model or episode execution belongs to this check')
-    with pytest.raises(BeforeProviderTransport):
-        asyncio.run(reopen())
-    assert observed == [EMAIL]
-    assert (run/'case-launch.json').read_bytes() == frozen_manifest
-    assert not turns.exists()

@@ -13,7 +13,7 @@ from gene_annotation_episode.bvbrc_comparative_systems_native import parse_compa
 from gene_annotation_episode.bvbrc_comparative_systems_sheet_contracts import validate_native_document
 
 
-FIXTURES = Path(__file__).parent / "fixtures" / "bvbrc_comparative_systems_native"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_comparative_systems_native"
 BUILD_INPUTS = json.loads((FIXTURES / "build_inputs.json").read_text())
 EVIDENCE = BUILD_INPUTS["families_sheet"]["producer_evidence"]
 

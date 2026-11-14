@@ -15,19 +15,19 @@ from fluorescence_flowio_test_support import require_bounded_runtime
 
 require_bounded_runtime()
 
-from gene_annotation_episode import fluorescence_event_contracts as core
-from gene_annotation_episode.fluorescence_execution_common import identity
-from gene_annotation_episode.native_fluorescence_contracts import IMPLEMENTATION_NAMES
-from gene_annotation_episode.native_fluorescence_storage import file_pin
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import identity
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import IMPLEMENTATION_NAMES
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_storage import file_pin
 from test_native_fluorescence_contracts import event_input, job, pin, software
 
 
-EXTRA_IMPLEMENTATIONS = (
+EXTRA_IMPLEMENTATIONS = tuple('episodic_workflow/root/library/' + name for name in (
     'native_fluorescence_prepared_contracts.py', 'native_fluorescence_prepared_driver.py',
     'fluorescence_preparation_contracts.py', 'fluorescence_preparation_readers.py',
     'fluorescence_event_preparation.py', 'fluorescence_fcs_reader.py',
     'fluorescence_native_report_contracts.py', 'fluorescence_native_reports.py',
-)
+))
 SCALE = 'fcs_scale_flowio_1_4_0'
 COMPENSATE = 'spill_compensate_flowutils_1_2_2'
 FACS = 'biomni_facs_log_548_v1'
@@ -167,6 +167,7 @@ def actual_software(directory):
     implementation = []
     for name in (*IMPLEMENTATION_NAMES, *EXTRA_IMPLEMENTATIONS):
         source, target = root / 'gene_annotation_episode' / name, package / name
+        target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, target)
         target.chmod(0o444)
         implementation.append(file_pin(target))

@@ -80,8 +80,8 @@ target field, interrupts after retaining the stdout response, reopens Store
 and Workflow, forbids new model/native calls, admits the original typed
 returns, and replays the complete closed history unchanged. Its retained
 evidence is in
-[`second-run.log`](../../../verification/tool_graders_bvbrc_appservice_monitor_workflow_2026-10-24/second-run.log).
-Its earlier failure remains in the same directory's `first-run.log`.
+[`second-run.log`](../../source_evidence/bvbrc/second-run.log).
+Its earlier failure is retained in [`first-run.log`](../../source_evidence/bvbrc/first-run.log).
 
 An independent read-only query of that successful run's retained database
 produced [workflow-numerical-evidence.json](workflow-numerical-evidence.json):

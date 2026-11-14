@@ -1,0 +1,132 @@
+{
+    "id": "GeneTree",
+    "script": "App-GeneTree",
+    "label": "Gene Tree",
+    "description": "Estimate phylogeny of gene or other sequence feature",
+    "default_memory": "4G",
+    "parameters": [
+        {
+            "id": "sequences",
+            "label": "Sequence Data Inputs",
+            "required": 1,
+            "allow_multiple": 1,
+            "filename": "string",
+            "type": ["aligned_dna_fasta", "aligned_protein_fasta", "feature_dna_fasta", "feature_protein_fasta", "feature_group", "genome_group", "feature_ids"]
+        },
+        {
+          "id": "genome_selection",
+          "label": "Genome Segment Selection",
+          "required": 0,
+          "type": "group",
+          "group": [
+            {
+              "id": "selected_segments",
+              "label": "Selected Segments",
+              "required": 0,
+              "allow_multiple": 1,
+              "type": "string",
+              "desc": "Segments selected by the user for viral genome group analysis."
+            },
+            {
+              "id": "concat_segments",
+              "label": "Concatenate Selected Segments",
+              "required": 0,
+              "type": "boolean",
+              "desc": "If true, concatenate the selected genome segments before analysis.",
+              "default": false
+            }
+          ]
+        },
+        {
+            "id": "alignment_program",
+            "label": "Alignment Program",
+            "required": 0,
+            "type": ["muscle", "mafft"]
+        },
+        {
+            "id": "trim_threshold",
+            "label": "Alignment End-Trimming Threshold",
+            "desc": "Remove outer columns of alignment until threshold density met.",
+            "required": 0,
+            "type": "float"
+        },
+        {
+            "id": "gap_threshold",
+            "label": "Delete Gappy Sequences Threshold",
+            "desc": "Remove rows of matrix below threshold density.",
+            "required": 0,
+            "type": "float"
+        },
+        {
+            "id": "alphabet",
+            "label": "DNA or Protein",
+            "required": 1,
+            "desc": "Sequence alphabet: DNA or RNA or Protein",
+            "type": "enum",
+            "enum": ["DNA", "Protein"]
+        },
+        {
+            "id": "substitution_model",
+            "label": "Substitution Model",
+            "required": 0,
+            "type": "enum",
+            "enum": ["HKY85", "JC69", "K80", "F81", "F84", "TN93", "GTR",
+                    "LG", "WAG", "JTT", "MtREV", "Dayhoff", "DCMut", "RtREV", 
+                    "CpREV", "VT", "AB", "Blosum62", "MtMam", "MtArt", "HIVw", "HIVb"]
+        },
+        {
+            "id": "bootstrap",
+            "label": "Perform boostrapping",
+            "required": 0,
+            "type": "integer"
+        },
+        {
+            "id": "recipe",
+            "label": "FeatureTree recipe",
+            "required": 0,
+            "default": "RAxML",
+            "desc": "Recipe used for FeatureTree analysis",
+            "type": "enum",
+            "enum": ["RAxML", "PhyML", "FastTree"]
+        },
+        {
+            "id": "tree_type",
+            "label": "Type of tree as requested by the user",
+            "required": 0,
+            "allow_multiple": 0,
+            "desc": "Fields to be retrieved for each gene.",
+            "type": "enum",
+            "enum": ["viral_genome", "gene"]
+        },
+        {
+            "id": "feature_metadata_fields",
+            "label": "Gene Metadata Fields",
+            "required": 0,
+            "allow_multiple": 1,
+            "desc": "Fields to be retrieved for each gene.",
+            "type": "string"
+        },
+        {
+            "id": "genome_metadata_fields",
+            "label": "Genome Metadata Fields",
+            "required": 0,
+            "allow_multiple": 1,
+            "desc": "Fields to be retrieved for each genome.",
+            "type": "string"
+        },
+        {
+            "id": "output_path",
+            "label": "Output Folder",
+            "required": 1,
+            "desc": "Path to which the output will be written.",
+            "type": "folder"
+        },
+        {
+            "id":"output_file",
+            "label":"File Basename",
+            "required": 1,
+            "desc":"Basename for the generated output files.",
+            "type":"wsid"
+        }
+    ]
+}

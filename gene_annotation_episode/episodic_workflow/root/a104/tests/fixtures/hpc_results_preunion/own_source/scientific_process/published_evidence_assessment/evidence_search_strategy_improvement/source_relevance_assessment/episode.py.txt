@@ -1,0 +1,1241 @@
+"""Private literature_search episode behavior for A104."""
+from __future__ import annotations
+from .requests import (CONTRACT_INFORMATION_PROFILE, ContractError, Mapping, ROLES, VERSION, _ACCESS_TOOLS, _ACQUISITION_TOOLS, _AXIS_DIRECTORY, _CHILDREN, _READ_TOOLS, _ROLE_INSTRUCTIONS, _binding_source_bytes, _population_catalog, _required_grading_logic, deepcopy, hashlib, identity, inspect, json, obj, plain, source_location_inputs, validate_schema)
+from .requests import LiteratureRequests
+from .returns import LiteratureReturns
+from .credit import LiteratureCredit
+from importlib import import_module as _import_module
+LiteratureYield = _import_module(".yield", __package__).LiteratureYield
+from .waiting import LiteratureWaiting
+
+class LiteratureEpisode(LiteratureRequests, LiteratureReturns, LiteratureCredit, LiteratureYield, LiteratureWaiting):
+    binding_path = 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment'
+    commissioning_parent = 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement'
+    """C7 binding for C10 assignments; no model connection or private loop."""
+
+    roles = ('literature_search',)
+
+    entry_roles = ()
+
+    def literature_rate_repository(self):
+        """Expose the selected source-sheet adapter; own no decisions or credit."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_storage import LiteratureRateRepository
+        if not hasattr(self, '_literature_rate_repository'):
+            self._literature_rate_repository = LiteratureRateRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        else:
+            # A rejected action can roll back DDL while this service cache
+            # survives. Restore the original adapter, retaining its identity.
+            self._literature_rate_repository._ensure_storage()
+        return self._literature_rate_repository
+
+    def literature_calibration_recovery_repository(self):
+        """Access selected recovery controls and exact saved numerical subsets."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_calibration_recovery_storage import LiteratureCalibrationRecoveryRepository
+        if not hasattr(self, '_literature_calibration_recovery_repository'):
+            self._literature_calibration_recovery_repository = LiteratureCalibrationRecoveryRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_calibration_recovery_repository
+
+    def literature_rate_observation_repository(self):
+        """Access selected original XLSX entries and saved requested subsets."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_observation_storage import LiteratureRateObservationRepository
+        if not hasattr(self, '_literature_rate_observation_repository'):
+            self._literature_rate_observation_repository = LiteratureRateObservationRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_rate_observation_repository
+
+    def literature_rate_replicate_repository(self):
+        """Access explicitly selected raw-rate tables and saved typed subsets."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_replicate_storage import LiteratureRateReplicateRepository
+        if not hasattr(self, '_literature_rate_replicate_repository'):
+            self._literature_rate_replicate_repository = LiteratureRateReplicateRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_rate_replicate_repository
+
+    def literature_quantity_repository(self):
+        """Access committed source-native quantities without owning episode work."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_quantity_storage import LiteratureQuantityRepository
+        if not hasattr(self, "_literature_quantity_repository"):
+            self._literature_quantity_repository = LiteratureQuantityRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_quantity_repository
+
+    def literature_assay_repository(self):
+        """Access source-bound numerical assay calculations; own no decisions."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_assay_storage import LiteratureAssayRepository
+        if not hasattr(self, '_literature_assay_repository'):
+            self._literature_assay_repository = LiteratureAssayRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_assay_repository
+
+    def literature_amount_repository(self):
+        """Access selected source amount components without choosing work."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_amount_storage import LiteratureAmountRepository
+        if not hasattr(self, '_literature_amount_repository'):
+            self._literature_amount_repository = LiteratureAmountRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_amount_repository
+
+    def literature_optical_repository(self):
+        """Access selected optical q/Vq inputs without choosing scientific work."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_optical_storage import LiteratureOpticalRepository
+        if not hasattr(self, '_literature_optical_repository'):
+            self._literature_optical_repository = LiteratureOpticalRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_optical_repository
+
+    def literature_kinetic_repository(self):
+        """Access selected native kinetic parameter components, without choosing work."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_kinetic_storage import LiteratureKineticRepository
+        if not hasattr(self, '_literature_kinetic_repository'):
+            self._literature_kinetic_repository = LiteratureKineticRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_kinetic_repository
+
+    def literature_binding_interaction_repository(self):
+        """Access selected four-cell source binding interaction components."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_binding_interaction_storage import LiteratureBindingInteractionRepository
+        if not hasattr(self, '_literature_binding_interaction_repository'):
+            self._literature_binding_interaction_repository = LiteratureBindingInteractionRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_binding_interaction_repository
+
+    def literature_ratio_repository(self):
+        """Access retained relative-signal components without choosing work."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_ratio_storage import LiteratureRatioRepository
+        if not hasattr(self, '_literature_ratio_repository'):
+            self._literature_ratio_repository = LiteratureRatioRepository(self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_ratio_repository
+
+    def literature_binding_repository(self):
+        """Access saved source binding parameters without choosing work."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_binding_storage import LiteratureBindingRepository
+        if not hasattr(self, '_literature_binding_repository'):
+            self._literature_binding_repository = LiteratureBindingRepository(self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_binding_repository
+
+    def literature_binding_model_repository(self):
+        """Read and populate explicitly selected conditional binding models."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_binding_model_storage import LiteratureBindingModelRepository
+        if not hasattr(self, '_literature_binding_model_repository'):
+            self._literature_binding_model_repository = LiteratureBindingModelRepository(self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_binding_model_repository
+
+    def literature_transport_repository(self):
+        """Access explicitly selected source kinetic-response calculations."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_transport_storage import LiteratureTransportRepository
+        if not hasattr(self, '_literature_transport_repository'):
+            self._literature_transport_repository = LiteratureTransportRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_transport_repository
+
+    def literature_figure_repository(self):
+        """Access selected native experimental figure measurements."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_figure_storage import LiteratureFigureRepository
+        if not hasattr(self, '_literature_figure_repository'):
+            self._literature_figure_repository = LiteratureFigureRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._literature_figure_repository
+
+    def literature_ratio_source_repository(self, *, evidence_origin="reported_source"):
+        """Access selected native source-signal cells with the caller's bound origin."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_ratio_source_storage import LiteratureRatioSourceRepository
+        if not hasattr(self, '_literature_ratio_source_repositories'):
+            self._literature_ratio_source_repositories = {}
+        if evidence_origin not in self._literature_ratio_source_repositories:
+            repository = LiteratureRatioSourceRepository(self.services.workflow.store, self.services.workflow.run_id,
+                evidence_origin=evidence_origin)
+            self._literature_ratio_source_repositories[evidence_origin] = repository
+        return self._literature_ratio_source_repositories[evidence_origin]
+
+    def literature_controlled_response_repository(self, *, expected_descriptor=None, evidence_origin="reported_source"):
+        """Access the caller-bound controlled-response repository; choose no work."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_controlled_response_storage import LiteratureControlledResponseRepository
+        key = json.dumps([expected_descriptor, evidence_origin], sort_keys=True, allow_nan=False)
+        if not hasattr(self, '_literature_controlled_response_repositories'):
+            self._literature_controlled_response_repositories = {}
+        if key not in self._literature_controlled_response_repositories:
+            self._literature_controlled_response_repositories[key] = LiteratureControlledResponseRepository(
+                self.services.workflow.store, self.services.workflow.run_id, expected_descriptor=expected_descriptor,
+                evidence_origin=evidence_origin)
+        return self._literature_controlled_response_repositories[key]
+
+    def literature_gel_repository(self, *, expected_descriptor=None, evidence_origin="reported_source"):
+        """Access the caller-bound gel repository; choose no work."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_gel_storage import LiteratureGelRepository
+        key = json.dumps([expected_descriptor, evidence_origin], sort_keys=True, allow_nan=False)
+        if not hasattr(self, '_literature_gel_repositories'):
+            self._literature_gel_repositories = {}
+        if key not in self._literature_gel_repositories:
+            self._literature_gel_repositories[key] = LiteratureGelRepository(
+                self.services.workflow.store, self.services.workflow.run_id, expected_descriptor=expected_descriptor,
+                evidence_origin=evidence_origin)
+        return self._literature_gel_repositories[key]
+
+    def __init__(self, services, *, outcome_page_size=8, rate_population=False, reference_parent_sources=None,
+                 contract_information_profile=None, ratio_source_population=False,
+                 ratio_source_evidence_origin="reported_source", controlled_response_population=False,
+                 controlled_response_descriptor=None, controlled_response_evidence_origin="reported_source",
+                 gel_population=False, gel_descriptor=None, gel_evidence_origin="reported_source",
+                 completion_time_population=False, product_partition_population=False, active_site_population=False, parent_depletion_population=False, stoichiometric_balance_population=False, compiled_assay_population=False, channel_population=False, ion_discrimination_population=False, assay_grading_population=False, private_yield_binding=False, yield_bindings=None):
+        if type(private_yield_binding) is not bool:
+            raise ValueError('boolean_private_literature_yield_binding_required')
+        self.private_yield_binding = private_yield_binding
+        if yield_bindings is not None and not private_yield_binding:
+            raise ValueError('literature_yield_bindings_require_private_binding')
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_task_credit import validate_yield_bindings
+        self._yield_bindings = validate_yield_bindings(
+            {} if yield_bindings is None else plain(yield_bindings))
+        if type(outcome_page_size) is not int or outcome_page_size < 1:
+            raise ValueError("positive_literature_outcome_page_size_required")
+        self.services = services
+        self.outcome_page_size = outcome_page_size
+        if type(rate_population) is not bool:
+            raise ValueError("boolean_rate_population_binding_required")
+        self.rate_population = rate_population
+        if type(assay_grading_population) is not bool or assay_grading_population and not rate_population:
+            raise ValueError('assay_grading_population_requires_rate_population')
+        self.assay_grading_population = assay_grading_population
+        if type(channel_population) is not bool or channel_population and not rate_population:
+            raise ValueError("channel_population_requires_rate_population")
+        self.channel_population = channel_population
+        if type(ion_discrimination_population) is not bool or ion_discrimination_population and not rate_population:
+            raise ValueError("ion_discrimination_population_requires_rate_population")
+        self.ion_discrimination_population = ion_discrimination_population
+        if type(compiled_assay_population) is not bool or compiled_assay_population and not rate_population:
+            raise ValueError("compiled_assay_population_requires_rate_population")
+        self.compiled_assay_population = compiled_assay_population
+        if type(completion_time_population) is not bool:
+            raise ValueError("boolean_completion_time_population_binding_required")
+        if completion_time_population and not rate_population:
+            raise ValueError("completion_time_population_requires_rate_population")
+        self.completion_time_population = completion_time_population
+        if type(active_site_population) is not bool:
+            raise ValueError("boolean_active_site_population_binding_required")
+        if active_site_population and not rate_population:
+            raise ValueError("active_site_population_requires_rate_population")
+        self.active_site_population = active_site_population
+        if type(parent_depletion_population) is not bool or parent_depletion_population and not rate_population:
+            raise ValueError('parent_depletion_population_requires_rate_population')
+        self.parent_depletion_population = parent_depletion_population
+        if type(stoichiometric_balance_population) is not bool or stoichiometric_balance_population and not rate_population:
+            raise ValueError('stoichiometric_balance_population_requires_rate_population')
+        self.stoichiometric_balance_population = stoichiometric_balance_population
+        if type(product_partition_population) is not bool:
+            raise ValueError("boolean_product_partition_population_binding_required")
+        if product_partition_population and not rate_population:
+            raise ValueError("product_partition_population_requires_rate_population")
+        self.product_partition_population = product_partition_population
+        if type(ratio_source_population) is not bool:
+            raise ValueError("boolean_ratio_source_population_binding_required")
+        if ratio_source_population and not rate_population:
+            raise ValueError("ratio_source_population_requires_rate_population")
+        if (ratio_source_evidence_origin not in ("reported_source", "synthetic_fixture")
+                or not ratio_source_population and ratio_source_evidence_origin != "reported_source"):
+            raise ValueError("invalid_ratio_source_evidence_origin_binding")
+        self.ratio_source_population = ratio_source_population
+        self.ratio_source_evidence_origin = ratio_source_evidence_origin
+        if type(controlled_response_population) is not bool:
+            raise ValueError("boolean_controlled_response_population_binding_required")
+        if controlled_response_population and not rate_population:
+            raise ValueError("controlled_response_population_requires_rate_population")
+        if not controlled_response_population and controlled_response_descriptor is not None:
+            raise ValueError("controlled_response_descriptor_requires_population")
+        self.controlled_response_population = controlled_response_population
+        if (controlled_response_evidence_origin not in ("reported_source", "synthetic_fixture")
+                or not controlled_response_population and controlled_response_evidence_origin != "reported_source"):
+            raise ValueError("invalid_controlled_response_evidence_origin_binding")
+        self.controlled_response_evidence_origin = controlled_response_evidence_origin
+        self._controlled_response_descriptor = None
+        if controlled_response_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_controlled_response_storage import implementation_descriptor
+            current = implementation_descriptor(evidence_origin=controlled_response_evidence_origin)
+            if controlled_response_descriptor is not None and controlled_response_descriptor != current:
+                raise ValueError("controlled_response_implementation_binding_mismatch")
+            self._controlled_response_descriptor = deepcopy(current)
+        if type(gel_population) is not bool:
+            raise ValueError("boolean_gel_population_binding_required")
+        if gel_population and not rate_population:
+            raise ValueError("gel_population_requires_rate_population")
+        if not gel_population and gel_descriptor is not None:
+            raise ValueError("gel_descriptor_requires_population")
+        self.gel_population = gel_population
+        if (gel_evidence_origin not in ("reported_source", "synthetic_fixture")
+                or not gel_population and gel_evidence_origin != "reported_source"):
+            raise ValueError("invalid_gel_evidence_origin_binding")
+        self.gel_evidence_origin = gel_evidence_origin
+        self._gel_descriptor = None
+        if gel_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_gel_storage import implementation_descriptor
+            current = implementation_descriptor(evidence_origin=gel_evidence_origin)
+            if gel_descriptor is not None and gel_descriptor != current:
+                raise ValueError("gel_implementation_binding_mismatch")
+            self._gel_descriptor = deepcopy(current)
+        from gene_annotation_episode.episodic_workflow.root.a104.composition_information import CONTRACT_INFORMATION_PROFILE
+        if contract_information_profile is not None and (
+                contract_information_profile != CONTRACT_INFORMATION_PROFILE or not rate_population):
+            raise ValueError('unsupported_literature_contract_information_profile')
+        self._contract_information_profile = contract_information_profile
+        if reference_parent_sources is not None:
+            if (not rate_population or not isinstance(reference_parent_sources, (list, tuple))
+                    or any(not isinstance(ref, str) or not ref for ref in reference_parent_sources)
+                    or len(set(reference_parent_sources)) != len(reference_parent_sources)):
+                raise ValueError("explicit_unique_reference_parent_sources_required")
+            reference_parent_sources = tuple(reference_parent_sources)
+        self.reference_parent_sources = reference_parent_sources
+
+    @classmethod
+    def reference_evidence(cls, services, *, source_refs,
+                           contract_information_profile=CONTRACT_INFORMATION_PROFILE,
+                           **configuration):
+        """Construct a fresh caller-assigned reference-source investigation.
+
+        This explicit entry point defaults to existing on-demand contract
+        information. The caller supplies its protocol, model and controller;
+        no source is read or scientific action selected here. Explicit None
+        retains the existing expanded presentation. The ordinary constructor
+        and saved-descriptor reconstruction keep their original defaults.
+        """
+        configuration.setdefault('rate_population', True)
+        return cls(services,
+            reference_parent_sources=source_refs,
+            contract_information_profile=contract_information_profile,
+            **configuration)
+
+    def as_record(self):
+        """Record only A104's own literature binding and retained local files."""
+        implementation = _binding_source_bytes()
+        for path in sorted(_AXIS_DIRECTORY.glob('literature*.py')):
+            if path.name != 'literature_episode.py':
+                implementation += path.read_bytes()
+        configuration = {'outcome_page_size': self.outcome_page_size}
+        for name in ('rate_population', 'compiled_assay_population',
+                     'assay_grading_population'):
+            if getattr(self, name):
+                configuration[name] = True
+        if self._contract_information_profile is not None:
+            configuration['contract_information_profile'] = self._contract_information_profile
+        if self.reference_parent_sources is not None:
+            configuration['reference_parent_sources'] = list(self.reference_parent_sources)
+        return {'version': VERSION, 'binding_id': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment',
+                'implementation_sha256': hashlib.sha256(implementation).hexdigest(),
+                'configuration': configuration}
+
+    def contract_information_configuration(self):
+        return self._contract_information_profile
+
+    def contract_information_profile(self, context):
+        if (context.role in ROLES or context.role == 'annotation' and len(context.path) == 1
+                and self.reference_parent_sources is not None):
+            return self._contract_information_profile
+        return None
+
+    @staticmethod
+    def _role(role):
+        if role not in ROLES:
+            raise ValueError("unsupported_literature_role:" + str(role))
+        return role
+
+    def permitted_common_actions(self, context):
+        self._role(context.role)
+        return ("tool", "reason", "child", "redeliver_report")
+
+    def _required_grading_repository(self, context=None):
+        if self.assay_grading_population:
+            return self._assay_grading_repository()
+        return None
+
+    def reasoning_action_schema(self, context, commit_schema, *, _accept_legacy_quotes=False):
+        repository = self._required_grading_repository(context)
+        leads = context.assignment.get('literature_task', {}).get('kind') == 'verified_source_leads'
+        if repository is None and not leads:
+            return None
+        schema = (obj({'kind': {'const': 'reason'}, 'commit': deepcopy(commit_schema)}) if repository is None else
+            _required_grading_logic(repository).action_schema(commit_schema, source_location_inputs(repository.population_schema(),
+                allow_legacy_quote=_accept_legacy_quotes)))
+        if leads:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_task_credit import lead_schema
+            schema['properties']['source_lead'] = lead_schema()
+        return source_location_inputs(schema, allow_legacy_quote=_accept_legacy_quotes)
+
+    def accept_reasoning_action_schema(self, context, commit_schema):
+        """Admit original quoted actions without requesting quotes from a model."""
+        return self.reasoning_action_schema(context, commit_schema, _accept_legacy_quotes=True)
+
+    def reasoning_has_task_content(self, context, selection):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_task_credit import commissioned_task, lead_schema
+        if 'source_lead' not in selection:
+            return False
+        task, _ = commissioned_task(context)
+        if task['kind'] != 'verified_source_leads':
+            return False
+        validate_schema(plain(selection['source_lead']), source_location_inputs(lead_schema(), allow_legacy_quote=True))
+        return True
+
+    def execute_reasoning(self, context, selection, operation_key):
+        repository = self._required_grading_repository(context)
+        if 'source_lead' in selection:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_task_credit import validate_lead
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_contract_error import ExperimentalContractError
+            store = self.services.workflow.store
+            try:
+                witness = selection['source_lead']['witness']
+                self._tool_arguments(context, 'source.read', {'source_ref': witness['source_ref'],
+                    'representation': witness['representation'], 'offset': witness['start'],
+                    'limit': witness['end'] - witness['start']})
+                with store.transaction():
+                    native = {key: value for key, value in plain(selection).items() if key != 'source_lead'}
+                    account_binding = ({'account_invocation': (context.run_id, context.episode_id)}
+                        if native['commit'].get('interpretation_accounts') else {})
+                    result = (store.commit_reasoning(native['commit'], plain(context.scope), operation_key, **account_binding)
+                        if repository is None else _required_grading_logic(repository).execute(context, native, operation_key, repository,
+                            authorize_source_access=lambda ref, representation: self._tool_arguments(
+                                context, 'source.read', {'source_ref': ref, 'representation': representation})))
+                    if result['status'] not in ('completed', 'partial'):
+                        return result
+                    return {**result, 'literature_source_lead': validate_lead(store, context, selection['source_lead'], result)}
+            except (ContractError, ExperimentalContractError) as error:
+                return {'status': 'invalid', 'record_refs': [], 'changed_record_refs': [], 'result': None,
+                    'feedback': {'category': 'source_lead', 'code': getattr(error, 'code', str(error))}}
+        if repository is None:
+            return None
+        return _required_grading_logic(repository).execute(context, selection, operation_key, repository,
+            authorize_source_access=lambda ref, representation: self._tool_arguments(
+                context, 'source.read', {'source_ref': ref, 'representation': representation}))
+
+    def allowed_children(self, parent, caller_capabilities):
+        self._role(parent.role)
+        # These are available branches, never automatically instantiated work.
+        return self.child_roles(parent.role, context=parent)
+
+    def child_roles(self, role, *, context=None):
+        self._role(role)
+        return _CHILDREN[role]
+
+    def instructions(self, context):
+        self._role(context.role)
+        return (_ROLE_INSTRUCTIONS[context.role] + "\n"
+            "This is an iterative scientific investigation in the shared Episode loop. "
+            "Earlier outcomes and admitted child forms inform later choices; no child order, "
+            "reading quota or complete-document requirement is prescribed. A one-off search/read "
+            "is an ordinary tool. A supplied reading selector is context, not an automatically "
+            "executed action. Preserve the source's actual subject, experimental conditions, "
+            "representation, version and UTF-8 byte anchors. Distinguish source claims from "
+            "their applicability to the fixed target. Negative findings and qualifications can "
+            "advance the investigation. Commit interpretations with the common reasoning action "
+            "and update only the parent's declared typed form in that same work call. "
+            "Navigation, byte coverage and repeated reading earn no scientific credit by themselves. "
+            "The commissioned task's own yield settings guide continuation.")
+
+    def initial_decision_context(self, context):
+        """Caller literature job; an empty source list starts source discovery."""
+        if (self.reference_parent_sources is None or context.role != "annotation"
+                or len(context.path) != 1):
+            return {}
+        custody = []
+        for reference in self.reference_parent_sources:
+            if reference not in context.received_record_refs:
+                raise ContractError("literature_parent_source_not_received")
+            source = self._require(reference, context.scope, "source")
+            custody.append({"source_ref": reference, **{name: source.get(name) for name in (
+                "artifact_ref", "text_ref", "version", "parent_source_refs")}})
+        result = {"reference_evidence_parent": {"version": "reference_evidence_parent_v1",
+                    "source_refs": list(self.reference_parent_sources), "source_custody": custody,
+                    "child_population_operations": [
+                        {name: entry[name] for name in ("name", "description")}
+                        for entry in _population_catalog(assay_grading_population=self.assay_grading_population,
+                            ratio_source_population=self.ratio_source_population,
+                            controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
+                            completion_time_population=self.completion_time_population,
+                            active_site_population=self.active_site_population,
+                            parent_depletion_population=self.parent_depletion_population,
+                            stoichiometric_balance_population=self.stoichiometric_balance_population,
+                            product_partition_population=self.product_partition_population,
+                            compiled_assay_population=self.compiled_assay_population,
+                            channel_population=self.channel_population,
+                            ion_discrimination_population=self.ion_discrimination_population)]},
+                "literature_experimental_work": {"version": "literature_experimental_task_v1",
+                    "aspect": "reference_evidence_parent"}}
+        if self.ratio_source_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_ratio_source_render import admitted_return_meanings
+            result["literature_ratio_source_return_meanings"] = admitted_return_meanings(
+                context, self._ratio_source_repository())
+        if self.controlled_response_population:
+            result["literature_controlled_response_return_bindings"] = self._controlled_response_bindings(context)
+        if self.gel_population:
+            result.update(self._gel_display_context(context))
+        if self.rate_population:
+            result.update(self._native_rate_display_context(context))
+            result.update(self._native_rate_domain_display_context(context))
+            result.update(self._native_rate_meaning_display_context(context))
+            result.update(self._received_fact_display_context(context))
+            result.update(self._endpoint_signal_display_context(context))
+            result.update(self._summary_precision_display_context(context))
+            result.update(self._measurement_comparison_display_context(context))
+            result.update(self._concentration_window_display_context(context))
+        if self.rate_population:
+            result.update(self._population_task_context(context))
+        result.update(self.current_report_facts(context))
+        return result
+
+    def decision_context(self, context, current_view):
+        assignment = self._validate_assignment(context.role, context.assignment, context.scope, context=context)
+        page = (assignment if context.role == "literature_page" else assignment.get("page"))
+        sources = ([page["source_ref"]] if page else assignment.get("source_refs", []))
+        custody = []
+        for reference in sources:
+            source = self._require(reference, context.scope, "source")
+            custody.append({"source_ref": reference, **{key: source.get(key) for key in
+                ("version", "artifact_ref", "text_ref", "stdout_ref", "stderr_ref", "parent_source_refs")}})
+        result = {"literature_assignment": assignment, "literature_source_custody": custody,
+            "own_literature_outcomes": plain(self.services.own_outcomes(context.episode_id,
+                tools=(*_ACQUISITION_TOOLS, *_READ_TOOLS), offset=0, limit=self.outcome_page_size)),
+            "literature_history_meaning": "Own outcome metadata only. Read exact previous outcomes together through episode.history with view=records and selected decision_indices. The request_context own_attempt_detail lookup reads selected inputs only. Source delivery does not establish understanding, absence or resolved science."}
+        if self.assay_grading_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_source_inputs import own_source_inputs
+            examined = own_source_inputs(self.services.workflow.store, context)
+            if examined:
+                result['literature_examined_source_inputs'] = examined
+        if self.rate_population:
+            result["literature_experimental_work"] = {
+                "version": "literature_experimental_task_v1", "aspect": "source_experimental_evidence"}
+        if self.ratio_source_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_ratio_source_render import admitted_return_meanings
+            result["literature_ratio_source_return_meanings"] = admitted_return_meanings(
+                context, self._ratio_source_repository())
+        if self.controlled_response_population:
+            result["literature_controlled_response_return_bindings"] = self._controlled_response_bindings(context)
+        if self.gel_population:
+            result.update(self._gel_display_context(context))
+        if self.rate_population:
+            result.update(self._native_rate_display_context(context))
+            result.update(self._native_rate_domain_display_context(context))
+            result.update(self._native_rate_meaning_display_context(context))
+            result.update(self._received_fact_display_context(context))
+            result.update(self._endpoint_signal_display_context(context))
+            result.update(self._summary_precision_display_context(context))
+            result.update(self._measurement_comparison_display_context(context))
+            result.update(self._concentration_window_display_context(context))
+        if self.rate_population:
+            result.update(self._population_task_context(context))
+        result.update(self.current_report_facts(context))
+        return result
+
+    def _owned_population_task_sources(self, context):
+        """Classify possessed own outputs using public metadata, read-only.
+
+        No repository is constructed, no table is installed and no sheet or
+        request artifact is opened. SQL extracts only successful operation
+        metadata, never numerical cells or provider/source contents.
+        """
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_task_selection import population_task_metadata_specs
+        workflow = self.services.workflow
+        if context.run_id != workflow.run_id:
+            return ()
+        db = workflow.store.db
+        installed = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        selected = []
+        table_rows = {}
+        for source, flag, table, provider, versions in population_task_metadata_specs():
+            if not getattr(self, flag) or table not in installed:
+                continue
+            if table not in table_rows:
+                table_rows[table] = tuple(db.execute(
+                    f"SELECT operation_key, json_extract(outcome,'$.status') AS status, "
+                    "json_extract(outcome,'$.operation_ref') AS operation_ref, "
+                    "json_extract(outcome,'$.result.sheet_ref') AS sheet_ref, "
+                    "json_extract(outcome,'$.record_refs') AS record_refs "
+                    f"FROM {table} WHERE run_id=? AND episode_id=? AND json_valid(outcome) ORDER BY rowid",
+                    (context.run_id, context.episode_id)))
+            for row in table_rows[table]:
+                reference = row['sheet_ref']
+                if (row['status'] != 'completed' or not isinstance(reference, str)
+                        or reference not in context.received_record_refs
+                        or row['operation_ref'] != identity('operation', {'run_id': context.run_id,
+                            'episode_id': context.episode_id, 'key': row['operation_key']})):
+                    continue
+                try:
+                    references = json.loads(row['record_refs'] or 'null')
+                    if not isinstance(references, list) or reference not in references:
+                        continue
+                    metadata = self._require(reference, context.scope, 'source')
+                except (ContractError, ValueError, TypeError, KeyError):
+                    continue
+                if (metadata.get('id') == reference and metadata.get('record_type') == 'source'
+                        and metadata.get('origin') == 'tool' and metadata.get('provider') == provider
+                        and metadata.get('version') in versions):
+                    selected.append(source)
+                    break
+        return tuple(selected)
+
+    def _population_task_context(self, context):
+        """Own classification plus the latest actually selected failed action."""
+        result = {'literature_owned_population_sources': self._owned_population_task_sources(context)}
+        workflow = self.services.workflow
+        if context.run_id != workflow.run_id:
+            return result
+        db = workflow.store.db
+        if not db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='runtime_actions'").fetchone():
+            return result
+        # The latest completed own action controls repair relevance. A later
+        # successful/non-tool action clears the old failure automatically.
+        row = db.execute("""SELECT json_extract(action,'$.kind') AS kind,
+            json_extract(action,'$.tool') AS tool,
+            json_extract(action,'$.arguments.version') AS version,
+            json_extract(action,'$.arguments.population_version') AS population_version,
+            json_extract(result,'$.status') AS status
+            FROM runtime_actions WHERE run_id=? AND episode_id=? AND result IS NOT NULL
+            AND json_valid(action) AND json_valid(result)
+            ORDER BY decision_index DESC LIMIT 1""", (context.run_id, context.episode_id)).fetchone()
+        if row and row['kind'] == 'tool' and row['status'] in ('invalid', 'failed', 'error'):
+            result['literature_selected_population_attempt'] = {'tool': row['tool'],
+                'arguments': {name: row[name] for name in ('version', 'population_version') if row[name] is not None},
+                'status': row['status']}
+        return result
+
+    def catalog(self, context, *, _accept_legacy_quotes=False):
+        self._role(context.role)
+        available = self.services.tool_catalog(context.scope)
+        entries = ([{"name": name, **entry} for name, entry in available.items()]
+                   if isinstance(available, Mapping) else list(available))
+        allowed = set(_ACCESS_TOOLS)
+        if context.role in {"literature", "literature_strategy", "literature_search"}:
+            allowed.update(_ACQUISITION_TOOLS)
+        result = []
+        for entry in entries:
+            if entry["name"] not in allowed:
+                continue
+            entry = deepcopy(plain(entry))
+            if entry["name"] == "public.ncbi.search":
+                entry["input_schema"]["properties"]["database"] = {'enum': ['pubmed']}
+            if entry["name"] == "execution.estimate":
+                branches = [branch for branch in entry["input_schema"].get("anyOf", ())
+                    if branch.get("properties", {}).get("tool", {}).get("const") in {
+                        "source.xlsx.sheets", "source.xlsx.rows"}]
+                if not branches:
+                    continue
+                entry["input_schema"] = {"anyOf": branches}
+            result.append(entry)
+        if self.rate_population:
+            populations = _population_catalog(assay_grading_population=self.assay_grading_population,
+                            ratio_source_population=self.ratio_source_population,
+                            controlled_response_population=self.controlled_response_population, gel_population=self.gel_population,
+                            completion_time_population=self.completion_time_population,
+                            active_site_population=self.active_site_population,
+                            parent_depletion_population=self.parent_depletion_population,
+                            stoichiometric_balance_population=self.stoichiometric_balance_population,
+                            product_partition_population=self.product_partition_population,
+                            compiled_assay_population=self.compiled_assay_population,
+                            channel_population=self.channel_population,
+                            ion_discrimination_population=self.ion_discrimination_population)
+            if self._contract_information_profile is not None:
+                from gene_annotation_episode.episodic_workflow.root.a104.composition_information import CONTRACT_ARGUMENT_TRANSPORT
+                populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
+            result.extend(populations)
+        # Publish location-only input contracts to the model. Internal ingress
+        # additionally accepts exact legacy quotes, which the source reader
+        # still validates rather than replacing a mismatching caller value.
+        return [{**entry, 'input_schema': source_location_inputs(
+                    entry['input_schema'], allow_legacy_quote=_accept_legacy_quotes)}
+                for entry in result]
+
+    async def execute(self, context, tool_name, arguments, operation_key):
+        try:
+            arguments = self._tool_arguments(context, tool_name, arguments)
+        except ContractError as error:
+            # The common source records this actual failed own attempt. It
+            # supplies feedback for another selected action, never a completed
+            # scientific observation or an automatic retry.
+            return {"status": "invalid", "operation_ref": identity("operation", {
+                "key": operation_key, "name": tool_name, "arguments": plain(arguments)}),
+                "record_refs": [], "changed_record_refs": [], "result": None,
+                "feedback": {"category": "arguments_or_reference", "code": str(error),
+                    **({"detail": error.detail} if error.detail else {})}}
+        if tool_name in {"literature.concentration_window.populate", "literature.measurement_comparison.populate", "literature.product_coupling.populate", "literature.measurement_validation.populate", "literature.ion_discrimination.populate", "literature.channel.populate", "literature.assay.components.populate", "literature.calibration.recovery.populate", "literature.rate.observations.populate", "literature.rate.replicates.populate", "literature.rate.populate", "literature.rate.source.populate", "literature.quantity.populate", "literature.assay.populate", "literature.ratio.populate", "literature.ratio.source.populate", "literature.binding.populate", "literature.binding.model.populate", "literature.transport.response.populate", "literature.figure.populate", "literature.amount.populate", "literature.completion_time.populate", "literature.active_site.populate", "literature.product_partition.populate", "literature.optical.populate", "literature.kinetic.populate", "literature.kinetic.model.populate", "literature.binding.interaction.populate", "literature.binding.interaction.model.populate", "literature.controlled_response.source_v3.populate", "literature.gel.populate", "literature.parent_depletion.populate", "literature.stoichiometric_balance.populate", "literature.assay_grading.populate", "literature.a105.aggregate"}:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_contract_error import ExperimentalContractError
+            try:
+                if tool_name == 'literature.figure.populate' and arguments.get('version') == 'literature_figure_endpoint_signal_population_v1':
+                    repo = self._endpoint_signal_repository()
+                    return repo.populate(context, self._materialize_text_arguments(context, arguments, repo), operation_key)
+                if tool_name == 'literature.kinetic.populate' and arguments.get('version') == 'literature_kinetic_summary_precision_population_v1':
+                    repo = self._summary_precision_repository()
+                    return repo.populate(context, self._materialize_text_arguments(context, arguments, repo), operation_key)
+                repo = {"literature.concentration_window.populate": self._concentration_window_repository,
+                        "literature.measurement_comparison.populate": self._measurement_comparison_repository,
+                        "literature.product_coupling.populate": self._product_coupling_repository,
+                        "literature.measurement_validation.populate": self._measurement_validation_repository,
+                        "literature.ion_discrimination.populate": self._ion_discrimination_repository,
+                        "literature.channel.populate": self._channel_repository,
+                        "literature.assay.components.populate": self._compiled_assay_repository,
+                        "literature.rate.populate": self.literature_rate_repository,
+                        "literature.calibration.recovery.populate": self.literature_calibration_recovery_repository,
+                        "literature.rate.observations.populate": self.literature_rate_observation_repository,
+                        "literature.rate.replicates.populate": self.literature_rate_replicate_repository,
+                        "literature.rate.source.populate": self.literature_rate_repository,
+                        "literature.quantity.populate": self.literature_quantity_repository,
+                        "literature.assay.populate": self.literature_assay_repository,
+                        "literature.amount.populate": self.literature_amount_repository,
+                        "literature.completion_time.populate": self._completion_time_repository,
+                        "literature.active_site.populate": self._active_site_repository,
+                        "literature.parent_depletion.populate": self._parent_depletion_repository,
+                        "literature.stoichiometric_balance.populate": self._stoichiometric_balance_repository,
+                        "literature.assay_grading.populate": self._assay_grading_repository,
+                        "literature.a105.aggregate": self._a105_aggregation_repository,
+                        "literature.product_partition.populate": self._product_partition_repository,
+                        "literature.optical.populate": self.literature_optical_repository,
+                        "literature.kinetic.populate": self.literature_kinetic_repository,
+                        "literature.kinetic.model.populate": self._kinetic_model_repository,
+                        "literature.binding.interaction.populate": self.literature_binding_interaction_repository,
+                        "literature.binding.interaction.model.populate": self._binding_interaction_model_repository,
+                        "literature.ratio.populate": self.literature_ratio_repository,
+                        "literature.ratio.source.populate": self._ratio_source_repository,
+                        "literature.controlled_response.source_v3.populate": self._controlled_response_repository,
+                        "literature.gel.populate": self._gel_repository,
+                        "literature.binding.populate": self.literature_binding_repository,
+                        "literature.binding.model.populate": self.literature_binding_model_repository,
+                        "literature.transport.response.populate": self.literature_transport_repository,
+                        "literature.figure.populate": self.literature_figure_repository,
+                        }[tool_name]()
+                arguments = self._materialize_text_arguments(context, arguments, repo)
+                if tool_name == "literature.controlled_response.source_v3.populate":
+                    return repo.populate_v3(context, arguments, operation_key)
+                return (repo.populate_native(context, arguments, operation_key)
+                        if tool_name == "literature.rate.source.populate" else repo.populate(context, arguments, operation_key))
+            except (ContractError, ExperimentalContractError) as error:
+                return {"status": "invalid", "operation_ref": identity("operation", {
+                    "key": operation_key, "name": tool_name, "arguments": plain(arguments)}),
+                    "record_refs": [], "changed_record_refs": [], "result": None,
+                    "feedback": {"category": "arguments_or_reference", "code": str(error),
+                                 "field": getattr(error, "field", None),
+                                 **({"detail": deepcopy(error.detail)}
+                                    if getattr(error, "detail", None) is not None and (
+                                        isinstance(error, ExperimentalContractError) and error.code == "source_quote_mismatch"
+                                        or isinstance(error, ContractError) and str(error) in {
+                                            "representation_error",
+                                            }
+                                        )
+                                    else {})}}
+        authorization = ({"permitted_record_refs": tuple(context.received_record_refs)}
+                         if tool_name in {"source.locate", "source.sequence.scan", "source.sequence.references", "source.experimental.records"} else {})
+        outcome = self.services.execute_tool(tool_name, arguments, scope=context.scope,
+                                              operation_key=operation_key, **authorization)
+        outcome = await outcome if inspect.isawaitable(outcome) else outcome
+        if self.rate_population and tool_name == 'state.query' and outcome.get('status') in {'completed', 'partial'}:
+            try:
+                for record in outcome.get('result', {}).get('records', ()):
+                    self._endpoint_signal_repository().authorize_record_access(context, record)
+                    self._summary_precision_repository().authorize_record_access(context, record)
+                    self._measurement_comparison_repository().authorize_record_access(context, record)
+                    self._concentration_window_repository().authorize_record_access(context, record)
+            except ContractError as error:
+                return {"status": "invalid", "operation_ref": identity("operation", {
+                    "key": operation_key, "name": tool_name, "arguments": plain(arguments)}),
+                    "record_refs": [], "changed_record_refs": [], "result": None,
+                    "feedback": {"category": "arguments_or_reference", "code": str(error)}}
+        return outcome
+
+    def _endpoint_signal_repository(self):
+        """Lazy selected adapter; discovery and reconstruction create no state."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_endpoint_signal_storage import LiteratureEndpointSignalRepository
+        if not hasattr(self, '_endpoint_signal_repo'):
+            self._endpoint_signal_repo = LiteratureEndpointSignalRepository(self.services.workflow.store, self.services.workflow.run_id)
+        return self._endpoint_signal_repo
+
+    def _concentration_window_repository(self):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_concentration_window_storage import LiteratureConcentrationWindowRepository
+        if not hasattr(self, '_concentration_window_repo'):
+            self._concentration_window_repo = LiteratureConcentrationWindowRepository(self.services.workflow.store, self.services.workflow.run_id)
+        return self._concentration_window_repo
+
+    def _concentration_window_display_context(self, context):
+        return {'literature_concentration_window_receipt_bindings': self._concentration_window_repository().receipt_bindings()}
+
+    def _measurement_comparison_repository(self):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_measurement_comparison_storage import LiteratureMeasurementComparisonRepository
+        if not hasattr(self, '_measurement_comparison_repo'):
+            self._measurement_comparison_repo = LiteratureMeasurementComparisonRepository(self.services.workflow.store, self.services.workflow.run_id)
+        return self._measurement_comparison_repo
+
+    def _measurement_comparison_display_context(self, context):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_measurement_comparison_storage import REQUESTED
+        repo = self._measurement_comparison_repository()
+        result = {'literature_measurement_comparison_receipt_bindings': repo.receipt_bindings()}
+        return result
+
+    def _summary_precision_repository(self):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_kinetic_summary_precision_storage import LiteratureKineticSummaryPrecisionRepository
+        if not hasattr(self, '_summary_precision_repo'):
+            self._summary_precision_repo = LiteratureKineticSummaryPrecisionRepository(self.services.workflow.store, self.services.workflow.run_id)
+        return self._summary_precision_repo
+
+    def _summary_precision_display_context(self, context):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_kinetic_summary_precision_storage import REQUESTED
+        repo = self._summary_precision_repository()
+        result = {'literature_summary_precision_receipt_bindings': repo.receipt_bindings()}
+        return result
+
+    def _endpoint_signal_display_context(self, context):
+        repo = self._endpoint_signal_repository()
+        result = {'literature_endpoint_receipt_bindings': repo.receipt_bindings()}
+        return result
+
+    def _rate_grid_repository(self):
+        return self.literature_rate_observation_repository().grid_projection()
+
+    def _compiled_assay_repository(self):
+        """Lazy common-sheet compilation; discovery installs no state."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_compiled_assay_storage import LiteratureCompiledAssayRepository
+        if not hasattr(self, "_compiled_assay_repo"):
+            self._compiled_assay_repo = LiteratureCompiledAssayRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._compiled_assay_repo
+
+    def _compiled_assay_v2_repository(self):
+        return self._compiled_assay_repository().v2_projection()
+
+    def _compiled_assay_v3_repository(self):
+        return self._compiled_assay_repository().v3_projection()
+
+    def _product_coupling_repository(self):
+        """Lazy selected product/cofactor adapter; discovery creates no state."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_product_coupling_storage import LiteratureProductCouplingRepository
+        if not hasattr(self, "_product_coupling_repo"):
+            self._product_coupling_repo = LiteratureProductCouplingRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._product_coupling_repo
+
+    def _measurement_validation_repository(self):
+        """Lazy selected precision/control adapter; discovery creates no state."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_measurement_validation_storage import LiteratureMeasurementValidationRepository
+        if not hasattr(self, "_measurement_validation_repo"):
+            self._measurement_validation_repo = LiteratureMeasurementValidationRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._measurement_validation_repo
+
+    def _ion_discrimination_repository(self):
+        """Optional lazy adapter; discovery and saved reads create no state."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_ion_discrimination_storage import LiteratureIonDiscriminationRepository
+        if not hasattr(self, "_ion_discrimination_repo"):
+            self._ion_discrimination_repo = LiteratureIonDiscriminationRepository(self.services.workflow.store, self.services.workflow.run_id)
+        return self._ion_discrimination_repo
+
+    def _channel_repository(self):
+        """Lazy adapter; only a selected population reads electrical sources."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_channel_storage import LiteratureChannelRepository
+        if not hasattr(self, "_channel_repo"):
+            self._channel_repo = LiteratureChannelRepository(self.services.workflow.store, self.services.workflow.run_id)
+        return self._channel_repo
+
+    def _completion_time_repository(self):
+        """Lazy selected-operation adapter; discovery installs no state."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_completion_time_storage import LiteratureCompletionTimeRepository
+        if not hasattr(self, "_completion_time_repo"):
+            self._completion_time_repo = LiteratureCompletionTimeRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._completion_time_repo
+
+    def _active_site_repository(self):
+        """Lazy selected-operation adapter; discovery installs no state."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_active_site_storage import LiteratureActiveSiteRepository
+        if not hasattr(self, "_active_site_repo"):
+            self._active_site_repo = LiteratureActiveSiteRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._active_site_repo
+
+    def _assay_grading_source_cells(self, context, namespace, sheet_ref, components):
+        # A source identifier does not grant a receiver the private child sheet.
+        # fact_cells returns cells admitted to this episode's typed report.
+        if namespace == 'literature_controlled_response_component_cells' and self.controlled_response_population:
+            rows = self._controlled_response_repository().fact_cells(context, [sheet_ref], components=components)
+            validate_schema(rows, self._rate_fact_sources()[namespace]['report_schema'])
+            return rows
+        if namespace == 'literature_gel_component_cells' and self.gel_population:
+            rows = self._gel_repository().fact_cells(context, [sheet_ref], components=components)
+            validate_schema(rows, self._rate_fact_sources()[namespace]['report_schema'])
+            return rows
+        for name, _, _, _, repository in self._population_routes(context):
+            if name == namespace and name != 'literature_assay_grading_cells':
+                rows = repository().fact_cells(context, [sheet_ref], components=components)
+                schema = self._rate_fact_sources()[namespace]['report_schema']
+                validate_schema(rows, schema)
+                return rows
+        raise ContractError('assay_grading_reader_namespace_unbound')
+
+    def _assay_grading_repository(self):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_assay_grading_storage import LiteratureAssayGradingRepository
+        if not hasattr(self, '_assay_grading_repo'):
+            self._assay_grading_repo = LiteratureAssayGradingRepository(
+                self.services.workflow.store, self.services.workflow.run_id,
+                read_cells=self._assay_grading_source_cells)
+        return self._assay_grading_repo
+
+    def _a105_aggregation_repository(self):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_a105_aggregation_storage import LiteratureA105AggregationRepository
+        if not hasattr(self, '_a105_aggregation_repo'):
+            self._a105_aggregation_repo = LiteratureA105AggregationRepository(
+                self.services.workflow.store, self.services.workflow.run_id,
+                read_cells=lambda context, sheet_ref, components:
+                    self._assay_grading_repository().fact_cells(context, [sheet_ref], components=components))
+        return self._a105_aggregation_repo
+
+    def _parent_depletion_repository(self):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_parent_depletion_storage import LiteratureParentDepletionRepository
+        if not hasattr(self,'_parent_depletion_repo'):
+            self._parent_depletion_repo=LiteratureParentDepletionRepository(
+                self.services.workflow.store,self.services.workflow.run_id)
+        return self._parent_depletion_repo
+
+    def _stoichiometric_balance_repository(self):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_stoichiometric_balance_storage import LiteratureStoichiometricBalanceRepository
+        if not hasattr(self, '_stoichiometric_balance_repo'):
+            self._stoichiometric_balance_repo = LiteratureStoichiometricBalanceRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._stoichiometric_balance_repo
+
+    def _product_partition_repository(self):
+        """Lazy source-composition adapter; discovery installs no state."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_product_partition_storage import LiteratureProductPartitionRepository
+        if not hasattr(self, "_product_partition_repo"):
+            self._product_partition_repo = LiteratureProductPartitionRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._product_partition_repo
+
+    def _binding_interaction_model_repository(self):
+        """Optional adapter; construction and saved reads install no tables."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_binding_interaction_model_storage import LiteratureBindingInteractionModelRepository
+        if not hasattr(self, "_binding_interaction_model_repo"):
+            self._binding_interaction_model_repo = LiteratureBindingInteractionModelRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._binding_interaction_model_repo
+
+    def _kinetic_model_repository(self):
+        """Optional local adapter; discovery and saved reads install no tables."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_kinetic_model_storage import LiteratureKineticModelRepository
+        if not hasattr(self, "_kinetic_model_repo"):
+            self._kinetic_model_repo = LiteratureKineticModelRepository(
+                self.services.workflow.store, self.services.workflow.run_id)
+        return self._kinetic_model_repo
+
+    def _ratio_source_repository(self):
+        return self.literature_ratio_source_repository(
+            evidence_origin=self.ratio_source_evidence_origin)
+
+    def _controlled_response_repository(self):
+        return self.literature_controlled_response_repository(
+            expected_descriptor=self._controlled_response_descriptor,
+            evidence_origin=self.controlled_response_evidence_origin)
+
+    def _gel_repository(self):
+        return self.literature_gel_repository(
+            expected_descriptor=self._gel_descriptor,
+            evidence_origin=self.gel_evidence_origin)
+
+    def _controlled_response_bindings(self, context):
+        """Host-only selected label locations, limited to this episode's possession."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_controlled_response_storage import PROVIDER, COMPONENTS, VIEWS
+        repository = self._controlled_response_repository()
+        rows = list(repository.received_cells(context))
+        for reference in context.received_record_refs:
+            record = self.services.read_record(reference)
+            if record.get("record_type") == "source" and record.get("provider") == PROVIDER:
+                # Explicit host inspection of the owned/admitted roster is not
+                # a default scientific return request. fact_cells enforces the
+                # originating episode or the receiver's exact admitted subset.
+                keys = repository.requested_component_keys(reference, {
+                    "requested_controlled_response_components": list(COMPONENTS),
+                    "requested_controlled_response_views": list(VIEWS)})
+                rows.extend(repository.fact_cells(context, [reference], components=keys))
+        unique = {}
+        for row in rows:
+            key = (row["sheet_ref"], row["component_key"])
+            if key in unique and unique[key] != row:
+                raise ContractError("controlled_response_possession_conflict")
+            unique[key] = row
+        return repository.semantic_bindings(list(unique.values()))
+
+    def _gel_bindings(self, context):
+        """Host-only selected label locations, limited to this episode's possession."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_gel_storage import PROVIDER, COMPONENTS, VIEWS
+        repository = self._gel_repository()
+        rows = list(repository.received_cells(context))
+        for reference in context.received_record_refs:
+            record = self.services.read_record(reference)
+            if record.get("record_type") == "source" and record.get("provider") == PROVIDER:
+                # Explicit host inspection of the owned/admitted roster is not
+                # a default scientific return request. fact_cells enforces the
+                # originating episode or the receiver's exact admitted subset.
+                keys = repository.requested_component_keys(reference, {
+                    "requested_gel_components": list(COMPONENTS),
+                    "requested_gel_views": list(VIEWS)})
+                rows.extend(repository.fact_cells(context, [reference], components=keys))
+        unique = {}
+        for row in rows:
+            key = (row["sheet_ref"], row["component_key"])
+            if key in unique and unique[key] != row:
+                raise ContractError("gel_possession_conflict")
+            unique[key] = row
+        return repository.semantic_bindings(list(unique.values()))
+
+    def _gel_display_context(self, context):
+        """Actual possessed meaning records, outside generic working-state pagination."""
+        bindings = self._gel_bindings(context)
+        records = {}
+        for entries in bindings.values():
+            for reference, binding in entries.items():
+                if binding["category"] != "scientific_meaning":
+                    continue
+                if binding["record_ref"] != reference or reference not in context.received_record_refs:
+                    raise ContractError("gel_semantic_display_record_not_received")
+                record = self._require(reference, context.scope, "reference")
+                if record.get("id") != reference or record.get("record_type") != "reference":
+                    raise ContractError("gel_semantic_display_record_mismatch")
+                records[reference] = record
+        return {"literature_gel_return_bindings": bindings, "literature_gel_return_records": records}
+
+    def _received_fact_display_context(self, context):
+        """Possessed scientific metadata only, independent of working pagination.
+
+        This map grants no source bytes or additional scientific references.
+        The pure renderer selects the relevant dependency closure and applies
+        existing operand maskers before presenting any of these records.
+        """
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_received_fact_render import KINDS
+        records = {}
+        for reference in context.received_record_refs:
+            # Record kind is encoded by domain.identity. Reject other handles
+            # before access; source/artifact metadata is not display content.
+            kind = next((kind for kind in KINDS if reference.startswith(kind + "_")), None)
+            if kind is None:
+                continue
+            record = self._require(reference, context.scope, kind)
+            if record.get("id") != reference or record.get("record_type") != kind:
+                raise ContractError("literature_received_fact_display_record_mismatch")
+            records[reference] = record
+        if self.assay_grading_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_work_report import source_metadata
+            records.update(source_metadata(self.services.workflow.store, context.received_record_refs))
+        return {"literature_received_fact_display": {"records": records,
+            "received_refs": list(context.received_record_refs)}}
+
+    def _native_rate_display_context(self, context):
+        """Exact owned/admitted rate rows and possessed meaning-record metadata."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_storage import PROVIDER, NATIVE_RECORD_VERSION, COMPONENTS
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_source_render import MEANING_FIELDS
+        repository = self.literature_rate_repository().source_projection()
+        rows = list(repository.received_cells(context))
+        for reference in context.received_record_refs:
+            record = self.services.read_record(reference)
+            if (record.get("record_type") == "source" and record.get("provider") == PROVIDER
+                    and record.get("version") == NATIVE_RECORD_VERSION):
+                # fact_cells authenticates the original sheet or the exact
+                # receiver subset. A known sheet never expands parent custody.
+                rows.extend(repository.fact_cells(context, [reference], components=COMPONENTS))
+        unique = {}
+        for row in rows:
+            key = (row["sheet_ref"], row["component"])
+            if key in unique and unique[key] != row:
+                raise ContractError("literature_rate_source_display_possession_conflict")
+            unique[key] = row
+        records = {}
+        for row in unique.values():
+            for field, namespace in MEANING_FIELDS.items():
+                reference = row[field]
+                if reference is None:
+                    continue
+                if reference not in context.received_record_refs:
+                    raise ContractError("literature_rate_source_display_record_not_received")
+                record = self._require(reference, context.scope, namespace)
+                if record.get("id") != reference or record.get("record_type") != namespace:
+                    raise ContractError("literature_rate_source_display_record_mismatch")
+                records[reference] = record
+        return {"literature_rate_source_display": {"cells": list(unique.values()), "records": records}}
+
+    def _native_rate_domain_display_context(self, context):
+        """Exact owned/admitted rate rows and possessed meaning-record metadata."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_storage import PROVIDER, NATIVE_RECORD_VERSION, COMPONENTS
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_source_render import MEANING_FIELDS
+        repository = self.literature_rate_repository().source_domain_projection()
+        rows = list(repository.received_cells(context))
+        for reference in context.received_record_refs:
+            record = self.services.read_record(reference)
+            if (record.get("record_type") == "source" and record.get("provider") == PROVIDER
+                    and record.get("version") == NATIVE_RECORD_VERSION):
+                # fact_cells authenticates the original sheet or the exact
+                # receiver subset. A known sheet never expands parent custody.
+                rows.extend(repository.fact_cells(context, [reference], components=COMPONENTS))
+        unique = {}
+        for row in rows:
+            key = (row["sheet_ref"], row["component"])
+            if key in unique and unique[key] != row:
+                raise ContractError("literature_rate_source_domain_display_possession_conflict")
+            unique[key] = row
+        records = {}
+        for row in unique.values():
+            for field, namespace in MEANING_FIELDS.items():
+                reference = row[field]
+                if reference is None:
+                    continue
+                if reference not in context.received_record_refs:
+                    raise ContractError("literature_rate_source_domain_display_record_not_received")
+                record = self._require(reference, context.scope, namespace)
+                if record.get("id") != reference or record.get("record_type") != namespace:
+                    raise ContractError("literature_rate_source_domain_display_record_mismatch")
+                records[reference] = record
+        return {"literature_rate_source_domain_display": {"cells": list(unique.values()), "records": records}}
+
+    def _native_rate_meaning_repository(self):
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_meaning_delivery import source_meaning_projection
+        return source_meaning_projection(self.literature_rate_repository())
+
+    def _native_rate_meaning_display_context(self, context):
+        """Owned or exactly admitted meaning rows; known sheets grant no expansion."""
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_storage import PROVIDER, NATIVE_RECORD_VERSION, COMPONENTS
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_source_render import MEANING_FIELDS
+        repository = self._native_rate_meaning_repository()
+        rows = list(repository.received_cells(context))
+        for reference in context.received_record_refs:
+            record = self.services.read_record(reference)
+            if (record.get("record_type") == "source" and record.get("provider") == PROVIDER
+                    and record.get("version") == NATIVE_RECORD_VERSION):
+                rows.extend(repository.fact_cells(context, [reference], components=COMPONENTS))
+        unique = {}
+        for row in rows:
+            key = (row["sheet_ref"], row["component"])
+            if key in unique and unique[key] != row:
+                raise ContractError("literature_rate_source_meaning_display_possession_conflict")
+            unique[key] = row
+        records = {}
+        for row in unique.values():
+            for field, namespace in MEANING_FIELDS.items():
+                reference = row[field]
+                if reference is None:
+                    continue
+                if reference not in context.received_record_refs:
+                    raise ContractError("literature_rate_source_meaning_display_record_not_received")
+                record = self._require(reference, context.scope, namespace)
+                if record.get("id") != reference or record.get("record_type") != namespace:
+                    raise ContractError("literature_rate_source_meaning_display_record_mismatch")
+                records[reference] = record
+        return {"literature_rate_source_meaning_display": {"cells": list(unique.values()), "records": records}}
+
+    def _population_routes(self, context=None):
+        if not self.rate_population:
+            return ()
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_kinetic_summary_precision_storage import PROVIDER as SUMMARY_PROVIDER, NAMESPACE as SUMMARY_NAMESPACE, REQUESTED as SUMMARY_REQUESTED
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_product_coupling_storage import PROVIDER as COUPLING_PROVIDER, NAMESPACE as COUPLING_NAMESPACE, REQUESTED as COUPLING_REQUESTED
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_measurement_validation_storage import PROVIDER as VALIDATION_PROVIDER, NAMESPACE as VALIDATION_NAMESPACE, REQUESTED as VALIDATION_REQUESTED
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_calibration_recovery_storage import PROVIDER as RECOVERY_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_observation_storage import PROVIDER as OBSERVATION_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_replicate_storage import PROVIDER as REPLICATE_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_rate_storage import COMPONENTS, PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_quantity_storage import COMPONENTS as QUANTITIES, PROVIDER as QUANTITY_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_assay_storage import COMPONENTS as ASSAY_COMPONENTS, PROVIDER as ASSAY_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_ratio_calculations import COMPONENTS as RATIO_COMPONENTS
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_ratio_storage import PROVIDER as RATIO_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_binding_calculations import COMPONENTS as BINDING_COMPONENTS
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_binding_storage import PROVIDER as BINDING_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_binding_models import COMPONENTS as BINDING_MODEL_COMPONENTS
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_binding_model_storage import PROVIDER as BINDING_MODEL_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_transport_storage import COMPONENTS as TRANSPORT_COMPONENTS, PROVIDER as TRANSPORT_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_figure_storage import COMPONENTS as FIGURE_COMPONENTS, PROVIDER as FIGURE_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_amount_storage import COMPONENTS as AMOUNT_COMPONENTS, PROVIDER as AMOUNT_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_optical_storage import COMPONENTS as OPTICAL_COMPONENTS, PROVIDER as OPTICAL_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_kinetic_storage import COMPONENTS as KINETIC_COMPONENTS, PROVIDER as KINETIC_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_kinetic_model_storage import COMPONENTS as KINETIC_MODEL_COMPONENTS, PROVIDER as KINETIC_MODEL_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_binding_interaction_storage import COMPONENTS as INTERACTION_COMPONENTS, PROVIDER as INTERACTION_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_binding_interaction_model_storage import COMPONENTS as INTERACTION_MODEL_COMPONENTS, PROVIDER as INTERACTION_MODEL_PROVIDER
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_endpoint_signal_storage import PROVIDER as ENDPOINT_PROVIDER, NAMESPACE as ENDPOINT_NAMESPACE, REQUESTED as ENDPOINT_REQUESTED
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_measurement_comparison_storage import PROVIDER as COMPARISON_PROVIDER, NAMESPACE as COMPARISON_NAMESPACE, REQUESTED as COMPARISON_REQUESTED
+        from gene_annotation_episode.episodic_workflow.root.a104.literature_concentration_window_storage import PROVIDER as WINDOW_PROVIDER, NAMESPACE as WINDOW_NAMESPACE, REQUESTED as WINDOW_REQUESTED
+        result = ((WINDOW_NAMESPACE, WINDOW_REQUESTED, WINDOW_PROVIDER, (), self._concentration_window_repository),
+                (COMPARISON_NAMESPACE, COMPARISON_REQUESTED, COMPARISON_PROVIDER, (), self._measurement_comparison_repository),
+                (SUMMARY_NAMESPACE, SUMMARY_REQUESTED, SUMMARY_PROVIDER, (), self._summary_precision_repository),
+                (ENDPOINT_NAMESPACE, ENDPOINT_REQUESTED, ENDPOINT_PROVIDER, (), self._endpoint_signal_repository),
+                (COUPLING_NAMESPACE, COUPLING_REQUESTED, COUPLING_PROVIDER,
+                 (), self._product_coupling_repository),
+                (VALIDATION_NAMESPACE, VALIDATION_REQUESTED, VALIDATION_PROVIDER,
+                 (), self._measurement_validation_repository),
+                ("literature_calibration_recovery_cells", "requested_calibration_recovery_components", RECOVERY_PROVIDER,
+                 (), self.literature_calibration_recovery_repository),
+                ("literature_rate_observation_cells", "requested_rate_observation_components", OBSERVATION_PROVIDER,
+                 (), self.literature_rate_observation_repository),
+                ("literature_rate_grid_cells", "requested_rate_grid_components", OBSERVATION_PROVIDER,
+                 (), self._rate_grid_repository),
+                ("literature_rate_replicate_cells", "requested_rate_replicate_components", REPLICATE_PROVIDER,
+                 (), self.literature_rate_replicate_repository),
+                ("literature_rate_cells", "requested_rate_components", PROVIDER,
+                 COMPONENTS, self.literature_rate_repository),
+                ("literature_rate_source_cells", "requested_rate_components", PROVIDER,
+                 COMPONENTS, (lambda: self.literature_rate_repository().source_projection())),
+                ("literature_rate_source_domain_cells", "requested_rate_components", PROVIDER,
+                 COMPONENTS, (lambda: self.literature_rate_repository().source_domain_projection())),
+                ("literature_rate_source_meaning_cells", "requested_rate_components", PROVIDER,
+                 COMPONENTS, self._native_rate_meaning_repository),
+                ("literature_quantity_cells", "requested_quantity_components", QUANTITY_PROVIDER,
+                 QUANTITIES, self.literature_quantity_repository),
+                ("literature_assay_cells", "requested_assay_components", ASSAY_PROVIDER,
+                 ASSAY_COMPONENTS, self.literature_assay_repository),
+                ("literature_ratio_cells", "requested_ratio_components", RATIO_PROVIDER,
+                 RATIO_COMPONENTS, self.literature_ratio_repository),
+                ("literature_binding_cells", "requested_binding_components", BINDING_PROVIDER,
+                 BINDING_COMPONENTS, self.literature_binding_repository),
+                ("literature_binding_model_cells", "requested_binding_model_components", BINDING_MODEL_PROVIDER,
+                 BINDING_MODEL_COMPONENTS, self.literature_binding_model_repository),
+                ("literature_transport_cells", "requested_transport_components", TRANSPORT_PROVIDER,
+                 TRANSPORT_COMPONENTS, self.literature_transport_repository),
+                ("literature_figure_cells", "requested_figure_components", FIGURE_PROVIDER,
+                 FIGURE_COMPONENTS, self.literature_figure_repository),
+                ("literature_amount_cells", "requested_amount_components", AMOUNT_PROVIDER,
+                 AMOUNT_COMPONENTS, self.literature_amount_repository),
+                ("literature_optical_cells", "requested_optical_components", OPTICAL_PROVIDER,
+                 OPTICAL_COMPONENTS, self.literature_optical_repository),
+                ("literature_kinetic_cells", "requested_kinetic_components", KINETIC_PROVIDER,
+                 KINETIC_COMPONENTS, self.literature_kinetic_repository),
+                ("literature_kinetic_model_cells", "requested_kinetic_model_components", KINETIC_MODEL_PROVIDER,
+                 KINETIC_MODEL_COMPONENTS, self._kinetic_model_repository),
+                ("literature_binding_interaction_cells", "requested_binding_interaction_components", INTERACTION_PROVIDER,
+                 INTERACTION_COMPONENTS, self.literature_binding_interaction_repository),
+                ("literature_binding_interaction_model_cells", "requested_binding_interaction_model_components", INTERACTION_MODEL_PROVIDER,
+                 INTERACTION_MODEL_COMPONENTS, self._binding_interaction_model_repository))
+        if self.ion_discrimination_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_ion_discrimination_storage import PROVIDER as ION_PROVIDER, NAMESPACE, REQUESTED
+            result += ((NAMESPACE, REQUESTED, ION_PROVIDER, (), self._ion_discrimination_repository),)
+        if self.channel_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_channel_storage import PROVIDER as CHANNEL_PROVIDER, NAMESPACE, REQUESTED
+            result += ((NAMESPACE, REQUESTED, CHANNEL_PROVIDER, (), self._channel_repository),)
+        if self.compiled_assay_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_compiled_assay_storage import PROVIDER as COMPILED_PROVIDER, NAMESPACE, REQUESTED
+            result += ((NAMESPACE, REQUESTED, COMPILED_PROVIDER, (), self._compiled_assay_repository),)
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_compiled_assay_storage import NAMESPACE_V2, REQUESTED_V2
+            result += ((NAMESPACE_V2, REQUESTED_V2, COMPILED_PROVIDER, (), self._compiled_assay_v2_repository),)
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_compiled_assay_storage import NAMESPACE_V3, REQUESTED_V3
+            result += ((NAMESPACE_V3, REQUESTED_V3, COMPILED_PROVIDER, (), self._compiled_assay_v3_repository),)
+        if self.assay_grading_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_assay_grading_storage import PROVIDER, NAMESPACE, REQUESTED
+            result += ((NAMESPACE, REQUESTED, PROVIDER, (), self._assay_grading_repository),)
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_a105_aggregation_storage import PROVIDER, NAMESPACE, REQUESTED
+            result += ((NAMESPACE, REQUESTED, PROVIDER, (), self._a105_aggregation_repository),)
+        if self.product_partition_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_product_partition_storage import PROVIDER as PARTITION_PROVIDER, NAMESPACE
+            result += ((NAMESPACE, "requested_product_partition_components", PARTITION_PROVIDER,
+                (), self._product_partition_repository),)
+        if self.completion_time_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_completion_time_storage import COMPONENTS as TIME_COMPONENTS, PROVIDER as TIME_PROVIDER, NAMESPACE
+            result += ((NAMESPACE, "requested_completion_time_components", TIME_PROVIDER,
+                (), self._completion_time_repository),)
+        if self.active_site_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_active_site_storage import COMPONENTS as ACTIVE_SITE_COMPONENTS, PROVIDER as ACTIVE_SITE_PROVIDER, NAMESPACE
+            result += ((NAMESPACE, "requested_active_site_components", ACTIVE_SITE_PROVIDER,
+                (), self._active_site_repository),)
+        if self.parent_depletion_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_parent_depletion_storage import PROVIDER, NAMESPACE, REQUESTED
+            result += ((NAMESPACE,REQUESTED,PROVIDER,(),self._parent_depletion_repository),)
+        if self.stoichiometric_balance_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_stoichiometric_balance_storage import PROVIDER, NAMESPACE, REQUESTED
+            result += ((NAMESPACE, REQUESTED, PROVIDER, (), self._stoichiometric_balance_repository),)
+        if self.ratio_source_population:
+            from gene_annotation_episode.episodic_workflow.root.a104.literature_ratio_source_storage import COMPONENTS as SOURCE_COMPONENTS, PROVIDER as SOURCE_PROVIDER
+            result += (("literature_ratio_source_cells", "requested_ratio_source_components", SOURCE_PROVIDER,
+                SOURCE_COMPONENTS, self._ratio_source_repository),)
+        return result

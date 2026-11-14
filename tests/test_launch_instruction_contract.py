@@ -16,7 +16,8 @@ from gene_annotation_episode.launch_instructions import (
     LaunchInstructions, SELECTION_SCHEMA, catalog, validate_selection,
 )
 from gene_annotation_episode.practical_resource_episodes import operation_catalog
-from gene_annotation_episode.homology_episodes import HomologyEpisodes, ROLES as HOMOLOGY_ROLES
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.requests import ROLES as HOMOLOGY_ROLES
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from gene_annotation_episode.api_execution import HMMERAPIExecution
@@ -104,7 +105,7 @@ def test_default_collection_has_resource_and_service_entries_with_real_operation
             provider = build_service(service, {'kind': 'api', 'service': service}, tools)
             service_catalogs[entry_id] = {item['name'] for item in
                 [*provider.capabilities(), *provider.result_catalog(request, {})]}
-    homology = object.__new__(HomologyEpisodes)
+    homology = object.__new__(HomologyEpisode)
     homology_tools = {row['name'] for role in HOMOLOGY_ROLES
         for row in homology.catalog(SimpleNamespace(path=((role, 'catalog-inspection'),)))}
     bound_catalogs = {

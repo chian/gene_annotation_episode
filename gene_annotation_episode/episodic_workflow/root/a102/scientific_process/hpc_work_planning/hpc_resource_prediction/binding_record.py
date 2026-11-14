@@ -1,0 +1,21 @@
+"""Private binding record for A102 prediction."""
+from __future__ import annotations
+from pathlib import Path
+from copy import deepcopy
+import hashlib
+from gene_annotation_episode.episodic_workflow.root.a102 import hpc_queue
+
+
+
+class PredictionBindingRecord:
+    def as_record(self):
+        home = Path(__file__).resolve().parent
+        axis = home.parents[2]
+        sources = {str(path.relative_to(axis)): path for path in sorted(home.glob('*.py'))}
+        sources.update({name: axis/name for name in ('hpc_campaign.py', 'hpc_ledger.py', 'library/hpc_prediction.py', 'library/hpc_resource_prediction.py', 'hpc_queue.py', 'hpc_monitoring.py', 'library/hpc_continuation.py', 'execution_memory.py', 'execution_guidance.py', 'hpc_commission_sources.py', 'communication.py', 'domain.py', 'episode_bindings.py', 'execution_contracts.py', 'episode_return_records.py', 'library/hpc_prompt.py')})
+        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+        return {'version': 'hpc_episode_v1', 'binding_id': 'scientific_process/hpc_work_planning/hpc_resource_prediction',
+            'implementation_sha256': hpc_queue.digest(hashes),
+            'configuration': {'resources': deepcopy(self.resources), 'commissions': deepcopy(self.commissions),
+                **({'shared_execution_memory': self.memory.as_record()} if self.memory else {}),
+                **({'require_commission_yield': True} if self.private_yield_binding else {})}}

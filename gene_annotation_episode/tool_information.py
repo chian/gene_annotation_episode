@@ -149,11 +149,6 @@ def workflow_execution_catalogs():
     These are global information entries. Receiver invocation still requires
     its own actual catalog. No HPC variant of a local scientific tool is added.
     """
-    from types import SimpleNamespace
-    from .terminal_execution_episodes import operation_catalog
-    from .episode_monitoring import MonitorEpisodes
-    from .homology_episodes import HomologyEpisodes
-    from .execution_episodes import launch_operation_catalog, native_result_operation_catalog
     from .api_blast import NCBIBlastService
     from .api_uniprot import UniProtService
     from .api_bvbrc import BVBRCDataService
@@ -161,15 +156,7 @@ def workflow_execution_catalogs():
     from .api_rfam import RfamBatchService
     from .api_execution import hmmer_operation_catalog
 
-    result = {kind: list(operation_catalog(kind)) for kind in ('local', 'hpc')}
-    result['local'].extend(launch_operation_catalog())
-    for kind in ('local', 'hpc'):
-        result[kind].extend(native_result_operation_catalog())
-    monitor = MonitorEpisodes(None).catalog(SimpleNamespace(role='monitor'))
-    for kind in RESOURCE_KINDS:
-        result.setdefault(kind, []).extend(deepcopy(monitor))
-    for role in ('job_launch', 'job_monitor', 'job_results'):
-        result['local'].extend(HomologyEpisodes.catalog(None, SimpleNamespace(path=((role, 'information'),))))
+    result = {kind: [] for kind in RESOURCE_KINDS}
     # These capability methods return declared operation contracts only. Their
     # temporary holder is never used for execution or availability inference.
     blast = NCBIBlastService.__new__(NCBIBlastService); blast.client = None

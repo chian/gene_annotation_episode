@@ -3,14 +3,14 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.fluorescence_event_calculations import calculate_fluorescence_sheet
-from gene_annotation_episode.fluorescence_result_views import project_fluorescence_result
-from gene_annotation_episode.fluorescence_result_contracts import (validate_fluorescence_projection,
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views import project_fluorescence_result
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_contracts import (validate_fluorescence_projection,
     validate_fluorescence_selector, validate_fluorescence_worker_result)
-from gene_annotation_episode.fluorescence_return_views import (FACT_SOURCES, CONTEXT_SOURCE, FAILURE_SOURCE,
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_return_views import (FACT_SOURCES, CONTEXT_SOURCE, FAILURE_SOURCE,
     PROJECTION_SOURCE, SAVED_SOURCE, fluorescence_fact_sources, requested_fluorescence_sources,
     select_fluorescence_return_facts, validate_fluorescence_fact_values)
-from gene_annotation_episode.fluorescence_result_worker import execute_fluorescence_worker
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_worker import execute_fluorescence_worker
 from gene_annotation_episode.state import Store
 from test_fluorescence_event_calculations import _batch, _parameters, _request, _sheet
 from test_fluorescence_result_worker import saved_plan, selector

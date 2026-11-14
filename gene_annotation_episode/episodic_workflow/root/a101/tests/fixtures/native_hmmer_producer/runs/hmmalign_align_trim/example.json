@@ -1,0 +1,113 @@
+{
+  "label": "hmmalign_align_trim",
+  "program": "hmmalign",
+  "mode": "align",
+  "variant": "trim",
+  "native_returncode": 0,
+  "artifact_count": 2,
+  "row_family": "sequences",
+  "row_count": 4,
+  "saved_sheet_recalculation_equal": true,
+  "sealed_replay_equal": true,
+  "episode_integration_verified": false,
+  "example_row": {
+    "record_key": "alignment:0/sequence:0",
+    "locator": {
+      "artifact_role": "stockholm",
+      "artifact_ref": "fixture:sha256:c8f43a46ef36614bfdb870be92c6a7fab7b7c4e579b1aa1a9d59abac3190667b",
+      "line": 3,
+      "byte_start": 17,
+      "byte_end": 57,
+      "alignment_index": 0,
+      "row_index": 0,
+      "name_occurrence": 0
+    },
+    "name": "test1",
+    "occurrence": 0,
+    "alignment_index": 0,
+    "origin": "newly_aligned",
+    "fragment": "not_declared",
+    "status": "available",
+    "availability": {
+      "geometry": true,
+      "rf": true,
+      "pp": true,
+      "original_mapping": "unique"
+    },
+    "original_length": 20,
+    "model_length": 20,
+    "retained_residues": 20,
+    "match_state_residues": 20,
+    "deleted_model_positions": 0,
+    "insert_state_residues": 0,
+    "terminal_unaligned_residues": 0,
+    "missing_model_positions": 0,
+    "nonresidue_model_positions": 0,
+    "trimmed_residues": 0,
+    "model_occupancy": 1.0,
+    "sequence_match_coverage": 1.0,
+    "posterior_lower_mean": 0.945,
+    "posterior_upper_mean": 0.9974999999999999,
+    "numerators": {
+      "model_occupancy": 20,
+      "sequence_match_coverage": 20,
+      "posterior_lower_mean": 18.9,
+      "posterior_upper_mean": 19.95
+    },
+    "denominators": {
+      "model_occupancy": 20,
+      "sequence_match_coverage": 20,
+      "posterior_lower_mean": 20,
+      "posterior_upper_mean": 20
+    },
+    "posterior_bounded_residue_count": 20,
+    "posterior_unavailable_residue_count": 0,
+    "posterior_mean_lower_inclusive": true,
+    "posterior_mean_upper_inclusive": false,
+    "posterior_population": "retained_residues_with_available_native_PP",
+    "posterior_bin_counts": {
+      "9": 1,
+      "*": 19
+    },
+    "mapping": {
+      "status": "unique",
+      "original_length": 20,
+      "candidate_intervals": [
+        [
+          0,
+          20
+        ]
+      ],
+      "original_interval": [
+        0,
+        20
+      ],
+      "trimmed_residues": 0,
+      "normalization": "native_alphabet_case_insensitive"
+    },
+    "inherited_join": null,
+    "native": {
+      "aligned_sequence": "ACDEFGHIKLMN.....PQRSTVWY",
+      "rf": "xxxxxxxxxxxx.....xxxxxxxx",
+      "pp": "9***********.....********"
+    },
+    "issues": [],
+    "unavailable": {},
+    "derived": {
+      "original_length": 20,
+      "model_length": 20,
+      "retained_residues": 20,
+      "match_state_residues": 20,
+      "deleted_model_positions": 0,
+      "insert_state_residues": 0,
+      "terminal_unaligned_residues": 0,
+      "missing_model_positions": 0,
+      "nonresidue_model_positions": 0,
+      "trimmed_residues": 0,
+      "model_occupancy": 1.0,
+      "sequence_match_coverage": 1.0,
+      "posterior_lower_mean": 0.945,
+      "posterior_upper_mean": 0.9974999999999999
+    }
+  }
+}

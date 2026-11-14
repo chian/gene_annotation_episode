@@ -1,0 +1,84 @@
+{
+  "version": "execution_target_v1",
+  "handle": "source_original_handoff_251",
+  "run_id": "run251",
+  "origin_episode_id": "local-child251",
+  "resource_kind": "local",
+  "resource_id": "local251",
+  "execution_id": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_003/temporary/pytest/test_actual_reservation_dispat1/.episode-operations/804d20f6cbab616bf961c72f1ccb0a8b0d67a3c3d021ba1aaa007830cc2a9ed1/d6ffaf517664d7886c65ba878d423cfa09c3782fb6f0501c01ea144252509639/native.json",
+  "request_sha256": "dc483af95656678f94a72394f521beda6807831cd4fa1f891e4c4fedbb67cbde",
+  "assignment": {
+    "requested_job": {
+      "argv": [
+        "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate",
+        "-L",
+        "0.01",
+        "--tailp",
+        "0.1",
+        "--seed",
+        "181",
+        "--cpu",
+        "1",
+        "--noforecast",
+        "outputs/calibrated_models"
+      ],
+      "environment": {},
+      "native_infernal_preparation": {
+        "version": "native_infernal_preparation_job_v1",
+        "program": "cmcalibrate",
+        "mode": "calibrate",
+        "software": {
+          "executable": "/home/chia/repos/gene_annotation_episode/resources/software/infernal-1.1.5-install/bin/cmcalibrate",
+          "sha256": "41be3917e970bfd0981663b0a09513702fbfd2bb69ee58c790d1f6f7df5569be",
+          "engine_version": "1.1.5"
+        },
+        "environment": {},
+        "operands": [
+          {
+            "role": "models",
+            "ordinal": 0,
+            "path": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_boundaries_2026-10-26_246/native/cmbuild_hand/built.cm",
+            "format": "infernal_cm_ascii",
+            "sha256": "5d4b67fb86678231388c34e37f06197232dd838c311ac5373b136c89f78e12cc",
+            "size_bytes": 9695,
+            "artifact_ref": "fixture:models:0"
+          }
+        ],
+        "options": [
+          "-L",
+          "0.01",
+          "--tailp",
+          "0.1",
+          "--seed",
+          "181",
+          "--cpu",
+          "1",
+          "--noforecast"
+        ],
+        "outputs": [
+          {
+            "role": "stdout",
+            "format": "infernal_stdout",
+            "relative_path": "outputs/stdout"
+          },
+          {
+            "role": "stderr",
+            "format": "infernal_stderr",
+            "relative_path": "outputs/stderr"
+          },
+          {
+            "role": "calibrated_models",
+            "format": "infernal_cm_ascii",
+            "relative_path": "outputs/calibrated_models"
+          }
+        ],
+        "key": null,
+        "grading_parameters": {}
+      }
+    },
+    "workspace": "/home/chia/repos/gene_annotation_episode/verification/tool_graders_infernal_preparation_producer_2026-10-26_251/producer_003/temporary/pytest/test_actual_reservation_dispat1",
+    "resource_kind": "local",
+    "resource_id": "local251"
+  },
+  "scope": {}
+}

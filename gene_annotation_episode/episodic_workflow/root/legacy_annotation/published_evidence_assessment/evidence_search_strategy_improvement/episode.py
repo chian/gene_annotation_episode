@@ -1,0 +1,40 @@
+from __future__ import annotations
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.configuration import LiteratureConfiguration
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.policy import LiteraturePolicy
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.from_parent import LiteratureAssignment
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.goal import LiteratureGoal
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.task import LiteratureTaskOperations
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.source_operations import LiteratureSourceOperations
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.internal_summary import LiteratureSummary
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.scientific_records import LiteratureScientificRecords
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.population_custody import LiteraturePopulationCustody
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.received_evidence import LiteratureReceivedEvidence
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.to_parent import LiteratureReport
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.credit import LiteratureCredit
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.continuation import LiteratureContinuation
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.aggregate_records import private_record
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.decision_source import LiteratureDecisionSource
+from gene_annotation_episode.episodic_workflow.root.legacy_annotation.published_evidence_assessment.evidence_search_strategy_improvement.decision_presentation import render_decision_context
+
+class LiteratureEpisode(LiteratureConfiguration, LiteraturePolicy, LiteratureAssignment, LiteratureGoal, LiteratureTaskOperations, LiteratureSourceOperations, LiteratureSummary, LiteratureScientificRecords, LiteraturePopulationCustody, LiteratureReceivedEvidence, LiteratureReport, LiteratureCredit, LiteratureContinuation):
+    roles = ('literature_strategy',)
+    entry_roles = ()
+    binding_path = 'legacy_annotation/published_evidence_assessment/evidence_search_strategy_improvement'
+    commissioning_parent = 'legacy_annotation/published_evidence_assessment'
+    decision_source_type = LiteratureDecisionSource
+    decision_prompt_renderer = staticmethod(render_decision_context)
+
+    def as_record(self):
+        return private_record(self, 'legacy_annotation/published_evidence_assessment/evidence_search_strategy_improvement')
+
+    @staticmethod
+    def child_message_exchange(role):
+        if role == 'literature_search':
+            from .to_child_source_relevance_assessment import prepare_request
+            from .from_child_source_relevance_assessment import admit_return
+            return prepare_request, admit_return
+        return None
+
+
+# Exact private declaration identity; custom callbacks retain runtime fallback.
+_declared_child_message_exchange = vars(LiteratureEpisode)["child_message_exchange"]

@@ -18,7 +18,7 @@ from gene_annotation_episode.uniprot_native import (legacy_uniprot_records, norm
 from gene_annotation_episode.uniprot_native_contracts import PARSED_PAGE_SCHEMA, PUBLICATION_SCHEMA
 
 
-FIXTURES = Path(__file__).parent / "fixtures" / "uniprot_native"
+FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/uniprot_native"
 RECORD = {"operation": "record", "accession": "P12345"}
 SEARCH = {"operation": "search", "query": "gene:controlled AND organism_id:83333", "size": 3}
 

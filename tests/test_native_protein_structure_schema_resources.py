@@ -15,7 +15,7 @@ from gene_annotation_episode.execution_contracts import digest, obj
 from gene_annotation_episode.native_protein_structure_worker import execute_protein_structure_request
 
 _fixtures = import_module(
-    "verification.tool_graders_protein_structure_execution_2026-10-27_390.fixture_helpers")
+    "gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390")
 _TYPES = (
     "Software", "ScientificRequest", "NativeProteinJob", "RequestedProteinJob",
     "NativeProteinBinding", "NativeProteinRunPlan", "NativeProteinBundle",
@@ -26,8 +26,7 @@ _TYPES = (
 @pytest.fixture(scope="module")
 def before():
     path = Path(__file__).resolve().parents[1] / (
-        "verification/tool_graders_protein_structure_schema_resources_2026-10-27_417/"
-        "prechange/native_protein_structure_contracts.py")
+        "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_schema_resources_417/native_protein_structure_contracts.py")
     name = "gene_annotation_episode._native_protein_structure_before_417"
     spec = util.spec_from_file_location(name, path)
     module = util.module_from_spec(spec)

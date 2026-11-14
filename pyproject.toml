@@ -20,10 +20,87 @@ include = ["gene_annotation_episode*", "method_loop*"]
 exclude = ["tests*", "_superseded*"]
 
 [tool.setuptools.package-data]
+"gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_information" = ["bvbrc_appservice_schemas.json"]
+"gene_annotation_episode.episodic_workflow.root.a101.tests" = ["fixtures/source_request_assembly/*.txt", "fixtures/recursive_scientific_parent/*.txt", "fixtures/other_task_runtime_providers/*.txt"]
+"gene_annotation_episode.episodic_workflow.root.a101.scientific_process.tests" = ["fixtures/*.txt"]
+"gene_annotation_episode.episodic_workflow.root.a102.tests" = ["fixtures/source_request_assembly/*.txt", "fixtures/resource_task_decision_original/*.txt", "fixtures/resource_task_decision_original/*.json", "fixtures/annotation_parent_boundaries/*.json"]
+"gene_annotation_episode.episodic_workflow.root.a102.library.tests" = ["fixtures/report_schema_ownership/*.py.source", "fixtures/report_schema_ownership/*.json", "fixtures/original_providers/*.py.source", "fixtures/original_providers/*.json", "fixtures/hpc_handoff_contract/*.py.source", "fixtures/hpc_handoff_contract/*.json"]
+"gene_annotation_episode.episodic_workflow.root.a102.scientific_process.tests" = ["fixtures/scientific_owner_placement/*.py.source", "fixtures/scientific_owner_placement/*.json"]
+"gene_annotation_episode.episodic_workflow.root.a103" = ["defaults.toml"]
+"gene_annotation_episode.episodic_workflow.root.a103.tests" = ["fixtures/source_request_assembly/*.txt", "fixtures/resource_task_decision_original/*.txt", "fixtures/resource_task_decision_original/*.json", "fixtures/homology_boundary_original/*.txt", "fixtures/homology_boundary_original/*.json", "fixtures/source_investigation/*.xml", "fixtures/scientific_parent_exchange/selected_original.py.txt", "fixtures/commissioning_policy/*.py.source", "fixtures/commissioning_policy/*.json", "fixtures/hierarchy_exchange/*.source", "fixtures/hierarchy_exchange/*.json"]
+"gene_annotation_episode.episodic_workflow.root.a103.library.tests" = ["fixtures/report_schema_ownership/*.py.source", "fixtures/report_schema_ownership/*.json", "fixtures/original_providers/*.py.source", "fixtures/original_providers/*.json"]
+"gene_annotation_episode.episodic_workflow.root.a103.scientific_process.tests" = ["fixtures/scientific_owner_placement/*.py.source", "fixtures/scientific_owner_placement/*.json"]
+"gene_annotation_episode.episodic_workflow.root.a104.tests" = ["fixtures/organization_boundaries/*.json", "fixtures/homology_family/*.txt", "fixtures/source_grading/*.txt", "fixtures/source_investigation/*.xml", "fixtures/source_request_assembly/*.txt"]
+"gene_annotation_episode.episodic_workflow.root.a105.tests" = ["fixtures/implicit_annotation_parent/*.json", "fixtures/implicit_annotation_parent/*.py.source"]
+"gene_annotation_episode.episodic_workflow.root.a105.library.tests" = ["fixtures/registered_providers/*.json", "fixtures/registered_policy/*.json", "fixtures/registered_policy/*.py.source"]
+"gene_annotation_episode.episodic_workflow.root.a106.tests" = ["fixtures/implicit_annotation_parent/*.json", "fixtures/implicit_annotation_parent/*.py.source", "fixtures/recursive_scientific_parent/*.txt", "fixtures/registered_provider_originals/*.txt"]
+"gene_annotation_episode.episodic_workflow.root.a106.scientific_process.tests" = ["fixtures/*.txt"]
+"gene_annotation_episode.episodic_workflow.root.a108.tests" = ["fixtures/implicit_annotation_parent/*.json", "fixtures/implicit_annotation_parent/*.py.source"]
+"gene_annotation_episode.episodic_workflow.root.a108.library.tests" = ["fixtures/registered_providers/*.json", "fixtures/registered_policy/*.json"]
+"gene_annotation_episode.episodic_workflow.root.a104.execution_instruction_library" = ["*.md"]
+"gene_annotation_episode.episodic_workflow.root.tests" = [
+    "fixtures/root_policy_original/*.json",
+    "fixtures/root_policy_original/*.py.source",
+    "fixtures/hpc_prediction/*.json",
+    "fixtures/blast_producer_identity/original_native6_bundle.json",
+    "fixtures/fluorescence_module_identity/original-native-plan.json",
+    "fixtures/fluorescence_module_identity/original-worker-execution.json",
+    "fixtures/fluorescence_module_identity/provenance.json",
+    "fixtures/protein_module_identity/retained_software.json",
+    "fixtures/saved_worker_identity/flux_job.json",
+    "fixtures/saved_worker_identity/genomic_job.json",
+    "fixtures/saved_worker_identity/rna_job.json",
+    "fixtures/lumpy_saved_driver_identity/handle.json",
+    "fixtures/lumpy_saved_driver_identity/plan.json",
+    "fixtures/lumpy_saved_driver_identity/request.json",
+    "fixtures/lumpy_saved_driver_identity/seal.json",
+    "fixtures/public_callers/inert_native",
+    "fixtures/public_callers/references.faa",
+    "fixtures/public_callers/policy.py",
+    "fixtures/fresh_decision_binding.json",
+    "fixtures/homer_v51_selected_region_inputs.zip",
+]
+"gene_annotation_episode.episodic_workflow.root.execution_monitoring.tests" = ["fixtures/original_boundary/*.source", "fixtures/monitor_descriptor_sources/*.json"]
+"gene_annotation_episode.episodic_workflow.root.homology_job_submission.tests" = ["fixtures/original_boundary/*.source", "fixtures/homology_selected_job_branches/*.py.source", "fixtures/homology_selected_job_branches/*.json", "fixtures/homology_source_identity/*.json", "fixtures/native_type_ownership/*.py.source", "fixtures/native_type_ownership/*.json"]
+"gene_annotation_episode.episodic_workflow.root.a107.tests" = ["fixtures/organization_original/*.source", "fixtures/organization_original/*.json", "fixtures/organization_preservation/*.json"]
+"gene_annotation_episode.episodic_workflow.root.a107.library.tests" = ["fixtures/original_providers/*.py.source", "fixtures/original_providers/*.json", "fixtures/hpc_handoff_contract/*.json", "fixtures/hpc_handoff_contract/*.py.source"]
+"gene_annotation_episode.episodic_workflow.root.a110.tests" = ["fixtures/received_execution_original/*.source", "fixtures/organization_original/*.source", "fixtures/organization_original/*.json", "fixtures/organization_preservation/*.json"]
+"gene_annotation_episode.episodic_workflow.root.a110.library.tests" = ["fixtures/original_providers/*.py.source", "fixtures/original_providers/*.json", "fixtures/hpc_handoff_contract/*.json", "fixtures/hpc_handoff_contract/*.py.source"]
+"gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies" = ["*.json", "adapter_source_custody/*.source"]
 "gene_annotation_episode.execution_instruction_library" = ["*.md"]
 gene_annotation_episode = ["defaults.toml", "vendor/*.txt", "vendor/*.json", "vendor/LICENSE*", "knowledge/*.json", "knowledge/*.md", "launch_instruction_library/*.json", "launch_instruction_library/*.md", "bvbrc_application_specs/MANIFEST.json", "bvbrc_application_specs/original/*.json", "bvbrc_application_specs/derived/*.json", "bvbrc_application_specs/README.md", "bvbrc_appservice_schemas.json", "bvbrc_proteome_native_schemas.json", "bvbrc_proteome_data_schemas.json", "bvbrc_proteome_sheet_schemas.json", "bvbrc_proteome_bundle_schemas.json", "bvbrc_proteome_directional_schemas.json", "bvbrc_proteome_directional_numerical_schemas.json", "bvbrc_proteome_bundle_v2_schemas.json", "bvbrc_comparative_systems_handoff_schemas.json", "bvbrc_fastqutils_schemas.json", "bvbrc_fastqutils_legacy_v2_schemas.json", "bvbrc_fastqutils_legacy_cutadapt_schemas.json", "literature_assay_grading_legacy_cells_v1.json"]
 method_loop = ["LICENSE", "SOURCE.json", "LOCAL_PATCHES.json"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = [
+    "tests",
+    "gene_annotation_episode/episodic_workflow/root/tests",
+    "gene_annotation_episode/episodic_workflow/root/a101",
+    "gene_annotation_episode/episodic_workflow/root/a102",
+    "gene_annotation_episode/episodic_workflow/root/a103",
+    "gene_annotation_episode/episodic_workflow/root/a104",
+    "gene_annotation_episode/episodic_workflow/root/a105",
+    "gene_annotation_episode/episodic_workflow/root/a106",
+    "gene_annotation_episode/episodic_workflow/root/a107",
+    "gene_annotation_episode/episodic_workflow/root/a108",
+    "gene_annotation_episode/episodic_workflow/root/a110",
+]
+pythonpath = [
+    ".",
+    "tests",
+    "gene_annotation_episode/episodic_workflow/root/tests",
+    "gene_annotation_episode/episodic_workflow/root/a101/tests",
+    "gene_annotation_episode/episodic_workflow/root/a102/tests",
+    "gene_annotation_episode/episodic_workflow/root/a103/tests",
+    "gene_annotation_episode/episodic_workflow/root/a104/tests",
+    "gene_annotation_episode/episodic_workflow/root/a105/tests",
+    "gene_annotation_episode/episodic_workflow/root/a106/tests",
+    "gene_annotation_episode/episodic_workflow/root/a107/tests",
+    "gene_annotation_episode/episodic_workflow/root/a108/tests",
+    "gene_annotation_episode/episodic_workflow/root/a110/tests",
+    "gene_annotation_episode/episodic_workflow/root/a105/published_evidence_assessment/tests",
+    "gene_annotation_episode/episodic_workflow/root/a106/published_evidence_assessment/tests",
+    "gene_annotation_episode/episodic_workflow/root/a107/published_evidence_assessment/tests",
+    "gene_annotation_episode/episodic_workflow/root/a108/published_evidence_assessment/tests",
+]
 cache_dir = "runs/pytest-cache"

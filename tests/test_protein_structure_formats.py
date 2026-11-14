@@ -3,7 +3,7 @@ from importlib import import_module
 from pathlib import Path
 import pytest
 from gene_annotation_episode.protein_structure_formats import parse_pdb_structure, parse_mmcif_structure, category_rows, native_number
-f = import_module("verification.tool_graders_protein_structure_inputs_2026-10-27_386.fixture_helpers")
+f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 
 
 def test_fixed_columns_insertions_order_blank_fields_and_raw_lines():

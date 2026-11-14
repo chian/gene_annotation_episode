@@ -1,0 +1,1491 @@
+{
+  "name": "whole_comma_pair_resolved",
+  "required_example_groups": [
+    7,
+    8
+  ],
+  "source_status": "synthetic",
+  "native_executed_this_workload": false,
+  "native_execution_case": null,
+  "common_operands": {
+    "inputs": [
+      {
+        "binding_id": "original",
+        "parameter_pointer": "/input/original",
+        "kind": "retained_bytes",
+        "content": {
+          "source_ref": "source:original",
+          "artifact_field": "artifact_ref",
+          "artifact_ref": "original",
+          "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05",
+          "byte_count": 12
+        },
+        "workspace_path": "/workspace/original",
+        "inline_value": null,
+        "link_evidence": null,
+        "members": []
+      }
+    ],
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "original#alignment",
+          "artifact": {
+            "raw_artifact_ref": "original",
+            "source_ref": "source:original",
+            "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 1,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "s0",
+              "member_label": "s0",
+              "sequence": "A",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "s1",
+              "member_label": "s1",
+              "sequence": "A",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 1,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "s0",
+              "member_label": "s0",
+              "sequence": "A",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "s1",
+              "member_label": "s1",
+              "sequence": "A",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "declarations": {
+      "common": {
+        "version": "bvbrc_alignment_associations_v1",
+        "analysis_id": "analysis",
+        "input_sequences": [
+          {
+            "kind": "parsed_document",
+            "input_binding_id": "original",
+            "document": "original#alignment",
+            "member_id_rule": "first_whitespace_token",
+            "molecule": "dna",
+            "host_member_joins": [],
+            "evidence": []
+          }
+        ],
+        "row_joins": [],
+        "automatic_row_joins": [
+          {
+            "alignment": "aligned#alignment",
+            "input_binding_ids": [
+              "original"
+            ],
+            "method": "exact_unique_header",
+            "case_policy": "literal",
+            "gap_policy": "literal",
+            "transformation_ids": [],
+            "evidence": []
+          }
+        ],
+        "transformations": [],
+        "correspondences": [],
+        "feature_genomes": [],
+        "source_records": [],
+        "member_entities": []
+      },
+      "functions": null,
+      "taxonomy": null
+    }
+  },
+  "common_result": {
+    "status": "ok",
+    "value": {
+      "original_members": [
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "s0",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 0,
+          "raw_header": "s0",
+          "member_label": "s0",
+          "sequence_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+          "original_length": 1,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        },
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "s1",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 1,
+          "raw_header": "s1",
+          "member_label": "s1",
+          "sequence_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+          "original_length": 1,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "inline_inputs": [],
+      "row_members": [
+        {
+          "association_id": "aligned#alignment/rows/0/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "s0",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        },
+        {
+          "association_id": "aligned#alignment/rows/1/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "s1",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        }
+      ],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [
+        {
+          "group_id": "analysis/dependence/0",
+          "kind": "identical_sequence",
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "s0",
+              "occurrence_index": 0
+            },
+            {
+              "input_binding_id": "original",
+              "member_id": "s1",
+              "occurrence_index": 0
+            }
+          ],
+          "alignment_rows": [],
+          "document_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "diagnostics": []
+  },
+  "metacats_operands": {
+    "analysis": {
+      "analysis_id": "analysis",
+      "mode": "files",
+      "alignment_id": "aligned#alignment",
+      "metadata_document_id": "metacats_metadata:2245a8391ded5e755b0a19bde63067a551de3421b1d2d7f68ee658e9f0e1f04d",
+      "category_ids": [
+        "category"
+      ],
+      "adjusted_matrix_ids": [
+        "metacats_adjusted_matrix:22203b921bb2b0d338dc43c7473d5181d1cc3454d33c5ee6af19af4cfcc68311"
+      ],
+      "chisq_table_ids": [
+        "metacats_chisq_table:a23374cc6cb60b7adb8b4987574782a1be42977dcba8f289183703d0514fc128"
+      ],
+      "pair_table_ids": [
+        "metacats_pair_table:c0736b38b75bffe0c1c02e81c4cf29182530b141b69bc9c45bc44d7c6c84d2bf"
+      ],
+      "raw_r_table_ids": [],
+      "output_role_evidence": []
+    },
+    "documents": [
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "original#alignment",
+          "artifact": {
+            "raw_artifact_ref": "original",
+            "source_ref": "source:original",
+            "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 1,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "s0",
+              "member_label": "s0",
+              "sequence": "A",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "s1",
+              "member_label": "s1",
+              "sequence": "A",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "original",
+                  "source_ref": "source:original",
+                  "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "alignment",
+        "value": {
+          "alignment_id": "aligned#alignment",
+          "artifact": {
+            "raw_artifact_ref": "aligned",
+            "source_ref": "source:aligned",
+            "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+          },
+          "format": "aligned_fasta",
+          "layout": "fasta",
+          "id_rule": "first_whitespace_token",
+          "encoding": "utf-8",
+          "declared_row_count": null,
+          "declared_column_count": null,
+          "observed_row_count": 2,
+          "observed_column_count": 1,
+          "completeness": "complete",
+          "rows": [
+            {
+              "row_index": 0,
+              "raw_header": "s0",
+              "member_label": "s0",
+              "sequence": "A",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 6,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              }
+            },
+            {
+              "row_index": 1,
+              "raw_header": "s1",
+              "member_label": "s1",
+              "sequence": "A",
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "aligned",
+                  "source_ref": "source:aligned",
+                  "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+                },
+                "byte_start_0based": 6,
+                "byte_end_0based_exclusive": 12,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 4,
+                "xml_path": null
+              }
+            }
+          ]
+        }
+      },
+      {
+        "kind": "metadata",
+        "value": {
+          "document_id": "metacats_metadata:2245a8391ded5e755b0a19bde63067a551de3421b1d2d7f68ee658e9f0e1f04d",
+          "artifact": {
+            "raw_artifact_ref": "metadata",
+            "source_ref": "source:metadata",
+            "sha256": "f5a0641d2d1047c8a8565c51b5ed97718e560612ed5d63e0957ef7c918a34f4d"
+          },
+          "encoding": "utf-8",
+          "completeness": "complete",
+          "delimiter": "tab",
+          "header": "present",
+          "header_tokens": [
+            "id",
+            "group"
+          ],
+          "rows": [
+            {
+              "row_index": 0,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "metadata",
+                  "source_ref": "source:metadata",
+                  "sha256": "f5a0641d2d1047c8a8565c51b5ed97718e560612ed5d63e0957ef7c918a34f4d"
+                },
+                "byte_start_0based": 9,
+                "byte_end_0based_exclusive": 16,
+                "line_start_1based": 2,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              },
+              "cells": [
+                "s0",
+                "A,B"
+              ]
+            },
+            {
+              "row_index": 1,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "metadata",
+                  "source_ref": "source:metadata",
+                  "sha256": "f5a0641d2d1047c8a8565c51b5ed97718e560612ed5d63e0957ef7c918a34f4d"
+                },
+                "byte_start_0based": 16,
+                "byte_end_0based_exclusive": 21,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 3,
+                "xml_path": null
+              },
+              "cells": [
+                "s1",
+                "C"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "adjusted_matrix",
+        "value": {
+          "document_id": "metacats_adjusted_matrix:22203b921bb2b0d338dc43c7473d5181d1cc3454d33c5ee6af19af4cfcc68311",
+          "artifact": {
+            "raw_artifact_ref": "synthetic-comma-matrix",
+            "source_ref": "source:synthetic-comma-matrix",
+            "sha256": "5a7a5cc92389b37f961639eddbbff52d1021e18d6f184552e91b4a536d50036a"
+          },
+          "encoding": "ascii",
+          "completeness": "partial",
+          "category_id": "category",
+          "rows": [
+            {
+              "row_index": 0,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "synthetic-comma-matrix",
+                  "source_ref": "source:synthetic-comma-matrix",
+                  "sha256": "5a7a5cc92389b37f961639eddbbff52d1021e18d6f184552e91b4a536d50036a"
+                },
+                "byte_start_0based": 0,
+                "byte_end_0based_exclusive": 15,
+                "line_start_1based": 1,
+                "line_end_1based_inclusive": 1,
+                "xml_path": null
+              },
+              "native_member_token": "ID",
+              "native_group_token": "Site1",
+              "symbols": [
+                "Group"
+              ]
+            },
+            {
+              "row_index": 1,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "synthetic-comma-matrix",
+                  "source_ref": "source:synthetic-comma-matrix",
+                  "sha256": "5a7a5cc92389b37f961639eddbbff52d1021e18d6f184552e91b4a536d50036a"
+                },
+                "byte_start_0based": 15,
+                "byte_end_0based_exclusive": 22,
+                "line_start_1based": 2,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              },
+              "native_member_token": "s0",
+              "native_group_token": "A",
+              "symbols": [
+                "1"
+              ]
+            },
+            {
+              "row_index": 2,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "synthetic-comma-matrix",
+                  "source_ref": "source:synthetic-comma-matrix",
+                  "sha256": "5a7a5cc92389b37f961639eddbbff52d1021e18d6f184552e91b4a536d50036a"
+                },
+                "byte_start_0based": 22,
+                "byte_end_0based_exclusive": 29,
+                "line_start_1based": 3,
+                "line_end_1based_inclusive": 3,
+                "xml_path": null
+              },
+              "native_member_token": "s1",
+              "native_group_token": "A",
+              "symbols": [
+                "2"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "kind": "metacats_chisq",
+        "value": {
+          "table_id": "metacats_chisq_table:a23374cc6cb60b7adb8b4987574782a1be42977dcba8f289183703d0514fc128",
+          "artifact": {
+            "raw_artifact_ref": "synthetic-comma-chisq",
+            "source_ref": "source:synthetic-comma-chisq",
+            "sha256": "28e748c0f2142870ddb0dc4365a0d142d624af63d6413791924de85e39d95432"
+          },
+          "encoding": "ascii",
+          "completeness": "complete",
+          "layout": "current_filtered_tsv",
+          "category_id": "category",
+          "header_tokens": [
+            "Position",
+            "Chi-square_value",
+            "P-value",
+            "Degrees_of_freedom",
+            "Fewer_5",
+            "A,B",
+            "C"
+          ],
+          "group_heading_tokens": [
+            "A,B",
+            "C"
+          ],
+          "rows": []
+        }
+      },
+      {
+        "kind": "metacats_pair",
+        "value": {
+          "table_id": "metacats_pair_table:c0736b38b75bffe0c1c02e81c4cf29182530b141b69bc9c45bc44d7c6c84d2bf",
+          "artifact": {
+            "raw_artifact_ref": "synthetic-comma-pair",
+            "source_ref": "source:synthetic-comma-pair",
+            "sha256": "ec2dc2026486bc5b8284b42ce84e227e0be3d412c2944d6a853d4bda0faad348"
+          },
+          "encoding": "ascii",
+          "completeness": "complete",
+          "layout": "current_filtered_tsv",
+          "category_id": "category",
+          "header_tokens": [
+            "Position",
+            "Multiple_comparison_p-value",
+            "Groups"
+          ],
+          "rows": [
+            {
+              "row_index": 0,
+              "source_location": {
+                "artifact": {
+                  "raw_artifact_ref": "synthetic-comma-pair",
+                  "source_ref": "source:synthetic-comma-pair",
+                  "sha256": "ec2dc2026486bc5b8284b42ce84e227e0be3d412c2944d6a853d4bda0faad348"
+                },
+                "byte_start_0based": 44,
+                "byte_end_0based_exclusive": 56,
+                "line_start_1based": 2,
+                "line_end_1based_inclusive": 2,
+                "xml_path": null
+              },
+              "position": {
+                "raw_token": "1",
+                "value": 1,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "synthetic-comma-pair",
+                    "source_ref": "source:synthetic-comma-pair",
+                    "sha256": "ec2dc2026486bc5b8284b42ce84e227e0be3d412c2944d6a853d4bda0faad348"
+                  },
+                  "byte_start_0based": 44,
+                  "byte_end_0based_exclusive": 45,
+                  "line_start_1based": 2,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              "p_value": {
+                "raw_token": "0.5",
+                "value": 0.5,
+                "state": "available",
+                "token_kind": "finite",
+                "source_location": {
+                  "artifact": {
+                    "raw_artifact_ref": "synthetic-comma-pair",
+                    "source_ref": "source:synthetic-comma-pair",
+                    "sha256": "ec2dc2026486bc5b8284b42ce84e227e0be3d412c2944d6a853d4bda0faad348"
+                  },
+                  "byte_start_0based": 46,
+                  "byte_end_0based_exclusive": 49,
+                  "line_start_1based": 2,
+                  "line_end_1based_inclusive": 2,
+                  "xml_path": null
+                }
+              },
+              "raw_groups_token": "A,B,C"
+            }
+          ]
+        }
+      }
+    ],
+    "associations": {
+      "original_members": [
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "s0",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 0,
+          "raw_header": "s0",
+          "member_label": "s0",
+          "sequence_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+          "original_length": 1,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        },
+        {
+          "key": {
+            "input_binding_id": "original",
+            "member_id": "s1",
+            "occurrence_index": 0
+          },
+          "host_member_id": null,
+          "original_input_pointer": "/input/original",
+          "source_document_id": "original#alignment",
+          "source_row_index": 1,
+          "raw_header": "s1",
+          "member_label": "s1",
+          "sequence_sha256": "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd",
+          "original_length": 1,
+          "molecule": "dna",
+          "feature_ids": [],
+          "genome_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "inline_inputs": [],
+      "row_members": [
+        {
+          "association_id": "aligned#alignment/rows/0/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "s0",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        },
+        {
+          "association_id": "aligned#alignment/rows/1/original",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "s1",
+              "occurrence_index": 0
+            }
+          ],
+          "transformation_ids": [],
+          "state": "resolved",
+          "basis": "exact_unique_header",
+          "evidence": []
+        }
+      ],
+      "transformations": [],
+      "correspondences": [],
+      "feature_genomes": [],
+      "source_records": [],
+      "functions": [],
+      "function_equivalences": [],
+      "taxonomy": [],
+      "member_entities": [],
+      "dependence_groups": [
+        {
+          "group_id": "analysis/dependence/0",
+          "kind": "identical_sequence",
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "s0",
+              "occurrence_index": 0
+            },
+            {
+              "input_binding_id": "original",
+              "member_id": "s1",
+              "occurrence_index": 0
+            }
+          ],
+          "alignment_rows": [],
+          "document_ids": [],
+          "source_record_ids": [],
+          "evidence": []
+        }
+      ],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "declarations": {
+      "version": "bvbrc_metacats_context_v1",
+      "analysis_id": "analysis",
+      "metadata_joins": [
+        {
+          "metadata": "metacats_metadata:2245a8391ded5e755b0a19bde63067a551de3421b1d2d7f68ee658e9f0e1f04d",
+          "id_column_index_0based": 0,
+          "alignment": "aligned#alignment",
+          "alignment_identity": "member_label",
+          "case_policy": "preserve",
+          "duplicate_policy": "retain_unresolved",
+          "evidence": []
+        }
+      ],
+      "categories": [
+        {
+          "category_id": "category",
+          "metadata": "metacats_metadata:2245a8391ded5e755b0a19bde63067a551de3421b1d2d7f68ee658e9f0e1f04d",
+          "metadata_column_index_0based": 1,
+          "raw_heading_token": "group",
+          "native_category_ordinal_1based": 1,
+          "native_output_stem": "category",
+          "input_mode": "files",
+          "group_identity_rule": "exact_category_value",
+          "evidence": []
+        }
+      ],
+      "explicit_memberships": [],
+      "auto_group_entries": [],
+      "group_sources": [],
+      "biological_group_populations": [
+        {
+          "kind": "observed_metadata_groups",
+          "group_population_id": "category-groups",
+          "category_id": "category",
+          "order": "first_metadata_occurrence",
+          "include_metadata_only": true,
+          "evidence": []
+        }
+      ],
+      "native_group_maps": [],
+      "r_columns": [
+        {
+          "category_id": "category",
+          "adjusted_matrix": "metacats_adjusted_matrix:22203b921bb2b0d338dc43c7473d5181d1cc3454d33c5ee6af19af4cfcc68311",
+          "interpreter_version": "synthetic-test-only",
+          "columns": [
+            {
+              "r_column_index_0based": 0,
+              "r_group_token": "1",
+              "native_group_ordinal": 1,
+              "group_id": "metacats_group:category/A%2CB",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "source:synthetic-comma-native-columns",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "synthetic-comma-native-columns",
+                    "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                    "byte_count": 30
+                  },
+                  "pointer": ""
+                }
+              ]
+            },
+            {
+              "r_column_index_0based": 1,
+              "r_group_token": "2",
+              "native_group_ordinal": 2,
+              "group_id": "metacats_group:category/C",
+              "evidence": [
+                {
+                  "content": {
+                    "source_ref": "source:synthetic-comma-native-columns",
+                    "artifact_field": "artifact_ref",
+                    "artifact_ref": "synthetic-comma-native-columns",
+                    "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                    "byte_count": 30
+                  },
+                  "pointer": ""
+                }
+              ]
+            }
+          ],
+          "completeness": "complete",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "exported_group_joins": [
+        {
+          "category_id": "category",
+          "table_id": "metacats_chisq_table:a23374cc6cb60b7adb8b4987574782a1be42977dcba8f289183703d0514fc128",
+          "heading_index_0based": 0,
+          "raw_heading_token": "A,B",
+          "group_id": "metacats_group:category/A%2CB",
+          "r_column_index_0based": 0,
+          "state": "resolved",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "category_id": "category",
+          "table_id": "metacats_chisq_table:a23374cc6cb60b7adb8b4987574782a1be42977dcba8f289183703d0514fc128",
+          "heading_index_0based": 1,
+          "raw_heading_token": "C",
+          "group_id": "metacats_group:category/C",
+          "r_column_index_0based": 1,
+          "state": "resolved",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "native_test_joins": []
+    }
+  },
+  "metacats_result": {
+    "status": "ok",
+    "value": {
+      "categories": [
+        {
+          "category_id": "category",
+          "metadata_document_id": "metacats_metadata:2245a8391ded5e755b0a19bde63067a551de3421b1d2d7f68ee658e9f0e1f04d",
+          "metadata_column_index_0based": 1,
+          "raw_heading_token": "group",
+          "native_category_ordinal_1based": 1,
+          "native_output_stem": "category",
+          "input_mode": "files",
+          "group_ids": [
+            "metacats_group:category/A%2CB",
+            "metacats_group:category/C"
+          ],
+          "state": "resolved",
+          "evidence": []
+        }
+      ],
+      "groups": [
+        {
+          "group_id": "metacats_group:category/A%2CB",
+          "category_id": "category",
+          "raw_group_value": "A,B",
+          "metadata_row_indices": [
+            0
+          ],
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "s0",
+              "occurrence_index": 0
+            }
+          ],
+          "source_group_bindings": [],
+          "membership_completeness": "complete",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "group_id": "metacats_group:category/C",
+          "category_id": "category",
+          "raw_group_value": "C",
+          "metadata_row_indices": [
+            1
+          ],
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "s1",
+              "occurrence_index": 0
+            }
+          ],
+          "source_group_bindings": [],
+          "membership_completeness": "complete",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "metadata_members": [
+        {
+          "metadata_document_id": "metacats_metadata:2245a8391ded5e755b0a19bde63067a551de3421b1d2d7f68ee658e9f0e1f04d",
+          "metadata_row_index": 0,
+          "id_column_index_0based": 0,
+          "raw_member_token": "s0",
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "s0",
+              "occurrence_index": 0
+            }
+          ],
+          "alignment_rows": [
+            {
+              "alignment_id": "aligned#alignment",
+              "row_index": 0
+            }
+          ],
+          "state": "resolved",
+          "evidence": []
+        },
+        {
+          "metadata_document_id": "metacats_metadata:2245a8391ded5e755b0a19bde63067a551de3421b1d2d7f68ee658e9f0e1f04d",
+          "metadata_row_index": 1,
+          "id_column_index_0based": 0,
+          "raw_member_token": "s1",
+          "member_keys": [
+            {
+              "input_binding_id": "original",
+              "member_id": "s1",
+              "occurrence_index": 0
+            }
+          ],
+          "alignment_rows": [
+            {
+              "alignment_id": "aligned#alignment",
+              "row_index": 1
+            }
+          ],
+          "state": "resolved",
+          "evidence": []
+        }
+      ],
+      "auto_group_entries": [],
+      "biological_assignments": [
+        {
+          "category_id": "category",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "s0",
+            "occurrence_index": 0
+          },
+          "group_id": "metacats_group:category/A%2CB",
+          "state": "resolved",
+          "evidence": []
+        },
+        {
+          "category_id": "category",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "s1",
+            "occurrence_index": 0
+          },
+          "group_id": "metacats_group:category/C",
+          "state": "resolved",
+          "evidence": []
+        }
+      ],
+      "biological_group_populations": [
+        {
+          "group_population_id": "category-groups",
+          "category_id": "category",
+          "groups": [
+            {
+              "group_id": "metacats_group:category/A%2CB",
+              "raw_group_value": "A,B",
+              "evidence": []
+            },
+            {
+              "group_id": "metacats_group:category/C",
+              "raw_group_value": "C",
+              "evidence": []
+            }
+          ],
+          "completeness": "complete",
+          "evidence": []
+        }
+      ],
+      "native_group_assignments": [
+        {
+          "category_id": "category",
+          "alignment_id": "aligned#alignment",
+          "row_index": 0,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "s0",
+            "occurrence_index": 0
+          },
+          "metadata_row_index": 0,
+          "metadata_column_index": 1,
+          "raw_group_value": "A,B",
+          "native_group_ordinal": null,
+          "displayed_group_label": "A,B",
+          "state": "native_unlabeled",
+          "evidence": []
+        },
+        {
+          "category_id": "category",
+          "alignment_id": "aligned#alignment",
+          "row_index": 1,
+          "member_key": {
+            "input_binding_id": "original",
+            "member_id": "s1",
+            "occurrence_index": 0
+          },
+          "metadata_row_index": 1,
+          "metadata_column_index": 1,
+          "raw_group_value": "C",
+          "native_group_ordinal": null,
+          "displayed_group_label": "C",
+          "state": "native_unlabeled",
+          "evidence": []
+        }
+      ],
+      "native_group_columns": [
+        {
+          "category_id": "category",
+          "r_column_index_0based": 0,
+          "r_group_token": "1",
+          "native_group_ordinal": 1,
+          "group_id": "metacats_group:category/A%2CB",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            },
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            }
+          ],
+          "exported_heading_index_0based": 0,
+          "exported_label_token": "A,B",
+          "state": "resolved"
+        },
+        {
+          "category_id": "category",
+          "r_column_index_0based": 1,
+          "r_group_token": "2",
+          "native_group_ordinal": 2,
+          "group_id": "metacats_group:category/C",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            },
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            }
+          ],
+          "exported_heading_index_0based": 1,
+          "exported_label_token": "C",
+          "state": "resolved"
+        }
+      ],
+      "exported_groups": [
+        {
+          "category_id": "category",
+          "table_id": "metacats_chisq_table:a23374cc6cb60b7adb8b4987574782a1be42977dcba8f289183703d0514fc128",
+          "heading_index_0based": 0,
+          "raw_heading_token": "A,B",
+          "group_id": "metacats_group:category/A%2CB",
+          "r_column_index_0based": 0,
+          "state": "resolved",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            }
+          ]
+        },
+        {
+          "category_id": "category",
+          "table_id": "metacats_chisq_table:a23374cc6cb60b7adb8b4987574782a1be42977dcba8f289183703d0514fc128",
+          "heading_index_0based": 1,
+          "raw_heading_token": "C",
+          "group_id": "metacats_group:category/C",
+          "r_column_index_0based": 1,
+          "state": "resolved",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "native_test_associations": [
+        {
+          "association_id": "metacats_pair_table:c0736b38b75bffe0c1c02e81c4cf29182530b141b69bc9c45bc44d7c6c84d2bf/rows/0/association",
+          "category_id": "category",
+          "table_id": "metacats_pair_table:c0736b38b75bffe0c1c02e81c4cf29182530b141b69bc9c45bc44d7c6c84d2bf",
+          "row_index": 0,
+          "test_kind": "pairwise",
+          "alignment_id": "aligned#alignment",
+          "column_0based": 0,
+          "group_ids": [
+            "metacats_group:category/A%2CB",
+            "metacats_group:category/C"
+          ],
+          "r_columns_0based": [
+            0,
+            1
+          ],
+          "raw_groups_token": "A,B,C",
+          "test_id": "native_test:metacats_pair_table%3Ac0736b38b75bffe0c1c02e81c4cf29182530b141b69bc9c45bc44d7c6c84d2bf/0",
+          "state": "resolved",
+          "evidence": [
+            {
+              "content": {
+                "source_ref": "source:synthetic-comma-native-columns",
+                "artifact_field": "artifact_ref",
+                "artifact_ref": "synthetic-comma-native-columns",
+                "sha256": "58762254acb00528318e11881a4632f2551da85fe9f7bda46c2fef9a020310d6",
+                "byte_count": 30
+              },
+              "pointer": ""
+            }
+          ]
+        }
+      ],
+      "requirements": [],
+      "diagnostics": []
+    },
+    "diagnostics": []
+  },
+  "calculations": [
+    {
+      "function": "biological_group_counts",
+      "alignment": {
+        "alignment_id": "aligned#alignment",
+        "artifact": {
+          "raw_artifact_ref": "aligned",
+          "source_ref": "source:aligned",
+          "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+        },
+        "format": "aligned_fasta",
+        "layout": "fasta",
+        "id_rule": "first_whitespace_token",
+        "encoding": "utf-8",
+        "declared_row_count": null,
+        "declared_column_count": null,
+        "observed_row_count": 2,
+        "observed_column_count": 1,
+        "completeness": "complete",
+        "rows": [
+          {
+            "row_index": 0,
+            "raw_header": "s0",
+            "member_label": "s0",
+            "sequence": "A",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "aligned",
+                "source_ref": "source:aligned",
+                "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+              },
+              "byte_start_0based": 0,
+              "byte_end_0based_exclusive": 6,
+              "line_start_1based": 1,
+              "line_end_1based_inclusive": 2,
+              "xml_path": null
+            }
+          },
+          {
+            "row_index": 1,
+            "raw_header": "s1",
+            "member_label": "s1",
+            "sequence": "A",
+            "source_location": {
+              "artifact": {
+                "raw_artifact_ref": "aligned",
+                "source_ref": "source:aligned",
+                "sha256": "4a480df249a6229fc82010517b565f68a780e109e6857153bedb5699324b8f05"
+              },
+              "byte_start_0based": 6,
+              "byte_end_0based_exclusive": 12,
+              "line_start_1based": 3,
+              "line_end_1based_inclusive": 4,
+              "xml_path": null
+            }
+          }
+        ]
+      },
+      "arguments": {
+        "analysis_id": "analysis",
+        "population": {
+          "population_id": "all-physical-rows-and-columns",
+          "alignment_id": "aligned#alignment",
+          "row_indices": [
+            0,
+            1
+          ],
+          "columns_0based": [
+            0
+          ],
+          "completeness": "complete",
+          "evidence": []
+        },
+        "category_id": "category",
+        "assignments": [
+          {
+            "category_id": "category",
+            "alignment_id": "aligned#alignment",
+            "row_index": 0,
+            "member_key": {
+              "input_binding_id": "original",
+              "member_id": "s0",
+              "occurrence_index": 0
+            },
+            "group_id": "metacats_group:category/A%2CB",
+            "state": "resolved",
+            "evidence": []
+          },
+          {
+            "category_id": "category",
+            "alignment_id": "aligned#alignment",
+            "row_index": 1,
+            "member_key": {
+              "input_binding_id": "original",
+              "member_id": "s1",
+              "occurrence_index": 0
+            },
+            "group_id": "metacats_group:category/C",
+            "state": "resolved",
+            "evidence": []
+          }
+        ],
+        "group_population": {
+          "group_population_id": "category-groups",
+          "category_id": "category",
+          "groups": [
+            {
+              "group_id": "metacats_group:category/A%2CB",
+              "raw_group_value": "A,B",
+              "evidence": []
+            },
+            {
+              "group_id": "metacats_group:category/C",
+              "raw_group_value": "C",
+              "evidence": []
+            }
+          ],
+          "completeness": "complete",
+          "evidence": []
+        },
+        "case_policy": "preserve",
+        "terminal_gap_policy": "exclude_terminal_dash",
+        "original_hash_policy": "exclude_hash"
+      },
+      "result": {
+        "status": "ok",
+        "analysis_id": "analysis",
+        "population_id": "all-physical-rows-and-columns",
+        "alignment_id": "aligned#alignment",
+        "category_id": "category",
+        "group_population": {
+          "group_population_id": "category-groups",
+          "category_id": "category",
+          "groups": [
+            {
+              "group_id": "metacats_group:category/A%2CB",
+              "raw_group_value": "A,B",
+              "evidence": []
+            },
+            {
+              "group_id": "metacats_group:category/C",
+              "raw_group_value": "C",
+              "evidence": []
+            }
+          ],
+          "completeness": "complete",
+          "evidence": []
+        },
+        "method_parameters": {
+          "case_policy": "preserve",
+          "terminal_gap_policy": "exclude_terminal_dash",
+          "original_hash_policy": "exclude_hash"
+        },
+        "sites": [
+          {
+            "table_id": "biological_group_counts:27990c444df344c119267eb647b500649d3014747cd91074fb983ff7762d4e08",
+            "column_0based": 0,
+            "state": "conserved",
+            "symbols": [
+              "A"
+            ],
+            "observed_counts": [
+              [
+                1,
+                1
+              ]
+            ],
+            "included_rows_by_group": [
+              [
+                0
+              ],
+              [
+                1
+              ]
+            ],
+            "excluded_terminal_rows_by_group": [
+              [],
+              []
+            ],
+            "excluded_original_hash_rows_by_group": [
+              [],
+              []
+            ],
+            "internal_gap_rows_by_group": [
+              [],
+              []
+            ],
+            "unresolved_row_indices": [],
+            "completeness": "complete",
+            "evidence": []
+          }
+        ],
+        "requirements": [],
+        "diagnostics": []
+      }
+    }
+  ],
+  "downstream_operands": {}
+}

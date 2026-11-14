@@ -223,7 +223,7 @@ def test_model_artifact_reference_has_its_actual_original_model_association(capt
 
 
 def test_supported_omitted_argument_keeps_previous_parser_digest(captures):
-    path = Path(__file__).parents[1] / "verification/tool_graders_hmmer_map_verification_2026-10-28_529/check152a_parsing689/source_snapshot/gene_annotation_episode/flux_balance_readers.py"
+    path = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/flux_balance/flux_balance_readers_prior.py"
     spec = importlib.util.spec_from_file_location("gene_annotation_episode._prior_sources_692_baseline", path)
     baseline = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(baseline)

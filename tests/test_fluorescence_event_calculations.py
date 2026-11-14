@@ -9,12 +9,12 @@ import json
 
 import pytest
 
-from gene_annotation_episode import fluorescence_event_calculations as calculations
-from gene_annotation_episode import fluorescence_result_views as views
-from gene_annotation_episode.fluorescence_event_contracts import (
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations as calculations
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_views as views
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import (
     PARSE_SCHEMA, FluorescenceContractError, canonical, issue, validate_components,
 )
-from gene_annotation_episode.fluorescence_event_sheet import populate_fluorescence_sheet
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_sheet import populate_fluorescence_sheet
 
 
 def _file(raw=b"synthetic evidence", format_name="synthetic_fixture"):

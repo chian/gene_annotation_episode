@@ -34,7 +34,7 @@ from gene_annotation_episode.domain import ContractError
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "verification/tool_graders_bvbrc_data_contract_2026-10-24"
+EVIDENCE = ROOT / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"
 FROZEN_BYTES = (EVIDENCE / "D1_QUERY_CONTRACT_FROZEN.json").read_bytes()
 FROZEN = json.loads(FROZEN_BYTES)
 BASE = "https://www.bv-brc.org/api"

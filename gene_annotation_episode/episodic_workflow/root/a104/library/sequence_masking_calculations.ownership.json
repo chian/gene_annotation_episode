@@ -1,0 +1,510 @@
+{
+  "module": "library/sequence_masking_calculations.py",
+  "owner": "A104 standalone execution dependency library",
+  "sha256": "451fab56a4b45edd52a18951e421930af25feb65ac3e75f1759b027d07d145d4",
+  "direct_callers": [
+    "library/native_blast_masking_result_worker.py"
+  ],
+  "symbols": [
+    "_count",
+    "calculate_sequence_masking_components"
+  ],
+  "retained_origin": "tracked_original/sequence_masking_calculations.py",
+  "preparation": "runs/hpc_launch_private_20261111_a104_preparation/masking_dependency_repair",
+  "stage": "masking_dependency_restoration_20261111",
+  "validation": [
+    {
+      "name": "masking_dependency_restoration_20261111",
+      "preparation": "runs/hpc_launch_private_20261111_a104_preparation/masking_dependency_repair",
+      "application_receipt": "runs/hpc_launch_private_20261111_a104_masking_apply/application.json",
+      "source_audit": "runs/hpc_launch_private_20261111_a104_masking_prepared02/audit.json",
+      "test_audit": "runs/hpc_launch_private_20261111_a104_masking_prepared02/test_audit.json",
+      "junit": "runs/hpc_launch_private_20261111_a104_masking_tests/pytest.xml",
+      "expected_passes": 71,
+      "constructor_probe": "runs/hpc_launch_private_20261111_a104_after_masking/a104/constructors/constructors.json",
+      "constructor_workflow": "runs/hpc_launch_private_20261111_a104_after_masking/workflow-result.json",
+      "source_hashes": {
+        "gene_annotation_episode/episodic_workflow/root/a104/library/native_blast_masking_result_publication.py": "11f77664ef4abb81b655aa99d686a5160568e0b134f2d6c477a985edbaaef67f",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/native_blast_masking_result_worker.py": "ee6510612def7ff21579d25d3dfd91def1616d3d02bdc0656a80ac3af0d4daae",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/sequence_masking_calculations.py": "451fab56a4b45edd52a18951e421930af25feb65ac3e75f1759b027d07d145d4",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/windowmasker_statistics.py": "ee0b64e7f336a4ed0a736f74750a255e535690eb8444938e0c3fb880120379a5",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/sequence_masking_ratios.py": "87dee0cd0bd459eccc725a2fddf8d2f5081c283269a8b888292d6003b2b52d40",
+        "gene_annotation_episode/episodic_workflow/root/a104/native_blast_masking_results.py": "5747e5e554a4272c5702dc9133bc04f045b72cc2be90b02493c6f03e1f1d5e45",
+        "gene_annotation_episode/episodic_workflow/root/a104/execution_progress.py": "15789862b1868a0aba54c03783f9c530e45c362f44414ce2c3432728d07b5a14"
+      },
+      "test_hashes": {
+        "gene_annotation_episode/episodic_workflow/root/a104/tests/test_a104_sequence_masking_library.py": "b62a1fed5f857d0b14a7b95ced0187a104427c428d1c1d64b9e7dc308f7e8674",
+        "gene_annotation_episode/episodic_workflow/root/a104/tests/test_a104_windowmasker_library.py": "30ff1ab4f53e313a0fbb350a4adbea8cec203db0adc3b1375b3d47a32a211268"
+      },
+      "original_restored_test_hashes": {
+        "gene_annotation_episode/episodic_workflow/root/a104/tests/test_a104_sequence_masking_library.py": "b62a1fed5f857d0b14a7b95ced0187a104427c428d1c1d64b9e7dc308f7e8674",
+        "gene_annotation_episode/episodic_workflow/root/a104/tests/test_a104_windowmasker_library.py": "30ff1ab4f53e313a0fbb350a4adbea8cec203db0adc3b1375b3d47a32a211268"
+      },
+      "test_sequence": {
+        "kind": "single_passing_run",
+        "passing_cases": 71
+      },
+      "registry_outcomes": null,
+      "evidence_hashes": {
+        "runs/hpc_launch_private_20261111_a104_masking_apply/application.json": "6b7221d8f76eceb4b38424cf3e5324209f42f9fd79c57f7330e5495723b0693b",
+        "runs/hpc_launch_private_20261111_a104_masking_prepared02/audit.json": "f003daf470d7c61c2a986ec8b5544ac2aae446c98c1535bae4505f55a6aab57e",
+        "runs/hpc_launch_private_20261111_a104_masking_prepared02/test_audit.json": "d189ecccd8cd839af71bb30f670995b625f2614f2b1a28f1ae6ea553a93d3472",
+        "runs/hpc_launch_private_20261111_a104_masking_tests/pytest.xml": "95a7ab15e0b74c0c393c284de4cd8674cebd2814fc5c53c4da73a5ec7cb08d7b",
+        "runs/hpc_launch_private_20261111_a104_after_masking/a104/constructors/constructors.json": "8214d6b8621ab7e81de45f01dbe83f4490982408899f7d7e12f860fa4cd21563",
+        "runs/hpc_launch_private_20261111_a104_preparation/masking_dependency_repair/manifest.json": "dedd24605dd0721c7dba757b09105122b2a38da84b51e62a8b3491bd16a07e1b",
+        "runs/hpc_launch_private_20261111_a104_preparation/masking_dependency_repair/test_manifest.json": "094ef4c7a7ef5f6ef2b1cd0c6cbb5a73a09473d29e3e758b28026a8137cba703"
+      },
+      "constructor_outcomes": [
+        {
+          "binding_path": "hpc_work_planning/execution_job_submission",
+          "status": "failed",
+          "error": {
+            "type": "ModuleNotFoundError",
+            "message": "No module named 'gene_annotation_episode.episodic_workflow.root.a104.native_blast_masking_returns'"
+          }
+        },
+        {
+          "binding_path": "hpc_work_planning/hpc_allocation_execution/execution_job_submission",
+          "status": "failed",
+          "error": {
+            "type": "ModuleNotFoundError",
+            "message": "No module named 'gene_annotation_episode.episodic_workflow.root.a104.native_blast_masking_returns'"
+          }
+        },
+        {
+          "binding_path": "scientific_process/hpc_work_planning/execution_job_submission",
+          "status": "failed",
+          "error": {
+            "type": "ModuleNotFoundError",
+            "message": "No module named 'gene_annotation_episode.episodic_workflow.root.a104.native_blast_masking_returns'"
+          }
+        },
+        {
+          "binding_path": "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission",
+          "status": "failed",
+          "error": {
+            "type": "ModuleNotFoundError",
+            "message": "No module named 'gene_annotation_episode.episodic_workflow.root.a104.native_blast_masking_returns'"
+          }
+        }
+      ],
+      "checks": [
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_A104_worker_lazy_parse_imports_and_exception_identity",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_actual_A104_worker_saved_stage_and_immutable_replay[native_result]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_actual_A104_worker_saved_stage_and_immutable_replay[saved_recalculation]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_contract_numerical_types_bounds_and_unknown_versions",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_contract_rejects_wrong_associations_bytes_and_format_style",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_incompatible_molecule_never_supplies_mask_denominator",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_operation_schema_and_validation_have_one_parameter_authority[dustmasker-mask]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_operation_schema_and_validation_have_one_parameter_authority[segmasker-mask]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_operation_schema_and_validation_have_one_parameter_authority[windowmasker-create_counts]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_operation_schema_and_validation_have_one_parameter_authority[windowmasker-mask]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_partial_input_and_unassociated_soft_output_keep_original_data",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_and_captured_parser_share_exact_input_validation[-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_and_captured_parser_share_exact_input_validation[>bad\\nA-C\\n-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_and_captured_parser_share_exact_input_validation[>bad\\nAC\\xffG\\n>good\\nTGCA\\n-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_and_captured_parser_share_exact_input_validation[>bad\\nAUC\\n-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_and_captured_parser_share_exact_input_validation[>duplicate\\naC gT\\n>duplicate\\nTGCA\\n-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_and_captured_parser_share_exact_input_validation[>empty\\n-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_and_captured_parser_share_exact_input_validation[>protein\\nacdefghiklmnpqrstvwy\\n-protein]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_and_captured_parser_share_exact_input_validation[not fasta\\n-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_malformed_caller_arguments_raise_stable_contract_error[>a\\nACGT\\n-molecule2]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_malformed_caller_arguments_raise_stable_contract_error[>a\\nACGT\\n-rna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_malformed_caller_arguments_raise_stable_contract_error[True-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_malformed_caller_arguments_raise_stable_contract_error[not bytes-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_saved_native_input_population[dna.fa-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_saved_native_input_population[protein.fa-protein]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_preflight_saved_native_input_population[window_target.fa-dna]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_native_dust_hard_ambiguity_preserves_exact_changed_count",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_native_empty_and_failed_outputs_do_not_manufacture_zero_masks",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_native_interval_soft_equivalence[False-dustmasker-expected0]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_native_interval_soft_equivalence[False-segmasker-expected1]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_native_interval_soft_equivalence[False-windowmasker-expected2]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_native_interval_soft_equivalence[True-dustmasker-expected0]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_native_interval_soft_equivalence[True-segmasker-expected1]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_native_interval_soft_equivalence[True-windowmasker-expected2]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_sheet_cannot_erase_hard_n_ambiguity_or_input_failures",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_sheet_rejects_forged_exact_mask_assumptions[hard]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_sheet_rejects_forged_exact_mask_assumptions[interval]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_saved_sheet_rejects_forged_exact_mask_assumptions[soft]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_empty_record_and_empty_file_are_different",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_incompatible_soft_output_never_implies_mask[acg-output_sequence_length_mismatch]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_incompatible_soft_output_never_implies_mask[acg?-unsupported_output_symbol]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_incompatible_soft_output_never_implies_mask[acga-output_sequence_symbol_change]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_invalid_substrate_has_no_denominator[AC-GT-gapped_input_unsupported]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_invalid_substrate_has_no_denominator[AC?GT-unsupported_sequence_symbol]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_invalid_substrate_has_no_denominator[ACUGT-unsupported_sequence_symbol]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_invalid_substrate_has_no_denominator[AC\\xffGT-input_not_utf8]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_malformed_interval_preserves_valid_rows_and_other_records[-1 - 2-malformed_interval_row]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_malformed_interval_preserves_valid_rows_and_other_records[3 - 1-reversed_interval]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_malformed_interval_preserves_valid_rows_and_other_records[8 - 9-interval_out_of_bounds]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_malformed_interval_preserves_valid_rows_and_other_records[bad row-malformed_interval_row]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_no_mask_absent_partial_and_native_failed_are_distinct",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_original_bytes_ordinals_and_mixed_occurrences_survive",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_overlap_duplicate_intervals_reuse_exact_shared_helpers",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_saved_only_recalculation_denies_all_io_and_process_work",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_sequence_masking_library.test_synthetic_supplied_outputs_require_explicit_record_bindings",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_generation_binding_does_not_require_a_self_referential_source_digest",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_malformed_schema_is_contract_error_not_native_failure",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_saved_native_complete_counts_percentiles_thresholds_and_reference_identity",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_malformed_content_retains_other_valid_rows[##pct: 1 nan-statistics_percentile_nonfinite]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_malformed_content_retains_other_valid_rows[##pct: x 10-statistics_percentile_syntax]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_malformed_content_retains_other_valid_rows[4-duplicate_statistics_unit_length]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_malformed_content_retains_other_valid_rows[>t_low 7-duplicate_statistics_threshold]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_malformed_content_retains_other_valid_rows[a -1-statistics_unit_row_syntax]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_malformed_content_retains_other_valid_rows[nonsense-statistics_unit_row_syntax]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_missing_unit_thresholds_and_unknown_provenance_stay_unknown",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_oversized_decimal_native_token_retains_valid_rows[##parameters:t_high=-statistics_metadata_parameter_conflict]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_oversized_decimal_native_token_retains_valid_rows[##pct: -statistics_percentile_syntax]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_oversized_decimal_native_token_retains_valid_rows[1 -statistics_unit_row_syntax]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_oversized_decimal_native_token_retains_valid_rows[>t_high -statistics_threshold_syntax]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_range_duplicates_order_metadata_conflicts_and_partial_custody",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_windowmasker_library.test_synthetic_unknown_metadata_and_absent_percentiles_do_not_invent_values"
+      ],
+      "workflow_receipts": [
+        {
+          "path": "runs/hpc_launch_private_20261111_a104_masking_apply/workflow-result.json",
+          "sha256": "58f03df99fa218a1be86f97e9a3acbcad5a3f3d12a00b2d6c576c76ed89b5a5f"
+        },
+        {
+          "path": "runs/hpc_launch_private_20261111_a104_masking_prepared02/workflow-result.json",
+          "sha256": "3cb0305ddc098e380f4b20c8f47b80258598ca600ec887d3f26d8f027cf995f1"
+        },
+        {
+          "path": "runs/hpc_launch_private_20261111_a104_after_masking/workflow-result.json",
+          "sha256": "20b1097a61da1ecdbb1e2e88ae337da6bcb36ce9c73ed380b1c5248c95f362b9"
+        },
+        {
+          "path": "runs/hpc_launch_private_20261111_a104_masking_tests/workflow-result.json",
+          "sha256": "22008683a918dfd7db6c7de9e8c9b58ccb1c8a7ea28aebc62c5b08891ef4c361"
+        }
+      ],
+      "test_fixture_owner": {
+        "actual_owner": "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/masking_native",
+        "manifest_sha256": "c6f11bc808a5ef9a2afd04285d8edd5f9a928fef1e74c0ade8aca27c20fe6054",
+        "new_fixture_copies": 0
+      },
+      "limits": [
+        "Private Launch binding/task extraction and complete Launch/results message exchanges remain open.",
+        "Full registry context exposure, saved-workflow restoration, shared-root integration and the full organization goal remain open.",
+        "The A104 closed-HPC model-reference omission is unchanged. Pure dependency tests do not establish its restoration.",
+        "No new native/HPC/provider execution or autonomous scientific workflow is claimed by these checks.",
+        "Earlier scientific and operational implementation/validation milestones remain unchanged.",
+        "The retained post-reader diagnostic constructed all four Launch bindings and all 31 registry bindings; it still reported missing exact-parent authentication, bound masking-selector TypeError, native parent-role rejection and duplicate context fields."
+      ]
+    },
+    {
+      "name": "reader_dependency_restoration_20261111",
+      "preparation": "runs/hpc_launch_private_20261111_a104_preparation/reader_dependency_repair",
+      "application_receipt": "runs/hpc_launch_private_20261111_a104_readers_apply/application.json",
+      "source_audit": "runs/hpc_launch_private_20261111_a104_readers_prepared02/audit.json",
+      "test_audit": "runs/hpc_launch_private_20261111_a104_readers_prepared02/test_audit.json",
+      "junit": "runs/hpc_launch_private_20261111_a104_readers_tests/pytest.xml",
+      "expected_passes": 72,
+      "constructor_probe": "runs/hpc_launch_private_20261111_a104_after_readers/a104/constructors/constructors.json",
+      "constructor_workflow": "runs/hpc_launch_private_20261111_a104_after_readers/workflow-result.json",
+      "registry_probe": "runs/hpc_launch_private_20261111_a104_after_readers/a104/registry/launch_registry_probe.json",
+      "schema_test_correction": {
+        "preparation": "runs/hpc_launch_private_20261111_a104_preparation/reader_schema_test_correction",
+        "audit": "runs/hpc_launch_private_20261111_a104_schema_test_audit/schema_test_audit.json",
+        "application_stdout": "runs/hpc_launch_private_20261111_a104_schema_test_apply/stdout.log",
+        "application_workflow": "runs/hpc_launch_private_20261111_a104_schema_test_apply/workflow-result.json",
+        "retry_junit": "runs/hpc_launch_private_20261111_a104_schema_test_retry/pytest.xml",
+        "retry_workflow": "runs/hpc_launch_private_20261111_a104_schema_test_retry/workflow-result.json"
+      },
+      "source_hashes": {
+        "gene_annotation_episode/episodic_workflow/root/a104/library/native_blast_database_returns.py": "601c70aafa53fcaf351b898168b3bfe60220a9419789e7863649f7fc7a5ad21b",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/native_blast_masking_returns.py": "19bfc5f3d5727442ef4a5d77e2fc0d43569d8ac5f17d2bd8e468639f836908bb",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/native_blast_returns.py": "41ef31d09587221e93af177563c76d60cde36dc4928e93108259b0da49239eb1",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/native_blast_standard_database_returns.py": "a584976577aff74df9661990d7ecce62db3e3f4da25e7ba3c7a7c7ca61afdff6",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/native_blast_utility_capture_failure.py": "e04404bc65e0b236927fcc6147a8ff9c4425a94858065c287aad5ca925116de4",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/native_blast_utility_result_publication.py": "d881b9e882e9548c4a660a7afd4ec5349b5f22142fa4f4d0b72840c0082ea532",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/native_blast_utility_returns.py": "ce83a19878c2c1f5f5c6b23dbdd081a95df28cb843e15b8c5177e0f61d975c90",
+        "gene_annotation_episode/episodic_workflow/root/a104/library/native_hmmer_preparation_failure_views.py": "2496b87d63c5db96f00ad622b750b7d4d556abe0b8891631aed5d70dabf66843",
+        "gene_annotation_episode/episodic_workflow/root/a104/a104_execution_bindings.py": "5baac3b3c8b42aedc10df20e2ded98ec0f01dd8c4e9aefa8b82e6d0d38de3e08",
+        "gene_annotation_episode/episodic_workflow/root/a104/native_blast_utility_results.py": "f20c725113a1f6cddf93c09f477465323868ecda7a8403ddefa4dc668bd7cbdf",
+        "gene_annotation_episode/episodic_workflow/root/a104/native_hmmer_preparation_results.py": "91a3d7c2c5adce8a53947975448f1c6d39cbd76dd8d0e4f517aa574277bf0b46"
+      },
+      "test_hashes": {
+        "gene_annotation_episode/episodic_workflow/root/a104/tests/blast_utility_contract_fixtures.py": "067512f35b39492de9fcea1d6599979fce19532d22536b3370ffdeef9e4b0872",
+        "gene_annotation_episode/episodic_workflow/root/a104/tests/test_a104_blast_utility_reader_views.py": "7baa2b4522996bfe3d302467473df8b02e8ee5d7bc9a1793dec1e5b58f99b42c",
+        "gene_annotation_episode/episodic_workflow/root/a104/tests/test_a104_installed_result_readers.py": "1938fe84b344f4d119db22add2075028bf91c4dc7547a9e374fe9545ae3efcb2"
+      },
+      "original_restored_test_hashes": {
+        "gene_annotation_episode/episodic_workflow/root/a104/tests/blast_utility_contract_fixtures.py": "067512f35b39492de9fcea1d6599979fce19532d22536b3370ffdeef9e4b0872",
+        "gene_annotation_episode/episodic_workflow/root/a104/tests/test_a104_blast_utility_reader_views.py": "704dc01a128d368aa8f6c030e55bfb1e4f0f18ce64d2070b67421c78263700e8",
+        "gene_annotation_episode/episodic_workflow/root/a104/tests/test_a104_installed_result_readers.py": "1938fe84b344f4d119db22add2075028bf91c4dc7547a9e374fe9545ae3efcb2"
+      },
+      "test_sequence": {
+        "kind": "71_earlier_passes_plus_one_linked_test_only_retry",
+        "earlier_passing_cases": 71,
+        "original_failed_cases": 1,
+        "focused_retry_passes": 1,
+        "distinct_passing_identities": 72,
+        "fresh_all_72_run": false,
+        "retained_failed_workflow": {
+          "path": "runs/hpc_launch_private_20261111_a104_readers_tests/workflow-result.json",
+          "sha256": "0ba3ca62477d87de75b521cad1a7dda12b466a3430748fe899dd3ad0de98f949"
+        },
+        "failed_case_identity": "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_public_schemas_are_closed_and_detached",
+        "schema_test_correction": {
+          "preparation": "runs/hpc_launch_private_20261111_a104_preparation/reader_schema_test_correction",
+          "audit": "runs/hpc_launch_private_20261111_a104_schema_test_audit/schema_test_audit.json",
+          "application_stdout": "runs/hpc_launch_private_20261111_a104_schema_test_apply/stdout.log",
+          "application_workflow": "runs/hpc_launch_private_20261111_a104_schema_test_apply/workflow-result.json",
+          "retry_junit": "runs/hpc_launch_private_20261111_a104_schema_test_retry/pytest.xml",
+          "retry_workflow": "runs/hpc_launch_private_20261111_a104_schema_test_retry/workflow-result.json",
+          "manifest_sha256": "dc5f1a4fd1e4e1238291e492f147543390814ea56f1047b9a52cd39d1ce124ae",
+          "path": "gene_annotation_episode/episodic_workflow/root/a104/tests/test_a104_blast_utility_reader_views.py",
+          "before_sha256": "704dc01a128d368aa8f6c030e55bfb1e4f0f18ce64d2070b67421c78263700e8",
+          "after_sha256": "7baa2b4522996bfe3d302467473df8b02e8ee5d7bc9a1793dec1e5b58f99b42c",
+          "scope": "Two imports and one original stale test function only; failed run and its source bytes retained."
+        }
+      },
+      "registry_outcomes": [
+        {
+          "binding_path": "hpc_work_planning/execution_job_submission",
+          "launch_prepare_assignment": {
+            "status": "raised",
+            "type": "ModuleNotFoundError",
+            "message": "No module named 'gene_annotation_episode.episodic_workflow.root.a104.hpc_launch_authentication'"
+          },
+          "bound_masking_selector": {
+            "status": "raised",
+            "type": "TypeError",
+            "message": "ExecutionEpisode._masking_selector() takes 1 positional argument but 2 were given"
+          },
+          "native_prepare_assignment": {
+            "status": "raised",
+            "type": "ValueError",
+            "message": "unknown_execution_episode_role"
+          },
+          "registry_initial_decision_context": {
+            "status": "raised",
+            "type": "ValueError",
+            "message": "initial_binding_context_field_conflict"
+          }
+        },
+        {
+          "binding_path": "hpc_work_planning/hpc_allocation_execution/execution_job_submission",
+          "launch_prepare_assignment": {
+            "status": "raised",
+            "type": "ModuleNotFoundError",
+            "message": "No module named 'gene_annotation_episode.episodic_workflow.root.a104.hpc_launch_authentication'"
+          },
+          "bound_masking_selector": {
+            "status": "raised",
+            "type": "TypeError",
+            "message": "ExecutionEpisode._masking_selector() takes 1 positional argument but 2 were given"
+          },
+          "native_prepare_assignment": {
+            "status": "raised",
+            "type": "ValueError",
+            "message": "unknown_execution_episode_role"
+          },
+          "registry_initial_decision_context": {
+            "status": "raised",
+            "type": "ValueError",
+            "message": "initial_binding_context_field_conflict"
+          }
+        },
+        {
+          "binding_path": "scientific_process/hpc_work_planning/execution_job_submission",
+          "launch_prepare_assignment": {
+            "status": "raised",
+            "type": "ModuleNotFoundError",
+            "message": "No module named 'gene_annotation_episode.episodic_workflow.root.a104.hpc_launch_authentication'"
+          },
+          "bound_masking_selector": {
+            "status": "raised",
+            "type": "TypeError",
+            "message": "ExecutionEpisode._masking_selector() takes 1 positional argument but 2 were given"
+          },
+          "native_prepare_assignment": {
+            "status": "raised",
+            "type": "ValueError",
+            "message": "unknown_execution_episode_role"
+          },
+          "registry_initial_decision_context": {
+            "status": "raised",
+            "type": "ValueError",
+            "message": "initial_binding_context_field_conflict"
+          }
+        },
+        {
+          "binding_path": "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission",
+          "launch_prepare_assignment": {
+            "status": "raised",
+            "type": "ModuleNotFoundError",
+            "message": "No module named 'gene_annotation_episode.episodic_workflow.root.a104.hpc_launch_authentication'"
+          },
+          "bound_masking_selector": {
+            "status": "raised",
+            "type": "TypeError",
+            "message": "ExecutionEpisode._masking_selector() takes 1 positional argument but 2 were given"
+          },
+          "native_prepare_assignment": {
+            "status": "raised",
+            "type": "ValueError",
+            "message": "unknown_execution_episode_role"
+          },
+          "registry_initial_decision_context": {
+            "status": "raised",
+            "type": "ValueError",
+            "message": "initial_binding_context_field_conflict"
+          }
+        }
+      ],
+      "evidence_hashes": {
+        "runs/hpc_launch_private_20261111_a104_readers_apply/application.json": "0cb91f8ef96a2b736a78aa46d7aa10d77741ef51dd87255a57a996d7ec8acb25",
+        "runs/hpc_launch_private_20261111_a104_readers_prepared02/audit.json": "662deac77e801ddcbd7408433070cc23854fe7a417755abada58ce1abfb73e2d",
+        "runs/hpc_launch_private_20261111_a104_readers_prepared02/test_audit.json": "9c344b5c2821833998f08ecc33d5c1ffd7bb3ca769d72d3cf3bc7094c0ad90ec",
+        "runs/hpc_launch_private_20261111_a104_readers_tests/pytest.xml": "bce9f32c76bd23b41c27b7260372d42f94912302655d6c7838a916ffe10e5863",
+        "runs/hpc_launch_private_20261111_a104_after_readers/a104/constructors/constructors.json": "8bfbc81025ec8e459894c09e28f0d228038f79f96e0f9a7b5061f0be95ea9ba5",
+        "runs/hpc_launch_private_20261111_a104_preparation/reader_dependency_repair/manifest.json": "fff7489daadc5bcce7ae586084402d887742d2bc6d6d64263b448484644a19a2",
+        "runs/hpc_launch_private_20261111_a104_preparation/reader_dependency_repair/test_manifest.json": "b78870cf141fe3e9bd49231f25c0b0a75dd26385248aed430c5adf7ce8d14d98",
+        "runs/hpc_launch_private_20261111_a104_after_readers/a104/registry/launch_registry_probe.json": "b646b037814e934015f3b7f035e628f2ba5d450948fe052c842df69d00f9ebb3",
+        "runs/hpc_launch_private_20261111_a104_schema_test_audit/schema_test_audit.json": "fe1aa2005a49aa5b8d562e73d0b805416e01ef9fed7520d4dbbf0cb584d88430",
+        "runs/hpc_launch_private_20261111_a104_schema_test_apply/stdout.log": "ff7fd3a3e9b160749271d7e876ce0495cdc9083bb6129bc2f8ae1270ac87313b",
+        "runs/hpc_launch_private_20261111_a104_schema_test_retry/pytest.xml": "5465ee81a55aa2b3efb502a1474d61f97f49af756585732c3b65c30b4182474d",
+        "runs/hpc_launch_private_20261111_a104_preparation/reader_schema_test_correction/manifest.json": "dc5f1a4fd1e4e1238291e492f147543390814ea56f1047b9a52cd39d1ce124ae"
+      },
+      "constructor_outcomes": [
+        {
+          "binding_path": "hpc_work_planning/execution_job_submission",
+          "status": "constructed"
+        },
+        {
+          "binding_path": "hpc_work_planning/hpc_allocation_execution/execution_job_submission",
+          "status": "constructed"
+        },
+        {
+          "binding_path": "scientific_process/hpc_work_planning/execution_job_submission",
+          "status": "constructed"
+        },
+        {
+          "binding_path": "scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission",
+          "status": "constructed"
+        }
+      ],
+      "checks": [
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_database_fields_keep_distinct_native_approximate_and_exact_observations",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_database_missing_field_has_no_fabricated_native_locator",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_dropping_missing_rows_cannot_relabel_unfulfilled_selection_complete",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_duplicate_requests_and_native_rows_are_preserved_without_ordinal_join",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_empty_sequence_selection_returns_no_record_or_sequence",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_integrity_selected_sample_keeps_unknown_count_and_seed",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_invalid_selector_is_rejected_before_projection[changes0]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_invalid_selector_is_rejected_before_projection[changes1]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_invalid_selector_is_rejected_before_projection[changes2]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_invalid_selector_is_rejected_before_projection[changes3]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_invalid_selector_is_rejected_before_projection[changes4]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_invalid_selector_is_rejected_before_projection[changes5]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_invalid_selector_is_rejected_before_projection[changes6]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_invalid_selector_is_rejected_before_projection[changes7]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_malformed_original_rows_keep_global_qualification_without_renumbering",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_missing_result_keeps_specific_unfulfilled_requests[False-unavailable]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_missing_result_keeps_specific_unfulfilled_requests[True-failed]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_missing_selection_preserves_present_sequence_and_failed_native_outcome",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_native_null_is_qualified_information_without_zero_or_missing_locator",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_non_json_or_nonfinite_facts_are_rejected[bad2]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_non_json_or_nonfinite_facts_are_rejected[bad3]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_non_json_or_nonfinite_facts_are_rejected[bytes]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_non_json_or_nonfinite_facts_are_rejected[inf]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_non_json_or_nonfinite_facts_are_rejected[nan]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_original_operation_outcome_and_occurrence_conflicts_are_rejected",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_parent_reference_forms_only_grant_explicit_selected_bytes",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_preparation_selected_fields_and_manifest_are_copies_not_artifact_grants",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_prepared_manifest_cannot_borrow_another_preparation[argv]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_prepared_manifest_cannot_borrow_another_preparation[files]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_prepared_manifest_cannot_borrow_another_preparation[identity]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_prepared_manifest_cannot_borrow_another_preparation[receipt]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_projection_tampering_cannot_expand_selection[<lambda>0]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_projection_tampering_cannot_expand_selection[<lambda>1]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_projection_tampering_cannot_expand_selection[<lambda>2]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_projection_tampering_cannot_expand_selection[<lambda>3]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_projection_tampering_cannot_expand_selection[<lambda>4]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_projection_tampering_cannot_expand_selection[<lambda>5]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_public_schemas_are_closed_and_detached",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_pure_projection_performs_no_file_network_or_process_work",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_return_owner_hooks_and_frozen_subset_do_not_merge_producers",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_same_bytes_keep_separate_original_occurrences_and_one_explicit_byte_grant",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_saved_data_selects_actual_result_and_manifest_schemas_only",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_selected_sequence_copies_original_identity_length_coordinates_without_extra_bytes",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_unavailable_preparation_is_typed_and_does_not_suppress_original_failure",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_unavailable_prepared_manifest_cannot_have_a_saved_manifest_descriptor",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_blast_utility_reader_views.test_unknown_length_and_coordinates_are_copied_without_repair",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_actual_installers_keep_selected_readers_and_original_owner[flags0]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_actual_installers_keep_selected_readers_and_original_owner[flags1]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_actual_installers_keep_selected_readers_and_original_owner[flags2]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_actual_installers_keep_selected_readers_and_original_owner[flags3]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_actual_installers_keep_selected_readers_and_original_owner[flags4]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_actual_installers_keep_selected_readers_and_original_owner[flags5]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[library.native_blast_database_returns-NativeBLASTDatabaseReturns]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[library.native_blast_masking_returns-NativeBLASTMaskingReturns]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[library.native_blast_returns-NativeBLASTReturns]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[library.native_blast_standard_database_returns-StandardBLASTDatabaseReturns]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[library.native_blast_utility_returns-NativeBLASTUtilityReturns]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[native_blast_database_results-NativeBLASTDatabaseResults]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[native_blast_masking_results-NativeBLASTMaskingResults]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[native_blast_results-NativeBLASTResults]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[native_blast_standard_database_results-StandardBLASTDatabaseResults]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[native_blast_utility_results-NativeBLASTUtilityResults]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[native_hmmer_preparation_results-NativeHmmerPreparationResults]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[native_hmmer_preparation_returns-NativeHmmerPreparationReturns]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_installed_class_keeps_own_axis_types[native_hmmer_results-NativeHMMERResults]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_preparation_failure_keeps_query_line_separate_from_operand_and_deduplicates",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_preparation_failure_rejects_changed_original_qualification[code]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_preparation_failure_rejects_changed_original_qualification[foreign_bundle]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_preparation_failure_rejects_changed_original_qualification[locator]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_preparation_failure_rejects_changed_original_qualification[role]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_preparation_failure_rejects_changed_original_qualification[stage]",
+        "gene_annotation_episode.episodic_workflow.root.a104.tests.test_a104_installed_result_readers.test_utility_helper_uses_existing_worker_and_own_exception"
+      ],
+      "workflow_receipts": [
+        {
+          "path": "runs/hpc_launch_private_20261111_a104_readers_apply/workflow-result.json",
+          "sha256": "9e290e5291c30c3651c580e5ae2596cfdd27321c97d338c2919c0fea7a65779f"
+        },
+        {
+          "path": "runs/hpc_launch_private_20261111_a104_readers_prepared02/workflow-result.json",
+          "sha256": "8ad44c9a1131dca3d92af802fd82c4503501779dc547927b182a5a36002239d3"
+        },
+        {
+          "path": "runs/hpc_launch_private_20261111_a104_after_readers/workflow-result.json",
+          "sha256": "b335ed16020ab17ef43b08d099effe1376595c340b0a429937fb5982bfc3574c"
+        },
+        {
+          "path": "runs/hpc_launch_private_20261111_a104_schema_test_apply/workflow-result.json",
+          "sha256": "7c3af4f76ed78a875352f0630525fb0b8b719b9af527fb28bb3fe0d5d62c6c62"
+        },
+        {
+          "path": "runs/hpc_launch_private_20261111_a104_schema_test_retry/workflow-result.json",
+          "sha256": "38bc8f30c72463da408af2565c1d2c2982078d95ef09494f1e2d60ff0a0c0665"
+        },
+        {
+          "path": "runs/hpc_launch_private_20261111_a104_schema_test_audit/workflow-result.json",
+          "sha256": "176edb0bd0fed22036379870c7760da14d2c21681b8e7f1047fc3d810a3923ff"
+        }
+      ],
+      "test_fixture_owner": null,
+      "limits": [
+        "Private Launch binding/task extraction and complete Launch/results message exchanges remain open.",
+        "Full registry context exposure, saved-workflow restoration, shared-root integration and the full organization goal remain open.",
+        "The A104 closed-HPC model-reference omission is unchanged. Pure dependency tests do not establish its restoration.",
+        "No new native/HPC/provider execution or autonomous scientific workflow is claimed by these checks.",
+        "Earlier scientific and operational implementation/validation milestones remain unchanged.",
+        "The retained post-reader diagnostic constructed all four Launch bindings and all 31 registry bindings; it still reported missing exact-parent authentication, bound masking-selector TypeError, native parent-role rejection and duplicate context fields."
+      ]
+    }
+  ],
+  "limitations": [
+    "Private Launch binding/task extraction and complete Launch/results message exchanges remain open.",
+    "Full registry context exposure, saved-workflow restoration, shared-root integration and the full organization goal remain open.",
+    "The A104 closed-HPC model-reference omission is unchanged. Pure dependency tests do not establish its restoration.",
+    "No new native/HPC/provider execution or autonomous scientific workflow is claimed by these checks.",
+    "Earlier scientific and operational implementation/validation milestones remain unchanged.",
+    "The retained post-reader diagnostic constructed all four Launch bindings and all 31 registry bindings; it still reported missing exact-parent authentication, bound masking-selector TypeError, native parent-role rejection and duplicate context fields."
+  ],
+  "scope": "Preserved original helper/reader implementation; each episode retains original owner and invocation/admission/report handling."
+}

@@ -68,7 +68,7 @@ def selected_call(tmp_path, monkeypatch):
     binding = dict(version="homer_native_binding_v1", operation=e.OPERATION, variant=e.VARIANT,
         deployment=deployment, software=software, input_staging=dict(mode="verified_copy", max_total_bytes=1024 * 1024))
     frozen = []
-    fixture = Path(__file__).with_name("fixtures") / "homer_v51_selected_region_inputs.zip"
+    fixture = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/homer_v51_selected_region_inputs.zip"
     with zipfile.ZipFile(fixture) as archive:
         manifest = json.loads(archive.read("manifest.json"))
         for row, fmt in zip(manifest["files"], ("bed", "fasta", "bed")):

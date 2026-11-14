@@ -1,0 +1,3639 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gene-annotation:planning:genomic-overlap-contract-418:v1",
+  "title": "Proposed concrete genomic overlap data contracts",
+  "description": "Planning only. This declares tool-specific data structures and joins, not a generic scoring/result DSL or an adopted production adapter.",
+  "x-status": "proposed_for_root_review",
+  "x-requirement-id": "B-L123-analyze_genomic_region_overlap",
+  "x-required-field-policy": "Every object is closed; every defined property is required. Null is allowed only at explicit nullable definitions.",
+  "x-semantic-validation": [
+    "All object fields listed in required are mandatory. Nullable fields are represented by JSON null; omitted and null are not interchangeable.",
+    "Only JSON finite numbers are permitted. Coordinates require 0 <= start < end <= 2**63-1. Endpoints and supplied threshold denominators are integers; booleans do not satisfy integer fields.",
+    "source.kind bed_artifact iff RegionSetSpec.format bed_outer_span_v1; coordinate_rows_artifact iff coordinate_rows_v1. Every parsed set source_file must equal its request source.file and parsed_byte_count may not exceed size_bytes.",
+    "Set keys are unique; request comparisons are exactly all unordered input-position pairs i<j in increasing (i,j) order, with unique comparison_key and zero-based ordinal. a_set_key and b_set_key are never inferred from output column positions.",
+    "Parsed sets have exactly the request set keys in request order. Each valid occurrence key/native token/data ordinal is unique within its set; data_ordinal counts all data rows, including invalid rows. Native tokens are globally unique in a request.",
+    "canonical_order is a permutation of valid occurrence keys in bytewise chromosome,start,end,data_ordinal order. Coordinate/full-record groups partition every valid occurrence exactly once and match the declared grouping fields.",
+    "BED locators contain complete original byte ranges including the line terminator if present. array_index locators refer to the original retained coordinate JSON array. All referenced source fields and names are copied, not model authored.",
+    "Each native comparison and reference relation has the same declared comparison key and endpoint set keys. The receipt a/b bindings equal the original request input files; each canonical token resolves through the same parsed set.",
+    "Every valid native row has exact original A/B endpoints, matching chromosome tokens, unique (comparison_key,a_occurrence_key,b_occurrence_key), and native_overlap_bp = min(a.end,b.end)-max(a.start,b.start) > 0. pair_key is a deterministic serialization of that tuple, not a feature name.",
+    "not_executed_invalid_input has outcome not_executed, null returncode/timestamps/software/stdout/stderr, empty argv and unavailable native extent. a/b canonical files for invalid input are not required: see NativePairReceipt.a/b nullable canonical_file below.",
+    "Components.source_sheet_sha256 is SHA-256 of the exact saved canonical sheet JSON (sorted keys, compact separators, ensure_ascii=False, allow_nan=False, UTF-8). The same hash occurs in the projection; projection parameters exactly equal its component snapshot.",
+    "Every FractionThreshold numerator <= denominator. Every Ratio value equals numerator/denominator when denominator > 0 and both inputs known; it is null with zero_denominator when denominator == 0. Missing numeric inputs never become zero; their missing_reason is explicit.",
+    "Set/pair components retain request key order and joins; mathematical meaning is the fixed per-field formulas in CONTRACT.md section 5. These schema records do not form an executable scoring language.",
+    "NativePairReceipt.issues and parser issues remain separate original stage facts. Copying an issue to an enclosing sheet does not create another measurement.",
+    "PairSummary exact totals remain null for partial/unavailable results. ObservedMetrics may hold lower bounds from valid retained rows only; interpretation lower_bound_subset is required. Invalid width/identity rows never contribute.",
+    "Native result selector saved_sheet_file is null. Saved recalculation selector saved_sheet_file must be a qualified nonnull previously admitted original sheet. Changing thresholds produces a new component snapshot, never mutation of source_sheet or earlier observations.",
+    "Selector comparison_keys form a unique subset of declared request comparisons, in request order. occurrence_keys is empty for pair_metrics/set_metrics; otherwise unique exact occurrence refs from selected comparisons. Empty occurrence_keys in occurrence_rows means all occurrences in selected comparisons, subject to explicit paging.",
+    "Projection result_extent reports the underlying selected scientific data extent, not whether the selected page was delivered. A complete requested page of a partial source remains result_extent partial. Reference relations are restricted to selected comparisons and copied exactly.",
+    "Complete parsed sets require parsed_byte_count == source_file.size_bytes and no invalid rows. Unavailable sets have null input_data_row_count, zero parsed bytes and empty tables. For partial sets, input_data_row_count is nonnull only if the full input was read and data rows counted; otherwise null. Valid rows and located failures remain available.",
+    "NativePairReceipt is supplied-data metadata, not an authority token. native_result_extent complete requires complete input sets, complete retained stdout bytes, no malformed/rejected/duplicate pair rows, and either closed_successful_native_attempt or supplied_full_output_declaration with explicit nonempty completeness_source_refs. The supplied-output route may have null identity/software/returncode/timestamps/writer_closed; it does not claim this workflow executed the tool. A live result host separately validates original selection, job, manifest, attempt, closure, receipt and replay before claiming live completion.",
+    "For derivation bedtools_intersect and completeness_basis closed_successful_native_attempt: outcome succeeded, returncode 0 and writer_closed true are required. Supplied_native_output with supplied_full_output_declaration has outcome unknown unless actual outcome evidence is supplied; complete byte capture alone never establishes complete scientific output. Validated-empty-input requires complete empty input and has no native returncode/timestamps/software/stdout/stderr; complete analytic pair table is empty.",
+    "NativeFileIdentity is exactly packet419 shape with format, not media_type. Input BED files use format bed_outer_span_v1; coordinate arrays use coordinate_rows_v1; canonical BED4 uses bed4_occurrence_v1; pair stdout uses bedtools_intersect_wo_bed4_v1; stderr uses native_stderr_text_v1; saved sheets use genomic_region_overlap_sheet_v1. No name or resource label overrides actual format validation.",
+    "OverlapCaptureRecord belongs only to result-host integration. native_manifest.files and captures have equal length; capture[i].declared equals native_manifest.files[i].declaration; unique file_key and role identify exactly one canonical_a, canonical_b, overlap_stdout, overlap_stderr declaration for executed pairs. Scientific stdout/stderr and canonical identities come from the same-role captures, not independently sorted lists. Verified rows match declaration hash/size/format exactly; mismatch keeps observed bytes and cannot establish complete native results.",
+    "Packet419 capture rules apply exactly: present declaration has hash/size; absent has both null. verified has observed identity, null failure and exact identity match; declared_absent has null observed/failure; digest_mismatch has observed identity and capture_file_digest_mismatch; unavailable has null observed and capture_file_unavailable. Shared helper only captures bytes. Overlap host owns original job, sealed manifest, writer-closure receipt and immutable selected-action capture receipt; replay reads retained files through retained_native_file and never recaptures producer paths.",
+    "Selector measurement_fields is a unique nonempty list from the fixed family-specific enum. Every projected row's measurements key set is exactly that list; an unavailable requested measurement is present with its defined null/missing representation and a located failure, never silently omitted or replaced. No unrequested measurement/intermediate is projected.",
+    "Projection has exactly one populated row family selected by kind; other families are empty. pair rows order by request comparison ordinal; set rows by original set position; occurrence rows by comparison ordinal,population(unfiltered before selected),A then B,data_ordinal. offset/limit applies after ordering/filtering, total_rows is full selected population, returned_rows equals actual rows.",
+    "Ratio projection always retains its numerator, denominator and missing reason. Result extent, reference relation and observed lower-bound interpretation accompany measurements as qualifications. Selected measures also retain the exact calculation parameters. These are required qualifications, not an invitation to return all components.",
+    "RequestedReturn.overlap is an example parent-chosen field with x-source genomic_overlap_pair_metrics. The host validates selector field equality and typed values against saved components. Parent forms may rename the enclosing field without expanding requested measurements. Serialization to model-facing text excludes source_sheet_sha256, host IDs and artifact references.",
+    "NativeDriverManifest contains no artifact identities. input_fingerprints are SHA-256/size/format of actual selected input bytes, joined to request sources by set_key and equality. Manifest files declare role/relative_path/format/hash/size. The result host captures those declarations with packet419, then creates NativePairReceipt canonical_file/stdout/stderr from actual observed NativeFileIdentity rows. It copies no invented artifact references from the driver.",
+    "NativeDriverManifest.input_fingerprints has exactly two entries in A then B order, with distinct set_key equal to manifest endpoints. For an executed pair, files has exactly the four distinct required roles; files and captures retain declaration order. NativePairReceipt receives identities only after host capture, never by manufacturing artifact_ references in the driver.",
+    "Projection issues/failures are limited to the selected measurements and their necessary input/native completeness/reference qualifications. Do not copy failures for unrelated comparisons or unrequested independent calculations. Failure.field_path is the exact storage JSON pointer where available; original lower-stage facts retain their own path.",
+    "Analytic validated_empty_input has no native stdout/stderr invocation files and may pass content=None to the pure pair parser; its exact empty pair table is retained in the saved sheet. This corrects section 2's earlier suggestion to require a native empty-result artifact for an uninvoked pair. A genuine invoked no-hit result instead requires the actual retained zero-byte stdout file.",
+    "Pure input parser content may be None only for an explicitly unavailable supplied source and produces a located input_unavailable failure. Pure pair parser content may be None only for unavailable or analytic-empty metadata. No parser obtains content from a producer path, Store, network or executable.",
+    "parse_region_set receives explicit set_position equal to the RegionSetSpec index in Request.region_sets. Its occurrence_key is 'r' followed by the zero-based data_ordinal in canonical decimal; identity is (set_key,occurrence_key). Its native_token is 's' + set_position + '_r' + data_ordinal. Header lines do not increment data_ordinal; invalid data rows do. Neither coordinate sorting nor duplicate grouping changes keys.",
+    "Every pair_key is 'p' + comparison.ordinal + ':a' + A.data_ordinal + ':b' + B.data_ordinal, with canonical nonnegative decimal integers. It is unambiguous within the frozen request and maps one-to-one to (comparison_key,a_set_key,a_occurrence_key,b_set_key,b_occurrence_key). Native row order never supplies occurrence identity.",
+    "Group keys are unique within their grouping table. Coordinate groups use exact chromosome/start/end; full-record groups use canonical original-fields JSON preserving JSON types and values. Group order is the least data_ordinal in each group; member occurrence order is data_ordinal. Group identity never merges occurrence records.",
+    "Initial bound v2.31.1 execution uses argv [bound_executable,'intersect','-a',canonical_a_path,'-b',canonical_b_path,'-wo','-sorted'], with no -f/-F options. Packet421/run002 observed all seven exact native cases, including 1-bp overlap at the signed-64-bit endpoint. This supersedes CONTRACT section 2's false default-fraction justification; ordinary supplied-data parsing remains format/mode based and does not require this workflow to have executed the source."
+  ],
+  "$defs": {
+    "JsonValue": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          }
+        }
+      ]
+    },
+    "Source": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "bed_artifact"
+            },
+            "source_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "file": {
+              "$ref": "#/$defs/NativeFileIdentity"
+            }
+          },
+          "required": [
+            "kind",
+            "source_ref",
+            "file"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "coordinate_rows_artifact"
+            },
+            "source_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "file": {
+              "$ref": "#/$defs/NativeFileIdentity"
+            }
+          },
+          "required": [
+            "kind",
+            "source_ref",
+            "file"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ContigMetadata": {
+      "type": "object",
+      "properties": {
+        "chromosome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "length_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sequence_accession_version": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sequence_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "chromosome",
+        "length_bp",
+        "sequence_accession_version",
+        "sequence_sha256",
+        "source_refs"
+      ],
+      "additionalProperties": false
+    },
+    "ReferenceMetadata": {
+      "type": "object",
+      "properties": {
+        "assembly_accession_version": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "assembly_label": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sequence_dictionary": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeFileIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contigs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ContigMetadata"
+          }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "assembly_accession_version",
+        "assembly_label",
+        "sequence_dictionary",
+        "contigs",
+        "source_refs"
+      ],
+      "additionalProperties": false
+    },
+    "RegionSetSpec": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "display_label": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/Source"
+        },
+        "reference": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReferenceMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "format": {
+          "enum": [
+            "bed_outer_span_v1",
+            "coordinate_rows_v1"
+          ]
+        }
+      },
+      "required": [
+        "set_key",
+        "display_label",
+        "source",
+        "reference",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "ComparisonSpec": {
+      "type": "object",
+      "properties": {
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "a_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "b_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        }
+      },
+      "required": [
+        "comparison_key",
+        "ordinal",
+        "a_set_key",
+        "b_set_key"
+      ],
+      "additionalProperties": false
+    },
+    "Request": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_request_v1"
+        },
+        "operation": {
+          "const": "analyze_genomic_region_overlap"
+        },
+        "mode": {
+          "const": "unstranded_outer_span"
+        },
+        "region_sets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RegionSetSpec"
+          },
+          "minItems": 2
+        },
+        "comparisons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ComparisonSpec"
+          },
+          "minItems": 1
+        },
+        "output_prefix": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$"
+        }
+      },
+      "required": [
+        "version",
+        "operation",
+        "mode",
+        "region_sets",
+        "comparisons",
+        "output_prefix"
+      ],
+      "additionalProperties": false
+    },
+    "Locator": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "bed_line"
+            },
+            "line_number": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "byte_start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "byte_end": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "kind",
+            "line_number",
+            "byte_start",
+            "byte_end"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "array_index"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "kind",
+            "index"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Failure": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "input_unavailable",
+            "input_digest_mismatch",
+            "unsupported_input_format",
+            "invalid_coordinate",
+            "zero_width_interval",
+            "invalid_chromosome_token",
+            "native_dependency_unavailable",
+            "native_version_unverified",
+            "native_nonzero_exit",
+            "resource_limit",
+            "native_output_unavailable",
+            "native_output_partial",
+            "native_output_malformed",
+            "native_pair_identity_conflict",
+            "duplicate_native_pair",
+            "overlap_width_conflict",
+            "original_attempt_mismatch",
+            "artifact_digest_mismatch",
+            "zero_denominator",
+            "requested_field_unavailable",
+            "reference_metadata_conflict",
+            "reference_identity_unavailable"
+          ]
+        },
+        "stage": {
+          "enum": [
+            "input",
+            "native",
+            "capture",
+            "parse",
+            "calculate",
+            "project",
+            "authority"
+          ]
+        },
+        "set_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "comparison_key": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "artifact_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "locator": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Locator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "field_path": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^/"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "partial_artifact_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "requirement": {
+          "enum": [
+            "none",
+            "complete_input",
+            "valid_coordinates",
+            "bound_bedtools",
+            "original_native_output",
+            "complete_native_output",
+            "matching_file_identity",
+            "nonzero_denominator",
+            "requested_reference_metadata",
+            "requested_selected_field",
+            "native_version_evidence"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "stage",
+        "set_key",
+        "comparison_key",
+        "artifact_ref",
+        "locator",
+        "field_path",
+        "expected_value",
+        "observed_value",
+        "partial_artifact_refs",
+        "requirement"
+      ],
+      "additionalProperties": false,
+      "description": "All fields required. Null means this locator or expected/observed scalar is not applicable; it is never a zero measurement. expected_value and observed_value contain copied source/contract values only, never interpretation prose."
+    },
+    "RegionRecord": {
+      "type": "object",
+      "properties": {
+        "occurrence_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "data_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "native_token": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_]+$"
+        },
+        "locator": {
+          "$ref": "#/$defs/Locator"
+        },
+        "original_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "minItems": 3
+        },
+        "chromosome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_strand": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "occurrence_key",
+        "data_ordinal",
+        "native_token",
+        "locator",
+        "original_fields",
+        "chromosome",
+        "start",
+        "end",
+        "name",
+        "raw_strand"
+      ],
+      "additionalProperties": false
+    },
+    "IgnoredRecord": {
+      "type": "object",
+      "properties": {
+        "locator": {
+          "$ref": "#/$defs/Locator"
+        },
+        "kind": {
+          "enum": [
+            "blank",
+            "comment",
+            "track_header",
+            "browser_header"
+          ]
+        }
+      },
+      "required": [
+        "locator",
+        "kind"
+      ],
+      "additionalProperties": false
+    },
+    "InvalidInputRecord": {
+      "type": "object",
+      "properties": {
+        "data_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "locator": {
+          "$ref": "#/$defs/Locator"
+        },
+        "original_fields": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/JsonValue"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "data_ordinal",
+        "locator",
+        "original_fields",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "CoordinateGroup": {
+      "type": "object",
+      "properties": {
+        "group_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "chromosome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "occurrence_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "group_key",
+        "chromosome",
+        "start",
+        "end",
+        "occurrence_keys"
+      ],
+      "additionalProperties": false
+    },
+    "FullRecordGroup": {
+      "type": "object",
+      "properties": {
+        "group_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "original_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "minItems": 3
+        },
+        "occurrence_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "group_key",
+        "original_fields",
+        "occurrence_keys"
+      ],
+      "additionalProperties": false
+    },
+    "ParsedRegionSet": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_parsed_set_v1"
+        },
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "source_file": {
+          "$ref": "#/$defs/NativeFileIdentity"
+        },
+        "parsed_byte_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "input_data_row_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "regions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RegionRecord"
+          }
+        },
+        "ignored_records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IgnoredRecord"
+          }
+        },
+        "invalid_records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InvalidInputRecord"
+          }
+        },
+        "canonical_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          }
+        },
+        "coordinate_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CoordinateGroup"
+          }
+        },
+        "full_record_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FullRecordGroup"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "set_key",
+        "source_file",
+        "parsed_byte_count",
+        "result_extent",
+        "input_data_row_count",
+        "regions",
+        "ignored_records",
+        "invalid_records",
+        "canonical_order",
+        "coordinate_groups",
+        "full_record_groups",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "ReferenceRelation": {
+      "type": "object",
+      "properties": {
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "a_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "b_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "relation": {
+          "enum": [
+            "same_supplied_reference",
+            "different_supplied_references",
+            "unknown",
+            "conflicting_metadata"
+          ]
+        },
+        "basis": {
+          "enum": [
+            "supplied_versioned_reference_identity",
+            "supplied_contig_sequence_identity",
+            "insufficient_supplied_identity",
+            "contradictory_supplied_identity"
+          ]
+        },
+        "a_reference": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReferenceMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "b_reference": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReferenceMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "comparison_key",
+        "a_set_key",
+        "b_set_key",
+        "relation",
+        "basis",
+        "a_reference",
+        "b_reference",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "NativeIdentity": {
+      "type": "object",
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "origin_episode_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resource_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "execution_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attempt_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operation_key": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "run_id",
+        "origin_episode_id",
+        "resource_id",
+        "execution_id",
+        "attempt_id",
+        "operation_key"
+      ],
+      "additionalProperties": false
+    },
+    "Software": {
+      "type": "object",
+      "properties": {
+        "executable": {
+          "type": "string",
+          "minLength": 1
+        },
+        "declared_version": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed_version": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "executable_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "executable",
+        "declared_version",
+        "observed_version",
+        "executable_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "OperandBinding": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "original_file": {
+          "$ref": "#/$defs/NativeFileIdentity"
+        },
+        "canonical_file": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeFileIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "set_key",
+        "original_file",
+        "canonical_file"
+      ],
+      "additionalProperties": false
+    },
+    "NativePairReceipt": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_native_pair_receipt_v1"
+        },
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "identity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "derivation": {
+          "enum": [
+            "bedtools_intersect",
+            "supplied_native_output",
+            "validated_empty_input",
+            "not_executed_invalid_input"
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "not_executed",
+            "unknown"
+          ]
+        },
+        "software": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Software"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "a": {
+          "$ref": "#/$defs/OperandBinding"
+        },
+        "b": {
+          "$ref": "#/$defs/OperandBinding"
+        },
+        "realized_argv": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "returncode": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "finished_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stdout": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeFileIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stderr": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeFileIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "writer_closed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "capture_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        },
+        "native_result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "completeness_basis": {
+          "enum": [
+            "closed_successful_native_attempt",
+            "supplied_full_output_declaration",
+            "validated_empty_input",
+            "partial_native_result",
+            "unavailable"
+          ]
+        },
+        "completeness_source_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "version",
+        "comparison_key",
+        "identity",
+        "derivation",
+        "outcome",
+        "software",
+        "a",
+        "b",
+        "realized_argv",
+        "environment",
+        "returncode",
+        "started_at",
+        "finished_at",
+        "stdout",
+        "stderr",
+        "writer_closed",
+        "capture_extent",
+        "issues",
+        "native_result_extent",
+        "completeness_basis",
+        "completeness_source_refs"
+      ],
+      "additionalProperties": false,
+      "description": "Scientific input metadata supplied to the pure parser. Execution facts may be absent for externally supplied retained output. This record does not grant original-attempt authority: the live result host validates that separately. Supplied completeness is explicitly source-declared, never inferred merely from a parseable file."
+    },
+    "NativeEndpoint": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "occurrence_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "native_token": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chromosome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "set_key",
+        "occurrence_key",
+        "native_token",
+        "chromosome",
+        "start",
+        "end"
+      ],
+      "additionalProperties": false
+    },
+    "NativePairRow": {
+      "type": "object",
+      "properties": {
+        "pair_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "native_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "locator": {
+          "$ref": "#/$defs/Locator"
+        },
+        "a": {
+          "$ref": "#/$defs/NativeEndpoint"
+        },
+        "b": {
+          "$ref": "#/$defs/NativeEndpoint"
+        },
+        "native_overlap_bp": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "pair_key",
+        "comparison_key",
+        "native_row_ordinal",
+        "locator",
+        "a",
+        "b",
+        "native_overlap_bp"
+      ],
+      "additionalProperties": false
+    },
+    "RejectedNativeRow": {
+      "type": "object",
+      "properties": {
+        "native_row_ordinal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "locator": {
+          "$ref": "#/$defs/Locator"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "native_row_ordinal",
+        "locator",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "ParsedOverlapPairs": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_parsed_pairs_v1"
+        },
+        "format": {
+          "const": "bedtools_intersect_wo_bed4_v1"
+        },
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "receipt": {
+          "$ref": "#/$defs/NativePairReceipt"
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "parsed_byte_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "valid_pairs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativePairRow"
+          }
+        },
+        "rejected_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RejectedNativeRow"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "format",
+        "comparison_key",
+        "receipt",
+        "result_extent",
+        "parsed_byte_count",
+        "valid_pairs",
+        "rejected_rows",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "Sheet": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_region_overlap_sheet_v1"
+        },
+        "request": {
+          "$ref": "#/$defs/Request"
+        },
+        "sets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ParsedRegionSet"
+          },
+          "minItems": 2
+        },
+        "comparisons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ParsedOverlapPairs"
+          },
+          "minItems": 1
+        },
+        "reference_relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReferenceRelation"
+          },
+          "minItems": 1
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "request",
+        "sets",
+        "comparisons",
+        "reference_relations",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "FractionThreshold": {
+      "type": "object",
+      "properties": {
+        "numerator": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "denominator": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "additionalProperties": false
+    },
+    "Parameters": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_calculation_parameters_v1"
+        },
+        "minimum_overlap_bp": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "minimum_a_fraction": {
+          "$ref": "#/$defs/FractionThreshold"
+        },
+        "minimum_b_fraction": {
+          "$ref": "#/$defs/FractionThreshold"
+        }
+      },
+      "required": [
+        "version",
+        "minimum_overlap_bp",
+        "minimum_a_fraction",
+        "minimum_b_fraction"
+      ],
+      "additionalProperties": false
+    },
+    "Ratio": {
+      "type": "object",
+      "properties": {
+        "numerator": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "denominator": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "missing_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "zero_denominator",
+                "incomplete_input",
+                "incomplete_native_result",
+                "unavailable_input",
+                "unavailable_native_result"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator",
+        "value",
+        "missing_reason"
+      ],
+      "additionalProperties": false
+    },
+    "Interval": {
+      "type": "object",
+      "properties": {
+        "chromosome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "chromosome",
+        "start",
+        "end"
+      ],
+      "additionalProperties": false
+    },
+    "RegionGeometry": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "occurrence_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "span_bp": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "set_key",
+        "occurrence_key",
+        "span_bp"
+      ],
+      "additionalProperties": false
+    },
+    "SetSummary": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "input_data_row_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "valid_region_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "region_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "summed_region_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "coordinate_locus_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "duplicate_coordinate_excess": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "set_key",
+        "result_extent",
+        "input_data_row_count",
+        "valid_region_count",
+        "region_count",
+        "summed_region_bp",
+        "union_bp",
+        "coordinate_locus_count",
+        "duplicate_coordinate_excess",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "SetComponents": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "input_data_row_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "valid_region_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "region_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "summed_region_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "coordinate_locus_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "duplicate_coordinate_excess": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        },
+        "union_segments": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Interval"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "region_geometry": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RegionGeometry"
+          }
+        }
+      },
+      "required": [
+        "set_key",
+        "result_extent",
+        "input_data_row_count",
+        "valid_region_count",
+        "region_count",
+        "summed_region_bp",
+        "union_bp",
+        "coordinate_locus_count",
+        "duplicate_coordinate_excess",
+        "issues",
+        "union_segments",
+        "region_geometry"
+      ],
+      "additionalProperties": false
+    },
+    "UnfilteredMetrics": {
+      "type": "object",
+      "properties": {
+        "native_pair_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pairwise_overlap_bp_sum": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "intersection_union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "combined_union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "jaccard_bp": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "a_union_coverage_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "b_union_coverage_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "a_regions_with_overlap": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "b_regions_with_overlap": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "a_region_overlap_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "b_region_overlap_fraction": {
+          "$ref": "#/$defs/Ratio"
+        }
+      },
+      "required": [
+        "native_pair_count",
+        "pairwise_overlap_bp_sum",
+        "intersection_union_bp",
+        "combined_union_bp",
+        "jaccard_bp",
+        "a_union_coverage_fraction",
+        "b_union_coverage_fraction",
+        "a_regions_with_overlap",
+        "b_regions_with_overlap",
+        "a_region_overlap_fraction",
+        "b_region_overlap_fraction"
+      ],
+      "additionalProperties": false
+    },
+    "SelectedMetrics": {
+      "type": "object",
+      "properties": {
+        "selected_pair_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected_pairwise_bp_sum": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected_intersection_union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected_shared_union_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "a_union_coverage_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "b_union_coverage_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "a_regions_with_overlap": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "b_regions_with_overlap": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "a_region_overlap_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "b_region_overlap_fraction": {
+          "$ref": "#/$defs/Ratio"
+        }
+      },
+      "required": [
+        "selected_pair_count",
+        "selected_pairwise_bp_sum",
+        "selected_intersection_union_bp",
+        "selected_shared_union_fraction",
+        "a_union_coverage_fraction",
+        "b_union_coverage_fraction",
+        "a_regions_with_overlap",
+        "b_regions_with_overlap",
+        "a_region_overlap_fraction",
+        "b_region_overlap_fraction"
+      ],
+      "additionalProperties": false
+    },
+    "ObservedMetrics": {
+      "type": "object",
+      "properties": {
+        "observed_pair_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed_pairwise_bp_sum": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed_intersection_union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "interpretation": {
+          "enum": [
+            "exact_complete_result",
+            "lower_bound_subset",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "observed_pair_count",
+        "observed_pairwise_bp_sum",
+        "observed_intersection_union_bp",
+        "interpretation"
+      ],
+      "additionalProperties": false
+    },
+    "EdgeComponents": {
+      "type": "object",
+      "properties": {
+        "pair_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "a_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "a_occurrence_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "b_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "b_occurrence_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "intersection": {
+          "$ref": "#/$defs/Interval"
+        },
+        "overlap_bp": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "a_overlap_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "b_overlap_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "selected": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "pair_key",
+        "a_set_key",
+        "a_occurrence_key",
+        "b_set_key",
+        "b_occurrence_key",
+        "intersection",
+        "overlap_bp",
+        "a_overlap_fraction",
+        "b_overlap_fraction",
+        "selected"
+      ],
+      "additionalProperties": false
+    },
+    "OccurrenceCoverage": {
+      "type": "object",
+      "properties": {
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "population": {
+          "enum": [
+            "unfiltered",
+            "selected"
+          ]
+        },
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "occurrence_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "span_bp": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "partner_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "covered_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "coverage_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "pair_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          }
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "comparison_key",
+        "population",
+        "set_key",
+        "occurrence_key",
+        "span_bp",
+        "partner_count",
+        "covered_bp",
+        "coverage_fraction",
+        "pair_keys",
+        "result_extent"
+      ],
+      "additionalProperties": false
+    },
+    "PairSummary": {
+      "type": "object",
+      "properties": {
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "a_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "b_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "reference_relation": {
+          "enum": [
+            "same_supplied_reference",
+            "different_supplied_references",
+            "unknown",
+            "conflicting_metadata"
+          ]
+        },
+        "observed": {
+          "$ref": "#/$defs/ObservedMetrics"
+        },
+        "unfiltered": {
+          "$ref": "#/$defs/UnfilteredMetrics"
+        },
+        "selected": {
+          "$ref": "#/$defs/SelectedMetrics"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "comparison_key",
+        "a_set_key",
+        "b_set_key",
+        "result_extent",
+        "reference_relation",
+        "observed",
+        "unfiltered",
+        "selected",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "PairComponents": {
+      "type": "object",
+      "properties": {
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "a_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "b_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "reference_relation": {
+          "enum": [
+            "same_supplied_reference",
+            "different_supplied_references",
+            "unknown",
+            "conflicting_metadata"
+          ]
+        },
+        "observed": {
+          "$ref": "#/$defs/ObservedMetrics"
+        },
+        "unfiltered": {
+          "$ref": "#/$defs/UnfilteredMetrics"
+        },
+        "selected": {
+          "$ref": "#/$defs/SelectedMetrics"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        },
+        "intersection_union_segments": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Interval"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected_intersection_union_segments": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Interval"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EdgeComponents"
+          }
+        },
+        "occurrences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OccurrenceCoverage"
+          }
+        }
+      },
+      "required": [
+        "comparison_key",
+        "a_set_key",
+        "b_set_key",
+        "result_extent",
+        "reference_relation",
+        "observed",
+        "unfiltered",
+        "selected",
+        "issues",
+        "intersection_union_segments",
+        "selected_intersection_union_segments",
+        "edges",
+        "occurrences"
+      ],
+      "additionalProperties": false
+    },
+    "Components": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_region_overlap_components_v1"
+        },
+        "source_sheet_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "parameters": {
+          "$ref": "#/$defs/Parameters"
+        },
+        "sets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SetComponents"
+          }
+        },
+        "pairs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PairComponents"
+          }
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "source_sheet_sha256",
+        "parameters",
+        "sets",
+        "pairs",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "GradedSheetView": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_region_overlap_graded_sheet_v1"
+        },
+        "sheet": {
+          "$ref": "#/$defs/Sheet"
+        },
+        "components": {
+          "$ref": "#/$defs/Components"
+        }
+      },
+      "required": [
+        "version",
+        "sheet",
+        "components"
+      ],
+      "additionalProperties": false,
+      "description": "This view has native measurements and actual numerical calculated components. The original sheet and every calculation snapshot remain separately immutable; this is not an empty grading template."
+    },
+    "OccurrenceSelection": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "occurrence_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        }
+      },
+      "required": [
+        "set_key",
+        "occurrence_key"
+      ],
+      "additionalProperties": false
+    },
+    "ProjectionSelection": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "pair_metrics"
+              ]
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "measurement_fields": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "unfiltered.native_pair_count",
+                  "unfiltered.pairwise_overlap_bp_sum",
+                  "unfiltered.intersection_union_bp",
+                  "unfiltered.combined_union_bp",
+                  "unfiltered.jaccard_bp",
+                  "unfiltered.a_union_coverage_fraction",
+                  "unfiltered.b_union_coverage_fraction",
+                  "unfiltered.a_regions_with_overlap",
+                  "unfiltered.b_regions_with_overlap",
+                  "unfiltered.a_region_overlap_fraction",
+                  "unfiltered.b_region_overlap_fraction",
+                  "selected.selected_pair_count",
+                  "selected.selected_pairwise_bp_sum",
+                  "selected.selected_intersection_union_bp",
+                  "selected.selected_shared_union_fraction",
+                  "selected.a_union_coverage_fraction",
+                  "selected.b_union_coverage_fraction",
+                  "selected.a_regions_with_overlap",
+                  "selected.b_regions_with_overlap",
+                  "selected.a_region_overlap_fraction",
+                  "selected.b_region_overlap_fraction",
+                  "observed.observed_pair_count",
+                  "observed.observed_pairwise_bp_sum",
+                  "observed.observed_intersection_union_bp"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "occurrence_keys": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/OccurrenceSelection"
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "offset",
+            "limit",
+            "measurement_fields",
+            "occurrence_keys"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "set_metrics"
+              ]
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "measurement_fields": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "input_data_row_count",
+                  "valid_region_count",
+                  "region_count",
+                  "summed_region_bp",
+                  "union_bp",
+                  "coordinate_locus_count",
+                  "duplicate_coordinate_excess"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "occurrence_keys": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/OccurrenceSelection"
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "offset",
+            "limit",
+            "measurement_fields",
+            "occurrence_keys"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "occurrence_rows"
+              ]
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "measurement_fields": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "span_bp",
+                  "partner_count",
+                  "covered_bp",
+                  "coverage_fraction",
+                  "pair_keys"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "occurrence_keys": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/OccurrenceSelection"
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "offset",
+            "limit",
+            "measurement_fields",
+            "occurrence_keys"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Selector": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_result_selector_v1"
+        },
+        "mode": {
+          "enum": [
+            "native_result",
+            "saved_sheet_recalculation"
+          ]
+        },
+        "comparison_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          },
+          "minItems": 1
+        },
+        "saved_sheet_file": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeFileIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parameters": {
+          "$ref": "#/$defs/Parameters"
+        },
+        "projection": {
+          "$ref": "#/$defs/ProjectionSelection"
+        }
+      },
+      "required": [
+        "version",
+        "mode",
+        "comparison_keys",
+        "saved_sheet_file",
+        "parameters",
+        "projection"
+      ],
+      "additionalProperties": false
+    },
+    "ProjectionPage": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total_rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "returned_rows": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "offset",
+        "limit",
+        "total_rows",
+        "returned_rows"
+      ],
+      "additionalProperties": false
+    },
+    "Projection": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "genomic_overlap_projection_v1"
+        },
+        "source_sheet_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "parameters": {
+          "$ref": "#/$defs/Parameters"
+        },
+        "kind": {
+          "enum": [
+            "pair_metrics",
+            "set_metrics",
+            "occurrence_rows"
+          ]
+        },
+        "page": {
+          "$ref": "#/$defs/ProjectionPage"
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "reference_relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReferenceRelation"
+          }
+        },
+        "pair_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PairProjectionRow"
+          }
+        },
+        "set_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SetProjectionRow"
+          }
+        },
+        "occurrence_rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OccurrenceProjectionRow"
+          }
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        },
+        "measurement_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "version",
+        "source_sheet_sha256",
+        "parameters",
+        "kind",
+        "page",
+        "result_extent",
+        "reference_relations",
+        "pair_rows",
+        "set_rows",
+        "occurrence_rows",
+        "failures",
+        "measurement_fields"
+      ],
+      "additionalProperties": false,
+      "description": "Parent-specific selected measurement projection plus necessary identity/extent/reference/denominator qualifications. Full components remain retained. Host hashes and artifact references are storage metadata and excluded from model-facing text."
+    },
+    "RequestedReturn": {
+      "type": "object",
+      "properties": {
+        "overlap": {
+          "$ref": "#/$defs/Projection"
+        }
+      },
+      "required": [
+        "overlap"
+      ],
+      "additionalProperties": false,
+      "x-source": "genomic_overlap_pair_metrics"
+    },
+    "NativeFileIdentity": {
+      "type": "object",
+      "properties": {
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        }
+      },
+      "required": [
+        "artifact_ref",
+        "sha256",
+        "size_bytes",
+        "format"
+      ],
+      "additionalProperties": false,
+      "description": "Exact shared NativeFileIdentity from packet419. format labels bytes and selects no parser by itself. Media type is a capture-call argument, not part of identity."
+    },
+    "NativeFileDeclaration": {
+      "type": "object",
+      "properties": {
+        "relative_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "state": {
+          "enum": [
+            "present",
+            "absent"
+          ]
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "size_bytes": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "relative_path",
+        "format",
+        "state",
+        "sha256",
+        "size_bytes"
+      ],
+      "additionalProperties": false,
+      "description": "Exact packet419 declaration. Present requires nonnull hash and size; absent requires both null."
+    },
+    "NativeFileCapture": {
+      "type": "object",
+      "properties": {
+        "declared": {
+          "$ref": "#/$defs/NativeFileDeclaration"
+        },
+        "observed": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeFileIdentity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "verified",
+            "declared_absent",
+            "digest_mismatch",
+            "unavailable"
+          ]
+        },
+        "failure": {
+          "anyOf": [
+            {
+              "enum": [
+                "capture_file_unavailable",
+                "capture_file_digest_mismatch"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "declared",
+        "observed",
+        "outcome",
+        "failure"
+      ],
+      "additionalProperties": false,
+      "description": "Exact packet419 returned capture row; original array position is the join."
+    },
+    "OverlapManifestFile": {
+      "type": "object",
+      "properties": {
+        "file_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "role": {
+          "enum": [
+            "canonical_a",
+            "canonical_b",
+            "overlap_stdout",
+            "overlap_stderr"
+          ]
+        },
+        "declaration": {
+          "$ref": "#/$defs/NativeFileDeclaration"
+        }
+      },
+      "required": [
+        "file_key",
+        "role",
+        "declaration"
+      ],
+      "additionalProperties": false,
+      "description": "Per-overlap mapping outside shared capture helper. Its zero-based array index joins capture rows."
+    },
+    "OverlapCaptureRecord": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "enum": [
+            "genomic_overlap_capture_record_v1"
+          ]
+        },
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "original_identity": {
+          "$ref": "#/$defs/NativeIdentity"
+        },
+        "original_requested_job_file": {
+          "$ref": "#/$defs/NativeFileIdentity"
+        },
+        "sealed_manifest_file": {
+          "$ref": "#/$defs/NativeFileIdentity"
+        },
+        "source_action_receipt_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "writer_closure_receipt_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "captures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeFileCapture"
+          }
+        },
+        "native_manifest": {
+          "$ref": "#/$defs/NativeDriverManifest"
+        }
+      },
+      "required": [
+        "version",
+        "comparison_key",
+        "original_identity",
+        "original_requested_job_file",
+        "sealed_manifest_file",
+        "source_action_receipt_ref",
+        "writer_closure_receipt_ref",
+        "captures",
+        "native_manifest"
+      ],
+      "additionalProperties": false,
+      "description": "Host-only proposed integration record; not an input required by pure G1 parsing/calculation and not a generic operation registry. Root owns final selected-action custody and replay binding."
+    },
+    "PairSelectedMeasurements": {
+      "type": "object",
+      "properties": {
+        "unfiltered.native_pair_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unfiltered.pairwise_overlap_bp_sum": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unfiltered.intersection_union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unfiltered.combined_union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unfiltered.jaccard_bp": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "unfiltered.a_union_coverage_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "unfiltered.b_union_coverage_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "unfiltered.a_regions_with_overlap": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unfiltered.b_regions_with_overlap": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unfiltered.a_region_overlap_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "unfiltered.b_region_overlap_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "selected.selected_pair_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected.selected_pairwise_bp_sum": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected.selected_intersection_union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected.selected_shared_union_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "selected.a_union_coverage_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "selected.b_union_coverage_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "selected.a_regions_with_overlap": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected.b_regions_with_overlap": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected.a_region_overlap_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "selected.b_region_overlap_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "observed.observed_pair_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed.observed_pairwise_bp_sum": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed.observed_intersection_union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Only the selector's explicit field names occur. Field names are a fixed per-tool enum, not executable expressions. Ratio values retain numerator and denominator."
+    },
+    "SetSelectedMeasurements": {
+      "type": "object",
+      "properties": {
+        "input_data_row_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "valid_region_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "region_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "summed_region_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "union_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "coordinate_locus_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "duplicate_coordinate_excess": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Only explicitly requested fixed set fields occur."
+    },
+    "OccurrenceSelectedMeasurements": {
+      "type": "object",
+      "properties": {
+        "span_bp": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "partner_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "covered_bp": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "coverage_fraction": {
+          "$ref": "#/$defs/Ratio"
+        },
+        "pair_keys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Only explicitly requested fixed occurrence fields occur."
+    },
+    "PairProjectionRow": {
+      "type": "object",
+      "properties": {
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "a_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "b_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "reference_relation": {
+          "enum": [
+            "same_supplied_reference",
+            "different_supplied_references",
+            "unknown",
+            "conflicting_metadata"
+          ]
+        },
+        "observed_interpretation": {
+          "enum": [
+            "exact_complete_result",
+            "lower_bound_subset",
+            "unavailable"
+          ]
+        },
+        "measurements": {
+          "$ref": "#/$defs/PairSelectedMeasurements"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "comparison_key",
+        "a_set_key",
+        "b_set_key",
+        "result_extent",
+        "reference_relation",
+        "observed_interpretation",
+        "measurements",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "SetProjectionRow": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "measurements": {
+          "$ref": "#/$defs/SetSelectedMeasurements"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Failure"
+          }
+        }
+      },
+      "required": [
+        "set_key",
+        "result_extent",
+        "measurements",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "OccurrenceProjectionRow": {
+      "type": "object",
+      "properties": {
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "population": {
+          "enum": [
+            "unfiltered",
+            "selected"
+          ]
+        },
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "occurrence_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "result_extent": {
+          "enum": [
+            "complete",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "measurements": {
+          "$ref": "#/$defs/OccurrenceSelectedMeasurements"
+        }
+      },
+      "required": [
+        "comparison_key",
+        "population",
+        "set_key",
+        "occurrence_key",
+        "result_extent",
+        "measurements"
+      ],
+      "additionalProperties": false
+    },
+    "NativeSourceFingerprint": {
+      "type": "object",
+      "properties": {
+        "set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "set_key",
+        "format",
+        "sha256",
+        "size_bytes"
+      ],
+      "additionalProperties": false,
+      "description": "Driver-side input byte identity; no Store reference exists in this record."
+    },
+    "NativeDriverManifest": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "enum": [
+            "genomic_overlap_native_manifest_v1"
+          ]
+        },
+        "comparison_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "identity": {
+          "$ref": "#/$defs/NativeIdentity"
+        },
+        "a_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "b_set_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]*$"
+        },
+        "input_fingerprints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NativeSourceFingerprint"
+          }
+        },
+        "derivation": {
+          "enum": [
+            "bedtools_intersect",
+            "validated_empty_input",
+            "not_executed_invalid_input"
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "not_executed",
+            "unknown"
+          ]
+        },
+        "software": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Software"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "realized_argv": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "returncode": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "finished_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "writer_closed": {
+          "type": "boolean"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/OverlapManifestFile"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "comparison_key",
+        "identity",
+        "a_set_key",
+        "b_set_key",
+        "input_fingerprints",
+        "derivation",
+        "outcome",
+        "software",
+        "realized_argv",
+        "environment",
+        "returncode",
+        "started_at",
+        "finished_at",
+        "writer_closed",
+        "files"
+      ],
+      "additionalProperties": false,
+      "description": "Exact native driver handoff. It declares relative file paths, hashes, sizes, roles and formats. It contains no artifact_ref or Store API result."
+    },
+    "CoordinateRow": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "integer",
+          "minimum": 1
+        }
+      ],
+      "minItems": 3,
+      "items": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "description": "Original coordinate_rows_v1 record. Extra JSON values are retained. start < end is semantic validation; booleans are not integers. Name/raw_strand are derived only when field 4/6 respectively is a string; otherwise null and original fields still retained."
+    },
+    "CoordinateRowsData": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CoordinateRow"
+      },
+      "description": "Complete UTF-8 JSON array retained as source bytes. Malformed rows remain invalid original records rather than being silently excluded; empty array is a valid complete empty set."
+    }
+  },
+  "$ref": "#/$defs/GradedSheetView",
+  "x-g1-pure-record-roots": [
+    "Request",
+    "ParsedRegionSet",
+    "ComparisonSpec",
+    "NativePairReceipt",
+    "ParsedOverlapPairs",
+    "Sheet",
+    "Parameters",
+    "Components",
+    "GradedSheetView",
+    "Selector",
+    "Projection",
+    "RequestedReturn"
+  ],
+  "x-host-only-record-roots": [
+    "NativeDriverManifest",
+    "OverlapCaptureRecord"
+  ],
+  "x-file-helper-records": [
+    "NativeFileIdentity",
+    "NativeFileDeclaration",
+    "NativeFileCapture"
+  ],
+  "x-synthetic-evidence-policy": "No production evidence_class field exists. WORKED_EXAMPLE.json labels its entire packet hand_worked_synthetic outside all production data records. Parsers/calculators accept supplied retained real data; they do not require workflow execution authority. Live original-attempt custody and completion are result-host responsibilities."
+}

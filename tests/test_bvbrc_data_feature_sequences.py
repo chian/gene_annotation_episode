@@ -24,7 +24,7 @@ from gene_annotation_episode.bvbrc_data_feature_sequences import (
 from gene_annotation_episode.bvbrc_data_schema import validate
 from gene_annotation_episode.bvbrc_data_calculators import calculate_feature_sequence_counts
 
-EVIDENCE = Path(__file__).resolve().parents[1] / "verification/tool_graders_bvbrc_data_contract_2026-10-24"
+EVIDENCE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"
 AA_MD5 = "7594e119ffe8456710f27d137885e84c"
 NA_MD5 = "584ae482fd635ee1fb6243df48fb8508"
 FEATURE_IDS = ["PATRIC.511145.12.NC_000913.CDS.822959.823720.rev",

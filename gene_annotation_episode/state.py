@@ -17,9 +17,9 @@ from typing import Any
 
 from .domain import (ANCHOR, ContractError, MOLECULES, ROLES, RECORD_SCHEMAS, REASONING_SCHEMA,
                      canonical, identity, parse_sequences, source_location_inputs, validate_schema)
-from . import materials
-from . import library_targets as libraries
-from . import context_masks
+from gene_annotation_episode import materials
+from gene_annotation_episode import library_targets as libraries
+from gene_annotation_episode import context_masks
 from .journal_metadata import ROOT_FLAG as JOURNAL_METADATA_MARKER,restore_request
 from .sequence_mapping import (VERSION as MAPPING_VERSION, extract_path, map_interval,
                                mapping_footprint, validate_mapping)
@@ -792,7 +792,7 @@ class Store:
                     constrained_refs(child, (*path, index))
         constrained_refs(data)
         if kind == "native_execution":
-            from .execution_recording import NativeMeasurement
+            from gene_annotation_episode.episodic_workflow.root.native_measurement import NativeMeasurement
             from .domain import NATIVE_EXECUTION_OPERATIONS
             self._require(data['measurement_artifact_ref'], {'artifact'})
             measured = NativeMeasurement.from_record(json.loads(self.get_artifact(data['measurement_artifact_ref'])))

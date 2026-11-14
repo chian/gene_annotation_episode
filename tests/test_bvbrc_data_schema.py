@@ -10,7 +10,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.bvbrc_data_schema import schema, validate, fact_schemas, json_digest
 from gene_annotation_episode.communication import validate_closed_schema, validate_form
 
-EVIDENCE = Path(__file__).resolve().parents[1] / "verification/tool_graders_bvbrc_data_contract_2026-10-24"
+EVIDENCE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"
 FROZEN = json.loads((EVIDENCE / "CONTRACT_SHAPES.json").read_text())
 EXAMPLES = json.loads((EVIDENCE / "FILLED_EXAMPLES.json").read_text())
 

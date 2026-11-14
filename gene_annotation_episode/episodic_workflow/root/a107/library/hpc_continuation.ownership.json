@@ -1,0 +1,40 @@
+{
+  "module": "library/hpc_continuation.py",
+  "original": "hpc_monitoring.py:HPCContinuationEstimator",
+  "consuming_episodes": [
+    "hpc_work_planning",
+    "hpc_work_planning/hpc_resource_prediction",
+    "hpc_work_planning/hpc_allocation_execution",
+    "scientific_process/hpc_work_planning",
+    "scientific_process/hpc_work_planning/hpc_resource_prediction",
+    "scientific_process/hpc_work_planning/hpc_allocation_execution"
+  ],
+  "direct_callers": [
+    "hpc_work_planning/hpc_allocation_execution/yield.py",
+    "hpc_work_planning/hpc_resource_prediction/yield.py",
+    "hpc_work_planning/yield.py",
+    "scientific_process/hpc_work_planning/hpc_allocation_execution/yield.py",
+    "scientific_process/hpc_work_planning/hpc_resource_prediction/yield.py",
+    "scientific_process/hpc_work_planning/yield.py"
+  ],
+  "reason": "Reusable calculations selected with each private consumer's original operands; separate implementation in each axis. No episode or extra credit source is created.",
+  "external_dependencies": [
+    "numerical.py and completion_evidence.py: original numerical/receipt type identities"
+  ],
+  "source_audit": "runs/hpc_calculation_ownership_20261111_audit/audit.json",
+  "validation": {
+    "baseline": "runs/hpc_calculation_ownership_20261111_baseline/pytest.xml",
+    "baseline_passes": 155,
+    "behavior": "runs/hpc_calculation_ownership_20261111_combined/pytest.xml",
+    "passes": 795,
+    "pass_count_scope": "Distinct checks passed across original run and exact failed-check retry; the original run itself had 784 passes and eleven descriptor-exhaustion failures.",
+    "original_passes": 784,
+    "original_failures": 11,
+    "failed_check_retry": "runs/hpc_calculation_ownership_20261111_retry/pytest.xml",
+    "inherited_connection_review": "runs/hpc_calculation_ownership_20261111_retry/failure_review.json",
+    "source_audit": "runs/hpc_calculation_ownership_20261111_audit/audit.json",
+    "numeric_vectors": "runs/hpc_calculation_ownership_20261111_audit/vectors.json",
+    "current_catalog_consistency": "runs/hpc_calculation_ownership_20261111_consistency02/consistency.json",
+    "scope": "Actual local mathematics, ledger custody, private estimator selection and original numerical controller replay across thirty consumers; existing prediction tasks/prompts/messages and monitor boundaries use their documented controlled ports. No live provider, remote work or full saved-workflow restoration."
+  }
+}

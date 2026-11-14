@@ -11,8 +11,8 @@ import re
 
 from jsonschema import Draft202012Validator, validators
 
-from .bvbrc_alignment_values import native_number, validate_native_number, validate_numeric_cell
-from . import phylogeny_calculation_contracts as locations
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import native_number, validate_native_number, validate_numeric_cell
+from gene_annotation_episode import phylogeny_calculation_contracts as locations
 
 
 SHEET_VERSION = 'homer_motif_sheet_v1'

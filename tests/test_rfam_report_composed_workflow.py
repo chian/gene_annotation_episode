@@ -41,10 +41,10 @@ from test_practical_runtime import selected
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "verification/tool_graders_rfam_report_workflow_2026-10-26_245"
-RUNS = Path(os.environ.get("RFAM_REPORT_WORKFLOW_RUNS", str(EVIDENCE / "runs")))
-LIVE = ROOT / "verification/tool_graders_rfam_live_workflow_2026-10-26_243/live_001"
-OUT = EVIDENCE / "original_job_out_001"
+EVIDENCE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/report_workflow"
+RUNS = Path(os.environ.get("RFAM_REPORT_WORKFLOW_RUNS", str(ROOT / "runs/rfam_report_composed_workflow")))
+LIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/live_workflow"
+OUT = EVIDENCE
 PUBLICATION = ROOT / "research/slotted_process_library/publications/2026-10-24-001"
 JOB = "infernal_cmscan-R20261026-041949-0621-14761545-p2m"
 RESOURCES = {"rfam": {"kind": "api", "service": "rfam_batch", "timeout": 90.0}}
@@ -57,7 +57,7 @@ METRICS = ["native_score_bits", "native_evalue", "native_bias_bits", "query_span
 GOAL = "Measure native Rfam model matches and sequence correspondence for the three supplied nucleotide occurrences"
 HISTORY_TABLES = ("runtime_episodes", "runtime_actions", "runtime_observations",
     "runtime_model_calls", "runtime_report_attempts", "runtime_forms")
-OLD_JSON = ROOT / "verification/tool_graders_rfam_workflow_2026-10-26_241/tests_005/runs/retained_single-7n2b5y3a"
+OLD_JSON = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/old_workflow"
 PROTECTED = [LIVE / name for name in ("history.json", "archive.json", "results-return.json",
     "scientific-return.json", "requested-forms.json", "state/state.sqlite3", "submitted-file.body")]
 PROTECTED += [OLD_JSON / name for name in ("history.json", "results-return.json", "scientific-return.json")]

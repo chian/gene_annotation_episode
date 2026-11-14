@@ -1,0 +1,8 @@
+"""Exact source membership of the actual A103 annotation parent."""
+from pathlib import Path
+
+ANNOTATION_IMPLEMENTATION_MEMBERS = ('__init__.py', 'child_message_owners.py', 'commissioning_policy.py', 'credit.py', 'decision_delivery.py', 'episode.py', 'from_child_execution_job_submission.py', 'from_child_execution_progress_assessment.py', 'from_child_execution_result_acquisition.py', 'from_child_homology_job_monitoring.py', 'from_child_homology_job_submission.py', 'from_child_homology_result_acquisition.py', 'from_child_hpc_work_planning.py', 'from_child_legacy_improvement.py', 'from_child_published_evidence_assessment.py', 'from_child_resource_result_acquisition.py', 'from_child_resource_work_submission.py', 'from_child_scientific_process.py', 'from_parent.py', 'goal.py', 'implementation.py', 'instructions.py', 'internal_summary.py', 'task.py', 'task_state.py', 'task_waiting.py', 'to_child_execution_job_submission.py', 'to_child_execution_progress_assessment.py', 'to_child_execution_result_acquisition.py', 'to_child_homology_job_monitoring.py', 'to_child_homology_job_submission.py', 'to_child_homology_result_acquisition.py', 'to_child_hpc_work_planning.py', 'to_child_legacy_improvement.py', 'to_child_published_evidence_assessment.py', 'to_child_resource_result_acquisition.py', 'to_child_resource_work_submission.py', 'to_child_scientific_process.py', 'to_parent.py', 'yield.py')
+
+def annotation_implementation_files():
+    directory = Path(__file__).parent
+    return tuple(directory / name for name in ANNOTATION_IMPLEMENTATION_MEMBERS) + (directory / 'library/hpc_handoff_report_contract.py',)

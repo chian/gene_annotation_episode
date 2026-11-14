@@ -208,7 +208,7 @@ native projection and explicitly records that it is not a live rerun.
 
 ## Verification
 
-Reusable inputs and helpers live in `tests/fixtures/a101/`,
+Reusable inputs and helpers live in `gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/a101/`,
 `tests/a101_subtree_fixture.py` and `tests/a101_native_return_fixture.py`.
 The functional examples in `characterization.txt` are explicitly invented.
 The `real/` fixtures retain actual public UniProt sequences and provenance for
@@ -250,11 +250,14 @@ phmmer executable under `resources/software/infernal-1.1.5/hmmer/src/phmmer`.
 
 ```bash
 mkdir -p runs/a101-check/tmp runs/a101-check/cache
-PYTHONDONTWRITEBYTECODE=1 TMPDIR="$PWD/runs/a101-check/tmp" \
+bash tools/one_workflow.sh runs/a101-check -- env \
+  PYTHONDONTWRITEBYTECODE=1 TMPDIR="$PWD/runs/a101-check/tmp" \
   XDG_CACHE_HOME="$PWD/runs/a101-check/cache" \
-  python -m pytest tests/test_a101_investigation.py tests/test_a101_subtree.py \
-  tests/test_a101_return_contracts.py \
-  tests/test_a101_real_sequence_examples.py \
+  python -B -m pytest \
+  gene_annotation_episode/episodic_workflow/root/a101/tests/test_a101_investigation.py \
+  gene_annotation_episode/episodic_workflow/root/a101/tests/test_a101_subtree.py \
+  gene_annotation_episode/episodic_workflow/root/a101/tests/test_a101_return_contracts.py \
+  gene_annotation_episode/episodic_workflow/root/a101/tests/test_a101_real_sequence_examples.py \
   tests/test_resource_result_receipt_preparation.py \
-  --basetemp=runs/a101-check/pytest-tmp -q
+  --basetemp=runs/a101-check/pytest-tmp -o cache_dir=runs/a101-check/cache/pytest -q
 ```

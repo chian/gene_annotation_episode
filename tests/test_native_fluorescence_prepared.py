@@ -18,19 +18,19 @@ from fluorescence_flowio_test_support import require_bounded_runtime
 
 require_bounded_runtime()
 
-from gene_annotation_episode import fluorescence_event_contracts as core
-from gene_annotation_episode import fluorescence_event_preparation as preparation
-from gene_annotation_episode import fluorescence_preparation_readers as readers
-from gene_annotation_episode import fluorescence_native_reports as report_parser
-from gene_annotation_episode import native_fluorescence_driver as driver
-from gene_annotation_episode.fluorescence_execution_common import canonical, digest, identity, validate_failure
-from gene_annotation_episode.native_fluorescence_contracts import (
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_preparation as preparation
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_preparation_readers as readers
+import gene_annotation_episode.episodic_workflow.root.library.fluorescence_native_reports as report_parser
+import gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_driver as driver
+from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical, digest, identity, validate_failure
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import (
     JOB_SCHEMA, JOB_V2_SCHEMA, OPERATIONS, fluorescence_output_files, validate_fluorescence_bindings,
     validate_fluorescence_job, validate_fluorescence_manifest, validate_fluorescence_prepared_batch,
     validate_fluorescence_report_batch,
 )
-from gene_annotation_episode.native_fluorescence_storage import read_json
-from gene_annotation_episode.native_fluorescence_tool_info import fluorescence_tool_contracts
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_storage import read_json
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_tool_info import fluorescence_tool_contracts
 from native_fluorescence_prepared_test_support import (
     COMPENSATE, FACS, SCALE, actual_software, add_facs_report, file_input,
     prepared_job, selected_preparation, v2_job,
@@ -150,7 +150,7 @@ def test_each_schema_keeps_its_own_capabilities_software_and_parser(tmp_path):
 def test_actual_scaling_compensation_lineage_and_report_envelopes(tmp_path, monkeypatch, operation, separate_matrix):
     selected = prepared_job(tmp_path, operation=operation, separate_matrix=separate_matrix)
     before = canonical(selected)
-    from gene_annotation_episode import fluorescence_event_calculations as calculations
+    import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations as calculations
     monkeypatch.setattr(calculations, 'calculate_fluorescence_sheet', lambda *a, **k: pytest.fail('producer calculated scores'))
     calls = []
     scaling, compensation = preparation.prepare_fcs_scaling, preparation.prepare_spill_compensation
@@ -367,7 +367,7 @@ def test_failure_indices_resolve_against_their_exact_role_collections(tmp_path, 
     add_facs_report(selected, tmp_path, key='second.report')
     original = plan(tmp_path, selected_job=selected)
     failure = validate_failure(dict(code='capture_file_unavailable', stage='capture', input_index=1, role=role))
-    from gene_annotation_episode.native_fluorescence_contracts import validate_fluorescence_native_capture
+    from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import validate_fluorescence_native_capture
     capture = dict(version='fluorescence_native_capture_v1', original_plan_sha256=digest(original),
         files=[dict(**row, retained=None) for row in original['outputs']],
         source_action_receipt_ref='artifact_' + '1' * 64, writer_closure_receipt_ref='artifact_' + '2' * 64,
@@ -411,7 +411,7 @@ def test_actual_selected_producer_authenticates_installed_native_closure(tmp_pat
     execution.mkdir(parents=True)
     plan_path = execution / 'fluorescence-plan.json'
     plan_path.write_bytes(canonical(original) + b'\n')
-    from gene_annotation_episode.native_fluorescence_contracts import fluorescence_driver_argv, fluorescence_environment
+    from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import fluorescence_driver_argv, fluorescence_environment
     env = os.environ.copy()
     env.update(fluorescence_environment(selected['software'], attempt_directory=original['attempt_directory']))
     env.update({name: str(execution) for name in ('TMPDIR', 'TMP', 'TEMP')})

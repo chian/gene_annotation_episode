@@ -17,13 +17,12 @@ import unicodedata
 
 from .domain import ContractError
 from .materials import artifact_file, _verified_artifact_path
+from .native_file_identity import (
+    NativeFileIdentity, ErrorCode, NativeFileCaptureError, _IDENTITY_FIELDS, _DIGEST,
+    _require, _label, _digest, _size, _identity,
+)
 
 
-class NativeFileIdentity(TypedDict):
-    artifact_ref: str
-    sha256: str
-    size_bytes: int
-    format: str
 
 
 class NativeFileDeclaration(TypedDict):
@@ -41,42 +40,23 @@ class NativeFileCapture(TypedDict):
     failure: Literal["capture_file_unavailable", "capture_file_digest_mismatch"] | None
 
 
-ErrorCode = Literal[
-    "invalid_capture_path", "invalid_file_declaration", "invalid_file_identity",
-    "capture_file_unavailable", "retained_artifact_unavailable", "retained_artifact_mismatch",
-]
 
 
-class NativeFileCaptureError(ValueError):
-    code: ErrorCode
-
-    def __init__(self, code: ErrorCode):
-        self.code = code
-        super().__init__(code)
 
 
-_IDENTITY_FIELDS = frozenset(NativeFileIdentity.__annotations__)
+
+
 _DECLARATION_FIELDS = frozenset(NativeFileDeclaration.__annotations__)
 _METADATA_FIELDS = frozenset({"id", "record_type", "sha256", "size", "media_type"})
-_DIGEST = re.compile(r"[0-9a-f]{64}")
 
 
-def _require(condition: bool, code: ErrorCode) -> None:
-    if not condition:
-        raise NativeFileCaptureError(code)
 
 
-def _label(value) -> bool:
-    return type(value) is str and bool(value) and not any(
-        unicodedata.category(char) == "Cc" for char in value)
 
 
-def _digest(value) -> bool:
-    return type(value) is str and _DIGEST.fullmatch(value) is not None
 
 
-def _size(value) -> bool:
-    return type(value) is int and value >= 0
+
 
 
 def _path(value, *, absolute: bool) -> PurePosixPath:
@@ -88,12 +68,6 @@ def _path(value, *, absolute: bool) -> PurePosixPath:
     return path
 
 
-def _identity(value) -> NativeFileIdentity:
-    _require(type(value) is dict and set(value) == _IDENTITY_FIELDS, "invalid_file_identity")
-    _require(_digest(value["sha256"]) and _size(value["size_bytes"])
-        and _label(value["format"]) and type(value["artifact_ref"]) is str
-        and value["artifact_ref"] == "artifact_" + value["sha256"], "invalid_file_identity")
-    return dict(value)
 
 
 def _declaration(value) -> NativeFileDeclaration:

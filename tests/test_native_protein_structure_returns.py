@@ -17,7 +17,7 @@ from gene_annotation_episode.protein_structure_authority import ProteinStructure
 from gene_annotation_episode.protein_structure_contracts import issue
 from gene_annotation_episode.state import Store
 
-F = import_module("verification.tool_graders_protein_structure_returns_2026-10-27_397.fixture_helpers")
+F = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.returns_397")
 
 
 @pytest.fixture
