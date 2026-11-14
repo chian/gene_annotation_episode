@@ -24,7 +24,7 @@ from gene_annotation_episode.api_enrichr_host import EnrichrProtocolHost
 from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.practical_execution_state import _immutable, _read
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable, _read
 from gene_annotation_episode.state import Store
 
 

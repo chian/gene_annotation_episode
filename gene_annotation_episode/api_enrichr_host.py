@@ -19,7 +19,7 @@ from .acquisition import AcquisitionError, SourceSnapshot
 from .api_enrichr import PROTOCOL_VERSION, QUERY, WIRE_PROFILE, _stage_shape
 from .episodic_workflow.root.communication import plain
 from .execution_contracts import canonical, digest
-from .practical_execution_state import _immutable, _read
+from .episodic_workflow.root.a101.practical_execution_state import _immutable, _read
 
 
 STAGE_INTENT_VERSION = "enrichr_protocol_stage_intent_v1"

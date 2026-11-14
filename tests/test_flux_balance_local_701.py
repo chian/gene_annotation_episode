@@ -22,7 +22,7 @@ from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_
 from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_local import (
     INPUT_BINDING_FILENAME, local_flux_balance_plan, prepare_local_flux_balance,
 )
-from gene_annotation_episode.practical_execution_state import PracticalState
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState
 
 pytestmark = pytest.mark.skipif('HMMER529_ATTEMPT' not in os.environ, reason='requires bounded529')
 ROOT = Path(__file__).resolve().parents[1]

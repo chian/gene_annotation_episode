@@ -435,7 +435,7 @@ def test_builder_and_projection_do_not_refit_score_discover_or_write(current, mo
     def forbidden(*args, **kwargs):
         calls.append((args, kwargs))
         raise AssertionError("Pure projection cannot refit, execute, discover or write")
-    monkeypatch.setattr("gene_annotation_episode.episode_reports.closing_yield", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a101.episode_reports.closing_yield", forbidden)
     for method in ("freeze", "entry", "search", "execute"):
         monkeypatch.setattr(ScientificProcessLibrary, method, forbidden)
     for method in ("freeze", "retrieve", "retrieve_literal_test", "resolve_invocations", "catalog", "parent_tool_info"):

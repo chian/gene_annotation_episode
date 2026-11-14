@@ -544,7 +544,7 @@ def test_pure_calls_need_no_files_network_store_or_native_execution(monkeypatch)
 
 
 def test_legacy_rql_gt_lt_requests_keep_their_original_native_meanings():
-    from gene_annotation_episode.api_bvbrc import request_url
+    from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import request_url
 
     for operator in ("gt", "lt"):
         meta = json.loads((EVIDENCE / f"range_{operator}.meta.json").read_bytes())

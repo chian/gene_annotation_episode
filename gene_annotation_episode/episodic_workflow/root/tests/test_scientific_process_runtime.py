@@ -172,7 +172,7 @@ class Scenario:
 
 def test_annotation_axis_root_observes_whole_child_return_and_replays_collection(tmp_path):
     from gene_annotation_episode.episodic_workflow.root.numerical import AnnotationAxisYieldController
-    from gene_annotation_episode.episode_reports import report_sources as yield_sources
+    from gene_annotation_episode.episodic_workflow.root.a101.episode_reports import report_sources as yield_sources
     from gene_annotation_episode.episodic_workflow.root.episode_journal import decode_credit
     with Store(tmp_path / 'state') as store:
         case = Scenario(tmp_path, store)

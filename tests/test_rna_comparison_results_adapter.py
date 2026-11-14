@@ -22,7 +22,7 @@ def forbid_acquisition(monkeypatch, f):
     monkeypatch.setattr(f.targets, "observe_target", forbidden)
     monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle", forbidden)
     monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local.local_rna_structure_plan", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.rna_structure_native.parse_rna_native_record", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native.parse_rna_native_record", forbidden)
     monkeypatch.setattr("socket.create_connection", forbidden)
 
 

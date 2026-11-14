@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_records imp
     AppServiceRecords, PROVIDER, VERSION, _decode, _encode,
 )
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.practical_execution_state import _immutable, _read
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable, _read
 from gene_annotation_episode.state import Store
 from test_api_bvbrc_appservice import PREFIX
 from test_bvbrc_appservice_inputs import Driver, download_args

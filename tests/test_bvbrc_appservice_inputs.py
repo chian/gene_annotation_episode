@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.root.library.bvbrc_appservice_rec
 from gene_annotation_episode.bvbrc_application_definitions import get_application_spec
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.practical_execution_state import _immutable, _read
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable, _read
 from gene_annotation_episode.state import Store
 from test_api_bvbrc_appservice import CONFIG, PREFIX, OBJECT_UUID, SHOCK_UUID, Client, metadata
 from test_bvbrc_appservice_custody import SavedRecords, request, selector, content, api_assignment

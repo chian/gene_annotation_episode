@@ -11,8 +11,8 @@ from unittest.mock import patch
 
 import pytest
 
-from gene_annotation_episode import cmalign_inputs as inputs
-from gene_annotation_episode.cmalign_grader import calculate_cmalign_scores
+from gene_annotation_episode.episodic_workflow.root.a107 import cmalign_inputs as inputs
+from gene_annotation_episode.episodic_workflow.root.a107.cmalign_grader import calculate_cmalign_scores
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/cmalign_graders"
 

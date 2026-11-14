@@ -15,7 +15,7 @@ from .acquisition import SourceSnapshot
 from .episodic_workflow.root.communication import plain
 from .domain import ContractError, canonical, identity, validate_schema
 from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
-from .episodic_workflow.root.waiting import validate_pending
+from .episodic_workflow.root.wait_events import validate_pending
 
 
 SELECTION_VERSION = "ensembl_discovery_selection_v1"

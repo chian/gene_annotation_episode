@@ -10,7 +10,7 @@ import json
 import pytest
 
 from gene_annotation_episode import independent_execution as reconstruction
-from gene_annotation_episode.episode_reports import report_sources
+from gene_annotation_episode.episodic_workflow.root.a101.episode_reports import report_sources
 from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import digest
 from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation

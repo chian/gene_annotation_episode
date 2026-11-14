@@ -16,7 +16,7 @@ from method_loop.archive import iter_json
 
 from gene_annotation_episode import independent_execution as reconstruction
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.episode_reports import report_sources
+from gene_annotation_episode.episodic_workflow.root.a101.episode_reports import report_sources
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters

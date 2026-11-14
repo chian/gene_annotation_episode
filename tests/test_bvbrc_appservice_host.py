@@ -12,7 +12,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.practical_execution_state import _read
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _read
 from gene_annotation_episode.state import Store
 from test_api_bvbrc_appservice import CONFIG, PREFIX, SHOCK_UUID, metadata
 from test_bvbrc_appservice_custody import SavedRecords, request

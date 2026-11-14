@@ -144,8 +144,8 @@ def main():
             'change': 'authenticate_original_receiver_attributions_against_frozen_completion_evidence; no_regrading_or_new_receipts'}
     correspondence_repair = None
     if args.repair_relationship_correspondence:
-        import gene_annotation_episode.a104_scoring as scoring
-        import gene_annotation_episode.a104_interpretation as interpretation
+        import gene_annotation_episode.episodic_workflow.root.a104.a104_scoring as scoring
+        import gene_annotation_episode.episodic_workflow.root.a104.a104_interpretation as interpretation
         import gene_annotation_episode.a104_tools as tool_module
         repairs = []
         for module, class_name, function_name in (

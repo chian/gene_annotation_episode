@@ -34,7 +34,7 @@ def test_saved_recalculation_new_generation_no_original_paths_or_acquisition(tmp
         monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
         monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local.local_rna_structure_plan", forbid)
         monkeypatch.setattr(f.targets, "observe_target", forbid)
-        monkeypatch.setattr("gene_annotation_episode.rna_structure_native.parse_rna_native_record", forbid)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native.parse_rna_native_record", forbid)
         monkeypatch.setattr("socket.create_connection", forbid)
         fresh = f.execute(child)
         values = {value["name"]: value["value"] for value in fresh["rows"][0]["measurements"]}

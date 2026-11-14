@@ -106,7 +106,7 @@ def build_service(service, configuration, tool_registry):
         from .api_blast import NCBIBlastService
         return NCBIBlastService(tool_registry, configuration=configuration)
     if service == "bvbrc_minhash":
-        from .api_bvbrc_minhash import BVBRCMinhashService
+        from .episodic_workflow.root.a102.api_bvbrc_minhash import BVBRCMinhashService
         return BVBRCMinhashService(tool_registry, configuration=configuration)
     if service == "rfam_batch":
         from .api_rfam import RfamBatchService
@@ -114,7 +114,7 @@ def build_service(service, configuration, tool_registry):
     if service == "sequence_support":
         from .api_sequence_support import SequenceSupportService
         return SequenceSupportService(tool_registry, configuration=configuration)
-    from .api_bvbrc import BVBRCDataService
+    from .episodic_workflow.root.a102.api_bvbrc import BVBRCDataService
     return BVBRCDataService(tool_registry, configuration=configuration)
 
 

@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_
     flux_balance_driver_argv, flux_balance_environment, flux_balance_output_files,
     validate_flux_balance_run_plan,
 )
-from gene_annotation_episode.native_flux_balance_storage import decode_json, file_pin, immutable_bytes, immutable_json, read_json
+from gene_annotation_episode.episodic_workflow.root.a110.native_flux_balance_storage import decode_json, file_pin, immutable_bytes, immutable_json, read_json
 from gene_annotation_episode.episodic_workflow.root.library.native_artifact_storage import retain_input
 from gene_annotation_episode.episodic_workflow.root.library import native_flux_balance_cobra_glpk as native
 
@@ -132,7 +132,7 @@ def _parameters(sheet):
 def _parsed_calculated(plan):
     from gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers import parse_fba_capture
     from gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet import populate_flux_balance_sheet
-    from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
+    from gene_annotation_episode.episodic_workflow.root.a110.flux_balance_calculations import calculate_flux_balance_sheet
     bundle = parse_fba_capture(_bundle(plan), expected=plan["identity"])
     sheet = populate_flux_balance_sheet(bundle=bundle)
     return sheet, calculate_flux_balance_sheet(sheet, parameters=_parameters(sheet))

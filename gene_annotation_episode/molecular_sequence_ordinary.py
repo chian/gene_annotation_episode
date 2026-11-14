@@ -29,7 +29,7 @@ from .molecular_sequence_execution_contracts import (
 )
 from . import molecular_sequence_result_contracts as contracts
 from .native_file_capture import _declaration, _identity
-from .native_flux_balance_storage import confined_file, directory, immutable_bytes, read_bytes
+from .episodic_workflow.root.a110.native_flux_balance_storage import confined_file, directory, immutable_bytes, read_bytes
 
 
 OPERATION = "annotate_open_reading_frames"

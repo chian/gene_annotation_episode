@@ -15,7 +15,7 @@ from method_loop import EpisodeGoal, EpisodeRequest
 from method_loop.communication import ReportContract
 from method_loop.identities import EpisodeRef
 
-from gene_annotation_episode.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
 from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import bvbrc_data_fact_sources
 from gene_annotation_episode.episodic_workflow.root.communication import plain
@@ -54,7 +54,7 @@ class HostFixture:
             self.calls.append(deepcopy(prepared))
             return snapshot(prepared, body)
 
-        monkeypatch.setattr("gene_annotation_episode.api_bvbrc.BVBRCDataClient.query_prepared", query_prepared)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.BVBRCDataClient.query_prepared", query_prepared)
         self.parent = self.context("annotation", {}, path=(("annotation", "root"),))
 
     def reopen(self):

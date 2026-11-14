@@ -72,7 +72,7 @@ def test_actual_saved_sheet_recalculation_after_native_files_removed(tmp_path, m
         monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle', forbid)
         monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local.local_rna_structure_plan', forbid)
         monkeypatch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', forbid)
-        monkeypatch.setattr('gene_annotation_episode.rna_structure_native.parse_rna_native_record', forbid)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native.parse_rna_native_record', forbid)
         monkeypatch.setattr('socket.create_connection', forbid)
         # Instrument the actual saved worker through the existing bounded job.
         # Its pure function is unchanged; the wrapper makes any scientific,
@@ -83,7 +83,7 @@ def test_actual_saved_sheet_recalculation_after_native_files_removed(tmp_path, m
         guard_path.write_text('''import builtins, json, pathlib, socket, subprocess, sys
 def denied(*args, **kwargs):
     raise AssertionError("saved worker attempted scientific acquisition or native parsing")
-import gene_annotation_episode.rna_structure_native as parser
+import gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native as parser
 parser.parse_rna_native_record = parser.populate_rna_prediction_sheet = parser.populate_rna_feature_sheet = denied
 import gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker as native
 native.predict_rna_secondary_structure = native.analyze_rna_secondary_structure_features = native._load_native = denied
@@ -97,7 +97,7 @@ def restricted(name, *args, **kwargs):
         denied()
     return original_import(name, *args, **kwargs)
 builtins.__import__ = restricted
-from gene_annotation_episode.native_rna_structure_result_worker import run_saved_rna_structure_grading_worker
+from gene_annotation_episode.episodic_workflow.root.a107.native_rna_structure_result_worker import run_saved_rna_structure_grading_worker
 plan = json.loads(pathlib.Path(sys.argv[1]).read_bytes())
 assert plan["version"] == "native_rna_structure_saved_grading_plan_v1"
 pathlib.Path(plan["directory"], "guards-active.json").write_text(json.dumps({"native": "disabled", "parser": "disabled", "acquisition": "disabled", "network": "disabled"}))
@@ -105,7 +105,7 @@ run_saved_rna_structure_grading_worker(plan)
 ''')
         snapshot['worker_calls'] = []
         def guarded(argv, **kwargs):
-            assert argv[1:4] == ['-B', '-m', 'gene_annotation_episode.native_rna_structure_result_worker']
+            assert argv[1:4] == ['-B', '-m', 'gene_annotation_episode.episodic_workflow.root.a107.native_rna_structure_result_worker']
             plan = json.loads(Path(argv[-1]).read_bytes())
             assert plan['version'] == 'native_rna_structure_saved_grading_plan_v1'
             snapshot['worker_calls'].append(deepcopy(plan))

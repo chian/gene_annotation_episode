@@ -8,7 +8,7 @@ from types import MappingProxyType
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import protein_conservation_result_contracts as contracts
-from gene_annotation_episode import protein_conservation_result_views as views
+from gene_annotation_episode.episodic_workflow.root.a104 import protein_conservation_result_views as views
 from gene_annotation_episode import scientific_process_prompt as prompt
 from gene_annotation_episode import phylogeny_calculators, phylogeny_formats
 from gene_annotation_episode import phylogeny_calculation_contracts as numerical_contracts

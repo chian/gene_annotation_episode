@@ -342,7 +342,7 @@ def test_tool_information_binds_real_commission_schema(tmp_path, software):
 
 
 def test_real_practical_state_reservation_recovery(tmp_path, software, monkeypatch):
-    from gene_annotation_episode.practical_execution_state import PracticalState
+    from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState
     from gene_annotation_episode.native_chromatin_interaction_local import prepare_local_chromatin_interaction, local_chromatin_interaction_plan
     plan = make_plan(tmp_path, software)
     assignment = {"version": "practical_assignment_v1", "assignment_id": "c3-actual-practical-reservation", "resource_kind": "local",
@@ -367,7 +367,7 @@ def test_real_practical_state_reservation_recovery(tmp_path, software, monkeypat
 
 
 def test_shared_local_operations_original_start_observe_collect(tmp_path, software, monkeypatch):
-    from gene_annotation_episode.practical_execution_state import PracticalState
+    from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState
     from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
     from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations
     from gene_annotation_episode.native_chromatin_interaction_local import local_chromatin_interaction_plan

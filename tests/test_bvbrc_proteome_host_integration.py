@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns impor
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_fact_contracts import encode_reference
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.practical_execution_state import _read
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _read
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_calculators import calculate_native_components
 from gene_annotation_episode.state import Store
 from bvbrc_proteome_host_fixture import ProteomeDriver, raw_native, MEAN

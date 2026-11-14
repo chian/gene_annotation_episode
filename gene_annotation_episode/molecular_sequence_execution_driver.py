@@ -26,7 +26,7 @@ from .molecular_sequence_execution_contracts import (
     require, validate_molecular_sequence_attempt_bundle,
     validate_molecular_sequence_selected_plan,
 )
-from .native_flux_balance_storage import (
+from .episodic_workflow.root.a110.native_flux_balance_storage import (
     directory, file_pin, immutable_bytes, read_bytes, retain_input,
 )
 

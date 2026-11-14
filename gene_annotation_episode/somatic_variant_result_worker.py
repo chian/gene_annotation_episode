@@ -12,7 +12,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from . import native_flux_balance_storage as storage
+from .episodic_workflow.root.a110 import native_flux_balance_storage as storage
 from . import somatic_variant_contracts as contracts
 from . import vcf_result_measurements as vcf
 

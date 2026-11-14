@@ -15,7 +15,7 @@ import uuid
 from gene_annotation_episode.workflow_budget import active_budget
 from gene_annotation_episode.a104_investigation import A104ServiceFactory, A104Subtree
 from gene_annotation_episode.a104_tools import A104ToolRegistry, NAMES
-from gene_annotation_episode.a104_publication import received_measurement
+from gene_annotation_episode.episodic_workflow.root.a104.a104_publication import received_measurement
 from gene_annotation_episode.a104_credit import A104EvolutionaryCredit
 from gene_annotation_episode.episodic_workflow.root.evidence_root import create_evidence_root_workflow, NativeEvidenceRootCredit
 from gene_annotation_episode.episodic_workflow.root.providers import load_config
@@ -102,7 +102,7 @@ class CommissionedParent:
             # compatible edges by reusing a split ordinal. The original child
             # stays closed. Its parent commissions one explicit review using
             # received native data and the corrected relationship inventory.
-            from gene_annotation_episode.a104_interpretation import compare_placements
+            from gene_annotation_episode.episodic_workflow.root.a104.a104_interpretation import compare_placements
             for reference in sorted(known):
                 measured = received_measurement(self.store, reference)
                 if measured is None or measured['body']['schema'] != 'a104_robustness_v1':

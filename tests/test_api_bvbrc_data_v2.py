@@ -17,7 +17,7 @@ from jsonschema import Draft202012Validator
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.api_bvbrc import (
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import (
     BVBRCDataService, DATA_QUERY_OPERATION, DATA_RESULT_OPERATION,
     DEFAULT_BASE_URL, EMPTY_ARGUMENTS, QUERY_OPERATION, RESULT_OPERATION,
 )
@@ -242,7 +242,7 @@ def test_exact_one_get_and_original_cache_ignore_local_projection(monkeypatch, s
             from urllib.parse import parse_qs, urlsplit
             calls.append(native)
             return Response(native.full_url, int(parse_qs(urlsplit(native.full_url).query)["start"][0]))
-    monkeypatch.setattr("gene_annotation_episode.api_bvbrc.urllib.request.build_opener", lambda handler: Opener())
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.urllib.request.build_opener", lambda handler: Opener())
     query = request(fields=["genome_id", "plasmids"], limit=1)
     launched = command(provider, query, operation=DATA_QUERY_OPERATION, scope=scope)
     assert launched["mutates_remote"] is False
@@ -281,7 +281,7 @@ def test_publication_custody_full_grading_single_source_and_repeat_identity(serv
     native = snapshot(prepared, raw)
     initial_sources = len(store.list("source"))
     def no_compile(*args, **kwargs): pytest.fail("publication recompiled saved request")
-    monkeypatch.setattr("gene_annotation_episode.api_bvbrc.encode_native_query", no_compile)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.encode_native_query", no_compile)
     monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query.encode_native_query", no_compile)
     monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query._expression", no_compile)
     inputs = publication_inputs(prepared)

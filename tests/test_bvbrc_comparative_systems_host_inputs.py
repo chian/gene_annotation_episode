@@ -5,7 +5,7 @@ import json
 import hashlib
 
 import pytest
-from gene_annotation_episode.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
 from gene_annotation_episode.episodic_workflow.root.bvbrc_comparative_systems_host_inputs import collect_comparative_systems_inputs, _SelectedDataHost, _materialize_producers
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.state import Store
@@ -49,7 +49,7 @@ def data_input(d, monkeypatch):
     def response(client, prepared):
         calls.append(deepcopy(prepared))
         return snapshot(prepared, raw)
-    monkeypatch.setattr('gene_annotation_episode.api_bvbrc.BVBRCDataClient.query_prepared', response)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.BVBRCDataClient.query_prepared', response)
     assignment = {'version':'api_service_assignment_v1','resource_id':'data','service':'bvbrc_data',
         'request':query,'endpoint':'usable_handoff','constraints':{}}
     launch = d.saved.child(d.parent,'launch',{'version':'execution_launch_assignment_v1',

@@ -10,7 +10,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.execution_contracts import digest
 from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.practical_execution_state import _immutable
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable
 
 
 def test_actual_operation_order_survives_hashed_paths_and_incomplete_actions(tmp_path):

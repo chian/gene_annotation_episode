@@ -15,7 +15,7 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.api_bvbrc import (
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import (
     BVBRCDataClient, DATA_QUERY_OPERATION, DATA_RESULT_OPERATION,
     EMPTY_ARGUMENTS, QUERY_OPERATION, RESULT_OPERATION,
 )
@@ -219,8 +219,8 @@ def test_descriptor_uses_actual_request_selector_and_only_bound_functions(
 
     def prohibited(*args, **kwargs):
         pytest.fail('describing a retained target performed work')
-    monkeypatch.setattr('gene_annotation_episode.api_bvbrc.encode_native_query', prohibited)
-    monkeypatch.setattr('gene_annotation_episode.api_bvbrc.BVBRCDataService.invoke', prohibited)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.encode_native_query', prohibited)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.BVBRCDataService.invoke', prohibited)
     descriptor = target_reader.describe_target(handoff, owner.scope, selector=selector)
     assert descriptor['called_operation'] == DATA_QUERY_OPERATION
     assert descriptor['operation'] == api_request['mode']
@@ -241,7 +241,7 @@ def test_descriptor_uses_actual_request_selector_and_only_bound_functions(
     assert set(extractor['return_fact_sources'][1:]) <= set(FACT_SOURCES)
     assert extractor['parser'] == 'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers.parse_data_snapshot'
     assert extractor['implementation'] == 'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_publication.publish_bvbrc_data'
-    assert extractor['service_implementation'] == 'gene_annotation_episode.api_bvbrc.BVBRCDataService.publish'
+    assert extractor['service_implementation'] == 'gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.BVBRCDataService.publish'
     assert extractor['projection_implementation'] == 'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views.project_bvbrc_data_facts'
     assert [name.rsplit('.', 1)[1] for name in extractor['calculators']] == [
         'calculate_page_counts', *additional_calculators]

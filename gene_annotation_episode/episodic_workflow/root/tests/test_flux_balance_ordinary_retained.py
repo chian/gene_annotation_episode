@@ -354,8 +354,8 @@ def test_genuine_pending_fba_continuation_saved_calculation_and_closed_replay(tm
             for name in ('parse_cobra_glpk_model_capture', 'parse_cobra_glpk_problem_capture',
                     'parse_cobra_glpk_solution_capture', 'parse_biomni_fba_csv', 'parse_fba_capture'):
                 frozen.setattr('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.' + name, _forbidden)
-            frozen.setattr('gene_annotation_episode.flux_balance_calculations.calculate_flux_balance_sheet', _forbidden)
-            frozen.setattr('gene_annotation_episode.flux_balance_result_worker.calculate_flux_balance_sheet', _forbidden)
+            frozen.setattr('gene_annotation_episode.episodic_workflow.root.a110.flux_balance_calculations.calculate_flux_balance_sheet', _forbidden)
+            frozen.setattr('gene_annotation_episode.episodic_workflow.root.a110.flux_balance_result_worker.calculate_flux_balance_sheet', _forbidden)
             frozen.setattr(DecisionSource, 'execute', traced_action)
             frozen.setattr(ScientificProcessEpisodes, 'restore_closed_process', traced_restore)
             replay = _workflow(case, tools, replay_provider, application, original_file)

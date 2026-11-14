@@ -7,7 +7,7 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.api_blast import NCBIBlastService
-from gene_annotation_episode.api_bvbrc import BVBRCDataService
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import BVBRCDataService
 from gene_annotation_episode.api_uniprot import UniProtService
 from gene_annotation_episode.practical_resource_episodes import operation_catalog
 from gene_annotation_episode.episodic_workflow.root.execution_episodes import launch_operation_catalog, native_result_operation_catalog

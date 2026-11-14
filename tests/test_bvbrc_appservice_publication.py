@@ -6,7 +6,7 @@ import pytest
 
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.practical_execution_state import _read
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _read
 from test_bvbrc_appservice_host import driver
 from test_bvbrc_appservice_inputs import output_target, download_args
 from test_bvbrc_appservice_custody import request, selector

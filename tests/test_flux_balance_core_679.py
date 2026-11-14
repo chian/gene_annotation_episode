@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.root.library.flux_balance_contrac
     ISSUE_CODES, flux_balance_schema, validate_flux_balance_record, validate_fba_artifact_payloads,
 )
 from gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet import populate_flux_balance_sheet, validate_flux_balance_sheet
-from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
+from gene_annotation_episode.episodic_workflow.root.a110.flux_balance_calculations import calculate_flux_balance_sheet
 
 
 FILE = {"artifact_ref": "artifact:deliberate-synthetic-fba-fixture679", "sha256": "a" * 64,

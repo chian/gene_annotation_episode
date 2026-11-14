@@ -140,8 +140,8 @@ def fixture(tmp_path, monkeypatch):
     def forbidden(*args, **kwargs):
         pytest.fail('Typed return authority attempted acquisition or calculation')
     for target in ('socket.socket', 'subprocess.Popen',
-            'gene_annotation_episode.flux_balance_result_worker.execute_flux_balance_worker',
-            'gene_annotation_episode.flux_balance_calculations.calculate_flux_balance_sheet',
+            'gene_annotation_episode.episodic_workflow.root.a110.flux_balance_result_worker.execute_flux_balance_worker',
+            'gene_annotation_episode.episodic_workflow.root.a110.flux_balance_calculations.calculate_flux_balance_sheet',
             'gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet.populate_flux_balance_sheet',
             'gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_fba_capture'):
         monkeypatch.setattr(target, forbidden)

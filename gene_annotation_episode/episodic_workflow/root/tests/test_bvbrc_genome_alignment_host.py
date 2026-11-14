@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.root.bvbrc_genome_alignment_retur
 from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_form
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.practical_execution_state import _read
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _read
 from gene_annotation_episode.state import Store
 from test_api_bvbrc_appservice import CONFIG, PREFIX, OBJECT_UUID, metadata
 from test_bvbrc_appservice_custody import SavedRecords, refs_schema, selector as support_selector

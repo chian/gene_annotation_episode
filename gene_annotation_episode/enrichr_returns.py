@@ -23,7 +23,7 @@ from .episodic_workflow.root.episode_receipts import (EpisodeReceipts, RECEIVED_
     _validate_report_prefix)
 from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords, _same
 from .execution_contracts import digest
-from .practical_execution_state import _read
+from .episodic_workflow.root.a101.practical_execution_state import _read
 from .tool_grading_artifacts import source_tool_grading_entries
 
 

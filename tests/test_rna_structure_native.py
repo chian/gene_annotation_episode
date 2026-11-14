@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_contracts import validate_rna_native_record
-from gene_annotation_episode.rna_structure_native import (
+from gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native import (
     parse_rna_native_record, parse_biomni_rna_prediction_text,
     populate_rna_prediction_sheet, populate_rna_feature_sheet,
 )

@@ -344,7 +344,7 @@ def _retained(name):
     # Two old packets retained a native record rather than its populated sheet.
     # Re-serialize that exact dictionary as supplied parser input; no new native
     # execution or original native-byte digest claim is made for this encoding.
-    from gene_annotation_episode.rna_structure_native import parse_rna_native_record, populate_rna_feature_sheet
+    from gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native import parse_rna_native_record, populate_rna_feature_sheet
     original = packet["record"]
     parsed = parse_rna_native_record(json.dumps(original).encode(), format="rna_native_record_json_v1",
         expected_mode=original["mode"], record_key=original["record_key"])

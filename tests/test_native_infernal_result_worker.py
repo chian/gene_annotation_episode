@@ -10,8 +10,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import native_infernal_result_worker as worker
-from gene_annotation_episode.cmalign_grader import calculate_cmalign_scores
+from gene_annotation_episode.episodic_workflow.root.a107 import native_infernal_result_worker as worker
+from gene_annotation_episode.episodic_workflow.root.a107.cmalign_grader import calculate_cmalign_scores
 from gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader import calculate_infernal_search_scores
 from gene_annotation_episode.episodic_workflow.root.library.infernal_native_result_views import NATIVE_INFERNAL_METRICS
 

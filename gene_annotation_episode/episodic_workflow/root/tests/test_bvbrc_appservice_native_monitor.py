@@ -22,7 +22,7 @@ from gene_annotation_episode.episodic_workflow.root.progress_observations import
 from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionProgressProvider
-from gene_annotation_episode.practical_execution_state import _read
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _read
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG

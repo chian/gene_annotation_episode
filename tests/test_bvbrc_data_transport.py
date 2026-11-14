@@ -9,7 +9,7 @@ from urllib.error import HTTPError
 import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError
-from gene_annotation_episode.api_bvbrc import BVBRCDataClient, DEFAULT_BASE_URL
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import BVBRCDataClient, DEFAULT_BASE_URL
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
 
 
@@ -46,7 +46,7 @@ def test_v2_sends_exact_prepared_get_and_records_complete_native_response(monkey
         def open(self, request, timeout):
             calls.append((request, timeout))
             return Response(request.full_url)
-    monkeypatch.setattr('gene_annotation_episode.api_bvbrc.urllib.request.build_opener', lambda handler: Opener())
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.urllib.request.build_opener', lambda handler: Opener())
     # Sending and decoding a persisted preparation must not compile it again.
     monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query.encode_native_query',
         lambda *args, **kwargs: pytest.fail('persisted query was recompiled'))
@@ -84,7 +84,7 @@ def test_v2_retains_error_body_without_retry_or_redirect(monkeypatch, status, co
             headers = Message()
             headers['Content-Type'] = 'text/html'
             raise HTTPError(request.full_url, status, 'failure', headers, io.BytesIO(b'native failure'))
-    monkeypatch.setattr('gene_annotation_episode.api_bvbrc.urllib.request.build_opener', lambda handler: Opener())
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.urllib.request.build_opener', lambda handler: Opener())
     with pytest.raises(AcquisitionError) as failure:
         BVBRCDataClient().query_prepared(prepared())
     assert failure.value.code == code and len(calls) == 1
@@ -98,7 +98,7 @@ def test_v2_retains_partial_bytes_as_incomplete(monkeypatch):
         def open(self, request, timeout):
             calls.append(request)
             return Response(request.full_url, error=http.client.IncompleteRead(b'{"response":', 20))
-    monkeypatch.setattr('gene_annotation_episode.api_bvbrc.urllib.request.build_opener', lambda handler: Opener())
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.urllib.request.build_opener', lambda handler: Opener())
     with pytest.raises(AcquisitionError) as failure:
         BVBRCDataClient().query_prepared(prepared())
     assert failure.value.code == 'provider_response_body_incomplete'
@@ -115,7 +115,7 @@ def test_v2_prepared_query_cannot_change_the_configured_endpoint(monkeypatch, ch
         original['native_request']['url'] = original['native_request']['url'].replace('/genome_feature/', '/taxonomy/')
     else:
         original['native_request']['url'] += '#fragment'
-    monkeypatch.setattr('gene_annotation_episode.api_bvbrc.urllib.request.build_opener',
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.urllib.request.build_opener',
         lambda *args: pytest.fail('invalid prepared endpoint attempted transport'))
     with pytest.raises(ValueError, match='bvbrc_prepared_endpoint_conflict'):
         BVBRCDataClient().query_prepared(original)

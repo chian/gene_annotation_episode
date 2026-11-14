@@ -23,7 +23,7 @@ def main():
     shutil.copytree(original/'artifacts',state/'artifacts')
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.a103_detection import detect,search_receipt
-    from gene_annotation_episode.a103_publication import binding_body,received_measurement
+    from gene_annotation_episode.episodic_workflow.root.a103.a103_publication import binding_body,received_measurement
     with Store(state) as store:
         known={row[0] for row in store.db.execute('SELECT DISTINCT record_ref FROM runtime_record_receipts')}
         candidates=[]

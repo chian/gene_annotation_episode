@@ -17,7 +17,7 @@ from .molecular_measurement_tools import (
     authenticate_molecular_invocation,
 )
 from .native_file_capture import capture_native_file
-from .native_flux_balance_storage import decode_json
+from .episodic_workflow.root.a110.native_flux_balance_storage import decode_json
 from .reference_edit_outcome_tools import _admit, _context, _current_cutoff, _frozen_admission, _invocation
 from . import somatic_variant_contracts as contracts
 from . import somatic_variant_result_worker as result_worker

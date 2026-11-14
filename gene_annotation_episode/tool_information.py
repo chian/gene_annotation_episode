@@ -151,8 +151,8 @@ def workflow_execution_catalogs():
     """
     from .api_blast import NCBIBlastService
     from .api_uniprot import UniProtService
-    from .api_bvbrc import BVBRCDataService
-    from .api_bvbrc_minhash import BVBRCMinhashService
+    from .episodic_workflow.root.a102.api_bvbrc import BVBRCDataService
+    from .episodic_workflow.root.a102.api_bvbrc_minhash import BVBRCMinhashService
     from .api_rfam import RfamBatchService
     from .episodic_workflow.root.api_execution import hmmer_operation_catalog
 

@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overl
     prepare_local_genomic_overlap, local_genomic_overlap_plan,
 )
 from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_driver import _immutable
-from gene_annotation_episode.practical_execution_state import PracticalState
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations
 
 f = import_module('gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.retained_workflow.verification.tool_graders_genomic_overlap_native_driver_2026-10-27_427.fixture_helpers')

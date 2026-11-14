@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.library.native_infernal_prep
 from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_local import (
     local_infernal_preparation_plan, prepare_local_infernal_preparation,
 )
-from gene_annotation_episode.practical_execution_state import _immutable
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable
 from test_native_infernal_preparation_driver import POLICY, make_plan, native_job, synthetic_plan
 
 

@@ -16,7 +16,7 @@ from method_loop import EpisodeGoal, EpisodeRequest
 from method_loop.communication import ReportContract
 from method_loop.identities import EpisodeRef
 
-from gene_annotation_episode.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
 from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import json_digest
 from gene_annotation_episode.episodic_workflow.root.communication import plain
@@ -125,8 +125,8 @@ def forbid_recomputation(monkeypatch):
     }.items():
         for name in names:
             monkeypatch.setattr("gene_annotation_episode." + module + "." + name, forbidden)
-    monkeypatch.setattr("gene_annotation_episode.api_bvbrc.BVBRCDataClient.query_prepared", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.api_bvbrc.BVBRCDataClient._query_once", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.BVBRCDataClient.query_prepared", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.BVBRCDataClient._query_once", forbidden)
     monkeypatch.setattr("subprocess.run", forbidden)
     monkeypatch.setattr("subprocess.Popen", forbidden)
 
@@ -192,9 +192,9 @@ def test_interrupted_original_action_resumes_retained_response_without_get_or_re
     def forbidden(*args, **kwargs):
         pytest.fail("recovery recompiled or requested an already retained response")
 
-    monkeypatch.setattr("gene_annotation_episode.api_bvbrc.encode_native_query", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.encode_native_query", forbidden)
     monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query.encode_native_query", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.api_bvbrc.BVBRCDataClient.query_prepared", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.BVBRCDataClient.query_prepared", forbidden)
     outcome = host.execute(child, DATA_RESULT_OPERATION, select=False)
     assert outcome["status"] == "completed", outcome
     qualified = host.api.read_bvbrc_result(outcome["record_refs"][0], context=child)

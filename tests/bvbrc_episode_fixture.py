@@ -17,10 +17,10 @@ from method_loop.archive import iter_json
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.api_bvbrc import BVBRCDataClient
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import BVBRCDataClient
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import bvbrc_data_fact_sources
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_reports import report_sources
+from gene_annotation_episode.episodic_workflow.root.a101.episode_reports import report_sources
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow

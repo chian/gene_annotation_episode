@@ -19,7 +19,7 @@ from .execution_contracts import canonical, digest
 from .local_jobs import LocalJobPolicy
 from .molecular_measurement_tools import MolecularOperationUnpublished
 from .native_file_capture import _identity
-from .native_flux_balance_storage import (
+from .episodic_workflow.root.a110.native_flux_balance_storage import (
     confined_file, decode_json, directory, file_pin, immutable_bytes, read_bytes,
 )
 

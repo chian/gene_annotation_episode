@@ -22,7 +22,7 @@ from gene_annotation_episode.native_infernal_contracts import native_infernal_di
 from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import (
     compile_native_infernal_preparation_job, requested_job_from_infernal_preparation,
 )
-from gene_annotation_episode.practical_execution_state import canonical
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import canonical
 from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_local import prepare_local_infernal_preparation
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.state import Store

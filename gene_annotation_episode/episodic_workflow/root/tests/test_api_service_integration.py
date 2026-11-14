@@ -84,7 +84,7 @@ class PublicResponses(Client):
 
 @pytest.fixture
 def service_responses(monkeypatch):
-    from gene_annotation_episode.api_bvbrc import BVBRCDataClient
+    from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import BVBRCDataClient
     client = PublicResponses()
     bvbrc_calls = []
 

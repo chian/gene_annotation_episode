@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations, canonical, digest
-from gene_annotation_episode.practical_execution_state import PracticalState
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState
 from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import (
     PracticalReceiptInformation, PROVIDER, VERSION)
 from gene_annotation_episode.state import Store

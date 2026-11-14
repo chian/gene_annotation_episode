@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.library.native_infernal_driv
     main, run_native_infernal, validate_native_infernal_bundle_files,
 )
 from gene_annotation_episode.episodic_workflow.root.library.native_infernal_local import local_infernal_plan, prepare_local_infernal
-from gene_annotation_episode.practical_execution_state import _immutable
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable
 
 
 ROOT = Path(__file__).resolve().parents[1]

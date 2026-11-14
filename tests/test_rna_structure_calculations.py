@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.library.rna_structure_calcul
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_contracts import (
     PAIR_TYPES, ROW_METRICS, validate_rna_components, validate_rna_sheet,
 )
-from gene_annotation_episode.rna_structure_native import (
+from gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native import (
     parse_rna_native_record, parse_biomni_rna_prediction_text, populate_rna_prediction_sheet,
 )
 

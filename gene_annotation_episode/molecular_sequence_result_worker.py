@@ -20,7 +20,7 @@ from .molecular_sequence_result_contracts import (
     SUPPLIED_PLAN_VERSION, SUPPLIED_RESULT_VERSION, SUPPLIED_OUTPUTS, SUPPLIED_PROFILE,
     supplied_failure, validate_supplied_worker_plan,
 )
-from .native_flux_balance_storage import file_pin, immutable_bytes, read_bytes
+from .episodic_workflow.root.a110.native_flux_balance_storage import file_pin, immutable_bytes, read_bytes
 
 
 def _json(raw):

@@ -5,7 +5,7 @@ HPC parent and its sisters own planning, refinement, launch and monitoring.
 """
 import math
 
-from .episodic_workflow.root.library.execution_guidance import resource_identity
+from .episodic_workflow.root.library.execution_resource_identity import resource_identity
 from .hpc_queue import digest
 
 

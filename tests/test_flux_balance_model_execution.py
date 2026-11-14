@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.library import flux_balance_
 from gene_annotation_episode.local_jobs import LocalJobPolicy, LocalJobResult
 from gene_annotation_episode.molecular_measurement_tools import MolecularOperationUnpublished
 from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY, flux_balance_environment
-from gene_annotation_episode.native_flux_balance_storage import immutable_json, read_json
+from gene_annotation_episode.episodic_workflow.root.a110.native_flux_balance_storage import immutable_json, read_json
 from test_flux_balance_ordinary_configuration import software as declared_software
 
 

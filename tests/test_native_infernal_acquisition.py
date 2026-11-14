@@ -21,7 +21,7 @@ from gene_annotation_episode.native_infernal_contracts import (compile_native_in
     native_infernal_digest as digest, requested_job_from_infernal)
 from gene_annotation_episode.episodic_workflow.root.library.native_infernal_local import prepare_local_infernal
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.practical_execution_state import canonical
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import canonical
 from gene_annotation_episode.state import Store
 
 

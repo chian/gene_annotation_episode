@@ -22,7 +22,7 @@ from gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers
     parse_cobra_glpk_solution_capture, parse_fba_capture,
 )
 from gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet import populate_flux_balance_sheet
-from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
+from gene_annotation_episode.episodic_workflow.root.a110.flux_balance_calculations import calculate_flux_balance_sheet
 from test_flux_balance_core_679 import parameters
 from test_flux_balance_readers_680 import (
     bound, bundle, captures, encode, file, location, missing, number, parsed,

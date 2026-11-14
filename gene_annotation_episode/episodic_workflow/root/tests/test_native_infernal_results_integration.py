@@ -529,7 +529,7 @@ def test_completed_action_accounting_and_exact_zero_without_extra_turn(native_ca
 
 def test_saved_calculator_replay_without_native_execution_or_acquisition(native_case, monkeypatch):
     case = native_case
-    from gene_annotation_episode.cmalign_grader import calculate_cmalign_scores
+    from gene_annotation_episode.episodic_workflow.root.a107.cmalign_grader import calculate_cmalign_scores
     from gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader import calculate_infernal_search_scores
     calculator = calculate_cmalign_scores if case.request['native_infernal']['program'] == 'cmalign' else calculate_infernal_search_scores
     body = case.outcomes[0]['result']
@@ -558,11 +558,11 @@ def test_original_result_and_return_replay_have_no_new_contribution(native_case,
         isolated.setattr('gene_annotation_episode.episodic_workflow.root.native_infernal_results.capture_local_bundle', forbidden)
         isolated.setattr('gene_annotation_episode.episodic_workflow.root.native_infernal_results.prepare_native_infernal_grading', forbidden)
         isolated.setattr('gene_annotation_episode.episodic_workflow.root.native_infernal_results.publish_selected_native_infernal_rows', forbidden)
-        isolated.setattr('gene_annotation_episode.native_infernal_result_worker.run', forbidden)
-        isolated.setattr('gene_annotation_episode.native_infernal_result_worker.populate_cmalign_sheet', forbidden)
-        isolated.setattr('gene_annotation_episode.native_infernal_result_worker.populate_infernal_search_sheet', forbidden)
-        isolated.setattr('gene_annotation_episode.native_infernal_result_worker.calculate_cmalign_scores', forbidden)
-        isolated.setattr('gene_annotation_episode.native_infernal_result_worker.calculate_infernal_search_scores', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.a107.native_infernal_result_worker.run', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.a107.native_infernal_result_worker.populate_cmalign_sheet', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.a107.native_infernal_result_worker.populate_infernal_search_sheet', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.a107.native_infernal_result_worker.calculate_cmalign_scores', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.a107.native_infernal_result_worker.calculate_infernal_search_scores', forbidden)
         isolated.setattr(case.owner.job_progress_provider.targets, 'observe_target', forbidden)
         isolated.setattr(subprocess, 'Popen', forbidden)
         for context, original in zip(case.contexts, case.outcomes):
@@ -708,9 +708,9 @@ def test_saved_actual_scientific_prompt_keeps_requested_native_metrics(decision,
         isolated.setattr(subprocess, 'Popen', forbidden)
         isolated.setattr(Store, 'get', forbidden)
         isolated.setattr(Store, 'get_artifact', forbidden)
-        isolated.setattr('gene_annotation_episode.native_infernal_result_worker.run', forbidden)
-        isolated.setattr('gene_annotation_episode.native_infernal_result_worker.populate_infernal_search_sheet', forbidden)
-        isolated.setattr('gene_annotation_episode.native_infernal_result_worker.calculate_infernal_search_scores', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.a107.native_infernal_result_worker.run', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.a107.native_infernal_result_worker.populate_infernal_search_sheet', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.a107.native_infernal_result_worker.calculate_infernal_search_scores', forbidden)
         text, _ = connection._presentation(saved['episode_id'], saved['role'],
             saved['instructions'], saved['context'])
         assert text == render_scientific_process_prompt(saved['context'], saved['instructions'])

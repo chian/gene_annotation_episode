@@ -18,7 +18,7 @@ from method_loop.durable import canonical, content_digest, validate_commission, 
 from method_loop.identities import EpisodeRef, UnitRef
 
 from .episodic_workflow.root.communication import validate_form
-from .episodic_workflow.root.waiting import validate_condition
+from .episodic_workflow.root.wait_events import validate_condition
 from .episodic_workflow.root.episode_admission import load_return_admission
 
 

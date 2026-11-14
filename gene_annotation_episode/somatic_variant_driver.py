@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 import subprocess
 
-from . import native_flux_balance_storage as storage
+from .episodic_workflow.root.a110 import native_flux_balance_storage as storage
 from . import somatic_variant_contracts as contracts
 from .local_jobs import LocalJobPolicy, check_scratch_budget
 from .native_atac_differential_reference import extract_atac_bam_header

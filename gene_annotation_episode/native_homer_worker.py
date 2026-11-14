@@ -39,7 +39,7 @@ def _json_bytes(value):
 
 
 def _copy_selected(row, target, *, mode):
-    from .native_flux_balance_storage import file_pin, retain_input
+    from .episodic_workflow.root.a110.native_flux_balance_storage import file_pin, retain_input
     observed = retain_input(row["path"], target, max_bytes=row["size_bytes"])
     _require(observed == {key: row[key] for key in ("sha256", "size_bytes")}, "selected_copy_identity_conflict")
     os.chmod(target, mode)
@@ -49,7 +49,7 @@ def _copy_selected(row, target, *, mode):
 def _stage_native(plan):
     """Copy only the selected bytes; caches and all mutable paths stay owned."""
     from . import native_homer_execution as e
-    from .native_flux_balance_storage import directory, file_pin, immutable_bytes, read_bytes
+    from .episodic_workflow.root.a110.native_flux_balance_storage import directory, file_pin, immutable_bytes, read_bytes
     root = Path(plan["attempt_directory"])
     deployment = plan["request"]["deployment"]
     for name in ("inputs", "runtime_control", "native", "work", "preparsed", "tmp", "cache", "home", "perl_trace"):
@@ -109,7 +109,7 @@ def _stage_native(plan):
 
 def _observed_output(root, specification):
     from . import native_homer_execution as e
-    from .native_flux_balance_storage import confined_file, file_pin
+    from .episodic_workflow.root.a110.native_flux_balance_storage import confined_file, file_pin
     row = dict(specification, observed_state="absent", sha256=None, size_bytes=None, failure=None)
     try:
         path = confined_file(root, specification["native_relative_path"])
@@ -126,7 +126,7 @@ def _observed_output(root, specification):
 def _inventory_native(plan, completion, completion_pin):
     """Seal each surviving output independently, including empty native files."""
     from . import native_homer_execution as e
-    from .native_flux_balance_storage import file_pin
+    from .episodic_workflow.root.a110.native_flux_balance_storage import file_pin
     root = Path(plan["attempt_directory"])
     files = [_observed_output(root, row) for row in e.homer_output_specifications(plan)]
     failures = []
@@ -184,7 +184,7 @@ def _inventory_native(plan, completion, completion_pin):
 def run_native_homer(plan_path, expected_payload_sha256):
     """Execute one immutable selected wrapper; never retry or replace it."""
     from . import native_homer_execution as e
-    from .native_flux_balance_storage import confined_file, decode_json, directory, file_pin, immutable_bytes, read_bytes
+    from .episodic_workflow.root.a110.native_flux_balance_storage import confined_file, decode_json, directory, file_pin, immutable_bytes, read_bytes
     plan_path = Path(plan_path)
     _require(plan_path.name == e.PLAN_FILENAME and plan_path.parent == Path.cwd(), "selected_plan_path_conflict")
     plan = e.validate_homer_plan(decode_json(read_bytes(plan_path)))
@@ -249,7 +249,7 @@ def run_native_homer(plan_path, expected_payload_sha256):
 
 def _read_worker_file(identity, path):
     from .native_file_capture import _identity
-    from .native_flux_balance_storage import read_bytes
+    from .episodic_workflow.root.a110.native_flux_balance_storage import read_bytes
     identity = _identity(identity)
     _require(type(path) is str and Path(path).is_absolute(), "input_path_invalid")
     raw = read_bytes(path)
@@ -294,7 +294,7 @@ def run_homer_motif_job(*, request, output_directory):
     from . import homer_motif_contracts as c
     from .homer_motif_measurements import parse_homer_motif_sheet, calculate_homer_components, project_homer_return
     from .homer_motif_result_contracts import validate_homer_motif_value
-    from .native_flux_balance_storage import decode_json, directory, file_pin, immutable_bytes
+    from .episodic_workflow.root.a110.native_flux_balance_storage import decode_json, directory, file_pin, immutable_bytes
     _closed(request, _PURE_FIELDS, "request_fields_invalid")
     _require(request["version"] == WORKER_REQUEST_VERSION and request["mode"] in ("parse", "calculate_saved")
         and type(request["projection_source_ref"]) is str and request["projection_source_ref"].startswith("source_"),
@@ -355,7 +355,7 @@ def main():
     if len(sys.argv) == 5 and sys.argv[1] == "--native-plan" and sys.argv[3] == "--selected-payload-sha256":
         return run_native_homer(Path(sys.argv[2]).absolute(), sys.argv[4])
     _require(len(sys.argv) == 3, "two_file_arguments_required")
-    from .native_flux_balance_storage import decode_json
+    from .episodic_workflow.root.a110.native_flux_balance_storage import decode_json
     request_path, output_path = map(Path, sys.argv[1:])
     payload = decode_json(request_path.read_bytes())
     _closed(payload, ("operation", "arguments"), "payload_fields_invalid")

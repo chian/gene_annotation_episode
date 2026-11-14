@@ -16,8 +16,8 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, SourceSnapshot
-from gene_annotation_episode import api_bvbrc_minhash as module
-from gene_annotation_episode.api_bvbrc_minhash import BVBRCMinhashService, RESULT_OPERATION, SERVICE
+from gene_annotation_episode.episodic_workflow.root.a102 import api_bvbrc_minhash as module
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc_minhash import BVBRCMinhashService, RESULT_OPERATION, SERVICE
 from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker import GRADING_SCHEMA
 from gene_annotation_episode.bvbrc_appservice_tool_info import LAUNCH_OPERATIONS
 from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution

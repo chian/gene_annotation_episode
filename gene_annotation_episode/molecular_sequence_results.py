@@ -33,7 +33,7 @@ from .molecular_sequence_result_contracts import (
     SCHEMAS,
 )
 from .native_file_capture import NativeFileCaptureError, capture_native_file, retained_native_file, _identity, _declaration
-from .native_flux_balance_storage import file_pin, read_bytes
+from .episodic_workflow.root.a110.native_flux_balance_storage import file_pin, read_bytes
 from .episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from . import molecular_sequence_result_contracts as supplied
 from .domain import identity as record_identity

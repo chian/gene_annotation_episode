@@ -11,7 +11,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter_v2 as adapter
 from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_publication import AppServicePublications
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.practical_execution_state import _read
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _read
 from gene_annotation_episode.state import Store
 from test_bvbrc_proteome_directional import native
 from test_bvbrc_proteome_directional_projection import forbid_construction, selector

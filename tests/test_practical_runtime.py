@@ -16,7 +16,7 @@ import uuid
 import pytest
 
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.episode_reports import report_sources
+from gene_annotation_episode.episodic_workflow.root.a101.episode_reports import report_sources
 from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations, digest

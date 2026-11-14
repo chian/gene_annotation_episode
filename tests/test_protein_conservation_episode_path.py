@@ -17,7 +17,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import muscle_alignment_driver as native
 from gene_annotation_episode import native_atac_differential_driver as native_storage
-from gene_annotation_episode import native_flux_balance_storage as storage
+from gene_annotation_episode.episodic_workflow.root.a110 import native_flux_balance_storage as storage
 from gene_annotation_episode import native_lifecycle
 from gene_annotation_episode import phylogeny_calculators as science
 from gene_annotation_episode import phylogeny_formats as formats

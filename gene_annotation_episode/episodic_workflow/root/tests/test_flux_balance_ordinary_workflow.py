@@ -485,8 +485,8 @@ def test_actual_ordinary_fba_model_edit_solve_saved_reads_and_recovery(tmp_path,
             frozen.setattr('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_cobra_glpk_solution_capture', _forbidden)
             frozen.setattr('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_biomni_fba_csv', _forbidden)
             frozen.setattr('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_fba_capture', _forbidden)
-            frozen.setattr('gene_annotation_episode.flux_balance_calculations.calculate_flux_balance_sheet', _forbidden)
-            frozen.setattr('gene_annotation_episode.flux_balance_result_worker.calculate_flux_balance_sheet', _forbidden)
+            frozen.setattr('gene_annotation_episode.episodic_workflow.root.a110.flux_balance_calculations.calculate_flux_balance_sheet', _forbidden)
+            frozen.setattr('gene_annotation_episode.episodic_workflow.root.a110.flux_balance_result_worker.calculate_flux_balance_sheet', _forbidden)
             frozen.setattr(DecisionSource, 'execute', traced_action)
             frozen.setattr(ScientificProcessEpisodes, 'restore_closed_process', traced_restore)
             replay = _workflow(case, restored_tools, replay_provider, application, original)
@@ -608,8 +608,8 @@ def test_actual_rhea_source_cited_edit_one_solve_and_requested_parent_return(tmp
     from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import JOURNALS, _files, _history, _sqlite_pins
     from gene_annotation_episode.episodic_workflow.root.library.hmmer_alignment_input_alphabet import _checkpoint as checkpoint
     import gene_annotation_episode.flux_balance_model_execution as model_execution
-    import gene_annotation_episode.flux_balance_calculations as calculations_module
-    import gene_annotation_episode.flux_balance_result_worker as result_worker_module
+    import gene_annotation_episode.episodic_workflow.root.a110.flux_balance_calculations as calculations_module
+    import gene_annotation_episode.episodic_workflow.root.a110.flux_balance_result_worker as result_worker_module
 
     capture, body, selected_case, fixture_pins = _fba_reaction_inputs()
     software = _software()  # This run's actual source/runtime/dependency declarations.

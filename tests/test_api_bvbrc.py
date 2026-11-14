@@ -10,7 +10,7 @@ from urllib.error import HTTPError
 import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, SourceSnapshot
-from gene_annotation_episode.api_bvbrc import (
+from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import (
     BVBRCDataClient, BVBRCDataService, DEFAULT_BASE_URL, QUERY_OPERATION,
     RESULT_OPERATION, SERVICE, request_url,
 )
@@ -242,7 +242,7 @@ def test_native_transport_is_one_get_and_keeps_page_headers_without_credentials(
         def open(self, request, timeout):
             calls.append((request, timeout))
             return Response()
-    monkeypatch.setattr("gene_annotation_episode.api_bvbrc.urllib.request.build_opener", lambda handler: Opener())
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.urllib.request.build_opener", lambda handler: Opener())
     native = BVBRCDataClient(timeout=3).query(request())
     assert len(calls) == 1 and calls[0][0].get_method() == "GET" and calls[0][1] == 3
     assert native.transport["headers"]["content-range"] == "items 0-0/0"
@@ -262,7 +262,7 @@ def test_http_failure_retains_actual_bytes_and_does_not_retry(monkeypatch, statu
             headers["Content-Type"] = "text/html"
             headers["Retry-After"] = "3"
             raise HTTPError(request.full_url, status, "native failure", headers, io.BytesIO(b"native failed body"))
-    monkeypatch.setattr("gene_annotation_episode.api_bvbrc.urllib.request.build_opener", lambda handler: Opener())
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.urllib.request.build_opener", lambda handler: Opener())
     with pytest.raises(AcquisitionError) as captured:
         BVBRCDataClient().query(request())
     assert captured.value.code == expected and captured.value.snapshot.content == b"native failed body"
@@ -274,7 +274,7 @@ def test_incomplete_success_response_preserves_partial_bytes_but_never_completes
     class Opener:
         def open(self, request, timeout):
             return Response(read_error=http.client.IncompleteRead(b"[]", 10))
-    monkeypatch.setattr("gene_annotation_episode.api_bvbrc.urllib.request.build_opener", lambda handler: Opener())
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc.urllib.request.build_opener", lambda handler: Opener())
     with pytest.raises(AcquisitionError) as captured:
         BVBRCDataClient().query(request())
     assert captured.value.snapshot.content == b"[]"

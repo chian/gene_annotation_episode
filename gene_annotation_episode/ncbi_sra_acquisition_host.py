@@ -19,7 +19,7 @@ from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .molecular_measurement_tools import authenticate_molecular_invocation
 from .molecular_sequence_input_contracts import input_record_digest
 from .native_file_capture import NativeFileCaptureError, _metadata, retained_native_file
-from .native_flux_balance_storage import read_bytes
+from .episodic_workflow.root.a110.native_flux_balance_storage import read_bytes
 
 
 TOOL = sra.TOOL

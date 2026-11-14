@@ -248,7 +248,7 @@ def test_scientific_renderer_has_no_hidden_io_store_native_calculator_or_model_w
     modules = [importlib.import_module(name) for name in (
         "gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations",
         "gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_publication",
-        "gene_annotation_episode.rna_structure_native")]
+        "gene_annotation_episode.episodic_workflow.root.a107.rna_structure_native")]
     state = scientific_state(pair + scan)
     original = deepcopy(state)
     def forbidden(*args, **kwargs):

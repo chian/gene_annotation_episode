@@ -79,7 +79,7 @@ def _guards(patch):
         "gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparation_worker.recalculate_hmmer_preparation",
         "gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker.grade_infernal_preparation",
         "gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker.recalculate_infernal_preparation",
-        "gene_annotation_episode.cmalign_grader.calculate_cmalign_scores",
+        "gene_annotation_episode.episodic_workflow.root.a107.cmalign_grader.calculate_cmalign_scores",
         "gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader.calculate_infernal_search_scores",
         "gene_annotation_episode.episodic_workflow.root.a101.hmmer_search_grader.calculate_hmmer_search_scores",
     ):

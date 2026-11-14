@@ -132,7 +132,7 @@ def connected_case():
         actual_prepare = native_lifecycle.prepare_job
 
         def saved_worker_only(command, **kwargs):
-            assert command[1:5] == ['-B', '-S', '-m', 'gene_annotation_episode.flux_balance_result_worker']
+            assert command[1:5] == ['-B', '-S', '-m', 'gene_annotation_episode.episodic_workflow.root.a110.flux_balance_result_worker']
             plan = json.loads(Path(command[-1]).read_bytes())
             assert plan['mode'] == 'saved_sheet_recalculation'
             assert plan['sheet']['file'] == case.sheet_file == plan['selector']['saved_sheet_file']
@@ -536,7 +536,7 @@ def test_closed_workflow_replays_with_scientific_bytes_and_execution_forbidden(c
         monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_flux_balance_results.' + name, deny)
     for target in ('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_fba_capture',
             'gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet.populate_flux_balance_sheet',
-            'gene_annotation_episode.flux_balance_calculations.calculate_flux_balance_sheet',
+            'gene_annotation_episode.episodic_workflow.root.a110.flux_balance_calculations.calculate_flux_balance_sheet',
             'gene_annotation_episode.episodic_workflow.root.library.flux_balance_result_views.project_fba_result'):
         monkeypatch.setattr(target, deny)
     monkeypatch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', deny)

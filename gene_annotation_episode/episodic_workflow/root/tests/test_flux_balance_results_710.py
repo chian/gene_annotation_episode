@@ -344,7 +344,7 @@ def test_real_finite_partial_worker_and_closed_host_replay(host, monkeypatch):
     shutil.rmtree(Path(original['identity']['execution_id']).parent)
     monkeypatch.setattr(native, 'status', forbidden)
     monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_flux_balance_results.prepare_flux_balance_result_worker', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.flux_balance_result_worker.execute_flux_balance_worker', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a110.flux_balance_result_worker.execute_flux_balance_worker', forbidden)
     assert f.host.own_fact_groups(context, verify_artifacts=False) == receipt['facts']
     assert f.host.receipts.read_completed(episode_id=context.episode_id,
         operation_key=receipt['intent']['operation_key'], scope=plain(context.scope)) == receipt

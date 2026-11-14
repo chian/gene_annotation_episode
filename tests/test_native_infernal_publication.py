@@ -20,7 +20,7 @@ from gene_annotation_episode.materials import artifact_file, artifact_path
 from gene_annotation_episode.native_infernal_contracts import requested_job_from_infernal, native_infernal_digest
 from gene_annotation_episode.episodic_workflow.root.library.native_infernal_result_publication import (
     prepare_native_infernal_grading, publish_selected_native_infernal_rows)
-from gene_annotation_episode.native_infernal_result_worker import _fasta
+from gene_annotation_episode.episodic_workflow.root.a107.native_infernal_result_worker import _fasta
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import retain_tool_grading
 
@@ -227,7 +227,7 @@ def test_host_no_full_dataset_or_sheet_hydration_and_completed_replay(tmp_path, 
         def prohibited(*args, **kwargs):
             raise AssertionError("replay attempted worker execution or scientific calculation")
         monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_infernal_result_publication.run_local_job", prohibited)
-        monkeypatch.setattr("gene_annotation_episode.native_infernal_result_worker.run", prohibited)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a107.native_infernal_result_worker.run", prohibited)
         assert prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected) == prepared
         with pytest.raises(ContractError, match="directory_identity_conflict"):
             prepare(store, tmp_path / "grading", bundle, ref, artifacts, selector(metrics=["bitscore"]))
@@ -526,7 +526,7 @@ def test_native_failure_preserves_diagnostics_and_no_fake_success(tmp_path):
 
 
 def test_saved_full_sheet_recalculates_without_files_network_or_execution(tmp_path, monkeypatch):
-    from gene_annotation_episode.cmalign_grader import calculate_cmalign_scores
+    from gene_annotation_episode.episodic_workflow.root.a107.cmalign_grader import calculate_cmalign_scores
     with Store(tmp_path / "store") as store:
         bound_subject(store, "cmalign")
         bundle, ref, artifacts = fixture_bundle(store, "cmalign")

@@ -509,7 +509,7 @@ def test_pure_extraction_and_saved_validation_forbid_external_work(monkeypatch):
     import builtins
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection, _SessionConnection
-    from gene_annotation_episode.api_bvbrc import BVBRCDataClient
+    from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import BVBRCDataClient
     from gene_annotation_episode.acquisition import PublicClients
     pages = [_page(DOCS)]
     selection = _selection(pages)

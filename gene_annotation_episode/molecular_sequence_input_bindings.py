@@ -26,7 +26,7 @@ from .molecular_sequence_input_contracts import (
     validate_molecular_sequence_received_subject,
 )
 from .native_file_capture import NativeFileCaptureError, _metadata, retained_native_file
-from .native_flux_balance_storage import read_bytes
+from .episodic_workflow.root.a110.native_flux_balance_storage import read_bytes
 
 
 _BASELINE_ROLES = frozenset(("launch", "launch_local", "launch_api", "launch_hpc", "results"))

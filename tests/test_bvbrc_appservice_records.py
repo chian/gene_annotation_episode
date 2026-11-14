@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.practical_execution_state import _immutable, _read
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable, _read
 from test_api_bvbrc_appservice import harness, original_request, bound, prepare, PREFIX
 
 
