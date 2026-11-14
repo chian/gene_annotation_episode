@@ -1,1 +1,0 @@
-/home/chia/repos/gene_annotation_episode/gene_annotation_episode/mauve_v4_format_contracts.py

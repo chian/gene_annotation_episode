@@ -8,7 +8,7 @@ from . import internal_summary
 from . import progress_observation
 from . import to_child_execution_monitoring
 from . import to_parent
-_yield = import_module('.yield', __package__)
+_yield = import_module('.yield_estimator', __package__)
 from .binding_identity import as_record
 from .from_child_execution_monitoring import admit_return
 

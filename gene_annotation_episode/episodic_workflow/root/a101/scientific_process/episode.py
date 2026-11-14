@@ -4,7 +4,7 @@ from .task import ScientificInvestigationTask
 from .scientific_contracts import ContractError, ROLE, ROLES
 from .credit import ScientificProcessCredit
 from importlib import import_module as _import_module
-ScientificProcessYield = _import_module('.yield', __package__).ScientificProcessYield
+from .yield_estimator import ScientificProcessYield
 from .to_child_execution_progress_assessment import prepare_request as prepare_monitor_request
 from .from_child_execution_progress_assessment import receive_progress as receive_monitor_progress
 

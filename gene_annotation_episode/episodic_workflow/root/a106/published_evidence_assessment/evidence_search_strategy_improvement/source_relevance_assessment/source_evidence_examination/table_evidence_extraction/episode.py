@@ -15,7 +15,7 @@ from .received_evidence import LiteratureReceivedEvidence
 from .credit import LiteratureCredit
 from .waiting import LiteratureWaiting
 from importlib import import_module
-LiteratureYield = import_module('.yield', __package__).LiteratureYield
+from .yield_estimator import LiteratureYield
 from .from_parent_page import OriginalPageAssignment
 from .grading.intervention_assessment import InterventionAssessment
 from .scoring.intervention_main_sheet import InterventionMainSheet

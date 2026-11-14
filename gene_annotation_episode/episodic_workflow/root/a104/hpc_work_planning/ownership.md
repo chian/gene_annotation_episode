@@ -60,7 +60,7 @@ The direct private source owners are:
 - `hpc_work_planning/to_parent.py` — Private to parent for A104 hpc.
 - `hpc_work_planning/waiting.py` — Private waiting for A104 hpc.
 - `hpc_work_planning/work_operations.py` — Private work operations for A104 hpc.
-- `hpc_work_planning/yield.py` — Private yield for A104 hpc.
+- `hpc_work_planning/yield_estimator.py` — Private yield for A104 hpc.
 
 The source installation is authenticated by `runs/root_a104_all60_source_application_01/applied/application.json`. The exact235 baseline account, candidate235 cases and actual descriptor observations are scoped controlled evidence; the original fixture failures remain explicit. Earlier scientific results remain retained, with no new whole-workflow or HPC execution claim. Current module/method facts, reciprocal endpoint sources, library dependencies and exact test/fixture assets are in the paired inventory. Named-envelope build tests do not themselves prove selected-route forwarding; that unchanged connection and Literature selected-route evidence are distinguished.
 
@@ -81,7 +81,7 @@ This existing `hpc` episode retains binding identity `hpc_work_planning` and its
 - **summary**: internal_summary.py presents original candidates, model/history, pending allocation and decision-relevant evidence.
 - **operations**: work_operations.py selects private resource_discovery.py, portfolio_candidates.py, portfolio_planning.py, portfolio_comparison.py, forecast_observations.py, allocation_handoff.py, allocation_order.py, allocation_observations.py, allocation_results.py, measured_history.py, received_evidence.py and queue_observations.py.
 - **credit**: credit.py retains original ledger acceptance progress and units; waiting never projects new credit and returned invalid/failed/unavailable operations retain original observations.
-- **yield**: yield.py privately supplies original controller settings and authenticated operands to library/hpc_continuation.py; pending attainable value remains distinct from earned credit.
+- **yield**: yield_estimator.py privately supplies original controller settings and authenticated operands to library/hpc_continuation.py; pending attainable value remains distinct from earned credit.
 - **waiting**: waiting.py retains activity advice; task_waiting.py owns original suspension bookkeeping; task.py preserves selected waits and EventTargetError identity.
 - **persistence**: portfolio_state.py, closed_models.py and task_state.py own state, closed references, restoration/checkpoint bookkeeping and source effects; original ledger/journal mechanics remain external.
 - **scientific grading and scoring**: These operational episodes do not own scientific evidence graders or scientific scoring sheets. Original result-validator/acceptance callbacks remain distinct from scientific assessment.

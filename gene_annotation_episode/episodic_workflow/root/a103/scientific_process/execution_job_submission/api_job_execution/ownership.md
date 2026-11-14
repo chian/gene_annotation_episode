@@ -38,7 +38,7 @@ Selected source: `runs/root_a103_execution30_metadata_generation_01/prepared/SOU
 - `terminal_execution.py`
 - `to_parent.py`
 - `waiting.py`
-- `yield.py`
+- `yield_estimator.py`
 
 ## 2026-11-13 exact pre-execution30 ownership history
 
@@ -77,7 +77,7 @@ Selected source: `runs/root_a103_existing12_metadata_generation_01/prepared/SOUR
 - `terminal_execution.py`
 - `to_parent.py`
 - `waiting.py`
-- `yield.py`
+- `yield_estimator.py`
 
 ## 2026-11-13 exact pre-source188 ownership history
 

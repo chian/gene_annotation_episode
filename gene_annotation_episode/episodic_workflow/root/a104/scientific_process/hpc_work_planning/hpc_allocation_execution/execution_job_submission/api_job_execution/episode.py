@@ -26,7 +26,7 @@ from .credit import APICredit
 from .closed_credit import APIClosedCredit
 from .completion import APICompletion
 from importlib import import_module
-ExecutionEpisodeYield = import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .task import APIJobTask
 from .presentation import present_api_context
 

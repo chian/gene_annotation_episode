@@ -15,7 +15,7 @@ from .to_parent import SourceInvestigationReport
 from .received_evidence import SourceReceivedEvidence
 from .credit import SourceInvestigationCredit
 from importlib import import_module
-SourceInvestigationYield = import_module('.yield', __package__).SourceInvestigationYield
+from .yield_estimator import SourceInvestigationYield
 from .waiting import SourceInvestigationWaiting
 from .source_contracts import ROLES, _CHILDREN
 from .to_child_table_evidence_extraction import TableEvidenceExtractionRequest

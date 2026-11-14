@@ -319,5 +319,5 @@ def compare_controller(value, case):
 def assert_private_yield_owner(value):
     callback = getattr(value.binding, 'yield_controller', None)
     assert callable(callback), 'missing private Homology yield owner'
-    assert callback.__module__ == type(value.binding).__module__.rsplit('.', 1)[0] + '.yield'
+    assert callback.__module__ == type(value.binding).__module__.rsplit('.', 1)[0] + '.yield_estimator'
     assert callback.__name__ == 'yield_controller'

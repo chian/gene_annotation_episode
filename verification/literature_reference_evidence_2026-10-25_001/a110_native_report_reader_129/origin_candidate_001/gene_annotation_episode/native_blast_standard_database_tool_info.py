@@ -1,1 +1,0 @@
-/home/chia/repos/gene_annotation_episode/gene_annotation_episode/native_blast_standard_database_tool_info.py

@@ -109,7 +109,7 @@ This record describes the actual prepared source for `gene_annotation_episode/ep
 - `credit_projection.py`: Immutable original contexts, authoritative saved rows, actual receipt inheritance/return identities and original completed-action credit/observation boundaries.
 - `numerical.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
 - `workflow_credit_services.py`: Forty complete original methods with exact defining owners on the original canonical receiver; method-level mapping retained separately for all 80 original methods including constructor.
-- `yield.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
+- `yield_estimator.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
 - `yield_parameters.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
 
 ### goal_assignment_and_policy
@@ -250,7 +250,7 @@ This record describes the actual prepared source for `gene_annotation_episode/ep
 - `credit_projection.py`: Immutable original contexts, authoritative saved rows, actual receipt inheritance/return identities and original completed-action credit/observation boundaries.
 - `numerical.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
 - `workflow_credit_services.py`: Forty complete original methods with exact defining owners on the original canonical receiver; method-level mapping retained separately for all 80 original methods including constructor.
-- `yield.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
+- `yield_estimator.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
 - `yield_parameters.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
 
 ### goal_assignment_and_policy
@@ -387,7 +387,7 @@ This record describes the actual prepared source for `gene_annotation_episode/ep
 - `credit_projection.py`: Immutable original contexts, authoritative saved rows, actual receipt inheritance/return identities and original completed-action credit/observation boundaries.
 - `numerical.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
 - `workflow_credit_services.py`: Forty complete original methods with exact defining owners on the original canonical receiver; method-level mapping retained separately for all 80 original methods including constructor.
-- `yield.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
+- `yield_estimator.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
 - `yield_parameters.py`: Own credit-based continuation, original per-axis forecasts/cutoffs and numerical state. This is not runtime, action-count or cumulative-usage enforcement.
 
 ### goal_assignment_and_policy
@@ -569,7 +569,7 @@ This current section supersedes the historical placement-status prose below. The
 | axis_response_contract.py:RootRequests | Canonical scientific-child response contracts used by scoring. Duplicate requests.py is removed. |
 | method_loop/identities.py | Canonical EpisodeRef, UnitRef and structural path identity. Duplicate library/episode_identity.py is removed; its original license remains. Other private-axis iterator classes have not been silently aliased to this owner. |
 | receiving_context.py; episode_journal.py; episode_receipts.py; episode_return_records.py | Immutable original receiving contexts, saved-row authentication, receipt inheritance and returned-evidence custody. No fabricated publication authority. |
-| credit.py; scoring.py; yield.py; numerical.py | Original received axis progress, signed annotation support and credit-based continuation. Private quantities/units and scientific eligibility remain with their actual axis owners. |
+| credit.py; scoring.py; yield_estimator.py; numerical.py | Original received axis progress, signed annotation support and credit-based continuation. Private quantities/units and scientific eligibility remain with their actual axis owners. |
 | decision_information.py and established global Ensembl presenter | The actual nonempty outcome reaches its original presenter, action observation, same-source reopen replay and next decision inputs. |
 | evidence_root.py:NativeEvidenceRootCredit, create_evidence_root_workflow | Complete original public native factory restored. Eight installed cases pass using genuine A102 credit/receipts and an explicit engineering root-only topology. No signed substitute or scientific acquisition. |
 
@@ -1173,7 +1173,7 @@ entry commissioning parent; recursive invocations use the same binding.
 
 The first local extraction assigns incoming assignment/preparation methods to
 `requests.py`, report/reference methods to `returns.py`, task projection methods
-to `credit.py`, and forecast/settings methods to `yield.py`. `episode.py` retains
+to `credit.py`, and forecast/settings methods to `yield_estimator.py`. `episode.py` retains
 registration, constructor, actions, context and assembly. Existing descriptive
 scientific-process helpers remain identifiable; subsequent ownership entries will
 record their relocation and all other current roles. This is a work plan, not a
@@ -1234,7 +1234,7 @@ requirements (`child_return_sources`, `child_return_form`) move to
 collection's received-axis credit projection move to `root/credit.py`, together
 with `root_axis_receipts.py:axis_progress_from_received` and its private
 `_finding_progress_type` selector. The two existing continuation methods move
-to `root/yield.py`. Other `root_axis_receipts.py` readers become `root/returns.py`.
+to `root/yield_estimator.py`. Other `root_axis_receipts.py` readers become `root/returns.py`.
 
 `evidence_root.py`, `root_axis_scalars.py`, `evidence_axis_scoring.py`,
 `evidence_geometry.py` and the named receipt/record readers keep their descriptive
@@ -1264,7 +1264,7 @@ The root extraction is now applied: `SignedRootEpisodeBinding` lives in
 `episode.py` with one annotation role; `RootRequests` lives in `requests.py`;
 received result readers in `returns.py`; `RootCredit`,
 `axis_progress_from_received` and `project_collection_credit` in `credit.py`;
-`RootYield` in `yield.py`; and `SignedEvidenceRootSupport` in `scoring.py`.
+`RootYield` in `yield_estimator.py`; and `SignedEvidenceRootSupport` in `scoring.py`.
 The original `signed_evidence_root.py` and `root_axis_receipts.py` are removed,
 and their consumers import the owning modules directly. The named numerical
 scoring, scalar and receipt dependencies remain descriptive files at the root.

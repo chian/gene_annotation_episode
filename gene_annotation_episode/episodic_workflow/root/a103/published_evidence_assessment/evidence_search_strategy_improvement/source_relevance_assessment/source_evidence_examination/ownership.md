@@ -42,7 +42,7 @@ Source authority: `runs/root_remaining40_verification_preparation_01/EXPECTED_SO
 - `to_child_table_evidence_extraction.py`: Assemble the original table evidence extraction child request.
 - `to_parent.py`: Private A103 literature_page to parent.
 - `waiting.py`: Private A103 literature_page waiting.
-- `yield.py`: Private A103 literature_page yield.
+- `yield_estimator.py`: Private A103 literature_page yield.
 
 ## 2026-11-13 exact preceding ownership history
 

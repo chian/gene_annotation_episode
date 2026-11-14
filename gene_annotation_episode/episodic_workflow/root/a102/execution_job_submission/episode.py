@@ -21,7 +21,7 @@ from .credit import LaunchCredit
 from .closed_credit import LaunchClosedCredit
 from .completion import LaunchCompletion
 from importlib import import_module as _import_module
-ExecutionEpisodeYield = _import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .task import LaunchTask
 from gene_annotation_episode.episodic_workflow.root.a102.scientific_process_prompt import render_selected_execution_prompt
 

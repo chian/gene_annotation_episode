@@ -1,1 +1,0 @@
-/home/chia/repos/gene_annotation_episode/gene_annotation_episode/protein_structure_correspondence.py

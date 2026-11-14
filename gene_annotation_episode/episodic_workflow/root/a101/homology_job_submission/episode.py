@@ -1,7 +1,7 @@
 """Connect private A101 job_launch operational responsibilities."""
 from __future__ import annotations
 from importlib import import_module as _original_yield_import
-OriginalContinuation = _original_yield_import('.yield', __package__).OriginalContinuation
+OriginalContinuation = _original_yield_import('.yield_estimator', __package__).OriginalContinuation
 from .task import OperationalTask
 from .credit import HomologyEpisodeCredit
 from .waiting import HomologyEpisodeWaiting

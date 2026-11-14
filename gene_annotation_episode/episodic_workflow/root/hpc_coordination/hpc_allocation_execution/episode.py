@@ -15,7 +15,7 @@ import gene_annotation_episode.episodic_workflow.root.hpc_coordination.hpc_alloc
 import gene_annotation_episode.episodic_workflow.root.hpc_coordination.hpc_allocation_execution.reference_custody as reference_custody
 import gene_annotation_episode.episodic_workflow.root.hpc_coordination.hpc_allocation_execution.reference_access as reference_access
 import gene_annotation_episode.episodic_workflow.root.hpc_coordination.hpc_allocation_execution.waiting as waiting
-yield_implementation = import_module('.yield', __package__)
+yield_implementation = import_module('.yield_estimator', __package__)
 from .binding_identity import as_record
 from .task import HPCAllocationExecutionTask
 

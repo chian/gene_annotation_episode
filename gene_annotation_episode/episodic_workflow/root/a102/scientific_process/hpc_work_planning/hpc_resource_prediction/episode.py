@@ -16,7 +16,7 @@ from .closed_models import ClosedModels
 from .credit import HPCEpisodeCredit
 from .queue_observations import QueueObservations
 from .binding_record import PredictionBindingRecord
-HPCEpisodeYield = import_module(".yield", __package__).HPCEpisodeYield
+from .yield_estimator import HPCEpisodeYield
 
 class HPCEpisode(PredictionConfiguration, PredictionAssignment, PredictionReport, PredictionGoal, PredictionSummary, PredictionState, PredictionHistory, PredictionOperations, PortfolioComparison, ReceivedEvidence, ClosedModels, HPCEpisodeCredit, HPCEpisodeYield, QueueObservations, PredictionBindingRecord):
     binding_path = 'scientific_process/hpc_work_planning/hpc_resource_prediction'

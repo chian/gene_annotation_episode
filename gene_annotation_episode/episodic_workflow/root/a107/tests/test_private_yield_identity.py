@@ -37,7 +37,7 @@ class YieldIdentityChecks:
 
     def expected(self, method):
         return ('gene_annotation_episode.episodic_workflow.root.a107.'
-            + self.binding_path.replace('/', '.') + '.yield.ExecutionEpisodeYield.' + method)
+            + self.binding_path.replace('/', '.') + '.yield_estimator.ExecutionEpisodeYield.' + method)
 
     def completion_context(self, s, index):
         unit = self.module('method_loop.identities').UnitRef(s.context.episode_id, index).as_record()

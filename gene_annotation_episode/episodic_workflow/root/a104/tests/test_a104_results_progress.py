@@ -88,6 +88,6 @@ def test_actual_results_goal_and_private_guard_selection(frame, binding_home):
     assert frame.owner._fluorescence_reference_access.__func__ is protected._fluorescence_reference_access
     if getattr(frame.owner, 'decision_source_type', None) is not None:
         assert frame.owner.instructions.__module__.endswith('.goal')
-        assert frame.owner.yield_controller.__module__.endswith('.yield')
+        assert frame.owner.yield_controller.__module__.endswith('.yield_estimator')
         assert frame.owner.credit_view.__module__.endswith('.credit')
         assert frame.owner.decision_source_type.suspension_changed.__module__.endswith('.waiting')

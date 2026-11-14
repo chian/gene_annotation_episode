@@ -50,7 +50,7 @@ Prepared current ownership for `gene_annotation_episode/episodic_workflow/root/l
 - `to_child_resource_result_acquisition.py`: Actual parent request preparation for resource_result_acquisition; applicable original predicate order retained.
 - `to_parent.py`: Validate the actual own child return and original parent report contract.
 - `waiting.py`: Own activity and continuation forecast for original HPC waiting/queue observations.
-- `yield.py`: Own progress/continuation policy using the original shared numerical estimator/controller.
+- `yield_estimator.py`: Own progress/continuation policy using the original shared numerical estimator/controller.
 
 The actual descriptor algorithm and all selected byte operands are recorded. Source-native formula values are labelled separately from observed runtime descriptors; Execution's original hash-free configured record gains no invented implementation hash.
 

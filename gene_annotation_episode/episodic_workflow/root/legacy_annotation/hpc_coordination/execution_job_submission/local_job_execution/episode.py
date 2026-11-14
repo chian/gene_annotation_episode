@@ -26,7 +26,7 @@ from .action_policy import LocalExecutionActionPolicy
 from .goal import LocalExecutionGoal
 from .internal_summary import LocalExecutionInternalSummary
 from importlib import import_module
-LocalExecutionYield = import_module('.yield', __package__).LocalExecutionYield
+from .yield_estimator import LocalExecutionYield
 from .completion import LocalExecutionCompletion
 
 class LocalExecutionBinding(LocalExecutionCredit, LocalExecutionChildCommissioning, LocalExecutionParentReport, LocalExecutionParentAssignment, LocalExecutionExecutionState, LocalExecutionActionPolicy, LocalExecutionGoal, LocalExecutionInternalSummary, LocalExecutionOperations, LocalExecutionReportFields, LocalExecutionReportDelivery, LocalExecutionInitialReferences, LocalExecutionReferenceAccess, LocalExecutionYield, LocalExecutionCompletion, ExecutionScientificInputs, ExecutionBlastCustody, ExecutionResultSelection, ExecutionScientificReturns, ExecutionResultCustody, ExecutionReceivedCustody, ExecutionClosedCredit, ExecutionResourceInformation, ExecutionRequestCustody):

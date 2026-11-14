@@ -1,1 +1,0 @@
-/home/chia/repos/gene_annotation_episode/gene_annotation_episode/scientific_process_episodes.py

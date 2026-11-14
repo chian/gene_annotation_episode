@@ -1,1 +1,0 @@
-/home/chia/repos/gene_annotation_episode/gene_annotation_episode/phylogeny_format_contracts.py

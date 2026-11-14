@@ -8,7 +8,7 @@ import sys
 PACKAGE = 'gene_annotation_episode.episodic_workflow.root.a101'
 ORDERS = ('runtime', 'annotation_improvement.episode', 'annotation_improvement.task',
           'annotation_improvement.from_parent', 'annotation_improvement.task_instructions',
-          'annotation_improvement.to_parent', 'annotation_improvement.yield',
+          'annotation_improvement.to_parent', 'annotation_improvement.yield_estimator',
           'annotation_improvement.from_child_annotation_improvement',
           'scientific_process.incoming_message_owners',
           'scientific_process.from_child_execution_job_submission')

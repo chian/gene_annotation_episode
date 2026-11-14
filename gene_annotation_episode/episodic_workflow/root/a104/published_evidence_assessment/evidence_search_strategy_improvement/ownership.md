@@ -58,7 +58,7 @@ The direct private source owners are:
 - `published_evidence_assessment/evidence_search_strategy_improvement/to_child_source_relevance_assessment.py` — Original A104 to child source relevance assessment.
 - `published_evidence_assessment/evidence_search_strategy_improvement/to_parent.py` — Private A104 to parent.
 - `published_evidence_assessment/evidence_search_strategy_improvement/waiting.py` — Private A104 waiting.
-- `published_evidence_assessment/evidence_search_strategy_improvement/yield.py` — Private A104 yield.
+- `published_evidence_assessment/evidence_search_strategy_improvement/yield_estimator.py` — Private A104 yield.
 
 The source installation is authenticated by `runs/root_a104_all60_source_application_01/applied/application.json`. The exact235 baseline account, candidate235 cases and actual descriptor observations are scoped controlled evidence; the original fixture failures remain explicit. Earlier scientific results remain retained, with no new whole-workflow or HPC execution claim. Current module/method facts, reciprocal endpoint sources, library dependencies and exact test/fixture assets are in the paired inventory. Named-envelope build tests do not themselves prove selected-route forwarding; that unchanged connection and Literature selected-route evidence are distinguished.
 

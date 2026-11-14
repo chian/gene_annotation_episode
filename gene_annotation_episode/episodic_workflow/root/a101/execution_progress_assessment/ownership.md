@@ -12,7 +12,7 @@ The inventory enumerates actual source responsibilities, methods, direct imports
 - outgoing report: `report_delivery.py`, `to_parent.py`.
 - internal summary: `decision_inputs.py`, `decision_state.py`, `internal_summary.py`.
 - credit: `credit.py`.
-- yield: `yield.py`.
+- yield: `yield_estimator.py`.
 - waiting: `waiting.py`.
 - instructions: `task_instructions.py`.
 - persistence: `task_state.py`.
@@ -41,7 +41,7 @@ source home. It preserves the original configuration and progress units.
 | Delivered observation identities | `received_progress.py`, `progress_records.py` |
 | Parent report and closure | `to_parent.py`, `report_delivery.py` |
 | Actual progress credit | `credit.py`; retains caller's explicit projector |
-| Original continuation rule/settings | `yield.py` |
+| Original continuation rule/settings | `yield_estimator.py` |
 | Suspension observations | `waiting.py`; wait actions remain in private task |
 | Current implementation identity | `binding_record.py` |
 

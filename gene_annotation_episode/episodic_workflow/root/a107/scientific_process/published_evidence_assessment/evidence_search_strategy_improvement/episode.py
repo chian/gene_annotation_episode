@@ -15,7 +15,7 @@ from .numerical_report_facts import LiteratureNumericalReportFacts
 from .received_reports import LiteratureReceivedReports
 from .to_parent import LiteratureReport
 from .credit import LiteratureCredit
-LiteratureYield = _import_module('.yield', __package__).LiteratureYield
+from .yield_estimator import LiteratureYield
 from .waiting import LiteratureWaiting
 from .source_repositories import LiteratureRepositories
 from gene_annotation_episode.episodic_workflow.root.a107.scientific_process.published_evidence_assessment.evidence_search_strategy_improvement.received_execution_information import received_execution_information as _received_execution_information

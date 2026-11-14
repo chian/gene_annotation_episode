@@ -38,7 +38,7 @@ Source authority: `runs/root_remaining40_verification_preparation_01/EXPECTED_SO
 - `to_child_source_relevance_assessment.py`: Assemble the original source relevance assessment child request.
 - `to_parent.py`: Private A103 literature_strategy to parent.
 - `waiting.py`: Private A103 literature_strategy waiting.
-- `yield.py`: Private A103 literature_strategy yield.
+- `yield_estimator.py`: Private A103 literature_strategy yield.
 
 ## 2026-11-13 exact preceding ownership history
 

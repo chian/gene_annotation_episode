@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a103.homology_job_monitoring
 from importlib import import_module
 
 class HomologyEpisode(MonitorConfiguration, MonitorBindingRecord, MonitorGoal, MonitorSummary, MonitorPlanning, MonitorCreditBinding, MonitorNativeEvents, MonitorOperations, MonitorAssignment, MonitorReport, HomologyEpisodeCredit, HomologyEpisodeWaiting):
-    yield_controller = staticmethod(import_module(__package__ + '.yield').yield_controller)
+    yield_controller = staticmethod(import_module(__package__ + '.yield_estimator').yield_controller)
     binding_path = 'legacy_annotation/homology_job_monitoring'
     commissioning_parent = 'legacy_annotation'
     entry_roles = ('job_monitor',)

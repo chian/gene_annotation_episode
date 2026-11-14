@@ -16,7 +16,7 @@ from .from_parent import LaunchAssignment
 from .from_child_api_job_execution import receive_api_job_report
 from .credit import ExecutionEpisodeCredit
 from importlib import import_module as _import_module
-ExecutionEpisodeYield = _import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 
 from .configuration import LaunchConfiguration
 from .binding_record import LaunchBindingRecord

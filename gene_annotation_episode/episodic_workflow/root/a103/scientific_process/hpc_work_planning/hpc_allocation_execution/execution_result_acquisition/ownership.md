@@ -50,7 +50,7 @@ Selected source: `runs/root_a103_execution30_metadata_generation_01/prepared/SOU
 - `terminal_execution.py`
 - `to_parent.py`
 - `waiting.py`
-- `yield.py`
+- `yield_estimator.py`
 
 ## 2026-11-13 exact pre-execution30 ownership history
 
@@ -69,10 +69,10 @@ This Results binding owns the 34 direct Python modules listed below. `episode.py
 | Input custody, retained readers, saved commissioning, acquired/publication records and received evidence | `parent_input_custody.py`, `retained_masking_reader.py`, `retained_utility_reader.py`, `saved_result_commission.py`, `retained_result_acquisition.py`, `retained_result_publication.py`, `received_records.py` |
 | Incoming assignment, child commissioning, outgoing facts/validation and saved report delivery | `from_parent.py`, `child_commissioning.py`, `to_parent.py`, `report_delivery.py` |
 | Current credit projection, retained closed credit and completion proof | `credit.py`, `closed_credit.py`, `completion.py` |
-| Original credit-based yield controller and practical estimator | `yield.py` |
+| Original credit-based yield controller and practical estimator | `yield_estimator.py` |
 | Private execution contract imports and original common definitions | `execution_contracts.py` |
 
-`ResultsTask` owns the current decision/action connection through its private state, decision, waiting and report-delivery bases. `ResultsCredit`, `ResultsClosedCredit` and `ResultsCompletion` retain their distinct credit and completion responsibilities. `yield.py:ExecutionEpisodeYield` retains the original continuation controller. Imported library implementations retain their own source owners.
+`ResultsTask` owns the current decision/action connection through its private state, decision, waiting and report-delivery bases. `ResultsCredit`, `ResultsClosedCredit` and `ResultsCompletion` retain their distinct credit and completion responsibilities. `yield_estimator.py:ExecutionEpisodeYield` retains the original continuation controller. Imported library implementations retain their own source owners.
 
 The declared parent is `gene_annotation_episode/episodic_workflow/root/a103/scientific_process/hpc_work_planning/hpc_allocation_execution/episode.py`. The incoming route is `runtime.Workflow.selected` / `Workflow.build` and `EpisodeBindingRegistry.for_child` to `from_parent.py:ResultsFromParent.prepare_assignment`. Outgoing facts and validation belong to `to_parent.py:ResultsToParent.facts` / `validate_report`; `report_delivery.py:ResultsReportDelivery.finish` retains saved report delivery. The parent-side route remains `Workflow.validate_report`, `Workflow.receive_form` and `Workflow._receive_form`, including its original saved-counterpart dispatch/fallback. These are source boundaries; no new parent implementation or independent native handoff authentication is inferred.
 

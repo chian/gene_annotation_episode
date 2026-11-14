@@ -15,7 +15,7 @@ from .received_evidence import LiteratureReceivedEvidence
 from .credit import LiteratureCredit
 from .waiting import LiteratureWaiting
 from importlib import import_module
-LiteratureYield = import_module('.yield', __package__).LiteratureYield
+from .yield_estimator import LiteratureYield
 from .from_parent_page import OriginalPageAssignment
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.literature_source_prompt import render_literature_source_prompt

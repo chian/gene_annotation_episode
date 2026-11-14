@@ -36,9 +36,9 @@ This record describes prepared source, not canonical installation. `ownership_in
 - `task_state.py`: Private task identity, state restoration and entry-path validation.
 - `to_parent.py`: Requested factual report, completion and typed report finalization.
 - `waiting.py`: Original execution-context suspension observation.
-- `yield.py`: Original further-credit estimate with verified endpoint completion.
+- `yield_estimator.py`: Original further-credit estimate with verified endpoint completion.
 
-Progress is the original sum of currently satisfied requirement credits, including signed loss and immutable initial validation. `yield.py` owns the original continuation estimate and qualified completion proof. Scientific evidence scores remain distinct. Failed, invalid and unavailable returned actions retain their original task/iterator path.
+Progress is the original sum of currently satisfied requirement credits, including signed loss and immutable initial validation. `yield_estimator.py` owns the original continuation estimate and qualified completion proof. Scientific evidence scores remain distinct. Failed, invalid and unavailable returned actions retain their original task/iterator path.
 
 The parent request is `gene_annotation_episode/episodic_workflow/root/legacy_annotation/to_child_local_job_execution.py` to `gene_annotation_episode/episodic_workflow/root/legacy_annotation/local_job_execution/from_parent.py`; the return is `gene_annotation_episode/episodic_workflow/root/legacy_annotation/local_job_execution/to_parent.py` to `gene_annotation_episode/episodic_workflow/root/legacy_annotation/from_child_local_job_execution.py`. Shared dispatch validation is pending.
 

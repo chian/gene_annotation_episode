@@ -15,7 +15,7 @@ from .goal import LocalGoal
 from .internal_summary import LocalSummary
 from .credit import LocalCredit
 from importlib import import_module
-LocalYield = import_module('.yield', __package__).LocalYield
+from .yield_estimator import LocalYield
 from .task import LocalTask
 
 VERSION = 'root_legacy_annotation_local_terminal_execution_v1'

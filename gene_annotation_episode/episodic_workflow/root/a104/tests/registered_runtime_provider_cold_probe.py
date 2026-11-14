@@ -12,7 +12,7 @@ import sys
 import traceback
 
 PACKAGE = 'gene_annotation_episode.episodic_workflow.root.a104'
-FIRST_MODULES = ('execution_job_submission.api_job_execution.task', 'homology_job_monitoring.task', 'hpc_work_planning.execution_job_submission.task', 'execution_job_submission.task', 'published_evidence_assessment.task', 'execution_progress_assessment.task', 'execution_job_submission.hpc_job_execution.task', 'execution_job_submission.local_job_execution.task', 'hpc_work_planning.task', 'hpc_work_planning.hpc_resource_prediction.task', 'hpc_work_planning.execution_result_acquisition.task', 'execution_result_acquisition.task', 'scientific_process.task', 'homology_job_monitoring.yield', 'homology_job_submission.yield', 'homology_result_acquisition.yield', 'scientific_process.task_instructions', 'execution_job_submission.api_job_execution.task_instructions', 'homology_job_submission.task', 'homology_job_submission.episode', 'homology_job_monitoring.episode', 'homology_result_acquisition.task', 'homology_result_acquisition.episode', 'homology_job_monitoring.task_state', 'homology_job_monitoring.task_decision', 'homology_job_monitoring.task_action', 'homology_job_monitoring.decision_inputs', 'homology_job_monitoring.decision_context')
+FIRST_MODULES = ('execution_job_submission.api_job_execution.task', 'homology_job_monitoring.task', 'hpc_work_planning.execution_job_submission.task', 'execution_job_submission.task', 'published_evidence_assessment.task', 'execution_progress_assessment.task', 'execution_job_submission.hpc_job_execution.task', 'execution_job_submission.local_job_execution.task', 'hpc_work_planning.task', 'hpc_work_planning.hpc_resource_prediction.task', 'hpc_work_planning.execution_result_acquisition.task', 'execution_result_acquisition.task', 'scientific_process.task', 'homology_job_monitoring.yield_estimator', 'homology_job_submission.yield_estimator', 'homology_result_acquisition.yield_estimator', 'scientific_process.task_instructions', 'execution_job_submission.api_job_execution.task_instructions', 'homology_job_submission.task', 'homology_job_submission.episode', 'homology_job_monitoring.episode', 'homology_result_acquisition.task', 'homology_result_acquisition.episode', 'homology_job_monitoring.task_state', 'homology_job_monitoring.task_decision', 'homology_job_monitoring.task_action', 'homology_job_monitoring.decision_inputs', 'homology_job_monitoring.decision_context')
 FIXTURE_SHA = '83130a45c6ecd1296b2443e0040b448e2b49a7336be52e786759acf47bacce87'
 def sha(raw): return hashlib.sha256(raw).hexdigest()
 def main():
@@ -54,7 +54,7 @@ def main():
         for expected in packet['homology_lifecycle_aliases']:
             home = expected['home']
             episode = importlib.import_module(PACKAGE + '.' + home + '.episode')
-            controller = importlib.import_module(PACKAGE + '.' + home + '.yield')
+            controller = importlib.import_module(PACKAGE + '.' + home + '.yield_estimator')
             context = importlib.import_module(PACKAGE + '.' + home + '.decision_context')
             declaration = vars(episode)['HomologyEpisode']
             assert vars(runtime)[expected['runtime_alias']] is declaration

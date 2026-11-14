@@ -91,7 +91,7 @@ def check_real_descriptor_policy_operand(directory):
 
 def check_nested_improvement_refusals(directory):
     credit = import_module(PACKAGE + '.legacy_improvement.credit')
-    continuation = import_module(PACKAGE + '.legacy_improvement.yield')
+    continuation = import_module(PACKAGE + '.legacy_improvement.yield_estimator')
     path = (('annotation', 'original'), ('improvement', 'nested'))
     context = SimpleNamespace(path=path, role='improvement')
     with parent_host(directory, 'improvement', parent_role='improvement') as host:

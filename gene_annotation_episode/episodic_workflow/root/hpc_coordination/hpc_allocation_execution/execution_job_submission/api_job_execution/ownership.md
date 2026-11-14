@@ -39,7 +39,7 @@ Prepared current ownership for `gene_annotation_episode/episodic_workflow/root/h
 - `task_report.py`: Own report assembly/return and original qualification/custody behavior.
 - `task_state.py`: Own saved decision/action state, identity, pending and replay observations.
 - `to_parent.py`: Validate the actual own child return and original parent report contract.
-- `yield.py`: Own progress/continuation policy using the original shared numerical estimator/controller.
+- `yield_estimator.py`: Own progress/continuation policy using the original shared numerical estimator/controller.
 
 The actual descriptor algorithm and all selected byte operands are recorded. Source-native formula values are labelled separately from observed runtime descriptors; Execution's original hash-free configured record gains no invented implementation hash.
 

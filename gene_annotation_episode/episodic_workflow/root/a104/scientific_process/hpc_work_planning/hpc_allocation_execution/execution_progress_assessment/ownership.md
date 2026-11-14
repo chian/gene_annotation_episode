@@ -44,7 +44,7 @@ The direct private source owners are:
 - `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/to_child_execution_progress_assessment.py` — Request one exposed direct dependency, preserving parent constraints.
 - `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/to_parent.py` — MonitorReport
 - `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/waiting.py` — Private monitor waiting; original selected outcomes return to the ordinary iterator.
-- `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/yield.py` — Original private information accumulation continuation calculations.
+- `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/yield_estimator.py` — Original private information accumulation continuation calculations.
 
 The source installation is authenticated by `runs/root_a104_all60_source_application_01/applied/application.json`. The exact235 baseline account, candidate235 cases and actual descriptor observations are scoped controlled evidence; the original fixture failures remain explicit. Earlier scientific results remain retained, with no new whole-workflow or HPC execution claim. Current module/method facts, reciprocal endpoint sources, library dependencies and exact test/fixture assets are in the paired inventory. Named-envelope build tests do not themselves prove selected-route forwarding; that unchanged connection and Literature selected-route evidence are distinguished.
 
@@ -71,7 +71,7 @@ source home. It preserves the original configuration and progress units.
 | Delivered observation identities | `received_progress.py`, `progress_records.py` |
 | Parent report and closure | `to_parent.py`, `report_delivery.py` |
 | Actual progress credit | `credit.py`; retains caller's explicit projector |
-| Original continuation rule/settings | `yield.py` |
+| Original continuation rule/settings | `yield_estimator.py` |
 | Suspension observations | `waiting.py`; wait actions remain in private task |
 | Current implementation identity | `binding_record.py` |
 

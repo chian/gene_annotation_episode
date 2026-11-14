@@ -51,7 +51,7 @@ from .from_parent import LaunchFromParent
 from .to_parent import LaunchToParent
 from .credit import LaunchCredit
 from importlib import import_module
-ExecutionEpisodeYield = import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .task import LaunchTask
 from .binding_roles import KINDS
 from .binding_roles import ROLE_KINDS

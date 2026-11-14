@@ -11,7 +11,7 @@ import inspect
 
 def capture_execution_yield_identity(binding, context, initial_credit, epoch, observations):
     from gene_annotation_episode.episodic_workflow.root.a104.practical_yield import PracticalYieldEstimator
-    expected_module = binding.__module__.removesuffix('.episode') + '.yield'
+    expected_module = binding.__module__.removesuffix('.episode') + '.yield_estimator'
     for name in ('yield_controller', 'practical_estimator'):
         method = getattr(binding, name)
         assert method.__func__.__module__ == expected_module

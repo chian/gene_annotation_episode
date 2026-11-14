@@ -428,7 +428,7 @@ def connected_build_trace(v):
 
 
 def yield_trace(v,mode):
-    binding=v.binding;context=v.context;module=PREFIX+'.'+v.home.replace('/','.')+'.yield'
+    binding=v.binding;context=v.context;module=PREFIX+'.'+v.home.replace('/','.')+'.yield_estimator'
     if mode=='finite':
         controller=binding.yield_controller(context,0.,'original-finite')
         first=controller.observe('original-first-window',{'credit':1.75}).as_record()
@@ -468,9 +468,9 @@ import json
 
 
 def estimator_observations(v):
-    module=own(v.home.replace('/','.')+'.yield')
+    module=own(v.home.replace('/','.')+'.yield_estimator')
     cls=module.ExecutionEpisodeYield
-    expected_module='gene_annotation_episode.episodic_workflow.root.a102.'+v.home.replace('/','.')+'.yield'
+    expected_module='gene_annotation_episode.episodic_workflow.root.a102.'+v.home.replace('/','.')+'.yield_estimator'
     assert cls.__module__==expected_module and cls.__qualname__=='ExecutionEpisodeYield'
     lexical={}
     for name,value in vars(cls).items():

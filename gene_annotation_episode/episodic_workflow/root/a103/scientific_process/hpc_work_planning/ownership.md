@@ -12,7 +12,7 @@ This existing `hpc` episode retains binding identity `scientific_process/hpc_wor
 - **summary**: internal_summary.py presents original candidates, model/history, pending allocation and decision-relevant evidence.
 - **operations**: work_operations.py selects private resource_discovery.py, portfolio_candidates.py, portfolio_planning.py, portfolio_comparison.py, forecast_observations.py, allocation_handoff.py, allocation_order.py, allocation_observations.py, allocation_results.py, measured_history.py, received_evidence.py and queue_observations.py.
 - **credit**: credit.py retains original ledger acceptance progress and units; waiting never projects new credit and returned invalid/failed/unavailable operations retain original observations.
-- **yield**: yield.py privately supplies original controller settings and authenticated operands to library/hpc_continuation.py; pending attainable value remains distinct from earned credit.
+- **yield**: yield_estimator.py privately supplies original controller settings and authenticated operands to library/hpc_continuation.py; pending attainable value remains distinct from earned credit.
 - **waiting**: waiting.py retains activity advice; task_waiting.py owns original suspension bookkeeping; task.py preserves selected waits and EventTargetError identity.
 - **persistence**: portfolio_state.py, closed_models.py and task_state.py own state, closed references, restoration/checkpoint bookkeeping and source effects; original ledger/journal mechanics remain external.
 - **scientific grading and scoring**: These operational episodes do not own scientific evidence graders or scientific scoring sheets. Original result-validator/acceptance callbacks remain distinct from scientific assessment.

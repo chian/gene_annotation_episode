@@ -15,7 +15,7 @@ from .goal import HPCGoal
 from .internal_summary import HPCSummary
 from .credit import HPCCredit
 from importlib import import_module
-HPCYield = import_module('.yield', __package__).HPCYield
+from .yield_estimator import HPCYield
 from .task import HPCTask
 
 VERSION = 'root_hpc_terminal_execution_v1'

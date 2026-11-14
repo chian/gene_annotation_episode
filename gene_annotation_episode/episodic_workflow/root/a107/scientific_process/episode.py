@@ -19,7 +19,7 @@ from .received_evidence import ScientificReceivedEvidence
 from .source_references import ScientificSourceReferences
 from .credit import ScientificProcessCredit
 from importlib import import_module as _import_module
-ScientificProcessYield = _import_module('.yield', __package__).ScientificProcessYield
+from .yield_estimator import ScientificProcessYield
 from .task import ScientificTask
 from .presentation import present_scientific_context
 

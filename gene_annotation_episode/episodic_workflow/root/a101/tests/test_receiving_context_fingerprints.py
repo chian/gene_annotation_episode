@@ -54,7 +54,7 @@ def framing(row, profile=None):
             raw += (AXIS_ROOT/'library'/name).read_bytes()
     elif family == 'a101_resource_raw_home_ordered_sources':
         names = ('a101_resource_implementation.py','library/homology_query.py',
-                 *CASES['resource_sources'], 'homology_job_submission/yield.py', 'homology_job_monitoring/yield.py', 'homology_result_acquisition/yield.py', 'resource_information.py',
+                 *CASES['resource_sources'], 'homology_job_submission/yield_estimator.py', 'homology_job_monitoring/yield_estimator.py', 'homology_result_acquisition/yield_estimator.py', 'resource_information.py',
                  'resource_records.py','launch_instructions.py')
         for name in names: raw += (AXIS_ROOT/name).read_bytes()
         if profile is not None:

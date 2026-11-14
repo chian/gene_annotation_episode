@@ -32,7 +32,7 @@ def as_record(self):
         'scientific_process/hpc_coordination/hpc_allocation_execution/reference_custody.py',
         'scientific_process/hpc_coordination/hpc_allocation_execution/reference_access.py',
         'scientific_process/hpc_coordination/hpc_allocation_execution/waiting.py',
-        'scientific_process/hpc_coordination/hpc_allocation_execution/yield.py',
+        'scientific_process/hpc_coordination/hpc_allocation_execution/yield_estimator.py',
         'scientific_process/hpc_coordination/hpc_allocation_execution/episode.py',
         'scientific_process/hpc_coordination/hpc_allocation_execution/binding_identity.py',
         'scientific_process/hpc_coordination/hpc_allocation_execution/task.py',

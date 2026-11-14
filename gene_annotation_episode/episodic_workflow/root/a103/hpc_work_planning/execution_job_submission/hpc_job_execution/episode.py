@@ -13,7 +13,7 @@ from .received_information import ReceivedExecutionInformation
 from .from_parent import NativeAssignment
 from .credit import ExecutionEpisodeCredit
 from importlib import import_module as _import_module
-ExecutionEpisodeYield = _import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 
 from .configuration import NativeConfiguration
 from .binding_record import NativeBindingRecord

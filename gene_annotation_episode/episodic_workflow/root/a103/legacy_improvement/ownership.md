@@ -24,7 +24,7 @@ The declaration in episode.py selects LegacyImprovementTask and the actual Legac
 | to_child_homology_job_submission.py | Prepare this parent’s original request to the child named by the file. |
 | to_child_homology_result_acquisition.py | Prepare this parent’s original request to the child named by the file. |
 | to_parent.py | Select, validate and present requested facts and qualifications to the actual parent. |
-| yield.py | Bind the original caller-supplied continuation controller and its unchanged task context/settings. |
+| yield_estimator.py | Bind the original caller-supplied continuation controller and its unchanged task context/settings. |
 
 This parent commissions the three private child homes below. Its own incoming assignment, credit and yield implementation remain explicit.
 

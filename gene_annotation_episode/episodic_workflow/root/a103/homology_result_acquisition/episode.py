@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a103.homology_result_acquisi
 from importlib import import_module
 
 class HomologyEpisode(AcquisitionConfiguration, AcquisitionBindingRecord, AcquisitionGoal, AcquisitionSummary, AcquisitionPlanning, AcquisitionCreditBinding, AcquisitionNativeEvents, AcquisitionOperations, AcquisitionAssignment, AcquisitionReport, HomologyEpisodeCredit, HomologyEpisodeWaiting):
-    yield_controller = staticmethod(import_module(__package__ + '.yield').yield_controller)
+    yield_controller = staticmethod(import_module(__package__ + '.yield_estimator').yield_controller)
     binding_path = 'legacy_annotation/homology_result_acquisition'
     commissioning_parent = 'legacy_annotation'
     entry_roles = ('job_results',)

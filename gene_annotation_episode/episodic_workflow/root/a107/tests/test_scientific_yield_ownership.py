@@ -16,7 +16,7 @@ def module(name):return importlib.import_module(PREFIX+'.'+name)
 constants=module('scientific_process.scientific_assignment_contracts')
 FIXTURE=json.loads((Path(__file__).parent/'fixtures/organization_original/scientific_yield_method.json').read_text())
 def original_callback():
-    namespace=dict(vars(module('scientific_process.yield')))
+    namespace=dict(vars(module('scientific_process.yield_estimator')))
     exec(compile(FIXTURE['yield_controller'],'<original-own-axis-scientific-yield>','exec'),namespace)
     return namespace['yield_controller']
 def setup(kind='accumulation',*,parameters=None,cutoff=0.125,declared=True):

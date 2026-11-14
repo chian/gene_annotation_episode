@@ -59,7 +59,7 @@ from .resource_information import NativeResourceInformation
 from .state import NativeState
 from .work_operations import NativeWorkOperations
 from .internal_summary import NativeInternalSummary
-ExecutionEpisodeYield = _import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 
 class ExecutionEpisode(NativeConfiguration, NativeBindingRecord, NativeScienceInputs, NativeState, NativeWorkOperations, NativeInternalSummary, NativeResourceInformation, NativeReceivedRecords, NativeParentRequests, NativeParentReturns, NativeCompletion, NativeGoal, ExecutionEpisodeCredit, ExecutionEpisodeYield):
     decision_prompt_renderer = staticmethod(_native_present_context)

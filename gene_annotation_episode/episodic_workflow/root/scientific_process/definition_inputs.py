@@ -247,7 +247,7 @@ DEFINITION_FILES = (
     "gene_annotation_episode/episodic_workflow/root/scientific_process/to_child_resource_result_acquisition.py",
     "gene_annotation_episode/episodic_workflow/root/scientific_process/to_parent.py",
     "gene_annotation_episode/episodic_workflow/root/scientific_process/tools.py",
-    "gene_annotation_episode/episodic_workflow/root/scientific_process/yield.py",
+    "gene_annotation_episode/episodic_workflow/root/scientific_process/yield_estimator.py",
     "gene_annotation_episode/episodic_workflow/root/scientific_process_library.py",
     "gene_annotation_episode/episodic_workflow/root/scientific_process_provenance.py",
     "gene_annotation_episode/episodic_workflow/root/scientific_process_records.py",

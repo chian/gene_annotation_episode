@@ -1,1 +1,0 @@
-/home/chia/repos/gene_annotation_episode/gene_annotation_episode/bvbrc_comparative_systems_bundle_adapter.py

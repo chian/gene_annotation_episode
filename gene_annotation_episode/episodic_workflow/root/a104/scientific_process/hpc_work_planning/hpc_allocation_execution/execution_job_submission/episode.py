@@ -20,7 +20,7 @@ from .received_reports import LaunchReceivedReports
 from .to_parent import LaunchReport
 from .credit import ExecutionEpisodeCredit
 from importlib import import_module
-ExecutionEpisodeYield = import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .contracts import A104HomologyExecution
 from .task import LaunchTask
 from .presentation import present_execution_context

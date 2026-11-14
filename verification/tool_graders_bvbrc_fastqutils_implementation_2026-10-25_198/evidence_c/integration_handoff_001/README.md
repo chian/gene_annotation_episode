@@ -1,1 +1,0 @@
-Exploratory workload C handoff from handcrafted synthetic inputs. Actual public native readers and deterministic calculators were used. Not a live service result or authenticated runtime publication. B and root files may still change; final frozen verification is separate.

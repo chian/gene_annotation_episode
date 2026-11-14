@@ -36,7 +36,7 @@ def as_record(self):
         'scientific_process/hpc_coordination/reference_custody.py',
         'scientific_process/hpc_coordination/reference_access.py',
         'scientific_process/hpc_coordination/waiting.py',
-        'scientific_process/hpc_coordination/yield.py',
+        'scientific_process/hpc_coordination/yield_estimator.py',
         'scientific_process/hpc_coordination/episode.py',
         'scientific_process/hpc_coordination/binding_identity.py',
         'scientific_process/hpc_coordination/task.py',

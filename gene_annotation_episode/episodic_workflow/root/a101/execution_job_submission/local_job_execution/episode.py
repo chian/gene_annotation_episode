@@ -6,7 +6,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.blast_return_co
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_axis_summaries import _blast_axis_summaries
 from .credit import ExecutionEpisodeCredit
 from importlib import import_module as _import_module
-ExecutionEpisodeYield = _import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .configuration import OperationalConfiguration
 from .binding_record import OperationalBindingRecord
 from .goal import OperationalGoal

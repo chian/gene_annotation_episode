@@ -85,7 +85,7 @@ def test_current_real_descriptor_exact_members_and_configuration(home,name,role,
     paths=next(n.value for n in ast.walk(declared) if isinstance(n,ast.Assign)
         and any(isinstance(t,ast.Name) and t.id=='paths' for t in n.targets))
     assert ast.literal_eval(paths)==tuple(expected['members'])
-    assert expected['new_required_members']==[home+'/internal_summary.py',home+'/yield.py',home+'/waiting.py',
+    assert expected['new_required_members']==[home+'/internal_summary.py',home+'/yield_estimator.py',home+'/waiting.py',
         '../../execution_contracts.py','execution_recording.py','native_events.py']
     assert set(expected['new_required_members'])<=set(expected['members'])
     assert set(expected['substantive_private_sources'])<=set(expected['members'])

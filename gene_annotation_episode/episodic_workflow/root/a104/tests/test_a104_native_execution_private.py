@@ -227,9 +227,9 @@ def test_original_yield_callback_record_and_observation_replay(native_frame, tmp
     home_module = 'gene_annotation_episode.episodic_workflow.root.a104.' + frame.home.replace('/', '.')
     controller = frame.binding.yield_controller(frame.context, 0., 'original-native-epoch')
     actual = controller.estimator.estimate_with_context.as_record()
-    expected = home_module + '.yield.ExecutionEpisodeYield._' + frame.context.role + '_yield_controller.<locals>.<lambda>'
+    expected = home_module + '.yield_estimator.ExecutionEpisodeYield._' + frame.context.role + '_yield_controller.<locals>.<lambda>'
     assert actual['completion_verifier'] == expected
-    assert frame.binding.practical_estimator.__func__.__module__ == home_module + '.yield'
+    assert frame.binding.practical_estimator.__func__.__module__ == home_module + '.yield_estimator'
     assert frame.binding.practical_estimator.__func__.__qualname__ == 'ExecutionEpisodeYield.practical_estimator'
     service_record = frame.binding.practical_estimator(frame.context).as_record()
     assert service_record['completion_verifier'] == 'gene_annotation_episode.episodic_workflow.root.a104.practical_execution_state.PracticalState.verify_completion'

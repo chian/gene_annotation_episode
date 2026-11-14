@@ -32,7 +32,7 @@ from .credit import ResultsCredit
 from .closed_credit import ResultsClosedCredit
 from .completion import ResultsCompletion
 from importlib import import_module as _import_module
-ExecutionEpisodeYield = _import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .task import ResultsTask
 from gene_annotation_episode.episodic_workflow.root.a103.scientific_process_prompt import render_selected_execution_prompt
 

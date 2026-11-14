@@ -12,7 +12,7 @@ The inventory enumerates actual source responsibilities, methods, direct imports
 - outgoing report: `report_delivery.py`, `to_parent.py`.
 - internal summary: `decision_inputs.py`, `decision_state.py`, `internal_summary.py`.
 - credit: `credit.py`.
-- yield: `yield.py`.
+- yield: `yield_estimator.py`.
 - waiting: `waiting.py`.
 - instructions: `task_instructions.py`.
 - persistence: `task_state.py`.
@@ -45,7 +45,7 @@ this directory. The separate legacy-annotation monitor has its own implementatio
 | Observation custody and original timestamps | `received_progress.py`, `progress_records.py` |
 | Parent report and typed reference validation | `to_parent.py:MonitorReport`; closure delivery in `report_delivery.py` |
 | Actual progress credit | `credit.py:MonitorEpisodeCredit`; retains the explicitly supplied `services.bound_role_credit` projector |
-| Continuation | `yield.py`; private copies of information accumulation and the original BLAST observation rule; `target_identity.py` selects from the actual target descriptor |
+| Continuation | `yield_estimator.py`; private copies of information accumulation and the original BLAST observation rule; `target_identity.py` selects from the actual target descriptor |
 | Waiting status | `waiting.py:suspension_changed`; selected waits and failure outcomes remain in the private task; general wait acquisition and estimates are runtime infrastructure |
 | Implementation fingerprint | `binding_record.py`; fingerprints immediate private Python files and the explicitly selected axis renderer and information-credit calculator |
 

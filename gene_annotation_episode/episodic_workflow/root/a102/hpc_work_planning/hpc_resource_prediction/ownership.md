@@ -15,7 +15,7 @@ including invalid, failed and unavailable returns. Replay does not reacquire wor
 `prediction_state.py` opens its existing ledger and preserves the entry model;
 it cannot create a replacement parent ledger. `credit.py` retains signed measured
 model improvement and this child's prospective validation contribution. Actual job
-credit stays outside this child. `yield.py` retains the original evidence-based
+credit stays outside this child. `yield_estimator.py` retains the original evidence-based
 continuation rule; new measured information reopens prediction. Scientific evidence
 grading and biological scoring do not belong to this operational predictor.
 

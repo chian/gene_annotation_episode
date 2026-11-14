@@ -15,7 +15,7 @@ from .received_evidence import LiteratureReceivedEvidence
 from .credit import LiteratureCredit
 from .waiting import LiteratureWaiting
 from importlib import import_module
-LiteratureYield = import_module('.yield', __package__).LiteratureYield
+from .yield_estimator import LiteratureYield
 from .to_child_source_evidence_examination import prepare_request as prepare_source_evidence_examination
 from .from_child_source_evidence_examination import receive_report as receive_source_evidence_examination
 

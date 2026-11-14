@@ -16,7 +16,7 @@ from .credit import SourceCredit
 from .waiting import SourceWaiting
 from .child_commissioning import SourceChildCommissioning
 from importlib import import_module as _import_module
-SourceYield = _import_module('.yield', __package__).SourceYield
+from .yield_estimator import SourceYield
 from .task import SourceTask
 from .decision_presentation import present_source_decision
 from .commissioning_page_assignment import SourceCommissioningPageAssignment

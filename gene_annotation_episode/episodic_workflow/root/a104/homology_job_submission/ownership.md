@@ -36,7 +36,7 @@ The direct private source owners are:
 - `homology_job_submission/task_waiting.py` — Private job_launch original task task_waiting.py.
 - `homology_job_submission/to_parent.py` — Actual private job_launch to_parent.
 - `homology_job_submission/tool_actions.py` — Actual private job_launch tool_actions.
-- `homology_job_submission/yield.py` — Exact original caller-controller selection; original runtime capture callback retained.
+- `homology_job_submission/yield_estimator.py` — Exact original caller-controller selection; original runtime capture callback retained.
 
 The source installation is authenticated by `runs/root_a104_all60_source_application_01/applied/application.json`. The exact235 baseline account, candidate235 cases and actual descriptor observations are scoped controlled evidence; the original fixture failures remain explicit. Earlier scientific results remain retained, with no new whole-workflow or HPC execution claim. Current module/method facts, reciprocal endpoint sources, library dependencies and exact test/fixture assets are in the paired inventory. Named-envelope build tests do not themselves prove selected-route forwarding; that unchanged connection and Literature selected-route evidence are distinguished.
 
@@ -68,7 +68,7 @@ Private role `job_launch`, binding path `homology_job_submission`, declared pare
 | `task_waiting.py` | Retain original suspension-change observations. |
 | `to_parent.py` | Read recorded report facts and parent-selected meanings without inventing scientific support. |
 | `tool_actions.py` | Declare this role's actual allowed operations and schemas. |
-| `yield.py` | Select original caller-provided continuation controller and configured practical estimator without adding stopping budgets. |
+| `yield_estimator.py` | Select original caller-provided continuation controller and configured practical estimator without adding stopping budgets. |
 
 The machine-readable inventory records every current function, class method, import, source hash and actual dependency consumer. All54 current home source hashes match Main's selected source snapshot and Fourth's prior coordination observation. The older Homology18 application remains historical; later differing source hashes are recorded explicitly. Main's completed102-source/64-metadata application has no per-home target overlap.
 

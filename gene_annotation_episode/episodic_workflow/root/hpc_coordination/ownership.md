@@ -54,7 +54,7 @@ Prepared current ownership for `gene_annotation_episode/episodic_workflow/root/h
 - `to_child_resource_result_acquisition.py`: Actual parent request preparation for resource_result_acquisition; applicable original predicate order retained.
 - `to_parent.py`: Validate the actual own child return and original parent report contract.
 - `waiting.py`: Own activity and continuation forecast for original HPC waiting/queue observations.
-- `yield.py`: Own progress/continuation policy using the original shared numerical estimator/controller.
+- `yield_estimator.py`: Own progress/continuation policy using the original shared numerical estimator/controller.
 
 The actual descriptor algorithm and all selected byte operands are recorded. Source-native formula values are labelled separately from observed runtime descriptors; Execution's original hash-free configured record gains no invented implementation hash.
 
@@ -67,7 +67,7 @@ Exact160 case and permanent fixture references are prepared evidence only. Fresh
 ~~~~~~text
 # HPCCoordinationEpisodes
 
-Fixed role `hpc`; complete applicable original binding methods are connected explicitly in episode.py. goal.py retains commissioned instructions; the descriptively named operations file executes available original work. Sixth owns the genuine private DecisionSource in task.py, selected by decision_source_type. credit.py measures original progress; yield.py and waiting.py retain continuation where applicable. Shared numerical machinery, ledger mechanics and source custody remain named dependencies. Parent-child roles and schemas retain original meaning; each role has a distinct binding identity.
+Fixed role `hpc`; complete applicable original binding methods are connected explicitly in episode.py. goal.py retains commissioned instructions; the descriptively named operations file executes available original work. Sixth owns the genuine private DecisionSource in task.py, selected by decision_source_type. credit.py measures original progress; yield_estimator.py and waiting.py retain continuation where applicable. Shared numerical machinery, ledger mechanics and source custody remain named dependencies. Parent-child roles and schemas retain original meaning; each role has a distinct binding identity.
 
 Source-only preparation. Sixth owns factory, saved reconstruction and private decision-source integration. Runtime, restoration, autonomous execution and behavior tests have not been performed. Full method/branch byte accounting is retained in the preparation packet.
 

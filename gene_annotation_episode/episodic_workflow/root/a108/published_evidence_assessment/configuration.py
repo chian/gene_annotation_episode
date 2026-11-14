@@ -12,7 +12,7 @@ class LiteratureConfiguration:
         if yield_bindings is not None and (not private_yield_binding):
             raise ValueError('literature_yield_bindings_require_private_binding')
         from importlib import import_module as _private_yield_module
-        validate_yield_bindings = _private_yield_module('gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.yield').validate_yield_bindings
+        validate_yield_bindings = _private_yield_module('gene_annotation_episode.episodic_workflow.root.a108.published_evidence_assessment.yield_estimator').validate_yield_bindings
         self.services = services
         self.outcome_page_size = outcome_page_size
         self.private_yield_binding = private_yield_binding

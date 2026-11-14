@@ -30,7 +30,7 @@ from .portfolio_candidates import PortfolioCandidates
 from .portfolio_planning import PortfolioPlanning
 from .allocation_handoff import AllocationHandoff
 from .allocation_order import AllocationOrder
-HPCEpisodeYield = import_module('.yield', __package__).HPCEpisodeYield
+from .yield_estimator import HPCEpisodeYield
 from .to_child_hpc_resource_prediction import prepare_request as prepare_prediction_request
 from .from_child_hpc_resource_prediction import receive_prediction_report
 from .to_child_hpc_allocation_execution import prepare_request as prepare_allocation_request

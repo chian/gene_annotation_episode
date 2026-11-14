@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.root.composition_information impo
 from gene_annotation_episode.episodic_workflow.root.task_values import _plain
 from gene_annotation_episode.episodic_workflow.root.decision_context import PROTOCOL as DECISION_EXCHANGE_PROTOCOL
 from importlib import import_module as _homology_import_module
-_homology_yield = _homology_import_module(__package__ + '.yield')
+_homology_yield = _homology_import_module(__package__ + '.yield_estimator')
 from .waiting import waiting_context
 
 class HomologyAcquisitionTaskDecision:

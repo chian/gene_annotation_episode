@@ -30,7 +30,7 @@ def original_rebound(runtime, owner, method, name, replacement, monkeypatch):
 
 def test_controller_uses_runtime_provider_rebound_after_private_import(tmp_path, monkeypatch):
     runtime = original.module('runtime')
-    original.module('continuation' if original.AXIS == 'a107' else 'yield')
+    original.module('continuation' if original.AXIS == 'a107' else 'yield_estimator')
     sentinel = object()
     received = []
     def wrapper(controller, journal, episode_id, **kwargs):

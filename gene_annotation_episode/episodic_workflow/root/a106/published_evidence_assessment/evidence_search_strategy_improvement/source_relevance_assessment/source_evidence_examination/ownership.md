@@ -25,7 +25,7 @@ Named responsibility homes:
 - `to_child_table_evidence_extraction`: `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/to_child_table_evidence_extraction.py`
 - `to_parent`: `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/to_parent.py`
 - `waiting`: `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/waiting.py`
-- `yield`: `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/yield.py`
+- `yield`: `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/yield_estimator.py`
 
 Application receipts and selected control outcomes, including failures and collection errors, remain separate from source membership. These records do not establish shared Root integration, native execution, autonomous scientific work or saved restoration. No per-episode test coverage is inferred from axis-selected controls.
 

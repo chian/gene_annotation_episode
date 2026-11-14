@@ -105,7 +105,7 @@ subscoring repository in `grading/contextual_subscoring.py`, and selects main
 sheet updates in `scoring/contextual_main_sheet.py`. Thirty-eight reused A108
 scientific modules now live under `library/`, with their descriptive filenames
 and original scientific bodies preserved. The original instruction text library
-is separate. Private `goal.py`, `credit.py` and `yield.py` own their original
+is separate. Private `goal.py`, `credit.py` and `yield_estimator.py` own their original
 commissioned-result schema, progress units and continuation calculations.
 
 Original contextual observation identities, source subjects, source claims and

@@ -26,7 +26,7 @@ from .action_policy import HPCExecutionActionPolicy
 from .goal import HPCExecutionGoal
 from .internal_summary import HPCExecutionInternalSummary
 from importlib import import_module
-HPCExecutionYield = import_module('.yield', __package__).HPCExecutionYield
+from .yield_estimator import HPCExecutionYield
 from .completion import HPCExecutionCompletion
 
 class HPCExecutionBinding(HPCExecutionCredit, HPCExecutionChildCommissioning, HPCExecutionParentReport, HPCExecutionParentAssignment, HPCExecutionExecutionState, HPCExecutionActionPolicy, HPCExecutionGoal, HPCExecutionInternalSummary, HPCExecutionOperations, HPCExecutionReportFields, HPCExecutionReportDelivery, HPCExecutionInitialReferences, HPCExecutionReferenceAccess, HPCExecutionYield, HPCExecutionCompletion, ExecutionScientificInputs, ExecutionBlastCustody, ExecutionResultSelection, ExecutionScientificReturns, ExecutionResultCustody, ExecutionReceivedCustody, ExecutionClosedCredit, ExecutionResourceInformation, ExecutionRequestCustody):

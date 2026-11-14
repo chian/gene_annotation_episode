@@ -36,7 +36,7 @@ def as_record(self):
         'legacy_annotation/hpc_coordination/reference_custody.py',
         'legacy_annotation/hpc_coordination/reference_access.py',
         'legacy_annotation/hpc_coordination/waiting.py',
-        'legacy_annotation/hpc_coordination/yield.py',
+        'legacy_annotation/hpc_coordination/yield_estimator.py',
         'legacy_annotation/hpc_coordination/episode.py',
         'legacy_annotation/hpc_coordination/binding_identity.py',
         'legacy_annotation/hpc_coordination/task.py',

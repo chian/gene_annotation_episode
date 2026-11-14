@@ -16,7 +16,7 @@ from .waiting import HomologyEpisodeWaiting
 from importlib import import_module
 
 class HomologyEpisode(SubmissionConfiguration, SubmissionBindingRecord, SubmissionGoal, SubmissionSummary, SubmissionPlanning, SubmissionCreditBinding, SubmissionNativeEvents, SubmissionOperations, SubmissionAssignment, SubmissionReport, HomologyEpisodeCredit, HomologyEpisodeWaiting):
-    yield_controller = staticmethod(import_module(__package__ + '.yield').yield_controller)
+    yield_controller = staticmethod(import_module(__package__ + '.yield_estimator').yield_controller)
     binding_path = 'legacy_improvement/homology_job_submission'
     commissioning_parent = 'legacy_improvement'
     entry_roles = ('job_launch',)

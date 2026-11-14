@@ -3,7 +3,7 @@ from importlib import import_module
 from .task import LegacyAnnotationTask
 from .credit import source_credit_view, source_credit_binding
 
-_controller = import_module('.yield', __package__).controller
+from .yield_estimator import controller as _controller
 
 class LegacyAnnotationEpisodeBinding:
     roles = ('improvement',)

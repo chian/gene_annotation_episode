@@ -2271,7 +2271,7 @@ class Workflow:
         from .episode import selects_annotation_continuation
         if selects_annotation_continuation(self, path, binding):
             from importlib import import_module
-            return import_module(__package__ + '.yield').controller(self, path, identity, row, role, binding, bound, binding_controller)
+            return import_module(__package__ + '.yield_estimator').controller(self, path, identity, row, role, binding, bound, binding_controller)
         from .annotation_improvement.episode import selects_improvement_continuation
         if selects_improvement_continuation(self, path, binding):
             from .annotation_improvement.continuation import controller

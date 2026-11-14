@@ -191,9 +191,9 @@ import json
 
 
 def estimator_observations(v):
-    module=own(v.home.replace('/','.')+'.yield')
+    module=own(v.home.replace('/','.')+'.yield_estimator')
     cls=module.ExecutionEpisodeYield
-    expected_module='gene_annotation_episode.episodic_workflow.root.a102.'+v.home.replace('/','.')+'.yield'
+    expected_module='gene_annotation_episode.episodic_workflow.root.a102.'+v.home.replace('/','.')+'.yield_estimator'
     assert cls.__module__==expected_module and cls.__qualname__=='ExecutionEpisodeYield'
     lexical={}
     for name,value in vars(cls).items():

@@ -21,7 +21,7 @@ def as_record(self):
         'hpc_coordination/hpc_resource_prediction/reference_custody.py',
         'hpc_coordination/hpc_resource_prediction/reference_access.py',
         'hpc_coordination/hpc_resource_prediction/waiting.py',
-        'hpc_coordination/hpc_resource_prediction/yield.py',
+        'hpc_coordination/hpc_resource_prediction/yield_estimator.py',
         'hpc_coordination/hpc_resource_prediction/episode.py',
         'hpc_coordination/hpc_resource_prediction/binding_identity.py',
         'hpc_coordination/hpc_resource_prediction/task.py',

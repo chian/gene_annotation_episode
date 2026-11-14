@@ -16,7 +16,7 @@ def test_private_binding_declares_independent_task_and_responsibilities():
     assert not issubclass(Task, runtime.DecisionSource)
     expected = {'instructions': 'goal', 'prepare_assignment': 'from_parent',
         'facts': 'to_parent', 'decision_context': 'internal_summary', 'execute': 'scientific_operations',
-        'credit_view': 'credit', 'yield_controller': 'yield', 'restore_saved_process': 'process_state'}
+        'credit_view': 'credit', 'yield_controller': 'yield_estimator', 'restore_saved_process': 'process_state'}
     for name, module in expected.items():
         assert getattr(Binding, name).__module__ == PACKAGE + '.scientific_process.' + module
     for name, module in {'execute': 'task', 'next': 'task', 'call': 'task_decision',

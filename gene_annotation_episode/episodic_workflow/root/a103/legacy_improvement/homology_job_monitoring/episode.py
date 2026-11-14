@@ -16,7 +16,7 @@ from .waiting import HomologyEpisodeWaiting
 from importlib import import_module
 
 class HomologyEpisode(MonitorConfiguration, MonitorBindingRecord, MonitorGoal, MonitorSummary, MonitorPlanning, MonitorCreditBinding, MonitorNativeEvents, MonitorOperations, MonitorAssignment, MonitorReport, HomologyEpisodeCredit, HomologyEpisodeWaiting):
-    yield_controller = staticmethod(import_module(__package__ + '.yield').yield_controller)
+    yield_controller = staticmethod(import_module(__package__ + '.yield_estimator').yield_controller)
     binding_path = 'legacy_improvement/homology_job_monitoring'
     commissioning_parent = 'legacy_improvement'
     entry_roles = ('job_monitor',)

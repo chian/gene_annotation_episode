@@ -21,7 +21,7 @@ FIRST_MODULES = ('runtime', 'episode', 'library.decision_source_exchange',
     'library.decision_source_execution', 'task_state', 'to_parent', 'yield',
     'to_child_execution_job_submission', 'scientific_process.from_child_scientific_process',
     'annotation_improvement.episode', 'annotation_improvement.task',
-    'annotation_improvement.to_parent', 'annotation_improvement.yield',
+    'annotation_improvement.to_parent', 'annotation_improvement.yield_estimator',
     'annotation_improvement.to_child_annotation_improvement')
 
 

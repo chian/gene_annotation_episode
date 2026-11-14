@@ -27,7 +27,7 @@ from .portfolio_candidates import PortfolioCandidates
 from .portfolio_planning import PortfolioPlanning
 from .allocation_handoff import AllocationHandoff
 from .allocation_order import AllocationOrder
-HPCEpisodeYield = import_module('.yield', __package__).HPCEpisodeYield
+from .yield_estimator import HPCEpisodeYield
 from .to_child_execution_progress_assessment import prepare_request as prepare_monitor_request
 from .from_child_execution_progress_assessment import receive_progress as receive_monitor_progress
 

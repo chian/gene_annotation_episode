@@ -59,7 +59,7 @@ from .receipt_selection import ResultsReceiptSelection
 from .to_parent import ResultsToParent
 from .closed_credit import ResultsClosedCredit
 from importlib import import_module
-ExecutionEpisodeYield = import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from gene_annotation_episode.episodic_workflow.root.a107.a107_blast_execution import A107BlastExecution
 from .task import ResultsTask
 

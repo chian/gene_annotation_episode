@@ -38,7 +38,7 @@ def test_actual_private_estimator_keeps_verified_action_identity(tmp_path, home)
     packet = original.completion_context(run_id=context.run_id, episode_id=context.episode_id)
     packet['practical_completion'].update(proof)
     before = deepcopy(packet)
-    module = import_module(ROOT + '.' + home.replace('/', '.') + '.yield')
+    module = import_module(ROOT + '.' + home.replace('/', '.') + '.yield_estimator')
     estimate = binding.practical_estimator(context)((7,), module.YieldParameters(), (packet,))
     assert estimate.expected_next_gain == NumericBand.exact(0)
     assert estimate.turns == 1

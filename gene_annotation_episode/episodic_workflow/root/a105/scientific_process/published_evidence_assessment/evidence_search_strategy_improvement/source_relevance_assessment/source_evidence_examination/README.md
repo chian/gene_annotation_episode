@@ -23,7 +23,7 @@ scientific functions live in their responsibility files.
 | `grading/` | Evidence applicability, required assessment contracts, typed scientific findings and saved grading sheets. |
 | `scoring/` | Numerical calculations and their saved scientific results. `assay_evidence.py` contains the numerical functions extracted from the assay grader. |
 | `credit.py` | Credit for the commissioned result, retaining the original policy for graded experiments, revisions and unresolved evidence. |
-| `yield.py` | Estimate remaining commissioned credit and apply the existing continuation policy. |
+| `yield_estimator.py` | Estimate remaining commissioned credit and apply the existing continuation policy. |
 | `to_parent.py` | Expose and validate the requested scientific return facts. |
 | `prompts/`, `tools/` | Private scientific prompts, source readers, operand validation and operation catalogues. |
 | `scientific_records.py`, `source_references.py`, `received_evidence.py` | Access and validate this episode's scientific records and received evidence. |

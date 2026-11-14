@@ -37,7 +37,7 @@ Source authority: `runs/root_remaining40_verification_preparation_01/EXPECTED_SO
 - `task_suspension.py`: Private A103 literature_table task suspension.
 - `to_parent.py`: Private A103 literature_table to parent.
 - `waiting.py`: Private A103 literature_table waiting.
-- `yield.py`: Private A103 literature_table yield.
+- `yield_estimator.py`: Private A103 literature_table yield.
 
 ## 2026-11-13 exact preceding ownership history
 

@@ -15,7 +15,7 @@ Named responsibility homes:
 - `to_child_execution_progress_assessment`: `scientific_process/execution_progress_assessment/to_child_execution_progress_assessment.py`
 - `to_parent`: `scientific_process/execution_progress_assessment/to_parent.py`
 - `waiting`: `scientific_process/execution_progress_assessment/waiting.py`
-- `yield`: `scientific_process/execution_progress_assessment/yield.py`
+- `yield`: `scientific_process/execution_progress_assessment/yield_estimator.py`
 
 Application receipts and selected control outcomes, including failures and collection errors, remain separate from source membership. These records do not establish shared Root integration, native execution, autonomous scientific work or saved restoration. No per-episode test coverage is inferred from axis-selected controls.
 
@@ -45,7 +45,7 @@ The following earlier wording is retained as historical provenance; current file
 > | Delivered observation identities | `received_progress.py`, `progress_records.py` |
 > | Parent report and closure | `to_parent.py`, `report_delivery.py` |
 > | Actual progress credit | `credit.py`; retains caller's explicit projector |
-> | Original continuation rule/settings | `yield.py` |
+> | Original continuation rule/settings | `yield_estimator.py` |
 > | Suspension observations | `waiting.py`; wait actions remain in private task |
 > | Current implementation identity | `binding_record.py` |
 > 

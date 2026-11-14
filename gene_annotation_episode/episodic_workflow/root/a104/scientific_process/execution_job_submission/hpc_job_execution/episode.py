@@ -18,7 +18,7 @@ from .credit import HPCExecutionCredit
 from .closed_credit import HPCExecutionClosedCredit
 from .completion import HPCExecutionCompletion
 from importlib import import_module
-ExecutionEpisodeYield = import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .retained_native_receipts import HPCExecutionRetainedNativeReceipts
 from .native_state import HPCExecutionNativeState
 from .received_result_custody import HPCExecutionReceivedResultCustody

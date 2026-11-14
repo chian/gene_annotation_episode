@@ -280,4 +280,4 @@ def test_original_finite_unbounded_and_typed_yield_profiles(actual, mode):
         assert value['status'] == 'raised' and value['type'] == 'builtins.ValueError'
         assert value['message'] == 'results_original_task_yield_profile_required:native_unbounded_local'
     elif mode == 'finite':
-        assert value['callback'].endswith('.yield.ExecutionEpisodeYield._results_yield_controller.<locals>.finite_result_yield')
+        assert value['callback'].endswith('.yield_estimator.ExecutionEpisodeYield._results_yield_controller.<locals>.finite_result_yield')

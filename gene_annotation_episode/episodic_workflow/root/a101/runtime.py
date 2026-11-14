@@ -2481,12 +2481,12 @@ class Workflow:
             from .episode import selects_annotation_parent
             if type(path) is tuple and selects_annotation_parent(self, role, path[:-1], binding):
                 from importlib import import_module
-                controller, bound = import_module(__package__ + '.yield').controller_and_context(self, path, row, identity, role, binding, bound)
+                controller, bound = import_module(__package__ + '.yield_estimator').controller_and_context(self, path, row, identity, role, binding, bound)
             else:
                 from .annotation_improvement.episode import selects_improvement_parent
                 if type(path) is tuple and selects_improvement_parent(self, role, path[:-1], binding):
                     from importlib import import_module
-                    controller, bound = import_module(__package__ + '.annotation_improvement.yield').controller_and_context(self, path, row, identity, role, binding, bound)
+                    controller, bound = import_module(__package__ + '.annotation_improvement.yield_estimator').controller_and_context(self, path, row, identity, role, binding, bound)
                 elif getattr(self.controller_factory, 'requires_original_task', False):
                     request = json.loads(row['request'])
                     bound = BindingContext(self.run_id, identity.episode_id, role, path, request['message']['scope'], request['message'].get('episode_assignment', {}), request, tuple(self.receipts.known(identity.episode_id)) if self.receipts is not None else ())

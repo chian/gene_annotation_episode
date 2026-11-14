@@ -44,7 +44,7 @@ Selected source: `runs/root_a103_execution30_metadata_generation_01/prepared/SOU
 - `to_child_local_job_execution.py`: Outgoing local_job_execution request owned by hpc_work_planning/hpc_allocation_execution/execution_job_submission.
 - `to_parent.py`
 - `waiting.py`
-- `yield.py`
+- `yield_estimator.py`
 
 ## 2026-11-13 exact pre-execution30 ownership history
 
@@ -86,7 +86,7 @@ Selected source: `runs/root_a103_existing12_metadata_generation_01/prepared/SOUR
 - `terminal_execution.py`
 - `to_parent.py`
 - `waiting.py`
-- `yield.py`
+- `yield_estimator.py`
 
 ## 2026-11-13 exact pre-source188 ownership history
 

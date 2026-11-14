@@ -41,7 +41,7 @@ The direct private source owners are:
 - `hpc_work_planning/hpc_resource_prediction/task_state.py` — Private prediction task state.
 - `hpc_work_planning/hpc_resource_prediction/to_parent.py` — Private to parent for A104 prediction.
 - `hpc_work_planning/hpc_resource_prediction/waiting.py` — Private prediction waiting.
-- `hpc_work_planning/hpc_resource_prediction/yield.py` — Private yield for A104 prediction.
+- `hpc_work_planning/hpc_resource_prediction/yield_estimator.py` — Private yield for A104 prediction.
 
 The source installation is authenticated by `runs/root_a104_all60_source_application_01/applied/application.json`. The exact235 baseline account, candidate235 cases and actual descriptor observations are scoped controlled evidence; the original fixture failures remain explicit. Earlier scientific results remain retained, with no new whole-workflow or HPC execution claim. Current module/method facts, reciprocal endpoint sources, library dependencies and exact test/fixture assets are in the paired inventory. Named-envelope build tests do not themselves prove selected-route forwarding; that unchanged connection and Literature selected-route evidence are distinguished.
 
@@ -65,7 +65,7 @@ including invalid, failed and unavailable returns. Replay does not reacquire wor
 `prediction_state.py` opens its existing ledger and preserves the entry model;
 it cannot create a replacement parent ledger. `credit.py` retains signed measured
 model improvement and this child's prospective validation contribution. Actual job
-credit stays outside this child. `yield.py` retains the original evidence-based
+credit stays outside this child. `yield_estimator.py` retains the original evidence-based
 continuation rule; new measured information reopens prediction. Scientific evidence
 grading and biological scoring do not belong to this operational predictor.
 

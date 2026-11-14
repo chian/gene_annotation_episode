@@ -14,7 +14,7 @@ from .received_evidence import ScientificReceivedEvidence
 from .source_references import ScientificSourceReferences
 from .credit import ScientificProcessCredit
 from importlib import import_module as _import_module
-ScientificProcessYield = _import_module('.yield', __package__).ScientificProcessYield
+from .yield_estimator import ScientificProcessYield
 from .to_child_published_evidence_assessment import assemble_request as assemble_published_evidence_assessment
 from .from_child_published_evidence_assessment import select_report_receiver
 

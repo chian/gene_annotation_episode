@@ -4,7 +4,7 @@ These checks use the existing required private task refinement fixture and its
 real registry/Store/Journal construction. They exercise actual own-role binding
 yield factories, PracticalYieldEstimator.as_record, YieldController observation,
 YieldStep/YieldState serialization and reconstruction from saved original inputs.
-The expected module/class/method names are the actual original own-home yield.py
+The expected module/class/method names are the actual original own-home yield_estimator.py
 ExecutionEpisodeYield definitions. No callback __module__/__qualname__ attribute
 is rewritten and no compatibility identity is substituted.
 

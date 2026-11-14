@@ -15,7 +15,7 @@ from .to_parent import ScientificReport
 from .source_references import ScientificReferences
 from .credit import ScientificProcessCredit
 from importlib import import_module
-ScientificProcessYield = import_module('.yield', __package__).ScientificProcessYield
+from .yield_estimator import ScientificProcessYield
 from .task import ScientificTask
 from .to_child_scientific_process import prepare_request as prepare_scientific_process
 from .from_child_scientific_process import receive_report as receive_scientific_process

@@ -1,7 +1,7 @@
 """Connect private A101 launch_local operational responsibilities."""
 from __future__ import annotations
 from importlib import import_module as _original_yield_import
-OriginalContinuation = _original_yield_import('.yield', __package__).OriginalContinuation
+OriginalContinuation = _original_yield_import('.yield_estimator', __package__).OriginalContinuation
 from .task import OperationalTask
 from .execution_contracts import RESOURCE_ROLES
 from .credit import ResourceEpisodeCredit

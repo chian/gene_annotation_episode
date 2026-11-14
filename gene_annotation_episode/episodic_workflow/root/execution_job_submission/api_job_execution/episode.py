@@ -26,7 +26,7 @@ from .action_policy import APIExecutionActionPolicy
 from .goal import APIExecutionGoal
 from .internal_summary import APIExecutionInternalSummary
 from importlib import import_module
-APIExecutionYield = import_module('.yield', __package__).APIExecutionYield
+from .yield_estimator import APIExecutionYield
 from .completion import APIExecutionCompletion
 
 class APIExecutionBinding(APIExecutionCredit, APIExecutionChildCommissioning, APIExecutionParentReport, APIExecutionParentAssignment, APIExecutionExecutionState, APIExecutionActionPolicy, APIExecutionGoal, APIExecutionInternalSummary, APIExecutionOperations, APIExecutionReportFields, APIExecutionReportDelivery, APIExecutionInitialReferences, APIExecutionReferenceAccess, APIExecutionYield, APIExecutionCompletion, ExecutionScientificInputs, ExecutionBlastCustody, ExecutionResultSelection, ExecutionScientificReturns, ExecutionResultCustody, ExecutionReceivedCustody, ExecutionClosedCredit, ExecutionResourceInformation, ExecutionRequestCustody):

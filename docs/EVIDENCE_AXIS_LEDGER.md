@@ -7045,7 +7045,7 @@ registration of all seven roles for each axis, plus preservation of 4,151
 method copies. This is structural/contract validation, not a scientific run.
 
 The existing annotation root now has `episode.py`, `requests.py`, `returns.py`,
-`credit.py`, `yield.py` and `scoring.py`. Its scientific combination remains
+`credit.py`, `yield_estimator.py` and `scoring.py`. Its scientific combination remains
 separate from received-axis investigation credit. The root extraction check in
 `runs/episode_root_checks_20261111/` verified 18 unchanged functions and the
 complete original result reader after inlining its extracted credit block;

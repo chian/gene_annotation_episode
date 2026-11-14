@@ -1,2 +1,0 @@
-#define PACKAGE_NAME "SAMStat"
-#define PACKAGE_VERSION "2.5.0"

@@ -12,7 +12,7 @@ The inventory enumerates actual source responsibilities, methods, direct imports
 - outgoing report: `report_delivery.py`, `to_parent.py`.
 - internal summary: `decision_inputs.py`, `decision_state.py`, `internal_summary.py`.
 - credit: `credit.py`.
-- yield: `yield.py`.
+- yield: `yield_estimator.py`.
 - waiting: `waiting.py`.
 - instructions: `task_instructions.py`.
 - persistence: `process_state.py`, `task_state.py`.

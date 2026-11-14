@@ -72,9 +72,9 @@ HOMOLOGY_BINDING_SOURCES = (
     'homology_result_acquisition/task_state.py',
     'homology_result_acquisition/to_parent.py',
     'homology_result_acquisition/waiting.py',
-    'homology_job_submission/yield.py',
-    'homology_job_monitoring/yield.py',
-    'homology_result_acquisition/yield.py',
+    'homology_job_submission/yield_estimator.py',
+    'homology_job_monitoring/yield_estimator.py',
+    'homology_result_acquisition/yield_estimator.py',
 )
 
 

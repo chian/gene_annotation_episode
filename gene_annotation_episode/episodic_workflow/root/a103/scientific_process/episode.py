@@ -11,7 +11,7 @@ from .configuration import ScientificConfiguration
 from .contracts import ContractError, EVIDENCE_AXIS_VERSION, INSTRUCTION_VERSION, LEGACY_SELECTION_VERSION, Path, ROLE, ROLES, SELECTION_VERSION, VERSION, _COMMON_TOOLS, _LEGACY_REVISION_ARGUMENTS, _REVISION_ARGUMENTS, _object, deepcopy, evidence_axis_instruction_view, hashlib, identity, inspect, instruction_view, plain, scientific_digest, scientific_invocation_ref, selection_fields, selector_selection, support_observation_kinds, validate_child_selection, validate_revision_origin, validate_schema, validate_selection
 from .credit import ScientificProcessCredit
 from importlib import import_module as _import_module
-ScientificProcessYield = _import_module('.yield', __package__).ScientificProcessYield
+from .yield_estimator import ScientificProcessYield
 from .to_child_execution_progress_assessment import prepare_request as prepare_monitor_request
 from .from_child_execution_progress_assessment import receive_progress as receive_monitor_progress
 

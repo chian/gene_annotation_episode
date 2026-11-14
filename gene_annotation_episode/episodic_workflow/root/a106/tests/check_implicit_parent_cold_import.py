@@ -18,7 +18,7 @@ allowed = ('runtime', 'from_parent', 'task_state', 'library.annotation_exchange_
            'received_outcomes', 'report_receiving', 'episode', 'instructions',
            'annotation_improvement.episode', 'annotation_improvement.from_parent',
            'annotation_improvement.instructions', 'annotation_improvement.to_parent',
-           'annotation_improvement.yield', 'scientific_process.incoming_message_owners')
+           'annotation_improvement.yield_estimator', 'scientific_process.incoming_message_owners')
 assert first in allowed
 importlib.import_module(PACKAGE + '.' + first)
 runtime = importlib.import_module(PACKAGE + '.runtime')

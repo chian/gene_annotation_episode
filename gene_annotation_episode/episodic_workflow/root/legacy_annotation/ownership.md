@@ -33,7 +33,7 @@ This record describes the actual prepared source for `gene_annotation_episode/ep
 ### credit_and_continuation
 
 - `credit.py`: Bind actual goal-specific progress and original source-credit projection.
-- `yield.py`: Own continuation settings and credit interpretation using the original numerical iterator.
+- `yield_estimator.py`: Own continuation settings and credit interpretation using the original numerical iterator.
 
 ### goal_assignment_and_policy
 
@@ -105,7 +105,7 @@ This record describes the actual prepared source for `gene_annotation_episode/ep
 ### credit_and_continuation
 
 - `credit.py`: Bind actual goal-specific progress and original source-credit projection.
-- `yield.py`: Own continuation settings and credit interpretation using the original numerical iterator.
+- `yield_estimator.py`: Own continuation settings and credit interpretation using the original numerical iterator.
 
 ### goal_assignment_and_policy
 
@@ -173,7 +173,7 @@ This record describes the actual prepared source for `gene_annotation_episode/ep
 ### credit_and_continuation
 
 - `credit.py`: Bind actual goal-specific progress and original source-credit projection.
-- `yield.py`: Own continuation settings and credit interpretation using the original numerical iterator.
+- `yield_estimator.py`: Own continuation settings and credit interpretation using the original numerical iterator.
 
 ### goal_assignment_and_policy
 

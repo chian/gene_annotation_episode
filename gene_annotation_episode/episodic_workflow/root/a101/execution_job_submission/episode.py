@@ -8,7 +8,7 @@ from .blast_pending_work import BlastPendingWork
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_return_contracts import _blast_reference_source
 from .credit import ExecutionEpisodeCredit
 from importlib import import_module as _import_module
-ExecutionEpisodeYield = _import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .configuration import OperationalConfiguration
 from .binding_record import OperationalBindingRecord
 from .goal import OperationalGoal

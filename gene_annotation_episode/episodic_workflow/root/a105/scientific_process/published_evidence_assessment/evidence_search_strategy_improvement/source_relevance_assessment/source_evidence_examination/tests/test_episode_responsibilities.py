@@ -57,7 +57,7 @@ def test_private_credit_definition_and_completed_yield_are_consistent():
     assert definition['unit'] == 'one_current_graded_assessment_per_original_experiment'
     assert definition['revision_credit'] is False
     assert definition['activity_credit'] is False
-    module = import_module(binding.__module__.rsplit('.', 1)[0] + '.yield')
+    module = import_module(binding.__module__.rsplit('.', 1)[0] + '.yield_estimator')
     estimate = module._RemainingCommissionedCredit(7, 7)([], module.YieldParameters(), [])
     assert estimate.expected_next_gain.value == 0
     assert estimate.expected_next_gain.upper == 0

@@ -47,7 +47,7 @@ from .receipt_selection import ResultsReceiptSelection
 from .to_parent import ResultsToParent
 from .closed_credit import ResultsClosedCredit
 from importlib import import_module
-ExecutionEpisodeYield = import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .task import ResultsTask
 
 class ExecutionEpisode(ResultsConfiguration, ResultsBindingRecord, ResultsGoal, ResultsFromParent, ResultsInputVersions, ResultsSavedCommission, ResultsResultState, ResultsNativeTargetState, ResultsResourceInformation, ResultsInstructions, ResultsInternalSummary, ResultsWorkOperations, ResultsNativeFileAcquisition, ResultsResultPublication, ResultsTargetCustody, ResultsCredit, ResultsCompletion, ResultsReceivedLaunchRequests, ResultsReceiptSelection, ResultsToParent, ResultsClosedCredit, ExecutionEpisodeYield):

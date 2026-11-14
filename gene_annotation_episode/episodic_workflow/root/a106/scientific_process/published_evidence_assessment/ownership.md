@@ -25,7 +25,7 @@ Named responsibility homes:
 - `to_child_execution_result_acquisition`: `scientific_process/published_evidence_assessment/to_child_execution_result_acquisition.py`
 - `to_parent`: `scientific_process/published_evidence_assessment/to_parent.py`
 - `waiting`: `scientific_process/published_evidence_assessment/waiting.py`
-- `yield`: `scientific_process/published_evidence_assessment/yield.py`
+- `yield`: `scientific_process/published_evidence_assessment/yield_estimator.py`
 
 Application receipts and selected control outcomes, including failures and collection errors, remain separate from source membership. These records do not establish shared Root integration, native execution, autonomous scientific work or saved restoration. No per-episode test coverage is inferred from axis-selected controls.
 

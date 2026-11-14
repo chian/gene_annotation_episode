@@ -24,7 +24,7 @@ class LegacyAnnotationEpisode:
     credit_projector = staticmethod(credit_projector)
     credit_binding = staticmethod(credit_binding)
     credit_view = staticmethod(credit_view)
-    yield_controller = staticmethod(import_module(__package__ + '.yield').yield_controller)
+    yield_controller = staticmethod(import_module(__package__ + '.yield_estimator').yield_controller)
 
     @staticmethod
     def child_request_assembler(role):

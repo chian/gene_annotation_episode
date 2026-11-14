@@ -13,7 +13,7 @@ from .credit import SourceCredit
 from .waiting import SourceWaiting
 from .binding_record import SourceBindingRecord
 from importlib import import_module
-SourceYield = import_module('.yield', __package__).SourceYield
+from .yield_estimator import SourceYield
 from .to_child_table_evidence_extraction import to_child as to_table_evidence_extraction
 from .from_child_table_evidence_extraction import FromTableEvidenceExtraction
 from .to_child_passage_evidence_extraction import to_child as to_passage_evidence_extraction

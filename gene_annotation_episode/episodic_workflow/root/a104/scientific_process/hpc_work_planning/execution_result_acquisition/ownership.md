@@ -73,7 +73,7 @@ The direct private source owners are:
 - `scientific_process/hpc_work_planning/execution_result_acquisition/to_parent.py` — Private A104 Results to parent.
 - `scientific_process/hpc_work_planning/execution_result_acquisition/waiting.py` — Private A104 Results waiting.
 - `scientific_process/hpc_work_planning/execution_result_acquisition/work_operations.py` — Private A104 Results work operations.
-- `scientific_process/hpc_work_planning/execution_result_acquisition/yield.py` — Private A104 Results yield.
+- `scientific_process/hpc_work_planning/execution_result_acquisition/yield_estimator.py` — Private A104 Results yield.
 
 The source installation is authenticated by `runs/root_a104_all60_source_application_01/applied/application.json`. The exact235 baseline account, candidate235 cases and actual descriptor observations are scoped controlled evidence; the original fixture failures remain explicit. Earlier scientific results remain retained, with no new whole-workflow or HPC execution claim. Current module/method facts, reciprocal endpoint sources, library dependencies and exact test/fixture assets are in the paired inventory. Named-envelope build tests do not themselves prove selected-route forwarding; that unchanged connection and Literature selected-route evidence are distinguished.
 

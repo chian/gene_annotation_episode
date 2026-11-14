@@ -20,7 +20,7 @@ from .credit import APICredit
 from .closed_credit import APIClosedCredit
 from .completion import APICompletion
 from importlib import import_module as _import_module
-ExecutionEpisodeYield = _import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .task import APIJobTask
 from gene_annotation_episode.episodic_workflow.root.a102.execution_prompt import render_api_launch_prompt
 

@@ -17,7 +17,7 @@ from .numerical_report_facts import LiteratureNumericalReportFacts
 from .received_reports import LiteratureReceivedReports
 from .to_parent import LiteratureReport
 from .credit import LiteratureCredit
-LiteratureYield = _import_module('.yield', __package__).LiteratureYield
+from .yield_estimator import LiteratureYield
 from .waiting import LiteratureWaiting
 from .source_repositories import LiteratureRepositories
 

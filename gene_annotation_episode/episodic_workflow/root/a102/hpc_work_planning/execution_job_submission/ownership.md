@@ -60,7 +60,7 @@ the original runtime lookup and order.
 - `to_children.py`
 - `to_parent.py`
 - `waiting.py`
-- `yield.py`
+- `yield_estimator.py`
 
 ## Exact prior ownership text
 
@@ -109,7 +109,7 @@ Source authority: `runs/root_next36_verification_preparation_01/EXPECTED_SOURCE_
 - `to_children.py`
 - `to_parent.py`
 - `waiting.py`
-- `yield.py`
+- `yield_estimator.py`
 
 ## Exact prior ownership text
 

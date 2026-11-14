@@ -11,7 +11,7 @@ from .goal import MonitorGoal
 from .binding_record import MonitorBindingRecord
 from .credit import MonitorEpisodeCredit
 from importlib import import_module
-MonitorEpisodeYield = import_module('.yield', __package__).MonitorEpisodeYield
+from .yield_estimator import MonitorEpisodeYield
 from .task import ProgressMonitoringTask
 from gene_annotation_episode.episodic_workflow.root.a101.library.monitor_prompt import render_monitor_prompt
 from .target_identity import is_blast_job

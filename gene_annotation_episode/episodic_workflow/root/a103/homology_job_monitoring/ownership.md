@@ -42,7 +42,7 @@ Original module responsibility: Private monitor decision delivery.
 - `task_waiting.py`: Private monitor task waiting.
 - `to_parent.py`: Private homology monitoring to parent.
 - `waiting.py`: Private job_monitor waiting behavior for A103.
-- `yield.py`: Own this Homology job's original supplied continuation and observation wrapper.
+- `yield_estimator.py`: Own this Homology job's original supplied continuation and observation wrapper.
 
 ## 2026-11-13 exact preceding ownership history
 

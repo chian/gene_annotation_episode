@@ -56,7 +56,7 @@ The direct private source owners are:
 - `scientific_process/to_child_scientific_process.py` — Original A104 scientific_process directional request/receipt assembly.
 - `scientific_process/to_parent.py` — Private A104 scientific to parent.
 - `scientific_process/tool_selection.py` — Private A104 scientific tool selection.
-- `scientific_process/yield.py` — Private scientific-process yield behavior for A104.
+- `scientific_process/yield_estimator.py` — Private scientific-process yield behavior for A104.
 
 The source installation is authenticated by `runs/root_a104_all60_source_application_01/applied/application.json`. The exact235 baseline account, candidate235 cases and actual descriptor observations are scoped controlled evidence; the original fixture failures remain explicit. Earlier scientific results remain retained, with no new whole-workflow or HPC execution claim. Current module/method facts, reciprocal endpoint sources, library dependencies and exact test/fixture assets are in the paired inventory. Named-envelope build tests do not themselves prove selected-route forwarding; that unchanged connection and Literature selected-route evidence are distinguished.
 

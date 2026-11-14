@@ -34,7 +34,7 @@ The caller owns resource/scoring configuration; the parent owns commissioning.
 - `task_waiting.py`: Original private package wiring or contracts.
 - `to_parent.py`: Original private package wiring or contracts.
 - `waiting.py`: Private job_launch waiting behavior for A103.
-- `yield.py`: Own this Homology job's original supplied continuation and observation wrapper.
+- `yield_estimator.py`: Own this Homology job's original supplied continuation and observation wrapper.
 
 ## 2026-11-13 exact preceding ownership history
 

@@ -18,7 +18,7 @@ from .credit import LocalExecutionCredit
 from .closed_credit import LocalExecutionClosedCredit
 from .completion import LocalExecutionCompletion
 from importlib import import_module
-ExecutionEpisodeYield = import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .retained_native_receipts import LocalExecutionRetainedNativeReceipts
 from .native_state import LocalExecutionNativeState
 from .received_result_custody import LocalExecutionReceivedResultCustody

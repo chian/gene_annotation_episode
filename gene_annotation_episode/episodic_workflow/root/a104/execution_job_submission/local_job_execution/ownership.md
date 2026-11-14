@@ -72,7 +72,7 @@ The direct private source owners are:
 - `execution_job_submission/local_job_execution/task_state.py` — Private A104 LocalExecution task state.
 - `execution_job_submission/local_job_execution/to_parent.py` — Private A104 LocalExecution to parent.
 - `execution_job_submission/local_job_execution/waiting.py` — Private A104 LocalExecution waiting.
-- `execution_job_submission/local_job_execution/yield.py` — Private A104 LocalExecution yield.
+- `execution_job_submission/local_job_execution/yield_estimator.py` — Private A104 LocalExecution yield.
 
 The source installation is authenticated by `runs/root_a104_all60_source_application_01/applied/application.json`. The exact235 baseline account, candidate235 cases and actual descriptor observations are scoped controlled evidence; the original fixture failures remain explicit. Earlier scientific results remain retained, with no new whole-workflow or HPC execution claim. Current module/method facts, reciprocal endpoint sources, library dependencies and exact test/fixture assets are in the paired inventory. Named-envelope build tests do not themselves prove selected-route forwarding; that unchanged connection and Literature selected-route evidence are distinguished.
 

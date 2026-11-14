@@ -17,7 +17,7 @@ def test_private_plan_uses_actual_original_commission_and_calculator(progress_ca
     assert plan['progress_definition']==binding.credit_projector(context).as_record()
     assert plan['planning_question']==binding.instructions(context)
     assert type(binding.credit_projector(context)).__module__==module+'.credit'
-    assert type(binding.yield_controller(context,0.,'epoch')).__module__==module+'.yield'
+    assert type(binding.yield_controller(context,0.,'epoch')).__module__==module+'.yield_estimator'
 
 
 @pytest.mark.parametrize('home',HOMES)

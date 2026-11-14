@@ -15,7 +15,7 @@ from .goal import MonitorGoal
 from .binding_record import MonitorBindingRecord
 from .credit import MonitorEpisodeCredit
 from importlib import import_module
-MonitorEpisodeYield = import_module('.yield', __package__).MonitorEpisodeYield
+from .yield_estimator import MonitorEpisodeYield
 from .task import ProgressMonitoringTask
 from .presentation import present_task_context
 

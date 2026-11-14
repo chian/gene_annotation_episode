@@ -42,7 +42,7 @@ Source authority: `runs/root_execution60_verification_preparation_01/EXPECTED_SO
 - `terminal_execution.py`
 - `to_parent.py`
 - `waiting.py`
-- `yield.py`
+- `yield_estimator.py`
 
 ## Exact prior ownership text
 
@@ -88,7 +88,7 @@ Source authority: `runs/root_next36_verification_preparation_01/EXPECTED_SOURCE_
 - `terminal_execution.py`
 - `to_parent.py`
 - `waiting.py`
-- `yield.py`
+- `yield_estimator.py`
 
 ## Exact prior ownership text
 

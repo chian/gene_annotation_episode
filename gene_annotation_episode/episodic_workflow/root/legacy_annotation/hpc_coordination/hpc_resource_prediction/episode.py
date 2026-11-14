@@ -14,7 +14,7 @@ import gene_annotation_episode.episodic_workflow.root.legacy_annotation.hpc_coor
 import gene_annotation_episode.episodic_workflow.root.legacy_annotation.hpc_coordination.hpc_resource_prediction.reference_custody as reference_custody
 import gene_annotation_episode.episodic_workflow.root.legacy_annotation.hpc_coordination.hpc_resource_prediction.reference_access as reference_access
 import gene_annotation_episode.episodic_workflow.root.legacy_annotation.hpc_coordination.hpc_resource_prediction.waiting as waiting
-yield_implementation = import_module('.yield', __package__)
+yield_implementation = import_module('.yield_estimator', __package__)
 from .binding_identity import as_record
 from .task import HPCResourcePredictionTask
 

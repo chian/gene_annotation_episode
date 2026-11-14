@@ -23,7 +23,7 @@ from .credit import LaunchCredit
 from .closed_credit import LaunchClosedCredit
 from .completion import LaunchCompletion
 from importlib import import_module
-ExecutionEpisodeYield = import_module('.yield', __package__).ExecutionEpisodeYield
+from .yield_estimator import ExecutionEpisodeYield
 from .retained_native_receipts import LaunchRetainedNativeReceipts
 from .launch_state import LaunchLaunchState
 from .received_result_custody import LaunchReceivedResultCustody

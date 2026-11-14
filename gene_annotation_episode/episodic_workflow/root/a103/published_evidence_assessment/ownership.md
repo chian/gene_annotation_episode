@@ -38,7 +38,7 @@ Source authority: `runs/root_remaining40_verification_preparation_01/EXPECTED_SO
 - `to_child_evidence_search_strategy_improvement.py`: Assemble the original evidence search strategy improvement child request.
 - `to_parent.py`: Private A103 literature to parent.
 - `waiting.py`: Private A103 literature waiting.
-- `yield.py`: Private A103 literature yield.
+- `yield_estimator.py`: Private A103 literature yield.
 
 ## 2026-11-13 exact preceding ownership history
 

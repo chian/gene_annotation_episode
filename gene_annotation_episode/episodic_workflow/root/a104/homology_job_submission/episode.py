@@ -17,11 +17,11 @@ class HomologyEpisode(HomologyFamilyResources, HomologySubmissionBindingRecord, 
     roles = ('job_launch',)
     decision_source_type = HomologySubmissionTask
     decision_prompt_renderer = staticmethod(present_job_context)
-    controller_selection = staticmethod(import_module('.yield', __package__).select_controller)
+    controller_selection = staticmethod(import_module('.yield_estimator', __package__).select_controller)
 
 import sys as _homology_binding_sys
 _original_controller_descriptor = vars(HomologyEpisode)['controller_selection']
-_original_controller_owner = _homology_binding_sys.modules[__package__ + '.yield']
+_original_controller_owner = _homology_binding_sys.modules[__package__ + '.yield_estimator']
 
 def _bind_homology_controller_alias(namespace):
     _original_controller_owner._bind_preserved_runtime_providers(namespace)

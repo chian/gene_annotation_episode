@@ -848,7 +848,7 @@ pass must not manufacture either an axis head or infinitely nested recursion.
 Supporting responsibilities: assignment/schema/preparation in `requests.py`;
 typed reports, received results and references in `returns.py`; original task
 projection in `credit.py`; task-selected continuation settings/estimator in
-`yield.py`; registration, context, available actions/children and local assembly
+`yield_estimator.py`; registration, context, available actions/children and local assembly
 in `episode.py`. Scientific scoring dependencies and their distinct descriptive
 filenames remain as recorded above. Cross-episode tests/fixtures remain at this
 axis's `tests/` until their precise local owner is established. Relocation is
@@ -862,7 +862,7 @@ pending; this entry fixes the chosen name before any binding moves.
 - `scientific_process/requests.py`: `assignment_schema`, `child_assignment_schema`, `_selection`, `_assignment`, `_invocation`, `prepare_assignment`, `_validate_origin`, `prepare_invocation`, `restore_closed_process`, `restore_saved_process`, `validate_context`, `validate_execution_context`, `_original_selection`, `_proposed_selection`.
 - `scientific_process/returns.py`: `required_return_sources`, `fact_sources`, `facts`, `received_report_sources`, `received_report_facts`, `_validate_protein_structure_action_report`, `validate_received_report`, `resolve`, `validate_report`, `initial_references`, `received_form_references`, `resolve_received_reference`.
 - `scientific_process/credit.py`: `credit_kind`, `credit_projector`, `credit_view`.
-- `scientific_process/yield.py`: `private_yield_binding`, `continuation_task`, `yield_controller`.
+- `scientific_process/yield_estimator.py`: `private_yield_binding`, `continuation_task`, `yield_controller`.
 
 Implementation fingerprinting continues to cover this axis's source tree, including the extracted files. No credit, yield, scientific scoring, report, waiting or request rule is changed. Descriptive scientific-process helper placement and test ownership remain to be completed in this pass.
 
@@ -880,7 +880,7 @@ The original `literature_episode.py:LiteratureEpisode` registers seven roles. Th
 | `literature_ordered` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination` |
 | `literature_targeted` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/episode.py` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination` |
 
-Each binding retains its own local methods: `requests.py` for assignments and request-derived schemas; `returns.py` for source/fact/report delivery; `credit.py` for task progress; `yield.py` for existing forecast behavior; `waiting.py` for existing wait declarations; `episode.py` for registration, construction, actions, and selected grader/repository assembly. Files are created only for existing responsibilities. Descriptive calculators, graders and sheet storage retain their names and current axis ownership pending the dependency-placement review.
+Each binding retains its own local methods: `requests.py` for assignments and request-derived schemas; `returns.py` for source/fact/report delivery; `credit.py` for task progress; `yield_estimator.py` for existing forecast behavior; `waiting.py` for existing wait declarations; `episode.py` for registration, construction, actions, and selected grader/repository assembly. Files are created only for existing responsibilities. Descriptive calculators, graders and sheet storage retain their names and current axis ownership pending the dependency-placement review.
 
 The current source-reading roles also perform applicable interpretation/population and grading work. That task mixture is preserved here; a later goal must decide task-specific divisions. Root evidence assessment can search/read directly as well as commission the nested strategy/search/source chain. Cross-role literature tests and shared fixtures remain at their common owner until the test-placement review.
 
@@ -894,7 +894,7 @@ The former multi-role class has been removed. Each recorded directory now has on
 - `scientific_process/published_evidence_assessment/requests.py`: `child_assignment_schema`, `assignment_schema`, `_validate_page`, `_validate_assignment`, `prepare_assignment`, `_tool_arguments`, `_materialize_text_arguments`.
 - `scientific_process/published_evidence_assessment/returns.py`: `_require`, `_artifact`, `_within_source`, `fact_sources`, `facts`, `current_report_facts`, `_rate_fact_sources`, `_rate_facts`, `received_report_sources`, `received_report_facts`, `_complete_requested_received_arrays`, `received_form_references`, `received_evidence_tokens`, `validate_received_report`, `resolve`, `validate_report`.
 - `scientific_process/published_evidence_assessment/credit.py`: `credit_kind`, `credit_view`, `credit_projector`.
-- `scientific_process/published_evidence_assessment/yield.py`: `continuation_task`, `yield_controller`.
+- `scientific_process/published_evidence_assessment/yield_estimator.py`: `continuation_task`, `yield_controller`.
 - `scientific_process/published_evidence_assessment/waiting.py`: `supports_wait`.
 
 `literature_strategy` support map:
@@ -903,7 +903,7 @@ The former multi-role class has been removed. Each recorded directory now has on
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/requests.py`: `child_assignment_schema`, `assignment_schema`, `_validate_page`, `_validate_assignment`, `prepare_assignment`, `_tool_arguments`, `_materialize_text_arguments`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/returns.py`: `_require`, `_artifact`, `_within_source`, `fact_sources`, `facts`, `current_report_facts`, `_rate_fact_sources`, `_rate_facts`, `received_report_sources`, `received_report_facts`, `_complete_requested_received_arrays`, `received_form_references`, `received_evidence_tokens`, `validate_received_report`, `resolve`, `validate_report`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/credit.py`: `credit_kind`, `credit_view`, `credit_projector`.
-- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/yield.py`: `continuation_task`, `yield_controller`.
+- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/yield_estimator.py`: `continuation_task`, `yield_controller`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/waiting.py`: `supports_wait`.
 
 `literature_search` support map:
@@ -912,7 +912,7 @@ The former multi-role class has been removed. Each recorded directory now has on
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/requests.py`: `child_assignment_schema`, `assignment_schema`, `_validate_page`, `_validate_assignment`, `prepare_assignment`, `_tool_arguments`, `_materialize_text_arguments`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/returns.py`: `_require`, `_artifact`, `_within_source`, `fact_sources`, `facts`, `current_report_facts`, `_rate_fact_sources`, `_rate_facts`, `received_report_sources`, `received_report_facts`, `_complete_requested_received_arrays`, `received_form_references`, `received_evidence_tokens`, `validate_received_report`, `resolve`, `validate_report`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/credit.py`: `credit_kind`, `credit_view`, `credit_projector`.
-- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/yield.py`: `continuation_task`, `yield_controller`.
+- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/yield_estimator.py`: `continuation_task`, `yield_controller`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/waiting.py`: `supports_wait`.
 
 `literature_page` support map:
@@ -921,7 +921,7 @@ The former multi-role class has been removed. Each recorded directory now has on
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/requests.py`: `child_assignment_schema`, `assignment_schema`, `_validate_page`, `_validate_assignment`, `prepare_assignment`, `_tool_arguments`, `_materialize_text_arguments`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/returns.py`: `_require`, `_artifact`, `_within_source`, `fact_sources`, `facts`, `current_report_facts`, `_rate_fact_sources`, `_rate_facts`, `received_report_sources`, `received_report_facts`, `_complete_requested_received_arrays`, `received_form_references`, `received_evidence_tokens`, `validate_received_report`, `resolve`, `validate_report`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/credit.py`: `credit_kind`, `credit_view`, `credit_projector`.
-- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/yield.py`: `continuation_task`, `yield_controller`.
+- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/yield_estimator.py`: `continuation_task`, `yield_controller`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/waiting.py`: `supports_wait`.
 
 `literature_table` support map:
@@ -930,7 +930,7 @@ The former multi-role class has been removed. Each recorded directory now has on
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/requests.py`: `child_assignment_schema`, `assignment_schema`, `_validate_page`, `_validate_assignment`, `prepare_assignment`, `_tool_arguments`, `_materialize_text_arguments`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/returns.py`: `_require`, `_artifact`, `_within_source`, `fact_sources`, `facts`, `current_report_facts`, `_rate_fact_sources`, `_rate_facts`, `received_report_sources`, `received_report_facts`, `_complete_requested_received_arrays`, `received_form_references`, `received_evidence_tokens`, `validate_received_report`, `resolve`, `validate_report`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/credit.py`: `credit_kind`, `credit_view`, `credit_projector`.
-- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/yield.py`: `continuation_task`, `yield_controller`.
+- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/yield_estimator.py`: `continuation_task`, `yield_controller`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/waiting.py`: `supports_wait`.
 
 `literature_ordered` support map:
@@ -939,7 +939,7 @@ The former multi-role class has been removed. Each recorded directory now has on
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/requests.py`: `child_assignment_schema`, `assignment_schema`, `_validate_page`, `_validate_assignment`, `prepare_assignment`, `_tool_arguments`, `_materialize_text_arguments`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/returns.py`: `_require`, `_artifact`, `_within_source`, `fact_sources`, `facts`, `current_report_facts`, `_rate_fact_sources`, `_rate_facts`, `received_report_sources`, `received_report_facts`, `_complete_requested_received_arrays`, `received_form_references`, `received_evidence_tokens`, `validate_received_report`, `resolve`, `validate_report`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/credit.py`: `credit_kind`, `credit_view`, `credit_projector`.
-- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/yield.py`: `continuation_task`, `yield_controller`.
+- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/yield_estimator.py`: `continuation_task`, `yield_controller`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/waiting.py`: `supports_wait`.
 
 `literature_targeted` support map:
@@ -948,7 +948,7 @@ The former multi-role class has been removed. Each recorded directory now has on
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/requests.py`: `child_assignment_schema`, `assignment_schema`, `_validate_page`, `_validate_assignment`, `prepare_assignment`, `_tool_arguments`, `_materialize_text_arguments`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/returns.py`: `_require`, `_artifact`, `_within_source`, `fact_sources`, `facts`, `current_report_facts`, `_rate_fact_sources`, `_rate_facts`, `received_report_sources`, `received_report_facts`, `_complete_requested_received_arrays`, `received_form_references`, `received_evidence_tokens`, `validate_received_report`, `resolve`, `validate_report`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/credit.py`: `credit_kind`, `credit_view`, `credit_projector`.
-- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/yield.py`: `continuation_task`, `yield_controller`.
+- `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/yield_estimator.py`: `continuation_task`, `yield_controller`.
 - `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/waiting.py`: `supports_wait`.
 
 
@@ -1015,7 +1015,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/execution_job_submission/api_job_execution` (`launch_api`):
@@ -1024,7 +1024,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/execution_job_submission/local_job_execution` (`launch_local`):
@@ -1033,7 +1033,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/execution_job_submission/hpc_job_execution` (`launch_hpc`):
@@ -1042,7 +1042,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/execution_result_acquisition` (`results`):
@@ -1051,7 +1051,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/execution_progress_assessment` (`monitor`):
@@ -1060,7 +1060,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `assignment_schema`, `_assignment`, `prepare_assignment`.
 - `returns.py`: `_received`, `_snapshot`, `fact_sources`, `facts`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `credit_view`.
-- `yield.py`: `yield_controller`.
+- `yield_estimator.py`: `yield_controller`.
 - `progress_observations.py`: this monitor's observation provider, factual schemas and numerical observation helpers.
 
 `scientific_process/hpc_work_planning` (`hpc`):
@@ -1069,7 +1069,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `assignment_schema`, `commission_identity`, `_commission`, `prepare_assignment`, `_tool_request`, `original_launch_handoff`.
 - `returns.py`: `export_closed`, `resolve_received_reference`, `read_evidence`, `_publish`, `fact_sources`, `facts`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_quality`, `credit_view`.
-- `yield.py`: `yield_controller`, `continuation_for_action`, `activity_advice`, `practical_estimator`.
+- `yield_estimator.py`: `yield_controller`, `continuation_for_action`, `activity_advice`, `practical_estimator`.
 - `waiting.py`: `_observe_queue`, `_queue`.
 
 `scientific_process/hpc_work_planning/hpc_resource_prediction` (`hpc_prediction`):
@@ -1078,7 +1078,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `assignment_schema`, `commission_identity`, `_commission`, `prepare_assignment`, `_tool_request`, `original_launch_handoff`.
 - `returns.py`: `export_closed`, `resolve_received_reference`, `read_evidence`, `_publish`, `fact_sources`, `facts`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_quality`, `credit_view`.
-- `yield.py`: `yield_controller`, `continuation_for_action`, `activity_advice`, `practical_estimator`.
+- `yield_estimator.py`: `yield_controller`, `continuation_for_action`, `activity_advice`, `practical_estimator`.
 - `waiting.py`: `_observe_queue`, `_queue`.
 
 `scientific_process/hpc_work_planning/hpc_allocation_execution` (`hpc_execution`):
@@ -1087,7 +1087,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `assignment_schema`, `commission_identity`, `_commission`, `prepare_assignment`, `_tool_request`, `original_launch_handoff`.
 - `returns.py`: `export_closed`, `resolve_received_reference`, `read_evidence`, `_publish`, `fact_sources`, `facts`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_quality`, `credit_view`.
-- `yield.py`: `yield_controller`, `continuation_for_action`, `activity_advice`, `practical_estimator`.
+- `yield_estimator.py`: `yield_controller`, `continuation_for_action`, `activity_advice`, `practical_estimator`.
 - `waiting.py`: `_observe_queue`, `_queue`.
 
 `scientific_process/hpc_work_planning/execution_job_submission` (`launch`):
@@ -1096,7 +1096,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/hpc_work_planning/execution_job_submission/api_job_execution` (`launch_api`):
@@ -1105,7 +1105,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/hpc_work_planning/execution_job_submission/local_job_execution` (`launch_local`):
@@ -1114,7 +1114,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution` (`launch_hpc`):
@@ -1123,7 +1123,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/hpc_work_planning/execution_result_acquisition` (`results`):
@@ -1132,7 +1132,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/hpc_work_planning/execution_progress_assessment` (`monitor`):
@@ -1141,7 +1141,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `assignment_schema`, `_assignment`, `prepare_assignment`.
 - `returns.py`: `_received`, `_snapshot`, `fact_sources`, `facts`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `credit_view`.
-- `yield.py`: `yield_controller`.
+- `yield_estimator.py`: `yield_controller`.
 - `progress_observations.py`: this monitor's observation provider, factual schemas and numerical observation helpers.
 
 `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission` (`launch`):
@@ -1150,7 +1150,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution` (`launch_api`):
@@ -1159,7 +1159,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution` (`launch_local`):
@@ -1168,7 +1168,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution` (`launch_hpc`):
@@ -1177,7 +1177,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition` (`results`):
@@ -1186,7 +1186,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `child_assignment_schema`, `assignment_schema`, `_permitted`, `prepare_assignment`.
 - `returns.py`: `_received`, `received_report_sources`, `received_report_facts`, `received_report_closure_facts`, `resolve_received_reference`, `validate_received_report`, `fact_sources`, `facts`, `_live_facts`, `received_form_references`, `initial_references`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `_closed_credit_carrier`, `_closed_credit_receipts`, `_closed_credit_value`, `_closed_credit_facts`, `_closed_operational_credit_view`, `project_credit`, `_live_project_credit`, `credit_view`, `_proof_for_action`, `completion_for_action`, `_closed_completion_verdict`, `verify_completion`.
-- `yield.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
+- `yield_estimator.py`: `_request_yield_class`, `_task_yield_profile`, `yield_controller`, `_launch_yield_controller`, `_launch_api_yield_controller`, `_launch_local_yield_controller`, `_launch_hpc_yield_controller`, `_results_yield_controller`, `practical_estimator`.
 - `terminal_execution.py`: private operative terminal implementation; no additional registered role or nested iterator.
 
 `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment` (`monitor`):
@@ -1195,7 +1195,7 @@ Each planned home now contains one singleton-role class with its original method
 - `requests.py`: `assignment_schema`, `_assignment`, `prepare_assignment`.
 - `returns.py`: `_received`, `_snapshot`, `fact_sources`, `facts`, `resolve`, `validate_report`.
 - `credit.py`: `credit_kind`, `credit_view`.
-- `yield.py`: `yield_controller`.
+- `yield_estimator.py`: `yield_controller`.
 - `progress_observations.py`: this monitor's observation provider, factual schemas and numerical observation helpers.
 
 `scientific_process/resource_work_submission` (`launch`):
@@ -1371,68 +1371,68 @@ The [complete ownership inventory](ownership_inventory.json) is the exact append
 
 | Original binding | Role | Final home | Parent | Supporting files |
 | --- | --- | --- | --- | --- |
-| `execution_episode.py:ExecutionEpisode` | `launch_api` | `execution_job_submission/api_job_execution/episode.py` | execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch` | `execution_job_submission/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `execution_job_submission/hpc_job_execution/episode.py` | execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_local` | `execution_job_submission/local_job_execution/episode.py` | execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `monitor_episode.py:MonitorEpisode` | `monitor` | `execution_progress_assessment/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `results` | `execution_result_acquisition/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `hpc_episode.py:HPCEpisode` | `hpc` | `hpc_work_planning/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_api` | `hpc_work_planning/execution_job_submission/api_job_execution/episode.py` | hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch` | `hpc_work_planning/execution_job_submission/episode.py` | hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `hpc_work_planning/execution_job_submission/hpc_job_execution/episode.py` | hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_local` | `hpc_work_planning/execution_job_submission/local_job_execution/episode.py` | hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `monitor_episode.py:MonitorEpisode` | `monitor` | `hpc_work_planning/execution_progress_assessment/episode.py` | hpc_work_planning | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `results` | `hpc_work_planning/execution_result_acquisition/episode.py` | hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `hpc_episode.py:HPCEpisode` | `hpc_execution` | `hpc_work_planning/hpc_allocation_execution/episode.py` | hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_api` | `hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/episode.py` | hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch` | `hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py` | hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/episode.py` | hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_local` | `hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/episode.py` | hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `monitor_episode.py:MonitorEpisode` | `monitor` | `hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/episode.py` | hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `results` | `hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/episode.py` | hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `hpc_episode.py:HPCEpisode` | `hpc_prediction` | `hpc_work_planning/hpc_resource_prediction/episode.py` | hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature` | `published_evidence_assessment/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_strategy` | `published_evidence_assessment/evidence_search_strategy_improvement/episode.py` | published_evidence_assessment | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_search` | `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/episode.py` | published_evidence_assessment/evidence_search_strategy_improvement | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_page` | `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/episode.py` | published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_targeted` | `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/episode.py` | published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_ordered` | `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py` | published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_table` | `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/episode.py` | published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_api` | `execution_job_submission/api_job_execution/episode.py` | execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch` | `execution_job_submission/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `execution_job_submission/hpc_job_execution/episode.py` | execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_local` | `execution_job_submission/local_job_execution/episode.py` | execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `monitor_episode.py:MonitorEpisode` | `monitor` | `execution_progress_assessment/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `results` | `execution_result_acquisition/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `hpc_episode.py:HPCEpisode` | `hpc` | `hpc_work_planning/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_api` | `hpc_work_planning/execution_job_submission/api_job_execution/episode.py` | hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch` | `hpc_work_planning/execution_job_submission/episode.py` | hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `hpc_work_planning/execution_job_submission/hpc_job_execution/episode.py` | hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_local` | `hpc_work_planning/execution_job_submission/local_job_execution/episode.py` | hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `monitor_episode.py:MonitorEpisode` | `monitor` | `hpc_work_planning/execution_progress_assessment/episode.py` | hpc_work_planning | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `results` | `hpc_work_planning/execution_result_acquisition/episode.py` | hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `hpc_episode.py:HPCEpisode` | `hpc_execution` | `hpc_work_planning/hpc_allocation_execution/episode.py` | hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_api` | `hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/episode.py` | hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch` | `hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py` | hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/episode.py` | hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_local` | `hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/episode.py` | hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `monitor_episode.py:MonitorEpisode` | `monitor` | `hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/episode.py` | hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `results` | `hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/episode.py` | hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `hpc_episode.py:HPCEpisode` | `hpc_prediction` | `hpc_work_planning/hpc_resource_prediction/episode.py` | hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature` | `published_evidence_assessment/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_strategy` | `published_evidence_assessment/evidence_search_strategy_improvement/episode.py` | published_evidence_assessment | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_search` | `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/episode.py` | published_evidence_assessment/evidence_search_strategy_improvement | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_page` | `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/episode.py` | published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_targeted` | `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/episode.py` | published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_ordered` | `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py` | published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_table` | `published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/episode.py` | published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
 | `resource_episode.py:ResourceEpisode` | `results` | `resource_result_acquisition/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `requests.py`, `returns.py` |
 | `resource_episode.py:ResourceEpisode` | `launch_api` | `resource_work_submission/api_resource_work_execution/episode.py` | resource_work_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py` |
 | `resource_episode.py:ResourceEpisode` | `launch` | `resource_work_submission/episode.py` | legacy annotation in runtime.py; dedicated axis head absent; improvement fallback unresolved | `credit.py`, `episode.py`, `requests.py`, `returns.py` |
 | `resource_episode.py:ResourceEpisode` | `launch_hpc` | `resource_work_submission/hpc_resource_work_execution/episode.py` | resource_work_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py` |
 | `resource_episode.py:ResourceEpisode` | `launch_local` | `resource_work_submission/local_resource_work_execution/episode.py` | resource_work_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py` |
-| `scientific_process_episode.py:ScientificProcessEpisode` | `scientific_process` | `scientific_process/episode.py` | root annotation; scientific_process self-recursion (not expanded) | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_api` | `scientific_process/execution_job_submission/api_job_execution/episode.py` | scientific_process/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch` | `scientific_process/execution_job_submission/episode.py` | scientific_process | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `scientific_process/execution_job_submission/hpc_job_execution/episode.py` | scientific_process/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_local` | `scientific_process/execution_job_submission/local_job_execution/episode.py` | scientific_process/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `monitor_episode.py:MonitorEpisode` | `monitor` | `scientific_process/execution_progress_assessment/episode.py` | scientific_process | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `results` | `scientific_process/execution_result_acquisition/episode.py` | scientific_process | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `hpc_episode.py:HPCEpisode` | `hpc` | `scientific_process/hpc_work_planning/episode.py` | scientific_process | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_api` | `scientific_process/hpc_work_planning/execution_job_submission/api_job_execution/episode.py` | scientific_process/hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch` | `scientific_process/hpc_work_planning/execution_job_submission/episode.py` | scientific_process/hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution/episode.py` | scientific_process/hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_local` | `scientific_process/hpc_work_planning/execution_job_submission/local_job_execution/episode.py` | scientific_process/hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `monitor_episode.py:MonitorEpisode` | `monitor` | `scientific_process/hpc_work_planning/execution_progress_assessment/episode.py` | scientific_process/hpc_work_planning | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `results` | `scientific_process/hpc_work_planning/execution_result_acquisition/episode.py` | scientific_process/hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `hpc_episode.py:HPCEpisode` | `hpc_execution` | `scientific_process/hpc_work_planning/hpc_allocation_execution/episode.py` | scientific_process/hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_api` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `launch_local` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `monitor_episode.py:MonitorEpisode` | `monitor` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield.py` |
-| `execution_episode.py:ExecutionEpisode` | `results` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield.py` |
-| `hpc_episode.py:HPCEpisode` | `hpc_prediction` | `scientific_process/hpc_work_planning/hpc_resource_prediction/episode.py` | scientific_process/hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature` | `scientific_process/published_evidence_assessment/episode.py` | scientific_process | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_strategy` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/episode.py` | scientific_process/published_evidence_assessment | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_search` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/episode.py` | scientific_process/published_evidence_assessment/evidence_search_strategy_improvement | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_page` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/episode.py` | scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_targeted` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/episode.py` | scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_ordered` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py` | scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
-| `literature_episode.py:LiteratureEpisode` | `literature_table` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/episode.py` | scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield.py` |
+| `scientific_process_episode.py:ScientificProcessEpisode` | `scientific_process` | `scientific_process/episode.py` | root annotation; scientific_process self-recursion (not expanded) | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_api` | `scientific_process/execution_job_submission/api_job_execution/episode.py` | scientific_process/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch` | `scientific_process/execution_job_submission/episode.py` | scientific_process | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `scientific_process/execution_job_submission/hpc_job_execution/episode.py` | scientific_process/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_local` | `scientific_process/execution_job_submission/local_job_execution/episode.py` | scientific_process/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `monitor_episode.py:MonitorEpisode` | `monitor` | `scientific_process/execution_progress_assessment/episode.py` | scientific_process | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `results` | `scientific_process/execution_result_acquisition/episode.py` | scientific_process | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `hpc_episode.py:HPCEpisode` | `hpc` | `scientific_process/hpc_work_planning/episode.py` | scientific_process | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_api` | `scientific_process/hpc_work_planning/execution_job_submission/api_job_execution/episode.py` | scientific_process/hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch` | `scientific_process/hpc_work_planning/execution_job_submission/episode.py` | scientific_process/hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution/episode.py` | scientific_process/hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_local` | `scientific_process/hpc_work_planning/execution_job_submission/local_job_execution/episode.py` | scientific_process/hpc_work_planning/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `monitor_episode.py:MonitorEpisode` | `monitor` | `scientific_process/hpc_work_planning/execution_progress_assessment/episode.py` | scientific_process/hpc_work_planning | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `results` | `scientific_process/hpc_work_planning/execution_result_acquisition/episode.py` | scientific_process/hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `hpc_episode.py:HPCEpisode` | `hpc_execution` | `scientific_process/hpc_work_planning/hpc_allocation_execution/episode.py` | scientific_process/hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_api` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_hpc` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `launch_local` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `monitor_episode.py:MonitorEpisode` | `monitor` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `progress_observations.py`, `requests.py`, `returns.py`, `yield_estimator.py` |
+| `execution_episode.py:ExecutionEpisode` | `results` | `scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/episode.py` | scientific_process/hpc_work_planning/hpc_allocation_execution | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `terminal_execution.py`, `yield_estimator.py` |
+| `hpc_episode.py:HPCEpisode` | `hpc_prediction` | `scientific_process/hpc_work_planning/hpc_resource_prediction/episode.py` | scientific_process/hpc_work_planning | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature` | `scientific_process/published_evidence_assessment/episode.py` | scientific_process | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_strategy` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/episode.py` | scientific_process/published_evidence_assessment | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_search` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/episode.py` | scientific_process/published_evidence_assessment/evidence_search_strategy_improvement | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_page` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/episode.py` | scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_targeted` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/episode.py` | scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_ordered` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/episode.py` | scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
+| `literature_episode.py:LiteratureEpisode` | `literature_table` | `scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/episode.py` | scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination | `credit.py`, `episode.py`, `requests.py`, `returns.py`, `waiting.py`, `yield_estimator.py` |
 | `resource_episode.py:ResourceEpisode` | `results` | `scientific_process/resource_result_acquisition/episode.py` | scientific_process | `credit.py`, `episode.py`, `requests.py`, `returns.py` |
 | `resource_episode.py:ResourceEpisode` | `launch_api` | `scientific_process/resource_work_submission/api_resource_work_execution/episode.py` | scientific_process/resource_work_submission | `credit.py`, `episode.py`, `requests.py`, `returns.py` |
 | `resource_episode.py:ResourceEpisode` | `launch` | `scientific_process/resource_work_submission/episode.py` | scientific_process | `credit.py`, `episode.py`, `requests.py`, `returns.py` |

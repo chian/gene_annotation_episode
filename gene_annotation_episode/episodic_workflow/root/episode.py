@@ -8,7 +8,7 @@ from .scoring import SignedEvidenceRootSupport
 from .root_axis_scalars import AXES, VERSION
 from .credit import RootCredit
 from .task import AnnotationTask
-RootYield = import_module('.yield', __package__).RootYield
+from .yield_estimator import RootYield
 
 @dataclass(frozen=True)
 class SignedRootEpisodeBinding(RootCredit, RootYield):
