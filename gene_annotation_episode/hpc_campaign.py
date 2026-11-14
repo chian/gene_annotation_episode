@@ -23,7 +23,7 @@ def validate_commission(value, resources):
     if set(value)-{'monitoring', 'execution_profile', 'yield_bindings'} != required or not value['objective']:
         raise ValueError('explicit_hpc_commission_fields_required')
     if 'yield_bindings' in value:
-        from .numerical import YieldController, YieldParameters
+        from .episodic_workflow.root.numerical import YieldController, YieldParameters
         bindings = value['yield_bindings']
         if not isinstance(bindings, dict) or set(bindings) != set(YIELD_ROLES):
             raise ValueError('hpc_commission_yield_binding_required_for_each_episode')
@@ -37,7 +37,7 @@ def validate_commission(value, resources):
                 YieldParameters(**binding['parameters']))
     if 'execution_profile' in value:
         from .execution_memory import validate_profile
-        from .execution_guidance import resource_identity
+        from .episodic_workflow.root.library.execution_guidance import resource_identity
         profile = validate_profile(value['execution_profile'])
         if (profile['backend'] != 'hpc' or profile['resource_id'] !=
                 resource_identity(value['resource_id'], resources[value['resource_id']])):

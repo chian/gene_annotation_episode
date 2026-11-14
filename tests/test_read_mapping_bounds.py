@@ -7,7 +7,7 @@ import pytest
 from gene_annotation_episode import read_mapping as mapper
 from gene_annotation_episode.cli import main
 from gene_annotation_episode.domain import ContractError, validate_schema
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 

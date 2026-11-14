@@ -7,7 +7,7 @@ import subprocess
 
 import pytest
 
-import gene_annotation_episode.phylogeny_raxml_inputs as native
+import gene_annotation_episode.episodic_workflow.root.library.phylogeny_raxml_inputs as native
 
 
 _REPOSITORY = next(path for path in Path(__file__).resolve().parents

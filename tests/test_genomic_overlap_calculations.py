@@ -8,8 +8,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.genomic_overlap_calculations import calculate_genomic_overlap_components
-from gene_annotation_episode.genomic_overlap_contracts import canonical_genomic_overlap_sheet_sha256
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_calculations import calculate_genomic_overlap_components
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_contracts import canonical_genomic_overlap_sheet_sha256
 from test_genomic_overlap_inputs import (
     PARAMETERS, ROOT, ROW, WORKED, inputs, make_sheet, parsed_pairs,
     reference, contig, sheet_from,
@@ -117,7 +117,7 @@ def test_changed_native_bytes_cannot_claim_genuine_subset_lower_bounds():
     request, sets = sheet['request'], sheet['sets']
     metadata = deepcopy(sheet['comparisons'][0]['receipt'])
     metadata['stdout']['sha256'] = '0' * 64
-    from gene_annotation_episode.genomic_overlap_inputs import parse_bedtools_intersect_wo
+    from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_inputs import parse_bedtools_intersect_wo
     parsed = parse_bedtools_intersect_wo(ROW,pair=request['comparisons'][0],sets={s['set_key']:s for s in sets},native=metadata)
     result = calculate(sheet_from(request,sets,[parsed]))
     assert result['pairs'][0]['observed']['interpretation'] == 'unavailable'

@@ -20,12 +20,12 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.flux_balance_result_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_result_contracts import (
     FIELD_SCHEMAS, ORIGINAL_FIELDS, POSITION_KEYS, fba_result_schema,
     validate_fba_projection_selector, validate_fba_projection, validate_fba_saved_sheet_reference,
 )
-from gene_annotation_episode.flux_balance_result_views import project_fba_result
-from gene_annotation_episode.flux_balance_return_views import (
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_result_views import project_fba_result
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_return_views import (
     fba_fact_sources, requested_fba_sources, select_fba_return_facts, validate_fba_fact_values,
 )
 
@@ -445,8 +445,8 @@ def test_absent_native_point_and_incompatible_calculated_cell(pair):
 @pytest.mark.parametrize("profile",["sbml","cobra_json"])
 def test_v13_current_parser_native_bytes_shared_calculator_projection_saved_only(profile,monkeypatch):
     """Actual original688 emissions; new consumer verification, zero new solves."""
-    from gene_annotation_episode.flux_balance_readers import parse_fba_capture
-    from gene_annotation_episode.flux_balance_sheet import populate_flux_balance_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers import parse_fba_capture
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet import populate_flux_balance_sheet
     from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
     folder=EMISSIONS/profile
     plan=json.loads((folder/"selected-plan.json").read_text())

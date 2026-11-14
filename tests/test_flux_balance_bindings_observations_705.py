@@ -17,16 +17,16 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.native_flux_balance_bindings import (
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_bindings import (
     FLUX_BALANCE_BINDING_SCHEMA, flux_balance_binding_accepts_job,
     validate_flux_balance_bindings,
 )
-from gene_annotation_episode.native_flux_balance_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
     ATTEMPT_DIRECTORY_NAME, ENVIRONMENT_FILENAME, OWNER_FILENAME, POLICY,
     SOURCE_FUNCTION_SHA256, STARTED_FILENAME, bind_flux_balance_environment,
     flux_balance_environment, flux_balance_output_files, validate_flux_balance_run_plan,
 )
-from gene_annotation_episode.native_flux_balance_observations import (
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_observations import (
     flux_balance_observed_files, read_flux_balance_output,
 )
 from test_flux_balance_operands_694 import software
@@ -66,7 +66,7 @@ def plan(job, tmp_path):
         'assignment_sha256': digest({'fixture': 'synthetic705'})}
     root = tmp_path / '.episode-operations' / digest({'run': owner['run_id'], 'episode': owner['episode_id']}) / owner['attempt_id']
     request = {'argv': [job['software']['python']['path'], '-B', '-S', '-m',
-        'gene_annotation_episode.native_flux_balance_driver', 'flux-balance-plan.json'],
+        'gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver', 'flux-balance-plan.json'],
         'environment': flux_balance_environment(job['software'], attempt_directory='/synthetic705/selected/flux-balance-attempt',
             lifecycle_directory='/synthetic705/selected'), 'native_flux_balance': job}
     owner.update(execution_id=str(root / 'native.json'), requested_job_sha256=digest(request))

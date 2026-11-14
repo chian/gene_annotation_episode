@@ -15,7 +15,7 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.communication import ReportBoundaryError, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema, validate_form
 from gene_annotation_episode import restriction_mapping_returns as views
 
 

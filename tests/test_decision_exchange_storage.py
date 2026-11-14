@@ -9,10 +9,10 @@ import pytest
 
 from method_loop.durable import canonical
 
-from gene_annotation_episode import execution_timing
-from gene_annotation_episode.decision_exchanges import DecisionExchanges
-from gene_annotation_episode.episode_completion import CompletionLedger
-from gene_annotation_episode.episode_journal import Journal, WorkflowError
+from gene_annotation_episode.episodic_workflow.root import execution_timing
+from gene_annotation_episode.episodic_workflow.root.decision_exchanges import DecisionExchanges
+from gene_annotation_episode.episodic_workflow.root.episode_completion import CompletionLedger
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal, WorkflowError
 from gene_annotation_episode.state import Store
 
 
@@ -335,8 +335,8 @@ def test_abrupt_owner_loss_preserves_unknown_span_and_excludes_offline_gap(tmp_p
     code = """
 import os, sys
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.decision_exchanges import DecisionExchanges
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.decision_exchanges import DecisionExchanges
 with Store(sys.argv[1]) as store:
     exchanges = DecisionExchanges(Journal(store, 'run'))
     with exchanges.measure('owner', 3, 0):

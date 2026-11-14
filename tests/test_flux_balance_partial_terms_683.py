@@ -16,9 +16,9 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
-from gene_annotation_episode.flux_balance_contracts import validate_flux_balance_record
-from gene_annotation_episode.flux_balance_readers import parse_fba_capture
-from gene_annotation_episode.flux_balance_sheet import populate_flux_balance_sheet
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_contracts import validate_flux_balance_record
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers import parse_fba_capture
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet import populate_flux_balance_sheet
 from test_flux_balance_core_679 import calc, make_sheet, parameters
 from test_flux_balance_readers_680 import bundle, captures, encode, file, missing, number
 

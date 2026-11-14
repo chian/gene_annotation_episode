@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.literature_experimental_prom
     EXPERIMENTAL_TASK, render_literature_experimental_prompt)
 from gene_annotation_episode.episodic_workflow.root.literature_reference_parent_prompt import (
     REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt)
-from gene_annotation_episode.runtime import Workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, run_workflow
 from gene_annotation_episode.state import Store
 from detached_workflow_fixture import (
     ControllerFactory, FixtureTools, ScriptedProvider, make_binding)

@@ -11,7 +11,7 @@ import json
 
 from method_loop.durable import canonical
 
-from .episode_journal import WorkflowError
+from .episodic_workflow.root.episode_journal import WorkflowError
 
 
 def _custody(workflow, source):
@@ -33,7 +33,7 @@ def acquire_report_evidence(workflow, source, selection, index, *,
     uses its recorded result; it never revalues either the original child or
     this acquisition against later sibling information.
     """
-    from .runtime import Record
+    from .episodic_workflow.root.runtime import Record
 
     journal = workflow.journal
     origin = {'child_episode_id': original_attempt['child_episode_id'],

@@ -5,14 +5,14 @@ import json
 from pathlib import Path
 import pytest
 
-from gene_annotation_episode import bvbrc_msa_provider_contracts as c
-from gene_annotation_episode.bvbrc_msa_inputs import extract_msa_sheet
-from gene_annotation_episode.bvbrc_msa_grader import calculate_msa
-from gene_annotation_episode.bvbrc_alignment_provider_contracts import ASSOCIATION_KEYS
-from gene_annotation_episode.bvbrc_msa_formats import parse_msa_frequency_table
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_provider_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_inputs import extract_msa_sheet
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_grader import calculate_msa
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_provider_contracts import ASSOCIATION_KEYS
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_formats import parse_msa_frequency_table
 from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta, parse_newick
-from gene_annotation_episode.bvbrc_msa_format_contracts import frequency_header
-from gene_annotation_episode.bvbrc_msa_xmfa_inputs import verify_xmfa_source_inputs, extract_msa_xmfa_bindings
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_format_contracts import frequency_header
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_xmfa_inputs import verify_xmfa_source_inputs, extract_msa_xmfa_bindings
 
 ROOT=Path(__file__).resolve().parents[1]
 NATIVE=ROOT/'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_metacats_boundaries/native_examples'
@@ -375,7 +375,7 @@ def test_xmfa_binding_tamper_and_wrong_mode_are_separate_failures():
 
 
 def reference_operands(ref_text='>a\nAC\n',query_text='>b\nAT\n'):
-    from gene_annotation_episode.bvbrc_alignment_associations import extract_alignment_associations
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_associations import extract_alignment_associations
     op=operands(); ev=evidence(); aid=op['analysis']['alignment_id']; bindings=[]
     for key,text in [('reference',ref_text),('query',query_text)]:
         bindings.append({'binding_id':key,'parameter_pointer':'/'+key,'kind':'inline_parameter','content':None,'workspace_path':None,'inline_value':text,'link_evidence':None,'members':[]})

@@ -2,8 +2,8 @@ from copy import deepcopy
 import pytest
 
 from test_native_rna_structure_acquisition import F
-from gene_annotation_episode.rna_structure_calculations import calculate_rna_feature_components
-from gene_annotation_episode.rna_structure_result_views import (project_rna_prepublication,
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_calculations import calculate_rna_feature_components
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import (project_rna_prepublication,
     prepare_rna_structure_failure_selection, project_rna_structure_failure_rows,
     validate_rna_structure_result_selector)
 

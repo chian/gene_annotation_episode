@@ -14,10 +14,10 @@ import pytest
 
 from fluorescence_flowio_test_support import require_bounded_runtime
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode import molecular_provider_acquisition as provider
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.scientific_process_prompt import text_instructions
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry

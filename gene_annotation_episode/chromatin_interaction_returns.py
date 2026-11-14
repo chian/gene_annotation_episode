@@ -10,11 +10,11 @@ from copy import deepcopy
 import json
 import re
 
-from .communication import plain, validate_closed_schema, validate_form
-from .episode_receipts import (
+from .episodic_workflow.root.communication import plain, validate_closed_schema, validate_form
+from .episodic_workflow.root.episode_receipts import (
     EpisodeReceipts, RECEIVED_REPORT_PREFIX_VERSION, _validate_report_prefix,
 )
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
 from .chromatin_interaction_return_views import (
     FACT_SOURCES, SAVED_SOURCE, requested_chromatin_sources,

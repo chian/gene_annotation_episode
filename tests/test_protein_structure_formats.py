@@ -2,7 +2,7 @@
 from importlib import import_module
 from pathlib import Path
 import pytest
-from gene_annotation_episode.protein_structure_formats import parse_pdb_structure, parse_mmcif_structure, category_rows, native_number
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats import parse_pdb_structure, parse_mmcif_structure, category_rows, native_number
 f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 
 

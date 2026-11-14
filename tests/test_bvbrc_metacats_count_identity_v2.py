@@ -8,7 +8,7 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_metacats_calculators import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculators import (
     metacats_group_counts, metacats_statistics, metacats_effects, adjust_p_values)
 from test_bvbrc_metacats_biological_calculators import SAVED
 
@@ -75,7 +75,7 @@ def test_historical_saved_count_replay_is_exact_with_io_and_native_execution_dis
     monkeypatch.setattr(socket, 'socket', forbidden)
     monkeypatch.setattr(subprocess, 'Popen', forbidden)
     monkeypatch.setattr('gene_annotation_episode.phylogeny_formats.parse_aligned_fasta', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_metacats_input_formats.parse_metacats_input_fasta', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_input_formats.parse_metacats_input_fasta', forbidden)
     assert calculate_saved(old, expected['holm']['family']) == expected
     assert json.dumps(old, sort_keys=True, allow_nan=False) == before
     assert all(s['table_id'].startswith('metacats_counts:') for s in old['counts']['sites'])

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.hmmalign_inputs import (
+from gene_annotation_episode.episodic_workflow.root.library.hmmalign_inputs import (
     build_hmmalign_sheet, iter_hmmalign_stockholm_events, iter_hmmalign_stockholm_records,
     iter_hmmalign_stockholm_rows, parse_hmmalign_stockholm, stockholm_digital_checksum,
 )

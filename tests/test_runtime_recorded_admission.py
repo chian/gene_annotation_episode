@@ -12,13 +12,13 @@ from method_loop import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.episode_commissions import CommissionCoordinator
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.episode_commissions import CommissionCoordinator
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.runtime import Record, TypedReportContract, Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract, Workflow
 from gene_annotation_episode.state import Store
 
 
@@ -364,7 +364,7 @@ def test_outer_contract_reuses_proven_whole_form_without_live_domain_validation(
 
 
 def test_outer_recorded_form_still_rejects_current_generic_audit_identifiers(frame):
-    from gene_annotation_episode.communication import ReportBoundaryError
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
     with pytest.raises(ReportBoundaryError, match="Internal audit identity") as error:
         _outer_contract(frame).admit(frame.form, audit_identifiers=(frame.references[0],))
     assert error.value.diagnostic["code"] == "audit_identity"
@@ -419,7 +419,7 @@ def test_optional_recorded_callback_does_not_change_serialized_contract_or_schem
 
 
 def test_ordinary_outer_contract_still_validates_schema_before_semantic_callback(frame):
-    from gene_annotation_episode.communication import ReportBoundaryError
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
     form = {**frame.form, "completed": 0}
     with pytest.raises(ReportBoundaryError):
         _outer_contract(frame, recorded=False).admit(form, audit_identifiers=("original-child-audit-only",))

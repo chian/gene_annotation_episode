@@ -12,7 +12,7 @@ import math
 import re
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_search import PROGRAM_UNITS
-from .communication import ReportBoundaryError, validate_closed_schema, validate_form
+from .episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema, validate_form
 
 
 __all__ = ["alignment_site_fact_sources", "requested_site_projections",

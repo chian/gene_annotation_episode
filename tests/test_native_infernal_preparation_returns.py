@@ -16,18 +16,18 @@ from method_loop.episode import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.infernal_preparation_result_views import (
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_result_views import (
     preparation_fact_sources, project_preparation_result,
 )
-from gene_annotation_episode.native_infernal_preparation_returns import (
+from gene_annotation_episode.episodic_workflow.root.native_infernal_preparation_returns import (
     FACT_SOURCES, REFERENCE_SOURCE, NativeInfernalPreparationReturns, requested_sources,
 )
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 
@@ -313,7 +313,7 @@ def test_actual_retained_projection_crosses_exact_form_without_new_work(saved, c
     form = saved.returned(saved.root, child)
     def forbidden(*args, **kwargs):
         raise AssertionError('Return authentication reprojected retained grading')
-    monkeypatch.setattr('gene_annotation_episode.infernal_preparation_result_views.project_preparation_result', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_result_views.project_preparation_result', forbidden)
     before = list(saved.store.db.iterdump())
     saved.boundary.validate_received_report(child, form, schema)
     assert validate_form(form, schema, lambda ref, ns: saved.boundary.resolve_received(saved.root, ref, ns)) == form

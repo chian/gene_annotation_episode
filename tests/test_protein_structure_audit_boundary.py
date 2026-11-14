@@ -10,9 +10,9 @@ import pytest
 
 from method_loop.communication import ParentModelInputError, ParentReport
 from method_loop.episode import _model_inputs
-from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts
-from gene_annotation_episode.protein_structure_result_views import protein_structure_fact_sources
-from gene_annotation_episode.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, form_with_facts
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views import protein_structure_fact_sources
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
 from test_protein_structure_form_boundary import native_facts, form, object_form, FIELDS
 
 

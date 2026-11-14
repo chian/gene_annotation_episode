@@ -10,9 +10,9 @@ from jsonschema import Draft202012Validator
 from referencing import Registry
 from referencing.exceptions import NoSuchResource
 
-from gene_annotation_episode import native_protein_structure_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_contracts as contracts
 from gene_annotation_episode.execution_contracts import digest, obj
-from gene_annotation_episode.native_protein_structure_worker import execute_protein_structure_request
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker import execute_protein_structure_request
 
 _fixtures = import_module(
     "gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390")

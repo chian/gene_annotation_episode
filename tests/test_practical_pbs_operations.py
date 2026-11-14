@@ -14,7 +14,7 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode import practical_pbs_operations as pbs
-from gene_annotation_episode.practical_execution_records import assess_validations
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations
 from gene_annotation_episode.execution_inventory import canonical_bytes, make_catalog
 
 

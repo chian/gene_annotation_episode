@@ -8,12 +8,12 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.infernal_search_cells import (
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_cells import (
     populate_infernal_search_cells, upgrade_saved_infernal_search_sheet)
-from gene_annotation_episode.infernal_search_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_contracts import (
     SHEET_SCHEMA, SCORE_SCHEMA, sheet_digest, validate_infernal_search_sheet,
     validate_infernal_search_scores)
-from gene_annotation_episode.infernal_search_grader import calculate_infernal_search_scores
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader import calculate_infernal_search_scores
 
 
 FIXTURE = Path(__file__).parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_search_shared_cells/SYNTHETIC_COMMON_INPUT.json"
@@ -179,8 +179,8 @@ def test_saved_v2_recalculation_and_validation_call_no_parser_io_or_process(monk
     before = deepcopy(saved)
     def forbidden(*args, **kwargs):
         raise AssertionError("saved-only calculation performed external work")
-    monkeypatch.setattr("gene_annotation_episode.infernal_search_cells.populate_infernal_search_cells", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.infernal_search_inputs.populate_infernal_search_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.infernal_search_cells.populate_infernal_search_cells", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.infernal_search_inputs.populate_infernal_search_sheet", forbidden)
     monkeypatch.setattr(Path, "read_text", forbidden)
     monkeypatch.setattr(Path, "read_bytes", forbidden)
     monkeypatch.setattr(socket, "socket", forbidden)
@@ -258,8 +258,8 @@ def test_explicit_v1_conversion_keeps_original_cells_and_lineage(monkeypatch):
     saved = deepcopy(legacy)
     def forbidden(*args, **kwargs):
         raise AssertionError("explicit saved conversion parsed/acquired data")
-    monkeypatch.setattr("gene_annotation_episode.infernal_search_inputs.populate_infernal_search_sheet", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.infernal_search_cells.populate_infernal_search_cells", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.infernal_search_inputs.populate_infernal_search_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.infernal_search_cells.populate_infernal_search_cells", forbidden)
     upgraded = upgrade_saved_infernal_search_sheet(legacy)
     assert legacy == saved
     assert upgraded["lineage"] == {"source_sheet_schema": "infernal_search_sheet_v1", "source_sheet_digest": sheet_digest(saved)}
@@ -280,7 +280,7 @@ def test_authentic_saved_native_v1_conversion_preserves_recorded_calculation(mon
     before_sheet, before_scores = deepcopy(old_sheet), deepcopy(old_scores)
     def forbidden(*args, **kwargs):
         raise AssertionError("saved native v1 conversion performed acquisition or parsing")
-    monkeypatch.setattr("gene_annotation_episode.infernal_search_inputs.populate_infernal_search_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.infernal_search_inputs.populate_infernal_search_sheet", forbidden)
     monkeypatch.setattr(Path, "read_bytes", forbidden)
     monkeypatch.setattr(Path, "read_text", forbidden)
     upgraded = upgrade_saved_infernal_search_sheet(old_sheet)

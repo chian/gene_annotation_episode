@@ -122,7 +122,7 @@ def _output_failure(registry, work, directory, failure, invalid):
 
 
 async def prepare_circular_dichroism_work(registry, arguments, *, scope, operation_key, authority):
-    from .communication import plain
+    from .episodic_workflow.root.communication import plain
     from .domain import ContractError, canonical
     from .molecular_measurement_tools import read_retained_molecular_publication
     arguments = contracts.validate_circular_dichroism_tool_arguments(arguments)

@@ -11,16 +11,16 @@ import subprocess
 import pytest
 import scipy
 
-from gene_annotation_episode.bvbrc_metacats_input_formats import parse_metacats_input_fasta
-from gene_annotation_episode.bvbrc_metacats_biological_calculators import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_input_formats import parse_metacats_input_fasta
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_biological_calculators import (
     biological_group_counts, biological_group_statistics, biological_group_effects)
-from gene_annotation_episode.bvbrc_metacats_biological_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_biological_contracts import (
     validate_biological_group_population, validate_biological_assignments,
     validate_biological_counts, validate_biological_statistics, validate_biological_effects)
-from gene_annotation_episode.bvbrc_contingency_math import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_contingency_math import (
     count_alignment_group_sites, expected_contingency_counts, pearson_contingency_statistic)
-from gene_annotation_episode.bvbrc_metacats_calculators import metacats_statistics, adjust_p_values
-from gene_annotation_episode.bvbrc_metacats_calculation_contracts import validate_test_family
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculators import metacats_statistics, adjust_p_values
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculation_contracts import validate_test_family
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -447,7 +447,7 @@ def test_saved_recalculation_and_detached_validation_need_no_io_or_parser(monkey
     monkeypatch.setattr(Path, 'read_text', forbidden)
     monkeypatch.setattr(socket, 'socket', forbidden)
     monkeypatch.setattr(subprocess, 'Popen', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_metacats_input_formats.parse_metacats_input_fasta', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_input_formats.parse_metacats_input_fasta', forbidden)
     assert biological_group_counts(alignment, **args) == counts
     assert biological_group_statistics(json.loads(json.dumps(counts)), **STAT_PARAMS) == stats
     changed = biological_group_statistics(counts, **{**STAT_PARAMS, 'epsilon': .5})
@@ -455,7 +455,7 @@ def test_saved_recalculation_and_detached_validation_need_no_io_or_parser(monkey
     assert changed['omnibus'][0]['chi_square']['value'] != stats['omnibus'][0]['chi_square']['value']
     assert biological_group_effects(counts, **EFFECT_PARAMS) == effects
     for name in ('biological_group_counts', 'biological_group_statistics', 'biological_group_effects', 'chi_square_tail'):
-        monkeypatch.setattr('gene_annotation_episode.bvbrc_metacats_biological_calculators.' + name, forbidden)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_biological_calculators.' + name, forbidden)
     for value, validator in ((counts, validate_biological_counts), (stats, validate_biological_statistics),
                              (effects, validate_biological_effects)):
         saved = json.loads(json.dumps(value, allow_nan=False))

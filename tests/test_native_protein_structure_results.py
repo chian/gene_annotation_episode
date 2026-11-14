@@ -15,17 +15,17 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import native_protein_structure_results as hm
-from gene_annotation_episode import protein_structure_calculations as calculations
-from gene_annotation_episode import protein_structure_sheet as sheets
+from gene_annotation_episode.episodic_workflow.root import native_protein_structure_results as hm
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_calculations as calculations
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_sheet as sheets
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.native_protein_structure_acquisition import retained_protein_structure_file
-from gene_annotation_episode.native_protein_structure_returns import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_acquisition import retained_protein_structure_file
+from gene_annotation_episode.episodic_workflow.root.native_protein_structure_returns import (
     PROJECTION_SOURCE, SAVED_SOURCE, SEQUENCE_SOURCE, FAILURE_SOURCE,
 )
-from gene_annotation_episode.protein_structure_authority import ProteinStructureOperandError
-from gene_annotation_episode.protein_structure_result_views import project_protein_structure_results
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views import project_protein_structure_results
 from gene_annotation_episode.state import Store
 from test_protein_structure_record_publication import case as retained_case, file_for, retain
 
@@ -542,7 +542,7 @@ def test_actual_same_action_cancellation_drains_under_receipt_lock(store, tmp_pa
 
 def test_actual_source_publication_interruption_reuses_capture_and_worker(store, tmp_path, monkeypatch):
     from gene_annotation_episode import native_lifecycle
-    from gene_annotation_episode import native_protein_structure_acquisition
+    from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_acquisition
     f = RUNTIME.HostFixture(store, tmp_path / "runtime", kind="inspect")
     asyncio.run(f.live())
     child = f.child(selector=selector(projection("structure_inventory")), schema=RUNTIME.schema_for(PROJECTION_SOURCE))

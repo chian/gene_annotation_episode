@@ -15,9 +15,9 @@ import urllib.request
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode import bvbrc_comparative_systems_bundle_adapter as adapter
-from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import validate_saved_comparative_systems_projection
-from gene_annotation_episode.bvbrc_comparative_systems_handoff_contracts import canonical_sha256
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_comparative_systems_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_projection import validate_saved_comparative_systems_projection
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_handoff_contracts import canonical_sha256
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_comparative_systems_bundle"
 INPUTS = json.loads((FIXTURES / "inputs.json").read_text())
@@ -79,8 +79,8 @@ def forbidden(*args, **kwargs):
 def replace_data(args, *, docs=None, total=None, exact=True, partial=False, complete=True):
     """Build a changed real Data reader result; no ComparativeSystems mock."""
     from gene_annotation_episode.acquisition import SourceSnapshot
-    from gene_annotation_episode.bvbrc_data_calculators import calculate_page_counts
-    from gene_annotation_episode.bvbrc_data_readers import parse_data_snapshot
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import calculate_page_counts
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import parse_data_snapshot
     wrapper = args["qualified_data_inputs"][0]
     grading = wrapper["qualified_result"]["grading"]
     prepared = grading["prepared"]
@@ -110,9 +110,9 @@ def add_reference_data(args, docs, *, collection="pathway_ref", total=None, part
                        source="synthetic_reference", offset=0, select_existing=False, filters=None):
     """Supply labelled native bytes through the delivered Data reader and D port."""
     from gene_annotation_episode.acquisition import SourceSnapshot
-    from gene_annotation_episode.bvbrc_data_calculators import calculate_page_counts
-    from gene_annotation_episode.bvbrc_data_query import encode_native_query
-    from gene_annotation_episode.bvbrc_data_readers import parse_data_snapshot
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import calculate_page_counts
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import parse_data_snapshot
     from gene_annotation_episode.execution_contracts import digest
     template = INPUTS["pathway_subsystem"]["qualified_data_inputs"][0]
     wrapper = deepcopy(template)
@@ -245,7 +245,7 @@ def test_actual_family_components_survive_ambiguous_hex(name, expected):
 
 
 def test_native_only_needs_no_data_extractor(monkeypatch):
-    import gene_annotation_episode.bvbrc_comparative_systems_bundle_resolution as resolution
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_resolution as resolution
     args = arguments(native_only=True)
     monkeypatch.setattr(resolution, "extract_comparative_systems_data_inputs", forbidden)
     result = adapter.consume_bundle(**args)

@@ -21,11 +21,11 @@ import urllib.request
 
 import pytest
 
-from gene_annotation_episode.bvbrc_comparative_systems_calculation_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_calculation_contracts import (
     validate_calculation_parameters, validate_components,
 )
-from gene_annotation_episode.bvbrc_comparative_systems_calculators import calculate_comparative_systems_components as calculate
-from gene_annotation_episode.bvbrc_comparative_systems_handoff_contracts import canonical_sha256, schema, validate_shape
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_calculators import calculate_comparative_systems_components as calculate
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_handoff_contracts import canonical_sha256, schema, validate_shape
 
 _FIXTURE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_comparative_systems_calculators/saved_examples.json"
 
@@ -398,7 +398,7 @@ def test_recalculation_and_saved_validation_forbid_acquisition_parsing_processes
     assert value(later["components"][0]) == 3 / 4
     alternate = one(sheet, request(examples, "reference_component_representation", reference="other_saved_map"))
     assert value(alternate) == 1 / 2
-    import gene_annotation_episode.bvbrc_comparative_systems_calculators as calculator_module
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_calculators as calculator_module
     monkeypatch.setattr(calculator_module, "calculate_comparative_systems_components", forbidden)
     assert validate_components(earlier, sheet=sheet) == earlier
     assert sheet == original
@@ -551,8 +551,8 @@ _FORMULAS = ("pathway_ec_conservation", "pathway_gene_conservation",
 
 
 def dependency_sheet(*, name="pathway_subsystem_sheet", edits=None, joined_witness=False, incomplete=None):
-    from gene_annotation_episode.bvbrc_comparative_systems_native import parse_comparative_systems_document
-    from gene_annotation_episode.bvbrc_comparative_systems_sheet import build_comparative_systems_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_native import parse_comparative_systems_document
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_sheet import build_comparative_systems_sheet
 
     options = json.loads((_N_FIXTURES / "build_inputs.json").read_text())[name]
     sources = options.pop("source_documents")
@@ -738,9 +738,9 @@ def test_corrected_dependencies_recalculate_immutably_and_validate_without_calcu
     changed["absolute_tolerance"] = 0.125
     def forbidden(*args, **kwargs):
         raise AssertionError("saved recalculation or validation attempted new work")
-    import gene_annotation_episode.bvbrc_comparative_systems_native as native_module
-    import gene_annotation_episode.bvbrc_comparative_systems_sheet as sheet_module
-    import gene_annotation_episode.bvbrc_comparative_systems_calculators as calculators
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_native as native_module
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_sheet as sheet_module
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_calculators as calculators
     for owner, name in ((native_module, "parse_comparative_systems_document"),
                         (sheet_module, "build_comparative_systems_sheet"),
                         (builtins, "open"), (Path, "read_bytes"), (Path, "read_text"),

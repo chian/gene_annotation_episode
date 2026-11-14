@@ -11,7 +11,7 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.rna_structure_comparison_worker import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_worker import (
     comparison_input_digests, comparison_calculation_key, run_rna_comparison_worker,
 )
 
@@ -107,7 +107,7 @@ def test_worker_retains_all_numeric_components_and_exactly_two_requested_structu
     plan = f.plan(tmp_path, selector, operands)
     original_import = builtins.__import__
     def guarded(name, *args, **kwargs):
-        assert name not in ("RNA", "gene_annotation_episode.native_rna_structure_worker")
+        assert name not in ("RNA", "gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker")
         return original_import(name, *args, **kwargs)
     def forbidden(*args, **kwargs):
         raise AssertionError("No native/network/subprocess operation is permitted")
@@ -160,7 +160,7 @@ def test_all_eight_filled_examples_match_saved_numerical_answers(tmp_path):
 def test_retained357_original_values_and_unavailable_arrays_survive_worker(tmp_path, name, quantity):
     packet = f.load(f.REPO / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_comparison_calculations_367/retained357" / (name + ".json"))
     original, software = packet["sheet"], packet["bundle"]["software"]
-    from gene_annotation_episode.rna_structure_comparison_inputs import populate_rna_comparison_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_inputs import populate_rna_comparison_sheet
     selected = f.b.selector([f.b.member(original, key="WT")], [], scan=f.b.scan_request({**f.b.energy_request(), "quantity": quantity}))
     sheet = populate_rna_comparison_sheet(selected, operands={"WT": {
         "original_sheet": original, "original_bundle_software": software, "received_failure": None}})

@@ -1,8 +1,8 @@
 """Prepare a caller descriptor without starting a model, child or tool job."""
 from pathlib import Path
 
-from .scientific_process_library import ScientificProcessLibrary
-from .scientific_tool_library import ScientificToolLibrary
+from .episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from .episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 
 
 def prepare_scientific_binding(*, run_directory, source_directory, tool_catalog, child_roles,

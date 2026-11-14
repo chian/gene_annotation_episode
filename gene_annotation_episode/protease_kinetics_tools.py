@@ -19,10 +19,10 @@ from . import protease_kinetics_measurements as measurements
 from . import protease_kinetics_result_contracts as contracts
 from . import native_lifecycle
 from .alignment_site_native import immutable_record
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError, identity
-from .episode_receipts import EpisodeReceipts
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_receipts import EpisodeReceipts
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
 from .native_operation_lock import _action_lock
 from .local_jobs import LocalJobPolicy

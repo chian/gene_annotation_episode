@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from copy import deepcopy
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .tool_information import RESOURCE_KINDS, comparable_contract, resource_kind
 from .tool_schema_validation import check_tool_schema
 

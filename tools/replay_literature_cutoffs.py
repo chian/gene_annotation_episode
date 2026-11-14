@@ -33,7 +33,7 @@ def main():
         parser.error('output must be beneath runs/')
     output.mkdir(parents=True, exist_ok=True)
     sys.path.insert(0, str(args.source_root.resolve()))
-    from gene_annotation_episode import numerical
+    from gene_annotation_episode.episodic_workflow.root import numerical
 
     db = sqlite3.connect(args.database.resolve().as_uri() + '?mode=ro', uri=True)
     db.row_factory = sqlite3.Row

@@ -3,7 +3,7 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, project_finding_progress
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, project_finding_progress
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.scientific_credit import AnnotationSupportScore

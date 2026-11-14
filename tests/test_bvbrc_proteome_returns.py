@@ -14,17 +14,17 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_bundle_adapter as adapter
-from gene_annotation_episode import bvbrc_proteome_fact_contracts as facts
-from gene_annotation_episode.bvbrc_proteome_returns import (
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_fact_contracts as facts
+from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns import (
     BVBRCProteomeReturns, FACT_SOURCES as ALL_FACT_SOURCES, IDENTIFIER_NAMESPACES, ProteomeReturnError,
     proteome_fact_sources, requested_sources, project_proteome_facts, _report_node,
 )
-from gene_annotation_episode.bvbrc_appservice_publication import DATA_PROVIDER, RESULT_VERSION
-from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustodyError
-from gene_annotation_episode.communication import plain, form_with_facts, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_publication import DATA_PROVIDER, RESULT_VERSION
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustodyError
+from gene_annotation_episode.episodic_workflow.root.communication import plain, form_with_facts, validate_closed_schema, validate_form
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.runtime import TypedReportContract, _object
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, _object
 from gene_annotation_episode.state import Store
 from test_bvbrc_appservice_custody import SavedRecords, selector as base_selector, refs_schema
 from test_bvbrc_proteome_bundle_resolution import fixture as provider_arguments
@@ -372,7 +372,7 @@ def test_requested_source_selection_is_finite_unique_tuple(sources):
 def test_no_requested_fields_do_not_read_any_publication(run, monkeypatch):
     def forbidden(*args, **kwargs):
         pytest.fail('unrequested publication lookup')
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_proteome_returns.read_latest_adapter_result', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns.read_latest_adapter_result', forbidden)
     assert project_proteome_facts(None, requested_sources=(), sheet=None, components=None) == {}
     assert run.host.facts(run.saved.root, {}) == run.host.received_facts(run.saved.root, {}) == {}
 
@@ -536,7 +536,7 @@ def test_empty_publication_guard_is_limited_to_exact_selected_results_adapter(ru
     outcome['result'] = {'publication_ref': partial, 'result_record_refs': []}
     run.store.db.execute('UPDATE runtime_actions SET result=? WHERE episode_id=? AND decision_index=10',
         (canonical(outcome), child.episode_id))
-    module = importlib.import_module('gene_annotation_episode.bvbrc_proteome_returns')
+    module = importlib.import_module('gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns')
     actual, calls = module.read_latest_adapter_result, []
     def read(*args, **kwargs):
         calls.append(kwargs['adapter_ids'])

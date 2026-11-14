@@ -10,11 +10,11 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from gene_annotation_episode.providers import ModelConnection, load_config
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
-from gene_annotation_episode.scientific_tool_retrieval import ScientificToolRetriever, VERSION, SEMANTIC
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection, load_config
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_retrieval import ScientificToolRetriever, VERSION, SEMANTIC
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 from method_loop.durable import canonical, content_digest
 
 

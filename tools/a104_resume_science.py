@@ -88,7 +88,7 @@ def main():
     original.register_resume = register_adapter
     repair = None
     if args.repair_axis_publication:
-        import gene_annotation_episode.runtime as runtime
+        import gene_annotation_episode.episodic_workflow.root.runtime as runtime
         tree = ast.parse((root/'gene_annotation_episode/runtime.py').read_text())
         cls = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == 'Workflow')
         method = next(node for node in cls.body if isinstance(node, ast.FunctionDef) and node.name == 'publish_axis_information')
@@ -130,7 +130,7 @@ def main():
             'change': 'mutual_scope_containment_for_equivalent_geometry; exact_original_ledger_receipt_and_native_bytes_required'}
     replay_repair = None
     if args.repair_closed_replay:
-        import gene_annotation_episode.runtime as runtime
+        import gene_annotation_episode.episodic_workflow.root.runtime as runtime
         tree = ast.parse((root/'gene_annotation_episode/runtime.py').read_text())
         cls = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == 'Workflow')
         method = next(node for node in cls.body if isinstance(node, ast.FunctionDef) and node.name == '_closed_child_commission')

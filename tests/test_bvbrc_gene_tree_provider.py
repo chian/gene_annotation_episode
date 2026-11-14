@@ -23,11 +23,11 @@ from urllib.parse import quote
 
 import pytest
 
-from gene_annotation_episode import bvbrc_gene_tree_inputs as provider
-from gene_annotation_episode import bvbrc_gene_tree_grader as grader
-from gene_annotation_episode import bvbrc_phylogeny_common_inputs as common_inputs
-from gene_annotation_episode import bvbrc_phylogeny_common_contracts as common_contracts
-from gene_annotation_episode import bvbrc_phylogeny_common_grader as common_grader
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_gene_tree_inputs as provider
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_gene_tree_grader as grader
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_common_inputs as common_inputs
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_common_contracts as common_contracts
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_common_grader as common_grader
 from gene_annotation_episode import phylogeny_formats as formats
 from gene_annotation_episode import phylogeny_calculators as calculators
 from gene_annotation_episode import phylogeny_calculation_contracts as calculation_contracts

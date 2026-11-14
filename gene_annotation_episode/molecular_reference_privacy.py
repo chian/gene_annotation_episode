@@ -261,8 +261,8 @@ def molecular_reference_restriction(store, context, reference, namespace, *, pri
             or not isinstance(context, BindingContext)):
         return False
     try:
-        from .episode_return_records import EpisodeReturnRecords
-        from .episode_receipts import EpisodeReceipts
+        from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+        from .episodic_workflow.root.episode_receipts import EpisodeReceipts
         EpisodeReturnRecords(store, context.run_id, failure_prefix="molecular_reference_").authenticate(context)
         receipts = EpisodeReceipts.__new__(EpisodeReceipts)
         receipts.store, receipts.db, receipts.run_id = store, store.db, context.run_id

@@ -7,9 +7,9 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_proteome_directional_sheet import build_directional_sheet
-from gene_annotation_episode.bvbrc_proteome_directional_calculators import calculate_directional_components
-from gene_annotation_episode.bvbrc_proteome_directional_numerical_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_sheet import build_directional_sheet
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_calculators import calculate_directional_components
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_numerical_contracts import (
     canonical_sheet_sha256, validate_directional_numerical, DirectionalNumericalContractError,
 )
 from test_bvbrc_proteome_directional import native, parse
@@ -131,7 +131,7 @@ def test_saved_sheet_recalculation_uses_no_native_reader_network_or_process(nati
     saved = json.loads(json.dumps(observed))
     def forbidden(*args, **kwargs):
         raise AssertionError('Saved-sheet recalculation attempted scientific I/O')
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_proteome_directional.parse_genome_comparison_directional_report', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional.parse_genome_comparison_directional_report', forbidden)
     monkeypatch.setattr(socket, 'create_connection', forbidden)
     monkeypatch.setattr(socket.socket, 'connect', forbidden)
     monkeypatch.setattr(subprocess, 'run', forbidden)

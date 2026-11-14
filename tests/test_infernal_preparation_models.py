@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from gene_annotation_episode.infernal_preparation_models import (
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_models import (
     ISSUE_CODES, OPAQUE_SIGNATURES, ROW_FIELDS, extract_infernal_models,
 )
 

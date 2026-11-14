@@ -143,7 +143,7 @@ def test_context_runtime_signed_revisions_return_actual_parent_facts_without_ext
     """Scripted reasoning + test-only continuation; no model/provider/native calls."""
     import asyncio
     from test_runtime import ScriptedProvider, FixtureController, obj
-    from gene_annotation_episode.runtime import run_workflow
+    from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
     from gene_annotation_episode.credit import project_credit
     with Store(tmp_path/'s') as s:
         target,reads,full,subsets,_=fixture(s,tmp_path)

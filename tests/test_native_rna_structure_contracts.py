@@ -9,11 +9,11 @@ import sys
 import pytest
 
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.native_rna_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_contracts import (
     ATTEMPT_DIRECTORY_NAME, POLICY, compile_rna_structure_job, requested_job_from_rna_structure,
     validate_rna_structure_job, validate_rna_structure_requested_job, validate_rna_structure_run_plan,
     validate_rna_structure_bindings)
-from gene_annotation_episode.native_rna_structure_tool_info import rna_structure_tool_contracts, rna_structure_tool_information
+from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_tool_info import rna_structure_tool_contracts, rna_structure_tool_information
 
 REPO = Path(__file__).resolve().parents[1]
 PACKET = REPO / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_producer_357"
@@ -50,7 +50,7 @@ def rna_input(*, prediction=False, energy=False):
 
 def software(*, native=False):
     result = {"python_executable": sys.executable, "python_sha256": sha(sys.executable),
-        "python_version": platform.python_version(), "worker_module": "gene_annotation_episode.native_rna_structure_worker",
+        "python_version": platform.python_version(), "worker_module": "gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker",
         "worker_source_sha256": sha(REPO / "gene_annotation_episode/native_rna_structure_worker.py"),
         "viennarna_distribution_version": None, "rna_module_sha256": None, "rna_extension_sha256": None}
     if native:

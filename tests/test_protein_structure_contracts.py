@@ -4,7 +4,7 @@ from importlib import import_module
 import math
 import pytest
 from jsonschema import Draft202012Validator
-from gene_annotation_episode import protein_structure_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_contracts as c
 f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 
 

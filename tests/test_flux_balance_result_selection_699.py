@@ -11,7 +11,7 @@ import subprocess
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.flux_balance_result_selection import (
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_result_selection import (
     FBA_RESULT_SELECTOR_SCHEMA, validate_flux_balance_result_selector,
 )
 

@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode import protein_disorder_result_contracts as contracts
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical, identity
 from gene_annotation_episode.molecular_reference_privacy import molecular_reference_restriction
 from test_molecular_sequence_input_bindings import actual_received_input_owner

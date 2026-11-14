@@ -13,19 +13,19 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.assembled_service_setup import bind_assembled_services
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.native_protein_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import (
     DRIVER_MODULE, POLICY, WORKER_MODULE,
 )
-from gene_annotation_episode.protein_structure_tools import (
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools import (
     PROTEIN_STRUCTURE_TOOLS, normalize_protein_structure_configuration,
     protein_structure_tool_catalog,
 )
 from gene_annotation_episode.resource_tool_information import tool_information_contracts
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
@@ -127,8 +127,8 @@ def test_invalid_explicit_selection_fails_before_work(tmp_path, monkeypatch, fau
         table[0]['environment'] = None
     else:
         table[0]['environment']['HOME'] = '/forbidden-managed-path'
-    monkeypatch.setattr('gene_annotation_episode.protein_structure_tools.run_cancellable_native', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.protein_structure_tools.prepare_selected_local_protein_structure', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools.run_cancellable_native', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools.prepare_selected_local_protein_structure', forbidden)
     with pytest.raises(ValueError):
         normalize_protein_structure_configuration(configured, table, LocalJobPolicy(**POLICY))
     assert not (tmp_path / 'uncreated-protein-workspace').exists()
@@ -155,8 +155,8 @@ def test_actual_registry_factory_is_idempotent_and_rejects_configuration_conflic
     selected_factory = factory(configured, table)
     with Store(tmp_path / 'store') as store:
         tools = registry(store)
-        monkeypatch.setattr('gene_annotation_episode.protein_structure_tools.run_cancellable_native', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.protein_structure_tools.prepare_selected_local_protein_structure', forbidden)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools.run_cancellable_native', forbidden)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools.prepare_selected_local_protein_structure', forbidden)
         selected_factory.configure_tool_registry(tools)
         frozen = canonical(tools._protein_structure_configuration)
         selected_factory.configure_tool_registry(tools)

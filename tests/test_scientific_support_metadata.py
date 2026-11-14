@@ -8,7 +8,7 @@ from gene_annotation_episode.credit import CreditPolicy
 from gene_annotation_episode.domain import (FINDING_QUALIFICATIONS,
     OBSERVATION_KINDS, PREDICATES, RECORD_SCHEMAS)
 from gene_annotation_episode.scientific_credit import AnnotationSupportScore
-from gene_annotation_episode.scientific_support_metadata import (
+from gene_annotation_episode.episodic_workflow.root.scientific_support_metadata import (
     annotation_policy_routes, support_observation_kinds, validate_support_entry)
 
 

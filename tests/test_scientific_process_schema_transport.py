@@ -10,11 +10,11 @@ import json
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.runtime import (
+from gene_annotation_episode.episodic_workflow.root.runtime import (
     _action_generation_schema, _decode_action_response,
 )
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
-from gene_annotation_episode.scientific_process_records import selector_selection
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import selector_selection
 from gene_annotation_episode.state import Store
 from test_runtime import ScriptedProvider
 from test_scientific_process_runtime import Scenario, prepared_child

@@ -19,7 +19,7 @@ import pytest
 from gene_annotation_episode.chemistry import accession, rhea_response, rhea_row
 from gene_annotation_episode.domain import RECORD_SCHEMAS, validate_schema
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.native_flux_balance_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
     ATTEMPT_DIRECTORY_NAME, POLICY, RUN_PLAN_FILENAME, flux_balance_driver_argv,
     flux_balance_environment, validate_flux_balance_software,
 )
@@ -40,7 +40,7 @@ from fractions import Fraction
 from pathlib import Path
 import sys
 
-from gene_annotation_episode.native_flux_balance_driver import _verify_software
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver import _verify_software
 from gene_annotation_episode.native_flux_balance_storage import file_pin, immutable_json, read_json
 
 request = read_json(sys.argv[1])

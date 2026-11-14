@@ -11,7 +11,7 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode.scientific_process_records import (
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import (
     scientific_digest, scientific_invocation_ref, selector_selection)
 from gene_annotation_episode.state import Store
 from test_published_axis_workflow import (

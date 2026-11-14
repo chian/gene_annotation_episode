@@ -6,7 +6,7 @@ import subprocess
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode.bvbrc_minhash_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_contracts import (
     minhash_result_selector_schema,
     validate_minhash_pair_metadata,
     validate_minhash_publication_inputs,

@@ -12,13 +12,13 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.decision_context import INSTRUCTIONS as EXCHANGE_INSTRUCTIONS
-from gene_annotation_episode.rna_structure_comparison_views import (
+from gene_annotation_episode.episodic_workflow.root.decision_context import INSTRUCTIONS as EXCHANGE_INSTRUCTIONS
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import (
     PROJECTION_SOURCE, rna_comparison_fact_sources,
 )
-from gene_annotation_episode.rna_structure_comparison_presentation import render_rna_comparison_projections
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_presentation import render_rna_comparison_projections
 from gene_annotation_episode.scientific_process_prompt import text_instructions
-import gene_annotation_episode.rna_structure_comparison_receiver_prompt as prompt
+import gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_receiver_prompt as prompt
 from test_rna_comparison_presentation import pair, scan
 
 
@@ -234,7 +234,7 @@ def test_full_task_repeats_before_first_return_after_update_and_same_decision_lo
 
 
 def test_actual_runtime_instructions_retain_full_recurring_task(pair):
-    from gene_annotation_episode.runtime import INSTRUCTIONS as RUNTIME_INSTRUCTIONS
+    from gene_annotation_episode.episodic_workflow.root.runtime import INSTRUCTIONS as RUNTIME_INSTRUCTIONS
     supplied = RUNTIME_INSTRUCTIONS + "\n" + EXCHANGE_INSTRUCTIONS
     task, _ = task_and_steering(root_state([pair[0]]), instructions=supplied)
     assert text_instructions(supplied) in task
@@ -309,8 +309,8 @@ def test_selected_material_long_strings_are_not_clipped_or_replaced(pair):
 def test_pure_receiver_does_not_read_hidden_data_calculate_or_invoke_work(pair, monkeypatch):
     state = legacy_state([pair[0]])
     before = deepcopy(state)
-    calculations = importlib.import_module("gene_annotation_episode.rna_structure_comparison_calculations")
-    views = importlib.import_module("gene_annotation_episode.rna_structure_comparison_views")
+    calculations = importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations")
+    views = importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views")
     from gene_annotation_episode.state import Store
     def forbidden(*args, **kwargs):
         raise AssertionError("renderer attempted acquisition, calculation, or execution")

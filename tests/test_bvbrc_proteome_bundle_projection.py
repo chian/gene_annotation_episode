@@ -9,14 +9,14 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_bundle_contracts as contracts
-from gene_annotation_episode import bvbrc_proteome_bundle_projection as projection
-from gene_annotation_episode import bvbrc_proteome_fact_contracts as facts
-from gene_annotation_episode import bvbrc_proteome_inputs as inputs
-from gene_annotation_episode import bvbrc_proteome_native as native
-from gene_annotation_episode import bvbrc_proteome_joins as joins
-from gene_annotation_episode import bvbrc_proteome_sheet as sheets
-from gene_annotation_episode import bvbrc_proteome_calculators as calculators
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_projection as projection
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_fact_contracts as facts
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_inputs as inputs
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_native as native
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_joins as joins
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_sheet as sheets
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_calculators as calculators
 from test_bvbrc_proteome_construction import parameters as calculation_parameters
 from test_bvbrc_proteome_joins import CONTRACT, case, source, native_result
 

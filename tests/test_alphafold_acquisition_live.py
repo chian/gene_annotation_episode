@@ -19,10 +19,10 @@ import pytest
 from method_loop import Context, EpisodeGoal
 from gene_annotation_episode.acquisition import PublicClients
 from gene_annotation_episode import alphafold_acquisition as af
-from gene_annotation_episode import alphafold_acquisition_host as host
+from gene_annotation_episode.episodic_workflow.root.library import alphafold_acquisition_host as host
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.runtime import TypedReportContract, Workflow
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider

@@ -13,10 +13,10 @@ import subprocess
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.bvbrc_proteome_native import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_native import (
     native_schema, parse_genome_comparison, validate_native_projection,
 )
-from gene_annotation_episode.bvbrc_proteome_native_contracts import NativeValidationError
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_native_contracts import NativeValidationError
 
 
 JSON_FORMAT = "genome_comparison_json_v1"
@@ -542,7 +542,7 @@ def test_no_io_network_native_program_model_or_existing_calculator_dependencies(
 
 
 def test_packaged_schema_is_the_exact_accepted_002_contract():
-    import gene_annotation_episode.bvbrc_proteome_native_contracts as contracts
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_native_contracts as contracts
     path = Path(contracts.__file__).with_name("bvbrc_proteome_native_schemas.json")
     # Prospective request-content amendment, preserving the accepted contract.
     original = json.loads(path.read_text())

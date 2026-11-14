@@ -152,7 +152,7 @@ def main():
         if pins[name] != checked[name]:
             raise ValueError("original_estimator_source_changed")
     sys.path.insert(0, str(original))
-    from gene_annotation_episode import numerical
+    from gene_annotation_episode.episodic_workflow.root import numerical
     profile = json.loads(args.profile.read_text())
     if profile["estimator"] != numerical.ESTIMATOR_VERSION:
         raise ValueError("selected_profile_requires_its_original_estimator")

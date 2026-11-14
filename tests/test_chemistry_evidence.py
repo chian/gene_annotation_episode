@@ -1152,12 +1152,12 @@ def _selected_chebi_workflow_case(tmp_path, monkeypatch, *, operation, arguments
     from method_loop.archive import iter_json
     from gene_annotation_episode import acquisition
     from gene_annotation_episode.chemistry import accession as canonical_accession
-    from gene_annotation_episode.communication import plain, validate_closed_schema
-    from gene_annotation_episode.episode_receipts import EpisodeReceipts
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-    from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-    from gene_annotation_episode.runtime import FACT_MEANINGS, FACT_SOURCES, Workflow
-    from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+    from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_closed_schema
+    from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+    from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+    from gene_annotation_episode.episodic_workflow.root.runtime import FACT_MEANINGS, FACT_SOURCES, Workflow
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 
     assert os.environ.get('HMMER529_ATTEMPT'), 'requires the selected bounded529 runtime'

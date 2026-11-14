@@ -7,11 +7,11 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.genomic_overlap_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_contracts import (
     canonical_genomic_overlap_sheet_sha256, genomic_overlap_schema,
     validate_genomic_overlap_record,
 )
-from gene_annotation_episode.genomic_overlap_inputs import (
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_inputs import (
     build_genomic_overlap_sheet, extract_overlap_reference_metadata,
     parse_bedtools_intersect_wo, parse_region_set,
 )

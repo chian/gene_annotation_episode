@@ -13,16 +13,16 @@ from method_loop.episode import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.infernal_native_result_views import (
+from gene_annotation_episode.episodic_workflow.root.library.infernal_native_result_views import (
     FAMILY_SOURCES, IDENTIFIER_NAMESPACES, NATIVE_INFERNAL_METRICS, native_infernal_fact_sources)
-from gene_annotation_episode.native_infernal_returns import (
+from gene_annotation_episode.episodic_workflow.root.native_infernal_returns import (
     FACT_SOURCES, REFERENCE_SOURCE, NativeInfernalReturns, requested_sources)
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 GENERIC_REFS = 'execution_result_refs'

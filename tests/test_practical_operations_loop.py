@@ -6,7 +6,7 @@ import json
 import sys
 
 from gene_annotation_episode.execution_inventory import make_catalog
-from gene_annotation_episode.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.state import Store
 from test_practical_runtime import Choices, host, make_assignment, observations, run, selected
 

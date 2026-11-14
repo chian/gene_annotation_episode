@@ -15,10 +15,10 @@ import sys
 import pytest
 
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.flux_balance_native_capture_contracts import validate_flux_balance_native_capture
-from gene_annotation_episode import native_flux_balance_capture as capture
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_native_capture_contracts import validate_flux_balance_native_capture
+from gene_annotation_episode.episodic_workflow.root.library import native_flux_balance_capture as capture
 from gene_annotation_episode.native_file_capture import NativeFileCaptureError, retained_native_file
-from gene_annotation_episode.native_flux_balance_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
     DRIVER_MODULE, ENVIRONMENT_FILENAME, OWNER_FILENAME, POLICY,
     RUN_PLAN_FILENAME, SOURCE_FUNCTION_SHA256, STACK, STARTED_FILENAME,
     bind_flux_balance_environment, flux_balance_environment, flux_balance_output_files,
@@ -153,8 +153,8 @@ def test_original688_native_bytes_real_store(store, format_, monkeypatch):
     for key, filename in (("owner", OWNER_FILENAME), ("started", STARTED_FILENAME)):
         assert Path(value["controls"][key]["path"]).read_bytes() == controls_before[filename]
     assert store.db.execute("SELECT COUNT(*) FROM records").fetchone()[0] == 0
-    assert "gene_annotation_episode.native_flux_balance_driver" not in sys.modules
-    assert "gene_annotation_episode.native_flux_balance_cobra_glpk" not in sys.modules
+    assert "gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver" not in sys.modules
+    assert "gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_cobra_glpk" not in sys.modules
 
 
 @pytest.mark.parametrize("damage", ["missing", "changed", "symlink", "directory", "fifo"])

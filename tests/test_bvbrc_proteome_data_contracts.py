@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_proteome_data_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_data_contracts import (
     ProteomeDataError, proteome_data_schema, validate_proteome_data,
 )
 
@@ -287,7 +287,7 @@ def test_invalid_records_cannot_be_presented_as_an_ok_result():
 def test_saved_validation_does_not_read_sources_or_call_scientific_functions(monkeypatch):
     import socket
     import subprocess
-    from gene_annotation_episode import bvbrc_proteome_native
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_native
     from gene_annotation_episode.episodic_workflow.root.a101 import blast_pairwise_grader
     value = inventory()
     validate_proteome_data("ProteinInventory", value)  # load static package schema

@@ -9,12 +9,12 @@ import urllib.request
 
 import pytest
 
-from gene_annotation_episode.expression_nmf_common import (MODE, NATIVE_SCHEMA, axis, default_nmf_parameters,
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_common import (MODE, NATIVE_SCHEMA, axis, default_nmf_parameters,
     digest, fit_parameters)
-from gene_annotation_episode.expression_nmf_inputs import parse_expression_matrix, prepare_expression_matrix
-from gene_annotation_episode.expression_nmf_sheet import populate_nmf_sheet
-from gene_annotation_episode.expression_nmf_calculations import calculate_nmf_sheet
-from gene_annotation_episode.expression_nmf_result_views import project_nmf_result
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_inputs import parse_expression_matrix, prepare_expression_matrix
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_sheet import populate_nmf_sheet
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_calculations import calculate_nmf_sheet
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_result_views import project_nmf_result
 
 W = [[1., 0.], [0., 1.], [1., 1.]]
 H = [[1., 2., 0.], [0., 1., 3.]]
@@ -210,7 +210,8 @@ def test_requested_projection_rows_and_filter_extent():
 
 
 def test_saved_recalculation_forbids_native_network_subprocess_and_files(monkeypatch):
-    from gene_annotation_episode import native_expression_nmf_driver, expression_nmf_sheet
+    from gene_annotation_episode import native_expression_nmf_driver
+    from gene_annotation_episode.episodic_workflow.root.library import expression_nmf_sheet
     from sklearn.decomposition import NMF
     sheet = json.loads(json.dumps(fixture_sheet()))
     def forbidden(*args, **kwargs):

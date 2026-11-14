@@ -6,7 +6,7 @@ import pytest
 
 from gene_annotation_episode import tool_schema_validation as validation
 from gene_annotation_episode.resource_tool_information import _contract
-from gene_annotation_episode.scientific_tool_library import _catalog, _profiles
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import _catalog, _profiles
 
 
 @pytest.fixture

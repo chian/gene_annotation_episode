@@ -12,11 +12,11 @@ import json
 import pytest
 from method_loop import Episode, EpisodeGoal, EpisodeRequest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, obj
-from gene_annotation_episode.episode_composition import scientific_binding_compatible
-from gene_annotation_episode.runtime import DecisionSource, Record, TypedReportContract
-from gene_annotation_episode.scientific_process_records import scientific_invocation_ref
+from gene_annotation_episode.episodic_workflow.root.episode_composition import scientific_binding_compatible
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource, Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_invocation_ref
 from gene_annotation_episode.state import Store
 from test_runtime import FixtureController
 from test_scientific_process_runtime import Scenario
@@ -64,7 +64,7 @@ def test_only_exact_identity_or_approved_direction_is_compatible(actual, recorde
 
 
 def test_compatibility_roster_is_only_the_explicit_reviewed_pairs():
-    from gene_annotation_episode.episode_composition import _SCIENTIFIC_IMPLEMENTATION_COMPATIBILITY
+    from gene_annotation_episode.episodic_workflow.root.episode_composition import _SCIENTIFIC_IMPLEMENTATION_COMPATIBILITY
     assert _SCIENTIFIC_IMPLEMENTATION_COMPATIBILITY == REVIEWED_PAIRS
 
 

@@ -5,7 +5,7 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.domain import validate_schema
-from gene_annotation_episode.protein_conservation_tools import (
+from gene_annotation_episode.episodic_workflow.root.library.protein_conservation_tools import (
     normalize_protein_conservation_configuration,
     protein_conservation_tool_arguments_schema,
     validate_protein_conservation_configuration,
@@ -119,7 +119,7 @@ def test_selected_worker_preparation_covers_actual_source_and_dependency_files(o
 
 
 def test_execution_factory_roundtrip_freezes_the_actual_registry_selection(tmp_path):
-    from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+    from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.tools import ToolRegistry
     selected = configuration()
@@ -146,7 +146,7 @@ def test_execution_factory_roundtrip_freezes_the_actual_registry_selection(tmp_p
 
 
 def test_default_factory_record_and_saved_only_selection_need_no_native_profile(tmp_path):
-    from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+    from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.tools import ToolRegistry
     factory = ExecutionServiceFactory(resources={'caller-local': dict(kind='local', policy=POLICY)},

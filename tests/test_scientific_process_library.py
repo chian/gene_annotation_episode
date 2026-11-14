@@ -9,10 +9,10 @@ import shutil
 import pytest
 
 from method_loop.durable import canonical, content_digest
-from gene_annotation_episode.scientific_process_records import (
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import (
     scientific_digest, validate_option_ref, validate_selection,
     validate_filled_process, validate_revision)
-from gene_annotation_episode.scientific_process_library import (
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import (
     ScientificProcessLibrary, catalog)
 
 

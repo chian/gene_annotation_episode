@@ -5,10 +5,10 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.infernal_preparation_emission import (
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_emission import (
     ISSUE_CODES, ROW_FIELDS, populate_cmemit_sheet,
 )
-from gene_annotation_episode.infernal_preparation_models import extract_infernal_models
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_models import extract_infernal_models
 
 
 ROOT = Path(__file__).resolve().parents[1]

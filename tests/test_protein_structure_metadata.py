@@ -2,10 +2,10 @@
 from copy import deepcopy
 from importlib import import_module
 import pytest
-from gene_annotation_episode.protein_structure_contracts import canonical
-from gene_annotation_episode.protein_structure_formats import parse_pdb_structure
-from gene_annotation_episode.protein_structure_sequences import extract_structure_sequence
-from gene_annotation_episode.protein_structure_metadata import extract_native_structure_metadata
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import canonical
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats import parse_pdb_structure
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_sequences import extract_structure_sequence
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_metadata import extract_native_structure_metadata
 f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 
 

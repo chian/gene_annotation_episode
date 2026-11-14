@@ -5,10 +5,10 @@ import json
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.evidence_axis_contracts import (
+from gene_annotation_episode.episodic_workflow.root.evidence_axis_contracts import (
     entry_schema, judgment_schema, native_metric_facts,
     validate_axis_judgment, validate_evidence_axis_entry)
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.state import Store
 from test_scientific_process_library import independent_source, write
 

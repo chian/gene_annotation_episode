@@ -8,7 +8,7 @@ import shutil
 import pytest
 
 from method_loop.durable import canonical, content_digest
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from test_scientific_support_metadata import support_entry
 
 

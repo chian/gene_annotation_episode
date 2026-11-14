@@ -4,8 +4,8 @@ from copy import deepcopy
 import json
 import pytest
 
-from gene_annotation_episode.decision_context import state_frame
-from gene_annotation_episode.providers import ModelConnection, _SessionConnection, load_config
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection, _SessionConnection, load_config
 
 
 class ConversationWire(_SessionConnection):

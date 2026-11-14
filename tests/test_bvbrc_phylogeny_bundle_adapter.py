@@ -15,12 +15,12 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_gene_tree_bundle_adapter as gene
-from gene_annotation_episode import bvbrc_codon_tree_bundle_adapter as codon
-from gene_annotation_episode import bvbrc_phylogeny_bundle_contracts as c
-from gene_annotation_episode import bvbrc_phylogeny_bundle_resolution as r
-from gene_annotation_episode.bvbrc_gene_tree_grader import calculate_gene_tree
-from gene_annotation_episode.bvbrc_codon_tree_grader import calculate_codon_tree
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_gene_tree_bundle_adapter as gene
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_bundle_adapter as codon
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_bundle_resolution as r
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_gene_tree_grader import calculate_gene_tree
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_codon_tree_grader import calculate_codon_tree
 from gene_annotation_episode.phylogeny_calculation_contracts import quantity
 from test_bvbrc_phylogeny_bundle_resolution import fixture, slot, add_artifact, supply, supplemental, evidence
 

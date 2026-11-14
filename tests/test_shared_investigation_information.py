@@ -6,7 +6,7 @@ from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.domain import ContractError, canonical
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.shared_information import SharedInformation
+from gene_annotation_episode.episodic_workflow.root.shared_information import SharedInformation
 from gene_annotation_episode.state import Store
 
 

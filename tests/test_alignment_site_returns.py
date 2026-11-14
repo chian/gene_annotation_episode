@@ -12,7 +12,7 @@ from gene_annotation_episode.alignment_site_returns import (
     project_reference_site_return, project_blast_column_return,
     project_site_action_return, validate_frozen_site_return,
 )
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, form_with_facts, validate_closed_schema, validate_form,
 )
 

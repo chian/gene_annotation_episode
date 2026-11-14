@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.tool_knowledge import ToolKnowledge, VERSION
 from test_runtime import (FixtureController, ScriptedProvider, commission,
                           fixture_credit, obj, reason, run, setup)

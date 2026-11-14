@@ -16,14 +16,14 @@ from method_loop.episode import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
-from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustody, AppServiceCustodyError
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustody, AppServiceCustodyError
 from gene_annotation_episode.bvbrc_application_definitions import get_application_spec, prepare_application
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 
@@ -354,7 +354,7 @@ def test_unsaved_context_cannot_use_selection_rejected_by_original_schema(saved)
 
 @pytest.mark.parametrize("change", [None, "selection", "spec", "hash"])
 def test_actual_durable_commission_intent_must_agree(saved, change):
-    from gene_annotation_episode.episode_commissions import CommissionCoordinator
+    from gene_annotation_episode.episodic_workflow.root.episode_commissions import CommissionCoordinator
     child = saved.child(saved.root, "launch", launch_assignment(), 1)
     selected = json.loads(saved.journal.row("runtime_actions", saved.root.episode_id, 1)["action"])
     coordinator = CommissionCoordinator(saved.store, saved.journal, None)

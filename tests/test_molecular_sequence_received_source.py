@@ -9,7 +9,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode import molecular_sequence_input_bindings as bindings

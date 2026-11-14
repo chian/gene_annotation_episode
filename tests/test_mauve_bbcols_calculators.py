@@ -5,14 +5,14 @@ import json
 
 import pytest
 
-from gene_annotation_episode.mauve_backbone_formats import parse_mauve_bbcols
-from gene_annotation_episode.mauve_backbone_calculators import calculate_mauve_bbcols_components
-from gene_annotation_episode.mauve_backbone_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats import parse_mauve_bbcols
+from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_calculators import calculate_mauve_bbcols_components
+from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_contracts import (
     validate_mauve_bbcols_document, validate_mauve_bbcols_selection, validate_mauve_bbcols_components,
     BBCOLS_DIALECT,
 )
-from gene_annotation_episode.xmfa_formats import parse_mauve_xmfa
-from gene_annotation_episode.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_associations
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_formats import parse_mauve_xmfa
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_associations
 from test_bvbrc_genome_alignment_input_contracts import artifact_member, original_task, evidence, native_member
 from test_mauve_backbone_formats import bbcols, selection, members, artifact, NATIVE, assert_locations
 from test_mauve_backbone_calculators import forbid_io
@@ -273,6 +273,6 @@ def test_saved_recalculation_changes_subset_without_io_or_any_native_analysis(mo
     second = calculate(doc, primary=primary, joins=joins, threshold=3, fraction=True)
     assert first['intervals'][0]['selected_block_fraction']['value'] == 1
     assert second['intervals'][0]['selected_block_fraction']['value'] == 19 / 52
-    monkeypatch.setattr('gene_annotation_episode.mauve_backbone_calculators.calculate_mauve_bbcols_components', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_calculators.calculate_mauve_bbcols_components', forbidden)
     assert validate_mauve_bbcols_components(first) == first
     assert (doc, primary, joins) == before

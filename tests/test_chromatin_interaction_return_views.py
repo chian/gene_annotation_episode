@@ -12,7 +12,7 @@ from gene_annotation_episode.chromatin_interaction_return_views import (
     chromatin_fact_sources, requested_chromatin_sources,
     select_chromatin_return_facts, validate_chromatin_fact_values,
 )
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, form_with_facts, interpretation_schema, validate_closed_schema, validate_form,
 )
 

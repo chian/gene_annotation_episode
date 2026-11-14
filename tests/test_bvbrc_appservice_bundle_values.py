@@ -10,7 +10,7 @@ import json
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.bvbrc_appservice_bundle_values import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_appservice_bundle_values import (
     build_acquisition_value, build_artifact_bundle,
 )
 from gene_annotation_episode.bvbrc_appservice_contracts import ContractValidationError, validate_contract

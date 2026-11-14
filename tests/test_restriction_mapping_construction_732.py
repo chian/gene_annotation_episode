@@ -10,9 +10,9 @@ import os
 
 import pytest
 
-from gene_annotation_episode.communication import ReportBoundaryError
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
 from gene_annotation_episode.state import Store
 from test_runtime import ScriptedProvider
 from test_scientific_process_runtime import Scenario
@@ -126,7 +126,7 @@ def test_later_semantic_failure_rolls_back_recorded_identity_and_new_prefix(tmp_
 
 
 def test_deferred_initial_name_records_original_pending_intent_without_dispatch(tmp_path,monkeypatch):
-    from gene_annotation_episode.runtime import DeferredActionUnit
+    from gene_annotation_episode.episodic_workflow.root.runtime import DeferredActionUnit
     store,case,workflow,parent=engineering_received_case(tmp_path)
     with store:
         selected=initial_selection(case)

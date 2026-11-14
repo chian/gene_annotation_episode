@@ -14,8 +14,8 @@ import pytest
 import scipy
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import bvbrc_alignment_bundle_contracts as c
-from gene_annotation_episode import bvbrc_alignment_bundle_resolution as r
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_alignment_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_alignment_bundle_resolution as r
 
 ROOT = Path(__file__).resolve().parents[1]
 MSA_NATIVE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_metacats_boundaries/native_examples'
@@ -219,7 +219,7 @@ def meta_native_fixture(case='aa_two_groups'):
         'native_output_stem': category, 'input_mode': 'files', 'group_identity_rule': 'exact_category_value', 'evidence': []}]
     context['biological_group_populations'] = [{'kind': 'observed_metadata_groups', 'group_population_id': 'groups', 'category_id': category,
         'order': 'first_metadata_occurrence', 'include_metadata_only': True, 'evidence': []}]
-    from gene_annotation_episode.bvbrc_metacats_association_contracts import group_id
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_association_contracts import group_id
     context['native_group_maps'] = [{'category_id': category, 'entries': [{'raw_group_value': col['group_id'],
         'native_group_ordinal': col['native_group_ordinal'], 'group_id': group_id(category, col['group_id']), 'evidence': col['evidence']} for col in columns],
         'completeness': 'complete', 'evidence': columns[0]['evidence']}]
@@ -651,7 +651,7 @@ def test_bundle_consumption_has_no_file_network_process_or_repeated_parse(monkey
 
 def test_changed_saved_parameters_do_not_modify_native_values_or_reparse(monkeypatch):
     from test_bvbrc_alignment_associations import forbid_io
-    from gene_annotation_episode.bvbrc_metacats_grader import calculate_metacats
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_grader import calculate_metacats
     f = meta_native_fixture(); values, _, _ = f.compose(); sheet, original, _ = values[0]
     before = deepcopy(sheet); changed = deepcopy(original['parameters'])
     for request in changed['requests']:
@@ -668,7 +668,7 @@ def test_changed_saved_parameters_do_not_modify_native_values_or_reparse(monkeyp
 
 def test_saved_projection_replay_has_no_parsers_calculators_or_io(monkeypatch):
     from test_bvbrc_alignment_associations import forbid_io
-    from gene_annotation_episode.bvbrc_alignment_bundle_projection import project_requested_facts, validate_projected_facts
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_bundle_projection import project_requested_facts, validate_projected_facts
     f = basic_fixture(); result = f.consume(COUNT_FIELD)
     arguments = {'sheet_set': result['sheet'], 'component_set': result['components'], 'missing_requirements': tuple(result['missing_requirements']),
         'diagnostics': tuple(result['diagnostics']), 'requested_form': c.requested_form_schema(COUNT_FIELD, provider='msa'), 'parameters': f.parameters, 'provider':'msa'}
@@ -681,7 +681,7 @@ def test_saved_projection_replay_has_no_parsers_calculators_or_io(monkeypatch):
 
 
 def test_facades_keep_exact_original_eight_fields_and_digest():
-    from gene_annotation_episode import bvbrc_msa_bundle_adapter as msa, bvbrc_metacats_bundle_adapter as meta
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_bundle_adapter as msa, bvbrc_metacats_bundle_adapter as meta
     for provider, adapter in [('msa',msa),('metacats',meta)]:
         f = basic_fixture(provider); form = adapter.requested_form_schema(COUNT_FIELD)
         result = adapter.consume_bundle(f.bundle, artifact_bytes=f.raw, supplied_values=f.values, requested_form=form, parameters=f.parameters)
@@ -716,7 +716,7 @@ def test_supplied_original_hash_and_case_are_not_reconstructed_from_native_masks
 
 
 def test_adapter_digest_covers_consumed_contract_bytes(monkeypatch):
-    from gene_annotation_episode import bvbrc_msa_bundle_adapter as adapter
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_bundle_adapter as adapter
     original = Path.read_bytes; digest = adapter.implementation_sha256()
     def changed(path):
         raw = original(path)

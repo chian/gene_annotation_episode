@@ -4,10 +4,10 @@ import json
 import pytest
 
 from test_native_rna_structure_acquisition import F
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.rna_structure_result_views import FAMILY_SOURCES, REFERENCE_SOURCE, SAVED_SOURCE, IDENTIFIER_NAMESPACES, result_receipt_key
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import FAMILY_SOURCES, REFERENCE_SOURCE, SAVED_SOURCE, IDENTIFIER_NAMESPACES, result_receipt_key
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
 
 
 def test_null_source_failure_crosses_real_results_and_scientific_forms(tmp_path):
@@ -199,7 +199,7 @@ def test_execution_rejects_missing_original_authority_before_any_observation_or_
         def forbidden(*args, **kwargs):
             raise AssertionError("unauthorized execution reached observation or capture")
         monkeypatch.setattr(f.targets, "observe_target", forbidden)
-        monkeypatch.setattr("gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle", forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle", forbidden)
         with pytest.raises(ValueError):
             f.execute(child)
         assert not f.targets.observations

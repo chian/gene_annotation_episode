@@ -4,9 +4,9 @@ import ast
 from pathlib import Path
 
 import pytest
-from gene_annotation_episode import bvbrc_proteome_bundle_v2_contracts as c
-from gene_annotation_episode import bvbrc_proteome_bundle_adapter_v2 as adapter
-from gene_annotation_episode import bvbrc_proteome_bundle_adapter as old
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_v2_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter_v2 as adapter
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter as old
 from gene_annotation_episode.bvbrc_appservice_adapters import bind_adapters
 from test_bvbrc_proteome_bundle_v2_resolution import fixture,selector
 
@@ -46,7 +46,7 @@ def test_both_versions_bind_only_under_exact_selected_pin():
 
 
 def test_schema_detached_and_actual_static_import_closure_pinned():
-    from gene_annotation_episode import bvbrc_proteome_directional_fact_contracts as facts
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_directional_fact_contracts as facts
     assert c.DIRECTIONAL_BINDING_CODES == frozenset(facts.BINDING_CODES)
     a=c.parameters_schema_v2();a['$defs'].clear();assert c.parameters_schema_v2()['$defs']
     package=Path(adapter.__file__).parent

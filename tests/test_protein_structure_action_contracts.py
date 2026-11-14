@@ -7,12 +7,12 @@ from types import SimpleNamespace
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import protein_structure_contracts as science
-from gene_annotation_episode import protein_structure_result_views as views
-from gene_annotation_episode import protein_structure_action_records as actions
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_contracts as science
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_result_views as views
+from gene_annotation_episode.episodic_workflow.root import protein_structure_action_records as actions
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.communication import validate_form, ReportBoundaryError
-from gene_annotation_episode.runtime import _references_in
+from gene_annotation_episode.episodic_workflow.root.communication import validate_form, ReportBoundaryError
+from gene_annotation_episode.episodic_workflow.root.runtime import _references_in
 
 
 SOURCE = "source_" + "a" * 24

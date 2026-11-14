@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.native_flux_balance_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
     ATTEMPT_DIRECTORY_NAME, ENVIRONMENT_FILENAME, OWNER_FILENAME, STARTED_FILENAME,
     bind_flux_balance_environment, flux_balance_driver_argv,
     validate_flux_balance_environment_binding, validate_flux_balance_run_plan,
@@ -131,7 +131,7 @@ def test_closed_versions_and_original_attempt(saved_plan, tmp_path):
 
 
 def _failed_attempt(saved_plan, tmp_path, monkeypatch, mismatch=False):
-    from gene_annotation_episode import native_flux_balance_driver as driver
+    from gene_annotation_episode.episodic_workflow.root.library import native_flux_balance_driver as driver
     plan = _v2(saved_plan, tmp_path)
     for k, v in plan["environment_binding"]["realized_environment"].items(): monkeypatch.setenv(k, v)
     monkeypatch.setenv("UNSELECTED_ENV_695", "must not be retained")

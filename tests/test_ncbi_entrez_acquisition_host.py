@@ -13,14 +13,14 @@ from urllib.parse import urlencode
 import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, canonical
 from gene_annotation_episode import ncbi_entrez_acquisition as native
 from gene_annotation_episode import ncbi_entrez_tools as host
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 
 from test_alphafold_acquisition_host import Provider, _controller, _credit, _selected
 from test_ensembl_acquisition_host import HTTP
@@ -665,7 +665,7 @@ def test_snp_current_episode_receipt_admission_lost_reply_session_and_closed_rep
     monkeypatch.setattr(urllib.request, "urlopen", forbidden)
     monkeypatch.setattr("socket.create_connection", forbidden)
     monkeypatch.setattr("gene_annotation_episode.native_lifecycle.prepare_job", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.providers._SessionConnection._rpc", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.providers._SessionConnection._rpc", forbidden)
     with Store(tmp_path / "store") as store:
         scope = {"subject_refs": store.create_problem(raw_sequence="MKWAA", molecule="protein")["subject_refs"]}
         original_targets = deepcopy(store.problem()["subject_refs"])
@@ -760,7 +760,7 @@ def test_live_retained_sra_accession_search_ordinary_acquisition(tmp_path, monke
 
     from gene_annotation_episode.acquisition import SourceSnapshot
     from gene_annotation_episode.domain import identity
-    from gene_annotation_episode.runtime import ActionFailure
+    from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure
     from test_molecular_acquisition_ordinary import (
         NoModel, _forbidden, _neutral_bookkeeping, _snapshot,
         _live_audit, _live_capture, _live_pin, _live_write,
@@ -1053,7 +1053,7 @@ def _sra_chain_transport(monkeypatch):
     monkeypatch.setattr(urllib.request, "urlopen", forbidden)
     monkeypatch.setattr("socket.create_connection", forbidden)
     monkeypatch.setattr("gene_annotation_episode.native_lifecycle.prepare_job", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.providers._SessionConnection._rpc", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.providers._SessionConnection._rpc", forbidden)
     monkeypatch.setattr(ToolRegistry, "_sequence_worker_async", forbidden)
     return http
 
@@ -1169,8 +1169,8 @@ def test_current_episode_selected_docset_fetch_supplies_actual_own_action_file_f
 def test_later_real_docset_file_receipt_cannot_backfill_an_earlier_denied_sra_action(tmp_path, monkeypatch):
     from gene_annotation_episode import ncbi_sra_acquisition as sra
     from gene_annotation_episode import ncbi_sra_acquisition_host as sra_host
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-    from gene_annotation_episode.runtime import ActionFailure
+    from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure
     from test_molecular_acquisition_ordinary import NoModel, _neutral_bookkeeping
     from test_ncbi_sra_acquisition import engineered
     http = _sra_chain_transport(monkeypatch)

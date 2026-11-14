@@ -14,7 +14,7 @@ import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.document_tools import pdf_native
-from gene_annotation_episode.rna_evidence import local_configuration, run_cmsearch
+from gene_annotation_episode.episodic_workflow.root.library.rna_evidence import local_configuration, run_cmsearch
 from gene_annotation_episode import read_mapping
 
 

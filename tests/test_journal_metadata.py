@@ -4,9 +4,9 @@ import sqlite3
 
 import pytest
 
-from gene_annotation_episode.decision_exchanges import DecisionExchanges
+from gene_annotation_episode.episodic_workflow.root.decision_exchanges import DecisionExchanges
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episode_journal import Journal,WorkflowError
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal,WorkflowError
 from gene_annotation_episode.journal_metadata import MARKER,ROOT_FLAG,MEDIA_TYPE
 from gene_annotation_episode.state import Store
 from method_loop.durable import canonical

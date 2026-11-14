@@ -13,18 +13,18 @@ import pytest
 from method_loop.episode import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 
-from gene_annotation_episode.communication import plain, form_with_facts
+from gene_annotation_episode.episodic_workflow.root.communication import plain, form_with_facts
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_return_views import (FACT_SOURCES, PROJECTION_SOURCE, CONTEXT_SOURCE, SAVED_SOURCE,
     FAILURE_SOURCE, fluorescence_fact_sources, requested_fluorescence_sources)
 from gene_annotation_episode.episodic_workflow.root.library.original_fluorescence_returns import FluorescenceReturns
 from gene_annotation_episode.episodic_workflow.root.library.original_fluorescence_result_receipts import FluorescenceResultReceipts
 from gene_annotation_episode.native_file_capture import retained_native_file
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 
@@ -323,8 +323,8 @@ def test_historical_return_survives_scientific_file_loss(fixture):
 
 
 def frame(f, parent, child, *, index, schema, selection):
-    from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE, CONTRACT_INFORMATION_OPERATIONS
-    from gene_annotation_episode.episode_contract_information import expand_fact_form
+    from gene_annotation_episode.episodic_workflow.root.composition_information import CONTRACT_INFORMATION_PROFILE, CONTRACT_INFORMATION_OPERATIONS
+    from gene_annotation_episode.episodic_workflow.root.episode_contract_information import expand_fact_form
     compact = obj({name: {'$ref': 'episode-fact:' + node['x-source']} for name, node in schema['properties'].items()})
     selection = {**deepcopy(selection), 'schema_json': canonical(compact)}
     facts = {child.role: fluorescence_fact_sources()}

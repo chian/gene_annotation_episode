@@ -9,7 +9,7 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.native_infernal_preparation_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import (
     JOB_VERSION, compile_native_infernal_preparation_job, output_contract,
     requested_job_from_infernal_preparation, validate_native_infernal_preparation_job,
     validate_native_infernal_preparation_requested_job,

@@ -262,7 +262,7 @@ def _communication_schema():
 @pytest.mark.parametrize("inline", [False, True])
 def test_registered_addgene_array_has_exact_closed_form_and_semantic_references(inline):
     """Controlled format/reference checks; no episode custody is asserted."""
-    from gene_annotation_episode.communication import validate_closed_schema, validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema, validate_form
 
     body = _body(_inline(), choices=(2, 0, 1, 99)) if inline else _body()
     value = facts.build_addgene_sequence_fact(body)
@@ -284,7 +284,7 @@ def test_registered_addgene_array_has_exact_closed_form_and_semantic_references(
 
 @pytest.mark.parametrize("defect", ["native_optional", "ordinal_float", "free_extra", "nested"])
 def test_registered_addgene_array_schema_cannot_be_redefined_or_nested(defect):
-    from gene_annotation_episode.communication import ReportBoundaryError, validate_closed_schema
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema
 
     schema = _communication_schema()
     selected = schema["properties"]["facts"]["items"]["properties"]["selected_rows"]["items"]
@@ -308,7 +308,7 @@ def test_registered_addgene_array_schema_cannot_be_redefined_or_nested(defect):
     ("invented_count", "addgene_sequence_fact_schema_invalid"),
 ])
 def test_registered_addgene_array_rejects_bad_dto_before_reference_checks(defect, code):
-    from gene_annotation_episode.communication import ReportBoundaryError, validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_form
 
     value, calls = facts.build_addgene_sequence_fact(_body()), []
     row = value["selected_rows"][0]
@@ -330,7 +330,7 @@ def test_registered_addgene_array_rejects_bad_dto_before_reference_checks(defect
 
 @pytest.mark.parametrize("denied_namespace", ["source", "artifact"])
 def test_registered_addgene_array_checks_source_and_selected_sequence_file_permissions(denied_namespace):
-    from gene_annotation_episode.communication import ReportBoundaryError, validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_form
 
     value = facts.build_addgene_sequence_fact(_body(_inline(), choices=(0,)))
     denied = (SOURCE, "source") if denied_namespace == "source" else (

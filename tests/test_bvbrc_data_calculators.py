@@ -8,10 +8,10 @@ import urllib.request
 
 import pytest
 
-from gene_annotation_episode.bvbrc_data_calculators import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import (
     calculate_facet_fractions, calculate_feature_sequence_counts, calculate_page_counts,
 )
-from gene_annotation_episode.bvbrc_data_readers import parse_data_snapshot
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import parse_data_snapshot
 from test_bvbrc_data_readers import envelope, parse_docs, prepared, snapshot
 
 EVIDENCE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"

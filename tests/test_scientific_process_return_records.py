@@ -11,16 +11,16 @@ from types import MappingProxyType, SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import (ReportBoundaryError,
+from gene_annotation_episode.episodic_workflow.root.communication import (ReportBoundaryError,
     reference_resolver, validate_closed_schema, validate_form)
 from gene_annotation_episode.domain import identity, obj
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_records import (scientific_invocation_ref,
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import (scientific_invocation_ref,
     validate_selection)
-from gene_annotation_episode.scientific_process_reports import (RETURN_VERSION,
+from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import (RETURN_VERSION,
     SELECTION_REPORT_VERSION, VERSION, build_process_result, merge_process_results,
     project_process_result, report_sources, validate_process_result)
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/scientific_process_returns"
@@ -147,7 +147,7 @@ def test_literal_old_schema_and_legacy_record_are_independent_and_unchanged(lega
 
     def unexpected_generator(*args, **kwargs):
         raise AssertionError("Literal replay must not generate a new schema")
-    monkeypatch.setattr("gene_annotation_episode.scientific_process_reports.report_sources", unexpected_generator)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.scientific_process_reports.report_sources", unexpected_generator)
     assert validate_closed_schema(schema) == schema
     assert validate_form({"chosen_name": [row]}, schema, _resolver(library, row)) == {"chosen_name": [row]}
     assert validate_process_result(row, library=library, tool_library=tools) == row

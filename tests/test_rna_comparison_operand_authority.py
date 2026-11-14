@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.rna_structure_comparison_operands import (
+from gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_operands import (
     RNAComparisonInputError, authenticate_received_rna_operand, authenticate_received_rna_failure,
     resolve_rna_comparison_operands, validate_rna_comparison_selected_inputs,
 )

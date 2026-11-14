@@ -9,10 +9,10 @@ from gene_annotation_episode.domain import ContractError, identity
 from gene_annotation_episode.scientific_credit import AnnotationSupportScore
 from gene_annotation_episode.credit import CreditPolicy
 from gene_annotation_episode.scientific_findings import FindingIdentity
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, project_finding_progress
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, project_finding_progress
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.runtime import _action_generation_schema, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import _action_generation_schema, run_workflow
 from test_runtime import FixtureController, ScriptedProvider, obj
 from test_scientific_hypervolume_runtime import assessment, annotation, evidence
 

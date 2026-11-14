@@ -10,12 +10,12 @@ import sys
 import uuid
 
 from gene_annotation_episode.workflow_budget import active_budget
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.execution_memory import ExecutionMemory
 from gene_annotation_episode.hpc_monitoring import MonitorCheckpoint
 from gene_annotation_episode.hpc_scheduler import register_resume
-from gene_annotation_episode.providers import ModelConnection, load_config
-from gene_annotation_episode.runtime import Workflow, controller_from_settings
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection, load_config
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, controller_from_settings
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from gene_annotation_episode.a104_hpc import import_result

@@ -13,10 +13,10 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_bundle_contracts as c
-from gene_annotation_episode import bvbrc_proteome_bundle_resolution as provider
-from gene_annotation_episode.bvbrc_proteome_bundle_projection import validate_saved_projection
-from gene_annotation_episode.bvbrc_proteome_calculators import calculate_native_components
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_resolution as provider
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_bundle_projection import validate_saved_projection
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_calculators import calculate_native_components
 from test_bvbrc_appservice_request_content import PARAMETER_POINTER, submitted, retained_submission
 from test_bvbrc_proteome_bundle_resolution import fixture, consume, codes, sync_supplied
 

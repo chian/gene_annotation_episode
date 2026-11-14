@@ -14,9 +14,9 @@ from gene_annotation_episode.credit import AnnotationScoringUnavailable, project
 from gene_annotation_episode.evidence_geometry import _metric, _observation_extents
 from gene_annotation_episode.domain import ATOM, ContractError, REASONING_SCHEMA, canonical, validate_schema
 from gene_annotation_episode.export import export_annotation
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, project_finding_progress
-from gene_annotation_episode.runtime import _action_generation_schema, _decode_action_response
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, project_finding_progress
+from gene_annotation_episode.episodic_workflow.root.runtime import _action_generation_schema, _decode_action_response
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 

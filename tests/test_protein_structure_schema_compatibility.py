@@ -7,9 +7,9 @@ from types import ModuleType
 import pytest
 
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode import native_protein_structure_contracts as native
-from gene_annotation_episode import protein_structure_contracts as science
-from gene_annotation_episode import protein_structure_result_views as views
+from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_contracts as native
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_contracts as science
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_result_views as views
 
 
 def legacy_modules():

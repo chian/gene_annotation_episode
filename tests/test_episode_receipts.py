@@ -4,9 +4,9 @@ import json
 
 import pytest
 
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-from gene_annotation_episode.runtime import Journal, TypedReportContract, Workflow, WorkflowError, run_workflow
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.runtime import Journal, TypedReportContract, Workflow, WorkflowError, run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_investigation_progress import put_finding

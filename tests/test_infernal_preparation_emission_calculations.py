@@ -6,8 +6,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import infernal_preparation_emission as reader
-from gene_annotation_episode.infernal_preparation_emission_calculations import (
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_emission as reader
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_emission_calculations import (
     CHECK_NAMES, COMPONENT_NAMES, ISSUE_CODES, calculate_cmemit_components,
 )
 from test_infernal_preparation_emission import build_sheet, rows, PRIOR, NATIVE
@@ -116,7 +116,7 @@ def test_saved_json_recalculation_uses_no_io_network_native_or_parser(monkeypatc
 
 
 def test_populate_itself_is_pure_with_supplied_models(monkeypatch):
-    from gene_annotation_episode.infernal_preparation_models import extract_infernal_models
+    from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_models import extract_infernal_models
     from test_infernal_preparation_emission import artifact
     data=(PRIOR/"cmemit_fasta/model.cm").read_bytes()
     ma=artifact(data,"models","infernal_cm_ascii")

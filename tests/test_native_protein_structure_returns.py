@@ -7,14 +7,14 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.native_protein_structure_returns import (
+from gene_annotation_episode.episodic_workflow.root.native_protein_structure_returns import (
     NativeProteinStructureReturns, requested_sources, FACT_SOURCES, SEQUENCE_SOURCE,
     SAVED_SOURCE, PROJECTION_SOURCE, FAILURE_SOURCE,
 )
-from gene_annotation_episode.protein_structure_authority import ProteinStructureOperandError
-from gene_annotation_episode.protein_structure_contracts import issue
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue
 from gene_annotation_episode.state import Store
 
 F = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.returns_397")
@@ -451,7 +451,7 @@ def test_compact_redelivery_uses_its_actual_frozen_prefix_and_facts(f, alter):
 
 @pytest.mark.parametrize("alter", [None, "selector", "other_assignment", "assignment_hash", "invocation_hash", "invocation_ref", "goal", "initial_report"])
 def test_materialized_scientific_assignment_requires_original_selectors_and_hashes(f, alter):
-    from gene_annotation_episode.scientific_process_records import scientific_digest, scientific_invocation_ref, selector_selection
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_digest, scientific_invocation_ref, selector_selection
     from gene_annotation_episode.tool_information import make_tool_info
     from gene_annotation_episode.tools import ToolRegistry
     _, view, _ = original(f)

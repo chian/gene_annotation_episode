@@ -20,8 +20,8 @@ import urllib.request
 
 import pytest
 
-from gene_annotation_episode import bvbrc_codon_tree_calculators as calc
-from gene_annotation_episode import bvbrc_codon_tree_native as native
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_calculators as calc
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_native as native
 from gene_annotation_episode import phylogeny_formats as formats
 
 

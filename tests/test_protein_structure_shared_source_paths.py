@@ -7,13 +7,13 @@ import json
 import pytest
 
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.native_protein_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import (
     compile_protein_structure_job, validate_protein_structure_job,
     validate_protein_structure_bundle,
 )
-from gene_annotation_episode.native_protein_structure_driver import run_protein_structure_driver
-from gene_annotation_episode.protein_structure_formats import parse_pdb_structure
-from gene_annotation_episode.protein_structure_sequences import extract_structure_sequence
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver import run_protein_structure_driver
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats import parse_pdb_structure
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_sequences import extract_structure_sequence
 
 _a = import_module('gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386')
 _c = import_module('gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390')

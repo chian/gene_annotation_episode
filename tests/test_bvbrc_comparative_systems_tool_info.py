@@ -4,14 +4,14 @@ import json
 
 import pytest
 from jsonschema import Draft202012Validator
-from gene_annotation_episode import bvbrc_comparative_systems_bundle_adapter as adapter
-from gene_annotation_episode.bvbrc_comparative_systems_tool_info import comparative_systems_tool_contracts
-from gene_annotation_episode.bvbrc_comparative_systems_returns import comparative_systems_fact_sources, parent_form_schema
-from gene_annotation_episode.bvbrc_comparative_systems_fact_contracts import requested_selection
-from gene_annotation_episode.communication import validate_closed_schema
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_comparative_systems_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_tool_info import comparative_systems_tool_contracts
+from gene_annotation_episode.episodic_workflow.root.bvbrc_comparative_systems_returns import comparative_systems_fact_sources, parent_form_schema
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_fact_contracts import requested_selection
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema
 from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
-from gene_annotation_episode.runtime import Workflow, _compile_form
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, _compile_form
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from types import SimpleNamespace
 from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homology_tool_info import factory
 from test_bvbrc_comparative_systems_episode_flow import query, result_selector
@@ -99,7 +99,7 @@ def test_seven_finite_sources_reach_real_workflow_schema_compiler(factory):
 
 
 def test_cached_schema_templates_remain_detached_and_equal():
-    from gene_annotation_episode.bvbrc_comparative_systems_returns import _fact_source_templates
+    from gene_annotation_episode.episodic_workflow.root.bvbrc_comparative_systems_returns import _fact_source_templates
     before=_fact_source_templates.__wrapped__()
     value=comparative_systems_fact_sources()
     assert value==before

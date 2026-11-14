@@ -9,10 +9,10 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.rna_structure_comparison_calculations import calculate_rna_comparison_components
-from gene_annotation_episode.rna_structure_comparison_contracts import PAIR_RELATIONS, SITE_TRANSITIONS, SELECTOR_VERSION
-from gene_annotation_episode.rna_structure_comparison_views import PROJECTION_SOURCE, project_rna_comparison
-from gene_annotation_episode.rna_structure_comparison_presentation import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations import calculate_rna_comparison_components
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_contracts import PAIR_RELATIONS, SITE_TRANSITIONS, SELECTOR_VERSION
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE, project_rna_comparison
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_presentation import (
     has_received_rna_comparison_context, is_rna_comparison_results_context,
     render_rna_comparison_lookup, render_rna_comparison_own_outcome,
     render_rna_comparison_projections, select_rna_comparison_presentation,
@@ -256,7 +256,7 @@ def test_rendering_requires_no_hidden_io_calculation_or_mutation(pair, scan, mon
     for owner, name in ((builtins, "open"), (Path, "read_text"), (Path, "read_bytes"),
             (socket, "create_connection"), (subprocess, "run"), (subprocess, "Popen")):
         monkeypatch.setattr(owner, name, forbidden)
-    module = importlib.import_module("gene_annotation_episode.rna_structure_comparison_calculations")
+    module = importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations")
     monkeypatch.setattr(module, "calculate_rna_comparison_components", forbidden)
     selected = select_rna_comparison_presentation(state)
     text = render_rna_comparison_projections(selected["projections"])

@@ -7,7 +7,7 @@ from collections.abc import Mapping
 import json
 import re
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .itc_binding_contracts import (
     PARAMETERS, PARAMETER_UNITS, REASONS, closed, copy_json, number,
     observed_number, require,

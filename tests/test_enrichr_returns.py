@@ -16,17 +16,17 @@ from jsonschema import Draft202012Validator
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.api_service_execution import APIServiceExecution
-from gene_annotation_episode.communication import (ReportBoundaryError, form_with_facts,
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.communication import (ReportBoundaryError, form_with_facts,
     plain, validate_form)
 from gene_annotation_episode.enrichr_contracts import enrichr_fact_sources, TABLE_SOURCE, ROW_SOURCE
 from gene_annotation_episode.enrichr_returns import (EnrichrReturns, OWN_WITNESSES,
     CLOSURE_PREFIX, requested_enrichr_fields)
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 

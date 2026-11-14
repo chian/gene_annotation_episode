@@ -83,7 +83,7 @@ def _retained_fluorescence_copy(source, destination, pins):
 def _retained_fluorescence_case(stack, directory, operation, checks):
     """Use the existing genuine-row reader, without constructing an execution owner."""
     from method_loop.archive import ArchivedRecord
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 
     read = lambda name: json.loads((directory / name).read_bytes())
     saved = read("CASE.json")
@@ -114,7 +114,7 @@ def _retained_fluorescence_case(stack, directory, operation, checks):
 
 def _retained_fluorescence_deliveries(case, receipts, checks):
     """Authenticate actual Results→SCI→annotation forms and their frozen rows."""
-    from gene_annotation_episode.communication import validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_form
     from gene_annotation_episode.episodic_workflow.root.library.fluorescence_return_views import (
         PROJECTION_SOURCE, CONTEXT_SOURCE, requested_fluorescence_sources, select_fluorescence_return_facts,
     )

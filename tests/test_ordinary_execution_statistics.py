@@ -4,14 +4,14 @@ import json
 from pathlib import Path
 import sqlite3
 
-from gene_annotation_episode.execution_recording import NativeMeasurement
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, project_finding_progress
+from gene_annotation_episode.episodic_workflow.root.execution_recording import NativeMeasurement
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, project_finding_progress
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.ordinary_execution import OrdinaryExecutionStatistics
 from gene_annotation_episode.resource_estimation import ResourceToolEstimator
 from gene_annotation_episode.run_statistics import RunHistory
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 from gene_annotation_episode.tools import ToolRegistry
 from test_scientific_hypervolume_runtime import assessment
 

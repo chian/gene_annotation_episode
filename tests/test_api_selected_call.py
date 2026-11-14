@@ -13,7 +13,7 @@ import pytest
 from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.api_selected_call import perform_selected_call
 from gene_annotation_episode.api_selected_effects import SelectedAPIEffects, EffectConflict
-from gene_annotation_episode.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.bvbrc_application_definitions import get_application_spec
 from gene_annotation_episode.execution_contracts import digest
 from test_api_bvbrc_appservice import (harness, bound, content_binding, original_request,

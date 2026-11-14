@@ -16,11 +16,11 @@ from method_loop import EpisodeCompletion
 from method_loop.communication import ReportContract
 from method_loop.durable import (DurableExecutionError, canonical, content_digest,
                                  validate_commission)
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.runtime import (ReleasingContext, TypedReportContract,
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.runtime import (ReleasingContext, TypedReportContract,
                                              assemble_workflow)
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_records import scientific_digest, selector_selection
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_digest, selector_selection
 from gene_annotation_episode.state import Store
 import detached_workflow_fixture as base
 

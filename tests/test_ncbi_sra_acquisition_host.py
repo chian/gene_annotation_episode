@@ -20,9 +20,9 @@ import pytest
 from gene_annotation_episode import ncbi_sra_acquisition as sra
 from gene_annotation_episode import ncbi_sra_acquisition_host as host
 from gene_annotation_episode.acquisition import PublicClients
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, canonical, identity
-from gene_annotation_episode.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 
@@ -640,7 +640,7 @@ def test_live_current_episode_entrez_advertisement_then_one_explicit_sra_normali
     from gene_annotation_episode import ncbi_entrez_tools as entrez_tools
     from gene_annotation_episode.acquisition import AcquisitionError
     from gene_annotation_episode.data_acquisition_receipts import validate_acquisition_receipt
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 
     if os.environ.get("HMMER_NATIVE_ORACLE_SRA_LIVE_WORKFLOW") != "1":
         pytest.skip("requires explicit bounded live metadata and up-to-1GiB archive acquisition selection")

@@ -11,7 +11,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a107.a107_tools import A107ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a110.a110_tools import A110ToolRegistry
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.state import Store

@@ -8,18 +8,18 @@ from method_loop.identities import EpisodeRef
 from method_loop.episode import EpisodeGoal, EpisodeRequest
 
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.flux_balance_model_tools import validate_flux_balance_model_view
-from gene_annotation_episode.flux_balance_result_contracts import fba_result_schema
-from gene_annotation_episode.flux_balance_return_views import (
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_model_tools import validate_flux_balance_model_view
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_result_contracts import fba_result_schema
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_return_views import (
     fba_fact_sources, requested_fba_sources, validate_fba_fact_values,
 )
-from gene_annotation_episode.flux_balance_returns import FluxBalanceReturns, ORDINARY_PREFIX
+from gene_annotation_episode.episodic_workflow.root.flux_balance_returns import FluxBalanceReturns, ORDINARY_PREFIX
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 
 
 MODEL = "flux_balance_model_views"

@@ -9,7 +9,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode import muscle_alignment_driver as driver
+from gene_annotation_episode.episodic_workflow.root.library import muscle_alignment_driver as driver
 
 
 def _forbidden(*args, **kwargs):

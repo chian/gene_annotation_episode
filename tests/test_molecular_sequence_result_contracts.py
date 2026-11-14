@@ -386,7 +386,7 @@ def test_supplied_worker_unsealed_after_actual_call_never_recalculates_or_infers
 
 
 def test_supplied_file_and_failure_forms_use_ordinary_grammar_without_rich_numeric_registration():
-    from gene_annotation_episode.communication import validate_closed_schema
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema
     definitions = contracts.supplied_file_fact_sources()
     schema = dict(type="object", properties={"files": definitions[contracts.SAVED_SOURCE]["report_schema"],
         "failures": definitions[contracts.FAILURE_SOURCE]["report_schema"]}, required=["files", "failures"], additionalProperties=False)

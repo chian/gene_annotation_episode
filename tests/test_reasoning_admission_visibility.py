@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.runtime import DecisionSource, Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource, Workflow
 from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
 
 

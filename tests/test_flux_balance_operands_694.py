@@ -14,16 +14,16 @@ from types import SimpleNamespace
 import pytest
 from method_loop.identities import EpisodeRef
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.flux_balance_operands import (
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_operands import (
     bind_flux_balance_job_inputs, validate_flux_balance_input_binding,
     freeze_flux_balance_input_binding, validate_flux_balance_input_binding_receipt,
 )
-from gene_annotation_episode.native_flux_balance_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
     flux_balance_environment, SOURCE_FUNCTION_SHA256, DRIVER_MODULE, RUN_PLAN_FILENAME,
 )
 from gene_annotation_episode.state import Store

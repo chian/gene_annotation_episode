@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import validate_form
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.document_tools import DocumentOutput
 from gene_annotation_episode.domain import ContractError

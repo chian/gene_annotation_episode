@@ -13,10 +13,10 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.flux_balance_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_contracts import (
     flux_balance_schema, normalize_fba_solver_status, validate_flux_balance_record,
 )
-from gene_annotation_episode.flux_balance_sheet import validate_flux_balance_sheet
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet import validate_flux_balance_sheet
 from test_flux_balance_core_679 import make_sheet, number
 
 

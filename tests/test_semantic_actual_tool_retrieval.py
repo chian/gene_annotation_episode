@@ -5,9 +5,9 @@ import json
 
 import pytest
 
-from gene_annotation_episode.providers import ModelRole
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
-from gene_annotation_episode.scientific_tool_retrieval import (
+from gene_annotation_episode.episodic_workflow.root.providers import ModelRole
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_retrieval import (
     ScientificToolRetriever, configuration, output_schema)
 from gene_annotation_episode.state import Store
 from method_loop.durable import canonical

@@ -11,12 +11,12 @@ import sys
 from Bio.Seq import Seq
 import pytest
 
-from gene_annotation_episode.communication import validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import validate_form
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError, REASONING_SCHEMA
 from gene_annotation_episode.export import export_annotation
-from gene_annotation_episode.numerical import YieldController
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 

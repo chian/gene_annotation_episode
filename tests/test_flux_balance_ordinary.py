@@ -11,14 +11,14 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import flux_balance_ordinary as ordinary
+from gene_annotation_episode.episodic_workflow.root.library import flux_balance_ordinary as ordinary
 from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.flux_balance_request_binding import _files, _materialize, _resolve_file
-from gene_annotation_episode.flux_balance_worker_contracts import build_saved_flux_balance_worker_plan
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import _files, _materialize, _resolve_file
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_worker_contracts import build_saved_flux_balance_worker_plan
 from gene_annotation_episode.local_jobs import LocalJobPolicy, LocalJobResult
 from gene_annotation_episode.molecular_measurement_tools import MolecularOperationUnpublished
-from gene_annotation_episode.native_flux_balance_contracts import (POLICY, ATTEMPT_DIRECTORY_NAME,
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (POLICY, ATTEMPT_DIRECTORY_NAME,
     STARTED_FILENAME, bind_flux_balance_environment, flux_balance_output_files, validate_flux_balance_run_plan)
 from test_flux_balance_execution_inputs_704 import selected
 from test_flux_balance_operands_694 import software

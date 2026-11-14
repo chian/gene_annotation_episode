@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.bvbrc_appservice_saved_results import read_latest_adapter_result
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_saved_results import read_latest_adapter_result
 
 
 class PublicationFixture:

@@ -248,7 +248,7 @@ def test_batch_native_alignments_share_single_operation_path_and_preserve_partia
 
 
 def test_parent_form_namespaces_restrict_read_and_selection_references_to_scope(tmp_path):
-    from gene_annotation_episode.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
         a, b = members(store, target)
@@ -267,7 +267,7 @@ def test_parent_form_namespaces_restrict_read_and_selection_references_to_scope(
 
 
 def test_existing_broad_interpretation_visible_on_child_overlap_without_broader_write_permission(tmp_path):
-    from gene_annotation_episode.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
         a, b = members(store, target)

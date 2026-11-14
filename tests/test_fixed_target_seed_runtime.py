@@ -17,8 +17,8 @@ import pytest
 from gene_annotation_episode import materials
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.fixed_target_seed import FixedTargetSeedError, prepare_fixed_target_seed
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_fixed_target_seed import make_seed_witness

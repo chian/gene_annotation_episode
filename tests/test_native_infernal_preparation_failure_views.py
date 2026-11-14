@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import validate_closed_schema, validate_form
-from gene_annotation_episode.infernal_preparation_result_views import preparation_fact_sources
-from gene_annotation_episode.native_infernal_preparation_failure_views import preparation_failure_facts
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_result_views import preparation_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_failure_views import preparation_failure_facts
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,7 +27,7 @@ def test_original_changed_stdout_has_exact_role_and_requested_closed_form(monkey
     def forbidden(*args, **kwargs):
         raise AssertionError('Failure projection did new work')
     for target in ('builtins.open', 'socket.socket', 'subprocess.Popen',
-            'gene_annotation_episode.native_infernal_preparation_worker.grade_infernal_preparation'):
+            'gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker.grade_infernal_preparation'):
         monkeypatch.setattr(target, forbidden)
     rows = preparation_failure_facts(body, bundle=bundle)
     mismatch = [r for r in rows if r['code'] == 'native_infernal_preparation_sealed_artifact_digest_mismatch']

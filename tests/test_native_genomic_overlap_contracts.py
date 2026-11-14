@@ -12,8 +12,8 @@ import subprocess
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import native_genomic_overlap_contracts as contracts
-from gene_annotation_episode.genomic_overlap_contracts import genomic_overlap_schema
+from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_contracts import genomic_overlap_schema
 
 f = import_module("gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.genomic_overlap.execution_contracts_426.fixtures")
 
@@ -42,7 +42,7 @@ def test_exact_two_set_outputs_and_nominal_compilation():
     compiled = contracts.compile_genomic_overlap_job(job)
     assert set(compiled) == {"argv", "environment", "outputs"}
     assert compiled["argv"] == [job["software"]["python_executable"], "-B", "-m",
-        "gene_annotation_episode.native_genomic_overlap_driver", "genomic-overlap-plan.json"]
+        "gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_driver", "genomic-overlap-plan.json"]
     requested = contracts.requested_job_from_genomic_overlap(job)
     assert contracts.validate_genomic_overlap_requested_job(requested) == requested
     assert set(requested) == {"argv", "environment", "native_genomic_overlap"}
@@ -218,7 +218,7 @@ def test_invoked_zero_byte_output_is_present_and_distinct_from_analytic_empty():
 
 
 def test_all_analytic_pairs_retain_no_version_probe_or_native_output():
-    from gene_annotation_episode.genomic_overlap_inputs import parse_region_set
+    from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_inputs import parse_region_set
     plan, batch = f.c_case("empty")
     index = f.files(batch)
     spec = plan["requested_job"]["native_genomic_overlap"]["request"]["region_sets"][0]

@@ -15,9 +15,9 @@ import pytest
 
 from gene_annotation_episode import liftover_contracts as core
 from gene_annotation_episode import molecular_measurement_tools as publications
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical, identity
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.molecular_sequence_input_bindings import MolecularSequenceInputBindings
 from gene_annotation_episode.tool_grading_artifacts import retain_tool_grading
 from gene_annotation_episode.tools import ToolRegistry

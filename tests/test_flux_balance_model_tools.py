@@ -13,7 +13,7 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode import flux_balance_model_tools as tools
+from gene_annotation_episode.episodic_workflow.root.library import flux_balance_model_tools as tools
 
 
 def file_for(raw, format_="cobra_json"):
@@ -358,7 +358,7 @@ def test_engineered_partial_setter_retains_applied_rows_and_private_trace_withou
 
 @pytest.mark.parametrize("missing", [False, True])
 def test_actual_input_identity_or_unavailable_failure_never_reaches_loader(native_cases, monkeypatch, tmp_path, missing):
-    from gene_annotation_episode import native_flux_balance_cobra_glpk as capture
+    from gene_annotation_episode.episodic_workflow.root.library import native_flux_balance_cobra_glpk as capture
     def forbidden(*args, **kwargs): raise AssertionError("failed input reached native loader")
     monkeypatch.setattr(capture, "_load_model", forbidden)
     supplied = request(native_cases.raw)

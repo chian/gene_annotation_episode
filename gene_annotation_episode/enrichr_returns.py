@@ -12,16 +12,16 @@ import re
 
 from jsonschema import Draft202012Validator
 
-from .communication import ReportBoundaryError, plain
+from .episodic_workflow.root.communication import ReportBoundaryError, plain
 from .domain import identity
 from .api_enrichr import PROTOCOL_VERSION, WIRE_PROFILE, _prepared as validate_prepared_enrichr
 from .enrichr_contracts import (TABLE_SOURCE, ROW_SOURCE, enrichr_fact_sources,
     project_enrichr_return, validate_enrichr_selector, validate_enrichr_sheet)
 from .enrichr_reference_privacy import (validated_enrichr_source, normalized_enrichr_outcome,
     matching_enrichr_publications, committed_enrichr_reference_kind)
-from .episode_receipts import (EpisodeReceipts, RECEIVED_REPORT_PREFIX_VERSION,
+from .episodic_workflow.root.episode_receipts import (EpisodeReceipts, RECEIVED_REPORT_PREFIX_VERSION,
     _validate_report_prefix)
-from .episode_return_records import EpisodeReturnRecords, _same
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords, _same
 from .execution_contracts import digest
 from .practical_execution_state import _read
 from .tool_grading_artifacts import source_tool_grading_entries

@@ -7,7 +7,7 @@ import json
 import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError
-from gene_annotation_episode.api_execution import HMMERAPIExecution
+from gene_annotation_episode.episodic_workflow.root.api_execution import HMMERAPIExecution
 from gene_annotation_episode.execution_contracts import digest
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
@@ -192,13 +192,13 @@ def test_selected_scope_and_original_request_cannot_be_replaced(tmp_path):
 
 
 def plain_scope(owner):
-    from gene_annotation_episode.communication import plain
+    from gene_annotation_episode.episodic_workflow.root.communication import plain
     return plain(owner.context.scope)
 
 
 def test_partial_rows_keep_valid_contributions_and_cross_original_parent_scope(tmp_path):
     from gene_annotation_episode.episode_bindings import BindingContext
-    from gene_annotation_episode.communication import plain
+    from gene_annotation_episode.episodic_workflow.root.communication import plain
     native = result()
     broken = json.loads(json.dumps(native['result']['hits'][0]))
     broken['index'] = 1
@@ -268,7 +268,7 @@ def test_reacquiring_identical_page_with_new_custody_time_has_no_inherited_gain(
 
 def test_api_handoff_result_and_completion_cannot_resolve_in_another_run(tmp_path):
     from gene_annotation_episode.episode_bindings import BindingContext
-    from gene_annotation_episode.communication import plain
+    from gene_annotation_episode.episodic_workflow.root.communication import plain
     with Store(tmp_path) as store:
         store.create_problem(raw_sequence='MACDEFGH', molecule='protein')
         owner = APIHarness(ToolRegistry(store, clients=Client()))

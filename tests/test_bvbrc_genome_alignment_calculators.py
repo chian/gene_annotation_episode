@@ -6,9 +6,9 @@ from unittest.mock import patch
 
 import pytest
 
-from gene_annotation_episode.bvbrc_genome_alignment_calculators import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_calculators import (
     calculate_genome_alignment_components, recalculate_genome_alignment_sheet)
-from gene_annotation_episode.bvbrc_genome_alignment_sheet import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_sheet import (
     build_genome_alignment_sheet, build_genome_alignment_data, validate_genome_alignment_sheet)
 from test_bvbrc_genome_alignment_sheet import (fixture_data, fixture_sheet, all_requests, plan,
     native_examples, slot, resolution, parsed, template, read, VERIFY)
@@ -65,27 +65,27 @@ def test_missing_C_and_secondary_witness_preserve_native_counts_and_global_needs
 
 IO_AND_PARSERS = ['builtins.open', 'io.open', 'os.open', 'pathlib.Path.read_bytes', 'pathlib.Path.read_text',
     'subprocess.Popen', 'socket.create_connection', 'socket.socket', 'urllib.request.urlopen',
-    'gene_annotation_episode.mauve_v4_formats.parse_mauve_v4',
-    'gene_annotation_episode.mauve_backbone_formats.parse_mauve_backbone',
-    'gene_annotation_episode.mauve_backbone_formats.parse_mauve_bbcols',
-    'gene_annotation_episode.xmfa_formats.parse_mauve_xmfa']
+    'gene_annotation_episode.episodic_workflow.root.library.mauve_v4_formats.parse_mauve_v4',
+    'gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats.parse_mauve_backbone',
+    'gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats.parse_mauve_bbcols',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_formats.parse_mauve_xmfa']
 SCIENCE = [
-    'gene_annotation_episode.mauve_v4_calculators.calculate_mauve_v4_segments',
-    'gene_annotation_episode.mauve_v4_calculators._extract',
-    'gene_annotation_episode.mauve_backbone_calculators.calculate_mauve_backbone_components',
-    'gene_annotation_episode.mauve_backbone_calculators.calculate_mauve_bbcols_components',
-    'gene_annotation_episode.xmfa_calculators.xmfa_alignment_components',
-    'gene_annotation_episode.xmfa_calculators.xmfa_interval_coverage',
-    'gene_annotation_episode.xmfa_calculators._entropy',
-    'gene_annotation_episode.xmfa_calculators._selected_placements',
-    'gene_annotation_episode.xmfa_coordinates.xmfa_column_coordinates',
-    'gene_annotation_episode.xmfa_coordinates.xmfa_source_positions',
-    'gene_annotation_episode.xmfa_coordinates._row_positions',
-    'gene_annotation_episode.xmfa_coordinates.validate_xmfa_bindings_for_document',
-    'gene_annotation_episode.xmfa_sources.bind_xmfa_sources',
-    'gene_annotation_episode.xmfa_sources.validate_xmfa_bindings_for_document',
-    'gene_annotation_episode.xmfa_sources._check_record',
-] + ['gene_annotation_episode.bvbrc_genome_alignment_calculators.' + name for name in (
+    'gene_annotation_episode.episodic_workflow.root.library.mauve_v4_calculators.calculate_mauve_v4_segments',
+    'gene_annotation_episode.episodic_workflow.root.library.mauve_v4_calculators._extract',
+    'gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_calculators.calculate_mauve_backbone_components',
+    'gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_calculators.calculate_mauve_bbcols_components',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_calculators.xmfa_alignment_components',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_calculators.xmfa_interval_coverage',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_calculators._entropy',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_calculators._selected_placements',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_coordinates.xmfa_column_coordinates',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_coordinates.xmfa_source_positions',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_coordinates._row_positions',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_coordinates.validate_xmfa_bindings_for_document',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_sources.bind_xmfa_sources',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_sources.validate_xmfa_bindings_for_document',
+    'gene_annotation_episode.episodic_workflow.root.library.xmfa_sources._check_record',
+] + ['gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_calculators.' + name for name in (
     'calculate_mauve_v4_segments', 'calculate_mauve_backbone_components', 'calculate_mauve_bbcols_components',
     'xmfa_alignment_components', 'xmfa_interval_coverage', 'xmfa_column_coordinates', 'xmfa_source_positions',
     'bind_xmfa_sources', 'calculate_genome_alignment_components')]
@@ -116,9 +116,9 @@ def test_saved_validation_and_builder_without_scientific_recalculation():
 
 
 def one_document_data(raw, fmt, *, sid='selected'):
-    from gene_annotation_episode.mauve_v4_formats import parse_mauve_v4
-    from gene_annotation_episode.mauve_backbone_formats import parse_mauve_backbone, parse_mauve_bbcols
-    from gene_annotation_episode.xmfa_formats import parse_mauve_xmfa
+    from gene_annotation_episode.episodic_workflow.root.library.mauve_v4_formats import parse_mauve_v4
+    from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats import parse_mauve_backbone, parse_mauve_bbcols
+    from gene_annotation_episode.episodic_workflow.root.library.xmfa_formats import parse_mauve_xmfa
     artifact = {'raw_artifact_ref': 'synthetic:raw:' + fmt, 'source_ref': 'synthetic:source:' + fmt,
                 'sha256': hashlib.sha256(raw).hexdigest()}
     reader = slot(sid, fmt)['reader']
@@ -149,8 +149,8 @@ def test_backbone_singleton_and_selected_good_rows_survive_unselected_malformed_
 
 
 def test_real_retained_native_bytes_parse_into_the_saved_D_data():
-    from gene_annotation_episode.mauve_backbone_formats import parse_mauve_backbone, parse_mauve_bbcols
-    from gene_annotation_episode.xmfa_formats import parse_mauve_xmfa
+    from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats import parse_mauve_backbone, parse_mauve_bbcols
+    from gene_annotation_episode.episodic_workflow.root.library.xmfa_formats import parse_mauve_xmfa
     b, _, _ = native_examples(); data = fixture_data()
     native = VERIFY / 'tool_graders_mauve_sidecars_2026-10-25/native_examples'
     checks = [('separate.xmfa.backbone', b['backbone_document'], parse_mauve_backbone, {'dialect': 'libmems_signed_coordinate_pairs_v1'}),
@@ -213,7 +213,7 @@ def test_v4_case_ambiguity_reverse_subset_and_absent_zero_are_distinct():
 
 def internal_seven_data():
     """Altered native test bytes plus explicit synthetic internal7→exported0 witness."""
-    from gene_annotation_episode.mauve_backbone_formats import parse_mauve_bbcols
+    from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats import parse_mauve_bbcols
     data = fixture_data(); old = data['parsed_artifacts'][2]['document']; old_id = old['document_id']
     raw = (VERIFY / 'tool_graders_mauve_sidecars_2026-10-25/native_examples/separate.xmfa.bbcols').read_bytes()
     altered = b'\n'.join(b'7' + line[1:] if line else line for line in raw.split(b'\n'))

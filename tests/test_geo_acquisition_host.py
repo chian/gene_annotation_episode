@@ -19,8 +19,8 @@ from method_loop.identities import EpisodeRef
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode import geo_tools as geo
 from gene_annotation_episode.materials import artifact_path
@@ -464,8 +464,8 @@ def test_live_advertised_geo_supplementary_ordinary_acquisition(tmp_path, monkey
     import os
     from pathlib import Path
 
-    from gene_annotation_episode.communication import plain
-    from gene_annotation_episode.runtime import ActionFailure, Workflow
+    from gene_annotation_episode.episodic_workflow.root.communication import plain
+    from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow
     from test_molecular_acquisition_ordinary import (
         NoModel, _forbidden, _neutral_bookkeeping, _snapshot,
         _live_audit, _live_capture, _live_pin, _live_write,

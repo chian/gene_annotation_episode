@@ -17,12 +17,12 @@ import sqlite3
 
 import pytest
 
-from gene_annotation_episode.decision_context import state_frame
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.flux_balance_tools import ENVIRONMENT_SELECTION, FBA_TOOL
-from gene_annotation_episode.native_flux_balance_contracts import POLICY
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_tools import ENVIRONMENT_SELECTION, FBA_TOOL
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_prompt import (
     _operation_schema_view, _registered_return_schema_view, render_scientific_process_prompt,
 )
@@ -225,10 +225,10 @@ def test_published_fba_inputs_and_retained_values_reach_recurring_text_turns(tmp
     monkeypatch.setattr("gene_annotation_episode.acquisition.PublicClients._http", _forbidden)
     monkeypatch.setattr("socket.create_connection", _forbidden)
     monkeypatch.setattr("subprocess.Popen", _forbidden)
-    monkeypatch.setattr("gene_annotation_episode.providers._SessionConnection._rpc", _forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.providers._SessionConnection._rpc", _forbidden)
     monkeypatch.setattr(ToolRegistry, "execute_async", _forbidden)
-    monkeypatch.setattr("gene_annotation_episode.flux_balance_tools.run_selected_flux_balance_native", _forbidden)
-    monkeypatch.setattr("gene_annotation_episode.flux_balance_tools.run_selected_flux_balance_result_worker", _forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.flux_balance_tools.run_selected_flux_balance_native", _forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.flux_balance_tools.run_selected_flux_balance_result_worker", _forbidden)
     monkeypatch.setattr("gene_annotation_episode.flux_balance_model_execution.run_selected_flux_balance_model", _forbidden)
 
     selected = retained["selected"]

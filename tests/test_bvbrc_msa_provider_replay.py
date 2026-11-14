@@ -10,10 +10,12 @@ import socket
 import subprocess
 import pytest
 
-from gene_annotation_episode import bvbrc_msa_inputs, bvbrc_msa_grader, bvbrc_msa_provider_contracts as c
-from gene_annotation_episode import bvbrc_msa_formats, phylogeny_formats, xmfa_formats, bvbrc_msa_xmfa_inputs
-from gene_annotation_episode import phylogeny_calculators, bvbrc_msa_calculators, xmfa_calculators, xmfa_coordinates
-from gene_annotation_episode import bvbrc_msa_calculation_contracts, xmfa_calculation_contracts
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_inputs, bvbrc_msa_grader, bvbrc_msa_provider_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_formats, xmfa_formats, bvbrc_msa_xmfa_inputs
+from gene_annotation_episode import phylogeny_formats
+from gene_annotation_episode import phylogeny_calculators
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_calculators, xmfa_calculators, xmfa_coordinates
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_calculation_contracts, xmfa_calculation_contracts
 from test_bvbrc_msa_provider import (native_operands,associated_operands,xmfa_operands,tree_operands,composition_operands,reference_operands,
     gap_fill_operands,first_block_projection_operands,source_example_operands,unbound_source_operands,alignment,artifact,frequency_header,parse_msa_frequency_table,
     parameters,request,entropy_request,extract_msa_sheet,calculate_msa,operands)

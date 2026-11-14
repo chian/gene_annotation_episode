@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_alignment_values import document_id, validate_native_number
-from gene_annotation_episode.xmfa_formats import parse_mauve_xmfa, NATIVE_DIAGNOSTIC_CODES
-from gene_annotation_episode.xmfa_format_contracts import validate_xmfa_document, CALLER_ERROR_CODES
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import document_id, validate_native_number
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_formats import parse_mauve_xmfa, NATIVE_DIAGNOSTIC_CODES
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_format_contracts import validate_xmfa_document, CALLER_ERROR_CODES
 
 
 NATIVE = Path(__file__).resolve().parents[1] / 'verification' / 'tool_graders_bvbrc_msa_xmfa_boundaries_2026-10-25' / 'native_examples'

@@ -10,7 +10,7 @@ from method_loop import (ChildEpisodeUnit, Context, Episode, EpisodeGoal,
                          EpisodeRequest, EpisodeTree, Grain, Leaf)
 from method_loop.suspension import external_wait
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 
 
 class RecordingController:

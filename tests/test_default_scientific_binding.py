@@ -9,7 +9,7 @@ import json
 import pytest
 
 from gene_annotation_episode.cli import main
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_investigation_progress import put_finding
@@ -129,7 +129,7 @@ def test_default_finding_credit_needs_no_annotation_and_interrupted_resume_keeps
 
 
 def test_cli_uses_received_progress_without_the_retired_annotation_default(tmp_path, monkeypatch, capsys):
-    from gene_annotation_episode import providers
+    from gene_annotation_episode.episodic_workflow.root import providers
 
     directory = tmp_path/'workspace'
     with Store(directory) as store:
@@ -149,7 +149,7 @@ def test_cli_uses_received_progress_without_the_retired_annotation_default(tmp_p
         async def release(self, episode_id):
             pass
         async def complete(self, episode_id, role, instructions, context, output_schema):
-            from gene_annotation_episode.decision_context import apply_state_frame
+            from gene_annotation_episode.episodic_workflow.root.decision_context import apply_state_frame
             self.state = apply_state_frame(self.state, context)
             context = self.state
             contexts.append(deepcopy(context))

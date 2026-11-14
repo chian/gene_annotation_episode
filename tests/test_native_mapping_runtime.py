@@ -2,7 +2,7 @@
 import asyncio
 import json
 
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from test_native_read_mapping import fixture
 from test_runtime import FixtureController, ScriptedProvider
 
@@ -50,7 +50,7 @@ def test_native_preview_complete_child_facts_and_selected_parent_reuse_share_one
         assert preview["result"]["record_refs_are_preview"]
         # Every visible basis ID is reconstructible from actually presented
         # state/outcome. Hidden full durable IDs are not injected into basis.
-        from gene_annotation_episode.runtime import _references_in
+        from gene_annotation_episode.episodic_workflow.root.runtime import _references_in
         expected=_references_in({"working_state":context["working_state"],
             "last_local_outcome":preview,"visual_evidence":context["visual_evidence"]},store.get,
             forms=[(context["current_report_update"],{"type":"object","properties":{"meaning":{"type":"string","enum":["uninterpreted"]}}})],
@@ -67,7 +67,7 @@ def test_native_preview_complete_child_facts_and_selected_parent_reuse_share_one
 
 
 def test_preview_does_not_recursively_edit_child_forms_or_exact_history_contract(tmp_path):
-    from gene_annotation_episode.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
     workflow=Workflow.__new__(Workflow);workflow.restoration_settings={"preview_size":0}
     native={"status":"completed","record_refs":["one","two"],
         "published_batch":{"representation":"native_publications_v1","published_rows_total":1,

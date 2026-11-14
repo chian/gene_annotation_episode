@@ -8,7 +8,7 @@ import sys
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import native_protein_structure_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_contracts as contracts
 from gene_annotation_episode.execution_contracts import digest, obj
 
 _fixtures = import_module(

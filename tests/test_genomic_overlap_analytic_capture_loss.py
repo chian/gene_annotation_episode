@@ -9,12 +9,12 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.genomic_overlap_calculations import calculate_genomic_overlap_components
-from gene_annotation_episode.genomic_overlap_contracts import canonical_genomic_overlap_sheet_sha256
-from gene_annotation_episode.genomic_overlap_inputs import (
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_calculations import calculate_genomic_overlap_components
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_contracts import canonical_genomic_overlap_sheet_sha256
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_inputs import (
     _native_complete, build_genomic_overlap_sheet, parse_bedtools_intersect_wo, parse_region_set,
 )
-from gene_annotation_episode.genomic_overlap_result_views import project_genomic_overlap_result
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_result_views import project_genomic_overlap_result
 from test_genomic_overlap_inputs import (
     PARAMETERS, ROW, identity, inputs, parsed_pairs, receipt, sheet_from,
 )

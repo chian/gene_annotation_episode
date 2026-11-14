@@ -477,8 +477,8 @@ def authenticate_itc_invocation(registry, name, arguments, scope, operation_key)
     if invocation is None:
         raise ContractError("molecular_tool_current_invocation_required")
     context, reader, selected_name, selected_arguments, selected_key = invocation
-    from .communication import plain
-    from .episode_return_records import EpisodeReturnRecords
+    from .episodic_workflow.root.communication import plain
+    from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     records = EpisodeReturnRecords(registry.store, context.run_id, failure_prefix="molecular_tool_")
     records.authenticate(context)
     prefix = f"{context.run_id}:{context.episode_id}:"
@@ -638,11 +638,11 @@ def _publication_profile(tool_name):
 def _recorded_molecular_action_details(registry, context, arguments, operation_key, tool_name, *,
         recovery_context=None, recovery_operation_key=None, selected_only=False):
     """Authenticate one editing action independently of its Source producer."""
-    from .communication import plain
+    from .episodic_workflow.root.communication import plain
     from .domain import identity
     from .episode_bindings import BindingContext
-    from .episode_return_records import EpisodeReturnRecords
-    from .waiting import validate_pending
+    from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+    from .episodic_workflow.root.waiting import validate_pending
     prefix = ("somatic_variant_" if tool_name == "detect_and_annotate_somatic_mutations" else "esm_gene_embedding_" if tool_name == "generate_gene_embeddings_with_ESM_models" else
         "protein_phylogeny_" if tool_name == "analyze_protein_phylogeny" else
         "protein_conservation_" if tool_name == "analyze_protein_conservation" else
@@ -743,9 +743,9 @@ def _recorded_molecular_producer_details(registry, source_ref, tool_name, *,
     is usable only for the new editing producer's actual current invocation;
     neither a Source handle nor a supplied recovery key establishes authority.
     """
-    from .communication import plain
+    from .episodic_workflow.root.communication import plain
     from .episode_bindings import BindingContext
-    from .episode_return_records import EpisodeReturnRecords
+    from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     _, _, modes, prefix = _publication_profile(tool_name)
     editing = tool_name in {"analyze_cas9_mutation_outcomes", "result.macs2.peaks", "find_enriched_motifs_with_homer",
         "identify_transcription_factor_binding_sites", "result.variants.vcf", "analyze_protease_kinetics",
@@ -820,7 +820,7 @@ def _recorded_molecular_capture_action(registry, operation_ref, tool_name):
     This metadata-only port grants no bytes, receipts or pending recovery.
     """
     from .domain import identity
-    from .episode_return_records import EpisodeReturnRecords
+    from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     if tool_name not in {"find_enriched_motifs_with_homer", "identify_transcription_factor_binding_sites",
             "analyze_protein_conservation", "analyze_protein_phylogeny", "detect_and_annotate_somatic_mutations"}:
         raise ContractError("molecular_capture_unknown_producer")
@@ -889,7 +889,7 @@ def _read_retained_molecular_publication(registry, context, reader, source_ref, 
         from .somatic_variant_publication import _read_somatic_variant_publication
         return _read_somatic_variant_publication(registry, context, reader, source_ref)
     if tool_name == "analyze_protein_phylogeny":
-        from .protein_phylogeny_publication import _read_protein_phylogeny_publication
+        from .episodic_workflow.root.library.protein_phylogeny_publication import _read_protein_phylogeny_publication
         return _read_protein_phylogeny_publication(registry, context, reader, source_ref)
     if tool_name == "analyze_protein_conservation":
         from gene_annotation_episode.episodic_workflow.root.library.protein_conservation_publication import _read_protein_conservation_publication
@@ -1042,7 +1042,7 @@ def project_itc_tool_result(stored, *, selection, source_ref, artifact_ref, grad
 
 
 async def prepare_itc_work(registry, arguments, *, scope, operation_key, authority):
-    from .communication import plain
+    from .episodic_workflow.root.communication import plain
     context, reader = authority
     if arguments["mode"] == "fit":
         item = _received(reader, context, arguments["input"]["reference"], arguments["input"]["namespace"])

@@ -8,8 +8,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_proteome_data_contracts import validate_proteome_data
-from gene_annotation_episode.bvbrc_proteome_inputs import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_data_contracts import validate_proteome_data
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_inputs import (
     index_original_inputs, read_feature_metadata, read_feature_sequences,
     read_genome_metadata, read_protein_fasta,
 )

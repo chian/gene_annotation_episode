@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.decision_context import (
+from gene_annotation_episode.episodic_workflow.root.decision_context import (
     apply_state_frame, model_snapshot, state_frame,
 )
 

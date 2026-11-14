@@ -14,10 +14,10 @@ from method_loop import ClosedRecord
 from method_loop.durable import canonical
 from method_loop.identities import UnitRef
 
-from gene_annotation_episode import decision_history as history
-from gene_annotation_episode.episode_completion import CompletionLedger
-from gene_annotation_episode.episode_journal import Journal, WorkflowError
-from gene_annotation_episode.numerical import YieldController, YieldParameters, estimate_score_yield
+from gene_annotation_episode.episodic_workflow.root import decision_history as history
+from gene_annotation_episode.episodic_workflow.root.episode_completion import CompletionLedger
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal, WorkflowError
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController, YieldParameters, estimate_score_yield
 from gene_annotation_episode.state import Store
 
 
@@ -160,7 +160,7 @@ def test_missing_time_and_unidentifiable_expectations_stay_unavailable(saved, mo
     assert sparse["rows"][0]["expected_yield"]["unavailable_reason"] == "progress_time_unavailable"
     assert sparse["rows"][0]["total_yield"] == 0
     from dataclasses import replace
-    from gene_annotation_episode.numerical import NumericBand, STATUS_UNIDENTIFIABLE
+    from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, STATUS_UNIDENTIFIABLE
     original = estimate_score_yield([], YieldParameters())
     monkeypatch.setattr(history, "estimate_score_yield", lambda *_, **__: replace(original,
         expected_next_gain=NumericBand.coded(STATUS_UNIDENTIFIABLE)))

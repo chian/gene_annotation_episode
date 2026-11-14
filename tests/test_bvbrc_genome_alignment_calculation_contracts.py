@@ -3,9 +3,9 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode import bvbrc_genome_alignment_calculation_contracts as contracts
-from gene_annotation_episode import bvbrc_genome_alignment_calculators as calculators
-from gene_annotation_episode.bvbrc_genome_alignment_sheet import build_genome_alignment_sheet, validate_genome_alignment_sheet
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_calculation_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_calculators as calculators
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_sheet import build_genome_alignment_sheet, validate_genome_alignment_sheet
 from test_bvbrc_genome_alignment_sheet import fixture_data, all_requests, plan, slot, resolution
 
 
@@ -150,6 +150,6 @@ def test_conflicting_slot_readers_for_same_artifact_reject():
     data['document_slots'].append(extra)
     res = deepcopy(data['slot_resolutions'][0]); res['slot_id'] = extra['slot_id']
     data['slot_resolutions'].append(res)
-    from gene_annotation_episode.bvbrc_genome_alignment_sheet import validate_genome_alignment_data
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_sheet import validate_genome_alignment_data
     with pytest.raises(ValueError, match='slot_reader_conflict'):
         validate_genome_alignment_data(data)

@@ -7,11 +7,11 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.bvbrc_proteome_directional import parse_genome_comparison_directional_report
-from gene_annotation_episode.bvbrc_proteome_directional_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional import parse_genome_comparison_directional_report
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_contracts import (
     ProteomeDirectionalError, directional_schema, validate_directional_report,
 )
-from gene_annotation_episode.bvbrc_proteome_native_contracts import native_schema
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_native_contracts import native_schema
 
 
 @pytest.fixture

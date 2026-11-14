@@ -4,8 +4,8 @@ import hashlib
 
 import pytest
 
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_adapter as facade
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_resolution as resolution
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_adapter as facade
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_resolution as resolution
 from test_bvbrc_genome_alignment_associations import native_case
 from test_bvbrc_genome_alignment_retained_records import content
 from test_bvbrc_genome_alignment_sheet import all_requests, plan, slot
@@ -189,7 +189,7 @@ def test_bundle_status_does_not_discard_independent_native_measurement(status):
 
 
 def test_original_bundle_reports_survive_alongside_usable_native_counts():
-    from gene_annotation_episode.bvbrc_alignment_values import diagnostic, requirement
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import diagnostic, requirement
     args = arguments(); code = 'bvbrc_genome_alignment_bundle_artifact_bytes_missing'
     req = requirement('original-bundle-gap', kind='output_bytes', role=None, reason_code=code)
     diag = diagnostic(code, phase='publication', path='/original-required-output')

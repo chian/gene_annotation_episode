@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.evidence_axis_contracts import native_metric_facts, validate_evidence_axis_entry
+from gene_annotation_episode.episodic_workflow.root.evidence_axis_contracts import native_metric_facts, validate_evidence_axis_entry
 from gene_annotation_episode.episodic_workflow.root.evidence_axis_scoring import score_axis
 from gene_annotation_episode.state import Store
 

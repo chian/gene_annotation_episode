@@ -6,7 +6,7 @@ import hashlib
 
 import pytest
 from gene_annotation_episode.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
-from gene_annotation_episode.bvbrc_comparative_systems_host_inputs import collect_comparative_systems_inputs, _SelectedDataHost, _materialize_producers
+from gene_annotation_episode.episodic_workflow.root.bvbrc_comparative_systems_host_inputs import collect_comparative_systems_inputs, _SelectedDataHost, _materialize_producers
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.acquisition import SourceSnapshot

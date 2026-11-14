@@ -13,11 +13,11 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.genomic_overlap_return_views import FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_return_views import FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE
 from gene_annotation_episode.native_file_capture import NativeFileCaptureError, retained_native_file
-from gene_annotation_episode import native_genomic_overlap_results as host_module
+from gene_annotation_episode.episodic_workflow.root import native_genomic_overlap_results as host_module
 
 
 F = import_module("gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.retained_workflow.verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers")
@@ -29,7 +29,7 @@ def deny(*args, **kwargs):
 
 @pytest.fixture(scope="module")
 def case(tmp_path_factory):
-    from gene_annotation_episode import genomic_overlap_result_receipts as receipts
+    from gene_annotation_episode.episodic_workflow.root import genomic_overlap_result_receipts as receipts
     import traceback
     original = receipts.require
     def traced(condition, code="genomic_overlap_result_authority_conflict"):
@@ -54,7 +54,7 @@ def receipt(case, position=0):
 
 def selected_outcome(value):
     if "pending_work_after_action" in value:
-        from gene_annotation_episode.waiting import validate_pending
+        from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
         validate_pending(value["pending_work_after_action"])
     return {key: item for key, item in value.items() if key != "pending_work_after_action"}
 
@@ -118,7 +118,7 @@ def test_completed_replay_and_historical_facts_survive_scientific_byte_loss(case
             patch.setattr(host_module, "capture_genomic_overlap_native_files", deny)
             patch.setattr(host_module, "prepare_genomic_overlap_worker", deny)
             patch.setattr(type(case.owner.job_progress_provider.targets), "observe_target", deny)
-            patch.setattr("gene_annotation_episode.native_genomic_overlap_local.local_genomic_overlap_plan", deny)
+            patch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_local.local_genomic_overlap_plan", deny)
             for index, context in enumerate(case.result_contexts):
                 actual = asyncio.run(service.execute(context, case.provider.target, "execution.results.collect", {},
                     receipt(case, index)["intent"]["operation_key"]))
@@ -148,7 +148,7 @@ def test_credit_one_original_population_and_zero_saved_recalculation(case):
 
 def test_baseline_uses_frozen_delivery_and_deduplicates_actual_received_origins(case, monkeypatch):
     """Later actual returns do not enter an earlier context's baseline."""
-    from gene_annotation_episode.episode_receipts import EpisodeReceipts
+    from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
     service = host(case)
     original, saved = case.result_contexts
     file, = case.returned[0]["saved"]
@@ -252,7 +252,7 @@ def test_actual_partial_inputs_preserve_independent_values_and_incomplete_delive
 
 def test_nonterminal_observation_cannot_capture_or_finish(tmp_path, monkeypatch):
     """Negative observation injection; the underlying native attempt is real."""
-    from gene_annotation_episode.execution_progress import ExecutionTargetReader
+    from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionTargetReader
     original = ExecutionTargetReader.observe_target
     observed = []
     def nonterminal(self, *args, **kwargs):
@@ -282,7 +282,7 @@ def test_nonterminal_observation_cannot_capture_or_finish(tmp_path, monkeypatch)
 
 def test_byte_verification_is_separate_from_semantic_output_qualification(case):
     """Negative role injection based on a real verified434 worker capture."""
-    from gene_annotation_episode.genomic_overlap_result_receipts import qualified_files
+    from gene_annotation_episode.episodic_workflow.root.genomic_overlap_result_receipts import qualified_files
     original = receipt(case)
     changed = deepcopy(original)
     capture = changed["worker_capture"]
@@ -345,7 +345,7 @@ def test_real_worker_reservation_interruption_recovers_same_selected_action(tmp_
             patch.setattr(host_module, "capture_genomic_overlap_native_files", deny)
             patch.setattr(type(owner.job_progress_provider.targets), "observe_target", deny)
             patch.setattr(native_lifecycle, "prepare_job", deny)
-            patch.setattr("gene_annotation_episode.native_genomic_overlap_preparation._snapshot", deny)
+            patch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_preparation._snapshot", deny)
             recovered = asyncio.run(service.execute(context, intent["target"], "execution.results.collect", {}, key))
         after = json.loads((root / "worker/worker.handle.json").read_bytes())
         assert after["unit"] == interrupted[0]["unit"]
@@ -422,7 +422,7 @@ def test_acquisition_requires_native_output_or_validated_empty_derivation(tmp_pa
 
 @pytest.mark.parametrize("mode", ["native_result", "saved_sheet_recalculation"])
 def test_completion_only_form_finishes_selected_work_without_new_sheet_grant(tmp_path, monkeypatch, mode):
-    from gene_annotation_episode.numerical import NumericBand
+    from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
     actual = F.commission
     completion_only = F.result_form(completed=True)
     def commission(role, assignment, scope, form, *, objective):
@@ -458,7 +458,7 @@ def test_completion_only_form_finishes_selected_work_without_new_sheet_grant(tmp
 
 def continued_saved_case(directory, monkeypatch, *, partial):
     """Scripted repair choices over the real437 runtime construction path."""
-    from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+    from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
     from jsonschema import Draft202012Validator
     original_assemble, original_controller = F.assemble, F.controller_factory
     def controller_factory(*, saved, failure):

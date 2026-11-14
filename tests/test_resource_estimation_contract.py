@@ -8,8 +8,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import validate_closed_schema, validate_form
-from gene_annotation_episode.execution_expectations import ExecutionExpectations, capture_execution_scopes
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.execution_expectations import ExecutionExpectations, capture_execution_scopes
 from gene_annotation_episode.resource_estimation import ResourceToolEstimator, recorded_estimate, report_source
 from gene_annotation_episode.run_statistics import ExecutionClass, RunHistory, RunStatistic
 

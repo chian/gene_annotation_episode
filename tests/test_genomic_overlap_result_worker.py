@@ -17,9 +17,9 @@ import time
 
 import pytest
 
-from gene_annotation_episode import genomic_overlap_result_worker as worker
-from gene_annotation_episode.genomic_overlap_contracts import canonical_genomic_overlap_sheet_sha256
-from gene_annotation_episode.native_genomic_overlap_contracts import genomic_overlap_output_files
+from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_result_worker as worker
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_contracts import canonical_genomic_overlap_sheet_sha256
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_contracts import genomic_overlap_output_files
 
 
 PACKET = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/result_worker'

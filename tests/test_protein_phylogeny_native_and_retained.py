@@ -11,9 +11,9 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import iqtree_phylogeny_driver as driver
-from gene_annotation_episode import protein_phylogeny_result_contracts as contracts
-from gene_annotation_episode import protein_phylogeny_result_worker as worker
+from gene_annotation_episode.episodic_workflow.root.library import iqtree_phylogeny_driver as driver
+from gene_annotation_episode.episodic_workflow.root.library import protein_phylogeny_result_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import protein_phylogeny_result_worker as worker
 
 
 PARAMETERS = dict(model="LG", bootstrap_replicates=1000, threads=1, seed=7)

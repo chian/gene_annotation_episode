@@ -10,7 +10,7 @@ from gene_annotation_episode.chromatin_interaction_return_views import (
     FACT_SOURCES, PROJECTION_SOURCE, FAILURE_SOURCE, SAVED_SOURCE,
     chromatin_fact_sources, chromatin_fact_schema_alternatives, select_chromatin_return_facts,
 )
-from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, form_with_facts, validate_closed_schema, validate_form
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.state import Store
 from tests.test_chromatin_interaction_returns import RuntimeFixture, files, references
@@ -143,7 +143,7 @@ def test_legacy_cooler_form_through_actual_host_receipts_and_production_returns(
     from gene_annotation_episode import native_chromatin_interaction_driver as driver
     from gene_annotation_episode.native_chromatin_interaction_preparation import freeze_chromatin_software_binding
     from gene_annotation_episode.chromatin_interaction_returns import ChromatinInteractionReturns
-    from gene_annotation_episode.communication import plain
+    from gene_annotation_episode.episodic_workflow.root.communication import plain
     attempt = Path(os.environ['HIC456_ATTEMPT'])
     software = freeze_chromatin_software_binding(module_root=str(Path(driver.__file__).parents[1]),
         snapshot_directory=str(attempt / 'legacy_native_software'), python_executable=os.sys.executable)

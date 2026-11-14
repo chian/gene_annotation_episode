@@ -10,9 +10,9 @@ import sqlite3
 
 import pytest
 
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts, RECEIPT_VERSION
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts, RECEIPT_VERSION
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.state import Store
 
@@ -224,7 +224,7 @@ def test_invalid_stored_metadata_cannot_be_silently_accepted(tmp_path, mutation)
 
 def test_commission_rejects_changed_prefix_even_when_saved_child_request_matches_change(tmp_path):
     from test_episode_commissions import setup_case
-    from gene_annotation_episode.episode_commissions import CommissionCoordinator, CommissionError
+    from gene_annotation_episode.episodic_workflow.root.episode_commissions import CommissionCoordinator, CommissionError
 
     store, journal, backend, operands, _ = setup_case(tmp_path)
     with store:
@@ -239,7 +239,7 @@ def test_commission_rejects_changed_prefix_even_when_saved_child_request_matches
 
 def test_appservice_custody_compares_complete_prefix_without_committing(tmp_path):
     from test_bvbrc_appservice_custody import SavedRecords, launch_assignment
-    from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustodyError
+    from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustodyError
 
     with Store(tmp_path / "store") as store:
         saved = SavedRecords(store)

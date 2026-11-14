@@ -4,7 +4,7 @@ from types import MappingProxyType
 
 import pytest
 
-from gene_annotation_episode.decision_context import INSTRUCTIONS
+from gene_annotation_episode.episodic_workflow.root.decision_context import INSTRUCTIONS
 from gene_annotation_episode.episodic_workflow.root.a105.literature_assay_prompt import ASSAY_TASK
 from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import EXPERIMENTAL_TASK
 from gene_annotation_episode.episodic_workflow.root.literature_reference_parent_prompt import (

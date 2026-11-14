@@ -7,8 +7,8 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.sequence_masking_contracts import validate_sequence_masking_record
-from gene_annotation_episode.windowmasker_statistics import parse_windowmasker_statistics, validate_windowmasker_statistics
+from gene_annotation_episode.episodic_workflow.root.library.sequence_masking_contracts import validate_sequence_masking_record
+from gene_annotation_episode.episodic_workflow.root.library.windowmasker_statistics import parse_windowmasker_statistics, validate_windowmasker_statistics
 
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/masking_native"

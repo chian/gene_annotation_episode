@@ -20,14 +20,14 @@ import pytest
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients
 from gene_annotation_episode import ensembl_acquisition as native
 from gene_annotation_episode import ensembl_acquisition_host as host
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.molecular_reference_privacy import molecular_reference_restriction
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 
 import test_ensembl_acquisition as captures
 from test_alphafold_acquisition_host import Provider, _controller, _credit, _selected
@@ -1250,7 +1250,7 @@ def _ensembl_attempt_native_evidence(connection, directory, report):
         if action["result"] is not None:
             actual = json.loads(action["result"])
             if "pending_work_after_action" in actual:
-                from gene_annotation_episode.waiting import validate_pending
+                from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
                 validate_pending(actual.pop("pending_work_after_action"))
             assert canonical(actual) == canonical(outcome)
         evidence[saved["id"]] = {"snapshot": snapshot, "artifact_ref": saved["artifact_ref"]}
@@ -1272,7 +1272,7 @@ def _ensembl_attempt_native_evidence(connection, directory, report):
 
 
 def _ensembl_attempt_parent_delivery(store, workflow, sources):
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     form, = store.db.execute("SELECT * FROM runtime_forms")
     attempt, = store.db.execute("SELECT * FROM runtime_report_attempts")
     expected = {"homology_source_refs": [sources[-1]["id"]]}
@@ -1371,7 +1371,7 @@ def test_retained_fresh_ensembl116_native_work_and_owned_parent_delivery(tmp_pat
     monkeypatch.setattr(host, "prepare_ensembl_request", deny("new_request_preparation"))
     monkeypatch.setattr(host, "publish_ensembl_request", deny("new_response_publication"))
     monkeypatch.setattr("gene_annotation_episode.native_lifecycle.prepare_job", deny("native_job"))
-    monkeypatch.setattr("gene_annotation_episode.providers._SessionConnection._rpc", deny("model_RPC"))
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.providers._SessionConnection._rpc", deny("model_RPC"))
     try:
         with Store(owned / "store") as store:
             try:

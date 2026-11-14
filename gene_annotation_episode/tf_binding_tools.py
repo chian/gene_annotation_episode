@@ -12,10 +12,10 @@ import json
 import re
 import stat
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError, identity, obj
-from .episode_receipts import EpisodeReceipts
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_receipts import EpisodeReceipts
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
 from .native_operation_lock import _action_lock
 from .local_jobs import LocalJobPolicy

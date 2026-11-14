@@ -14,9 +14,9 @@ from pathlib import Path
 import sqlite3
 from types import SimpleNamespace
 
-from gene_annotation_episode.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
 from gene_annotation_episode.episodic_workflow.root.literature_work_report import completed_work
-from gene_annotation_episode.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 
 
 FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/work_reports/a105-parent-input-too-large.json.gz'

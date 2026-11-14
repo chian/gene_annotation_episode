@@ -17,16 +17,16 @@ import sys
 import numpy as np
 import pytest
 
-from gene_annotation_episode import protein_structure_result_worker as worker
-from gene_annotation_episode import protein_structure_calculations as calculations
-from gene_annotation_episode import protein_structure_sheet as sheets
-from gene_annotation_episode import protein_structure_sequences as sequences
-from gene_annotation_episode import protein_structure_metadata as metadata
-from gene_annotation_episode import protein_structure_formats as formats
-from gene_annotation_episode import native_protein_structure_worker as native_worker
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_result_worker as worker
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_calculations as calculations
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_sheet as sheets
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_sequences as sequences
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_metadata as metadata
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_formats as formats
+from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_worker as native_worker
 from gene_annotation_episode import sequence_ops
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.protein_structure_contracts import issue, same
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue, same
 
 REPO = Path(__file__).resolve().parents[1]
 PACKET = REPO / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_result_worker_393"
@@ -508,7 +508,7 @@ def test_real_cli_and_output_bytes(tmp_path, mode):
         if mode == "failure": plan["native_result"] = None
     plan_file = tmp_path / "plan.json"
     plan_file.write_bytes(_bytes(plan))
-    command = [sys.executable, "-B", "-m", "gene_annotation_episode.protein_structure_result_worker", str(plan_file)]
+    command = [sys.executable, "-B", "-m", "gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_worker", str(plan_file)]
     completed = subprocess.run(command, cwd=tmp_path, capture_output=True, check=False)
     (tmp_path / "cli-command.json").write_bytes(_bytes(command))
     (tmp_path / "cli-stdout.txt").write_bytes(completed.stdout)
@@ -528,7 +528,7 @@ def test_cli_rejects_extra_arguments_and_noncanonical_plan(tmp_path):
     plan, _ = _native_plan(tmp_path, "inspect")
     plan_file = tmp_path / "plan.json"
     plan_file.write_bytes(_bytes(plan) + b"\n")
-    base = [sys.executable, "-B", "-m", "gene_annotation_episode.protein_structure_result_worker"]
+    base = [sys.executable, "-B", "-m", "gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_worker"]
     for arguments in ([], [str(plan_file)], [str(plan_file), "extra"]):
         result = subprocess.run(base + arguments, cwd=tmp_path, capture_output=True, check=False)
         assert result.returncode != 0 and b"ValueError" in result.stderr

@@ -7,12 +7,12 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_bundle_contracts as c
-from gene_annotation_episode import bvbrc_proteome_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter as adapter
 from gene_annotation_episode.bvbrc_appservice_contracts import contract_schema
-from gene_annotation_episode.bvbrc_proteome_data_contracts import proteome_data_schema
-from gene_annotation_episode.bvbrc_proteome_native_contracts import native_schema
-from gene_annotation_episode.bvbrc_proteome_sheet_contracts import proteome_sheet_schema
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_data_contracts import proteome_data_schema
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_native_contracts import native_schema
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_sheet_contracts import proteome_sheet_schema
 from test_bvbrc_proteome_bundle_resolution import fixture, consume
 
 
@@ -106,13 +106,13 @@ def saved():
 
 
 def test_saved_validation_calls_no_native_constructor_calculator_or_projection(saved, monkeypatch):
-    from gene_annotation_episode import bvbrc_proteome_bundle_resolution as resolution
-    from gene_annotation_episode import bvbrc_proteome_bundle_projection as projection
-    from gene_annotation_episode import bvbrc_proteome_inputs as inputs
-    from gene_annotation_episode import bvbrc_proteome_native as native
-    from gene_annotation_episode import bvbrc_proteome_joins as joins
-    from gene_annotation_episode import bvbrc_proteome_sheet as sheet
-    from gene_annotation_episode import bvbrc_proteome_calculators as calculators
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_resolution as resolution
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_projection as projection
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_inputs as inputs
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_native as native
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_joins as joins
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_sheet as sheet
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_calculators as calculators
     def forbidden(*args, **kwargs):
         raise AssertionError("saved validation cannot reconstruct work")
     for module, names in ((resolution, ("consume_bundle", "build_native_sheet", "build_native_joins", "calculate_native_components", "parse_genome_comparison")),

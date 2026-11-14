@@ -11,8 +11,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustodyError
-from gene_annotation_episode.bvbrc_appservice_receipt_values import build_appservice_receipt
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustodyError
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_appservice_receipt_values import build_appservice_receipt
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.practical_execution_state import _read
 from gene_annotation_episode.state import Store

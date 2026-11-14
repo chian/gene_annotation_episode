@@ -17,15 +17,15 @@ from method_loop.identities import EpisodeRef
 import pytest
 
 from gene_annotation_episode import chromatin_interaction_operands as operands
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.native_chromatin_interaction_contracts import (
     REQUIRED_DEPENDENCIES, REQUIRED_MODULES, requested_job_from_chromatin,
 )
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 

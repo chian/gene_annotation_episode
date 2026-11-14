@@ -3,7 +3,7 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_fact_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_fact_contracts as c
 
 
 @pytest.mark.parametrize("state,value,valid", [

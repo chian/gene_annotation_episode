@@ -4,7 +4,7 @@ from dataclasses import replace
 import pytest
 
 from test_rna_comparison_operand_authority import E, resolve
-from gene_annotation_episode.rna_structure_comparison_operands import validate_rna_comparison_selected_inputs
+from gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_operands import validate_rna_comparison_selected_inputs
 from gene_annotation_episode.state import Store
 
 

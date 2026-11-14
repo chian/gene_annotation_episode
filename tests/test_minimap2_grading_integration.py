@@ -21,8 +21,8 @@ from gene_annotation_episode.domain import ContractError, canonical
 from gene_annotation_episode.minimap2_grader import (
     calculate_minimap2_placement_scores, calculate_minimap2_query_scores,
 )
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import MEDIA_TYPE, source_tool_gradings

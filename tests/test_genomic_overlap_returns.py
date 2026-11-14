@@ -16,18 +16,18 @@ from method_loop.episode import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.genomic_overlap_return_views import (
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_return_views import (
     FACT_SOURCES, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE,
     genomic_overlap_fact_sources,
 )
-from gene_annotation_episode.genomic_overlap_returns import GenomicOverlapReturns
+from gene_annotation_episode.episodic_workflow.root.genomic_overlap_returns import GenomicOverlapReturns
 from gene_annotation_episode.native_file_capture import retained_native_file
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 
@@ -236,10 +236,10 @@ def no_acquisition_calculation_or_model(monkeypatch):
     def forbidden(*args, **kwargs):
         raise AssertionError("Return authority attempted acquisition, native work or numerical calculation")
     for path in ("socket.create_connection", "socket.socket", "subprocess.Popen",
-        "gene_annotation_episode.genomic_overlap_inputs.parse_region_set",
-        "gene_annotation_episode.genomic_overlap_inputs.parse_bedtools_intersect_wo",
-        "gene_annotation_episode.genomic_overlap_calculations.calculate_genomic_overlap_components",
-        "gene_annotation_episode.genomic_overlap_result_views.project_genomic_overlap_result"):
+        "gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_inputs.parse_region_set",
+        "gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_inputs.parse_bedtools_intersect_wo",
+        "gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_calculations.calculate_genomic_overlap_components",
+        "gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_result_views.project_genomic_overlap_result"):
         monkeypatch.setattr(path, forbidden)
 
 

@@ -15,15 +15,15 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_progress import ExecutionProgressProvider, ExecutionTargetReader, describe_execution_target
-from gene_annotation_episode.native_flux_balance_contracts import POLICY
-from gene_annotation_episode.native_flux_balance_local import local_flux_balance_plan
+from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionProgressProvider, ExecutionTargetReader, describe_execution_target
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_local import local_flux_balance_plan
 from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-from gene_annotation_episode.practical_execution_records import assess_validations
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations
 from gene_annotation_episode.practical_execution_state import PracticalState
-from gene_annotation_episode.practical_receipt_information import PracticalReceiptInformation
+from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
 from test_flux_balance_execution_inputs_704 import selected
 
@@ -101,7 +101,7 @@ def test_selected_start_uses_701_and_preserves_input_file_and_original_facts(cas
     execution = job['execution_id']
     plan = local_flux_balance_plan(c.state.assignment, execution)
     assert Path(c.prepares[0][1]['cwd']) == Path(execution).parent
-    assert c.prepares[0][0][0][2:5] == ['-S', '-m', 'gene_annotation_episode.native_flux_balance_driver']
+    assert c.prepares[0][0][0][2:5] == ['-S', '-m', 'gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver']
     assert job['argv'] == c.state.assignment['requested_job']['argv']
     assert job['environment'] == c.state.assignment['requested_job']['environment']
     assert job['requested_job_sha256'] == digest(c.state.assignment['requested_job'])

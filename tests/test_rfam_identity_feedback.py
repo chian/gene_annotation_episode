@@ -14,7 +14,7 @@ import pytest
 from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.rfam_discovery import result_body, result_url
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController

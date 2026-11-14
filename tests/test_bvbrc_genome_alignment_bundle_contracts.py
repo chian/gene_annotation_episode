@@ -4,7 +4,7 @@ from copy import deepcopy
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_contracts as c
 from test_bvbrc_genome_alignment_bundle_resolution import arguments, measurement, member
 
 

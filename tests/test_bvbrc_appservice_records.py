@@ -10,11 +10,11 @@ from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.api_selected_call import perform_selected_call
 from gene_annotation_episode.api_selected_effects import SelectedAPIEffects
-from gene_annotation_episode.api_service_execution import APIServiceExecution
-from gene_annotation_episode.bvbrc_appservice_records import AppServiceRecords, provisional_receipt_ref
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_records import AppServiceRecords, provisional_receipt_ref
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.practical_execution_state import _immutable, _read
 from test_api_bvbrc_appservice import harness, original_request, bound, prepare, PREFIX
@@ -150,7 +150,7 @@ def test_original_call_metadata_corruption_is_detected_on_read(receipt_fixture):
     path = f.directory / 'call_response.json'
     changed = _read(path)
     changed['snapshot']['request'] = {'different': True}
-    from gene_annotation_episode.practical_execution_records import canonical as record_bytes
+    from gene_annotation_episode.episodic_workflow.root.practical_execution_records import canonical as record_bytes
     path.write_bytes((record_bytes(changed) + '\n').encode('utf-8'))
     with pytest.raises(ValueError, match='original_transport_conflict'):
         f.records.read(published['source_ref'])
@@ -170,7 +170,7 @@ def test_wrong_saved_episode_context_is_rejected(receipt_fixture):
 
 def test_handoff_codec_rewrites_only_two_declared_self_fields():
     # Exact codec behavior, deliberately no claim of an actual task handoff.
-    from gene_annotation_episode.bvbrc_appservice_records import _encode
+    from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_records import _encode
     value = {'receipt': {'receipt_ref': 'provisional'},
         'original_task': {'submission_receipt_ref': 'provisional', 'submission_source_ref': 'native'},
         'native_submission_record': {'literal': 'provisional'}}

@@ -14,7 +14,7 @@ import sys
 import pytest
 
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.native_flux_balance_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
     ATTEMPT_DIRECTORY_NAME, DRIVER_MODULE, POLICY, RUN_PLAN_FILENAME, SOURCE_FUNCTION_SHA256,
     flux_balance_driver_argv, flux_balance_environment, flux_balance_output_files,
     validate_flux_balance_run_plan,
@@ -22,7 +22,7 @@ from gene_annotation_episode.native_flux_balance_contracts import (
 from gene_annotation_episode.native_flux_balance_storage import (
     decode_json, file_pin, immutable_bytes, immutable_json, read_json, retain_input,
 )
-from gene_annotation_episode import native_flux_balance_cobra_glpk as native
+from gene_annotation_episode.episodic_workflow.root.library import native_flux_balance_cobra_glpk as native
 
 ATTEMPT = Path(os.environ["HMMER529_ATTEMPT"]) if "HMMER529_ATTEMPT" in os.environ else None
 pytestmark = pytest.mark.skipif(ATTEMPT is None, reason="application/native work requires bounded529")
@@ -131,8 +131,8 @@ def _parameters(sheet):
 
 
 def _parsed_calculated(plan):
-    from gene_annotation_episode.flux_balance_readers import parse_fba_capture
-    from gene_annotation_episode.flux_balance_sheet import populate_flux_balance_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers import parse_fba_capture
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet import populate_flux_balance_sheet
     from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
     bundle = parse_fba_capture(_bundle(plan), expected=plan["identity"])
     sheet = populate_flux_balance_sheet(bundle=bundle)
@@ -369,7 +369,7 @@ def test_synthetic_pass_chronology_and_per_value_qualification(tmp_path, monkeyp
 
 
 def test_selected_no_solve_failures_and_source_retention(tmp_path, monkeypatch):
-    from gene_annotation_episode.native_flux_balance_driver import run_flux_balance_native
+    from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver import run_flux_balance_native
     import cobra
     def forbidden(*args, **kwargs):
         raise AssertionError("pre-solve rejection must not call optimize")
@@ -435,7 +435,7 @@ def test_source_units_collisions_and_actual_partial_setter_without_solve(tmp_pat
 
 def test_decoded_xml_audit_survives_source_interpretation_exception(tmp_path, monkeypatch):
     import cobra
-    from gene_annotation_episode.native_flux_balance_driver import run_flux_balance_native
+    from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver import run_flux_balance_native
     def forbidden(*args, **kwargs):
         raise AssertionError("invalid semantic source must never optimize")
     monkeypatch.setattr(cobra.Model, "optimize", forbidden)
@@ -457,7 +457,7 @@ def test_saved_emission_recalculation_cli_replay_and_tamper_no_solve(tmp_path, m
     retained = os.environ.get("HMMER_NATIVE_ORACLE_FBA_RETAINED")
     if retained is None:
         pytest.skip("requires explicitly supplied original producer emissions")
-    from gene_annotation_episode.native_flux_balance_driver import main, run_flux_balance_native
+    from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver import main, run_flux_balance_native
     from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
     import cobra
     def forbidden(*args, **kwargs):
@@ -506,7 +506,7 @@ def test_controlled_exception_after_observed_return_and_csv_write_failure(tmp_pa
         pytest.skip("controlled transport fixture requires original retained bytes")
     import cobra
     import optlang.glpk_interface as interface
-    from gene_annotation_episode import native_flux_balance_driver as driver
+    from gene_annotation_episode.episodic_workflow.root.library import native_flux_balance_driver as driver
     original_plan = read_json(Path(retained) / "sbml/selected-plan.json")
     retained_payload = read_json(Path(original_plan["attempt_directory"]) / "outputs/solution-capture.json")
     native_calls = []
@@ -555,7 +555,7 @@ def test_controlled_exception_after_observed_return_and_csv_write_failure(tmp_pa
 def test_final_software_identity_failure_downgrades_exact_without_native_work(tmp_path, monkeypatch):
     """Controlled Python invocation only; the native optimizer is never called."""
     import cobra
-    from gene_annotation_episode import native_flux_balance_driver as driver
+    from gene_annotation_episode.episodic_workflow.root.library import native_flux_balance_driver as driver
     original_verify = driver._verify_software
     def verify(software, *, native_loaded=False):
         if native_loaded:
@@ -579,7 +579,7 @@ def test_final_software_identity_failure_downgrades_exact_without_native_work(tm
 
 
 def test_invalid_selected_requests_and_envelopes_reject_before_invocation(tmp_path, monkeypatch):
-    from gene_annotation_episode.native_flux_balance_driver import run_flux_balance_native
+    from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver import run_flux_balance_native
     import cobra
     def forbidden(*args, **kwargs):
         raise AssertionError("invalid envelope must never invoke native work")
@@ -609,7 +609,7 @@ def test_invalid_selected_requests_and_envelopes_reject_before_invocation(tmp_pa
 def test_selected_producer_native_sbml_and_json_once(tmp_path, monkeypatch):
     if os.environ.get("HMMER_NATIVE_ORACLE_FBA_PRODUCER") != "two-selected-cases-688":
         pytest.skip("two new original solves require this explicit selected verification")
-    from gene_annotation_episode.native_flux_balance_driver import run_flux_balance_native
+    from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver import run_flux_balance_native
     software = _software()
     cases = [("sbml", SBML, None), ("cobra_json", canonical(_json_model()).encode(), [
         {"reaction_id": "AB", "lower": _selected_bound(0), "upper": _selected_bound(10)},
@@ -655,7 +655,7 @@ def test_selected_native_bound_and_objective_perturbations():
         pytest.skip("requires the explicitly selected prepared714 software descriptor")
     from gene_annotation_episode import native_lifecycle
     from gene_annotation_episode.local_jobs import LocalJobPolicy
-    from gene_annotation_episode.native_flux_balance_contracts import validate_flux_balance_software
+    from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import validate_flux_balance_software
 
     descriptor = Path(selected)
     assert descriptor.is_absolute()

@@ -13,10 +13,10 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a107 import a107_qualification as partner
 from gene_annotation_episode.episodic_workflow.root.a110 import a110_qualification as chemistry
 from gene_annotation_episode.episodic_workflow.root.a110 import a110_experimental_qualification as experimental
-from gene_annotation_episode import component_source_identity as identity
+from gene_annotation_episode.episodic_workflow.root.library import component_source_identity as identity
 from gene_annotation_episode.episodic_workflow.root.a107.a107_expression_components import calculate as expression_components
 from gene_annotation_episode.episodic_workflow.root.a110.a110_chemical_accounting import calculate as chemical_components
-from gene_annotation_episode.communication import form_with_facts, plain
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain
 from gene_annotation_episode.episodic_workflow.root.a107.component_axis_native_hpc import publish as publish_a107, RESULT_PROVIDER
 from gene_annotation_episode.episodic_workflow.root.a110.component_axis_native_hpc import publish as publish_a110
 from gene_annotation_episode.domain import ContractError, obj

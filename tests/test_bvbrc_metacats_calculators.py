@@ -12,11 +12,11 @@ import pytest
 import scipy
 
 from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
-from gene_annotation_episode.bvbrc_alignment_values import numeric_cell
-from gene_annotation_episode.bvbrc_metacats_calculators import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import numeric_cell
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculators import (
     metacats_group_counts, metacats_statistics, metacats_effects,
     adjust_p_values, chi_square_tail)
-from gene_annotation_episode.bvbrc_metacats_calculation_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculation_contracts import (
     validate_group_counts, validate_statistics, validate_effects, validate_multiplicity)
 
 
@@ -322,9 +322,9 @@ def test_saved_outputs_validate_detached_without_recalculation(monkeypatch):
     def forbidden(*args, **kwargs):
         raise AssertionError('calculation_or_io_forbidden')
     monkeypatch.setattr(builtins, 'open', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_metacats_calculators.metacats_statistics', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_metacats_calculators.metacats_effects', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_metacats_calculators.adjust_p_values', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculators.metacats_statistics', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculators.metacats_effects', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculators.adjust_p_values', forbidden)
     for value, validate in ((stats, validate_statistics), (effects, validate_effects),
                              (multiplicity, validate_multiplicity)):
         saved = json.loads(json.dumps(value, allow_nan=False))

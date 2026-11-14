@@ -8,10 +8,10 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode.communication import plain, validate_form
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.numerical import NumericBand
-from gene_annotation_episode.rna_structure_comparison_views import PROJECTION_SOURCE
+from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE
 from test_native_rna_structure_results_integration import history
 
 SPEC = importlib.util.spec_from_file_location('rna_shared372',
@@ -122,10 +122,10 @@ def test_replay_without_producer_files_preserves_original_receipts_and_observati
     before = [dict(row) for row in case.store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')]
     for seed in case.seeds:
         shutil.rmtree(seed.root)
-    monkeypatch.setattr('gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.native_rna_structure_local.local_rna_structure_plan', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local.local_rna_structure_plan', forbidden)
     monkeypatch.setattr(case.owner.job_progress_provider.targets, 'observe_target', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.rna_structure_comparison_publication.run_local_job', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_publication.run_local_job', forbidden)
     outcome = asyncio.run(case.owner.execute(context, 'execution.results.collect', {}, case.body['operation_key']))
     assert outcome['result'] == case.body and outcome['record_refs'] == []
     assert [dict(row) for row in case.store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')] == before
@@ -173,9 +173,9 @@ def test_qualified_incompatible_result_completes_after_status_without_extra_turn
 @pytest.mark.parametrize('custody', ['changed', 'missing'])
 def test_changed_retained_sheet_records_one_failed_collect_without_native_retry(tmp_path, monkeypatch, custody):
     def forbid_native(case):
-        monkeypatch.setattr('gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle', forbidden)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle', forbidden)
         monkeypatch.setattr(case.owner.job_progress_provider.targets, 'observe_target', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.rna_structure_comparison_publication.run_local_job', forbidden)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_publication.run_local_job', forbidden)
     case = F.workflow_case(tmp_path, monkeypatch, corrupt=custody, before_comparison=forbid_native)
     try:
         assert case.body['delivery_complete'] is False

@@ -17,16 +17,16 @@ from method_loop.identities import EpisodeRef
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.api_service_execution import APIServiceExecution
-from gene_annotation_episode.communication import form_with_facts, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.rfam_batch_returns import (FACT_SOURCES, IDENTIFIER_NAMESPACES,
+from gene_annotation_episode.episodic_workflow.root.rfam_batch_returns import (FACT_SOURCES, IDENTIFIER_NAMESPACES,
     RfamBatchReturns, rfam_fact_sources)
 from gene_annotation_episode.rfam_discovery import result_url
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 

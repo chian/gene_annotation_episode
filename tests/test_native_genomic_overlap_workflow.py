@@ -13,10 +13,10 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.genomic_overlap_return_views import PROJECTION_SOURCE, SAVED_SOURCE
-from gene_annotation_episode.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_return_views import PROJECTION_SOURCE, SAVED_SOURCE
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
 F = import_module("gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.retained_workflow.verification.tool_graders_genomic_overlap_workflow_2026-10-27_437.fixture_helpers")
@@ -102,7 +102,7 @@ def connected_case(tmp_path_factory):
         actual_prepare = native_lifecycle.prepare_job
 
         def saved_worker_only(command, **kwargs):
-            assert command[1:5] == ["-B", "-S", "-m", "gene_annotation_episode.genomic_overlap_result_worker"]
+            assert command[1:5] == ["-B", "-S", "-m", "gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_result_worker"]
             plan = json.loads(Path(command[-1]).read_bytes())
             assert plan["mode"] == "saved_sheet_recalculation"
             assert set(plan) == {"version", "mode", "directory", "sheet", "selector"}
@@ -112,7 +112,7 @@ def connected_case(tmp_path_factory):
             return actual_prepare(command, **kwargs)
 
         patch.setattr(native_lifecycle, "prepare_job", saved_worker_only)
-        patch.setattr("gene_annotation_episode.native_genomic_overlap_results.capture_genomic_overlap_native_files", deny)
+        patch.setattr("gene_annotation_episode.episodic_workflow.root.native_genomic_overlap_results.capture_genomic_overlap_native_files", deny)
         patch.setattr(type(case.owner.job_progress_provider.targets), "observe_target", deny)
         patch.setattr("socket.create_connection", deny)
 
@@ -266,8 +266,8 @@ def test_reconstructed_finished_workflow_replays_original_actions_and_proofs(con
     monkeypatch.setattr("gene_annotation_episode.native_lifecycle.start_prepared", deny)
     monkeypatch.setattr("gene_annotation_episode.native_lifecycle.resume_start", deny)
     monkeypatch.setattr("gene_annotation_episode.native_lifecycle.status", deny)
-    monkeypatch.setattr("gene_annotation_episode.native_genomic_overlap_results.capture_genomic_overlap_native_files", deny)
-    monkeypatch.setattr("gene_annotation_episode.native_genomic_overlap_results.prepare_genomic_overlap_worker", deny)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_genomic_overlap_results.capture_genomic_overlap_native_files", deny)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_genomic_overlap_results.prepare_genomic_overlap_worker", deny)
     monkeypatch.setattr("socket.create_connection", deny)
 
     class NoNewDecisions:

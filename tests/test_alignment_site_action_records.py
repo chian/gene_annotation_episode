@@ -20,11 +20,11 @@ from gene_annotation_episode.alignment_site_returns import (
     alignment_site_fact_sources, requested_site_projections,
     project_site_action_return, validate_frozen_site_return,
 )
-from gene_annotation_episode.communication import plain, ReportBoundaryError
+from gene_annotation_episode.episodic_workflow.root.communication import plain, ReportBoundaryError
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import MEDIA_TYPE, retain_tool_grading
 from gene_annotation_episode.tools import ToolRegistry

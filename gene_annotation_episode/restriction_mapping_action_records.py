@@ -8,9 +8,9 @@ from __future__ import annotations
 from copy import deepcopy
 import json
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import canonical, identity
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .restriction_mapping_bound_contracts import validate_restriction_alias_arguments
 from .restriction_mapping_returns import requested_restriction_projections
 

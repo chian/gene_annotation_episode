@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.nhmmer_inputs import (
+from gene_annotation_episode.episodic_workflow.root.library.nhmmer_inputs import (
     build_nhmmer_sheet, iter_nhmmer_stdout_queries, iter_nhmmer_stdout_records,
     iter_nhmmer_tblout_rows, parse_nhmmer_artifacts,
 )

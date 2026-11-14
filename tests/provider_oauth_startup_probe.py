@@ -4,7 +4,7 @@ import asyncio
 import json
 from pathlib import Path
 
-from gene_annotation_episode.providers import _SessionConnection, load_config
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection, load_config
 from gene_annotation_episode.workflow_budget import active_budget
 
 

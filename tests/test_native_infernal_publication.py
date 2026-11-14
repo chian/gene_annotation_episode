@@ -14,11 +14,11 @@ import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.domain import ContractError, canonical
-from gene_annotation_episode.infernal_native_result_views import NATIVE_INFERNAL_METRICS
+from gene_annotation_episode.episodic_workflow.root.library.infernal_native_result_views import NATIVE_INFERNAL_METRICS
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.materials import artifact_file, artifact_path
 from gene_annotation_episode.native_infernal_contracts import requested_job_from_infernal, native_infernal_digest
-from gene_annotation_episode.native_infernal_result_publication import (
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_result_publication import (
     prepare_native_infernal_grading, publish_selected_native_infernal_rows)
 from gene_annotation_episode.native_infernal_result_worker import _fasta
 from gene_annotation_episode.state import Store
@@ -226,7 +226,7 @@ def test_host_no_full_dataset_or_sheet_hydration_and_completed_replay(tmp_path, 
         assert publish(store, bundle, prepared, selected)["rows"][0]["status"] == "published"
         def prohibited(*args, **kwargs):
             raise AssertionError("replay attempted worker execution or scientific calculation")
-        monkeypatch.setattr("gene_annotation_episode.native_infernal_result_publication.run_local_job", prohibited)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_infernal_result_publication.run_local_job", prohibited)
         monkeypatch.setattr("gene_annotation_episode.native_infernal_result_worker.run", prohibited)
         assert prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected) == prepared
         with pytest.raises(ContractError, match="directory_identity_conflict"):
@@ -339,7 +339,7 @@ def test_custody_failure_retains_bytes_excludes_unusable_path_and_does_not_retry
         captured = next(r for r in artifacts if r["role"] == "sequences")
         assert {**captured, "kind": "input"} in stable["captured_artifacts"]
         assert artifact_path(store, captured["artifact_ref"]).is_file()
-        monkeypatch.setattr("gene_annotation_episode.native_infernal_result_publication.run_local_job",
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_infernal_result_publication.run_local_job",
             lambda *a, **kw: pytest.fail("completed failure retried"))
         assert prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected) == prepared
 
@@ -349,7 +349,7 @@ def test_failed_worker_receipt_and_interrupted_intent_never_retry(tmp_path, monk
     def failed(*args, **kwargs):
         calls.append(kwargs["policy"])
         raise AcquisitionError("synthetic_resource_failure")
-    monkeypatch.setattr("gene_annotation_episode.native_infernal_result_publication.run_local_job", failed)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_infernal_result_publication.run_local_job", failed)
     with Store(tmp_path / "store") as store:
         bound_subject(store)
         bundle, ref, artifacts = fixture_bundle(store)
@@ -374,7 +374,7 @@ def test_replay_detects_corrupted_retained_input_without_launch(tmp_path, monkey
         captured = next(r for r in artifacts if r["role"] == "sequences")
         path = artifact_path(store, captured["artifact_ref"])
         path.write_bytes(b"corrupted retained original input\n")
-        monkeypatch.setattr("gene_annotation_episode.native_infernal_result_publication.run_local_job",
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_infernal_result_publication.run_local_job",
             lambda *a, **kw: pytest.fail("replay launched worker after corruption"))
         with pytest.raises(ContractError, match="prepared_grading_identity_mismatch"):
             prepare(store, tmp_path / "grading", bundle, ref, artifacts, selected)

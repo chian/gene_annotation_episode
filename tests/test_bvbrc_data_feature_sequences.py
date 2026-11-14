@@ -15,14 +15,14 @@ import subprocess
 import jsonschema
 import pytest
 
-from gene_annotation_episode.bvbrc_data_fields import FIELD_REGISTRY
-from gene_annotation_episode.bvbrc_data_feature_sequences import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import FIELD_REGISTRY
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_feature_sequences import (
     FEATURE_SEQUENCE_COMPONENTS_SCHEMA,
     FEATURE_SEQUENCE_SHEET_SCHEMA,
     extract_feature_sequence_join,
 )
-from gene_annotation_episode.bvbrc_data_schema import validate
-from gene_annotation_episode.bvbrc_data_calculators import calculate_feature_sequence_counts
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import validate
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import calculate_feature_sequence_counts
 
 EVIDENCE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"
 AA_MD5 = "7594e119ffe8456710f27d137885e84c"
@@ -565,8 +565,8 @@ def test_native_empty_identity_and_invalid_array_metadata_keep_useful_partial_da
 def retained_decoder_fixture():
     """Actual D2 payload decoding, deliberately unqualified as a v2 request."""
     from gene_annotation_episode.acquisition import SourceSnapshot
-    from gene_annotation_episode.bvbrc_data_query import encode_native_query
-    from gene_annotation_episode.bvbrc_data_readers import _decode_native_payload
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import _decode_native_payload
 
     fixture_features, fixture_sequences = native_fixture()
     result = []
@@ -602,8 +602,8 @@ def test_actual_native_decoder_to_join_to_separate_calculator():
 
 def test_public_v2_parser_to_join_with_explicitly_synthetic_solr_transport():
     from gene_annotation_episode.acquisition import SourceSnapshot
-    from gene_annotation_episode.bvbrc_data_query import encode_native_query
-    from gene_annotation_episode.bvbrc_data_readers import parse_data_snapshot
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import parse_data_snapshot
 
     pages = []
     for name, fixture in zip(("feature_page", "feature_sequences"), native_fixture()):

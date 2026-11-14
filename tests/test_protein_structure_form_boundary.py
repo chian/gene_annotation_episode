@@ -6,13 +6,13 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import communication as boundary
-from gene_annotation_episode.episode_contract_information import (
+from gene_annotation_episode.episodic_workflow.root import communication as boundary
+from gene_annotation_episode.episodic_workflow.root.episode_contract_information import (
     ContractInformationError, expand_fact_form, validate_saved_fact_form,
 )
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.protein_structure_contracts import issue
-from gene_annotation_episode.protein_structure_result_views import (
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views import (
     protein_structure_fact_sources, project_protein_structure_results,
 )
 from gene_annotation_episode.schema_information_text import schema_fingerprint

@@ -12,10 +12,10 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.acquisition import PublicClients
-from gene_annotation_episode.decision_context import VERSION, state_frame
+from gene_annotation_episode.episodic_workflow.root.decision_context import VERSION, state_frame
 from gene_annotation_episode import native_lifecycle
-from gene_annotation_episode.providers import _SessionConnection, _ordinary_runtime_receiver_context
-from gene_annotation_episode.rna_structure_comparison_receiver_prompt import _source_operands
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection, _ordinary_runtime_receiver_context
+from gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_receiver_prompt import _source_operands
 from gene_annotation_episode.scientific_process_prompt import text_instructions
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry

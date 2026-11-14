@@ -6,7 +6,7 @@ import sys
 
 import pytest
 
-from gene_annotation_episode.providers import ModelCallError, _SessionConnection, load_config
+from gene_annotation_episode.episodic_workflow.root.providers import ModelCallError, _SessionConnection, load_config
 
 
 def connection(path, mode):

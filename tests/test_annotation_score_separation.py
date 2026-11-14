@@ -9,7 +9,7 @@ import json
 import pytest
 
 from gene_annotation_episode.credit import CreditPolicy
-from gene_annotation_episode.runtime import run_workflow, WorkflowError
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow, WorkflowError
 from gene_annotation_episode.scientific_credit import AnnotationSupportScore
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry

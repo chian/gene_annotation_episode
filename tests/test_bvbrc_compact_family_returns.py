@@ -16,13 +16,13 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain
-from gene_annotation_episode.composition_information import (
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain
+from gene_annotation_episode.episodic_workflow.root.composition_information import (
     CONTRACT_INFORMATION_OPERATIONS, CONTRACT_INFORMATION_PROFILE,
 )
-from gene_annotation_episode.episode_contract_information import expand_fact_form
+from gene_annotation_episode.episodic_workflow.root.episode_contract_information import expand_fact_form
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.runtime import TypedReportContract, Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, Workflow
 from gene_annotation_episode.state import Store
 from test_bvbrc_appservice_custody import SavedRecords
 

@@ -12,7 +12,7 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_genome_alignment_input_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_input_contracts import (
     validate_genome_alignment_inputs, validate_genome_alignment_associations,
     validate_genome_alignment_native_member,
 )

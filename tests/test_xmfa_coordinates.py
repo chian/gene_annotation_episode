@@ -8,8 +8,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.xmfa_coordinates import xmfa_column_coordinates, xmfa_source_positions
-from gene_annotation_episode.xmfa_calculation_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_coordinates import xmfa_column_coordinates, xmfa_source_positions
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_calculation_contracts import (
     validate_xmfa_coordinates, validate_xmfa_inverse_coordinates)
 from test_xmfa_sources import BASE, native_document, supplied, bind, input_file, evidence, mapping
 
@@ -216,8 +216,8 @@ def test_saved_recalculation_is_detached_and_no_parser_acquisition_or_native_cal
         for target, name in ((builtins, 'open'), (Path, 'open'), (Path, 'read_bytes'),
                              (socket, 'socket'), (subprocess, 'Popen')):
             locked.setattr(target, name, forbidden)
-        locked.setattr('gene_annotation_episode.xmfa_formats.parse_mauve_xmfa', forbidden)
-        locked.setattr('gene_annotation_episode.xmfa_sources.bind_xmfa_sources', forbidden)
+        locked.setattr('gene_annotation_episode.episodic_workflow.root.library.xmfa_formats.parse_mauve_xmfa', forbidden)
+        locked.setattr('gene_annotation_episode.episodic_workflow.root.library.xmfa_sources.bind_xmfa_sources', forbidden)
         assert xmfa_column_coordinates(saved_doc, cells=refs, bindings=saved_binding) == expected
         assert xmfa_source_positions(saved_doc, queries=queries, bindings=saved_binding) == inverse
         assert validate_xmfa_coordinates(json.loads(json.dumps(expected))) == expected

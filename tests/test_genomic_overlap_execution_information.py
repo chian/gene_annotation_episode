@@ -17,11 +17,11 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.genomic_overlap_contracts import genomic_overlap_schema
-from gene_annotation_episode.genomic_overlap_execution_information import (
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_contracts import genomic_overlap_schema
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_execution_information import (
     describe_genomic_overlap_result, genomic_overlap_result_selector_schema,
 )
-from gene_annotation_episode.genomic_overlap_return_views import genomic_overlap_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_return_views import genomic_overlap_fact_sources
 
 
 fixtures = import_module("gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.genomic_overlap.execution_contracts_426.fixtures")
@@ -293,12 +293,13 @@ def test_embedded_schema_has_only_unchanged_reachable_g1_definitions_and_its_own
 
 
 def test_every_advertised_execution_reader_calculator_and_projection_function_exists():
-    from gene_annotation_episode import genomic_overlap_inputs, genomic_overlap_calculations
-    from gene_annotation_episode import genomic_overlap_result_worker, genomic_overlap_result_views
-    from gene_annotation_episode import genomic_overlap_return_views, genomic_overlap_returns
-    from gene_annotation_episode import native_genomic_overlap_capture, native_genomic_overlap_preparation
-    from gene_annotation_episode import native_genomic_overlap_driver
-    from gene_annotation_episode.native_genomic_overlap_results import NativeGenomicOverlapResults, operation_catalog
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_inputs, genomic_overlap_calculations
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_result_worker, genomic_overlap_result_views
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_return_views
+    from gene_annotation_episode.episodic_workflow.root import genomic_overlap_returns
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_capture, native_genomic_overlap_preparation
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_driver
+    from gene_annotation_episode.episodic_workflow.root.native_genomic_overlap_results import NativeGenomicOverlapResults, operation_catalog
     from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
     native = describe_genomic_overlap_result(target(), selector=selector())
     saved = describe_genomic_overlap_result(target(), selector=selector(saved=True))
@@ -329,10 +330,10 @@ def test_every_advertised_execution_reader_calculator_and_projection_function_ex
 
 
 def test_information_never_opens_files_uses_store_observes_executes_or_calculates(monkeypatch):
-    from gene_annotation_episode import genomic_overlap_inputs, genomic_overlap_calculations
-    from gene_annotation_episode import genomic_overlap_result_worker, genomic_overlap_result_views
-    from gene_annotation_episode import native_genomic_overlap_capture, native_genomic_overlap_preparation
-    from gene_annotation_episode import native_genomic_overlap_driver
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_inputs, genomic_overlap_calculations
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_result_worker, genomic_overlap_result_views
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_capture, native_genomic_overlap_preparation
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_driver
     from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
     from gene_annotation_episode.state import Store
     original = target()

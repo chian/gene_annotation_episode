@@ -11,10 +11,10 @@ import urllib.request
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode import bvbrc_comparative_systems_bundle_adapter as adapter
-from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import project_comparative_systems_facts
-from gene_annotation_episode.bvbrc_comparative_systems_fact_contracts import FACT_SOURCES, validate_requested_form
-from gene_annotation_episode.bvbrc_comparative_systems_handoff_contracts import canonical_sha256
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_comparative_systems_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_projection import project_comparative_systems_facts
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_fact_contracts import FACT_SOURCES, validate_requested_form
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_handoff_contracts import canonical_sha256
 from test_bvbrc_comparative_systems_bundle import arguments, empty_failure_context, field, form, forbidden, measurement, replace_bytes, save_validate
 
 
@@ -50,11 +50,11 @@ def test_seven_families_copy_exact_requested_values(saved):
 
 def test_saved_projection_forbids_readers_extractors_calculators_and_io(saved, monkeypatch):
     args, result = deepcopy(saved)
-    import gene_annotation_episode.bvbrc_comparative_systems_native as native
-    import gene_annotation_episode.bvbrc_comparative_systems_sheet as builder
-    import gene_annotation_episode.bvbrc_comparative_systems_calculators as calculators
-    import gene_annotation_episode.bvbrc_comparative_systems_data_inputs as extractor
-    import gene_annotation_episode.bvbrc_comparative_systems_bundle_resolution as resolution
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_native as native
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_sheet as builder
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_calculators as calculators
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_data_inputs as extractor
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_resolution as resolution
     for module, names in ((native, ["parse_comparative_systems_document"]), (builder, ["build_comparative_systems_sheet"]),
                            (calculators, ["calculate_comparative_systems_components"]), (extractor, ["extract_comparative_systems_data_inputs"]),
                            (resolution, ["parse_comparative_systems_document", "build_comparative_systems_sheet", "calculate_comparative_systems_components", "extract_comparative_systems_data_inputs"])):
@@ -120,9 +120,9 @@ def test_scalar_requires_computed_selector_and_ratio_requires_ratio(saved):
 
 @pytest.mark.parametrize("state", ["partial", "invalid"])
 def test_null_saved_objects_preserve_failures_and_forbid_available_values(saved, monkeypatch, state):
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_contracts import issue, requirement
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import assemble_projection
-    import gene_annotation_episode.bvbrc_comparative_systems_bundle_resolution as resolution
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_contracts import issue, requirement
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_projection import assemble_projection
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_resolution as resolution
     args, original = deepcopy(saved)
     args["requested_form"] = form(
         field("computed", {"kind": "computed_measurement", "component_id": "retained_pathway_percent"}, "available_value"),
@@ -166,7 +166,7 @@ def test_null_saved_objects_preserve_failures_and_forbid_available_values(saved,
 
 
 def test_saved_sheet_without_components_keeps_native_value_and_missing_calculation(saved):
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import assemble_projection
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_projection import assemble_projection
     args, original = deepcopy(saved)
     args["requested_form"] = form(measurement(args, availability="available_value"),
         field("computed", {"kind": "computed_measurement", "component_id": "retained_pathway_percent"}, "available_value"))
@@ -181,7 +181,7 @@ def test_saved_sheet_without_components_keeps_native_value_and_missing_calculati
 
 
 def test_null_saved_membership_has_no_invented_native_identifier(saved):
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import assemble_projection
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_projection import assemble_projection
     args, original = deepcopy(saved)
     args["requested_form"] = form(field("membership", {"kind": "membership",
         "entity": original["sheet"]["pathway_rows"][0]["entity"], "genome_id": "1.1",
@@ -283,7 +283,7 @@ def test_metadata_selectors_share_snapshot_and_retain_own_cardinality_failures(n
 
 
 def test_null_saved_metadata_cardinality_failure_does_not_become_its_own_input(saved):
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import assemble_projection
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_projection import assemble_projection
     args, _ = deepcopy(saved)
     args["requested_form"] = form(
         field("qualification", {"kind": "qualification", "code": "producer_version_unverified"}),
@@ -296,9 +296,9 @@ def test_null_saved_metadata_cardinality_failure_does_not_become_its_own_input(s
 
 
 def test_original_and_generated_failure_identity_collision_is_losslessly_replayed(saved, monkeypatch):
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_contracts import issue, requirement
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import assemble_projection, validate_projection_failure_context
-    import gene_annotation_episode.bvbrc_comparative_systems_bundle_resolution as resolution
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_contracts import issue, requirement
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_projection import assemble_projection, validate_projection_failure_context
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_resolution as resolution
     args, _ = deepcopy(saved)
     args["requested_form"] = form(
         field("qualification", {"kind": "qualification", "code": "producer_version_unverified"}),
@@ -337,7 +337,7 @@ def test_original_and_generated_failure_identity_collision_is_losslessly_replaye
 
 @pytest.mark.parametrize("mutation", ["missing", "extra", "tuple", "status", "boolean", "record", "nonfinite"])
 def test_projection_failure_context_is_strict_finite_and_detached(mutation):
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import validate_projection_failure_context
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_projection import validate_projection_failure_context
     context = empty_failure_context()
     if mutation == "missing":
         del context["failure_status"]
@@ -358,7 +358,7 @@ def test_projection_failure_context_is_strict_finite_and_detached(mutation):
 
 
 def test_saved_validator_requires_original_failure_context(saved):
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import validate_saved_comparative_systems_projection
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_projection import validate_saved_comparative_systems_projection
     args, result = deepcopy(saved)
     with pytest.raises(TypeError, match="failure_context"):
         validate_saved_comparative_systems_projection(result["sheet"], result["components"],
@@ -368,8 +368,8 @@ def test_saved_validator_requires_original_failure_context(saved):
 
 @pytest.mark.parametrize("mutation", [None, "unbound_artifact", "different_artifact", "different_document"])
 def test_failure_context_locations_bind_exact_source_artifact_and_document(saved, mutation):
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_contracts import issue
-    from gene_annotation_episode.bvbrc_comparative_systems_bundle_projection import assemble_projection
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_contracts import issue
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_bundle_projection import assemble_projection
     args, _ = deepcopy(saved)
     args["requested_form"] = form(field("qualification", {"kind": "qualification", "code": "format_incompatible"}))
     diagnostic = issue("format_incompatible", document_id="pathways", refs=["synthetic_source_pathways"], phase="decode")

@@ -10,9 +10,9 @@ import json
 import pytest
 
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
-from gene_annotation_episode.bvbrc_appservice_records import _encode
-from gene_annotation_episode.bvbrc_genome_alignment_inputs import validate_genome_alignment_retained_records
-from gene_annotation_episode.bvbrc_genome_alignment_retained_records import (
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_records import _encode
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_inputs import validate_genome_alignment_retained_records
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_retained_records import (
     PREFIX, RETAINED_RECORD_ERRORS, validate_retained_record_arguments,
 )
 from gene_annotation_episode.execution_contracts import canonical, digest

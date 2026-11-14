@@ -16,15 +16,15 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import bvbrc_alignment_bundle_contracts as contracts
-from gene_annotation_episode.bvbrc_alignment_returns import (
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_alignment_bundle_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.bvbrc_alignment_returns import (
     BVBRCAlignmentReturns, FACT_SOURCES, IDENTIFIER_NAMESPACES,
     alignment_fact_sources, project_alignment_facts,
 )
-from gene_annotation_episode.bvbrc_appservice_publication import (
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_publication import (
     AppServicePublications, DATA_PROVIDER, RESULT_VERSION,
 )
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, plain, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.execution_contracts import canonical, digest
@@ -227,9 +227,9 @@ def test_saved_binding_original_selection_and_requested_values_cannot_be_forged(
 def test_saved_return_does_no_io_parsing_or_scientific_recalculation(monkeypatch):
     args = projection(msa_native_fixture())
     expected = projected(args)
-    from gene_annotation_episode import bvbrc_alignment_bundle_resolution as resolver
-    from gene_annotation_episode import bvbrc_msa_grader as msa
-    from gene_annotation_episode import bvbrc_metacats_grader as metacats
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_alignment_bundle_resolution as resolver
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_grader as msa
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_metacats_grader as metacats
     def forbidden(*args, **kwargs):
         raise AssertionError("saved return repeated acquisition/parsing/calculation")
     with monkeypatch.context() as patch:

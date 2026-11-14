@@ -21,9 +21,9 @@ sys.path.insert(0,str(ROOT/'tests'))
 from a102_native_fixture import NativeCase,PUBLICATION
 from gene_annotation_episode.a102_investigation import A102ServiceFactory
 from gene_annotation_episode.a102_publication import received_grade
-from gene_annotation_episode.decision_context import PROTOCOL,apply_state_frame
-from gene_annotation_episode.numerical import YieldController,YieldEstimate,NumericBand
-from gene_annotation_episode.providers import ModelConnection,load_config
+from gene_annotation_episode.episodic_workflow.root.decision_context import PROTOCOL,apply_state_frame
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController,YieldEstimate,NumericBand
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection,load_config
 from gene_annotation_episode.state import Store
 
 

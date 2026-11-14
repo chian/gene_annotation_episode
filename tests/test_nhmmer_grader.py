@@ -8,8 +8,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.nhmmer_inputs import build_nhmmer_sheet, parse_nhmmer_artifacts
-from gene_annotation_episode.nhmmer_grader import calculate_nhmmer_scores
+from gene_annotation_episode.episodic_workflow.root.library.nhmmer_inputs import build_nhmmer_sheet, parse_nhmmer_artifacts
+from gene_annotation_episode.episodic_workflow.root.library.nhmmer_grader import calculate_nhmmer_scores
 
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/nhmmer"
@@ -240,7 +240,7 @@ def test_unsupported_parameters_and_nonfinite_json_are_rejected():
 
 
 def test_saved_sheet_recalculates_with_no_files_network_programs_or_parser(monkeypatch):
-    import gene_annotation_episode.nhmmer_inputs as readers
+    import gene_annotation_episode.episodic_workflow.root.library.nhmmer_inputs as readers
     sheet = sheet_for("nhmmscan")
     expected = calculate_nhmmer_scores(sheet)
     saved = json.loads(json.dumps(sheet, allow_nan=False))

@@ -16,10 +16,10 @@ from jsonschema import Draft202012Validator
 
 from gene_annotation_episode import rcsb_acquisition as rcsb
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.data_acquisition_receipts import acquisition_receipt_schema
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider

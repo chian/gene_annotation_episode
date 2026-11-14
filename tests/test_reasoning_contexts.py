@@ -5,7 +5,7 @@ from pathlib import Path
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import REASONING_SCHEMA
 from gene_annotation_episode.export import export_annotation
-from gene_annotation_episode.runtime import _action_generation_schema
+from gene_annotation_episode.episodic_workflow.root.runtime import _action_generation_schema
 from gene_annotation_episode.state import Store
 
 

@@ -5,7 +5,7 @@ import json
 import pytest
 
 from gene_annotation_episode import uniprot_return_contracts as contracts
-from gene_annotation_episode.episode_contract_information import (
+from gene_annotation_episode.episodic_workflow.root.episode_contract_information import (
     ContractInformationError, expand_fact_form, validate_saved_fact_form,
 )
 

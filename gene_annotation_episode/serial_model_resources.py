@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import ctypes
 import gc
-from .providers import ModelConnection, _SessionConnection
+from .episodic_workflow.root.providers import ModelConnection, _SessionConnection
 
 
 def release_unused_memory():

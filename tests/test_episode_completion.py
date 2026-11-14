@@ -15,10 +15,10 @@ from method_loop import ClosedRecord
 from method_loop.durable import canonical
 from method_loop.identities import UnitRef
 
-from gene_annotation_episode.episode_admission import admit_return
-from gene_annotation_episode.episode_completion import (
+from gene_annotation_episode.episodic_workflow.root.episode_admission import admit_return
+from gene_annotation_episode.episodic_workflow.root.episode_completion import (
     CompletionLedger, EFFECT_VERSION, SLOT_VERSION, SOURCE_RESTORE_VERSION)
-from gene_annotation_episode.episode_journal import Journal, WorkflowError
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal, WorkflowError
 from gene_annotation_episode.state import Store
 from test_episode_admission import receiver_for, seal_return, setup_case
 

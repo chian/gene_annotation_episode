@@ -11,7 +11,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import ReportBoundaryError, plain
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
 from gene_annotation_episode.domain import canonical, identity, obj
 from gene_annotation_episode.restriction_mapping_references import RestrictionMappingReferences
 from gene_annotation_episode.state import Store

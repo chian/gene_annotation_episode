@@ -21,16 +21,16 @@ from gene_annotation_episode import calibrated_signal_calculations as calculatio
 from gene_annotation_episode import calibrated_signal_contracts as core
 from gene_annotation_episode import calibrated_signal_sheet as inputs
 from gene_annotation_episode import native_lifecycle
-from gene_annotation_episode.communication import plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_form
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.molecular_measurement_tools import MolecularOperationUnpublished
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import ActionFailure, Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
@@ -619,7 +619,7 @@ def test_input_inspection_preserves_unavailable_partial_sheet_without_starting_w
 
 
 def _arsenic_inputs_controller(path, initial):
-    from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate
+    from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate
     horizon = 1 if path[-1][0] == "annotation" else 2
     def estimate(history, parameters, contexts):
         return YieldEstimate(len(history), NumericBand.exact(0 if len(history) >= horizon else 1),
@@ -631,7 +631,7 @@ def _arsenic_inputs_controller(path, initial):
 def test_authentic549_source_only_input_inspection_without_workers_or_original_file(tmp_path, monkeypatch, source_ordinal):
     """A new current reader; the two authentic549 calculator workers never repeat."""
     import shutil
-    from gene_annotation_episode.decision_context import state_frame
+    from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
     from tests.test_homer_motif_saved_workflow import _encode
     from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history, _sqlite_pins
     configured = os.environ.get("HMMER_NATIVE_ORACLE_ARSENIC_INPUT_VIEW_PROOF")

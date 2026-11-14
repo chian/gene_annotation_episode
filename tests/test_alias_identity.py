@@ -8,7 +8,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.communication import ReportBoundaryError, reference_resolver, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, reference_resolver, validate_form
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.state import Store

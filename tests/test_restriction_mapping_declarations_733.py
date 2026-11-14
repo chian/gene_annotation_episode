@@ -6,14 +6,14 @@ import os
 import pytest
 
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_contract_information import (
+from gene_annotation_episode.episodic_workflow.root.episode_contract_information import (
     ContractInformationError, expand_fact_form, validate_saved_fact_form,
 )
 from gene_annotation_episode.restriction_mapping_returns import (
     restriction_mapping_fact_sources, requested_restriction_projections,
     project_restriction_action_return, validate_frozen_restriction_return,
 )
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 
 
 SOURCE='restriction_mapping_results'
@@ -125,7 +125,7 @@ def configured_case(tmp_path,monkeypatch,*,names=True):
     This tests its existing generic configured route, without claiming a
     configured-model or newly selectable restriction operation.
     """
-    from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE as PROFILE
+    from gene_annotation_episode.episodic_workflow.root.composition_information import CONTRACT_INFORMATION_PROFILE as PROFILE
     from gene_annotation_episode.state import Store
     from test_scientific_process_runtime import Scenario
     from test_runtime import ScriptedProvider
@@ -143,7 +143,7 @@ def configured_case(tmp_path,monkeypatch,*,names=True):
 
 
 def save_pending(workflow,source,selected,index):
-    from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE as PROFILE
+    from gene_annotation_episode.episodic_workflow.root.composition_information import CONTRACT_INFORMATION_PROFILE as PROFILE
     context={'tools':workflow.catalog(source.scope,source=source),'contract_information_profile':PROFILE}
     schema=workflow.action_schema(source)
     record={'context':context,'schema':schema,'decision_protocol':'decision_exchange_v1',
@@ -155,7 +155,7 @@ def save_pending(workflow,source,selected,index):
 
 def freeze_name(workflow,case,parent,child):
     """Unavailable namespace-only engineering fixture, with no measurements."""
-    from gene_annotation_episode.runtime import TypedReportContract
+    from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
     context=workflow.binding_context(child.source)
     schema=plain(child.request.as_record())['report_contract']['measurements']['schema']
     group={'selection_policy':'all_own_completed_results','sequence_ref':case.scope['subject_refs'][0],
@@ -260,7 +260,7 @@ def test_original_compact_commission_requires_original_declaration(tmp_path,monk
 
 
 def test_journal_migration_preserves_old_attempts_and_unknown_proof(tmp_path):
-    from gene_annotation_episode.episode_journal import Journal
+    from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
     from gene_annotation_episode.state import Store
     with Store(tmp_path/'store') as store:
         store.db.execute('CREATE TABLE runtime_report_attempts (run_id TEXT,parent_episode_id TEXT,decision_index INTEGER,delivery_ref TEXT,child_episode_id TEXT,contract TEXT,form TEXT,failure TEXT,PRIMARY KEY(run_id,parent_episode_id,decision_index))')
@@ -276,7 +276,7 @@ def test_journal_migration_preserves_old_attempts_and_unknown_proof(tmp_path):
 
 @pytest.mark.parametrize('fault',['missing','text'])
 def test_attempt_reconstruction_cannot_replace_recorded_declaration(tmp_path,monkeypatch,fault):
-    from gene_annotation_episode.runtime import TypedReportContract, WorkflowError
+    from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, WorkflowError
     store,case,workflow,parent,child,_=configured_case(tmp_path,monkeypatch)
     with store:
         freeze_name(workflow,case,parent,child)
@@ -297,7 +297,7 @@ def test_attempt_reconstruction_cannot_replace_recorded_declaration(tmp_path,mon
 def test_compact_empty_source_closes_in_actual_shared_method_loop(tmp_path,monkeypatch):
     """Configured engineering presentation and fixture choices, real loop/records."""
     import asyncio
-    from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE as PROFILE
+    from gene_annotation_episode.episodic_workflow.root.composition_information import CONTRACT_INFORMATION_PROFILE as PROFILE
     from gene_annotation_episode.state import Store
     from test_scientific_process_runtime import Scenario, action, supplied_molecule_reasoning
     from test_runtime_decision_exchanges import ConversationProvider, select

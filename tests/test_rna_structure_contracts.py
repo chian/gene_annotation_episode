@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.rna_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_contracts import (
     analyze_rna_input_sequence, validate_rna_input, validate_rna_parameters,
     validate_rna_model_spec_shape, validate_rna_effective_model_shape,
     validate_rna_sheet, validate_rna_components, validate_rna_issue,

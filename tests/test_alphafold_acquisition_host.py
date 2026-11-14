@@ -10,12 +10,12 @@ import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
 from gene_annotation_episode import alphafold_acquisition as af
-from gene_annotation_episode import alphafold_acquisition_host as host
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.library import alphafold_acquisition_host as host
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, canonical
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController

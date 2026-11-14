@@ -16,9 +16,9 @@ import subprocess
 import pytest
 
 from gene_annotation_episode import native_file_capture as shared
-from gene_annotation_episode import native_genomic_overlap_capture as capture
+from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_capture as capture
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.native_genomic_overlap_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_contracts import (
     genomic_overlap_driver_argv, genomic_overlap_environment, genomic_overlap_output_files,
     validate_genomic_overlap_batch, validate_genomic_overlap_independent_pair_manifest,
     validate_genomic_overlap_run_plan,

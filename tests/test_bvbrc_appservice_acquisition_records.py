@@ -10,9 +10,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.bvbrc_appservice_bundle_values import build_acquisition_value
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_appservice_bundle_values import build_acquisition_value
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
-from gene_annotation_episode.bvbrc_appservice_records import (
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_records import (
     AppServiceRecords, PROVIDER, VERSION, _decode, _encode,
 )
 from gene_annotation_episode.execution_contracts import canonical, digest
@@ -128,7 +128,7 @@ def test_actual_bytes_and_single_self_reference_replay_without_new_work(acquisit
 
 def test_interrupted_receipt_file_publication_recovers_same_source(acquisition, monkeypatch):
     f, d = acquisition, acquisition.driver
-    import gene_annotation_episode.bvbrc_appservice_records as module
+    import gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_records as module
     original = module._immutable
     def interrupted(path, value):
         if path.name == 'typed_receipt.json':

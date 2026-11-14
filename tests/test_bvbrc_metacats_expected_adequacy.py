@@ -3,11 +3,11 @@ import json
 
 import pytest
 
-from gene_annotation_episode.bvbrc_metacats_adequacy import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_adequacy import (
     expected_count_adequacy, validate_expected_count_adequacy)
-from gene_annotation_episode.bvbrc_metacats_biological_calculators import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_biological_calculators import (
     biological_group_statistics, biological_group_counts, biological_group_effects)
-from gene_annotation_episode.bvbrc_metacats_calculators import metacats_statistics, metacats_effects
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculators import metacats_statistics, metacats_effects
 from test_bvbrc_metacats_biological_calculators import (
     make_counts, make_inputs, retained_inputs, STAT_PARAMS, EFFECT_PARAMS)
 

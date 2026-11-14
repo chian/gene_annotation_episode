@@ -9,9 +9,9 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.protein_structure_contracts import issue
-from gene_annotation_episode.protein_structure_publication import protein_structure_source_payload
-from gene_annotation_episode.protein_structure_result_worker import validate_protein_structure_result_worker_result
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_publication import protein_structure_source_payload
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_worker import validate_protein_structure_result_worker_result
 
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_publication_399/capture_examples.json"

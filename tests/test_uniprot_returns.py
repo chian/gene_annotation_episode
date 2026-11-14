@@ -17,17 +17,17 @@ from method_loop.archive import iter_json
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.api_service_execution import APIServiceExecution
-from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, interpretation_schema, plain
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, form_with_facts, interpretation_schema, plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from gene_annotation_episode.uniprot_return_contracts import uniprot_selected_return_schema
-from gene_annotation_episode.uniprot_returns import UniProtReturns, select_received_uniprot_pages
+from gene_annotation_episode.episodic_workflow.root.uniprot_returns import UniProtReturns, select_received_uniprot_pages
 
 
 FIXTURE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/uniprot_native"
@@ -388,7 +388,7 @@ def test_closed_native_withdrawal_replays_forms_and_rejects_new_material_read(ru
         (run.store.path / "artifacts" / sha[:2] / sha).unlink()
     def prohibited(*args, **kwargs):
         pytest.fail("closed history reprojected native content")
-    monkeypatch.setattr("gene_annotation_episode.uniprot_returns.project_uniprot_page", prohibited)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.uniprot_returns.project_uniprot_page", prohibited)
     before = [tuple(row) for row in run.store.db.execute("SELECT * FROM runtime_actions ORDER BY episode_id,decision_index")]
     assert run.host.facts(child, schema(chosen))[SOURCE] == returned["arbitrary_scientific_cells"]
     run.host.validate_received_report(child, returned, schema(chosen))
@@ -452,9 +452,9 @@ def test_forwarding_closed_prefix_excludes_later_child_and_rejects_forged_attemp
 
 @pytest.mark.parametrize("source,sequence", [(False, False), (True, False), (False, True), (True, True)])
 def test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay(tmp_path, monkeypatch, source, sequence):
-    from gene_annotation_episode.decision_context import apply_state_frame
-    from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-    from gene_annotation_episode.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.decision_context import apply_state_frame
+    from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+    from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
     from test_resource_tool_selection import ResourceCase
     from test_execution_episodes_family import launch_assignment
     from test_execution_wiring import child as commission, form as reference_form
@@ -562,7 +562,7 @@ def test_shared_workflow_results_scientific_parent_ancestor_and_closed_replay(tm
         (store.path / "artifacts" / sha[:2] / sha).unlink()
         def prohibited(*args, **kwargs):
             pytest.fail("closed workflow reprojected a source")
-        monkeypatch.setattr("gene_annotation_episode.uniprot_returns.project_uniprot_page", prohibited)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.uniprot_returns.project_uniprot_page", prohibited)
         host.validate_received_report(context, parent_form, provider.forward_schema)
         assert host.facts_for_closure(context, provider.forward_schema)[SOURCE] == parent_form["ancestor_requested_cells"]
         attempt = store.db.execute("SELECT decision_index FROM runtime_report_attempts WHERE child_episode_id=?",

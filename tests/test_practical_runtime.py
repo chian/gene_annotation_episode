@@ -17,12 +17,12 @@ import pytest
 
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.episode_reports import report_sources
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-from gene_annotation_episode.practical_execution_records import assess_validations, digest
-from gene_annotation_episode.practical_receipt_information import PracticalReceiptInformation
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations, digest
+from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 

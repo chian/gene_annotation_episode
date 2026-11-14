@@ -13,7 +13,7 @@ import pytest
 
 from method_loop.archive import ArchivedRecord
 from method_loop.durable import DurableExecutionStore
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from detached_workflow_fixture import (ControllerFactory, FixtureTools, ScriptedProvider,
     child_credit, commission, gate_paths, make_binding, parent_credit, until)

@@ -12,10 +12,10 @@ import sqlite3
 
 import pytest
 
-from gene_annotation_episode.execution_expectations import ExecutionExpectations
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate
+from gene_annotation_episode.episodic_workflow.root.execution_expectations import ExecutionExpectations
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate
 from gene_annotation_episode.run_statistics import ExecutionClass, RunHistory, RunStatistic
-from gene_annotation_episode.runtime import WorkflowError, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import WorkflowError, run_workflow
 from test_runtime import (FixtureController, FixtureTools, ScriptedProvider, commission,
                           fixture_credit, obj, reason, setup, tool)
 

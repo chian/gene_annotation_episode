@@ -10,9 +10,9 @@ import json
 from .alignment_site_native import (immutable_record, operand_descriptor,
     original_mappings, paf_row_bytes, source_descriptor, read_quality, biopython_molecule,
     reference_source_operands)
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import canonical, identity
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .tool_grading_artifacts import MEDIA_TYPE, SCHEMA
 
 

@@ -25,22 +25,22 @@ from method_loop import ClosedChildUnit
 from method_loop.archive import ArchivedRecord, iter_json
 
 from gene_annotation_episode import native_lifecycle
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.decision_context import apply_state_frame, state_frame
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.decision_context import apply_state_frame, state_frame
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.evidence_axis_instructions import instruction_view
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.evidence_axis_instructions import instruction_view
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.native_protein_structure_contracts import POLICY
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate
-from gene_annotation_episode.protein_structure_action_records import (
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate
+from gene_annotation_episode.episodic_workflow.root.protein_structure_action_records import (
     SAVED_SOURCE, VIEW_SOURCE, frozen_protein_structure_action_facts,
     protein_structure_action_fact_sources,
 )
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import INSTRUCTIONS, DecisionSource, Workflow, _decode_action_response
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import INSTRUCTIONS, DecisionSource, Workflow, _decode_action_response
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
@@ -536,12 +536,12 @@ def test_retained_protein_threshold_and_value_projection_in_current_published_wo
         monkeypatch.setattr(Store, "get_artifact", retained_bytes)
         monkeypatch.setattr("gene_annotation_episode.acquisition.PublicClients._http", _forbidden)
         monkeypatch.setattr("socket.create_connection", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_tools._run_reserved", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_tools.resolve_protein_structure_operands", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_formats.parse_pdb_structure", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_formats.parse_mmcif_structure", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_calculations.fit_ca_transform", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_calculations.calculate_protein_structure_components", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools._run_reserved", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools.resolve_protein_structure_operands", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats.parse_pdb_structure", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats.parse_mmcif_structure", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations.fit_ca_transform", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations.calculate_protein_structure_components", _forbidden)
         resources, environments = _configuration(directory)
         tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
         tools.configure_protein_structure_resources(resources, environments)
@@ -554,7 +554,7 @@ def test_retained_protein_threshold_and_value_projection_in_current_published_wo
             scope=scope, initial_known_record_refs=[ORIGINAL_SOURCE], directory=str(directory / "run"))
         actual_prepare, actual_execute = native_lifecycle.prepare_job, ToolRegistry.execute_async
         def prepare(command, **kwargs):
-            assert "gene_annotation_episode.protein_structure_result_worker" in command
+            assert "gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_worker" in command
             assert len(proof["workers"]) == 0, "more than one saved worker was requested"
             plan = json.loads(Path(command[-1]).read_text())
             assert plan["mode"] == "saved_sheet_recalculation"
@@ -722,10 +722,10 @@ def test_retained_completed_protein_saved_workflow_finishes_checks_without_work(
             monkeypatch.setattr(ToolRegistry, name, _forbidden)
         monkeypatch.setattr("gene_annotation_episode.acquisition.PublicClients._http", _forbidden)
         monkeypatch.setattr("socket.create_connection", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_calculations.fit_ca_transform", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_calculations.calculate_protein_structure_components", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_formats.parse_pdb_structure", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_formats.parse_mmcif_structure", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations.fit_ca_transform", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations.calculate_protein_structure_components", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats.parse_pdb_structure", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats.parse_mmcif_structure", _forbidden)
         original_call = DecisionSource.call
         replayed_calls = []
         async def cached_call(source, context, schema):

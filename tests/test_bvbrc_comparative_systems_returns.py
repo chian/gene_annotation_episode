@@ -3,12 +3,12 @@ from copy import deepcopy
 import hashlib
 
 import pytest
-from gene_annotation_episode.bvbrc_appservice_publication import RESULT_VERSION
-from gene_annotation_episode.bvbrc_comparative_systems_fact_contracts import requested_selection
-from gene_annotation_episode.bvbrc_comparative_systems_returns import (
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_publication import RESULT_VERSION
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_fact_contracts import requested_selection
+from gene_annotation_episode.episodic_workflow.root.bvbrc_comparative_systems_returns import (
     FACT_SOURCES, BVBRCComparativeSystemsReturns, ComparativeSystemsReturnError,
     project_comparative_systems_return_facts, parent_form_schema)
-from gene_annotation_episode.communication import validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import validate_form
 from gene_annotation_episode.execution_contracts import canonical, digest
 from test_bvbrc_comparative_systems_bundle import arguments, adapter
 from test_bvbrc_comparative_systems_publication import stored

@@ -10,10 +10,10 @@ import json
 
 import pytest
 
-from gene_annotation_episode.communication import ReportBoundaryError
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
 from test_runtime import FixtureController, ScriptedProvider
 from test_scientific_process_runtime import Scenario, action, root_credit, child_credit
@@ -29,7 +29,7 @@ def _selector(case, thought='P01'):
 def test_current_tool_information_reaches_child_and_compact_return_matches_frozen_source(tmp_path):
     with Store(tmp_path / 'state') as store:
         case = Scenario(tmp_path, store)
-        from gene_annotation_episode.scientific_process_reports import report_sources
+        from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import report_sources
         tools = ScientificToolLibrary(case.directory / 'scientific-tool-library')
         form = obj({
             'approaches': report_sources(case.library, tools)['scientific_process_results']['report_schema'],
@@ -138,9 +138,9 @@ def test_current_tool_information_reaches_child_and_compact_return_matches_froze
     ids=['revision', 'no_approaches_requested', 'metadata_only', 'ordinary_child'])
 def test_current_nested_returns_preserve_each_closure_without_extra_credit(
         tmp_path, request_results, request_sources, mark_revision):
-    from gene_annotation_episode.numerical import NumericBand, SignedNumericBand, YieldController, YieldEstimate
-    from gene_annotation_episode.scientific_process_records import selector_selection, scientific_digest
-    from gene_annotation_episode.scientific_process_reports import report_sources
+    from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, SignedNumericBand, YieldController, YieldEstimate
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_records import selector_selection, scientific_digest
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import report_sources
 
     with Store(tmp_path / 'state') as store:
         case = Scenario(tmp_path, store)

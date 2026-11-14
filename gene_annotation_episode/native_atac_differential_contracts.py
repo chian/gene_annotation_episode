@@ -380,7 +380,7 @@ def validate_atac_run_plan(value):
     identity = value["identity"]
     execution = path_value(identity["execution_id"], absolute=True)
     attempt = path_value(value["attempt_directory"], absolute=True)
-    from .terminal_scientific_evidence import terminal_plan_identity
+    from .episodic_workflow.root.terminal_scientific_evidence import terminal_plan_identity
     current = terminal_plan_identity(identity, attempt_directory=str(attempt))
     require((current or execution.name == "native.json") and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME)
     require(identity["attempt_id"] == digest(identity["operation_key"]) and identity["requested_job_sha256"] == digest(requested))

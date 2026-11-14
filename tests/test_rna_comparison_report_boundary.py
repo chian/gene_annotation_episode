@@ -8,16 +8,16 @@ import importlib
 
 import pytest
 
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, form_with_facts, interpretation_schema,
     validate_closed_schema, validate_form,
 )
-from gene_annotation_episode.rna_structure_comparison_calculations import calculate_rna_comparison_components
-from gene_annotation_episode.rna_structure_comparison_views import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations import calculate_rna_comparison_components
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import (
     PROJECTION_SOURCE, project_rna_comparison, rna_comparison_fact_sources,
 )
-from gene_annotation_episode.rna_structure_result_views import rna_structure_fact_sources
-from gene_annotation_episode.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import rna_structure_fact_sources
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
 
 f = importlib.import_module(
     "gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_calculations_367.fixture_helpers")

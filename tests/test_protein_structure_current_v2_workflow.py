@@ -14,16 +14,16 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.native_protein_structure_worker import _alignment_grading
-from gene_annotation_episode.protein_structure_authority import ProteinStructureOperandError
-from gene_annotation_episode.protein_structure_operands import (
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker import _alignment_grading
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
+from gene_annotation_episode.episodic_workflow.root.protein_structure_operands import (
     authenticate_selected_alignment, authenticate_structure_sequence_reference,
 )
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import DecisionSource
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource
 from gene_annotation_episode.tools import ToolRegistry
 
 

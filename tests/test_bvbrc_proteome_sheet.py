@@ -14,11 +14,11 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_inputs as inputs
-from gene_annotation_episode import bvbrc_proteome_native as parser
-from gene_annotation_episode.bvbrc_proteome_calculators import calculate_native_components
-from gene_annotation_episode.bvbrc_proteome_sheet import build_native_sheet
-from gene_annotation_episode.bvbrc_proteome_sheet_contracts import validate_proteome_sheet_data
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_inputs as inputs
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_native as parser
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_calculators import calculate_native_components
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_sheet import build_native_sheet
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_sheet_contracts import validate_proteome_sheet_data
 
 
 IDENTITY = "native_first_hsp_alignment_identity_fraction"
@@ -642,7 +642,7 @@ def test_empty_complete_projection_and_unavailable_directional_attachment_are_di
 
 
 def test_sheet_construction_and_recalculation_make_no_io_parser_or_join_calls(monkeypatch):
-    from gene_annotation_episode import bvbrc_proteome_joins as joins
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_joins as joins
     args = metadata_args(); expected = build(args)
     calculate_native_components(expected, parameters=parameters())  # warm packaged schemas
 

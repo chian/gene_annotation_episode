@@ -11,7 +11,7 @@ from types import MappingProxyType, SimpleNamespace
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import bvbrc_application_returns as returns
+from gene_annotation_episode.episodic_workflow.root import bvbrc_application_returns as returns
 from gene_annotation_episode import bvbrc_annotation_bundle_adapter as adapter
 from gene_annotation_episode import bvbrc_annotation_contracts as contracts
 from gene_annotation_episode import bvbrc_annotation_native as native
@@ -123,8 +123,8 @@ def return_schema():
 
 
 def test_actual_runtime_form_compiler_and_receiver_resolve_only_declared_top_references():
-    from gene_annotation_episode.runtime import _compile_form
-    from gene_annotation_episode.communication import validate_form
+    from gene_annotation_episode.episodic_workflow.root.runtime import _compile_form
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_form
     from test_bvbrc_annotation_native import gto
     data = gto()
     data["features"][0]["source_ref"] = "source_" + "9" * 24
@@ -147,7 +147,7 @@ def test_actual_runtime_form_compiler_and_receiver_resolve_only_declared_top_ref
 
 @pytest.mark.parametrize("change", ["nested-reference", "definition", "extra-field", "source-type"])
 def test_registered_schema_identity_cannot_be_widened_at_runtime(change):
-    from gene_annotation_episode.runtime import _compile_form
+    from gene_annotation_episode.episodic_workflow.root.runtime import _compile_form
     schema = return_schema(); field = schema["properties"]["observations"]
     if change == "nested-reference":
         field["items"]["properties"]["value"]["oneOf"][0]["properties"]["context"] = {
@@ -197,7 +197,7 @@ def test_selected_value_display_preserves_native_keys_and_values_under_frozen_co
     ("application_artifact_bundle_" + "a" * 63, "tool", "bvbrc_appservice_bundle_data_v1", False),
 ])
 def test_receipt_metadata_policy_stops_only_new_bound_application_source(accession, origin, version, stop):
-    from gene_annotation_episode.episode_receipts import EpisodeReceipts
+    from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
     # Metadata-only engineering control: this mints no Source, receipt or grant.
     record = {"record_type": "source", "provider": "episode.bvbrc_appservice_bundle_data",
         "origin": origin, "version": version, "accession": accession}
@@ -207,7 +207,7 @@ def test_receipt_metadata_policy_stops_only_new_bound_application_source(accessi
 
 @pytest.mark.parametrize("references", [[], ["engineered-new-partial"]])
 def test_newer_partial_application_does_not_borrow_older_completion(references):
-    from gene_annotation_episode.bvbrc_appservice_publication import AppServicePublications
+    from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_publication import AppServicePublications
     context = SimpleNamespace(assignment={"selector": {"adapter": {
         "adapter_id": adapter.ADAPTER_ID, "adapter_version": adapter.ADAPTER_VERSION}}},
         scope={}, episode_id="engineered-results")

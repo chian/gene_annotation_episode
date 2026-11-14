@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.hpc_prompt import plan_outcome_view, render_hpc_prompt
+from gene_annotation_episode.episodic_workflow.root.hpc_prompt import plan_outcome_view, render_hpc_prompt
 from gene_annotation_episode.episodic_workflow.root.component_axis_literature_prompt import with_fact_contract_instructions
 
 

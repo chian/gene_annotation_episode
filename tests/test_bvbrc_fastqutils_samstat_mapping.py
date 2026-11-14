@@ -27,8 +27,8 @@ from gene_annotation_episode.bvbrc_fastqutils_saved_codec import validate_saved_
 from gene_annotation_episode.bvbrc_fastqutils_returns import (
     encode_return_value, decode_return_value, parent_form_schema, project_fastqutils_return_facts,
 )
-from gene_annotation_episode.communication import validate_form
-from gene_annotation_episode.bvbrc_appservice_publication import RESULT_VERSION
+from gene_annotation_episode.episodic_workflow.root.communication import validate_form
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_publication import RESULT_VERSION
 from gene_annotation_episode.execution_contracts import canonical, digest
 
 FIXTURES = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc_fastqutils_samstat_mapping'

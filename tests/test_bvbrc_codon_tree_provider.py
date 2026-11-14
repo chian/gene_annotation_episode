@@ -17,13 +17,13 @@ from urllib.parse import quote
 
 import pytest
 
-from gene_annotation_episode import bvbrc_codon_tree_inputs as provider
-from gene_annotation_episode import bvbrc_codon_tree_grader as grader
-from gene_annotation_episode import bvbrc_codon_tree_native as native
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_inputs as provider
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_grader as grader
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_native as native
 from gene_annotation_episode import phylogeny_formats as formats
-from gene_annotation_episode import phylogeny_raxml_inputs as raxml
+from gene_annotation_episode.episodic_workflow.root.library import phylogeny_raxml_inputs as raxml
 from gene_annotation_episode import phylogeny_calculation_contracts as cells
-from gene_annotation_episode import bvbrc_phylogeny_common_inputs as common
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_common_inputs as common
 
 
 STAGING = Path(__file__).resolve().parents[1]

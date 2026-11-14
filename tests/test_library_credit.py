@@ -5,7 +5,7 @@ import json
 import pytest
 
 from gene_annotation_episode.credit import AXES, CreditPolicy, project_credit, softened_hypervolume
-from gene_annotation_episode.numerical import YieldController
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController
 from test_credit import StoreView
 
 LIBRARY_REF = "input_" + "1"*24

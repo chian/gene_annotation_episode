@@ -8,11 +8,11 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.mauve_v4_formats import parse_mauve_v4
-from gene_annotation_episode.mauve_v4_calculators import calculate_mauve_v4_segments
-from gene_annotation_episode.mauve_v4_calculation_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.mauve_v4_formats import parse_mauve_v4
+from gene_annotation_episode.episodic_workflow.root.library.mauve_v4_calculators import calculate_mauve_v4_segments
+from gene_annotation_episode.episodic_workflow.root.library.mauve_v4_calculation_contracts import (
     validate_mauve_v4_components, validate_mauve_v4_selection)
-from gene_annotation_episode.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_inputs
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_inputs
 from test_mauve_v4_formats import OFFICIAL, parse, native
 from test_bvbrc_genome_alignment_input_contracts import input_fixture
 
@@ -277,8 +277,8 @@ def test_saved_components_reject_altered_numeric_relationships(mutation):
 
 
 def test_recalculation_and_saved_validation_without_io_parsers_or_native_execution(monkeypatch):
-    import gene_annotation_episode.mauve_v4_formats as formats
-    import gene_annotation_episode.mauve_v4_calculators as calculators
+    import gene_annotation_episode.episodic_workflow.root.library.mauve_v4_formats as formats
+    import gene_annotation_episode.episodic_workflow.root.library.mauve_v4_calculators as calculators
     d = json.loads(json.dumps(parse(native('4 1 1\n'))['value'])); inputs = json.loads(json.dumps(bound_inputs()))
     s = selection(d, denominator='validated_staged_length')
     first = calculate_mauve_v4_segments(d, selection=s, inputs=inputs); saved = deepcopy(first)

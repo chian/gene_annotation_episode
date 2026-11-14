@@ -11,13 +11,13 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.numerical import NumericBand
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.protein_structure_authority import ProteinStructureOperandError
-from gene_annotation_episode.protein_structure_operands import authenticate_structure_sequence_reference
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
+from gene_annotation_episode.episodic_workflow.root.protein_structure_operands import authenticate_structure_sequence_reference
 
 F = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.workflow_410")
 
@@ -71,7 +71,7 @@ def connected_case(tmp_path_factory):
         actual_prepare = native_lifecycle.prepare_job
 
         def selected_worker(command, **kwargs):
-            assert command[1:4] == ["-B", "-m", "gene_annotation_episode.protein_structure_result_worker"]
+            assert command[1:4] == ["-B", "-m", "gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_worker"]
             plan = json.loads(Path(command[-1]).read_bytes())
             assert plan["mode"] == "saved_sheet_recalculation"
             assert kwargs["policy"].to_dict() == F.POLICY
@@ -79,7 +79,7 @@ def connected_case(tmp_path_factory):
             return actual_prepare(command, **kwargs)
 
         patch.setattr(native_lifecycle, "prepare_job", selected_worker)
-        patch.setattr("gene_annotation_episode.native_protein_structure_results.capture_local_protein_structure_bundle", deny)
+        patch.setattr("gene_annotation_episode.episodic_workflow.root.native_protein_structure_results.capture_local_protein_structure_bundle", deny)
         patch.setattr(type(case.owner.job_progress_provider.targets), "observe_target", deny)
         patch.setattr("socket.create_connection", deny)
 

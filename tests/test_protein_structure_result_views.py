@@ -14,10 +14,10 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode import protein_structure_result_views as v
-from gene_annotation_episode import protein_structure_contracts as a
-from gene_annotation_episode import protein_structure_calculations as calc
-from gene_annotation_episode.protein_structure_sequences import inspect_structure
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_result_views as v
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_contracts as a
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_calculations as calc
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_sequences import inspect_structure
 
 f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 b = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.calculations_389")
@@ -65,10 +65,10 @@ def forbid_projection_work(monkeypatch):
         raise AssertionError("Projection attempted I/O, native reading, or scientific computation")
     for module, names in (
         (calc, ["calculate_protein_structure_components", "fit_ca_transform", "validate_declared_transform", "resolve_pair_selection"]),
-        (import_module("gene_annotation_episode.protein_structure_formats"), ["parse_pdb_structure", "parse_mmcif_structure"]),
-        (import_module("gene_annotation_episode.protein_structure_sequences"), ["extract_structure_sequence", "inspect_structure"]),
-        (import_module("gene_annotation_episode.protein_structure_metadata"), ["extract_native_structure_metadata"]),
-        (import_module("gene_annotation_episode.protein_structure_correspondence"), ["correspondence_from_pairwise_sheet", "validate_explicit_residue_map"]),
+        (import_module("gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats"), ["parse_pdb_structure", "parse_mmcif_structure"]),
+        (import_module("gene_annotation_episode.episodic_workflow.root.library.protein_structure_sequences"), ["extract_structure_sequence", "inspect_structure"]),
+        (import_module("gene_annotation_episode.episodic_workflow.root.library.protein_structure_metadata"), ["extract_native_structure_metadata"]),
+        (import_module("gene_annotation_episode.episodic_workflow.root.library.protein_structure_correspondence"), ["correspondence_from_pairwise_sheet", "validate_explicit_residue_map"]),
         (import_module("gene_annotation_episode.sequence_ops"), ["align_pair"]),
         (import_module("gene_annotation_episode.biopython_pairwise_grader"), ["build_biopython_pairwise_sheet"]),
         (import_module("numpy.linalg"), ["svd"]),

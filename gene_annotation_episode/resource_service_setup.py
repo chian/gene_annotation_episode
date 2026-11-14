@@ -1,8 +1,8 @@
 """Bind received resource credit to the caller's actual run and registry."""
 from __future__ import annotations
 
-from .episode_application_services import EpisodeApplicationServices
-from .episode_journal import Journal
+from .episodic_workflow.root.episode_application_services import EpisodeApplicationServices
+from .episodic_workflow.root.episode_journal import Journal
 from .episodic_workflow.root.a101.resource_work_submission.episode import ResourceEpisode as ResourceSubmission
 from .episodic_workflow.root.a101.resource_work_submission.api_resource_work_execution.episode import ResourceEpisode as APIResourceExecution
 from .episodic_workflow.root.a101.resource_work_submission.local_resource_work_execution.episode import ResourceEpisode as LocalResourceExecution

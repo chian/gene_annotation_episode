@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_proteome_directional import parse_genome_comparison_directional_report
-from gene_annotation_episode.bvbrc_proteome_directional_sheet import build_directional_sheet
-from gene_annotation_episode.bvbrc_proteome_directional_numerical_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional import parse_genome_comparison_directional_report
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_sheet import build_directional_sheet
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_numerical_contracts import (
     DirectionalNumericalContractError, validate_directional_numerical,
 )
 

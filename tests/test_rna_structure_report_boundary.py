@@ -3,14 +3,14 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, form_with_facts, interpretation_schema,
     validate_closed_schema, validate_form,
 )
-from gene_annotation_episode.rna_structure_result_views import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import (
     FAMILY_SOURCES, rna_structure_fact_sources,
 )
-from gene_annotation_episode.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
 
 
 def form(fields):

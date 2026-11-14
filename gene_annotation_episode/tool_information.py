@@ -154,7 +154,7 @@ def workflow_execution_catalogs():
     from .api_bvbrc import BVBRCDataService
     from .api_bvbrc_minhash import BVBRCMinhashService
     from .api_rfam import RfamBatchService
-    from .api_execution import hmmer_operation_catalog
+    from .episodic_workflow.root.api_execution import hmmer_operation_catalog
 
     result = {kind: [] for kind in RESOURCE_KINDS}
     # These capability methods return declared operation contracts only. Their

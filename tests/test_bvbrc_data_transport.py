@@ -10,7 +10,7 @@ import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.api_bvbrc import BVBRCDataClient, DEFAULT_BASE_URL
-from gene_annotation_episode.bvbrc_data_query import encode_native_query
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
 
 
 def prepared():
@@ -37,8 +37,8 @@ class Response:
 
 
 def test_v2_sends_exact_prepared_get_and_records_complete_native_response(monkeypatch):
-    from gene_annotation_episode.bvbrc_data_readers import parse_data_snapshot
-    from gene_annotation_episode.bvbrc_data_calculators import calculate_page_counts
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import parse_data_snapshot
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import calculate_page_counts
     original = prepared()
     before = deepcopy(original)
     calls = []
@@ -48,7 +48,7 @@ def test_v2_sends_exact_prepared_get_and_records_complete_native_response(monkey
             return Response(request.full_url)
     monkeypatch.setattr('gene_annotation_episode.api_bvbrc.urllib.request.build_opener', lambda handler: Opener())
     # Sending and decoding a persisted preparation must not compile it again.
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_data_query.encode_native_query',
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query.encode_native_query',
         lambda *args, **kwargs: pytest.fail('persisted query was recompiled'))
     snapshot = BVBRCDataClient(timeout=4).query_prepared(original)
     assert original == before and len(calls) == 1

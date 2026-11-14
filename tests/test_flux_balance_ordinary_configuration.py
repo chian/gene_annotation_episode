@@ -10,13 +10,13 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.assembled_service_setup import bind_assembled_services
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.native_flux_balance_contracts import POLICY, STACK
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY, STACK
 from gene_annotation_episode.resource_tool_information import tool_information_contracts
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
 from test_scientific_process_library import independent_source
 

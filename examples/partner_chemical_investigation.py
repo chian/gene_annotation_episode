@@ -52,16 +52,16 @@ async def run(args):
         cell_views, repository as component_repository, received_reports, mark_native_execution)
     from gene_annotation_episode.component_axis_native_hpc import received_components, execution_findings
     from gene_annotation_episode.component_axis_workflow import TASKS, INSTRUCTIONS
-    from gene_annotation_episode.decision_context import PROTOCOL
-    from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+    from gene_annotation_episode.episodic_workflow.root.decision_context import PROTOCOL
+    from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
     from gene_annotation_episode.hpc_monitoring import MonitorCheckpoint
     from gene_annotation_episode.hpc_scheduler import register_resume
     from gene_annotation_episode.materials import artifact_file, source_for_artifact
     from gene_annotation_episode.a107_tools import A107ToolRegistry
     from gene_annotation_episode.a110_tools import A110ToolRegistry
-    from gene_annotation_episode.providers import load_config
+    from gene_annotation_episode.episodic_workflow.root.providers import load_config
     from gene_annotation_episode.public_configuration import configured_tools
-    from gene_annotation_episode.runtime import controller_from_settings, _plain
+    from gene_annotation_episode.episodic_workflow.root.runtime import controller_from_settings, _plain
     from gene_annotation_episode.serial_model_resources import SerialModelConnection
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.workflow_budget import active_budget
@@ -120,7 +120,7 @@ async def run(args):
     # Use the repository's original controller settings, not new experiment
     # limits. load_config contains only the model table.
     import tomllib
-    from gene_annotation_episode.providers import default_config_path
+    from gene_annotation_episode.episodic_workflow.root.providers import default_config_path
     settings = tomllib.loads(default_config_path().read_text())
     execution = (ExecutionServiceFactory(**configuration['execution'])
         if configuration.get('execution') is not None else None)
@@ -243,7 +243,7 @@ async def run(args):
                 record = await root.run_async(workflow.context)
                 result = await root.build_result(record)
                 context = workflow.binding_context(root.source)
-                from gene_annotation_episode.episode_source_failure import child_completion_status
+                from gene_annotation_episode.episodic_workflow.root.episode_source_failure import child_completion_status
                 completion = child_completion_status(store, prepared['run_id'], context.episode_id,
                     {'ended_by': record.ended_by, 'end_reason': getattr(record, 'end_reason', None)},
                     delivery='root_return')
@@ -260,7 +260,7 @@ async def run(args):
                     workflow.services, axis, field).received_cells(context)
                     for field, schema in cell_views(axis).items()}
                 if axis == 'A110':
-                    from gene_annotation_episode.literature_reaction_native_storage import NAMESPACE
+                    from gene_annotation_episode.episodic_workflow.root.literature_reaction_native_storage import NAMESPACE
                     experimental[NAMESPACE] = workflow.services.literature_reaction_repository(
                         ).native_observations_projection().received_rows(context)
                 # Custom child field names can deliver authenticated native

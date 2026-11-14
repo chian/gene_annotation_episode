@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from gene_annotation_episode.infernal_preparation_artifacts import (
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_artifacts import (
     CHECK_NAMES, COMPONENT_NAMES, ISSUE_CODES, ROW_FIELDS,
     parse_infernal_artifact_operation, populate_infernal_artifact_sheet,
     validate_infernal_artifact_sheet,
@@ -239,7 +239,7 @@ def test_saved_sheet_recalculation_without_any_reader_or_execution():
     sheet = json.loads(json.dumps(press_sheet()))
     params = bound_parameters(sheet)
     expected = calculate(sheet, params)
-    with patch("builtins.open", side_effect=AssertionError("file")), patch("socket.socket", side_effect=AssertionError("network")), patch("subprocess.Popen", side_effect=AssertionError("native")), patch("gene_annotation_episode.infernal_preparation_artifacts.extract_infernal_models", side_effect=AssertionError("parser")):
+    with patch("builtins.open", side_effect=AssertionError("file")), patch("socket.socket", side_effect=AssertionError("network")), patch("subprocess.Popen", side_effect=AssertionError("native")), patch("gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_artifacts.extract_infernal_models", side_effect=AssertionError("parser")):
         assert calculate(sheet, params) == expected
         changed = deepcopy(params)
         changed["artifact_bindings"][0]["source_sha256"] = "1"*64

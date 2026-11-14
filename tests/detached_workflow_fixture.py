@@ -20,7 +20,7 @@ from method_loop import EpisodeCompletion, EpisodeGoal
 from method_loop.communication import ReportContract
 from method_loop.durable import (DurableExecutionError, canonical, content_digest,
                                  validate_commission)
-from gene_annotation_episode.runtime import (ReleasingContext, TypedReportContract,
+from gene_annotation_episode.episodic_workflow.root.runtime import (ReleasingContext, TypedReportContract,
                                              assemble_workflow)
 from gene_annotation_episode.state import Store
 

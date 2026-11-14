@@ -240,7 +240,7 @@ def test_later_submission_failure_preserves_previous_partial_source(tmp_path, mo
 
 def test_deleted_ordinary_bypass_feedback_reaches_runtime_without_observation(tmp_path):
     from test_runtime import FixtureController, ScriptedProvider
-    from gene_annotation_episode.runtime import run_workflow
+    from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
     with Store(tmp_path/'state') as store:
         tools, args = registered_tools(store, Client())
         def see_removed(context):

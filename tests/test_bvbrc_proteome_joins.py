@@ -12,10 +12,10 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_inputs as inputs
-from gene_annotation_episode import bvbrc_proteome_native as native_parser
-from gene_annotation_episode.bvbrc_proteome_joins import build_native_joins
-from gene_annotation_episode.bvbrc_proteome_sheet_contracts import validate_proteome_sheet_data
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_inputs as inputs
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_native as native_parser
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_joins import build_native_joins
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_sheet_contracts import validate_proteome_sheet_data
 
 
 CONTRACT = {

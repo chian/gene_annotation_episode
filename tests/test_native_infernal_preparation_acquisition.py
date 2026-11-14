@@ -15,15 +15,15 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import native_infernal_preparation_acquisition as acquisition
-from gene_annotation_episode import native_infernal_driver as native_driver
-from gene_annotation_episode import native_infernal_preparation_driver as preparation_driver
+from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_acquisition as acquisition
+from gene_annotation_episode.episodic_workflow.root.library import native_infernal_driver as native_driver
+from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_driver as preparation_driver
 from gene_annotation_episode.native_infernal_contracts import native_infernal_digest as digest
-from gene_annotation_episode.native_infernal_preparation_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import (
     compile_native_infernal_preparation_job, requested_job_from_infernal_preparation,
 )
 from gene_annotation_episode.practical_execution_state import canonical
-from gene_annotation_episode.native_infernal_preparation_local import prepare_local_infernal_preparation
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_local import prepare_local_infernal_preparation
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.state import Store
 
@@ -141,7 +141,7 @@ def sealed_case(tmp_path, monkeypatch, mode="merge_scores"):
     monkeypatch.setattr(subprocess, "run", forbidden)
     monkeypatch.setattr(subprocess, "Popen", forbidden)
     monkeypatch.setattr(socket, "socket", forbidden)
-    from gene_annotation_episode import native_infernal_preparation_worker as worker
+    from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_worker as worker
     monkeypatch.setattr(worker, "grade_infernal_preparation", forbidden)
     return root, plan, bundle, target
 

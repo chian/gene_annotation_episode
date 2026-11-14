@@ -21,29 +21,29 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from gene_annotation_episode import protein_structure_operands as operands
-from gene_annotation_episode import protein_structure_calculations as calculations
-from gene_annotation_episode import protein_structure_formats as formats
+from gene_annotation_episode.episodic_workflow.root import protein_structure_operands as operands
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_calculations as calculations
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_formats as formats
 from gene_annotation_episode import sequence_ops
 from gene_annotation_episode.domain import canonical as domain_canonical, identity
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.native_protein_structure_acquisition import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_acquisition import (
     capture_local_protein_structure_bundle, decode_protein_structure_json,
 )
-from gene_annotation_episode.native_protein_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import (
     output_files, requested_job_from_protein_structure, required_input_files,
 )
-from gene_annotation_episode.native_protein_structure_driver import run_protein_structure_driver
-from gene_annotation_episode.native_protein_structure_local import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver import run_protein_structure_driver
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_local import (
     prepare_local_protein_structure, local_protein_structure_plan,
 )
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.protein_structure_authority import ProteinStructureOperandError
-from gene_annotation_episode.protein_structure_contracts import issue, same
-from gene_annotation_episode.protein_structure_publication import protein_structure_source_payload
-from gene_annotation_episode.protein_structure_result_views import project_protein_structure_results
-from gene_annotation_episode.protein_structure_result_worker import run_protein_structure_result_worker
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue, same
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_publication import protein_structure_source_payload
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views import project_protein_structure_results
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_worker import run_protein_structure_result_worker
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry, SequenceWork
 
@@ -344,8 +344,8 @@ def readonly(f, monkeypatch):
     monkeypatch.setattr(f.store, "put", forbidden)
     monkeypatch.setattr(f.store, "artifact", forbidden)
     monkeypatch.setattr(f.store, "_validate_record", forbidden)
-    monkeypatch.setattr(import_module("gene_annotation_episode.native_protein_structure_worker"), "execute_protein_structure_request", forbidden)
-    monkeypatch.setattr(import_module("gene_annotation_episode.native_protein_structure_acquisition"), "capture_local_protein_structure_bundle", forbidden)
+    monkeypatch.setattr(import_module("gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker"), "execute_protein_structure_request", forbidden)
+    monkeypatch.setattr(import_module("gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_acquisition"), "capture_local_protein_structure_bundle", forbidden)
     monkeypatch.setattr(import_module("gene_annotation_episode.biopython_pairwise_grader"), "calculate_biopython_pairwise_scores", forbidden)
     # SELECT/READ/PRAGMA-only is checked by SQLite itself; any hidden receipt
     # helper creating tables or committing would violate this read-only guard.

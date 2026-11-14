@@ -17,19 +17,19 @@ import urllib.request
 
 import pytest
 
-from gene_annotation_episode import native_protein_structure_acquisition as acquisition
+from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_acquisition as acquisition
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.native_protein_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import (
     POLICY, BUNDLE_FILENAME, RUN_PLAN_FILENAME, requested_job_from_protein_structure,
     validate_protein_structure_request,
 )
-from gene_annotation_episode.native_protein_structure_driver import run_protein_structure_driver
-from gene_annotation_episode.native_protein_structure_local import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver import run_protein_structure_driver
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_local import (
     prepare_local_protein_structure, local_protein_structure_plan,
 )
-from gene_annotation_episode.protein_structure_contracts import issue, validate_file_identity
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue, validate_file_identity
 from gene_annotation_episode.state import Store
 
 F = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390")
@@ -104,7 +104,7 @@ def guard_capture(monkeypatch, *, replay=False, producer=None):
         for name in names:
             monkeypatch.setattr(loaded, name, forbidden)
     if replay:
-        monkeypatch.setattr("gene_annotation_episode.native_protein_structure_local.local_protein_structure_plan", forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_local.local_protein_structure_plan", forbidden)
         monkeypatch.setattr(acquisition, "_producer_file", forbidden)
         monkeypatch.setattr(native.NativeJobHandle, "read", forbidden)
         original_open, original_resolve, original_io_open = os.open, Path.resolve, io.open
@@ -398,7 +398,7 @@ def test_conflicting_or_missing_intent_and_corrupt_control_are_errors(tmp_path, 
 
 def test_invalid_caller_and_result_paths_fail_before_capture(tmp_path, monkeypatch):
     f = case(tmp_path / "producer")
-    monkeypatch.setattr("gene_annotation_episode.native_protein_structure_local.local_protein_structure_plan", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_local.local_protein_structure_plan", forbidden)
     with Store(tmp_path / "store") as store:
         for target in ({}, {**f.target, "resource_kind": "api"}, {**f.target, "request_sha256": "0" * 64}):
             with pytest.raises(ValueError):

@@ -20,9 +20,9 @@ from gene_annotation_episode import api_bvbrc_minhash as module
 from gene_annotation_episode.api_bvbrc_minhash import (
     BVBRCMinhashService, GRADING_SCHEMA, LAUNCH_OPERATIONS, RESULT_OPERATION, SERVICE,
 )
-from gene_annotation_episode.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.domain import canonical
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
 from gene_annotation_episode.tools import ToolRegistry
@@ -365,7 +365,7 @@ def test_publication_replay_precedes_readers_calculators_and_preserves_identity(
 
 
 def test_actual_published_envelope_supplies_only_requested_saved_facts(harness, monkeypatch):
-    from gene_annotation_episode.bvbrc_minhash_views import project_minhash_facts
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_views import project_minhash_facts
 
     h = harness
     h.client.rows = [["511145.12", *UPSTREAM_VALUES],

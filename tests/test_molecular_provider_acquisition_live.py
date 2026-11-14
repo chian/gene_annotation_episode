@@ -20,7 +20,7 @@ from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.molecular_provider_acquisition import (
     MAX_RESPONSE_BYTES, OPERATIONS, VERSION, validate_provider_result,
 )
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_molecular_provider_acquisition_host import (

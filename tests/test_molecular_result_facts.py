@@ -14,8 +14,8 @@ from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode import liftover_contracts as core
 from gene_annotation_episode import molecular_result_facts as facts
-from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustody
-from gene_annotation_episode.communication import ReportBoundaryError, plain
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustody
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
 from gene_annotation_episode.domain import canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext
 from test_molecular_publication_custody import (
@@ -165,7 +165,7 @@ def test_source_group_copies_and_canonical_dedup_preserve_existing_meaning(fact_
 
 
 def test_unrelated_forms_never_enter_full_validation_or_source_declarations(monkeypatch):
-    from gene_annotation_episode import communication
+    from gene_annotation_episode.episodic_workflow.root import communication
     monkeypatch.setattr(communication, "validate_closed_schema", forbidden)
     monkeypatch.setattr(facts, "_sources", forbidden)
     schema = obj(dict(sources={"type": "array", "items": {"type": "string"}, "x-source": "changed_record_refs"}))

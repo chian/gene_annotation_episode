@@ -16,9 +16,9 @@ import subprocess
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode.native_infernal_preparation_contracts import compile_native_infernal_preparation_job
-from gene_annotation_episode.native_infernal_preparation_worker import recalculate_infernal_preparation
-from gene_annotation_episode.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import compile_native_infernal_preparation_job
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker import recalculate_infernal_preparation
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from test_native_infernal_preparation_driver import CASES, POLICY, native_job
 from test_native_infernal_preparation_results_integration import (
     PREFIX, assert_accounting, choice_for, result_form, run_case,
@@ -486,10 +486,10 @@ def test_remaining_native_preparation_modes_through_workflow(tmp_path, monkeypat
         with monkeypatch.context() as guard:
             guard.setattr(socket, 'socket', forbidden)
             guard.setattr(subprocess, 'Popen', forbidden)
-            guard.setattr('gene_annotation_episode.native_infernal_preparation_worker.grade_infernal_preparation', forbidden)
-            guard.setattr('gene_annotation_episode.infernal_preparation_statistics.populate_infernal_statistics_sheet', forbidden)
-            guard.setattr('gene_annotation_episode.infernal_preparation_artifacts.populate_infernal_artifact_sheet', forbidden)
-            guard.setattr('gene_annotation_episode.infernal_preparation_emission.populate_cmemit_sheet', forbidden)
+            guard.setattr('gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker.grade_infernal_preparation', forbidden)
+            guard.setattr('gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_statistics.populate_infernal_statistics_sheet', forbidden)
+            guard.setattr('gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_artifacts.populate_infernal_artifact_sheet', forbidden)
+            guard.setattr('gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_emission.populate_cmemit_sheet', forbidden)
             assert recalculate_infernal_preparation(sheet, parameters=calculations['parameters']) == calculations
             adjustment = {'scores_at_evalue': {'evalue': .001}, 'scores_at_pvalue': {'pvalue': .001},
                 'evalues_at_score': {'search_space_mb': 20}}.get(mode) if program == 'cmstat' else None

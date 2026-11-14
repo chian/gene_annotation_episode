@@ -11,8 +11,8 @@ import json
 from pathlib import Path
 from types import MappingProxyType
 
-from .communication import plain
-from .episode_application_services import EpisodeApplicationServices
+from .episodic_workflow.root.communication import plain
+from .episodic_workflow.root.episode_application_services import EpisodeApplicationServices
 
 
 def _freeze(value):

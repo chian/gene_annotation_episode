@@ -9,7 +9,7 @@ import re
 
 from .alignment_site_native import immutable_record
 from .domain import ContractError
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
 from .local_jobs import LocalJobPolicy
 from .molecular_measurement_tools import (

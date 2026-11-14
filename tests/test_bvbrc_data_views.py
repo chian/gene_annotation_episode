@@ -17,20 +17,20 @@ import urllib.request
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.bvbrc_data_calculators import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import (
     calculate_facet_fractions, calculate_feature_sequence_counts, calculate_page_counts,
 )
-from gene_annotation_episode.bvbrc_data_feature_sequences import extract_feature_sequence_join
-from gene_annotation_episode.bvbrc_data_molecular import extract_molecular_experiment_rows
-from gene_annotation_episode.bvbrc_data_query import encode_native_query
-from gene_annotation_episode.bvbrc_data_readers import parse_data_snapshot
-from gene_annotation_episode.bvbrc_data_schema import json_digest, validate
-from gene_annotation_episode.bvbrc_data_views import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_feature_sequences import extract_feature_sequence_join
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_molecular import extract_molecular_experiment_rows
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import parse_data_snapshot
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import json_digest, validate
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import (
     FACT_SCHEMAS, FACT_SOURCES, IDENTIFIER_NAMESPACES, bvbrc_data_fact_sources,
     materialize_bvbrc_received_values, project_bvbrc_data_facts,
     resolve_bvbrc_data_identifier, validate_bvbrc_data_return, validate_data_result_selector,
 )
-from gene_annotation_episode.communication import validate_closed_schema, validate_form, form_with_facts
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema, validate_form, form_with_facts
 from gene_annotation_episode.execution_contracts import digest
 
 EVIDENCE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"
@@ -512,7 +512,7 @@ def test_materialization_order_dedup_key_receiver_identity_and_no_io_mutation(mo
 
 
 def test_renderer_is_expressly_unimplemented():
-    import gene_annotation_episode.bvbrc_data_views as views
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views as views
     assert not hasattr(views, "render_bvbrc_received_values")
 
 

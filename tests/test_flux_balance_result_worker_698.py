@@ -16,16 +16,16 @@ import pytest
 
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode import flux_balance_result_worker as worker
-from gene_annotation_episode.flux_balance_worker_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_worker_contracts import (
     build_native_flux_balance_worker_plan, build_saved_flux_balance_worker_plan,
     validate_flux_balance_worker_plan, validate_flux_balance_worker_result,
 )
-from gene_annotation_episode.flux_balance_readers import parse_fba_capture
-from gene_annotation_episode.flux_balance_sheet import populate_flux_balance_sheet
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers import parse_fba_capture
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet import populate_flux_balance_sheet
 from gene_annotation_episode.flux_balance_calculations import calculate_flux_balance_sheet
-from gene_annotation_episode.flux_balance_result_views import project_fba_result
-from gene_annotation_episode.native_flux_balance_capture import capture_flux_balance_native_files
-from gene_annotation_episode.native_flux_balance_contracts import bind_flux_balance_environment
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_result_views import project_fba_result
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_capture import capture_flux_balance_native_files
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import bind_flux_balance_environment
 from gene_annotation_episode.native_file_capture import retained_native_file
 from gene_annotation_episode.state import Store
 
@@ -117,7 +117,7 @@ def forbid_execution(monkeypatch):
     original_import = builtins.__import__
     def guarded(name, *args, **kwargs):
         assert name.split(".")[0] not in {"cobra", "optlang", "swiglpk"}
-        assert name not in {"gene_annotation_episode.native_flux_balance_driver", "gene_annotation_episode.native_flux_balance_cobra_glpk"}
+        assert name not in {"gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver", "gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_cobra_glpk"}
         return original_import(name, *args, **kwargs)
     monkeypatch.setattr(builtins, "__import__", guarded)
     monkeypatch.setattr(subprocess, "Popen", forbidden)
@@ -404,8 +404,8 @@ def test_strict_closed_plans_results_and_cli(store, tmp_path):
             validate_flux_balance_worker_result(value)
     for args in ([], ["relative.json"], ["/one", "/two"]):
         with pytest.raises(ValueError): worker.main(args)
-    assert "gene_annotation_episode.native_flux_balance_driver" not in sys.modules
-    assert "gene_annotation_episode.native_flux_balance_cobra_glpk" not in sys.modules
+    assert "gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_driver" not in sys.modules
+    assert "gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_cobra_glpk" not in sys.modules
 
 
 @pytest.mark.parametrize("damage", ["none", "missing", "corrupt", "non_json"])

@@ -8,7 +8,7 @@ from types import MethodType, SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.runtime import DecisionSource, Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource, Workflow
 from gene_annotation_episode.state import Store
 
 

@@ -16,7 +16,7 @@ from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode.api_selected_effects import SelectedAPIEffects
 from gene_annotation_episode.bvbrc_application_definitions import get_application_spec
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
-from gene_annotation_episode.bvbrc_appservice_receipt_values import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_appservice_receipt_values import (
     build_appservice_receipt, confirm_appservice_effects,
 )
 from test_api_bvbrc_appservice import (

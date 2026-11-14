@@ -19,7 +19,7 @@ from gene_annotation_episode.api_blast import NCBIBlastService
 from gene_annotation_episode.public_configuration import (
     configured_tools, ncbi_contact, public_config_path, save_ncbi_contact)
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 
 
 EMAIL = "synthetic-contact@example.invalid"

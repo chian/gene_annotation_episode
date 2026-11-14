@@ -15,15 +15,15 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.domain import validate_schema
-from gene_annotation_episode.communication import reference_resolver, validate_closed_schema, validate_form
-from gene_annotation_episode import infernal_preparation_result_views as views
-from gene_annotation_episode import infernal_preparation_models as models
-from gene_annotation_episode import infernal_preparation_artifacts as artifacts
-from gene_annotation_episode import infernal_preparation_statistics as statistics
-from gene_annotation_episode import infernal_preparation_calculations as calculations
-from gene_annotation_episode import infernal_preparation_emission as emission
-from gene_annotation_episode import infernal_preparation_emission_calculations as emission_calculations
-from gene_annotation_episode import native_infernal_preparation_worker as worker
+from gene_annotation_episode.episodic_workflow.root.communication import reference_resolver, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_result_views as views
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_models as models
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_artifacts as artifacts
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_statistics as statistics
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_calculations as calculations
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_emission as emission
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_emission_calculations as emission_calculations
+from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_worker as worker
 
 
 ROOT = Path(__file__).resolve().parents[1]

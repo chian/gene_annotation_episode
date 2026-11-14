@@ -16,13 +16,13 @@ import pytest
 from gene_annotation_episode import esm_gene_embedding_contracts as contracts
 from gene_annotation_episode import esm_gene_embedding_tools as host
 from gene_annotation_episode import esm_gene_embedding_publication as publication
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.molecular_measurement_tools import (
     MolecularOperationUnpublished, _publication_profile, _recorded_molecular_action_details,
 )
-from gene_annotation_episode.runtime import ActionFailure, Workflow, _compile_form
+from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow, _compile_form
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_esm_gene_embeddings import RAW, deployment, document, genes, parameters, selection, supplied
@@ -176,7 +176,7 @@ def test_unreceived_actual_file_is_denied_before_body_or_worker(tmp_path,monkeyp
             f"{value.flow.run_id}:{context.episode_id}:0",contracts.TOOL)
         runtime=json.loads(row["result"])
         assert set(runtime)==set(details["outcome"])|{"pending_work_after_action"}
-        from gene_annotation_episode.waiting import validate_pending
+        from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
         pending=runtime["pending_work_after_action"]
         assert validate_pending(pending)==pending and pending["items"]==[]
         assert details["outcome"]=={key:item for key,item in runtime.items() if key!="pending_work_after_action"}
@@ -286,7 +286,7 @@ def test_default_factory_record_and_registry_catalog_keep_unconfigured_esm_absen
 
 def test_registered_typed_form_resolves_only_outer_source_and_preserves_literal_identifiers(monkeypatch):
     """DTO-only supplied vectors and reference syntax, not publication custody."""
-    from gene_annotation_episode.communication import validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_form
     from gene_annotation_episode.molecular_result_facts import requested_molecular_fact_fields
     data=document();nested="source_"+"b"*24
     data["input"]["source_ref"]=nested
@@ -303,7 +303,7 @@ def test_registered_typed_form_resolves_only_outer_source_and_preserves_literal_
 
 
 def test_fact_groups_deduplicate_full_source_selection_and_reject_changed_frozen_values():
-    from gene_annotation_episode.communication import ReportBoundaryError
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
     from gene_annotation_episode.molecular_result_facts import merge_molecular_facts,validate_frozen_molecular_return
     reference="source_"+"a"*24
     first=contracts.project_esm_embedding_return(document(),selection(components=[0]),reference)
@@ -320,7 +320,7 @@ def test_fact_groups_deduplicate_full_source_selection_and_reject_changed_frozen
 
 @pytest.mark.parametrize("change",["schema","missing_source","bool_count","float_count"])
 def test_actual_typed_boundary_denies_changed_schema_missing_grant_and_scalar_substitution(change):
-    from gene_annotation_episode.communication import ReportBoundaryError,validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError,validate_form
     schema=_fact_schema()
     value=contracts.project_esm_embedding_return(document(),selection(selected=[]),"source_"+"a"*24)
     resolver=lambda *_:True

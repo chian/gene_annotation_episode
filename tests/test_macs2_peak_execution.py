@@ -16,8 +16,8 @@ from macs2_peak_fixtures import (
 )
 from gene_annotation_episode import native_macs2_peak_execution as native
 from gene_annotation_episode import macs2_peak_request_binding as compact
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.flux_balance_request_binding import resource_assignment_schema as fba_assignment_schema
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import resource_assignment_schema as fba_assignment_schema
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.native_atac_differential_contracts import canonical, digest, _dependency_roots
 from gene_annotation_episode.atac_differential_inputs import (
@@ -29,11 +29,11 @@ from gene_annotation_episode import macs2_peak_result_worker as result_worker
 from gene_annotation_episode.practical_execution_state import PracticalState
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.local_file_capture_results import (
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.local_file_capture_results import (
     MACS2_SELECTOR_VERSION, resolve_macs2_peak_file_selector,
 )
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from test_native_atac_differential_contracts import fake_software as atac_control_software
 
 

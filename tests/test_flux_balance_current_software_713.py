@@ -41,7 +41,7 @@ def _diagnostic_candidate(original, receipt):
 
 def _metadata_plans(original, software):
     from gene_annotation_episode.execution_contracts import digest
-    from gene_annotation_episode.native_flux_balance_contracts import (
+    from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
         ATTEMPT_DIRECTORY_NAME, bind_flux_balance_environment, flux_balance_environment,
         validate_flux_balance_run_plan,
     )
@@ -71,7 +71,7 @@ def _metadata_plans(original, software):
 
 
 def test_actual_original_runtime_and_current_source_metadata(preparation):
-    from gene_annotation_episode.native_flux_balance_contracts import validate_flux_balance_software
+    from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import validate_flux_balance_software
     helper, original, destination, result = preparation
     receipt = result["receipt"]
     selected = original["requested_job"]["native_flux_balance"]["software"]
@@ -122,7 +122,7 @@ def test_actual_original_runtime_and_current_source_metadata(preparation):
 
 
 def test_schema_detachment_and_rejection(preparation):
-    from gene_annotation_episode.native_flux_balance_contracts import validate_flux_balance_software
+    from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import validate_flux_balance_software
     helper, original, _, result = preparation
     candidate = _diagnostic_candidate(original, result["receipt"])
     validated = validate_flux_balance_software(candidate)

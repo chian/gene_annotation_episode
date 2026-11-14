@@ -5,11 +5,11 @@ import json
 
 import pytest
 
-from gene_annotation_episode import execution_timing as timing
-from gene_annotation_episode.numerical import YieldController, estimate_score_yield
+from gene_annotation_episode.episodic_workflow.root import execution_timing as timing
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController, estimate_score_yield
 from gene_annotation_episode.run_statistics import ExecutionClass, RunHistory, RunStatistic
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.waiting import (WaitError, WaitStore, completed_action_context,
+from gene_annotation_episode.episodic_workflow.root.waiting import (WaitError, WaitStore, completed_action_context,
     estimate_wait, validate_condition)
 
 

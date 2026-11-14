@@ -5,11 +5,11 @@ import json
 import pytest
 
 from method_loop.durable import DurableExecutionError, canonical, content_digest
-from gene_annotation_episode import application_execution_binding as application
-from gene_annotation_episode.default_scientific_binding import VERSION as DEFAULT_VERSION
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root import application_execution_binding as application
+from gene_annotation_episode.episodic_workflow.root.default_scientific_binding import VERSION as DEFAULT_VERSION
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 from gene_annotation_episode.tools import ToolRegistry
 
 

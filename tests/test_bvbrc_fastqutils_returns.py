@@ -12,13 +12,13 @@ import uuid
 import pytest
 
 from gene_annotation_episode import bvbrc_fastqutils_bundle_adapter as adapter
-from gene_annotation_episode.bvbrc_appservice_publication import AppServicePublications, RESULT_VERSION
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_publication import AppServicePublications, RESULT_VERSION
 from gene_annotation_episode.bvbrc_fastqutils_contracts import validate_requested_form
 from gene_annotation_episode.bvbrc_fastqutils_returns import (
     FACT_SOURCES, BVBRCFastqUtilsReturns, encode_return_value, decode_return_value,
     fastqutils_fact_sources, parent_form_schema, project_fastqutils_return_facts,
 )
-from gene_annotation_episode.communication import validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import validate_form
 from gene_annotation_episode.execution_contracts import canonical, digest
 
 spec = importlib.util.spec_from_file_location('fastq_return_fixtures',

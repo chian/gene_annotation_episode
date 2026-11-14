@@ -4,8 +4,8 @@ import json
 
 import pytest
 
-from gene_annotation_episode import execution_timing as timing
-from gene_annotation_episode.runtime import Journal
+from gene_annotation_episode.episodic_workflow.root import execution_timing as timing
+from gene_annotation_episode.episodic_workflow.root.runtime import Journal
 from gene_annotation_episode.state import Store
 
 

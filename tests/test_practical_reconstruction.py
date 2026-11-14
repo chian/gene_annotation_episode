@@ -9,10 +9,10 @@ from gene_annotation_episode import independent_execution as reconstruction
 from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
 from gene_annotation_episode.practical_service_setup import PracticalServiceFactory
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
-from gene_annotation_episode.providers import ModelConnection
-from gene_annotation_episode.runtime import assemble_workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import assemble_workflow, run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 
 
 class BeforeModel(Exception):

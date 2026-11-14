@@ -11,11 +11,11 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_calculators as calculators
-from gene_annotation_episode import bvbrc_proteome_inputs as inputs
-from gene_annotation_episode import bvbrc_proteome_joins as joins
-from gene_annotation_episode import bvbrc_proteome_native as native
-from gene_annotation_episode import bvbrc_proteome_sheet as sheets
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_calculators as calculators
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_inputs as inputs
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_joins as joins
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_native as native
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_sheet as sheets
 from test_bvbrc_proteome_joins import case, fasta, metadata_case, native_result
 
 

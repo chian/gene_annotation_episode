@@ -11,8 +11,8 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_calculators as calculators
-from gene_annotation_episode.bvbrc_proteome_sheet_contracts import validate_proteome_sheet_data
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_calculators as calculators
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_sheet_contracts import validate_proteome_sheet_data
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -640,7 +640,7 @@ def test_conditional_future_ratio_arithmetic_does_not_forge_an_execution_witness
 def test_saved_sheet_recalculation_has_no_io_parsing_scientific_execution_or_store(monkeypatch):
     import socket
     import subprocess
-    from gene_annotation_episode import bvbrc_proteome_native, bvbrc_proteome_inputs
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_native, bvbrc_proteome_inputs
     from gene_annotation_episode.episodic_workflow.root.a101 import blast_pairwise_grader
     sheet, options = saved_sheet(), parameters()
     initial = calculators.calculate_native_components(sheet, parameters=options)

@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import sqlite3
 
-from .execution_guidance import resource_identity
+from .episodic_workflow.root.library.execution_guidance import resource_identity
 from .execution_memory import ExecutionMemory, digest, validate_profile
 
 

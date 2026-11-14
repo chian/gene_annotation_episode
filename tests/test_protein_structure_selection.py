@@ -8,10 +8,10 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.protein_structure_authority import ProteinStructureOperandError
-from gene_annotation_episode.protein_structure_contracts import issue
-from gene_annotation_episode.protein_structure_result_views import protein_structure_fact_sources
-from gene_annotation_episode.protein_structure_selection import (
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views import protein_structure_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_selection import (
     protein_structure_result_selector_schema, validate_protein_structure_result_selector,
 )
 
@@ -169,7 +169,7 @@ def test_schema_contains_exact_reachable_definitions_only():
 
 
 def test_pure_validation_uses_neither_io_nor_calculators(monkeypatch):
-    from gene_annotation_episode import protein_structure_calculations as calculations
+    from gene_annotation_episode.episodic_workflow.root.library import protein_structure_calculations as calculations
     value, request = saved()
     def forbidden(*args, **kwargs):
         raise AssertionError("selector validation attempted I/O or calculation")

@@ -7,8 +7,8 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.bvbrc_data_schema import schema, validate, fact_schemas, json_digest
-from gene_annotation_episode.communication import validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import schema, validate, fact_schemas, json_digest
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema, validate_form
 
 EVIDENCE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract"
 FROZEN = json.loads((EVIDENCE / "CONTRACT_SHAPES.json").read_text())

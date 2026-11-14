@@ -14,7 +14,7 @@ import time
 
 import pytest
 
-from gene_annotation_episode.execution_recording import (NativeMeasurement, NativeStatistics,
+from gene_annotation_episode.episodic_workflow.root.execution_recording import (NativeMeasurement, NativeStatistics,
     publish_native_statistics, recover_native_measurement)
 from gene_annotation_episode.local_jobs import LocalJobPolicy, run_local_job
 from gene_annotation_episode.native_lifecycle import NativeJobHandle, collect, prepare_job, start_job, start_prepared, status
@@ -44,7 +44,7 @@ def start(directory, context, *, detached_owner=False):
     handle = NativeJobHandle(directory/'handle.json')
     if detached_owner:
         code = ('from pathlib import Path\n'
-            'from gene_annotation_episode.execution_recording import NativeStatistics\n'
+            'from gene_annotation_episode.episodic_workflow.root.execution_recording import NativeStatistics\n'
             'from gene_annotation_episode.local_jobs import LocalJobPolicy\n'
             'from gene_annotation_episode.native_lifecycle import start_job\n'
             f'start_job({COMMAND!r},cwd=Path({str(directory)!r}),policy=LocalJobPolicy(**{POLICY.to_dict()!r}),'

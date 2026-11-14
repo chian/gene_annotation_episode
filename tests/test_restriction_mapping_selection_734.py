@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import ReportBoundaryError
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
 from gene_annotation_episode.restriction_mapping_contracts import restriction_canonical
 from gene_annotation_episode.restriction_mapping_returns import (
     project_restriction_action_return, requested_restriction_projections,

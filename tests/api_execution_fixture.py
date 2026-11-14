@@ -2,10 +2,10 @@
 import asyncio
 from dataclasses import replace
 
-from gene_annotation_episode.api_execution import HMMERAPIExecution
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.api_execution import HMMERAPIExecution
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical
 
 

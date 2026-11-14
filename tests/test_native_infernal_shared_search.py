@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode import native_infernal_result_worker as worker
-from gene_annotation_episode.infernal_search_contracts import sheet_digest
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_contracts import sheet_digest
 from test_native_infernal_result_worker import execute, plan_for, values
 
 

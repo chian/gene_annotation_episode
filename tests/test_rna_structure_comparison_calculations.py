@@ -8,15 +8,15 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.rna_structure_comparison_calculations import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations import (
     calculate_rna_comparison_components, calculate_rna_energy_comparison,
     calculate_rna_pair_changes, calculate_rna_site_changes, qualify_rna_energy_comparison,
 )
-from gene_annotation_episode.rna_structure_comparison_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_contracts import (
     ARRAY_SETTING_NAMES, MODEL_SETTING_NAMES, OTHER_SCALAR_SETTING_NAMES,
     validate_rna_comparison_components,
 )
-from gene_annotation_episode.rna_structure_comparison_inputs import populate_rna_comparison_sheet
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_inputs import populate_rna_comparison_sheet
 
 f = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_calculations_367.fixture_helpers")
 

@@ -12,13 +12,13 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_genome_alignment_associations import bind_genome_alignment_artifacts
-from gene_annotation_episode.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_associations
-from gene_annotation_episode.bvbrc_genome_alignment_inputs import validate_genome_alignment_retained_records
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_associations import bind_genome_alignment_artifacts
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_associations
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_inputs import validate_genome_alignment_retained_records
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.mauve_v4_formats import parse_mauve_v4
-from gene_annotation_episode.mauve_backbone_formats import parse_mauve_backbone, parse_mauve_bbcols
-from gene_annotation_episode.xmfa_formats import parse_mauve_xmfa
+from gene_annotation_episode.episodic_workflow.root.library.mauve_v4_formats import parse_mauve_v4
+from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats import parse_mauve_backbone, parse_mauve_bbcols
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_formats import parse_mauve_xmfa
 from test_bvbrc_genome_alignment_retained_records import (
     fixture, acquisition_record, log_record, rewrap, content, inline,
 )
@@ -269,8 +269,8 @@ def test_selected_download_object_cannot_claim_another_manifest_row():
 
 
 def test_both_c_extractors_consume_same_actual_receipts_and_preserve_native_quantities():
-    from gene_annotation_episode.bvbrc_genome_alignment_inputs import extract_genome_alignment_inputs
-    from gene_annotation_episode.mauve_v4_calculators import calculate_mauve_v4_segments
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_inputs import extract_genome_alignment_inputs
+    from gene_annotation_episode.episodic_workflow.root.library.mauve_v4_calculators import calculate_mauve_v4_segments
     from test_mauve_v4_calculators import selection
     case = native_case()
     extracted = extract_genome_alignment_inputs(case['original_task'],
@@ -333,8 +333,8 @@ def test_malformed_caller_is_not_silently_converted_to_partial(field, value):
 
 
 def test_no_input_output_network_process_or_native_reparse_during_association(monkeypatch):
-    from gene_annotation_episode import mauve_v4_formats, mauve_backbone_formats, xmfa_formats
-    from gene_annotation_episode import mauve_v4_calculators, mauve_backbone_calculators, xmfa_calculators
+    from gene_annotation_episode.episodic_workflow.root.library import mauve_v4_formats, mauve_backbone_formats, xmfa_formats
+    from gene_annotation_episode.episodic_workflow.root.library import mauve_v4_calculators, mauve_backbone_calculators, xmfa_calculators
     case = native_case()
     def forbidden(*args, **kwargs): raise AssertionError('forbidden I/O/native parse')
     for target, name in ((builtins, 'open'), (Path, 'open'), (socket, 'socket'),

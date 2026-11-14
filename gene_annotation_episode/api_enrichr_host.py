@@ -17,7 +17,7 @@ import re
 
 from .acquisition import AcquisitionError, SourceSnapshot
 from .api_enrichr import PROTOCOL_VERSION, QUERY, WIRE_PROFILE, _stage_shape
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .execution_contracts import canonical, digest
 from .practical_execution_state import _immutable, _read
 

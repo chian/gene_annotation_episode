@@ -9,7 +9,7 @@ from __future__ import annotations
 import asyncio
 from copy import deepcopy
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import obj
 from .execution_contracts import digest
 from .chromatin_interaction_contracts import validate_chromatin_record

@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_contracts as c
 from test_bvbrc_genome_alignment_bundle_projection import synthetic_original_sheet
 from test_bvbrc_genome_alignment_returns import (
     CELL, MEASUREMENTS, ORIGINAL, example, measurement, project, fact_form, forbid_science, run,

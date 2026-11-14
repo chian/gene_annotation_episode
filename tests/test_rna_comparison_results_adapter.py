@@ -7,10 +7,10 @@ import pytest
 
 from test_rna_comparison_operand_authority import E
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.practical_execution_records import validate_completion_proof
-from gene_annotation_episode.rna_structure_comparison_results import result_receipt_key, VALIDATION_KEYS, PREPARED_COPY_FIELDS
-from gene_annotation_episode.rna_structure_comparison_views import PROJECTION_SOURCE
-from gene_annotation_episode.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import validate_completion_proof
+from gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_results import result_receipt_key, VALIDATION_KEYS, PREPARED_COPY_FIELDS
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
 from gene_annotation_episode.state import Store
 
 
@@ -20,8 +20,8 @@ def forbidden(*args, **kwargs):
 
 def forbid_acquisition(monkeypatch, f):
     monkeypatch.setattr(f.targets, "observe_target", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.native_rna_structure_local.local_rna_structure_plan", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local.local_rna_structure_plan", forbidden)
     monkeypatch.setattr("gene_annotation_episode.rna_structure_native.parse_rna_native_record", forbidden)
     monkeypatch.setattr("socket.create_connection", forbidden)
 
@@ -55,7 +55,7 @@ def test_actual_worker_selected_counts_exact_return_replay_and_completed_proof(t
         assert credit["credit"] == credit["new_acquired_record_count"] == credit["new_handoff_count"] == 0
         assert credit["operational_credit_binding"]["acquired_record_unit"] == 3
         before = list(store.db.iterdump())
-        monkeypatch.setattr("gene_annotation_episode.rna_structure_comparison_publication.prepare_rna_comparison_grading", forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_publication.prepare_rna_comparison_grading", forbidden)
         outcome = asyncio.run(f.results.execute(child, f.owner._target(child), body["tool_name"], {}, body["operation_key"]))
         assert outcome["result"] == body and outcome["record_refs"] == outcome["changed_record_refs"] == []
         assert f.results.read_receipt_key(result_receipt_key(body), f.scope) == body
@@ -84,8 +84,8 @@ def test_status_checks_retained_inputs_without_worker_native_or_completion(tmp_p
         f = E.Fixture(store, tmp_path / "fixture")
         child = f.child()
         forbid_acquisition(monkeypatch, f)
-        monkeypatch.setattr("gene_annotation_episode.rna_structure_comparison_publication.prepare_rna_comparison_grading", forbidden)
-        monkeypatch.setattr("gene_annotation_episode.rna_structure_comparison_publication.validate_prepared_rna_comparison", forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_publication.prepare_rna_comparison_grading", forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_publication.validate_prepared_rna_comparison", forbidden)
         status = f.execute(child, name="execution.results.status")
         assert status["projection_rows"] == status["issues"] == status["selected_input_digests"] == []
         assert not status["delivery_complete"] and status["comparison_sheet_artifact_ref"] is None
@@ -103,7 +103,7 @@ def test_collect_records_real_custody_failure_and_replays_it_after_restoration(t
         original = path.read_bytes()
         path.unlink() if problem == "missing" else path.write_bytes(b"{}\n")
         forbid_acquisition(monkeypatch, f)
-        monkeypatch.setattr("gene_annotation_episode.rna_structure_comparison_publication.prepare_rna_comparison_grading", forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_publication.prepare_rna_comparison_grading", forbidden)
         body = f.execute(child)
         code = "retained_sheet_missing" if problem == "missing" else "retained_sheet_digest_mismatch"
         assert [i["code"] for i in body["issues"]] == [code]

@@ -6,11 +6,11 @@ import json
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, form_with_facts, interpretation_schema,
     validate_closed_schema, validate_form,
 )
-from gene_annotation_episode.genomic_overlap_return_views import (
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_return_views import (
     FACT_SOURCES, FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE,
     genomic_overlap_fact_sources, requested_genomic_overlap_sources,
     select_genomic_overlap_return_facts, validate_genomic_overlap_fact_values,

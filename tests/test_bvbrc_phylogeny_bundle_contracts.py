@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import bvbrc_phylogeny_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_bundle_contracts as c
 from gene_annotation_episode.bvbrc_appservice_contracts import ContractValidationError
 
 

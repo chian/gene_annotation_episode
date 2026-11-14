@@ -12,16 +12,16 @@ import pytest
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.native_protein_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import (
     POLICY, RUN_PLAN_FILENAME, BUNDLE_FILENAME, OWNER_FILENAME, STARTED_FILENAME,
     validate_protein_structure_bundle, requested_job_from_protein_structure,
     validate_native_protein_structure_result, compile_protein_structure_job,
 )
-from gene_annotation_episode.native_protein_structure_worker import execute_protein_structure_request
-from gene_annotation_episode.native_protein_structure_driver import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker import execute_protein_structure_request
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver import (
     run_protein_structure_driver, _strict_json, _immutable, confined_file,
 )
-from gene_annotation_episode.native_protein_structure_local import prepare_local_protein_structure, local_protein_structure_plan
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_local import prepare_local_protein_structure, local_protein_structure_plan
 _f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390")
 _a = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 
@@ -107,7 +107,7 @@ def test_driver_real_worker_seals_every_declared_file_and_replays(tmp_path, monk
         assert len(raw) == row["byte_length"] and hashlib.sha256(raw).hexdigest() == row["sha256"]
     assert (root / RUN_PLAN_FILENAME).read_bytes() == (root.parent / RUN_PLAN_FILENAME).read_bytes()
     if kind == "extract_sequence": assert (root / "sequence.txt").read_bytes() == b"AGST"
-    import gene_annotation_episode.native_protein_structure_driver as driver
+    import gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver as driver
     monkeypatch.setattr(driver.subprocess, "Popen", lambda *a, **k: pytest.fail("replay launched work"))
     assert run_protein_structure_driver(plan) == result
     altered = deepcopy(result)
@@ -304,7 +304,7 @@ def test_unavailable_sequence_is_absent_not_empty_and_capture_partial(tmp_path):
 
 
 def test_resource_budget_failure_retains_controls_without_start(tmp_path, monkeypatch):
-    import gene_annotation_episode.native_protein_structure_driver as driver
+    import gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver as driver
     from gene_annotation_episode.acquisition import AcquisitionError
     selected = _f.job(tmp_path, kind="inspect")
     plan = _f.plan(tmp_path, selected)
@@ -320,7 +320,7 @@ def test_resource_budget_failure_retains_controls_without_start(tmp_path, monkey
 
 @pytest.mark.parametrize("raw", [b'{"a":1,"a":2}', b'{"a":NaN}', b'{"a":Infinity}'])
 def test_malformed_json_is_rejected_before_use(raw):
-    from gene_annotation_episode.native_protein_structure_worker import strict_json
+    from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker import strict_json
     with pytest.raises(ValueError): strict_json(raw)
 
 

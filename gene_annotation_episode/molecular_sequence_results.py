@@ -17,14 +17,14 @@ from pathlib import Path
 
 from method_loop.identities import EpisodeRef
 from .acquisition import AcquisitionError
-from .communication import plain, validate_form
-from .bvbrc_appservice_custody import AppServiceCustody
-from .episode_receipts import EpisodeReceipts, RECEIVED_REPORT_PREFIX_VERSION, _validate_report_prefix
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.communication import plain, validate_form
+from .episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustody
+from .episodic_workflow.root.episode_receipts import EpisodeReceipts, RECEIVED_REPORT_PREFIX_VERSION, _validate_report_prefix
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest, validate_target
-from .genomic_overlap_result_receipts import GenomicOverlapResultReceipts as _Actions
-from .genomic_overlap_result_receipts import immutable, read_control, same, unique
-from .genomic_overlap_result_receipts import directory as _control_directory, regular as _control_regular
+from .episodic_workflow.root.genomic_overlap_result_receipts import GenomicOverlapResultReceipts as _Actions
+from .episodic_workflow.root.genomic_overlap_result_receipts import immutable, read_control, same, unique
+from .episodic_workflow.root.genomic_overlap_result_receipts import directory as _control_directory, regular as _control_regular
 from .molecular_sequence_result_contracts import (
     FACT_SOURCES, FAILURE_SOURCE, FILE_ROLES, MODES, PLAN_VERSION, PROJECTION_SOURCE, SAVED_SOURCE,
     empty_file_state, failure, require, select_molecular_sequence_return_facts,
@@ -34,7 +34,7 @@ from .molecular_sequence_result_contracts import (
 )
 from .native_file_capture import NativeFileCaptureError, capture_native_file, retained_native_file, _identity, _declaration
 from .native_flux_balance_storage import file_pin, read_bytes
-from .practical_receipt_information import PracticalReceiptInformation
+from .episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from . import molecular_sequence_result_contracts as supplied
 from .domain import identity as record_identity
 

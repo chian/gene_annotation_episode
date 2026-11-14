@@ -11,9 +11,9 @@ import json
 import pytest
 from method_loop.archive import iter_json
 
-from gene_annotation_episode.decision_context import apply_state_frame
+from gene_annotation_episode.episodic_workflow.root.decision_context import apply_state_frame
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.providers import ModelRole
+from gene_annotation_episode.episodic_workflow.root.providers import ModelRole
 from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_information import selectors

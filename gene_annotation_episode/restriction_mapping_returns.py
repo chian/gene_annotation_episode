@@ -8,7 +8,7 @@ from copy import deepcopy
 
 from jsonschema import Draft202012Validator
 
-from .communication import CODE, ReportBoundaryError, validate_closed_schema
+from .episodic_workflow.root.communication import CODE, ReportBoundaryError, validate_closed_schema
 from .restriction_mapping_contracts import (
     restriction_canonical, restriction_schema, validate_restriction_record,
 )

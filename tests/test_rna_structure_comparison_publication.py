@@ -8,8 +8,8 @@ import pytest
 
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.rna_structure_comparison_contracts import validate_rna_comparison_components
-from gene_annotation_episode import rna_structure_comparison_publication as p
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_contracts import validate_rna_comparison_components
+from gene_annotation_episode.episodic_workflow.root.library import rna_structure_comparison_publication as p
 
 f = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_worker_369.fixture_helpers")
 POLICY = LocalJobPolicy(**p.POLICY)
@@ -325,7 +325,7 @@ def test_actual_257_member_worker_keeps_aggregate_return_compact(tmp_path):
     energy = f.b.energy_request()
     selected = f.b.selector([f.b.member(s) for s in originals],
         [f.b.comparison(s["record_key"], energy=energy) for s in originals[1:]], scan=f.b.scan_request(energy))
-    from gene_annotation_episode.rna_structure_comparison_inputs import populate_rna_comparison_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_inputs import populate_rna_comparison_sheet
     sheet = populate_rna_comparison_sheet(selected, operands={s["record_key"]: f.b.supplied(s) for s in originals})
     selector, operands = f.resolved(sheet, [f.projection("scan_energy", metrics=["baseline_rank_start",
         "baseline_rank_end", "lowest_energy_tie_count", "baseline_energy_above_minimum"])])

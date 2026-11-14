@@ -16,8 +16,8 @@ from numbers import Real
 from method_loop.durable import canonical
 from method_loop.identities import UnitRef
 
-from .completion_evidence import validate_completion_evidence
-from .numerical import (NumericBand, YieldEstimate, YieldParameters,
+from .episodic_workflow.root.completion_evidence import validate_completion_evidence
+from .episodic_workflow.root.numerical import (NumericBand, YieldEstimate, YieldParameters,
                         estimate_score_yield)
 
 

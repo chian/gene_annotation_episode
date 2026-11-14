@@ -21,9 +21,9 @@ from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode.api_rfam import RfamBatchService
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS
-from gene_annotation_episode.rfam_batch_grader import calculate_rfam_batch_components
-from gene_annotation_episode.rfam_batch_publication import publish_rfam_batch_result
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_grader import calculate_rfam_batch_components
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_publication import publish_rfam_batch_result
 from gene_annotation_episode.rfam_discovery import BASE_URL, result_url
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
@@ -188,7 +188,7 @@ def test_exact_original_replay_does_not_reparse_and_changed_selector_cannot_reus
     first = publish(h)
     def forbidden(*args, **kwargs):
         pytest.fail("replay reparsed original data")
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_publication.populate_rfam_batch_json_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_publication.populate_rfam_batch_json_sheet", forbidden)
     assert publish(h) == first
     assert h.store.count("source") == h.original_source_count + 3
     with pytest.raises(ContractError, match="operation_key_reused_for_different_work"):
@@ -443,7 +443,7 @@ def test_out_of_scope_metadata_source_bytes_are_never_read(single, monkeypatch, 
 
 def test_metadata_read_selection_scope_is_checked_without_reading_bytes(tmp_path, monkeypatch):
     from gene_annotation_episode import library_targets
-    from gene_annotation_episode.rfam_batch_publication import validate_rfam_metadata_source_scope
+    from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_publication import validate_rfam_metadata_source_scope
 
     reads = tmp_path / "outside-selection.fastq"
     reads.write_text("@original-read\nACGT\n+\nIIII\n")
@@ -538,8 +538,8 @@ def batch(tmp_path):
 
 
 def test_synthetic_generated_batch_service_publication_full_infernal_saved_data(batch):
-    from gene_annotation_episode.infernal_search_grader import calculate_infernal_search_scores
-    from gene_annotation_episode.rfam_batch_table_grader import calculate_rfam_batch_table_components
+    from gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader import calculate_infernal_search_scores
+    from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table_grader import calculate_rfam_batch_table_components
     h = batch
     selected = selection("native_score_bits", "native_evalue", "query_span_fraction",
         "model_coverage_fraction", representation="tblout", version=2)

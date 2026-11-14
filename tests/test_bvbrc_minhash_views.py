@@ -8,13 +8,13 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.bvbrc_analysis_protocol import prepare_rpc_request
-from gene_annotation_episode.bvbrc_minhash_grader import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_grader import (
     calculate_minhash_components, parse_minhash_result,
 )
-from gene_annotation_episode.bvbrc_minhash_views import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_views import (
     minhash_fact_sources, project_minhash_facts,
 )
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, reference_resolver, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.domain import identity
@@ -354,7 +354,7 @@ def test_nonfinite_numbers_rejected_everywhere_even_unprojected_data(location):
 def test_no_parser_calculator_file_io_or_mutation_during_projection(monkeypatch):
     value = qualified()
     frozen = json.loads(json.dumps(value, allow_nan=False))
-    import gene_annotation_episode.bvbrc_minhash_grader as grader
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_grader as grader
     def forbidden(*args, **kwargs):
         raise AssertionError("projection cannot regrade or perform I/O")
     monkeypatch.setattr(grader, "parse_minhash_result", forbidden)

@@ -15,16 +15,16 @@ from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.execution_contracts import digest
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.native_genomic_overlap_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_contracts import (
     POLICY, RUN_PLAN_FILENAME, BATCH_FILENAME, ATTEMPT_DIRECTORY_NAME,
     genomic_overlap_driver_argv, genomic_overlap_environment,
 )
-from gene_annotation_episode.native_genomic_overlap_local import (
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_local import (
     prepare_local_genomic_overlap, local_genomic_overlap_plan,
 )
-from gene_annotation_episode.native_genomic_overlap_driver import _immutable
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_driver import _immutable
 from gene_annotation_episode.practical_execution_state import PracticalState
-from gene_annotation_episode.practical_execution_records import assess_validations
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations
 
 f = import_module('gene_annotation_episode.episodic_workflow.root.a103.tests.fixtures.retained_workflow.verification.tool_graders_genomic_overlap_native_driver_2026-10-27_427.fixture_helpers')
 
@@ -263,7 +263,7 @@ def test_actual_lifecycle_kill_after_first_pair_seal_preserves_unsealed_attempt(
         monkeypatch.setattr(native, 'prepare_job', lambda *a, **k: pytest.fail('killed attempt re-reserved'))
         assert prepare_local_genomic_overlap(state, key, root=root, policy=LocalJobPolicy(**POLICY)).path == handle.path
         assert handle.path.read_bytes() == before
-        from gene_annotation_episode.native_genomic_overlap_driver import run_genomic_overlap_driver
+        from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_driver import run_genomic_overlap_driver
         with pytest.raises(ValueError, match='unsealed_native_attempt'):
             run_genomic_overlap_driver(plan)
     finally:

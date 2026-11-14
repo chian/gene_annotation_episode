@@ -9,9 +9,9 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.xmfa_calculators import xmfa_alignment_components, xmfa_interval_coverage
-from gene_annotation_episode.xmfa_coordinates import xmfa_column_coordinates
-from gene_annotation_episode.xmfa_calculation_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_calculators import xmfa_alignment_components, xmfa_interval_coverage
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_coordinates import xmfa_column_coordinates
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_calculation_contracts import (
     validate_xmfa_selection, validate_xmfa_alignment_components, validate_xmfa_coverage_components)
 from test_xmfa_coordinates import toy, concat_case, original, cell
 from test_xmfa_sources import native_document, supplied, bind, BASE
@@ -361,8 +361,8 @@ def test_saved_recalculation_changes_only_explicit_parameters_with_io_and_parser
         for target, name in ((builtins, 'open'), (Path, 'open'), (Path, 'read_bytes'),
                              (socket, 'socket'), (subprocess, 'Popen')):
             locked.setattr(target, name, forbidden)
-        locked.setattr('gene_annotation_episode.xmfa_formats.parse_mauve_xmfa', forbidden)
-        locked.setattr('gene_annotation_episode.xmfa_sources.bind_xmfa_sources', forbidden)
+        locked.setattr('gene_annotation_episode.episodic_workflow.root.library.xmfa_formats.parse_mauve_xmfa', forbidden)
+        locked.setattr('gene_annotation_episode.episodic_workflow.root.library.xmfa_sources.bind_xmfa_sources', forbidden)
         assert alignment(saved_doc, saved_selection, pairs=((1, 3),)) == outputs[0]
         for expected in outputs[1:]:
             assert coverage(saved_doc, saved_binding, saved_selection, expected['parameters']['basis']) == expected

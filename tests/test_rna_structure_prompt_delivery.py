@@ -5,9 +5,9 @@ import json
 
 import pytest
 
-from gene_annotation_episode.decision_context import INSTRUCTIONS, state_frame
-from gene_annotation_episode.rna_structure_presentation import render_rna_structure_groups
-from gene_annotation_episode.rna_structure_result_views import FAMILY_SOURCES, REFERENCE_SOURCE, SAVED_SOURCE
+from gene_annotation_episode.episodic_workflow.root.decision_context import INSTRUCTIONS, state_frame
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_presentation import render_rna_structure_groups
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import FAMILY_SOURCES, REFERENCE_SOURCE, SAVED_SOURCE
 from gene_annotation_episode.scientific_process_prompt import text_instructions
 from test_rna_structure_results_prompt import recorded_state, instructions as results_instructions
 from test_scientific_process_prompt_delivery import ScientificWire, OUTPUT_SCHEMA, snapshot

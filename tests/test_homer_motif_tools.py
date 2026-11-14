@@ -12,11 +12,11 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode import homer_motif_tools as host
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.homer_motif_result_contracts import homer_motif_return
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.tools import ToolRegistry
 from gene_annotation_episode import native_lifecycle
 from gene_annotation_episode.molecular_measurement_tools import (MolecularOperationUnpublished,

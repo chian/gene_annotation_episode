@@ -13,7 +13,7 @@ from gene_annotation_episode.workflow_budget import active_budget,ENV,SLICE,UNIT
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.native_lifecycle import prepare_job,start_prepared,wait_job,_properties
 from gene_annotation_episode.acquisition import AcquisitionError
-from gene_annotation_episode.providers import ModelConnection,_SessionConnection,ModelCallError,load_config
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection,_SessionConnection,ModelCallError,load_config
 
 
 ROOT=Path(__file__).resolve().parents[1]

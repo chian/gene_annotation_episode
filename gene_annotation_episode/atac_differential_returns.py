@@ -10,12 +10,12 @@ from copy import deepcopy
 import json
 import re
 
-from .communication import plain, validate_closed_schema, validate_form
-from .episode_receipts import (
+from .episodic_workflow.root.communication import plain, validate_closed_schema, validate_form
+from .episodic_workflow.root.episode_receipts import (
     EpisodeReceipts, RECEIVED_REPORT_PREFIX_VERSION, _validate_report_prefix,
 )
-from .episode_return_records import EpisodeReturnRecords
-from .episode_contract_information import expand_fact_form, validate_saved_fact_form
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_contract_information import expand_fact_form, validate_saved_fact_form
 from .execution_contracts import canonical, digest
 from .atac_differential_return_views import (
     FACT_SOURCES, SAVED_SOURCE, requested_atac_sources,
@@ -104,8 +104,8 @@ class AtacDifferentialReturns(EpisodeReturnRecords):
         self._require(row is not None and row["purpose"] == "decision", "original_contract_information_required")
         # This existing validator only checks supplied original records. It
         # performs no discovery, catalog refresh, construction or model call.
-        from .runtime import Workflow
-        from .episode_journal import WorkflowError
+        from .episodic_workflow.root.runtime import Workflow
+        from .episodic_workflow.root.episode_journal import WorkflowError
         try:
             record = Workflow.validate_contract_information(None, json.loads(row["request"]))
         except WorkflowError as error:

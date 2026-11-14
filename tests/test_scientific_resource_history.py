@@ -4,7 +4,7 @@ import gzip
 import json
 from pathlib import Path
 
-from gene_annotation_episode.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 from gene_annotation_episode.scientific_process_prompt import render_episode_steering
 
 

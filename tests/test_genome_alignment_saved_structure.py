@@ -14,13 +14,13 @@ import textwrap
 
 import pytest
 
-from gene_annotation_episode import mauve_v4_calculation_contracts as v4
-from gene_annotation_episode import mauve_backbone_contracts as side
-from gene_annotation_episode import xmfa_calculation_contracts as xmfa
-from gene_annotation_episode import bvbrc_genome_alignment_calculation_contracts as provider
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_projection as projection
-from gene_annotation_episode.bvbrc_genome_alignment_sheet import validate_genome_alignment_sheet
-from gene_annotation_episode.bvbrc_genome_alignment_calculators import (
+from gene_annotation_episode.episodic_workflow.root.library import mauve_v4_calculation_contracts as v4
+from gene_annotation_episode.episodic_workflow.root.library import mauve_backbone_contracts as side
+from gene_annotation_episode.episodic_workflow.root.library import xmfa_calculation_contracts as xmfa
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_calculation_contracts as provider
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_projection as projection
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_sheet import validate_genome_alignment_sheet
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_calculators import (
     calculate_genome_alignment_components, recalculate_genome_alignment_sheet)
 from gene_annotation_episode.state import Store
 from test_bvbrc_genome_alignment_sheet import fixture_sheet, fixture_data, all_requests, plan
@@ -270,7 +270,7 @@ def test_missing_duplicate_requests_and_explicit_recalculation_keep_original_his
     missing = deepcopy(requests[3]); missing.update(request_id='missing-first', document_slot_id='missing')
     requests.insert(0, missing)
     requests.append(deepcopy(requests[4]) | {'request_id': 'duplicate-science-distinct-request'})
-    from gene_annotation_episode.bvbrc_genome_alignment_sheet import build_genome_alignment_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_sheet import build_genome_alignment_sheet
     components = calculate_genome_alignment_components(data, calculation_plan=plan(requests))
     sheet = build_genome_alignment_sheet(data=data, components=components); before = deepcopy(sheet)
     with monkeypatch.context() as barrier:

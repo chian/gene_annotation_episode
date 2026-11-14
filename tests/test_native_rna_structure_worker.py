@@ -5,9 +5,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import native_rna_structure_worker as worker
+from gene_annotation_episode.episodic_workflow.root.library import native_rna_structure_worker as worker
 from gene_annotation_episode.rna_structure_native import parse_rna_native_record, populate_rna_feature_sheet
-from gene_annotation_episode.rna_structure_calculations import calculate_rna_feature_components
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_calculations import calculate_rna_feature_components
 from test_native_rna_structure_contracts import model, parameters, rna_input, software
 
 

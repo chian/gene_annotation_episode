@@ -6,18 +6,18 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import infernal_search_grader
+from gene_annotation_episode.episodic_workflow.root.library import infernal_search_grader
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.infernal_search_contracts import SHEET_SCHEMA, SCORE_SCHEMA
-from gene_annotation_episode.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS, rfam_digest
-from gene_annotation_episode.rfam_batch_grader import calculate_rfam_batch_components
-from gene_annotation_episode.rfam_batch_report_grader import calculate_rfam_batch_report_components
-from gene_annotation_episode.rfam_batch_table_grader import calculate_rfam_batch_table_components
-from gene_annotation_episode.rfam_batch_infernal import (
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_contracts import SHEET_SCHEMA, SCORE_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS, rfam_digest
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_grader import calculate_rfam_batch_components
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_grader import calculate_rfam_batch_report_components
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table_grader import calculate_rfam_batch_table_components
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_infernal import (
     HIT_ALIASES, POPULATION_ALIASES, project_rfam_infernal_result, upgrade_saved_rfam_search_sheet,
     select_rfam_common_sheet,
 )
-from gene_annotation_episode.rfam_batch_inputs import populate_rfam_batch_json_sheet
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs import populate_rfam_batch_json_sheet
 from test_rfam_batch_inputs import EXAMPLES, identity, capture, native_example, parse as parse_json
 from test_rfam_batch_grader import alignment_bundle
 from test_rfam_batch_report import actual_case, one_query, synthetic, parse as parse_report
@@ -204,9 +204,9 @@ def test_saved_recalculation_projection_copy_aliases_without_parser_or_io(monkey
     monkeypatch.setattr(socket, "socket", forbidden)
     monkeypatch.setattr(subprocess, "Popen", forbidden)
     monkeypatch.setattr("builtins.open", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_inputs.populate_rfam_batch_json_sheet", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_report.populate_rfam_batch_report_sheet", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_table.populate_rfam_batch_tblout_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs.populate_rfam_batch_json_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report.populate_rfam_batch_report_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table.populate_rfam_batch_tblout_sheet", forbidden)
     assert infernal_search_grader.calculate_infernal_search_scores(copied) == expected
     monkeypatch.setattr(infernal_search_grader, "calculate_infernal_search_scores", forbidden)
     for family, metrics in (("hit", ["native_score_bits", "query_span_nt", "model_coverage_fraction"]),
@@ -236,7 +236,7 @@ def test_saved_legacy_conversion_is_explicit_pure_and_does_not_rewrite_old_cells
     monkeypatch.setattr("builtins.open", forbidden)
     monkeypatch.setattr(socket, "socket", forbidden)
     monkeypatch.setattr(subprocess, "Popen", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_inputs.populate_rfam_batch_json_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs.populate_rfam_batch_json_sheet", forbidden)
     converted = upgrade_saved_rfam_search_sheet(old, representation=representation)
     assert converted["lineage"] == dict(source_sheet_schema=legacy_schema, source_sheet_digest=rfam_digest(old))
     assert converted["artifacts"][0]["source_descriptor"]["byte_hash_verified"] is False

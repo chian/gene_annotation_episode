@@ -11,8 +11,8 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import runtime
-from gene_annotation_episode.decision_context import (
+from gene_annotation_episode.episodic_workflow.root import runtime
+from gene_annotation_episode.episodic_workflow.root.decision_context import (
     INSTRUCTIONS, apply_state_frame, model_snapshot, state_frame,
 )
 from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt

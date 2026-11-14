@@ -23,13 +23,13 @@ from gene_annotation_episode.atac_differential_return_views import (
 )
 from gene_annotation_episode.atac_differential_result_contracts import validate_atac_result_record
 from gene_annotation_episode.atac_differential_returns import AtacDifferentialReturns
-from gene_annotation_episode.communication import form_with_facts, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.native_file_capture import _metadata, retained_native_file
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 
@@ -885,10 +885,10 @@ def test_existing_scientific_and_process_revision_edges_remain_usable(f, kind):
 
 def compact_form_frame(f, parent, child, *, index, schema, selection):
     """Authored decision frame validated by the real frozen-contract reader."""
-    from gene_annotation_episode.composition_information import (
+    from gene_annotation_episode.episodic_workflow.root.composition_information import (
         CONTRACT_INFORMATION_PROFILE, CONTRACT_INFORMATION_OPERATIONS)
     from gene_annotation_episode.domain import obj
-    from gene_annotation_episode.episode_contract_information import expand_fact_form
+    from gene_annotation_episode.episodic_workflow.root.episode_contract_information import expand_fact_form
     compact = deepcopy(schema)
     for name, node in compact['properties'].items():
         compact['properties'][name] = {'$ref': 'episode-fact:' + node['x-source']}

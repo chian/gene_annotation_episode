@@ -7,8 +7,8 @@ import urllib.request
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS, rfam_digest
-from gene_annotation_episode.rfam_batch_grader import calculate_rfam_batch_components
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS, rfam_digest
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_grader import calculate_rfam_batch_components
 from test_rfam_batch_inputs import (native_example, parse, model_metadata, identity, capture,
     EXAMPLES, live_single_operands)
 
@@ -154,7 +154,7 @@ def test_unknown_model_metadata_only_suppresses_dependent_cells():
 
 
 def alignment_bundle(content, operand, acquired):
-    from gene_annotation_episode.rfam_batch_alignment import parse_rfam_alignment_display
+    from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_alignment import parse_rfam_alignment_display
     native = json.loads(content)
     rows = []
     for family, hits in native["hits"].items():
@@ -171,7 +171,7 @@ def alignment_bundle(content, operand, acquired):
 
 @pytest.mark.parametrize("live", [False, True])
 def test_separate_actual_alignment_reader_composes_into_sheet_and_saved_calculator(live):
-    from gene_annotation_episode.rfam_batch_inputs import populate_rfam_batch_json_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs import populate_rfam_batch_json_sheet
     if live:
         content, operand, acquired = live_single_operands()
     else:
@@ -194,7 +194,7 @@ def test_separate_actual_alignment_reader_composes_into_sheet_and_saved_calculat
 @pytest.mark.parametrize("mutation", ["artifact", "query", "family", "strand", "pointer", "duplicate", "foreign",
     "duplicate_query_position", "wrong_posterior_bin"])
 def test_alignment_component_misbinding_only_disables_alignment(mutation):
-    from gene_annotation_episode.rfam_batch_inputs import populate_rfam_batch_json_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs import populate_rfam_batch_json_sheet
     content, operand, acquired = live_single_operands()
     bundle = alignment_bundle(content, operand, acquired)
     row = bundle["rows"][0]
@@ -223,7 +223,7 @@ def test_alignment_component_misbinding_only_disables_alignment(mutation):
 
 
 def test_missing_optional_pp_preserves_supplied_geometry_and_native_scores():
-    from gene_annotation_episode.rfam_batch_inputs import populate_rfam_batch_json_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs import populate_rfam_batch_json_sheet
     native = native_example()
     del native["hits"]["5S_rRNA"][0]["alignment"]["pp"]
     content = json.dumps(native).encode()

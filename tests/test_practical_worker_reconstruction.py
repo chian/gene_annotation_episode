@@ -11,15 +11,15 @@ import pytest
 
 from gene_annotation_episode import independent_execution as reconstruction
 from gene_annotation_episode.episode_reports import report_sources
-from gene_annotation_episode.numerical import NumericBand
-from gene_annotation_episode.practical_execution_records import digest
-from gene_annotation_episode.practical_receipt_information import PracticalReceiptInformation
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import digest
+from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.practical_service_setup import PracticalServiceFactory
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.providers import ModelConnection
-from gene_annotation_episode.runtime import TypedReportContract, assemble_workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, assemble_workflow, run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 from test_practical_reconstruction import BeforeModel
 from test_practical_runtime import Choices, make_assignment, selected
 
@@ -116,7 +116,7 @@ def test_saved_c1_factory_executes_original_practical_commission_once(tmp_path, 
         async def __aexit__(self, *args):
             self.exited = True
 
-    monkeypatch.setattr('gene_annotation_episode.providers.ModelConnection', FixtureModelConnection)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.providers.ModelConnection', FixtureModelConnection)
     async def execute_worker_factory():
         async with reconstruction.open_commission(commission) as opened:
             episode, context = opened['episode'], opened['context']

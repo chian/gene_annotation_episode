@@ -10,15 +10,15 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS, rfam_digest
-from gene_annotation_episode.rfam_batch_report import populate_rfam_batch_report_sheet
-from gene_annotation_episode.rfam_batch_report_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS, rfam_digest
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report import populate_rfam_batch_report_sheet
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_contracts import (
     RFAM_REPORT_METRICS, REPORT_METRIC_DEFINITIONS,
 )
-from gene_annotation_episode.infernal_search_contracts import validate_infernal_search_sheet as validate_rfam_report_sheet, validate_infernal_search_scores as validate_rfam_report_calculation
-from gene_annotation_episode.rfam_batch_infernal import HIT_ALIASES
-from gene_annotation_episode.rfam_batch_report_grader import calculate_rfam_batch_report_components
-from gene_annotation_episode.rfam_batch_report_views import project_rfam_batch_report_result
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_contracts import validate_infernal_search_sheet as validate_rfam_report_sheet, validate_infernal_search_scores as validate_rfam_report_calculation
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_infernal import HIT_ALIASES
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_grader import calculate_rfam_batch_report_components
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_views import project_rfam_batch_report_result
 from test_rfam_batch_table import native_case, report_case
 
 
@@ -128,10 +128,10 @@ def test_saved_sheet_recalculation_and_projection_forbid_acquisition_or_parser(m
     monkeypatch.setattr(socket, "socket", forbidden)
     monkeypatch.setattr(subprocess, "Popen", forbidden)
     monkeypatch.setattr("builtins.open", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_report.populate_rfam_batch_report_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report.populate_rfam_batch_report_sheet", forbidden)
     actual = calculate(sheet)
     assert actual == expected
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_report_grader.calculate_rfam_batch_report_components", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_grader.calculate_rfam_batch_report_components", forbidden)
     view = project(sheet, actual, rows={"record_keys": [actual["hits"][2]["hit_id"]]}, metrics=["query_span_nt"])
     assert view["selected_row_count"] == 1 and view["rows"][0]["strand"] == "-"
 
@@ -426,7 +426,7 @@ def test_projection_requires_exact_supplied_artifact_digests():
 
 
 def test_legacy_alignment_outputs_exactly_match_the_preexisting_retained_objects():
-    from gene_annotation_episode.rfam_batch_alignment import parse_rfam_alignment_display
+    from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_alignment import parse_rfam_alignment_display
     root = Path(__file__).resolve().parents[1]
     evidence = root / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/alignment"
     for name in ("native-rfam_example_original", "native-rfam_example_repeat", "native-rfam_example_reverse_complement",

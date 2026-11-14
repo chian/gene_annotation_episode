@@ -15,11 +15,11 @@ import pytest
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.native_flux_balance_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
     ATTEMPT_DIRECTORY_NAME, OWNER_FILENAME, POLICY, RUN_PLAN_FILENAME, STARTED_FILENAME,
     flux_balance_driver_argv, flux_balance_environment,
 )
-from gene_annotation_episode.native_flux_balance_local import (
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_local import (
     INPUT_BINDING_FILENAME, local_flux_balance_plan, prepare_local_flux_balance,
 )
 from gene_annotation_episode.practical_execution_state import PracticalState

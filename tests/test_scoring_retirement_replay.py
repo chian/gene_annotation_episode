@@ -9,7 +9,7 @@ import pytest
 from gene_annotation_episode.independent_execution import make_runtime_binding, _saved_episode_factories
 from gene_annotation_episode.case_execution import _load_policy
 from gene_annotation_episode.credit import AnnotationScoringUnavailable
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from method_loop.durable import DurableExecutionError
@@ -145,7 +145,7 @@ def test_explicit_numeric_annotation_channel_preserves_progress_and_closed_histo
 @pytest.mark.parametrize('retrieval', [None,
     {'version': 'scientific_tool_retrieval_v1', 'mode': 'literal_test_v1'}])
 def test_current_tool_information_descriptor_reopens_only_with_matching_identity(tmp_path, retrieval):
-    from gene_annotation_episode.episode_composition import reopen_scientific_binding
+    from gene_annotation_episode.episodic_workflow.root.episode_composition import reopen_scientific_binding
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
     from test_scientific_process_library import independent_source
 

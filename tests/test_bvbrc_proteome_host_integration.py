@@ -11,13 +11,13 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_bundle_adapter as adapter
-from gene_annotation_episode.bvbrc_proteome_returns import FACT_SOURCES
-from gene_annotation_episode.bvbrc_proteome_fact_contracts import encode_reference
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns import FACT_SOURCES
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_fact_contracts import encode_reference
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import digest
 from gene_annotation_episode.practical_execution_state import _read
-from gene_annotation_episode.bvbrc_proteome_calculators import calculate_native_components
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_calculators import calculate_native_components
 from gene_annotation_episode.state import Store
 from bvbrc_proteome_host_fixture import ProteomeDriver, raw_native, MEAN
 

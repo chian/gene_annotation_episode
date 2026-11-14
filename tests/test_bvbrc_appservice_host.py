@@ -9,8 +9,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.api_service_execution import APIServiceExecution
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.practical_execution_state import _read
 from gene_annotation_episode.state import Store

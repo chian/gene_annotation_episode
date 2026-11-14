@@ -17,13 +17,13 @@ import jsonschema
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.sequence_masking_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.sequence_masking_contracts import (
     PARAMETERS, sequence_masking_operation_schema, validate_sequence_masking_record)
-from gene_annotation_episode.sequence_masking_inputs import (
+from gene_annotation_episode.episodic_workflow.root.library.sequence_masking_inputs import (
     parse_masking_input_fasta, preflight_masking_input_fasta, parse_sequence_masking_output,
     populate_sequence_masking_sheet)
-from gene_annotation_episode.sequence_masking_calculations import calculate_sequence_masking_components
-from gene_annotation_episode.windowmasker_statistics import parse_windowmasker_statistics
+from gene_annotation_episode.episodic_workflow.root.library.sequence_masking_calculations import calculate_sequence_masking_components
+from gene_annotation_episode.episodic_workflow.root.library.windowmasker_statistics import parse_windowmasker_statistics
 
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/masking_native"
@@ -148,7 +148,7 @@ def test_saved_native_dust_hard_ambiguity_preserves_exact_changed_count():
 
 
 def test_synthetic_overlap_duplicate_intervals_reuse_exact_shared_helpers():
-    from gene_annotation_episode import genomic_overlap_calculations
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_calculations
     from gene_annotation_episode.episodic_workflow.root.a101 import hmmer_search_grader
     with patch.object(hmmer_search_grader, "_union", wraps=hmmer_search_grader._union) as union, \
          patch.object(genomic_overlap_calculations, "_ratio", wraps=genomic_overlap_calculations._ratio) as ratio:

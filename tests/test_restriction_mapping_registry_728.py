@@ -9,8 +9,8 @@ import pytest
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.domain import ContractError, canonical
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.restriction_mapping_jobs import RestrictionMappingJobs
 from gene_annotation_episode.restriction_mapping_publication import read_published_restriction_result
 from gene_annotation_episode.restriction_mapping_returns import restriction_mapping_fact_sources

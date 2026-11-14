@@ -7,12 +7,12 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.bvbrc_proteome_directional_numerical_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_numerical_contracts import (
     DirectionalNumericalContractError, canonical_sheet_sha256,
     directional_numerical_schema, validate_directional_numerical,
 )
-from gene_annotation_episode.bvbrc_proteome_directional_calculators import calculate_directional_components
-from gene_annotation_episode.bvbrc_proteome_directional_geometry import calculate_protein_block
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_calculators import calculate_directional_components
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_geometry import calculate_protein_block
 from test_bvbrc_proteome_directional_sheet import (
     PARAMETERS, native_sheet, synthetic_sheet, parse_bytes, native_bytes,
 )
@@ -210,7 +210,7 @@ def test_saved_sheet_recalculation_validation_no_parser_network_process_or_files
     monkeypatch.setattr(Path,'open',forbidden)
     monkeypatch.setattr('socket.socket',forbidden)
     monkeypatch.setattr('subprocess.Popen',forbidden)
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_proteome_directional.parse_genome_comparison_directional_report',forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional.parse_genome_comparison_directional_report',forbidden)
     a = computed(saved)
     b = computed(saved,{**PARAMETERS,'ratio_decimal_places':3,'amino_acid_alphabet':'standard20_plus_uo'})
     assert a['sheet_sha256'] == b['sheet_sha256'] == canonical_sheet_sha256(sheet)

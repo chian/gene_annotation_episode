@@ -8,7 +8,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.runtime import WorkflowError
+from gene_annotation_episode.episodic_workflow.root.runtime import WorkflowError
 from test_runtime import (ScriptedProvider, commission, fixture_credit, obj, reason,
                           run, setup)
 
@@ -154,7 +154,7 @@ def test_nested_scientific_children_use_their_own_commissions_and_parent_project
 
 
 def test_local_projector_without_details_does_not_expose_root_detail_reader(tmp_path):
-    from gene_annotation_episode.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
     store, tools = setup(tmp_path)
     def root(*args):
         return fixture_credit(*args)
@@ -183,7 +183,7 @@ def test_invalid_job_role_does_not_break_history_feedback(tmp_path):
 
 
 def test_interruption_after_child_outcome_before_parent_projection_does_not_repeat_child(tmp_path, monkeypatch):
-    from gene_annotation_episode.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
     store, tools = setup(tmp_path)
     seed(store)
     original = Workflow.source_credit_view

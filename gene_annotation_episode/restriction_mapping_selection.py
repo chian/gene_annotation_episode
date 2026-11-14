@@ -5,7 +5,7 @@ reader remain the authorities for values, coordinates and missingness.
 """
 from copy import deepcopy
 
-from .communication import ReportBoundaryError
+from .episodic_workflow.root.communication import ReportBoundaryError
 from .restriction_mapping_contracts import restriction_canonical
 from .restriction_mapping_returns import (
     requested_restriction_projections, restriction_mapping_fact_sources,

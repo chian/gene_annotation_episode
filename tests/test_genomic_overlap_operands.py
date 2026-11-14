@@ -15,13 +15,13 @@ from types import SimpleNamespace
 import pytest
 from method_loop.identities import EpisodeRef
 
-from gene_annotation_episode import genomic_overlap_operands as operands
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_operands as operands
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.native_genomic_overlap_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_contracts import (
     genomic_overlap_output_files, requested_job_from_genomic_overlap,
 )
 from gene_annotation_episode.state import Store
@@ -68,7 +68,7 @@ def assignment(store, specs):
     # These fixture declarations are never native availability evidence.
     software = {"python_executable": "/fixture/python", "python_sha256": "1" * 64,
         "python_version": "3.12.3", "module_root": "/fixture/source",
-        "driver_module": "gene_annotation_episode.native_genomic_overlap_driver",
+        "driver_module": "gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_driver",
         "implementation_files": [{"module": "gene_annotation_episode." + name,
             "sha256": "2" * 64} for name in modules],
         "bedtools_executable": "/fixture/bedtools", "bedtools_sha256": "3" * 64,
@@ -374,8 +374,10 @@ def test_programming_and_callback_errors_are_not_hidden(f, monkeypatch):
 
 @pytest.mark.parametrize("physical_state", ["present", "missing", "changed"])
 def test_host_reads_only_metadata_creates_no_state_and_leaves_physical_checks_to_driver(f, monkeypatch, physical_state):
-    from gene_annotation_episode import materials, native_file_capture, genomic_overlap_inputs
-    from gene_annotation_episode import native_genomic_overlap_driver, native_lifecycle, local_jobs
+    from gene_annotation_episode import materials, native_file_capture
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_inputs
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_driver
+    from gene_annotation_episode import native_lifecycle, local_jobs
     import builtins
     import io
     import os

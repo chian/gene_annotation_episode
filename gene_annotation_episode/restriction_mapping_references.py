@@ -9,9 +9,9 @@ import json
 import re
 
 from .boundary_validation import parse_json_object
-from .communication import interpretation_schema, plain, validate_form
-from .episode_receipts import EpisodeReceipts, _validate_report_prefix
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.communication import interpretation_schema, plain, validate_form
+from .episodic_workflow.root.episode_receipts import EpisodeReceipts, _validate_report_prefix
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .execution_contracts import digest
 from .restriction_mapping_action_records import RestrictionMappingActionRecords
 from .restriction_mapping_returns import (
@@ -124,7 +124,7 @@ class RestrictionMappingReferences(EpisodeReturnRecords):
         schema = self._json(selected.get("schema_json"), "original_commission_invalid")
         declaration = plain(child.request).get("message", {}).get("report_contract_declaration")
         if declaration is not None:
-            from .episode_contract_information import validate_saved_fact_form
+            from .episodic_workflow.root.episode_contract_information import validate_saved_fact_form
             try:
                 schema = validate_saved_fact_form(child_role=child.role,
                     submitted_schema_json=selected["schema_json"],

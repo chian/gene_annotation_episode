@@ -5,11 +5,11 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_genome_alignment_sheet import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_sheet import (
     build_genome_alignment_data, validate_genome_alignment_data,
     build_genome_alignment_sheet, validate_genome_alignment_sheet)
-from gene_annotation_episode.bvbrc_genome_alignment_calculators import calculate_genome_alignment_components
-from gene_annotation_episode.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_inputs
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_calculators import calculate_genome_alignment_components
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_inputs
 
 ROOT = Path(__file__).parents[1]
 VERIFY = ROOT / 'verification'
@@ -170,7 +170,7 @@ def test_saved_cross_record_corruption_rejects(field):
 
 
 def test_all_nested_requirements_retained_and_conflicting_ids_reject():
-    from gene_annotation_episode.bvbrc_alignment_values import requirement, diagnostic
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import requirement, diagnostic
     data = fixture_data(with_inputs=False, with_associations=False)
     r = requirement('unselected-gap', kind='input_bytes', role='genome_alignment_staged_input',
         reason_code='bvbrc_genome_alignment_staged_file_missing')

@@ -26,10 +26,10 @@ from urllib.parse import unquote, urlencode, urljoin, urlsplit
 import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import identity
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from gene_annotation_episode import geo_tools

@@ -6,9 +6,9 @@ import math
 
 import pytest
 
-from gene_annotation_episode.bvbrc_comparative_systems_native import parse_comparative_systems_document
-from gene_annotation_episode.bvbrc_comparative_systems_sheet import build_comparative_systems_sheet
-from gene_annotation_episode.bvbrc_comparative_systems_sheet_contracts import validate_sheet
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_native import parse_comparative_systems_document
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_sheet import build_comparative_systems_sheet
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_sheet_contracts import validate_sheet
 from test_bvbrc_comparative_systems_native import BUILD_INPUTS, FIXTURES, artifact
 
 
@@ -340,7 +340,7 @@ def test_same_bytes_at_distinct_sources_are_dependent_representations():
 ])
 def test_saved_sheet_tampering_rejected_without_reparsing(mutation, code, monkeypatch):
     value = sheet("families_sheet")
-    monkeypatch.setattr("gene_annotation_episode.bvbrc_comparative_systems_native.parse_comparative_systems_document",
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_native.parse_comparative_systems_document",
                         lambda *a, **k: pytest.fail("saved validation parsed again"))
     mutation(value)
     with pytest.raises(ValueError, match=code):

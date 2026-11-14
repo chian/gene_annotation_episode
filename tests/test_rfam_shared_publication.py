@@ -13,10 +13,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.api_service_execution import APIServiceExecution
-from gene_annotation_episode.rfam_batch_contracts import rfam_digest
-from gene_annotation_episode.rfam_batch_infernal import HIT_ALIASES
-from gene_annotation_episode.rfam_batch_views import project_rfam_batch_result
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import rfam_digest
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_infernal import HIT_ALIASES
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_views import project_rfam_batch_result
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_rfam_batch_returns import Harness, forbid_read_work, schema_for, selector
@@ -31,7 +31,7 @@ def no_external_work(monkeypatch):
     def forbidden(*args, **kwargs):
         raise AssertionError("Shared Rfam verification attempted external or model work")
     for path in ("socket.create_connection", "subprocess.Popen",
-                 "gene_annotation_episode.runtime.DecisionSource.call"):
+                 "gene_annotation_episode.episodic_workflow.root.runtime.DecisionSource.call"):
         monkeypatch.setattr(path, forbidden)
 
 
@@ -46,7 +46,7 @@ def _saved(h, outcome):
 
 @pytest.mark.parametrize("representation", ["json", "tblout", "out"])
 def test_selected_child_publication_and_both_returns_use_one_common_calculation(tmp_path, monkeypatch, representation):
-    from gene_annotation_episode import infernal_search_grader
+    from gene_annotation_episode.episodic_workflow.root.library import infernal_search_grader
     calls = []
     original = infernal_search_grader.calculate_infernal_search_scores
     def tracked(sheet, *, parameters=None):

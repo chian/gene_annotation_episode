@@ -6,10 +6,10 @@ import json
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.execution_progress import describe_execution_target
-from gene_annotation_episode.rna_structure_comparison_contracts import RNA_COMPARISON_SELECTOR_SCHEMA
-from gene_annotation_episode.rna_structure_result_views import RESULT_SELECTOR_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.library.execution_progress import describe_execution_target
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_contracts import RNA_COMPARISON_SELECTOR_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import RESULT_SELECTOR_SCHEMA
 from test_rna_comparison_workflow import F, forbidden, pair_case
 
 
@@ -30,7 +30,7 @@ def test_retained_descriptor_is_exact_and_never_observes_or_calls_old_selector(p
     case = pair_case
     reader = case.owner.job_progress_provider.targets
     monkeypatch.setattr(reader, 'observe_target', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.rna_structure_result_views.validate_rna_structure_result_selector', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views.validate_rna_structure_result_selector', forbidden)
     actual = reader.describe_target(case.seeds[1].handoff, case.scope, selector=case.selection)
     assert set(actual) == {'resource_kind', 'service_or_program', 'operation', 'mode', 'output_format',
         'called_operation', 'routing_anchor', 'result_selector_schema', 'result_selection', 'status_operations',

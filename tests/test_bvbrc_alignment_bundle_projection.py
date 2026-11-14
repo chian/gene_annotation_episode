@@ -14,8 +14,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_alignment_bundle_contracts as c
-from gene_annotation_episode import bvbrc_alignment_bundle_projection as p
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_alignment_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_alignment_bundle_projection as p
 from test_bvbrc_alignment_bundle_resolution import (
     basic_fixture, msa_native_fixture, meta_fixture, meta_native_fixture,
     xmfa_native_fixture, cross_family_fixture, slot,
@@ -423,11 +423,11 @@ def test_pure_saved_validation_with_io_parsers_and_calculators_blocked(monkeypat
     fields={'coordinates':selection('xmfa_coordinates',aid,'xmfa_column_coordinates',cells=[{'block_index':0,'record_index':0,'column_0based':0}]),
         'coverage':selection('xmfa_coverage',aid,'represented',member_numbers=[1],include_intervals=True,include_original_coverage=True)}
     form=c.requested_form_schema(fields,provider='msa');facts=p.project_requested_facts(**args,requested_form=form)
-    import gene_annotation_episode.bvbrc_msa_grader as grader
-    import gene_annotation_episode.bvbrc_msa_formats as readers
-    import gene_annotation_episode.xmfa_calculators as math
-    import gene_annotation_episode.xmfa_coordinates as coordinates
-    import gene_annotation_episode.bvbrc_msa_provider_contracts as validators
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_grader as grader
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_formats as readers
+    import gene_annotation_episode.episodic_workflow.root.library.xmfa_calculators as math
+    import gene_annotation_episode.episodic_workflow.root.library.xmfa_coordinates as coordinates
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_provider_contracts as validators
     def forbidden(*args,**kwargs):raise AssertionError('saved projection attempted I/O, parsing or calculation')
     for obj,name in [(builtins,'open'),(Path,'open'),(Path,'read_bytes'),(Path,'read_text'),(socket,'socket'),(subprocess,'run'),(subprocess,'Popen'),(grader,'calculate_msa'),(readers,'parse_msa_frequency_table'),(math,'xmfa_alignment_components'),(math,'xmfa_interval_coverage'),(coordinates,'xmfa_column_coordinates'),(coordinates,'xmfa_source_positions'),(validators,'validate_msa_components')]:monkeypatch.setattr(obj,name,forbidden)
     assert p.project_requested_facts(**args,requested_form=form)==facts

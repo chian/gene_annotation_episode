@@ -14,11 +14,11 @@ from unittest.mock import patch
 import pytest
 
 from gene_annotation_episode import phylogeny_formats as formats
-from gene_annotation_episode import phylogeny_raxml_inputs as raxml
-from gene_annotation_episode import bvbrc_codon_tree_native as codon_native
-from gene_annotation_episode import bvbrc_phylogeny_common_inputs as inputs
-from gene_annotation_episode import bvbrc_phylogeny_common_contracts as contracts
-from gene_annotation_episode import bvbrc_phylogeny_common_grader as grader
+from gene_annotation_episode.episodic_workflow.root.library import phylogeny_raxml_inputs as raxml
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_native as codon_native
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_common_inputs as inputs
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_common_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phylogeny_common_grader as grader
 
 ROOT = Path(__file__).resolve().parents[1]
 NATIVE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries'

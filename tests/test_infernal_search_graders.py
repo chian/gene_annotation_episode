@@ -7,8 +7,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import infernal_search_inputs as inputs
-from gene_annotation_episode.infernal_search_grader import calculate_infernal_search_scores
+from gene_annotation_episode.episodic_workflow.root.library import infernal_search_inputs as inputs
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader import calculate_infernal_search_scores
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_search_graders"
 

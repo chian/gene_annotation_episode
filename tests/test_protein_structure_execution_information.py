@@ -6,10 +6,10 @@ import json
 
 import pytest
 
-from gene_annotation_episode.execution_progress import ExecutionTargetReader
-from gene_annotation_episode.native_protein_structure_contracts import NATIVE_FORMATS, output_files
-from gene_annotation_episode.protein_structure_execution_information import describe_protein_structure_result
-from gene_annotation_episode.protein_structure_result_views import protein_structure_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionTargetReader
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import NATIVE_FORMATS, output_files
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_execution_information import describe_protein_structure_result
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views import protein_structure_fact_sources
 from test_protein_structure_selection import native, selector, saved
 
 
@@ -60,7 +60,7 @@ def test_saved_sheet_reports_explicit_calculation_and_no_fresh_producer_observat
     assert original["assignment"]["requested_job"]["native_protein_structure"]["request"] == request
     result = describe(original, selected)
     extractor = collect(result)
-    assert extractor["calculators"] == ["gene_annotation_episode.protein_structure_calculations.calculate_protein_structure_components"]
+    assert extractor["calculators"] == ["gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations.calculate_protein_structure_components"]
     assert extractor["calculator_parameters"]["distance_threshold_A"] == 7.5
     assert extractor["original_sheet_and_baseline_preserved"] is True
     assert extractor["new_producer_observation"] is False
@@ -104,8 +104,8 @@ def test_incompatible_information_request_is_rejected(change):
 
 
 def test_description_never_reads_scientific_bytes_observes_or_calculates(monkeypatch):
-    from gene_annotation_episode import protein_structure_calculations, protein_structure_sheet
-    from gene_annotation_episode import native_protein_structure_acquisition
+    from gene_annotation_episode.episodic_workflow.root.library import protein_structure_calculations, protein_structure_sheet
+    from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_acquisition
     from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
     original, selected = target(), selector()
     saved_selection, _ = saved()

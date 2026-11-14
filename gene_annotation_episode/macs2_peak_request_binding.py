@@ -9,14 +9,14 @@ import json
 import os
 from pathlib import Path
 
-from .bvbrc_appservice_custody import AppServiceCustody
-from .communication import plain
+from .episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustody
+from .episodic_workflow.root.communication import plain
 from .episode_bindings import BindingContext
 from .execution_contracts import canonical, checked, digest, obj
-from .genomic_overlap_result_receipts import immutable, read_control
+from .episodic_workflow.root.genomic_overlap_result_receipts import immutable, read_control
 from .native_file_capture import _metadata, capture_native_file, retained_native_file
-from .practical_execution_records import validate_assignment
-from .received_native_file_inputs import received_file_context
+from .episodic_workflow.root.practical_execution_records import validate_assignment
+from .episodic_workflow.root.received_native_file_inputs import received_file_context
 
 
 ASSIGNMENT_VERSION = 'macs2_peak_scientific_assignment_v1'
@@ -199,7 +199,7 @@ def practical_outcome_view(receipt):
 def match_practical_public_outcome(value, receipt, reference):
     value = deepcopy(plain(value))
     if 'pending_work_after_action' in value:
-        from .waiting import validate_pending
+        from .episodic_workflow.root.waiting import validate_pending
         validate_pending(value.pop('pending_work_after_action'))
     _require(canonical(value) == canonical(dict(status='completed', record_refs=[reference],
         changed_record_refs=[reference], result=practical_outcome_view(receipt))), 'public_outcome_conflict')
@@ -212,7 +212,7 @@ class Macs2PeakRequestBindings:
 
     def validate_practical_history(self, context, practical_context, practical):
         """Authenticate this MACS2 resource child's recorded peak job receipts."""
-        from .practical_receipt_information import PracticalReceiptInformation
+        from .episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
         _require(context.role == 'launch_local' and is_compact_assignment(plain(context.assignment)),
             'resource_context_required')
         control = read_request_binding(self.store, context.run_id, context.episode_id)

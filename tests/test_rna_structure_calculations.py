@@ -9,11 +9,11 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.rna_structure_calculations import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_calculations import (
     calculate_rna_topology_components, calculate_rna_pair_composition, calculate_rna_energy_components,
     calculate_rna_prediction_components, calculate_rna_feature_components,
 )
-from gene_annotation_episode.rna_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_contracts import (
     PAIR_TYPES, ROW_METRICS, validate_rna_components, validate_rna_sheet,
 )
 from gene_annotation_episode.rna_structure_native import (

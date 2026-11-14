@@ -17,7 +17,7 @@ import pytest
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode import api_bvbrc_minhash as service_module
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, canonical
 from gene_annotation_episode.episode_bindings import BindingContext
 from test_api_bvbrc_minhash import (

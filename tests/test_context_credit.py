@@ -215,7 +215,7 @@ def revision_payload(row):
 
 
 def test_current_allocation_corrections_and_stale_links_have_signed_credit(tmp_path):
-    from gene_annotation_episode.numerical import YieldController
+    from gene_annotation_episode.episodic_workflow.root.numerical import YieldController
     store, target, members, source, sample = library_fixture(tmp_path)
     with store:
         full = {'subject_refs': [target['id']]}

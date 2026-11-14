@@ -10,7 +10,7 @@ import json
 import pytest
 
 from gene_annotation_episode.bvbrc_appservice_contracts import ContractValidationError, validate_contract
-from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustodyError
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustodyError
 from test_bvbrc_appservice_custody import saved, selector, request
 from test_bvbrc_appservice_host import driver
 from test_bvbrc_appservice_inputs import output_target, download_args

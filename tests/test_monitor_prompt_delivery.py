@@ -4,9 +4,9 @@ import gzip
 import json
 from pathlib import Path
 
-from gene_annotation_episode.decision_context import state_frame
-from gene_annotation_episode.monitor_prompt import is_monitor_context, render_monitor_prompt
-from gene_annotation_episode.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.monitor_prompt import is_monitor_context, render_monitor_prompt
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 
 
 FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/hpc/a107-genomic05-monitor-context.json.gz'

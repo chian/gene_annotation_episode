@@ -3,10 +3,10 @@ from copy import deepcopy
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.rfam_batch_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import (
     RFAM_HIT_METRICS, RFAM_QUERY_STRAND_METRICS, query_strand_record_key,
     rfam_digest, validate_rfam_result_selector)
-from gene_annotation_episode.rfam_batch_views import project_rfam_batch_result
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_views import project_rfam_batch_result
 from test_rfam_batch_inputs import native_example, parse
 from test_rfam_batch_grader import calculate
 

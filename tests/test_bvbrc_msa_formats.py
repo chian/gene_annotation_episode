@@ -5,11 +5,11 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_alignment_values import document_id
-from gene_annotation_episode.bvbrc_msa_format_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import document_id
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_format_contracts import (
     frequency_header, validate_msa_frequency_table,
 )
-from gene_annotation_episode.bvbrc_msa_formats import parse_msa_frequency_table
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_formats import parse_msa_frequency_table
 
 
 NATIVE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_metacats_boundaries/native_examples'

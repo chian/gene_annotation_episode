@@ -9,8 +9,8 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.rfam_batch_alignment import parse_rfam_alignment_display
-from gene_annotation_episode.rfam_batch_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_alignment import parse_rfam_alignment_display
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import (
     RFAM_ALIGNMENT_COUNT_FIELDS, RFAM_ALIGNMENT_RESULT_FIELDS,
     validate_rfam_alignment_result,
 )

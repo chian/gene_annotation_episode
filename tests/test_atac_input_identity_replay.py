@@ -15,8 +15,8 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.state import Store
 from test_atac_differential_operands import f, context, make_assignment
 from test_atac_differential_execution_integration import selected

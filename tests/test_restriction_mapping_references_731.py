@@ -15,11 +15,11 @@ from types import SimpleNamespace
 import pytest
 from method_loop.identities import EpisodeRef
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.restriction_mapping_action_records import RestrictionMappingActionRecords
 from gene_annotation_episode.restriction_mapping_references import RestrictionMappingReferences
 from gene_annotation_episode.restriction_mapping_returns import restriction_mapping_fact_sources

@@ -8,7 +8,7 @@ from types import MappingProxyType
 
 import pytest
 
-from gene_annotation_episode.infernal_result_presentation import infernal_receiver_context
+from gene_annotation_episode.episodic_workflow.root.infernal_result_presentation import infernal_receiver_context
 
 
 NATIVE_VERSION = "native_infernal_observation_v1"

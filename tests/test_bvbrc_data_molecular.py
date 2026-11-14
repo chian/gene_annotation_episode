@@ -17,7 +17,7 @@ import urllib.request
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode.bvbrc_data_molecular import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_molecular import (
     MOLECULAR_SHEET_SCHEMA, SUPPLIED_METADATA_SCHEMA,
     extract_molecular_experiment_rows,
 )

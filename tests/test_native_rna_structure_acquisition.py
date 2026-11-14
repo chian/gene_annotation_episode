@@ -5,7 +5,7 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode.native_rna_structure_acquisition import capture_local_rna_structure_bundle, validate_capture
+from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_acquisition import capture_local_rna_structure_bundle, validate_capture
 from gene_annotation_episode.state import Store
 
 PACKET = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_results_358"
@@ -22,7 +22,7 @@ def test_full_capture_replays_saved_bytes_without_original_files(tmp_path, monke
         assert [row["role"] for row in capture["artifacts"]] == ["input", "native_result", "stdout", "stderr"]
         assert store.get_artifact(capture["artifacts"][1]["artifact_ref"]) == (f.attempt / "native-result.json").read_bytes()
         shutil.rmtree(f.native_root)
-        monkeypatch.setattr("gene_annotation_episode.native_rna_structure_local.local_rna_structure_plan",
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local.local_rna_structure_plan",
             lambda *a, **k: pytest.fail("reopened original reservation"))
         assert capture_local_rna_structure_bundle(store, target=f.target, directory=tmp_path / "capture") == capture
         F.retain("complete_capture", bundle=f.bundle, capture=capture)

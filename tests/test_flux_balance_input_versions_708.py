@@ -11,10 +11,10 @@ import os
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.execution_input_versions import validate_execution_input_versions
-from gene_annotation_episode.flux_balance_execution_inputs import FluxBalanceExecutionInputs
+from gene_annotation_episode.episodic_workflow.root.flux_balance_execution_inputs import FluxBalanceExecutionInputs
 from test_flux_balance_operands_694 import (
     selected as operands, artifact, source, version, with_prior,
 )

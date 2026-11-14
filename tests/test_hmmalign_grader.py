@@ -6,8 +6,8 @@ import subprocess
 
 import pytest
 
-import gene_annotation_episode.hmmalign_inputs as readers
-from gene_annotation_episode.hmmalign_grader import calculate_hmmalign_scores
+import gene_annotation_episode.episodic_workflow.root.library.hmmalign_inputs as readers
+from gene_annotation_episode.episodic_workflow.root.library.hmmalign_grader import calculate_hmmalign_scores
 
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/hmmalign_native"

@@ -5,10 +5,10 @@ from importlib import import_module
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.native_genomic_overlap_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_contracts import (
     genomic_overlap_execution_schema, requested_job_from_genomic_overlap, validate_genomic_overlap_bindings,
 )
-from gene_annotation_episode.native_genomic_overlap_tool_info import (
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_tool_info import (
     genomic_overlap_tool_contracts, genomic_overlap_tool_information,
 )
 

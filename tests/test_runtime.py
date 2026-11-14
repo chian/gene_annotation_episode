@@ -11,7 +11,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.runtime import (
+from gene_annotation_episode.episodic_workflow.root.runtime import (
     Journal, Record, WorkflowError, _action_generation_schema,
     _decode_action_response, run_workflow,
 )
@@ -783,7 +783,7 @@ def test_async_tool_protocol_runs_on_owning_loop_with_sync_fallback_available(tm
 def test_shared_kernel_sync_delivery_repair_preserves_declarative_child_trace():
     from method_loop import (Context, Episode, EpisodeGoal, EpisodeRequest, EpisodeTree,
         Grain, Leaf, ChildEpisodeUnit, ReportDeliveryError, ReportRedelivery)
-    from gene_annotation_episode.runtime import TypedReportContract
+    from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
     factory = lambda path: FixtureController(str(path), 0, 2)
     root_grain = Grain("fixture_root", "Fixture work", "Fixture result", factory)
     child_grain = Grain("fixture_child", "Fixture work", "Fixture result", factory)
@@ -841,7 +841,7 @@ def test_selected_record_page_remains_part_of_actual_report_basis(tmp_path):
 
 def test_form_facts_stream_only_reference_arrays_without_archived_tool_text(tmp_path, monkeypatch):
     """Guard both SQLite-to-Python rows and JSON decoding, not just query text."""
-    import gene_annotation_episode.runtime as runtime
+    import gene_annotation_episode.episodic_workflow.root.runtime as runtime
     store, tools = setup(tmp_path)
     rows = [("observation_A", "observation"), ("annotation_B", "annotation"),
             ("assessment_A", "assessment"), ("assessment_C", "assessment")]
@@ -910,7 +910,7 @@ def test_effective_credit_binding_in_context_is_persisted_and_restored(tmp_path)
     from gene_annotation_episode.credit import AXES, CreditPolicy
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.tools import ToolRegistry
-    from gene_annotation_episode.runtime import _credit_binding_from_settings
+    from gene_annotation_episode.episodic_workflow.root.runtime import _credit_binding_from_settings
     policy = CreditPolicy(epsilon=.37, scale=42,
         axis_weights=tuple((axis, 2. if axis == "comparative" else 1.) for axis in AXES))
     factory = lambda path, baseline: FixtureController(str(path), baseline, 2)
@@ -1018,8 +1018,8 @@ def test_caller_native_resource_changes_preserve_original_history_on_resume(tmp_
 
 def test_resource_only_run_config_uses_canonical_models_and_resume_keeps_custom_models(tmp_path):
     import tomllib
-    from gene_annotation_episode.runtime import _effective_configuration
-    from gene_annotation_episode.providers import default_config_path
+    from gene_annotation_episode.episodic_workflow.root.runtime import _effective_configuration
+    from gene_annotation_episode.episodic_workflow.root.providers import default_config_path
     defaults = tomllib.loads(default_config_path().read_text())
     local_only = {"local_tools": {"cmsearch_executable": "/fixture/cmsearch", "cmsearch_cpu": 2}}
     models, control = _effective_configuration(local_only)

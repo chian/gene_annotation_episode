@@ -19,7 +19,7 @@ import urllib.request
 
 import pytest
 
-import gene_annotation_episode.bvbrc_codon_tree_native as native
+import gene_annotation_episode.episodic_workflow.root.library.bvbrc_codon_tree_native as native
 import gene_annotation_episode.phylogeny_format_contracts as formats
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
 

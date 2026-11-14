@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.provider_authentication import (
+from gene_annotation_episode.episodic_workflow.root.provider_authentication import (
     ProviderAuthenticationError, authentication_policy,
     authentication_transport, verify_authentication)
 
@@ -111,13 +111,13 @@ def test_existing_unconfigured_transports_keep_their_original_behavior():
 
 
 def test_wrong_account_stops_owned_provider_through_existing_source_failure_type(tmp_path, monkeypatch):
-    from gene_annotation_episode.providers import ModelCallError, _SessionConnection, load_config
+    from gene_annotation_episode.episodic_workflow.root.providers import ModelCallError, _SessionConnection, load_config
     executable = tmp_path/'codex'
     executable.write_bytes(Path(__file__).with_name('provider_wrong_oauth_fixture.py').read_bytes())
     executable.chmod(0o700)
     requests = tmp_path/'request-methods.txt'
     monkeypatch.setenv('AUTH_FIXTURE_REQUEST_LOG', str(requests))
-    monkeypatch.setattr('gene_annotation_episode.providers._seed_codex_index', lambda _: [])
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.providers._seed_codex_index', lambda _: [])
     config = load_config()
     config['connection'] = {'command': [str(executable), 'app-server'], 'authentication': POLICY}
     provider = _SessionConnection(config, tmp_path/'provider', tmp_path)

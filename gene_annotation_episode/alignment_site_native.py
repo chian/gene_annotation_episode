@@ -185,7 +185,7 @@ def _selected_reference_alignment_authority(store, context, alignment_ref, *, be
     consumers reconstruct the original receiver context/cutoff and call this
     same helper again before comparing it with their privately retained witness.
     """
-    from .communication import plain
+    from .episodic_workflow.root.communication import plain
     from .execution_contracts import digest
     from .tool_grading_artifacts import MEDIA_TYPE
 

@@ -5,7 +5,7 @@ import json
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode.practical_execution_records import (
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import (
     ASSIGNMENT_SCHEMA, COMPLETION_PROOF_SCHEMA, RECEIPT_SCHEMA,
     assess_validations, canonical, digest, validate_assignment)
 from gene_annotation_episode.practical_execution_state import PracticalState

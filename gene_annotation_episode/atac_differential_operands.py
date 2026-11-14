@@ -10,11 +10,11 @@ import json
 
 from method_loop.identities import EpisodeRef
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError
 from .episode_bindings import BindingContext
-from .episode_receipts import EpisodeReceipts
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_receipts import EpisodeReceipts
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .native_atac_differential_contracts import validate_atac_requested_job
 from .native_file_capture import NativeFileCaptureError, _metadata
 
@@ -35,17 +35,17 @@ def _require(condition, code):
 
 
 def _context_inputs(store, context):
-    from .received_native_file_inputs import received_file_context
+    from .episodic_workflow.root.received_native_file_inputs import received_file_context
     return received_file_context(store, context, failure_prefix="atac_input_")
 
 
 def _source(store, reference, *, metadata=False):
-    from .received_native_file_inputs import received_file_source
+    from .episodic_workflow.root.received_native_file_inputs import received_file_source
     return received_file_source(store, reference, metadata=metadata, failure_prefix="atac_input_")
 
 
 def _file(store, identity):
-    from .received_native_file_inputs import received_file_path
+    from .episodic_workflow.root.received_native_file_inputs import received_file_path
     return received_file_path(store, identity, failure_prefix="atac_input_")
 
 

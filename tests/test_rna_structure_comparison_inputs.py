@@ -6,10 +6,10 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.rna_structure_comparison_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_contracts import (
     validate_rna_comparison_sheet, validate_rna_comparison_selector,
 )
-from gene_annotation_episode.rna_structure_comparison_inputs import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_inputs import (
     build_rna_correspondence, populate_rna_comparison_sheet,
 )
 _fixtures = import_module("gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_inputs_366.fixture_helpers")

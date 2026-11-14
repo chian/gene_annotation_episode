@@ -13,13 +13,13 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode.decision_context import apply_state_frame, state_frame
+from gene_annotation_episode.episodic_workflow.root.decision_context import apply_state_frame, state_frame
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.evidence_axis_instructions import instruction_view
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate
-from gene_annotation_episode.providers import _SessionConnection, load_config
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.evidence_axis_instructions import instruction_view
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection, load_config
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store

@@ -13,11 +13,11 @@ from types import SimpleNamespace
 import pytest
 
 from method_loop.identities import EpisodeRef
-from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustody
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustody
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.molecular_sequence_input_bindings import MolecularSequenceInputBindings
 from gene_annotation_episode import molecular_sequence_input_bindings as bindings
 from gene_annotation_episode import molecular_sequence_input_contracts as contracts
@@ -618,7 +618,7 @@ def test_received_sequence_subject_denies_a_received_input_outside_the_child_sco
 
 
 def test_workflow_service_uses_existing_subject_owner_and_keeps_source_only_contract(tmp_path, monkeypatch):
-    from gene_annotation_episode.episode_services import WorkflowServices
+    from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
     with actual_received_input_owner(tmp_path, namespace="source") as value:
         subject = actual_sequence_subject(value, "reference")
         value.receipts.receive(value.parent.episode_id, [subject["id"]], kind="initial")
@@ -697,7 +697,7 @@ def test_received_read_subject_preserves_real_lazy_namespace_and_index_metadata_
         if port == "binding":
             result = value.binding.read_received_subject(context, subject["id"], "read_subject")
         else:
-            from gene_annotation_episode.episode_services import WorkflowServices
+            from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
             workflow = SimpleNamespace(store=value.store, run_id=value.owner.run_id, tools=None,
                 episode_bindings=SimpleNamespace(resolve_received_reference=value.owner.resolve_received_reference))
             result = WorkflowServices(workflow).read_received_molecular_input(
@@ -797,7 +797,7 @@ def test_received_read_subject_authority_denials_retain_only_the_requested_names
 @pytest.mark.parametrize("namespace", ["artifact", "source"])
 @pytest.mark.parametrize("port", ["binding", "service"])
 def test_current_file_metadata_authenticates_without_body_path_verified_dto_or_new_receipts(tmp_path, monkeypatch, namespace, port):
-    from gene_annotation_episode.episode_services import WorkflowServices
+    from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
     with actual_received_input_owner(tmp_path, namespace=namespace) as value:
         context = value.context
         before = read_subject_state(value, context)

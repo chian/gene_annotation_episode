@@ -2,8 +2,8 @@
 from copy import deepcopy
 from importlib import import_module
 import pytest
-from gene_annotation_episode.protein_structure_formats import parse_pdb_structure
-from gene_annotation_episode.protein_structure_sequences import extract_structure_sequence, rebind_structure_sequence, inspect_structure
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats import parse_pdb_structure
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_sequences import extract_structure_sequence, rebind_structure_sequence, inspect_structure
 f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 
 
@@ -179,7 +179,7 @@ def test_agreeing_native_parent_is_distinct_from_native_one_letter_origin():
 
 
 def test_physical_residue_helpers_preserve_ca_identity_without_equating_atom_spans():
-    from gene_annotation_episode.protein_structure_sequences import residue_component_id, residue_position_key
+    from gene_annotation_episode.episodic_workflow.root.library.protein_structure_sequences import residue_component_id, residue_position_key
     data, _, _, _ = f.fixture_cif()
     data = data.replace(b"ATOM q2 C CA . ALA", b"ATOM q3 N N . ALA X 1 2 100 ALA A N ? 1.0 0.0 0.0 1.0 20.0 5\nATOM q2 C CA . ALA")
     _, p, seq, _ = f.fixture_cif(data=data)

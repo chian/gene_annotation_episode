@@ -13,7 +13,7 @@ from gene_annotation_episode.native_infernal_contracts import (
     native_infernal_digest, requested_job_from_infernal, validate_native_infernal_job,
     validate_native_infernal_requested_job,
 )
-from gene_annotation_episode.native_infernal_tool_info import (
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_tool_info import (
     native_infernal_tool_contracts, native_infernal_tool_information,
 )
 

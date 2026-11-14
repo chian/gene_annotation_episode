@@ -4,9 +4,9 @@ import json
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_fact_contracts as facts
-from gene_annotation_episode.bvbrc_proteome_returns import ProteomeReturnError
-from gene_annotation_episode.communication import form_with_facts, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_fact_contracts as facts
+from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns import ProteomeReturnError
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain, validate_form
 from gene_annotation_episode.execution_contracts import canonical
 from test_bvbrc_proteome_returns import (
     ASSOCIATIONS, FACT_SOURCES, MEASUREMENTS, POPULATIONS, REQUIREMENTS, STATUS,

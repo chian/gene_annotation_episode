@@ -14,17 +14,17 @@ from types import SimpleNamespace
 import pytest
 
 from method_loop import EpisodeGoal, EpisodeRef, EpisodeRequest, EpisodeTree, Grain
-from gene_annotation_episode.communication import ReportBoundaryError, plain
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode import enrichr_reference_privacy as privacy
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.runtime import Record, ReleasingContext, Workflow
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, ReleasingContext, Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.waiting import PENDING_VERSION
+from gene_annotation_episode.episodic_workflow.root.waiting import PENDING_VERSION
 from test_enrichr_returns import Harness
 
 

@@ -12,10 +12,10 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.flux_balance_tools import (
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_tools import (
     ARGUMENT_VERSION, FBA_TOOL, RESULT_VERSION, OrdinaryFluxBalanceTools,
 )
-from gene_annotation_episode import flux_balance_tools as ordinary
+from gene_annotation_episode.episodic_workflow.root.library import flux_balance_tools as ordinary
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.molecular_reference_privacy import molecular_reference_restriction
 from gene_annotation_episode.state import Store

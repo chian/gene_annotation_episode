@@ -8,7 +8,7 @@ import pytest
 
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 

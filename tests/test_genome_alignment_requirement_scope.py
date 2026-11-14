@@ -8,10 +8,10 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.bvbrc_alignment_values import requirement
-from gene_annotation_episode.bvbrc_appservice_bundle_values import _requirements
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import requirement
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_appservice_bundle_values import _requirements
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
-from gene_annotation_episode.bvbrc_genome_alignment_sheet import validate_genome_alignment_data
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_sheet import validate_genome_alignment_data
 from test_bvbrc_genome_alignment_host import declaration, selection
 from test_bvbrc_genome_alignment_sheet import fixture_data
 

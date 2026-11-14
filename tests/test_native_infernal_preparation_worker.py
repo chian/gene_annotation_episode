@@ -7,12 +7,12 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import infernal_preparation_models as models
-from gene_annotation_episode import infernal_preparation_statistics as statistics
-from gene_annotation_episode import infernal_preparation_emission as emission
-from gene_annotation_episode import infernal_preparation_artifacts as artifacts
-from gene_annotation_episode.infernal_preparation_schema import field_input, locator, value
-from gene_annotation_episode.native_infernal_preparation_worker import (
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_models as models
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_statistics as statistics
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_emission as emission
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_artifacts as artifacts
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_schema import field_input, locator, value
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker import (
     grade_infernal_preparation, recalculate_infernal_preparation,
 )
 
@@ -111,7 +111,7 @@ def test_zero_exit_does_not_erase_missing_fetch_request():
 
 @pytest.mark.parametrize("fault", ["key", "argv", "malformed", "duplicate"])
 def test_single_key_locator_cannot_claim_unrelated_request_bytes(monkeypatch, fault):
-    from gene_annotation_episode.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
+    from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
     supplied = prepared(case_for("cmfetch", "single_key"))
     original = supplied["inputs"]["request"][0]
     job = json.loads(original["content"])

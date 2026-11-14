@@ -15,7 +15,7 @@ import subprocess
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import protein_conservation_result_worker as worker
+from gene_annotation_episode.episodic_workflow.root.library import protein_conservation_result_worker as worker
 
 
 _CAPTURE = "source_" + "c" * 24

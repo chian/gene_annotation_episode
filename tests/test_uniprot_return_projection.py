@@ -14,7 +14,7 @@ from gene_annotation_episode.domain import identity
 from gene_annotation_episode.uniprot_native import parse_uniprot_native
 from gene_annotation_episode.uniprot_publication import bind_uniprot_publication
 from gene_annotation_episode.uniprot_return_contracts import validate_uniprot_selected_values
-from gene_annotation_episode.uniprot_return_projection import project_uniprot_page
+from gene_annotation_episode.episodic_workflow.root.library.uniprot_return_projection import project_uniprot_page
 
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/uniprot_native"

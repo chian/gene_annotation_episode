@@ -18,7 +18,7 @@ import stat
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
 
 
@@ -156,7 +156,7 @@ def verify_retained_nmf_sheet_permissions(*, flow, owner, science, parent, resul
         records.authenticate_received_saved_sheet(parent, sheet)
     # Baseline caller Files remain admitted. Their already removed bytes are
     # not reopened to turn a metadata permission check into a new data read.
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     admission = EpisodeReturnRecords(flow.store, parent.run_id, failure_prefix='nmf_finish_')
     for reference in configuration['initial_refs']:
         assert owner.resolve_received_reference(parent, reference, 'artifact') is not False
@@ -240,16 +240,16 @@ def test_retained_completed_nmf_replay_finishes_origin_permissions_without_repla
         assert _pin(backend / 'executions.sqlite') == _pin(source_backend / 'executions.sqlite')
         before_backend = _empty_backend(backend)
         from gene_annotation_episode import acquisition, native_lifecycle
-        from gene_annotation_episode import expression_nmf_calculations as calculations
-        from gene_annotation_episode import expression_nmf_result_views as projections
-        from gene_annotation_episode import expression_nmf_result_worker as worker
-        from gene_annotation_episode import expression_nmf_sheet as sheets
+        from gene_annotation_episode.episodic_workflow.root.library import expression_nmf_calculations as calculations
+        from gene_annotation_episode.episodic_workflow.root.library import expression_nmf_result_views as projections
+        from gene_annotation_episode.episodic_workflow.root.library import expression_nmf_result_worker as worker
+        from gene_annotation_episode.episodic_workflow.root.library import expression_nmf_sheet as sheets
         from gene_annotation_episode import native_expression_nmf_driver as driver
-        from gene_annotation_episode import native_expression_nmf_preparation as preparation
-        from gene_annotation_episode import native_expression_nmf_results as native_results
-        from gene_annotation_episode.episode_receipts import EpisodeReceipts
-        from gene_annotation_episode.execution_progress import ExecutionTargetReader
-        from gene_annotation_episode.runtime import Workflow
+        from gene_annotation_episode.episodic_workflow.root.library import native_expression_nmf_preparation as preparation
+        from gene_annotation_episode.episodic_workflow.root import native_expression_nmf_results as native_results
+        from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+        from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionTargetReader
+        from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
         from gene_annotation_episode.state import Store
         from gene_annotation_episode.tools import ToolRegistry
         from method_loop.archive import ArchivedRecord

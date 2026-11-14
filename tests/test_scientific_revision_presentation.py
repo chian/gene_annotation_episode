@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.root.component_axis_literature_pr
 from gene_annotation_episode.scientific_process_prompt import (
     _information, _outcome, _values, render_scientific_process_prompt)
 from gene_annotation_episode.tool_information import selectors
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 

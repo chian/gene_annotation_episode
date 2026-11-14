@@ -10,13 +10,13 @@ import json
 import pytest
 
 from method_loop.durable import DurableExecutionError, content_digest
-from gene_annotation_episode import application_execution_binding as application
+from gene_annotation_episode.episodic_workflow.root import application_execution_binding as application
 from gene_annotation_episode import independent_execution as reconstruction
-from gene_annotation_episode.default_scientific_binding import VERSION as DEFAULT_VERSION
-from gene_annotation_episode.providers import ModelConnection
-from gene_annotation_episode.runtime import Workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.default_scientific_binding import VERSION as DEFAULT_VERSION
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 from test_runtime import ScriptedProvider
 
 

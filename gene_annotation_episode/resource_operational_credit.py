@@ -14,7 +14,7 @@ import json
 import math
 from typing import Protocol
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .episode_bindings import BindingContext
 
 

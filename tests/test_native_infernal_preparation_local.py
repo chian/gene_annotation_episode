@@ -9,8 +9,8 @@ import pytest
 
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.native_infernal_contracts import native_infernal_digest
-from gene_annotation_episode.native_infernal_preparation_driver import OWNER_NAME
-from gene_annotation_episode.native_infernal_preparation_local import (
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_driver import OWNER_NAME
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_local import (
     local_infernal_preparation_plan, prepare_local_infernal_preparation,
 )
 from gene_annotation_episode.practical_execution_state import _immutable
@@ -134,7 +134,7 @@ def test_wrong_root_and_missing_resource_are_rejected_without_reservation(tmp_pa
 
 @pytest.mark.parametrize("case", ["consensus", "calibrate", "merge_scores", "calibration_failure"])
 def test_actual_reservation_dispatch_and_cli_bundle_through_existing_lifecycle(tmp_path, case):
-    from gene_annotation_episode.native_infernal_preparation_driver import validate_preparation_bundle_files
+    from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_driver import validate_preparation_bundle_files
     state, operation, root = local_state(tmp_path)
     selected = native_job("cmemit", "consensus") if case == "consensus" else native_job(
         "cmcalibrate", "calibrate" if case == "calibration_failure" else case)

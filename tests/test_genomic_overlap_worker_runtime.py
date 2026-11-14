@@ -15,7 +15,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import native_genomic_overlap_preparation as preparation
+from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_preparation as preparation
 from gene_annotation_episode.state import Store
 from test_native_genomic_overlap_preparation import POLICY, deny, native_plan, read
 
@@ -95,7 +95,7 @@ def test_explicit_frozen_roots_support_no_site_worker_and_completed_replay(produ
     dependencies = case.execution["dependencies"]
     roots = preparation._dependency_roots({"dependencies": dependencies})
     assert case.request["command"] == [case.execution["interpreter"]["path"], "-B", "-S", "-m",
-        "gene_annotation_episode.genomic_overlap_result_worker", case.plan["directory"] + "/plan.json"]
+        "gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_result_worker", case.plan["directory"] + "/plan.json"]
     assert case.request["env"]["PYTHONPATH"].split(os.pathsep) == [
         case.plan["directory"] + "/source_snapshot", *roots]
     assert all(Path(path).name.startswith("selected_distribution_") for path in roots)

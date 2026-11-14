@@ -213,7 +213,7 @@ def select_macs2_peak_capture_presentation(state, *, lookup_results=()):
     if not isinstance(state, Mapping) or not _macs2_peak_context(state):
         return dict(context=state, lookup_results=lookup_results, captures=[])
     from .execution_contracts import canonical, checked
-    from .local_file_capture_results import OUTCOME_SCHEMA, OUTCOMES_SCHEMA
+    from .episodic_workflow.root.local_file_capture_results import OUTCOME_SCHEMA, OUTCOMES_SCHEMA
     sources = state.get('available_report_facts', {})
     source = sources.get('execution_file_capture_outcomes', {}) if isinstance(sources, Mapping) else {}
     source = source if isinstance(source, Mapping) else {}

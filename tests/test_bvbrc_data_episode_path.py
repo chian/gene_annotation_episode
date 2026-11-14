@@ -11,10 +11,10 @@ import json
 
 import pytest
 
-from gene_annotation_episode.bvbrc_data_calculators import calculate_page_counts, calculate_facet_fractions
-from gene_annotation_episode.bvbrc_data_schema import json_digest
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import calculate_page_counts, calculate_facet_fractions
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import json_digest
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
 from bvbrc_episode_fixture import (

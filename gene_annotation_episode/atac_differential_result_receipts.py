@@ -23,7 +23,7 @@ from typing import Literal, TypedDict
 
 from method_loop.identities import EpisodeRef
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import identity
 from .episode_bindings import BindingContext
 from .execution_contracts import canonical, digest, validate_target
@@ -41,8 +41,8 @@ from .native_atac_differential_contracts import (
     POLICY, atac_driver_argv,
     validate_atac_requested_job, validate_atac_run_plan, _dependency_roots,
 )
-from .practical_execution_records import validate_receipt
-from .practical_receipt_information import PracticalReceiptInformation
+from .episodic_workflow.root.practical_execution_records import validate_receipt
+from .episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from .progress_records import validate_resource_observation
 
 
@@ -453,7 +453,7 @@ class AtacDifferentialResultReceipts:
             "size_bytes": metadata["size"], "format": "application/json"}, value=value)
 
     def validate_handoff(self, proof, intent):
-        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_handoff
+        from .episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, validate_terminal_handoff
         if is_terminal_target(intent['target']):
             validate_terminal_handoff(proof, intent, self.store, self.owner.run_id)
             return
@@ -535,7 +535,7 @@ class AtacDifferentialResultReceipts:
 
     def read_handoff(self, action):
         self.require_action(action)
-        from .terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
+        from .episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, read_terminal_handoff
         if is_terminal_target(action.intent['target']):
             proof = read_terminal_handoff(self.store, self.owner.run_id,
                 action.intent['target'], action.intent['scope'])
@@ -575,7 +575,7 @@ class AtacDifferentialResultReceipts:
     def native_snapshot(self, action, observation):
         """Freeze authenticated original controls once, after the observation."""
         self.require_action(action)
-        from .terminal_scientific_evidence import is_terminal_target, terminal_native_snapshot
+        from .episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, terminal_native_snapshot
         if is_terminal_target(action.intent['target']):
             value = terminal_native_snapshot(self, action, observation)
             immutable(action.directory / 'native-snapshot.json', value)
@@ -613,7 +613,7 @@ class AtacDifferentialResultReceipts:
         return deepcopy(value)
 
     def validate_native(self, value, intent, observation):
-        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_native
+        from .episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, validate_terminal_native
         if is_terminal_target(intent['target']):
             validate_terminal_native(value, intent, observation, self.store, self.owner.run_id)
             return
@@ -668,7 +668,7 @@ class AtacDifferentialResultReceipts:
             require(value["driver_started"] is expected)
 
     def validate_observation(self, value, intent):
-        from .terminal_scientific_evidence import is_terminal_target, validate_terminal_observation
+        from .episodic_workflow.root.terminal_scientific_evidence import is_terminal_target, validate_terminal_observation
         if is_terminal_target(intent['target']):
             validate_terminal_observation(value, intent, self.store, self.owner.run_id)
             return value
@@ -1247,7 +1247,7 @@ class AtacDifferentialResultReceipts:
         require(row["result"] is not None)
         actual = json.loads(row["result"])
         if "pending_work_after_action" in actual:
-            from .waiting import validate_pending
+            from .episodic_workflow.root.waiting import validate_pending
             validate_pending(actual.pop("pending_work_after_action"))
         require(same(actual, outcome(receipt)))
 
@@ -1358,7 +1358,7 @@ class AtacDifferentialResultReceipts:
 
     def baseline_populations(self, context, references):
         """Subtract actual frozen inherited populations, without operand grants."""
-        from .episode_receipts import EpisodeReceipts
+        from .episodic_workflow.root.episode_receipts import EpisodeReceipts
         self._context(context, allow_unsaved=True)
         receipts = object.__new__(EpisodeReceipts)
         receipts.store, receipts.db, receipts.run_id = self.store, self.store.db, self.owner.run_id

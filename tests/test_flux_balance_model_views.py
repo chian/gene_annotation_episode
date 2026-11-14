@@ -14,8 +14,8 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode import flux_balance_model_tools as tools
-from gene_annotation_episode import flux_balance_readers as readers
+from gene_annotation_episode.episodic_workflow.root.library import flux_balance_model_tools as tools
+from gene_annotation_episode.episodic_workflow.root.library import flux_balance_readers as readers
 from test_flux_balance_model_tools import addition, file_for, request, selector
 
 

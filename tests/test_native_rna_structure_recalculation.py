@@ -5,7 +5,7 @@ import shutil
 import pytest
 
 from test_native_rna_structure_acquisition import F
-from gene_annotation_episode.rna_structure_result_views import FAMILY_SOURCES, SAVED_SOURCE
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import FAMILY_SOURCES, SAVED_SOURCE
 from gene_annotation_episode.state import Store
 
 
@@ -31,8 +31,8 @@ def test_saved_recalculation_new_generation_no_original_paths_or_acquisition(tmp
         before_observations = list(f.targets.observations)
         shutil.rmtree(f.native_root)
         (f.root_path / "supplied-input.json").unlink()
-        monkeypatch.setattr("gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
-        monkeypatch.setattr("gene_annotation_episode.native_rna_structure_local.local_rna_structure_plan", forbid)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local.local_rna_structure_plan", forbid)
         monkeypatch.setattr(f.targets, "observe_target", forbid)
         monkeypatch.setattr("gene_annotation_episode.rna_structure_native.parse_rna_native_record", forbid)
         monkeypatch.setattr("socket.create_connection", forbid)
@@ -61,7 +61,7 @@ def test_saved_sheet_loss_reports_specific_failure_without_reacquisition(tmp_pat
         meta = store.get(selected["saved_input"]["sheet_artifact_ref"])
         path = store.path / "artifacts" / meta["sha256"][:2] / meta["sha256"]
         path.unlink() if problem == "missing" else path.write_bytes(b"{}\n")
-        monkeypatch.setattr("gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
         monkeypatch.setattr(f.targets, "observe_target", forbid)
         fresh = f.execute(child)
         assert not fresh["delivery_complete"] and fresh["rows"] == []
@@ -101,7 +101,7 @@ def test_saved_status_uses_historical_observation_and_publishes_no_science(tmp_p
         first, body = original(f)
         child = f.child(selection=f.saved_selector(body), index=1)
         monkeypatch.setattr(f.targets, "observe_target", forbid)
-        monkeypatch.setattr("gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
         status = f.execute(child, name="execution.results.status")
         assert status["observation"] == body["observation"]
         assert status["source_ref"] is None and status["rows"] == status["record_refs"] == []
@@ -183,7 +183,7 @@ def test_saved_sheet_custody_can_complete_despite_original_partial_capture(tmp_p
         assert f.results.completion(first) is None
         before = F.encoded(body)
         child = f.child(selection=f.saved_selector(body), index=1)
-        monkeypatch.setattr("gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
         monkeypatch.setattr(f.targets, "observe_target", forbid)
         fresh = f.execute(child)
         assert fresh["delivery_complete"] and not fresh["capture_complete"] and fresh["native_success"]
@@ -202,7 +202,7 @@ def test_saved_status_missing_sheet_is_specific_and_does_not_complete(tmp_path, 
         meta = store.get(selected["saved_input"]["sheet_artifact_ref"])
         (store.path / "artifacts" / meta["sha256"][:2] / meta["sha256"]).unlink()
         monkeypatch.setattr(f.targets, "observe_target", forbid)
-        monkeypatch.setattr("gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle", forbid)
         result = f.execute(child, name="execution.results.status")
         assert result["failures"] == [F.issue("rna_capture_unavailable", stage="capture", record_key="synthetic-rna",
             field="/selector/saved_input/sheet_artifact_ref")]

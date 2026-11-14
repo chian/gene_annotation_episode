@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider, fixture_credit, setup

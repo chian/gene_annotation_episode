@@ -12,7 +12,7 @@ import pytest
 
 from method_loop.durable import DurableExecutionError, DurableExecutionStore
 from gene_annotation_episode import _local_job_worker as worker
-from gene_annotation_episode import native_events as events
+from gene_annotation_episode.episodic_workflow.root import native_events as events
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode._local_job_worker import atomic_json
 from gene_annotation_episode.acquisition import AcquisitionError
@@ -112,7 +112,7 @@ def test_export_recovery_does_not_report_poll_execute_or_restamp(tmp_path, monke
 
 @pytest.mark.parametrize('failing_exporter', ['statistics', 'events'])
 def test_hook_exports_independently_and_keeps_actual_exit(tmp_path, monkeypatch, failing_exporter):
-    from gene_annotation_episode import execution_recording
+    from gene_annotation_episode.episodic_workflow.root import execution_recording
     handle = prepared(tmp_path, binding(tmp_path))
     body = handle.read()
     body['statistics'] = {'fixture': True}

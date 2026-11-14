@@ -9,7 +9,7 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_metacats_formats import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_formats import (
     parse_metacats_adjusted_matrix, parse_metacats_chisq_table, parse_metacats_metadata,
     parse_metacats_pair_table, parse_metacats_raw_r_table,
 )

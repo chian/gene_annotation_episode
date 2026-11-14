@@ -17,9 +17,9 @@ from typing import Literal, TypedDict
 from method_loop.durable import canonical, content_digest, validate_commission, validate_return
 from method_loop.identities import EpisodeRef, UnitRef
 
-from .communication import validate_form
-from .waiting import validate_condition
-from .episode_admission import load_return_admission
+from .episodic_workflow.root.communication import validate_form
+from .episodic_workflow.root.waiting import validate_condition
+from .episodic_workflow.root.episode_admission import load_return_admission
 
 
 VERSION = "local_parent_return_history_v1"

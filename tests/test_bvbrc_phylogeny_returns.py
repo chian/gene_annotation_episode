@@ -12,17 +12,17 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.bvbrc_appservice_publication import DATA_PROVIDER, RESULT_VERSION
-from gene_annotation_episode.bvbrc_phylogeny_bundle_contracts import (
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_publication import DATA_PROVIDER, RESULT_VERSION
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_phylogeny_bundle_contracts import (
     SCALAR_CATALOG, encode_reference, requested_form_schema,
 )
-from gene_annotation_episode.bvbrc_phylogeny_returns import (
+from gene_annotation_episode.episodic_workflow.root.bvbrc_phylogeny_returns import (
     BVBRCPhylogenyReturns, FACT_SOURCES, IDENTIFIER_NAMESPACES,
     phylogeny_fact_sources, project_phylogeny_facts, requested_sources,
 )
-from gene_annotation_episode.communication import form_with_facts, plain, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain, validate_closed_schema, validate_form
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.runtime import TypedReportContract, _object
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, _object
 from gene_annotation_episode.state import Store
 from test_bvbrc_appservice_custody import SavedRecords, selector
 

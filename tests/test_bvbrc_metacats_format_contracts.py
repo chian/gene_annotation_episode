@@ -9,8 +9,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_metacats_formats as readers
-from gene_annotation_episode.bvbrc_metacats_format_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_metacats_formats as readers
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_format_contracts import (
     validate_metacats_adjusted_matrix, validate_metacats_chisq_table,
     validate_metacats_metadata, validate_metacats_pair_table, validate_metacats_raw_r_table,
 )

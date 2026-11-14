@@ -2,9 +2,9 @@
 from copy import deepcopy
 from importlib import import_module
 import pytest
-from gene_annotation_episode.protein_structure_sheet import build_protein_structure_sheet
-from gene_annotation_episode.protein_structure_sheet import parse_native_protein_comparison
-from gene_annotation_episode.protein_structure_calculations import (
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_sheet import build_protein_structure_sheet
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_sheet import parse_native_protein_comparison
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations import (
     calculate_protein_structure_components, validate_recorded_protein_structure_components,
 )
 
@@ -67,7 +67,7 @@ def test_native_parser_exact_request_and_null_sheet_failure():
     changed["parameters"]["distance_threshold_A"] = 2
     with pytest.raises(ValueError, match="original_commission_mismatch"):
         parse_native_protein_comparison(native, expected_request=changed)
-    from gene_annotation_episode.protein_structure_contracts import issue
+    from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue
     native.update(sheet=None, state="unavailable", issues=[issue("native_process_failed", stage="native", field="returncode")])
     assert parse_native_protein_comparison(native, expected_request=native["request"]) is None
     native["issues"] = []
@@ -100,7 +100,7 @@ def test_saved_sheet_recalculation_is_pure_and_never_changes_original(monkeypatc
 def test_unknown_traceback_population_never_becomes_no_alignment():
     sheet = f.make_sheet(retained=True)
     corr = deepcopy(sheet["correspondence"])
-    from gene_annotation_episode.protein_structure_contracts import issue
+    from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue
     corr.update(state="invalid", population_available=False, alignment_native=None, rows=[], unmapped_fixed=[], unmapped_moving=[],
         issues=[issue("invalid_traceback", stage="correspondence", field="traceback")])
     invalid = f.rebuild_sheet(sheet, correspondence=corr)
@@ -120,7 +120,7 @@ def test_unknown_traceback_population_never_becomes_no_alignment():
 
 def test_genuine_native_no_alignment_has_zero_pair_population_and_native_missing_score():
     from gene_annotation_episode.biopython_pairwise_grader import build_biopython_pairwise_sheet
-    from gene_annotation_episode.protein_structure_correspondence import correspondence_from_pairwise_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.protein_structure_correspondence import correspondence_from_pairwise_sheet
     from gene_annotation_episode.execution_contracts import canonical
     sheet = f.make_sheet(retained=True)
     source = deepcopy(sheet["input_identities"]["correspondence"])
@@ -202,7 +202,7 @@ def test_builder_validates_original_baseline_and_uses_unicode_canonical_identity
 def test_recorded_later_components_validate_without_refit_calculator_or_io(monkeypatch):
     import builtins
     import numpy as np
-    from gene_annotation_episode import protein_structure_calculations as calculations
+    from gene_annotation_episode.episodic_workflow.root.library import protein_structure_calculations as calculations
     native = f.synthetic_native(f.make_sheet())
     saved = native["sheet"]
     parameters = deepcopy(saved["native_request"])
@@ -229,7 +229,7 @@ def test_recorded_later_components_validate_without_refit_calculator_or_io(monke
 
 
 def test_invalid_traceback_does_not_relax_original_extraction_associations():
-    from gene_annotation_episode.protein_structure_contracts import issue
+    from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import issue
     sheet = f.make_sheet(retained=True)
     corr = deepcopy(sheet["correspondence"])
     corr.update(state="invalid", population_available=False, alignment_native=None, rows=[], unmapped_fixed=[], unmapped_moving=[],

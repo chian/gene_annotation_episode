@@ -70,15 +70,15 @@ def _gate():
 
 
 def _guards(monkeypatch):
-    from gene_annotation_episode import genomic_overlap_calculations as calculations
-    from gene_annotation_episode import genomic_overlap_result_worker as worker
-    from gene_annotation_episode import native_genomic_overlap_driver as driver
-    from gene_annotation_episode import native_genomic_overlap_local as local
-    from gene_annotation_episode import native_genomic_overlap_preparation as prep
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_calculations as calculations
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_result_worker as worker
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_driver as driver
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_local as local
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_preparation as prep
     from gene_annotation_episode import native_atac_differential_preparation as shared_prep
     from gene_annotation_episode import native_lifecycle
     from gene_annotation_episode.acquisition import PublicClients
-    from gene_annotation_episode.providers import _SessionConnection
+    from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.tools import ToolRegistry
 
@@ -172,9 +172,9 @@ def test_original_five_failed_worker_receipts_validate_without_dependency_discov
     proof_path, original = _gate()
     helper = _fixture(dict(name="overlap_complete"), monkeypatch)
     _guards(monkeypatch)
-    from gene_annotation_episode.episode_composition import scientific_binding_compatible
-    from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-    from gene_annotation_episode.genomic_overlap_result_receipts import GenomicOverlapResultReceipts
+    from gene_annotation_episode.episodic_workflow.root.episode_composition import scientific_binding_compatible
+    from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+    from gene_annotation_episode.episodic_workflow.root.genomic_overlap_result_receipts import GenomicOverlapResultReceipts
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.tools import ToolRegistry
 

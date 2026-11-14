@@ -11,8 +11,8 @@ import pytest
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.materials import artifact_path
-from gene_annotation_episode.providers import _SessionConnection, load_config
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection, load_config
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
@@ -142,7 +142,7 @@ def test_provider_sends_actual_selected_input_and_journals_exact_wire(tmp_path):
 
 def test_missing_image_resolver_fails_before_model_dispatch(tmp_path):
     provider = WireFixture(tmp_path / "wire")
-    from gene_annotation_episode.providers import ModelCallError
+    from gene_annotation_episode.episodic_workflow.root.providers import ModelCallError
     with pytest.raises(ModelCallError, match="no bound artifact resolver"):
         asyncio.run(provider.complete("episode", "REASONING", "fixture", {"visual_evidence": [{"id": "chosen"}]}, {}))
     assert provider.sent == []

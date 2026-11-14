@@ -7,7 +7,7 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode import protein_conservation_result_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import protein_conservation_result_contracts as contracts
 from gene_annotation_episode import phylogeny_calculators, phylogeny_formats
 from gene_annotation_episode import phylogeny_calculation_contracts as numerical_contracts
 

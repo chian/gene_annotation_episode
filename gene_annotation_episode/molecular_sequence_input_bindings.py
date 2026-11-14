@@ -9,12 +9,12 @@ import re
 
 from method_loop.identities import EpisodeRef
 
-from .bvbrc_appservice_custody import AppServiceCustody, AppServiceCustodyError
-from .communication import plain
+from .episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustody, AppServiceCustodyError
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError, identity
 from .episode_bindings import BindingContext
-from .episode_receipts import EpisodeReceipts
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_receipts import EpisodeReceipts
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .materials import source_window_selection
 from .molecular_sequence_input_contracts import (
     RECEIVED_INPUT_VERSION, RECEIVED_FILE_VERSION, RECEIVED_SOURCE_VERSION,

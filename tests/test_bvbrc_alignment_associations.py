@@ -8,11 +8,11 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_alignment_associations import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_associations import (
     extract_alignment_associations, extract_inline_fasta_members, input_member_occurrence_subject_id,
 )
-from gene_annotation_episode import bvbrc_alignment_provider_contracts as c
-from gene_annotation_episode.bvbrc_metacats_input_formats import parse_metacats_input_fasta
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_alignment_provider_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_input_formats import parse_metacats_input_fasta
 from gene_annotation_episode.phylogeny_formats import parse_newick
 
 
@@ -235,7 +235,7 @@ def test_run_record_exact_types_and_populations_references():
 
 
 def test_accepted_xmfa_reader_is_msa_only_and_keeps_its_native_document():
-    from gene_annotation_episode.xmfa_formats import parse_mauve_xmfa
+    from gene_annotation_episode.episodic_workflow.root.library.xmfa_formats import parse_mauve_xmfa
     raw = b'#FormatVersion Mauve1\n> 1:1-2 + sequence\nAC\n=\n'
     a = artifact(raw, 'native.xmfa')
     parsed = parse_mauve_xmfa(raw, artifact=a, dialect='mauve1', alphabet='dna', encoding='ascii')

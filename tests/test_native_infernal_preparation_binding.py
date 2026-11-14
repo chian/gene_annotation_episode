@@ -11,15 +11,15 @@ import pytest
 
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.native_infernal_contracts import native_infernal_digest
-from gene_annotation_episode.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
-from gene_annotation_episode.native_infernal_preparation_job_schema import NATIVE_INFERNAL_PREPARATION_REQUESTED_JOB_SCHEMA
-from gene_annotation_episode.native_infernal_preparation_local import local_infernal_preparation_plan
-from gene_annotation_episode.native_infernal_preparation_tool_info import (
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_job_schema import NATIVE_INFERNAL_PREPARATION_REQUESTED_JOB_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_local import local_infernal_preparation_plan
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_tool_info import (
     native_infernal_preparation_tool_contracts, native_infernal_preparation_tool_information,
     validate_native_infernal_preparation_bindings,
 )
 from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-from gene_annotation_episode.practical_execution_records import ASSIGNMENT_SCHEMA, validate_assignment
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import ASSIGNMENT_SCHEMA, validate_assignment
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
 from test_native_infernal_preparation_driver import CASES, POLICY, native_job
 
@@ -150,7 +150,7 @@ def test_actual_practical_action_stages_runs_observes_and_replays_original_job(t
     assert 'runtime_max' not in native_result.metadata["verified_cgroup"]
     plan = local_infernal_preparation_plan(context.assignment, str(handle.path))
     assert Path(plan["attempt_directory"]) == attempt
-    assert handle.read()["command"][1:3] == ["-m", "gene_annotation_episode.native_infernal_preparation_driver"]
+    assert handle.read()["command"][1:3] == ["-m", "gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_driver"]
     bundle = json.loads((attempt / "bundle.json").read_bytes())
     assert bundle["returncode"] == 0 and bundle["failures"] == []
     assert all(row["expected_sha256"] == row["staged_sha256"] == row["final_sha256"] for row in bundle["inputs"])

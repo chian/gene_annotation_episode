@@ -13,10 +13,10 @@ import re
 
 from . import vcf_result_measurements as core
 from .alignment_site_native import immutable_record
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError, identity, obj
-from .episode_receipts import EpisodeReceipts
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_receipts import EpisodeReceipts
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
 from .materials import source_window_selection
 from .molecular_measurement_tools import (

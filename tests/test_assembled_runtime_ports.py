@@ -5,9 +5,9 @@ import json
 import pytest
 
 from method_loop.durable import DurableExecutionError
-from gene_annotation_episode.episode_application_services import EpisodeApplicationServices, service_binding
+from gene_annotation_episode.episodic_workflow.root.episode_application_services import EpisodeApplicationServices, service_binding
 from gene_annotation_episode.independent_execution import _check_bindings
-from gene_annotation_episode.runtime import Workflow, WorkflowError, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, WorkflowError, run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import obj, ScriptedProvider
@@ -116,7 +116,7 @@ def test_run_persists_explicit_roles_and_rejects_changed_ports_before_provider_c
         assert saved['annotation_child_roles'] == []
         assert saved['episode_application_services']['inputs'] == MODE
         assert calls[0]['tool_catalog'] == tools.catalog()
-        monkeypatch.setattr('gene_annotation_episode.providers.ModelConnection', forbidden)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.providers.ModelConnection', forbidden)
         for changed, message in [({'annotation_child_roles': None}, 'original_annotation_child_roles'),
                 ({'annotation_child_roles': ('literature',)}, 'original_annotation_child_roles'),
                 ({'episode_service_inputs': None}, 'original_episode_application_services')]:

@@ -8,8 +8,8 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-from gene_annotation_episode.practical_execution_records import ASSIGNMENT_SCHEMA, validate_assignment
-from gene_annotation_episode.native_flux_balance_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import ASSIGNMENT_SCHEMA, validate_assignment
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY
 
 pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="requires bounded529")
 SELECTION = {"version": "flux_balance_execution_selection_v1",

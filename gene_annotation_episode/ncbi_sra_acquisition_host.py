@@ -11,11 +11,11 @@ import math
 
 from . import ncbi_sra_acquisition as sra
 from .acquisition import SourceSnapshot
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError, canonical, identity
 from .episode_bindings import BindingContext
-from .episode_receipts import EpisodeReceipts
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_receipts import EpisodeReceipts
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .molecular_measurement_tools import authenticate_molecular_invocation
 from .molecular_sequence_input_contracts import input_record_digest
 from .native_file_capture import NativeFileCaptureError, _metadata, retained_native_file

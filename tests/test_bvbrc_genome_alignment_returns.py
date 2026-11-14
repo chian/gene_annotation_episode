@@ -14,20 +14,20 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_adapter as adapter
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_contracts as contracts
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_projection as projection
-from gene_annotation_episode.bvbrc_genome_alignment_returns import (
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_projection as projection
+from gene_annotation_episode.episodic_workflow.root.bvbrc_genome_alignment_returns import (
     BVBRCGenomeAlignmentReturns, FACT_SOURCES, IDENTIFIER_NAMESPACES,
     genome_alignment_fact_sources, requested_sources, project_genome_alignment_facts,
 )
-from gene_annotation_episode.bvbrc_appservice_publication import DATA_PROVIDER, RESULT_VERSION
-from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustodyError
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_publication import DATA_PROVIDER, RESULT_VERSION
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustodyError
+from gene_annotation_episode.episodic_workflow.root.communication import (
     plain, form_with_facts, validate_closed_schema, validate_form, ReportBoundaryError,
 )
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.runtime import TypedReportContract, _object
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, _object
 from gene_annotation_episode.state import Store
 from test_bvbrc_appservice_custody import SavedRecords, selector as base_selector
 from test_bvbrc_genome_alignment_bundle_resolution import arguments, measurement, member
@@ -543,7 +543,7 @@ def test_exact_redelivery_deduplicates_without_new_action_or_observation(run):
 
 def test_no_requested_source_performs_no_provider_lookup(run, monkeypatch):
     monkeypatch.setattr(run.publications, 'outcomes', lambda *a: pytest.fail('unrequested provider lookup'))
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_genome_alignment_returns.read_latest_adapter_result',
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.bvbrc_genome_alignment_returns.read_latest_adapter_result',
         lambda *a, **k: pytest.fail('unrequested provider lookup'))
     assert run.host.facts(run.saved.root, {}) == {}
     assert run.host.received_facts(run.saved.root, {}) == {}
@@ -615,8 +615,8 @@ def test_strict_saved_return_never_recomputes_native_arithmetic(run, monkeypatch
 
 @pytest.mark.parametrize('possessed', [False, True, 'artifact'])
 def test_requirement_source_must_be_actual_possessed_store_source(run, possessed):
-    from gene_annotation_episode.bvbrc_genome_alignment_calculators import calculate_genome_alignment_components
-    from gene_annotation_episode.bvbrc_genome_alignment_sheet import build_genome_alignment_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_calculators import calculate_genome_alignment_components
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_sheet import build_genome_alignment_sheet
     binding = run.saved.source()
     data = fixture_data()
     required_ref = binding['artifact_ref'] if possessed == 'artifact' else binding['source_ref']

@@ -10,10 +10,10 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_proteome_directional import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional import (
     ProteomeDirectionalError, parse_genome_comparison_directional_report,
 )
-from gene_annotation_episode.bvbrc_proteome_directional_contracts import validate_directional_report
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_contracts import validate_directional_report
 
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_proteome_directional"

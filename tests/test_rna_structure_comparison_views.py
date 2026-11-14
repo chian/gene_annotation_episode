@@ -14,13 +14,13 @@ import sys
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.rna_structure_comparison_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_contracts import (
     PAIR_METRICS, PAIR_RELATIONS, SCAN_ENERGY_METRICS, SCAN_SITE_METRICS,
     SITE_METRICS, SITE_TRANSITIONS, comparison_digest, validate_rna_comparison_components,
 )
-from gene_annotation_episode.rna_structure_comparison_calculations import calculate_rna_comparison_components
-from gene_annotation_episode.rna_structure_comparison_inputs import populate_rna_comparison_sheet
-from gene_annotation_episode.rna_structure_comparison_views import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations import calculate_rna_comparison_components
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_inputs import populate_rna_comparison_sheet
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import (
     PROJECTION_SOURCE, RETURNED_NUMERIC_CELL_SCHEMA, RNA_COMPARISON_PROJECTION_RESULT_SCHEMA,
     project_rna_comparison, rna_comparison_fact_sources, validate_rna_comparison_projection,
 )
@@ -569,8 +569,8 @@ def test_projection_is_pure_detached_and_reselectable_without_calculators(pair_d
     before = deepcopy(pair_data)
     def forbidden(*args, **kwargs):
         raise AssertionError("Projector attempted calculation or acquisition")
-    calculation = importlib.import_module("gene_annotation_episode.rna_structure_comparison_calculations")
-    scan_calculation = importlib.import_module("gene_annotation_episode.rna_structure_scan_calculations")
+    calculation = importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations")
+    scan_calculation = importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.rna_structure_scan_calculations")
     monkeypatch.setattr(calculation, "calculate_rna_comparison_components", forbidden)
     monkeypatch.setattr(scan_calculation, "calculate_rna_scan_components", forbidden)
     monkeypatch.setitem(sys.modules, "RNA", None)
@@ -583,7 +583,7 @@ def test_projection_is_pure_detached_and_reselectable_without_calculators(pair_d
     next_result, = project(pair_data, request_for("energy_comparison", metrics=["energy_absolute_delta"], include_order=False))
     assert next_result["payload"]["rows"][0]["measurements"][0]["value"] == 1.0
     assert next_result["payload"]["rows"][0]["order"] is None
-    source = inspect.getsource(importlib.import_module("gene_annotation_episode.rna_structure_comparison_views"))
+    source = inspect.getsource(importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views"))
     assert "from .rna_structure_comparison_calculations import" not in source
     assert "import subprocess" not in source and "open(" not in source
 

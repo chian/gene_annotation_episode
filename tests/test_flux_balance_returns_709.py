@@ -13,19 +13,19 @@ import pytest
 from method_loop.episode import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     plain, form_with_facts, validate_closed_schema, validate_form, ReportBoundaryError,
 )
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.flux_balance_return_views import fba_fact_sources
-from gene_annotation_episode.flux_balance_returns import FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE
-from gene_annotation_episode.flux_balance_returns import FluxBalanceReturns
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_return_views import fba_fact_sources
+from gene_annotation_episode.episodic_workflow.root.flux_balance_returns import FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE
+from gene_annotation_episode.episodic_workflow.root.flux_balance_returns import FluxBalanceReturns
 from gene_annotation_episode.native_file_capture import retained_native_file
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 
@@ -141,8 +141,8 @@ def fixture(tmp_path, monkeypatch):
     for target in ('socket.socket', 'subprocess.Popen',
             'gene_annotation_episode.flux_balance_result_worker.execute_flux_balance_worker',
             'gene_annotation_episode.flux_balance_calculations.calculate_flux_balance_sheet',
-            'gene_annotation_episode.flux_balance_sheet.populate_flux_balance_sheet',
-            'gene_annotation_episode.flux_balance_readers.parse_fba_capture'):
+            'gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet.populate_flux_balance_sheet',
+            'gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_fba_capture'):
         monkeypatch.setattr(target, forbidden)
     with Store(tmp_path / 'store') as store:
         f = Fixture(store)
@@ -220,8 +220,8 @@ def test_historical_return_survives_scientific_file_loss(fixture):
 
 
 def frame(f, parent, child, *, index, schema, selection):
-    from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE, CONTRACT_INFORMATION_OPERATIONS
-    from gene_annotation_episode.episode_contract_information import expand_fact_form
+    from gene_annotation_episode.episodic_workflow.root.composition_information import CONTRACT_INFORMATION_PROFILE, CONTRACT_INFORMATION_OPERATIONS
+    from gene_annotation_episode.episodic_workflow.root.episode_contract_information import expand_fact_form
     compact = obj({name: {'$ref': 'episode-fact:' + node['x-source']} for name, node in schema['properties'].items()})
     selection = {**deepcopy(selection), 'schema_json': canonical(compact)}
     facts = {child.role: fba_fact_sources()}
@@ -478,7 +478,7 @@ def test_original688_projection_numbers_are_forwarded_verbatim_without_new_scien
 @pytest.mark.parametrize('fault', [None, 'filled_selection', 'assignment_digest', 'invocation_digest',
     'invocation_identity', 'selected_assignment'])
 def test_materialized_scientific_parent_retains_selected_slots_and_filled_invocation(fixture, fault):
-    from gene_annotation_episode.scientific_process_records import scientific_digest, scientific_invocation_ref, selector_selection
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_digest, scientific_invocation_ref, selector_selection
     f = fixture
     science = f.child(f.root, form_schema(SAVED_SOURCE), role='scientific_process')
     def option(slot, name):

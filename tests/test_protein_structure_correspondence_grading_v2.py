@@ -13,13 +13,13 @@ from jsonschema import Draft202012Validator
 
 from gene_annotation_episode import alignment_correspondence as common
 from gene_annotation_episode import biopython_pairwise_grader as pairwise
-from gene_annotation_episode import native_protein_structure_worker as worker
-from gene_annotation_episode import protein_structure_contracts as science
-from gene_annotation_episode import protein_structure_operands as operands
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_worker as worker
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_contracts as science
+from gene_annotation_episode.episodic_workflow.root import protein_structure_operands as operands
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.native_protein_structure_contracts import validate_protein_structure_software
-from gene_annotation_episode.protein_structure_authority import ProteinStructureOperandError
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import validate_protein_structure_software
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import SequenceWork, ToolRegistry
 
@@ -122,10 +122,10 @@ def test_unknown_descriptor_and_outer_version_are_rejected():
 def historical_software_shape():
     # Structurally valid frozen selection, deliberately not executable pins.
     return {"python_executable": sys.executable, "python_sha256": "0"*64, "python_version": "constructed",
-        "driver_module": "gene_annotation_episode.native_protein_structure_driver",
-        "worker_module": "gene_annotation_episode.native_protein_structure_worker",
-        "implementation_files": [{"module": "gene_annotation_episode.native_protein_structure_driver", "sha256": "0"*64},
-            {"module": "gene_annotation_episode.native_protein_structure_worker", "sha256": "0"*64}],
+        "driver_module": "gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver",
+        "worker_module": "gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker",
+        "implementation_files": [{"module": "gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver", "sha256": "0"*64},
+            {"module": "gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker", "sha256": "0"*64}],
         "numpy_version": "constructed", "biopython_version": "constructed",
         "implementation": "gene_annotation_episode_corrected_protein_structure_v1", "algorithm": "unweighted_proper_rigid_ca_svd_v1"}
 
@@ -271,18 +271,18 @@ def _retained_alignment(case, label, version):
 def _read_only(case, monkeypatch):
     for target in (
         'gene_annotation_episode.sequence_ops.align_pair',
-        'gene_annotation_episode.native_protein_structure_worker.execute_protein_structure_request',
-        'gene_annotation_episode.protein_structure_formats.parse_pdb_structure',
-        'gene_annotation_episode.protein_structure_formats.parse_mmcif_structure',
-        'gene_annotation_episode.protein_structure_sequences.extract_structure_sequence',
-        'gene_annotation_episode.protein_structure_calculations.calculate_protein_structure_components',
-        'gene_annotation_episode.protein_structure_calculations.fit_ca_transform',
+        'gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker.execute_protein_structure_request',
+        'gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats.parse_pdb_structure',
+        'gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats.parse_mmcif_structure',
+        'gene_annotation_episode.episodic_workflow.root.library.protein_structure_sequences.extract_structure_sequence',
+        'gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations.calculate_protein_structure_components',
+        'gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations.fit_ca_transform',
         'numpy.linalg.svd',
         'gene_annotation_episode.biopython_pairwise_grader.grade_biopython_pairwise',
         'gene_annotation_episode.biopython_pairwise_grader.calculate_biopython_pairwise_scores',
         'gene_annotation_episode.tool_grading_artifacts.retain_tool_grading',
-        'gene_annotation_episode.protein_structure_publication.publish_protein_structure_source',
-        'gene_annotation_episode.native_protein_structure_acquisition.capture_local_protein_structure_bundle',
+        'gene_annotation_episode.episodic_workflow.root.library.protein_structure_publication.publish_protein_structure_source',
+        'gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_acquisition.capture_local_protein_structure_bundle',
         'gene_annotation_episode.native_lifecycle.prepare_job',
         'gene_annotation_episode.native_lifecycle.start_prepared',
         'gene_annotation_episode.native_lifecycle.resume_start',

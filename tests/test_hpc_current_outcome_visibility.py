@@ -1,5 +1,5 @@
 """HPC decisions retain actual callable operands and execution output."""
-from gene_annotation_episode.hpc_prompt import render_hpc_prompt
+from gene_annotation_episode.episodic_workflow.root.hpc_prompt import render_hpc_prompt
 
 
 def test_current_plan_return_keeps_launch_operands_beside_credit_summary():

@@ -8,8 +8,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.genomic_overlap_contracts import canonical_genomic_overlap_sheet_sha256
-from gene_annotation_episode.genomic_overlap_result_views import project_genomic_overlap_result
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_contracts import canonical_genomic_overlap_sheet_sha256
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_result_views import project_genomic_overlap_result
 
 
 PACKET = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/genomic_overlap/contract"
@@ -435,11 +435,11 @@ def test_projector_is_detached_and_performs_no_io_or_execution(worked, monkeypat
 
 def test_joined_supplied_readers_calculator_to_projection(worked):
     """One actual pure chain; still supplied synthetic bytes, no native execution."""
-    from gene_annotation_episode.genomic_overlap_inputs import (
+    from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_inputs import (
         build_genomic_overlap_sheet, extract_overlap_reference_metadata,
         parse_bedtools_intersect_wo, parse_region_set,
     )
-    from gene_annotation_episode.genomic_overlap_calculations import calculate_genomic_overlap_components
+    from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_calculations import calculate_genomic_overlap_components
     raw = {row["key"]: row["utf8_text"].encode() for row in worked["raw_artifacts"]}
     request = worked["request"]
     parsed = [parse_region_set(raw["input_a" if index == 0 else "input_b"],

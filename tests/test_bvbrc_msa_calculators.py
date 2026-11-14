@@ -11,12 +11,13 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_msa_formats, phylogeny_formats
-from gene_annotation_episode.bvbrc_msa_calculation_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_formats
+from gene_annotation_episode import phylogeny_formats
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_calculation_contracts import (
     CATEGORIES, validate_msa_entropy_components, validate_msa_reference_components,
 )
-from gene_annotation_episode.bvbrc_msa_calculators import msa_native_entropy, msa_reference_differences
-from gene_annotation_episode.bvbrc_msa_formats import parse_msa_frequency_table
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_calculators import msa_native_entropy, msa_reference_differences
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_formats import parse_msa_frequency_table
 from gene_annotation_episode.phylogeny_calculators import alignment_components
 from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
 

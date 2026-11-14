@@ -21,13 +21,13 @@ from gene_annotation_episode import native_lifecycle
 from gene_annotation_episode import protease_kinetics_measurements as scientific
 from gene_annotation_episode import protease_kinetics_result_contracts as contracts
 from gene_annotation_episode import protease_kinetics_tools as host
-from gene_annotation_episode.communication import ReportBoundaryError, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain, validate_form
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.molecular_measurement_tools import MolecularOperationUnpublished
-from gene_annotation_episode.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_protease_kinetics_measurements import supplied_fixture
@@ -671,15 +671,15 @@ def _protease_native_operations(store, run_id):
 class _ProteaseNativeChoices:
     """Persisted decision indices select finite fixture choices, never a grader."""
     def __init__(self, store, library, proof, output, active):
-        from gene_annotation_episode.providers import _SessionConnection
+        from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
         self.store, self.library, self.proof, self.output, self.active = store, library, proof, output, active
         self.states = {}
         self.connection = object.__new__(_SessionConnection)
         self.connection.scientific_prompt_states = {}
 
     async def complete(self, episode_id, role, instructions, context, schema):
-        from gene_annotation_episode.decision_context import state_frame
-        from gene_annotation_episode.evidence_axis_instructions import instruction_view
+        from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+        from gene_annotation_episode.episodic_workflow.root.evidence_axis_instructions import instruction_view
         from tests.test_homer_motif_saved_workflow import _encode
         from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files
         context = plain(context)
@@ -774,7 +774,7 @@ class _ProteaseNativeChoices:
 
 
 def _protease_native_verify(store, workflow, registry, proof):
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     from tests.test_homer_motif_saved_workflow import _archive
     from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _history
     history = _history(store, proof["run_id"])
@@ -904,7 +904,7 @@ class _ProteaseNoNewDecisions:
 
 
 def _protease_native_closed_replay(store, directory, proof, monkeypatch):
-    from gene_annotation_episode.runtime import ReturnedActionUnit
+    from gene_annotation_episode.episodic_workflow.root.runtime import ReturnedActionUnit
     from tests.test_homer_motif_saved_workflow import _archive, _archive_value
     from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history
     before_tables, before_files = _tables(store), _files(directory)
@@ -946,9 +946,9 @@ def _protease_native_closed_replay(store, directory, proof, monkeypatch):
         # The ordinary root already closed through its real controller. This
         # read-side reconstruction uses its actual admitted child report/view;
         # it is not a historical post-return decision or a new provider call.
-        from gene_annotation_episode.runtime import DecisionSource
-        from gene_annotation_episode.providers import _SessionConnection
-        from gene_annotation_episode.decision_context import state_frame
+        from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource
+        from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+        from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
         from method_loop.episode import EpisodeView
         receiver_scope = workflow.context.enter(root.grain, root.key)
         try:
@@ -1004,7 +1004,7 @@ def test_genuine_current_protease_native_saved_typed_parent_and_closed_replay(tm
     import os
     if os.environ.get("HMMER_NATIVE_ORACLE_ORDINARY_PROTEASE_KINETICS") != "1":
         pytest.skip("requires explicit bounded current ordinary protease native selection")
-    from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
     from tests.test_homer_motif_saved_workflow import _archive_value
     from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _sqlite_pins
@@ -1252,15 +1252,15 @@ def _protease_retained_original(store, original):
 class _ProteaseRetainedChoices:
     """New current choices admit metadata, then read the three original views."""
     def __init__(self, store, library, proof, output, expected):
-        from gene_annotation_episode.providers import _SessionConnection
+        from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
         self.store, self.library, self.proof, self.output, self.expected = store, library, proof, output, expected
         self.states = {}
         self.connection = object.__new__(_SessionConnection)
         self.connection.scientific_prompt_states = {}
 
     async def complete(self, episode_id, role, instructions, context, schema):
-        from gene_annotation_episode.decision_context import state_frame
-        from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+        from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+        from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
         from tests.test_homer_motif_saved_workflow import _encode
         context = plain(context)
         if context.get("feedback"):
@@ -1428,7 +1428,7 @@ def _protease_retained_native_values(store, registry, workflow, context, origina
     for quantity in stored.QUANTITIES:
         assert values["context"]["physical"][quantity]["uncertainty"]["total_uncertainty"]["value_state"] == "stored_null"
     invocation, input = native_control["invocation"], native_control["intent"]["input"]
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     producer = EpisodeReturnRecords(store, original["run_id"], failure_prefix="retained_protease_").context(invocation["episode_id"])
     directory = Path(native_control["worker"]["selection"]["cwd"])
     assert host._check_input(registry, producer, native_control["arguments"], invocation, input, producer_directory=directory) == input
@@ -1454,10 +1454,10 @@ def _protease_retained_native_values(store, registry, workflow, context, origina
 def test_retained542_protease_current_admission_typed_receiver_and_closed_replay(tmp_path, monkeypatch):
     import os
     import shutil
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-    from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+    from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
-    from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+    from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
     from tests.test_homer_motif_saved_workflow import _archive, _archive_value
     from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history, _sqlite_pins
     if not os.environ.get("HMMER_NATIVE_ORACLE_PROTEASE_RETAINED_PROOF"):
@@ -1565,7 +1565,7 @@ def test_retained542_protease_current_admission_typed_receiver_and_closed_replay
 def _protease_retained_verify_completed(store, workflow, registry, proof, original, expected, retained,
         case, output, original_rows, original_artifacts, sources_before, monkeypatch, guarded, *, root=None, record=None):
     """Authenticate completed records and replay them; never acquire another result."""
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     from tests.test_homer_motif_saved_workflow import _archive, _archive_value
     from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history
     private = {reference for source in original["publications"]

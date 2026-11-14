@@ -11,15 +11,15 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.expression_nmf_common import digest
-from gene_annotation_episode.expression_nmf_result_contracts import validate_expression_nmf_result_selector, validate_projection
-from gene_annotation_episode.expression_nmf_result_worker import execute_expression_nmf_worker
-from gene_annotation_episode.expression_nmf_return_views import FACT_SOURCES, expression_nmf_fact_sources
-from gene_annotation_episode.native_expression_nmf_capture import capture_expression_nmf_native_files
-from gene_annotation_episode.native_expression_nmf_preparation import (
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_common import digest
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_result_contracts import validate_expression_nmf_result_selector, validate_projection
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_result_worker import execute_expression_nmf_worker
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_return_views import FACT_SOURCES, expression_nmf_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.native_expression_nmf_capture import capture_expression_nmf_native_files
+from gene_annotation_episode.episodic_workflow.root.library.native_expression_nmf_preparation import (
     build_native_expression_nmf_worker_plan, build_saved_expression_nmf_worker_plan,
     prepare_expression_nmf_result_worker, validate_prepared_expression_nmf_worker)
-from gene_annotation_episode.native_expression_nmf_storage import read_json
+from gene_annotation_episode.episodic_workflow.root.library.native_expression_nmf_storage import read_json
 from gene_annotation_episode.native_file_capture import capture_native_file, retained_native_file
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.state import Store
@@ -121,7 +121,7 @@ def test_saved_calculation_without_producer_or_native_environment(tmp_path, monk
             sheet={'file': file, 'path': str(retained_native_file(store, file))}, selector=selected)
         def forbidden(*args, **kwargs):
             pytest.fail('Saved sheet attempted original native work, loading or acquisition')
-        monkeypatch.setattr('gene_annotation_episode.expression_nmf_result_worker.load_expression_nmf_artifacts', forbidden)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.expression_nmf_result_worker.load_expression_nmf_artifacts', forbidden)
         monkeypatch.setattr('socket.socket', forbidden)
         monkeypatch.setattr('subprocess.Popen', forbidden)
         result = execute_expression_nmf_worker(saved)
@@ -133,7 +133,7 @@ def test_saved_calculation_without_producer_or_native_environment(tmp_path, monk
 
 def test_failed_projection_preserves_original_fit_for_saved_repair(tmp_path, monkeypatch):
     from types import SimpleNamespace
-    from gene_annotation_episode.expression_nmf_result_receipts import ExpressionNMFResultReceipts
+    from gene_annotation_episode.episodic_workflow.root.expression_nmf_result_receipts import ExpressionNMFResultReceipts
     with Store(tmp_path / 'store') as store:
         selected = selector('sample_contributions', sample_positions=[99])
         plan = native_plan(store, tmp_path / 'native', selected)
@@ -154,7 +154,7 @@ def test_failed_projection_preserves_original_fit_for_saved_repair(tmp_path, mon
             selector=selector('sample_contributions', saved=file, sample_positions=[1]))
         def forbidden(*args, **kwargs):
             pytest.fail('Saved repair attempted original acquisition')
-        monkeypatch.setattr('gene_annotation_episode.expression_nmf_result_worker.load_expression_nmf_artifacts', forbidden)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.expression_nmf_result_worker.load_expression_nmf_artifacts', forbidden)
         repaired = execute_expression_nmf_worker(saved)
         assert repaired['analysis_complete'] and not repaired['original_fit_acquired']
 
@@ -189,9 +189,9 @@ def test_actual_finite_worker_receipt_and_replay(tmp_path, monkeypatch):
 
 @pytest.mark.parametrize('variant', ['exact_fixture', 'actual_nonconvergence'])
 def test_saved_numeric_population_and_native_qualification(tmp_path, variant, monkeypatch):
-    from gene_annotation_episode.expression_nmf_artifacts import load_expression_nmf_artifacts
-    from gene_annotation_episode.expression_nmf_sheet import populate_nmf_sheet
-    from gene_annotation_episode.native_expression_nmf_storage import immutable_json
+    from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_artifacts import load_expression_nmf_artifacts
+    from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_sheet import populate_nmf_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.native_expression_nmf_storage import immutable_json
     manifest = NATIVE / ('native-none' if variant == 'exact_fixture' else 'native-nonconvergence') / 'fit-manifest.json'
     original = read_json(NATIVE / 'selected-native-plan.json')['requested_job']['native_expression_nmf']['input']
     loaded = load_expression_nmf_artifacts(manifest, expected_input_identity={k: original[k] for k in ('sha256', 'size_bytes')})

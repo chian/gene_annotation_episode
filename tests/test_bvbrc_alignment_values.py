@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.bvbrc_alignment_values import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_values import (
     native_number, validate_native_number, numeric_cell, validate_numeric_cell,
     document_id, diagnostic, requirement)
 

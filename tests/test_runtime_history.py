@@ -9,7 +9,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode import runtime
+from gene_annotation_episode.episodic_workflow.root import runtime
 from test_runtime import (FixtureController, FixtureTools, ScriptedProvider,
     commission, obj, reason, run, setup, tool)
 
@@ -232,7 +232,7 @@ def test_current_or_future_decision_cannot_be_recalled(tmp_path, index):
 
 
 def test_restoration_config_is_canonical_persisted_and_immutable_on_resume(tmp_path, monkeypatch):
-    from gene_annotation_episode.providers import default_config_path
+    from gene_annotation_episode.episodic_workflow.root.providers import default_config_path
     import tomllib
     store, tools = setup(tmp_path)
     config = tomllib.loads(default_config_path().read_text())
@@ -251,7 +251,7 @@ def test_restoration_config_is_canonical_persisted_and_immutable_on_resume(tmp_p
     # A changed package default cannot silently replace the recorded caller choice.
     changed_default = tmp_path / "new-defaults.toml"
     changed_default.write_text(default_config_path().read_text().replace("preview_size = 24", "preview_size = 99"))
-    monkeypatch.setattr("gene_annotation_episode.providers.default_config_path", lambda: changed_default)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.providers.default_config_path", lambda: changed_default)
     resumed = ScriptedProvider([reason(1)])
     run(store, tools, resumed, None, resume=True)
     assert resumed.contexts[0]["restored_episode_history"]["preview_size"] == 2

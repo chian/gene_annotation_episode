@@ -14,9 +14,9 @@ from urllib.parse import unquote
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.bvbrc_data_fields import FIELD_REGISTRY
-from gene_annotation_episode.bvbrc_data_query import encode_native_query
-from gene_annotation_episode.bvbrc_data_readers import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import FIELD_REGISTRY
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import (
     NUMERIC_TEXT_GRAMMARS, _decode_native_payload, extract_collection_rows, parse_data_snapshot,
     validate_data_sheet,
 )
@@ -447,7 +447,7 @@ def test_public_saved_sheet_validator_preserves_partial_data_and_detaches():
 
 
 def test_saved_prepared_request_replays_when_native_compiler_is_unavailable(monkeypatch):
-    from gene_annotation_episode import bvbrc_data_query
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_data_query
     binding = prepared("genome", ["genome_id", "plasmids"], filters=[
         {"field": "genome_id", "operator": "eq", "value": "α;beta"}])
     source = snapshot(binding, envelope([{"genome_id": "α;beta", "plasmids": 0}]))

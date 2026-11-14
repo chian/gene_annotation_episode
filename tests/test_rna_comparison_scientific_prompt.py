@@ -11,9 +11,9 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.decision_context import state_frame
-from gene_annotation_episode.rna_structure_comparison_presentation import render_rna_comparison_projections
-from gene_annotation_episode.rna_structure_comparison_views import PROJECTION_SOURCE
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_presentation import render_rna_comparison_projections
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE
 import gene_annotation_episode.scientific_process_prompt as prompt
 from test_scientific_process_prompt_delivery import (
     ScientificWire, INSTRUCTION_TEXT, OUTPUT_SCHEMA, complete, snapshot,
@@ -284,10 +284,10 @@ def test_reusable_steering_accepts_no_scientific_task_and_keeps_status_meaning(p
 
 def test_scientific_renderer_has_no_hidden_io_store_native_calculator_or_model_work(pair, scan, monkeypatch):
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.providers import _SessionConnection
+    from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
     modules = [importlib.import_module(name) for name in (
-        "gene_annotation_episode.rna_structure_comparison_calculations",
-        "gene_annotation_episode.rna_structure_comparison_publication",
+        "gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations",
+        "gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_publication",
         "gene_annotation_episode.rna_structure_native")]
     state = scientific_state(pair + scan)
     original = deepcopy(state)

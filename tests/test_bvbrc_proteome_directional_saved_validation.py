@@ -6,9 +6,9 @@ import json
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_bundle_v2_contracts as c
-from gene_annotation_episode.bvbrc_proteome_bundle_v2_resolution import _construct_bundle
-from gene_annotation_episode.bvbrc_proteome_directional_calculators import calculate_directional_components
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_v2_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_bundle_v2_resolution import _construct_bundle
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_calculators import calculate_directional_components
 from test_bvbrc_proteome_bundle_v2_resolution import fixture
 
 
@@ -118,7 +118,7 @@ def test_saved_ratio_checks_ignore_ambient_decimal_context(saved,monkeypatch):
 
 def test_explicit_changed_parameter_calculation_reads_saved_observations_only(saved,monkeypatch):
     case,result=saved
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_proteome_directional.parse_genome_comparison_directional_report',forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional.parse_genome_comparison_directional_report',forbidden)
     monkeypatch.setattr('socket.socket',forbidden);monkeypatch.setattr('subprocess.run',forbidden)
     before=deepcopy(result)
     options={**case['parameters']['directional_calculation_parameters'],'ratio_decimal_places':3}

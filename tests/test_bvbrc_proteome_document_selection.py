@@ -3,9 +3,9 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_contracts as c
 from gene_annotation_episode.bvbrc_appservice_contracts import ContractValidationError, validate_contract
-from gene_annotation_episode.bvbrc_proteome_bundle_projection import validate_saved_projection
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_bundle_projection import validate_saved_projection
 from test_bvbrc_proteome_bundle_resolution import fixture, consume, codes
 from test_bvbrc_appservice_bundle_values import fixture as acquisition_fixture, dependency, bundle
 from test_api_bvbrc_appservice import harness

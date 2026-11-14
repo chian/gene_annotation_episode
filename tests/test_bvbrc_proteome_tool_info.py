@@ -5,8 +5,8 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.bvbrc_application_definitions import prepare_application
-from gene_annotation_episode.bvbrc_proteome_tool_info import proteome_tool_contracts
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_tool_info import proteome_tool_contracts
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from test_api_bvbrc_appservice import CONFIG
 from test_bvbrc_appservice_custody import request, selector
 from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homology_tool_info import factory

@@ -25,10 +25,10 @@ from gene_annotation_episode.bvbrc_appservice_contracts import (
 )
 from gene_annotation_episode.bvbrc_appservice_tool_info import operation_catalog
 from gene_annotation_episode.bvbrc_appservice_readers import _bounded_capture
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, validate_schema
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG
@@ -329,8 +329,8 @@ def test_legacy_cache_denies_unauthorized_context_or_action_before_private_contr
         code = 'bvbrc_appservice_custody_input_not_received_before_commission'
     def forbidden(*args, **kwargs):
         pytest.fail('unauthorized cache admission read private control/entity bytes')
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_appservice_host._read', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_appservice_records._read', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_host._read', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_records._read', forbidden)
     monkeypatch.setattr(d.store, 'get_artifact', forbidden)
     with pytest.raises(ValueError, match='^' + code + '$'):
         d.api.appservice.legacy_cached_download(context, PREFIX + 'download', arguments, key)

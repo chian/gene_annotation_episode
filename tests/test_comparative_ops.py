@@ -10,7 +10,7 @@ from Bio.SeqRecord import SeqRecord
 import pytest
 
 from gene_annotation_episode.acquisition import parse_genbank
-from gene_annotation_episode.comparative_ops import genbank_neighborhood
+from gene_annotation_episode.episodic_workflow.root.library.comparative_ops import genbank_neighborhood
 
 
 def feature(start, end, *, strand=1, kind="CDS", tag="locus_A", product="native source label"):

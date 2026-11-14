@@ -16,10 +16,10 @@ from .alignment_site_native import (
     _selected_reference_alignment_authority, immutable_record, original_mappings,
     read_selected_reference_alignment, source_descriptor,
 )
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError, identity, obj
-from .episode_receipts import EpisodeReceipts
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_receipts import EpisodeReceipts
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
 from .molecular_sequence_input_contracts import (
     SUBJECT_NAMESPACES, input_record_digest, validate_molecular_sequence_received_source,

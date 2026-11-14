@@ -21,16 +21,16 @@ import pytest
 from method_loop.archive import iter_json
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.communication import plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_form
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS
-from gene_annotation_episode.rfam_batch_report_contracts import REPORT_FORMAT, RFAM_REPORT_METRIC_UNITS
-from gene_annotation_episode.rfam_batch_report_grader import calculate_rfam_batch_report_components
-from gene_annotation_episode.rfam_batch_returns import rfam_fact_sources
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_contracts import REPORT_FORMAT, RFAM_REPORT_METRIC_UNITS
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_grader import calculate_rfam_batch_report_components
+from gene_annotation_episode.episodic_workflow.root.rfam_batch_returns import rfam_fact_sources
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
@@ -572,12 +572,12 @@ def test_report_saved_recalculation_and_reopened_workflow_need_no_native_work(re
         raise AssertionError("Saved replay must not acquire, parse, calculate or call a model")
     for name in ("submit_file", "result", "status"):
         monkeypatch.setattr(run.native, name, forbidden)
-    for path in ("gene_annotation_episode.rfam_batch_report.populate_rfam_batch_report_sheet",
-        "gene_annotation_episode.rfam_batch_report_grader.calculate_rfam_batch_report_components",
-        "gene_annotation_episode.rfam_batch_report._alignment_geometry",
-        "gene_annotation_episode.rfam_batch_report.parse_rfam_report_membership",
-        "gene_annotation_episode.rfam_batch_table.parse_rfam_report_membership",
-        "gene_annotation_episode.rfam_batch_publication.publish_rfam_batch_result",
+    for path in ("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report.populate_rfam_batch_report_sheet",
+        "gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_grader.calculate_rfam_batch_report_components",
+        "gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report._alignment_geometry",
+        "gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report.parse_rfam_report_membership",
+        "gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table.parse_rfam_report_membership",
+        "gene_annotation_episode.episodic_workflow.root.library.rfam_batch_publication.publish_rfam_batch_result",
         "gene_annotation_episode.rfam_batch_transport.RfamBatchHTTP._request"):
         monkeypatch.setattr(path, forbidden)
     class NoModel:

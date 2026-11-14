@@ -14,7 +14,7 @@ import time
 
 from . import native_lifecycle as native
 from .acquisition import AcquisitionError
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .episode_bindings import BindingContext
 from .execution_contracts import canonical, digest
 from .local_jobs import LocalJobPolicy

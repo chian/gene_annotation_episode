@@ -13,9 +13,9 @@ import os
 from pathlib import Path
 
 import pytest
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
 F = import_module('gene_annotation_episode.episodic_workflow.root.tests.fixtures.retained_workflow.verification.tool_graders_chromatin_workflow_2026-10-27_451.fixture_helpers')

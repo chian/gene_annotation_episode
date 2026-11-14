@@ -11,9 +11,9 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import xmfa_formats, xmfa_format_contracts
-from gene_annotation_episode.xmfa_formats import parse_mauve_xmfa
-from gene_annotation_episode.xmfa_format_contracts import validate_xmfa_document, CALLER_ERROR_CODES
+from gene_annotation_episode.episodic_workflow.root.library import xmfa_formats, xmfa_format_contracts
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_formats import parse_mauve_xmfa
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_format_contracts import validate_xmfa_document, CALLER_ERROR_CODES
 
 
 TEXT = ('#FormatVersion Mauve1\n#Sequence1File\tinput.fa\n#Sequence1Entry\t1\n'

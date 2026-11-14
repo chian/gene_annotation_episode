@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.mauve_backbone_formats import parse_mauve_backbone, parse_mauve_bbcols
-from gene_annotation_episode.mauve_backbone_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats import parse_mauve_backbone, parse_mauve_bbcols
+from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_contracts import (
     BACKBONE_DIALECT, BBCOLS_DIALECT, SIDECAR_NAMESPACE,
     validate_mauve_backbone_document, validate_mauve_bbcols_document,
 )
@@ -195,8 +195,8 @@ def test_saved_backbone_document_corruption_is_rejected(change):
 def test_saved_document_validation_is_detached_and_does_not_parse(monkeypatch):
     b = backbone()['value']; cols = bbcols()['value']; original = deepcopy(b)
     def forbidden(*args, **kwargs): raise AssertionError('native parser called')
-    monkeypatch.setattr('gene_annotation_episode.mauve_backbone_formats.parse_mauve_backbone', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.mauve_backbone_formats.parse_mauve_bbcols', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats.parse_mauve_backbone', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats.parse_mauve_bbcols', forbidden)
     result = validate_mauve_backbone_document(b)
     result['rows'].clear()
     assert b == original

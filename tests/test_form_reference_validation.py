@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import ReportBoundaryError, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.form_reference_validation import (
     _binding_key, form_reference_validation, form_validation_value,

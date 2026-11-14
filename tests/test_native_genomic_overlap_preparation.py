@@ -14,14 +14,14 @@ import socket
 
 import pytest
 
-from gene_annotation_episode import native_genomic_overlap_preparation as preparation
+from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_preparation as preparation
 from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.native_file_capture import (
     NativeFileCaptureError, capture_native_file, capture_declared_native_files,
     retained_native_file,
 )
-from gene_annotation_episode.native_genomic_overlap_contracts import genomic_overlap_output_files
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_contracts import genomic_overlap_output_files
 from gene_annotation_episode.state import Store
 
 
@@ -130,7 +130,7 @@ def test_actual_native_worker_snapshot_canonical_and_all_hash_joins(store, tmp_p
     assert execution["stdout_file"]["artifact_ref"] == execution["stderr_file"]["artifact_ref"]
     assert execution["stdout_file"]["format"] != execution["stderr_file"]["format"]
     assert handle["command"] == request["command"] == [execution["interpreter"]["path"], "-B", "-S", "-m",
-        "gene_annotation_episode.genomic_overlap_result_worker", plan["directory"] + "/plan.json"]
+        "gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_result_worker", plan["directory"] + "/plan.json"]
     assert execution["request_file"]["sha256"] == handle["request_sha256"]
     assert request["env"]["PYTHONPATH"].split(os.pathsep)[0] == plan["directory"] + "/source_snapshot"
     assert request["env"]["PYTHONNOUSERSITE"] == "1" and request["env"]["PYTHONHOME"]
@@ -169,7 +169,7 @@ def test_saved_recalculation_only_received_sheet_and_changed_parameters(store, t
     with monkeypatch.context() as patch:
         patch.setattr(socket, "create_connection", deny)
         # These native APIs must not participate in a saved-sheet calculation.
-        from gene_annotation_episode import native_genomic_overlap_local, native_genomic_overlap_driver
+        from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_local, native_genomic_overlap_driver
         patch.setattr(native_genomic_overlap_local, "local_genomic_overlap_plan", deny)
         patch.setattr(native_genomic_overlap_driver, "main", deny)
         second = preparation.prepare_genomic_overlap_worker(store, plan=plan, policy=POLICY)

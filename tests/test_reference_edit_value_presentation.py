@@ -18,12 +18,12 @@ import sqlite3
 
 import pytest
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.decision_context import apply_state_frame, state_frame
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.decision_context import apply_state_frame, state_frame
 from gene_annotation_episode.domain import canonical, identity
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.molecular_result_facts import frozen_molecular_facts, received_molecular_facts
-from gene_annotation_episode.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 from gene_annotation_episode import reference_edit_outcomes as core
 from gene_annotation_episode import scientific_process_prompt as prompt
 from gene_annotation_episode.state import Store

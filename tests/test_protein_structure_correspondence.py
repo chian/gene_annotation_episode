@@ -3,8 +3,8 @@ from copy import deepcopy
 from importlib import import_module
 import pytest
 from gene_annotation_episode.biopython_pairwise_grader import build_biopython_pairwise_sheet
-from gene_annotation_episode.protein_structure_correspondence import correspondence_from_pairwise_sheet, validate_explicit_residue_map
-from gene_annotation_episode.protein_structure_sequences import rebind_structure_sequence
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_correspondence import correspondence_from_pairwise_sheet, validate_explicit_residue_map
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_sequences import rebind_structure_sequence
 f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
 
 
@@ -118,7 +118,7 @@ def test_declared_no_coordinate_residue_retains_correspondence():
 
 
 def test_retained_filled_examples_are_hand_checkable_and_source_bound(tmp_path):
-    from gene_annotation_episode.protein_structure_contracts import canonical
+    from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import canonical
     fixed_bytes, fixed_parsed, fixed, fixed_meta = f.fixture_pdb()
     moving_bytes, moving_parsed, moving, moving_meta = f.fixture_pdb(role="moving", chain="B")
     sheet, kwargs, correspondence = f.retained_alignment(fixed, moving)

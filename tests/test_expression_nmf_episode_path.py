@@ -17,8 +17,8 @@ import sqlite3
 
 import pytest
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
 F = import_module('gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.retained_workflow.verification.tool_graders_expression_nmf_episode_path_2026-10-27_490.fixture_helpers')
@@ -84,7 +84,7 @@ def connected_case(tmp_path_factory):
         actual_prepare = native_lifecycle.prepare_job
 
         def saved_worker_only(command, **kwargs):
-            assert command[1:5] == ['-B', '-S', '-m', 'gene_annotation_episode.expression_nmf_result_worker']
+            assert command[1:5] == ['-B', '-S', '-m', 'gene_annotation_episode.episodic_workflow.root.library.expression_nmf_result_worker']
             plan = json.loads(Path(command[-1]).read_bytes())
             assert plan['mode'] == 'saved_sheet_recalculation'
             assert plan['selector']['saved_sheet_file'] == case.sheet_file
@@ -104,7 +104,7 @@ def connected_case(tmp_path_factory):
                 return _function(handle, *args, **kwargs)
 
             patch.setattr(native_lifecycle, name, saved_lifecycle_only)
-        patch.setattr('gene_annotation_episode.native_expression_nmf_results.capture_expression_nmf_native_files', deny)
+        patch.setattr('gene_annotation_episode.episodic_workflow.root.native_expression_nmf_results.capture_expression_nmf_native_files', deny)
         patch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', deny)
         patch.setattr('socket.create_connection', deny)
         patch.setattr('socket.socket.connect', deny)
@@ -263,7 +263,7 @@ def test_closed_workflow_and_result_replay_performs_no_new_work(connected_case, 
     for name in ('prepare_job', 'start_prepared', 'resume_start', 'status', 'wait_job', 'collect'):
         monkeypatch.setattr('gene_annotation_episode.native_lifecycle.' + name, deny)
     for name in ('capture_expression_nmf_native_files', 'prepare_expression_nmf_result_worker'):
-        monkeypatch.setattr('gene_annotation_episode.native_expression_nmf_results.' + name, deny)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_expression_nmf_results.' + name, deny)
     monkeypatch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', deny)
     monkeypatch.setattr('socket.create_connection', deny)
     monkeypatch.setattr('socket.socket.connect', deny)
@@ -293,15 +293,16 @@ def test_closed_workflow_and_result_replay_performs_no_new_work(connected_case, 
 
 def test_explicit_retained_closed_nmf_workflow_replays_without_fit_or_calculation(tmp_path, monkeypatch):
     """Reopen a separately pinned completed case, independently of connected_case."""
-    from gene_annotation_episode import acquisition, expression_nmf_calculations as calculations
-    from gene_annotation_episode import expression_nmf_result_views as projections
-    from gene_annotation_episode import expression_nmf_result_worker as worker
-    from gene_annotation_episode import expression_nmf_sheet as sheets
+    from gene_annotation_episode import acquisition
+    from gene_annotation_episode.episodic_workflow.root.library import expression_nmf_calculations as calculations
+    from gene_annotation_episode.episodic_workflow.root.library import expression_nmf_result_views as projections
+    from gene_annotation_episode.episodic_workflow.root.library import expression_nmf_result_worker as worker
+    from gene_annotation_episode.episodic_workflow.root.library import expression_nmf_sheet as sheets
     from gene_annotation_episode import native_expression_nmf_driver as driver
-    from gene_annotation_episode import native_expression_nmf_preparation as preparation
-    from gene_annotation_episode import native_expression_nmf_results as native_results
+    from gene_annotation_episode.episodic_workflow.root.library import native_expression_nmf_preparation as preparation
+    from gene_annotation_episode.episodic_workflow.root import native_expression_nmf_results as native_results
     from gene_annotation_episode import native_lifecycle
-    from gene_annotation_episode.execution_progress import ExecutionTargetReader
+    from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionTargetReader
     from gene_annotation_episode.tools import ToolRegistry
 
     environment = 'HMMER_NATIVE_ORACLE_NMF_RETAINED'

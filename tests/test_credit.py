@@ -12,7 +12,7 @@ import pytest
 from gene_annotation_episode.credit import (
     AXES, CreditPolicy, project_credit, softened_hypervolume,
 )
-from gene_annotation_episode.numerical import YieldController
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController
 from gene_annotation_episode.domain import ContractError
 
 
@@ -1006,7 +1006,7 @@ def test_native_store_reasoning_commit_credit_provenance_and_reopen(tmp_path, mo
 
         # The parent's closed typed form refers to the very same committed
         # application, annotation and source fact used by the projection.
-        from gene_annotation_episode.communication import (
+        from gene_annotation_episode.episodic_workflow.root.communication import (
             form_with_facts, reference_resolver, validate_form)
         schema = {"type": "object", "additionalProperties": False, "properties": {
             "assessment_refs": {"type": "array", "items": {"type": "string", "format": "reference",

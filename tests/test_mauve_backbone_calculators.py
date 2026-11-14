@@ -8,11 +8,11 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.mauve_backbone_calculators import calculate_mauve_backbone_components
-from gene_annotation_episode.mauve_backbone_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_calculators import calculate_mauve_backbone_components
+from gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_contracts import (
     validate_mauve_backbone_components, validate_mauve_backbone_selection,
 )
-from gene_annotation_episode.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_inputs
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_inputs
 from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
 from test_bvbrc_genome_alignment_input_contracts import input_fixture, original_task, content, evidence
 from test_mauve_backbone_formats import backbone, selection, members, NATIVE, HEADER
@@ -254,8 +254,8 @@ def forbid_io(monkeypatch):
     for owner, field in ((builtins, 'open'), (Path, 'open'), (socket, 'socket'), (socket, 'create_connection'),
                          (subprocess, 'Popen'), (subprocess, 'run')):
         monkeypatch.setattr(owner, field, forbidden)
-    monkeypatch.setattr('gene_annotation_episode.mauve_backbone_formats.parse_mauve_backbone', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.mauve_backbone_formats.parse_mauve_bbcols', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats.parse_mauve_backbone', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_formats.parse_mauve_bbcols', forbidden)
     monkeypatch.setattr('gene_annotation_episode.phylogeny_formats.parse_aligned_fasta', forbidden)
     return forbidden
 
@@ -268,7 +268,7 @@ def test_saved_data_recalculate_changed_threshold_without_io_and_validator_never
     second = calculate(doc, threshold=3, denominator='validated_staged_length', inputs=sources)
     assert [r['known_union_bases']['value'] for r in first['coverage']] == [50, 49, 19]
     assert [r['known_union_bases']['value'] for r in second['coverage']] == [18, 18, 19]
-    monkeypatch.setattr('gene_annotation_episode.mauve_backbone_calculators.calculate_mauve_backbone_components', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.mauve_backbone_calculators.calculate_mauve_backbone_components', forbidden)
     assert validate_mauve_backbone_components(first) == first
     assert doc == original and sources == sources_before
 

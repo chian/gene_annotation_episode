@@ -16,8 +16,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.flux_balance_contracts import validate_flux_balance_record
-from gene_annotation_episode.flux_balance_readers import (
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_contracts import validate_flux_balance_record
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers import (
     parse_cobra_glpk_model_capture, parse_cobra_glpk_problem_capture,
     parse_cobra_glpk_solution_capture, parse_fba_capture,
 )

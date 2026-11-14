@@ -20,13 +20,13 @@ from urllib.parse import parse_qsl, urlsplit
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode import bvbrc_data_fields as fields_module
-from gene_annotation_episode import bvbrc_data_query as query_module
-from gene_annotation_episode.bvbrc_data_fields import (
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_data_fields as fields_module
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_data_query as query_module
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import (
     COLLECTIONS, FIELD_CONTRACT_VERSION, FIELD_REGISTRY, METADATA_FIELDS,
     MOLECULAR_MEASUREMENT_FIELDS, NUMERICAL_FIELDS, SELECTABLE_FIELDS,
 )
-from gene_annotation_episode.bvbrc_data_query import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import (
     COMPILER_VERSION, DATA_QUERY_SCHEMA, PREPARED_DATA_QUERY_SCHEMA,
     encode_native_query, validate_data_query,
 )

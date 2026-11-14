@@ -9,9 +9,9 @@ from pathlib import Path
 
 import pytest
 
-import gene_annotation_episode.bvbrc_minhash_grader as grader
-import gene_annotation_episode.bvbrc_minhash_views as views
-from gene_annotation_episode.communication import (
+import gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_grader as grader
+import gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_views as views
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, reference_resolver, validate_closed_schema, validate_form,
 )
 from test_bvbrc_minhash_views import (

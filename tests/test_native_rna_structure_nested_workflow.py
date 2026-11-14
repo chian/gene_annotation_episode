@@ -8,9 +8,9 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode.communication import plain, validate_form
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.rna_structure_result_views import FAMILY_SOURCES
+from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import FAMILY_SOURCES
 from test_native_rna_structure_results_integration import (
     RUN_ID, assert_accounting, history, result_form, selector, values, workflow_case)
 
@@ -69,8 +69,8 @@ def test_actual_saved_sheet_recalculation_after_native_files_removed(tmp_path, m
             (RUN_ID, body['episode_id'], body['target']['origin_episode_id']))]
         shutil.rmtree(Path(case.plan['identity']['execution_id']).parent)
         Path(case.job['operands'][0]['path']).unlink()
-        monkeypatch.setattr('gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle', forbid)
-        monkeypatch.setattr('gene_annotation_episode.native_rna_structure_local.local_rna_structure_plan', forbid)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle', forbid)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local.local_rna_structure_plan', forbid)
         monkeypatch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', forbid)
         monkeypatch.setattr('gene_annotation_episode.rna_structure_native.parse_rna_native_record', forbid)
         monkeypatch.setattr('socket.create_connection', forbid)
@@ -85,9 +85,9 @@ def denied(*args, **kwargs):
     raise AssertionError("saved worker attempted scientific acquisition or native parsing")
 import gene_annotation_episode.rna_structure_native as parser
 parser.parse_rna_native_record = parser.populate_rna_prediction_sheet = parser.populate_rna_feature_sheet = denied
-import gene_annotation_episode.native_rna_structure_worker as native
+import gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker as native
 native.predict_rna_secondary_structure = native.analyze_rna_secondary_structure_features = native._load_native = denied
-import gene_annotation_episode.native_rna_structure_acquisition as acquisition
+import gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_acquisition as acquisition
 acquisition.capture_local_rna_structure_bundle = denied
 socket.create_connection = socket.socket = denied
 subprocess.run = subprocess.Popen = denied
@@ -214,7 +214,7 @@ def test_original_action_replay_keeps_receipt_and_observation_history(nested_cas
     directory = case.owner.native_rna_structure_results._saved_directory(body['episode_id'], body['operation_key'])
     original = (directory / 'receipt.json').read_bytes()
     history_before = [dict(row) for row in case.store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')]
-    monkeypatch.setattr('gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle', forbid)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle', forbid)
     monkeypatch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', forbid)
     replay = asyncio.run(case.owner.execute(case.result_contexts[0], 'execution.results.collect', {}, body['operation_key']))
     assert replay['result'] == body

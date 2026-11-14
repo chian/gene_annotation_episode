@@ -140,8 +140,8 @@ class HPCContinuationEstimator:
         return type(self)(self.verify, cost)
 
     def __call__(self, history, parameters, contexts):
-        from .numerical import YieldEstimate, NumericBand, estimate_score_yield
-        from .completion_evidence import validate_completion_evidence
+        from .episodic_workflow.root.numerical import YieldEstimate, NumericBand, estimate_score_yield
+        from .episodic_workflow.root.completion_evidence import validate_completion_evidence
         if len(history) != len(contexts):
             raise ValueError('hpc_continuation_requires_aligned_contexts')
         supplied = contexts[-1].get('hpc_continuation') if contexts and contexts[-1] else None

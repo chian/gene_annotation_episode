@@ -89,7 +89,7 @@ def test_actual_retained_homer_post_read_context_reaches_provider_text(tmp_path,
     from gene_annotation_episode import acquisition, homer_motif_tools as host
     from gene_annotation_episode import native_homer_execution as native
     from gene_annotation_episode import native_homer_worker, native_lifecycle
-    from gene_annotation_episode.providers import _SessionConnection
+    from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.tools import ToolRegistry
     from test_homer_motif_workflow import QUESTION

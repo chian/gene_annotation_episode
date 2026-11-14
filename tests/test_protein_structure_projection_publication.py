@@ -9,9 +9,9 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.native_protein_structure_acquisition import retained_protein_structure_file
-from gene_annotation_episode.protein_structure_projection_publication import publish_protein_structure_projection
-from gene_annotation_episode.protein_structure_result_views import project_protein_structure_results
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_acquisition import retained_protein_structure_file
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_projection_publication import publish_protein_structure_projection
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views import project_protein_structure_results
 from gene_annotation_episode.state import Store
 
 
@@ -160,9 +160,9 @@ def test_existing_artifact_damage_is_reported_without_repair(tmp_path, monkeypat
 
 @pytest.mark.parametrize("delivery", ["values", "artifact"])
 def test_actual_publication_enters_only_requested_typed_form_field(tmp_path, delivery):
-    from gene_annotation_episode.communication import form_with_facts, validate_form
-    from gene_annotation_episode.episode_contract_information import expand_fact_form
-    from gene_annotation_episode.protein_structure_result_views import protein_structure_fact_sources
+    from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, validate_form
+    from gene_annotation_episode.episodic_workflow.root.episode_contract_information import expand_fact_form
+    from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views import protein_structure_fact_sources
     source = "execution_protein_structure_projections"
     declaration = {"type": "object", "properties": {"answer": {"$ref": "episode-fact:" + source}},
                    "required": ["answer"], "additionalProperties": False}

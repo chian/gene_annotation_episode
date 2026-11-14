@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.episode_work_report import requested_action_history
+from gene_annotation_episode.episodic_workflow.root.episode_work_report import requested_action_history
 
 
 @pytest.fixture

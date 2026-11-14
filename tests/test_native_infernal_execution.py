@@ -15,10 +15,10 @@ from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.native_infernal_contracts import (
     native_infernal_digest, output_contract, requested_job_from_infernal,
 )
-from gene_annotation_episode.native_infernal_driver import (
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_driver import (
     main, run_native_infernal, validate_native_infernal_bundle_files,
 )
-from gene_annotation_episode.native_infernal_local import local_infernal_plan, prepare_local_infernal
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_local import local_infernal_plan, prepare_local_infernal
 from gene_annotation_episode.practical_execution_state import _immutable
 
 
@@ -82,7 +82,7 @@ def fake_native(monkeypatch, *, returncode=0, tables=True):
                 if flag in argv:
                     Path(argv[argv.index(flag) + 1]).write_bytes(b"synthetic result fixture\n")
         return subprocess.CompletedProcess(argv, returncode)
-    monkeypatch.setattr("gene_annotation_episode.native_infernal_driver.subprocess.run", run)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_infernal_driver.subprocess.run", run)
     return calls
 
 
@@ -166,7 +166,7 @@ def test_nonzero_is_retained_with_diagnostics_and_missing_outputs(tmp_path, monk
 
 
 def test_partial_copy_retains_actual_partial_hash_and_never_executes(tmp_path, monkeypatch):
-    from gene_annotation_episode import native_infernal_driver as driver
+    from gene_annotation_episode.episodic_workflow.root.library import native_infernal_driver as driver
     plan = plan_for(tmp_path)
     job = plan["requested_job"]["native_infernal"]
     sequence = Path(job["operands"][1]["path"])

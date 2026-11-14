@@ -12,8 +12,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import protein_conservation_publication as publication
-from gene_annotation_episode import protein_conservation_result_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import protein_conservation_publication as publication
+from gene_annotation_episode.episodic_workflow.root.library import protein_conservation_result_contracts as contracts
 from gene_annotation_episode import phylogeny_calculators, phylogeny_formats
 from gene_annotation_episode import phylogeny_calculation_contracts as numerical
 from gene_annotation_episode.state import Store
@@ -159,7 +159,7 @@ def test_component_declaration_cannot_select_another_private_path(monkeypatch, c
 @pytest.mark.parametrize("version", [contracts.SOURCE_VERSION, publication.CAPTURE_VERSION])
 def test_conservation_receipt_policy_keeps_declared_source_dependencies_private(version):
     """Classify supplied metadata only; this establishes no Source custody."""
-    from gene_annotation_episode.episode_receipts import EpisodeReceipts
+    from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
     receipts = object.__new__(EpisodeReceipts)
     receipts.store = SimpleNamespace(_refs=_forbidden)
     metadata = dict(record_type="source", origin="tool", provider=contracts.TOOL, version=version)
@@ -168,7 +168,7 @@ def test_conservation_receipt_policy_keeps_declared_source_dependencies_private(
 
 @pytest.mark.parametrize("change", ["provider", "version", "record_type", "origin"])
 def test_conservation_receipt_policy_does_not_reclassify_other_record_metadata(change):
-    from gene_annotation_episode.episode_receipts import EpisodeReceipts
+    from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
     receipts = object.__new__(EpisodeReceipts)
     seen = []
     def references(value):

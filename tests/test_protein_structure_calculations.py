@@ -4,7 +4,7 @@ from importlib import import_module
 import math
 import pytest
 
-from gene_annotation_episode.protein_structure_calculations import (
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations import (
     calculate_protein_structure_components, resolve_pair_selection, fit_ca_transform, validate_declared_transform,
 )
 

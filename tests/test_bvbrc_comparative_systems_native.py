@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_comparative_systems_handoff_contracts import canonical_sha256, schema, validate_shape
-from gene_annotation_episode.bvbrc_comparative_systems_native import parse_comparative_systems_document
-from gene_annotation_episode.bvbrc_comparative_systems_sheet_contracts import validate_native_document
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_handoff_contracts import canonical_sha256, schema, validate_shape
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_native import parse_comparative_systems_document
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_sheet_contracts import validate_native_document
 
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_comparative_systems_native"
@@ -48,7 +48,7 @@ def family_modified(change):
 
 
 def test_shared_asset_is_reviewed_and_detached():
-    import gene_annotation_episode.bvbrc_comparative_systems_handoff_contracts as contracts
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_handoff_contracts as contracts
     path = Path(contracts.__file__).with_name("bvbrc_comparative_systems_handoff_schemas.json")
     assert hashlib.sha256(path.read_bytes()).hexdigest() == "b1310c2f3c7a464191f8c9eb5918d516ed2e6dd13f49bec024a2e9a8bde159f8"
     s = schema("SourceDocumentV1")

@@ -18,13 +18,13 @@ import stat
 import numpy as np
 import pytest
 
-from gene_annotation_episode import native_protein_structure_preparation as preparation
+from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_preparation as preparation
 from gene_annotation_episode import native_lifecycle as lifecycle
-from gene_annotation_episode import protein_structure_result_worker as worker
-from gene_annotation_episode import protein_structure_calculations as calculations
-from gene_annotation_episode import protein_structure_sheet as sheets
-from gene_annotation_episode import native_protein_structure_worker as native_worker
-from gene_annotation_episode import native_protein_structure_acquisition as acquisition
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_result_worker as worker
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_calculations as calculations
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_sheet as sheets
+from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_worker as native_worker
+from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_acquisition as acquisition
 from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.local_jobs import LocalJobPolicy
@@ -137,7 +137,7 @@ def test_actual_worker_retains_exact_native_and_baseline(store, tmp_path, label)
                         ("handle_artifact_ref", "worker.handle.json")):
         assert store.get_artifact(execution[field]) == (directory / name).read_bytes()
     handle = json.loads(store.get_artifact(execution["handle_artifact_ref"]))
-    assert handle["command"][-4:] == ["-B", "-m", "gene_annotation_episode.protein_structure_result_worker", str(directory / "plan.json")]
+    assert handle["command"][-4:] == ["-B", "-m", "gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_worker", str(directory / "plan.json")]
     request = json.loads(store.get_artifact("artifact_" + handle["request_sha256"]))
     assert request["env"]["PYTHONPATH"] == str(REPO)
     assert request["env"]["TMPDIR"] == str(directory)

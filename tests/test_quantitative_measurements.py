@@ -18,7 +18,7 @@ from gene_annotation_episode.boundary_validation import ModelOutputError, parse_
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError, REASONING_SCHEMA, validate_schema
 from gene_annotation_episode.export import export_annotation
-from gene_annotation_episode.runtime import _action_generation_schema, _decode_action_response, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import _action_generation_schema, _decode_action_response, run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider

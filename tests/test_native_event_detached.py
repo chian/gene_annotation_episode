@@ -17,9 +17,9 @@ import pytest
 from method_loop.archive import ArchivedRecord
 from method_loop.durable import DurableExecutionStore, content_digest
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import FileAsset, HomologyJobs, OUTPUTS, digest
-from gene_annotation_episode.native_events import publish_native_events
+from gene_annotation_episode.episodic_workflow.root.native_events import publish_native_events
 from gene_annotation_episode.native_lifecycle import collect, release, status
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from detached_workflow_fixture import ScriptedProvider, until

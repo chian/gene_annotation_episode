@@ -14,10 +14,10 @@ import pytest
 from method_loop import EpisodeGoal
 from method_loop.durable import content_digest, native_target_descriptor, native_target_handle
 from method_loop.identities import EpisodeRef
-from gene_annotation_episode.communication import ReportBoundaryError, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.native_event_information import (NativeEventInformation,
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.library.native_event_information import (NativeEventInformation,
     report_sources, validate_target_view)
 from gene_annotation_episode.resource_records import LAUNCH_VERSION, RESULTS_VERSION
 from gene_annotation_episode.state import Store

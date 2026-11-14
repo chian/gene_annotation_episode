@@ -15,16 +15,16 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.domain import ContractError, canonical, obj
-from gene_annotation_episode.communication import ReportBoundaryError, validate_form
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_form
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.materials import source_for_artifact
 from gene_annotation_episode.molecular_measurement_tools import (
     ITC_TOOL, MolecularOperationUnpublished, authenticate_itc_invocation,
     itc_tool_contract, read_retained_itc_result,
 )
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_grading_entries
@@ -214,7 +214,7 @@ def test_registered_itc_fit_same_episode_next_iteration_saved_and_closed_replay(
             altered['assignment']['selection']['child_tool_info'][0]['resources'] = 'hpc'
             assert compare(parent_context, actual_context, altered, decision_index=0) is False
             from dataclasses import replace
-            from gene_annotation_episode.communication import plain
+            from gene_annotation_episode.episodic_workflow.root.communication import plain
             forged_request = plain(actual_context.request)
             forged_request['message']['episode_assignment']['selection']['child_tool_info'][0]['instructions'] = 'forged host instruction'
             forged = replace(actual_context, request=forged_request,

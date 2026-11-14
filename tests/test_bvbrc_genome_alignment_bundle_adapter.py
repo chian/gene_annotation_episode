@@ -9,8 +9,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_adapter as facade
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_resolution as resolution
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_adapter as facade
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_resolution as resolution
 from test_bvbrc_genome_alignment_bundle_resolution import arguments
 
 

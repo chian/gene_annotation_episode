@@ -22,16 +22,16 @@ from urllib.response import addinfourl
 
 import pytest
 
-from gene_annotation_episode import encode_tools as encode
+from gene_annotation_episode.episodic_workflow.root.library import encode_tools as encode
 from gene_annotation_episode import jaspar_tools as jaspar
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients
-from gene_annotation_episode.communication import validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema, validate_form
 from gene_annotation_episode.data_acquisition_receipts import acquisition_receipt_schema, validate_acquisition_receipt
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.waiting import validate_pending
+from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
 
 
 SEARCH = {"operation": "search", "object_type": "File", "filters": [

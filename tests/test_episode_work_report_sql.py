@@ -3,7 +3,7 @@ import json
 import sqlite3
 from types import SimpleNamespace
 
-from gene_annotation_episode.episode_work_report import _object_sql, completed_action_reports
+from gene_annotation_episode.episodic_workflow.root.episode_work_report import _object_sql, completed_action_reports
 
 
 def database():

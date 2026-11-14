@@ -3,7 +3,7 @@ import asyncio
 import json
 
 from gene_annotation_episode.credit import project_credit
-from gene_annotation_episode.runtime import _references_in, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import _references_in, run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider, obj

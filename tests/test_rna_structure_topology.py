@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.rna_structure_contracts import COORDINATE_SYSTEM, validate_topology
-from gene_annotation_episode.rna_structure_topology import parse_rna_topology
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_contracts import COORDINATE_SYSTEM, validate_topology
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_topology import parse_rna_topology
 
 PACKET = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rna_structure_core_354"
 CASES = json.loads((PACKET / "topology_oracles.json").read_text())

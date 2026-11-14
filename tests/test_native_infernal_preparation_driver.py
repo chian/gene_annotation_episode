@@ -9,10 +9,10 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import native_infernal_preparation_driver as driver
+from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_driver as driver
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.native_infernal_contracts import native_infernal_digest
-from gene_annotation_episode.native_infernal_preparation_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import (
     requested_job_from_infernal_preparation,
 )
 
@@ -384,7 +384,7 @@ def test_actual_native_failure_keeps_partial_model_and_diagnostic(tmp_path):
 
 def test_actual_pressed_quartet_consumed_by_separately_selected_cmscan(tmp_path):
     from gene_annotation_episode.native_infernal_contracts import output_contract, requested_job_from_infernal
-    from gene_annotation_episode.native_infernal_driver import run_native_infernal
+    from gene_annotation_episode.episodic_workflow.root.library.native_infernal_driver import run_native_infernal
 
     selected = native_job("cmpress", "press")
     calibrated = native_job("cmstat", "summary")["operands"][0]

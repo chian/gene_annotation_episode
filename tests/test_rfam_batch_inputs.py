@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS, rfam_digest
-from gene_annotation_episode.rfam_batch_inputs import populate_rfam_batch_json_sheet
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS, rfam_digest
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs import populate_rfam_batch_json_sheet
 
 
 EXAMPLES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/contract/examples"

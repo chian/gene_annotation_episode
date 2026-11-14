@@ -16,17 +16,17 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import native_infernal_preparation_acquisition as acquisition
-from gene_annotation_episode import native_infernal_preparation_result_publication as publication
-from gene_annotation_episode import native_infernal_preparation_worker as pure
-from gene_annotation_episode import infernal_preparation_result_views as views
+from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_acquisition as acquisition
+from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_result_publication as publication
+from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_worker as pure
+from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_result_views as views
 from gene_annotation_episode import native_lifecycle
 from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.native_infernal_contracts import native_infernal_digest as digest
-from gene_annotation_episode.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
-from gene_annotation_episode.native_infernal_preparation_local import prepare_local_infernal_preparation
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_local import prepare_local_infernal_preparation
 from gene_annotation_episode.practical_execution_state import _immutable
 from gene_annotation_episode.state import Store
 
@@ -491,8 +491,8 @@ def test_saved_calibration_sheet_recalculates_without_parser_native_or_network(t
     with Store(tmp_path / "store") as store:
         _, _, _, _, _, prepared = grade(store, tmp_path, "calibrate")
         grading = full(store, prepared)
-        from gene_annotation_episode import infernal_preparation_statistics as parsers
-        from gene_annotation_episode import infernal_preparation_models as models
+        from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_statistics as parsers
+        from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_models as models
         monkeypatch.setattr(parsers, "populate_infernal_statistics_sheet", forbidden)
         monkeypatch.setattr(models, "extract_infernal_models", forbidden)
         monkeypatch.setattr(subprocess, "run", forbidden)

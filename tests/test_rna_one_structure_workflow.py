@@ -12,14 +12,14 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.decision_context import state_frame
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.numerical import NumericBand
-from gene_annotation_episode.rna_structure_comparison_contracts import validate_rna_comparison_selector
-from gene_annotation_episode.rna_structure_comparison_prompt import rna_comparison_results_instructions
-from gene_annotation_episode.rna_structure_comparison_views import PROJECTION_SOURCE
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_contracts import validate_rna_comparison_selector
+from gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_prompt import rna_comparison_results_instructions
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE
 from test_native_rna_structure_results_integration import history, RUN_ID
 from test_scientific_process_prompt_delivery import ScientificWire, OUTPUT_SCHEMA
 
@@ -149,10 +149,10 @@ def test_one_collect_one_observation_no_new_native_work_or_source_credit(one_cas
 def test_replay_preserves_receipt_and_adds_no_worker_or_observation(one_case, monkeypatch):
     case = one_case
     before = [dict(row) for row in case.store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')]
-    monkeypatch.setattr('gene_annotation_episode.native_rna_structure_results.capture_local_rna_structure_bundle', F.denied)
-    monkeypatch.setattr('gene_annotation_episode.native_rna_structure_local.local_rna_structure_plan', F.denied)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_rna_structure_results.capture_local_rna_structure_bundle', F.denied)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local.local_rna_structure_plan', F.denied)
     monkeypatch.setattr(case.owner.job_progress_provider.targets, 'observe_target', F.denied)
-    monkeypatch.setattr('gene_annotation_episode.rna_structure_comparison_publication.run_local_job', F.denied)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_publication.run_local_job', F.denied)
     result = asyncio.run(case.owner.execute(case.comparison_context, 'execution.results.collect', {}, case.body['operation_key']))
     assert result['result'] == case.body and result['record_refs'] == result['changed_record_refs'] == []
     assert [dict(row) for row in case.store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')] == before

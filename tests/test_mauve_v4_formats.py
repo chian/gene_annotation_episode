@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.mauve_v4_formats import parse_mauve_v4
-from gene_annotation_episode.mauve_v4_format_contracts import validate_mauve_v4_document
+from gene_annotation_episode.episodic_workflow.root.library.mauve_v4_formats import parse_mauve_v4
+from gene_annotation_episode.episodic_workflow.root.library.mauve_v4_format_contracts import validate_mauve_v4_document
 
 OFFICIAL = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc/genome_alignment_boundaries/retained_sources/mauve/testdata/small.mauve'
 

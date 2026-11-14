@@ -6,8 +6,8 @@ separate selected-process tests exercise the actual Workflow boundary.
 from copy import deepcopy
 import pytest
 
-from gene_annotation_episode.bvbrc_data_schema import json_digest
-from gene_annotation_episode.communication import ReportBoundaryError, plain
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import json_digest
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.state import Store
 

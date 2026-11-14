@@ -10,11 +10,11 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode.episode_composition import reopen_scientific_binding
-from gene_annotation_episode.providers import ModelRole
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.episode_composition import reopen_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.providers import ModelRole
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
-from gene_annotation_episode.scientific_tool_retrieval import ScientificToolRetriever
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_retrieval import ScientificToolRetriever
 from gene_annotation_episode.state import Store
 from test_actual_tool_retriever_runtime import ActualToolCase, action, FORM, GOAL, INVESTIGATION
 from test_runtime import ScriptedProvider

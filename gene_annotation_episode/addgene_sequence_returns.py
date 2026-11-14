@@ -18,10 +18,10 @@ import re
 from .addgene_sequence_facts import (FACT_SOURCE, ADDGENE_SEQUENCE_FACTS_SCHEMA,
     build_addgene_sequence_fact, validate_addgene_sequence_fact)
 from .api_sequence_support import COLLECT
-from .communication import ReportBoundaryError, plain
-from .episode_receipts import (EpisodeReceipts, RECEIVED_REPORT_PREFIX_VERSION,
+from .episodic_workflow.root.communication import ReportBoundaryError, plain
+from .episodic_workflow.root.episode_receipts import (EpisodeReceipts, RECEIVED_REPORT_PREFIX_VERSION,
     _validate_report_prefix)
-from .episode_return_records import EpisodeReturnRecords, _same
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords, _same
 from .execution_contracts import digest
 from .form_reference_validation import form_validation_value, _binding_key
 from .sequence_support_publication import read_sequence_support_publication
@@ -154,7 +154,7 @@ class AddgeneSequenceReturns(EpisodeReturnRecords):
         selected_schema = json.loads(action["schema_json"])
         declaration = plain(child.request)["message"].get("report_contract_declaration")
         if declaration is not None:
-            from .episode_contract_information import validate_saved_fact_form
+            from .episodic_workflow.root.episode_contract_information import validate_saved_fact_form
             selected_schema = validate_saved_fact_form(child_role=child.role,
                 submitted_schema_json=action["schema_json"],
                 expanded_schema=contract["measurements"]["schema"], declaration=declaration)

@@ -15,13 +15,13 @@ import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
 from gene_annotation_episode import molecular_provider_acquisition as provider
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, canonical, identity
 from gene_annotation_episode.molecular_provider_acquisition import (
     OPERATIONS, PROVIDER_ARGUMENTS_SCHEMAS, validate_provider_receipt, validate_provider_value,
 )
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.scientific_process_prompt import text_instructions
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry

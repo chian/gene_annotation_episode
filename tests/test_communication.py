@@ -3,7 +3,7 @@ import math
 import pytest
 
 from gene_annotation_episode.boundary_validation import parse_json_object
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, validate_closed_schema, validate_form,
     interpretation_schema, form_with_facts, generation_schema, reference_resolver,
 )

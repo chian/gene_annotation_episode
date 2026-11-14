@@ -5,7 +5,7 @@ import os
 import pytest
 
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 from gene_annotation_episode.workflow_budget import ENV
 from live_a106_workflow import evaluation_tool_configuration
 from test_live_a106_binding import pdf_with_text

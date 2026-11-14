@@ -21,7 +21,7 @@ require_bounded_runtime()
 import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
 import gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_worker as worker
 import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_preparation as preparation
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_readers import parse_fluorescence_csv
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical, digest, identity
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_native_report_contracts import (

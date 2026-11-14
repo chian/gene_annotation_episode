@@ -9,7 +9,7 @@ from gene_annotation_episode.bvbrc_fastqutils_returns import (
     BVBRCFastqUtilsReturns, FACT_SOURCES, decode_return_value, parent_form_schema,
     project_fastqutils_return_facts,
 )
-from gene_annotation_episode.communication import validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import validate_form
 from test_bvbrc_fastqutils_returns import saved_fixture
 from test_bvbrc_fastqutils_provider import f
 

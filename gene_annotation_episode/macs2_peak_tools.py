@@ -12,9 +12,9 @@ from pathlib import Path, PurePosixPath
 import re
 
 from .acquisition import AcquisitionError
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError, identity, obj
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
 from .native_operation_lock import _action_lock
 from .macs2_peak_result_contracts import (

@@ -7,10 +7,10 @@ from real_time_credit_fixture import progress_time
 from method_loop import Context, Episode, EpisodeGoal, EpisodeRequest, EpisodeTree, Grain, Leaf
 from method_loop.identities import EpisodeRef, UnitRef
 
-from gene_annotation_episode.numerical import (NumericBand, STATUS_INSUFFICIENT, STATUS_NORMAL,
+from gene_annotation_episode.episodic_workflow.root.numerical import (NumericBand, STATUS_INSUFFICIENT, STATUS_NORMAL,
     YieldController, YieldEstimate, YieldParameters, estimate_score_yield)
 from gene_annotation_episode.practical_yield import ESTIMATOR_VERSION, PracticalYieldEstimator
-from gene_annotation_episode.runtime import Record
+from gene_annotation_episode.episodic_workflow.root.runtime import Record
 
 
 def completion_context(*, run_id="run-practical", episode_id="episode-practical",

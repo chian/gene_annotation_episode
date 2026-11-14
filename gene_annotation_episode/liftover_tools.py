@@ -10,7 +10,7 @@ import json
 import os
 from pathlib import Path
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError, REF, canonical, obj
 from . import liftover_contracts as core
 from .liftover_measurements import validate_liftover_tool_result

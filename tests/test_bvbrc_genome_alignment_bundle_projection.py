@@ -9,9 +9,9 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_contracts as c
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_projection as projection
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_adapter as facade
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_projection as projection
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_adapter as facade
 from test_bvbrc_genome_alignment_bundle_resolution import arguments, measurement, member, scientific_artifact, replace_native
 from test_bvbrc_genome_alignment_sheet import fixture_sheet, fixture_data, all_requests, plan
 
@@ -35,8 +35,8 @@ def replay_arguments(result, original):
 
 def synthetic_original_sheet():
     """Test-only feature witness over actual source/native bytes, not C custody."""
-    from gene_annotation_episode.bvbrc_genome_alignment_calculators import calculate_genome_alignment_components
-    from gene_annotation_episode.bvbrc_genome_alignment_sheet import build_genome_alignment_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_calculators import calculate_genome_alignment_components
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_sheet import build_genome_alignment_sheet
     data = fixture_data(); inputs = data['inputs']; file = inputs['files'][0]; record = file['records'][0]
     original = {'input_binding_id': 'synthetic-feature-input', 'member_id': 'synthetic-feature', 'occurrence_index': 0}
     ev = deepcopy(file['path_evidence'])

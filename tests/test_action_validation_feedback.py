@@ -6,7 +6,7 @@ import pytest
 from jsonschema import Draft202012Validator, ValidationError
 
 from gene_annotation_episode.boundary_validation import schema_failure_diagnostic
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider, obj

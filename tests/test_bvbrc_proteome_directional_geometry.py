@@ -9,8 +9,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_proteome_directional import parse_genome_comparison_directional_report
-from gene_annotation_episode.bvbrc_proteome_directional_geometry import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional import parse_genome_comparison_directional_report
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_geometry import (
     DirectionalNumericalContractError, calculate_protein_block,
     inspect_protein_correspondence, union_position_intervals,
 )
@@ -380,7 +380,7 @@ def test_recalculation_and_graph_need_no_io_process_or_parser(monkeypatch):
     monkeypatch.setattr(Path, "read_bytes", forbidden)
     monkeypatch.setattr(socket, "socket", forbidden)
     monkeypatch.setattr(subprocess, "Popen", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.bvbrc_proteome_directional.parse_genome_comparison_directional_report", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional.parse_genome_comparison_directional_report", forbidden)
     got = calc(native, places=4)
     changed = calc(native, places=9)
     assert got["fractions"]["trace_symbol_identity_over_columns"]["value"]["decimal"] == "0.7500"

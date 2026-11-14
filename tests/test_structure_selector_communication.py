@@ -4,7 +4,7 @@ from copy import deepcopy
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     FORMATS, REFERENCE_FORMATS, ReportBoundaryError, form_with_facts,
     generation_schema, interpretation_schema, validate_closed_schema, validate_form,
 )

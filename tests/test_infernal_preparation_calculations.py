@@ -4,8 +4,8 @@ import math
 
 import pytest
 
-from gene_annotation_episode.infernal_preparation_calculations import calculate_infernal_statistics
-from gene_annotation_episode.infernal_preparation_schema import value
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_calculations import calculate_infernal_statistics
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_schema import value
 from test_infernal_preparation_statistics import native_stat, operation, payload, populate, retained
 
 
@@ -105,8 +105,8 @@ def test_exact_synthetic_known_answers_saved_recalculation_without_tool(monkeypa
         fit[key]['value'],fit[key]['native_token'] = number,None
     saved = json.loads(json.dumps(sheet))
     original = json.dumps(saved,sort_keys=True)
-    import gene_annotation_episode.infernal_preparation_models as models
-    import gene_annotation_episode.infernal_preparation_statistics as stats
+    import gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_models as models
+    import gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_statistics as stats
     import socket
     import subprocess
     def forbidden(*args, **kwargs):

@@ -5,16 +5,16 @@ from types import MappingProxyType, SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import (ReportBoundaryError,
+from gene_annotation_episode.episodic_workflow.root.communication import (ReportBoundaryError,
     validate_closed_schema, validate_form)
 from gene_annotation_episode.domain import identity, obj
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episode_reports import closing_yield, report_sources as yield_sources
-from gene_annotation_episode.numerical import (NumericBand, SignedNumericBand,
+from gene_annotation_episode.episodic_workflow.root.numerical import (NumericBand, SignedNumericBand,
     STATUS_INSUFFICIENT, STATUS_UNIDENTIFIABLE, YieldController, YieldEstimate)
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_records import scientific_invocation_ref
-from gene_annotation_episode.scientific_process_reports import (build_process_result,
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_invocation_ref
+from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import (build_process_result,
     credit_binding_ref, merge_process_results, project_process_result, report_sources, validate_process_result)
 from test_scientific_process_library import independent_source, write
 
@@ -45,7 +45,7 @@ def library(tmp_path_factory):
         **deepcopy(second["evidence"][0])})
     write(source / "option_sources.json", table)
     library = ScientificProcessLibrary.freeze(directory / "library", source=source)
-    from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+    from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
     library.tool_library = ScientificToolLibrary.freeze(directory / "tools", catalog=[{
         "name": "fixture.inspect", "input_schema": obj({})}])
     return library

@@ -13,9 +13,9 @@ import pytest
 
 from gene_annotation_episode import variant_provider_acquisition as provider
 from gene_annotation_episode.acquisition import PublicClients
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.scientific_process_prompt import text_instructions
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry

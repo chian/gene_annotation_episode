@@ -3,9 +3,9 @@ from datetime import datetime, timezone
 
 from . import esm_gene_embedding_contracts as contracts
 from .alignment_site_native import immutable_record
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError
-from .episode_return_records import EpisodeReturnRecords
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from .execution_contracts import canonical, digest
 from .molecular_measurement_tools import (
     _publication_bytes, _recorded_molecular_action_details, _recorded_molecular_producer_details,

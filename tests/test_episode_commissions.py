@@ -16,11 +16,11 @@ from method_loop import EpisodeGoal
 from method_loop.communication import ReportContract
 from method_loop.durable import DurableExecutionStore, canonical, content_digest
 from method_loop.identities import EpisodeRef
-from gene_annotation_episode.episode_commissions import CommissionCoordinator, CommissionError
-from gene_annotation_episode.episode_journal import Journal, WorkflowError
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_commissions import CommissionCoordinator, CommissionError
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal, WorkflowError
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.waiting import validate_pending
+from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
 
 
 class BackendFixture:

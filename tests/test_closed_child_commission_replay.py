@@ -16,10 +16,10 @@ from jsonschema import Draft202012Validator
 from method_loop import ClosedChildUnit
 from method_loop.archive import iter_json
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_journal import WorkflowError
-from gene_annotation_episode.runtime import Workflow, ReturnedActionUnit, _json
+from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, ReturnedActionUnit, _json
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from gene_annotation_episode import native_lifecycle

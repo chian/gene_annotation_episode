@@ -12,10 +12,10 @@ from pathlib import Path
 
 from gene_annotation_episode.workflow_budget import active_budget
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.a104_credit import A104EvolutionaryCredit
 from gene_annotation_episode.a104_hpc import native_body
-from gene_annotation_episode.evidence_root import NativeEvidenceRootCredit
+from gene_annotation_episode.episodic_workflow.root.evidence_root import NativeEvidenceRootCredit
 
 
 def audit(case):

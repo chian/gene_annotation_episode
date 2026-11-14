@@ -11,11 +11,11 @@ import shutil
 import pytest
 
 from gene_annotation_episode.credit import CreditPolicy
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.scientific_credit import AnnotationSupportScore
-from gene_annotation_episode.scientific_process_records import scientific_digest
-from gene_annotation_episode.scientific_support_metadata import annotation_policy_routes
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_digest
+from gene_annotation_episode.episodic_workflow.root.scientific_support_metadata import annotation_policy_routes
 from gene_annotation_episode.state import Store
 from test_actual_tool_retriever_runtime import ActualToolCase, FORM, GOAL, action
 from test_runtime import ScriptedProvider

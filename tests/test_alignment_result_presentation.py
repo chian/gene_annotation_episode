@@ -3,8 +3,8 @@ import asyncio
 from copy import deepcopy
 
 from gene_annotation_episode.alignment_result_presentation import alignment_report_presentation
-from gene_annotation_episode.bvbrc_alignment_bundle_contracts import encode_reference
-from gene_annotation_episode.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_bundle_contracts import encode_reference
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
 from test_scientific_process_prompt_delivery import ScientificWire, complete, snapshot, OUTPUT_SCHEMA
 
 
@@ -105,8 +105,8 @@ def test_actual_provider_update_omits_source_envelope_and_preserves_full_task(tm
 
 
 def test_genome_alignment_native_fact_presentation_preserves_selected_measurements():
-    from gene_annotation_episode.bvbrc_genome_alignment_bundle_adapter import consume_bundle
-    from gene_annotation_episode.bvbrc_genome_alignment_bundle_contracts import encode_reference as genome_ref
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_bundle_adapter import consume_bundle
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_bundle_contracts import encode_reference as genome_ref
     from test_bvbrc_genome_alignment_bundle_resolution import arguments, measurement
     args = arguments(fields={'coverage': measurement(field='coverage_fraction')})
     result = consume_bundle(**args)

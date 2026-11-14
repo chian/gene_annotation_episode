@@ -15,11 +15,11 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
-from gene_annotation_episode import bvbrc_proteome_bundle_contracts as c
-from gene_annotation_episode import bvbrc_proteome_bundle_resolution as provider
-from gene_annotation_episode.bvbrc_proteome_fact_contracts import requested_form_schema
-from gene_annotation_episode.bvbrc_proteome_bundle_projection import validate_saved_projection
-from gene_annotation_episode.bvbrc_proteome_calculators import calculate_native_components
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_resolution as provider
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_fact_contracts import requested_form_schema
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_bundle_projection import validate_saved_projection
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_calculators import calculate_native_components
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -261,7 +261,7 @@ def replace_native(case, raw, fmt):
 
 
 def tsv():
-    from gene_annotation_episode.bvbrc_proteome_native_contracts import REFERENCE_FIELDS, COMPARISON_FIELDS
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_native_contracts import REFERENCE_FIELDS, COMPARISON_FIELDS
     fields = ["ref_genome_" + n for n in REFERENCE_FIELDS] + ["comp_genome_2_" + n for n in COMPARISON_FIELDS]
     displays = ["same label"] + [""] * 11 + ["same label"] + [""] * 9
     data = ["", "", "4", "r1", "", "", "", "", "", "", "", "", "bi (<->)", "", "", "4", "s1", "", "", "", "0.875", "0.750"]

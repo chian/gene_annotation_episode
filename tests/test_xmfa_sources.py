@@ -9,9 +9,9 @@ import subprocess
 import pytest
 
 from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
-from gene_annotation_episode.xmfa_formats import parse_mauve_xmfa
-from gene_annotation_episode.xmfa_sources import bind_xmfa_sources, validate_xmfa_bindings_for_document
-from gene_annotation_episode.xmfa_source_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_formats import parse_mauve_xmfa
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_sources import bind_xmfa_sources, validate_xmfa_bindings_for_document
+from gene_annotation_episode.episodic_workflow.root.library.xmfa_source_contracts import (
     validate_xmfa_source_inputs, validate_xmfa_source_bindings, validate_xmfa_original_map)
 
 BASE=Path(__file__).resolve().parents[1]/'gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/bvbrc/msa_xmfa_boundaries/native_examples'
@@ -321,7 +321,7 @@ def test_pure_binding_and_saved_recheck_without_any_acquisition(monkeypatch):
         locked.setattr(builtins,'open',forbidden);locked.setattr(Path,'open',forbidden)
         locked.setattr(Path,'read_bytes',forbidden);locked.setattr(socket,'socket',forbidden)
         locked.setattr(subprocess,'Popen',forbidden)
-        locked.setattr('gene_annotation_episode.xmfa_formats.parse_mauve_xmfa',forbidden)
+        locked.setattr('gene_annotation_episode.episodic_workflow.root.library.xmfa_formats.parse_mauve_xmfa',forbidden)
         result=bind(document,inputs)
         assert result==expected
         assert validate_xmfa_bindings_for_document(document,json.loads(json.dumps(result)))==expected

@@ -19,10 +19,10 @@ from urllib.response import addinfourl
 import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
-from gene_annotation_episode.communication import validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema, validate_form
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode import jaspar_tools as jaspar
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 

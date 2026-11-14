@@ -14,13 +14,13 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.rna_structure_presentation import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_presentation import (
     has_rna_structure_receiver_context, is_rna_structure_results_context,
     render_rna_structure_groups, render_rna_structure_lookup,
     render_rna_structure_own_outcome, render_rna_structure_own_progress,
     rna_structure_return_schema_view, select_rna_structure_presentation,
 )
-from gene_annotation_episode.rna_structure_result_views import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import (
     FAMILY_SOURCES, REFERENCE_SOURCE, SAVED_SOURCE, rna_structure_fact_sources,
 )
 
@@ -171,7 +171,7 @@ def read_operands(text):
 
 
 def test_exact_public_ports_and_context_capability_are_separate_from_facts():
-    module = importlib.import_module("gene_annotation_episode.rna_structure_presentation")
+    module = importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.rna_structure_presentation")
     assert set(module.__all__) == {"is_rna_structure_results_context", "has_rna_structure_receiver_context",
         "select_rna_structure_presentation", "render_rna_structure_groups", "render_rna_structure_own_outcome",
         "render_rna_structure_own_progress", "render_rna_structure_lookup", "rna_structure_return_schema_view"}
@@ -471,9 +471,9 @@ def test_all_seven_original_sources_have_distinct_compact_meanings():
 
 
 def test_non_rna_and_comparison_inputs_are_exact_presentation_noops():
-    from gene_annotation_episode.rna_structure_comparison_presentation import select_rna_comparison_presentation
+    from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_presentation import select_rna_comparison_presentation
     from gene_annotation_episode.scientific_process_prompt import _steering, render_episode_steering
-    from gene_annotation_episode.rna_structure_comparison_views import PROJECTION_SOURCE
+    from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE
     state = {"goal": {"objective": "Other task"}, "child_reports": [{"unrelated": [1, 2]}],
         "last_local_outcome": {"result": {"other": 3}}, "current_report_update": {"decision": "keep"}}
     before = deepcopy(state)

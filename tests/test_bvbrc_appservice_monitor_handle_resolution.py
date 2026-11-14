@@ -8,8 +8,8 @@ import json
 
 import pytest
 
-from gene_annotation_episode.bvbrc_appservice_records import PROVIDER
-from gene_annotation_episode.communication import ReportBoundaryError, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_records import PROVIDER
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain, validate_form
 from gene_annotation_episode.execution_contracts import canonical
 from test_bvbrc_appservice_native_monitor import (
     assignment, consumer, dependency_monitor, h, observe,

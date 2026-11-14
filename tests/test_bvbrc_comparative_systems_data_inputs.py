@@ -10,15 +10,15 @@ import urllib.request
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.bvbrc_data_calculators import calculate_page_counts
-from gene_annotation_episode.bvbrc_data_fields import FIELD_REGISTRY
-from gene_annotation_episode.bvbrc_data_query import encode_native_query
-from gene_annotation_episode.bvbrc_data_readers import _decode_native_payload, parse_data_snapshot
-from gene_annotation_episode.bvbrc_comparative_systems_handoff_contracts import canonical_sha256
-from gene_annotation_episode.bvbrc_comparative_systems_data_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import calculate_page_counts
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import FIELD_REGISTRY
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers import _decode_native_payload, parse_data_snapshot
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_handoff_contracts import canonical_sha256
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_data_contracts import (
     validate_data_population_selection, validate_supplied_record_sets,
 )
-from gene_annotation_episode.bvbrc_comparative_systems_data_inputs import extract_comparative_systems_data_inputs
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_comparative_systems_data_inputs import extract_comparative_systems_data_inputs
 from gene_annotation_episode.execution_contracts import digest
 
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a103/tests/fixtures/bvbrc_comparative_systems_data_inputs"
@@ -508,7 +508,7 @@ def test_snapshot_pointer_must_resolve_exact_selected_bytes():
 def test_pure_extraction_and_saved_validation_forbid_external_work(monkeypatch):
     import builtins
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.providers import ModelConnection, _SessionConnection
+    from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection, _SessionConnection
     from gene_annotation_episode.api_bvbrc import BVBRCDataClient
     from gene_annotation_episode.acquisition import PublicClients
     pages = [_page(DOCS)]
@@ -532,8 +532,8 @@ def test_pure_extraction_and_saved_validation_forbid_external_work(monkeypatch):
     monkeypatch.setattr(Path, "read_text", forbidden)
     monkeypatch.setattr(builtins, "open", forbidden)
     result = _extract(pages, selection)
-    from gene_annotation_episode import bvbrc_comparative_systems_data_inputs as extraction
-    from gene_annotation_episode import bvbrc_data_readers as data_readers
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_comparative_systems_data_inputs as extraction
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_data_readers as data_readers
     monkeypatch.setattr(extraction, "extract_comparative_systems_data_inputs", forbidden)
     monkeypatch.setattr(extraction, "parse_data_snapshot", forbidden)
     monkeypatch.setattr(extraction, "_decode_native_payload", forbidden)

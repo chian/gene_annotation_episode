@@ -14,16 +14,16 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import protein_structure_publication as publication
+from gene_annotation_episode.episodic_workflow.root.library import protein_structure_publication as publication
 from gene_annotation_episode.domain import canonical as domain_canonical, identity
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.native_protein_structure_acquisition import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_acquisition import (
     retained_protein_structure_file, validate_protein_structure_capture,
 )
-from gene_annotation_episode.protein_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import (
     issue, validate_structure_sequence,
 )
-from gene_annotation_episode.protein_structure_result_worker import run_protein_structure_result_worker
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_worker import run_protein_structure_result_worker
 from gene_annotation_episode.state import Store
 
 

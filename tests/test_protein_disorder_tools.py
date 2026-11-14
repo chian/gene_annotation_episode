@@ -20,7 +20,7 @@ from gene_annotation_episode import protein_disorder_tools as adapter
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_molecular_provider_acquisition_host import _controller, _credit, _scope

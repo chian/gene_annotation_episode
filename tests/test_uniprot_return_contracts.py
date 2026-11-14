@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, form_with_facts, interpretation_schema,
     validate_closed_schema, validate_form,
 )

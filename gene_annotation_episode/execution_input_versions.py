@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import hashlib
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 
 
 def _flux_balance_witnesses(owner, versions, scope, context, assignments):
@@ -18,7 +18,7 @@ def _flux_balance_witnesses(owner, versions, scope, context, assignments):
     for assignment in assignments:
         if assignment.get('requested_job', {}).get('native_flux_balance') is None:
             continue
-        from .episode_return_records import EpisodeReturnRecords
+        from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
         from .execution_contracts import digest
         frozen = None
         if (context.role == 'launch_local'
@@ -57,7 +57,7 @@ def _flux_balance_witnesses(owner, versions, scope, context, assignments):
 
 def _check_flux_balance_version(owner, supplied, witness, index):
     from gene_annotation_episode.episodic_workflow.root.library.flux_balance_operands import _check_version
-    from .episode_return_records import EpisodeReturnRecords
+    from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     if not EpisodeReturnRecords._equal(supplied, witness[1]):
         raise ValueError('flux_balance_input_version_conflict')
     _check_version(owner.store, witness[0], supplied, '/input_versions/' + str(index))

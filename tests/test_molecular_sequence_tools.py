@@ -16,8 +16,8 @@ from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.genomic_overlap_result_receipts import read_control
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.genomic_overlap_result_receipts import read_control
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.molecular_measurement_tools import authenticate_molecular_invocation, MolecularOperationUnpublished
 from gene_annotation_episode.molecular_sequence_input_bindings import MolecularSequenceInputBindings
@@ -620,7 +620,7 @@ def test_saved_calculation_uncertain_marker_never_reissues(backend_case, monkeyp
     arguments = dict(mode="calculate_saved", result_ref=reference, rows=_saved_rows())
     key = f'{value.context.run_id}:{value.context.episode_id}:1'
     directory = value.host.action_directory(value.context.episode_id, key)
-    from gene_annotation_episode.genomic_overlap_result_receipts import immutable
+    from gene_annotation_episode.episodic_workflow.root.genomic_overlap_result_receipts import immutable
     immutable(directory / "ordinary-calculation-started.json", {"engineering_interrupted_marker": True})
     monkeypatch.setattr("gene_annotation_episode.orf_measurements.calculate_orf_components", lambda *a: pytest.fail("uncertain action recalculated"))
     with pytest.raises(MolecularOperationUnpublished, match="outcome_unknown"):
@@ -749,7 +749,7 @@ def test_original_and_recalculated_source_groups_freeze_without_private_reads(ba
 
 def _saved_receiver(value, *, run, source_ref):
     """Engineering root records and actual Source receipts, no child-return claim."""
-    from gene_annotation_episode.episode_receipts import EpisodeReceipts
+    from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
     manifest_reader = EpisodeReceipts(value.store, run)
     episode = EpisodeRef(run, value.context.path).episode_id
     manifest = manifest_reader.bind(episode)

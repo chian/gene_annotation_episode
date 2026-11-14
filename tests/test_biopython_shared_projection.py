@@ -17,8 +17,8 @@ import pytest
 from gene_annotation_episode import biopython_pairwise_grader as grader
 from gene_annotation_episode import sequence_ops
 from gene_annotation_episode.domain import canonical
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import SequenceWork, ToolRegistry
@@ -237,8 +237,8 @@ def test_raw_native_producer_has_no_convenience_count_or_ratio_implementation():
 @pytest.mark.parametrize("no_alignment", [False, True])
 def test_structure_correspondence_accepts_new_native_and_preserves_legacy_shape(no_alignment):
     f = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")
-    from gene_annotation_episode.protein_structure_contracts import _validate
-    from gene_annotation_episode.protein_structure_correspondence import correspondence_from_pairwise_sheet
+    from gene_annotation_episode.episodic_workflow.root.library.protein_structure_contracts import _validate
+    from gene_annotation_episode.episodic_workflow.root.library.protein_structure_correspondence import correspondence_from_pairwise_sheet
     fixed = f.fixture_pdb("AAAA" if no_alignment else "AGST")[2]
     moving = f.fixture_pdb("WWWW" if no_alignment else "AGST", role="moving", chain="B")[2]
     sheet, kwargs, result = f.retained_alignment(fixed, moving, mode="local" if no_alignment else "global")

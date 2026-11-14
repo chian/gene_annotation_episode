@@ -18,14 +18,14 @@ import shutil
 import pytest
 
 from gene_annotation_episode import liftover_contracts as core
-from gene_annotation_episode.communication import ReportBoundaryError, plain
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
 from gene_annotation_episode.domain import canonical, obj
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.liftover_tools import LIFTOVER_TOOL
 from gene_annotation_episode.molecular_result_facts import (
     received_molecular_facts, validate_frozen_molecular_return,
 )
-from gene_annotation_episode.runtime import TypedReportContract, Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_grading_entries
 from gene_annotation_episode.tools import ToolRegistry

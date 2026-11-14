@@ -12,10 +12,10 @@ from pathlib import Path
 import threading
 
 from .acquisition import AcquisitionError
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .domain import ContractError, REF, identity
 from .execution_contracts import canonical, digest
-from .genomic_overlap_result_receipts import immutable, read_control, same
+from .episodic_workflow.root.genomic_overlap_result_receipts import immutable, read_control, same
 from .local_jobs import LocalJobPolicy
 from .molecular_measurement_tools import authenticate_molecular_invocation, MolecularOperationUnpublished
 from .molecular_sequence_execution_contracts import absolute_path, _software

@@ -9,9 +9,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import runtime
-from gene_annotation_episode.decision_context import apply_state_frame
-from gene_annotation_episode.decision_exchanges import DecisionExchanges
+from gene_annotation_episode.episodic_workflow.root import runtime
+from gene_annotation_episode.episodic_workflow.root.decision_context import apply_state_frame
+from gene_annotation_episode.episodic_workflow.root.decision_exchanges import DecisionExchanges
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import (FixtureController, ScriptedProvider, fixture_credit,
@@ -22,7 +22,7 @@ PROTOCOL = 'decision_exchange_v1'
 
 
 def test_category_yield_parameters_default_controller():
-    binding = {'factory': 'gene_annotation_episode.numerical.YieldController',
+    binding = {'factory': 'gene_annotation_episode.episodic_workflow.root.numerical.YieldController',
         'definition': {'cost': .01, 'window_size': 8, 'subsample_size': 3,
             'uncertainty_alpha': .05}}
     assert runtime._category_yield_parameters(binding) == {
@@ -34,7 +34,7 @@ def test_category_yield_parameters_default_controller():
                                    'existing_yield_controller_explicit_role_costs_v3'])
 @pytest.mark.parametrize('wrapped', [False, True])
 def test_category_yield_parameters_declared_caller_layout(version, wrapped):
-    from gene_annotation_episode.numerical import YieldParameters
+    from gene_annotation_episode.episodic_workflow.root.numerical import YieldParameters
     parameters = YieldParameters(window_size=11, subsample_size=5, uncertainty_alpha=.07)
     definition = {'version': version, 'cost': .003, 'parameters': parameters.as_record(),
         'continuation': 'available_next_gain_upper_bound_lte_cost',
@@ -387,7 +387,7 @@ def test_common_assembly_loads_saved_protocol_and_rejects_rebinding(tmp_path):
 @pytest.mark.parametrize('explicit_original', [False, True])
 def test_owned_connection_defaults_new_and_explicit_null_keeps_original(tmp_path, monkeypatch,
                                                                      explicit_original):
-    from gene_annotation_episode import providers, application_execution_binding
+    from gene_annotation_episode.episodic_workflow.root import providers, application_execution_binding
     store, tools = setup(tmp_path)
     instances = []
     class OwnedFixture(ScriptedProvider):

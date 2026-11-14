@@ -9,8 +9,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import native_infernal_preparation_result_worker as worker
-from gene_annotation_episode import native_infernal_preparation_worker as pure
+from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_result_worker as worker
+from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_worker as pure
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.state import Store
 

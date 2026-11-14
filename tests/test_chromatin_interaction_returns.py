@@ -24,13 +24,13 @@ from gene_annotation_episode.chromatin_interaction_return_views import (
 )
 from gene_annotation_episode.chromatin_interaction_contracts import validate_chromatin_record
 from gene_annotation_episode.chromatin_interaction_returns import ChromatinInteractionReturns
-from gene_annotation_episode.communication import form_with_facts, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.native_file_capture import _metadata, retained_native_file
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 

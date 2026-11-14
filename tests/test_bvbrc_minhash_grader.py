@@ -10,7 +10,7 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_minhash_grader import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_grader import (
     MINHASH_DIAGNOSTIC_CODES,
     calculate_minhash_components,
     calculate_minhash_shared_hash_fraction,
@@ -379,7 +379,7 @@ def test_common_shared_hash_fraction_requires_exact_true_identity(identity):
 
 
 def test_calculator_calls_common_fraction_helper_without_changing_other_components(monkeypatch):
-    import gene_annotation_episode.bvbrc_minhash_grader as grader
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_grader as grader
     observed = []
     original = grader.calculate_minhash_shared_hash_fraction
 

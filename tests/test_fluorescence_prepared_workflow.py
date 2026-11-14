@@ -20,10 +20,10 @@ require_bounded_runtime()
 import pytest
 
 import gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts as core
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import canonical as control_canonical
-from gene_annotation_episode.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
 import fluorescence_workflow_support as F

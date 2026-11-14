@@ -9,8 +9,8 @@ import pytest
 from test_bvbrc_metacats_provider import (
     CASES, OLD, retained_sheet, requests, simple_sheet, by_id, native_family_request, forbid_io,
 )
-from gene_annotation_episode import bvbrc_metacats_provider_contracts as c
-from gene_annotation_episode.bvbrc_metacats_grader import calculate_metacats
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_metacats_provider_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_grader import calculate_metacats
 
 
 @pytest.mark.parametrize('case', CASES)
@@ -63,8 +63,8 @@ def test_saved_recalculation_needs_no_bytes_readers_or_native_execution(case, mo
     forbid_io(monkeypatch)
     def forbidden(*args, **kwargs):
         raise AssertionError('native parser called during saved replay')
-    import gene_annotation_episode.bvbrc_metacats_formats as formats
-    import gene_annotation_episode.bvbrc_metacats_input_formats as inputs
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_formats as formats
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_input_formats as inputs
     for name in formats.__all__:
         monkeypatch.setattr(formats, name, forbidden)
     monkeypatch.setattr(inputs, 'parse_metacats_input_fasta', forbidden)
@@ -89,12 +89,12 @@ def test_detached_validators_with_all_calculators_disabled(monkeypatch):
     forbid_io(monkeypatch)
     def forbidden(*args, **kwargs):
         raise AssertionError('calculation or parsing during saved validation')
-    import gene_annotation_episode.bvbrc_metacats_calculators as native
-    import gene_annotation_episode.bvbrc_metacats_biological_calculators as biological
-    import gene_annotation_episode.bvbrc_metacats_adequacy as adequacy
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_calculators as native
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_biological_calculators as biological
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_adequacy as adequacy
     import gene_annotation_episode.phylogeny_calculators as shared
-    import gene_annotation_episode.bvbrc_metacats_grader as grader
-    import gene_annotation_episode.bvbrc_metacats_formats as formats
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_grader as grader
+    import gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_formats as formats
     for module, names in ((native, ('metacats_group_counts', 'metacats_statistics', 'metacats_effects', 'adjust_p_values', 'chi_square_tail')),
                           (biological, biological.__all__), (shared, shared.__all__), (formats, formats.__all__),
                           (adequacy, ('expected_count_adequacy',)), (grader, ('calculate_metacats',))):

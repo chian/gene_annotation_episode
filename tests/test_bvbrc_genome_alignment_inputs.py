@@ -10,10 +10,10 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.bvbrc_genome_alignment_inputs import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_inputs import (
     extract_genome_alignment_inputs, validate_genome_alignment_supplied_value_shapes,
 )
-from gene_annotation_episode.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_inputs
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_input_contracts import validate_genome_alignment_inputs
 from gene_annotation_episode.execution_contracts import canonical, digest
 from test_bvbrc_genome_alignment_retained_records import (
     PREFIX, acquisition_record, content, fixture, inline, log_bytes, log_record, rewrap,
@@ -451,7 +451,7 @@ def test_retained_native_v4_counts_survive_missing_source_identity_in_actual_con
     # deliberately unclaimed. This exercises only C -> existing A arithmetic.
     from test_mauve_v4_formats import OFFICIAL, parse
     from test_mauve_v4_calculators import selection
-    from gene_annotation_episode.mauve_v4_calculators import calculate_mauve_v4_segments
+    from gene_annotation_episode.episodic_workflow.root.library.mauve_v4_calculators import calculate_mauve_v4_segments
     task, request, handoff, data = fixture(recipe='mauveAligner')
     log = log_record(task, request, data, raw=log_bytes(recipe='mauveAligner'))
     supplied = candidate(task, data)
@@ -525,9 +525,9 @@ def test_recognized_metadata_shape_errors_raise_before_local_data_recovery(mutat
 
 
 def test_pure_saved_input_replay_forbids_file_network_process_and_model_boundaries(monkeypatch):
-    from gene_annotation_episode.providers import ModelConnection
+    from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
     from gene_annotation_episode.acquisition import PublicClients
-    from gene_annotation_episode.bvbrc_appservice_records import AppServiceRecords
+    from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_records import AppServiceRecords
     task, request, handoff, data = fixture()
     log = log_record(task, request, data)
     supplied = candidate(task, data)
@@ -552,6 +552,6 @@ def test_unexpected_programming_errors_are_not_converted_into_missing_science(mo
     task, _, handoff, data = fixture()
     def unexpected(*args, **kwargs):
         raise RuntimeError('deliberate programming error')
-    monkeypatch.setattr('gene_annotation_episode.bvbrc_genome_alignment_inputs.validate_genome_alignment_retained_records', unexpected)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_inputs.validate_genome_alignment_retained_records', unexpected)
     with pytest.raises(RuntimeError, match='deliberate programming error'):
         extract(task, (handoff,), data)

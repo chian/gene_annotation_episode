@@ -21,7 +21,7 @@ from gene_annotation_episode.api_enrichr import (EnrichrService, PROTOCOL_VERSIO
     QUERY, WIRE_PROFILE)
 from gene_annotation_episode import api_enrichr, api_enrichr_host as host_module
 from gene_annotation_episode.api_enrichr_host import EnrichrProtocolHost
-from gene_annotation_episode.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.practical_execution_state import _immutable, _read

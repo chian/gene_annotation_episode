@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.native_flux_balance_contracts import validate_flux_balance_software
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import validate_flux_balance_software
 from gene_annotation_episode.native_flux_balance_storage import file_pin, read_json
 
 ATTEMPT = Path(os.environ["HMMER529_ATTEMPT"]) if "HMMER529_ATTEMPT" in os.environ else None

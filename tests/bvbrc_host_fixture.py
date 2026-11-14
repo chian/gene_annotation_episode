@@ -16,13 +16,13 @@ from method_loop.communication import ReportContract
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
-from gene_annotation_episode.api_service_execution import APIServiceExecution
-from gene_annotation_episode.bvbrc_data_views import bvbrc_data_fact_sources
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import bvbrc_data_fact_sources
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.runtime import Record
+from gene_annotation_episode.episodic_workflow.root.runtime import Record
 from gene_annotation_episode.tools import ToolRegistry
 
 from test_api_bvbrc_data_v2 import envelope, request, selector, snapshot

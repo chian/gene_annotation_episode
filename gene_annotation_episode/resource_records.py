@@ -1,7 +1,7 @@
 """Pure resource assignment and handoff schemas, shared by producers/readers."""
 from copy import deepcopy
 
-from .communication import plain
+from .episodic_workflow.root.communication import plain
 from .launch_instructions import SELECTION_SCHEMA as LAUNCH_INSTRUCTION_SELECTION_SCHEMA
 
 

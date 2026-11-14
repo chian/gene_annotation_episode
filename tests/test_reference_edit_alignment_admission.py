@@ -428,7 +428,7 @@ def _authority(case, monkeypatch, *, context=None, cutoff=1):
 
 @pytest.mark.parametrize('retention', ['modern', 'legacy_source', 'legacy_companion', 'no_grading'])
 def test_metadata_authority_pins_original_producer_and_files_without_payload_or_grants(admission, monkeypatch, retention):
-    from gene_annotation_episode.communication import plain
+    from gene_annotation_episode.episodic_workflow.root.communication import plain
     from gene_annotation_episode.execution_contracts import digest
     case = admission(retention=retention)
     authority = _authority(case, monkeypatch)

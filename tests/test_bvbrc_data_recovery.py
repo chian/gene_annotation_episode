@@ -17,17 +17,17 @@ from method_loop.communication import ReportContract
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
-from gene_annotation_episode.api_service_execution import APIServiceExecution
-from gene_annotation_episode.bvbrc_data_schema import json_digest
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import json_digest
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.materials import source_for_artifact
 from gene_annotation_episode.molecular_sequence_input_bindings import MolecularSequenceInputBindings
-from gene_annotation_episode.runtime import Record
+from gene_annotation_episode.episodic_workflow.root.runtime import Record
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 
@@ -193,7 +193,7 @@ def test_interrupted_original_action_resumes_retained_response_without_get_or_re
         pytest.fail("recovery recompiled or requested an already retained response")
 
     monkeypatch.setattr("gene_annotation_episode.api_bvbrc.encode_native_query", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.bvbrc_data_query.encode_native_query", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query.encode_native_query", forbidden)
     monkeypatch.setattr("gene_annotation_episode.api_bvbrc.BVBRCDataClient.query_prepared", forbidden)
     outcome = host.execute(child, DATA_RESULT_OPERATION, select=False)
     assert outcome["status"] == "completed", outcome
@@ -243,7 +243,7 @@ def test_completed_replay_and_receipt_reads_do_not_compile_calculate_or_acquire(
 
 
 def test_interruption_after_saved_publication_reuses_sheet_without_calculator(host, monkeypatch):
-    import gene_annotation_episode.api_service_execution as executor
+    import gene_annotation_episode.episodic_workflow.root.api_service_execution as executor
     _, handoff = host.launch()
     child = host.results_context(handoff)
     key = host.select(child, DATA_RESULT_OPERATION)
@@ -603,7 +603,7 @@ def test_supplied_metadata_rejects_unreceived_source_or_nonidentical_pointed_obj
 
 
 def test_interrupted_join_replay_retains_original_input_bindings_without_recalculation(host, monkeypatch):
-    import gene_annotation_episode.api_service_execution as executor
+    import gene_annotation_episode.episodic_workflow.root.api_service_execution as executor
     _, reference, query, body = feature_inputs(host)
     _, handoff = host.launch(query, body=body)
     child = host.results_context(handoff, feature_selection(reference),

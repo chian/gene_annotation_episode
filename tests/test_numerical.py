@@ -7,7 +7,7 @@ from unittest.mock import patch
 import pytest
 from real_time_credit_fixture import contexts_at, progress_time
 
-from gene_annotation_episode.numerical import (
+from gene_annotation_episode.episodic_workflow.root.numerical import (
     NumericBand, SOURCE_SHA256, STATUS_INSUFFICIENT, STATUS_NORMAL,
     STATUS_UNIDENTIFIABLE, ScalarScoreYieldEstimator, SignedNumericBand,
     BoundedYieldController, CompletionYieldController, YieldController, YieldParameters, estimate_nonnegative_yield,
@@ -66,7 +66,7 @@ def annotation_credit(*rows):
 
 
 def test_annotation_axis_forecasts_use_only_that_whole_invocation_and_own_cutoff():
-    from gene_annotation_episode.numerical import AnnotationAxisYieldController
+    from gene_annotation_episode.episodic_workflow.root.numerical import AnnotationAxisYieldController
     baseline = annotation_credit(('one', 'A105', .2), ('one', 'A106', -.1), ('two', 'A105', .3))
     controller = AnnotationAxisYieldController('epoch', baseline, {'A105': .075, 'A106': .8})
     assert controller.state().annotation_credits == (
@@ -100,7 +100,7 @@ def test_annotation_axis_forecasts_use_only_that_whole_invocation_and_own_cutoff
 
 
 def test_root_credit_max_tracks_the_best_annotation_without_mixing_support_scores():
-    from gene_annotation_episode.numerical import AnnotationAxisYieldController, validate_task_credit
+    from gene_annotation_episode.episodic_workflow.root.numerical import AnnotationAxisYieldController, validate_task_credit
     initial = annotation_credit(('one', 'A105', .5), ('one', 'A106', -.2),
         ('two', 'A105', .4))
     controller = AnnotationAxisYieldController('epoch', initial, {'A105': .1, 'A106': .1})
@@ -116,7 +116,7 @@ def test_root_credit_max_tracks_the_best_annotation_without_mixing_support_score
 
 def test_unknown_and_transfer_resolution_do_not_reuse_exhausted_axis_history():
     from copy import deepcopy
-    from gene_annotation_episode.numerical import AnnotationAxisYieldController
+    from gene_annotation_episode.episodic_workflow.root.numerical import AnnotationAxisYieldController
     initial = annotation_credit(('one', 'A105', None), ('two', 'A106', 0))
     controller = AnnotationAxisYieldController('epoch', initial, {'A105': 0, 'A106': 1e6})
     context = {**contexts_at((10,))[0], 'completed_annotation_axis': initial['arms'][0]}
@@ -193,7 +193,7 @@ def test_availability_and_failed_input_never_become_zero_observations():
         result = estimator.observe(value)
         assert result.expected_next_gain.status_code == STATUS_INSUFFICIENT
         assert not predicted_gain_upper_bound(result.expected_next_gain, 1000).stop
-    with patch("gene_annotation_episode.numerical._RealScoreFit._fit_full_history",
+    with patch("gene_annotation_episode.episodic_workflow.root.numerical._RealScoreFit._fit_full_history",
                side_effect=ArithmeticError("unknown")):
         unavailable = estimate_score_yield([.1]*7+[-.1], contexts=contexts_at(range(10, 90, 10)))
     assert unavailable.expected_next_gain.status_code == STATUS_UNIDENTIFIABLE
@@ -244,7 +244,7 @@ def test_controller_rule_is_exact_for_root_and_child_and_signed_band():
     for is_root in (False,True):
         c = YieldController("epoch",0,.03,YieldParameters(2,1))
         with patch.object(c.estimator, "observe") as observe:
-            from gene_annotation_episode.numerical import YieldEstimate
+            from gene_annotation_episode.episodic_workflow.root.numerical import YieldEstimate
             observe.return_value=YieldEstimate(2,band,c.settings,{})
             assert c.observe("action",-.2,is_root).stop
 
@@ -268,7 +268,7 @@ def test_default_context_is_not_an_implicit_new_time_formula():
 
 
 def test_custom_estimator_has_its_own_provenance_and_aligned_raw_contexts():
-    from gene_annotation_episode.numerical import YieldEstimate
+    from gene_annotation_episode.episodic_workflow.root.numerical import YieldEstimate
     received = []
     def fixture(history, parameters, contexts):
         received.append((history, contexts))

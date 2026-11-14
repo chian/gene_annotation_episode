@@ -8,14 +8,14 @@ from types import MappingProxyType
 
 import pytest
 
-from gene_annotation_episode.communication import ReportBoundaryError, validate_closed_schema
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.native_timing_information import (MEASUREMENT_SCHEMA, NativeTimingInformation,
     measurement_fields, read_measurement, validate_native_measurements)
 from gene_annotation_episode.ordinary_execution import OrdinaryExecutionStatistics
 from gene_annotation_episode.run_statistics import RunHistory
 from gene_annotation_episode.resource_estimation import ESTIMATE_SCHEMA, ResourceToolEstimator
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider, obj
@@ -241,7 +241,7 @@ def test_interruption_restores_original_native_binding_receipts_and_observation_
         assert store.count('native_execution') == 1
         with sqlite3.connect(history) as db:
             assert db.execute('SELECT * FROM run_statistics').fetchall() == original_statistics
-        from gene_annotation_episode.runtime import WorkflowError
+        from gene_annotation_episode.episodic_workflow.root.runtime import WorkflowError
         with pytest.raises(WorkflowError, match='replace_native_timing_information'):
             run(store, tools, ScriptedProvider([]), path, counts=(2, 2), resume=True,
                 binding=NativeTimingInformation(UNIT+1))

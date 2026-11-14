@@ -8,7 +8,7 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_metacats_input_formats import parse_metacats_input_fasta
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_input_formats import parse_metacats_input_fasta
 from gene_annotation_episode.phylogeny_formats import parse_aligned_fasta
 from gene_annotation_episode.phylogeny_format_contracts import validate_alignment_document
 

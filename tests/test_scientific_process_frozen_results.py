@@ -9,11 +9,11 @@ from method_loop import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.runtime import Record
-from gene_annotation_episode.scientific_process_provenance import ScientificProcessProvenance
-from gene_annotation_episode.scientific_process_records import scientific_invocation_ref
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.runtime import Record
+from gene_annotation_episode.episodic_workflow.root.scientific_process_provenance import ScientificProcessProvenance
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_invocation_ref
 from gene_annotation_episode.state import Store
 
 

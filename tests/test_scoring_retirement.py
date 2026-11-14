@@ -10,7 +10,7 @@ from gene_annotation_episode.credit import (
 from gene_annotation_episode.scientific_credit import (
     AnnotationSupportScore, ScientificEvidenceCredit, ScientificInvestigationCredit,
 )
-from gene_annotation_episode.scientific_support_metadata import annotation_policy_routes
+from gene_annotation_episode.episodic_workflow.root.scientific_support_metadata import annotation_policy_routes
 
 
 @pytest.mark.parametrize('constructor', [CreditPolicy, AnnotationSupportScore,

@@ -15,7 +15,7 @@ from gene_annotation_episode.workflow_budget import active_budget
 active_budget()  # Before importing BioPython, application setup, or providers.
 
 from a103_native_fixture import A103NativeCase,CASES
-from gene_annotation_episode.providers import ModelConnection,load_config
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection,load_config
 from gene_annotation_episode.state import Store
 
 

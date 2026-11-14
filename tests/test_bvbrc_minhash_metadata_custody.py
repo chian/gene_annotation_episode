@@ -16,8 +16,8 @@ import pytest
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode import api_bvbrc_minhash as module
-from gene_annotation_episode.bvbrc_minhash_views import minhash_fact_sources
-from gene_annotation_episode.communication import ReportBoundaryError, plain, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_minhash_views import minhash_fact_sources
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain, validate_closed_schema, validate_form
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.execution_contracts import digest

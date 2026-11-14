@@ -6,10 +6,10 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_directional_fact_contracts as c
-from gene_annotation_episode import bvbrc_proteome_fact_contracts as legacy
-from gene_annotation_episode.bvbrc_proteome_returns import proteome_fact_sources
-from gene_annotation_episode.communication import validate_closed_schema
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_directional_fact_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_fact_contracts as legacy
+from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns import proteome_fact_sources
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema
 
 
 def all_selections():
@@ -88,7 +88,7 @@ def test_layer_zero_has_no_provider_projection_parser_or_calculator_import():
     tree = ast.parse(Path(c.__file__).read_text())
     imports = [node.module or '' for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)]
     assert not any(any(word in name for word in ('bundle_v2', 'projection', 'returns', 'calculation', 'geometry')) for name in imports)
-    from gene_annotation_episode.bvbrc_proteome_bundle_v2_contracts import DIRECTIONAL_BINDING_CODES
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_bundle_v2_contracts import DIRECTIONAL_BINDING_CODES
     assert set(c.BINDING_CODES) == set(DIRECTIONAL_BINDING_CODES)
 
 

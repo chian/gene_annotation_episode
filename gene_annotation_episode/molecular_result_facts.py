@@ -121,7 +121,7 @@ def requested_molecular_fact_fields(schema, *, fact_source):
     if not isinstance(properties, Mapping) or not any(isinstance(node, Mapping)
             and node.get("x-source") == fact_source for node in properties.values()):
         return []
-    from .communication import plain, validate_closed_schema
+    from .episodic_workflow.root.communication import plain, validate_closed_schema
     schema = validate_closed_schema(plain(schema))
     available = _sources(fact_source)[fact_source]["report_schema"]
     fields = []
@@ -138,28 +138,28 @@ def validate_molecular_fact(value, *, fact_source):
     _, prefix = _profile(fact_source)
     if fact_source == "somatic_variant_outcomes":
         from .somatic_variant_contracts import validate_somatic_return
-        from .communication import plain
+        from .episodic_workflow.root.communication import plain
         try:
             return validate_somatic_return(plain(value))
         except ValueError as error:
             raise ContractError(prefix + "return_invalid") from error
     if fact_source == "protein_phylogeny_outcomes":
         from gene_annotation_episode.episodic_workflow.root.library.protein_phylogeny_result_contracts import validate_phylogeny_return
-        from .communication import plain
+        from .episodic_workflow.root.communication import plain
         try:
             return validate_phylogeny_return(plain(value))
         except ValueError as error:
             raise ContractError(prefix + "return_invalid") from error
     if fact_source == "esm_gene_embedding_outcomes":
         from .esm_gene_embedding_contracts import validate_esm_embedding_return
-        from .communication import plain
+        from .episodic_workflow.root.communication import plain
         try:
             return validate_esm_embedding_return(plain(value))
         except ValueError as error:
             raise ContractError(prefix + "return_invalid") from error
     if fact_source == "protein_conservation_outcomes":
         from gene_annotation_episode.episodic_workflow.root.library.protein_conservation_result_contracts import validate_conservation_return
-        from .communication import plain
+        from .episodic_workflow.root.communication import plain
         try:
             return validate_conservation_return(plain(value))
         except ValueError as error:
@@ -290,8 +290,8 @@ def _project(stored, source_ref, fact_source):
 
 def own_molecular_facts(registry, context, *, read_received, fact_source):
     """Authenticate current own actions, then project their original Sources."""
-    from .communication import plain
-    from .episode_return_records import EpisodeReturnRecords
+    from .episodic_workflow.root.communication import plain
+    from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     from .molecular_measurement_tools import read_retained_molecular_publication
     tool_name, prefix = _profile(fact_source)
     EpisodeReturnRecords(registry.store, context.run_id, failure_prefix=prefix).authenticate(context)
@@ -361,7 +361,7 @@ def own_molecular_facts(registry, context, *, read_received, fact_source):
             elif fact_source == "esm_gene_embedding_outcomes":
                 from .esm_gene_embedding_publication import read_esm_gene_embedding_action_result as read_action_result
             elif fact_source == "protein_phylogeny_outcomes":
-                from .protein_phylogeny_publication import read_protein_phylogeny_action_result as read_action_result
+                from .episodic_workflow.root.library.protein_phylogeny_publication import read_protein_phylogeny_action_result as read_action_result
             elif fact_source == "protein_conservation_outcomes":
                 from gene_annotation_episode.episodic_workflow.root.library.protein_conservation_publication import read_protein_conservation_action_result as read_action_result
             elif fact_source == "protein_disorder_outcomes":
@@ -410,7 +410,7 @@ def own_molecular_facts(registry, context, *, read_received, fact_source):
 
 def frozen_molecular_facts(store, run_id, context, *, fact_source):
     """Read a literal frozen group; absence remains unknown, not empty."""
-    from .episode_return_records import EpisodeReturnRecords
+    from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     _, prefix = _profile(fact_source)
     EpisodeReturnRecords(store, run_id, failure_prefix=prefix).authenticate(context)
     row = store.db.execute("SELECT facts FROM runtime_forms WHERE run_id=? AND episode_id=?",
@@ -430,7 +430,7 @@ def frozen_molecular_facts(store, run_id, context, *, fact_source):
 
 def validate_frozen_molecular_return(form, schema, frozen, *, fact_source):
     """Compare original typed values without native or private File reads."""
-    from .communication import ReportBoundaryError, plain
+    from .episodic_workflow.root.communication import ReportBoundaryError, plain
     _, prefix = _profile(fact_source)
     for name in requested_molecular_fact_fields(schema, fact_source=fact_source):
         actual = plain(form).get(name)
@@ -468,8 +468,8 @@ def validate_frozen_molecular_return(form, schema, frozen, *, fact_source):
 
 def received_molecular_facts(store, run_id, context, *, fact_source):
     """Consume authenticated child forms and original ancestor prefixes."""
-    from .episode_receipts import EpisodeReceipts
-    from .episode_return_records import EpisodeReturnRecords
+    from .episodic_workflow.root.episode_receipts import EpisodeReceipts
+    from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     from .execution_contracts import digest
     from .molecular_reference_privacy import molecular_reference_restriction
     tool_name, failure_prefix = _profile(fact_source)

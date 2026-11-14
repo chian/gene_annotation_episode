@@ -4,10 +4,10 @@ import importlib
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_bundle_adapter_v2 as adapter
-from gene_annotation_episode import bvbrc_proteome_bundle_v2_contracts as c
-from gene_annotation_episode import bvbrc_proteome_bundle_v2_resolution as provider
-from gene_annotation_episode.bvbrc_proteome_directional_fact_contracts import requested_form_schema_v2
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter_v2 as adapter
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_v2_contracts as c
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_v2_resolution as provider
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_directional_fact_contracts import requested_form_schema_v2
 from test_bvbrc_proteome_bundle_resolution import fixture as legacy_fixture, member
 from test_bvbrc_proteome_directional import native
 from test_bvbrc_proteome_directional_calculators import PARAMETERS
@@ -55,7 +55,7 @@ def append_document(case, *, document_id='second', raw=None):
 
 def test_directional_only_calls_real_producers_once_and_never_legacy_projection(monkeypatch):
     case=fixture(); before=deepcopy(case); calls={}
-    from gene_annotation_episode import bvbrc_proteome_directional_numerical_contracts as numerical
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_directional_numerical_contracts as numerical
     full_validation = numerical._validate_components
     def counted_validation(*args, **kwargs):
         calls['full_producer_validation'] = calls.get('full_producer_validation', 0) + 1

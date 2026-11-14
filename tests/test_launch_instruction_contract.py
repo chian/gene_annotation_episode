@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homo
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.requests import ROLES as HOMOLOGY_ROLES
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.api_execution import HMMERAPIExecution
+from gene_annotation_episode.episodic_workflow.root.api_execution import HMMERAPIExecution
 
 
 def _source(tmp_path):

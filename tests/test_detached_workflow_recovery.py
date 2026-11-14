@@ -11,7 +11,7 @@ import os
 import pytest
 
 from method_loop.durable import DurableExecutionStore
-from gene_annotation_episode.runtime import DecisionSource
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource
 from gene_annotation_episode.state import Store
 from detached_workflow_fixture import FixtureTools, ScriptedProvider, commission, tool
 from test_detached_workflow import (InterruptedParent, Scenario,

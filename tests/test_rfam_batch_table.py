@@ -8,9 +8,9 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.infernal_search_grader import calculate_infernal_search_scores
-from gene_annotation_episode.infernal_search_inputs import populate_infernal_search_sheet
-from gene_annotation_episode.rfam_batch_table import (
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader import calculate_infernal_search_scores
+from gene_annotation_episode.episodic_workflow.root.library.infernal_search_inputs import populate_infernal_search_sheet
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table import (
     RFAM_BATCH_TABLE_ISSUE_CODES, RfamBatchTableIssue, RfamBatchTableParseResult,
     parse_rfam_report_membership, populate_rfam_batch_tblout_sheet,
     validate_rfam_batch_file_input,

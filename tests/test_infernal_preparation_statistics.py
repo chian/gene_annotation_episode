@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.infernal_preparation_models import extract_infernal_models
-from gene_annotation_episode.infernal_preparation_schema import locator, record_key, value, validate_common_sheet
-from gene_annotation_episode.infernal_preparation_statistics import (
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_models import extract_infernal_models
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_schema import locator, record_key, value, validate_common_sheet
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_statistics import (
     CM_ALGORITHMS, parse_cmbuild_summary, parse_cmcalibrate_output, parse_cmcalibrate_sidecar,
     parse_cmstat_output, populate_infernal_statistics_sheet,
 )

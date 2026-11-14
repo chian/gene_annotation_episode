@@ -10,8 +10,8 @@ from copy import deepcopy
 import json
 import math
 
-from .communication import REFERENCE_FORMATS, ReportBoundaryError
-from .execution_recording import NativeMeasurement
+from .episodic_workflow.root.communication import REFERENCE_FORMATS, ReportBoundaryError
+from .episodic_workflow.root.execution_recording import NativeMeasurement
 from .domain import NATIVE_EXECUTION_OPERATIONS
 
 

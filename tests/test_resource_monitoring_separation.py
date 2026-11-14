@@ -6,12 +6,12 @@ import sqlite3
 
 import pytest
 
-from gene_annotation_episode.communication import validate_closed_schema, validate_form, ReportBoundaryError
-from gene_annotation_episode.execution_expectations import ExecutionExpectations
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema, validate_form, ReportBoundaryError
+from gene_annotation_episode.episodic_workflow.root.execution_expectations import ExecutionExpectations
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.monitoring_credit import MonitoringInformationCredit
 from gene_annotation_episode.resource_estimation import ESTIMATE_SCHEMA, ResourceToolEstimator, recorded_estimate, report_source
-from gene_annotation_episode.runtime import Journal, _compile_form
+from gene_annotation_episode.episodic_workflow.root.runtime import Journal, _compile_form
 from test_runtime import setup, obj
 from test_runtime_expectations import make_history, append
 

@@ -8,9 +8,9 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.bvbrc_alignment_associations import extract_alignment_associations
-from gene_annotation_episode.bvbrc_alignment_provider_contracts import ASSOCIATION_KEYS
-from gene_annotation_episode.bvbrc_msa_xmfa_inputs import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_associations import extract_alignment_associations
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_provider_contracts import ASSOCIATION_KEYS
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_xmfa_inputs import (
     verify_xmfa_source_inputs, extract_msa_xmfa_bindings,
     validate_msa_xmfa_source_verification, validate_msa_xmfa_binding_record,
 )
@@ -336,8 +336,8 @@ def test_saved_binding_rechecks_document_and_source_records_without_reparse(monk
             locked.setattr(Path, name, forbidden)
         locked.setattr(socket, 'socket', forbidden); locked.setattr(socket, 'create_connection', forbidden)
         locked.setattr(subprocess, 'Popen', forbidden)
-        locked.setattr('gene_annotation_episode.bvbrc_msa_xmfa_inputs.parse_aligned_fasta', forbidden)
-        locked.setattr('gene_annotation_episode.xmfa_formats.parse_mauve_xmfa', forbidden)
+        locked.setattr('gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_xmfa_inputs.parse_aligned_fasta', forbidden)
+        locked.setattr('gene_annotation_episode.episodic_workflow.root.library.xmfa_formats.parse_mauve_xmfa', forbidden)
         restored = json.loads(json.dumps(expected))
         assert validate_msa_xmfa_binding_record(restored, document=document, associations=operands['associations']) == expected
         assert binding(document, verified) == expected

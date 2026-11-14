@@ -3,9 +3,9 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
 from gene_annotation_episode.domain import canonical
-from gene_annotation_episode.providers import _SessionConnection, load_config
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection, load_config
 from test_scientific_process_prompt_delivery import INSTRUCTION_TEXT, snapshot
 
 

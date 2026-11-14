@@ -5,9 +5,9 @@ biological claim, configured-model verification or new stopping rule is implied.
 """
 import json
 
-from gene_annotation_episode.communication import validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import validate_form
 from gene_annotation_episode.monitoring_credit import MonitoringInformationCredit
-from gene_annotation_episode.runtime import Journal
+from gene_annotation_episode.episodic_workflow.root.runtime import Journal
 from test_resource_monitoring_separation import sample
 from test_runtime import obj, setup
 

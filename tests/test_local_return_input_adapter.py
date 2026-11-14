@@ -6,12 +6,12 @@ import pytest
 from method_loop.durable import canonical
 from method_loop.identities import UnitRef
 
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.wait_estimation_inputs import (WaitInputs,
+from gene_annotation_episode.episodic_workflow.root.wait_estimation_inputs import (WaitInputs,
     validate_local_return_history)
-from gene_annotation_episode.waiting import (WaitError, completed_action_context,
+from gene_annotation_episode.episodic_workflow.root.waiting import (WaitError, completed_action_context,
     estimate_wait)
 
 

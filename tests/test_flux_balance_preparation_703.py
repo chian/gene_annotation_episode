@@ -12,16 +12,16 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode import native_flux_balance_preparation as prep
+from gene_annotation_episode.episodic_workflow.root.library import native_flux_balance_preparation as prep
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.flux_balance_worker_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_worker_contracts import (
     OUTPUTS, build_native_flux_balance_worker_plan, build_saved_flux_balance_worker_plan,
 )
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.native_file_capture import retained_native_file
-from gene_annotation_episode.native_flux_balance_capture import capture_flux_balance_native_files
-from gene_annotation_episode.native_flux_balance_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_capture import capture_flux_balance_native_files
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY
 from gene_annotation_episode.state import Store
 
 pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="requires bounded529")

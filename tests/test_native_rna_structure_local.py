@@ -7,8 +7,8 @@ import pytest
 
 from gene_annotation_episode import native_lifecycle
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.native_rna_structure_contracts import POLICY, RUN_PLAN_FILENAME
-from gene_annotation_episode.native_rna_structure_local import prepare_local_rna_structure, local_rna_structure_plan
+from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_contracts import POLICY, RUN_PLAN_FILENAME
+from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_local import prepare_local_rna_structure, local_rna_structure_plan
 from gene_annotation_episode.practical_execution_state import _read
 from test_native_rna_structure_contracts import plan
 

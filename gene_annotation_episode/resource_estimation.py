@@ -14,7 +14,7 @@ import math
 import re
 
 from .run_statistics import CONDITIONS, EXECUTION_PHASE_BACKENDS, VERSION as STATISTICS_VERSION, ExecutionClass
-from .communication import REFERENCE_FORMATS, ReportBoundaryError
+from .episodic_workflow.root.communication import REFERENCE_FORMATS, ReportBoundaryError
 
 
 VERSION = 'resource_tool_duration_estimator_v2'

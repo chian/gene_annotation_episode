@@ -3,7 +3,7 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.native_protein_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import (
     validate_protein_structure_job, validate_protein_structure_request,
     validate_native_protein_structure_result, validate_protein_structure_requested_job,
     validate_protein_structure_run_plan, validate_protein_structure_bundle,

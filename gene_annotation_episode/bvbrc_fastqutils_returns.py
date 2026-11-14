@@ -14,11 +14,11 @@ import re
 from . import bvbrc_fastqutils_contracts as contracts
 from .bvbrc_fastqutils_identity import field_ref
 from .bvbrc_appservice_contracts import validate_contract, _finite_json
-from .bvbrc_appservice_custody import _references
-from .bvbrc_appservice_publication import RESULT_VERSION
-from .bvbrc_appservice_saved_results import read_latest_adapter_result
-from .communication import plain, validate_closed_schema, validate_form
-from .episode_return_records import EpisodeReturnRecords, _same
+from .episodic_workflow.root.bvbrc_appservice_custody import _references
+from .episodic_workflow.root.bvbrc_appservice_publication import RESULT_VERSION
+from .episodic_workflow.root.bvbrc_appservice_saved_results import read_latest_adapter_result
+from .episodic_workflow.root.communication import plain, validate_closed_schema, validate_form
+from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords, _same
 from .execution_contracts import canonical, digest
 from .form_reference_validation import _binding_key, form_validation_value
 

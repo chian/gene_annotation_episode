@@ -15,11 +15,11 @@ from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode import reference_edit_outcomes as core
 from gene_annotation_episode import reference_edit_outcome_tools as host
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.molecular_measurement_tools import (
     _recorded_molecular_producer, _recorded_molecular_producer_details,
@@ -395,7 +395,7 @@ def test_source_receipt_stops_at_public_source_and_private_controls_always_deny(
 
 def test_generic_own_facts_authenticate_producer_and_redisplay_then_freeze_literal_group(admission, monkeypatch):
     from gene_annotation_episode import molecular_result_facts as facts
-    from gene_annotation_episode.communication import validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_form
     case = admission()
     original = _publication(case)
     receiver = original.receiver
@@ -438,7 +438,7 @@ def test_generic_own_facts_authenticate_producer_and_redisplay_then_freeze_liter
 
 @pytest.mark.parametrize("fault", ["nested", "counterfeit", "float_count", "bool_ordinal"])
 def test_exact_registered_form_rejects_schema_or_scalar_forgery_before_resolution(admission, fault):
-    from gene_annotation_episode.communication import ReportBoundaryError, validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_form
     case = admission()
     original = _publication(case)
     source_schema = host.reference_edit_outcome_fact_sources()["reference_edit_outcomes"]["report_schema"]
@@ -458,7 +458,7 @@ def test_exact_registered_form_rejects_schema_or_scalar_forgery_before_resolutio
 
 def test_source_group_merge_and_frozen_comparison_preserve_original_operand_identity(admission):
     from gene_annotation_episode import molecular_result_facts as facts
-    from gene_annotation_episode.communication import ReportBoundaryError
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
     case = admission()
     original = _publication(case)
     group = [original.result["result"]]

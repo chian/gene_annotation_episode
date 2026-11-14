@@ -21,13 +21,13 @@ from gene_annotation_episode.api_bvbrc import (
     BVBRCDataService, DATA_QUERY_OPERATION, DATA_RESULT_OPERATION,
     DEFAULT_BASE_URL, EMPTY_ARGUMENTS, QUERY_OPERATION, RESULT_OPERATION,
 )
-from gene_annotation_episode.bvbrc_data_calculators import (
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators import (
     calculate_facet_fractions, calculate_feature_sequence_counts, calculate_page_counts,
 )
-from gene_annotation_episode.bvbrc_data_fields import COLLECTIONS, FIELD_REGISTRY, MOLECULAR_MEASUREMENT_FIELDS
-from gene_annotation_episode.bvbrc_data_publication import requested_projection_failures
-from gene_annotation_episode.bvbrc_data_query import encode_native_query
-from gene_annotation_episode.bvbrc_data_schema import json_digest
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import COLLECTIONS, FIELD_REGISTRY, MOLECULAR_MEASUREMENT_FIELDS
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_publication import requested_projection_failures
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import json_digest
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.execution_contracts import digest as host_digest
 from gene_annotation_episode.state import Store
@@ -212,7 +212,7 @@ def test_declarations_work_without_service_construction_and_versions_do_not_cros
 
 
 def test_actual_host_assignment_schema_embeds_both_request_versions():
-    from gene_annotation_episode.api_service_execution import APIServiceExecution
+    from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
     host = APIServiceExecution.__new__(APIServiceExecution)
     host.configuration = {"fixture_api": {"kind": "api", "service": "bvbrc_data"}}
     host.services = {"fixture_api": BVBRCDataService(None)}
@@ -282,8 +282,8 @@ def test_publication_custody_full_grading_single_source_and_repeat_identity(serv
     initial_sources = len(store.list("source"))
     def no_compile(*args, **kwargs): pytest.fail("publication recompiled saved request")
     monkeypatch.setattr("gene_annotation_episode.api_bvbrc.encode_native_query", no_compile)
-    monkeypatch.setattr("gene_annotation_episode.bvbrc_data_query.encode_native_query", no_compile)
-    monkeypatch.setattr("gene_annotation_episode.bvbrc_data_query._expression", no_compile)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query.encode_native_query", no_compile)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query._expression", no_compile)
     inputs = publication_inputs(prepared)
     outcome = provider.publish(query, selected, native, scope, "first", publication_inputs=inputs)
     result = outcome["result"]
@@ -466,7 +466,7 @@ def test_native_feature_sequence_composition_preserves_two_features_and_four_rel
     assert calculate_feature_sequence_counts(grading["feature_sequence_sheet"]) == grading["feature_sequence_components"]
     assert grading["input_bindings"] == [sequences["binding"]]
     assert not service[0].tools.store.list("observation")
-    from gene_annotation_episode.bvbrc_data_views import project_bvbrc_data_facts
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import project_bvbrc_data_facts
     qualified = qualified_fixture(outcome, grading, service[1], inputs=[sequences])
     facts = project_bvbrc_data_facts([qualified], selector=selection,
         requested_sources=("execution_bvbrc_feature_sequence_rows",))
@@ -530,7 +530,7 @@ def test_supplied_units_keep_real_source_pointer_and_fractional_signed_values(se
     locations = next(m for m in molecular["rows"][0]["metadata"] if m["source_level"] == "supplied" and m["field"] == "measurement_units")["cells"]
     assert all(location["source_ref"] == metadata_source and "native_sha256" not in location and "collection" not in location for location in locations)
     Draft202012Validator(corrected_frozen_schema("PublishedGrading")).validate(grading)
-    from gene_annotation_episode.bvbrc_data_views import (
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import (
         FACT_SCHEMAS, materialize_bvbrc_received_values, project_bvbrc_data_facts,
     )
     qualified = qualified_fixture(outcome, grading, service[1])
@@ -574,7 +574,7 @@ def test_invalid_molecular_measurement_is_partial_only_when_requested(service):
 
 @pytest.mark.parametrize("family,source", [("query_metadata", "execution_bvbrc_pages"), ("facet", "execution_bvbrc_facets")])
 def test_failed_publication_projects_explicit_unavailable_without_native_zero(service, family, source):
-    from gene_annotation_episode.bvbrc_data_views import project_bvbrc_data_facts
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import project_bvbrc_data_facts
     query = request() if family == "query_metadata" else request("genome_feature", mode="facet", facet={
         "field": "annotation", "offset": 0, "limit": 2, "min_count": 1, "sort": "index", "include_missing": True})
     selection = selector()

@@ -13,7 +13,7 @@ import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients
 from gene_annotation_episode.credit import project_credit
-from gene_annotation_episode.rna_evidence import model_header
+from gene_annotation_episode.episodic_workflow.root.library.rna_evidence import model_header
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 

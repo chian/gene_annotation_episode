@@ -13,8 +13,8 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_sheet_contracts as contracts
-from gene_annotation_episode.bvbrc_proteome_data_contracts import ProteomeDataError
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_sheet_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_proteome_data_contracts import ProteomeDataError
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -844,7 +844,7 @@ def test_validation_does_not_recalculate_saved_means_or_claim_absent_sheet_diges
 
 
 def test_each_retained_part_is_validated_once_without_parser_calculator_or_io(monkeypatch):
-    from gene_annotation_episode import bvbrc_proteome_native, bvbrc_proteome_inputs, bvbrc_proteome_calculators
+    from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_native, bvbrc_proteome_inputs, bvbrc_proteome_calculators
     saved = metadata_sheet()
     expected = components()
     validate("NativeSheet", saved)  # Warm static packaged schema caches.

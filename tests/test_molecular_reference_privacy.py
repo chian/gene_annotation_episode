@@ -13,10 +13,10 @@ from types import SimpleNamespace
 import pytest
 
 from method_loop.identities import EpisodeRef
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical, identity
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.molecular_reference_privacy import molecular_reference_restriction
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry

@@ -15,17 +15,17 @@ import re
 
 import pytest
 
-from gene_annotation_episode.api_service_execution import APIServiceExecution
-from gene_annotation_episode.communication import plain, validate_form
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.form_reference_validation import form_reference_validation
-from gene_annotation_episode.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS
-from gene_annotation_episode.rfam_batch_publication import publish_rfam_batch_result
-from gene_annotation_episode.rfam_batch_report_contracts import (
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts import RFAM_CALCULATION_PARAMETERS
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_publication import publish_rfam_batch_result
+from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_contracts import (
     REPORT_FORMAT, REPORT_PARSE_VERSION, RFAM_REPORT_METRICS)
-from gene_annotation_episode.rfam_batch_returns import RfamBatchReturns, rfam_fact_sources
+from gene_annotation_episode.episodic_workflow.root.rfam_batch_returns import RfamBatchReturns, rfam_fact_sources
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tools import ToolRegistry
 
@@ -111,7 +111,7 @@ def no_external_work(monkeypatch):
     monkeypatch.setattr("socket.create_connection", forbidden)
     monkeypatch.setattr("subprocess.Popen", forbidden)
     monkeypatch.setattr("time.sleep", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.runtime.DecisionSource.call", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.runtime.DecisionSource.call", forbidden)
 
 
 @pytest.fixture
@@ -135,9 +135,9 @@ def forbid_report_read_work(monkeypatch, h):
     forbid_read_work(monkeypatch, h)
     def forbidden(*args, **kwargs):
         raise AssertionError("Return/replay attempted report parsing, calculation or transport")
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_report.populate_rfam_batch_report_sheet", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_report_grader.calculate_rfam_batch_report_components", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_table.parse_rfam_report_membership", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report.populate_rfam_batch_report_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_grader.calculate_rfam_batch_report_components", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table.parse_rfam_report_membership", forbidden)
 
 
 def publication_inputs(h, child, outcome):
@@ -156,7 +156,7 @@ def test_selected_report_keeps_native_arithmetic_full_artifacts_and_separate_mod
     h = saved
     def forbidden(*args, **kwargs):
         raise AssertionError("Report publication entered the JSON scientific parser")
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_publication._json_parse", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_publication._json_parse", forbidden)
     child, outcome = h.acquired(selected=report_selector(*RFAM_REPORT_METRICS["hit"]))
     assert outcome["status"] == "completed", outcome
     result = outcome["result"]
@@ -460,7 +460,7 @@ def test_old_report_selector_still_has_artifact_only_semantics(saved, monkeypatc
     h = saved
     def forbidden(*args, **kwargs):
         raise AssertionError("Old report selection entered new numerical parser")
-    monkeypatch.setattr("gene_annotation_episode.rfam_batch_report.populate_rfam_batch_report_sheet", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report.populate_rfam_batch_report_sheet", forbidden)
     child, outcome = h.acquired(selected=report_selector(version=version, projection=False))
     assert outcome["status"] == "completed"
     result = outcome["result"]

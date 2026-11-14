@@ -5,7 +5,7 @@ from copy import deepcopy
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, project_finding_progress
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, project_finding_progress
 from gene_annotation_episode.scientific_findings import validate_finding
 from gene_annotation_episode.state import Store
 from test_scientific_findings import finding, quoted_observation, target_question
@@ -103,7 +103,7 @@ def test_either_existing_observation_subject_role_remains_permitted():
 
 @pytest.mark.parametrize('through_history', [False, True])
 def test_recorded_subject_operands_reach_actual_literature_wire(tmp_path, through_history):
-    from gene_annotation_episode.decision_context import state_frame
+    from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
     from test_component_axis_inspection_prompt import state
     from test_literature_experimental_prompt_delivery import LiteratureWire, complete
 
