@@ -90,7 +90,7 @@ def _owned_environment(root, original):
         raise ValueError(code)
     return {**_environment(root),
         "GENE_EPISODE_WORKFLOW_BUDGET_FILE": str(directory / "workflow-budget.json"),
-        "CODEX_THREAD_ID": workflow["window_id"]}
+        "GENE_EPISODE_WORKFLOW_SLOT": workflow["window_id"]}
 
 
 def _invoke(request, attempt):

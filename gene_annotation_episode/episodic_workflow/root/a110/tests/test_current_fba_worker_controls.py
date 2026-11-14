@@ -25,7 +25,7 @@ def current_records():
         'whole_workflow_budget': workflow, 'cpu_threads': 64, 'cpu_quota_percent': 100,
         'local_resources': {'version': 'controlled-test-declaration-not-allocation'}}}
     intent = {'version': 'flux_balance_worker_intent_v3', 'environment': {
-        'PYTHONDONTWRITEBYTECODE': '1', 'CODEX_THREAD_ID': 'overwritten-original-input'}}
+        'PYTHONDONTWRITEBYTECODE': '1', 'GENE_EPISODE_WORKFLOW_SLOT': 'overwritten-original-input'}}
     policy = {'memory_bytes': 1024, 'scratch_bytes': 2048}
     metadata = deepcopy(body['metadata'])
     metadata.update(service_exit={'SERVICE_RESULT': 'success'}, native_returncode=0,
@@ -41,7 +41,7 @@ def test_current_native_injection_and_recorded_thread_metadata(version):
     body, intent, metadata, policy = current_records()
     intent['version'] = version
     before = deepcopy((body, intent, metadata, policy)); environment = dict(os.environ)
-    expected = {**intent['environment'], 'CODEX_THREAD_ID': body['metadata']['whole_workflow_budget']['window_id'],
+    expected = {**intent['environment'], 'GENE_EPISODE_WORKFLOW_SLOT': body['metadata']['whole_workflow_budget']['window_id'],
         'GENE_EPISODE_WORKFLOW_BUDGET_FILE': '/controlled/runs/work/workflow-budget.json'}
     assert current_worker_request_environment(body, intent) == expected
     assert current_worker_cgroup_matches(metadata, body, intent, policy)

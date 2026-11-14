@@ -44,11 +44,11 @@ def resume_spec(directory, root, payload_argv, schedule, *, window):
             'registration_argv': ['systemd-run', '--user', '--quiet', '--collect', '--unit='+unit,
                 '--on-calendar='+when.astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC'),
                 '--timer-property=AccuracySec=1s', '--timer-property=RemainAfterElapse=no',
-                '--property=WorkingDirectory='+str(root), '--setenv=CODEX_THREAD_ID='+window, *command]}
+                '--property=WorkingDirectory='+str(root), '--setenv=GENE_EPISODE_WORKFLOW_SLOT='+window, *command]}
 
 
 def register_resume(directory, root, payload_argv, schedule):
-    spec = resume_spec(directory, root, payload_argv, schedule, window=os.environ['CODEX_THREAD_ID'])
+    spec = resume_spec(directory, root, payload_argv, schedule, window=os.environ['GENE_EPISODE_WORKFLOW_SLOT'])
     retained = Path(directory)/'monitor-scheduler'
     retained.mkdir(exist_ok=True)
     record = retained/(digest(spec)+'.json')

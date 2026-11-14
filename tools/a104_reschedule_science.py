@@ -21,7 +21,7 @@ def main():
     case = args.case_directory.resolve()
     root = Path(__file__).resolve().parents[1]
     previous = json.loads((case/'scheduled-resume.json').read_text())
-    if previous['window'] != os.environ['CODEX_THREAD_ID']:
+    if previous['window'] != os.environ['GENE_EPISODE_WORKFLOW_SLOT']:
         raise ValueError('a104_resume_must_belong_to_original_window')
     subprocess.run(['systemctl', '--user', 'stop', previous['timer']], check=True)
     command = [sys.executable, '-B', str(root/'tools/a104_resume_science.py'), '--case-directory', str(case),

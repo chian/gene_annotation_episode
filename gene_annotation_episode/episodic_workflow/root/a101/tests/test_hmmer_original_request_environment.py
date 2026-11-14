@@ -56,7 +56,7 @@ def sealed_request(tmp_path, monkeypatch):
         request_environment = dict(environment)
         if form == 'propagated':
             request_environment.update(GENE_EPISODE_WORKFLOW_BUDGET_FILE=str(Path(original_workflow['run_directory']) / 'workflow-budget.json'),
-                CODEX_THREAD_ID=original_workflow['window_id'])
+                GENE_EPISODE_WORKFLOW_SLOT=original_workflow['window_id'])
         request = {'command': selected['command'], 'cwd': str(directory),
             'file_bytes': policy.scratch_bytes, 'ready_path': paths['ready'],
             'release_path': paths['release'], 'result_path': paths['result'],
@@ -83,7 +83,7 @@ def sealed_request(tmp_path, monkeypatch):
 def test_original_request_forms_do_not_use_current_workflow(sealed_request, monkeypatch, form):
     directory, policy, plan, selected, body = sealed_request(form)
     monkeypatch.setenv('GENE_EPISODE_WORKFLOW_BUDGET_FILE', '/unrelated/current/workflow-budget.json')
-    monkeypatch.setenv('CODEX_THREAD_ID', '22222222-2222-2222-2222-222222222222')
+    monkeypatch.setenv('GENE_EPISODE_WORKFLOW_SLOT', '22222222-2222-2222-2222-222222222222')
     restored, handle = publication._worker_selection(directory, task='grade', policy=policy, plan=plan)
     assert restored == selected
     assert handle.read() == body
@@ -98,11 +98,11 @@ def test_pinned_request_still_requires_every_original_operand(sealed_request, ch
         if change == 'workflow_path':
             request['env']['GENE_EPISODE_WORKFLOW_BUDGET_FILE'] = '/another/workflow-budget.json'
         elif change == 'window_id':
-            request['env']['CODEX_THREAD_ID'] = 'another-window'
+            request['env']['GENE_EPISODE_WORKFLOW_SLOT'] = 'another-window'
         elif change == 'missing_path':
             del request['env']['GENE_EPISODE_WORKFLOW_BUDGET_FILE']
         elif change == 'missing_window':
-            del request['env']['CODEX_THREAD_ID']
+            del request['env']['GENE_EPISODE_WORKFLOW_SLOT']
         elif change == 'extra_environment':
             request['env']['UNSELECTED'] = 'value'
         elif change == 'original_environment':

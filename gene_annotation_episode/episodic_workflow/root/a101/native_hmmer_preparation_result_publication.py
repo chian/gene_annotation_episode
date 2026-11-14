@@ -357,7 +357,7 @@ def _worker_selection(directory, *, task, policy, plan=None):
             _error("result_worker_original_request_conflict")
         expected_request["env"] = {**selected["environment"],
             "GENE_EPISODE_WORKFLOW_BUDGET_FILE": str(Path(workflow["run_directory"]) / "workflow-budget.json"),
-            "CODEX_THREAD_ID": workflow["window_id"]}
+            "GENE_EPISODE_WORKFLOW_SLOT": workflow["window_id"]}
         if request != expected_request:
             _error("result_worker_original_request_conflict")
     return selected, handle

@@ -19,7 +19,7 @@ import time
 
 
 VERSION='whole_workflow_budget_v2'
-WINDOW_ENV='CODEX_THREAD_ID'
+WINDOW_ENV='GENE_EPISODE_WORKFLOW_SLOT'
 WINDOW_ID=os.environ.get(WINDOW_ENV)
 
 

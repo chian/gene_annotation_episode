@@ -186,10 +186,10 @@ def test_calendar_resume_is_bound_to_selected_monitor_and_original_window(tmp_pa
     schedule = {'version': 'hpc_monitor_schedule_v1', 'schedule_ref': 'original-schedule',
         'reconsider_at': '2026-11-04T07:20:00+00:00', 'job_id': 'original-job',
         'wake_action': {'tool': 'hpc.monitor'}, 'valuation': {'schedule': True}}
-    window = os.environ['CODEX_THREAD_ID']
+    window = os.environ['GENE_EPISODE_WORKFLOW_SLOT']
     spec = resume_spec(directory, tmp_path, ['/python', '/original-driver'], schedule, window=window)
     assert spec == resume_spec(directory, tmp_path, ['/python', '/original-driver'], schedule, window=window)
-    assert '--setenv=CODEX_THREAD_ID='+window in spec['registration_argv']
+    assert '--setenv=GENE_EPISODE_WORKFLOW_SLOT='+window in spec['registration_argv']
     assert '--on-calendar=2026-11-04 07:20:00 UTC' in spec['registration_argv']
     assert spec['command'][1] == str(tmp_path/'tools'/'one_workflow.sh')
     assert spec['schedule']['job_id'] == 'original-job'

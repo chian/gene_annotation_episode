@@ -1,20 +1,30 @@
 #!/usr/bin/env bash
-# One owned workflow per window, inside machine resource bounds.
+# One owned workflow per slot, inside machine resource bounds.
 set -euo pipefail
 task_repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
+# A slot is one exclusive workflow lane in this checkout. Runs in the same slot
+# never overlap; a second terminal that needs its own lane names another slot.
+task_slot_name=main
+if [[ ${1-} == --slot ]]; then
+    task_slot_name=${2-}
+    shift 2
+fi
+if [[ ! $task_slot_name =~ ^[a-z0-9][a-z0-9_-]*$ ]]; then
+    echo 'Slot names use lowercase letters, digits, underscore and hyphen.' >&2
+    exit 64
+fi
 if [[ $# -lt 3 || $2 != -- ]]; then
-    echo 'Usage: bash tools/one_workflow.sh runs/<unique-run> -- command arguments...' >&2
+    echo 'Usage: bash tools/one_workflow.sh [--slot <name>] runs/<unique-run> -- command arguments...' >&2
     exit 64
 fi
 task_run=$(realpath -m -- "$1")
 shift 2
 case "$task_run" in "$task_repo/runs/"*) ;; *) echo 'Output must be under repository runs/.' >&2; exit 64 ;; esac
 mkdir -p -- "$task_repo/runs"
-task_window=${CODEX_THREAD_ID-}
-if [[ ! $task_window =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$ ]]; then
-    echo 'A stable CODEX_THREAD_ID is required for this window; do not invent one per run.' >&2
-    exit 64
-fi
+# The slot identity is derived from this checkout and the slot name, so it is
+# stable across runs and needs nothing from the calling program's environment.
+task_digest=$(printf '%s\n%s\n' "$task_repo" "$task_slot_name" | sha256sum)
+task_window="${task_digest:0:8}-${task_digest:8:4}-${task_digest:12:4}-${task_digest:16:4}-${task_digest:20:12}"
 task_key=${task_window//-/}
 task_service="gene-episode-workflow-$task_key.service"
 # No hyphens: this must not inherit the old globally capped workflow slice.
@@ -22,7 +32,7 @@ task_slice="geneepisodewindow$task_key.slice"
 task_slot="$task_repo/runs/workflow-windows/$task_window"
 mkdir -p -- "$task_slot"
 exec 9>"$task_slot/workflow.lock"
-if ! flock -n 9; then echo 'This Codex window already owns a running workflow.' >&2; exit 75; fi
+if ! flock -n 9; then echo 'This slot already has a running workflow.' >&2; exit 75; fi
 task_state=$(systemctl --user show "$task_service" --property=ActiveState --value)
 case "$task_state" in active|activating|deactivating|reloading) echo 'The prior workflow is still active.' >&2; exit 75 ;; esac
 task_group=$(systemctl --user show "$task_slice" --property=ControlGroup --value)
@@ -58,7 +68,7 @@ systemd-run --user --quiet --wait --pipe --collect --service-type=exec --expand-
     --property=MemorySwapMax=0 --property=TasksMax=infinity \
     --property=KillMode=control-group --working-directory="$task_repo" \
     --setenv="PYTHONPATH=$task_repo" --setenv=PYTHONDONTWRITEBYTECODE=1 \
-    --setenv="CODEX_THREAD_ID=$task_window" \
+    --setenv="GENE_EPISODE_WORKFLOW_SLOT=$task_window" \
     --property="ExecStopPost=$task_python -m gene_annotation_episode.workflow_budget cleanup" \
     "$task_python" -m gene_annotation_episode.workflow_budget "$task_run" -- "$@" \
     >"$task_run/stdout.log" 2>"$task_run/stderr.log" || task_status=$?
