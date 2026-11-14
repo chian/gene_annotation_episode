@@ -61,13 +61,13 @@ def ratio_case(path):
 def selected_case(kind, path):
     if kind == "ratio":
         store, context, args = ratio_case(path)
-        module = importlib.import_module("gene_annotation_episode.episodic_workflow.root.a105.literature_ratio_storage")
+        module = importlib.import_module("gene_annotation_episode.episodic_workflow.root.literature_ratio_storage")
         repo_type, schema = module.LiteratureRatioRepository, module.ratio_cells_schema()
     else:
         fixture_module, fixture, class_part, schema_name = CASES[kind]
         store, context, args, *_ = getattr(importlib.import_module(fixture_module), fixture)(path)
         name = "rate" if kind == "rate_source" else "partner" if kind.startswith("partner_") else kind
-        module = importlib.import_module("gene_annotation_episode.literature_" + name + "_storage")
+        module = importlib.import_module("gene_annotation_episode.episodic_workflow.root.literature_" + name + "_storage")
         repo_type = getattr(module, "Literature" + class_part + "Repository")
         schema = getattr(module, schema_name)()
     context = replace(context, role="literature", path=(("literature", "owner"),),

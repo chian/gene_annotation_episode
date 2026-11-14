@@ -62,7 +62,7 @@ def build_run(directory, *, compact=True, durable=False):
     store = Store(directory / "state")
     factory = ExecutionServiceFactory({"selected-api": CONFIG}, {}, 2, 3, .5)
     provider = Provider()
-    workflow = Workflow(store, ToolRegistry(store), provider, directory / "run", "custody479",
+    workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider, directory / "run", "custody479",
         controller_factory=lambda path, initial: YieldController(str(path), initial, 0,
             YieldParameters(100, 50), estimate_with_context=lambda history, parameters, _: fixture_estimate(history, parameters)),
         project_credit=lambda *_: 0, episode_service_factory=factory,

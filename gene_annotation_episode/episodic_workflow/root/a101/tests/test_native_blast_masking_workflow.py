@@ -28,7 +28,8 @@ from gene_annotation_episode.episodic_workflow.root.a101.native_blast_masking_lo
 from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.episode import ScientificProcessEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_result_views import masking_fact_sources
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
@@ -114,7 +115,7 @@ def nested_case(tmp_path, program, mode, *, supplied_job=None, result_selector=N
     tools = ToolRegistry(store)
     application = ExecutionServiceFactory(resources, {}, 3, 2, 1, log_window_bytes=128)(
         store, run_id=RUN_ID, directory=tmp_path / 'run', tool_registry=tools)
-    descriptor = prepare_scientific_binding(run_directory=tmp_path / 'run', source_directory=PUBLICATION,
+    descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=tmp_path / 'run', source_directory=PUBLICATION,
         tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
         resource_catalogs=application.resource_tool_catalogs)
     library = ScientificProcessLibrary(tmp_path / 'run/scientific-process-library')

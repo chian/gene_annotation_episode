@@ -31,7 +31,7 @@ def no_external_work(monkeypatch):
     def forbidden(*args, **kwargs):
         raise AssertionError("Shared Rfam verification attempted external or model work")
     for path in ("socket.create_connection", "subprocess.Popen",
-                 "gene_annotation_episode.episodic_workflow.root.runtime.DecisionSource.call"):
+                 "gene_annotation_episode.episodic_workflow.root.task.AnnotationTask.call"):
         monkeypatch.setattr(path, forbidden)
 
 

@@ -5,8 +5,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from method_loop import EpisodeGoal, EpisodeRequest
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal

@@ -132,7 +132,7 @@ def test_multiple_context_exchanges_complete_one_actual_action_slot_and_observat
             'value': {'type': 'enum', 'value': 'unresolved'}, 'context_refs': []}]
         action = {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
         provider = ConversationProvider([lookup(), lookup(category='reason'), select(action)])
-        workflow = runtime.Workflow(store, ToolRegistry(store), provider, tmp_path / 'run',
+        workflow = runtime.Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider, tmp_path / 'run',
             'synthetic-exchange-run', lambda path, initial: FixtureController(str(path), initial, 1),
             lambda *_: 0, episode_binding_factories=(), execution_binding={'fixture': True},
             decision_protocol=PROTOCOL)

@@ -32,7 +32,8 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_ut
 from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.episode import ScientificProcessEpisode
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_blast_utility_result_views_629 import selector as result_selector
@@ -453,7 +454,7 @@ def run_case(directory, *, continuation_output=None):
     tools = ToolRegistry(store)
     application = ExecutionServiceFactory(resources, {}, 3, 2, 1, log_window_bytes=128)(
         store, run_id=RUN_ID, directory=directory / 'run', tool_registry=tools)
-    descriptor = prepare_scientific_binding(run_directory=directory / 'run', source_directory=PUBLICATION,
+    descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=directory / 'run', source_directory=PUBLICATION,
         tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
         resource_catalogs=application.resource_tool_catalogs)
     library = ScientificProcessLibrary(directory / 'run/scientific-process-library')

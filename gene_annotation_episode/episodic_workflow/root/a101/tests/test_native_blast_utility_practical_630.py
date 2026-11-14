@@ -12,11 +12,11 @@ from types import SimpleNamespace
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import native_lifecycle as native
+from gene_annotation_episode.episodic_workflow.root.a101 import native_lifecycle as native
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_driver as driver
 from gene_annotation_episode.episodic_workflow.root.a101.communication import plain
-from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.a101.execution_progress import ExecutionProgressProvider, ExecutionTargetReader
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_contracts import LEGACY_MODES, requested_job_from_native_blast_utility
@@ -27,9 +27,9 @@ from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_rec
     ASSIGNMENT_SCHEMA, assess_validations, canonical, digest, validate_assignment, validate_outcome)
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState
 from gene_annotation_episode.episodic_workflow.root.a101.practical_receipt_information import PracticalReceiptInformation
-from gene_annotation_episode.practical_yield import PracticalYieldEstimator
-from gene_annotation_episode.progress_records import validate_resource_observation
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.practical_yield import PracticalYieldEstimator
+from gene_annotation_episode.episodic_workflow.root.a101.progress_records import validate_resource_observation
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 
 from test_native_blast_utility_producer_628 import POLICY, controlled_native, job_fixture
 from test_practical_yield import completion_context

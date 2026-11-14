@@ -785,10 +785,10 @@ def test_v2_population_and_parameter_recalculation_are_pure_and_do_not_reprove_f
         for target, name in ((builtins,"open"), (io,"open"), (socket,"socket"), (socket,"create_connection"),
                 (subprocess,"Popen"), (subprocess,"run"), (Path,"read_bytes"), (Path,"read_text")):
             patch.setattr(target,name,forbidden)
-        patch.setattr("gene_annotation_episode.episodic_workflow.root.a101.blast_fasta_record_identity.parse_blast_fasta_source_records", forbidden)
+        patch.setattr("gene_annotation_episode.episodic_workflow.root.a101.library.blast_fasta_record_identity.parse_blast_fasta_source_records", forbidden)
         patch.setattr("gene_annotation_episode.domain.parse_sequences", forbidden)
-        patch.setattr("gene_annotation_episode.episodic_workflow.root.a101.blast_grading_inputs.parse_blast_json", forbidden)
-        patch.setattr("gene_annotation_episode.episodic_workflow.root.a101.blast_report_collection.parse_blast_report_collection", forbidden)
+        patch.setattr("gene_annotation_episode.episodic_workflow.root.a101.library.blast_grading_inputs.parse_blast_json", forbidden)
+        patch.setattr("gene_annotation_episode.episodic_workflow.root.a101.library.blast_report_collection.parse_blast_report_collection", forbidden)
         assert populate(**arguments) == saved
         out = calculate(saved, model={"temperature_bits":2})
     assert saved == before

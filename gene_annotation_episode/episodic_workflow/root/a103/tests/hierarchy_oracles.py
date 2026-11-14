@@ -88,9 +88,3 @@ def original_resource_received(home):
     node, row = definition(key, 'ResourceReceivedMessages', 'received_form_references')
     module = import_module(PACKAGE + '.' + home.replace('/', '.') + '.received_messages')
     return compile_original(node, row, vars(module))
-
-
-def original_private_function(key, name):
-    node, row = definition(key, None, name)
-    module = import_module(mapped_module(row['module']))
-    return compile_original(node, row, vars(module))

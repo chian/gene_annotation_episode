@@ -13,9 +13,9 @@ from pathlib import Path, PurePosixPath
 import re
 
 from gene_annotation_episode.acquisition import AcquisitionError
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, identity, obj
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.native_operation_lock import _action_lock
 from gene_annotation_episode.episodic_workflow.root.library.macs2_peak_result_contracts import (

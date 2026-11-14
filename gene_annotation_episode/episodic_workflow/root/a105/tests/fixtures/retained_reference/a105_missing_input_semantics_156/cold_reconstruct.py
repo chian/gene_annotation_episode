@@ -8,12 +8,12 @@ from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[8]))
 
-from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_composition import compose_episode_bindings
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext, EpisodeBindingRegistry
+from gene_annotation_episode.episodic_workflow.root.a105.episode_composition import compose_episode_bindings
+from gene_annotation_episode.episodic_workflow.root.a105.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a105.state import Store
+from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
 
 
 def forbidden(*args, **kwargs):
@@ -21,9 +21,9 @@ def forbidden(*args, **kwargs):
 
 
 def main():
-    import gene_annotation_episode.literature_activity_calculations as calculator
-    import gene_annotation_episode.literature_assay_inputs as assay_inputs
-    import gene_annotation_episode.literature_prose_reader as prose
+    import gene_annotation_episode.episodic_workflow.root.a105.library.literature_activity_calculations as calculator
+    import gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_inputs as assay_inputs
+    import gene_annotation_episode.episodic_workflow.root.a105.library.literature_prose_reader as prose
     calculator.populate_corrected_activity = forbidden
     assay_inputs.read_assay_inputs = forbidden
     prose.read_jats_quantity = forbidden
@@ -47,7 +47,7 @@ def main():
             resource_estimator=None, role_credit_bindings={})
         binding, = composition.bindings
         host.episode_bindings = EpisodeBindingRegistry((binding,))
-        repository = getattr(services, f'literature_{data["kind"]}_repository')()
+        repository = getattr(binding, f'literature_{data["kind"]}_repository')()
         assert binding.as_record() == data['descriptor']
         assert asyncio.run(binding.execute(context, f'literature.{data["kind"]}.populate',
             data['arguments'], data['operation_key'])) == data['outcome']

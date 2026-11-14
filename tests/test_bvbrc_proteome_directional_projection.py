@@ -232,7 +232,7 @@ def forbid_construction(monkeypatch):
         'bvbrc_proteome_directional_geometry': ('calculate_protein_block', 'inspect_protein_correspondence', 'union_position_intervals'),
         'bvbrc_proteome_bundle_v2_resolution': ('parse_genome_comparison_directional_report', 'build_directional_sheet', 'calculate_directional_components'),
     }.items():
-        for name in names: monkeypatch.setattr(importlib.import_module('gene_annotation_episode.' + module), name, fail)
+        for name in names: monkeypatch.setattr(importlib.import_module('gene_annotation_episode.episodic_workflow.root.library.' + module), name, fail)
     monkeypatch.setattr('socket.create_connection', fail)
     monkeypatch.setattr('subprocess.run', fail)
     monkeypatch.setattr('subprocess.Popen', fail)

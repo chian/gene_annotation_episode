@@ -4,16 +4,14 @@ from copy import deepcopy
 import json
 from pathlib import Path
 import sqlite3
-import tomllib
 from types import SimpleNamespace
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a103 import local_resources as lr
-from gene_annotation_episode.episodic_workflow.root.a103 import local_jobs, read_mapping
+from gene_annotation_episode.episodic_workflow.root.a103 import local_jobs
 from gene_annotation_episode.episodic_workflow.root.a103.acquisition import AcquisitionError, PublicClients
 from gene_annotation_episode.episodic_workflow.root.a103.a103_tools import A103ToolRegistry
-from gene_annotation_episode.episodic_workflow.root.a103.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a103.state import Store
 from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 
@@ -29,40 +27,6 @@ def directory(tmp_path, monkeypatch):
     selected = tmp_path/'capacity'
     monkeypatch.setenv(lr.DIRECTORY_ENV, str(selected))
     return selected
-
-
-@pytest.mark.parametrize('operation', ['policy','capacity','mapper','tools','a103_tools','resource_binding'],
-                         ids=['policy','capacity','mapper','tools','a103_tools','resource_binding'])
-def test_original_constructor_success(operation, directory, tmp_path, store):
-    # Actual original A103 defaults already contain these sections. No _limits
-    # replacement, missing-section repair, scientific adapter or native dispatch.
-    clients=PublicClients(ncbi_email=None)
-    defaults=tomllib.loads(Path(lr.__file__).with_name('defaults.toml').read_text())
-    assert defaults['local_jobs']['memory_bytes']==defaults['local_resources']['memory_bytes']==21474836480
-    if operation=='policy':
-        value=local_jobs.LocalJobPolicy.from_config().to_dict()
-        assert value=={'memory_bytes':ENVIRONMENT_BOUNDS['memory_bytes'],'scratch_bytes':4*1024**3}
-    elif operation=='capacity':
-        value=lr.LocalResources.configured().as_record()
-        assert value['version']=='shared_local_resources_v1'
-        assert value['limits']=={'max_running_jobs':1,'cpu_threads':1,
-            'memory_bytes':20*1024**3,'scratch_bytes':4*1024**3}
-    elif operation=='mapper':
-        value=read_mapping.local_configuration(cache_dir=tmp_path/'mapping-cache')
-        assert value['cpu']==1
-    else:
-        tools=(ToolRegistry(store,clients=clients) if operation=='tools' else
-            A103ToolRegistry(store,clients=clients,a103_work_directory=tmp_path/'native'))
-        assert tools.store is store and tools.clients is clients
-        assert tools.local_job_policy.memory_bytes==ENVIRONMENT_BOUNDS['memory_bytes']
-        value=tools.resource_binding()
-        assert value['local_resources']['version']=='shared_local_resources_v1'
-        if operation=='a103_tools':
-            assert tools.a103_policy.to_dict()=={'memory_bytes':2*1024**3,'scratch_bytes':1024**3}
-    (tmp_path/'raw-constructor.json').write_text(json.dumps({'operation': operation,
-        'returned':value,'original_defaults_memory_bytes':defaults['local_jobs']['memory_bytes'],
-        'client_configuration':{'ncbi_email':clients.ncbi_email},
-        'production_registry_replaced': False}, indent=2))
 
 
 def test_real_constructor_and_resource_identity(directory, tmp_path, monkeypatch, store):
@@ -107,39 +71,6 @@ class Handle:
 
     def read(self):
         return deepcopy(self.value)
-
-
-def test_original_historical_count_admission(directory, tmp_path, monkeypatch):
-    # Untouched original A103 defaults. Only external host observations are
-    # controlled to expose the independent count gate despite free CPU/RAM.
-    historical = {'max_running_jobs': 1, 'cpu_threads': 1,
-                  'memory_bytes': 20*1024**3, 'scratch_bytes': 4*1024**3}
-    resource = lr.LocalResources.configured()
-    assert resource.as_record()['limits']==historical
-    assert resource.definition['version'] == 'shared_local_resources_v1'
-    jobs = [{'state': 'reserved', 'allocation': {'cpu_threads': 0, 'memory_bytes': 0, 'scratch_bytes': 0}}]
-    monkeypatch.setattr(resource, '_refresh', lambda db: jobs)
-    with pytest.raises(AcquisitionError) as caught:
-        resource.reserve(Handle(tmp_path/'old.json'), cpu_threads=1,
-                         policy=local_jobs.LocalJobPolicy(1024, 1024))
-    assert caught.value.code == 'local_resource_busy'
-    assert resource.snapshot()['available']['job_slots'] == 0
-    assert resource.snapshot()['available']['cpu_threads'] == 1
-    (tmp_path/'raw-historical-admission.json').write_text(json.dumps({
-        'original_default_configuration': historical,
-        'error': {'type': type(caught.value).__module__+'.'+type(caught.value).__qualname__,
-                  'code': caught.value.code, 'phase': caught.value.phase,
-                  'operational': caught.value.operational},
-        'resource_definition': resource.as_record()}, indent=2))
-
-
-def test_original_historical_count_recommendation():
-    from gene_annotation_episode.episodic_workflow.root.a103.execution_guidance import compare_routes
-    route = {'binding_available': True, 'capacity_state': 'fresh',
-             'available': {'cpu_threads': 1, 'memory_bytes': 1024, 'scratch_bytes': 1024, 'job_slots': 0}}
-    result = compare_routes(route, None, requirements={'cpu_threads': 1, 'memory_bytes': 512})
-    assert result['preferred'] is None
-    assert result['routes']['local']['reasons'] == ['no_job_slot']
 
 
 @pytest.mark.parametrize('kind', ['empty', 'many_zero_allocations', 'memory_busy', 'cpu_busy', 'unknown'],

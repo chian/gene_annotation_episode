@@ -21,6 +21,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_bind
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_models import binding_model_operand_keys
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_model_storage import binding_model_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
@@ -164,7 +165,7 @@ def test_selected_model_action_returns_conditional_values_once(tmp_path, limit):
             controllers.append(value)
             return value
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, native, model_action, receive]), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(context.received_record_refs), episode_binding_factories=(partial(LiteratureEpisode, rate_population=True),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, native, model_action, receive]), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(context.received_record_refs), episode_binding_factories=literature_binding_factories(rate_population=True), binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0 and len(received) == 1
         assert [value.scores for value in controllers] == [[0, 0], [0, 0]]
         assert store.db.execute('select count(*) from runtime_observations').fetchone()[0] == 4

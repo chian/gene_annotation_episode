@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a107.communication import form_with_facts, validate_form
-from gene_annotation_episode.domain import ContractError, canonical, obj, validate_schema
+from gene_annotation_episode.episodic_workflow.root.a107.domain import ContractError, canonical, obj, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_storage import LiteraturePartnerRepository
 from gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_sheet_records import partner_cells_schema, partner_source_population_schema

@@ -55,7 +55,7 @@ def test_read_window_and_admitted_child_form_supply_visible_handles_outside_prev
         # This explicitly injected fixture controller only bounds the local
         # regression. Production yield rules and observations are unchanged.
         controller = lambda path, value: FixtureController(str(path), value, 2)
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
             run_dir=tmp_path / "run", controller_factory=controller,
             project_credit=lambda bound, scope: project_credit(bound, scope=scope)))
         child, parent = provider.contexts[2], provider.contexts[3]
@@ -132,7 +132,7 @@ def test_candidate_artifacts_match_existing_registry_before_and_after_member_reg
             format="fastq", use="evidence", molecule="dna", role="read", quality_encoding="phred33")
         attempt = store.parse_material(material["id"])
         member_ref = store.material_members(attempt["collection_ref"])["members"][0]["id"]
-        header = ToolRegistry(store).execute("material.header", {"member_ref": member_ref})
+        header = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("material.header", {"member_ref": member_ref})
         assert header["status"] == "completed"
         header_ref = header["result"]["artifact_ref"]
         source = store.get(material["source_ref"])
@@ -167,7 +167,7 @@ def test_cross_scope_context_stays_readable_without_broadening_existing_form_sco
         local = store.put("hypothesis", {"subject_refs": [left], "predicate": "sequence_integrity",
             "value": {"type": "enum", "value": "unknown"}, "context_refs": [foreign["id"]]},
             origin="reasoning", scope=scope)
-        queried = ToolRegistry(store).execute("state.query", {"refs": [foreign["id"]]}, scope=scope)
+        queried = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("state.query", {"refs": [foreign["id"]]}, scope=scope)
         assert queried["status"] == "completed" and queried["result"]["records"] == [foreign]
         supplied = {"local_record": local, "actual_query": queried}
         candidates = [left, right, local["id"], foreign["id"]]

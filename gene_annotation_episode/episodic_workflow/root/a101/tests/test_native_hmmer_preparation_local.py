@@ -7,7 +7,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import native_lifecycle as native
+from gene_annotation_episode.episodic_workflow.root.a101 import native_lifecycle as native
 from gene_annotation_episode.native_infernal_contracts import native_infernal_digest
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_contracts import requested_job_from_hmmer_preparation
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparation_driver import OWNER_NAME, validate_preparation_bundle_files

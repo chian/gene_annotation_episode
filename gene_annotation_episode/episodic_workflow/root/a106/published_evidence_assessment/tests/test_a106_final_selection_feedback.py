@@ -23,7 +23,7 @@ def test_final_selection_feedback_identifies_received_source_without_publishing_
             context = replace(context, received_record_refs=[ref for ref in context.received_record_refs
                 if ref != wrong_ref])
         services, _ = service_binding(store, context)
-        binding = LiteratureEpisode(services, rate_population=True, a106_intervention=True)
+        binding = LiteratureEpisode(services)
         services.workflow.episode_bindings = EpisodeBindingRegistry((binding,))
         proposed = deepcopy(correct)
         proposed["experiments"][0]["sheet_ref"] = wrong_ref
@@ -72,7 +72,7 @@ def test_stale_assessment_feedback_identifies_only_the_received_matching_head(tm
         context = replace(context, received_record_refs=[*context.received_record_refs, other,
             *([latest] if latest_received else [])])
         services, _ = service_binding(store, context)
-        binding = LiteratureEpisode(services, rate_population=True, a106_intervention=True)
+        binding = LiteratureEpisode(services)
         services.workflow.episode_bindings = EpisodeBindingRegistry((binding,))
         args.update(revises_subscore_ref=first_final, revision_reason="Select the corrected assessment")
         before = store.list("source")
@@ -114,7 +114,7 @@ def test_stale_final_feedback_withholds_unreceived_current_reference(tmp_path, l
         if latest_received:
             context = replace(context, received_record_refs=[*context.received_record_refs, latest])
         services, _ = service_binding(store, context)
-        binding = LiteratureEpisode(services, rate_population=True, a106_intervention=True)
+        binding = LiteratureEpisode(services)
         services.workflow.episode_bindings = EpisodeBindingRegistry((binding,))
         before = store.list("source")
         failed = asyncio.run(binding.execute(context, "literature.a106.finalize", args, "stale-final"))

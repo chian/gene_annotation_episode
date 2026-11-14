@@ -12,6 +12,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt, EXPERIMENTAL_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_interaction_model_storage import COMPONENTS, binding_interaction_model_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_interaction_model_prompt import BINDING_INTERACTION_MODEL_TASK
@@ -64,7 +65,7 @@ def test_selected_child_original_parent_subset_and_one_observation_per_action(tm
             controllers.append(value)
             return value
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, native, model_action, receive]), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(context.received_record_refs), episode_binding_factories=(partial(LiteratureEpisode, rate_population=True),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, native, model_action, receive]), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(context.received_record_refs), episode_binding_factories=literature_binding_factories(rate_population=True), binding_definitions={'credit': scorer.as_record()}))
         assert len(received) == 1 and summary['credit'] == 0
         assert [v.scores for v in controllers] == [[0, 0], [0, 0]]
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 4

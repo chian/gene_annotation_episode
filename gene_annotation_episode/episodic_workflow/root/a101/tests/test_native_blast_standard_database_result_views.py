@@ -4,7 +4,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_standard_database_result_views as v
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_standard_database_calculators as c
-from gene_annotation_episode.domain import validate_schema
+from gene_annotation_episode.episodic_workflow.root.a101.domain import validate_schema
 from test_native_blast_standard_database_calculators import calculate, cell, family, fixture, numerical
 from test_native_blast_standard_database_metadata import assert_pure
 

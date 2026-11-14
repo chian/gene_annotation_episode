@@ -106,7 +106,7 @@ def admission(tmp_path, monkeypatch):
         store = Store(directory / 'state')
         opened.append(store)
         query_ref, reference_ref, other = store.create_problem(fasta, molecule=molecule)['subject_refs']
-        case = setup_case(store, ToolRegistry(store), scope={'subject_refs': [query_ref, other] if broad_scope else [query_ref]})
+        case = setup_case(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), scope={'subject_refs': [query_ref, other] if broad_scope else [query_ref]})
         if external_query:
             material = store.register_material(data=f'>registered_external_query\n{query}\n', format='fasta', molecule=molecule)
             parsed = store.parse_material(material['id'])
@@ -396,7 +396,7 @@ def test_actual_read_batch_admits_record_beyond_twelve_row_preview(tmp_path, mon
         parsed = store.parse_material(material['id'])
         member, = store.material_members(parsed['collection_ref'])['members']
         reference = store.material_reference(member['id'])
-        case = setup_case(store, ToolRegistry(store), scope={'subject_refs': [library]})
+        case = setup_case(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), scope={'subject_refs': [library]})
         members = library_targets.member_page(store, library, limit=20, scope=case.scope)['members']
         queries = [member['id'] for member in members]
         assert len(queries) == 13

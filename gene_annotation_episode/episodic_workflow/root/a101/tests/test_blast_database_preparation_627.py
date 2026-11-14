@@ -17,7 +17,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_database_preparation as p
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_standard_database_contracts as standard
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 
 
 EVIDENCE = Path(__file__).resolve().parents[5] / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/blast_database_preparation"
@@ -96,14 +96,15 @@ def test_saved_only_revalidation_and_projection_are_pure_and_detached(monkeypatc
     record = p.populate_database_artifact_set(**case["arguments"])
     saved = json.loads(json.dumps(record))
     expected = project(saved, receipt)
-    forbid_io(monkeypatch)
-    assert p.populate_database_artifact_set(**case["arguments"]) == saved
-    checked = p.validate_database_artifact_relationships(saved)
-    assert checked == saved
-    assert project(saved, receipt) == expected
-    assert standard.validate_standard_prepared_blast_database_manifest(expected["manifest"]) == expected["manifest"]
-    checked["outputs"].clear()
-    assert saved["outputs"]
+    with monkeypatch.context() as patch:
+        forbid_io(patch)
+        assert p.populate_database_artifact_set(**case["arguments"]) == saved
+        checked = p.validate_database_artifact_relationships(saved)
+        assert checked == saved
+        assert project(saved, receipt) == expected
+        assert standard.validate_standard_prepared_blast_database_manifest(expected["manifest"]) == expected["manifest"]
+        checked["outputs"].clear()
+        assert saved["outputs"]
 
 
 def test_native_duplicate_id_failure_keeps_actual_partial_build_and_returncode():

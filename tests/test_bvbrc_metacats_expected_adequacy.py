@@ -146,7 +146,7 @@ def test_adequacy_and_saved_validation_do_not_call_calculators(monkeypatch):
         ('bvbrc_metacats_biological_calculators', ('biological_group_statistics', 'biological_group_effects', 'chi_square_tail')),
         ('bvbrc_contingency_math', ('expected_contingency_counts', 'pearson_contingency_statistic'))):
         for name in names:
-            monkeypatch.setattr('gene_annotation_episode.' + module + '.' + name, forbidden)
+            monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.' + module + '.' + name, forbidden)
     assert expected_count_adequacy(stats, statistics_kind='biological') == expected
     assert validate_expected_count_adequacy(json.loads(json.dumps(expected))) == expected
     assert json.dumps(stats, sort_keys=True, allow_nan=False) == before

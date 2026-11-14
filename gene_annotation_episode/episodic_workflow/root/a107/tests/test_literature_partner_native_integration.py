@@ -128,7 +128,7 @@ def setup_case(path, *, case='primary_native', components=None):
 
 def binding_for(store, context):
     host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
-    binding = LiteratureEpisode(WorkflowServices(host), rate_population=True)
+    binding = LiteratureEpisode(WorkflowServices(host))
     host.episode_bindings = EpisodeBindingRegistry((binding,))
     return binding
 
@@ -186,8 +186,9 @@ def test_native_selected_and_saved_only_reconstruction_without_prepared_json(tmp
             journal=Journal(store, context.run_id), execution_backend=None, descriptors=[binding.as_record()],
             job_episodes=None, resource_estimator=None, role_credit_bindings={}).bindings
         # Capture complete original operation map before disabling source helpers.
-        catalog = restored.catalog(context)
-        restored.catalog = lambda _: deepcopy(catalog)
+        # The private owner admits arguments with its legacy-quote catalog; keep both saved maps.
+        catalogs = {flag: restored.catalog(context, _accept_legacy_quotes=flag) for flag in (False, True)}
+        restored.catalog = lambda _, *, _accept_legacy_quotes=False: deepcopy(catalogs[_accept_legacy_quotes])
         sheet = store.get(outcome['result']['sheet_ref'])
         allowed = {sheet['artifact_ref'],sheet['request_ref']}
         read = store.get_artifact
@@ -242,7 +243,7 @@ def test_native_ordinary_typed_parent_receives_actual_source_bindings(tmp_path, 
         result=asyncio.run(run_workflow(store,ToolRegistry(store),provider=ScriptedProvider([commission,action,receive]),
             run_dir=tmp_path/'run',controller_factory=lambda path,initial:FixtureController(str(path),initial,2 if len(path)==1 else 1),
             project_credit=scorer,initial_known_record_refs=list(context.received_record_refs),
-            episode_binding_factories=(partial(LiteratureEpisode,rate_population=True),),binding_definitions={'credit':scorer.as_record()}))
+            episode_binding_factories=(partial(LiteratureEpisode),),binding_definitions={'credit':scorer.as_record()}))
         assert len(received)==1 and result['credit']==0
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]==3
         assert store.db.execute('SELECT count(*) FROM literature_partner_operations').fetchone()[0]==1

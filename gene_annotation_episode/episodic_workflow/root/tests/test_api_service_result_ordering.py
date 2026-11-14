@@ -78,7 +78,8 @@ def test_received_support_hook_does_not_duplicate_execution_owned_facts(role):
         genome_alignment_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
         proteome_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
         comparative_systems_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
-        fastqutils_returns=SimpleNamespace(received_facts=lambda context, schema: {}))
+        fastqutils_returns=SimpleNamespace(received_facts=lambda context, schema: {}),
+        application_returns=SimpleNamespace(received_facts=lambda context, schema: {}))
     context = SimpleNamespace(role=role, request={"report_contract": {"measurements": {
         "schema": {"properties": {"support": {
             "x-source": "bvbrc_appservice_support_refs"}}}}}})

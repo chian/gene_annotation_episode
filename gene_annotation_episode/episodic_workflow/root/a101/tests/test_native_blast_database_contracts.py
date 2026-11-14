@@ -84,22 +84,23 @@ def test_exact_compilation_and_all_modes_without_io(monkeypatch, program, query,
     if program in {"psiblast", "deltablast"}:
         job["options"] += ["-num_iterations", "0"]
     original = deepcopy(job)
-    forbid_io(monkeypatch)
-    assert c.validate_native_blast_database_job(job) == job
-    result = compiled(job)
-    query_flag = {"sequence": "-query", "msa": "-in_msa", "pssm": "-in_pssm"}[query]
-    expected = [job["software"]["executable"], *job["options"], query_flag, "/selected/query", "-db", "/selected/db/target"]
-    if program == "deltablast":
-        expected += ["-rpsdb", "/selected/db/domain"]
-    outfmt = "15" if fmt == "json15" else ("6" if fmt == "tabular6" else "7") + " qseqid sseqid bitscore qstart qend"
-    assert result["argv"] == [*expected, "-outfmt", outfmt, "-out", "report"]
-    assert [r["path"] for r in result["outputs"]] == [r["relative_path"] for r in job["outputs"]]
-    request = c.requested_job_from_native_blast_database(job)
-    assert c.validate_native_blast_database_requested_job(request) == request
-    Draft202012Validator(c.NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA).validate(request)
-    result["outputs"][0]["relative_path"] = "changed"
-    request["native_blast_database"]["query"]["input_key"] = "changed"
-    assert job == original
+    with monkeypatch.context() as patch:
+        forbid_io(patch)
+        assert c.validate_native_blast_database_job(job) == job
+        result = compiled(job)
+        query_flag = {"sequence": "-query", "msa": "-in_msa", "pssm": "-in_pssm"}[query]
+        expected = [job["software"]["executable"], *job["options"], query_flag, "/selected/query", "-db", "/selected/db/target"]
+        if program == "deltablast":
+            expected += ["-rpsdb", "/selected/db/domain"]
+        outfmt = "15" if fmt == "json15" else ("6" if fmt == "tabular6" else "7") + " qseqid sseqid bitscore qstart qend"
+        assert result["argv"] == [*expected, "-outfmt", outfmt, "-out", "report"]
+        assert [r["path"] for r in result["outputs"]] == [r["relative_path"] for r in job["outputs"]]
+        request = c.requested_job_from_native_blast_database(job)
+        assert c.validate_native_blast_database_requested_job(request) == request
+        Draft202012Validator(c.NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA).validate(request)
+        result["outputs"][0]["relative_path"] = "changed"
+        request["native_blast_database"]["query"]["input_key"] = "changed"
+        assert job == original
 
 
 @pytest.mark.parametrize("ordinal,ignore,flags", [(None, None, []), (None, False, []), (None, True, ["-ignore_msa_master"]),
@@ -228,25 +229,27 @@ def manifest_for():
         "entry_module": "gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_driver",
         "python": {"path": "/runtime/python", "sha256": "a" * 64, "size_bytes": 23},
         "package_files": [{"relative_path": "gene_annotation_episode/" + n, "sha256": "b" * 64, "size_bytes": 10}
-            for n in ("__init__.py", "native_blast_database_contracts.py", "native_blast_database_driver.py")],
+            for n in ("__init__.py", "episodic_workflow/root/a101/library/native_blast_database_contracts.py",
+                "episodic_workflow/root/a101/native_blast_database_driver.py")],
         "runtime_files": [{"path": "/runtime/lib", "sha256": "c" * 64, "size_bytes": 10}]}
 
 
 def test_producer_manifest_is_pure_defensive_and_closed(monkeypatch):
     manifest = manifest_for()
-    forbid_io(monkeypatch)
-    result = c.validate_native_blast_database_producer_manifest(manifest, module_root="/deploy", python_executable="/runtime/python")
-    result["python"]["size_bytes"] = 99
-    assert manifest["python"]["size_bytes"] == 23
-    for change in (lambda m: m["package_files"].pop(), lambda m: m["package_files"].append(m["package_files"][0]),
-        lambda m: m["package_files"][0].update(relative_path="../escape"),
-        lambda m: m["runtime_files"][0].update(path="/deploy/extra"),
-        lambda m: m["runtime_files"][0].update(path="/runtime/python"), lambda m: m.update(extra=True),
-        lambda m: m["python"].update(size_bytes=True), lambda m: m.update(module_root="/different")):
-        bad = deepcopy(manifest)
-        change(bad)
-        with pytest.raises(ValueError):
-            c.validate_native_blast_database_producer_manifest(bad, module_root="/deploy", python_executable="/runtime/python")
+    with monkeypatch.context() as patch:
+        forbid_io(patch)
+        result = c.validate_native_blast_database_producer_manifest(manifest, module_root="/deploy", python_executable="/runtime/python")
+        result["python"]["size_bytes"] = 99
+        assert manifest["python"]["size_bytes"] == 23
+        for change in (lambda m: m["package_files"].pop(), lambda m: m["package_files"].append(m["package_files"][0]),
+            lambda m: m["package_files"][0].update(relative_path="../escape"),
+            lambda m: m["runtime_files"][0].update(path="/deploy/extra"),
+            lambda m: m["runtime_files"][0].update(path="/runtime/python"), lambda m: m.update(extra=True),
+            lambda m: m["python"].update(size_bytes=True), lambda m: m.update(module_root="/different")):
+            bad = deepcopy(manifest)
+            change(bad)
+            with pytest.raises(ValueError):
+                c.validate_native_blast_database_producer_manifest(bad, module_root="/deploy", python_executable="/runtime/python")
 
 
 def test_original_request_and_paired_compiler_remain_distinct():

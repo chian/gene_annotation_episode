@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_pr
 from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_driver as driver
 from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_result_worker as result_worker
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_hmmer_preparation_worker as worker
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_records import canonical as practical_canonical
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable
 from test_hmmer_alignment_input_calculations import ORACLE, EMISSION, SELEX, annotated_selex, checks, sheet_for
@@ -396,7 +396,7 @@ def test_original_five_source_context_recalculates_and_replays_without_new_input
     """Use the actual closed529 case, preserving original bytes and observations."""
     import shutil
     from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_result_publication as publication
-    from gene_annotation_episode.state import Store
+    from gene_annotation_episode.episodic_workflow.root.a101.state import Store
     from test_native_hmmer_preparation_result_publication import POLICY
     original = Path(__file__).parent / "fixtures/hmmer_alignment_input_integration/check004"
     prepared_path, = original.rglob("prepared.json")

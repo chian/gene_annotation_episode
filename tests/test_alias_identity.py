@@ -35,7 +35,7 @@ def _payload(target, observed_ref, hypothesis_alias, assessment_alias, *, revisi
 def test_long_private_aliases_commit_resolve_replay_and_cannot_cross_parent_form(tmp_path):
     with Store(tmp_path) as store:
         target = store.create_problem(raw_sequence="MKWAA", molecule="protein")["subject_refs"][0]
-        inspection = ToolRegistry(store).execute("sequence.inspect", {"subject_ref": target})
+        inspection = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("sequence.inspect", {"subject_ref": target})
         observed = next(ref for ref in inspection["record_refs"] if ref.startswith("observation_"))
         hypothesis_alias = "separate_sira_like_not_target_tusa"
         assessment_alias = "second_epimerase_comparative_revision"
@@ -73,7 +73,7 @@ def test_long_private_aliases_commit_resolve_replay_and_cannot_cross_parent_form
 def test_removed_length_cap_preserves_alias_grammar_and_resolution_feedback(tmp_path):
     with Store(tmp_path) as store:
         target = store.create_problem(raw_sequence="MKWAA", molecule="protein")["subject_refs"][0]
-        inspected = ToolRegistry(store).execute("sequence.inspect", {"subject_ref": target})
+        inspected = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("sequence.inspect", {"subject_ref": target})
         observed = next(ref for ref in inspected["record_refs"] if ref.startswith("observation_"))
         original = _payload(target, observed, "a_private_hypothesis_name_longer_than_thirty_two", "valid_assessment")
         invalid = copy.deepcopy(original)

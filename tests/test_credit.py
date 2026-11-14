@@ -614,7 +614,7 @@ def test_real_external_query_input_reference_is_bounded_by_native_reference_inte
         unit = "aa" if molecule == "protein" else "symbol"
         scope = {"subject_refs": [target]}
         query = _sequence_reference_fixture(store, "DF", "fixture:query")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         aligned = tools.execute("sequence.align", {"query_ref": query["id"], "reference_ref": target,
             "molecule": "protein", "mode": "local"}, scope=scope, operation_key="external-query-native-reference")
         assert aligned["status"] == "completed", aligned
@@ -647,7 +647,7 @@ def test_real_external_query_reference_sites_are_disjoint_or_explicitly_unexamin
         target = store.create_problem(raw_sequence="MMADFKGWW", molecule="protein", role="protein")["subject_refs"][0]
         scope = {"subject_refs": [target]}
         query = _sequence_reference_fixture(store, "DFKG", "fixture:query")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         aligned = tools.execute("sequence.align", {"query_ref": query["id"], "reference_ref": target,
             "molecule": "protein", "mode": "local"}, scope=scope, operation_key="align-for-sites")
         assert aligned["status"] == "completed", aligned
@@ -690,7 +690,7 @@ def test_real_source_only_query_and_derivation_need_explicit_target_attribution(
         target = store.create_problem(raw_sequence="AAAA", molecule="protein", role="protein")["subject_refs"][0]
         scope = {"subject_refs": [target]}
         targets_before = store.targets()
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         if derived != "reference":
             source_dna = _sequence_reference_fixture(store, "ATGGCTGACTTCAAAGGGTAA", "fixture:source_dna")
             translated = tools.execute("sequence.translate", {"subject_ref": source_dna["id"], "code": 11,
@@ -763,7 +763,7 @@ def test_real_derivation_alignment_credit_maps_exact_query_and_reopens(
     with Store(path) as store:
         target = store.create_problem(raw_sequence=dna, molecule="dna", role="gene")["subject_refs"][0]
         scope = {"subject_refs": [target]}
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         derived = tools.execute("sequence.translate", {"subject_ref": target,
             "code": 11, "start": 3, "end": 3+len(region), "strand": strand,
             "frame": frame, "cds": cds}, scope=scope, operation_key="native-translate")
@@ -1073,7 +1073,7 @@ def test_inferred_source_role_factor_and_target_scope_are_identity_independent(t
         targets = _three_input_inference_fixture(store, tmp_path)
         root_scope = {'subject_refs': list(targets.values())}
         target_scope = {'subject_refs': [targets['B']]}
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         query = targets['A']
         if 'external' in source_kind:
             query = _sequence_reference_fixture(store, 'MMADFKGWW', 'fixture:A')['id']
@@ -1124,7 +1124,7 @@ def test_sibling_loci_same_original_input_can_infer_then_correct_to_observed_ext
             'segments': [{'start': start, 'end': end}], 'strand': '.', 'context_refs': []},
             origin='reasoning', scope=scope)['id'] for start, end in [(0, 9), (11, 20)]]
         reference = _sequence_reference_fixture(store, 'DF', 'fixture:fragment')
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         aligned = tools.execute('sequence.align', {'query_ref': left, 'reference_ref': reference['id'],
             'molecule': 'protein', 'mode': 'local'}, scope=scope, operation_key='left-source-comparison')
         assert aligned['status'] == 'completed', aligned
@@ -1241,7 +1241,7 @@ def test_actual_gap_inference_is_distinct_from_observed_extent_and_unexamined_si
         target = store.create_problem(raw_sequence=query_sequence, molecule='protein')['subject_refs'][0]
         scope = {'subject_refs': [target]}
         reference = _sequence_reference_fixture(store, reference_sequence, 'fixture:site-reference')
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         aligned = tools.execute('sequence.align', {'query_ref': target, 'reference_ref': reference['id'],
             'molecule': 'protein', 'mode': 'global' if case == 'measured_gap' else 'local'},
             scope=scope, operation_key='align-for-native-site')
@@ -1312,7 +1312,7 @@ def test_native_observed_sibling_query_and_reference_project_independently(tmp_p
             'segments': [{'start': start, 'end': end}], 'strand': '.', 'context_refs': []},
             origin='reasoning', scope=root_scope)['id'] for parent, (start, end) in zip(parents, intervals)]
         query, reference = features
-        aligned = ToolRegistry(store).execute('sequence.align', {'query_ref': query, 'reference_ref': reference,
+        aligned = ToolRegistry(store, run_directory=store.path / 'tool-run').execute('sequence.align', {'query_ref': query, 'reference_ref': reference,
             'molecule': 'protein', 'mode': 'global'}, scope=root_scope, operation_key='native-sibling-comparison')
         assert aligned['status'] == 'completed', aligned
         observation = store.get(aligned['result']['observation_ref'])

@@ -14,7 +14,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_utility_result_views as views
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import validate_blast_utility_result
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_vdb_utility_inputs import parse_blast_vdb_extraction, parse_blast_vdb_inspection
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from test_blast_vdb_utility_inputs_663 import supplied, occurrence, identity, provenance, INFO, AUTHENTIC, STDOUT_SHA
 from test_blast_utility_result_views_629 import (
     project as legacy_project, selected_sequences, selector as legacy_selector,

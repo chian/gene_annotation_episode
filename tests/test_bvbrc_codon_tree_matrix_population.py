@@ -242,7 +242,7 @@ def test_retained_native_membership_with_explicit_single_genome_scope():
 
 
 def test_saved_json_recalculation_uses_production_calculator_without_external_access(monkeypatch):
-    assert Path(calc.__file__).resolve() == ROOT / "gene_annotation_episode/bvbrc_codon_tree_calculators.py"
+    assert Path(calc.__file__).resolve() == ROOT / "gene_annotation_episode/episodic_workflow/root/library/bvbrc_codon_tree_calculators.py"
     originals = [scoped_sheet(), scoped_sheet(empty=True), retained_subset_sheet()]
     saved = json.loads(json.dumps(originals))
     expected = [calculate(sheet) for sheet in originals]

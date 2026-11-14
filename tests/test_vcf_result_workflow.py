@@ -27,6 +27,7 @@ from gene_annotation_episode.episodic_workflow.root.providers import _SessionCon
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.episodic_workflow.root.library.molecular_value_presentation import _selected_molecular_text, _selected_molecular_view
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
@@ -180,10 +181,10 @@ class VcfProvider:
 
 
 def _saved_workflow(store, directory, run_id, scope, references, factory, *, scientific=None):
-    tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
     factory.configure_tool_registry(tools)
     if scientific is None:
-        scientific = prepare_scientific_binding(run_directory=directory, source_directory=PUBLICATION,
+        scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory, source_directory=PUBLICATION,
             tool_catalog=tools.catalog(), child_roles=["scientific_process"])
     library = ScientificProcessLibrary(directory / "scientific-process-library")
     provider = VcfProvider(store, library, scope, None, result_refs=references)
@@ -212,9 +213,9 @@ def test_supplied_native_vcf_saved_modes_typed_parent_return_and_closed_replay(t
             workspace.mkdir()
             factory = ExecutionServiceFactory({"ordinary": dict(kind="local", workspace=str(workspace),
                 policy=deepcopy(POLICY))}, {}, 2, .25, .5)
-            tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
+            tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
             factory.configure_tool_registry(tools)
-            scientific = prepare_scientific_binding(run_directory=tmp_path / "run", source_directory=PUBLICATION,
+            scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=tmp_path / "run", source_directory=PUBLICATION,
                 tool_catalog=tools.catalog(), child_roles=["scientific_process"])
             library = ScientificProcessLibrary(tmp_path / "run/scientific-process-library")
             provider = VcfProvider(store, library, scope, input_ref)

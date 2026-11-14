@@ -210,7 +210,7 @@ def test_requested_projection_rows_and_filter_extent():
 
 
 def test_saved_recalculation_forbids_native_network_subprocess_and_files(monkeypatch):
-    from gene_annotation_episode import native_expression_nmf_driver
+    from gene_annotation_episode.episodic_workflow.root.a107 import native_expression_nmf_driver  # the only copy of this driver is the a107 one
     from gene_annotation_episode.episodic_workflow.root.library import expression_nmf_sheet
     from sklearn.decomposition import NMF
     sheet = json.loads(json.dumps(fixture_sheet()))

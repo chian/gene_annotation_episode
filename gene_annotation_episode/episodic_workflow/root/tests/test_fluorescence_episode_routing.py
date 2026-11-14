@@ -129,7 +129,7 @@ def selected(tmp_path, monkeypatch):
         f.assignment['requested_job'] = _request(f, f.selected)
         f.resources = {f.assignment['resource_id']: configuration}
         configuration['native_fluorescence'].append({**deepcopy(configuration['native_fluorescence'][0]), 'operation': OPERATIONS[1]})
-        f.tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
+        f.tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
         f.owner = _owner(f)
         f.target = dict(version='execution_target_v1', handle='fixture-handoff', run_id=f.run_id,
             resource_id=f.assignment['resource_id'], resource_kind='local', execution_id='/fixture/native.json',

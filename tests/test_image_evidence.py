@@ -30,7 +30,7 @@ def test_selected_frame_retains_native_pixels_custody_and_replay(tmp_path):
         original_problem = store.create_problem(raw_sequence="MKWAA", molecule="protein")
         first, second = Image.new("RGB", (7, 5), "red"), Image.new("RGB", (7, 5), "blue")
         source_ref, native = native_source(store, first, format="TIFF", save_all=True, append_images=[second])
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         args = {"source_ref": source_ref, "frame": 1}
         operation = tools.execute("image.view", args, operation_key="choose_second_frame")
         assert operation["status"] == "completed", operation
@@ -50,7 +50,7 @@ def test_selected_frame_retains_native_pixels_custody_and_replay(tmp_path):
         assert store.problem() == original_problem and not store.list("observation")
         assert project_credit(store).credit == 0
     with Store(tmp_path) as reopened:
-        assert ToolRegistry(reopened).resolve_image_input(view) == selected
+        assert ToolRegistry(reopened, run_directory=reopened.path / 'tool-run').resolve_image_input(view) == selected
 
 
 def test_identical_png_bytes_keep_original_mime_and_remain_viewable(tmp_path):
@@ -59,7 +59,7 @@ def test_identical_png_bytes_keep_original_mime_and_remain_viewable(tmp_path):
         source_ref, native = native_source(store, Image.new("RGB", (5, 3), "green"))
         original_artifact = store.get(source_ref)["artifact_ref"]
         assert store.get(original_artifact)["media_type"] == "application/octet-stream"
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         result = tools.execute("image.view", {"source_ref": source_ref})
         assert result["status"] == "completed", result
         view = result["result"]["view"]
@@ -71,7 +71,7 @@ def test_conversion_and_invalid_frame_are_actionable_and_never_reselect(tmp_path
     with Store(tmp_path) as store:
         store.create_problem(raw_sequence="MKWAA", molecule="protein")
         source_ref, native = native_source(store, Image.new("CMYK", (8, 6)), format="TIFF")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         unavailable = tools.execute("image.view", {"source_ref": source_ref})
         assert unavailable["status"] == "invalid"
         assert unavailable["feedback"]["code"] == "image_mode_requires_explicit_conversion"
@@ -91,7 +91,7 @@ def test_forged_view_and_corrupt_artifact_cannot_be_sent_as_pixels(tmp_path):
     with Store(tmp_path) as store:
         store.create_problem(raw_sequence="MKWAA", molecule="protein")
         source_ref, _ = native_source(store, Image.new("RGB", (5, 3)))
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         view = tools.execute("image.view", {"source_ref": source_ref})["result"]["view"]
         forged = {**view, "path": "/etc/passwd"}
         with pytest.raises(ContractError, match="image_input_selection_mismatch"):
@@ -158,7 +158,7 @@ def test_runtime_selected_image_is_one_own_observation_and_survives_resume(tmp_p
         next_read = {"selection": {"kind": "tool", "tool": "state.query", "arguments": {"refs": original["subject_refs"]}},
                      "report_update": {}}
         provider = ScriptedProvider([select, KeyboardInterrupt()])
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         factory = lambda path, initial: FixtureController(str(path), initial, 3)
         with pytest.raises(KeyboardInterrupt):
             asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path / "run",
@@ -194,7 +194,7 @@ def test_parent_and_child_image_selection_uses_own_completed_action_boundary(tmp
             "schema_json": json.dumps(form), "initial_report_json": "{}"}, "report_update": {}}
         provider = ScriptedProvider([image, child, query, query, query])
         factory = lambda path, initial: FixtureController(str(path), initial, 3 if len(path) == 1 else 2)
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / "run",
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider, run_dir=tmp_path / "run",
             controller_factory=factory, project_credit=lambda *_: 0))
         assert provider.contexts[1]["visual_evidence"]
         assert provider.contexts[2]["visual_evidence"] == provider.contexts[3]["visual_evidence"] == []

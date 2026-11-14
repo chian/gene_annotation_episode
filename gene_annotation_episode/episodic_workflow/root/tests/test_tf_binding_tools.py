@@ -33,6 +33,7 @@ from gene_annotation_episode.episodic_workflow.root.providers import _SessionCon
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_homer_motif_saved_workflow import _archive, _archive_value, _encode
@@ -117,7 +118,7 @@ def _selection(threshold):
 
 def _assemble(store, directory, proof, provider):
     factory = ExecutionServiceFactory.from_record(proof['factory'])
-    tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
     application = factory(store, run_id=proof['run_id'], directory=directory, tool_registry=tools)
     workflow = Workflow(store, tools, provider, directory, proof['run_id'], _controller, _credit,
         project_child_credit=_credit, episode_record_receipts=True,
@@ -447,12 +448,12 @@ def test_genuine_tf_binding_native_saved_views_and_typed_return(tmp_path, monkey
                     scan_selection=dict(mode='explicit', requests=[dict(sequence_input_id='dna',
                         sequence_record_ordinal_0based=0, matrix_input_id='matrix', matrix_record_ordinal_0based=0,
                         strands=['+', '-'])]), selection=_selection(2)))
-            configured = ToolRegistry(store, job_limits=deepcopy(POLICY)); factory.configure_tool_registry(configured)
+            configured = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY)); factory.configure_tool_registry(configured)
             entry = configured.catalog()[contracts.TOOL]
             assert entry['invocation_route'] == dict(kind='direct') and entry['resources'] == 'local'
             assert entry['configuration']['saved_modes'] is True
             proof['selected_tool_contract'] = entry
-            proof['scientific_binding'] = prepare_scientific_binding(run_directory=case / 'run',
+            proof['scientific_binding'] = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=case / 'run',
                 source_directory=ROOT / PUBLICATION, tool_catalog=configured.catalog(), child_roles=['scientific_process'])
             library = ScientificProcessLibrary(case / 'run/scientific-process-library')
             provider = _Choices(store, library, proof, output, active)

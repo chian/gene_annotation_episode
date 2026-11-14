@@ -114,7 +114,7 @@ def test_authentic_v1_exact_readonly_projection_forms_and_scoped_facts(name, mon
     before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in path.rglob('*') if p.is_file()}
     for module, names in {'literature_transport_storage': ('read_transport_inputs', 'populate_transport_response', '_quantity_key'), 'literature_binding_model_storage': ('read_binding_model', 'populate_binding_model', 'binding_model_operand_keys'), 'literature_binding_storage': ('read_binding_parameter_table', 'populate_binding_contrast'), 'literature_activity_calculations': ('populate_corrected_activity',), 'literature_prose_reader': ('read_jats_quantity',)}.items():
         for function in names:
-            monkeypatch.setattr(f'gene_annotation_episode.{module}.{function}', forbid)
+            monkeypatch.setattr(f'gene_annotation_episode.episodic_workflow.root.a105.library.{module}.{function}', forbid)
     with open_readonly(path) as store:
         original = store.get_artifact
         allowed = {store.get(row['id'])[field] for row in store.list('source') if row['origin'] == 'tool' for field in ('artifact_ref', 'request_ref')}

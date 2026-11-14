@@ -124,6 +124,32 @@ class LaunchConnectedChecks:
                 native=native, native_context=native_context, ledger=ledger, plan=plan,
                 directory=tmp_path / "workflow", execution_options=execution_options)
 
+    @pytest.fixture
+    def informed(self, connected):
+        """`connected` with the original-global information catalogs bound on its registry.
+
+        Workflow construction binds these before any registry context is read; every
+        execution binding here requires that authority and the registry refuses without it.
+        The factory is this fixture's own execution operands.
+        """
+        v = connected
+        options = v.execution_options
+        factory = self.module("execution_service_setup").ExecutionServiceFactory(
+            options["resources"], options["initial_information"], options["handoff_unit"],
+            options["acquired_record_unit"], 1., log_window_bytes=options["log_window_bytes"],
+            log_roles=options["log_roles"])
+        operands = dict(store=v.store, run_id=v.run_id, directory=v.directory,
+            tool_registry=options["tool_registry"], services=v.launch.services)
+        initial = self.module("library/execution_initial_information/information_configuration"
+            ).InitialInformationConfiguration.original_global_factory(factory).construct(**operands)
+        v.registry.configure_initial_information(
+            initial, self.module("annotation_initial_information").initial_information)
+        received = self.module("library/received_execution_information/received_configuration"
+            ).ReceivedExecutionConfiguration.original_global_factory(factory).construct(**operands)
+        v.registry.configure_received_execution_information(
+            received, self.module("annotation_received_execution_information").received_execution_information)
+        return v
+
     def source(self, v, context):
         return SimpleNamespace(episode_id=context.episode_id, path=context.path,
             scope=v.runtime._plain(context.scope), interpret_schema=v.runtime._object({}),
@@ -167,12 +193,12 @@ class LaunchConnectedChecks:
                 "x-source": "execution_handoff_refs"}},
             "required": ["completed", "handoffs"], "additionalProperties": False}
 
-    def test_full_registry_keeps_actual_launch_context_and_original_input_file(self, connected):
-        v = connected
+    def test_full_registry_keeps_actual_launch_context_and_original_input_file(self, informed):
+        v = informed
         assert v.registry.for_path(v.context.path) is v.launch
         assert v.registry.for_child(v.context.path, "launch_hpc") is v.native
         actual = v.registry.initial_decision_context(v.context)
-        assert actual["execution_resource_capabilities"] == v.launch.initial_decision_context(v.context)["execution_resource_capabilities"]
+        assert actual["execution_resource_capabilities"] == v.registry._recipient_initial_information(v.context)["execution_resource_capabilities"]
         assert actual["hpc_execution_job"]["scientific_manifest"] == v.plan["manifest"]
         assert json.loads(Path(actual["hpc_execution_job"]["supplied_input_file"]).read_text()) == v.plan
         assert v.runtime.Workflow.is_job_source(self.workflow(v), self.source(v, v.context)) is False
@@ -181,10 +207,10 @@ class LaunchConnectedChecks:
         v.registry.received_report_sources("launch", path=v.context.path)
         v.registry.received_report_facts(v.context)
 
-    def test_original_parent_resource_exposure_and_nearest_hpc_commissioner(self, connected):
-        v = connected
+    def test_original_parent_resource_exposure_and_nearest_hpc_commissioner(self, informed):
+        v = informed
         parent = v.registry.initial_decision_context(v.parent_context)
-        assert parent["execution_resource_capabilities"] == v.launch.initial_decision_context(v.context)["execution_resource_capabilities"]
+        assert parent["execution_resource_capabilities"] == v.registry._recipient_initial_information(v.context)["execution_resource_capabilities"]
         assert parent["execution_initial_information"] == {}
         for context in (v.context, v.native_context):
             providers = []
@@ -482,8 +508,8 @@ class LaunchConnectedChecks:
 
     @pytest.mark.parametrize("declared_renderer", [False, True])
     def test_interrupted_saved_decision_keeps_full_original_payload_and_renderer(
-            self, connected, declared_renderer):
-        v = connected
+            self, informed, declared_renderer):
+        v = informed
         f = self.task(v)
         task, w = f.task, f.workflow
         task._model_snapshot = task._presented_conversation_key = None
@@ -495,7 +521,7 @@ class LaunchConnectedChecks:
             "resource_configuration": deepcopy(v.launch.resources),
             "hpc_execution_job": {"plan_id": v.plan["plan_id"],
                 "scientific_manifest": deepcopy(v.plan["manifest"])},
-            "execution_resource_capabilities": deepcopy(v.launch.initial_decision_context(v.context)[
+            "execution_resource_capabilities": deepcopy(v.registry._recipient_initial_information(v.context)[
                 "execution_resource_capabilities"]),
             "launch_instruction_library": {"preserved": "original selected library"}}
         schema = v.runtime.Workflow.action_schema(w, task)
@@ -508,17 +534,24 @@ class LaunchConnectedChecks:
         async def complete(*args, **kwargs):
             calls.append((args, kwargs))
             return response
-        w.provider = (SimpleNamespace(has_session=lambda *args: True,
-            complete_with_presentation=complete, complete=forbidden) if declared_renderer else
-            SimpleNamespace(has_session=lambda *args: True, complete=complete))
+        if declared_renderer:
+            # The private task hands its declared renderer only to the genuine provider type
+            # (task_decision.decision_completion); built as in test_private_task_refinement.py.
+            w.provider = object.__new__(self.module("providers").ModelConnection)
+            w.provider.worker_lock = asyncio.Lock()
+            w.provider.workers = {}
+            w.provider.has_session = lambda *args: True
+            w.provider._complete_serial = complete
+        else:
+            w.provider = SimpleNamespace(has_session=lambda *args: True, complete=complete)
         returned = asyncio.run(task.call({"changed_current_context": True}, v.runtime._object({})))
         assert returned[0] == response and returned[2:] == (original, schema)
         assert calls[0][0][3] == original
         assert calls[0][0][2] == self.module("runtime_prompt").instructions(task, original)
         expected = ({"prompt_renderer": v.launch.decision_prompt_renderer} if declared_renderer else {})
         assert calls[0][1] == expected
-        assert getattr(v.launch, "decision_prompt_renderer", None) is self.module(
-            "library/hpc_prompt").render_hpc_prompt
+        assert v.launch.decision_prompt_renderer is self.module(
+            self.binding_path + "/task_presentation").present_launch_context
         saved = v.journal.row("runtime_model_calls", task.episode_id, 0)
         assert json.loads(saved["request"])["context"] == original
         assert json.loads(saved["request"])["schema"] == schema
@@ -544,6 +577,8 @@ class LaunchConnectedChecks:
         progress, receipts, cached = [], [], {"references": None}
         w.progress_provider = SimpleNamespace(receive_form=lambda *args: progress.append(args))
         w.receipts = SimpleNamespace(receive=lambda *args, **kwargs: receipts.append((args, kwargs)))
+        # Registry receipt references are a controlled port here, as in test_private_task_refinement.py.
+        monkeypatch.setattr(v.registry, "received_form_references", lambda *args: [])
         monkeypatch.setattr(self.module("episode_return_records").EpisodeReturnRecords,
             "recorded_admission_references", lambda *args: cached["references"])
         def selected(index, action, child_id=None):
@@ -561,13 +596,14 @@ class LaunchConnectedChecks:
     def test_named_native_report_receipt_redelivery_and_saved_identity(self, connected, monkeypatch):
         v = connected
         r = self.receipt_fixture(v, monkeypatch)
-        receiver = v.launch.child_report_receiver("launch_hpc")
+        receiver = v.launch.execution_child_report_receiver("launch_hpc")
         assert receiver.__module__ == v.launch.__module__.removesuffix(".episode") + ".from_child_hpc_job_execution"
         before = v.launch.credit_view(v.context, None)
-        assert v.runtime.Workflow._receive_form(r.workflow, r.source, r.form, r.schema, 5) == []
+        assert v.runtime.Workflow._receive_form(
+            r.workflow, r.source, r.form, r.schema, 5, child_role="launch_hpc") == []
         r.selected(9, {"kind": "redeliver_report", "delivery_ref": "original-native-delivery"})
         assert v.runtime.Workflow._receive_form(
-            r.workflow, r.source, r.form, r.schema, 9, redelivery=True) == []
+            r.workflow, r.source, r.form, r.schema, 9, redelivery=True, child_role="launch_hpc") == []
         assert [row[-1] for row in r.progress] == [
             v.run_id + ":" + v.context.episode_id + ":5:typed_form",
             v.run_id + ":" + v.context.episode_id + ":9:typed_form"]

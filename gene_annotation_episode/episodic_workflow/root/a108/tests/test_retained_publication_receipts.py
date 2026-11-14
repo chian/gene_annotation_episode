@@ -21,7 +21,7 @@ def module(name):return import_module(PACKAGE+'.'+name)
 def test_incoming_publication_uses_original_receipts_even_without_a_producer(
         tmp_path,provider,version,operation,origin,public_auxiliary):
     canonical=module('domain').canonical
-    EpisodeRef=module('method_loop.identities').EpisodeRef
+    EpisodeRef=import_module('gene_annotation_episode.episodic_workflow.root.method_loop.identities').EpisodeRef  # a108 has no private method_loop; its modules import the shared root package
     BindingContext=module('episode_bindings').BindingContext
     with module('state').Store(tmp_path/'state') as store:
         store.create_problem(raw_sequence='MAAA',molecule='protein')

@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.root.a103.a103_attachments import
 from gene_annotation_episode.episodic_workflow.root.a103.a103_credit import A103ContextCredit
 from gene_annotation_episode.episodic_workflow.root.a103.a103_publication import publish,received_measurement
 from gene_annotation_episode.episodic_workflow.root.a103.a103_scoring import compare_neighborhoods,cooccurrence,fisher_enrichment,fusion,pair_organization,digest
-from gene_annotation_episode.domain import ContractError,canonical
+from gene_annotation_episode.episodic_workflow.root.a103.domain import ContractError,canonical
 from gene_annotation_episode.episodic_workflow.root.evidence_root import NativeEvidenceRootCredit
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a103.tests.a103_test_support import source,protein,genomic_file,binding,measured_neighborhood,native_pair

@@ -6,9 +6,9 @@ It makes no scientific, autonomous-workflow or durable-recovery claim.
 import asyncio
 from types import SimpleNamespace
 
-from method_loop import (ChildEpisodeUnit, Context, Episode, EpisodeGoal,
+from gene_annotation_episode.episodic_workflow.root.method_loop import (ChildEpisodeUnit, Context, Episode, EpisodeGoal,
                          EpisodeRequest, EpisodeTree, Grain, Leaf)
-from method_loop.suspension import external_wait
+from gene_annotation_episode.episodic_workflow.root.method_loop.suspension import external_wait
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract

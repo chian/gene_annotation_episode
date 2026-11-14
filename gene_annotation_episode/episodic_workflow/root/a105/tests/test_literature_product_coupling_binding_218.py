@@ -15,6 +15,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import
 from gene_annotation_episode.episodic_workflow.root.a105.episode_composition import compose_episode_bindings
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.source_contracts import _population_catalog
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_product_coupling_storage import LiteratureProductCouplingRepository, product_coupling_cells_schema, COMPONENTS, NAMESPACE, REQUESTED, VIEW
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_product_coupling_prompt import PRODUCT_COUPLING_TASK
@@ -449,7 +450,7 @@ def test_pending_decision_restores_original_alias_schema_without_current_fact_ca
     submitted = obj({'numbers': {'$ref': 'episode-fact:' + NAMESPACE}, 'limits': qualification})
     selected = select({'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': plain(ctx.assignment), 'goal': 'Evaluate the supplied endpoint pair and preserve unknown molecular attribution.', 'scope': plain(ctx.scope), 'purpose': 'Return requested ratio and constrained attribution qualification.', 'schema_json': json.dumps(submitted), 'initial_report_json': json.dumps({'limits': 'attribution_unknown'})}, 'report_update': {}})
     provider = PresentedProvider([OSError('Controlled pending218 interruption')])
-    value = Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', ctx.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=list(ctx.received_record_refs), episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[args['source_ref']], contract_information_profile=profile),), decision_protocol='decision_exchange_v1')
+    value = Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', ctx.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=list(ctx.received_record_refs), episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[args['source_ref']], contract_information_profile=profile), decision_protocol='decision_exchange_v1')
     root = value.build('annotation', 'root', 'Evaluate the supplied experimental source.', plain(ctx.scope))
     try:
         with pytest.raises(OSError, match='pending218'):
@@ -522,7 +523,7 @@ def test_actual_nested_parent_forwards_only_its_requested_admitted_cells(tmp_pat
     provider.script = iter([select(root_choice), select(nested_choice), select(populate), lambda frame: select(integrate(provider.views[provider.active_episode])), lambda frame: select(integrate(provider.views[provider.active_episode]))])
     try:
         progress = ScientificFindingProgress(FindingProgressPolicy(1))
-        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 1 if len(path) == 3 else 2), project_credit=progress, initial_known_record_refs=[source_ref], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[source_ref]),), binding_definitions={'credit': progress.as_record()}, decision_protocol='decision_exchange_v1'))
+        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 1 if len(path) == 3 else 2), project_credit=progress, initial_known_record_refs=[source_ref], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[source_ref]), binding_definitions={'credit': progress.as_record()}, decision_protocol='decision_exchange_v1'))
         assert [[row['component'] for row in form['numbers']] for form in captures] == [['productive_fraction', 'reported_cofactor_activity'], ['productive_fraction']]
         assert captures[0]['numbers'][0] == captures[1]['numbers'][0]
         assert '216' not in root_prompts[0].split('\n\nSTEERING\n', 1)[1]
@@ -598,7 +599,7 @@ def test_selected_shared_loop_original_form_and_first_readonly_cold_composition(
     provider.script = iter([action(child), action(populate), lambda frame: action(integrate(provider.views[provider.active_episode]))])
     try:
         progress = ScientificFindingProgress(FindingProgressPolicy(1))
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=controller, project_credit=progress, initial_known_record_refs=list(ctx.received_record_refs), episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=list(ctx.received_record_refs), contract_information_profile=profile),), binding_definitions={'credit': progress.as_record()}, decision_protocol='decision_exchange_v1'))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=controller, project_credit=progress, initial_known_record_refs=list(ctx.received_record_refs), episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=list(ctx.received_record_refs), contract_information_profile=profile), binding_definitions={'credit': progress.as_record()}, decision_protocol='decision_exchange_v1'))
         assert len(captured) == 1 and summary['credit'] == 0
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
         assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 3

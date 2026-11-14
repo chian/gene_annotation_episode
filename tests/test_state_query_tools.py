@@ -32,7 +32,7 @@ def _inspect(tools, target):
 def test_follow_advertised_current_pages_through_ordinary_tool(tmp_path):
     with Store(tmp_path) as store:
         target = store.create_problem(raw_sequence="MKWAA", molecule="protein")["subject_refs"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         observation = _inspect(tools, target)
         first_hypothesis = _hypothesis(store, target)
         second_hypothesis = _hypothesis(store, target, "frameshift")
@@ -63,7 +63,7 @@ def test_follow_advertised_current_pages_through_ordinary_tool(tmp_path):
 def test_reverse_reference_filter_reaches_current_interpretation_and_keeps_paths(tmp_path):
     with Store(tmp_path) as store:
         target = store.create_problem(raw_sequence="MKWAA", molecule="protein")["subject_refs"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         observation = _inspect(tools, target)
         assumption = _hypothesis(store, target)
         function = _hypothesis(store, target, "frameshift")
@@ -88,7 +88,7 @@ def test_exact_empty_refs_stays_empty_and_mixed_query_modes_are_actionable(tmp_p
     with Store(tmp_path) as store:
         target = store.create_problem(raw_sequence="MKWAA", molecule="protein")["subject_refs"][0]
         hypothesis = _hypothesis(store, target)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         empty = tools.execute("state.query", {"refs": []})
         assert empty["status"] == "completed", empty
         assert empty["result"]["records"] == []
@@ -117,7 +117,7 @@ def test_subject_pages_preserve_scope_and_do_not_materialize_inventory(tmp_path,
     fasta.write_text(">one\nATGAAATAA\n>two\nATGTGGTAA\n")
     with Store(tmp_path / "store") as store:
         targets = store.create_problem(input_path=fasta, molecule="dna")["subject_refs"]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         derivatives = {}
         for target in targets:
             translated = tools.execute("sequence.translate", {"subject_ref": target, "code": 11})

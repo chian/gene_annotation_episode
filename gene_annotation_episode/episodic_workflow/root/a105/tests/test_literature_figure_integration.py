@@ -15,6 +15,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_figure_inputs import LITERAL_FIELDS
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_figure_storage import LiteratureFigureRepository, figure_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
@@ -196,7 +197,7 @@ def test_ordinary_figure_child_parent_delivery_and_observation_counts(tmp_path, 
             commit['source_subjects'] = [{'alias': 'studied_molecule', 'reference_type': 'assay', 'source_ref': paper['id'], 'label': label, 'anchor': anchor}]
             return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, action, receive]), run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1), project_credit=scorer, initial_known_record_refs=list(context.received_record_refs), episode_binding_factories=(partial(LiteratureEpisode, rate_population=True),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, action, receive]), run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1), project_credit=scorer, initial_known_record_refs=list(context.received_record_refs), episode_binding_factories=literature_binding_factories(rate_population=True), binding_definitions={'credit': scorer.as_record()}))
         assert len(received) == 1 and summary['credit'] == 0
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
         assert store.db.execute('SELECT count(*) FROM literature_figure_operations').fetchone()[0] == 1

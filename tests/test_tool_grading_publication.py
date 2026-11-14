@@ -53,7 +53,7 @@ def quality_library(store, tmp_path, *, long_read=False):
     manifest.write_text(json.dumps({"schema_version": 2, "entries": [{"path": path.name,
         "molecule": "dna", "quality_encoding": "phred33"}]}))
     target, = store.create_problem(manifest_path=manifest)["subject_refs"]
-    selected = ToolRegistry(store).execute("library.members", {"library_ref": target}, operation_key="members")
+    selected = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("library.members", {"library_ref": target}, operation_key="members")
     assert selected["status"] == "completed", selected
     return target, selected["result"]["members"], content
 
@@ -65,7 +65,7 @@ def test_real_pairwise_worker_retains_complete_sheet_on_existing_observation(tmp
     directory = tmp_path / "state"
     with Store(directory) as store:
         target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         args = {"query_ref": target, "reference_ref": target, "molecule": molecule, "mode": mode}
         result = registry.execute("sequence.align", args, operation_key="align")
         assert result["status"] == "completed", result
@@ -110,7 +110,7 @@ def test_real_local_no_alignment_is_zero_positions_and_unknown_identity(tmp_path
     fasta.write_text(">query\nAAAA\n>reference\nTTTT\n")
     with Store(tmp_path / "state") as store:
         query, reference = store.create_problem(fasta, molecule="dna")["subject_refs"]
-        result = ToolRegistry(store).execute("sequence.align", {"query_ref": query,
+        result = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("sequence.align", {"query_ref": query,
             "reference_ref": reference, "molecule": "dna", "mode": "local"}, operation_key="no-alignment")
         assert result["status"] == "completed", result
         grading = only_grading(store, result["result"]["source_ref"])
@@ -139,7 +139,7 @@ def test_valid_gap_only_native_fixture_does_not_publish_zero_denominator_identit
     fasta.write_text(">query\nA\n>reference\nT\n")
     with Store(tmp_path / "state") as store:
         query_ref, reference_ref = store.create_problem(fasta, molecule="dna")["subject_refs"]
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         calls = []
         async def supplied_worker(operation, arguments, *, directory):
             assert not store.db.in_transaction
@@ -184,7 +184,7 @@ def test_actual_alignment_publication_retains_nontrivial_denominators(tmp_path, 
     fasta.write_text(f">query\n{query}\n>reference\n{reference}\n")
     with Store(tmp_path / "state") as store:
         query_ref, reference_ref = store.create_problem(fasta, molecule="dna")["subject_refs"]
-        result = ToolRegistry(store).execute("sequence.align", {"query_ref": query_ref,
+        result = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("sequence.align", {"query_ref": query_ref,
             "reference_ref": reference_ref, "molecule": "dna", "mode": mode},
             scope={"subject_refs": [query_ref]}, operation_key="nontrivial-alignment")
         assert result["status"] == "completed", result
@@ -205,7 +205,7 @@ def test_real_meta_prediction_grades_unshifted_result_then_publishes_parent_coor
     with Store(tmp_path / "state") as store:
         target, = store.create_problem(raw_sequence="N" * offset + region + "N" * 11,
                                        molecule="dna")["subject_refs"]
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         args = {"subject_ref": target, "mode": "meta", "code": 11,
                 "start": offset, "end": offset + len(region)}
         result = registry.execute("genes.predict", args, operation_key="meta-offset")
@@ -241,7 +241,7 @@ def test_real_meta_prediction_grades_unshifted_result_then_publishes_parent_coor
 def test_declared_molecule_controls_composition_and_missing_quality_stays_unknown(tmp_path, molecule, sequence, gc):
     with Store(tmp_path / "state") as store:
         target, = store.create_problem(raw_sequence=sequence, molecule=molecule)["subject_refs"]
-        result = ToolRegistry(store).execute("sequence.inspect", {"subject_ref": target}, operation_key="inspect")
+        result = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("sequence.inspect", {"subject_ref": target}, operation_key="inspect")
         assert result["status"] == "completed", result
         observation = store.get(result["result"]["observation_ref"])
         grading = only_grading(store, observation["source_ref"])
@@ -260,7 +260,7 @@ def test_read_quality_uses_complete_original_members_and_offline_threshold_recal
     directory = tmp_path / "state"
     with Store(directory) as store:
         target, reads, content = quality_library(store, tmp_path, long_read=True)
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         args = {"subject_refs": [row["id"] for row in reads]}
         result = registry.execute("reads.inspect", args, operation_key="read-qc")
         assert result["status"] == "completed", result
@@ -300,7 +300,7 @@ def test_read_quality_uses_complete_original_members_and_offline_threshold_recal
 def test_source_grading_custody_rejects_cross_source_identity(tmp_path, mismatch):
     with Store(tmp_path / "state") as store:
         target, = store.create_problem(raw_sequence="ACGT", molecule="dna")["subject_refs"]
-        result = ToolRegistry(store).execute("sequence.inspect", {"subject_ref": target})
+        result = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("sequence.inspect", {"subject_ref": target})
         observation = store.get(result["result"]["observation_ref"])
         source = store.get(observation["source_ref"])
         bad = retain_tool_grading(store, provider="wrong.provider" if mismatch == "provider" else source["provider"],
@@ -334,7 +334,7 @@ def test_grader_rejection_preserves_native_work_and_explicit_failure_without_zer
         args = ({"query_ref": target, "reference_ref": target, "molecule": "dna", "mode": "global"}
                 if operation == "sequence.align" else {"subject_ref": target, "mode": "meta", "code": 11}
                 if operation == "genes.predict" else {"subject_ref": target})
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         result = registry.execute(operation, args, operation_key="grading-failure")
         assert result["status"] == "partial", result
         assert result["feedback"]["category"] == "grading_input"
@@ -368,7 +368,7 @@ def test_read_batch_grading_failure_preserves_valid_neighbor_and_member_identity
     monkeypatch.setattr(module, "grade_sequence_composition", reject_low_quality)
     with Store(tmp_path / "state") as store:
         _, reads, _ = quality_library(store, tmp_path)
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         args = {"subject_refs": [row["id"] for row in reads]}
         result = registry.execute("reads.inspect", args, operation_key="partial-read-grading")
         assert result["status"] == "partial", result

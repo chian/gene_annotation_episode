@@ -9,7 +9,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import SCHEMAS, blast_utility_schema_for_version, blast_utility_result_version_for_operation, validate_blast_utility_operation, validate_blast_utility_result, validate_blast_utility_record as core
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_extraction import parse_blastdbcmd_sequences
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 
 
 EVIDENCE = Path(__file__).resolve().parent / "fixtures/blast_vdb_shared_core"

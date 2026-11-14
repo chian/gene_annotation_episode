@@ -108,7 +108,7 @@ def run_case(tmp_path, program='cmemit', mode='consensus', *, selectors=None, fo
             'format': 'reference', 'x-reference-namespace': 'execution_handoff'},
             'x-source': 'execution_handoff_refs'}}, 'required': ['completed', 'references']}
     factory = ExecutionServiceFactory(resources, {}, 3, 2, 1, log_window_bytes=128)
-    tools = ToolRegistry(store)
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
     owner = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id=RUN_ID,
         resources=resources, initial_information={}, tool_registry=tools, handoff_unit=3,
         acquired_record_unit=2, log_window_bytes=128, log_roles=('stdout', 'stderr'))
@@ -407,7 +407,7 @@ def test_configured_modes_are_callable_through_actual_launch_contract(tmp_path, 
     store = Store(tmp_path / 'store')
     try:
         factory = ExecutionServiceFactory(resources, {}, 3, 2, 1)
-        application = factory(store, run_id=RUN_ID, directory=tmp_path / 'run', tool_registry=ToolRegistry(store))
+        application = factory(store, run_id=RUN_ID, directory=tmp_path / 'run', tool_registry=ToolRegistry(store, run_directory=store.path / 'tool-run'))
         entry, = [r for r in application.resource_tool_catalogs['local'] if r['name'].startswith('native.')]
         assert entry['name'] == 'native.' + job['program'] + '.' + job['mode']
         Draft202012Validator(entry['input_schema']).validate(requested_job_from_infernal_preparation(job))

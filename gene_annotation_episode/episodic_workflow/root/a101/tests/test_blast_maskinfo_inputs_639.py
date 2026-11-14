@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_maskinfo_inputs import parse_blast_maskinfo, _signature
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 
 PACKET = Path(__file__).resolve().parent / "fixtures/blast_mask_conversion"
 

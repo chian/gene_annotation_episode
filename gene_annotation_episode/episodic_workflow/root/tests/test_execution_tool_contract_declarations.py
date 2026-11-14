@@ -121,7 +121,7 @@ def test_hmmer_declaration_is_an_independent_copy():
 
 def _native_request(label):
     root = Path(__file__).resolve().parents[4]
-    return json.loads((Path(__file__).parent / 'fixtures/native_hmmer_requests'/
+    return json.loads((Path(__file__).parent / 'fixtures/native_hmmer_producer/runs'/
         label/'plan.json').read_text())['requested_job']
 
 

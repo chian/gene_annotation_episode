@@ -37,7 +37,7 @@ def validate_commission(value, resources):
                 YieldParameters(**binding['parameters']))
     if 'execution_profile' in value:
         from .execution_memory import validate_profile
-        from .episodic_workflow.root.library.execution_guidance import resource_identity
+        from .episodic_workflow.root.library.execution_resource_identity import resource_identity
         profile = validate_profile(value['execution_profile'])
         if (profile['backend'] != 'hpc' or profile['resource_id'] !=
                 resource_identity(value['resource_id'], resources[value['resource_id']])):

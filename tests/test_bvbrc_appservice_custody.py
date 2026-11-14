@@ -12,14 +12,14 @@ import json
 
 import pytest
 
-from method_loop.episode import EpisodeGoal, EpisodeRequest
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
 from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustody, AppServiceCustodyError
 from gene_annotation_episode.bvbrc_application_definitions import get_application_spec, prepare_application
 from gene_annotation_episode.episodic_workflow.root.communication import plain
-from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episodic_workflow.root.receiving_context import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest

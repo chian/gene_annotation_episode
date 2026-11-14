@@ -39,7 +39,7 @@ def test_100k_identifier_and_description_are_bounded_previews_and_exact_native_t
         initial = store.create_problem(raw_sequence="MKWV", molecule="protein")
         material = store.register_material(data=content, name="long-header")
         attempt = store.parse_material(material["id"])
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         page = execute(tools, "material.members", {"collection_ref": attempt["collection_ref"], "limit": 1})
         preview, = page["members"]
         assert "name" not in preview and "description" not in preview
@@ -83,7 +83,7 @@ def test_automatic_target_projection_preserves_ids_without_nested_identifier_byp
         assert target["name"] == target["source_record"]["identifier"] == name
         assert store.get(target["id"])["description"] == description
         assert store.scope_coverage() == [{"target_ref": target["id"], "start": 0, "end": 4, "unit": "nt"}]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         title, _ = reconstructed(tools, projected["header"]["read_with"]["member_ref"])
         assert title == name + " " + description
         exact = execute(tools, "state.query", {"refs": [target["id"]]})["records"][0]
@@ -97,7 +97,7 @@ def test_unicode_header_windows_have_exact_utf8_boundaries_and_continuations(tmp
         material = store.register_material(data=(">" + title + "\nACGT\n").encode())
         attempt = store.parse_material(material["id"])
         member = store.material_members(attempt["collection_ref"])["members"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         too_small = tools.execute("material.header", {"member_ref": member["id"], "offset": 0, "limit": 1})
         assert too_small["feedback"]["code"] == "header_window_too_small_for_character"
         bad_offset = tools.execute("material.header", {"member_ref": member["id"], "offset": 1, "limit": 4})
@@ -121,7 +121,7 @@ def test_native_parser_title_is_distinct_from_original_header_bytes(tmp_path, fo
         attempt = store.parse_material(material["id"])
         assert attempt["status"] == "completed"
         member = store.material_members(attempt["collection_ref"])["members"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         title, windows = reconstructed(tools, member["id"])
         assert title == expected_title
         assert windows[0]["representation"] == "parser_returned_title"
@@ -147,7 +147,7 @@ def test_partial_native_title_and_errors_survive_export_reopen_without_source_ro
     with Store(workspace) as store:
         assert store.problem() == original
         assert store.parse_material(material["id"]) == attempt
-        selected = execute(ToolRegistry(store), "material.member", {"member_ref": member["id"], "limit": 2})
+        selected = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": member["id"], "limit": 2})
         assert selected["sequence"] == "AC" and selected["quality"] == "!@"
         assert len(json.dumps(selected).encode()) < 6000
         exported = export_annotation(store, tmp_path / "portable.json", include_artifacts=True, page_size=1)

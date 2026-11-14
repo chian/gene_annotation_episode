@@ -285,7 +285,7 @@ class HomologyResults:
         with artifact_path(self.store, query['sequence_ref']).open('rb') as stream:
             for chunk in iter(lambda: stream.read(1024*1024), b''):
                 query_hash.update(chunk.upper())
-        worker_fingerprint = hashlib.sha256(b''.join((Path(__file__).resolve().parents[3]/name).read_bytes()
+        worker_fingerprint = hashlib.sha256(b''.join((Path(__file__).resolve().parent/name).read_bytes()
             for name in ('phmmer_format.py', 'phmmer_result_worker.py', 'phmmer_grading_worker.py',
                          'hmmer_search_inputs.py', 'hmmer_search_grader.py', 'hmmer_graders.py'))).hexdigest()
         supplied = inputs.provenance or {}

@@ -12,9 +12,8 @@ import pytest
 from gene_annotation_episode.atac_differential_scores import calculate_atac_interval_scores
 
 
-_NATIVE = (Path(__file__).resolve().parents[1] / 'verification' /
-           'tool_graders_atac_differential_plan_2026-10-27_460' /
-           'native001' / 'explicit_tracks' / 'NATIVE_DIAGNOSTIC.json')
+_NATIVE = (Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/atac/native001' /
+           'explicit_tracks' / 'NATIVE_DIAGNOSTIC.json')
 
 
 def calculate(**changes):

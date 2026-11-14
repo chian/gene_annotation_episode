@@ -15,9 +15,9 @@ from jsonschema import Draft202012Validator
 import pytest
 
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episodic_workflow.root.a101.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
-from gene_annotation_episode.execution_contracts import canonical
+from gene_annotation_episode.episodic_workflow.root.a101.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_contracts import compile_native_hmmer_job, requested_job_from_native
@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_ope
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_records import digest
 from gene_annotation_episode.episodic_workflow.root.a101.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 

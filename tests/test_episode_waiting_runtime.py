@@ -15,7 +15,7 @@ from test_runtime import FixtureController, ScriptedProvider, fixture_credit, se
 def received_wait_state(tmp_path):
     with Store(tmp_path / 'state') as store:
         store.create_problem(raw_sequence='MKWAA', molecule='protein')
-        yield store, ToolRegistry(store)
+        yield store, ToolRegistry(store, run_directory=store.path / 'tool-run')
 
 
 def test_selected_time_wait_is_one_zero_gain_observation_and_replays_without_waiting(tmp_path):

@@ -10,9 +10,9 @@ import threading
 
 import pytest
 
-from method_loop import ClosedRecord
-from method_loop.durable import canonical
-from method_loop.identities import UnitRef
+from gene_annotation_episode.episodic_workflow.root.method_loop import ClosedRecord
+from gene_annotation_episode.episodic_workflow.root.method_loop.durable import canonical
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import UnitRef
 
 from gene_annotation_episode.episodic_workflow.root.episode_admission import admit_return
 from gene_annotation_episode.episodic_workflow.root.episode_completion import (

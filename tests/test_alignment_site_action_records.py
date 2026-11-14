@@ -150,7 +150,7 @@ def reference_base(tmp_path_factory):
     fasta.write_text('>query\nACGTTGCA\n>reference\nACGTAGCA\n>other\nTCGTTGCA\n')
     with Store(directory / 'state') as store:
         query, reference, other = store.create_problem(fasta, molecule='dna')['subject_refs']
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         alignments = []
         for index, query_ref in enumerate((query, other)):
             outcome = tools.execute('sequence.align', {'query_ref': query_ref, 'reference_ref': reference,
@@ -165,7 +165,7 @@ def reference_case(tmp_path, reference_base):
     original, alignments = reference_base
     shutil.copytree(original, tmp_path / 'state')
     with Store(tmp_path / 'state') as store:
-        case = setup_case(store, ToolRegistry(store))
+        case = setup_case(store, ToolRegistry(store, run_directory=store.path / 'tool-run'))
         case.alignments = alignments
         yield case
 
@@ -184,7 +184,7 @@ def blast_case(tmp_path, blast_base):
     original, target, alignment = blast_base
     shutil.copytree(original, tmp_path / 'store')
     store = Store(tmp_path / 'store')
-    tools = ToolRegistry(store)
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
     with store:
         case = setup_case(store, tools)
         case.alignment, case.target = alignment, target
@@ -533,7 +533,7 @@ def mapping_case(tmp_path, mapping_base):
     original, scope, alignments = mapping_base
     shutil.copytree(original, tmp_path / 'state')
     with Store(tmp_path / 'state') as store:
-        case = setup_case(store, ToolRegistry(store), scope=scope)
+        case = setup_case(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), scope=scope)
         case.alignments = alignments
         yield case
 

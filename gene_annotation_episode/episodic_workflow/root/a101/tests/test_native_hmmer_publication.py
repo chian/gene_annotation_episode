@@ -11,15 +11,15 @@ import subprocess
 
 import pytest
 
-from gene_annotation_episode.domain import ContractError, canonical
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError, canonical
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_native_result_views import NATIVE_HMMER_METRICS, family_for_program
-from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.materials import artifact_file
+from gene_annotation_episode.episodic_workflow.root.a101.local_jobs import LocalJobPolicy
+from gene_annotation_episode.episodic_workflow.root.a101.materials import artifact_file
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_contracts import requested_job_from_native, native_hmmer_digest
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_result_publication import (
     prepare_native_hmmer_grading, publish_selected_native_hmmer_rows)
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_worker_values import _fasta
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 
 
 ROOT = Path(__file__).resolve().parents[5]
@@ -424,7 +424,7 @@ def test_multiple_actual_query_ordinals_rebuild_corresponding_numerical_inputs(t
 
 
 def test_worker_resource_failure_retains_custody_and_structured_failure_without_retry(tmp_path, monkeypatch):
-    from gene_annotation_episode.acquisition import AcquisitionError
+    from gene_annotation_episode.episodic_workflow.root.a101.acquisition import AcquisitionError
     calls = []
     def resource_failed(*args, **kwargs):
         calls.append(kwargs["policy"])

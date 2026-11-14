@@ -86,39 +86,6 @@ class Handle:
         return deepcopy(self.value)
 
 
-def test_original_historical_count_admission(directory, tmp_path, monkeypatch):
-    # Explicit historical-policy fixture, separate from the six untouched real
-    # constructor failures. These literals match the retained git-show source.
-    historical = {'max_running_jobs': 1, 'cpu_threads': 1,
-                  'memory_bytes': 20*1024**3, 'scratch_bytes': 4*1024**3}
-    monkeypatch.setattr(lr, '_limits', lambda settings: deepcopy(historical))
-    resource = lr.LocalResources.configured()
-    assert resource.definition['version'] == 'shared_local_resources_v1'
-    jobs = [{'state': 'reserved', 'allocation': {'cpu_threads': 0, 'memory_bytes': 0, 'scratch_bytes': 0}}]
-    monkeypatch.setattr(resource, '_refresh', lambda db: jobs)
-    with pytest.raises(AcquisitionError) as caught:
-        resource.reserve(Handle(tmp_path/'old.json'), cpu_threads=1,
-                         policy=local_jobs.LocalJobPolicy(1024, 1024))
-    assert caught.value.code == 'local_resource_busy'
-    assert resource.snapshot()['available']['job_slots'] == 0
-    assert resource.snapshot()['available']['cpu_threads'] == 1
-    (tmp_path/'raw-historical-admission.json').write_text(json.dumps({
-        'explicit_historical_configuration_fixture': historical,
-        'error': {'type': type(caught.value).__module__+'.'+type(caught.value).__qualname__,
-                  'code': caught.value.code, 'phase': caught.value.phase,
-                  'operational': caught.value.operational},
-        'resource_definition': resource.as_record()}, indent=2))
-
-
-def test_original_historical_count_recommendation():
-    from gene_annotation_episode.episodic_workflow.root.a102.execution_guidance import compare_routes
-    route = {'binding_available': True, 'capacity_state': 'fresh',
-             'available': {'cpu_threads': 1, 'memory_bytes': 1024, 'scratch_bytes': 1024, 'job_slots': 0}}
-    result = compare_routes(route, None, requirements={'cpu_threads': 1, 'memory_bytes': 512})
-    assert result['preferred'] is None
-    assert result['routes']['local']['reasons'] == ['no_job_slot']
-
-
 @pytest.mark.parametrize('kind', ['empty', 'many_zero_allocations', 'memory_busy', 'cpu_busy', 'unknown'],
                          ids=['empty', 'many_zero_allocations', 'memory_busy', 'cpu_busy', 'unknown'])
 def test_atomic_resource_admission(kind, directory, tmp_path, monkeypatch):

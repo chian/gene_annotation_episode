@@ -84,9 +84,9 @@ def test_optional_native_stream_fields_require_artifacts_and_are_not_model_autho
         stream = store.artifact(b"synthetic native stream\x00\xff", "application/octet-stream")
         recorded = store.put("source", {**body, "stdout_ref": stream, "stderr_ref": stream}, origin="tool")
         assert recorded["stdout_ref"] == recorded["stderr_ref"] == stream
-        unreadable = ToolRegistry(store).execute("source.read", {"source_ref": recorded["id"], "representation": "stdout"})
+        unreadable = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("source.read", {"source_ref": recorded["id"], "representation": "stdout"})
         assert unreadable["status"] == "invalid" and unreadable["feedback"]["code"] == "source_not_utf8_text"
-        missing = ToolRegistry(store).execute("source.read", {"source_ref": source["id"], "representation": "stderr"})
+        missing = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("source.read", {"source_ref": source["id"], "representation": "stderr"})
         assert missing["status"] == "invalid"
         assert missing["feedback"]["code"] == "source_representation_unavailable"
         assert missing["feedback"]["detail"] == {"representation": "stderr", "available_representations": ["original", "text"]}
@@ -113,7 +113,7 @@ def test_successful_native_warning_stream_survives_paged_read_and_portable_expor
                 "selection": {"first_page": 1, "last_page": 1},
                 "transformation": "synthetic_utf8_page_protocol_fixture"}, stdout, "text/plain", stdout, stderr)
         monkeypatch.setattr("gene_annotation_episode.tools.pdf_native", native_fixture)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         args = {"source_ref": material["source_ref"], "page": 1}
         result = tools.execute("source.pdf.text", args, operation_key="successful-warning")
         assert result["status"] == "completed", result

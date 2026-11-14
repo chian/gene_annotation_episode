@@ -18,15 +18,15 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_graders
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_pairwise_grader
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_search
-from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.api_blast import NCBIBlastService
+from gene_annotation_episode.episodic_workflow.root.a101.acquisition import SourceSnapshot
+from gene_annotation_episode.episodic_workflow.root.a101.api_blast import NCBIBlastService
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_grader import build_database_sheet, calculate_database_probabilities
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_hsp_site_calculators import calculate_blast_hsp_column_components
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_result_views import BLAST_HSP_FACT_SCHEMA, blast_hsp_facts, read_blast_hsp
 from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, validate_form
-from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.tool_grading_artifacts import source_tool_gradings
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 

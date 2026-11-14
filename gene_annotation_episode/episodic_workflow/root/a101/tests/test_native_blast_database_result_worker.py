@@ -214,7 +214,7 @@ def implementation(*, execution_program=None):
 
 def test_current_implementation_requires_shared_correspondence_pin():
     selected = implementation()
-    common = "gene_annotation_episode.alignment_correspondence"
+    common = "gene_annotation_episode.episodic_workflow.root.a101.library.alignment_correspondence"
     assert common in {row["module"] for row in selected["files"]}
     worker._verify_implementation(selected)
     missing = deepcopy(selected)

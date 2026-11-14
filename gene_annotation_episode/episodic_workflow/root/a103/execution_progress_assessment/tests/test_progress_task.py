@@ -166,6 +166,8 @@ def test_runtime_build_uses_private_monitor_task(monkeypatch):
         run_id='run', store=SimpleNamespace(transaction=nullcontext, db=SimpleNamespace(execute=lambda *args: None)),
         source_credit_view=lambda source: {'credit': 0}, expose_assigned_job=lambda source: None,
         receive_tool_attributions=lambda *args, **kwargs: None, archive=SimpleNamespace(store=lambda value: value))
+    # A103's build resolves a legacy parent for the path through the registry above.
+    workflow.legacy_parent_for_path = lambda path: runtime.Workflow.legacy_parent_for_path(workflow, path)
     task = runtime.Workflow.build(workflow, 'monitor', 'monitor', 'Resolve progress', {})
     assert type(task) is binding.decision_source_type
     assert type(task).__module__.endswith('execution_progress_assessment.task')

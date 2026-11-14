@@ -15,6 +15,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import
 from gene_annotation_episode.episodic_workflow.root.a105.episode_composition import compose_episode_bindings
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories, literature_binding_for_role
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_calibration_recovery_prompt import CALIBRATION_RECOVERY_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_calibration_recovery_storage import COMPONENTS, NAMESPACE, REQUESTED, LiteratureCalibrationRecoveryRepository, calibration_recovery_cells_schema
@@ -116,7 +117,7 @@ def test_selected_operation_exact_scope_subsets_and_genuine_empty(tmp_path):
         with pytest.raises(ReportBoundaryError, match='unrequested'):
             binding.validate_report(without_request, form, FORM)
         with pytest.raises(ContractError, match='component_selection_invalid'):
-            services.literature_calibration_recovery_repository().project_cells([], permitted_record_refs=(), components=[{}])
+            binding.literature_calibration_recovery_repository().project_cells([], permitted_record_refs=(), components=[{}])
         changed_schema = deepcopy(FORM)
         changed_schema['properties']['calibration']['items']['properties']['source_kind'] = {'type': 'string'}
         with pytest.raises(ReportBoundaryError, match='registered source'):
@@ -323,7 +324,7 @@ def test_original_source_shared_loop_typed_return_and_readonly_factory(tmp_path,
     try:
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
         provider = ScriptedProvider([child, selected(0), selected(1), integrate])
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=base / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=[source_ref], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[source_ref]),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=base / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=[source_ref], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[source_ref]), binding_definitions={'credit': scorer.as_record()}))
         assert len(captured) == 1 and store.targets() == [] and (summary['credit'] == 0)
         assert all((CALIBRATION_RECOVERY_TASK in task for task in child_tasks))
         assert [c.scores for c in controllers] == [[0, 0], [0, 0]]
@@ -342,7 +343,7 @@ def test_original_source_shared_loop_typed_return_and_readonly_factory(tmp_path,
         receiver = BindingContext(run_id, parent_id, 'annotation', (('annotation', parent_id),), context.scope, {}, {}, (source_ref, *sheet_refs))
         (base / 'ORIGINAL_ADMITTED_FORM_001.json').write_text(json.dumps(captured[0], indent=2) + '\n')
         (base / 'BINDING_DESCRIPTOR_001.json').write_text(json.dumps(descriptor, indent=2) + '\n')
-        saved_sheets = {ref: services.literature_calibration_recovery_repository().read(ref) for ref in sheet_refs}
+        saved_sheets = {ref: binding.literature_calibration_recovery_repository().read(ref) for ref in sheet_refs}
         (base / 'SAVED_SHEETS_001.json').write_text(json.dumps(saved_sheets, indent=2) + '\n')
         (base / 'CHILD_TASKS_001.json').write_text(json.dumps(child_tasks, indent=2) + '\n')
         (base / 'PARENT_PROMPTS_001.json').write_text(json.dumps(parent_prompts, indent=2) + '\n')
@@ -380,7 +381,7 @@ def test_original_source_shared_loop_typed_return_and_readonly_factory(tmp_path,
         changes = readonly.db.total_changes
         restored, = compose_episode_bindings(cold_services, store=readonly, journal=SimpleNamespace(store=readonly, run_id=run_id), execution_backend=None, descriptors=[descriptor], job_episodes=None, resource_estimator=None, role_credit_bindings={}).bindings
         cold_host.episode_bindings = EpisodeBindingRegistry((restored,))
-        repository = cold_services.literature_calibration_recovery_repository()
+        repository = restored.literature_calibration_recovery_repository()
         assert restored.as_record() == descriptor
         assert repository.received_cells(receiver) == exact_rows
         assert repository.fact_cells(receiver, sheet_refs, components=COMPONENTS) == exact_rows
@@ -402,7 +403,7 @@ def test_page_scope_applies_to_every_received_witness_source(tmp_path):
         scoped = replace(context, role='literature_page', path=(('literature_page', context.episode_id),), assignment=page, received_record_refs=(*context.received_record_refs, alias))
         args['matrix']['source_ref'] = alias
         _, binding = binding_for(store, scoped)
-        out = asyncio.run(binding.execute(scoped, 'literature.calibration.recovery.populate', args, 'outside-assigned-paper'))
+        out = asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(scoped, 'literature.calibration.recovery.populate', args, 'outside-assigned-paper'))
         assert out['status'] == 'invalid' and out['feedback']['code'] == 'literature_reading_outside_assigned_source'
     finally:
         store.close()

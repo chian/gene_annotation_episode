@@ -41,7 +41,7 @@ def test_service_input_protocol_keeps_legacy_record_and_requires_explicit_mode()
 def test_factory_receives_the_same_actual_map_only_in_explicit_mode(tmp_path, mode):
     calls = []
     with Store(tmp_path/'workspace') as store:
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         original = tools.catalog()
 
         def setup(actual_store, **kwargs):
@@ -83,7 +83,7 @@ def test_actual_catalog_rejects_unsupported_json_before_setup_publication(tmp_pa
         return EpisodeApplicationServices([], {})
 
     with Store(tmp_path/'workspace') as store:
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         monkeypatch.setattr(tools, 'catalog', lambda: catalog)
         with pytest.raises((ValueError, TypeError)):
             Workflow(store, tools, object(), tmp_path/'run', 'invalid-catalog-fixture',
@@ -107,7 +107,7 @@ def test_run_persists_explicit_roles_and_rejects_changed_ports_before_provider_c
 
     with Store(tmp_path/'workspace') as store:
         store.create_problem(raw_sequence='MKK', molecule='protein')
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         options = dict(episode_service_factory=setup, episode_service_binding={'fixture': True},
             episode_service_inputs=MODE, annotation_child_roles=(), run_dir=tmp_path/'run')
         with monkeypatch.context() as patched:

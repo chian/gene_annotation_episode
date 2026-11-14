@@ -9,8 +9,8 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_masking_result_publication as publication
 from gene_annotation_episode.episodic_workflow.root.a101.library import sequence_masking_calculations as calculations
-from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.local_jobs import LocalJobPolicy
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.local_jobs import LocalJobPolicy
 from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_result_views import validate_masking_fact_values, validate_masking_result_selector
 from test_native_blast_masking_results_616 import (
     POLICY, captured_fixture, inline_workers, prepared_fixture, publish, selector, slot,

@@ -1,0 +1,1925 @@
+====================================================================================================
+a105/library/literature_binding_interaction_inputs.py
+--- function _dependencies
+@@ -2 +2 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in _FROZEN}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in _FROZEN}
+@@ -5 +5 @@
+-    calculator = hashlib.sha256(Path(__file__).with_name('literature_binding_interaction_calculations.py').read_bytes()).hexdigest()
++    calculator = hashlib.sha256(source_file('literature_binding_interaction_calculations.py').read_bytes()).hexdigest()
+====================================================================================================
+a105/library/literature_experimental_contracts.py
+--- REMOVED class ExperimentalContractError
+class ExperimentalContractError(ValueError):
+    """A repairable field/relationship failure; never an overall evidence grade."""
+
+    def __init__(self, code, field, *, detail=None):
+        self.code, self.field = (code, field)
+        self.detail = deepcopy(detail)
+        super().__init__(f'{code}:{field}')
+====================================================================================================
+a105/library/literature_binding_interaction_storage.py
+--- function _dependencies
+@@ -4 +4 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+====================================================================================================
+a105/library/literature_controlled_response_inputs.py
+--- class _SavedV3SourceContext
+@@ -5,0 +6 @@
++        self._saved_implementation_dependencies = deepcopy(extraction['implementation_dependencies'])
+--- function _validate_v2_saved_science
+@@ -16 +16 @@
+-    if extraction['implementation_dependencies'] != dependencies:
++    if extraction['implementation_dependencies'] != dependencies and (not any((extraction['implementation_dependencies'] == {**dependencies, 'expected_module_fingerprints': release['modules']} for release in facade._RETAINED_SAVED_DEPENDENCY_RELEASES))):
+--- function _validate_v3_saved_science
+@@ -16 +16 @@
+-    if extraction['implementation_dependencies'] != expected_dependencies:
++    if extraction['implementation_dependencies'] != expected_dependencies and (not any((extraction['implementation_dependencies'] == {**expected_dependencies, 'expected_module_fingerprints': release['modules']} for release in facade._RETAINED_SAVED_DEPENDENCY_RELEASES))):
+====================================================================================================
+a105/library/literature_controlled_response_v2_inputs.py
+--- function _dependencies
+@@ -3 +3 @@
+-    return {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    return {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+--- function _validate_graph
+@@ -1 +1 @@
+-def _validate_graph(selected, result, *, sources, images, request):
++def _validate_graph(selected, result, *, sources, images, request, implementation_fingerprints):
+@@ -70 +70 @@
+-    if pixels['counter_module_sha256'] != _dependencies()['literature_controlled_response_figure_inputs.py'] or pixels['image_sha256'] != spec['byte_sha256'] or pixels['original_image_sha256'] != spec['original_byte_sha256']:
++    if pixels['counter_module_sha256'] != implementation_fingerprints['literature_controlled_response_figure_inputs.py'] or pixels['image_sha256'] != spec['byte_sha256'] or pixels['original_image_sha256'] != spec['original_byte_sha256']:
+--- function validate_controlled_response_v2_extraction
+@@ -10 +10 @@
+-            return _validate_graph(selected, candidates[0]['graph_details'], sources=sources, images=image_records, request=arguments)
++            return _validate_graph(selected, candidates[0]['graph_details'], sources=sources, images=image_records, request=arguments, implementation_fingerprints=extraction['implementation_dependencies']['expected_module_fingerprints'])
+--- ADDED assign _RETAINED_SAVED_DEPENDENCY_RELEASES
+_RETAINED_SAVED_DEPENDENCY_RELEASES = ({'release': 'retained_actual_pre_attestation_result', 'modules': {'literature_assay_inputs.py': '52f467910b38909d66efe92c3b70b31aa2f212e81bf19ad157f60fd3fe551c5f', 'literature_binding_reader.py': '05020a57d1f57fe9427cb804b6cc3433925e5e0a1c3290f760e35baa89e314ae', 'literature_binding_visual_inputs.py': 'c7fb75e9a6497edcac2f9c450ce1bcd71e0f14a1bedcfc6a148a2f3b000d386d', 'literature_controlled_response_calculations.py': '42fec22042ee196e86de277bde47fae2a68f4ac09f87ed8246fe9b645deb5c7b', 'literature_controlled_response_figure_inputs.py': 'd7b4b768124dd92acd8c
+====================================================================================================
+a105/library/literature_controlled_response_v3_inputs.py
+--- function _dependencies
+@@ -5 +5 @@
+-    return {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    return {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+--- function _finish_v3
+@@ -86 +86 @@
+-    result = {'version': 'controlled_response_source_extraction_v3', 'selection': cp(selected), 'sources': cp(context.roster), 'images': cp(context.images), 'arms': {r: cp(dict(a)) if a else None for r, a in arms.items()}, 'relationships': relationships, 'covariance': base_covariance, 'requested_model': requested, 'effective_model': effective, 'calculation_inputs': projection, 'representation_rec
++    result = {'version': 'controlled_response_source_extraction_v3', 'selection': cp(selected), 'sources': cp(context.roster), 'images': cp(context.images), 'arms': {r: cp(dict(a)) if a else None for r, a in arms.items()}, 'relationships': relationships, 'covariance': base_covariance, 'requested_model': requested, 'effective_model': effective, 'calculation_inputs': projection, 'representation_rec
+--- function validate_controlled_response_v3_extraction
+@@ -8 +8 @@
+-            return v2._validate_graph(selected, arm['graph_details'], sources={(s['source_ref'], s['representation']): s for s in source_records}, images=image_records, request=arguments)
++            return v2._validate_graph(selected, arm['graph_details'], sources={(s['source_ref'], s['representation']): s for s in source_records}, images=image_records, request=arguments, implementation_fingerprints=extraction['implementation_dependencies']['expected_module_fingerprints'])
+--- ADDED assign _RETAINED_SAVED_DEPENDENCY_RELEASES
+_RETAINED_SAVED_DEPENDENCY_RELEASES = ({'release': 'retained_actual_pre_attestation_result', 'modules': {'literature_assay_inputs.py': '52f467910b38909d66efe92c3b70b31aa2f212e81bf19ad157f60fd3fe551c5f', 'literature_binding_reader.py': '05020a57d1f57fe9427cb804b6cc3433925e5e0a1c3290f760e35baa89e314ae', 'literature_binding_visual_inputs.py': 'c7fb75e9a6497edcac2f9c450ce1bcd71e0f14a1bedcfc6a148a2f3b000d386d', 'literature_controlled_response_calculations.py': '42fec22042ee196e86de277bde47fae2a68f4ac09f87ed8246fe9b645deb5c7b', 'literature_controlled_response_figure_inputs.py': 'd7b4b768124dd92acd8c
+====================================================================================================
+a105/library/literature_kinetic_storage.py
+--- function _dependencies
+@@ -4 +4 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+====================================================================================================
+a105/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/grading/literature_experimental_contracts.py
+--- REMOVED class ExperimentalContractError
+class ExperimentalContractError(ValueError):
+    """A repairable field/relationship failure; never an overall evidence grade."""
+
+    def __init__(self, code, field, *, detail=None):
+        self.code, self.field = (code, field)
+        self.detail = deepcopy(detail)
+        super().__init__(f'{code}:{field}')
+====================================================================================================
+a105/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/tools/literature_controlled_response_inputs.py
+--- class _SavedV3SourceContext
+@@ -5,0 +6 @@
++        self._saved_implementation_dependencies = deepcopy(extraction['implementation_dependencies'])
+--- function _validate_v2_saved_science
+@@ -16 +16 @@
+-    if extraction['implementation_dependencies'] != dependencies:
++    if extraction['implementation_dependencies'] != dependencies and (not any((extraction['implementation_dependencies'] == {**dependencies, 'expected_module_fingerprints': release['modules']} for release in facade._RETAINED_SAVED_DEPENDENCY_RELEASES))):
+--- function _validate_v3_saved_science
+@@ -16 +16 @@
+-    if extraction['implementation_dependencies'] != expected_dependencies:
++    if extraction['implementation_dependencies'] != expected_dependencies and (not any((extraction['implementation_dependencies'] == {**expected_dependencies, 'expected_module_fingerprints': release['modules']} for release in facade._RETAINED_SAVED_DEPENDENCY_RELEASES))):
+====================================================================================================
+a105/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/tools/literature_controlled_response_v2_inputs.py
+--- function _dependencies
+@@ -3 +3 @@
+-    return {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    return {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+--- function _validate_graph
+@@ -1 +1 @@
+-def _validate_graph(selected, result, *, sources, images, request):
++def _validate_graph(selected, result, *, sources, images, request, implementation_fingerprints):
+@@ -70 +70 @@
+-    if pixels['counter_module_sha256'] != _dependencies()['literature_controlled_response_figure_inputs.py'] or pixels['image_sha256'] != spec['byte_sha256'] or pixels['original_image_sha256'] != spec['original_byte_sha256']:
++    if pixels['counter_module_sha256'] != implementation_fingerprints['literature_controlled_response_figure_inputs.py'] or pixels['image_sha256'] != spec['byte_sha256'] or pixels['original_image_sha256'] != spec['original_byte_sha256']:
+--- function validate_controlled_response_v2_extraction
+@@ -10 +10 @@
+-            return _validate_graph(selected, candidates[0]['graph_details'], sources=sources, images=image_records, request=arguments)
++            return _validate_graph(selected, candidates[0]['graph_details'], sources=sources, images=image_records, request=arguments, implementation_fingerprints=extraction['implementation_dependencies']['expected_module_fingerprints'])
+--- ADDED assign _RETAINED_SAVED_DEPENDENCY_RELEASES
+_RETAINED_SAVED_DEPENDENCY_RELEASES = ({'release': 'retained_actual_pre_attestation_result', 'modules': {'literature_assay_inputs.py': 'f002393939d3aaa50c249c003f157f0612c51829225366e451b32b06cd9b2a83', 'literature_binding_reader.py': '26ca3056d7aba55d75ac7b778c85be329e2a3021d314c2b30e6b49c1c3195a53', 'literature_binding_visual_inputs.py': '1d75645274c0ca62b3aaedae0867658368e8132deca43a8f4f692103395622f2', 'literature_controlled_response_calculations.py': 'fb4af9906ef09c19ca3c3e1f5e937d8c8b5bc39a54ae25393d71856dacc3da01', 'literature_controlled_response_figure_inputs.py': 'a9e1b9ba5ac16d57bbc5
+====================================================================================================
+a105/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/tools/literature_controlled_response_v3_inputs.py
+--- function _dependencies
+@@ -5 +5 @@
+-    return {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    return {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+--- function _finish_v3
+@@ -86 +86 @@
+-    result = {'version': 'controlled_response_source_extraction_v3', 'selection': cp(selected), 'sources': cp(context.roster), 'images': cp(context.images), 'arms': {r: cp(dict(a)) if a else None for r, a in arms.items()}, 'relationships': relationships, 'covariance': base_covariance, 'requested_model': requested, 'effective_model': effective, 'calculation_inputs': projection, 'representation_rec
++    result = {'version': 'controlled_response_source_extraction_v3', 'selection': cp(selected), 'sources': cp(context.roster), 'images': cp(context.images), 'arms': {r: cp(dict(a)) if a else None for r, a in arms.items()}, 'relationships': relationships, 'covariance': base_covariance, 'requested_model': requested, 'effective_model': effective, 'calculation_inputs': projection, 'representation_rec
+--- function validate_controlled_response_v3_extraction
+@@ -8 +8 @@
+-            return v2._validate_graph(selected, arm['graph_details'], sources={(s['source_ref'], s['representation']): s for s in source_records}, images=image_records, request=arguments)
++            return v2._validate_graph(selected, arm['graph_details'], sources={(s['source_ref'], s['representation']): s for s in source_records}, images=image_records, request=arguments, implementation_fingerprints=extraction['implementation_dependencies']['expected_module_fingerprints'])
+--- ADDED assign _RETAINED_SAVED_DEPENDENCY_RELEASES
+_RETAINED_SAVED_DEPENDENCY_RELEASES = ({'release': 'retained_actual_pre_attestation_result', 'modules': {'literature_assay_inputs.py': 'f002393939d3aaa50c249c003f157f0612c51829225366e451b32b06cd9b2a83', 'literature_binding_reader.py': '26ca3056d7aba55d75ac7b778c85be329e2a3021d314c2b30e6b49c1c3195a53', 'literature_binding_visual_inputs.py': '1d75645274c0ca62b3aaedae0867658368e8132deca43a8f4f692103395622f2', 'literature_controlled_response_calculations.py': 'fb4af9906ef09c19ca3c3e1f5e937d8c8b5bc39a54ae25393d71856dacc3da01', 'literature_controlled_response_figure_inputs.py': 'a9e1b9ba5ac16d57bbc5
+====================================================================================================
+a105/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/tools/literature_binding_interaction_inputs.py
+--- function _dependencies
+@@ -2 +2 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in _FROZEN}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in _FROZEN}
+@@ -5 +5 @@
+-    calculator = hashlib.sha256(Path(__file__).with_name('literature_binding_interaction_calculations.py').read_bytes()).hexdigest()
++    calculator = hashlib.sha256(source_file('literature_binding_interaction_calculations.py').read_bytes()).hexdigest()
+====================================================================================================
+a105/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/scoring/literature_binding_interaction_storage.py
+--- function _dependencies
+@@ -4 +4 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+====================================================================================================
+a105/scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/scoring/literature_kinetic_storage.py
+--- function _dependencies
+@@ -4 +4 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+====================================================================================================
+a106/library/literature_experimental_contracts.py
+--- REMOVED class ExperimentalContractError
+class ExperimentalContractError(ValueError):
+    """A repairable field/relationship failure; never an overall evidence grade."""
+
+    def __init__(self, code, field, *, detail=None):
+        self.code, self.field = (code, field)
+        self.detail = deepcopy(detail)
+        super().__init__(f'{code}:{field}')
+====================================================================================================
+a106/library/literature_kinetic_storage.py
+--- function _dependencies
+@@ -4 +4 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+====================================================================================================
+a106/library/literature_controlled_response_inputs.py
+--- class _SavedV3SourceContext
+@@ -5,0 +6 @@
++        self._saved_implementation_dependencies = deepcopy(extraction['implementation_dependencies'])
+--- function _validate_v2_saved_science
+@@ -16 +16 @@
+-    if extraction['implementation_dependencies'] != dependencies:
++    if extraction['implementation_dependencies'] != dependencies and extraction['implementation_dependencies'] != _RETAINED_CAPTURED_CONTROLLED_DEPENDENCIES['controlled_response_source_extraction_v2'] and (extraction['implementation_dependencies'] not in _retained_profiles.RETAINED_PRIVATE_DEPENDENCIES):
+--- function _validate_v3_saved_science
+@@ -16 +16 @@
+-    if extraction['implementation_dependencies'] != expected_dependencies:
++    if extraction['implementation_dependencies'] != expected_dependencies and extraction['implementation_dependencies'] != _RETAINED_CAPTURED_CONTROLLED_DEPENDENCIES['controlled_response_source_extraction_v3'] and (extraction['implementation_dependencies'] not in _retained_profiles.RETAINED_PRIVATE_DEPENDENCIES):
+--- ADDED assign _RETAINED_CAPTURED_CONTROLLED_DEPENDENCIES
+_RETAINED_CAPTURED_CONTROLLED_DEPENDENCIES = {'controlled_response_source_extraction_v2': {'calculator_contract_version': 'controlled_response_owner_inputs_v2', 'expected_module_fingerprints': {'literature_assay_inputs.py': 'cd3ecdc59bfbbeee73a0897e90cbe642a2bb52504d5e97d2153a0c3c146c0f5c', 'literature_binding_reader.py': 'e117105486773280edf1dba796ab2be10c61feb6a9c0ad407ba876e2332714a1', 'literature_binding_visual_inputs.py': '8153f555699cd9b1dea63bd8ccc29869c70e127c205bdb10fd26c979b202b718', 'literature_controlled_response_calculations.py': 'a75b8f8ef4905d805be24e86236ef8303c97b5e4761acf0d84
+====================================================================================================
+a106/library/literature_controlled_response_v2_inputs.py
+--- function _dependencies
+@@ -3 +3 @@
+-    return {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    return {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+--- function _validate_graph
+@@ -1 +1 @@
+-def _validate_graph(selected, result, *, sources, images, request):
++def _validate_graph(selected, result, *, sources, images, request, source_dependencies=None):
+@@ -70 +70 @@
+-    if pixels['counter_module_sha256'] != _dependencies()['literature_controlled_response_figure_inputs.py'] or pixels['image_sha256'] != spec['byte_sha256'] or pixels['original_image_sha256'] != spec['original_byte_sha256']:
++    if pixels['counter_module_sha256'] != (_dependencies()['literature_controlled_response_figure_inputs.py'] if source_dependencies is None else source_dependencies['expected_module_fingerprints']['literature_controlled_response_figure_inputs.py']) or pixels['image_sha256'] != spec['byte_sha256'] or pixels['original_image_sha256'] != spec['original_byte_sha256']:
+--- function validate_controlled_response_v2_extraction
+@@ -10 +10 @@
+-            return _validate_graph(selected, candidates[0]['graph_details'], sources=sources, images=image_records, request=arguments)
++            return _validate_graph(selected, candidates[0]['graph_details'], sources=sources, images=image_records, request=arguments, source_dependencies=extraction['implementation_dependencies'])
+====================================================================================================
+a106/library/literature_controlled_response_v3_inputs.py
+--- function _dependencies
+@@ -5 +5 @@
+-    return {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    return {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+--- function _finish_v3
+@@ -86 +86 @@
+-    result = {'version': 'controlled_response_source_extraction_v3', 'selection': cp(selected), 'sources': cp(context.roster), 'images': cp(context.images), 'arms': {r: cp(dict(a)) if a else None for r, a in arms.items()}, 'relationships': relationships, 'covariance': base_covariance, 'requested_model': requested, 'effective_model': effective, 'calculation_inputs': projection, 'representation_rec
++    result = {'version': 'controlled_response_source_extraction_v3', 'selection': cp(selected), 'sources': cp(context.roster), 'images': cp(context.images), 'arms': {r: cp(dict(a)) if a else None for r, a in arms.items()}, 'relationships': relationships, 'covariance': base_covariance, 'requested_model': requested, 'effective_model': effective, 'calculation_inputs': projection, 'representation_rec
+--- function validate_controlled_response_v3_extraction
+@@ -8 +8 @@
+-            return v2._validate_graph(selected, arm['graph_details'], sources={(s['source_ref'], s['representation']): s for s in source_records}, images=image_records, request=arguments)
++            return v2._validate_graph(selected, arm['graph_details'], sources={(s['source_ref'], s['representation']): s for s in source_records}, images=image_records, request=arguments, source_dependencies=extraction['implementation_dependencies'])
+====================================================================================================
+a106/library/literature_binding_interaction_inputs.py
+--- function _dependencies
+@@ -2 +2 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in _FROZEN}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in _FROZEN}
+@@ -5 +5 @@
+-    calculator = hashlib.sha256(Path(__file__).with_name('literature_binding_interaction_calculations.py').read_bytes()).hexdigest()
++    calculator = hashlib.sha256(source_file('literature_binding_interaction_calculations.py').read_bytes()).hexdigest()
+====================================================================================================
+a106/library/literature_binding_interaction_storage.py
+--- function _dependencies
+@@ -4 +4 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+====================================================================================================
+a106/library/literature_ion_discrimination_numbers.py
+--- Expr#0
+@@ -1 +1 @@
+-'Exact original-token reading for ion-discrimination estimates and limits.\n\nThis local lexical extension does not alter shared readers or source bytes.\nScientific ownership, quantity meanings and applicability are separate inputs.\n'
++'Exact original-token reading for ion-discrimination estimates and limits.\n\nThis local lexical extension does not alter shared readers or source bytes.\nScientific account_context, quantity meanings and applicability are separate inputs.\n'
+====================================================================================================
+a106/library/literature_ion_discrimination_inputs.py
+--- function canonical_activity_owner
+@@ -2 +2 @@
+-    """Known complete mean ownership, never a shared subset or equal values.
++    """Known complete mean account_context, never a shared subset or equal values.
+--- function validate_ion_discrimination_extraction
+@@ -2 +2 @@
+-    """Validate parsed-input shape and numerical ownership without source I/O."""
++    """Validate parsed-input shape and numerical account_context without source I/O."""
+====================================================================================================
+a107/__init__.py
+a101/__init__.py
+a103/__init__.py
+a104/__init__.py
+--- Expr#0
+@@ -1 +1 @@
+-'Evidence-linked, iterative microbial annotation.'
++'Evidence-axis package.'
+--- REMOVED assign __version__
+__version__ = '0.2.0'
+====================================================================================================
+a107/blast_program_context.py
+a101/library/blast_program_context.py
+a103/blast_program_context.py
+a104/blast_program_context.py
+--- Expr#0
+@@ -1 +1 @@
+-"BLAST executable identity and alignment geometry are separate facts.\n\nThis is not an execution or API allowlist. The source-qualified aliases are\ndocumented in verification/tool_graders_blast_collection_2026-10-26_293/.\nNCBI's BlastNumber2Program, GetBlastProgramName and TBLASTN/PSI option\nconstructors establish the reported tokens; no version-number allowlist is used.\n"
++"BLAST executable identity and alignment geometry are separate facts.\n\nThis is not an execution or API allowlist. The source-qualified aliases are\ndocumented by the retained reports in tests/fixtures/blast_report_collection/.\nNCBI's BlastNumber2Program, GetBlastProgramName and TBLASTN/PSI option\nconstructors establish the reported tokens; no version-number allowlist is used.\n"
+====================================================================================================
+a107/native_blast_standard_database_contracts.py
+--- assign PRODUCER_MANIFEST_SCHEMA
+@@ -1 +1 @@
+-PRODUCER_MANIFEST_SCHEMA = _object({'version': {'const': 'native_blast_standard_database_producer_manifest_v1'}, 'module_root': _ABS, 'entry_module': {'const': 'gene_annotation_episode.native_blast_standard_database_driver'}, 'python': _FILE, 'package_files': _array(_object({'relative_path': _STR, 'sha256': _SHA, 'size_bytes': _INT}), minItems=4), 'runtime_files': _array(_FILE)})
++PRODUCER_MANIFEST_SCHEMA = _object({'version': {'const': 'native_blast_standard_database_producer_manifest_v1'}, 'module_root': _ABS, 'entry_module': {'const': 'gene_annotation_episode.episodic_workflow.root.a107.native_blast_standard_database_driver'}, 'python': _FILE, 'package_files': _array(_object({'relative_path': _STR, 'sha256': _SHA, 'size_bytes': _INT}), minItems=4), 'runtime_files': _arr
+--- function validate_standard_blast_database_producer_manifest
+@@ -9 +9 @@
+-    required = {'gene_annotation_episode/__init__.py', 'gene_annotation_episode/native_blast_standard_database_driver.py', 'gene_annotation_episode/native_blast_standard_database_contracts.py', 'gene_annotation_episode/blast_program_context.py'}
++    required = {'gene_annotation_episode/__init__.py', 'gene_annotation_episode/episodic_workflow/root/a107/native_blast_standard_database_driver.py', 'gene_annotation_episode/episodic_workflow/root/a107/native_blast_standard_database_contracts.py', 'gene_annotation_episode/episodic_workflow/root/a107/blast_program_context.py'}
+====================================================================================================
+a108/library/retained_input_authority/literature_kinetic_inputs.py
+a101/library/retained_input_authority/literature_kinetic_inputs.py
+--- REMOVED assign DEPENDENCIES
+DEPENDENCIES = {**LEGACY_DEPENDENCIES, 'scalar_scope_sha256': '6683a39272203ff0b2844c951ab13b2333ae0ae16e3966c4eb932970f30764a8'}
+--- REMOVED assign DEPENDENCY_RELEASES
+DEPENDENCY_RELEASES = {LEGACY_VERSION: LEGACY_DEPENDENCIES, VERSION: DEPENDENCIES}
+--- REMOVED assign LEGACY_DEPENDENCIES
+LEGACY_DEPENDENCIES = {'custody_module': 'gene_annotation_episode.literature_assay_inputs', 'custody_sha256': '52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e', 'scalar_module': 'gene_annotation_episode.literature_rate_native_inputs', 'scalar_sha256': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'scalar_scope_module': 'gene_annotation_episode.literature_partner_source_fields', 'scalar_scope_sha256': '20fd7866318fff00d80dcf3109c3a2589c36a38e35329d1b63ca954f2c035a17'}
+--- REMOVED assign LEGACY_VERSION
+LEGACY_VERSION = 'a105_kinetic_source_extraction_v2'
+--- REMOVED assign SELECTION_VERSION
+SELECTION_VERSION = 'a105_kinetic_source_selection_v1'
+--- REMOVED assign SOURCE_KINDS
+SOURCE_KINDS = ('primary_source', 'synthetic_fixture')
+--- REMOVED assign VERSION
+VERSION = 'a105_kinetic_source_extraction_v3'
+--- REMOVED assign _ALL_UNITS
+_ALL_UNITS = {name: value for table in _UNIT_TABLES.values() for name, value in table.items()}
+--- REMOVED assign _COUNT_PARTIAL_ERRORS
+_COUNT_PARTIAL_ERRORS = frozenset(('plain_source_point_required', 'lower_bound_source_number_unsupported', 'approximate_source_number_unsupported', 'interval_source_number_unsupported', 'postfix_source_bound_unsupported', 'postfix_source_approximation_unsupported', 'composite_source_comparator_unsupported', 'negated_source_comparator_unsupported'))
+--- REMOVED assign _COUNT_SMALL
+_COUNT_SMALL = dict(zip('zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split(), range(20)))
+--- REMOVED assign _COUNT_START
+_COUNT_START = '(?:[+−-]?[0-9]+|' + '|'.join(sorted((*_COUNT_SMALL, *_COUNT_TENS), key=len, reverse=True)) + ')\\b'
+--- REMOVED assign _COUNT_TENS
+_COUNT_TENS = dict(zip('twenty thirty forty fifty sixty seventy eighty ninety'.split(), range(20, 100, 10)))
+--- REMOVED assign _COUNT_WORDS
+_COUNT_WORDS = frozenset((*_COUNT_SMALL, *_COUNT_TENS, 'hundred', 'thousand', 'million'))
+--- REMOVED assign _NUMBER
+_NUMBER = '[+−-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+−-]?[0-9]+)?'
+--- REMOVED assign _TAGS
+_TAGS = re.compile('</?[A-Za-z_][^<>]*>')
+--- REMOVED assign _TRANSLATE
+_TRANSLATE = str.maketrans({'−': '-', '⁻': '-', '¹': '1', 'µ': 'u', 'μ': 'u'})
+--- REMOVED assign _UNIT_TABLES
+_UNIT_TABLES = _unit_tables()
+--- REMOVED assign __all__
+__all__ = ['VERSION', 'LEGACY_VERSION', 'SELECTION_VERSION', 'SOURCE_KINDS', 'PARAMETER_UNITS', 'SUBJECT_FIELDS', 'CONTEXT_FIELDS', 'QUALIFICATIONS', 'COMPARISON_VALUES', 'DEPENDENCIES', 'LEGACY_DEPENDENCIES', 'DEPENDENCY_RELEASES', 'COUNT_STATUSES', 'COUNT_REASONS', 'COUNT_NOTATIONS', 'COUNT_RELATIONS', 'kinetic_arguments_schema', 'read_kinetic_inputs']
+--- REMOVED function _cardinal_count
+def _cardinal_count(raw):
+    """Recognize one finite cardinal grammar, never article/noun meanings."""
+    token = raw.lower()
+    if not re.fullmatch('[a-z]+(?:[\\s-]+[a-z]+)*', token):
+        return None
+    for left, right in re.findall('([a-z]+)-([a-z]+)', token):
+        if left not in _COUNT_TENS or _COUNT_SMALL.get(right, 0) not in range(1, 10):
+            return None
+    if '--' in token or re.search('\\s-|-[\\s]', token):
+        return None
+    words = token.replace('-', ' ').split()
+
+    def below_hundred(group):
+        if len(group) == 1:
+            return _COUNT_SMALL.get(gro
+--- REMOVED function _confidence
+def _confidence(selection, sources):
+    if selection is None:
+        return None
+    witness = sources.witness(selection, 'uncertainty.confidence_level')
+    match = re.fullmatch('\\s*(' + _NUMBER + ')\\s*%\\s*', witness['quote'])
+    if match is None:
+        _fail('literal_percent_confidence_required', 'uncertainty.confidence_level')
+    before, after = _field_contexts(sources, witness, 0, len(witness['quote']))
+    if before[-1:] and (before[-1:].isalnum() or before[-1:] in '.eE+−-_') or (after[:1] and (after[:1].isalnum() or after[:1] in '.eE+−-_%')):
+        _fail('partial_source_confid
+--- REMOVED function _converted
+def _converted(number, unit, field):
+    if number is None or unit is None or unit['canonical_unit'] is None:
+        return (None, None)
+    scale = next((table[_normalize(unit['raw_unit'])][1] for table in _UNIT_TABLES.values() if _normalize(unit['raw_unit']) in table))
+    try:
+        exact = _literal_fraction(number['raw_number']) * scale
+        value = float(exact)
+    except (ArithmeticError, ValueError):
+        return (None, 'source_numeric_range')
+    if not math.isfinite(value) or (value == 0 and exact != 0):
+        return (None, 'source_numeric_range')
+    return (value, None)
+--- REMOVED function _count_reading
+def _count_reading(selection, sources):
+    """Read a reported numeral; qualifications never become an exact sample n."""
+    if selection is None:
+        return None
+    witness = sources.witness(selection['witness'], 'uncertainty.count')
+    start, end = (selection['number_start'], selection['number_end'])
+    _index(start, 'uncertainty.count.number_start')
+    _index(end, 'uncertainty.count.number_end')
+    if not 0 <= start < end <= len(witness['quote']):
+        _fail('source_number_span_order_invalid', 'uncertainty.count')
+    token = witness['quote'][start:end]
+    prefix, suffix = _fi
+--- REMOVED function _count_scope
+def _count_scope(prefix, suffix, token):
+    """Classify finite count qualification/range syntax in actual source text."""
+    lower = '\\b(?:or\\s+(?:more|greater|above)|and\\s+above)\\b'
+    upper = '\\b(?:or\\s+(?:less|fewer|below)|and\\s+below)\\b'
+    remaining, relations, approximate, qualified = (prefix, [], False, False)
+    while True:
+        approx, high, low = (_APPROX.search(remaining), _UPPER.search(remaining), _LOWER.search(remaining))
+        if approx:
+            approximate, qualified = (True, True)
+            remaining = remaining[:approx.start()]
+        elif high or low:
+--- REMOVED function _explicit_unit
+def _explicit_unit(number, selected, kind, sources):
+    if number is None or selected is None or selected['canonical_unit'] is None:
+        return
+    ns = number['selector']
+    _, after = _field_contexts(sources, ns['witness'], ns['number_start'], ns['number_end'])
+    visible = after.lstrip()
+    plus_minus = re.match('(?:±|\\+\\s*/\\s*-)\\s*' + _NUMBER + '\\s*', visible)
+    if plus_minus:
+        visible = visible[plus_minus.end():]
+    _explicit_unit_after(visible, selected, kind)
+--- REMOVED function _explicit_unit_after
+def _explicit_unit_after(visible, selected, kind):
+    if selected is None or selected['canonical_unit'] is None:
+        return
+    compact, positions = ('', [])
+    for i, char in enumerate(visible):
+        translated = char.translate(_TRANSLATE)
+        if translated.isspace() or translated == '^':
+            continue
+        compact += translated
+        positions.append(i + 1)
+    for spelling in sorted(_ALL_UNITS, key=len, reverse=True):
+        if not compact.startswith(spelling):
+            continue
+        end = positions[len(spelling) - 1]
+        if visible[end:end + 1].isalnum()
+--- REMOVED function _fail
+def _fail(code, field):
+    raise ExperimentalContractError(code, field)
+--- REMOVED function _interpret
+def _interpret(selected, sources, field):
+    witnesses = [sources.witness(w, field + '.witnesses') for w in selected['witnesses']]
+    unique = {_locator_key(w) for w in witnesses}
+    value = selected['value']
+    minimum = 2 if value == 'conflicting' else 0 if value in ('unknown', 'unspecified', 'unreported') else 1
+    if len(unique) < minimum:
+        _fail('interpretation_witness_required', field)
+    return {'value': value, 'witnesses': witnesses}
+--- REMOVED function _interval
+def _interval(selection, sources):
+    if selection is None:
+        return None
+    witness = sources.witness(selection['witness'], 'uncertainty.interval')
+    quote = witness['quote']
+    match = re.fullmatch('\\s*[\\[(]\\s*(?P<lower>' + _NUMBER + ')\\s*,\\s*(?P<upper>' + _NUMBER + ')\\s*[\\])]\\s*', quote)
+    if match is None or (quote.strip()[0], quote.strip()[-1]) not in (('[', ']'), ('(', ')')):
+        _fail('literal_ci_interval_required', 'uncertainty.interval')
+    for side in ('lower', 'upper'):
+        if (selection[side + '_start'], selection[side + '_end']) != match.span(side):
+ 
+--- REMOVED function _literal_fraction
+def _literal_fraction(raw):
+    token = raw.replace('−', '-')
+    return Fraction(token) if any((c in '123456789' for c in token.lower().split('e', 1)[0])) else Fraction(0)
+--- REMOVED function _locator
+def _locator(witness):
+    return {name: witness[name] for name in ('source_ref', 'artifact_ref', 'representation', 'start', 'end')}
+--- REMOVED function _locator_key
+def _locator_key(witness):
+    return tuple(_locator(witness).values())
+--- REMOVED function _meaning_schema
+def _meaning_schema(values):
+    return obj({'value': {'enum': list(values)}, 'witnesses': {'type': 'array', 'items': _witness_schema()}})
+--- REMOVED function _normalize
+def _normalize(raw):
+    visible = html.unescape(_TAGS.sub('', raw)).translate(_TRANSLATE).replace('^', '')
+    return re.sub('\\s+', '', visible)
+--- REMOVED function _operand
+def _operand(selected, sources, source_origin):
+    if selected is None:
+        return (None, None, ['source_measurement_unreported'])
+    parameter = _interpret(selected['parameter_kind'], sources, 'parameter_kind')
+    kind = parameter['value']
+    subject = {name: sources.witness(w, 'subject.' + name) if w is not None else None for name, w in selected['subject'].items()}
+    context = {name: sources.witness(w, 'context.' + name) if w is not None else None for name, w in selected['context'].items()}
+    physical = sources.witness(selected['measurement_identity'], 'measurement_identity') if 
+--- REMOVED function _tail_continues
+def _tail_continues(after):
+    first = after[:1]
+    return bool(first and (first.isalnum() or first in '/_^−-⁻¹%')) or bool(re.match('\\s+(?:[/^]|[A-Za-zµμ]+\\s*\\^?\\s*[-−⁻]\\s*[1¹]|per\\s+(?:min|s|h|mg|g|mol|[munµμ]?M)\\b)', after))
+--- REMOVED function _uncertainty
+def _uncertainty(selected, parameter_unit, kind, sources):
+    meanings = {name: _interpret(selected[name], sources, 'uncertainty.' + name) for name in ('statistic', 'unit_relationship', 'repetition_basis', 'estimate_basis')}
+    statistic = meanings['statistic']['value']
+    magnitude = _number(selected['magnitude'], sources, 'spread') if selected['magnitude'] is not None else None
+    interval = _interval(selected['interval'], sources)
+    confidence = _confidence(selected['confidence_level'], sources)
+    if statistic == 'unreported' and (magnitude is not None or interval is not None or con
+--- REMOVED function _unit
+def _unit(selection, kind, sources):
+    if selection is None:
+        return None
+    witness = sources.witness(selection, 'kinetic.unit')
+    before, after = _field_contexts(sources, witness, 0, len(witness['quote']))
+    compound_prefix = re.search('(?:[/^]\\s*\\(?\\s*|\\b(?:[nmuµμ]?M|mol|mg|g|min|s|h)\\s*(?:\\^?[-−⁻][1¹])?\\s+)$', before)
+    if before[-1:] and (before[-1:].isalpha() or before[-1:] in '_µμ/^⁻¹') or compound_prefix or _tail_continues(after):
+        _fail('partial_source_kinetic_unit', 'kinetic.unit')
+    parsed = _UNIT_TABLES.get(kind, {}).get(_normalize(witness['quote']))
+--- REMOVED function _unit_tables
+def _unit_tables():
+    concentration = {'M': Fraction(1000000), 'mM': Fraction(1000), 'uM': Fraction(1), 'nM': Fraction(1, 1000)}
+    time = {'min': Fraction(1), 's': Fraction(60)}
+    tables = {'Km': {unit: ('uM', scale) for unit, scale in concentration.items()}, 'kcat': {}, 'catalytic_efficiency': {}}
+    for duration, scale in time.items():
+        for spelling in (duration + '-1', '1/' + duration, 'per_' + duration, 'per' + duration):
+            tables['kcat'][spelling] = ('per_min', scale)
+        for molarity, amount_scale in concentration.items():
+            for spelling in (molarity
+--- REMOVED function kinetic_arguments_schema
+def kinetic_arguments_schema():
+    """All scientific numbers are selected spans, never supplied operands."""
+    witness, number = (_witness_schema(), number_selector_schema())
+    count = deepcopy(number)
+    count['description'] = 'Select the complete reported repetition numeral, which may be decimal digits or an English cardinal word expression. Outer witness offsets are UTF8 bytes; number_start and number_end are Unicode character positions inside that exact quote. Do not supply a converted number. Qualified or unsupported counts retain partial source information; repetition meaning is se
+--- REMOVED function read_kinetic_inputs
+def read_kinetic_inputs(selection, *, read_source):
+    """Read exact source estimates into045 operands; unknowns remain unknown.
+
+    This is a native literal reader, not an experiment grader. Covariance/model
+    extraction and selected runtime storage/typed rendering are separate work.
+    """
+    try:
+        validate_schema(selection, kinetic_arguments_schema())
+    except ContractError as error:
+        raise ExperimentalContractError('kinetic_selection_schema_invalid', 'selection', detail=error.detail) from error
+    sources = _Sources(read_source)
+    sources.source(selection['source_r
+====================================================================================================
+a108/library/retained_input_authority/literature_controlled_response_calculations.py
+a101/library/retained_input_authority/literature_controlled_response_calculations.py
+--- REMOVED assign ARM_FIELDS
+ARM_FIELDS = ('value', 'threshold', 'relation', 'approximate', 'unit', 'status', 'endpoint_id', 'normalization_id', 'subject_construct_id', 'condition_id', 'physical_observation_id', 'source_observation_id', 'origin', 'digitization_interval', 'protein_arrangement', 'meaning_statuses')
+--- REMOVED assign CELL_FIELDS
+CELL_FIELDS = ('value', 'lower', 'upper', 'relation', 'approximate', 'unit', 'status', 'origin', 'unavailable_reason', 'formula_code', 'conditional_on', 'bound_kind', 'bound_state')
+--- REMOVED assign COMPONENTS
+COMPONENTS = tuple((name + '_response' for name in PRIMITIVE_ORDER)) + ('condition1_controlled_response', 'condition0_controlled_response', 'controlled_response_difference', 'contrast_variance', 'contrast_standard_uncertainty', 'contrast_precision', 'source_profile_log_ratio', 'source_signed_index')
+--- REMOVED assign INPUT_VERSION
+INPUT_VERSION = 'controlled_response_inputs_v1'
+--- REMOVED assign REASONS
+REASONS = ('missing_arm', 'unknown_unit', 'incompatible_unit_dimension', 'unknown_endpoint', 'different_endpoint', 'conflicting_endpoint', 'unknown_normalization', 'different_normalization', 'conflicting_normalization', 'unknown_subject_correspondence', 'different_subject_correspondence', 'conflicting_subject_correspondence', 'unknown_control_application', 'conflicting_control_application', 'unknown_protein_arrangement', 'conflicting_protein_arrangement', 'incompatible_control_arrangement', 'unknown_condition_correspondence', 'different_condition_correspondence', 'conflicting_condition_corresp
+--- REMOVED assign RELATIONSHIP_FIELDS
+RELATIONSHIP_FIELDS = ('condition1_target', 'condition0_target', 'condition_levels_relation', 'condition1_control_application', 'condition0_control_application', 'subject_construct_across_conditions', 'control_reference_reuse', 'nonintended_conditions', 'intended_factor')
+--- REMOVED assign VERSION
+VERSION = 'controlled_response_sheet_v1'
+--- REMOVED assign _BASE_UNITS
+_BASE_UNITS = {'amount_rate': 'umol/min', 'concentration_rate': 'uM/min', 'turnover_rate': 'per_min', 'specific_amount_rate': 'umol/min/mg'}
+--- REMOVED assign _FORMULAS
+_FORMULAS = ('source_response',) * 4 + ('condition_control_difference',) * 2 + ('four_arm_condition_difference', 'linear_joint_covariance', 'square_root_variance', 'inverse_variance', 'signed_known_normal_profile', 'tanh_half_signed_profile')
+--- REMOVED assign _STATES
+_STATES = ('known', 'unknown', 'conflicting')
+--- REMOVED assign __all__
+__all__ = ['INPUT_VERSION', 'VERSION', 'PRIMITIVE_ORDER', 'COMPONENTS', 'CELL_FIELDS', 'ARM_FIELDS', 'RELATIONSHIP_FIELDS', 'REASONS', 'validate_controlled_response_inputs', 'populate_controlled_response']
+--- REMOVED class _Range
+@dataclass(frozen=True)
+class _Range:
+    point: Fraction | None
+    lower: Fraction | None
+    upper: Fraction | None
+    lower_closed: bool = True
+    upper_closed: bool = True
+    kinds: frozenset = frozenset()
+--- REMOVED function _alias_reasons
+def _alias_reasons(left, right):
+    """Test consistency of an asserted common physical/source observation."""
+    reasons = set()
+    for meaning in _MEANINGS[:-1]:
+        a, b = (left[meaning + '_id'], right[meaning + '_id'])
+        if a is not None and b is not None and (a != b):
+            reasons |= {'conflicting_' + meaning if meaning in ('endpoint', 'normalization') else 'conflicting_' + ('subject_correspondence' if meaning == 'subject_construct' else 'condition_correspondence')}
+    if left['protein_arrangement'] != right['protein_arrangement']:
+        reasons.add('conflicting_prot
+--- REMOVED function _bounded_index
+def _bounded_index(score):
+    if score == 0:
+        return Fraction(0)
+    if abs(score) > 100:
+        return Fraction(1 if score > 0 else -1)
+    half = _number(score / 2)
+    if half is None:
+        return None
+    result = math.tanh(half)
+    return result if result != 0 else None
+--- REMOVED function _cell
+def _cell(value, unit, formula, arms, *, reasons=(), qualifications=(), raw=False):
+    reasons, qualifications = (set(reasons), set(qualifications))
+    result = {'value': None, 'lower': None, 'upper': None, 'relation': 'none', 'approximate': any((arm is not None and arm['approximate'] for arm in arms)), 'unit': unit, 'status': 'unavailable', 'origin': _origin(arms, raw=raw), 'unavailable_reason': None, 'formula_code': formula, 'conditional_on': sorted(qualifications), 'bound_kind': 'none', 'bound_state': {'lower': 'unknown', 'upper': 'unknown'}}
+    if reasons:
+        result['status'] = 'co
+--- REMOVED function _closed
+def _closed(value, fields, field):
+    if not isinstance(value, dict) or set(value) != set(fields):
+        _fail('closed_fields_required', field)
+--- REMOVED function _common_alias_reasons
+def _common_alias_reasons(arms):
+    reasons = set()
+    for i, left in enumerate(arms):
+        if left is None:
+            continue
+        for right in arms[:i]:
+            if right is None:
+                continue
+            same_owner = left['physical_observation_id'] is not None and left['physical_observation_id'] == right['physical_observation_id']
+            same_source = left['source_observation_id'] is not None and left['source_observation_id'] == right['source_observation_id']
+            if same_owner or same_source:
+                reasons |= _alias_reasons(left, right)
+     
+--- REMOVED function _determinant
+def _determinant(matrix):
+    size = len(matrix)
+    total = Fraction(0)
+    for perm in permutations(range(size)):
+        inversions = sum((perm[i] > perm[j] for i in range(size) for j in range(i + 1, size)))
+        product = Fraction((-1) ** inversions)
+        for i in range(size):
+            product *= matrix[i][perm[i]]
+        total += product
+    return total
+--- REMOVED function _effect_reasons
+def _effect_reasons(inputs, pair_reasons):
+    arms = [inputs['arms'][name] for name in PRIMITIVE_ORDER]
+    relationships = inputs['relationships']
+    reasons = set().union(*pair_reasons)
+    if len({RATE_UNITS[arm['unit']][0] for arm in arms if arm and arm['unit']}) > 1:
+        reasons.add('incompatible_unit_dimension')
+    for meaning in ('endpoint', 'normalization'):
+        reasons |= _identity_reasons(arms, meaning)
+    reasons |= _identity_reasons([arms[0], arms[2]], 'subject_construct')
+    subject = relationships['subject_construct_across_conditions']
+    if subject != 'same':
+     
+--- REMOVED function _enum
+def _enum(value, allowed, field):
+    if not isinstance(value, str) or value not in allowed:
+        _fail('unsupported_value', field)
+--- REMOVED function _fail
+def _fail(code, field):
+    raise ExperimentalContractError(code, field)
+--- REMOVED function _finite
+def _finite(value, field, *, nullable=False):
+    if value is None and nullable:
+        return
+    try:
+        valid = type(value) in (int, float) and math.isfinite(value)
+    except OverflowError:
+        valid = False
+    if not valid:
+        _fail('finite_number_required', field)
+--- REMOVED function _identity
+def _identity(value, field, *, nullable=True):
+    if value is None and nullable:
+        return
+    if not isinstance(value, str) or not value.strip():
+        _fail('nonempty_identity_required', field)
+--- REMOVED function _identity_reasons
+def _identity_reasons(arms, meaning):
+    states = [arm['meaning_statuses'][meaning] for arm in arms if arm is not None]
+    if 'conflicting' in states:
+        return {'conflicting_' + meaning if meaning in ('endpoint', 'normalization') else 'conflicting_' + ('subject_correspondence' if meaning == 'subject_construct' else 'condition_correspondence')}
+    if len(states) != len(arms) or 'unknown' in states:
+        return {'unknown_' + meaning if meaning in ('endpoint', 'normalization') else 'unknown_' + ('subject_correspondence' if meaning == 'subject_construct' else 'condition_correspondence'
+--- REMOVED function _linear
+def _linear(arms, coefficients):
+    groups = {}
+    for i, (arm, coefficient) in enumerate(zip(arms, coefficients)):
+        key = ('owner', arm['physical_observation_id']) if arm['physical_observation_id'] is not None else ('role', i)
+        if key in groups:
+            old, count = groups[key]
+            groups[key] = (old, count + coefficient)
+        else:
+            groups[key] = (arm, coefficient)
+    point = lower = upper = Fraction(0)
+    lower_closed = upper_closed = True
+    kinds = set()
+    for arm, coefficient in groups.values():
+        if coefficient == 0:
+            conti
+--- REMOVED function _number
+def _number(value):
+    if value is None:
+        return None
+    try:
+        result = float(value)
+    except (OverflowError, ValueError):
+        return None
+    return result if math.isfinite(result) and (result != 0 or value == 0) else None
+--- REMOVED function _operand_reasons
+def _operand_reasons(arm):
+    if arm is None:
+        return {'missing_arm'}
+    reasons = set()
+    if arm['unit'] is None:
+        reasons.add('unknown_unit')
+    status_reason = {'missing': 'missing_arm', 'ambiguous': 'ambiguous_source_literal', 'conflicting': 'conflicting_source_literal', 'unsupported': 'unsupported_source_expression'}
+    if arm['status'] in status_reason:
+        reasons.add(status_reason[arm['status']])
+    return reasons
+--- REMOVED function _origin
+def _origin(arms, *, raw=False):
+    origins = {arm['origin'] for arm in arms if arm is not None}
+    return 'synthetic' if 'synthetic' in origins else 'graph_derived' if 'graph_derived' in origins else next(iter(origins)) if raw and origins else 'calculated'
+--- REMOVED function _pair_reasons
+def _pair_reasons(inputs, indices, label):
+    arms = [inputs['arms'][PRIMITIVE_ORDER[i]] for i in indices]
+    reasons = set().union(*(_operand_reasons(arm) for arm in arms))
+    for meaning in ('endpoint', 'normalization'):
+        reasons |= _identity_reasons(arms, meaning)
+    if len({RATE_UNITS[arm['unit']][0] for arm in arms if arm and arm['unit']}) > 1:
+        reasons.add('incompatible_unit_dimension')
+    for arm, allowed in zip(arms, (('protein_present',), ('protein_free_control', 'empty_vector_control'))):
+        if arm is None:
+            continue
+        arrangement = arm['prote
+--- REMOVED function _point
+def _point(value):
+    return None if value is None else _Range(value, value, value)
+--- REMOVED function _q
+def _q(value):
+    return Fraction(str(value))
+--- REMOVED function _qualifications
+def _qualifications(inputs, arms, *, cross=False, covariance=False, model=False):
+    result = set()
+    if any((arm is not None and arm['origin'] == 'synthetic' for arm in arms)):
+        result.add('synthetic_fixture')
+    if any((arm is not None and arm['approximate'] for arm in arms)):
+        result.add('approximate_source_reading')
+    if any((arm is not None and arm['digitization_interval'] is not None for arm in arms)):
+        result.add('conditional_digitization')
+    if cross:
+        relationships = inputs['relationships']
+        state = relationships['nonintended_conditions']
+   
+--- REMOVED function _range
+def _range(arm):
+    scale = _scale(arm['unit'])
+    if arm['status'] == 'point':
+        point = _q(arm['value']) * scale
+        interval = arm['digitization_interval']
+        return _Range(point, _q(interval['lower']) * scale, _q(interval['upper']) * scale, kinds=frozenset(('conditional_digitization',))) if interval else _Range(point, point, point)
+    threshold = _q(arm['threshold']) * scale
+    return _Range(None, None, threshold, upper_closed=arm['relation'] == 'le', kinds=frozenset(('reported_limit',))) if arm['relation'] in ('lt', 'le') else _Range(None, threshold, None, lower_closed=
+--- REMOVED function _scale
+def _scale(unit):
+    return _q(RATE_UNITS[unit][1])
+--- REMOVED function _sqrt
+def _sqrt(value):
+    with localcontext() as context:
+        context.prec = 80
+        return (Decimal(value.numerator) / Decimal(value.denominator)).sqrt()
+--- REMOVED function _unit
+def _unit(arms):
+    units = [arm['unit'] for arm in arms if arm is not None and arm['unit'] is not None]
+    dimensions = {RATE_UNITS[unit][0] for unit in units}
+    return _BASE_UNITS[next(iter(dimensions))] if len(dimensions) == 1 else None
+--- REMOVED function _validate
+def _validate(inputs):
+    _closed(inputs, ('version', 'arms', 'relationships', 'covariance', 'variance_status', 'model_kind'), 'inputs')
+    if inputs['version'] != INPUT_VERSION:
+        _fail('unsupported_input_version', 'version')
+    _closed(inputs['arms'], PRIMITIVE_ORDER, 'arms')
+    for name, arm in inputs['arms'].items():
+        _validate_arm(arm, 'arms.' + name)
+    relationships = inputs['relationships']
+    _closed(relationships, RELATIONSHIP_FIELDS, 'relationships')
+    for name in ('condition1_target', 'condition0_target'):
+        target = relationships[name]
+        _closed(ta
+--- REMOVED function _validate_arm
+def _validate_arm(arm, field):
+    if arm is None:
+        return
+    _closed(arm, ARM_FIELDS, field)
+    _enum(arm['status'], ('point', 'bound', 'missing', 'ambiguous', 'conflicting', 'unsupported'), field + '.status')
+    _enum(arm['relation'], ('eq', 'lt', 'le', 'gt', 'ge', 'interval', 'none'), field + '.relation')
+    _enum(arm['origin'], ('reported', 'graph_derived', 'synthetic'), field + '.origin')
+    _enum(arm['protein_arrangement'], _ARRANGEMENTS, field + '.protein_arrangement')
+    if type(arm['approximate']) is not bool:
+        _fail('boolean_required', field + '.approximate')
+    
+--- REMOVED function _validate_covariance
+def _validate_covariance(inputs):
+    raw, status = (inputs['covariance'], inputs['variance_status'])
+    if (raw is None) != (status == 'unknown'):
+        _fail('covariance_status_mismatch', 'variance_status')
+    if raw is None:
+        return None
+    _closed(raw, ('primitive_order', 'physical_observation_ids', 'units', 'matrix'), 'covariance')
+    if raw['primitive_order'] != list(PRIMITIVE_ORDER):
+        _fail('covariance_order_mismatch', 'covariance.primitive_order')
+    for field in ('physical_observation_ids', 'units'):
+        if not isinstance(raw[field], list) or len(raw[field]) !
+--- REMOVED function populate_controlled_response
+def populate_controlled_response(inputs):
+    """Populate four raw responses, two controlled pairs and their joint effect.
+
+    e = x0-x1-x2+x3; V = [1,-1,-1,1] C [1,-1,-1,1]^T. Units
+    and the biological normalization identity must both be compatible. Every
+    linear operation uses exact rationals and explicit physical aliases, not
+    independent intermediate pair intervals. Each final numerical dependency
+    has its own finite-range check. Invalid direct covariance raises; missing
+    covariance leaves valid magnitudes intact. No count implies independence.
+    """
+    covariance = _val
+--- REMOVED function validate_controlled_response_inputs
+def validate_controlled_response_inputs(inputs):
+    """Validate the closed parsed-input contract and return a detached copy.
+
+    Invalid direct covariance is an actionable contract error. A future source
+    reader must retain authentic bad covariance as a source partial before
+    calling this function with covariance explicitly unavailable.
+    """
+    _validate(inputs)
+    return deepcopy(inputs)
+====================================================================================================
+a101/domain.py
+--- Expr#0
+@@ -1 +1 @@
+-'Closed semantic records shared by scientific tools and reasoning commits.'
++'A101 semantic records, canonical identities and sequence/schema parsing.'
+====================================================================================================
+a101/library/native_blast_standard_database_contracts.py
+--- assign PRODUCER_MANIFEST_SCHEMA
+@@ -1 +1 @@
+-PRODUCER_MANIFEST_SCHEMA = _object({'version': {'const': 'native_blast_standard_database_producer_manifest_v1'}, 'module_root': _ABS, 'entry_module': {'const': 'gene_annotation_episode.native_blast_standard_database_driver'}, 'python': _FILE, 'package_files': _array(_object({'relative_path': _STR, 'sha256': _SHA, 'size_bytes': _INT}), minItems=4), 'runtime_files': _array(_FILE)})
++PRODUCER_MANIFEST_SCHEMA = _object({'version': {'const': 'native_blast_standard_database_producer_manifest_v1'}, 'module_root': _ABS, 'entry_module': {'const': 'gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_driver'}, 'python': _FILE, 'package_files': _array(_object({'relative_path': _STR, 'sha256': _SHA, 'size_bytes': _INT}), minItems=4), 'runtime_files': _arr
+--- function _validate_producer_verification
+@@ -1 +1 @@
+-def _validate_producer_verification(bundle, artifacts, has):
++def _validate_producer_verification(bundle, artifacts, has, *, manifest_validator):
+@@ -18 +18 @@
+-        validate_standard_blast_database_producer_manifest(manifest, module_root=manifest['module_root'], python_executable=manifest['python']['path'])
++        manifest_validator(manifest, module_root=manifest['module_root'], python_executable=manifest['python']['path'])
+--- function validate_standard_blast_database_bundle
+@@ -2,203 +2 @@
+-    """Qualify a sealed record against an independently authenticated plan hash."""
+-    bundle, envelope = (_copy(bundle), _copy(attempt_identity))
+-    job = validate_standard_blast_database_job(original_job)
+-    _schema(bundle, NATIVE_BLAST_STANDARD_DATABASE_BUNDLE_SCHEMA)
+-    _schema(envelope, _object({'identity': IDENTITY_SCHEMA, 'attempt_directory': _ABS, 'plan_sha256': _SHA}))
+-    _absolute(envelope['attempt_directory'])
+-    plan = validate_standard_blast_database_plan(bundle['plan'])
+-    request = requested_job_from_standard_blast_database(job)
+-    _identity(envelope['identity'], request, final=True)
+-    if bundle['identity'] != envelope['identity'] or _digest(plan) != envelope['plan_sha256'] or plan['attempt_directory'] != envelope['attempt_directory'] or (plan['identity'] != {**envelope['identity'], 'execution_id': None}) or (bundle['requested_job'] != request) or (plan['requested_job'] != request) or (bundle['program'] != job['program']) or (bundle['mode'] != job['mode']):
+-        _fail('bundle_original_attempt_mismatch')
+-    compiled = _compile(job, input_paths=plan['input_paths'], database_paths=plan['database_paths'], output_directory=plan['output_directory'])
+-    if bundle['realized_argv'] != compiled['argv'] or bundle['environment'] != _effective_environment(plan):
+-        _fail('bundle_realized_command_mismatch')
+-    inputs, databases, outputs = (_unique(job[field], key) for field, key in (('inputs', 'input_key'), ('databases', 'database_key'), ('outputs', 'output_key')))
+-    artifacts = _unique(bundle['artifacts'], 'artifact_key')
+-    _disjoint([r['relative_path'] for r in artifacts.values()], 'artifact_path_overlap')
+-    for row in artifacts.values():
+-        _relative(row['relative_path'])
+-        if row['relative_path'] in {'bundle.json', '.native-blast-standard-database-owner.json'}:
+-            _fail('artifact_control_file_forbidden')
+-        owners = [k for k in ('input_key', 'database_key', 'output_key') if row[k] is not None]
+-        if row['role'] == 'producer_manifest':
+-            if owners or row['format'] not in {'json', 'opaque'} or row['fields'] or (row['delimiter'] is not None):
+-                _fail('producer_artifact_contract_invalid')
+-        elif len(owners) != 1:
+-            _fail('artifact_single_owner_required')
+-        if owners:
+-            owner = owners[0]
+-            selected = {'input_key': inputs, 'database_key': databases, 'output_key': outputs}[owner]
+-            if row[owner] not in selected:
+-                _fail('artifact_owner_not_selected')
+-            if owner == 'input_key':
+-                descriptor = selected[row[owner]]
+-                expected_path = str(PurePosixPath(plan['input_paths'][row[owner]]).relative_to(plan['attempt_directory']))
+-                if row['role'] != descriptor['role'] or row['format'] != descriptor['format'] or row['relative_path'] != expected_path or row['fields'] or (row['delimiter'] is not None):
+-                    _fail('input_artifact_contract_conflict')
+-            elif owner == 'database_key':
+-                if row['role'] not in {'database_manifest', 'preparation_receipt', 'metadata'} or row['format'] not in ({'json', 'opaque'} if row['role'] == 'database_manifest' else {'opaque'}) or row['fields'] or (row['delimiter'] is not None):
+-                    _fail('database_artifact_contract_conflict')
+-            else:
+-                descriptor = selected[row[owner]]
+-                resolved = next((r['path'] for r in compiled['outputs'] if r['output_key'] == row[owner]))
+-                path = str(PurePosixPath(plan['attempt_directory']) / row['relative_path'])
+-                if any((row[k] != descriptor[k] for k in ('role', 'format', 'fields', 'delimiter'))) or (descriptor['path_kind'] == 'file' and path != resolved) or (descriptor['path_kind'] == 'prefix' and (not _inside(path, str(PurePosixPath(resolved).parent)))):
+-                    _fail('output_artifact_contract_conflict')
+-    process, failures = (bundle['process'], bundle['failures'])
+-    started, rc = (process['started'], process['returncode'])
+-    sealed = _time(bundle['sealed_at'])
+-    if started:
+-        if rc is None or process['native_elapsed_seconds'] is None:
+-            _fail('started_process_measurements_required')
+-        if not _time(process['started_at']) <= _time(process['finished_at']) <= sealed:
+-            _fail('process_timestamp_order_invalid')
+-    elif any((process[k] is not None for k in ('returncode', 'started_at', 'finished_at', 'native_elapsed_seconds'))):
+-        _fail('unstarted_process_has_measurement')
+-    for row in failures:
+-        code = row['code']
+-        applicable = 'input_key' if code.startswith('input_') or code == 'producer_input_parser_unavailable' else 'database_key' if code.startswith('database_') or code == 'offline_configuration_unestablished' else 'output_key' if code.startswith('output_') or code == 'required_output_missing' else None
+-        for key, descriptors in (('input_key', inputs), ('database_key', databases), ('output_key', outputs)):
+-            if key == applicable and row[key] not in descriptors or (key != applicable and row[key] is not None):
+-                _fail('failure_descriptor_relationship_invalid')
+-        if row['artifact_key'] is not None:
+-            artifact = artifacts.get(row['artifact_key'])
+-            if artifact is None or (applicable is not None and artifact[applicable] != row[applicable]):
+-                _fail('failure_artifact_relationship_invalid')
+-            if applicable is None and (code != 'producer_manifest_invalid' or artifact['role'] != 'producer_manifest'):
+-                _fail('failure_unrelated_artifact')
+-        if code == 'producer_input_parser_unavailable':
+-            if row['input_key'] != job['query']['input_key'] or row['artifact_key'] is None or inputs[row['input_key']]['role'] != 'query_pssm':
+-                _fail('unavailable_input_parser_relationship_invalid')
+-        expected_rc = rc if applicable == 'output_key' or code == 'native_nonzero_exit' else None
+-        if row['native_returncode'] != expected_rc:
+-            _fail('failure_returncode_conflict')
+-        if code == 'native_nonzero_exit' and (not started or rc == 0):
+-            _fail('nonzero_failure_without_nonzero_exit')
+-        if started and (code.startswith(('input_', 'database_', 'software_', 'producer_')) or code in {'offline_configuration_unestablished', 'native_start_failed'}):
+-            _fail('started_process_setup_failure_conflict')
+-
+-    def has(code, key=None, value=None):
+-        return any((f['code'] == code and (key is None or f[key] == value) for f in failures))
+-    if started and rc != 0 and (not has('native_nonzero_exit')):
+-        _fail('nonzero_exit_failure_missing')
+-    if not started and (not any((f['code'] not in {'required_output_missing', 'native_nonzero_exit'} for f in failures))):
+-        _fail('unstarted_process_failure_missing')
+-    software = bundle['software']
+-    if software['selected'] != job['software']:
+-        _fail('software_selection_mismatch')
+-    if software['version_source'] is not None:
+-        _provenance(software['version_source'])
+-    if software['observed_sha256'] != job['software']['sha256']:
+-        code = 'software_missing' if software['observed_sha256'] is None else 'software_identity_mismatch'
+-        if started or not has(code):
+-            _fail('software_measurement_failure_missing')
+-    _validate_producer_verification(bundle, artifacts, has)
+-    used = {r['artifact_key'] for r in artifacts.values() if r['role'] == 'producer_manifest'}
+-    captures = _unique(bundle['input_manifest'], 'input_key')
+-    for key, descriptor in inputs.items():
+-        row = captures.get(key)
+-        if row is None:
+-            if started or not has('input_missing', 'input_key', key):
+-                _fail('input_capture_missing')
+-            continue
+-        a = artifacts.get(row['artifact_key'])
+-        if a is None or a['input_key'] != key or row['original_path'] != descriptor['path'] or (row['realized_path'] != plan['input_paths'][key]) or (row['expected_sha256'] != descriptor['sha256']) or (row['observed_sha256'] != a['sha256']) or (row['size_bytes'] != a['size_bytes']):
+-            _fail('input_capture_relationship_invalid')
+-        if row['observed_sha256'] != descriptor['sha256'] or row['size_bytes'] != descriptor['size_bytes']:
+-            if started or not has('input_identity_mismatch', 'input_key', key):
+-                _fail('input_mismatch_failure_missing')
+-        used.add(a['artifact_key'])
+-    if captures.keys() - inputs.keys():
+-        _fail('unselected_input_capture')
+-    db_captures = _unique(bundle['database_manifest'], 'database_key')
+-    if db_captures.keys() != databases.keys():
+-        _fail('database_capture_inventory_mismatch')
+-    if [r['database_key'] for r in bundle['database_manifest']] != [r['database_key'] for r in job['databases']]:
+-        _fail('database_capture_selected_order_mismatch')
+-
+-    def database_artifact(key, artifact_key, expected, role):
+-        failures_for_db = ('database_file_missing', 'database_file_unreadable', 'database_identity_mismatch', 'offline_configuration_unestablished')
+-        if role == 'database_manifest':
+-            failures_for_db += ('database_manifest_invalid',)
+-        if artifact_key is None:
+-            if started or not any((has(c, 'database_key', key) for c in failures_for_db)):
+-                _fail('database_artifact_missing_failure')
+-            return
+-        a = artifacts.get(artifact_key)
+-        if a is None or a['database_key'] != key or a['role'] != role:
+-            _fail('database_capture_artifact_relationship_invalid')
+-        if role == 'metadata' and artifact_key != _database_metadata_key(key, expected):
+-            _fail('database_metadata_artifact_identity_mismatch')
+-        if role == 'database_manifest' and a['format'] != 'json':
+-            if started or not has('database_manifest_invalid', 'database_key', key):
+-                _fail('database_manifest_format_failure_missing')
+-        if a['sha256'] != expected['sha256'] or a['size_bytes'] != expected['size_bytes']:
+-            if started or not has('database_identity_mismatch', 'database_key', key):
+-                _fail('database_artifact_mismatch_failure_missing')
+-        used.add(artifact_key)
+-    for key, db in databases.items():
+-        row, manifest = (db_captures[key], db['manifest'])
+-        if row['native_paths'] != db['native_paths']:
+-            _fail('database_capture_paths_mismatch')
+-        database_artifact(key, row['manifest_artifact_key'], db['manifest_file'], 'database_manifest')
+-        database_artifact(key, row['preparation_receipt_artifact_key'], manifest['preparation']['receipt'], 'preparation_receipt')
+-        if [r['identity'] for r in row['metadata_manifest_artifacts']] != manifest['metadata_manifests']:
+-            _fail('database_metadata_selection_mismatch')
+-        for metadata in row['metadata_manifest_artifacts']:
+-            database_artifact(key, metadata['artifact_key'], metadata['identity'], 'metadata')
+-        expected_sidecars = [(role, identity) for role, identity in _database_sidecars(db) if identity is not None]
+-        if [(r['role'], r['identity']) for r in row['sidecar_artifacts']] != expected_sidecars:
+-            _fail('database_sidecar_selection_mismatch')
+-        for sidecar in row['sidecar_artifacts']:
+-            database_artifact(key, sidecar['artifact_key'], sidecar['identity'], 'metadata')
+-        checks = _unique(row['checks'], 'path')
+-        files = {r['path']: r for r in manifest['files']}
+-        if checks.keys() != files.keys():
+-            _fail('database_check_inventory_mismatch')
+-        for path, check in checks.items():
+-            expected = files[path]
+-            if check['expected_sha256'] != expected['sha256']:
+-                _fail('database_check_expected_digest_conflict')
+-            _measurement(check, expected)
+-            code = {'missing': 'database_file_missing', 'mismatch': 'database_identity_mismatch', 'unreadable': 'database_file_unreadable'}.get(check['status'])
+-            if code and (not has(code, 'database_key', key)):
+-                _fail('database_check_failure_missing')
+-            if started and check['status'] != 'verified':
+-                _fail('started_process_unverified_database')
+-            if check['checked_at'] is not None and _time(check['checked_at']) > (_time(process['started_at']) if started else sealed):
+-                _fail('database_check_not_prelaunch')
+-    for check in bundle['producer_verification']['checks']:
+-        if check['checked_at'] is not None and _time(check['checked_at']) > (_time(process['started_at']) if started else sealed):
+-            _fail('producer_check_not_prelaunch')
+-    captures = _unique(bundle['output_manifest'], 'output_key')
+-    if captures.keys() != outputs.keys():
+-        _fail('output_capture_inventory_mismatch')
+-    for key, descriptor in outputs.items():
+-        row = captures[key]
+-        for artifact_key in row['artifact_keys']:
+-            a = artifacts.get(artifact_key)
+-            if a is None or a['output_key'] != key:
+-                _fail('output_capture_artifact_relationship_invalid')
+-            used.add(artifact_key)
+-        if descriptor['path_kind'] == 'file' and len(row['artifact_keys']) > 1:
+-            _fail('file_output_has_multiple_artifacts')
+-        presence = row['presence']
+-        if (presence == 'present') != bool(row['artifact_keys']) or (presence == 'not_emitted' and descriptor['path_kind'] != 'prefix') or (presence == 'missing' and descriptor['path_kind'] != 'file'):
+-            _fail('output_presence_relationship_invalid')
+-        if presence in {'missing', 'not_emitted'} and (not row['inventory_complete']):
+-            _fail('output_presence_requires_complete_inventory')
+-        if (presence == 'unknown' or not row['inventory_complete']) and (not any((f['output_key'] == key and f['code'].startswith('output_') for f in failures))):
+-            _fail('output_inventory_failure_missing')
+-        if descriptor['required'] and started and (rc == 0) and (not row['artifact_keys']):
+-            if not has('required_output_missing', 'output_key', key):
+-                _fail('required_output_failure_missing')
+-        if has('required_output_missing', 'output_key', key) and row['artifact_keys']:
+-            _fail('required_output_missing_with_present_artifact')
+-    if used != artifacts.keys():
+-        _fail('unassociated_artifact')
+-    q = job['query']
+-    expected_associations = {'query_input_key': q['input_key'], 'selected_options': job['options'], 'external_manifest_keys': [r['manifest_artifact_key'] for r in bundle['database_manifest'] if r['manifest_artifact_key'] is not None]}
+-    if bundle['associations'] != expected_associations:
+-        _fail('bundle_selected_associations_mismatch')
+-    return bundle
++    return _validate_bundle_profile(bundle, original_job=original_job, attempt_identity=attempt_identity, bundle_schema=NATIVE_BLAST_STANDARD_DATABASE_BUNDLE_SCHEMA, manifest_validator=validate_standard_blast_database_producer_manifest)
+--- function validate_standard_blast_database_producer_manifest
+@@ -2,22 +2 @@
+-    manifest = _copy(manifest)
+-    _schema(manifest, PRODUCER_MANIFEST_SCHEMA)
+-    _absolute(module_root)
+-    _absolute(python_executable)
+-    if manifest['module_root'] != module_root or manifest['python']['path'] != python_executable:
+-        _fail('producer_manifest_binding_mismatch')
+-    package = _unique(manifest['package_files'], 'relative_path')
+-    required = {'gene_annotation_episode/__init__.py', 'gene_annotation_episode/native_blast_standard_database_driver.py', 'gene_annotation_episode/native_blast_standard_database_contracts.py', 'gene_annotation_episode/blast_program_context.py'}
+-    if not required <= package.keys():
+-        _fail('producer_required_package_file_missing')
+-    for path in package:
+-        _relative(path)
+-    _disjoint(list(package), 'producer_package_path_overlap')
+-    runtime = _unique(manifest['runtime_files'], 'path')
+-    for row in [manifest['python'], *runtime.values()]:
+-        _absolute(row['path'])
+-        if _inside(row['path'], module_root, equal=True):
+-            _fail('producer_external_file_inside_module_root')
+-    if python_executable in runtime:
+-        _fail('producer_duplicate_interpreter_file')
+-    _disjoint([python_executable, *runtime], 'producer_external_path_overlap')
+-    return manifest
++    return _validate_producer_manifest_profile(manifest, module_root=module_root, python_executable=python_executable, producer_schema=PRODUCER_MANIFEST_SCHEMA, required_package_files={'gene_annotation_episode/__init__.py', 'gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_driver.py', 'gene_annotation_episode/episodic_workflow/root/a101/library/native_blast_stand
+--- ADDED assign _ORIGINAL_BUNDLE_SCHEMA
+_ORIGINAL_BUNDLE_SCHEMA = _copy(NATIVE_BLAST_STANDARD_DATABASE_BUNDLE_SCHEMA)
+--- ADDED assign _ORIGINAL_BUNDLE_SCHEMA['properties']['producer_verification']['properties']['manifest']
+_ORIGINAL_BUNDLE_SCHEMA['properties']['producer_verification']['properties']['manifest'] = _nullable(_ORIGINAL_PRODUCER_MANIFEST_SCHEMA)
+--- ADDED assign _ORIGINAL_PRODUCER_MANIFEST_SCHEMA
+_ORIGINAL_PRODUCER_MANIFEST_SCHEMA = _copy(PRODUCER_MANIFEST_SCHEMA)
+--- ADDED assign _ORIGINAL_PRODUCER_MANIFEST_SCHEMA['properties']['entry_module']['const']
+_ORIGINAL_PRODUCER_MANIFEST_SCHEMA['properties']['entry_module']['const'] = 'gene_annotation_episode.native_blast_standard_database_driver'
+--- ADDED assign _PRE_LIBRARY_PRIVATE_STANDARD_DATABASE_REQUIRED_FILES
+_PRE_LIBRARY_PRIVATE_STANDARD_DATABASE_REQUIRED_FILES = frozenset({'gene_annotation_episode/__init__.py', 'gene_annotation_episode/episodic_workflow/root/a101/library/blast_program_context.py', 'gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_contracts.py', 'gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_driver.py'})
+--- ADDED assign _PRE_NATIVE_PRIVATE_STANDARD_REQUIRED_FILES
+_PRE_NATIVE_PRIVATE_STANDARD_REQUIRED_FILES = frozenset({'gene_annotation_episode/__init__.py', 'gene_annotation_episode/episodic_workflow/root/a101/blast_program_context.py', 'gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_contracts.py', 'gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_driver.py'})
+--- ADDED function _has_pre_library_private_standard_database_profile
+def _has_pre_library_private_standard_database_profile(manifest):
+    if type(manifest) is not dict or manifest.get('entry_module') != 'gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_driver':
+        return False
+    files = manifest.get('package_files')
+    if type(files) is not list or any((type(row) is not dict or type(row.get('relative_path')) is not str for row in files)):
+        return False
+    return _PRE_LIBRARY_PRIVATE_STANDARD_DATABASE_REQUIRED_FILES <= {row['relative_path'] for row in files}
+--- ADDED function _has_pre_native_private_standard_profile
+def _has_pre_native_private_standard_profile(manifest):
+    """Select a source-evidenced prior inventory without changing its payload."""
+    if type(manifest) is not dict or manifest.get('entry_module') != 'gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_driver':
+        return False
+    files = manifest.get('package_files')
+    if type(files) is not list or any((type(row) is not dict or type(row.get('relative_path')) is not str for row in files)):
+        return False
+    return _PRE_NATIVE_PRIVATE_STANDARD_REQUIRED_FILES <= {row['relative_path'] for row in
+--- ADDED function _validate_bundle_profile
+def _validate_bundle_profile(bundle, *, original_job, attempt_identity, bundle_schema, manifest_validator):
+    """Qualify a sealed record against an independently authenticated plan hash."""
+    bundle, envelope = (_copy(bundle), _copy(attempt_identity))
+    job = validate_standard_blast_database_job(original_job)
+    _schema(bundle, bundle_schema)
+    _schema(envelope, _object({'identity': IDENTITY_SCHEMA, 'attempt_directory': _ABS, 'plan_sha256': _SHA}))
+    _absolute(envelope['attempt_directory'])
+    plan = validate_standard_blast_database_plan(bundle['plan'])
+    request = requested_job_
+--- ADDED function _validate_producer_manifest_profile
+def _validate_producer_manifest_profile(manifest, *, module_root, python_executable, producer_schema, required_package_files):
+    manifest = _copy(manifest)
+    _schema(manifest, producer_schema)
+    _absolute(module_root)
+    _absolute(python_executable)
+    if manifest['module_root'] != module_root or manifest['python']['path'] != python_executable:
+        _fail('producer_manifest_binding_mismatch')
+    package = _unique(manifest['package_files'], 'relative_path')
+    required = required_package_files
+    if not required <= package.keys():
+        _fail('producer_required_package_file_miss
+--- ADDED function validate_retained_standard_blast_database_bundle
+def validate_retained_standard_blast_database_bundle(bundle, *, original_job, attempt_identity):
+    """Read an independently bound bundle with its original producer identity."""
+    bundle = _copy(bundle)
+    verification = bundle.get('producer_verification') if type(bundle) is dict else None
+    manifest = verification.get('manifest') if type(verification) is dict else None
+    if type(manifest) is dict and manifest.get('entry_module') == 'gene_annotation_episode.native_blast_standard_database_driver':
+        return _validate_bundle_profile(bundle, original_job=original_job, attempt_identit
+--- ADDED function validate_retained_standard_blast_database_producer_manifest
+def validate_retained_standard_blast_database_producer_manifest(manifest, *, module_root, python_executable):
+    """Validate a supplied retained manifest; never select a live producer."""
+    manifest = _copy(manifest)
+    if type(manifest) is dict and manifest.get('entry_module') == 'gene_annotation_episode.native_blast_standard_database_driver':
+        return _validate_producer_manifest_profile(manifest, module_root=module_root, python_executable=python_executable, producer_schema=_ORIGINAL_PRODUCER_MANIFEST_SCHEMA, required_package_files={'gene_annotation_episode/__init__.py', 'gene_annot
+====================================================================================================
+a101/library/retained_input_authority/literature_assay_inputs.py
+--- REMOVED assign OBSERVATION_MODELS
+OBSERVATION_MODELS = ('none', 'known_normal_nonnegative_presence')
+--- REMOVED assign VARIANCE_STATUSES
+VARIANCE_STATUSES = ('known', 'estimated', 'unknown')
+--- REMOVED assign VERSION
+VERSION = 'a105_assay_inputs_v1'
+--- REMOVED assign _ARGS
+_ARGS = ('source_ref', 'source_kind', 'assay', 'primitives', 'covariance_source_ref', 'distinct_residual_variance', 'variance_status', 'observation_model', 'model_witnesses')
+--- REMOVED assign _COVARIANCE_FIELDS
+_COVARIANCE_FIELDS = ('version', 'primitive_order', 'primitive_measurement_keys', 'primitive_units', 'covariance', 'origin')
+--- REMOVED assign _MEASUREMENT_FIELDS
+_MEASUREMENT_FIELDS = ('witness', 'number_start', 'number_end', 'unit_start', 'unit_end')
+--- REMOVED assign _NUMBER
+_NUMBER = re.compile('[+−-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+−-]?\\d+)?\\Z')
+--- REMOVED assign _WITNESS_FIELDS
+_WITNESS_FIELDS = ('source_ref', 'representation', 'start', 'end', 'quote')
+--- REMOVED assign _WITNESS_LOCATION_FIELDS
+_WITNESS_LOCATION_FIELDS = ('source_ref', 'representation', 'start', 'end')
+--- REMOVED assign __all__
+__all__ = ['VERSION', 'PRIMITIVE_ORDER', 'ASSAY_LITERAL_FIELDS', 'ENDPOINTS', 'ARRANGEMENTS', 'SOURCE_KINDS', 'assay_arguments_schema', 'materialize_text_witness_inputs', 'read_assay_inputs']
+--- REMOVED class _Sources
+class _Sources:
+
+    def __init__(self, read_source):
+        if not callable(read_source):
+            _fail('source_reader_required', 'read_source')
+        self.read_source = read_source
+        self.cache = {}
+        self.references = []
+
+    def source(self, reference, representation):
+        _text(reference, 'source_ref')
+        if representation not in ('original', 'text'):
+            _fail('unknown_source_representation', 'representation')
+        key = (reference, representation)
+        if key not in self.cache:
+            result = self.read_source(reference, representation)
+   
+--- REMOVED function _covariance
+def _covariance(reference, observations, sources):
+    if reference is None:
+        return (None, None)
+    _text(reference, 'covariance_source_ref')
+    if any((observations[role] is None for role in PRIMITIVE_ORDER)):
+        _fail('complete_covariance_owners_required', 'covariance_source_ref')
+    raw = sources.source(reference, 'original')
+    value = _json_source(raw['content'], 'covariance_source_ref')
+    _keys(value, _COVARIANCE_FIELDS, 'covariance_source')
+    if value['version'] != 'a105_primitive_covariance_v1':
+        _fail('covariance_version_mismatch', 'covariance_source.versio
+--- REMOVED function _fail
+def _fail(code, field):
+    raise ExperimentalContractError(code, field)
+--- REMOVED function _finite
+def _finite(value, field):
+    try:
+        valid = type(value) in (int, float) and math.isfinite(value)
+    except OverflowError:
+        valid = False
+    if not valid:
+        _fail('finite_number_required', field)
+--- REMOVED function _index
+def _index(value, field):
+    if type(value) is not int or value < 0:
+        _fail('nonnegative_integer_offset_required', field)
+--- REMOVED function _interpretation
+def _interpretation(value, allowed, sources, field):
+    _keys(value, ('value', 'witnesses'), field)
+    if value['value'] not in allowed:
+        _fail('unknown_interpretation_value', field + '.value')
+    if not isinstance(value['witnesses'], list):
+        _fail('witness_list_required', field + '.witnesses')
+    witnesses = [sources.witness(item, f'{field}.witnesses[{i}]') for i, item in enumerate(value['witnesses'])]
+    unique = {(item['source_ref'], item['artifact_ref'], item['representation'], item['start'], item['end']) for item in witnesses}
+    required = 2 if value['value'] == 'conf
+--- REMOVED function _json_source
+def _json_source(raw, field):
+
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                _fail('duplicate_json_key', field)
+            result[key] = value
+        return result
+
+    def constant(_value):
+        _fail('finite_number_required', field)
+    try:
+        return json.loads(raw.decode('utf-8'), object_pairs_hook=pairs, parse_constant=constant)
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ExperimentalContractError('covariance_json_required', field) from error
+--- REMOVED function _keys
+def _keys(value, names, field):
+    if not isinstance(value, dict) or set(value) != set(names):
+        _fail('closed_fields_required', field)
+--- REMOVED function _numeric
+def _numeric(token, field):
+    if not _NUMBER.fullmatch(token):
+        _fail('literal_point_number_required', field)
+    try:
+        value = float(token.replace('−', '-'))
+    except (OverflowError, ValueError):
+        _fail('finite_number_required', field)
+    _finite(value, field)
+    if value == 0 and any((c in '123456789' for c in token.lower().split('e', 1)[0])):
+        _fail('numerical_model_range', field)
+    return value
+--- REMOVED function _text
+def _text(value, field):
+    if not isinstance(value, str) or not value.strip():
+        _fail('nonempty_source_token_required', field)
+--- REMOVED function _unit
+def _unit(raw, role, field):
+    compact = re.sub('\\s+', '', raw).replace('µ', 'u').replace('μ', 'u')
+    if role in ('q', 'g', 'u', 'v'):
+        units, canonical = ({'uM/min': 1.0, 'mM/min': 1000.0, 'nM/min': 0.001}, 'uM/min')
+    elif role == 'E':
+        units, canonical = ({'uM': 1.0, 'mM': 1000.0, 'nM': 0.001}, 'uM')
+    elif role == 'k':
+        units, canonical = ({'': 1.0, 'fraction': 1.0, 'dimensionless': 1.0, '1': 1.0}, 'dimensionless')
+    else:
+        units, canonical = ({'per_min_squared': 1.0, 'min^-2': 1.0, 'min−2': 1.0}, 'per_min_squared')
+    if compact not in units:
+      
+--- REMOVED function assay_arguments_schema
+def assay_arguments_schema():
+    """Closed selected-operation operands; all numbers come from source spans."""
+    witness = _witness_schema()
+    measurement = obj({'witness': deepcopy(witness), **{field: {'type': 'integer', 'minimum': 0} for field in ('number_start', 'number_end', 'unit_start', 'unit_end')}})
+
+    def interpretation(values):
+        return obj({'value': {'enum': list(values)}, 'witnesses': {'type': 'array', 'items': deepcopy(witness)}})
+    assay = obj({**{field: _nullable(deepcopy(witness)) for field in ASSAY_LITERAL_FIELDS}, 'endpoint': interpretation(ENDPOINTS), 'arrange
+--- REMOVED function materialize_text_witness_inputs
+def materialize_text_witness_inputs(value, *, read_source):
+    """Fill only exact native-text coordinate selections from authorized bytes.
+
+    Apply after closed input admission and before the original population
+    validator. Existing quoted operands are unchanged, so their ordinary
+    authentication still rejects mismatches. Image interpretations and other
+    objects are never converted into text witnesses.
+    """
+    sources = _Sources(read_source)
+    locations = set(_WITNESS_LOCATION_FIELDS)
+
+    def materialize(selected, field):
+        if isinstance(selected, dict):
+            ta
+--- REMOVED function read_assay_inputs
+def read_assay_inputs(arguments, *, read_source):
+    """Read a finite source assay graph; unknown operands remain exact nulls.
+
+    ``read_source`` authorizes actual received/scoped source references and returns
+    their retained bytes. Source labels/roles/model assumptions are explicitly
+    interpreted inputs. Matching quotes verifies neither biological attribution,
+    comparison validity, independence nor the requested sampling model.
+    """
+    _keys(arguments, _ARGS, 'arguments')
+    if arguments['source_kind'] not in SOURCE_KINDS:
+        _fail('unknown_source_kind', 'source_kind')
+ 
+====================================================================================================
+a101/library/retained_input_authority/literature_rate_native_inputs.py
+--- REMOVED assign MEANINGS
+MEANINGS = ('subject', 'construct', 'preparation', 'experiment', 'label', 'condition', 'endpoint', 'normalization')
+--- REMOVED assign RELATIONS
+RELATIONS = ('subject', 'endpoint', 'normalization')
+--- REMOVED assign SOURCE_KINDS
+SOURCE_KINDS = ('primary_source', 'retained_extraction', 'synthetic_fixture')
+--- REMOVED assign VERSION
+VERSION = 'a105_rate_extraction_v2'
+--- REMOVED assign _APPROX
+_APPROX = re.compile('(?:[~≈≃≅∼]|\\b(?:approximately|roughly|around|about|circa|approx\\.?))\\s*$', re.I)
+--- REMOVED assign _BASE
+_BASE = {'amount_rate': 'umol/min', 'concentration_rate': 'uM/min', 'turnover_rate': 'per_min', 'specific_amount_rate': 'umol/min/mg'}
+--- REMOVED assign _FIELD_BOUNDARY
+_FIELD_BOUNDARY = re.compile('</?(?:td|th|tr|table|thead|tbody|tfoot|p|div|section|sec|title|caption|list|list-item|li|hr|disp-formula)(?=[\\s/>])[^<>]*>', re.I)
+--- REMOVED assign _KEYS
+_KEYS = ('input_mode', 'source_ref', 'source_kind', 'experiment', 'arms', 'comparison', 'dependence', 'observation_model')
+--- REMOVED assign _LOWER
+_LOWER = re.compile('(>=?|≥|\\b(?:greater\\s+than(?:\\s+or\\s+equal\\s+to)?|more\\s+than|above|at\\s+least|no\\s+less\\s+than))\\s*$', re.I)
+--- REMOVED assign _PHYSICAL_UNIT
+_PHYSICAL_UNIT = re.compile('\\s*\\(?\\s*(?:[pnmuµμ]?mol|[pnmuµμ]?M|[kmunpµμ]?g|[munpµμ]?L|s|min|h|sec(?:onds?)?|hours?|minutes?|[kmunpµμ]?m|U)(?![A-Za-z_µμ])')
+--- REMOVED assign _PRINTED_UNIT
+_PRINTED_UNIT = re.compile('(?:[pnmuµμ]?mol\\s*(?:/\\s*(?:min|s)(?:\\s*/\\s*mg)?|\\s*(?:min|s)\\s*\\^?\\s*[-−⁻][1¹](?:\\s*mg\\s*\\^?\\s*[-−⁻][1¹])?)|[nmuµμ]M\\s*/\\s*min|U\\s*/\\s*mg|per_(?:min|s)|(?:min|s)\\s*\\^?\\s*[-−⁻][1¹])')
+--- REMOVED assign _UPPER
+_UPPER = re.compile('(<=?|≤|\\b(?:less\\s+than(?:\\s+or\\s+equal\\s+to)?|below|at\\s+most|no\\s+more\\s+than))\\s*$', re.I)
+--- REMOVED assign __all__
+__all__ = ['VERSION', 'NATIVE_BINDINGS', 'NATIVE_REASONS', 'rate_source_population_schema', 'read_rate_source_inputs', 'native_pair_reason', 'validate_native_extraction', 'validate_native_selection']
+--- REMOVED function _check_explicit_unit
+def _check_explicit_unit(number, selected, sources):
+    if number is None or selected is None or selected['canonical_unit'] is None:
+        return
+    ns = number['selector']
+    _, suffix = _field_contexts(sources, ns['witness'], ns['number_start'], ns['number_end'])
+    visible = html.unescape(_ALL_TAGS.sub('', suffix)).lstrip()
+    match = _PRINTED_UNIT.match(visible)
+    if match is None:
+        return
+    token = match.group()
+    if _unit_continuation(visible[match.end():]) or re.match('\\s+per\\b', visible[match.end():]):
+        _fail('partial_source_rate_unit', 'number')
+    if re.
+--- REMOVED function _converted
+def _converted(number, unit):
+    if number is None or unit is None or unit['canonical_unit'] is None:
+        return None
+    return _finite_fraction(Fraction(number['raw_number'].replace('−', '-')) * _scale(unit), 'number')
+--- REMOVED function _defined_unit
+def _defined_unit(selection, sources, endpoint):
+    """The existing definition semantics with native field-aware boundaries."""
+    _keys(selection, ('kind', 'witness', 'definition'), 'defined_unit')
+    if selection['kind'] != 'source_defined_rate_unit':
+        _fail('defined_unit_kind_required', 'defined_unit.kind')
+    _keys(selection['definition'], _DEFINITION_KEYS, 'defined_unit.definition')
+    unit = sources.witness(selection['witness'], 'defined_unit.witness')
+    prefix, suffix = _field_contexts(sources, unit, 0, len(unit['quote']))
+    before = prefix[-1:]
+    if before and (before
+--- REMOVED function _fail
+def _fail(code, field):
+    raise ExperimentalContractError(code, field)
+--- REMOVED function _field_contexts
+def _field_contexts(sources, witness, start, end):
+    """Read adjacent source text within its actual HTML/JATS field.
+
+    Structural tags bound fields; inline tags expose real lexical neighbours.
+    Witness bytes and absolute positions are never rewritten.
+    """
+    raw = sources.source(witness['source_ref'], witness['representation'])['content']
+    quote = witness['quote']
+    first = witness['start'] + len(quote[:start].encode('utf-8'))
+    last = witness['start'] + len(quote[:end].encode('utf-8'))
+    prefix = raw[:first].decode('utf-8', errors='ignore')
+    suffix = raw[last:].decode
+--- REMOVED function _finite_fraction
+def _finite_fraction(value, field):
+    try:
+        converted = float(value)
+    except (ValueError, OverflowError):
+        _fail('numerical_model_range', field)
+    if not math.isfinite(converted) or (converted == 0 and value != 0):
+        _fail('numerical_model_range', field)
+    return converted
+--- REMOVED function _interpret
+def _interpret(value, allowed, sources, field):
+    _keys(value, ('value', 'witnesses'), field)
+    if value['value'] not in allowed or not isinstance(value['witnesses'], list):
+        _fail('unsupported_native_interpretation', field)
+    witnesses = [sources.witness(w, field + '.witnesses') for w in value['witnesses']]
+    if value['value'] not in ('unknown', 'none', 'unspecified') and (not witnesses):
+        _fail('interpretation_witness_required', field)
+    return {'value': value['value'], 'witnesses': witnesses}
+--- REMOVED function _number
+def _number(selection, sources, role, *, count_unit_guard=True):
+    """Keep lower limits and approximations without accepting clipped numbers."""
+    _keys(selection, ('witness', 'number_start', 'number_end'), 'number_selector')
+    if role not in ('rate', 'spread', 'condition'):
+        _fail('unsupported_source_number_role', 'role')
+    witness = sources.witness(selection['witness'], 'number_selector.witness')
+    start, end = (selection['number_start'], selection['number_end'])
+    _index(start, 'number_start')
+    _index(end, 'number_end')
+    if not 0 <= start < end <= len(witness['quote
+--- REMOVED function _plain_unit
+def _plain_unit(raw):
+    text = re.sub('\\s+', '', html.unescape(_ALL_TAGS.sub('', raw)))
+    text = text.replace('µ', 'u').replace('μ', 'u')
+    text = text.translate(str.maketrans({'−': '-', '⁻': '-', '¹': '1'})).replace('^', '')
+    aliases = {name: name for name in RATE_UNITS}
+    for amount in ('umol', 'nmol', 'mmol'):
+        aliases[amount + 'min-1'] = amount + '/min'
+    for amount in ('umol', 'nmol'):
+        aliases[amount + 'min-1mg-1'] = amount + '/min/mg'
+    for amount in ('uM', 'nM'):
+        aliases[amount + 'min-1'] = amount + '/min'
+    for time in ('min', 's'):
+        for 
+--- REMOVED function _saved_number
+def _saved_number(value, field):
+    _keys(value, ('selector', 'raw_number', 'value', 'relation', 'approximate'), field)
+    selection = value['selector']
+    _keys(selection, ('witness', 'number_start', 'number_end'), field + '.selector')
+    _saved_witness(selection['witness'], field + '.witness')
+    start, end = (selection['number_start'], selection['number_end'])
+    if type(start) is not int or type(end) is not int or (not 0 <= start < end <= len(selection['witness']['quote'])) or (selection['witness']['quote'][start:end] != value['raw_number']) or (not isinstance(value['raw_number'], st
+--- REMOVED function _saved_unit
+def _saved_unit(value, field):
+    _keys(value, ('witness', 'raw_unit', 'canonical_unit', 'multiplier', 'source_defined_unit', 'unavailable_reason'), field)
+    _saved_witness(value['witness'], field + '.witness')
+    if value['raw_unit'] != value['witness']['quote']:
+        _fail('native_unit_record_mismatch', field)
+    defined = value['source_defined_unit']
+    if defined is not None:
+        _keys(defined, ('witness', 'raw_unit', 'canonical_unit', 'multiplier', 'definition'), field)
+        scale = _definition_scale(defined['definition'])
+        if defined['witness'] != value['witness'] 
+--- REMOVED function _saved_witness
+def _saved_witness(value, field):
+    _keys(value, ('source_ref', 'artifact_ref', 'representation', 'start', 'end', 'quote'), field)
+    if any((not isinstance(value[k], str) or not value[k] for k in ('source_ref', 'artifact_ref', 'quote'))) or value['representation'] not in ('original', 'text') or type(value['start']) is not int or (type(value['end']) is not int) or (not 0 <= value['start'] < value['end']) or (value['end'] - value['start'] != len(value['quote'].encode())):
+        _fail('native_witness_record_mismatch', field)
+--- REMOVED function _scale
+def _scale(unit):
+    if unit['source_defined_unit'] is not None:
+        return _definition_scale(unit['source_defined_unit']['definition']) / 1000000
+    parsed = _plain_unit(unit['raw_unit'])
+    if parsed is None:
+        _fail('unsupported_source_rate_unit', 'unit')
+    return parsed[1]
+--- REMOVED function _unit
+def _unit(selection, sources, endpoint):
+    if selection is None:
+        return None
+    if isinstance(selection, dict) and selection.get('kind') == 'source_defined_rate_unit':
+        defined = _defined_unit(selection, sources, endpoint)
+        scale = _definition_scale(defined['definition']) / 1000000
+        unit, witness, reason = ('umol/min/mg', defined['witness'], None)
+    else:
+        defined = None
+        witness = sources.witness(selection, 'unit_witness')
+        prefix, suffix = _field_contexts(sources, witness, 0, len(witness['quote']))
+        before = prefix[-1:]
+        if
+--- REMOVED function native_pair_reason
+def native_pair_reason(extraction):
+    comparison = extraction['native_context']['comparison']
+    for field in ('endpoint', 'normalization'):
+        value = comparison[field + '_relation']['value']
+        if value != 'same':
+            return 'source_' + field + '_relationship_' + value
+    rows = extraction['rows']
+    if len(rows) == 2:
+        first, second = (row['source'] for row in rows)
+
+        def byte_identity(witness):
+            return None if witness is None else tuple((witness[k] for k in ('source_ref', 'artifact_ref', 'start', 'end')))
+        if first['location'] is not N
+--- REMOVED function rate_source_population_schema
+def rate_source_population_schema():
+    witness = _witness_schema()
+    number = number_selector_schema()
+    unit = {'anyOf': [deepcopy(witness), defined_rate_unit_schema(), {'type': 'null'}]}
+
+    def interpreted(values):
+        return obj({'value': {'enum': list(values)}, 'witnesses': {'type': 'array', 'items': deepcopy(witness)}})
+    uncertainty = obj({'kind': {'enum': list(UNCERTAINTY_KINDS)}, 'magnitude': _nullable(deepcopy(number)), 'unit': deepcopy(unit), 'kind_witnesses': {'type': 'array', 'items': deepcopy(witness)}, 'count': _nullable(deepcopy(number)), 'sampling_basis': interpre
+--- REMOVED function read_rate_source_inputs
+def read_rate_source_inputs(arguments, *, read_source):
+    """Read exactly selected source facts, retaining unknown meanings and units."""
+    _keys(arguments, _KEYS, 'arguments')
+    if arguments['input_mode'] != 'native_source_spans' or arguments['source_kind'] not in SOURCE_KINDS:
+        _fail('unsupported_native_rate_input', 'arguments')
+    sources = _Sources(read_source)
+    root = sources.source(arguments['source_ref'], 'original')
+
+    def witness(value, field):
+        return None if value is None else sources.witness(value, field)
+    experiment = witness(arguments['experiment'], '
+--- REMOVED function validate_native_extraction
+def validate_native_extraction(value):
+    """Validate saved operand relationships without acquiring source bytes."""
+    _keys(value, ('version', 'subject', 'experiment', 'rows', 'native_context'), 'extraction')
+    if value['version'] != VERSION or not isinstance(value['rows'], list):
+        _fail('unsupported_extraction_version', 'version')
+    context = value['native_context']
+    _keys(context, ('source_ref', 'source_kind', 'experiment', 'comparison', 'model', 'source_refs'), 'native_context')
+    if context['source_kind'] not in SOURCE_KINDS:
+        _fail('unknown_source_kind', 'native
+--- REMOVED function validate_native_selection
+def validate_native_selection(arguments, extraction):
+    """Compare saved enriched operands to their original, unmodified selection."""
+    _keys(arguments, _KEYS, 'arguments')
+    context = extraction['native_context']
+
+    def selected_witness(w):
+        return None if w is None else {k: w[k] for k in ('source_ref', 'representation', 'start', 'end', 'quote')}
+
+    def selected_number(n):
+        return None if n is None else {**n['selector'], 'witness': selected_witness(n['selector']['witness'])}
+
+    def selected_unit(u):
+        return None if u is None else _definition_selection(u['sour
+====================================================================================================
+a101/library/retained_input_authority/literature_partner_source_fields.py
+--- REMOVED assign _ALL_TAGS
+_ALL_TAGS = re.compile(_TAG)
+--- REMOVED assign _APPROX
+_APPROX = re.compile('(?:[~≈≃≅∼]|\\b(?:approximately|about|circa|approx\\.?))\\s*$', re.I)
+--- REMOVED assign _BETWEEN_AND
+_BETWEEN_AND = re.compile('\\bbetween\\b' + _SCOPE_TEXT + '\\band\\s*$', re.I)
+--- REMOVED assign _BETWEEN_FIRST_PREFIX
+_BETWEEN_FIRST_PREFIX = re.compile('\\bbetween\\b' + _SCOPE_TEXT + '$', re.I)
+--- REMOVED assign _BETWEEN_FIRST_SUFFIX
+_BETWEEN_FIRST_SUFFIX = re.compile('^' + _SCOPE_TEXT + '\\band\\b', re.I)
+--- REMOVED assign _INITIAL_TAGS
+_INITIAL_TAGS = re.compile('^(?:\\s*' + _TAG + ')+')
+--- REMOVED assign _LOWER
+_LOWER = re.compile('(?:>=?|≥|\\b(?:greater\\s+than(?:\\s+or\\s+equal\\s+to)?|above|at\\s+least|no\\s+less\\s+than))\\s*$', re.I)
+--- REMOVED assign _NUMBER
+_NUMBER = re.compile('[+−-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+−-]?[0-9]+)?\\Z')
+--- REMOVED assign _PM
+_PM = re.compile('(?:±|\\+\\s*/\\s*-|\\+\\s*−)\\s*$')
+--- REMOVED assign _POWER_MINUS_ONE
+_POWER_MINUS_ONE = '\\s*\\^?\\s*[-−⁻]\\s*[1¹]'
+--- REMOVED assign _PRINTED_RATE_UNIT
+_PRINTED_RATE_UNIT = re.compile('(?:[pnuµμ]mol\\s*(?:/\\s*min\\s*/\\s*mg|\\s*min' + _POWER_MINUS_ONE + '\\s*mg' + _POWER_MINUS_ONE + ')|[unµμ]M\\s*(?:/\\s*min|\\s*min' + _POWER_MINUS_ONE + ')|per_?\\s*(?:min|s)|(?:min|s)' + _POWER_MINUS_ONE + '|1\\s*/\\s*(?:min|s))')
+--- REMOVED assign _RATE_UNIT_START
+_RATE_UNIT_START = re.compile('(?:[pnumµμ]?mol|[unmµμ]?M|kg|mg|g|per_?\\s*(?:min|s)|min|s|1\\s*/)(?=\\b|min|[/_^−⁻-])')
+--- REMOVED assign _SCALE
+_SCALE = {'pmol/min/mg': ('pmol/min/mg', 1), 'nmol/min/mg': ('pmol/min/mg', 1000), 'umol/min/mg': ('pmol/min/mg', 1000000), 'per_min': ('per_min', 1), 'per_s': ('per_min', 60), 'uM/min': ('uM/min', 1), 'nM/min': ('uM/min', 0.001)}
+--- REMOVED assign _SCOPE_ADDITION
+_SCOPE_ADDITION = re.compile('(?P<items>' + _SCOPE_ITEM + '(?:(?:\\s*,\\s*(?:and\\s+)?|\\s+and\\s+)' + _SCOPE_ITEM + ')*)\\s+(?:was|were)\\s+added\\s+to\\s+(?:each\\s+respective|the\\s+respective|their\\s+respective)\\s+(?P<vessel>flasks?|wells?|vessels?|tubes?|cuvettes?|containers?)\\s*(?=[.;!?]|$)', re.I)
+--- REMOVED assign _SCOPE_ALLOCATION
+_SCOPE_ALLOCATION = re.compile('\\s*' + _SCOPE_CARDINAL + '\\s+(?P<vessels>' + _SCOPE_VESSELS + ')(?:\\s+of\\s+(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)\\s*(?:[uµμ]l|ml|L)\\s+each)?\\s*,?\\s+and\\s+', re.I)
+--- REMOVED assign _SCOPE_ALLOCATION_VERB
+_SCOPE_ALLOCATION_VERB = re.compile('\\b(?:was|were|is|are)\\s+(?:(?:equally|evenly)\\s+)?(?:divided|distributed|split|allocated|dispensed)\\s*$', re.I)
+--- REMOVED assign _SCOPE_BARE_FORMAT
+_SCOPE_BARE_FORMAT = re.compile('</?' + _SCOPE_FORMAT_NAMES + '\\s*/?>', re.I)
+--- REMOVED assign _SCOPE_CANDIDATE_TAG
+_SCOPE_CANDIDATE_TAG = '</?' + _SCOPE_FORMAT_NAMES + '(?=[\\s/>])[^<>]*>'
+--- REMOVED assign _SCOPE_CARDINAL
+_SCOPE_CARDINAL = '(?:[1-9][0-9]*|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|(?:twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:[ -](?:one|two|three|four|five|six|seven|eight|nine))?)'
+--- REMOVED assign _SCOPE_FORMAT_NAMES
+_SCOPE_FORMAT_NAMES = '(?:i|em|b|strong|span|sup|sub|italic|bold)'
+--- REMOVED assign _SCOPE_ITEM
+_SCOPE_ITEM = '(?:' + _SCOPE_QUALIFIER + ')*(?:' + _SCOPE_NUMBER + '|' + _SCOPE_MARKER + ')\\s+' + _SCOPE_UNIT + '\\s+' + _SCOPE_LABEL_TOKEN + '(?:\\s+' + _SCOPE_LABEL_TOKEN + ')*'
+--- REMOVED assign _SCOPE_LABEL_TOKEN
+_SCOPE_LABEL_TOKEN = '(?!(?:between|from|to|range|interval|CI|confidence|and|or|was|were|added|SD|SEM|standard|error|uncertainty|approximately|roughly|around|about|circa|approx|less|greater|more|above|below|at|no)\\b)[A-Za-z][A-Za-z0-9_-]*'
+--- REMOVED assign _SCOPE_MARKER
+_SCOPE_MARKER = '__selected_scalar__'
+--- REMOVED assign _SCOPE_NUMBER
+_SCOPE_NUMBER = _NUMBER.pattern.removesuffix('\\Z')
+--- REMOVED assign _SCOPE_QUALIFIER
+_SCOPE_QUALIFIER = '(?:[<>]=?|[≤≥~≈≃≅∼]|approximately|roughly|around|about|circa|approx\\.?|less\\s+than(?:\\s+or\\s+equal\\s+to)?|greater\\s+than(?:\\s+or\\s+equal\\s+to)?|more\\s+than|above|below|at\\s+(?:least|most)|no\\s+(?:less|more)\\s+than)\\s*'
+--- REMOVED assign _SCOPE_TEXT
+_SCOPE_TEXT = '(?:' + _SCOPE_CANDIDATE_TAG + '|(?!(?:[;!?\\n]|(?<!approx)\\.(?![0-9]|[eE][+−-]?[0-9]))).)*'
+--- REMOVED assign _SCOPE_UNIT
+_SCOPE_UNIT = '(?:[nmuµμ]?M|[muµμ]?g\\s*/\\s*(?:ml|mL|L))'
+--- REMOVED assign _SCOPE_VESSELS
+_SCOPE_VESSELS = '(?:flasks|wells|vessels|tubes|cuvettes|containers)'
+--- REMOVED assign _SOFT_BREAK_TAG
+_SOFT_BREAK_TAG = re.compile('</?(?:br|break)(?=[\\s/>])[^<>]*>\\Z', re.I)
+--- REMOVED assign _STRUCTURAL_TAG
+_STRUCTURAL_TAG = re.compile('</?(?:table|thead|tbody|tfoot|tr|td|th|caption|colgroup|col|p|div|section|sec|title|list|list-item|li|hr|disp-formula|br|break)(?=[\\s/>])[^<>]*>\\Z', re.I)
+--- REMOVED assign _TABLE_BOUNDARY
+_TABLE_BOUNDARY = re.compile('</?(?:table|thead|tbody|tfoot|tr|td|th|caption|colgroup|col)(?=[\\s/>])[^<>]*>', re.I)
+--- REMOVED assign _TAG
+_TAG = '</?[A-Za-z_][^<>]*>'
+--- REMOVED assign _TERMINAL_TAGS
+_TERMINAL_TAGS = re.compile('(?:' + _TAG + '\\s*)+$')
+--- REMOVED assign _UPPER
+_UPPER = re.compile('(<=?|≤|\\b(?:less\\s+than(?:\\s+or\\s+equal\\s+to)?|below|at\\s+most|no\\s+more\\s+than))\\s*$', re.I)
+--- REMOVED assign __all__
+__all__ = ['number_selector_schema', 'read_source_number', 'read_source_rate_unit', 'convert_source_number', 'validate_source_spread_unit']
+--- REMOVED function _between_numeric_scope
+def _between_numeric_scope(prefix, suffix):
+    """Classify one candidate's syntax, never its scientific operands.
+
+    Only a completely recognized allocation followed by a separate, completed
+    amount-addition list escapes the broad guard. Unknown syntax stays unknown.
+    Callers detect candidates separately: absence of a candidate is not positive
+    evidence of coordination. Inline markup is ignored only for this syntactic
+    test, using bare recognized format tags only; original contexts, source
+    bytes and selectors remain untouched. Contexts are already entity-decoded.
+    """
+   
+--- REMOVED function _contexts
+def _contexts(sources, witness, start, end):
+    return _edge_contexts(*_raw_contexts(sources, witness, start, end))
+--- REMOVED function _edge_contexts
+def _edge_contexts(prefix, suffix):
+
+    def visible(match):
+        return _ALL_TAGS.sub(lambda tag: ' ' if _STRUCTURAL_TAG.fullmatch(tag.group()) else '', match.group())
+    return (html.unescape(_TERMINAL_TAGS.sub(visible, prefix)), html.unescape(_INITIAL_TAGS.sub(visible, suffix)))
+--- REMOVED function _fail
+def _fail(code, field):
+    raise ExperimentalContractError(code, field)
+--- REMOVED function _interval_contexts
+def _interval_contexts(sources, witness, start, end):
+    """Expose direct interval syntax through actual markup inside one field."""
+
+    def visible(tag):
+        return ' ' if _STRUCTURAL_TAG.fullmatch(tag.group()) else ''
+    return tuple((html.unescape(_ALL_TAGS.sub(visible, value)) for value in _table_contexts(sources, witness, start, end)))
+--- REMOVED function _rate_unit
+def _rate_unit(raw):
+    fragments = [html.unescape(_ALL_TAGS.sub('', part)).strip() for part in _TABLE_BOUNDARY.split(raw)]
+    if sum((bool(part) for part in fragments)) > 1:
+        _fail('unsupported_source_rate_unit', 'unit_witness')
+    text = html.unescape(_ALL_TAGS.sub('', raw))
+    text = re.sub('\\s+', '', text).replace('µ', 'u').replace('μ', 'u')
+    text = text.translate(str.maketrans({'−': '-', '⁻': '-', '¹': '1'})).replace('^', '')
+    aliases = {key: key for key in _SCALE}
+    for amount in ('pmol', 'nmol', 'umol'):
+        aliases[amount + 'min-1mg-1'] = amount + '/min/mg'
+    
+--- REMOVED function _raw_contexts
+def _raw_contexts(sources, witness, start, end):
+    raw = sources.source(witness['source_ref'], witness['representation'])['content']
+    quote = witness['quote']
+    absolute_start = witness['start'] + len(quote[:start].encode('utf-8'))
+    absolute_end = witness['start'] + len(quote[:end].encode('utf-8'))
+    prefix = raw[:absolute_start].decode('utf-8', errors='ignore')
+    suffix = raw[absolute_end:].decode('utf-8', errors='ignore')
+    return (prefix, suffix)
+--- REMOVED function _relation
+def _relation(prefix, suffix, *, role, interval_contexts=None):
+    interval_prefix, interval_suffix = (prefix, suffix) if interval_contexts is None else interval_contexts
+    relative = '(?:CV|RSD|coefficient\\s+of\\s+variation|relative\\s+(?:standard\\s+)?(?:error|uncertainty|deviation))'
+    if role == 'spread' and (re.match('\\s*\\(?\\s*(?:%|percent\\b|per\\s+cent\\b|' + relative + '\\b)', suffix, re.I) or re.search('(?:%|\\bpercent|\\bper\\s+cent)\\s*\\)?\\s*[:=]?\\s*$', prefix, re.I) or re.search('\\b' + relative + '\\s*(?:was|is|of|[:=])?\\s*$', prefix, re.I)):
+        _fail('relative_s
+--- REMOVED function _selected_witness
+def _selected_witness(witness):
+    """Remove only the host-added artifact identity before revalidating bytes."""
+    return {name: witness[name] for name in ('source_ref', 'representation', 'start', 'end', 'quote')}
+--- REMOVED function _soft_break_numeric_token
+def _soft_break_numeric_token(sources, witness, start, end, token, *, pm_spread):
+    """A soft break cannot hide a sign, decimal marker or exponent fragment.
+
+    This guard does not join independent digits across line breaks. Real source
+    whitespace and definite structural field boundaries remain separators.
+    """
+    prefix, suffix = _raw_contexts(sources, witness, start, end)
+
+    def has_soft_break(edge):
+        return edge is not None and any((_SOFT_BREAK_TAG.fullmatch(tag.group()) for tag in _ALL_TAGS.finditer(edge.group())))
+
+    def visible(tag):
+        return ' ' if _STRUCTURA
+--- REMOVED function _table_contexts
+def _table_contexts(sources, witness, start, end):
+    """Return original lexical neighbours within definite table boundaries."""
+    prefix, suffix = _raw_contexts(sources, witness, start, end)
+    boundaries = list(_TABLE_BOUNDARY.finditer(prefix))
+    if boundaries:
+        prefix = prefix[boundaries[-1].end():]
+    boundary = _TABLE_BOUNDARY.search(suffix)
+    if boundary:
+        suffix = suffix[:boundary.start()]
+    return (prefix, suffix)
+--- REMOVED function _unit_contexts
+def _unit_contexts(sources, witness, start, end):
+    """Lexical unit neighbours cannot continue through another table field."""
+    return _edge_contexts(*_table_contexts(sources, witness, start, end))
+--- REMOVED function _unit_continuation
+def _unit_continuation(suffix):
+    after = suffix[:1]
+    return bool(after and (after.isalnum() or after in '/_^−-⁻¹%')) or bool(re.match('\\s+(?:[/^]|[A-Za-zµμ]+\\s*(?:\\^?\\s*[-−⁻]\\s*[1¹]|/))', suffix))
+--- REMOVED function convert_source_number
+def convert_source_number(number, unit):
+    """Convert decimal source token exactly before its final float rounding."""
+    _keys(number, ('selector', 'raw_number', 'value', 'relation'), 'source_number')
+    _keys(unit, ('witness', 'raw_unit', 'canonical_unit', 'multiplier'), 'source_unit')
+    if not isinstance(number['raw_number'], str) or not _NUMBER.fullmatch(number['raw_number']) or number['relation'] not in ('point', 'lt', 'le'):
+        _fail('invalid_source_number_record', 'source_number')
+    try:
+        finite_value = type(number['value']) in (int, float) and math.isfinite(number['
+--- REMOVED function read_source_number
+def read_source_number(selector, *, sources, role):
+    """Read one full point/upper-limit token and its exact source provenance.
+
+    ``value`` is the finite native float; ``raw_number`` remains the exact token
+    for decimal-rational conversion. Source offsets are bytes while selector
+    offsets within a verified UTF8 quote are Unicode character positions.
+    """
+    _keys(selector, ('witness', 'number_start', 'number_end'), 'number_selector')
+    if role not in ('rate', 'spread', 'condition'):
+        _fail('unsupported_source_number_role', 'role')
+    witness = sources.witness(selector[
+--- REMOVED function read_source_rate_unit
+def read_source_rate_unit(witness, *, sources):
+    """Read one complete supported rate unit without assigning its denominator."""
+    enriched = sources.witness(witness, 'unit_witness')
+    raw = enriched['quote']
+    prefix, suffix = _unit_contexts(sources, enriched, 0, len(raw))
+    before = prefix[-1:]
+    if before and (before.isalpha() or before in '_µμ/⁻¹^') or _unit_continuation(suffix):
+        _fail('partial_source_rate_unit', 'unit_witness')
+    canonical, multiplier = _rate_unit(raw)
+    return {'witness': enriched, 'raw_unit': raw, 'canonical_unit': canonical, 'multiplier': multip
+--- REMOVED function validate_source_spread_unit
+def validate_source_spread_unit(number, unit, *, sources):
+    """Require any explicitly printed spread unit to match its supplied scale.
+
+    No adjacent unit means the caller's supplied common-unit interpretation is
+    retained. An explicitly printed supported rate unit is checked independently
+    of that interpretation, including its multiplier. A percentage is never an
+    absolute rate uncertainty. This function returns ``None`` on success.
+    """
+    _keys(number, ('selector', 'raw_number', 'value', 'relation'), 'source_number')
+    _keys(unit, ('witness', 'raw_unit', 'canonical_unit'
+====================================================================================================
+a101/library/retained_input_authority/literature_partner_defined_units.py
+--- REMOVED assign _AMOUNT_SCALES
+_AMOUNT_SCALES = {'pmol': 1, 'nmol': 1000, 'umol': 1000000}
+--- REMOVED assign _BRIDGE
+_BRIDGE = re.compile('one\\s+unit\\s+was\\s+(?:equivalent\\s+to|defined\\s+as)\\s+', re.I)
+--- REMOVED assign _CLAUSE
+_CLAUSE = re.compile('[+\\-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+\\-]?[0-9]+)?\\s*(?:pmol|nmol|umol)\\s+(?:of\\s+)?[^,;.!?]+?\\s+per\\s+(?:min|minute|s|second)\\Z')
+--- REMOVED assign _EVENT
+_EVENT = re.compile('(?:the\\s+)?(?:oxidation|reduction|formation)\\s+of\\s+', re.I)
+--- REMOVED assign _TIME_SCALES
+_TIME_SCALES = {'min': 1, 'minute': 1, 's': 60, 'second': 60}
+--- REMOVED assign _UNIT_KEYS
+_UNIT_KEYS = ('witness', 'raw_unit', 'canonical_unit', 'multiplier', 'definition')
+--- REMOVED assign _U_RATE
+_U_RATE = re.compile('U\\s*/\\s*mg')
+--- REMOVED assign _U_START
+_U_START = re.compile('(?:[munµμ]?U|units?)\\b', re.I)
+--- REMOVED assign _WITNESS_KEYS
+_WITNESS_KEYS = ('source_ref', 'representation', 'start', 'end', 'quote', 'artifact_ref')
+--- REMOVED assign __all__
+__all__ = ['defined_rate_unit_schema', 'parsed_defined_rate_unit_schema', 'read_defined_rate_unit', 'convert_defined_source_number', 'validate_defined_spread_unit']
+--- REMOVED function _contained
+def _contained(inner, outer, field):
+    _witness_shape(inner, field)
+    _witness_shape(outer, field)
+    identity = ('source_ref', 'artifact_ref', 'representation')
+    if any((inner[name] != outer[name] for name in identity)):
+        _fail('defined_unit_source_mismatch', field)
+    if not outer['start'] <= inner['start'] < inner['end'] <= outer['end']:
+        _fail('defined_unit_containment_required', field)
+    left, right = (inner['start'] - outer['start'], inner['end'] - outer['start'])
+    if outer['quote'].encode()[left:right] != inner['quote'].encode():
+        _fail('defined_unit_c
+--- REMOVED function _definition_scale
+def _definition_scale(definition):
+    """Validate saved internal associations; no sources or scientific inference."""
+    _keys(definition, _DEFINITION_KEYS, 'unit.definition')
+    for name in _DEFINITION_KEYS:
+        if name != 'amount':
+            _witness_shape(definition[name], 'unit.definition.' + name)
+    bridge, clause = (definition['bridge'], definition['clause'])
+    _contained(clause, bridge, 'unit.definition.clause')
+    amount = definition['amount']
+    coefficient = _number_fraction(amount, 'unit.definition.amount', point=True)
+    if coefficient <= 0:
+        _fail('defined_u
+--- REMOVED function _definition_selection
+def _definition_selection(unit):
+    definition = {name: _selected_witness(value) for name, value in unit['definition'].items() if name != 'amount'}
+    amount = deepcopy(unit['definition']['amount']['selector'])
+    amount['witness'] = _selected_witness(amount['witness'])
+    definition['amount'] = amount
+    return {'kind': 'source_defined_rate_unit', 'witness': _selected_witness(unit['witness']), 'definition': definition}
+--- REMOVED function _fail
+def _fail(code, field):
+    raise ExperimentalContractError(code, field)
+--- REMOVED function _finite_float
+def _finite_float(exact, field):
+    try:
+        value = float(exact)
+    except (OverflowError, ValueError) as error:
+        raise ExperimentalContractError('numerical_model_range', field) from error
+    if not math.isfinite(value) or (value == 0 and exact != 0):
+        _fail('numerical_model_range', field)
+    return value
+--- REMOVED function _normal
+def _normal(text):
+    return re.sub('\\s+', ' ', unicodedata.normalize('NFKC', text)).strip()
+--- REMOVED function _number_fraction
+def _number_fraction(number, field, *, point=False):
+    _keys(number, ('selector', 'raw_number', 'value', 'relation'), field)
+    selector = number['selector']
+    _keys(selector, ('witness', 'number_start', 'number_end'), field + '.selector')
+    witness = selector['witness']
+    _witness_shape(witness, field + '.selector.witness')
+    start, end = (selector['number_start'], selector['number_end'])
+    if type(start) is not int or type(end) is not int or (not 0 <= start < end <= len(witness['quote'])) or (witness['quote'][start:end] != number['raw_number']):
+        _fail('defined_unit_numbe
+--- REMOVED function _quantity_token
+def _quantity_token(text):
+    return _normal(text).replace('μ', 'u').replace('µ', 'u')
+--- REMOVED function _source_witness
+def _source_witness(value, sources, field):
+    """Accept the enriched endpoint only after revalidating its original fields."""
+    if isinstance(value, dict) and set(value) == set(_WITNESS_KEYS):
+        actual = sources.witness(_selected_witness(value), field)
+        if actual != value:
+            _fail('defined_unit_endpoint_mismatch', field)
+        return actual
+    return sources.witness(value, field)
+--- REMOVED function _whole_entity
+def _whole_entity(entity, outer, field):
+    _contained(entity, outer, field)
+    raw = outer['quote'].encode()
+    left, right = (entity['start'] - outer['start'], entity['end'] - outer['start'])
+    before = raw[:left].decode()[-1:]
+    after = raw[right:].decode()[:1]
+    if before and (before.isalnum() or before == '_') or (after and (after.isalnum() or after == '_')):
+        _fail('defined_unit_partial_entity', field)
+--- REMOVED function _witness_shape
+def _witness_shape(value, field):
+    _keys(value, _WITNESS_KEYS, field)
+    for key in ('source_ref', 'artifact_ref', 'quote'):
+        if not isinstance(value[key], str) or not value[key]:
+            _fail('defined_unit_witness_required', field)
+    if value['representation'] not in ('original', 'text') or type(value['start']) is not int or type(value['end']) is not int or (not 0 <= value['start'] < value['end']) or (value['end'] - value['start'] != len(value['quote'].encode('utf-8'))):
+        _fail('defined_unit_witness_span_mismatch', field)
+--- REMOVED function convert_defined_source_number
+def convert_defined_source_number(number, unit):
+    """Convert a source literal using its retained, validated definition."""
+    _keys(unit, _UNIT_KEYS, 'defined_unit')
+    _witness_shape(unit['witness'], 'defined_unit.witness')
+    if not isinstance(unit['raw_unit'], str) or unit['raw_unit'] != unit['witness']['quote'] or re.sub('\\s+', '', unit['raw_unit']) != 'U/mg' or (unit['canonical_unit'] != 'pmol/min/mg') or (type(unit['multiplier']) not in (int, float)):
+        _fail('defined_unit_record_mismatch', 'defined_unit')
+    scale = _definition_scale(unit['definition'])
+    if unit['multip
+--- REMOVED function read_defined_rate_unit
+def read_defined_rate_unit(selection, *, sources, endpoint):
+    """Read one selected endpoint-specific U/mg definition, without an alias."""
+    _keys(selection, ('kind', 'witness', 'definition'), 'defined_unit')
+    if selection['kind'] != 'source_defined_rate_unit':
+        _fail('defined_unit_kind_required', 'defined_unit.kind')
+    _keys(selection['definition'], _DEFINITION_KEYS, 'defined_unit.definition')
+    unit = sources.witness(selection['witness'], 'defined_unit.witness')
+    prefix, suffix = _contexts(sources, unit, 0, len(unit['quote']))
+    before = prefix[-1:]
+    if before and 
+--- REMOVED function validate_defined_spread_unit
+def validate_defined_spread_unit(number, unit, *, sources):
+    """Check any printed spread unit, including unselected U/mg on plain units.
+
+    Plain parsed units are accepted for the consumer's independently selected
+    spread route. They retain the original scalar guard, plus rejection of a
+    source-defined unit that was not actually selected with its definition.
+    """
+    if not isinstance(unit, dict):
+        _fail('defined_unit_record_mismatch', 'defined_unit')
+    _keys(number, ('selector', 'raw_number', 'value', 'relation'), 'source_number')
+    if 'definition' not in unit:
+      
+====================================================================================================
+a103/domain.py
+--- Expr#0
+@@ -1 +1 @@
+-'Closed semantic records shared by scientific tools and reasoning commits.'
++'A103 semantic records, canonical identities and sequence/schema parsing.'
+====================================================================================================
+a103/native_blast_standard_database_contracts.py
+--- assign PRODUCER_MANIFEST_SCHEMA
+@@ -1 +1 @@
+-PRODUCER_MANIFEST_SCHEMA = _object({'version': {'const': 'native_blast_standard_database_producer_manifest_v1'}, 'module_root': _ABS, 'entry_module': {'const': 'gene_annotation_episode.native_blast_standard_database_driver'}, 'python': _FILE, 'package_files': _array(_object({'relative_path': _STR, 'sha256': _SHA, 'size_bytes': _INT}), minItems=4), 'runtime_files': _array(_FILE)})
++PRODUCER_MANIFEST_SCHEMA = _object({'version': {'const': 'native_blast_standard_database_producer_manifest_v1'}, 'module_root': _ABS, 'entry_module': {'const': 'gene_annotation_episode.episodic_workflow.root.a103.native_blast_standard_database_driver'}, 'python': _FILE, 'package_files': _array(_object({'relative_path': _STR, 'sha256': _SHA, 'size_bytes': _INT}), minItems=4), 'runtime_files': _arr
+--- function validate_standard_blast_database_producer_manifest
+@@ -9 +9 @@
+-    required = {'gene_annotation_episode/__init__.py', 'gene_annotation_episode/native_blast_standard_database_driver.py', 'gene_annotation_episode/native_blast_standard_database_contracts.py', 'gene_annotation_episode/blast_program_context.py'}
++    required = {'gene_annotation_episode/__init__.py', 'gene_annotation_episode/episodic_workflow/root/a103/native_blast_standard_database_driver.py', 'gene_annotation_episode/episodic_workflow/root/a103/native_blast_standard_database_contracts.py', 'gene_annotation_episode/episodic_workflow/root/a103/blast_program_context.py'}
+====================================================================================================
+a104/literature_kinetic_inputs.py
+--- assign LEGACY_DEPENDENCIES
+@@ -1 +1 @@
+-LEGACY_DEPENDENCIES = {'custody_module': 'gene_annotation_episode.literature_assay_inputs', 'custody_sha256': '52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e', 'scalar_module': 'gene_annotation_episode.literature_rate_native_inputs', 'scalar_sha256': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'scalar_scope_module': 'gene_annotation_episode.literature_par
++LEGACY_DEPENDENCIES = {'custody_module': 'gene_annotation_episode.episodic_workflow.root.a104.literature_assay_inputs', 'custody_sha256': '52069b7d974556631a18d132eaa8bd79b23efc5b7dc2a583b1fff73df4758b6e', 'scalar_module': 'gene_annotation_episode.episodic_workflow.root.a104.literature_rate_native_inputs', 'scalar_sha256': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'scala
+====================================================================================================
+a104/native_blast_standard_database_contracts.py
+--- assign PRODUCER_MANIFEST_SCHEMA
+@@ -1 +1 @@
+-PRODUCER_MANIFEST_SCHEMA = _object({'version': {'const': 'native_blast_standard_database_producer_manifest_v1'}, 'module_root': _ABS, 'entry_module': {'const': 'gene_annotation_episode.native_blast_standard_database_driver'}, 'python': _FILE, 'package_files': _array(_object({'relative_path': _STR, 'sha256': _SHA, 'size_bytes': _INT}), minItems=4), 'runtime_files': _array(_FILE)})
++PRODUCER_MANIFEST_SCHEMA = _object({'version': {'const': 'native_blast_standard_database_producer_manifest_v1'}, 'module_root': _ABS, 'entry_module': {'const': 'gene_annotation_episode.episodic_workflow.root.a104.native_blast_standard_database_driver'}, 'python': _FILE, 'package_files': _array(_object({'relative_path': _STR, 'sha256': _SHA, 'size_bytes': _INT}), minItems=4), 'runtime_files': _arr
+--- function validate_standard_blast_database_producer_manifest
+@@ -9 +9 @@
+-    required = {'gene_annotation_episode/__init__.py', 'gene_annotation_episode/native_blast_standard_database_driver.py', 'gene_annotation_episode/native_blast_standard_database_contracts.py', 'gene_annotation_episode/blast_program_context.py'}
++    required = {'gene_annotation_episode/__init__.py', 'gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_driver.py', 'gene_annotation_episode/episodic_workflow/root/a101/native_blast_standard_database_contracts.py', 'gene_annotation_episode/episodic_workflow/root/a101/blast_program_context.py'}
+====================================================================================================
+a104/literature_experimental_contracts.py
+--- REMOVED class ExperimentalContractError
+class ExperimentalContractError(ValueError):
+    """A repairable field/relationship failure; never an overall evidence grade."""
+
+    def __init__(self, code, field, *, detail=None):
+        self.code, self.field = (code, field)
+        self.detail = deepcopy(detail)
+        super().__init__(f'{code}:{field}')
+====================================================================================================
+a104/literature_kinetic_storage.py
+--- function _dependencies
+@@ -4 +4 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+====================================================================================================
+a104/literature_binding_interaction_inputs.py
+--- function _dependencies
+@@ -2 +2 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in _FROZEN}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in _FROZEN}
+@@ -5 +5 @@
+-    calculator = hashlib.sha256(Path(__file__).with_name('literature_binding_interaction_calculations.py').read_bytes()).hexdigest()
++    calculator = hashlib.sha256(source_file('literature_binding_interaction_calculations.py').read_bytes()).hexdigest()
+====================================================================================================
+a104/literature_binding_interaction_storage.py
+--- function _dependencies
+@@ -4 +4 @@
+-    hashes = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in names}
++    hashes = {name: hashlib.sha256(source_file(name).read_bytes()).hexdigest() for name in names}
+====================================================================================================
+a104/literature_optical_inputs.py
+--- assign LEXICAL_DEPENDENCY
+@@ -1 +1 @@
+-LEXICAL_DEPENDENCY = {'module': 'gene_annotation_episode.literature_rate_native_inputs', 'sha256_at_release': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'interface': "_number(selection,sources,role='rate'); _field_contexts", 'scope_module': 'gene_annotation_episode.literature_partner_source_fields', 'scope_sha256_at_release': '20fd7866318fff00d80dcf3109c3a2589c36a38e35329
++LEXICAL_DEPENDENCY = {'module': 'gene_annotation_episode.episodic_workflow.root.a104.literature_rate_native_inputs', 'sha256_at_release': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'interface': "_number(selection,sources,role='rate'); _field_contexts", 'scope_module': 'gene_annotation_episode.episodic_workflow.root.a104.literature_partner_source_fields', 'scope_sha256_at_
+====================================================================================================
+a104/literature_optical_validation.py
+--- assign _LEXICAL_DEPENDENCY
+@@ -1 +1 @@
+-_LEXICAL_DEPENDENCY = {'module': 'gene_annotation_episode.literature_rate_native_inputs', 'sha256_at_release': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'interface': "_number(selection,sources,role='rate'); _field_contexts", 'scope_module': 'gene_annotation_episode.literature_partner_source_fields', 'scope_sha256_at_release': '20fd7866318fff00d80dcf3109c3a2589c36a38e3532
++_LEXICAL_DEPENDENCY = {'module': 'gene_annotation_episode.episodic_workflow.root.a104.literature_rate_native_inputs', 'sha256_at_release': '55244315a64d0940c09d0410a9d1e930f73609e7d0d34ef5ed751a5bbad71500', 'interface': "_number(selection,sources,role='rate'); _field_contexts", 'scope_module': 'gene_annotation_episode.episodic_workflow.root.a104.literature_partner_source_fields', 'scope_sha256_at

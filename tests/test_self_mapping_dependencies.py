@@ -20,7 +20,7 @@ def prepare(tmp_path, reads, *, native=False):
     path.write_text("".join(f"@synthetic_{i}\n{sequence}\n+\n"+"?"*len(sequence)+"\n"
         for i,sequence in enumerate(reads)))
     store=Store(tmp_path/"state");store.create_problem(path,molecule="dna")
-    tools=ToolRegistry(store,minimap2_executable=binary() if native else None)
+    tools=ToolRegistry(store, run_directory=store.path / 'tool-run',minimap2_executable=binary() if native else None)
     target,=store.targets()
     selected=checked(tools,"library.select",{"library_ref":target["id"],"ordinal_ranges":[{"start":0,"end":len(reads)}]})
     members=checked(tools,"library.members",{"library_ref":target["id"],"selection_ref":selected["selection"]["id"]})["members"]

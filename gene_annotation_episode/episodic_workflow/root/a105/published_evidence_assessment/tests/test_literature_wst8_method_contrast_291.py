@@ -186,7 +186,7 @@ def test_original_wst8_uv_selected_operation_returns_typed_cells(tmp_path):
         assert saved['sheet']['axis'] == 'A105'
         assert saved['sheet']['annotation_credit'] is None
         assert current.received_record_refs[-1] == outcome['result']['sheet_ref']
-        assert saved['original_implementation']['version'] == 'measurement_comparison_original_implementation_v2'
+        assert saved['original_implementation']['version'] == 'measurement_comparison_original_implementation_v4'
         source_record = store.get(outcome['result']['sheet_ref'])
         allowed = {source_record[name] for name in ('artifact_ref', 'request_ref')}
         assert tuple(store.db.execute('PRAGMA wal_checkpoint(TRUNCATE)').fetchone()) == (0, 0, 0)

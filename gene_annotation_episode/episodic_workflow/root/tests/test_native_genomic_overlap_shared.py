@@ -177,7 +177,7 @@ def test_selected_start_dispatches_overlap_reservation_and_records_original_iden
 
 def _family(store, directory, resources):
     return ExecutionEpisodes(None, store=store, directory=directory, run_id='overlap-registration',
-        resources=resources, initial_information={}, tool_registry=ToolRegistry(store),
+        resources=resources, initial_information={}, tool_registry=ToolRegistry(store, run_directory=store.path / 'tool-run'),
         handoff_unit=3, acquired_record_unit=2, log_window_bytes=128, log_roles=['stdout', 'stderr'])
 
 
@@ -207,9 +207,9 @@ def test_bound_overlap_is_a_launch_contract_and_reopens_without_native_work(sele
         assert row['description'] and row['instructions'] and row['resources'] == 'local'
         assert row['invocation_route'] == {'kind': 'commission', 'routes': [{
             'entry_role': 'launch', 'resource_id': resource_id, 'resource_role': 'launch_local'}]}
-        assert 'analyze_genomic_region_overlap' not in ToolRegistry(store).catalog()
+        assert 'analyze_genomic_region_overlap' not in ToolRegistry(store, run_directory=store.path / 'tool-run').catalog()
         restored = ExecutionEpisodes(None, store=store, directory=tmp_path / 'restored',
-            run_id='overlap-registration', tool_registry=ToolRegistry(store), **family.as_record()['configuration'])
+            run_id='overlap-registration', tool_registry=ToolRegistry(store, run_directory=store.path / 'tool-run'), **family.as_record()['configuration'])
         assert restored.as_record() == family.as_record()
         assert restored.resource_tool_contracts() == family.resource_tool_contracts()
         wrong = deepcopy(selected.assignment)
@@ -290,7 +290,7 @@ def test_received_overlap_inputs_cross_actual_launch_and_resource_commission_hoo
         'operation': 'analyze_genomic_region_overlap', 'mode': 'unstranded_outer_span',
         'software': requested['native_genomic_overlap']['software']}]}
     family = ExecutionEpisodes(None, store=f.store, directory=tmp_path / 'run', run_id=f.run_id,
-        resources={'here': resource}, initial_information={}, tool_registry=ToolRegistry(f.store),
+        resources={'here': resource}, initial_information={}, tool_registry=ToolRegistry(f.store, run_directory=f.store.path / 'tool-run'),
         handoff_unit=3, acquired_record_unit=2, log_window_bytes=128, log_roles=['stdout', 'stderr'])
     def denied(*args, **kwargs):
         raise AssertionError('commission validation and initialization must not start a job')

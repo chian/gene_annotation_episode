@@ -246,7 +246,11 @@ class APIJobTaskBehavior:
         selector=getattr(parent,'child_report_receiver',None)
         if selector is not None:
             assert selector('launch_api').__module__==parent.__module__.removesuffix('.episode')+'.from_child_api_job_execution'
-            assert selector('launch_local') is None
+            # The private Launch names all three counterparts (same rule as launch_task_checks.py).
+            assert hasattr(parent,'decision_source_type')
+            assert selector('launch_local').__module__==parent.__module__.removesuffix('.episode')+'.from_child_local_job_execution'
+            assert selector('launch_hpc').__module__==parent.__module__.removesuffix('.episode')+'.from_child_hpc_job_execution'
+            assert selector('unrelated') is None
         f.journal.save('runtime_actions',{'episode_id':parent_id,'decision_index':8,
             'action':json.dumps({'kind':'tool','tool':'unrelated','arguments':{}}),'result':None,'credit':None})
         if selector is not None:

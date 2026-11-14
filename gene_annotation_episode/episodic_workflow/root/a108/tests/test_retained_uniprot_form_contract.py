@@ -13,7 +13,7 @@ import pytest
 @pytest.fixture(autouse=True, params=('a101', 'a105', 'a106', 'a108'))
 def private_contract_owner(request, monkeypatch):
     prefix='gene_annotation_episode.episodic_workflow.root.'+request.param
-    path=prefix+'.uniprot_return_contracts' if request.param=='a101' else prefix+'.library.retained_input_authority.uniprot_return_contracts'
+    path=prefix+'.library.uniprot_return_contracts' if request.param=='a101' else prefix+'.library.retained_input_authority.uniprot_return_contracts'
     contracts=import_module(path)
     form_contract=import_module(prefix+'.episode_contract_information')
     for name,value in {'contracts':contracts,

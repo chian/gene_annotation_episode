@@ -48,7 +48,7 @@ def test_repeated_semantic_target_is_listed_once_with_original_manifest_occurren
         assert len(projection["targets"]) == 2 and projection["credit"] == 0
         view = store.reasoning_view()
         assert len(view["subjects"]) == len(view["scope"]["subject_refs"]) == 2
-        call(ToolRegistry(store), "sequence.inspect", {"subject_ref": problem["subject_refs"][0]})
+        call(ToolRegistry(store, run_directory=store.path / 'tool-run'), "sequence.inspect", {"subject_ref": problem["subject_refs"][0]})
         assert store.problem() == problem
 
 
@@ -121,7 +121,7 @@ def test_auto_unknown_assets_remain_bytes_not_sequences(tmp_path, content, repre
         source = store.get(material["source_ref"])
         assert store.get_artifact(source["artifact_ref"]) == content
         assert store.get(source["artifact_ref"])["sha256"] == hashlib.sha256(content).hexdigest()
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         page = call(tools, "material.read", {"material_ref": material["id"], "offset": 1, "limit": 3})
         assert base64.b64decode(page["content"]) == content[1:4]
         assert call(tools, "state.query", {"kind": "material"})["records"][0]["id"] == material["id"]
@@ -140,7 +140,7 @@ def test_mixed_evidence_fastq_order_qualities_links_and_fixed_targets(tmp_path):
         assert len(targets) == 1
         reads = next(row for row in store.list("collection") if row["representation"] == "fastq")
         assert reads["member_count"] == 2 and reads["sequence_symbols"] == 8
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         first = call(tools, "material.members", {"collection_ref": reads["id"], "limit": 1})
         second = call(tools, "material.members", first["next_query"])
         assert [first["members"][0]["ordinal"], second["members"][0]["ordinal"]] == [0, 1]
@@ -170,7 +170,7 @@ def test_partial_fasta_retains_independent_records_and_source_ordinals(tmp_path)
     with Store(tmp_path / "state") as store:
         store.create_problem(raw_sequence="MKWV", molecule="protein")
         material = store.register_material(data=content, name="partial")
-        result = ToolRegistry(store).execute("material.parse", {"material_ref": material["id"]})
+        result = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("material.parse", {"material_ref": material["id"]})
         assert result["status"] == "partial"
         attempt = result["result"]["parse_attempt"]
         assert attempt["valid_records"] == 2 and attempt["error_count"] == 1
@@ -208,7 +208,7 @@ def test_read_library_is_bound_without_per_read_targets(tmp_path):
         assert target["target_kind"] == "read_library" and target["position_mass"] == 8
         assert problem["intake_feedback"] == []
         assert store.get(problem["initial_collection_refs"][0])["member_count"] == 2
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         member = call(tools, "material.members", {"collection_ref": problem["initial_collection_refs"][0]})["members"][0]
         reference = call(tools, "material.member", {"member_ref": member["id"]})["reference_ref"]
         call(tools, "sequence.inspect", {"subject_ref": reference})
@@ -242,7 +242,7 @@ def test_gzip_lineage_cache_reopen_and_bounded_members(tmp_path, monkeypatch):
         request = json.loads(store.get_artifact(decoded["request_ref"]))
         assert request["source_ref"] == original["id"]
         assert store.parse_material(material["id"]) == attempt
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         monkeypatch.setattr(store, "get_artifact", lambda *a, **k: pytest.fail("bounded reads must not hydrate an artifact"))
         page = call(tools, "material.members", {"collection_ref": attempt["collection_ref"], "limit": 1})
         selected = call(tools, "material.member", {"member_ref": page["members"][0]["id"], "limit": 2}, operation_key="member-window")
@@ -252,7 +252,7 @@ def test_gzip_lineage_cache_reopen_and_bounded_members(tmp_path, monkeypatch):
     with Store(workspace) as store:
         assert store.problem() == problem
         assert store.parse_material(material["id"]) == attempt
-        replay = call(ToolRegistry(store), "material.member", {"member_ref": page["members"][0]["id"], "limit": 2}, operation_key="member-window")
+        replay = call(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": page["members"][0]["id"], "limit": 2}, operation_key="member-window")
         assert replay == selected
         assert store.db.execute("SELECT COUNT(*) FROM material_members").fetchone()[0] == 3  # original target + two evidence records
 
@@ -264,7 +264,7 @@ def test_registered_external_source_reused_without_origin_or_target_relabeling(t
         source = store.put("source", {"provider": "fixture_public_supplement", "accession": "actual-supplement",
             "uri": "https://example.invalid/supplement.faa", "artifact_ref": body, "text_ref": body,
             "request_ref": None, "version": "fixture1", "retrieved_at": None}, origin="external")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         material = call(tools, "material.from_source", {"source_ref": source["id"]}, operation_key="source-wrapper")
         wrapper = store.get(material["material_ref"])
         assert wrapper["origin"] == "tool" and wrapper["use"] == "evidence"

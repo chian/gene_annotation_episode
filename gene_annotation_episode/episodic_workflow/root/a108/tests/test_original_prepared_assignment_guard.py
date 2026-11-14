@@ -15,7 +15,7 @@ def module(name):return import_module(PACKAGE+'.'+name)
 def test_original_structural_preparation_requires_exact_recorded_parent_custody(tmp_path,changed_request_hash):
     canonical=module('domain').canonical
     digest=module('execution_contracts' if PACKAGE.endswith('.a101') else 'record_identity').digest
-    EpisodeRef=module('method_loop.identities').EpisodeRef
+    EpisodeRef=import_module('gene_annotation_episode.episodic_workflow.root.method_loop.identities').EpisodeRef  # a108 has no private method_loop; its modules import the shared root package
     BindingContext=module('episode_bindings').BindingContext
     with module('state').Store(tmp_path/'state') as store:
         store.create_problem(raw_sequence='MAAA',molecule='protein')

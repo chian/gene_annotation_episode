@@ -30,7 +30,8 @@ from gene_annotation_episode.practical_yield import PracticalYieldEstimator
 from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_prompt import render_scientific_process_prompt
-from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.episode import ScientificProcessEpisode
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_native_hmmer_preparation_workflow import (
@@ -141,7 +142,7 @@ def nested_case(tmp_path, program='hmmemit', mode='consensus_simple', *, selecto
     factory = ExecutionServiceFactory(resources, {}, 3, 2, 1, log_window_bytes=128)
     tools = ToolRegistry(store)
     application = factory(store, run_id=RUN_ID, directory=tmp_path / 'run', tool_registry=tools)
-    descriptor = prepare_scientific_binding(run_directory=tmp_path / 'run', source_directory=PUBLICATION,
+    descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=tmp_path / 'run', source_directory=PUBLICATION,
         tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
         resource_catalogs=application.resource_tool_catalogs)
     library = ScientificProcessLibrary(tmp_path / 'run/scientific-process-library')

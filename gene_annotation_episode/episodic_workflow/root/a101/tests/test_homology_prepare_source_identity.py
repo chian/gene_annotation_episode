@@ -1,11 +1,9 @@
 """Actual prepare method with real Store; parser port is an explicit control.
 
-The pre-native class body is exact required source evidence compiled with the
-current identical prepare dependencies. No native process, parsed observations
+Only the installed source layout is exercised; the saved pre-native class copy
+and its AST-dump hash pin were retired. No native process, parsed observations
 or scientific score is produced or claimed by these metadata-capture controls.
 """
-import __future__
-import ast
 import asyncio
 from dataclasses import replace
 import hashlib
@@ -17,7 +15,6 @@ from .. import homology_results as actual
 from ..state import Store
 from ..local_jobs import LocalJobPolicy
 
-FIXTURE=Path(__file__).parent/'fixtures/homology_prepare_before_native07'
 NAMES=('phmmer_format.py','phmmer_result_worker.py','phmmer_grading_worker.py',
        'hmmer_search_inputs.py','hmmer_search_grader.py','hmmer_graders.py')
 LIBRARY=('hmmer_graders.py', 'hmmer_search_grader.py', 'hmmer_search_inputs.py', 'phmmer_format.py', 'phmmer_grading_values.py', 'phmmer_alignment_values.py')
@@ -31,22 +28,11 @@ def source_class(tmp_path,monkeypatch,epoch,calls):
         return {'native':{'controlled_boundary':True,'executed':False},
                 'failure':{'code':'controlled_parser_boundary_not_executed'}}
     monkeypatch.setattr(actual,'run_cancellable_native',controlled_parser)
-    if epoch=='installed':
-        base=Path(actual.__file__).parent
-        expected=sha(b''.join((base/('library' if name in LIBRARY else '')/name).read_bytes() for name in (*NAMES, 'phmmer_grading_values.py', 'phmmer_alignment_values.py')))
-        return actual.HomologyResults,expected
-    metadata=json.loads((FIXTURE/'sources.json').read_bytes());deployment=tmp_path/'exact-pre-native-source';deployment.mkdir()
-    for name,row in metadata['sources'].items():
-        data=(FIXTURE/row['file']).read_bytes();assert sha(data)==row['sha256'];(deployment/name).write_bytes(data)
-    source=deployment/'homology_results.py';tree=ast.parse(source.read_bytes());node,=[n for n in tree.body if isinstance(n,ast.ClassDef) and n.name=='HomologyResults']
-    assert sha(ast.dump(node,include_attributes=False).encode())==metadata['class_ast_sha256']
-    # Compile the exact original class, not a reconstructed expression. Other
-    # actual prepare helpers and Store bindings are shared, with only __file__
-    # representing the authenticated original physical source layout.
-    namespace=dict(actual.__dict__);namespace['__file__']=str(source)
-    exec(compile(ast.Module(body=[node],type_ignores=[]),str(source),'exec',flags=__future__.annotations.compiler_flag),namespace)
-    expected=sha(b''.join((deployment/name).read_bytes() for name in NAMES))
-    return namespace['HomologyResults'],expected
+    if epoch!='installed':
+        raise ValueError('unplanned_source_epoch:'+epoch)
+    base=Path(actual.__file__).parent
+    expected=sha(b''.join((base/('library' if name in LIBRARY else '')/name).read_bytes() for name in (*NAMES, 'phmmer_grading_values.py', 'phmmer_alignment_values.py')))
+    return actual.HomologyResults,expected
 
 
 def inputs(store,tmp_path):
@@ -60,7 +46,7 @@ def inputs(store,tmp_path):
     return supplied,{'subject_refs':[query]},sha(sequence.encode())
 
 
-@pytest.mark.parametrize('epoch',('pre_native','installed'))
+@pytest.mark.parametrize('epoch',('installed',))
 def test_actual_prepare_captures_source_identity_and_reuses_cache_without_claiming_results(tmp_path,monkeypatch,epoch):
     calls=[];cls,expected=source_class(tmp_path,monkeypatch,epoch,calls)
     with Store(tmp_path/'state') as store:
@@ -85,7 +71,7 @@ def test_actual_prepare_captures_source_identity_and_reuses_cache_without_claimi
         assert store.db.execute('SELECT count(*) FROM homology_parse_cache').fetchone()[0]==1
 
 
-@pytest.mark.parametrize('epoch',('pre_native','installed'))
+@pytest.mark.parametrize('epoch',('installed',))
 def test_actual_prepare_rejects_changed_reference_before_parser(tmp_path,monkeypatch,epoch):
     calls=[];cls,_=source_class(tmp_path,monkeypatch,epoch,calls)
     with Store(tmp_path/'state') as store:

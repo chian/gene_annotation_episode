@@ -240,7 +240,7 @@ def test_actual_default_registry_advertises_only_the_canonical_current_contract(
 
     with Store(tmp_path / "canonical-restriction-catalog") as store:
         store.create_problem(raw_sequence=SEQUENCE, molecule="dna")
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         catalog = registry.catalog()
         assert TOOL in catalog and "find_restriction_enzymes" not in catalog
         entry = catalog[TOOL]
@@ -266,7 +266,7 @@ def test_actual_dispatch_denies_unreceived_sequence_before_bytes_or_job_preparat
 
     with Store(tmp_path / "unreceived-restriction-input") as store:
         store.create_problem(raw_sequence=SEQUENCE, molecule="dna")
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         subject = store.targets()[0]["id"]
         arguments = {**canonical_arguments({"kind": "explicit", "names": ["EcoRI"]}),
             "sequence_ref": subject}

@@ -156,7 +156,8 @@ def planning_observation(v, scenario='selected'):
         result=capture(lambda:v.runtime.Workflow.resource_context(workflow,context))
     expected_failure=None
     if connected and scenario in missing_cases:
-        parent='scientific_process' if scenario.startswith('scientific') else 'None'
+        # a103 label is legacy_annotation: the annotation root resolves to a real parent (a103/episode_bindings.py:450-453, message at :433).
+        parent='scientific_process' if scenario.startswith('scientific') else 'legacy_annotation'
         expected_failure=('LookupError','episode_child_not_bound:'+parent+':launch')
     elif connected and scenario=='wrong_registered_class':expected_failure=('ValueError','resource_planning_registered_identity_mismatch')
     elif connected and scenario=='wrong_resource_child':expected_failure=('ValueError','resource_planning_private_edge_mismatch')
@@ -178,7 +179,8 @@ def planning_observation(v, scenario='selected'):
         assert result=={'status':'raised','type':'builtins.LookupError','message':'episode_role_requires_parent:launch'}
         assert events==[] and not memory.path.exists()
     elif scenario=='invalid_private_parent':
-        assert result=={'status':'raised','type':'builtins.LookupError','message':'episode_child_not_bound:None:launch_local'}
+        # a103 label is legacy_annotation: the annotation root resolves to a real parent (a103/episode_bindings.py:450-453, message at :433).
+        assert result=={'status':'raised','type':'builtins.LookupError','message':'episode_child_not_bound:legacy_annotation:launch_local'}
         assert events==[] and not memory.path.exists()
     else:
         # The original unambiguous global lookup chooses the other portfolio in

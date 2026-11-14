@@ -171,7 +171,7 @@ def test_source_quantities_keep_values_units_uncertainty_operands_and_context_th
         assert store.get(refs["glucose_addition"])["attributes"] == [
             {"name": "concentration", "value": {"type": "number", "value": 10, "unit_ref": refs["uM"]}}]
         assert store.commit_reasoning(decoded, store.validate_scope(None), "source-quantity-fixture") == result
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         ids = [refs[key] for key in ("glycine_level", "serine_level", "glcB_Kd", "gcvT_Kd")]
         queried = tools.execute("state.query", {"refs": ids})
         assert queried["status"] == "completed"
@@ -221,7 +221,7 @@ def test_scripted_runtime_preserves_numeric_transport_into_child_form_and_parent
         provider = ScriptedProvider([commission,
             {"selection": {"kind": "reason", "commit": optional_transport_nulls(data)}, "report_update": {"measurement_refs": []}},
             child_read, parent_read])
-        result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
             run_dir=tmp_path / "scripted-runtime",
             controller_factory=lambda path, baseline: FixtureController(str(path), baseline, 2)))
         assert result["completed_actions"] == 2 and result["episode_count"] == 2
@@ -302,7 +302,7 @@ def test_scripted_runtime_returns_partial_quantity_feedback_and_reuses_successes
         provider = ScriptedProvider([
             {"selection": {"kind": "reason", "commit": optional_transport_nulls(data)}, "report_update": {}},
             correct_affected_quantity])
-        result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
             run_dir=tmp_path / "scripted-partial-runtime",
             controller_factory=lambda path, baseline: FixtureController(str(path), baseline, 2)))
         assert result["completed_actions"] == 2 and result["episode_count"] == 1

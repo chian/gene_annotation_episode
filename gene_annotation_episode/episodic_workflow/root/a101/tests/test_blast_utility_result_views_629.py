@@ -10,7 +10,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import validate_blast_utility_result
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_result_views import FACT_SOURCES, IDENTIFIER_NAMESPACES, NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA, PREPARED_DATABASE_VERSION, PROJECTION_FIELDS, blast_utility_fact_sources, project_blast_utility_result, projection_identifiers, validate_blast_utility_fact_values, validate_blast_utility_projection, validate_blast_utility_result_selector
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_utility_returns import (
     NativeBLASTUtilityReturns, requested_sources,
 )

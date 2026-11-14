@@ -65,6 +65,10 @@ class PlanningAllocationTaskBehavior:
             source_credit_view=lambda source: v.binding.credit_view(v.context, None),
             expose_assigned_job=lambda source: None, receive_tool_attributions=lambda *a, **k: None,
             archive=SimpleNamespace(store=lambda value: value), launch_instructions=SimpleNamespace(materialize=lambda value: None))
+        # a103's Workflow.build reads self.legacy_parent_for_path (a103/runtime.py); bind the real method.
+        # Selected by the runtime module, not self.axis: launch tests pass an adapter without an axis.
+        if runtime.__name__ == 'gene_annotation_episode.episodic_workflow.root.a103.runtime':
+            workflow.legacy_parent_for_path = lambda path: runtime.Workflow.legacy_parent_for_path(workflow, path)
         selected = runtime.Workflow.build(workflow, self.role, 'original-work', v.c['objective'],
             runtime._plain(v.context.scope), episode_assignment=runtime._plain(v.context.assignment))
         assert type(selected) is getattr(v.binding, 'decision_source_type', runtime.DecisionSource)
@@ -195,7 +199,7 @@ class PlanningAllocationTaskBehavior:
         task.workflow.native_event_information = None
         task.workflow.knowledge = SimpleNamespace(instructions='Selected knowledge.')
         task.workflow.launch_instructions = SimpleNamespace(instructions='Selected launch instructions.')
-        if self.axis == 'a104':
+        if self.axis in ('a102', 'a103', 'a104'):
             task.workflow.services = self.module('episode_services').WorkflowServices(task.workflow)
         else:
             task.workflow.services = SimpleNamespace(

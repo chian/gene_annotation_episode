@@ -12,9 +12,9 @@ import json
 from types import SimpleNamespace
 
 import pytest
-from method_loop import EpisodeGoal, EpisodeRequest
-from method_loop.communication import ReportContract
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.communication import ReportContract
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
 from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
@@ -74,7 +74,7 @@ class ReceivedMetadataHost(HostFixture):
 
     def reopen(self):
         return APIServiceExecution(self.store, run_id=self.run_id, directory=self.directory,
-            configuration=self.configuration, tool_registry=ToolRegistry(self.store),
+            configuration=self.configuration, tool_registry=ToolRegistry(self.store, run_directory=self.store.path / 'tool-run'),
             handoff_unit=3, acquired_record_unit=2, received_input_reader=self.read_received_input)
 
     def context(self, role, assignment, *, parent=None, path=None, schema=None, scope=None):
@@ -305,7 +305,7 @@ def test_original_source_is_not_a_result_in_another_run_or_narrower_scope(host):
         host.api.read_bvbrc_result(reference, context=narrow)
     other_run = "unrelated-authentic-run"
     other_api = APIServiceExecution(host.store, run_id=other_run, directory=host.directory,
-        configuration=host.configuration, tool_registry=ToolRegistry(host.store), handoff_unit=3, acquired_record_unit=2)
+        configuration=host.configuration, tool_registry=ToolRegistry(host.store, run_directory=host.store.path / 'tool-run'), handoff_unit=3, acquired_record_unit=2)
     identity = EpisodeRef(other_run, (("annotation", "root"),))
     other = BindingContext(other_run, identity.episode_id, "annotation", identity.path,
         host.scope, {}, plain(host.parent.request))

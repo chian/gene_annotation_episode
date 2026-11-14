@@ -21,7 +21,9 @@ from test_native_hmmer_results_integration import LABELS, PRODUCER
 
 def retained_capture(tmp_path, monkeypatch, label='hmmsearch_search_ordinary'):
     plan = json.loads((PRODUCER / label / 'plan.json').read_text())
-    original = Path(plan['attempt_directory'])
+    # The retained plan names the packet's original location; the packet itself is kept under PRODUCER.
+    assert Path(plan['attempt_directory']).parts[-2:] == (label, 'attempt')
+    original = PRODUCER / label / 'attempt'
     root = tmp_path / 'retained-attempt'
     shutil.copytree(original, root)
     plan['attempt_directory'] = str(root)

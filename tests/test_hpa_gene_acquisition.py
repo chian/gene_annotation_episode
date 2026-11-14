@@ -338,7 +338,7 @@ def test_selected_arguments_mismatch_keeps_actual_capture_but_never_claims_selec
 
 def test_no_response_has_no_source_or_data_and_does_not_publish_placeholder_evidence(tmp_path):
     with Store(tmp_path / "store") as store:
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         before = list(store.db.execute("SELECT * FROM records"))
         with pytest.raises(ValueError, match="snapshot_invalid"):
             provider.publish_molecular_provider_request(registry, OPERATION, ARGUMENTS, None)

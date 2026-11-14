@@ -10,8 +10,8 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from method_loop.episode import EpisodeGoal, EpisodeRequest
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.episodic_workflow.root.communication import (
     plain, form_with_facts, validate_closed_schema, validate_form, ReportBoundaryError,

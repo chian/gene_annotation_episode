@@ -30,7 +30,7 @@ def work(tools, name, args, **kwargs):
 
 
 def members(store, target):
-    return work(ToolRegistry(store), "library.members", {"library_ref": target["id"]})["members"]
+    return work(ToolRegistry(store, run_directory=store.path / 'tool-run'), "library.members", {"library_ref": target["id"]})["members"]
 
 
 def test_fixed_library_is_not_a_joined_sequence_or_per_read_input_inventory(tmp_path):
@@ -51,7 +51,7 @@ def test_fixed_library_is_not_a_joined_sequence_or_per_read_input_inventory(tmp_
         assert store.coverage(target["id"]) == []
         with pytest.raises(ContractError, match="library_scope_requires_streamed_geometry"):
             store.scope_coverage()
-        result = ToolRegistry(store).execute("sequence.inspect", {"subject_ref": target["id"]})
+        result = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("sequence.inspect", {"subject_ref": target["id"]})
         assert result["status"] == "invalid" and result["feedback"]["code"] == "library_is_not_a_sequence_operand"
         assert store.current_annotations() == []
 
@@ -67,14 +67,14 @@ def test_read_identity_local_coordinates_native_quality_survive_reopening(tmp_pa
         assert not store._covered_by([intervals[0]], [intervals[1]])
         assert store.scope_measure(None, target["id"]) == 24
         assert list(store.iter_scope_coverage()) == intervals
-        saved = work(ToolRegistry(store), "library.read", {"subject_ref": reads[0]["id"], "offset": 2, "limit": 5}, operation_key="read-window")
+        saved = work(ToolRegistry(store, run_directory=store.path / 'tool-run'), "library.read", {"subject_ref": reads[0]["id"], "offset": 2, "limit": 5}, operation_key="read-window")
         assert saved["sequence"] == "GTTGC" and saved["quality"] == "+~###"
         raw = store.get_artifact(store.get(target["source_refs"][0])["artifact_ref"])
         assert raw == READS
     with Store(path) as store:
         assert store.problem() == problem and store.targets() == [target]
         assert members(store, target) == reads
-        assert work(ToolRegistry(store), "library.read", {"subject_ref": reads[0]["id"], "offset": 2, "limit": 5}, operation_key="read-window") == saved
+        assert work(ToolRegistry(store, run_directory=store.path / 'tool-run'), "library.read", {"subject_ref": reads[0]["id"], "offset": 2, "limit": 5}, operation_key="read-window") == saved
         assert store.get(reads[0]["id"])["name"] == "same"
         assert store.get(reads[1]["id"])["description"] == "second native"
         assert store.roots(reads[0]["id"]) == [target["id"]]
@@ -84,7 +84,7 @@ def test_selected_members_and_intervals_bound_tools_records_forms_and_child_scop
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
         a, b = members(store, target)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         selected = work(tools, "library.select", {"library_ref": target["id"], "member_refs": [a["member_ref"]]})
         scope = store.validate_scope(selected["scope"], parent_scope=store.validate_scope())
         assert store.scope_measure(scope, target["id"]) == 12
@@ -121,7 +121,7 @@ def test_native_translation_stays_on_original_read_and_cannot_cover_another(tmp_
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, content, molecule="dna")
         a, b = members(store, target)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         translated = work(tools, "sequence.translate", {"subject_ref": a["id"], "code": 11})
         product = store.get(translated["records"][0]["product_ref"])
         assert store.get_artifact(product["sequence_ref"]) == b"MKFG"
@@ -142,7 +142,7 @@ def test_partial_read_membership_is_explicit_and_external_selection_does_not_exp
         member = store.material_members(attempt["collection_ref"])["members"][0]
         with pytest.raises(ContractError, match="member_not_in_fixed_library"):
             store.read_subject_ref(target["id"], member["id"])
-        work(ToolRegistry(store), "material.member", {"member_ref": member["id"]})
+        work(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": member["id"]})
         assert store.problem() == problem and store.targets() == [target]
         assert store.scope_measure(None, target["id"]) == 24
 
@@ -169,7 +169,7 @@ def test_batch_is_one_ordinary_tool_result_with_separate_native_member_observati
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
         reads = members(store, target)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         args = {"subject_refs": [row["id"] for row in reads]}
         result = work(tools, "reads.inspect", args, operation_key="batch")
         assert result["count"] == 2 and len(result["records"]) == 2
@@ -188,7 +188,7 @@ def test_portable_export_keeps_member_identity_selection_and_no_library_chromoso
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
         a, b = members(store, target)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         selected = work(tools, "library.select", {"library_ref": target["id"], "member_refs": [a["member_ref"]]})
         work(tools, "sequence.view", {"subject_ref": a["id"], "molecule": "dna"}, scope=selected["scope"])
         result = export_annotation(store, tmp_path / "out.gff3", format="gff3", scope=selected["scope"], include_artifacts=True, page_size=1)
@@ -222,7 +222,7 @@ def test_batch_native_alignments_share_single_operation_path_and_preserve_partia
         parsed = store.parse_material(evidence["id"])
         member = store.material_members(parsed["collection_ref"])["members"][0]
         reference = store.material_reference(member["id"])
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         batch = tools.execute("reads.align", {"subject_refs": [a["id"], "read_subject_" + "0"*48, b["id"]],
             "reference_ref": reference["id"], "molecule": "dna", "mode": "local"}, operation_key="align-batch")
         assert batch["status"] == "partial", batch
@@ -252,7 +252,7 @@ def test_parent_form_namespaces_restrict_read_and_selection_references_to_scope(
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
         a, b = members(store, target)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         chosen = work(tools, "library.select", {"library_ref": target["id"], "member_refs": [a["member_ref"]]})
         broader = work(tools, "library.select", {"library_ref": target["id"], "ordinal_ranges": [{"start": 0, "end": 2}]})
         workflow = Workflow.__new__(Workflow)
@@ -271,7 +271,7 @@ def test_existing_broad_interpretation_visible_on_child_overlap_without_broader_
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
         a, b = members(store, target)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         observed = work(tools, "sequence.inspect", {"subject_ref": a["id"]})
         hypothesis = store.put("hypothesis", {"subject_refs": [a["id"]], "predicate": "sequence_integrity",
             "value": {"type": "enum", "value": "unresolved"}, "context_refs": []}, origin="reasoning")

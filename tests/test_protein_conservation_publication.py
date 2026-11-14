@@ -39,7 +39,7 @@ def documents(tmp_path, monkeypatch):
     assert fixture["provenance"]["kind"] == "supplied_engineering_json"
     assert fixture["provenance"]["producer_authenticated"] is False
     with Store(tmp_path / "store") as store:
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         raw = fixture["raw_output_utf8"].encode()
         assert store.artifact(raw, "text/x-fasta") == fixture["alignment"]["artifact"]["raw_artifact_ref"]
         assert store.artifact(fixture["raw_input_utf8"].encode(), "text/x-fasta") == \

@@ -13,7 +13,7 @@ def fixture(tmp_path):
     store = Store(tmp_path / "state")
     store.create_problem(reads, molecule="dna")
     target, = store.targets()
-    tools = ToolRegistry(store)
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
     members = tools.execute("library.members", {"library_ref": target["id"]})["result"]["members"]
     selected = tools.execute("library.select", {"library_ref": target["id"],
         "member_refs": [members[0]["member_ref"]]})["result"]

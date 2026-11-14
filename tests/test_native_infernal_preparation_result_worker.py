@@ -17,6 +17,9 @@ from gene_annotation_episode.state import Store
 
 ROOT = Path(__file__).resolve().parents[1]
 CAPTURE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/infernal_preparation/capture"
+# NATIVE_CAPTURE_EXAMPLES_002.json records its retained files as paths relative to the axis home
+# that holds this fixture packet (tests/fixtures/infernal_preparation/...).
+PACKET_HOME = ROOT / "gene_annotation_episode/episodic_workflow/root/a107"
 EXAMPLES = json.loads((CAPTURE / "NATIVE_CAPTURE_EXAMPLES_002.json").read_bytes())["examples"]
 
 
@@ -25,7 +28,7 @@ def forbidden(*args, **kwargs):
 
 
 def indexed_bytes(row):
-    raw = (ROOT / row["path"]).read_bytes()
+    raw = (PACKET_HOME / row["path"]).read_bytes()
     assert len(raw) == row["size_bytes"] and hashlib.sha256(raw).hexdigest() == row["sha256"]
     return raw
 
@@ -33,7 +36,7 @@ def indexed_bytes(row):
 def captured_case(store, tmp_path, case="consensus"):
     example = next(row for row in EXAMPLES if row["case"] == case)
     captured = json.loads(indexed_bytes(example["capture_receipt"]))
-    original_directory = (ROOT / example["capture_receipt"]["path"]).parent
+    original_directory = (PACKET_HOME / example["capture_receipt"]["path"]).parent
     directory = tmp_path / "capture"
     shutil.copytree(original_directory, directory)
     original_store = original_directory.parent / "store"

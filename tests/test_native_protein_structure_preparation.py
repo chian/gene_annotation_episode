@@ -34,7 +34,7 @@ from gene_annotation_episode.state import Store
 REPO = Path(__file__).resolve().parents[1]
 PACKET = REPO / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_preparation_396"
 FIXTURES = REPO / "gene_annotation_episode/episodic_workflow/root/a102/tests/fixtures/protein_structure_result_worker_393/fixtures"
-POLICY = LocalJobPolicy(memory_bytes=21474836480, scratch_bytes=4294967296)
+POLICY = LocalJobPolicy(memory_bytes=5368709120, scratch_bytes=4294967296)
 
 
 def _bytes(value):

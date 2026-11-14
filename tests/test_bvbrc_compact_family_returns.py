@@ -79,7 +79,7 @@ def frame(selection, role, descriptors):
 class FamilyRecords:
     def __init__(self, store, family):
         name, class_name, catalog_name = family
-        self.module = importlib.import_module('gene_annotation_episode.bvbrc_' + name + '_returns')
+        self.module = importlib.import_module('gene_annotation_episode.episodic_workflow.root.bvbrc_' + name + '_returns')
         self.saved = SavedRecords(store)
         self.store = store
         available = getattr(self.module, catalog_name)()
@@ -331,7 +331,7 @@ def test_all_consumers_accept_actual_workflow_original_contract_and_explicit_red
             monkeypatch.setattr(Workflow, method, forbidden)
         case.store.db.execute('PRAGMA query_only=ON')
         for name, class_name, _ in FAMILIES:
-            module = importlib.import_module('gene_annotation_episode.bvbrc_' + name + '_returns')
+            module = importlib.import_module('gene_annotation_episode.episodic_workflow.root.bvbrc_' + name + '_returns')
             host = getattr(module, class_name)(api)
             assert host._attempt(parent, 0)[1:] == expected
             assert host._attempt(parent, case.redelivery_index)[1] == {'again': [case.reference]}

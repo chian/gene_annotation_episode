@@ -183,7 +183,7 @@ def test_missing_endpoint_auth_and_unconfigured_auth_origin_send_nothing(monkeyp
 
 def test_connection_failure_is_one_attempt_with_unknown_outcome(monkeypatch):
     calls = []
-    def unavailable(self, request, *, timeout):
+    def unavailable(self, request):
         calls.append(request)
         raise urllib.error.URLError(TimeoutError())
     monkeypatch.setattr('urllib.request.OpenerDirector.open', unavailable)

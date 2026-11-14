@@ -241,7 +241,7 @@ def _native_fixture(store, tmp_path):
     path.write_bytes(b"@same first\nATGAAATTTGGG\n+\nIIIIIIIIIIII\n@same second\nATGAAATTTGGG\n+\n!!!!!!!!!!!!\n")
     store.create_problem(path, molecule="dna")
     target, = store.targets()
-    tools = ToolRegistry(store)
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
     result = tools.execute("library.members", {"library_ref": target["id"]})
     assert result["status"] == "completed", result
     return target, result["result"]["members"], tools
@@ -380,7 +380,7 @@ def test_real_scalar_summary_and_detail_page_preserve_frozen_nondefault_policy(t
     with Store(tmp_path / "scalar") as store:
         target = store.create_problem(raw_sequence="ATGAAATTTGGG", molecule="dna")["subject_refs"][0]
         reference = _reference(store, "ATGAAATTTGGG")
-        aligned = ToolRegistry(store).execute("sequence.align", {"query_ref": target,
+        aligned = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("sequence.align", {"query_ref": target,
             "reference_ref": reference["id"], "molecule": "dna", "mode": "global"})
         assert aligned["status"] == "completed", aligned
         _commit_native(store, target, aligned["result"]["observation_ref"], key="scalar-comparison")

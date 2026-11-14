@@ -8,7 +8,7 @@ from copy import deepcopy
 
 from .bvbrc_appservice_contracts import contract_schema
 from .bvbrc_phylogeny_bundle_contracts import parameters_schema
-from gene_annotation_episode.episodic_workflow.root.a104.scientific_process.execution_result_acquisition.requests import RESULTS_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.a104.library.execution_result_request_contracts import RESULTS_SCHEMA
 
 
 _PROVIDERS = {

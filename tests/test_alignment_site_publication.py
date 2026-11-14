@@ -15,7 +15,7 @@ from test_tool_grading_publication import numerical
 def test_actual_alignment_selected_positions_publish_exact_distinct_population(tmp_path, molecule, sequence):
     with Store(tmp_path / 'state') as store:
         target, = store.create_problem(raw_sequence=sequence, molecule=molecule)['subject_refs']
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         aligned = tools.execute('sequence.align', {'query_ref': target, 'reference_ref': target,
             'molecule': molecule, 'mode': 'global'}, operation_key='align')
         assert aligned['status'] == 'completed', aligned
@@ -45,7 +45,7 @@ def test_known_no_alignment_preserves_zero_coverage_and_unknown_identity(tmp_pat
     path.write_text('>query\nAAAA\n>reference\nTTTT\n')
     with Store(tmp_path / 'state') as store:
         query, reference = store.create_problem(path, molecule='dna')['subject_refs']
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         aligned = tools.execute('sequence.align', {'query_ref': query, 'reference_ref': reference,
             'molecule': 'dna', 'mode': 'local'}, operation_key='align')
         assert aligned['status'] == 'completed', aligned
@@ -101,7 +101,7 @@ def test_site_grading_failure_keeps_existing_native_source_and_typed_partial(tmp
     import gene_annotation_episode.alignment_site_inputs as inputs
     with Store(tmp_path / 'state') as store:
         target, = store.create_problem(raw_sequence='ACGTTGCA', molecule='dna')['subject_refs']
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         aligned = tools.execute('sequence.align', {'query_ref': target, 'reference_ref': target,
             'molecule': 'dna', 'mode': 'global'}, operation_key='align')
         def fail(*args, **kwargs):

@@ -100,7 +100,9 @@ def test_receipt_dispatch_uses_saved_original_child_counterpart(edge,tmp_path,mo
             progress_provider=SimpleNamespace(receive_form=lambda *args:progress.append(args)),
             native_timing_information=None,job_episodes=None,receive_tool_attributions=lambda *args,**kwargs:[],
             receipts=SimpleNamespace(receive=lambda *args,**kwargs:receipts.append((args,kwargs))),
-            episode_bindings=SimpleNamespace(received_form_references=lambda *args:['typed-finding','saved-sheet']))
+            episode_bindings=SimpleNamespace(received_form_references=lambda *args:['typed-finding','saved-sheet'],
+                # The registry names the original child binding by its home path.
+                for_child=lambda path,actual_role:SimpleNamespace(binding_path=(home+'.'+name).replace('.','/'))))
         references=runtime.Workflow._receive_form(workflow,source,{}, {'type':'object','properties':{},'required':[],'additionalProperties':False},8,redelivery=redelivery)
         assert references==['typed-finding','saved-sheet'] and called==[role]
         assert len(progress)==1

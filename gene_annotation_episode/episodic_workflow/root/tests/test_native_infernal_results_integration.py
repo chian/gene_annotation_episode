@@ -38,6 +38,7 @@ from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.library.published_scientific_task_presentation import render_scientific_process_prompt
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -187,7 +188,7 @@ def run_case(tmp_path, program, *, selectors=None, bind=True, wrong_sequence=Fal
             'format': 'reference', 'x-reference-namespace': 'execution_handoff'},
             'x-source': 'execution_handoff_refs'}}, 'required': ['completed', 'references'],
         'additionalProperties': False}
-    tools = ToolRegistry(store)
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
     owner = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id=RUN_ID,
         resources=resources, initial_information={}, tool_registry=tools, handoff_unit=3,
         acquired_record_unit=2, log_window_bytes=128, log_roles=('stdout', 'stderr'))
@@ -196,7 +197,7 @@ def run_case(tmp_path, program, *, selectors=None, bind=True, wrong_sequence=Fal
         'episode_service_inputs': 'actual_tool_registry_v1'}
     if nested:
         application = factory(store, run_id=RUN_ID, directory=tmp_path / 'run', tool_registry=tools)
-        descriptor = prepare_scientific_binding(run_directory=tmp_path / 'run',
+        descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=tmp_path / 'run',
             source_directory=PUBLICATION, tool_catalog=tools.catalog(),
             child_roles=('scientific_process', 'launch', 'results'),
             resource_catalogs=application.resource_tool_catalogs)

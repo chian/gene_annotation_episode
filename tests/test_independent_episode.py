@@ -9,9 +9,9 @@ import weakref
 
 import pytest
 
-from method_loop import (ChildEpisodeUnit, Context, Episode, EpisodeGoal,
+from gene_annotation_episode.episodic_workflow.root.method_loop import (ChildEpisodeUnit, Context, Episode, EpisodeGoal,
                          EpisodeRequest, EpisodeTree, Grain, Leaf)
-from method_loop.archive import JsonArchive
+from gene_annotation_episode.episodic_workflow.root.method_loop.archive import JsonArchive
 from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
@@ -24,7 +24,7 @@ def leaf(label, work):
 
 class ExternalJobEvent(asyncio.Event):
     async def wait(self):
-        from method_loop.suspension import external_wait
+        from gene_annotation_episode.episodic_workflow.root.method_loop.suspension import external_wait
         return await external_wait(super().wait(),
             {'kind': 'scheduled_external_job', 'job_id': 'fixture-job'})
 

@@ -316,7 +316,7 @@ def test_equal_companion_measurements_still_have_distinct_saved_selector_callbac
         seen.append(cp(selector))
         if selected and selected['kind'] == 'linear_bar':
             arm = result['arms'][selector['role']]
-            return legacy._validate_graph(selected, arm['graph_details'], sources={(s['source_ref'], s['representation']): s for s in source_records}, images=image_records, request=f.args)
+            return legacy._validate_graph(selected, arm['graph_details'], sources={(s['source_ref'], s['representation']): s for s in source_records}, images=image_records, request=f.args, implementation_fingerprints=result['implementation_dependencies']['expected_module_fingerprints'])
         return legacy._validate_measurement(selected, measurement, source_records=source_records, image_records=image_records)
     assert shared.validate_controlled_response_saved_science(f.args, result, measurement_checks=check) == result
     assert seen == [dict(role=r, reading_key=None) for r in ROLES] + [dict(role=ROLES[0], reading_key='same-A'), dict(role=ROLES[0], reading_key='same-A-2')]

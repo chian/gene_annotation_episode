@@ -5,7 +5,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from method_loop import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeGoal, EpisodeRequest
 
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow

@@ -300,7 +300,7 @@ async def open_commission(spec):
             episodes = job_episodes(jobs)
             assert episodes.as_record() == settings['job_episodes']
             provider = ChildProvider(store, jobs, spec, directory)
-            workflow = assemble_workflow(store, ToolRegistry(store), provider, directory,
+            workflow = assemble_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider, directory,
                 spec['run_id'], settings, controller_factory=ControllerFactory(),
                 project_credit=parent_credit, job_episodes=episodes, execution_binding=binding,
                 episode_service_factory=application_services,

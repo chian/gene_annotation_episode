@@ -88,7 +88,7 @@ def test_primary_author_product_pair_ratio_selected_and_returned_with_unknown_sa
         result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run',
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1),
             project_credit=scorer, initial_known_record_refs=[*seed.received_record_refs, dataset['id']],
-            episode_binding_factories=(partial(LiteratureEpisode, rate_population=True,
+            episode_binding_factories=(partial(LiteratureEpisode,
                 reference_parent_sources=[args['source_ref']]),), binding_definitions={'credit': scorer.as_record()}))
         assert len(captured) == 1
         assert store.db.execute('select count(*) from runtime_observations').fetchone()[0] == 3

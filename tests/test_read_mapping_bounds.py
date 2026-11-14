@@ -58,7 +58,7 @@ def test_caller_cpu_representation_errors_are_actionable_before_execution(cpu):
 def prepared(tmp_path):
     fastq=tmp_path/"synthetic.fq";fastq.write_text("@read\nACGT\n+\nIIII\n")
     store=Store(tmp_path/"state");store.create_problem(fastq,molecule="dna")
-    target,=store.targets();tools=ToolRegistry(store)
+    target,=store.targets();tools=ToolRegistry(store, run_directory=store.path / 'tool-run')
     selected=tools.execute("library.select",{"library_ref":target["id"],"ordinal_ranges":[{"start":0,"end":1}]})
     material=store.register_material(data=">synthetic_ref\nACGT\n",format="fasta",molecule="dna")
     parsed=store.parse_material(material["id"])

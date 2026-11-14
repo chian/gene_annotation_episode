@@ -23,8 +23,7 @@ from gene_annotation_episode.atac_differential_calculations import (
 
 ROLES = ('signal1', 'background1', 'signal2', 'background2')
 LIKELIHOODS = ('condition1_vs_background', 'condition2_vs_background', 'condition1_vs_condition2')
-NATIVE = (Path(__file__).resolve().parents[1] / 'verification' /
-          'tool_graders_atac_differential_plan_2026-10-27_460' / 'native001')
+NATIVE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/atac/native001'
 MAX_COORDINATE = 2**63 - 1
 
 

@@ -196,7 +196,11 @@ class PredictionParentExchangeChecks:
         v = exchange
         receiver = v.parent.child_report_receiver('hpc_prediction')
         assert receiver.__module__ == v.parent.__module__.removesuffix('.episode') + '.from_child_hpc_resource_prediction'
-        assert v.parent.child_report_receiver('launch') is None
+        launch = v.parent.child_report_receiver('launch')
+        if self.axis == 'a104':
+            assert launch.__module__ == v.parent.__module__.removesuffix('.episode') + '.from_child_execution_job_submission'
+        else:
+            assert launch is None
         calls = []
         def selected(role):
             assert role == 'hpc_prediction'

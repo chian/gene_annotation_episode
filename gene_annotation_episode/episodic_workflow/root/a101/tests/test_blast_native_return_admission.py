@@ -9,8 +9,8 @@ from dataclasses import replace
 import json
 from types import SimpleNamespace
 
-from method_loop.episode import EpisodeGoal, EpisodeRequest
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.a101.method_loop.episode import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.a101.method_loop.identities import EpisodeRef
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, plain, validate_form

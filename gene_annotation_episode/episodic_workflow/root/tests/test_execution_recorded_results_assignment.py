@@ -8,8 +8,8 @@ from dataclasses import replace
 import json
 from types import SimpleNamespace
 
-from method_loop import EpisodeGoal, EpisodeRequest
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.communication import plain

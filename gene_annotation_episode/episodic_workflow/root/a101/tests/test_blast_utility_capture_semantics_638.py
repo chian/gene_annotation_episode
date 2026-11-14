@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_uti
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_result_worker as worker
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import validate_blast_utility_record
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_contracts import native_blast_utility_output_completeness, producer_failure, validate_native_blast_utility_bundle
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from test_blast_utility_contracts_625 import binding, occurrence, operation, outcome
 from test_native_blast_utility_producer_628 import (
     FAMILY, controlled_native, job_fixture, plan_fixture, reserved_fixture,

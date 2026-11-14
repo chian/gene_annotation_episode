@@ -41,7 +41,7 @@ def test_unknown_tag_does_not_dump_alternative_schemas_or_large_instance():
 def test_actual_runtime_repairs_malformed_pmc_without_external_call_or_observation(tmp_path):
     with Store(tmp_path/'workspace') as store:
         target = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs'][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         invalid = {'selection': {'kind': 'tool', 'tool': 'public.pmc.versions',
                     'arguments': {'pmcid': 'PMC99633}},'}}, 'report_update': {}}
 

@@ -64,3 +64,16 @@ def literature_binding_factories(**configuration):
     from ..published_evidence_assessment.episode import create_binding_tree
     return tuple(partial(type(binding), **deepcopy(configuration))
                  for binding in create_binding_tree(object(), **configuration))
+
+
+def literature_binding_for_role(binding, role):
+    """Build the private literature home that owns ``role`` on the same services.
+
+    The former single literature binding served every literature role; each role
+    now has its own home. The configuration is the one the binding records, which
+    is what the application itself uses to rebuild a home from a saved descriptor.
+    An unknown role raises KeyError.
+    """
+    from ..published_evidence_assessment.episode import create_binding_tree
+    owners = {home.roles[0]: type(home) for home in create_binding_tree(object())}
+    return owners[role](binding.services, **deepcopy(binding.as_record()['configuration']))

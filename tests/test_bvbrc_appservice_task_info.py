@@ -42,8 +42,8 @@ def install(monkeypatch, responder):
     calls = []
 
     class Opener:
-        def open(self, request, timeout):
-            calls.append((request, timeout))
+        def open(self, request):
+            calls.append(request)
             return responder(request)
 
     monkeypatch.setattr("urllib.request.build_opener", lambda *handlers: Opener())
@@ -54,12 +54,11 @@ def install(monkeypatch, responder):
 def test_task_info_is_one_exact_configured_endpoint_get(monkeypatch, file):
     calls = install(monkeypatch, lambda req: Response(req.full_url))
     monkeypatch.setenv("BVBRC_TEST_ONLY_AUTH", "OAuth controlled-token")
-    client = BVBRCAnalysisClient({"AppService": ENDPOINT}, timeout=17,
+    client = BVBRCAnalysisClient({"AppService": ENDPOINT},
                                  authorization_env="BVBRC_TEST_ONLY_AUTH")
     snapshot = client.task_info("task_12-3", file)
     assert len(calls) == 1
-    request, timeout = calls[0]
-    assert timeout == 17
+    request = calls[0]
     assert request.get_method() == "GET"
     assert request.full_url == ENDPOINT + "/task_info/task_12-3/" + file
     assert request.data is None
@@ -76,7 +75,7 @@ def test_old_task_log_request_identity_and_operands_are_unchanged(monkeypatch):
     client = BVBRCAnalysisClient({"AppService": ENDPOINT})
     snapshot = client.task_log("legacy task", "stdout")
     assert snapshot.request == {"kind": "task_log", "task_id": "legacy task", "stream": "stdout"}
-    assert calls[0][0].full_url.endswith("/task_info/legacy%20task/stdout")
+    assert calls[0].full_url.endswith("/task_info/legacy%20task/stdout")
     with pytest.raises(ValueError, match="bvbrc_task_log_selection_invalid"):
         client.task_log("12", "job_result_id")
     assert len(calls) == 1

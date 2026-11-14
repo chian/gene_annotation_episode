@@ -12,6 +12,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from gene_annotation_episode.episodic_workflow.root.a104.communication import plain
 from .test_a104_results_preservation import binding_home, frame, own_module
 
 
@@ -32,7 +33,8 @@ def native_receipt(frame):
     observed, reads, target_reads = [], [], []
     result = {'mode': 'bytes'}
     def read_target(reference, scope):
-        assert reference == assignment['handoff_ref'] and scope == frame.scope
+        # The owner passes the receiving context's immutable scope view.
+        assert reference == assignment['handoff_ref'] and plain(scope) == frame.scope
         target_reads.append(reference)
         return deepcopy(target)
     def observe(selected_target, *, operation_key):
@@ -77,6 +79,7 @@ def test_actual_native_result_publication_retains_qualifications_and_failure_rec
     reference, = returned['record_refs']
     assert returned['changed_record_refs'] == [reference]
     frame.journal.save('runtime_actions', {'episode_id': frame.child.episode_id, 'decision_index': 2,
+        'action': own_module('runtime')._json(case.selected),
         'result': own_module('runtime')._json(returned), 'credit': 0.0})
     replay = asyncio.run(frame.owner._execute_native_results(frame.child, case.target,
         case.selected['tool'], case.arguments, case.key))
@@ -91,6 +94,7 @@ def test_actual_native_receipt_read_rejects_changed_original_controls(native_rec
         case.selected['tool'], case.arguments, case.key))
     reference, = returned['record_refs']
     frame.journal.save('runtime_actions', {'episode_id': frame.child.episode_id, 'decision_index': 2,
+        'action': own_module('runtime')._json(case.selected),
         'result': own_module('runtime')._json(returned), 'credit': 0.0})
     if change == 'selected_arguments':
         changed = deepcopy(case.selected)
@@ -103,7 +107,9 @@ def test_actual_native_receipt_read_rejects_changed_original_controls(native_rec
         path = frame.owner._result_directory(frame.child) / (contracts.digest(case.key) + '.receipt.json')
         body = json.loads(path.read_bytes())
         body['observation']['state'] = 'changed-original-observation'
-        path.write_text(contracts.canonical(body))
+        # Saved controls are canonical JSON plus one newline; keep that byte
+        # form so the changed content, not the file format, is what is rejected.
+        path.write_text(contracts.canonical(body) + '\n')
         expected = 'execution_result_original_receipt_conflict'
     elif change == 'target_identity':
         case.target['handle'] = 'changed-native-handoff'
@@ -112,6 +118,7 @@ def test_actual_native_receipt_read_rejects_changed_original_controls(native_rec
         changed = deepcopy(returned)
         changed['result']['observation']['state'] = 'changed-saved-outcome'
         frame.journal.save('runtime_actions', {'episode_id': frame.child.episode_id, 'decision_index': 2,
+            'action': own_module('runtime')._json(case.selected),
             'result': own_module('runtime')._json(changed)})
         expected = 'execution_result_saved_outcome_conflict'
     with pytest.raises(ValueError, match=expected):

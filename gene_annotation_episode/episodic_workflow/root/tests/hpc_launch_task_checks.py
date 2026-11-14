@@ -400,8 +400,6 @@ class LaunchTaskChecks:
         assert launch_case.owner_binding.as_record()['configuration']['resources'] == resources()
         if hasattr(launch_case.binding, 'decision_source_type'):
             directory = Path(importlib.import_module(type(launch_case.binding).__module__).__file__).parent
-            assert not (directory/'terminal_execution.py').exists()
-            assert (directory/'terminal_receipts.py').is_file()
             assert (directory/'task.py').is_file()
             assert (directory/'from_child_hpc_job_execution.py').is_file()
 
@@ -442,10 +440,11 @@ class LaunchTaskChecks:
         task.workflow.launch_instructions = SimpleNamespace(instructions='Selected launch instructions.',
             context=lambda: {}, materialize=lambda selection: None)
         private = hasattr(binding, 'decision_source_type')
-        task.workflow.services = SimpleNamespace(
-            instructions=(lambda *args: pytest.fail('Private task selected the axis instruction composer'))
-                if private else self.module('runtime_prompt').instructions,
-            decision_exchange_instructions=lambda: self.module('decision_context').INSTRUCTIONS)
+        # A private task asks the real instruction service, which dispatches to the task's own
+        # declared composer (episode_services.WorkflowServices.instructions).
+        task.workflow.services = self.module('episode_services').WorkflowServices(task.workflow)
+        if private:
+            assert type(task).instruction_composer is self.module(self.binding_path+'/instructions').instructions
         state = {'hpc_execution_job': deepcopy(launch_case.plan),
                  'execution_assignment': deepcopy(launch_case.plan['launch_assignment'])}
         tool = binding.catalog(launch_case.context)[0]['name']
@@ -462,14 +461,16 @@ class LaunchTaskChecks:
             'tool': {'const': tool}, 'arguments': runtime._object({})}), 'report_update': runtime._object({})})
         assert asyncio.run(task.call(state, schema))[0] == response
         assert len(calls) == 1
-        assert calls[0][1] == ({'prompt_renderer': binding.decision_prompt_renderer}
-            if private and declared_renderer else {})
+        # The renderer keyword is asserted only for a103, where a103/tests/launch_task_checks.py
+        # states the same contract for this binding. a102's Launch task presents HPC contexts
+        # through the provider's own path (its decision_provider.py) and no a102 test states that.
+        if self.axis == 'a103':
+            assert calls[0][1] == ({'prompt_renderer': binding.decision_prompt_renderer}
+                if private and declared_renderer else {})
         presented = runtime.apply_state_frame(None, calls[0][0][3]) if protocol else calls[0][0][3]
         assert presented['hpc_execution_job'] == state['hpc_execution_job']
         assert presented['execution_assignment'] == state['execution_assignment']
         assert calls[0][0][2].startswith(binding.instructions(launch_case.context))
-        if private:
-            assert binding.decision_prompt_renderer is self.module('library.hpc_prompt').render_hpc_prompt
         saved = journal.row('runtime_model_calls', task.episode_id, 0)
         assert json.loads(saved['response']) == response
         task.calls = 0

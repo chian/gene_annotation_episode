@@ -24,6 +24,7 @@ from gene_annotation_episode.native_atac_differential_reference import extract_a
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -53,7 +54,7 @@ def _body(raw):
 def _reconstruct_original_workflow(store, proof):
     """Fresh runtime owners; preserve every original identity and binding."""
     factory = ExecutionServiceFactory.from_record(proof['factory'])
-    tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
     factory.configure_tool_registry(tools)
     directory = Path(proof['workflow_directory'])
     library = ScientificProcessLibrary(directory / 'scientific-process-library')
@@ -168,10 +169,10 @@ def test_selected_lumpy_PE_native_output_shared_saved_values_and_typed_delivery(
             workspace.mkdir()
             factory = ExecutionServiceFactory({'ordinary': dict(kind='local', workspace=str(workspace),
                 policy=deepcopy(POLICY))}, {}, 2, .25, .5)
-            tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
+            tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
             factory.configure_tool_registry(tools)
             directory, run_id = tmp_path / 'run', 'native-lumpy-vcf-shared-results'
-            scientific = prepare_scientific_binding(run_directory=directory, source_directory=PUBLICATION,
+            scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory, source_directory=PUBLICATION,
                 tool_catalog=tools.catalog(), child_roles=['scientific_process'])
             library = ScientificProcessLibrary(directory / 'scientific-process-library')
             provider = VcfProvider(store, library, scope, input_ref, question=QUESTION, native_file=output,

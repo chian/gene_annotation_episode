@@ -16,7 +16,7 @@ def test_partial_sheet_decode_is_published_with_actionable_feedback(tmp_path):
     with Store(tmp_path/'workspace') as store:
         store.create_problem(raw_sequence='MARGKK', molecule='protein', role='gene')
         source = register(store, path)
-        tools = ToolRegistry(store, job_limits={'memory_bytes': 256*1024**2, 'scratch_bytes': 8*1024**2})
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits={'memory_bytes': 256*1024**2, 'scratch_bytes': 8*1024**2})
         result = tools.execute('source.xlsx.rows', {'source_ref': source['id'],
             'sheet_key': 'selected', 'offset': 0, 'limit': 3, 'where': None, 'header_row': 1})
         assert result['status'] == 'partial'

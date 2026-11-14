@@ -15,6 +15,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext, EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories, literature_binding_for_role
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_a105_worksheet import a105_worksheet_template, FAMILIES, VERSION as WORKSHEET
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_concentration_window_prompt import CONCENTRATION_WINDOW_TASK
@@ -216,7 +217,7 @@ def test_source_bytes_and_nested_covariance_custody(tmp_path):
         assert out['status'] == 'invalid' and 'not_received' in out['feedback']['code']
         page = dict(version='page_assignment_v1', source_ref=args['selection']['source_ref'], representation='original', artifact_ref=store.get(args['selection']['source_ref'])['artifact_ref'], question_context_refs=[], prior_delivery_refs=[], **{REQUESTED: ['substrate_loss_variance']})
         page_ctx = replace(ctx, role='literature_page', path=(('literature_page', ctx.episode_id),), assignment=page, received_record_refs=(*ctx.received_record_refs, alien))
-        out = asyncio.run(binding.execute(page_ctx, OPERATION, args, 'outside281'))
+        out = asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(page_ctx, OPERATION, args, 'outside281'))
         assert out['status'] == 'invalid' and 'outside_assigned_source' in out['feedback']['code']
     finally:
         store.close()
@@ -394,7 +395,7 @@ def test_shared_loop_common_worksheet_typed_delivery_and_fresh_cold(tmp_path, mo
     provider = ScriptedProvider(script)
     progress = ScientificFindingProgress(FindingProgressPolicy(1))
     try:
-        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=sources),)))
+        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=sources)))
         assert len(captured) == (2 if nested else 1)
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == (5 if nested else 3)
         assert store.db.execute('SELECT count(*) FROM literature_concentration_window_operations').fetchone()[0] == 1

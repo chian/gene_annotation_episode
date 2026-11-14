@@ -27,7 +27,7 @@ def _family(f, *, kind='local', formats=None):
             'software': deepcopy(f.assignment['requested_job']['native_flux_balance']['software']),
             'model_formats': ['cobra_json'] if formats is None else formats}]}
     return ExecutionEpisodes(None, store=f.store, run_id=f.records.run_id, directory=f.owner.directory,
-        resources={'selected-local': configuration}, initial_information={}, tool_registry=ToolRegistry(f.store),
+        resources={'selected-local': configuration}, initial_information={}, tool_registry=ToolRegistry(f.store, run_directory=f.store.path / 'tool-run'),
         handoff_unit=1, acquired_record_unit=1, log_window_bytes=64, log_roles=['stdout', 'stderr'])
 
 
@@ -250,7 +250,7 @@ def test_compact_completed_private_action_reopens_before_public_commit_without_e
     monkeypatch.setattr(LocalPracticalOperations, 'execute', no_execution)
     descriptor = family.as_record()
     restored = ExecutionEpisodes(None, store=f.store, run_id=f.records.run_id, directory=f.owner.directory,
-        tool_registry=ToolRegistry(f.store), **descriptor['configuration'])
+        tool_registry=ToolRegistry(f.store, run_directory=f.store.path / 'tool-run'), **descriptor['configuration'])
     assert restored.initialize(child).receipts() == [receipt]
     assert asyncio.run(restored.execute(child, 'practical.inspect', {}, key)) == original
     f.store.db.execute('UPDATE runtime_actions SET result=? WHERE run_id=? AND episode_id=? AND decision_index=0',
@@ -281,7 +281,7 @@ def test_legacy_compact_control_recovery_and_committed_replay_keep_original_proj
     f.store.db.execute('DELETE FROM runtime_flux_balance_request_bindings WHERE run_id=?', (f.records.run_id,))
     descriptor = family.as_record()
     restored = ExecutionEpisodes(None, store=f.store, run_id=f.records.run_id, directory=f.owner.directory,
-        tool_registry=ToolRegistry(f.store), **descriptor['configuration'])
+        tool_registry=ToolRegistry(f.store, run_directory=f.store.path / 'tool-run'), **descriptor['configuration'])
     restored.initialize(launch)
     restored.initialize(child)
     assert read_request_binding(f.store, f.records.run_id, launch.episode_id) == original_parent
@@ -321,7 +321,7 @@ def test_compact_reserved_or_unpublished_metadata_action_recovers_original_selec
         actual_execute if interrupted_at == 'reserved' else no_repeated_operation)
     descriptor = family.as_record()
     restored = ExecutionEpisodes(None, store=f.store, run_id=f.records.run_id, directory=f.owner.directory,
-        tool_registry=ToolRegistry(f.store), **descriptor['configuration'])
+        tool_registry=ToolRegistry(f.store, run_directory=f.store.path / 'tool-run'), **descriptor['configuration'])
     result = asyncio.run(restored.execute(child, 'practical.inspect', {}, key))
     assert result['status'] == 'completed'
     assert {path.name: path.read_bytes() for path in (state.directory / 'intents').iterdir()} == intents
@@ -597,7 +597,7 @@ def test_descriptor_reconstruction_installs_original_receiver_without_serializin
     record = family.as_record(); json.dumps(record, allow_nan=False)
     assert 'flux_balance_input_reader' not in canonical(record)
     restored = ExecutionEpisodes(None, store=f.store, run_id=f.records.run_id, directory=f.owner.directory,
-        tool_registry=ToolRegistry(f.store), **record['configuration'])
+        tool_registry=ToolRegistry(f.store, run_directory=f.store.path / 'tool-run'), **record['configuration'])
     assert restored.as_record() == record
     operation = restored._practical['selected-local']._operations('local')
     assert operation.flux_balance_input_reader.__self__ is restored.flux_balance_inputs

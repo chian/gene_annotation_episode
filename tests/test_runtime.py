@@ -415,7 +415,7 @@ def test_resume_reuses_closed_child_archives_without_duplicate_files(tmp_path):
     assert files_after-files_before == {root_file, root_file.removesuffix('.json')+'.index.json'}
     assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == observations_before+1
     assert len(resumed.contexts) == 1 and tools.executions == tools.commits == 1
-    from method_loop.archive import ArchivedRecord
+    from gene_annotation_episode.episodic_workflow.root.method_loop.archive import ArchivedRecord
     expanded = ArchivedRecord(directory/root_file, descriptor['sha256'], descriptor['index_sha256']).load()
     assert expanded['units'][0]['child']['units_consumed'] == 2
     assert expanded['units'][0]['child_result']['form']['credit'] == 1
@@ -534,7 +534,7 @@ def test_actual_schema_transport_is_closed_required_and_roundtrips(tmp_path):
     with Store(tmp_path / "schema-store") as store:
         store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein", role="protein")
         schemas = [REASONING_SCHEMA] + [definition["input_schema"]
-                    for definition in ToolRegistry(store).catalog().values()]
+                    for definition in ToolRegistry(store, run_directory=store.path / 'tool-run').catalog().values()]
         def visit(node):
             if not isinstance(node, dict):
                 return
@@ -587,7 +587,7 @@ def test_actual_store_partial_reasoning_retains_independent_rows(tmp_path):
         # This admission fixture measures retained valid rows, not biological support.
         def retained_valid_hypotheses(bound_store, scope):
             return len(bound_store.list("hypothesis"))
-        result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
             run_dir=tmp_path / "partial-run",
             project_credit=retained_valid_hypotheses,
             controller_factory=lambda path, baseline: FixtureController(str(path), baseline, 1)))
@@ -610,7 +610,7 @@ def test_omitted_optional_contexts_does_not_make_empty_request_a_completed_actio
             {"selection": {"kind": "tool", "tool": "sequence.inspect",
              "arguments": {"subject_ref": problem["subject_refs"][0]}}, "report_update": {}},
         ])
-        result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
             run_dir=tmp_path / "empty-run",
             controller_factory=lambda path, baseline: FixtureController(str(path), baseline, 1)))
         assert result["completed_actions"] == 1
@@ -643,7 +643,7 @@ def test_transport_optional_null_is_decoded_even_when_another_reasoning_row_is_i
         # This transport fixture measures retained source-subject rows only.
         def retained_source_subjects(bound_store, scope):
             return len(bound_store.list("reference"))
-        result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider,
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
             run_dir=tmp_path / "transport-partial-run",
             project_credit=retained_source_subjects,
             controller_factory=lambda path, baseline: FixtureController(str(path), baseline, 1)))
@@ -682,7 +682,7 @@ def redeliver(schema):
 
 
 def test_failed_child_delivery_parent_repairs_without_new_science_or_yield(tmp_path):
-    from method_loop.archive import ArchivedRecord
+    from gene_annotation_episode.episodic_workflow.root.method_loop.archive import ArchivedRecord
     store, tools = setup(tmp_path)
     original = delivery_schema()
     repaired = deepcopy(original)
@@ -781,7 +781,7 @@ def test_async_tool_protocol_runs_on_owning_loop_with_sync_fallback_available(tm
 
 
 def test_shared_kernel_sync_delivery_repair_preserves_declarative_child_trace():
-    from method_loop import (Context, Episode, EpisodeGoal, EpisodeRequest, EpisodeTree,
+    from gene_annotation_episode.episodic_workflow.root.method_loop import (Context, Episode, EpisodeGoal, EpisodeRequest, EpisodeTree,
         Grain, Leaf, ChildEpisodeUnit, ReportDeliveryError, ReportRedelivery)
     from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
     factory = lambda path: FixtureController(str(path), 0, 2)
@@ -917,7 +917,7 @@ def test_effective_credit_binding_in_context_is_persisted_and_restored(tmp_path)
     with Store(tmp_path / "actual") as store:
         problem = store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein", role="protein")
         subject = problem["subject_refs"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         provider = ScriptedProvider([{"selection": {"kind": "tool", "tool": "sequence.inspect",
             "arguments": {"subject_ref": subject}}, "report_update": {}}, KeyboardInterrupt()])
         with pytest.raises(KeyboardInterrupt):
@@ -1048,7 +1048,7 @@ def test_actual_store_tools_and_credit_reasoning_commit_existing_evidence(tmp_pa
     with Store(tmp_path / "actual") as store:
         problem = store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein", role="protein")
         subject = problem["subject_refs"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         first = {"selection": {"kind": "tool", "tool": "sequence.inspect",
                  "arguments": {"subject_ref": subject}}, "report_update": {}}
         def interpretation(context):
@@ -1096,7 +1096,7 @@ def test_missing_inferred_extent_notice_reaches_owner_then_bounded_revision_gain
 
     with Store(tmp_path / 'extent-feedback') as store:
         target = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs'][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         first = {'selection': {'kind': 'tool', 'tool': 'sequence.inspect',
             'arguments': {'subject_ref': target}}, 'report_update': {}}
         def no_extent(context):

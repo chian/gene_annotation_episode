@@ -30,6 +30,7 @@ from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_native_rna_structure_contracts import job as native_job, rna_input
@@ -167,9 +168,9 @@ def workflow_case(tmp_path, *, prediction=True, energy=False, failed=False, sele
     results_form = result_form(results_fields)
     science_form = result_form(parent_fields, completed=False)
     factory = ExecutionServiceFactory(resources, {}, 3, 2, 1, log_window_bytes=128)
-    tools = ToolRegistry(store)
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
     application = factory(store, run_id=RUN_ID, directory=tmp_path / 'run', tool_registry=tools)
-    descriptor = prepare_scientific_binding(run_directory=tmp_path / 'run', source_directory=PUBLICATION,
+    descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=tmp_path / 'run', source_directory=PUBLICATION,
         tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
         resource_catalogs=application.resource_tool_catalogs)
     library = ScientificProcessLibrary(tmp_path / 'run/scientific-process-library')

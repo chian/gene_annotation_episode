@@ -10,9 +10,9 @@ import json
 import pytest
 from real_time_credit_fixture import progress_time
 from jsonschema import Draft202012Validator
-from method_loop import ClosedRecord
-from method_loop.durable import canonical
-from method_loop.identities import UnitRef
+from gene_annotation_episode.episodic_workflow.root.method_loop import ClosedRecord
+from gene_annotation_episode.episodic_workflow.root.method_loop.durable import canonical
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import UnitRef
 
 from gene_annotation_episode.episodic_workflow.root import decision_history as history
 from gene_annotation_episode.episodic_workflow.root.episode_completion import CompletionLedger

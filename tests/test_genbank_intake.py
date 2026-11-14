@@ -67,7 +67,7 @@ def test_caller_genbank_collection_binds_sequences_without_copying_native_assert
         native = store.get(attempt["native_source_ref"])
         assert native["parent_source_refs"] == [attempt["source_ref"]]
         assert store.get_artifact(store.get(attempt["source_ref"])["artifact_ref"]) == content
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         records = call(tools, "material.annotations", {"parse_ref": attempt["id"]})["result"]
         actual = [native_entry(store, entry) for entry in records["entries"]]
         assert [row["record"]["annotations"]["molecule_type"] for row in actual] == ["DNA", "protein"]
@@ -95,7 +95,7 @@ def test_native_feature_pages_are_bounded_and_exact_full_qualifiers_remain_reada
         store.create_problem(raw_sequence="MACT")
         material = store.register_material(data=content, use="evidence")
         attempt = store.parse_material(material["id"])
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         first = call(tools, "material.annotations", {"parse_ref": attempt["id"], "kind": "feature", "limit": 1})["result"]
         assert first["total"] == 3 and len(json.dumps(first).encode()) < 5000
         second = call(tools, "material.annotations", first["next_query"])["result"]
@@ -125,7 +125,7 @@ def test_partial_native_records_warnings_and_metadata_only_records_survive_expor
     with Store(workspace) as store:
         original = store.create_problem(raw_sequence="MACT", molecule="protein")
         material = store.register_material(data=content, use="evidence")
-        result = call(ToolRegistry(store), "material.parse", {"material_ref": material["id"]}, operation_key="native-partial")
+        result = call(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.parse", {"material_ref": material["id"]}, operation_key="native-partial")
         assert result["status"] == "partial"
         attempt = result["result"]["parse_attempt"]
         assert attempt["native_source_ref"] in result["record_refs"]
@@ -170,7 +170,7 @@ def test_metadata_only_caller_genbank_has_no_fabricated_sequence_target(tmp_path
         assert attempt["status"] == "partial" and attempt["valid_records"] == 0
         assert attempt["code"] == "native_metadata_without_sequence_projection"
         assert store.material_members(attempt["collection_ref"])["members"] == []
-        page = call(ToolRegistry(store), "material.annotations", {"parse_ref": attempt["id"]})["result"]
+        page = call(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.annotations", {"parse_ref": attempt["id"]})["result"]
         native = native_entry(store, page["entries"][0])
         assert native["record"]["sequence"]["length"] == 9 and native["record"]["sequence"]["defined"] is False
         assert not store.targets() and not store.list("feature")
@@ -188,7 +188,7 @@ def test_saved_external_genbank_evidence_preserves_origin_fixed_targets_cache_an
         source = store.put("source", {key: value for key, value in original_source.items()
             if key not in {"id", "record_type", "origin"}}, origin="external")
         assert source == original_source
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         wrapped = call(tools, "material.from_source", {"source_ref": source["id"]})["result"]
         material = store.get(wrapped["material_ref"])
         assert material["source_ref"] == source["id"] and material["use"] == "evidence"
@@ -274,7 +274,7 @@ def test_gzip_frame_coordinates_remain_decoded_source_coordinates_not_compressed
 def test_native_read_contracts_do_not_accept_paths_forge_sources_or_claim_empty_fasta_annotations(tmp_path):
     with Store(tmp_path / "state") as store:
         original = store.create_problem(raw_sequence="MACT")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         unavailable = call(tools, "material.annotations", {"parse_ref": original["initial_parse_refs"][0]})["result"]
         assert unavailable["availability"] == "unavailable" and unavailable["total"] is None
         assert unavailable["code"] == "native_annotations_not_available"

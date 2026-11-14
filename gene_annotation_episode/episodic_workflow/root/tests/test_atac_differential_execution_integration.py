@@ -35,7 +35,7 @@ def selected(f, tmp_path):
     binding = {'operation': OPERATION, 'mode': MODE, 'software': job['software']}
     resources = {'here': {'kind': 'local', 'workspace': str(workspace),
         'policy': deepcopy(POLICY), 'native_atac_differential': [binding]}}
-    tools = ToolRegistry(f.store, job_limits=deepcopy(POLICY))
+    tools = ToolRegistry(f.store, run_directory=f.store.path / 'tool-run', job_limits=deepcopy(POLICY))
     owner = ExecutionEpisodes(None, store=f.store, directory=tmp_path / 'run', run_id=f.run_id,
         resources=resources, initial_information={}, tool_registry=tools,
         handoff_unit=3, acquired_record_unit=2, log_window_bytes=128, log_roles=('stdout', 'stderr'))

@@ -118,7 +118,7 @@ def test_execution_factory_roundtrip_freezes_the_actual_registry_selection(tmp_p
     restored = ExecutionServiceFactory.from_record(record)
     assert restored.as_record() == record
     with Store(tmp_path / 'store') as store:
-        registry = ToolRegistry(store, job_limits=POLICY)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=POLICY)
         restored.configure_tool_registry(registry)
         assert registry._protein_conservation_configuration == dict(selected, saved_modes=True)
         restored.configure_tool_registry(registry)
@@ -141,7 +141,7 @@ def test_default_factory_record_and_saved_only_selection_need_no_native_profile(
     assert 'protein_conservation_saved_modes' not in record
     record['protein_conservation_saved_modes'] = True
     with Store(tmp_path / 'store') as store:
-        registry = ToolRegistry(store, job_limits=POLICY)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=POLICY)
         ExecutionServiceFactory.from_record(record).configure_tool_registry(registry)
         selected = registry._protein_conservation_configuration
         assert selected['resources'] == [] and selected['saved_modes'] is True

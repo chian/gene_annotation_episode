@@ -20,8 +20,8 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_utility_result_views as views
 from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts
-from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.form_reference_validation import form_reference_validation
+from gene_annotation_episode.episodic_workflow.root.a101.execution_contracts import canonical
+from gene_annotation_episode.episodic_workflow.root.a101.form_reference_validation import form_reference_validation
 from test_blast_vdb_publication_returns_669 import selected_collect, selected_result_host
 
 

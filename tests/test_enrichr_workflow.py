@@ -31,6 +31,7 @@ from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -166,11 +167,11 @@ class EnrichrWorkflowRun:
             "constraints": {"allowed_resource_ids": ["enrichr"], "allowed_kinds": ["api"]}}
         self.calls, self.contexts, self.result_forms, self.result_contexts = {}, [], [], []
         self.handoff = self.scientific_after_result = self.root_after_result = None
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         factory = ExecutionServiceFactory(RESOURCES, {}, 3, 2, .5)
         application = factory(store, run_id=self.run_id, directory=self.directory,
             tool_registry=tools, tool_catalog=tools.catalog())
-        self.descriptor = prepare_scientific_binding(run_directory=self.directory,
+        self.descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=self.directory,
             source_directory=PUBLICATION, tool_catalog=tools.catalog(),
             child_roles=("scientific_process", "launch", "results"),
             resource_catalogs=application.resource_tool_catalogs)
@@ -304,7 +305,7 @@ def _no_api_root(store, directory, run_id, scope, initial_refs):
     class NoProvider:
         async def complete(self, *args, **kwargs):
             _forbidden()
-    workflow = Workflow(store, ToolRegistry(store), NoProvider(), directory, run_id,
+    workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), NoProvider(), directory, run_id,
         controller_factory=lambda path, initial: YieldController(str(path), initial, 0, YieldParameters(100, 50)),
         project_credit=lambda *_: 0, episode_record_receipts=True, initial_known_record_refs=initial_refs)
     assert "results" not in workflow.episode_bindings.roles

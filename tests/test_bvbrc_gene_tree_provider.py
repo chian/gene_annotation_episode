@@ -34,7 +34,7 @@ from gene_annotation_episode import phylogeny_calculation_contracts as calculati
 
 
 STAGING = Path(__file__).resolve().parents[1]
-BOUNDARIES = STAGING / "verification" / "tool_graders_bvbrc_phylogeny_boundaries_2026-10-24"
+BOUNDARIES = STAGING / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/phylogeny_boundaries"
 NATIVE = BOUNDARIES / "additional_sources" / "bvbrc_gene_tree" / "tests"
 XML_NAMES = ("Buchnera_acpS_fg_dna_raxml_hky85.xml",
              "Buchnera_acpS_fg_dna_raxml_hky85_RAxML_tree_rell.xml")

@@ -11,7 +11,7 @@ def test_translation_is_an_explicit_derived_product_and_replays_once(tmp_path):
     with Store(tmp_path) as store:
         problem = store.create_problem(raw_sequence="ATGTGAGGGTAA", molecule="dna", role="gene")
         target = problem["subject_refs"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         args = {"subject_ref": target, "code": 25}
         first = tools.execute("sequence.translate", args, operation_key="translation-one")
         assert first["status"] == "completed", first
@@ -27,7 +27,7 @@ def test_translation_is_an_explicit_derived_product_and_replays_once(tmp_path):
 def test_source_and_exact_pages_are_readable_without_becoming_target_features(tmp_path):
     with Store(tmp_path) as store:
         problem = store.create_problem(raw_sequence="MKWVTFISLLFLFSSAYSRGVFRRDTHKSEIAHRFKDLGE", molecule="protein", role="protein")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         result = tools.execute("sequence.inspect", {"subject_ref": problem["subject_refs"][0]})
         assert result["status"] == "completed"
         source_ref = next(ref for ref in result["record_refs"] if ref.startswith("source_"))
@@ -44,7 +44,7 @@ def test_source_and_exact_pages_are_readable_without_becoming_target_features(tm
 def test_bad_local_operation_is_feedback_without_new_scientific_records(tmp_path):
     with Store(tmp_path) as store:
         problem = store.create_problem(raw_sequence="MKWVTFISLLFLFSSAYSRGVFRRDTHKSEIAHRFKDLGE", molecule="protein")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         result = tools.execute("sequence.translate", {"subject_ref": problem["subject_refs"][0], "code": 11})
         assert result["status"] == "invalid"
         assert not result["record_refs"]
@@ -58,7 +58,7 @@ def test_source_utf8_window_reports_size_and_boundary_differently(tmp_path):
         body = store.artifact("αbc", "text/plain")
         source = store.put("source", {"provider": "test_source", "accession": None, "uri": None,
             "artifact_ref": body, "text_ref": None, "request_ref": None, "version": None, "retrieved_at": None}, origin="caller")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         too_small = tools.execute("source.read", {"source_ref": source["id"], "offset": 0, "limit": 1})
         assert too_small["feedback"]["code"] == "source_window_too_small_for_character"
         invalid_offset = tools.execute("source.read", {"source_ref": source["id"], "offset": 1, "limit": 2})

@@ -79,18 +79,18 @@ def test_new_information_can_lower_actual_annotation_score_without_negative_prog
             'project_credit': fixture_progress, 'project_annotation_score': scorer,
             'binding_definitions': {'credit': {'kind': 'fixture_correction_flag'},
                                     'annotation_score': scorer.as_record()}}
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
             provider=ScriptedProvider([correct, inspect, inspect_operands]), **options))
         assert summary['credit'] == 1 and summary['annotation_score'] == 0
         assert controllers[0].scores == [1, 0, 0]
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
-        assert asyncio.run(run_workflow(store, ToolRegistry(store),
+        assert asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
             provider=ScriptedProvider([]), resume=True, **options)) == summary
         assert len(controllers) == 1
         without_score = {key: value for key, value in options.items()
                          if key not in {'project_annotation_score', 'binding_definitions'}}
         with pytest.raises(WorkflowError, match='same controller and credit bindings'):
-            asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([]),
+            asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=ScriptedProvider([]),
                 resume=True, **without_score))
 
 

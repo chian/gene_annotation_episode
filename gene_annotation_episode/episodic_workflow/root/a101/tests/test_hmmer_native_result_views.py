@@ -2,7 +2,7 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.domain import ContractError, validate_schema
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError, validate_schema
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_native_result_views import NATIVE_HMMER_METRICS, native_hmmer_fact_sources, projected_measurements, validate_native_hmmer_result_selector
 from test_native_hmmer_publication import selector
 

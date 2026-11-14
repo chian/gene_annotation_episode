@@ -195,7 +195,7 @@ def test_selector_embeds_with_independent_schema_scope():
 
 def family(store, directory, resource):
     return ExecutionEpisodes(None, store=store, directory=directory, run_id='chromatin-registration',
-        resources={'selected-local': resource}, initial_information={}, tool_registry=ToolRegistry(store),
+        resources={'selected-local': resource}, initial_information={}, tool_registry=ToolRegistry(store, run_directory=store.path / 'tool-run'),
         handoff_unit=3, acquired_record_unit=2, log_window_bytes=128, log_roles=['stdout', 'stderr'])
 
 
@@ -233,9 +233,9 @@ def test_actual_bound_registration_and_reconstruction(tmp_path, monkeypatch):
         assert entries[0]['description'] and entries[0]['instructions']
         assert entries[0]['invocation_route']['routes'] == [{'entry_role': 'launch',
             'resource_id': 'selected-local', 'resource_role': 'launch_local'}]
-        assert 'analyze_chromatin_interactions' not in ToolRegistry(store).catalog()
+        assert 'analyze_chromatin_interactions' not in ToolRegistry(store, run_directory=store.path / 'tool-run').catalog()
         restored = ExecutionEpisodes(None, store=store, directory=tmp_path / 'restored',
-            run_id='chromatin-registration', tool_registry=ToolRegistry(store), **owner.as_record()['configuration'])
+            run_id='chromatin-registration', tool_registry=ToolRegistry(store, run_directory=store.path / 'tool-run'), **owner.as_record()['configuration'])
         assert restored.as_record() == owner.as_record()
         assert restored.resource_tool_contracts() == owner.resource_tool_contracts()
         changed = deepcopy(selected)

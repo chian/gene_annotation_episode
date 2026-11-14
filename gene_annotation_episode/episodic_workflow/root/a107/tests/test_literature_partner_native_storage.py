@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a107.communication import form_with_facts, validate_closed_schema, validate_form
-from gene_annotation_episode.domain import ContractError, canonical, obj, validate_schema
+from gene_annotation_episode.episodic_workflow.root.a107.domain import ContractError, canonical, obj, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a107.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_storage import COMPONENTS, LiteraturePartnerRepository

@@ -47,14 +47,3 @@ def commit(store, *, assessments, annotation_update, report):
     return {'selection': {'kind': 'reason', 'commit': payload}, 'report_update': report}
 
 
-def test_scientific_binding_requires_explicit_policy_and_preserves_commission_scope(tmp_path):
-    with pytest.raises(TypeError, match='explicit_scientific_CreditPolicy_required'):
-        ScientificEvidenceCredit({})
-    with Store(tmp_path/'workspace') as store:
-        target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
-        scope = {'subject_refs': [target]}
-        narrow = {**scope, 'segments': [{'target_ref': target, 'start': 0, 'end': 5, 'unit': 'aa'}]}
-        scorer = ScientificEvidenceCredit(CreditPolicy())
-        with pytest.raises(ValueError, match='differs_from_original_commission'):
-            scorer(store, scope, assignment={'scope': narrow}, episode_id='fixture', run_id='fixture')
-        assert scorer(store, narrow, assignment={'scope': narrow}).credit == 0

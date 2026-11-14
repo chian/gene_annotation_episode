@@ -6,7 +6,7 @@ from dataclasses import replace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a110.communication import form_with_facts
-from gene_annotation_episode.domain import ContractError, obj
+from gene_annotation_episode.episodic_workflow.root.a110.domain import ContractError, obj
 from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_report_contracts import reaction_cells_schema, reaction_semantic_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_integration import setup_case, binding_for

@@ -489,7 +489,7 @@ def test_cyclic_input_rejected_with_path(packet):
 
 
 def test_offline_replay_public_validator_real_consumers_and_detachment(packet, monkeypatch):
-    from gene_annotation_episode.state import Store
+    from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 
     before = deepcopy(packet)
     expected = extract(packet)

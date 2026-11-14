@@ -176,7 +176,7 @@ def test_runtime_passes_actual_receiver_to_annotation_channel_and_preserves_prog
                 'predicate': 'functional_family', 'value': {'type': 'enum', 'value': 'unresolved'},
                 'context_refs': []}]
             return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
-        result = asyncio.run(run_workflow(store, ToolRegistry(store), run_dir=tmp_path / 'workflow',
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), run_dir=tmp_path / 'workflow',
             provider=ScriptedProvider([inspect]), controller_factory=controller_from_settings(settings),
             project_credit=progress, project_annotation_score=scorer,
             binding_definitions={'credit': progress.as_record(), 'annotation_score': scorer.as_record(),
@@ -605,7 +605,7 @@ def test_saved_scientific_return_credits_received_finding_without_using_child_sc
 def test_native_translated_protein_keeps_original_region_and_amino_acid_denominator(tmp_path):
     with Store(tmp_path / 'state') as store:
         genome, = store.create_problem(raw_sequence='GCT' * 100, molecule='dna')['subject_refs']
-        outcome = ToolRegistry(store).execute('sequence.translate', {'subject_ref': genome, 'code': 11})
+        outcome = ToolRegistry(store, run_directory=store.path / 'tool-run').execute('sequence.translate', {'subject_ref': genome, 'code': 11})
         assert outcome['status'] == 'completed'
         protein = outcome['result']['records'][0]['product_ref']
         proposal = proposed_annotation(store, protein, 'enzyme')
@@ -737,7 +737,7 @@ def test_runtime_discovers_new_proposal_and_updates_score_on_later_decision(tmp_
                     'predicate': 'functional_family', 'value': {'type': 'enum', 'value': 'unresolved'},
                     'context_refs': []}]
             return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
-        result = asyncio.run(run_workflow(store, ToolRegistry(store), run_dir=tmp_path / 'workflow',
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), run_dir=tmp_path / 'workflow',
             provider=ScriptedProvider([decision] * 3),
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 3),
             project_credit=progress, project_annotation_score=scorer,
@@ -755,7 +755,7 @@ def test_runtime_discovers_new_proposal_and_updates_score_on_later_decision(tmp_
         from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
         episode_id = store.db.execute('SELECT episode_id FROM runtime_episodes').fetchone()[0]
         settings = json.loads(store.db.execute('SELECT settings FROM runtime_runs').fetchone()[0])
-        workflow = assemble_workflow(store, ToolRegistry(store), ScriptedProvider([]), tmp_path / 'workflow',
+        workflow = assemble_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), ScriptedProvider([]), tmp_path / 'workflow',
             result['run_id'], settings, project_credit=progress, project_annotation_score=scorer,
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 3),
             initial_known_record_refs=[target, store.targets()[0]['source_ref'], source, observed],
@@ -776,7 +776,7 @@ def test_component_receipt_uses_public_native_subject_and_requires_region_covera
     from gene_annotation_episode.episodic_workflow.root.returns import axis_contribution_readers
     with Store(tmp_path / 'state') as store:
         genome, = store.create_problem(raw_sequence='GCT' * 100, molecule='dna')['subject_refs']
-        translation = ToolRegistry(store).execute('sequence.translate', {'subject_ref': genome, 'code': 11})
+        translation = ToolRegistry(store, run_directory=store.path / 'tool-run').execute('sequence.translate', {'subject_ref': genome, 'code': 11})
         protein = translation['result']['records'][0]['product_ref']
         proposal = proposed_annotation(store, protein, 'enzyme')
         other = proposed_annotation(store, protein, 'other')

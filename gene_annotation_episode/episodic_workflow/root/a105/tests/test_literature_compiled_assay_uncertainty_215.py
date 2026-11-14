@@ -20,6 +20,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_comp
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_compiled_assay_prompt import COMPILED_ASSAY_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_numerical_contracts as contracts
 from gene_annotation_episode.episodic_workflow.root.a105.episode_contract_information import validate_saved_fact_form
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
@@ -297,7 +298,7 @@ def test_mixed_actual_shared_loop_delivery_and_cold_readonly_reconstruction(tmp_
         return value
     provider = ScriptedProvider([child, work('literature.assay.populate', outputs['assay']['arguments']), work('literature.optical.populate', outputs['optical']['arguments'], 'assay'), work('literature.calibration.recovery.populate', outputs['recovery']['arguments'], 'optical'), work('literature.active_site.populate', outputs['active']['arguments'], 'recovery'), work('literature.assay.components.populate', lambda: operands(args), 'active'), work('literature.assay.components.populate', lambda: operands(v2args)), integrate])
     scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-    summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=proof / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=raw_refs, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, active_site_population=True, compiled_assay_population=True, reference_parent_sources=[args['source_ref']]),), binding_definitions={'credit': scorer.as_record()}))
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=proof / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=raw_refs, episode_binding_factories=literature_binding_factories(rate_population=True, active_site_population=True, compiled_assay_population=True, reference_parent_sources=[args['source_ref']]), binding_definitions={'credit': scorer.as_record()}))
     assert len(forms) == 1 and summary['credit'] == 0
     assert [c.scores for c in controllers] == [[0, 0], [0, 0, 0, 0, 0, 0]]
     assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 8

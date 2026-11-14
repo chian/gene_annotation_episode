@@ -11,7 +11,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_preparation import populate_database_artifact_set, validate_database_artifact_relationships
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_preparation_inputs import parse_blast_alias_document
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_preparation_population import populate_blast_preparation_artifact_set as populate, validate_blast_preparation_relationships
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from test_blast_preparation_contracts_647 import operation
 from test_blast_preparation_population_647 import common, database, occurrence, projection
 

@@ -8,8 +8,8 @@ import hashlib
 import json
 from pathlib import Path
 
-HISTORICAL = ('gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver',
-              'gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker')
+HISTORICAL = ('gene_annotation_episode.native_protein_structure_driver',
+              'gene_annotation_episode.native_protein_structure_worker')
 CURRENT = ('gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_driver',
            'gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_worker')
 ORIGINAL_CASES = ('historical_roundtrip', 'historical_pin_required',

@@ -11,9 +11,9 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.library.decision_steering_display import render_episode_steering
 from gene_annotation_episode.episodic_workflow.root.wait_events import completed_action_context
-from method_loop.durable import EventTargetError
-from method_loop.episode import Context
-from method_loop.suspension import SuspensionState
+from gene_annotation_episode.episodic_workflow.root.method_loop.durable import EventTargetError
+from gene_annotation_episode.episodic_workflow.root.method_loop.episode import Context
+from gene_annotation_episode.episodic_workflow.root.method_loop.suspension import SuspensionState
 
 
 RECORDED = json.loads((Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/waiting/'

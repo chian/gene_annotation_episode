@@ -8,7 +8,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_inspection import parse_blast_database_inspection, parse_blastdbcheck_diagnostics
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import validate_blast_utility_record
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 
 
 EVIDENCE = Path(__file__).resolve().parent / "fixtures/blast_database_readers"

@@ -19,6 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import
 from gene_annotation_episode.episodic_workflow.root.a105.episode_composition import compose_episode_bindings
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.source_contracts import _population_catalog
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_validation_storage import LiteratureMeasurementValidationRepository, measurement_validation_cells_schema, COMPONENTS, NAMESPACE, REQUESTED, VIEW
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_calibration_recovery_storage import LiteratureCalibrationRecoveryRepository
@@ -346,7 +347,7 @@ def test_original_source_selected_loop_exact_alias_return_and_readonly_cold_comp
         script = [child, recovery, validation, integrate]
         provider = FixtureProvider([])
         provider.script = iter([action(item) if isinstance(item, dict) else lambda frame, f=item: action(f(provider.views[provider.active_episode])) for item in script])
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=controller, project_credit=progress, initial_known_record_refs=[source_ref], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[source_ref], contract_information_profile=profile),), binding_definitions={'credit': progress.as_record()}, decision_protocol='decision_exchange_v1'))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=controller, project_credit=progress, initial_known_record_refs=[source_ref], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[source_ref], contract_information_profile=profile), binding_definitions={'credit': progress.as_record()}, decision_protocol='decision_exchange_v1'))
         assert len(captured) == 1 and summary['credit'] == 0
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 4
         assert store.db.execute('SELECT count(*) FROM literature_measurement_validation_operations').fetchone()[0] == 1

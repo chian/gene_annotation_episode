@@ -4,8 +4,8 @@ from gene_annotation_episode.episodic_workflow.root.a101.communication import va
 from gene_annotation_episode.episodic_workflow.root.a101.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.homology_job_submission.execution_contracts import obj, reference
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import HomologyJobs, FileAsset, digest
-from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.local_jobs import LocalJobPolicy
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from gene_annotation_episode.episodic_workflow.root.a103.tests.a103_test_support import source, protein, native_pair
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
 

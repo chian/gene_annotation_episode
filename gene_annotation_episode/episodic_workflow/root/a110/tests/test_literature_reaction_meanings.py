@@ -8,7 +8,7 @@ import sqlite3
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a110.communication import validate_closed_schema
-from gene_annotation_episode.domain import ContractError, obj, validate_schema
+from gene_annotation_episode.episodic_workflow.root.a110.domain import ContractError, obj, validate_schema
 from gene_annotation_episode.episodic_workflow.root.a110.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.root.a110.library.literature_reaction_meanings import DATA_VERSION, RECORD_VERSION, MODEL_FIELDS, RESOURCE_FIELDS, DEMAND_FIELDS
 from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository

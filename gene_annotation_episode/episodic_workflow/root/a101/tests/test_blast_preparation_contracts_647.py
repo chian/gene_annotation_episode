@@ -6,7 +6,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_preparation_contracts import blast_preparation_document_schema, validate_blast_preparation_document
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import blast_utility_record_name_for_version, blast_utility_schema_for_version, blast_utility_result_version_for_operation, validate_blast_utility_record as core, validate_blast_utility_operation
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 
 
 def operation(mode, **updates):

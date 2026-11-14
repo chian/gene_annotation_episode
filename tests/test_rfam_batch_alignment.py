@@ -20,6 +20,10 @@ ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/alignment"
 DOCS = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/contract/examples/official-single-result.json"
 LIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/transport/live/single/003-fetch-json/response.body"
+# The alignment fixtures name their source bytes by the transport packet's original location;
+# the packet itself is kept under TRANSPORT.
+TRANSPORT_ORIGIN = "verification/tool_graders_rfam_transport_2026-10-26_234"
+TRANSPORT = ROOT / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/transport"
 IDENTITY = {"artifact_ref": "fixture:synthetic-display", "hit_key": "fixture:synthetic-display/hits/test/0",
             "query_occurrence_key": "fixture:original-occurrence-0", "family_accession": "RF00001"}
 
@@ -35,7 +39,10 @@ def native_json(path):
 
 def report_fixture(name):
     data = json.loads((EVIDENCE / "fixtures" / (name + ".json")).read_text())
-    assert hashlib.sha256((ROOT / data["source"]["path"]).read_bytes()).hexdigest() == data["source"]["sha256"]
+    recorded = Path(data["source"]["path"])
+    source = (TRANSPORT / recorded.relative_to(TRANSPORT_ORIGIN) if recorded.is_relative_to(TRANSPORT_ORIGIN)
+        else ROOT / recorded)
+    assert hashlib.sha256(source.read_bytes()).hexdigest() == data["source"]["sha256"]
     return data
 
 

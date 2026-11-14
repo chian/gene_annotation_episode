@@ -160,22 +160,23 @@ def forbid_io(monkeypatch, *, forbid_population=False, forbid_parsers=True):
 def test_closed_dispatch_and_default_helpers_do_not_mutate_registration(monkeypatch):
     case = wire_case(); before = deepcopy(case)
     registry = legacy.metadata_schema_registry()
-    forbid_io(monkeypatch, forbid_population=True)
-    legacy_catalog = deepcopy(case["catalog"])
-    legacy_catalog["descriptor"]["consumer"] = "vdb"
-    legacy._validate_catalog(legacy_catalog)
-    legacy._validate_catalog(case["catalog"], consumers=("vdb_function",))
-    unsupported = dict(case["descriptor"], schema_id="future_unknown_v1")
-    old = legacy.validate_native_blast_database_metadata_payload(case["payload"], descriptor=unsupported,
-        document_catalog=case["catalog"], job=case["job"])
-    assert old["status"] == "unsupported"
-    result = validate(case)
-    assert result["status"] == "valid" and not result["issues"], [(i["pointer"], i["detail_code"]) for i in result["issues"]]
-    assert result["normalized"]["searches"] == [case["original"]]
-    assert case == before and legacy.metadata_schema_registry() == registry
-    assert set(result) == set("consumer schema_id input_key artifact_ref sha256 status payload normalized normalization_map issues".split())
-    result["payload"]["searches"].clear()
-    assert case == before
+    with monkeypatch.context() as patch:
+        forbid_io(patch, forbid_population=True)
+        legacy_catalog = deepcopy(case["catalog"])
+        legacy_catalog["descriptor"]["consumer"] = "vdb"
+        legacy._validate_catalog(legacy_catalog)
+        legacy._validate_catalog(case["catalog"], consumers=("vdb_function",))
+        unsupported = dict(case["descriptor"], schema_id="future_unknown_v1")
+        old = legacy.validate_native_blast_database_metadata_payload(case["payload"], descriptor=unsupported,
+            document_catalog=case["catalog"], job=case["job"])
+        assert old["status"] == "unsupported"
+        result = validate(case)
+        assert result["status"] == "valid" and not result["issues"], [(i["pointer"], i["detail_code"]) for i in result["issues"]]
+        assert result["normalized"]["searches"] == [case["original"]]
+        assert case == before and legacy.metadata_schema_registry() == registry
+        assert set(result) == set("consumer schema_id input_key artifact_ref sha256 status payload normalized normalization_map issues".split())
+        result["payload"]["searches"].clear()
+        assert case == before
 
 
 @pytest.mark.parametrize("field,value", [("consumer", "vdb"), ("schema_id", "future_v1")])
@@ -427,10 +428,11 @@ def test_native_locator_without_declared_parse_remains_unavailable(monkeypatch):
     case["payload"]["documents"][0]["artifact"].update(identity)
     provenance = case["payload"]["searches"][0]["supplied_assignments"][0]["scope_source"]
     provenance.update(source_ref=doc["document_key"], pointer="/records/0")
-    forbid_io(monkeypatch, forbid_population=True)
-    out = validate(case)
-    assert out["payload"] == case["payload"]
-    assert any(i["detail_code"] == "source_locator_not_supported" for i in out["issues"])
+    with monkeypatch.context() as patch:
+        forbid_io(patch, forbid_population=True)
+        out = validate(case)
+        assert out["payload"] == case["payload"]
+        assert any(i["detail_code"] == "source_locator_not_supported" for i in out["issues"])
 
 
 @pytest.mark.parametrize("same_key", [False, True])

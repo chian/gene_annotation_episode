@@ -308,7 +308,7 @@ def test_practical_assignment_pins_are_optional_and_precede_initial_native_probe
     assert Draft202012Validator(ASSIGNMENT_SCHEMA).is_valid(spec.assignment)
     with Store(tmp_path / 'state') as store:
         subject, = store.create_problem(raw_sequence='MARGKK', molecule='protein')['subject_refs']
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         tools.launch_instruction_library_directory = source
         directory = tmp_path / 'run'
         resources = {'local': {'kind': 'local', 'workspace': str(spec.workspace),

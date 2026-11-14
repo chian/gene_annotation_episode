@@ -13,6 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext, EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories, literature_binding_for_role
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_figure_storage import figure_operation_schema
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_endpoint_signal_storage import LiteratureEndpointSignalRepository, ENDPOINT_SIGNAL_CELLS_SCHEMA_V1, endpoint_signal_cells_schema, NAMESPACE, REQUESTED, VIEW, COMPONENTS
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_endpoint_signal_prompt import ENDPOINT_SIGNAL_TASK
@@ -311,7 +312,7 @@ def test_all_sources_keep_assigned_page_ancestry(tmp_path):
         alien = source(store.get_artifact(store.get(args['selection']['image']['source_ref'])['artifact_ref']), 'controlled_unrelated_image244')
         args['selection']['image']['source_ref'] = alien
         pagectx = replace(pagectx, received_record_refs=(*pagectx.received_record_refs, alien))
-        out = asyncio.run(binding.execute(pagectx, 'literature.figure.populate', args, 'page244'))
+        out = asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(pagectx, 'literature.figure.populate', args, 'page244'))
         assert out['status'] == 'invalid' and out['feedback']['code'] == 'literature_reading_outside_assigned_source'
     finally:
         store.close()
@@ -487,7 +488,7 @@ def test_original_pending_alias_first_readonly_composer_has_no_factory_or_cache_
     literal = obj({'numbers': endpoint_signal_cells_schema()})
     submitted = obj({'numbers': {'$ref': 'episode-fact:' + NAMESPACE}})
     provider = PresentedProvider([OSError('Controlled pending244 interruption')])
-    workflow = Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', ctx.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=sources, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=sources, contract_information_profile=profile),), decision_protocol='decision_exchange_v1')
+    workflow = Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', ctx.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=sources, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=sources, contract_information_profile=profile), decision_protocol='decision_exchange_v1')
     root = workflow.build('annotation', 'root', 'Evaluate the selected experimental endpoint evidence.', plain(ctx.scope))
     with pytest.raises(OSError, match='pending244'):
         asyncio.run(root.run_async(workflow.context))
@@ -607,7 +608,7 @@ def test_selected_shared_loop_and_first_readonly_composer(tmp_path, monkeypatch,
     provider = ControlledPresented(script) if profile else ScriptedProvider(script)
     progress = ScientificFindingProgress(FindingProgressPolicy(1))
     try:
-        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=sources, contract_information_profile=profile),), **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
+        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=sources, contract_information_profile=profile), **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
         observations = 5 if nested else 3
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == observations
         assert store.db.execute('SELECT count(*) FROM literature_endpoint_signal_operations').fetchone()[0] == 1

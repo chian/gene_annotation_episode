@@ -43,7 +43,7 @@ def test_reopen_rejects_changed_frozen_library(tmp_path):
     saved = binding.as_record()
     path = directory / 'scientific-tool-library/index.json'
     path.write_text(path.read_text().replace('scientific_tool_library_v1', 'forged_library'))
-    failure = import_module(AXIS + '.method_loop.durable').DurableExecutionError
+    failure = import_module('gene_annotation_episode.episodic_workflow.root.method_loop.durable').DurableExecutionError
     composition = import_module(AXIS + '.episode_composition')
     with pytest.raises(failure):
         composition.reopen_scientific_binding(SimpleNamespace(), descriptor=saved, directory=directory)
@@ -72,7 +72,7 @@ def test_reopen_both_literal_literature_families_preserves_parent_identity(confi
 
 def test_reopen_rejects_unregistered_private_path():
     module = import_module(AXIS + '.episode_composition')
-    failure = import_module(AXIS + '.method_loop.durable').DurableExecutionError
+    failure = import_module('gene_annotation_episode.episodic_workflow.root.method_loop.durable').DurableExecutionError
     binding = import_module(AXIS + '.' + HOMES[0] + '.episode').LiteratureEpisode(SimpleNamespace())
     saved = deepcopy(binding.as_record())
     saved['binding_id'] = '../other_parent/episode'

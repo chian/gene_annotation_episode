@@ -19,6 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import ScientificFindingProgress, FindingProgressPolicy
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_comparison_storage import COMPONENTS, NAMESPACE, REQUESTED, OPERATION, measurement_comparison_cells_schema, LiteratureMeasurementComparisonRepository
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
@@ -130,7 +131,7 @@ def test_one_selected_original_source_common_worksheet_and_first_cold(tmp_path):
     provider = ScriptedProvider([{'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': assignment, 'goal': 'Compare the already selected source measurements with their qualifications.', 'scope': plain(ctx.scope), 'purpose': 'Return only requested comparison cells in the common worksheet.', 'schema_json': json.dumps(template['submitted_form']), 'initial_report_json': json.dumps({'assessment_context': empty_context()})}, 'report_update': {}}, work, integrate])
     progress = ScientificFindingProgress(FindingProgressPolicy(1))
     try:
-        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=sources),)))
+        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=sources)))
         assert len(captured) == 1
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
         assert store.db.execute('SELECT count(*) FROM literature_measurement_comparison_operations').fetchone()[0] == 1

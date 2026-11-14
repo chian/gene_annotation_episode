@@ -24,7 +24,7 @@ def test_real_pairwise_worker_runs_outside_host_and_sql_transaction(tmp_path, mo
             raise AssertionError("native alignment must never execute in workflow host")
         monkeypatch.setattr(module, "run_local_job_async", observed)
         monkeypatch.setattr(sequence_ops, "align_pair", forbidden)
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         result = registry.execute("sequence.align", {"query_ref": subject, "reference_ref": subject,
             "molecule": "dna", "mode": "global"})
         assert result["status"] == "completed", result
@@ -52,7 +52,7 @@ def test_resource_failure_reaches_next_episode_decision_without_yield_observatio
             raise AssertionError("resource failure cannot select an in-process fallback")
         monkeypatch.setattr(module, "run_local_job_async", bounded_failure)
         monkeypatch.setattr(sequence_ops, "align_pair", forbidden)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         def revise(context):
             assert context["feedback"]["category"] == "execution"
             assert context["feedback"]["code"] == "local_job_resource_limit"
@@ -80,7 +80,7 @@ def test_reads_align_keeps_valid_siblings_as_one_action_on_resource_failure(tmp_
     fastq.write_text("@a\nACGTACGT\n+\nIIIIIIII\n@b\nTTTTTTTT\n+\nIIIIIIII\n@c\nACGTTCGT\n+\nIIIIIIII\n")
     with Store(tmp_path / "state") as store:
         library = store.create_problem(fastq, molecule="dna")["subject_refs"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         reads = tools.execute("library.members", {"library_ref": library})["result"]["members"]
         real = module.run_local_job_async
         count = 0
@@ -130,7 +130,7 @@ def test_memory_allocation_failure_preserves_basic_reason_without_claiming_cgrou
     monkeypatch.setattr(module, "run_local_job_async", memory_error)
     with Store(tmp_path / "state") as store:
         subject = store.create_problem(raw_sequence="ACGT", molecule="dna")["subject_refs"][0]
-        result = ToolRegistry(store).execute("sequence.align", {"query_ref": subject, "reference_ref": subject,
+        result = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("sequence.align", {"query_ref": subject, "reference_ref": subject,
             "molecule": "dna", "mode": "global"})
         assert result["status"] == "failed" and result["feedback"]["category"] == "execution"
         assert result["feedback"]["worker_failure"] == "native_memory_allocation_failed"

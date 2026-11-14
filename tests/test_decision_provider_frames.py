@@ -108,7 +108,7 @@ def test_native_finite_invalid_exchange_value_reaches_runtime_feedback_path(tmp_
 
 
 def test_legacy_native_response_still_requires_an_object(tmp_path):
-    from gene_annotation_episode.boundary_validation import ModelOutputError
+    from gene_annotation_episode.episodic_workflow.root.boundary_validation import ModelOutputError
     wire = ConversationWire(tmp_path / "wire")
     wire.reply = None
     with pytest.raises(ModelOutputError, match="must be a JSON object"):

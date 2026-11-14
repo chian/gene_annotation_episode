@@ -30,7 +30,7 @@ def source_image(store, *, mode="RGB", pixels=None, format="PNG"):
 
 def native_view(store, **kwargs):
     source, original = source_image(store, **kwargs)
-    result = ToolRegistry(store).execute("image.view", {"source_ref": source["id"]})
+    result = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("image.view", {"source_ref": source["id"]})
     assert result["status"] == "completed", result
     return source, original, result["result"]["view"], result
 
@@ -200,7 +200,7 @@ def test_integer_tiff_preserve_never_silently_clamps_and_explicit_rgb_is_recorde
         store.create_problem(raw_sequence="MKWV")
         pixels = [0, 100000] + [0] * 94
         source, original = source_image(store, mode="I", pixels=pixels, format="TIFF")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         preserve = tools.execute("image.view", {"source_ref": source["id"]})
         assert preserve["status"] == "invalid"
         assert preserve["feedback"]["code"] == "image_pixels_not_preserved_in_png"
@@ -223,7 +223,7 @@ def test_repeated_view_of_unwrapped_source_exports_actual_forward_source_chain(t
         original = store.put("source", {"provider": "synthetic_image_fixture", "accession": None,
             "uri": None, "artifact_ref": artifact, "text_ref": None, "request_ref": None,
             "version": None, "retrieved_at": None}, origin="caller")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         first = tools.execute("image.view", {"source_ref": original["id"]})
         assert first["status"] == "completed", first
         first_view = first["result"]["view"]

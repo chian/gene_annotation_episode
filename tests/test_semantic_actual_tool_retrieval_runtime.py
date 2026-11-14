@@ -14,6 +14,7 @@ from gene_annotation_episode.episodic_workflow.root.episode_composition import r
 from gene_annotation_episode.episodic_workflow.root.providers import ModelRole
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.episodic_workflow.root.scientific_tool_retrieval import ScientificToolRetriever
 from gene_annotation_episode.state import Store
 from test_actual_tool_retriever_runtime import ActualToolCase, action, FORM, GOAL, INVESTIGATION
@@ -45,7 +46,7 @@ def semantic_case(tmp_path, store, *, stops=None):
     case = ActualToolCase(tmp_path, store, stops=stops)
     assert case.descriptor["version"] == "scientific_process_episodes_v5"
     assert set(case.descriptor["configuration"]) == {"library", "tool_library", "child_roles"}
-    case.descriptor = prepare_scientific_binding(run_directory=case.directory,
+    case.descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=case.directory,
         source_directory=case.source, tool_catalog=case.tools.catalog(),
         child_roles=["scientific_process"], tool_retrieval=CONFIG)
     return case

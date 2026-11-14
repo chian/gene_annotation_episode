@@ -103,7 +103,7 @@ def test_failed_xml_projection_retains_source_and_replays_partial_outcome(tmp_pa
         assert tools.execute("public.literature.read", args, operation_key="bad-projection") == first
         assert clients.calls == 1 and store.problem() == initial and not store.list("observation")
     with Store(tmp_path) as reopened:
-        result = ToolRegistry(reopened).execute("source.read", {"source_ref": original["id"], "representation": "original"})
+        result = ToolRegistry(reopened, run_directory=reopened.path / 'tool-run').execute("source.read", {"source_ref": original["id"], "representation": "original"})
         assert result["status"] == "completed" and result["result"]["text"].encode() == body
         assert project_credit(reopened).credit == 0
 

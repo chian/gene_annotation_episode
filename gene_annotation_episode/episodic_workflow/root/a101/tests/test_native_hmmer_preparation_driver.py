@@ -10,7 +10,7 @@ import sys
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_driver as driver
-from gene_annotation_episode.local_jobs import LocalJobPolicy, run_local_job
+from gene_annotation_episode.episodic_workflow.root.a101.local_jobs import LocalJobPolicy, run_local_job
 from gene_annotation_episode.native_infernal_contracts import native_infernal_digest
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_contracts import requested_job_from_hmmer_preparation
 from test_native_hmmer_preparation_contracts import BIN, CASES, EVIDENCE, FM_CONTRACT, NATIVE, ROOT, digest, job, operand

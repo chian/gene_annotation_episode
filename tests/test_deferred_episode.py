@@ -3,7 +3,7 @@ import asyncio
 
 import pytest
 
-from method_loop import (ClosedChildUnit, Context, DeferredUnit, Episode,
+from gene_annotation_episode.episodic_workflow.root.method_loop import (ClosedChildUnit, Context, DeferredUnit, Episode,
                          EpisodeRequest)
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from test_independent_episode import Source, child_unit, leaf, world
@@ -14,7 +14,7 @@ def test_deferred_child_and_parent_work_have_only_completed_action_observations(
         context, goal, grain, controllers = world(2)
         class ExternalJob(asyncio.Event):
             async def wait(self):
-                from method_loop.suspension import external_wait
+                from gene_annotation_episode.episodic_workflow.root.method_loop.suspension import external_wait
                 return await external_wait(super().wait(),
                     {'kind': 'scheduled_external_job', 'job_id': 'fixture-job'})
         entered, release = asyncio.Event(), ExternalJob()

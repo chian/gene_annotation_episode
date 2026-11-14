@@ -15,7 +15,7 @@ from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBind
 from gene_annotation_episode.episodic_workflow.root.a106.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a106.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episodic_workflow.root.a106.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-from gene_annotation_episode.episodic_workflow.root.a106.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a106.published_evidence_assessment.episode import LiteratureEpisode, create_binding_tree
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_storage import LiteraturePerturbationRepository, perturbation_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_summary_storage import LiteraturePerturbationSummaryProjection, perturbation_summary_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a106.runtime import run_workflow
@@ -28,9 +28,14 @@ from gene_annotation_episode.episodic_workflow.root.a106.tests.perturbation_summ
 FORM=obj({"measurements":perturbation_summary_cells_schema()})
 
 
+def literature_factories(**configuration):
+    """One factory per private A106 literature home, each taken from the product's own seven-binding assembly."""
+    return tuple(partial(lambda index,services:create_binding_tree(services,**configuration)[index],index) for index in range(7))
+
+
 def binding_for(store,context):
     host=SimpleNamespace(store=store,run_id=context.run_id,tools=ToolRegistry(store))
-    binding=LiteratureEpisode(WorkflowServices(host),rate_population=True)
+    binding=LiteratureEpisode(WorkflowServices(host))
     host.episode_bindings=EpisodeBindingRegistry((binding,))
     return binding
 
@@ -135,7 +140,7 @@ def test_summary_operation_in_ordinary_child_admits_exact_form_once_without_extr
         result=asyncio.run(run_workflow(store,ToolRegistry(store),provider=ScriptedProvider([commission,action,receive]),
             run_dir=tmp_path/'run',controller_factory=lambda path,initial:FixtureController(str(path),initial,2 if len(path)==1 else 1),
             project_credit=scorer,initial_known_record_refs=list(context.received_record_refs),
-            episode_binding_factories=(partial(LiteratureEpisode,rate_population=True),),binding_definitions={'credit':scorer.as_record()}))
+            episode_binding_factories=literature_factories(),binding_definitions={'credit':scorer.as_record()}))
         assert len(received)==1 and result['credit']==0
         assert store.db.execute('select count(*) from runtime_observations').fetchone()[0]==3
         assert store.db.execute('select count(*) from literature_perturbation_operations').fetchone()[0]==1

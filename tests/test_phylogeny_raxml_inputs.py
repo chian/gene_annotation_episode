@@ -35,7 +35,7 @@ def _observations(result, method):
 
 
 def test_actual_complete_raxml_log_retains_all_native_measurements_and_models():
-    assert Path(native.__file__).resolve().parent == Path(__file__).resolve().parents[1] / "gene_annotation_episode"
+    assert Path(native.__file__).resolve().parent == Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/library"
     data = (_EXAMPLES / "RAxML_info.test9_genome_8taxa_10cds_10proteins_codonAndProteins").read_bytes()
     artifact = _artifact(data)
     before = deepcopy(artifact)

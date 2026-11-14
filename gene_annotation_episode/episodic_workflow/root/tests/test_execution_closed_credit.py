@@ -50,7 +50,7 @@ class ClosedCreditFrame:
             "protocol_profile": "standard_enrichr_v1", "base_url": "https://enrichr.invalid/Enrichr",
             "timeout": 2, "response_byte_limit": 4096}}
         factory = ExecutionServiceFactory(resources, {}, 3, 2, .5)
-        self.workflow = Workflow(store, ToolRegistry(store), object(), directory, "closed-credit-engineering",
+        self.workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), object(), directory, "closed-credit-engineering",
             controller_factory=lambda path, initial: YieldController(str(path), initial, 0, YieldParameters(100, 50)),
             project_credit=lambda *_: 0, episode_service_factory=factory,
             episode_service_binding=factory.as_record(), episode_service_inputs="actual_tool_registry_v1",

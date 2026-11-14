@@ -131,7 +131,7 @@ def test_original_fluc_cold_saved_reconstruction_does_not_reparse_source(tmp_pat
         raise AssertionError('cold reconstruction invoked science')
     for module, names in {'literature_channel_storage': ('read_channel_inputs', 'channel_calculation_inputs', 'populate_channel_components'), 'literature_channel_inputs': ('read_channel_inputs', '_number', '_read_unit'), 'literature_channel_calculations': ('populate_channel_components',)}.items():
         for name in names:
-            monkeypatch.setattr(f'gene_annotation_episode.{module}.{name}', forbidden)
+            monkeypatch.setattr(f'gene_annotation_episode.episodic_workflow.root.a105.library.{module}.{name}', forbidden)
     cold = Store.__new__(Store)
     cold.path = tmp_path
     cold._savepoint = 0

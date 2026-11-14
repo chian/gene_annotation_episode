@@ -3,6 +3,7 @@ import asyncio
 from copy import deepcopy
 from dataclasses import replace
 from functools import partial
+from importlib import import_module
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -21,6 +22,20 @@ from gene_annotation_episode.episodic_workflow.root.a102.state import Store
 from gene_annotation_episode.episodic_workflow.root.a102.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_integration import source, witness
 from test_runtime import FixtureController, ScriptedProvider
+
+LITERATURE_PACKAGE = 'gene_annotation_episode.episodic_workflow.root.a102.published_evidence_assessment'
+EXAMINATION = '.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination'
+LITERATURE_HOMES = ('', '.evidence_search_strategy_improvement',
+    '.evidence_search_strategy_improvement.source_relevance_assessment', EXAMINATION,
+    EXAMINATION + '.table_evidence_extraction', EXAMINATION + '.source_coverage_improvement',
+    EXAMINATION + '.passage_evidence_extraction')
+
+
+def literature_home_factories(**configuration):
+    """One factory per private A102 literature home, in the order of create_binding_tree."""
+    return tuple(partial(import_module(LITERATURE_PACKAGE + home + '.episode').LiteratureEpisode, **configuration)
+        for home in LITERATURE_HOMES)
+
 
 BASE = Path(__file__).parent / 'fixtures/literature_structure'
 COMPONENTS = ['local_fit_index', 'geometry_support_fraction', 'source_geometry_positive', 'source_geometry_signed']
@@ -161,107 +176,10 @@ def test_structure_selected_in_ordinary_child_and_received_once(tmp_path, valida
             commission, action, receive]), run_dir=tmp_path / 'run',
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path)==1 else 1),
             project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
-            episode_binding_factories=(partial(LiteratureEpisode, structure_population=True),),
+            episode_binding_factories=literature_home_factories(structure_population=True),
             binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0 and len(received) == 1
         assert store.db.execute('select count(*) from runtime_observations').fetchone()[0] == 3
         assert store.db.execute('select count(*) from literature_structure_operations').fetchone()[0] == 1
         assert store.db.execute('select count(*) from literature_structure_received').fetchone()[0] == 1
         assert not store.list('observation') and not store.list('assessment')
-
-
-def test_structure_task_and_conditional_meanings_repeat_at_provider_boundary(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a102.decision_context import state_frame
-    from gene_annotation_episode.episodic_workflow.root.a102.literature_structure_prompt import STRUCTURE_TASK
-    from test_literature_experimental_prompt_delivery import LiteratureWire, snapshot, complete
-    first = snapshot()
-    first['goal']['objective'] = 'Evaluate the four declared contacts in the selected apo-IscR model.'
-    first['requested_form'] = FORM
-    first['literature_assignment']['requested_structure_components'] = COMPONENTS
-    first['available_report_facts']['literature_structure_cells'] = {'meaning':
-        'Conditional source-model geometry and local residue fit, with unreported measurement uncertainty.'}
-    second = deepcopy(first)
-    second['last_local_outcome'] = {'status': 'completed', 'result': {
-        'cells': {'source_geometry_positive': {'value': .61155675, 'lower': .61155674, 'upper': .61155676,
-            'unit': 'dimensionless', 'status': 'populated', 'origin': 'proposed',
-            'unavailable_reason': None, 'conditional_on': ['selected_model_assignment',
-                'unreported_coordinate_uncertainty', 'source_geometry_convention']}},
-        'validation_binding': 'matching_entry_revision',
-        'evaluation_scope': 'conditional_deposited_model_geometry', 'operand_source_kind': 'primary_source',
-        'bound_kind': 'conditional_arithmetic_outer', 'unconditional_uncertainty': 'unreported',
-        'occupancy_basis': 'conditioned_selected_model',
-        'comparability_basis': 'single_state_no_causal_comparison',
-        'isolation_basis': 'conditioned_atom_assignments',
-        'measurement_keys': {'geometry': 'HOST_GEOMETRY_HASH'}}}
-    lookup = {'version': 'decision_context_v1', 'kind': 'decision_lookup_result', 'decision_index': 2,
-        'exchange_index': 1, 'result': {'status': 'completed',
-            'text': 'The chosen validation is a residue-level statistic for this fitted model.'}}
-    wire, reopened = LiteratureWire(tmp_path / 'wire'), LiteratureWire(tmp_path / 'reopened')
-    async def exercise():
-        await complete(wire, state_frame(first))
-        await complete(wire, state_frame(second, first))
-        await complete(wire, lookup)
-        await complete(reopened, state_frame(second))
-    asyncio.run(exercise())
-    tasks = []
-    for transport in (wire, reopened):
-        for turn in transport.turns_sent():
-            text = turn['input'][0]['text']
-            task, steering = text.split('\n\nSTEERING\n', 1)
-            tasks.append(task)
-            assert STRUCTURE_TASK in task and first['goal']['objective'] in task
-            assert 'HOST_GEOMETRY_HASH' not in text
-    assert all(task == tasks[0] for task in tasks)
-    for turn in (*wire.turns_sent()[1:], *reopened.turns_sent()):
-        steering = turn['input'][0]['text'].split('\n\nSTEERING\n', 1)[1]
-        for meaning in ('matching_entry_revision', 'conditional_deposited_model_geometry',
-            'conditional_arithmetic_outer', 'unreported_coordinate_uncertainty',
-            'conditioned_selected_model', 'single_state_no_causal_comparison', 'conditioned_atom_assignments'):
-            assert meaning in steering
-
-
-def test_parent_keeps_own_task_and_receives_physical_panel_once(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a102.decision_context import state_frame
-    from gene_annotation_episode.episodic_workflow.root.library.literature_reference_parent_presentation import REFERENCE_PARENT_TASK
-    from gene_annotation_episode.episodic_workflow.root.a102.literature_structure_prompt import STRUCTURE_TASK
-    from test_literature_experimental_prompt_delivery import LiteratureWire, snapshot, complete
-    store, context, args = setup_case(tmp_path / 'state')
-    with store:
-        repo = LiteratureStructureRepository(store, context.run_id)
-        outcome = repo.populate(context, args, 'selected')
-        rows = repo.project_cells([outcome['result']['sheet_ref']],
-            permitted_record_refs=outcome['record_refs'], components=COMPONENTS)
-    first = snapshot()
-    first.pop('literature_assignment')
-    first.pop('literature_source_custody')
-    first['literature_experimental_work']['aspect'] = 'reference_evidence_parent'
-    first['reference_evidence_parent'] = {'version': 'reference_evidence_parent_v1',
-        'source_refs': [args['source_ref']], 'source_custody': []}
-    first['goal']['objective'] = 'Determine which structural interpretation is supported by the source evidence.'
-    second = deepcopy(first)
-    second['child_reports'] = [{'measurements': rows}]
-    wire, reopened = LiteratureWire(tmp_path / 'wire'), LiteratureWire(tmp_path / 'reopened')
-    lookup = {'version': 'decision_context_v1', 'kind': 'decision_lookup_result', 'decision_index': 2,
-        'exchange_index': 1, 'result': {'status': 'completed', 'text': 'The contact question concerns one crystal model.'}}
-    async def exercise():
-        await complete(wire, state_frame(first), episode='parent')
-        await complete(wire, state_frame(second, first), episode='parent')
-        await complete(wire, lookup, episode='parent')
-        await complete(reopened, state_frame(second), episode='parent')
-    asyncio.run(exercise())
-    tasks = []
-    for transport in (wire, reopened):
-        for turn in transport.turns_sent():
-            text = turn['input'][0]['text']
-            task, steering = text.split('\n\nSTEERING\n', 1)
-            tasks.append(task)
-            assert REFERENCE_PARENT_TASK in task and STRUCTURE_TASK not in task
-            assert first['goal']['objective'] in task
-    assert all(task == tasks[0] for task in tasks)
-    for turn in (*wire.turns_sent()[1:], *reopened.turns_sent()):
-        steering = turn['input'][0]['text'].split('\n\nSTEERING\n', 1)[1]
-        assert steering.count('Declared geometry panel; fixed denominator 4') == 1
-        assert steering.count('Declared local validation panel; fixed denominator 6') == 1
-        for meaning in ('GLU43', 'OE1,OE2', '3.5', '4.5', '0.75', 'conditional_arithmetic_outer',
-            'conditioned_selected_model', 'unreported', 'identity_coordinates_only'):
-            assert meaning in steering

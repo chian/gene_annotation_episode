@@ -105,6 +105,10 @@ class MonitorCreditBehaviorChecks:
             progress_selection=lambda source:{'initial_progress_refs':['baseline'],'known_progress_refs':list(delivered)},
             role_credit_projectors={'monitor':project},controller_value=observe)
         workflow.source_credit_view=lambda source:runtime.Workflow.source_credit_view(workflow,source)
+        if axis.endswith('.root.a103'):
+            # A103's source_credit_view first resolves a legacy parent through the bound roles.
+            workflow.episode_bindings=SimpleNamespace(roles=('monitor',))
+            workflow.legacy_parent_for_path=lambda path:runtime.Workflow.legacy_parent_for_path(workflow,path)
         binding.services=importlib.import_module(axis+'.episode_services').WorkflowServices(workflow)
         task.workflow=workflow
         selected={'kind':'tool','tool':'progress.observe','arguments':{'requested_fields':['execution_status']}}

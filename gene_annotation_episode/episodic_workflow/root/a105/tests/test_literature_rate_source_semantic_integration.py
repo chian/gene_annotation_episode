@@ -19,6 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_receipts import
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import _steering, render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_source_render import MEANING_FIELDS
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_storage import LiteratureRateRepository, rate_source_cells_schema
@@ -85,7 +86,7 @@ def test_actual_selected_own_and_parent_decisions_then_first_readonly_display_pr
     provider = ScriptedProvider([{'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': assignment, 'goal': 'Examine the constructed source comparison.', 'scope': plain(template.scope), 'purpose': 'Return only requested native numerical components.', 'schema_json': json.dumps(form), 'initial_report_json': '{}'}, 'report_update': {}}, {'selection': {'kind': 'tool', 'tool': 'literature.rate.source.populate', 'arguments': args}, 'report_update': {}}, child_next, parent_next])
     scorer = ScientificFindingProgress(FindingProgressPolicy(1))
     run_dir = tmp_path / 'run'
-    result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=run_dir, controller_factory=lambda path, initial: FixtureController(str(path), initial, 2), project_credit=scorer, initial_known_record_refs=[args['source_ref']], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[args['source_ref']]),), binding_definitions={'credit': scorer.as_record()}))
+    result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=run_dir, controller_factory=lambda path, initial: FixtureController(str(path), initial, 2), project_credit=scorer, initial_known_record_refs=[args['source_ref']], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[args['source_ref']]), binding_definitions={'credit': scorer.as_record()}))
     assert result['credit'] == 0
     assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 4
     assert store.db.execute('SELECT count(*) FROM literature_rate_operations').fetchone()[0] == 1
@@ -128,7 +129,7 @@ def test_actual_selected_own_and_parent_decisions_then_first_readonly_display_pr
         assert reopened.db.total_changes == 0
         display = binding._native_rate_display_context(parent)['literature_rate_source_display']
         assert display == expected
-        projection = services.literature_rate_repository().source_projection()
+        projection = binding.literature_rate_repository().source_projection()
         assert projection.received_cells(parent) == returned['parent_chosen_values']
         assert projection.fact_cells(parent, [display['cells'][0]['sheet_ref']], components=['test_rate']) == []
         for row in display['cells']:
@@ -150,7 +151,7 @@ def test_other_known_sheet_and_unreceived_meaning_records_cannot_expand_receiver
     store, owner, args = setup_native_store(tmp_path)
     try:
         services, binding = service_binding(store, owner)
-        repo = services.literature_rate_repository().source_projection()
+        repo = binding.literature_rate_repository().source_projection()
         first = repo.populate_native(owner, args, 'original')
         permitted = (*owner.received_record_refs, *first['record_refs'])
         owner = replace(owner, received_record_refs=permitted)

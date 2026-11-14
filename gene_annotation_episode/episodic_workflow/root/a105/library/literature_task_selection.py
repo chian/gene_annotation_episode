@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from importlib import import_module
 import json
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_task_families import A105_ASSAY_SELECTION_TASK, NATIVE_KINETIC_TASK, family_row as a105_family_row
+from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_observation_prompt import REPORTED_CURVE_SCOPE_TASK
 
 @dataclass(frozen=True)
 class _Family:

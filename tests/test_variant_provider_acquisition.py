@@ -385,7 +385,7 @@ def publisher(tmp_path, monkeypatch):
     monkeypatch.setattr("socket.create_connection", forbidden)
     monkeypatch.setattr("gene_annotation_episode.native_lifecycle.prepare_job", forbidden)
     with Store(tmp_path / "store") as store:
-        yield store, ToolRegistry(store)
+        yield store, ToolRegistry(store, run_directory=store.path / 'tool-run')
 
 
 def publish(registry, case, saved):

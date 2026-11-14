@@ -11,6 +11,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.communication import in
 from gene_annotation_episode.episodic_workflow.root.a105.domain import obj
 from gene_annotation_episode.episodic_workflow.root.a105.episode_contract_information import ContractInformationError, validate_saved_fact_form
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_numerical_contracts as contracts
 from gene_annotation_episode.episodic_workflow.root.a105.schema_information_text import schema_fingerprint
 QUALIFICATION = {'type': 'string', 'enum': ['unknown', 'qualified']}
@@ -136,7 +137,7 @@ def world(path, *, execution_binding=None, protocol='decision_exchange_v1', prof
             return await super().complete(episode_id, role, instructions, context, output_schema)
     store, seed, args = setup(path / 'state')
     provider = DirectPresentedProvider() if protocol is None else PresentedProvider([])
-    value = Workflow(store, ToolRegistry(store), provider, path / 'run', seed.run_id, lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=list(seed.received_record_refs), episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[args['source_ref']], contract_information_profile=profile, **extra_binding or {}),), decision_protocol=protocol, execution_binding=execution_binding)
+    value = Workflow(store, ToolRegistry(store), provider, path / 'run', seed.run_id, lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=list(seed.received_record_refs), episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[args['source_ref']], contract_information_profile=profile, **extra_binding or {}), decision_protocol=protocol, execution_binding=execution_binding)
     root = value.build('annotation', 'root', 'Evaluate the supplied synthetic experimental evidence', plain(seed.scope))
     return (store, seed, args, provider, value, root)
 
@@ -485,11 +486,11 @@ def test_actual_standard_c1_worker_reopens_legacy_alias_original_request_without
     from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_kinetic_storage import setup
     store, seed, args = setup(tmp_path / 'state')
     directory = tmp_path / 'run'
-    binding_factory = partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[args['source_ref']], contract_information_profile=None)
+    binding_factories = literature_binding_factories(rate_population=True, reference_parent_sources=[args['source_ref']], contract_information_profile=None)
     provider = PresentedProvider([OSError('Controlled root interruption before any action')])
     try:
         with pytest.raises(OSError, match='before any action'):
-            asyncio.run(run_workflow(store, build_tools(store), provider=provider, run_dir=directory, initial_known_record_refs=list(seed.received_record_refs), episode_binding_factories=(binding_factory,), decision_protocol='decision_exchange_v1'))
+            asyncio.run(run_workflow(store, build_tools(store), provider=provider, run_dir=directory, initial_known_record_refs=list(seed.received_record_refs), episode_binding_factories=binding_factories, decision_protocol='decision_exchange_v1'))
         settings = json.loads((directory / 'run.json').read_text())
         run_id = settings.pop('run_id')
         original_binding = worker.make_runtime_binding(store, directory)

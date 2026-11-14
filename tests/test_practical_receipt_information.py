@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.communication import plain
-from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episodic_workflow.root.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations, canonical, digest
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState

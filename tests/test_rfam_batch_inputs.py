@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_inputs im
 
 
 EXAMPLES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/rfam/contract/examples"
-LIVE = EXAMPLES.parents[1] / "tool_graders_rfam_transport_2026-10-26_234/live"
+LIVE = EXAMPLES.parents[1] / "transport/live"
 
 
 def identity():

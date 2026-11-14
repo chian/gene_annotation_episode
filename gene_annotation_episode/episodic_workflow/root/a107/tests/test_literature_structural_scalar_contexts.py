@@ -266,7 +266,7 @@ def table_case(path, *, censored=False):
 
 def binding_for(store, context):
     host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
-    binding = LiteratureEpisode(WorkflowServices(host), rate_population=True)
+    binding = LiteratureEpisode(WorkflowServices(host))
     host.episode_bindings = EpisodeBindingRegistry((binding,))
     return binding
 
@@ -368,7 +368,7 @@ def test_table_values_cross_the_ordinary_typed_parent_boundary(tmp_path):
         result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([commission, action, receive]),
             run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1),
             project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
-            episode_binding_factories=(partial(LiteratureEpisode, rate_population=True),),
+            episode_binding_factories=(partial(LiteratureEpisode),),
             binding_definitions={'credit': scorer.as_record()}))
         assert len(received) == 1 and result['credit'] == 0
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3

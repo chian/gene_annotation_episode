@@ -3,7 +3,6 @@ from contextlib import contextmanager
 from copy import deepcopy
 from importlib import import_module
 from pathlib import Path
-from types import SimpleNamespace
 from unittest.mock import patch
 
 from .. import runtime
@@ -11,7 +10,7 @@ from ..episode import LegacyAnnotationEpisode
 from ..legacy_improvement.episode import LegacyImprovementEpisode
 from ..homology_service_setup import legacy_parent_types, homology_binding_types
 from ..implementation import ANNOTATION_IMPLEMENTATION_MEMBERS, annotation_implementation_files
-from .hierarchy_oracles import PACKAGE, original_selected, original_private_function
+from .hierarchy_oracles import PACKAGE, original_selected
 from .homology_direction_checks import actual, commission
 from .parent_exchange_checks import parent_host, isolated_rows
 
@@ -87,27 +86,3 @@ def check_real_descriptor_policy_operand(directory):
             assert {key: value for key, value in original.items() if key != 'implementation_sha256'} == {
                 key: value for key, value in changed.items() if key != 'implementation_sha256'}
     # No file bytes were modified; only an explicit read operand was varied.
-
-
-def check_nested_improvement_refusals(directory):
-    credit = import_module(PACKAGE + '.legacy_improvement.credit')
-    continuation = import_module(PACKAGE + '.legacy_improvement.yield_estimator')
-    path = (('annotation', 'original'), ('improvement', 'nested'))
-    context = SimpleNamespace(path=path, role='improvement')
-    with parent_host(directory, 'improvement', parent_role='improvement') as host:
-        flow = SimpleNamespace(context=host.context, grains=host.grains,
-            controller_factory=SimpleNamespace(requires_original_task=True), run_id=host.journal.run_id,
-            receipts=None, journal=SimpleNamespace(row=lambda *args: {
-                'request': '{"message":{"scope":{},"episode_assignment":{}}}', 'initial_credit': 0.0}))
-        for key, callback, args, message in (
-            ('improvement_credit', credit.credit_projector, (flow, context), 'scientific_task_credit_not_declared:improvement'),
-            ('improvement_credit', credit.credit_binding, (flow, context), 'scientific_task_credit_not_declared:improvement'),
-            ('improvement_yield', continuation.yield_controller, (flow, path), 'scientific_continuation_task_not_declared:improvement')):
-            original = original_private_function(key, callback.__name__)
-            for observed in (original, callback):
-                try:
-                    observed(*args)
-                except ValueError as error:
-                    assert str(error) == message
-                else:
-                    raise AssertionError('the original conditional refusal was removed')

@@ -39,7 +39,7 @@ def setup(tmp_path,monkeypatch,*,count=32,broken_tail=False):
     monkeypatch.setattr(ToolRegistry, "_sequence_worker_async", synthetic_worker)
     store=Store(tmp_path/"state")
     subject=store.create_problem(raw_sequence="ATGAAA"*count,molecule="dna",role="assembly")["subject_refs"][0]
-    return store,ToolRegistry(store),subject,calls
+    return store,ToolRegistry(store, run_directory=store.path / 'tool-run'),subject,calls
 
 
 def genes(subject,code=11):

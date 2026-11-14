@@ -66,7 +66,7 @@ def test_unreported_unit_cannot_conceal_an_actual_amount_or_numerical_uncertaint
             coverage=None if case == 'detection_limit' else .95)
     def forbidden(*a, **kw):
         raise AssertionError('unitless amount must be rejected before image decoding')
-    with patch('gene_annotation_episode.episodic_workflow.root.a106.literature_perturbation_summary.read_summary_figure', forbidden):
+    with patch('gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_summary.read_summary_figure', forbidden):
         with pytest.raises(ExperimentalContractError, match='observed_amount_unit_required'):
             extract(data, images)
 
@@ -151,8 +151,8 @@ def test_selected_typed_unknown_unit_and_exact_saved_replay_without_sources(tmp_
         store.db.execute('pragma query_only=ON'); before = store.db.total_changes
         with patch.object(store, 'get_artifact', saved_only), patch.object(store, 'put', forbidden), \
             patch.object(store, 'artifact', forbidden), patch.object(store, 'transaction', forbidden), \
-            patch('gene_annotation_episode.episodic_workflow.root.a106.literature_perturbation_storage.read_perturbation_inputs', forbidden), \
-            patch('gene_annotation_episode.episodic_workflow.root.a106.literature_perturbation_storage.populate_source_summary_restoration', forbidden):
+            patch('gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_storage.read_perturbation_inputs', forbidden), \
+            patch('gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_storage.populate_source_summary_restoration', forbidden):
             assert projection.received_cells(parent) == rows
             assert projection.project_cells([sheet], permitted_record_refs=context.received_record_refs, components=names) == rows
             assert store.db.total_changes == before

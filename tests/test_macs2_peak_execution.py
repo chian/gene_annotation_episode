@@ -596,12 +596,12 @@ def test_unrelated_resource_construction_never_creates_a_macs2_request_table(tmp
         store.create_problem(raw_sequence='ACGTACGT', molecule='dna')
         factory = ExecutionServiceFactory(dict(local=dict(kind='local', workspace=str(tmp_path / 'workspace'),
             policy=deepcopy(native.POLICY))), {}, 3, 2, 1)
-        tools = ToolRegistry(store, job_limits=deepcopy(native.POLICY))
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(native.POLICY))
         factory(store, run_id='unrelated', directory=tmp_path / 'run', tool_registry=tools)
         before = {row[0] for row in store.db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         assert 'runtime_macs2_peak_request_bindings' not in before
         factory(store, run_id='unrelated', directory=tmp_path / 'run',
-            tool_registry=ToolRegistry(store, job_limits=deepcopy(native.POLICY)))
+            tool_registry=ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(native.POLICY)))
         assert {row[0] for row in store.db.execute("SELECT name FROM sqlite_master WHERE type='table'")} == before
 
 
@@ -665,7 +665,7 @@ def test_public_output_roles_deny_unreceived_handoff_before_private_target_read(
         workspace.mkdir()
         factory = ExecutionServiceFactory(dict(local=dict(kind='local', workspace=str(workspace),
             policy=deepcopy(native.POLICY))), {}, 3, 2, 1)
-        tools = ToolRegistry(store, job_limits=deepcopy(native.POLICY))
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(native.POLICY))
         application = factory(store, run_id='unreceived-public-output', directory=tmp_path / 'run', tool_registry=tools)
         flow = Workflow(store, tools, SimpleNamespace(complete=forbidden), tmp_path / 'run', 'unreceived-public-output',
             controller_factory=forbidden, project_credit=lambda *_a, **_k: 0, annotation_child_roles=('results',),

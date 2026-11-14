@@ -212,7 +212,7 @@ async def open_commission(spec):
         try:
             episodes = job_episodes(jobs)
             provider = ChildProvider(spec, directory)
-            workflow = assemble_workflow(store, ToolRegistry(store), provider, directory,
+            workflow = assemble_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider, directory,
                 spec['run_id'], settings, controller_factory=ControllerFactory(),
                 project_credit=zero_science, job_episodes=episodes, execution_binding=binding,
                 native_job_events=EVENT_MODE, episode_service_factory=application_services,

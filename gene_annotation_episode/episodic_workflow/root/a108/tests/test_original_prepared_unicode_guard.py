@@ -21,7 +21,7 @@ def test_prepared_wrapper_preserves_original_unicode_hash_and_parent_delivery(tm
     helper=module('library.retained_input_authority.prepared_results')
     identity=module('library.retained_input_authority.prepared_record_identity')
     BindingContext=module('episode_bindings').BindingContext
-    EpisodeRef=module('method_loop.identities').EpisodeRef
+    EpisodeRef=import_module('gene_annotation_episode.episodic_workflow.root.method_loop.identities').EpisodeRef  # a108 has no private method_loop; its modules import the shared root package
     original_request={'original_subject':'β-chain','qualifier':'unresolved α/β correspondence'}
     expected=original_digest(original_request)
     alternate=hashlib.sha256(json.dumps(original_request,sort_keys=True,separators=(',',':'),

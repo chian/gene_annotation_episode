@@ -62,9 +62,10 @@ def synthetic_plan(tmp_path, *, v2=False):
     software = {"version": "fba_software_v1", "python": pin(python_home / "bin/python"),
         "python_version": "synthetic", "python_home": str(python_home), "module_root": str(module_root),
         "dependency_roots": [str(deps)], "implementation_files": [pin(module_root / "gene_annotation_episode" / x)
-            for x in ("__init__.py", "execution_contracts.py", "flux_balance_contracts.py",
-                "native_flux_balance_contracts.py", "native_flux_balance_storage.py",
-                "native_flux_balance_cobra_glpk.py", "native_flux_balance_driver.py")],
+            for x in ("__init__.py", "execution_contracts.py",
+                *("episodic_workflow/root/library/" + name for name in ("flux_balance_contracts.py",
+                    "native_flux_balance_contracts.py", "native_flux_balance_storage.py",
+                    "native_flux_balance_cobra_glpk.py", "native_flux_balance_driver.py")))],
         "runtime_files": [pin(python_home / "lib/stdlib.py"), pin(deps / "runtime.py")],
         "solver_runtime_files": [pin(deps / "solver.so")],
         "distributions": [{"name": k, "version": v} for k, v in STACK.items()],

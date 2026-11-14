@@ -20,7 +20,7 @@ def feature(store, subject, segments, strand=".", scope=None):
 
 
 def derive(store, subject, **arguments):
-    result = ToolRegistry(store).execute("sequence.translate", {"subject_ref": subject, "code": 11, **arguments})
+    result = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("sequence.translate", {"subject_ref": subject, "code": 11, **arguments})
     assert result["status"] == "completed", result
     refs = result["result"]["records"][0]
     return store.get(refs["feature_ref"]), store.get(refs["product_ref"])
@@ -163,7 +163,7 @@ def test_real_installed_pyrodigal_partial_prediction_has_exact_native_interval(t
     with Store(tmp_path / "db") as store:
         store.create_problem(raw_sequence="ATG" + "AAA" * 100 + "TAA", molecule="dna")
         target = store.targets()[0]["id"]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         result = tools.execute("genes.predict", {"subject_ref": target, "code": code, "mode": "meta"})
         assert result["status"] == "completed", result
         assert result["result"]["count"] >= 1
@@ -196,7 +196,7 @@ def test_unrepresentable_later_native_codon_interval_preserves_prior_publication
     with Store(tmp_path / "db") as store:
         store.create_problem(raw_sequence="ATGAAAATGA", molecule="dna")
         target = store.targets()[0]["id"]
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         args = {"subject_ref": target, "code": 11, "mode": "meta"}
         result = registry.execute("genes.predict", args, operation_key="partial-native-fixture")
         assert result["status"] == "partial", result

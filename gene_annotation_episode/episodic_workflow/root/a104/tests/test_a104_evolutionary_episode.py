@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.root.a104.a104_hpc import prepare
 from gene_annotation_episode.episodic_workflow.root.a104.a104_hpc_worker import validate_request, alignment_correspondence, tree_summary
 from gene_annotation_episode.episodic_workflow.root.a104.a104_credit import (A104EvolutionaryCredit,
     A104PanelIdentityCredit, A104AlignmentSuitabilityCredit)
-from gene_annotation_episode.episodic_workflow.root.a104.a104_investigation import initial_report, resolve_report
+from gene_annotation_episode.episodic_workflow.root.a104.a104_investigation import resolve_report
 from gene_annotation_episode.episodic_workflow.root.a104.a104_tools import catalog
 from gene_annotation_episode.episodic_workflow.root.a104.a104_characterization import clade_sheet
 from gene_annotation_episode.hpc_campaign import validate_commission
@@ -174,7 +174,11 @@ def test_representation_root_and_unknown_support_do_not_become_ancestry_or_zero(
 def test_native_tree_claim_requires_actual_received_execution(tmp_path):
     with Store(tmp_path/'state') as store:
         target, refs, known, scope, analysis = operands(store)
-        report = {**initial_report(), 'phylogeny_status': 'native_trees_received',
+        # The legacy model-verdict report requires every field explicitly;
+        # initial_report() is the current records/credit-only form.
+        report = {'phylogeny_status': 'native_trees_received', 'function_scope': 'not_assessed',
+                  'history_interpretation': 'not_assessed', 'limitations': [],
+                  'information_need_refs': [], 'hypothesis_refs': [], 'assessment_refs': [],
                   'records': [], 'phylogenetic_credit': 0.}
         with pytest.raises(ValueError, match='native_tree_statement_requires_received_original_execution'):
             resolve_report(store, report, scope=scope)
@@ -347,7 +351,10 @@ def test_credit_read_is_pure_and_a_third_variant_requires_an_actual_comparison(t
 
 def test_received_dynamic_commission_uses_existing_hpc_owner_and_cannot_change_scope(tmp_path):
     from gene_annotation_episode.hpc_commission_sources import publish, read
-    from gene_annotation_episode.hpc_episodes import HPCEpisodes
+    # The planning home owns role 'hpc'; its allocation child home owns 'hpc_execution'.
+    from gene_annotation_episode.episodic_workflow.root.a104.hpc_work_planning.episode import HPCEpisode as HPCEpisodes
+    from gene_annotation_episode.episodic_workflow.root.a104.hpc_work_planning.hpc_allocation_execution.episode import (
+        HPCEpisode as HPCAllocationEpisode)
     from gene_annotation_episode.episode_bindings import BindingContext
     from gene_annotation_episode.domain import validate_schema
     from hpc_helpers import commission as work, resources
@@ -371,7 +378,9 @@ def test_received_dynamic_commission_uses_existing_hpc_owner_and_cannot_change_s
         ledger = binding.state(owner)
         assert ledger.read('owner')['commission_source_ref'] == reference
         child = {'commission_source_ref': reference, 'owner_episode_id': 'hpc-owner'}
-        assert binding.prepare_assignment(owner, 'hpc_execution', child, scope, 'second') == child
+        allocation = HPCAllocationEpisode(object(), store=store, run_id='test', directory=tmp_path/'hpc',
+            resources=configured, commissions={'original': definition})
+        assert allocation.prepare_assignment(owner, 'hpc_execution', child, scope, 'second') == child
         changed = deepcopy(configured)
         changed[definition['resource_id']]['workspace'] += '/changed'
         with pytest.raises(ValueError, match='resource_changed'):

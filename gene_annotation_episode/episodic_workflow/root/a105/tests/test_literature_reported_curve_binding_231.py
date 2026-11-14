@@ -13,6 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext, EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories, literature_binding_for_role
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_observation_storage import LiteratureRateObservationRepository, LiteratureReportedCurveRepository, GRID_NAMESPACE, GRID_REQUESTED, GRID_RECORD, GRID_POPULATION, GRID_VIEW, rate_grid_cells_schema, rate_observation_operation_schema, _grid_scoped_label
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_observation_prompt import REPORTED_CURVE_TASK, REPORTED_CURVE_SCOPE_TASK, RATE_OBSERVATION_TASK, render_received
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import EXPERIMENTAL_TASK, render_literature_experimental_prompt
@@ -136,7 +137,7 @@ def test_empty_order_possession_page_and_exact_admitted_subset(tmp_path):
         denied = replace(ctx, received_record_refs=(source,))
         assert asyncio.run(binding.execute(denied, 'literature.rate.observations.populate', args, 'missing'))['feedback']['code'] == 'literature_source_not_received'
         page = replace(ctx, role='literature_page', path=(('literature_page', ctx.episode_id),), assignment={'version': 'page_assignment_v1', 'source_ref': source, 'representation': 'original', 'artifact_ref': store.get(source)['artifact_ref'], 'question_context_refs': [], 'prior_delivery_refs': [], GRID_REQUESTED: SELECTORS})
-        assert asyncio.run(binding.execute(page, 'literature.rate.observations.populate', args, 'page'))['feedback']['code'] == 'literature_reading_outside_assigned_source'
+        assert asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(page, 'literature.rate.observations.populate', args, 'page'))['feedback']['code'] == 'literature_reading_outside_assigned_source'
         binding, current, out, rows = selected(store, ctx, args)
         repo = LiteratureRateObservationRepository(store, ctx.run_id).grid_projection()
         parent = replace(current, episode_id='parent231', role='annotation', path=(('annotation', 'parent231'),), assignment={})
@@ -339,7 +340,7 @@ def shared_case(tmp_path, monkeypatch, profile, alias, nondetection, *, nested=F
             return await super().complete(episode_id, *args)
     provider = FixturePresented(script) if profile else ScriptedProvider(script)
     progress = ScientificFindingProgress(FindingProgressPolicy(1))
-    asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, initial_known_record_refs=[source, article], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[source, article], contract_information_profile=profile),), binding_definitions={'credit': progress.as_record()}, **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
+    asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, initial_known_record_refs=[source, article], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[source, article], contract_information_profile=profile), binding_definitions={'credit': progress.as_record()}, **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
     observations = 5 if nested else 3
     assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == observations
     assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == observations
@@ -396,7 +397,7 @@ def test_pending_grid_alias_uses_original_frozen_declaration(tmp_path, monkeypat
     submitted = obj({'numbers': {'$ref': 'episode-fact:' + GRID_NAMESPACE}, 'limits': limit})
     choice = action({'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': plain(ctx.assignment), 'goal': 'Evaluate reported precision.', 'scope': plain(ctx.scope), 'purpose': 'Return selected scalar source evidence.', 'schema_json': json.dumps(submitted), 'initial_report_json': json.dumps({'limits': 'attribution_unknown'})}, 'report_update': {}})
     provider = PresentedProvider([OSError('Controlled pending231 interruption')])
-    workflow = Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', ctx.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=[source, article], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[source, article], contract_information_profile=profile),), decision_protocol='decision_exchange_v1')
+    workflow = Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', ctx.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=[source, article], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[source, article], contract_information_profile=profile), decision_protocol='decision_exchange_v1')
     root = workflow.build('annotation', 'root', 'Evaluate source experimental evidence.', plain(ctx.scope))
     try:
         with pytest.raises(OSError, match='pending231'):

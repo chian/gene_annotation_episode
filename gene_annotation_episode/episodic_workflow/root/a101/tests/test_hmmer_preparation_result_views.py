@@ -19,9 +19,9 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_preparation_result_views as views
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_hmmer_preparation_worker as worker
 from gene_annotation_episode.episodic_workflow.root.a101.communication import validate_form
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_contracts import PROGRAM_MODES
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tests import test_native_hmmer_preparation_worker as native
 
 

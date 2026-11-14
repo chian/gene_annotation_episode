@@ -49,7 +49,7 @@ def selected_operands():
     store = Store(directory / "store")
     store.create_problem(raw_sequence="ACGTGAATTCGGATCC", molecule="dna")
     original, = store.targets()
-    tools = ToolRegistry(store)
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
     feature = store.put("feature", {"subject_ref": original["id"], "kind": "CDS",
         "segments": [{"start": 2, "end": 6}, {"start": 10, "end": 14}], "strand": "-",
         "context_refs": []}, origin="tool")
@@ -158,7 +158,7 @@ def test_explicit_non_dna_or_invalid_symbols_are_rejected(tmp_path, molecule, se
             "sequence_ref": store.artifact(sequence, "text/x-sequence"), "molecule": molecule,
             "length": len(sequence), "term_refs": [], "context_refs": []}, origin="tool")
         with pytest.raises(ContractError, match="restriction_(dna_processing_model_required|dna_sequence_invalid)"):
-            witness(store, ToolRegistry(store), reference["id"])
+            witness(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), reference["id"])
 
 
 @pytest.fixture(scope="module")
@@ -175,7 +175,7 @@ def packed_read():
         library, = store.targets()
         member = json.loads(store.db.execute("SELECT data FROM material_members ORDER BY ordinal LIMIT 1").fetchone()[0])
         ref = read_ref(library["id"], member["id"])
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         value = witness(store, tools, ref)
         (directory / "selected_read.json").write_text(json.dumps(value, sort_keys=True, allow_nan=False) + "\n")
         yield store, tools, library, member, ref, value
@@ -201,7 +201,7 @@ def test_unspecified_molecule_keeps_original_symbol_units_and_selected_dna_model
     with Store(tmp_path / "state") as store:
         store.create_problem(raw_sequence="ACGTRYN", molecule="unspecified")
         selected, = store.targets()
-        value = witness(store, ToolRegistry(store), selected["id"])
+        value = witness(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), selected["id"])
         assert value["molecule"] == "unspecified"
         assert value["mapping"]["units_per_symbol"] == 1
         assert value["mapping"]["path"][0]["unit"] == "symbol"

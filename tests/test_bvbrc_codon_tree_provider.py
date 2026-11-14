@@ -27,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.root.library import bvbrc_phyloge
 
 
 STAGING = Path(__file__).resolve().parents[1]
-NATIVE = STAGING / "verification" / "tool_graders_bvbrc_phylogeny_boundaries_2026-10-24" / "official_example"
+NATIVE = STAGING / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/phylogeny_boundaries/official_example"
 BASE = "test9_genome_8taxa_10cds_10proteins_codonAndProteins"
 POP_KEYS = ("alignments", "leaves", "composition", "taxonomy", "genomes", "families", "bootstraps", "native")
 JOIN_KEYS = ("input_rows", "tip_rows", "feature_genomes", "functions", "function_equivalences", "taxa",

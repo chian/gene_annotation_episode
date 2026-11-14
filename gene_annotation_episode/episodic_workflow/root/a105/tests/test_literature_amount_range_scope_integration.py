@@ -14,6 +14,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress 
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_amount_inputs import LEXICAL_DEPENDENCY, validate_amount_extraction
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_amount_storage import LiteratureAmountRepository, amount_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
@@ -85,7 +86,7 @@ def test_selected_original_nominal_witnesses_deliver_saved_closed_cells(tmp_path
             assert rows[component]['value'] == pytest.approx(value)
         assert rows['conditional_mass_denominator_factor']['unavailable_reason'] == 'mass_factor_not_applicable'
         assert rows['amount_ratio_variance']['unavailable_reason'] == 'amount_covariance_unreported'
-        saved = binding.services.literature_amount_repository().read(outcome['result']['sheet_ref'])
+        saved = binding.literature_amount_repository().read(outcome['result']['sheet_ref'])
         assert saved['extraction']['lexical_dependency'] == LEXICAL_DEPENDENCY
         assert saved['selection']['pair_relationship']['witnesses'][0]['quote'] == SENTENCE
         assert saved['selection']['experiment']['start'] == 49807
@@ -130,7 +131,7 @@ def test_controlled_nominal_selected_action_returns_once_in_ordinary_episode_loo
         return result
     try:
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-        asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([child, work, receives]), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(context.received_record_refs), episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[args['source_ref']]),), binding_definitions={'credit': scorer.as_record()}))
+        asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([child, work, receives]), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(context.received_record_refs), episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[args['source_ref']]), binding_definitions={'credit': scorer.as_record()}))
         assert len(received) == 1
         assert [row.scores for row in controllers] == [[0, 0], [0]]
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3

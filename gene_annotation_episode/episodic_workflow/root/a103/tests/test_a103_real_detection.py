@@ -19,11 +19,11 @@ from gene_annotation_episode.episodic_workflow.root.a103.a103_scoring import bin
 from gene_annotation_episode.episodic_workflow.root.a103.a103_publication import publish
 from gene_annotation_episode.episodic_workflow.root.a103.a103_attachments import refresh,target_link
 from gene_annotation_episode.episodic_workflow.root.a103.a103_credit import A103ContextCredit
-from gene_annotation_episode.acquisition import AcquisitionError
+from gene_annotation_episode.episodic_workflow.root.a103.acquisition import AcquisitionError
 from gene_annotation_episode.domain import canonical
-from gene_annotation_episode.episodic_workflow.root.a101.homology_results import HomologyResults,NativePhmmerInput
-from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.native_lifecycle import prepare_job,start_prepared,wait_job
+from gene_annotation_episode.episodic_workflow.root.a103.homology_results import HomologyResults,NativePhmmerInput
+from gene_annotation_episode.episodic_workflow.root.a103.local_jobs import LocalJobPolicy
+from gene_annotation_episode.episodic_workflow.root.a103.native_lifecycle import prepare_job,start_prepared,wait_job
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a103.tests.a103_native_fixture import REAL,PROGRAM,genomic_source
 from gene_annotation_episode.episodic_workflow.root.a103.tests.a103_test_support import protein

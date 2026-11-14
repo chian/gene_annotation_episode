@@ -51,6 +51,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_grading import COMPONENTS, CRITERIA_BY_TYPE, ROLES
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_grading_storage import LiteratureAssayGradingRepository, assay_grading_cells_schema, REQUESTED, NAMESPACE
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.episode_composition import compose_episode_bindings
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
@@ -182,7 +183,7 @@ def test_selected_grader_delivers_requested_a105_scores_through_actual_loop(tmp_
             controllers.append(result)
             return result
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ControlledProvider(), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(original_context.received_record_refs), episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, assay_grading_population=True, reference_parent_sources=[args['source_ref']]),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ControlledProvider(), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(original_context.received_record_refs), episode_binding_factories=literature_binding_factories(rate_population=True, assay_grading_population=True, reference_parent_sources=[args['source_ref']]), binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0
         assert len(contexts) == 2 and [c.scores for c in controllers] == [[0], [0]]
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 2
@@ -225,7 +226,7 @@ def test_existing_rate_reader_populates_grade_through_bound_received_cell_path(t
         combined = replace(context, received_record_refs=[*context.received_record_refs, rate_args['source_ref']], assignment={**plain(context.assignment), 'source_refs': [args['source_ref'], rate_args['source_ref']]})
         services = WorkflowServices(SimpleNamespace(store=store, run_id=context.run_id))
         binding = LiteratureEpisode(services, rate_population=True, assay_grading_population=True)
-        rate_repo = services.literature_rate_repository()
+        rate_repo = binding.literature_rate_repository()
         rate_outcome = rate_repo.populate(combined, rate_args, 'existing-rate-reader')
         combined = replace(combined, received_record_refs=[*combined.received_record_refs, *rate_outcome['record_refs']])
         native_ref = rate_outcome['result']['sheet_ref']

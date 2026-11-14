@@ -38,7 +38,7 @@ def interpreted_composition(store, tools, subject):
 def test_selected_annotation_page_uses_run_frozen_nondefault_policy_and_one_observation(tmp_path):
     with Store(tmp_path / "store") as store:
         subject = store.create_problem(raw_sequence="ACGTACGT", molecule="dna")["subject_refs"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         observation, assessment, annotation = interpreted_composition(store, tools, subject)
         policy = CreditPolicy(scale=231., epsilon=.4)
         expected = project_credit(store, policy=policy).credit
@@ -85,7 +85,7 @@ def test_credit_read_uses_owner_region_without_expanding_to_other_original_targe
             {"sequence": "ACGTACGT", "molecule": "dna", "name": "one"},
             {"sequence": "GATTACAA", "molecule": "dna", "name": "two"}]}))
         one, two = store.create_problem(manifest_path=path)["subject_refs"]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         interpreted_composition(store, tools, one)
         interpreted_composition(store, tools, two)
         policy = CreditPolicy(scale=317.)
@@ -121,7 +121,7 @@ def test_native_current_credit_reads_do_not_materialize_scalar_operand_archives(
 
     with Store(tmp_path / "store") as store:
         subject = store.create_problem(raw_sequence="ACGTACGT", molecule="dna")["subject_refs"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         interpreted_composition(store, tools, subject)
         policy = CreditPolicy(scale=231., epsilon=.4)
         expected = project_credit(store, policy=policy).credit
@@ -144,7 +144,7 @@ def test_native_current_credit_reads_do_not_materialize_scalar_operand_archives(
 def test_detail_read_failure_returns_owner_feedback_without_completed_observation(tmp_path):
     with Store(tmp_path / "store") as store:
         subject = store.create_problem(raw_sequence="ACGTACGT", molecule="dna")["subject_refs"][0]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         def bound(store, scope):
             return project_credit(store, scope)
         def unavailable_details(*args, **kwargs):

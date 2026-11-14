@@ -58,6 +58,7 @@ def harness(store, mode, kind, native, *, saved=None):
         source_credit_binding=lambda _: {'kind': 'original_scientific_credit'}, pending_work=lambda _: [],
         delivery_status=lambda _: [], controller_binding={'version': 'controlled-original-binding'},
         catalog=lambda *args, **kwargs: [], knowledge=SimpleNamespace(context=lambda: {}),
+        job_episode_options=lambda _: None,
         extra_report_sources=lambda _: {}, is_scientific_source=lambda _: True,
         annotation_context=annotation_context, specialist=lambda _: None,
         tools=SimpleNamespace(), action_schema=lambda _: {'original_action_schema': True})

@@ -31,7 +31,7 @@ EVIDENCE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episod
 FEATURE_IDS = ['PATRIC.511145.12.NC_000913.CDS.822959.823720.rev',
                'RefSeq.511145.12.NC_000913.CDS.822959.823720.rev']
 RESOURCES = {'bvbrc': {'kind': 'api', 'service': 'bvbrc_data',
-                       'base_url': 'https://www.bv-brc.org/api', 'timeout': 90}}
+                       'base_url': 'https://www.bv-brc.org/api'}}
 
 
 def request(collection='genome_feature', *, mode='count', fields=None, **extra):
@@ -165,7 +165,7 @@ class EpisodeRun:
             return YieldController(str(path), initial, 0, YieldParameters(100, 50),
                 estimate_with_context=root_estimate if path[-1][0] == 'annotation' else None)
 
-        self.workflow = Workflow(store, ToolRegistry(store), self, directory, 'bvbrc-episode-fixture',
+        self.workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), self, directory, 'bvbrc-episode-fixture',
             controller_factory=controller, project_credit=lambda *_: 0,
             episode_service_factory=factory, episode_service_binding=factory.as_record(),
             episode_service_inputs='actual_tool_registry_v1', annotation_child_roles=('launch', 'results'),

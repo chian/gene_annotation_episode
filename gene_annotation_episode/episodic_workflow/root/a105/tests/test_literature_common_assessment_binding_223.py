@@ -13,6 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_compiled_assay_storage import LiteratureCompiledAssayRepository, compiled_assay_v3_cells_schema, compiled_assay_operation_schema, VERSION_V3, NAMESPACE_V3, REQUESTED_V3
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_compiled_assay_prompt import COMMON_ASSESSMENT_TASK, COMPILED_ASSAY_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
@@ -341,7 +342,7 @@ def _selected_shared_loop_case(tmp_path, monkeypatch, profile, alias, index, *, 
     else:
         provider = ScriptedProvider(script)
     progress = ScientificFindingProgress(FindingProgressPolicy(1))
-    asyncio.run(run_workflow(case.store, ToolRegistry(case.store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 5), project_credit=progress, initial_known_record_refs=raw_refs, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, compiled_assay_population=True, reference_parent_sources=[case.source], contract_information_profile=profile),), binding_definitions={'credit': progress.as_record()}, **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
+    asyncio.run(run_workflow(case.store, ToolRegistry(case.store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 5), project_credit=progress, initial_known_record_refs=raw_refs, episode_binding_factories=literature_binding_factories(rate_population=True, compiled_assay_population=True, reference_parent_sources=[case.source], contract_information_profile=profile), binding_definitions={'credit': progress.as_record()}, **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
     assert len(captured) == (2 if nested else 1) and len(prompts) == 5
     row = case.store.db.execute('SELECT run_id,episode_id FROM literature_compiled_assay_v3_received').fetchone()
     run_id, episode_id = row
@@ -479,7 +480,7 @@ def test_original_pending_common_alias_uses_frozen_declarations(tmp_path, monkey
     submitted = obj({'numbers': {'$ref': 'episode-fact:' + NAMESPACE_V3}, 'limits': limit})
     choice = select({'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': assignment, 'goal': 'Determine what the selected molecular experiments establish.', 'scope': plain(case.context.scope), 'purpose': 'Return the requested comparison and scientific limitation.', 'schema_json': json.dumps(submitted), 'initial_report_json': json.dumps({'limits': 'attribution_unknown'})}, 'report_update': {}})
     provider = PresentedProvider([OSError('Controlled pending223 interruption')])
-    workflow = Workflow(case.store, ToolRegistry(case.store), provider, tmp_path / 'run', case.context.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=[case.source, case.model_ref], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, compiled_assay_population=True, reference_parent_sources=[case.source], contract_information_profile=profile),), decision_protocol='decision_exchange_v1')
+    workflow = Workflow(case.store, ToolRegistry(case.store), provider, tmp_path / 'run', case.context.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=[case.source, case.model_ref], episode_binding_factories=literature_binding_factories(rate_population=True, compiled_assay_population=True, reference_parent_sources=[case.source], contract_information_profile=profile), decision_protocol='decision_exchange_v1')
     root = workflow.build('annotation', 'root', 'Evaluate the experimental reference evidence.', plain(case.context.scope))
     try:
         with pytest.raises(OSError, match='pending223'):

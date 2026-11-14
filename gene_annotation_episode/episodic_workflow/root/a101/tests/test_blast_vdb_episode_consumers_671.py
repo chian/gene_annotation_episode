@@ -22,7 +22,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_r
 from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts
 from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.execution_contracts import canonical, digest
+from gene_annotation_episode.episodic_workflow.root.a101.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION, RESULTS_VERSION
 from gene_annotation_episode.episodic_workflow.root.a101.execution_progress import describe_execution_target
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_contracts import JOB_VERSION_V3, requested_job_from_native_blast_utility
@@ -31,7 +31,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.numerical import Numeri
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_operations import LocalPracticalOperations
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_records import assess_validations, validate_assignment
 from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 from test_blast_utility_episode_wiring_632 import assignment, context

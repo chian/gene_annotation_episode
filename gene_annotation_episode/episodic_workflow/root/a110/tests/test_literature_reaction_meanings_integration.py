@@ -80,7 +80,7 @@ def test_actual_selected_delivery_named_models_resources_and_first_readonly_disp
         result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / "run",
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 2),
             project_credit=scorer, initial_known_record_refs=[*context.received_record_refs, *extras],
-            episode_binding_factories=(partial(LiteratureEpisode, rate_population=True,
+            episode_binding_factories=(partial(LiteratureEpisode,
                 reference_parent_sources=[root["id"]]),), binding_definitions={"credit": scorer.as_record()}))
         assert set(captured) == {"own", "parent"}
         observed = [dict(row) for row in store.db.execute("select * from runtime_observations")]
@@ -102,7 +102,7 @@ def test_actual_selected_delivery_named_models_resources_and_first_readonly_disp
         monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a110.providers.ModelConnection", forbidden)
         monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage.read_reaction_inputs", forbidden)
         monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage.populate_reaction_constraints", forbidden)
-        binding = LiteratureEpisode(WorkflowServices(SimpleNamespace(store=store, run_id=result["run_id"])), rate_population=True)
+        binding = LiteratureEpisode(WorkflowServices(SimpleNamespace(store=store, run_id=result["run_id"])))
         restored = binding._received_fact_display_context(parent)
         assert restored["literature_received_fact_display"]["records"] == expected
         state = {**captured["parent"], **restored, "working_state": {}}

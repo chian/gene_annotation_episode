@@ -30,6 +30,10 @@ def original_protocol_operands():
     return ast.literal_eval(requests[0]), config
 
 
+# a108 carries no private method_loop package; its modules import the shared root package.
+METHOD_LOOP_OWNER = {'a101': 'a101.', 'a105': 'a105.', 'a106': 'a106.', 'a108': ''}
+
+
 @pytest.mark.parametrize('axis', ['a101', 'a105', 'a106', 'a108'])
 def test_original_enrichr_material_port_denies_private_controls(tmp_path, axis):
     def module(name):
@@ -50,7 +54,7 @@ def test_original_enrichr_material_port_denies_private_controls(tmp_path, axis):
         run = receipts.run_id
 
         def context(path, assignment, parent=None):
-            episode = module('method_loop.identities').EpisodeRef(run, path).episode_id
+            episode = import_module('gene_annotation_episode.episodic_workflow.root.' + METHOD_LOOP_OWNER[axis] + 'method_loop.identities').EpisodeRef(run, path).episode_id
             inheritance = receipts.bind(episode, None if parent is None else parent.episode_id)
             saved = {'message': {'scope': scope, 'episode_assignment': assignment,
                                  'knowledge_inheritance': inheritance}}

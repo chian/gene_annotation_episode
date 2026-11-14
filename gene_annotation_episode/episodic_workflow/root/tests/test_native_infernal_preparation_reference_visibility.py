@@ -16,8 +16,8 @@ import socket
 import subprocess
 from types import SimpleNamespace
 
-from method_loop.episode import EpisodeGoal, EpisodeRequest
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.communication import plain
@@ -104,7 +104,7 @@ class MetadataBoundary:
         self.subject_artifact = self.store.get(self.scope['subject_refs'][0])['sequence_ref']
         self.shared = self.subject_artifact if subject_bytes else self.selected
         self.source = self.new_source('preparation', auxiliary=[self.selected, self.unrequested, self.shared])
-        self.tools = ToolRegistry(self.store)
+        self.tools = ToolRegistry(self.store, run_directory=self.store.path / 'tool-run')
         self.directory = tmp_path / 'run'
         self.resources = {'synthetic-local': {'kind': 'local', 'workspace': str(tmp_path),
             'policy': {'memory_bytes': 20 * 1024 ** 3, 'scratch_bytes': 4 * 1024 ** 3},

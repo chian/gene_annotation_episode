@@ -11,7 +11,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_preparation_result_views as views
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_hmmer_preparation_worker as worker
 from gene_annotation_episode.episodic_workflow.root.a101.communication import validate_form
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from test_hmmer_artifact_data import payload
 from test_hmmer_model_binary2 import packed
 from test_hmmer_model_legacy import synthetic
@@ -59,8 +59,8 @@ def test_original_evd_pair_is_selectable_through_existing_profile_and_typed_fact
     with monkeypatch.context() as patch:
         patch.setattr("builtins.open", forbidden)
         patch.setattr(worker, "grade_hmmer_preparation", forbidden)
-        patch.setattr("gene_annotation_episode.episodic_workflow.root.a101.hmmer_model_data.extract_hmmer_models", forbidden)
-        patch.setattr("gene_annotation_episode.episodic_workflow.root.a101.hmmer_model_calculations.calculate_hmmer_model_components", forbidden)
+        patch.setattr("gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_model_data.extract_hmmer_models", forbidden)
+        patch.setattr("gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_model_calculations.calculate_hmmer_model_components", forbidden)
         result = project(grading, occurrences)
     assert grading == before
     row, = result["rows"]

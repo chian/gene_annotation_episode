@@ -21,7 +21,7 @@ def test_native_source_kind_origin_survives_normalization_saved_cells_and_typed_
         assert outcome['status'] == 'completed', outcome
         assert outcome['result']['ratio_origin'] == expected
         assert outcome['result']['cells']['ratio_mean']['origin'] == expected
-        adapter = binding.services.literature_reaction_repository().native_observations_projection()
+        adapter = binding.literature_reaction_repository().native_observations_projection()
         rows = adapter.project_rows([outcome['result']['sheet_ref']], permitted_record_refs=outcome['record_refs'])
         assert rows and all(row['origin'] == expected for row in rows)
         saved = adapter.read(outcome['result']['sheet_ref'])
@@ -36,7 +36,7 @@ def test_legacy_prepared_graph_origin_is_unchanged(tmp_path, version):
     with store:
         binding = binding_for(store, context)
         initial = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'prepare-fixture'))
-        saved = binding.services.literature_reaction_repository().read(initial['result']['sheet_ref'])
+        saved = binding.literature_reaction_repository().read(initial['result']['sheet_ref'])
         data = deepcopy(saved['extraction']['observations'])
         data['version'] = version
         data['ratio']['origin'] = 'graph_derived'

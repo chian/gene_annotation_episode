@@ -50,7 +50,7 @@ def test_semantic_position_set_identity_and_episode_scope_separation(tmp_path):
     with Store(tmp_path/'s') as s:
         target,reads,full,subsets,choices=fixture(s,tmp_path)
         union={'subject_refs':full['subject_refs'],'read_selection_refs':[c['id'] for c in choices]}
-        selectall=ToolRegistry(s).execute('library.select',{'library_ref':target['id'],'member_refs':[r['member_ref'] for r in reads]})['result']['scope']
+        selectall=ToolRegistry(s, run_directory=s.path / 'tool-run').execute('library.select',{'library_ref':target['id'],'member_refs':[r['member_ref'] for r in reads]})['result']['scope']
         assert s.context_mask_identity(full)==s.context_mask_identity(union)==s.context_mask_identity(selectall)
         assert s.context_mask_measure(union,target['id'])==20
         assert s.context_mask_subset(subsets[0],union)
@@ -170,7 +170,7 @@ def test_context_runtime_signed_revisions_return_actual_parent_facts_without_ext
             assert s.current_annotations()[0]['context_scope']=={'subject_refs':[]}
             return {'selection':{'kind':'tool','tool':'state.query','arguments':{'kind':'annotation','limit':2,'current_only':True}},'report_update':{}}
         provider=ScriptedProvider([commission,first,withdraw,parent])
-        result=asyncio.run(run_workflow(s,ToolRegistry(s),provider=provider,run_dir=tmp_path/'run',controller_factory=lambda path,initial:FixtureController(str(path),initial,2)))
+        result=asyncio.run(run_workflow(s,ToolRegistry(s, run_directory=s.path / 'tool-run'),provider=provider,run_dir=tmp_path/'run',controller_factory=lambda path,initial:FixtureController(str(path),initial,2)))
         assert result['completed_actions']==2 and len(provider.contexts)==4
         episodes=list(s.db.execute('SELECT episode_id,path FROM runtime_episodes'))
         child=next(row['episode_id'] for row in episodes if len(json.loads(row['path']))==2)
@@ -186,7 +186,7 @@ def test_export_current_context_allocation_uses_mask_not_physical_source_extent(
     with Store(tmp_path/'s') as s:
         target,reads,full,subsets,_=fixture(s,tmp_path)
         source_read=reads[1]
-        observed=ToolRegistry(s).execute('sequence.inspect',{'subject_ref':source_read['id']})['result']['observation_ref']
+        observed=ToolRegistry(s, run_directory=s.path / 'tool-run').execute('sequence.inspect',{'subject_ref':source_read['id']})['result']['observation_ref']
         h=s.put('hypothesis',{'subject_refs':[source_read['id']],'predicate':'growth_capability','value':{'type':'enum','value':'unknown'},'context_refs':[]},origin='reasoning')
         a=s.put('assessment',assessment_record(h,{'id':observed},subsets[0],subsets[0]),origin='reasoning',scope=subsets[0])
         assert s.current_assessments(subsets[0])==[a]

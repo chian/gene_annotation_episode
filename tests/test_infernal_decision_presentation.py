@@ -259,7 +259,7 @@ def test_runtime_restores_old_pending_snapshot_without_rereading_or_rewriting_an
         'commit': obj({'fixture_value': {'type': 'number'}})}), 'report_update': obj({})})
     with Store(tmp_path / 'state') as store:
         subject = store.create_problem(raw_sequence='ACGU', molecule='rna')['subject_refs'][0]
-        workflow = runtime.Workflow(store, ToolRegistry(store), wire, tmp_path / 'run',
+        workflow = runtime.Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), wire, tmp_path / 'run',
             'synthetic-infernal-pending-restoration',
             lambda path, initial: FixtureController(str(path), initial, 1), lambda *_: 0,
             episode_binding_factories=(), execution_binding={'fixture': True},

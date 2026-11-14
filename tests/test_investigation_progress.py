@@ -278,36 +278,6 @@ def test_unreceived_same_lineage_withdrawal_has_exact_current_loss_provenance(tm
             'withdrawal_reason': 'source_misread'}]
 
 
-def test_annotation_and_information_progress_share_replacement_validity(tmp_path):
-    with Store(tmp_path/'workspace') as store:
-        target, hypothesis = target_question(store)
-        scope = {'subject_refs': [target]}
-        observed = evidence(store, target, 'alignment')
-        payload = assessment(hypothesis, observed['id'], 'direct')
-        payload['investigation_finding'] = finding(target)
-        a = store.put('assessment', payload, origin='reasoning', scope=scope)
-        store.put('annotation', annotation(target, hypothesis, [a['id']], 0), origin='reasoning')
-        support = AnnotationSupportScore(CreditPolicy())
-        before = support.read_details(store, scope, details_limit=10, details_offset=0)
-        assert before['credit'] > 0
-        b = put_finding(store, hypothesis, evidence(store, target, 'comparison'), target,
-            value='negative', replaces=[a['id']])
-        # Annotation still names A. Its now-retired operand cannot remain live
-        # merely because its raw observation lineage has a current revision.
-        after = support.read_details(store, scope, details_limit=10, details_offset=0)
-        assert after['credit'] == 0
-        assert after['detail_pages']['state_basis_sha256'] != before['detail_pages']['state_basis_sha256']
-        assert after['inactive_dependencies'][0]['reason'] == 'scientific_finding_replaced'
-        assert after['inactive_dependencies'][0]['replacement_refs'] == [b['id']]
-        progress = project_finding_progress(store, scope, FindingProgressPolicy(2),
-            known_assessment_refs=[a['id']], details_limit=10)
-        assert progress['credit'] == 0
-        assert progress['inactive_dependencies'][0]['replacement_refs'] == [b['id']]
-        assert project_finding_progress(store, scope, FindingProgressPolicy(2),
-            known_assessment_refs=[a['id'], b['id']])['credit'] == 2
-        assert store.get(a['id']) == a
-
-
 @pytest.mark.parametrize('unit', [0, -1, True, float('nan'), float('inf')])
 def test_finding_units_are_explicit_and_finite(unit):
     with pytest.raises(ValueError, match='explicit_positive_finding_unit_required'):

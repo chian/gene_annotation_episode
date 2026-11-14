@@ -19,6 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.episode_contract_information
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.episodic_workflow.root.scoring import SignedEvidenceRootSupport
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
@@ -62,7 +63,7 @@ def table_count(store, name):
 def test_root_rejects_tools_at_schema_dispatch_and_metadata_surface(tmp_path):
     with Store(tmp_path/'state') as store:
         target, = store.create_problem(raw_sequence='ATGAAATAA', molecule='dna')['subject_refs']
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         workflow = runtime.Workflow(store, tools, object(), tmp_path/'run', 'root-boundary',
             controller, zero, episode_binding_factories=(), decision_protocol='decision_exchange_v1')
         root = workflow.build('annotation', 'root', 'Synthetic root annotation', {'subject_refs': [target]})
@@ -94,7 +95,7 @@ def test_root_rejects_tools_at_schema_dispatch_and_metadata_surface(tmp_path):
 def test_combined_root_child_form_comes_from_declared_facts(tmp_path):
     with Store(tmp_path/'state') as store:
         target, = store.create_problem(raw_sequence='ATGAAATAA', molecule='dna')['subject_refs']
-        workflow = runtime.Workflow(store, ToolRegistry(store), object(), tmp_path/'run',
+        workflow = runtime.Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), object(), tmp_path/'run',
             'root-form', controller, zero, episode_binding_factories=(),
             decision_protocol='decision_exchange_v1')
         root = workflow.build('annotation', 'root', 'Synthetic root annotation',
@@ -147,10 +148,10 @@ def test_combined_root_child_form_comes_from_declared_facts(tmp_path):
 def test_metadata_then_real_child_translation_typed_return_and_root_reason(tmp_path):
     with Store(tmp_path/'state') as store:
         target, = store.create_problem(raw_sequence='ATGAAATAA', molecule='dna')['subject_refs']
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         source, run_dir = tmp_path/'fixture-source', tmp_path/'run'
         independent_source(source)
-        descriptor = prepare_scientific_binding(run_directory=run_dir, source_directory=source,
+        descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=run_dir, source_directory=source,
             tool_catalog=tools.catalog(), child_roles=('scientific_process',))
         library = ScientificProcessLibrary(run_dir/'scientific-process-library')
         scope = {'subject_refs': [target]}
@@ -249,7 +250,7 @@ def test_metadata_then_real_child_translation_typed_return_and_root_reason(tmp_p
 def test_parent_can_discover_child_return_facts(tmp_path):
     with Store(tmp_path/'state') as store:
         target, = store.create_problem(raw_sequence='MK', molecule='protein')['subject_refs']
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         factory = ExecutionServiceFactory({'uniprot': {'kind': 'api', 'service': 'uniprot'}}, {}, 1, 1, 1)
         workflow = runtime.Workflow(store, tools, object(), tmp_path/'run', 'child-contracts',
             controller, zero, episode_service_factory=factory,
@@ -266,7 +267,7 @@ def test_parent_can_discover_child_return_facts(tmp_path):
 def test_recovery_reuses_metadata_reply_without_an_action_or_duplicate_lookup(tmp_path, monkeypatch):
     with Store(tmp_path/'state') as store:
         target, = store.create_problem(raw_sequence='ATGAAATAA', molecule='dna')['subject_refs']
-        tools, run_dir = ToolRegistry(store), tmp_path/'run'
+        tools, run_dir = ToolRegistry(store, run_directory=store.path / 'tool-run'), tmp_path/'run'
         lookups = []
         original = runtime.child_option_information
 

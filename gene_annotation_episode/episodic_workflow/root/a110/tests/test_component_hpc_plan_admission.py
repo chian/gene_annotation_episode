@@ -13,7 +13,7 @@ import zlib
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a110 import component_axis_native_hpc as native
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a110.domain import ContractError
 
 
 @pytest.fixture

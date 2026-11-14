@@ -156,7 +156,7 @@ def test_native_readers_receive_unchanged_witness_and_keep_censor_and_unit_check
 
 def test_registry_original_arguments_replay_receipts_scope_and_no_publication(store, monkeypatch):
     row = source(store, b'exact exact')
-    registry = ToolRegistry(store)
+    registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
     args = {'source_ref': row['id'], 'representation': 'original', 'needle': 'exact'}
     scope = store.validate_scope()
     before = len(store.list('source'))
@@ -192,7 +192,7 @@ def test_identity_conflicts_and_storage_failures_are_specific(store, monkeypatch
     monkeypatch.setattr(store, 'get', read)
     path = store.path / 'artifacts' / row['artifact_ref'][9:11] / row['artifact_ref'][9:]
     path.unlink()
-    outcome = ToolRegistry(store).execute('source.locate', {'source_ref': row['id'],
+    outcome = ToolRegistry(store, run_directory=store.path / 'tool-run').execute('source.locate', {'source_ref': row['id'],
         'representation': 'original', 'needle': 'abc'}, permitted_record_refs=(row['id'],))
     assert outcome['status'] == 'failed' and outcome['feedback']['code'] == 'adapter_execution_failed'
     assert outcome['result'] is None
@@ -223,7 +223,7 @@ def test_short_source_or_context_read_is_an_integrity_failure_not_a_loop_or_matc
     monkeypatch.setattr(Path, 'open', lambda path, *args, **kwargs:
         ShortRead(original(path, *args, **kwargs)) if path.name == row['artifact_ref'][9:]
         else original(path, *args, **kwargs))
-    outcome = ToolRegistry(store).execute('source.locate', {'source_ref': row['id'],
+    outcome = ToolRegistry(store, run_directory=store.path / 'tool-run').execute('source.locate', {'source_ref': row['id'],
         'representation': 'original', 'needle': 'one'}, permitted_record_refs=(row['id'],))
     assert outcome['status'] == 'invalid'
     assert outcome['feedback']['code'] == 'source_location_artifact_size_conflict'
@@ -233,7 +233,7 @@ def test_short_source_or_context_read_is_an_integrity_failure_not_a_loop_or_matc
 @pytest.mark.parametrize('bad', [True, float('nan'), float('inf'), -1, 1.5])
 def test_registry_bad_indices_are_structured_failures(store, bad):
     row = source(store, b'abc')
-    outcome = ToolRegistry(store).execute('source.locate', {'source_ref': row['id'],
+    outcome = ToolRegistry(store, run_directory=store.path / 'tool-run').execute('source.locate', {'source_ref': row['id'],
         'representation': 'original', 'needle': 'a', 'offset': bad},
         permitted_record_refs=(row['id'],))
     assert outcome['status'] == 'invalid' and outcome['result'] is None
@@ -245,11 +245,11 @@ def test_registry_reopens_original_result_read_only_without_source_io(tmp_path, 
         row = source(store, b'exact retained quote')
         args = {'source_ref': row['id'], 'representation': 'original', 'needle': 'retained'}
         scope = store.validate_scope()
-        outcome = ToolRegistry(store).execute('source.locate', args, scope=scope,
+        outcome = ToolRegistry(store, run_directory=store.path / 'tool-run').execute('source.locate', args, scope=scope,
             operation_key='retained', permitted_record_refs=(row['id'],))
         assert outcome['status'] == 'completed'
     with Store(tmp_path) as reopened:
-        registry = ToolRegistry(reopened)
+        registry = ToolRegistry(reopened, run_directory=reopened.path / 'tool-run')
         def forbidden(*args, **kwargs):
             raise AssertionError('saved-only reopen performed source I/O')
         monkeypatch.setattr(Path, 'open', forbidden)
@@ -269,7 +269,7 @@ def test_complete_from_zero_scan_verifies_content_addressed_bytes(store):
 @pytest.mark.parametrize('change', [{'representation': 'text'}, {'representation': 'stdout'}, {'offset': 999}])
 def test_registry_failed_attempt_replays_its_original_failure_details(store, change):
     row = source(store, b'original only')
-    registry = ToolRegistry(store)
+    registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
     args = {'source_ref': row['id'], 'representation': 'original', 'needle': 'only', **change}
     first = registry.execute('source.locate', args, operation_key='unavailable', permitted_record_refs=(row['id'],))
     assert first['status'] == 'invalid'

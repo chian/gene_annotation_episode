@@ -43,7 +43,7 @@ def publisher(tmp_path, monkeypatch):
     monkeypatch.setattr("socket.create_connection", forbidden)
     monkeypatch.setattr("gene_annotation_episode.native_lifecycle.prepare_job", forbidden)
     with Store(tmp_path / "store") as store:
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
         def record_materialization(result, source):
             # This recorder proves invocation/operands only. It does not create
             # a Reference; actual availability/admission belongs to host tests.

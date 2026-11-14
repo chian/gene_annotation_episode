@@ -72,8 +72,8 @@ def load_case(name):
 
 
 def validate_bundle(case):
-    validator = (native.validate_native_blast_database_bundle if case["job"]["version"] ==
-                 "native_blast_database_job_v1" else standard.validate_standard_blast_database_bundle)
+    validator = (native.validate_retained_native_blast_database_bundle if case["job"]["version"] ==
+                 "native_blast_database_job_v1" else standard.validate_retained_standard_blast_database_bundle)
     assert validator(case["bundle"], original_job=case["job"],
                      attempt_identity=case["attempt_identity"]) == case["bundle"]
 

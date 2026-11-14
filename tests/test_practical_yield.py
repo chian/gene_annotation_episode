@@ -4,8 +4,8 @@ import json
 import pytest
 from real_time_credit_fixture import progress_time
 
-from method_loop import Context, Episode, EpisodeGoal, EpisodeRequest, EpisodeTree, Grain, Leaf
-from method_loop.identities import EpisodeRef, UnitRef
+from gene_annotation_episode.episodic_workflow.root.method_loop import Context, Episode, EpisodeGoal, EpisodeRequest, EpisodeTree, Grain, Leaf
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef, UnitRef
 
 from gene_annotation_episode.episodic_workflow.root.numerical import (NumericBand, STATUS_INSUFFICIENT, STATUS_NORMAL,
     YieldController, YieldEstimate, YieldParameters, estimate_score_yield)

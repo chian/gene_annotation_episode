@@ -15,6 +15,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_a105_worksheet import a105_worksheet_template, NATIVE, VERSION
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_calculations import populate_kinetic_contrast
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_inputs import read_kinetic_inputs
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage import LiteratureKineticRepository
@@ -160,7 +161,7 @@ def test_pa0142_two_selected_kinetic_contrasts_typed_worksheet_and_cold_reconstr
     provider = ScriptedProvider([commission('literature', literature_assignment), commission('literature_strategy', strategy_assignment), {'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate', 'arguments': guanine}, 'report_update': {'assessment_context': EMPTY}}, {'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate', 'arguments': isocytosine}, 'report_update': {'assessment_context': EMPTY}}, receive, receive])
     scorer = ScientificFindingProgress(FindingProgressPolicy(1))
     try:
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda p, initial: FixtureController(str(p), initial, 2), project_credit=scorer, initial_known_record_refs=[source_ref, xml_ref, si_ref, pdf_ref], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[source_ref]),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda p, initial: FixtureController(str(p), initial, 2), project_credit=scorer, initial_known_record_refs=[source_ref, xml_ref, si_ref, pdf_ref], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[source_ref]), binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0 and captured[0] == captured[1]
         assert len(provider.contexts) == 6
         assert not store.list('assessment') and (not store.list('observation'))

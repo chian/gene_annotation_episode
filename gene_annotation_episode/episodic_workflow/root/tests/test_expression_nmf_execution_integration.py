@@ -11,8 +11,8 @@ from types import SimpleNamespace
 
 import pytest
 from jsonschema import Draft202012Validator
-from method_loop.episode import EpisodeGoal, EpisodeRequest
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_closed_schema, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
@@ -80,7 +80,7 @@ def selected(tmp_path):
         f.assignment = {'requested_job': f.request}
         f.resources = {'here': {'kind': 'local', 'workspace': str(workspace), 'policy': deepcopy(POLICY),
             'native_expression_nmf': [{'operation': OPERATION, 'mode': MODE, 'software': software}]}}
-        f.tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
+        f.tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
         f.owner = ExecutionEpisodes(None, store=store, directory=tmp_path / 'run', run_id=f.run_id,
             resources=f.resources, initial_information={}, tool_registry=f.tools, handoff_unit=3,
             acquired_record_unit=2, log_window_bytes=128, log_roles=('stdout', 'stderr'))

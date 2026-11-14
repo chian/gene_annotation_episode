@@ -4,7 +4,7 @@ import json
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a103.a103_channels import publish_channels
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a103.domain import ContractError
 from gene_annotation_episode.molecular_provider_acquisition import provider_value
 from test_molecular_provider_acquisition import snapshot,IDS
 from gene_annotation_episode.episodic_workflow.root.a103.tests.test_a103_context import context_case,grade

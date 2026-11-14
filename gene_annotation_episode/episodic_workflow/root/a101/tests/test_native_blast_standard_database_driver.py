@@ -332,9 +332,10 @@ def test_bundle_validation_rejects_forged_relationships_pure(tmp_path,monkeypatc
     path,plan,_=fixture(tmp_path); result,bundle=run_fixture(path,plan)
     assert result.returncode==0,result.stderr.decode()
     altered=deepcopy(bundle); change(altered)
-    forbid_io(monkeypatch)
-    assert validate_bundle(bundle,plan)==bundle
-    with pytest.raises(ValueError): validate_bundle(altered,plan)
+    with monkeypatch.context() as patch:
+        forbid_io(patch)
+        assert validate_bundle(bundle,plan)==bundle
+        with pytest.raises(ValueError): validate_bundle(altered,plan)
 
 
 @pytest.mark.parametrize('change', [lambda p:p['identity'].update(attempt_id='0'*64),
@@ -345,6 +346,7 @@ def test_bundle_validation_rejects_forged_relationships_pure(tmp_path,monkeypatc
     lambda p:p['database_paths'].update(target=['/unselected/db'])])
 def test_plan_and_control_relationship_rejections_are_pure(tmp_path,monkeypatch,change):
     _,plan,_=fixture(tmp_path); bad=deepcopy(plan);change(bad)
-    forbid_io(monkeypatch)
-    assert c.validate_standard_blast_database_plan(plan)==plan
-    with pytest.raises(ValueError): c.validate_standard_blast_database_plan(bad)
+    with monkeypatch.context() as patch:
+        forbid_io(patch)
+        assert c.validate_standard_blast_database_plan(plan)==plan
+        with pytest.raises(ValueError): c.validate_standard_blast_database_plan(bad)

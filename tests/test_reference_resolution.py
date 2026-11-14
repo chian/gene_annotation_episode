@@ -111,7 +111,7 @@ def test_subject_namespace_keeps_actual_mapped_features_and_products(tmp_path, m
     fasta.write_text(">left\nMACT\n>right\nMKKK\n")
     with Store(tmp_path / "store") as store:
         left, right = store.create_problem(fasta, format="fasta", molecule="protein")["subject_refs"]
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         subjects = {}
         for target in (left, right):
             result = tools.execute("sequence.view", {"subject_ref": target,

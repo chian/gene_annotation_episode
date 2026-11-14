@@ -33,7 +33,8 @@ from gene_annotation_episode.episodic_workflow.root.a101.providers import _Sessi
 from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_prompt import render_scientific_process_prompt
-from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.episode import ScientificProcessEpisode
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
@@ -186,7 +187,7 @@ def run_case(tmp_path, program, *, selectors=None, bind=True, wrong_sequence=Fal
         'episode_service_inputs': 'actual_tool_registry_v1'}
     if nested:
         application = factory(store, run_id=RUN_ID, directory=tmp_path / 'run', tool_registry=tools)
-        descriptor = prepare_scientific_binding(run_directory=tmp_path / 'run',
+        descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=tmp_path / 'run',
             source_directory=PUBLICATION, tool_catalog=tools.catalog(),
             child_roles=('scientific_process', 'launch', 'results'),
             resource_catalogs=application.resource_tool_catalogs)

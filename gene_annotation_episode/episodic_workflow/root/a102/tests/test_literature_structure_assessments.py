@@ -3,14 +3,27 @@ import asyncio
 from copy import deepcopy
 from dataclasses import replace
 
+from types import SimpleNamespace
+
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a102.communication import form_with_facts
-from gene_annotation_episode.domain import ContractError, obj
+from gene_annotation_episode.episodic_workflow.root.a102.domain import ContractError, obj
+from gene_annotation_episode.episodic_workflow.root.a102.episode_bindings import EpisodeBindingRegistry
+from gene_annotation_episode.episodic_workflow.root.a102.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a102.literature_structure_storage import LiteratureStructureRepository, structure_cells_schema
+from gene_annotation_episode.episodic_workflow.root.a102.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a102.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a102.tests.test_literature_structure_integration import setup_case
-from test_literature_perturbation_integration import binding_for
 from test_literature_perturbation_assessments import identify
+
+
+def binding_for(store, context):
+    """The A102 literature binding with structure population, as the integration test builds it."""
+    host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
+    binding = LiteratureEpisode(WorkflowServices(host), structure_population=True)
+    host.episode_bindings = EpisodeBindingRegistry((binding,))
+    return binding
 
 
 @pytest.mark.parametrize("validation", [False, True])

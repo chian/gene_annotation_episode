@@ -25,7 +25,7 @@ def test_interior_offset_feedback_can_be_used_without_changing_original_request(
     with Store(tmp_path) as store:
         store.create_problem(raw_sequence="MACD", molecule="protein")
         row, body = source(store, ("prefix " + character + " suffix").encode(), representation)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         start, width = len(b"prefix "), len(character.encode())
         arguments = {"source_ref": row["id"], "representation": representation,
             "offset": start + inside, "limit": 1}
@@ -56,7 +56,7 @@ def test_invalid_utf8_has_no_fabricated_character_boundary(tmp_path, raw, offset
     with Store(tmp_path) as store:
         store.create_problem(raw_sequence="MACD", molecule="protein")
         row, _ = source(store, raw, "original")
-        outcome = ToolRegistry(store).execute("source.read", {"source_ref": row["id"],
+        outcome = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("source.read", {"source_ref": row["id"],
             "representation": "original", "offset": offset, "limit": 2})
         assert outcome["status"] == "invalid" and outcome["result"] is None
         assert outcome["feedback"] == {"category": "arguments_or_reference",
@@ -72,7 +72,7 @@ def test_missing_text_derivative_identifies_original_binary_without_retry(tmp_pa
         row = store.put("source", {"provider": "fixture.binary-source", "accession": None,
             "uri": None, "artifact_ref": body, "text_ref": None, "request_ref": None,
             "version": None, "retrieved_at": None}, origin="caller")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         arguments = {"source_ref": row["id"], "representation": "text", "offset": 0,
             "limit": len(raw)}
         original = deepcopy(arguments)
@@ -100,7 +100,7 @@ def test_undecodable_selected_representation_does_not_switch_to_readable_alterna
         row, body = source(store, b"prefix \xff suffix", representation)
         arguments = {"source_ref": row["id"], "representation": representation,
             "offset": len(b"prefix "), "limit": 4}
-        outcome = ToolRegistry(store).execute("source.read", arguments)
+        outcome = ToolRegistry(store, run_directory=store.path / 'tool-run').execute("source.read", arguments)
         assert outcome["status"] == "invalid" and outcome["result"] is None
         assert outcome["record_refs"] == []
         assert outcome["feedback"]["code"] == "source_not_utf8_text"

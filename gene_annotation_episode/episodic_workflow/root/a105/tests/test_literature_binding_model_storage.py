@@ -144,7 +144,7 @@ def test_fresh_reopen_replays_saved_result_without_parser_calculator_or_source_r
         raise AssertionError('saved projection/replay must not parse, calculate or read images')
     for module, names in (('literature_binding_model_storage', ('read_binding_model', 'populate_binding_model', 'binding_model_operand_keys')), ('literature_binding_storage', ('read_binding_parameter_table', 'populate_binding_contrast'))):
         for name in names:
-            monkeypatch.setattr(f'gene_annotation_episode.{module}.{name}', forbidden)
+            monkeypatch.setattr(f'gene_annotation_episode.episodic_workflow.root.a105.library.{module}.{name}', forbidden)
     monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_storage.Image.open', forbidden)
     with Store(tmp_path) as reopened:
         get_artifact = reopened.get_artifact

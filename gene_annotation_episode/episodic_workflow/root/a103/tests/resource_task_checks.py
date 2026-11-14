@@ -311,6 +311,7 @@ def connected_build_trace(v):
         expose_assigned_job=lambda source:None,receive_tool_attributions=lambda *args,**kwargs:None,
         archive=SimpleNamespace(store=forbidden),launch_instructions=SimpleNamespace(materialize=lambda value:None))
     host.specialist=lambda source:v.registry.for_path(source.path)
+    host.legacy_parent_for_path=lambda path:runtime.Workflow.legacy_parent_for_path(host,path)
     host.binding_context=lambda source:own('episode_bindings').BindingContext(host.run_id,source.episode_id,
         source.path[-1][0],source.path,source.scope,source.request.message.as_record()['episode_assignment'],source.request.as_record())
     host.source_credit_view=lambda source:host.specialist(source).credit_view(host.binding_context(source),None)

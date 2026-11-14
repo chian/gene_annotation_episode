@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library import native_b
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_driver as driver
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_acquisition as acquisition
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_materializations import preparation_path_maps, realize_blast_utility_materializations
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from test_native_blast_utility_producer_628 import identity, job_fixture, plan_fixture, reserved_fixture
 import gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_capture_contracts as _scientific_native_blast_utility_acquisition
 

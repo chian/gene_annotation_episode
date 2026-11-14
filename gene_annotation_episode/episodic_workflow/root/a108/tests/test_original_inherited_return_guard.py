@@ -16,7 +16,7 @@ def module(name):
 def test_original_result_assignment_checked_before_frozen_form_acceptance(tmp_path,changed_assignment):
     canonical=module('domain').canonical
     BindingContext=module('episode_bindings').BindingContext
-    EpisodeRef=module('method_loop.identities').EpisodeRef
+    EpisodeRef=import_module('gene_annotation_episode.episodic_workflow.root.method_loop.identities').EpisodeRef  # a108 has no private method_loop; its modules import the shared root package
     with module('state').Store(tmp_path/'state') as store:
         store.create_problem(raw_sequence='MAAA',molecule='protein')
         scope=store.validate_scope()

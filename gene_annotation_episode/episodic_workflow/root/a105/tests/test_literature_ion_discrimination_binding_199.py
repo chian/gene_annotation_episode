@@ -16,6 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import
 from gene_annotation_episode.episodic_workflow.root.a105.episode_composition import compose_episode_bindings
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_ion_discrimination_storage import LiteratureIonDiscriminationRepository, ion_discrimination_cells_schema, COMPONENTS, NAMESPACE, REQUESTED
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_ion_discrimination_inputs import activity_key, dependency_keys
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_ion_discrimination_prompt import ION_DISCRIMINATION_TASK
@@ -469,7 +470,7 @@ def test_selected_original_fluc_shared_loop_exact_typed_admission_and_cold_compo
             pass
     provider = ControlledProvider()
     scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-    summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=proof / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(ctx.received_record_refs), episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, ion_discrimination_population=True, reference_parent_sources=[args['source_ref']], contract_information_profile=CONTRACT_INFORMATION_PROFILE),), binding_definitions={'credit': scorer.as_record()}, decision_protocol='decision_exchange_v1'))
+    summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=proof / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(ctx.received_record_refs), episode_binding_factories=literature_binding_factories(rate_population=True, ion_discrimination_population=True, reference_parent_sources=[args['source_ref']], contract_information_profile=CONTRACT_INFORMATION_PROFILE), binding_definitions={'credit': scorer.as_record()}, decision_protocol='decision_exchange_v1'))
     assert len(forms) == 1 and summary['credit'] == 0
     assert [c.scores for c in controllers] == [[0, 0], [0]]
     assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
@@ -511,8 +512,8 @@ def test_empty_mixed_registered_forms_use_only_their_lazy_routes(tmp_path, monke
         binding = LiteratureEpisode(WorkflowServices(host), rate_population=True, channel_population=True, ion_discrimination_population=True, controlled_response_population=True, gel_population=True)
         host.episode_bindings = EpisodeBindingRegistry((binding,))
         ctx = replace(ctx, assignment={**plain(ctx.assignment), 'requested_channel_components': []})
-        for name in ('literature_rate_repository', 'literature_perturbation_repository', 'literature_reaction_repository', 'literature_controlled_response_repository', 'literature_gel_repository'):
-            monkeypatch.setattr(binding.services, name, forbid)
+        for name in ('literature_rate_repository', 'literature_controlled_response_repository', 'literature_gel_repository'):
+            monkeypatch.setattr(binding, name, forbid)
         form = obj({'ions': ion_discrimination_cells_schema(), 'electrical': channel_cells_schema()})
         before = store.db.total_changes
         store.db.execute('PRAGMA query_only=ON')

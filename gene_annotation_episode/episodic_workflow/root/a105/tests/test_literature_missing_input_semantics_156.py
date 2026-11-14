@@ -18,6 +18,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assa
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_quantity_storage import quantity_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
@@ -43,7 +44,7 @@ def test_exact_prechange_v1_replay_projection_original_schema_and_admission(tmp_
     helper = HELPERS[kind]
     with Store(tmp_path / 'state') as store:
         binding = helper.binding_for(store, context)
-        repository = getattr(binding.services, f'literature_{kind}_repository')()
+        repository = getattr(binding, f'literature_{kind}_repository')()
         ref = saved['outcome']['result']['sheet_ref']
         assert saved['payload']['version'].endswith('_v1')
         assert saved['payload']['sheet']['correction']['version'] == 'a105_corrected_activity_v1'
@@ -91,7 +92,7 @@ def test_selected_null_does_not_claim_omission_even_when_fixture_contains_operan
         binding = assay.binding_for(store, context)
         outcome = asyncio.run(binding.execute(context, 'literature.assay.populate', arguments, 'missing-selection'))
         assert outcome['status'] == 'completed'
-        repository = binding.services.literature_assay_repository()
+        repository = binding.literature_assay_repository()
         ref = outcome['result']['sheet_ref']
         payload = repository.read(ref)
         assert payload['version'] == 'literature_assay_population_record_v2'
@@ -116,7 +117,7 @@ def test_only_explicit_supported_payload_versions_can_be_read(tmp_path, kind, pa
     store, context, arguments = helper.setup_store(tmp_path, **{'full': False} if kind == 'assay' else {})
     with store:
         binding = helper.binding_for(store, context)
-        repository = getattr(binding.services, f'literature_{kind}_repository')()
+        repository = getattr(binding, f'literature_{kind}_repository')()
         outcome = repository.populate(context, arguments, 'selected')
         original = store.get(outcome['result']['sheet_ref'])
         payload = repository.read(original['id'])
@@ -147,7 +148,7 @@ def test_fresh_v2_selected_operation_typed_subset_and_cold_descriptor_reconstruc
         assert any((row['unavailable_reason'] == 'correction_inputs_not_supplied' for row in form['measurements']))
         parent = replace(current, role='annotation', episode_id='parent', path=(('annotation', 'root'),), assignment={})
         binding.received_form_references(parent, form, helper.FORM, 'v2-delivery')
-        repository = getattr(binding.services, f'literature_{kind}_repository')()
+        repository = getattr(binding, f'literature_{kind}_repository')()
         data = {'kind': kind, 'context': context_record(context), 'parent': context_record(parent), 'arguments': arguments, 'operation_key': 'selected-v2', 'outcome': outcome, 'form': form, 'schema': helper.FORM, 'descriptor': binding.as_record(), 'payload': repository.read(ref)}
         assert data['payload']['version'].endswith('_v2')
         assert data['payload']['sheet']['correction']['version'] == 'a105_corrected_activity_v2'
@@ -180,7 +181,7 @@ def test_synthetic_quantity_shared_loop_returns_missing_input_meaning_without_ex
             controllers.append(value)
             return value
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([child, selected, receive]), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=[arguments['source_ref']], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([child, selected, receive]), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=[arguments['source_ref']], episode_binding_factories=literature_binding_factories(rate_population=True), binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0 and len(seen) == 1
         assert [value.scores for value in controllers] == [[0, 0], [0]]
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3

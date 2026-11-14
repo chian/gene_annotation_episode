@@ -16,8 +16,8 @@ from types import MethodType, SimpleNamespace
 
 import pytest
 
-from method_loop.episode import EpisodeGoal, EpisodeRequest
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, plain, validate_closed_schema, validate_form,
@@ -680,7 +680,7 @@ def _registered_capture_dispatch_case(store, directory, *, saved=None, scientifi
 @pytest.mark.parametrize('condition', ['allowed_none', 'allowed_source', 'wrong_namespace',
     'foreign_scope', 'forged_capture', 'missing_source'])
 def test_local_file_source_probe_preserves_registered_capture_authority(tmp_path, condition):
-    from method_loop.episode import EpisodeGoal
+    from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal
     with Store(tmp_path / 'state') as store:
         if condition == 'foreign_scope':
             manifest = tmp_path / 'scope-targets.json'

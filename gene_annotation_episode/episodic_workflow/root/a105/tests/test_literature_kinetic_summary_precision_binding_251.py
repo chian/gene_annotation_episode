@@ -13,6 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext, EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_summary_precision_storage import LiteratureKineticSummaryPrecisionRepository, summary_precision_cells_schema, kinetic_operation_schema, COMPONENTS, NAMESPACE, REQUESTED, VIEW, VERSION
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_summary_precision_prompt import KINETIC_SUMMARY_PRECISION_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_model_prompt import KINETIC_MODEL_TASK
@@ -481,7 +482,7 @@ def test_selected_shared_loop_first_readonly_composer_and_observations(tmp_path,
     provider = ControlledPresented(script) if profile else ScriptedProvider(script)
     progress = ScientificFindingProgress(FindingProgressPolicy(1))
     try:
-        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=sources, contract_information_profile=profile),), **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
+        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=sources, contract_information_profile=profile), **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == (5 if nested else 3)
         assert store.db.execute('SELECT count(*) FROM literature_kinetic_summary_precision_operations').fetchone()[0] == 1
         run_id, parent = store.db.execute('SELECT run_id,episode_id FROM literature_kinetic_summary_precision_received ORDER BY rowid DESC LIMIT 1').fetchone()
@@ -540,7 +541,7 @@ def test_original_pending_alias_first_cold_compose_no_new_factories(tmp_path, mo
     literal = obj({'numbers': summary_precision_cells_schema()})
     alias = obj({'numbers': {'$ref': 'episode-fact:' + NAMESPACE}})
     provider = PresentedProvider([OSError('Controlled pending251 interruption')])
-    workflow = Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', ctx.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=sources, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=sources, contract_information_profile=profile),), decision_protocol='decision_exchange_v1')
+    workflow = Workflow(store, ToolRegistry(store), provider, tmp_path / 'run', ctx.run_id, lambda path, initial: FixtureController(str(path), initial, 2), ScientificFindingProgress(FindingProgressPolicy(1)), initial_known_record_refs=sources, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=sources, contract_information_profile=profile), decision_protocol='decision_exchange_v1')
     root = workflow.build('annotation', 'root', 'Evaluate the selected synthetic precision.', plain(ctx.scope))
     with pytest.raises(OSError, match='pending251'):
         asyncio.run(root.run_async(workflow.context))

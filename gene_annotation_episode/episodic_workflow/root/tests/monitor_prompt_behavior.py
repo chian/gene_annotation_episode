@@ -5,11 +5,26 @@ from types import SimpleNamespace
 import pytest
 
 
-class MonitorPromptBehaviorChecks:
+def axis_of(home):
+    return home.split('.root.')[0]+'.root.'+home.split('.root.')[1].split('.')[0]
+
+
+def renderer_state():
+    return {'monitor_assignment':{'version':'monitor_assignment_v1'},
+        'requested_form':{'properties':{'answer':{'x-source':'requested_result'}}},
+        'available_report_facts':{'requested_result':{'meaning':'Requested original meaning'},
+            'monitoring_progress_refs':{'meaning':'Actual delivered progress'},
+            'unrequested_result':{'meaning':'Unrequested scientific definition'}}}
+
+
+class MonitorPromptChecks:
+    """Instruction checks shared by every axis; each home's test class adds its own provider and renderer checks."""
     def setup(self,*,protocol=None,wait=False,native=False):
         module=importlib.import_module(self.home+'.episode')
-        axis=self.home.split('.root.')[0]+'.root.'+self.home.split('.root.')[1].split('.')[0]
+        axis=axis_of(self.home)
         runtime_prompt=importlib.import_module(axis+'.runtime_prompt')
+        # The axis's actual instruction dispatch: it selects the task's private composer.
+        services_type=importlib.import_module(axis+'.episode_services').WorkflowServices
         binding=module.MonitorEpisode(object())
         task=object.__new__(binding.decision_source_type)
         task.episode_id='monitor';task.path=(('monitor','original'),)
@@ -19,7 +34,7 @@ class MonitorPromptBehaviorChecks:
             native_event_information=object() if native else None,decision_protocol=protocol,
             knowledge=SimpleNamespace(instructions='\nOriginal tool-library guidance.'),
             launch_instructions=SimpleNamespace(instructions='\nOriginal launch-library guidance.'),
-            services=SimpleNamespace(instructions=runtime_prompt.instructions))
+            services=SimpleNamespace(instructions=lambda source,context:services_type.instructions(None,source,context)))
         return task,binding,context,runtime_prompt
 
     @pytest.mark.parametrize('protocol',[None,'decision_exchange_v1'])
@@ -52,6 +67,9 @@ class MonitorPromptBehaviorChecks:
         assert ('The separate native_event_targets input' in text)==(wait and native)
         assert 'pending_child_delivery' in text
 
+
+class CompleteDecisionChecks:
+    """Monitors whose task exposes complete_decision(instructions, context, schema)."""
     def test_declared_renderer_reaches_capable_provider(self):
         task,binding,_,_=self.setup()
         calls=[]
@@ -77,14 +95,54 @@ class MonitorPromptBehaviorChecks:
         assert asyncio.run(task.complete_decision('monitor instructions',state,schema))=={'original':'response'}
         assert calls==[('monitor','REASONING','monitor instructions',state,schema)]
 
+
+class DecisionCompletionChecks:
+    """Monitors whose task exposes decision_completion(), returning the five-operand provider call."""
+    def test_legacy_provider_keeps_original_structured_arguments(self):
+        task,_,_,_=self.setup()
+        calls=[]
+        async def complete(*args):
+            calls.append(args);return {'original':'response'}
+        task.workflow.provider=SimpleNamespace(complete=complete)
+        state={'monitor_assignment':{'version':'monitor_assignment_v1'}};schema={'type':'object'}
+        complete_private_decision=task.decision_completion()
+        assert asyncio.run(complete_private_decision('monitor','REASONING','monitor instructions',state,schema))=={'original':'response'}
+        assert calls==[('monitor','REASONING','monitor instructions',state,schema)]
+
+
+class DirectRendererChecks:
+    """Monitors whose binding renderer is the monitor prompt renderer itself."""
     def test_renderer_retains_requested_facts_without_unrequested_science(self):
         _,binding,_,_=self.setup()
-        state={'monitor_assignment':{'version':'monitor_assignment_v1'},
-            'requested_form':{'properties':{'answer':{'x-source':'requested_result'}}},
-            'available_report_facts':{'requested_result':{'meaning':'Requested original meaning'},
-                'monitoring_progress_refs':{'meaning':'Actual delivered progress'},
-                'unrequested_result':{'meaning':'Unrequested scientific definition'}}}
+        state=renderer_state()
         text=binding.decision_prompt_renderer(state,'Original monitor instructions',lookup_results=[{'status':'unavailable'}])
         assert 'Requested original meaning' in text and 'Actual delivered progress' in text
         assert 'Unrequested scientific definition' not in text
         assert 'unavailable' in text
+
+
+class SelectedRendererChecks:
+    """Monitors whose binding renderer is a context presenter that selects the monitor prompt renderer."""
+    def test_renderer_retains_requested_facts_without_unrequested_science(self):
+        _,binding,_,_=self.setup()
+        state=renderer_state()
+        assert binding.decision_prompt_renderer.presentation_protocol=='episode_context_presentation_v1'
+        _,renderer_for=importlib.import_module(self.home+'.presentation_selection').task_presentation_selection()
+        renderer=renderer_for(state)
+        assert renderer is importlib.import_module(axis_of(self.home)+'.library.monitor_prompt').render_monitor_prompt
+        text=renderer(state,'Original monitor instructions',lookup_results=[{'status':'unavailable'}])
+        assert 'Requested original meaning' in text and 'Actual delivered progress' in text
+        assert 'Unrequested scientific definition' not in text
+        assert 'unavailable' in text
+
+
+class MonitorPromptBehaviorChecks(MonitorPromptChecks,CompleteDecisionChecks,DirectRendererChecks):
+    """A102, A103, A107 and A110 monitor homes."""
+
+
+class MonitorDecisionCompletionPromptChecks(MonitorPromptChecks,DecisionCompletionChecks,DirectRendererChecks):
+    """A101 and A106 monitor homes."""
+
+
+class MonitorContextPresenterPromptChecks(MonitorPromptChecks,DecisionCompletionChecks,SelectedRendererChecks):
+    """A104 monitor homes."""

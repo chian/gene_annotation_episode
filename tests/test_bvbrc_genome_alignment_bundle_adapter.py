@@ -15,6 +15,9 @@ from test_bvbrc_genome_alignment_bundle_resolution import arguments
 
 
 BASE = Path(facade.__file__).parent
+# implementation_sha256() reads each _DEPENDENCIES name relative to the package directory
+# (bvbrc_genome_alignment_bundle_adapter.py: Path(__file__).resolve().parents[3] / name).
+DEPENDENCY_BASE = Path(facade.__file__).resolve().parents[3]
 
 
 def actual_local_closure():
@@ -53,9 +56,10 @@ def actual_local_closure():
 
 @pytest.mark.parametrize('changed_name', facade._DEPENDENCIES)
 def test_every_source_and_schema_dependency_changes_pin_without_editing_shared_files(monkeypatch, changed_name):
-    originals = {name: (BASE / name).read_bytes() for name in facade._DEPENDENCIES}
+    originals = {DEPENDENCY_BASE / name: (DEPENDENCY_BASE / name).read_bytes() for name in facade._DEPENDENCIES}
+    changed = DEPENDENCY_BASE / changed_name
     expected = facade.implementation_sha256()
-    monkeypatch.setattr(Path, 'read_bytes', lambda path: originals[path.name] + (b'\n# pin mutation' if path.name == changed_name else b''))
+    monkeypatch.setattr(Path, 'read_bytes', lambda path: originals[path] + (b'\n# pin mutation' if path == changed else b''))
     assert facade.implementation_sha256() != expected
 
 

@@ -8,12 +8,12 @@ import zipfile
 
 import pytest
 
-from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
+from gene_annotation_episode.episodic_workflow.root.a101.acquisition import AcquisitionError, PublicClients, SourceSnapshot
 from gene_annotation_episode.credit import AnnotationScoringUnavailable, project_credit
 from gene_annotation_episode.export import export_annotation
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
-from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
+from gene_annotation_episode.episodic_workflow.root.a101.tool_grading_artifacts import source_tool_gradings
 
 
 def assert_retired_annotation_scorer(store, scope=None):
@@ -522,7 +522,7 @@ def test_zero_native_frames_remain_integer_source_metadata(tmp_path):
         obs=store.get(result['result']['records'][0]['observation_ref'])
         assert obs['native_blast']['query_frame']==obs['native_blast']['hit_frame']==0
         assert 'native_blast' not in store.reasoning_schema()['properties']['observations']['items']['properties']
-        from gene_annotation_episode.domain import RECORD_SCHEMAS
+        from gene_annotation_episode.episodic_workflow.root.a101.domain import RECORD_SCHEMAS
         assert 'native_blast' in RECORD_SCHEMAS['observation']['properties']
 
 

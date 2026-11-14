@@ -10,7 +10,7 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a110.communication import form_with_facts, plain
-from gene_annotation_episode.domain import ContractError, canonical, obj
+from gene_annotation_episode.episodic_workflow.root.a110.domain import ContractError, canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.a110.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a110.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
@@ -72,7 +72,7 @@ def setup_case(path, *, requested=True):
 
 def binding_for(store, context):
     host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
-    binding = LiteratureEpisode(WorkflowServices(host), rate_population=True)
+    binding = LiteratureEpisode(WorkflowServices(host))
     host.episode_bindings = EpisodeBindingRegistry((binding,))
     return binding
 
@@ -173,7 +173,7 @@ def test_ordinary_original_child_return_exact_receipt_and_normal_observation_acc
         result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run',
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1),
             project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
-            episode_binding_factories=(partial(LiteratureEpisode, rate_population=True,
+            episode_binding_factories=(partial(LiteratureEpisode,
                 reference_parent_sources=[args["source_ref"]]),),
             binding_definitions={'credit': scorer.as_record()}))
         assert len(captures) == 1
@@ -260,7 +260,7 @@ def test_native_position_subset_does_not_expand_from_globally_known_sheet(tmp_pa
         outcome = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'two-units'))
         assert outcome['status'] == 'completed', outcome
         owner = replace(context, received_record_refs=tuple(dict.fromkeys((*context.received_record_refs, *outcome['record_refs']))))
-        adapter = binding.services.literature_reaction_repository().native_observations_projection()
+        adapter = binding.literature_reaction_repository().native_observations_projection()
         sheet = outcome['result']['sheet_ref']
         all_rows = adapter.fact_rows(owner, [sheet], positions=['all'])
         assert [row['value'] for row in all_rows] == [.8, .9]
@@ -287,7 +287,7 @@ def test_mixed_old_prepared_and_native_sheets_preserve_aggregate_and_skip_missin
         binding = binding_for(store, context)
         native = asyncio.run(binding.execute(context, 'literature.reaction.populate', args, 'native'))
         assert native['status'] == 'completed', native
-        normalized = binding.services.literature_reaction_repository().read(native['result']['sheet_ref'])['extraction']['observations']
+        normalized = binding.literature_reaction_repository().read(native['result']['sheet_ref'])['extraction']['observations']
         # Both historical v1 and v2 prepared routes remain available alongside
         # a newly selected native-source recipe in this exact same episode.
         prepared = []

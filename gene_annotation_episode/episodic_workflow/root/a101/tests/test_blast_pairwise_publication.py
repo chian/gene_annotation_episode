@@ -16,15 +16,15 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_pairwise_result_views import NATIVE_BLAST_METRICS
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_pairwise_results import calculate_blast_pairwise_components
-from gene_annotation_episode.domain import ContractError, canonical, parse_sequences
-from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.materials import artifact_file, artifact_path
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError, canonical, parse_sequences
+from gene_annotation_episode.episodic_workflow.root.a101.local_jobs import LocalJobPolicy
+from gene_annotation_episode.episodic_workflow.root.a101.materials import artifact_file, artifact_path
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_acquisition import publish_original_source
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_contracts import native_blast_digest, requested_job_from_native
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_result_publication import (
     prepare_native_blast_grading, publish_selected_native_blast_rows, validate_native_blast_publication,
 )
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 
 
 ROOT = Path(__file__).resolve().parents[5]

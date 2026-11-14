@@ -7,7 +7,7 @@ matching value, label or physical measurement. No score or credit is computed.
 from collections.abc import Mapping
 from copy import deepcopy
 
-from ...domain import canonical
+from .domain import canonical
 
 
 def current_scoring_view(sheets):

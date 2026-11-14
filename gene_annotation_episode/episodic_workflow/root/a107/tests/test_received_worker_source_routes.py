@@ -31,7 +31,7 @@ def test_current_worker_closure_keeps_defining_modules_and_package_initializers(
 
 def test_unavailable_original_global_name_is_not_redirected_to_current_worker(tmp_path):
     with pytest.raises(ValueError, match='received_worker_source_identity_invalid'):
-        current_worker_sources('gene_annotation_episode.episodic_workflow.root.a107.library.genomic_overlap_result_worker', module_root=tmp_path)
+        current_worker_sources('gene_annotation_episode.genomic_overlap_result_worker', module_root=tmp_path)
 
 
 def test_missing_current_worker_remains_unavailable(tmp_path):
@@ -160,7 +160,7 @@ def test_genomic_intent_checks_the_versioned_command_and_required_source_paths(m
 
 def test_genomic_original_execution_does_not_gain_current_source_identity():
     from gene_annotation_episode.episodic_workflow.root.a107.library import native_genomic_overlap_preparation as module
-    assert module._worker_source_module({'version': module._EXECUTION}) == 'gene_annotation_episode.episodic_workflow.root.a107.library.genomic_overlap_result_worker'
+    assert module._worker_source_module({'version': module._EXECUTION}) == 'gene_annotation_episode.genomic_overlap_result_worker'
     assert module._worker_source_module({'version': module._CURRENT_EXECUTION}) == CURRENT_WORKERS['genomic_overlap']
     with pytest.raises(ValueError, match='source_identity_invalid'):
         module._worker_source_module({'version': 'unknown'})

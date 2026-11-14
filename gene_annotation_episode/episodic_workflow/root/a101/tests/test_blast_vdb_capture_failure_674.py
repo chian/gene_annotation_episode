@@ -17,8 +17,8 @@ from gene_annotation_episode.episodic_workflow.root.a101.library import native_b
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_results as results
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_result_publication as publication
 from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts
-from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.execution_contracts import canonical
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.execution_contracts import canonical
 
 import test_blast_vdb_publication_returns_669 as helpers
 from test_blast_vdb_native_context_668 import (

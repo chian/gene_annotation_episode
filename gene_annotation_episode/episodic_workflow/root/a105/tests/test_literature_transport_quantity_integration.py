@@ -15,6 +15,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_quantity_storage import LiteratureQuantityRepository, quantity_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
@@ -105,7 +106,7 @@ def test_primary_html_ordinary_child_returns_only_requested_cells_and_actual_obs
             commit['source_subjects'] = [{'alias': 'source_name', 'reference_type': 'assay', 'source_ref': source['id'], 'label': 'BtsT', 'anchor': {'source_ref': source['id'], 'artifact_ref': source['artifact_ref'], 'start': start, 'end': start + 4, 'quote': 'BtsT'}}]
             return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([child, selected, parent_receives]), run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1), project_credit=scorer, initial_known_record_refs=[args['source_ref']], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([child, selected, parent_receives]), run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1), project_credit=scorer, initial_known_record_refs=[args['source_ref']], episode_binding_factories=literature_binding_factories(rate_population=True), binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0 and len(seen) == 1
         assert store.db.execute('select count(*) from runtime_observations').fetchone()[0] == 3
         assert store.db.execute('select count(*) from literature_quantity_operations').fetchone()[0] == 1

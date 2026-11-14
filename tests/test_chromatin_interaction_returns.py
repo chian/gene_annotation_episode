@@ -14,8 +14,8 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from method_loop.episode import EpisodeGoal, EpisodeRequest
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 import pytest
 
 from gene_annotation_episode.chromatin_interaction_return_views import (

@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.library import native_lumpy_
 
 
 FIXTURES = Path(__file__).parent / "fixtures" / "lumpy_saved_driver_identity"
-LEGACY = "gene_annotation_episode.episodic_workflow.root.library.native_lumpy_execution"
+LEGACY = "gene_annotation_episode.native_lumpy_execution"
 CURRENT = "gene_annotation_episode.episodic_workflow.root.library.native_lumpy_execution"
 CURRENT_MODULES = (
     CURRENT,

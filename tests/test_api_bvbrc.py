@@ -187,7 +187,7 @@ def test_publication_preserves_reference_subjects_missing_fields_and_native_coor
     with Store(tmp_path) as store:
         problem = store.create_problem(raw_sequence="MACDEFGH", molecule="protein")
         scope = {"subject_refs": problem["subject_refs"]}
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         service = BVBRCDataService(tools)
         source_count_before = len(store.list("source"))
         command = prepare(service, scope=scope)

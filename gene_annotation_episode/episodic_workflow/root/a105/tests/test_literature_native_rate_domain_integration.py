@@ -17,6 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_receipts import
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_calculations import populate_rate_contrast
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_domains import NAMESPACE, rate_source_domain_cells_schema
@@ -75,7 +76,7 @@ def test_selected_native_action_own_next_decision_typed_subset_and_readonly_repl
         return source_reason(store, args['source_ref'])
     provider = ScriptedProvider([{'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': assignment, 'goal': 'Compare constructed source rates.', 'scope': plain(template.scope), 'purpose': 'Return only the requested numerical component.', 'schema_json': json.dumps(form), 'initial_report_json': '{}'}, 'report_update': {}}, {'selection': {'kind': 'tool', 'tool': 'literature.rate.source.populate', 'arguments': args}, 'report_update': {}}, child_next, parent_next])
     scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-    result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2), project_credit=scorer, initial_known_record_refs=[args['source_ref']], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[args['source_ref']]),), binding_definitions={'credit': scorer.as_record()}))
+    result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2), project_credit=scorer, initial_known_record_refs=[args['source_ref']], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[args['source_ref']]), binding_definitions={'credit': scorer.as_record()}))
     assert result['credit'] == 0
     assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 4
     operation, = store.db.execute('SELECT * FROM literature_rate_operations').fetchall()
@@ -123,7 +124,7 @@ def test_selected_native_action_own_next_decision_typed_subset_and_readonly_repl
     try:
         services = WorkflowServices(SimpleNamespace(store=reopened, run_id=operation['run_id']))
         binding = LiteratureEpisode(services, rate_population=True, reference_parent_sources=[args['source_ref']])
-        repo = services.literature_rate_repository()
+        repo = binding.literature_rate_repository()
         assert repo.populate_native(owner, args, operation['operation_key']) == outcome
         assert repo.read(sheet_ref) == saved
         view = repo.source_domain_projection() if domain_return else repo.source_projection()

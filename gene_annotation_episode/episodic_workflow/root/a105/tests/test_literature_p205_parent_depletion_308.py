@@ -13,6 +13,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_a105_worksheet import a105_worksheet_template, VERSION
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt, EXPERIMENTAL_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_reference_parent_prompt import REFERENCE_PARENT_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_parent_depletion_inputs import VERSION as INPUT_VERSION, read_parent_depletion_inputs
@@ -126,7 +127,7 @@ def test_selected_xlsx_read_population_typed_return_and_cold_reconstruction(tmp_
     provider = Provider()
     scorer = ScientificFindingProgress(FindingProgressPolicy(1))
     try:
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda p, initial: FixtureController(str(p), initial, 2), project_credit=scorer, initial_known_record_refs=[source_ref, article_ref], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, parent_depletion_population=True, reference_parent_sources=[source_ref]),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda p, initial: FixtureController(str(p), initial, 2), project_credit=scorer, initial_known_record_refs=[source_ref, article_ref], episode_binding_factories=literature_binding_factories(rate_population=True, parent_depletion_population=True, reference_parent_sources=[source_ref]), binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0
         assert len(provider.contexts) in (4, 5)
         child_prompts = [render_literature_experimental_prompt(context, instructions) for context, instructions in provider.prompts if 'literature_assignment' in context]

@@ -71,7 +71,7 @@ def test_cmsearch_publication_has_one_common_calculation_and_saved_recalculation
 
         monkeypatch.setattr(infernal_search_grader, "calculate_infernal_search_scores", tracked)
         monkeypatch.setattr(rna_evidence, "iter_fmt3", forbidden)
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
 
         async def captured_completion(selected, scope):
             assert selected == args
@@ -106,7 +106,7 @@ def test_malformed_trailing_row_preserves_shared_sheet_and_valid_observation(tmp
     with Store(tmp_path / "state") as store:
         args, native = prepared_case(store)
         native = replace(native, table=native.table + b"invalid trailing synthetic parser fixture\n")
-        registry = ToolRegistry(store)
+        registry = ToolRegistry(store, run_directory=store.path / 'tool-run')
 
         async def captured_completion(selected, scope):
             assert selected == args

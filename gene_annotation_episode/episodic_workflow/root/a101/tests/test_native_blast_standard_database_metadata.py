@@ -99,7 +99,9 @@ def fixture(program="blastp", *, query=None, kind="sequence", doc=None, options=
         entry_module="gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_driver",
         python=dict(path="/synthetic/bin/python", sha256="2" * 64, size_bytes=30),
         package_files=[dict(relative_path="gene_annotation_episode/" + name, sha256="3" * 64, size_bytes=40)
-            for name in ("__init__.py", "native_blast_standard_database_contracts.py", "native_blast_standard_database_driver.py", "blast_program_context.py")], runtime_files=[])
+            for name in ("__init__.py", "episodic_workflow/root/a101/library/native_blast_standard_database_contracts.py",
+                "episodic_workflow/root/a101/native_blast_standard_database_driver.py",
+                "episodic_workflow/root/a101/library/blast_program_context.py")], runtime_files=[])
     producer_raw = encoded(manifest)
     plan = dict(version="native_blast_standard_database_run_plan_v1", identity=identity,
         requested_job=request, attempt_directory="/synthetic/attempt", input_paths={r["input_key"]: "/synthetic/attempt/input/" + r["input_key"] for r in job["inputs"]},

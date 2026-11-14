@@ -170,18 +170,19 @@ def test_saved_sheet_recalculation_and_pure_ports_forbid_io(monkeypatch):
     op,inputs,outputs = exact_payloads("forward")
     def forbidden(*args,**kwargs):
         raise AssertionError("pure component attempted I/O or native invocation")
-    monkeypatch.setattr(builtins,"open",forbidden)
-    monkeypatch.setattr(Path,"open",forbidden)
-    monkeypatch.setattr(socket,"socket",forbidden)
-    monkeypatch.setattr(subprocess,"Popen",forbidden)
-    monkeypatch.setattr(subprocess,"run",forbidden)
-    first = calculate_hmmer_fm_components(sheet)
-    changed = calculate_hmmer_fm_components(sheet,parameters={"exhaustive_literal_check":True})
-    recreated = populate_hmmer_fm_sheet(operation=op,inputs=inputs,outputs=outputs,producer_contract=ABI)
-    assert values(first,"exactmatch_summary")["expected_literal_location_count"] is None
-    assert values(changed,"exactmatch_summary")["expected_literal_location_count"] == 17
-    assert sheet == before
-    assert recreated["database"]["population"]["complete"] is True
+    with monkeypatch.context() as patch:
+        patch.setattr(builtins,"open",forbidden)
+        patch.setattr(Path,"open",forbidden)
+        patch.setattr(socket,"socket",forbidden)
+        patch.setattr(subprocess,"Popen",forbidden)
+        patch.setattr(subprocess,"run",forbidden)
+        first = calculate_hmmer_fm_components(sheet)
+        changed = calculate_hmmer_fm_components(sheet,parameters={"exhaustive_literal_check":True})
+        recreated = populate_hmmer_fm_sheet(operation=op,inputs=inputs,outputs=outputs,producer_contract=ABI)
+        assert values(first,"exactmatch_summary")["expected_literal_location_count"] is None
+        assert values(changed,"exactmatch_summary")["expected_literal_location_count"] == 17
+        assert sheet == before
+        assert recreated["database"]["population"]["complete"] is True
 
 
 @pytest.mark.parametrize("parameters",[{"alphabet_normalization":"auto"},{"coordinate_policy":"zero_based"},{"exhaustive_literal_check":1},{"confidence":0.9}])

@@ -232,7 +232,7 @@ def _retained_alignment(case, label, version):
     assert legacy['schema'] == 'tool_grading_artifact_v1'
     descriptor = original
     if version == 2:
-        registry, requests = ToolRegistry(case.store), []
+        registry, requests = ToolRegistry(case.store, run_directory=case.store.path / 'tool-run'), []
         path = case.root / ('retained-alignment-' + str(ordinal) + '.json')
         path.write_bytes(raw)
 

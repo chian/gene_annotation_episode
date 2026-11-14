@@ -25,6 +25,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_prod
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_product_partition_prompt import PRODUCT_PARTITION_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_product_partition_storage import LiteratureProductPartitionRepository, product_partition_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
@@ -181,7 +182,7 @@ def _run_joined_optional_families(tmp_path, monkeypatch, relationship_unknown, *
         controllers.append(result)
         return result
     scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-    factories = (partial(LiteratureEpisode, rate_population=True, completion_time_population=True, product_partition_population=True, reference_parent_sources=[source]),)
+    factories = literature_binding_factories(rate_population=True, completion_time_population=True, product_partition_population=True, reference_parent_sources=[source])
     try:
         summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ControlledProvider(), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=[source], episode_binding_factories=factories, binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0 and len(received) == 1 and (len(prompts) == 5)

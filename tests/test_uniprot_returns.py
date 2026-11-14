@@ -11,9 +11,9 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from method_loop.episode import EpisodeGoal, EpisodeRequest
-from method_loop.identities import EpisodeRef
-from method_loop.archive import iter_json
+from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop.archive import iter_json
 import pytest
 
 from gene_annotation_episode.acquisition import SourceSnapshot

@@ -75,32 +75,34 @@ def test_exact_selected_argv_all_programs_and_formats_pure(monkeypatch, program,
     job = job_for(program, query, fmt)
     job['options'] = ['-evalue', '0.0100', '-num_threads', '2', '-soft_masking', 'false']
     original = deepcopy(job)
-    forbid_io(monkeypatch)
-    assert c.validate_standard_blast_database_job(job) == job
-    flag = '-in_pssm' if query == 'pssm' else '-query'
-    outfmt = '15' if fmt == 'json15' else ('6' if fmt == 'tabular6' else '7') + ' qseqid sseqid bitscore'
-    assert compiled(job) == [job['software']['executable'], *job['options'], flag, '/selected/query',
-        '-db', '/selected/db/target', '-outfmt', outfmt, '-out', 'report']
-    request = c.requested_job_from_standard_blast_database(job)
-    assert c.validate_standard_blast_database_requested_job(request) == request
-    Draft202012Validator(c.NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA).validate(request)
-    request['native_blast_standard_database']['query']['input_key'] = 'changed'
-    assert job == original
+    with monkeypatch.context() as patch:
+        forbid_io(patch)
+        assert c.validate_standard_blast_database_job(job) == job
+        flag = '-in_pssm' if query == 'pssm' else '-query'
+        outfmt = '15' if fmt == 'json15' else ('6' if fmt == 'tabular6' else '7') + ' qseqid sseqid bitscore'
+        assert compiled(job) == [job['software']['executable'], *job['options'], flag, '/selected/query',
+            '-db', '/selected/db/target', '-outfmt', outfmt, '-out', 'report']
+        request = c.requested_job_from_standard_blast_database(job)
+        assert c.validate_standard_blast_database_requested_job(request) == request
+        Draft202012Validator(c.NATIVE_BLAST_STANDARD_DATABASE_REQUESTED_JOB_SCHEMA).validate(request)
+        request['native_blast_standard_database']['query']['input_key'] = 'changed'
+        assert job == original
 
 
 @pytest.mark.parametrize('program,units', [('blastn', ('nt', 'nt', 'nt')), ('blastp', ('aa', 'aa', 'aa')),
     ('blastx', ('nt', 'aa', 'aa')), ('tblastn', ('aa', 'nt', 'aa')), ('tblastx', ('nt', 'nt', 'aa'))])
 def test_public_program_geometry_matches_actual_alias_context(monkeypatch, program, units):
-    forbid_io(monkeypatch)
-    spec = c.standard_blast_database_program_spec(program)
-    Draft202012Validator(c.STANDARD_BLAST_DATABASE_PROGRAM_SPEC_SCHEMA).validate(spec)
-    assert tuple(spec[k] for k in ['query_coordinate_unit', 'reference_coordinate_unit', 'alignment_coordinate_unit']) == units
-    assert spec['program_contexts']['sequence']['geometry_program'] == program
-    assert spec['native_program_aliases']['sequence'] == [program]
-    if program == 'tblastn':
-        assert spec['native_program_aliases']['pssm'] == ['psitblastn']
-    spec['admitted_options'].clear()
-    assert c.standard_blast_database_program_spec(program)['admitted_options']
+    with monkeypatch.context() as patch:
+        forbid_io(patch)
+        spec = c.standard_blast_database_program_spec(program)
+        Draft202012Validator(c.STANDARD_BLAST_DATABASE_PROGRAM_SPEC_SCHEMA).validate(spec)
+        assert tuple(spec[k] for k in ['query_coordinate_unit', 'reference_coordinate_unit', 'alignment_coordinate_unit']) == units
+        assert spec['program_contexts']['sequence']['geometry_program'] == program
+        assert spec['native_program_aliases']['sequence'] == [program]
+        if program == 'tblastn':
+            assert spec['native_program_aliases']['pssm'] == ['psitblastn']
+        spec['admitted_options'].clear()
+        assert c.standard_blast_database_program_spec(program)['admitted_options']
 
 
 @pytest.mark.parametrize('program,options', [
@@ -190,12 +192,13 @@ def test_metadata_registry_is_exact_and_public_validator_accepts_real_standard_j
     catalog = {'descriptor': descriptor, 'documents': [], 'primary_reports': [],
         'bundle_source_ref': 'source_bundle', 'bundle_artifact_ref': 'artifact_bundle'}
     old = metadata_schema_registry()
-    forbid_io(monkeypatch)
-    assert c.standard_blast_database_metadata_registry() == [r for r in old if r['consumer'] in {'query_identity', 'sequence_database'}]
-    assert c.validate_standard_blast_database_job(job) == job
-    result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor, document_catalog=catalog, job=job)
-    assert result['status'] == 'valid' and result['normalized']['searches'] == []
-    assert job['version'] == 'native_blast_standard_database_job_v1'
+    with monkeypatch.context() as patch:
+        forbid_io(patch)
+        assert c.standard_blast_database_metadata_registry() == [r for r in old if r['consumer'] in {'query_identity', 'sequence_database'}]
+        assert c.validate_standard_blast_database_job(job) == job
+        result = validate_native_blast_database_metadata_payload(payload, descriptor=descriptor, document_catalog=catalog, job=job)
+        assert result['status'] == 'valid' and result['normalized']['searches'] == []
+        assert job['version'] == 'native_blast_standard_database_job_v1'
 
 
 @pytest.mark.parametrize('change', [lambda j: j.update(mode='pairwise'), lambda j: j.update(extra='undeclared'),

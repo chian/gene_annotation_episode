@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.root.tool_configuration import bu
 
 def actual_catalog(tmp_path):
     with Store(tmp_path / "state") as store:
-        return build_tools(store).catalog()
+        return build_tools(store, run_directory=tmp_path / "run").catalog()
 
 
 def test_full_actual_map_round_trips_without_tool_bundles(tmp_path):

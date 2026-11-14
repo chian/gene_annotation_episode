@@ -211,7 +211,7 @@ def forbid_replay_work(monkeypatch):
         'bvbrc_genome_alignment_associations': ['bind_genome_alignment_artifacts'],
     }
     for name, attrs in functions.items():
-        module = importlib.import_module('gene_annotation_episode.' + name)
+        module = importlib.import_module('gene_annotation_episode.episodic_workflow.root.library.' + name)
         for attr in attrs: monkeypatch.setattr(module, attr, forbidden)
     for module, attr in ((builtins, 'open'), (Path, 'open'), (socket, 'socket'), (subprocess, 'Popen')):
         monkeypatch.setattr(module, attr, forbidden)
@@ -277,7 +277,7 @@ def test_strict_saved_boundary_never_recomputes_union_coverage_or_entropy(monkey
     def forbidden(*a, **k):
         raise AssertionError('scientific numerical recomputation during saved replay')
     for name in ('mauve_v4_calculation_contracts', 'mauve_backbone_contracts', 'xmfa_calculation_contracts'):
-        module = importlib.import_module('gene_annotation_episode.' + name)
+        module = importlib.import_module('gene_annotation_episode.episodic_workflow.root.library.' + name)
         for helper in ('union_intervals', 'interval_length', 'multiplicity_bases', 'complement_intervals'):
             monkeypatch.setattr(module, helper, forbidden)
     monkeypatch.setattr(math, 'log2', forbidden)

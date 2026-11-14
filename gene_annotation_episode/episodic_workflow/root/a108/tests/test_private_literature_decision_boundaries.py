@@ -122,6 +122,7 @@ def make_control(decision_store, home, node_id, protocol, root_shape, *, error_a
         annotation_context=lambda scope, source: {'engineering_annotation_context': 'metadata only'},
         pending_work=lambda _: [], delivery_status=lambda _: [], controller_binding={},
         catalog=lambda *args, **kwargs: [], knowledge=SimpleNamespace(context=lambda: {}),
+        job_episode_options=lambda _: None, permits_common_action=lambda *args: args[-1] != 'wait',
         tools=SimpleNamespace(), extra_report_sources=lambda _: {}, action_schema=lambda _: deepcopy(schema),
         contract_information_profile=lambda _: None, resource_context=lambda _: None,
         shared_information_context=lambda _: None,

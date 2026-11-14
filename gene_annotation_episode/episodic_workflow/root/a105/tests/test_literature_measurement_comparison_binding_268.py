@@ -15,6 +15,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractE
 from gene_annotation_episode.episodic_workflow.root.a105.episode_bindings import BindingContext, EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories, literature_binding_for_role
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_comparison_storage import LiteratureMeasurementComparisonRepository, measurement_comparison_cells_schema, measurement_comparison_operation_schema, COMPONENTS, NAMESPACE, REQUESTED, VIEW, VERSION, OPERATION
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_comparison_prompt import MEASUREMENT_COMPARISON_TASK
@@ -192,6 +193,7 @@ def test_nested_covariance_source_must_belong_to_assigned_page(tmp_path):
         page = {'version': 'page_assignment_v1', 'source_ref': root, 'representation': 'original', 'artifact_ref': store.get(root)['artifact_ref'], 'question_context_refs': [], 'prior_delivery_refs': []}
         ctx = replace(ctx, role='literature_page', path=(('literature_page', ctx.episode_id),), assignment={**page, REQUESTED: SELECTED}, received_record_refs=(*ctx.received_record_refs, alien))
         args['selection']['covariance_source_refs'] = [alien]
+        binding = literature_binding_for_role(binding, 'literature_page')
         out = asyncio.run(binding.execute(ctx, OPERATION, args, 'alien268'))
         assert out['status'] == 'invalid'
         assert out['feedback']['code'] == 'literature_reading_outside_assigned_source'
@@ -331,7 +333,7 @@ def test_nonowner_requested_intersection_private_receipts_and_history(tmp_path):
         ref = out['result']['sheet_ref']
         parent = replace(current, episode_id='parent268', path=(('literature', 'parent268'),), assignment={**plain(ctx.assignment), REQUESTED: SELECTED[:1]})
         schema = obj({'numbers': measurement_comparison_cells_schema()})
-        binding.received_form_references(parent, {'numbers': rows[:1]}, schema, 'explicit_controlled_delivery268')
+        binding.receive_child_result(parent, 'literature_strategy', {'numbers': rows[:1]}, schema, 'explicit_controlled_delivery268')
         assert repo.fact_cells(parent, [ref], components=list(reversed(SELECTED))) == rows[:1]
         with pytest.raises(ContractError):
             repo.validate_fact_values(parent, rows)
@@ -377,7 +379,7 @@ def test_original_report_repair_redelivery_without_repopulation(tmp_path, monkey
     commission = {'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': plain(ctx.assignment), 'goal': 'Read the synthetic comparison.', 'scope': plain(ctx.scope), 'purpose': 'Return selected comparison.', 'schema_json': json.dumps(original_schema), 'initial_report_json': '{}'}, 'report_update': {}}
     work = {'selection': {'kind': 'tool', 'tool': OPERATION, 'arguments': args}, 'report_update': {}}
     progress = ScientificFindingProgress(FindingProgressPolicy(1))
-    options = {'run_dir': tmp_path / 'run', 'controller_factory': lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1), 'project_credit': progress, 'binding_definitions': {'credit': progress.as_record()}, 'initial_known_record_refs': list(ctx.received_record_refs), 'episode_binding_factories': (partial(LiteratureEpisode, rate_population=True, reference_parent_sources=list(ctx.received_record_refs)),)}
+    options = {'run_dir': tmp_path / 'run', 'controller_factory': lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 else 1), 'project_credit': progress, 'binding_definitions': {'credit': progress.as_record()}, 'initial_known_record_refs': list(ctx.received_record_refs), 'episode_binding_factories': literature_binding_factories(rate_population=True, reference_parent_sources=list(ctx.received_record_refs))}
     try:
         admit = TypedReportContract.admit
         controlled_failures = []
@@ -495,7 +497,7 @@ def test_selected_shared_loop_return_and_first_cold_reconstruction(tmp_path, mon
     provider = ControlledPresented(script) if profile else ScriptedProvider(script)
     progress = ScientificFindingProgress(FindingProgressPolicy(1))
     try:
-        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=sources, contract_information_profile=profile),), **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
+        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 1), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=sources, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=sources, contract_information_profile=profile), **{'decision_protocol': 'decision_exchange_v1'} if profile else {}))
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == (5 if nested else 3)
         assert store.db.execute('SELECT count(*) FROM literature_measurement_comparison_operations').fetchone()[0] == 1
         run_id, parent = store.db.execute('SELECT run_id,episode_id FROM literature_measurement_comparison_received ORDER BY rowid DESC LIMIT 1').fetchone()

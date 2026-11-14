@@ -117,7 +117,12 @@ def test_parent_receipt_selection_preserves_actual_child_role_and_redelivery(act
     if hasattr(parent, 'child_report_receiver'):
         receiver = parent.child_report_receiver('launch_api')
         assert receiver.__module__ == parent_type.__module__.removesuffix('.episode') + '.from_child_api_job_execution'
-        assert parent.child_report_receiver('launch_local') is None and roles == ['launch_api']
+        prefix = parent_type.__module__.removesuffix('.episode')
+        # The private Launch names all three counterparts (same rule as test_private_launch_tasks.py).
+        assert hasattr(parent, 'decision_source_type')
+        assert parent.child_report_receiver('launch_local').__module__ == prefix + '.from_child_local_job_execution'
+        assert parent.child_report_receiver('launch_hpc').__module__ == prefix + '.from_child_hpc_job_execution'
+        assert parent.child_report_receiver('results') is None and roles == ['launch_api']
     else:
         assert roles == []
 

@@ -59,7 +59,7 @@ def actual_job():
     store = Store(directory / "store")
     store.create_problem(raw_sequence="AAAAGAATTCTTTT", molecule="dna")
     subject, = store.targets()
-    tools = ToolRegistry(store)
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
     witness = restriction_sequence_witness(store, subject["id"], namespace="subject", scope=None,
         permitted_record_refs=[subject["id"]], sequence_reader=tools._sequence,
         check_operand=tools._check_sequence_operand)
@@ -223,7 +223,7 @@ def engineering_arguments(directory):
     store = Store(directory / "store")
     store.create_problem(raw_sequence="AAAAGAATTCTTTT", molecule="dna")
     subject, = store.targets()
-    tools = ToolRegistry(store)
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
     witness = restriction_sequence_witness(store, subject["id"], namespace="subject", scope=None,
         permitted_record_refs=[subject["id"]], sequence_reader=tools._sequence,
         check_operand=tools._check_sequence_operand)

@@ -223,7 +223,7 @@ def test_replay_and_readonly_reconstruction_never_reacquire_or_recalculate(tmp_p
         raise AssertionError('saved reconstruction must not read, parse, convert or calculate science')
     for module, functions in {'literature_channel_storage': ('read_channel_inputs', 'channel_calculation_inputs', 'populate_channel_components'), 'literature_channel_inputs': ('read_channel_inputs', 'channel_calculation_inputs', '_number', '_read_unit', '_explicit_unit', '_covariance'), 'literature_channel_calculations': ('populate_channel_components', '_validate', '_fraction'), 'literature_partner_source_fields': ('read_source_number', 'convert_source_number')}.items():
         for function in functions:
-            monkeypatch.setattr(f'gene_annotation_episode.{module}.{function}', forbidden)
+            monkeypatch.setattr(f'gene_annotation_episode.episodic_workflow.root.a105.library.{module}.{function}', forbidden)
     read = Store.__new__(Store)
     read.path = Path(tmp_path)
     read._savepoint = 0

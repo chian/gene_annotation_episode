@@ -71,8 +71,8 @@ def test_actual_distributed_native_binary_conflict_and_saved_evd_view_without_ne
         raise AssertionError("saved EVD inspection attempted input bytes, parsing, math or network")
     with monkeypatch.context() as guard:
         guard.setattr("builtins.open", forbidden)
-        guard.setattr("gene_annotation_episode.episodic_workflow.root.a101.hmmer_model_data.extract_hmmer_models", forbidden)
-        guard.setattr("gene_annotation_episode.episodic_workflow.root.a101.hmmer_model_calculations.calculate_hmmer_model_components", forbidden)
+        guard.setattr("gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_model_data.extract_hmmer_models", forbidden)
+        guard.setattr("gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_model_calculations.calculate_hmmer_model_components", forbidden)
         guard.setattr("socket.socket", forbidden)
         values = [_hmmer2_evd_quantity(rrm, path) for path in ("calibration.EVD.mu", "calibration.EVD.lambda")]
         absent = [_hmmer2_evd_quantity(records[name], "calibration.EVD.mu") for name in ("fn3-bin", "fn3-bin-swap")]
@@ -204,7 +204,7 @@ def test_opt_in_actual_admitted_rrm_h3_fetch_input_evd_typed_saved_and_closed_re
         with monkeypatch.context() as guard:
             guard.setattr(worker, "grade_hmmer_preparation", forbidden)
             guard.setattr(worker, "recalculate_hmmer_preparation", forbidden)
-            guard.setattr("gene_annotation_episode.episodic_workflow.root.a101.hmmer_model_data.extract_hmmer_models", forbidden)
+            guard.setattr("gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_model_data.extract_hmmer_models", forbidden)
             for name in ("prepare_job", "resume_start", "start_job", "status", "collect", "wait_job"):
                 guard.setattr(native_lifecycle, name, forbidden)
             guard.setattr("subprocess.Popen", forbidden)

@@ -45,7 +45,7 @@ def setup(tmp_path):
     created = RunHistory(history); created.close()
     store = Store(tmp_path/'workspace')
     target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
-    tools = ToolRegistry(store, native_statistics=OrdinaryExecutionStatistics(history, 'fixture-host', tmp_path/'receipts'))
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', native_statistics=OrdinaryExecutionStatistics(history, 'fixture-host', tmp_path/'receipts'))
     return store, tools, target, history
 
 
@@ -261,7 +261,7 @@ def test_prior_run_statistics_inform_decision_before_native_work_and_preserve_or
         train_store.close()
     with Store(tmp_path/'new-workspace') as store:
         target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
-        tools = ToolRegistry(store, native_statistics=OrdinaryExecutionStatistics(
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', native_statistics=OrdinaryExecutionStatistics(
             history, 'fixture-host', tmp_path/'new-receipts'))
         arguments = {'query_ref': target, 'reference_ref': target, 'molecule': 'protein', 'mode': 'global'}
         def before_work(context):

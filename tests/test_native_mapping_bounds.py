@@ -21,7 +21,7 @@ def test_actual_native_index_keeps_requested_boundaries_and_zero_alias(tmp_path)
     fastq.write_text("@synthetic_read\n"+query+"\n+\n"+"?"*len(query)+"\n")
     with Store(tmp_path/"state") as store:
         store.create_problem(fastq,molecule="dna")
-        tools=ToolRegistry(store,minimap2_executable=binary(),minimap2_cpu=1)
+        tools=ToolRegistry(store, run_directory=store.path / 'tool-run',minimap2_executable=binary(),minimap2_cpu=1)
         target,=store.targets()
         selected=checked(tools,"library.select",{"library_ref":target["id"],"ordinal_ranges":[{"start":0,"end":1}]})
         # Distinct actual reference identities with duplicate sequence supply

@@ -93,7 +93,7 @@ def setup_synthetic_process_case(tmp_path, mode, *, job_limits=None):
     store = Store(tmp_path/"state")
     store.create_problem(reads, molecule="dna")
     target, = store.targets()
-    tools = ToolRegistry(store, minimap2_executable=synthetic_executable(tmp_path, mode),
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', minimap2_executable=synthetic_executable(tmp_path, mode),
         job_limits=job_limits or {'memory_bytes': 256*1024**2, 'scratch_bytes': 2*1024**2})
     material = store.register_material(data=">synthetic_reference\nACGT\n", format="fasta", molecule="dna")
     parsed = store.parse_material(material["id"])

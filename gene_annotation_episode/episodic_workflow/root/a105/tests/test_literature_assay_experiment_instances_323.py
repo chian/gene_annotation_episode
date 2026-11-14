@@ -16,6 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_a105
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_grading import COMPONENTS
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_grading_storage import LiteratureAssayGradingRepository, REQUESTED, NAMESPACE, legacy_assay_grading_cells_schema, LEGACY_VERSION, PROVIDER
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
@@ -160,7 +161,7 @@ def test_two_children_deliver_separate_experiments_to_same_parent_through_actual
             controllers.append(result)
             return result
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=Provider(), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(original.received_record_refs), episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, assay_grading_population=True, reference_parent_sources=[first['source_ref']]),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=Provider(), run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=list(original.received_record_refs), episode_binding_factories=literature_binding_factories(rate_population=True, assay_grading_population=True, reference_parent_sources=[first['source_ref']]), binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0
         assert len(contexts) == 4 and [c.scores for c in controllers] == [[0, 0], [0], [0]]
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 4

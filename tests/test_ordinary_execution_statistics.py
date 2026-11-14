@@ -22,7 +22,7 @@ def test_actual_tool_measurements_update_history_without_duplicate_scientific_fi
     with Store(tmp_path/'workspace') as store:
         target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
         binding = OrdinaryExecutionStatistics(history_path, 'fixture-host', tmp_path/'receipts')
-        tools = ToolRegistry(store, native_statistics=binding)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', native_statistics=binding)
         arguments = {'query_ref': target, 'reference_ref': target, 'molecule': 'protein', 'mode': 'global'}
         hypothesis = store.put('hypothesis', {'subject_refs': [target], 'predicate': 'sequence_integrity',
             'value': {'type': 'enum', 'value': 'intact'}, 'context_refs': []}, origin='reasoning')

@@ -5,7 +5,7 @@ import math
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_pairwise_result_views import NATIVE_BLAST_METRICS, FAMILY_SOURCES, native_blast_fact_sources, projected_measurements, row_schema, validate_native_blast_result_selector
-from gene_annotation_episode.domain import ContractError, RECORD_SCHEMAS, REASONING_SCHEMA, validate_schema
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError, RECORD_SCHEMAS, REASONING_SCHEMA, validate_schema
 from gene_annotation_episode.episodic_workflow.root.a101.communication import validate_closed_schema
 
 

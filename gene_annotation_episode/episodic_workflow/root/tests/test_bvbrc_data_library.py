@@ -60,7 +60,7 @@ def no_network(monkeypatch):
 def owner(tmp_path, monkeypatch):
     with Store(tmp_path/'state') as store:
         target, = store.create_problem(raw_sequence='MACDEFGH', molecule='protein')['subject_refs']
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         journal = Journal(store, 'bvbrc-library-fixture')
         resources = {'selected-bvbrc': {'kind': 'api', 'service': 'bvbrc_data'}}
         family = ExecutionEpisodes(None, store=store, directory=tmp_path/'run', run_id=journal.run_id,

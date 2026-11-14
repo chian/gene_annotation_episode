@@ -17,9 +17,9 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_hsp_site_inputs import extract_blast_hsp_columns
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_hsp_site_calculators import calculate_blast_hsp_column_components
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_result_views import _original_hsp, blast_hsp_facts, read_blast_hsp
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_hsp_views import native_blast_pairwise_hsp
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_blast_pairwise_publication import (
     EXAMPLES, fixture, native_path, prepare, publish, replace_report, selector, values,
@@ -290,7 +290,7 @@ def test_native_action_requires_received_hsp_before_own_action(native_action, re
                                   "window", "native_locator", "program"])
 def test_native_own_action_rejects_foreign_markers_and_artifact_roles(native_action, fault):
     from test_alignment_site_action_records import blast_read, page, change_outcome, change_grading
-    from gene_annotation_episode.tool_grading_artifacts import retain_tool_grading
+    from gene_annotation_episode.episodic_workflow.root.a101.tool_grading_artifacts import retain_tool_grading
     case = native_action
     case.receipts.receive(case.context.episode_id, [case.alignment], kind="initial")
     blast_read(case, case.context)

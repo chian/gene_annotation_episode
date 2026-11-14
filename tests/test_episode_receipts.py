@@ -103,7 +103,7 @@ def test_initial_form_is_inherited_before_baseline_but_changed_assignment_cannot
         saved = put_finding(store, hypothesis, evidence(store, target, 'alignment'), target)
         scope = {'subject_refs': [target]}
         scorer = ScientificFindingProgress(FindingProgressPolicy(7))
-        workflow = Workflow(store, ToolRegistry(store), ScriptedProvider([]), tmp_path/'run',
+        workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), ScriptedProvider([]), tmp_path/'run',
             'synthetic-run', lambda path, initial: FixtureController(str(path), initial, 2), scorer,
             project_child_credit=scorer, initial_known_record_refs=[])
         root = workflow.build('annotation', 'root', 'Synthetic investigation', scope)
@@ -181,7 +181,7 @@ def test_runtime_credits_only_requested_child_information_and_replay_keeps_histo
             arguments = {'run_dir': tmp_path/'run', 'controller_factory': factory,
                 'provider_config': {'scientific_progress': {'finding_unit': 3}},
                 'initial_known_record_refs': [inherited['id']]}
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
             provider=ScriptedProvider([commission, reason(0), reason(1), parent]), **arguments))
         assert summary['credit'] == 6
         root, child = controllers
@@ -192,7 +192,7 @@ def test_runtime_credits_only_requested_child_information_and_replay_keeps_histo
         assert len(store.current_assessments(scope)) == 3  # Unreturned work survives.
         assert store.db.execute('SELECT count(*) FROM tool_operations').fetchone()[0] == 0
         frozen = store.db.execute('SELECT * FROM runtime_observations ORDER BY episode_id,unit_index').fetchall()
-        replay = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([]),
+        replay = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=ScriptedProvider([]),
                                          resume=True, **arguments))
         assert replay == summary
         assert [tuple(row) for row in frozen] == [tuple(row) for row in
@@ -204,7 +204,7 @@ def test_receipt_policy_requires_explicit_initial_knowledge(tmp_path):
         target_question(store)
         scorer = ScientificFindingProgress(FindingProgressPolicy(2))
         with pytest.raises(ValueError, match='requires_explicit_initial_known_record_refs'):
-            asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([]),
+            asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=ScriptedProvider([]),
                 run_dir=tmp_path/'run', project_credit=scorer))
 
 
@@ -282,7 +282,7 @@ def test_native_workbook_pages_return_one_finding_through_child_form_and_replay(
             'project_credit': scorer, 'project_child_credit': scorer,
             'initial_known_record_refs': [], 'binding_definitions': {
                 'credit': scorer.as_record(), 'scientific_child_credit': scorer.as_record()}}
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
             provider=ScriptedProvider([commission, page(1), interpret, page(2), interpret, parent]),
             **arguments))
         assert summary['credit'] == 1 and summary['completed_actions'] == 2
@@ -305,7 +305,7 @@ def test_native_workbook_pages_return_one_finding_through_child_form_and_replay(
         assert {row['known_assessment_ref'] for row in details['source_contributions']} == set(received[0]['findings'])
         frozen = [tuple(row) for row in store.db.execute(
             'SELECT * FROM runtime_observations ORDER BY episode_id,unit_index')]
-        replay = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([]),
+        replay = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=ScriptedProvider([]),
                                          resume=True, **arguments))
         assert replay == summary
         assert store.db.execute('SELECT count(*) FROM tool_operations').fetchone()[0] == 2
@@ -342,7 +342,7 @@ def test_root_state_read_is_rejected_without_delivering_existing_findings(tmp_pa
             return controller
         provider = ScriptedProvider([read, rejected])
         with pytest.raises(KeyboardInterrupt, match='fixture inspected rejected root discovery'):
-            asyncio.run(run_workflow(store, ToolRegistry(store),
+            asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
                 provider=provider, run_dir=tmp_path/'run', controller_factory=factory,
                 project_credit=scorer, initial_known_record_refs=[]))
         assert len(provider.contexts) == 2 and len(controllers) == 1
@@ -392,10 +392,10 @@ def test_interruption_between_publication_receipt_and_projection_recovers_once(t
         arguments = {'run_dir': tmp_path/'run', 'controller_factory': factory,
                      'project_credit': scorer, 'initial_known_record_refs': []}
         with pytest.raises(RuntimeError, match='synthetic interruption'):
-            asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([selected]), **arguments))
+            asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=ScriptedProvider([selected]), **arguments))
         assert store.db.execute('SELECT count(*) FROM reasoning_commits').fetchone()[0] == 1
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 0
-        result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([]),
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=ScriptedProvider([]),
                                          resume=True, **arguments))
         assert result['credit'] == 4 and controllers[-1].scores == [4]
         assert store.db.execute('SELECT count(*) FROM reasoning_commits').fetchone()[0] == 1
@@ -443,7 +443,7 @@ def test_different_parent_scalar_does_not_grant_unreceived_information_to_child(
             controllers.append(controller)
             return controller
         provider = ScriptedProvider([parent, reason])
-        result = asyncio.run(run_workflow(store, ToolRegistry(store),
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
             provider=provider, run_dir=tmp_path/'run',
             controller_factory=factory, project_credit=parent_credit, project_child_credit=progress,
             initial_known_record_refs=[], episode_record_receipts=True, decision_protocol=None))
@@ -530,7 +530,7 @@ def test_failed_form_repair_and_interruption_preserve_work_and_observation_bound
         script = [commission, reason, child_reason] + ([repair] if interrupt_after_redelivery else [])
         script.append(KeyboardInterrupt())
         with pytest.raises(KeyboardInterrupt):
-            asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider(script), **arguments))
+            asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=ScriptedProvider(script), **arguments))
         assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
         original_commits = [tuple(row) for row in store.db.execute(
             'SELECT * FROM reasoning_commits ORDER BY operation_key')]
@@ -541,7 +541,7 @@ def test_failed_form_repair_and_interruption_preserve_work_and_observation_bound
             "SELECT * FROM runtime_actions WHERE json_extract(action,'$.kind')='reason' "
             'ORDER BY decision_index')]
         assert len(original_child_actions) == 2
-        result = asyncio.run(run_workflow(store, ToolRegistry(store), resume=True,
+        result = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), resume=True,
             provider=ScriptedProvider(([] if interrupt_after_redelivery else [repair])+[parent]), **arguments))
         assert result['credit'] == 3 and result['pending_report_deliveries'] == 0
         commits = [tuple(row) for row in store.db.execute('SELECT * FROM reasoning_commits')]

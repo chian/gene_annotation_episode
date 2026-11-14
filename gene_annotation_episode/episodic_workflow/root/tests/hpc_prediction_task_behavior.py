@@ -30,6 +30,9 @@ class PredictionTaskBehavior:
             expose_assigned_job=lambda source: None, receive_tool_attributions=lambda *args, **kwargs: None,
             archive=SimpleNamespace(store=lambda value: value),
             launch_instructions=SimpleNamespace(materialize=lambda selected: None))
+        # a103's Workflow.build reads self.legacy_parent_for_path (a103/runtime.py); bind the real method.
+        if self.axis == 'a103':
+            workflow.legacy_parent_for_path = lambda path: runtime.Workflow.legacy_parent_for_path(workflow, path)
         task = runtime.Workflow.build(workflow, 'hpc_prediction', 'prediction', 'Improve measured predictions',
             runtime._plain(context.scope), episode_assignment=runtime._plain(context.assignment))
         assert type(task) is binding.decision_source_type

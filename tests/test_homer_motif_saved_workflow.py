@@ -32,6 +32,7 @@ from gene_annotation_episode import native_lifecycle
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import FixtureController
@@ -180,7 +181,7 @@ def _assemble(store, directory, configuration, provider):
     factory = ExecutionServiceFactory.from_record(configuration['factory'])
     assert not factory.homer_environments and factory.homer_saved_modes is True
     assert all('native_homer_motif' not in resource for resource in plain(factory.resources).values())
-    tools = ToolRegistry(store, job_limits=deepcopy(native.POLICY))
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(native.POLICY))
     application = factory(store, run_id=configuration['run_id'], directory=directory, tool_registry=tools)
     workflow = Workflow(store, tools, provider, directory, configuration['run_id'], _controller, _credit,
         project_child_credit=_credit, episode_record_receipts=True,
@@ -196,7 +197,7 @@ def _original_services(store, directory, proof):
             raise AssertionError('original parent literal read requested another decision')
         async def release(self, episode_id): pass
     factory = ExecutionServiceFactory.from_record(proof['factory'])
-    tools = ToolRegistry(store, job_limits=deepcopy(native.POLICY))
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(native.POLICY))
     application = factory(store, run_id=proof['run_id'], directory=directory, tool_registry=tools)
     workflow = Workflow(store, tools, NoDecisions(), directory, proof['run_id'], _controller, _credit,
         project_child_credit=_credit, episode_record_receipts=True,
@@ -319,9 +320,9 @@ def test_retained_homer_source_supports_actual_saved_views_and_closed_replay(tmp
         workspace.mkdir()
         factory = ExecutionServiceFactory({'saved-local': dict(kind='local', workspace=str(workspace),
             policy=deepcopy(native.POLICY))}, {}, 2, .25, .5, homer_saved_modes=True)
-        tools = ToolRegistry(store, job_limits=deepcopy(native.POLICY))
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(native.POLICY))
         factory.configure_tool_registry(tools)
-        configuration.update(factory=factory.as_record(), scientific_binding=prepare_scientific_binding(
+        configuration.update(factory=factory.as_record(), scientific_binding=prepare_scientific_binding(episode_type=ScientificProcessEpisodes, 
             run_directory=directory, source_directory=ROOT / PUBLICATION, tool_catalog=tools.catalog(),
             child_roles=['scientific_process']))
         library = ScientificProcessLibrary(directory / 'scientific-process-library')

@@ -37,7 +37,7 @@ def test_retired_default_rejected_without_rewriting_saved_work(tmp_path, entrypo
     directory = tmp_path/'run'
     with Store(tmp_path/'workspace') as store:
         store.create_problem(raw_sequence='ATGAAATAA', molecule='dna', role='gene')
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         with pytest.raises(asyncio.CancelledError):
             asyncio.run(run_workflow(store, tools, run_dir=directory,
                 provider=ScriptedProvider([fixture_reason(store), asyncio.CancelledError()])))
@@ -107,7 +107,7 @@ def test_explicit_numeric_annotation_channel_preserves_progress_and_closed_histo
     definitions = {'annotation_score': {'kind': 'explicit_synthetic_numeric_operand'}}
     with Store(tmp_path/'workspace') as store:
         store.create_problem(raw_sequence='ATGAAATAA', molecule='dna', role='gene')
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
 
         def lower_annotation(context):
             assert context['current_credit'] == 0
@@ -148,11 +148,12 @@ def test_explicit_numeric_annotation_channel_preserves_progress_and_closed_histo
 def test_current_tool_information_descriptor_reopens_only_with_matching_identity(tmp_path, retrieval):
     from gene_annotation_episode.episodic_workflow.root.episode_composition import reopen_scientific_binding
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+    from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
     from test_scientific_process_library import independent_source
 
     source, directory = tmp_path/'source', tmp_path/'run'
     independent_source(source)
-    descriptor = prepare_scientific_binding(run_directory=directory, source_directory=source,
+    descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory, source_directory=source,
         tool_catalog=[{'name': 'state.query', 'description': 'Read stored fixture metadata.',
             'input_schema': {'type': 'object', 'properties': {}, 'additionalProperties': False}}],
         child_roles=('scientific_process',), tool_retrieval=retrieval)

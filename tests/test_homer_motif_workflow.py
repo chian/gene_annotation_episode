@@ -29,6 +29,7 @@ from gene_annotation_episode import native_homer_execution as native
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import FixtureController
@@ -221,14 +222,14 @@ def test_genuine_ordinary_homer_reaches_scientific_parent(tmp_path, monkeypatch)
             scope = store.validate_scope()
             arguments = dict(mode='run_native', inputs=inputs, parameters=deepcopy(PARAMETERS),
                 selection=dict(series=[dict(role='known_results'), dict(role='denovo_pwm', motif_length=8)], offset=0, limit=2))
-            tools = ToolRegistry(store, job_limits=deepcopy(native.POLICY))
+            tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(native.POLICY))
             factory.configure_tool_registry(tools)
             contract = tools.catalog()[contracts.TOOL]
             assert contract['instructions'] == host.INSTRUCTIONS
             assert contract['invocation_route'] == dict(kind='direct')
             proof['selected_tool_contract'] = contract
             directory = tmp_path / 'run'
-            scientific = prepare_scientific_binding(run_directory=directory, source_directory=ROOT / PUBLICATION,
+            scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory, source_directory=ROOT / PUBLICATION,
                 tool_catalog=tools.catalog(), child_roles=['scientific_process'])
             library = ScientificProcessLibrary(directory / 'scientific-process-library')
             provider = _Choices(library, scope, arguments)

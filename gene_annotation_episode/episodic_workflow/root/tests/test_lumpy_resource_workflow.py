@@ -31,6 +31,7 @@ from gene_annotation_episode.episodic_workflow.root.providers import _SessionCon
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -71,7 +72,7 @@ def _selection(**changes):
 
 def _assemble(store, proof, provider):
     factory = ExecutionServiceFactory.from_record(proof['factory'])
-    tools = ToolRegistry(store, job_limits=deepcopy(native.POLICY))
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(native.POLICY))
     application = factory(store, run_id=proof['run_id'], directory=Path(proof['directory']) / 'run', tool_registry=tools)
     workflow = Workflow(store, tools, provider, Path(proof['directory']) / 'run', proof['run_id'],
         _controller, _zero, project_child_credit=_zero, episode_record_receipts=True,
@@ -259,10 +260,10 @@ def test_actual_SR_resource_child_capture_shared_VCF_saved_selection_and_parent_
         factory = ExecutionServiceFactory(dict(here=dict(kind='local', workspace=str(workspace),
             policy=deepcopy(native.POLICY), native_lumpy=[dict(operation=native.OPERATION,
                 mode=native.MODE, software=software)])), {}, 3, 2, 1, log_window_bytes=128)
-        tools = ToolRegistry(store, job_limits=deepcopy(native.POLICY))
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(native.POLICY))
         run_id = 'genuine-LUMPY-SR-resource'
         application = factory(store, run_id=run_id, directory=directory / 'run', tool_registry=tools)
-        scientific = prepare_scientific_binding(run_directory=directory / 'run', source_directory=PUBLICATION,
+        scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory / 'run', source_directory=PUBLICATION,
             tool_catalog=tools.catalog(), resource_catalogs=application.resource_tool_catalogs,
             child_roles=['scientific_process', 'launch', 'results'])
         library = ScientificProcessLibrary(directory / 'run/scientific-process-library')

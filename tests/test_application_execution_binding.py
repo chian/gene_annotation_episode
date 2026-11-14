@@ -308,7 +308,7 @@ def test_build_tools_copies_only_actual_configuration_operands_without_changing_
     configuration = {'local_tools': {'cmsearch_cpu': 2},
         'public': {'transport_timeout_seconds': 73, 'ncbi_email': None}, 'caller_metadata': {'selection': ['actual']}}
     with Store(tmp_path/'workspace') as store:
-        ordinary = ToolRegistry(store, cmsearch_cpu=2)
+        ordinary = ToolRegistry(store, run_directory=store.path / 'tool-run', cmsearch_cpu=2)
         configured = build_tools(store, configuration)
         assert configured.resource_binding() == ordinary.resource_binding()
         assert not hasattr(ordinary, 'reconstruction_configuration')

@@ -111,7 +111,7 @@ def no_external_work(monkeypatch):
     monkeypatch.setattr("socket.create_connection", forbidden)
     monkeypatch.setattr("subprocess.Popen", forbidden)
     monkeypatch.setattr("time.sleep", forbidden)
-    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.runtime.DecisionSource.call", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.task.AnnotationTask.call", forbidden)
 
 
 @pytest.fixture

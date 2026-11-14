@@ -79,7 +79,7 @@ def test_default_progress_is_preserved_without_inventing_an_annotation_score(tmp
         config = {'scientific_progress': {'finding_unit': 7}}
         options = {'run_dir': tmp_path/'run', 'controller_factory': fixture_factory,
             'initial_known_record_refs': [hypothesis, positive['id'], negative['id']]}
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
             provider=ScriptedProvider([initial, oppose, inspect]),
             provider_config=config, **options))
         assert summary['credit'] == 14 and 'annotation_score' not in summary
@@ -90,12 +90,12 @@ def test_default_progress_is_preserved_without_inventing_an_annotation_score(tmp
         assert 'annotation_score' not in saved['bindings']
         rows = [tuple(row) for row in store.db.execute('SELECT * FROM runtime_observations ORDER BY rowid')]
         # No configuration supplied: restore the original values, not defaults.
-        replay = asyncio.run(run_workflow(store, ToolRegistry(store),
+        replay = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
             provider=ScriptedProvider([]), resume=True, **options))
         assert replay == summary
         assert [tuple(row) for row in store.db.execute('SELECT * FROM runtime_observations ORDER BY rowid')] == rows
         with pytest.raises(Exception, match='binding definitions'):
-            asyncio.run(run_workflow(store, ToolRegistry(store),
+            asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
                 provider=ScriptedProvider([]), resume=True,
                 provider_config={'scientific_progress': {'finding_unit': 9}}, **options))
 
@@ -110,7 +110,7 @@ def test_default_finding_credit_needs_no_annotation_and_interrupted_resume_keeps
             'initial_known_record_refs': [hypothesis, observed['id']],
             'controller_factory': lambda path, initial: FixtureController(str(path), initial, 2)}
         with pytest.raises(asyncio.CancelledError):
-            asyncio.run(run_workflow(store, ToolRegistry(store),
+            asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
                 provider=ScriptedProvider([reason(store, [row]), asyncio.CancelledError()]),
                 provider_config={'scientific_progress': {'finding_unit': 7}}, **options))
         prefix = [tuple(r) for r in store.db.execute('SELECT * FROM runtime_observations ORDER BY rowid')]
@@ -120,7 +120,7 @@ def test_default_finding_credit_needs_no_annotation_and_interrupted_resume_keeps
             assert context['current_credit'] == 7 and 'annotation_score' not in context
             assert context['controller']['scores'] == [7]
             return repeat_hypothesis(store, hypothesis)
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
             provider=ScriptedProvider([next_choice]), resume=True, **options))
         assert summary['credit'] == 7 and 'annotation_score' not in summary
         assert summary['annotation_score_status'] == 'unavailable_no_scorer_bound'

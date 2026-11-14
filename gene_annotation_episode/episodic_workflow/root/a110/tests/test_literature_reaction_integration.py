@@ -10,7 +10,7 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a110.communication import form_with_facts, plain
-from gene_annotation_episode.domain import ContractError, canonical, obj
+from gene_annotation_episode.episodic_workflow.root.a110.domain import ContractError, canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.a110.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a110.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
@@ -102,7 +102,7 @@ def setup_case(path, *, primary=False, incomplete=False, target_sequence=None):
 
 def binding_for(store, context):
     host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
-    binding = LiteratureEpisode(WorkflowServices(host), rate_population=True)
+    binding = LiteratureEpisode(WorkflowServices(host))
     host.episode_bindings = EpisodeBindingRegistry((binding,))
     return binding
 
@@ -199,7 +199,7 @@ def test_selected_in_ordinary_child_and_received_once(tmp_path, primary):
             commission, action, receive]), run_dir=tmp_path/'run',
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path)==1 else 1),
             project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
-            episode_binding_factories=(partial(LiteratureEpisode, rate_population=True),),
+            episode_binding_factories=(partial(LiteratureEpisode),),
             binding_definitions={'credit': scorer.as_record()}))
         assert len(received) == 1 and summary['credit'] == 0
         assert store.db.execute('select count(*) from runtime_observations').fetchone()[0] == 3

@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_al
 from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_driver as driver
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_hmmer_preparation_worker as worker
 from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_preparation_result_views as views
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from test_hmmer_alignment_preparation_data import operation, payload
 from test_hmmer_preparation_result_views import prepared, project, selection
 

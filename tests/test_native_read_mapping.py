@@ -54,7 +54,7 @@ def fixture(tmp_path, *, copies=2, executable=None):
     store = Store(tmp_path/"state")
     store.create_problem(path, molecule="dna")
     target, = store.targets()
-    tools = ToolRegistry(store, minimap2_executable=executable if executable is not None else binary())
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', minimap2_executable=executable if executable is not None else binary())
     material = store.register_material(data=">actual_reference\n"+reference+"\n", format="fasta", molecule="dna")
     parsed = store.parse_material(material["id"])
     member, = store.material_members(parsed["collection_ref"])["members"]
@@ -115,7 +115,7 @@ def test_native_replay_uses_saved_operation_and_new_work_reuses_only_exact_index
         async def prohibited(*a,**k):
             pytest.fail("committed operation reran native work")
         monkeypatch.setattr(read_mapping,"run_mapping",prohibited)
-        new_registry=ToolRegistry(store,minimap2_executable="/not/installed",minimap2_cpu=3)
+        new_registry=ToolRegistry(store, run_directory=store.path / 'tool-run',minimap2_executable="/not/installed",minimap2_cpu=3)
         assert new_registry.execute("reads.map",args,operation_key="first") == first
 
 
@@ -199,7 +199,7 @@ def test_unconfigured_binary_is_actionable_and_no_scientific_publication(tmp_pat
     store, tools, target, selected, args = fixture(tmp_path)
     with store:
         before=store.db.execute("SELECT count(*) FROM records WHERE record_type='observation'").fetchone()[0]
-        output=ToolRegistry(store).execute("reads.map",args,operation_key="unconfigured")
+        output=ToolRegistry(store, run_directory=store.path / 'tool-run').execute("reads.map",args,operation_key="unconfigured")
         assert output["status"] == "unavailable" and output["feedback"]["code"] == "minimap2_not_configured"
         assert store.db.execute("SELECT count(*) FROM records WHERE record_type='observation'").fetchone()[0] == before
         assert not list(store.path.glob(".native-read-mapping-*"))
@@ -277,7 +277,7 @@ def test_literal_aggregate_product_sites_do_not_invent_exact_ancestry_or_block_e
         material=store.register_material(data=">reference\nACGTACGT\n",format="fasta",molecule="dna")
         parsed=store.parse_material(material["id"])
         reference=store.material_reference(store.material_members(parsed["collection_ref"])["members"][0]["id"])
-        tools=ToolRegistry(store)
+        tools=ToolRegistry(store, run_directory=store.path / 'tool-run')
         aligned=checked(tools,"sequence.align",{"query_ref":product["id"],"reference_ref":reference["id"],"molecule":"dna","mode":"global"})
         result=checked(tools,"sequence.sites",{"alignment_ref":aligned["observation_ref"],"positions":[1]})
         assert result["sites"][0]["query_position"] == 1 and not store.has_exact_mapping(product["id"])

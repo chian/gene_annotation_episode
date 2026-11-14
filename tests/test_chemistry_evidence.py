@@ -683,6 +683,7 @@ def _selected_chebi_workflow_case(tmp_path, monkeypatch, *, operation, arguments
     from gene_annotation_episode.episodic_workflow.root.runtime import FACT_SOURCES, Workflow
     from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+    from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 
     assert os.environ.get('HMMER529_ATTEMPT'), 'requires the selected bounded529 runtime'
     assert operation in {'public.chebi.compound', 'public.chebi.search'}
@@ -896,7 +897,7 @@ def _selected_chebi_workflow_case(tmp_path, monkeypatch, *, operation, arguments
         report['initial_evidence_refs'] = list(initial_records)
         save_report()
         tools = ToolRegistry(store, clients=client)
-        binding = prepare_scientific_binding(run_directory=directory / 'run', source_directory=publication,
+        binding = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory / 'run', source_directory=publication,
             tool_catalog=tools.catalog(), child_roles=('scientific_process',))
         library = ScientificProcessLibrary(directory / 'run/scientific-process-library')
         axis, pattern = library.reference('A110'), library.reference('P10')

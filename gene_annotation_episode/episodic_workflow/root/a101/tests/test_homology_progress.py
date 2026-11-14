@@ -14,12 +14,12 @@ import time
 import pytest
 
 from method_loop.durable import content_digest
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import FileAsset, HomologyJobs, OUTPUTS, digest
 from gene_annotation_episode.episodic_workflow.root.a101.homology_progress import HomologyProgressProvider
-from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.progress_records import validate_job_status
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a101.local_jobs import LocalJobPolicy
+from gene_annotation_episode.episodic_workflow.root.a101.progress_records import validate_job_status
+from gene_annotation_episode.episodic_workflow.root.a101.state import Store
 from test_durable_episode import commission_spec
 
 
@@ -415,6 +415,6 @@ def test_actual_tiny_local_native_run_and_retained_log_bytes(fixture):
         assert jobs.db.execute('SELECT count(*) FROM orders').fetchone()[0] == 1
         assert not store.list('observation') and not store.list('native_execution')
     finally:
-        from gene_annotation_episode.native_lifecycle import cancel
+        from gene_annotation_episode.episodic_workflow.root.a101.native_lifecycle import cancel
         if jobs.status(job)['state'] in {'starting', 'running'}:
             cancel(jobs._handle(job))

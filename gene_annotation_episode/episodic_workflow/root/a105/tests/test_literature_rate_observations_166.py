@@ -19,6 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_journal import 
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories, literature_binding_for_role
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_reference_parent_prompt import REFERENCE_PARENT_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_observation_inputs import read_rate_observations
@@ -249,7 +250,7 @@ def test_selected_binding_exact_facts_repairable_label_mismatch_and_custody(tmp_
         other_artifact = store.artifact(b'unrelated fixture')
         other = store.put('source', {'provider': 'unrelated_fixture', 'accession': None, 'uri': None, 'artifact_ref': other_artifact, 'text_ref': None, 'request_ref': None, 'version': None, 'retrieved_at': None}, origin='caller')
         page = replace(context, role='literature_page', path=(('literature_page', 'page'),), assignment={'version': 'page_assignment_v1', 'source_ref': args['source_ref'], 'representation': 'original', 'artifact_ref': store.get(args['source_ref'])['artifact_ref'], 'question_context_refs': [], 'prior_delivery_refs': [], REQUESTED: ['rate_difference']}, received_record_refs=(*context.received_record_refs, other['id']))
-        failed = asyncio.run(binding.execute(page, 'literature.rate.observations.populate', {**args, 'source_ref': other['id']}, 'outside-page'))
+        failed = asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(page, 'literature.rate.observations.populate', {**args, 'source_ref': other['id']}, 'outside-page'))
         assert failed['feedback']['code'] == 'literature_reading_outside_assigned_source'
     finally:
         store.close()
@@ -358,7 +359,7 @@ def test_original_source_shared_episode_admission_and_cold_readonly_factory(tmp_
     try:
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
         provider = ScriptedProvider([child, work, integrate])
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=known, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=known),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=known, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=known), binding_definitions={'credit': scorer.as_record()}))
         assert len(received) == 1 and summary['credit'] == 0 and (store.targets() == [])
         assert all((RATE_OBSERVATION_TASK in task for task in tasks))
         assert [c.scores for c in controllers] == [[0, 0], [0]]
@@ -404,7 +405,7 @@ def test_original_source_shared_episode_admission_and_cold_readonly_factory(tmp_
         assert restored.as_record() == descriptor
         assert restored.received_report_facts(parent)[NAMESPACE] == received[0]['activity']
         fresh_services = WorkflowServices(services.workflow)
-        assert fresh_services.literature_rate_observation_repository().fact_cells(parent, [received[0]['activity'][0]['sheet_ref']], components=COMPONENTS) == received[0]['activity']
+        assert LiteratureEpisode(fresh_services, rate_population=True).literature_rate_observation_repository().fact_cells(parent, [received[0]['activity'][0]['sheet_ref']], components=COMPONENTS) == received[0]['activity']
         assert store.db.total_changes == 0
         assert {str(p.relative_to(store.path)): p.read_bytes() for p in store.path.rglob('*') if p.is_file()} == before
         obsolete = deepcopy(descriptor)

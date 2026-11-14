@@ -6,7 +6,7 @@ import json
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a110.communication import validate_closed_schema
-from gene_annotation_episode.domain import ContractError, obj, validate_schema
+from gene_annotation_episode.episodic_workflow.root.a110.domain import ContractError, obj, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_population_contracts import BINDINGS
 from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import COMPONENTS

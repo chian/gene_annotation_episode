@@ -406,6 +406,10 @@ def test_new_molecular_requests_preserve_all_explicit_ids_and_bounds(monkeypatch
     client = PublicClients()
     def record(*args, **kwargs): calls.append((args, kwargs)); return 'captured'
     monkeypatch.setattr(client, '_http', record)
+    # A stored Addgene credential routes addgene_sequences around _http to a
+    # live login. This test is about the public-page request, so no credential.
+    from gene_annotation_episode import addgene_access
+    monkeypatch.setattr(addgene_access, 'configured_addgene_credential', lambda: None)
     assert client.ncbi_gene(['2', '10'], max_bytes=500) == 'captured'
     assert calls[-1][0][2]['db'] == 'gene' and calls[-1][0][2]['id'] == '2,10'
     assert calls[-1][1] == {'max_bytes': 500}

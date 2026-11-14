@@ -15,14 +15,15 @@ from test_native_blast_database_contracts import database, forbid_io
 def test_manifest_and_operand_ports_are_pure_and_return_detached_values(monkeypatch, kind):
     operand = database(kind=kind)
     original = deepcopy(operand)
-    forbid_io(monkeypatch)
-    manifest = c.validate_prepared_blast_database_manifest(operand["manifest"])
-    selected = c.validate_native_blast_database_operand(operand)
-    assert manifest == original["manifest"]
-    assert selected == original
-    manifest["files"][0]["size_bytes"] = 99
-    selected["identity"]["source"]["pointer"] = "/different"
-    assert operand == original
+    with monkeypatch.context() as patch:
+        forbid_io(patch)
+        manifest = c.validate_prepared_blast_database_manifest(operand["manifest"])
+        selected = c.validate_native_blast_database_operand(operand)
+        assert manifest == original["manifest"]
+        assert selected == original
+        manifest["files"][0]["size_bytes"] = 99
+        selected["identity"]["source"]["pointer"] = "/different"
+        assert operand == original
 
 
 @pytest.mark.parametrize("mutation,reason", [

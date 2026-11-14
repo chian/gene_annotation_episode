@@ -114,7 +114,7 @@ def test_actual_read_batches_keep_sources_partial_rows_and_exact_selected_reads(
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
         a, b = members(store, target)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         workflow = runtime.Workflow.__new__(runtime.Workflow)
         workflow.restoration_settings = {"preview_size": 1}
         inspected = tools.execute("reads.inspect", {"subject_refs": [a["id"], b["id"]]})
@@ -154,7 +154,7 @@ def test_actual_small_derivations_share_generated_publication_contract(tmp_path,
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
         a, _ = members(store, target)
-        outcome = ToolRegistry(store).execute(name, {"subject_ref": a["id"], **arguments})
+        outcome = ToolRegistry(store, run_directory=store.path / 'tool-run').execute(name, {"subject_ref": a["id"], **arguments})
         assert outcome["status"] == "completed"
         assert outcome["published_batch"]["published_rows_total"] == 1
         assert len(outcome["record_refs"]) == 5
@@ -174,7 +174,7 @@ def test_actual_all_failed_read_batch_bounds_repeated_feedback_but_observes_only
         responses = [{"selection": {"kind": "tool", "tool": "reads.align", "arguments": args}, "report_update": {}},
             {"selection": {"kind": "tool", "tool": "state.query", "arguments": {"refs": [a["id"]]}}, "report_update": {}}]
         provider = ScriptedProvider(responses)
-        summary = asyncio.run(runtime.run_workflow(store, ToolRegistry(store), provider=provider,
+        summary = asyncio.run(runtime.run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
             run_dir=tmp_path / "run", restoration_settings={"preview_size": 1},
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 1)))
         context = provider.contexts[1]

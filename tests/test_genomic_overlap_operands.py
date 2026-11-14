@@ -17,7 +17,7 @@ from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_operands as operands
 from gene_annotation_episode.episodic_workflow.root.communication import plain
-from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episodic_workflow.root.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
@@ -69,7 +69,7 @@ def assignment(store, specs):
     software = {"python_executable": "/fixture/python", "python_sha256": "1" * 64,
         "python_version": "3.12.3", "module_root": "/fixture/source",
         "driver_module": "gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_driver",
-        "implementation_files": [{"module": "gene_annotation_episode." + name,
+        "implementation_files": [{"module": "gene_annotation_episode.episodic_workflow.root.library." + name,
             "sha256": "2" * 64} for name in modules],
         "bedtools_executable": "/fixture/bedtools", "bedtools_sha256": "3" * 64,
         "bedtools_version": "bedtools v2.31.1"}

@@ -175,7 +175,7 @@ def test_old_saved_table_calculation_keeps_its_original_requested_view(monkeypat
         "infernal_search_cells.upgrade_saved_infernal_search_sheet",
         "rfam_batch_infernal.upgrade_saved_rfam_search_sheet",
     ):
-        monkeypatch.setattr("gene_annotation_episode." + path, forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library." + path, forbidden)
     actual = project_rfam_batch_table_result(parsed, original, projection=expected["selection"],
         artifact_bindings={**{key: expected[key] for key in ("source_ref", "sheet_ref", "calculation_ref")},
             "sheet_digest": rfam_digest(parsed["sheet"]), "calculation_digest": rfam_digest(original)})

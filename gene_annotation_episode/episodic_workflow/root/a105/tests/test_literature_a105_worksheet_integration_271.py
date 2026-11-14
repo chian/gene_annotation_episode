@@ -24,6 +24,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import ScientificFindingProgress, FindingProgressPolicy
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_a105_worksheet import a105_worksheet_template, VERSION, NATIVE, SUMMARY
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_prompt import EXPERIMENTAL_TASK, render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_reference_parent_prompt import REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_summary_precision_prompt import KINETIC_SUMMARY_PRECISION_TASK
@@ -249,7 +250,7 @@ def test_selected_worksheet_links_forwarding_and_first_cold_reconstruction(tmp_p
     provider = ScriptedProvider(script)
     progress = ScientificFindingProgress(FindingProgressPolicy(1))
     try:
-        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 3), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=source_refs, episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=source_refs),)))
+        asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda path, initial: FixtureController(str(path), initial, 2 if len(path) == 1 or (nested and len(path) == 2) else 3), project_credit=progress, binding_definitions={'credit': progress.as_record()}, initial_known_record_refs=source_refs, episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=source_refs)))
         assert len(captured) == (2 if nested else 1)
         assert len(selected_outcomes) == 2
         expected_observations = 7 if nested else 5

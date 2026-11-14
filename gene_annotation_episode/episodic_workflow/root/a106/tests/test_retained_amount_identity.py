@@ -49,6 +49,6 @@ def test_new_production_uses_the_original_release_labels():
     arguments,_,reader=fixture()
     extracted=inputs.read_amount_inputs(arguments,read_source=reader)
     assert extracted['lexical_dependency']==inputs.LEXICAL_DEPENDENCY
-    assert extracted['lexical_dependency']['module']=='gene_annotation_episode.episodic_workflow.root.a106.library.literature_rate_native_inputs'
-    assert extracted['lexical_dependency']['scope_module']=='gene_annotation_episode.episodic_workflow.root.a106.library.literature_partner_source_fields'
+    assert extracted['lexical_dependency']['module']=='gene_annotation_episode.literature_rate_native_inputs'
+    assert extracted['lexical_dependency']['scope_module']=='gene_annotation_episode.literature_partner_source_fields'
     assert extracted['lexical_dependency']!=captured()['observed_lexical_dependency']

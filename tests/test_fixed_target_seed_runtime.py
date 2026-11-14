@@ -377,7 +377,7 @@ def test_initial_seed_receipts_exist_before_first_projection_without_actions(tmp
     with Store(destination) as store:
         scorer = RecordingProgress(FindingProgressPolicy(7))  # Explicit fixture units only.
         provider = ScriptedProvider([])
-        workflow = Workflow(store, ToolRegistry(store), provider, tmp_path / 'fixture-run', 'fixed-seed-fixture', controller, scorer, initial_known_record_refs=sealed_refs, episode_record_receipts=True, episode_binding_factories=())
+        workflow = Workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider, tmp_path / 'fixture-run', 'fixed-seed-fixture', controller, scorer, initial_known_record_refs=sealed_refs, episode_record_receipts=True, episode_binding_factories=())
         root = workflow.build('annotation', 'root', 'Check the supplied fixed target baseline', {'subject_refs': [receipt['fixed_identity']['target_ref']]})
         assert projections and projections[0]['credit'] == 0
         assert workflow.journal.row('runtime_episodes', root.source.episode_id)['initial_credit'] == 0

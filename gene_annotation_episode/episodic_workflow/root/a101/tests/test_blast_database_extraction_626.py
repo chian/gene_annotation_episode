@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_extraction import parse_blastdbcmd_sequences, validate_sequence_extraction
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 
 
 EVIDENCE = Path(__file__).resolve().parent / "fixtures/blast_database_readers"

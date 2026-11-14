@@ -55,7 +55,7 @@ def service(tmp_path):
     with Store(tmp_path) as store:
         problem = store.create_problem(raw_sequence="MACDEFGH", molecule="protein")
         scope = {"subject_refs": problem["subject_refs"]}
-        yield BVBRCDataService(ToolRegistry(store)), scope
+        yield BVBRCDataService(ToolRegistry(store, run_directory=store.path / 'tool-run')), scope
 
 
 def request(collection="genome", *, mode="page", fields=None, **kwargs):

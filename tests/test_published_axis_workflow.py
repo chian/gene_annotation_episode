@@ -22,6 +22,7 @@ from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.library.published_scientific_task_presentation import render_scientific_process_prompt
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -120,10 +121,10 @@ class PublishedCase:
         self.store, self.directory = store, tmp_path / 'run'
         self.source = tmp_path / 'published-source'
         shutil.copytree(PUBLICATION, self.source)
-        self.tools = ToolRegistry(store)
+        self.tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         self.target, = store.create_problem(raw_sequence=PROTEIN, molecule='protein')['subject_refs']
         self.scope = store.validate_scope({'subject_refs': [self.target]})
-        self.descriptor = prepare_scientific_binding(run_directory=self.directory,
+        self.descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=self.directory,
             source_directory=self.source, tool_catalog=self.tools.catalog(),
             child_roles=('scientific_process',))
         self.library = ScientificProcessLibrary(self.directory / 'scientific-process-library')

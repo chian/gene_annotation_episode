@@ -68,7 +68,8 @@ def test_recorded_context_preserves_original_yield_table_selection(monkeypatch, 
     parameters = {'original': 'yield-parameters'}
     context = {'current_credit': {'mode': 'annotation_axis_credit', 'arms': []} if root_shape else 2.5,
                'controller': {'arms': [{'original': 'saved-arm'}]}}
-    monkeypatch.setattr(owner, 'yield_table', lambda *args, **kwargs: calls.append((args, kwargs)) or {'original': 'ordinary-table'})
+    # The product reaches the table through its axis runtime module, not this module's imported name.
+    monkeypatch.setattr(owner._original_runtime, 'yield_table', lambda *args, **kwargs: calls.append((args, kwargs)) or {'original': 'ordinary-table'})
     table = owner.decision_yield_table(source, context, 4, parameters)
     if root_shape:
         assert table == {'version': 'annotation_axis_yield_table_v1', 'rows': context['controller']['arms'],

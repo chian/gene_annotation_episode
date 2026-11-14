@@ -122,7 +122,7 @@ def test_bound_thresholds_round_trip_without_defaults_through_real_consumers(tmp
         question = store.get(committed['aliases']['bounded_question'])
         assert context['attributes'][0]['value'] == question['value'] == expected[3]
         assert store.commit_reasoning(decoded, {'subject_refs': [target]}, 'synthetic-bounds') == committed
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         queried = tools.execute('state.query', {'refs': refs}, operation_key='synthetic-bounds-query')
         assert queried['status'] == 'completed'
         assert [row['measurements'][0]['value'] for row in queried['result']['records']] == expected
@@ -222,7 +222,7 @@ def test_bounded_extent_is_unavailable_while_findings_and_received_progress_surv
         progress = project_finding_progress(store, scope, FindingProgressPolicy(1),
             known_assessment_refs=[retained['id'], limited['id']], details_limit=10)
         assert progress['retained_finding_count'] == 2 and progress['credit'] == 2
-        assert ToolRegistry(store).execute('state.query', {'refs': [bad['id'], limited['id']]})['status'] == 'completed'
+        assert ToolRegistry(store, run_directory=store.path / 'tool-run').execute('state.query', {'refs': [bad['id'], limited['id']]})['status'] == 'completed'
         actions = store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0]
         with pytest.raises(ContractError, match='bounded_measurement_cannot_supply_exact_extent') as repeated_error:
             _observation_extents(store, bad)

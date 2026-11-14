@@ -14,6 +14,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_contract_inform
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_a105_worksheet import NATIVE, VERSION, VERSION_V2, QUANTITY_RELATIONS, QUANTITY_RELATIONS_V2, a105_worksheet_template, validate_a105_worksheet_links
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage import LiteratureKineticRepository, kinetic_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
@@ -76,7 +77,7 @@ def test_pa0142_reused_numerator_links_in_selected_return_and_cold_read(tmp_path
     provider = ScriptedProvider([commission('literature', literature), commission('literature_strategy', strategy), {'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate', 'arguments': _selection(spans, 'guanine')}, 'report_update': {'assessment_context': EMPTY}}, {'selection': {'kind': 'tool', 'tool': 'literature.kinetic.populate', 'arguments': _selection(spans, 'isocytosine')}, 'report_update': {'assessment_context': EMPTY}}, receive, receive])
     scorer = ScientificFindingProgress(FindingProgressPolicy(1))
     try:
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda p, initial: FixtureController(str(p), initial, 2), project_credit=scorer, initial_known_record_refs=[source_ref, xml_ref, si_ref, pdf_ref], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[source_ref]),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=lambda p, initial: FixtureController(str(p), initial, 2), project_credit=scorer, initial_known_record_refs=[source_ref, xml_ref, si_ref, pdf_ref], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[source_ref]), binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0 and captured[0] == captured[1]
         assert len(provider.contexts) == 6
         assert store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0] == 6

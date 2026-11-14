@@ -11,7 +11,7 @@ import jsonschema
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_maskinfo_inputs import parse_blast_maskinfo, populate_mask_conversion
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_contracts import sequence_masking_molecule, sequence_masking_operation_schema, validate_sequence_masking_record as core
 from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_inputs import parse_masking_input_fasta
 from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_calculations import calculate_sequence_masking_components

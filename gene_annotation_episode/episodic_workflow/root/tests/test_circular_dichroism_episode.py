@@ -26,6 +26,7 @@ from gene_annotation_episode.episodic_workflow.root.workflow_values import Typed
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_grading_entries
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
@@ -83,11 +84,11 @@ def test_selected_cd_worker_saved_views_and_source_only_onward(tmp_path, monkeyp
         assert input_source["artifact_ref"] == input_file
         initial = [input_source["id"], input_file]
         assert store.reference_subset(initial, scope) == initial
-        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
         contract = tools.catalog()[contracts.CD_TOOL]
         assert contract["resources"] == "local"
         assert contract["input_schema"] == contracts.circular_dichroism_tool_argument_schema()
-        descriptor = prepare_scientific_binding(run_directory=directory, source_directory=PUBLICATION,
+        descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory, source_directory=PUBLICATION,
             tool_catalog=tools.catalog(), child_roles=["scientific_process"])
         library = ScientificProcessLibrary(directory / "scientific-process-library")
         selected = dict(version="scientific_process_selection_v3", evidence_axis=library.reference("A101"),
@@ -436,8 +437,8 @@ def test_selected_cd_partial_spectrum_preserves_thermal_and_saved_view(tmp_path,
         input_file = store.artifact(raw, "application/json")
         input_source = source_for_artifact(store, input_file)
         initial = [input_source["id"], input_file]
-        tools = ToolRegistry(store, job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
-        descriptor = prepare_scientific_binding(run_directory=directory, source_directory=PUBLICATION,
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=dict(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3))
+        descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory, source_directory=PUBLICATION,
             tool_catalog=tools.catalog(), child_roles=["scientific_process"])
         library = ScientificProcessLibrary(directory / "scientific-process-library")
         selected = dict(version="scientific_process_selection_v3", evidence_axis=library.reference("A101"),

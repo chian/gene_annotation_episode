@@ -123,7 +123,7 @@ def test_saved_rate_and_assay_scores_are_not_measurements(
 
 def controlled_response_rows(store):
     from gene_annotation_episode.episode_bindings import BindingContext
-    from gene_annotation_episode.episodic_workflow.root.a105 import literature_controlled_response_storage as storage
+    from gene_annotation_episode.episodic_workflow.root import literature_controlled_response_storage as storage
 
     fixture = json.loads((Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a106/tests/fixtures/a106_source_components/controlled_response_source_case.json").read_text())
     references = {}

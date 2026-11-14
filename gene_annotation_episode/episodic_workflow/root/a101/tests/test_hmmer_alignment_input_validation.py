@@ -98,7 +98,7 @@ def _saved_components(sheet, formats):
     from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_alignment_preparation_calculations import calculate_hmmer_alignment_preparation_components
     saved = json.loads(json.dumps(sheet))
     before = deepcopy(saved)
-    module = "gene_annotation_episode.episodic_workflow.root.a101.hmmer_alignment_preparation_data."
+    module = "gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_alignment_preparation_data."
     with patch(module + "infer_hmmer_alignment_alphabet", side_effect=AssertionError("saved source probe")), \
             patch(module + "read_hmmer_alignment_input", side_effect=AssertionError("saved input read")), \
             patch(module + "read_hmmer_alignment_output", side_effect=AssertionError("saved output read")):
@@ -176,7 +176,7 @@ def test_first_success_and_eof_file_bound_are_distinct_from_local_validation():
 
 def test_probe_validation_uses_the_one_existing_classifier():
     content, probe = _case("probe_afa_above5000")
-    with patch("gene_annotation_episode.episodic_workflow.root.a101.hmmer_alignment_input_validation.classify_easel_alphabet_counts",
+    with patch("gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_alignment_input_validation.classify_easel_alphabet_counts",
                wraps=classify_easel_alphabet_counts) as classifier:
         assert alphabet_probe_valid(probe, declared_format="afa", source_size_bytes=len(content))
     assert classifier.call_count == len(probe["checkpoints"])
@@ -421,7 +421,7 @@ def test_actual_legacy_sheet_is_valid_without_new_facts_or_classifier_calls(lega
     content = _pinned(pin)
     sheet = json.loads(content)
     original = deepcopy(sheet)
-    with patch("gene_annotation_episode.episodic_workflow.root.a101.hmmer_alignment_input_validation.classify_easel_alphabet_counts",
+    with patch("gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_alignment_input_validation.classify_easel_alphabet_counts",
                side_effect=AssertionError("legacy classification is forbidden")):
         assert saved_alignment_decoding_valid(sheet)
     assert sheet == original

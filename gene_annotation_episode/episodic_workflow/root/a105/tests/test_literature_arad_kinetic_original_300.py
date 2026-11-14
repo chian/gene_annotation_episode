@@ -17,6 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.communication import va
 from gene_annotation_episode.episodic_workflow.root.a105.domain import obj
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage import LiteratureKineticRepository, kinetic_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.state import Store
@@ -155,7 +156,7 @@ def test_selected_arad3529_table2_kinetics_typed_return_and_first_cold_reconstru
     def controller(path, initial):
         return FixtureController(str(path), initial, 1 if len(path) == 3 else 2)
     try:
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=[source_ref, xml_ref, pdf_ref], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True, reference_parent_sources=[source_ref]),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=[source_ref, xml_ref, pdf_ref], episode_binding_factories=literature_binding_factories(rate_population=True, reference_parent_sources=[source_ref]), binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0 and returned[0] == returned[1]
         assert len(provider.contexts) == 5
         assert not store.list('assessment') and (not store.list('observation'))

@@ -52,6 +52,11 @@ def saved_workflow(tmp_path):
     workflow = SimpleNamespace(store=store, journal=journal, run_id='run', receipts=None,
         progress_provider=provider, specialist=lambda source: parent,
         binding_context=lambda source: source, is_job_source=lambda source: False)
+    # The scientific parent selects its receiver by the child's bound path.
+    child_paths = {'monitor': 'scientific_process/execution_progress_assessment',
+        'literature': 'scientific_process/published_evidence_assessment'}
+    workflow.episode_bindings = SimpleNamespace(
+        for_child=lambda path, role: SimpleNamespace(binding_path=child_paths[role]))
     return store, workflow, source
 
 

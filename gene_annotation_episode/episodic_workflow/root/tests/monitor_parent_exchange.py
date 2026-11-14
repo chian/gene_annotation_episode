@@ -40,6 +40,12 @@ class MonitorParentExchangeChecks:
         workflow = SimpleNamespace(store=database,journal=journal,run_id='run',receipts=None,
             progress_provider=provider,specialist=lambda source: parent,binding_context=lambda source: source,
             is_job_source=lambda source:False)
+        if self.parent_module.endswith('.root.a106.scientific_process.episode'):
+            # A106's scientific parent selects its receiver by the child's bound path.
+            child_paths = {'monitor':'scientific_process/execution_progress_assessment',
+                'literature':'scientific_process/published_evidence_assessment'}
+            workflow.episode_bindings = SimpleNamespace(
+                for_child=lambda path,role: SimpleNamespace(binding_path=child_paths[role]))
         value = SimpleNamespace(parent=parent,workflow=workflow,source=source,provider=provider,
             domain=domain,runtime=runtime,WorkflowError=journal_module.WorkflowError)
         try:

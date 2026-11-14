@@ -11,10 +11,10 @@ import threading
 
 import pytest
 
-from method_loop import ClosedRecord, EpisodeGoal
-from method_loop.archive import JsonArchive
-from method_loop.durable import canonical, content_digest
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop import ClosedRecord, EpisodeGoal
+from gene_annotation_episode.episodic_workflow.root.method_loop.archive import JsonArchive
+from gene_annotation_episode.episodic_workflow.root.method_loop.durable import canonical, content_digest
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 from gene_annotation_episode.episodic_workflow.root.episode_admission import (
     AdmissionError, ReceiverBindingV1, admit_return)
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal

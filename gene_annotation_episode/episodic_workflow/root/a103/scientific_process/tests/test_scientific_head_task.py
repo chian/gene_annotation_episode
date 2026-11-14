@@ -202,9 +202,10 @@ class TestScientificHeadTask(ScientificHeadBoundaryChecks):
  def test_cold_import_order_retains_real_class(self,tmp_path,order):
   import os
   import subprocess
+  import sys
   code="import importlib; p='"+PACKAGE+"'; order='"+order+"'; first='scientific_process.episode' if order=='head-first' else 'runtime'; importlib.import_module(p+'.'+first); h=importlib.import_module(p+'.scientific_process.episode'); r=importlib.import_module(p+'.runtime'); t=getattr(h.ScientificProcessEpisode,'decision_source_type',r.DecisionSource); assert t is r.DecisionSource or (t.__name__=='ScientificProcessTask' and t.__module__==p+'.scientific_process.task')"
   env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','TMPDIR':str(tmp_path),'XDG_CACHE_HOME':str(tmp_path/'cache')}
-  completed=subprocess.run(['/usr/bin/python3','-B','-c',code],env=env,text=True,capture_output=True)
+  completed=subprocess.run([sys.executable,'-B','-c',code],env=env,text=True,capture_output=True)
   assert completed.returncode==0,(completed.stdout,completed.stderr)
 
  @pytest.mark.parametrize('role',['monitor','unrelated'])

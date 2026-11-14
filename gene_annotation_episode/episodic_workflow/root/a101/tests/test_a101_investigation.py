@@ -9,7 +9,8 @@ from gene_annotation_episode.episodic_workflow.root.a101.a101_investigation impo
     A101Subtree, initial_report, report_schema, resolve_report,
 )
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.episode import ScientificProcessEpisode
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
@@ -22,7 +23,7 @@ def case(tmp_path):
     with Store(tmp_path / "state") as store:
         target, = store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein")["subject_refs"]
         directory = tmp_path / "run"
-        prepare_scientific_binding(run_directory=directory, source_directory=PUBLICATION,
+        prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=directory, source_directory=PUBLICATION,
             tool_catalog=ToolRegistry(store).catalog(), child_roles=("scientific_process",))
         yield store, target, A101Subtree(directory)
 
@@ -128,7 +129,7 @@ def test_multirecord_file_requires_the_explicit_selected_subject(tmp_path):
     with Store(tmp_path / "state") as store:
         first, second = store.create_problem(path, molecule="protein")["subject_refs"]
         run = tmp_path / "run"
-        prepare_scientific_binding(run_directory=run, source_directory=PUBLICATION,
+        prepare_scientific_binding(episode_type=ScientificProcessEpisode, run_directory=run, source_directory=PUBLICATION,
             tool_catalog=ToolRegistry(store).catalog(), child_roles=("scientific_process",))
         selected = A101Subtree(run).commission(store, target_ref=second,
             scope={"subject_refs": [second]}, completeness="fragment", child_tool_info=[],

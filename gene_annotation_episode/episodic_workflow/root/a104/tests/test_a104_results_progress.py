@@ -47,6 +47,7 @@ def test_actual_returned_windows_connect_to_original_credit_and_yield(native_rec
     # A completed information acquisition can retain a failed byte window.
     assert returned['status'] == 'completed'
     frame.journal.save('runtime_actions', {'episode_id': frame.child.episode_id, 'decision_index': 2,
+        'action': own_module('runtime')._json(case.selected),
         'result': own_module('runtime')._json(returned), 'credit': None})
     frame.receipts.receive(frame.child.episode_id, [reference], kind='own_action', source_index=2)
     selection = owner._selection(frame.child)
@@ -59,7 +60,7 @@ def test_actual_returned_windows_connect_to_original_credit_and_yield(native_rec
     assert view['operational_credit_binding']['qualification'] == 'original_selector_byte_position_union_current_filesystem_version_unverified'
     assert owner.completion_for_action(frame.child, case.key) is None
     frame.journal.save('runtime_actions', {'episode_id': frame.child.episode_id, 'decision_index': 2,
-        'credit': view['credit']})
+        'action': own_module('runtime')._json(case.selected), 'credit': view['credit']})
     step = controller.observe('original-completed-result-action', {'credit': view['credit']})
     assert controller.estimator.scores == (expected_credit,)
     assert step.credit == expected_credit

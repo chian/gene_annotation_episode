@@ -81,6 +81,7 @@ def test_default_service_selects_full_private_composer_once(home, monkeypatch):
         events.append('specialist')
         return specialist
     source.workflow = SimpleNamespace(specialist=select, binding_context=lambda value: 'original-context',
+        is_job_source=lambda value: False,
         permits_common_action=lambda value, action: action == 'reason' or action == 'wait' and home == 'scientific_process',
         knowledge=SimpleNamespace(instructions='Original supplied knowledge.'),
         launch_instructions=SimpleNamespace(instructions='Original launch instructions.'),

@@ -19,6 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.episode_receipts import
 from gene_annotation_episode.episodic_workflow.root.a105.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a105.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures import literature_binding_factories
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_storage import rate_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow
 from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegistry
@@ -95,7 +96,7 @@ def test_workflow_delivers_exact_requested_cells_without_credit_or_extra_observa
             controllers.append(result)
             return result
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
-        summary = asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=[args['source_ref']], episode_binding_factories=(partial(LiteratureEpisode, rate_population=True),), binding_definitions={'credit': scorer.as_record()}))
+        summary = asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path / 'run', controller_factory=controller, project_credit=scorer, initial_known_record_refs=[args['source_ref']], episode_binding_factories=literature_binding_factories(rate_population=True), binding_definitions={'credit': scorer.as_record()}))
         assert summary['credit'] == 0
         assert len(received) == 1
         assert [controller.scores for controller in controllers] == [[0, 0], [0]]

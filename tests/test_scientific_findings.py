@@ -319,7 +319,7 @@ def test_iterative_child_returns_typed_findings_through_existing_parent_form(tmp
             value = FixtureController(str(path), initial, 2)
             controllers.append(value)
             return value
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store),
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
             provider=ScriptedProvider([commission, reason_with(first), revise, integrate]),
             run_dir=tmp_path/'run', controller_factory=controller,
             project_credit=lambda *_: 0,

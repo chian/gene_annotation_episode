@@ -138,7 +138,7 @@ def test_automatic_preview_never_decodes_or_returns_archived_contexts_and_outcom
         return original_loads(text, *args, **kwargs)
 
     store.db = workflow.journal.db = GuardDB()
-    monkeypatch.setattr(runtime.json, "loads", guard_loads)
+    monkeypatch.setattr(json, "loads", guard_loads)
     import asyncio
     asyncio.run(source.call({"visible_record_refs": [], "current_report_update": {}}, obj({})))
     assert [row["decision_index"] for row in provider.contexts[0]["restored_episode_history"]["entries"]] == [6, 7]

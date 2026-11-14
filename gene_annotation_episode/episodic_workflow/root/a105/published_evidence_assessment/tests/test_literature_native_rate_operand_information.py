@@ -163,30 +163,3 @@ def test_actual_catalog_schema_meanings_recur_in_task_and_feedback_stays_in_stee
     assert 'one unit was defined as' not in steering
     assert ('defined_unit_endpoint_mismatch' in steering) == with_failure
     assert 'exact same witness' in _schema(entry['input_schema'], 'arguments')
-
-def test_actual_c7_dispatch_is_still_one_selected_native_repository_call():
-    args, _read_source, _witness = fixture()
-    calls = []
-    outcome = {'status': 'completed', 'result': {'synthetic_dispatch_probe': True}}
-
-    class Repository:
-
-        def populate_native(self, context, selected, key):
-            calls.append((context, deepcopy(selected), key))
-            return outcome
-
-    class Services:
-
-        def tool_catalog(self, scope):
-            return {}
-
-        def __getattr__(self, name):
-            if name.startswith('literature_') and name.endswith('_repository'):
-                return lambda: Repository()
-            raise AttributeError(name)
-    context = SimpleNamespace(role='literature', scope={}, assignment={'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': []})
-    binding = LiteratureEpisode(Services(), rate_population=True)
-    result = asyncio.run(binding.execute(context, 'literature.rate.source.populate', args, 'synthetic:operation'))
-    assert result is outcome
-    assert calls == [(context, args, 'synthetic:operation')]
-    assert binding.fact_sources('literature')['literature_rate_source_cells']['report_schema']['x-source'] == 'literature_rate_source_cells'

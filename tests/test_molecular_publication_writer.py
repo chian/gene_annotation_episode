@@ -75,7 +75,7 @@ def _prepared(tmp_path, monkeypatch):
         parent = store.put("source", {key: value for key, value in witness.items()
             if key not in {"id", "record_type", "origin"}}, origin=witness["origin"])
         assert canonical(parent) == canonical(witness)
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         directory = tmp_path / "engineering-worker-output"; directory.mkdir()
         output = directory / "worker-result.json"; output.write_bytes(bodies[NATIVE])
         (directory / "execution-selection.json").write_text(canonical(control["execution_selection"]))

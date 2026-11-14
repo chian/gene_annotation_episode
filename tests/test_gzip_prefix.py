@@ -134,7 +134,7 @@ def test_one_selected_parse_records_partial_work_once_without_scientific_credit(
     with Store(tmp_path / "store") as store:
         store.create_problem(raw_sequence="MKWV", molecule="protein")
         material = store.register_material(data=native_wrapper("trailer_absent"), role="read", molecule="dna")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         provider = ScriptedProvider([{"selection": {"kind": "tool", "tool": "material.parse",
             "arguments": {"material_ref": material["id"]}}, "report_update": {}}])
         summary = asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path / "run",

@@ -50,7 +50,7 @@ def host(tmp_path):
     journal = Journal(store, 'family-fixture')
     configuration = {'kind': 'local', 'workspace': str(workspace), 'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}}
     family = ExecutionEpisodes(None, store=store, directory=tmp_path/'run', run_id=journal.run_id,
-        resources={'here': configuration}, initial_information={}, tool_registry=ToolRegistry(store),
+        resources={'here': configuration}, initial_information={}, tool_registry=ToolRegistry(store, run_directory=store.path / 'tool-run'),
         handoff_unit=3, acquired_record_unit=2, log_window_bytes=4, log_roles=['stdout', 'stderr'])
     yield SimpleNamespace(store=store, journal=journal, family=family, workspace=workspace,
         scope={'subject_refs': [target]}, target=target, tmp_path=tmp_path)

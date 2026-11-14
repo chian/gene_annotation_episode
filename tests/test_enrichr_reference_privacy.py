@@ -13,7 +13,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from method_loop import EpisodeGoal, EpisodeRef, EpisodeRequest, EpisodeTree, Grain
+from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeGoal, EpisodeRef, EpisodeRequest, EpisodeTree, Grain
 from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry

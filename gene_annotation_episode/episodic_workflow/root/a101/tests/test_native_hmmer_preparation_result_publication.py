@@ -125,7 +125,7 @@ def test_captured_artifact_survives_unavailable_grade_worker(tmp_path, monkeypat
     The native capture fixture's relocated custody is synthetic, as declared at
     module scope. The durable worker preparation is real; no worker is started.
     """
-    from gene_annotation_episode.acquisition import AcquisitionError
+    from gene_annotation_episode.episodic_workflow.root.a101.acquisition import AcquisitionError
     with Store(tmp_path / "store") as store:
         root, _, _, target, capture = capture_native(store, tmp_path, monkeypatch)
         shutil.rmtree(root.parent)
@@ -371,7 +371,7 @@ def test_grade_and_projection_share_one_original_runtime_without_environment_cop
 
 
 def test_complete_runtime_copy_footprint_is_admitted_before_any_copy(tmp_path, monkeypatch):
-    from gene_annotation_episode.acquisition import AcquisitionError
+    from gene_annotation_episode.episodic_workflow.root.a101.acquisition import AcquisitionError
     from gene_annotation_episode import native_atac_differential_software as software
     intent = {"policy": POLICY.to_dict(), "engineering_control": "copy_budget_negative"}
     directory, _ = publication._begin(tmp_path / "grading", "native-hmmer-preparation-grading", intent, "prepared.json")
@@ -391,7 +391,7 @@ def test_complete_runtime_copy_footprint_is_admitted_before_any_copy(tmp_path, m
 @pytest.mark.parametrize("code", ["local_job_resource_limit", "local_job_execution_error"])
 def test_only_observed_terminal_worker_failure_reaches_existing_failure_receipt(tmp_path, monkeypatch, code, verified_control_runtime):
     """Inject a negative lifecycle observation; this is no native success proof."""
-    from gene_annotation_episode.acquisition import AcquisitionError
+    from gene_annotation_episode.episodic_workflow.root.a101.acquisition import AcquisitionError
     directory, _, plan, selected, _ = _sealed_engineering_phase(tmp_path, verified_control_runtime)
     def terminal(handle):
         return {"terminal": True, "quiescent": True, "state": "returned"}

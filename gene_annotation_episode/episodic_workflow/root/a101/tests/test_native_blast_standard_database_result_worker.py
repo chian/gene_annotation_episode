@@ -107,7 +107,7 @@ def test_common_companion_v2_is_required_and_keeps_old_component_addresses(tmp_p
     assert manifest["status"] == "complete", diagnostics
     assert manifest["version"] == v.PREFIX + "result_worker_manifest_v2"
     assert len(manifest["artifacts"]) == 8
-    assert any(row["module"] == "gene_annotation_episode.alignment_correspondence"
+    assert any(row["module"] == "gene_annotation_episode.episodic_workflow.root.a101.library.alignment_correspondence"
         for row in request["implementation"]["files"])
     directory = Path(request["output_directory"])
     calculations = json.loads((directory / "calculations.json").read_bytes())

@@ -63,7 +63,7 @@ def loopback(mode="normal", *, timeout=2):
     server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
     thread = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": .01}, daemon=True)
     thread.start()
-    client = RfamBatchHTTP(timeout_seconds=timeout)
+    client = RfamBatchHTTP()
     # Only the network endpoint is replaced in this controlled test. The
     # selected production URL/headers are independently checked on the wire.
     client._connection = lambda: http.client.HTTPConnection(*server.server_address, timeout=timeout)
@@ -219,7 +219,7 @@ def test_connect_failure_before_post_is_not_sent(monkeypatch):
         def close(self):
             pass
 
-    client = RfamBatchHTTP(timeout_seconds=1)
+    client = RfamBatchHTTP()
     monkeypatch.setattr(client, "_connection", Connection)
     with pytest.raises(AcquisitionError) as caught:
         client.submit("ACGT")
@@ -249,7 +249,7 @@ def test_incomplete_read_exception_preserves_exception_partial(monkeypatch):
         def getresponse(self): return Response()
         def close(self): pass
 
-    client = RfamBatchHTTP(timeout_seconds=1)
+    client = RfamBatchHTTP()
     monkeypatch.setattr(client, "_connection", Connection)
     snapshot = client.status(JOB)
     assert snapshot.content == b"prefix"
@@ -257,15 +257,9 @@ def test_incomplete_read_exception_preserves_exception_partial(monkeypatch):
     assert snapshot.transport["body_capture_error"] == "IncompleteRead"
 
 
-@pytest.mark.parametrize("value", [0, -1, True, None, "2", float("nan"), float("inf")])
-def test_invalid_timeout(value):
-    with pytest.raises(ValueError, match="rfam_transport_timeout_invalid"):
-        RfamBatchHTTP(timeout_seconds=value)
-
-
 @pytest.mark.parametrize("job", ["", "infernal_cmscan-", "../bad", "infernal_cmscan-a?b", "infernal_cmscan-a#b", "https://elsewhere", None, 1])
 def test_invalid_handle_never_connects(job, monkeypatch):
-    client = RfamBatchHTTP(timeout_seconds=1)
+    client = RfamBatchHTTP()
     monkeypatch.setattr(client, "_connection", lambda: pytest.fail("must not connect"))
     for call in (lambda: client.status(job), lambda: client.result(job, representation="json")):
         with pytest.raises(AcquisitionError, match="rfam_job_identity_invalid"):
@@ -274,7 +268,7 @@ def test_invalid_handle_never_connects(job, monkeypatch):
 
 @pytest.mark.parametrize("filename", ["", "a\nb", "a\rb", 'a"b', "a/b", "a\\b", "é.fa"])
 def test_invalid_filename_never_connects(filename, monkeypatch):
-    client = RfamBatchHTTP(timeout_seconds=1)
+    client = RfamBatchHTTP()
     monkeypatch.setattr(client, "_connection", lambda: pytest.fail("must not connect"))
     with pytest.raises(AcquisitionError) as caught:
         client.submit_file(b"ACGT", filename=filename)
@@ -282,7 +276,7 @@ def test_invalid_filename_never_connects(filename, monkeypatch):
 
 
 def test_invalid_sequence_or_representation_never_connects(monkeypatch):
-    client = RfamBatchHTTP(timeout_seconds=1)
+    client = RfamBatchHTTP()
     monkeypatch.setattr(client, "_connection", lambda: pytest.fail("must not connect"))
     for sequence in ("", "ACGé", b"ACGT", None):
         with pytest.raises(AcquisitionError, match="rfam_sequence_invalid"):

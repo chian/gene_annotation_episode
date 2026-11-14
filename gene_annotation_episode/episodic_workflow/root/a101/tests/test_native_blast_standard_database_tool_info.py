@@ -23,23 +23,24 @@ def bindings():
 
 def test_five_distinct_explicit_hpc_contracts_with_actual_selected_request_shapes(monkeypatch):
     selected = bindings(); original = deepcopy(selected)
-    forbid_io(monkeypatch)
-    rows = standard_blast_database_tool_contracts(selected,resource_kind='hpc',resource_id='declared-hpc')
-    assert len(rows)==5 and {r['name'] for r in rows}=={'native.'+p+'.database' for p in c.PROGRAMS}
-    for row,binding in zip(rows,selected):
-        assert set(row)=={'name','description','resources','instructions','input_schema','invocation_route'}
-        assert row['resources']=='hpc'
-        assert row['invocation_route']=={'kind':'commission','routes':[{'entry_role':'launch','resource_id':'declared-hpc','resource_role':'launch_hpc'}]}
-        request=c.requested_job_from_standard_blast_database(job_for(binding['program']))
-        Draft202012Validator(row['input_schema']).validate(request)
-        request['native_blast_standard_database']['software']['sha256']='f'*64
-        assert not Draft202012Validator(row['input_schema']).is_valid(request)
-        assert 'practical.job.start' in row['instructions']
-        assert 'run_standard_blast_database_plan' in row['instructions']
-        assert 'does not establish installed software' in row['instructions']
-        assert 'not coefficients in that kernel' in row['instructions']
-    rows[0]['input_schema'].clear()
-    assert selected==original
+    with monkeypatch.context() as patch:
+        forbid_io(patch)
+        rows = standard_blast_database_tool_contracts(selected,resource_kind='hpc',resource_id='declared-hpc')
+        assert len(rows)==5 and {r['name'] for r in rows}=={'native.'+p+'.database' for p in c.PROGRAMS}
+        for row,binding in zip(rows,selected):
+            assert set(row)=={'name','description','resources','instructions','input_schema','invocation_route'}
+            assert row['resources']=='hpc'
+            assert row['invocation_route']=={'kind':'commission','routes':[{'entry_role':'launch','resource_id':'declared-hpc','resource_role':'launch_hpc'}]}
+            request=c.requested_job_from_standard_blast_database(job_for(binding['program']))
+            Draft202012Validator(row['input_schema']).validate(request)
+            request['native_blast_standard_database']['software']['sha256']='f'*64
+            assert not Draft202012Validator(row['input_schema']).is_valid(request)
+            assert 'practical.job.start' in row['instructions']
+            assert 'run_standard_blast_database_plan' in row['instructions']
+            assert 'does not establish installed software' in row['instructions']
+            assert 'not coefficients in that kernel' in row['instructions']
+        rows[0]['input_schema'].clear()
+        assert selected==original
 
 
 def test_existing_library_freezes_instructions_and_exact_invocation_contracts(tmp_path):

@@ -125,7 +125,7 @@ def caller(tmp_path, monkeypatch):
     monkeypatch.setattr('socket.create_connection', _forbidden)
     monkeypatch.setattr('gene_annotation_episode.native_lifecycle.prepare_job', _forbidden)
     with Store(tmp_path / 'store') as store:
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         scope = {'subject_refs': store.create_problem(raw_sequence='MKWAA', molecule='protein')['subject_refs']}
         snapshot = _snapshot()
         outcome = _publish(tools, 'engineered-original-metadata', host.PREDICTION_TOOL,
@@ -273,7 +273,7 @@ def test_new_metadata_source_retains_private_value_raw_bytes_and_explicit_data_o
 @pytest.mark.parametrize('kind', ['http', 'incomplete', 'parse', 'identity', 'request'])
 def test_captured_failure_publishes_source_only_and_preserves_native_entity(tmp_path, provider, kind):
     with Store(tmp_path / 'store') as store:
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         snapshot = _snapshot(provider)
         args = deepcopy(snapshot.request)
         if kind == 'http': snapshot = replace(snapshot, transport={**snapshot.transport, 'status': 403})
@@ -312,7 +312,7 @@ def test_emdb_receipt_reuses_exact_native_id_qualification_without_request_fill(
 def test_emdb_success_keeps_all_native_fields_in_original_primary_file(tmp_path):
     snapshot = _snapshot('emdb')
     with Store(tmp_path / 'store') as store:
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         token = tools._publications.set([])
         try:
             receipt, refs = emdb.publish_emdb_entry_receipt(tools, snapshot.request, snapshot)
@@ -456,7 +456,7 @@ def test_legacy_prediction_toolop_and_file_cache_need_no_new_value_or_entity_rer
             source_ref=source['id'], artifact_ref=source['artifact_ref'])
         return value, [source['id']]
     with Store(tmp_path / 'store') as store:
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         scope = {'subject_refs': store.create_problem(raw_sequence='MKWAA', molecule='protein')['subject_refs']}
         metadata = _publish(tools, 'legacy-caller-metadata', host.PREDICTION_TOOL,
             snapshot.request, scope, legacy_prediction, snapshot)
@@ -568,7 +568,7 @@ def test_actual_no_response_dispatch_returns_finite_failure_without_source_or_da
         raise AcquisitionError('provider_connection_failed')
     monkeypatch.setattr(PublicClients, '_http', no_response)
     with Store(tmp_path / 'store') as store:
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         monkeypatch.setattr(tools, '_source', _forbidden)
         scope = {'subject_refs': store.create_problem(raw_sequence='MKWAA', molecule='protein')['subject_refs']}
         workflow = Workflow(store, tools, NoModel(), tmp_path / 'run', 'provider-no-response-engineering',

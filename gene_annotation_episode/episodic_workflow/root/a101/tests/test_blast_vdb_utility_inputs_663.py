@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import validate_blast_utility_result
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_vdb_inputs import read_blast_vdb_sequence_table
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_vdb_utility_inputs import normalize_blast_vdb_extraction, parse_blast_vdb_diagnostics, parse_blast_vdb_extraction, parse_blast_vdb_inspection
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 
 
 ROOT = Path(__file__).resolve().parents[5]

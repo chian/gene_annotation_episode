@@ -24,7 +24,7 @@ def pdf_case(tmp_path, monkeypatch):
     with Store(tmp_path / "state") as store:
         store.create_problem(raw_sequence="MACT", molecule="protein")
         material = store.register_material(data=document.read_bytes(), format="opaque", use="evidence")
-        yield store, build_tools(store, configuration), material["source_ref"]
+        yield store, build_tools(store, configuration, run_directory=tmp_path / "run"), material["source_ref"]
 
 
 @pytest.mark.parametrize("selection,last_page", [

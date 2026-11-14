@@ -60,7 +60,7 @@ def supplied(tmp_path):
         pytest.skip("previously verified input path; focused proof validation followup")
     with Store(tmp_path / "store") as store:
         store.create_problem(raw_sequence="aCGTGAATTCGGATCC", molecule="dna")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         selected, = store.targets()
         yield store, tools, selected, _witness(store, tools, selected["id"])
 
@@ -116,7 +116,7 @@ def test_packed_equal_bytes_different_index_fails_retention(tmp_path):
             store.create_problem(raw, molecule="dna")
             library, = store.targets()
             member = json.loads(store.db.execute("SELECT data FROM material_members ORDER BY ordinal LIMIT 1").fetchone()[0])
-            tools = ToolRegistry(store)
+            tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
             witness = _witness(store, tools, read_ref(library["id"], member["id"]))
             row = witness["packed_components"][0]
             new_index = 1 + max(r[0] for r in store.db.execute("SELECT chunk_index FROM material_pack_chunks WHERE parse_key=?", (row["parse_key"],)))

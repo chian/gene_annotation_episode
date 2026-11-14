@@ -82,7 +82,7 @@ def save_operation(case, *, index, arguments, source_ref, name=TOOL):
 def publication_case(tmp_path, *, state="mapping", corruption=None, deliver=True, producer=True, origin="tool"):
     raw = b"engineering supplied chain bytes; never parsed or converted\n"
     with actual_received_input_owner(tmp_path, raw=raw, namespace="artifact") as value:
-        registry = ToolRegistry(value.store)
+        registry = ToolRegistry(value.store, run_directory=value.store.path / 'tool-run')
         received, path = value.binding.read_received_file(value.context, value.artifact_ref,
             "artifact", file_format="ucsc_chain")
         assert received["failure"] is None and path is not None

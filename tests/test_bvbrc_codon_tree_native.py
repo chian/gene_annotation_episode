@@ -27,7 +27,7 @@ from gene_annotation_episode.bvbrc_appservice_contracts import validate_contract
 STAGING = Path(__file__).resolve().parents[1]
 VERIFICATION = STAGING / "verification"
 HISTORICAL_MEMBERSHIP = (
-    VERIFICATION / "tool_graders_bvbrc_phylogeny_boundaries_2026-10-24/official_example"
+    STAGING / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/phylogeny_boundaries/official_example"
     / "test9_genome_dir/test9_genome_8taxa_10cds_10proteins.pgfamsAndGenesIncludedInAlignment.txt"
 )
 

@@ -11,9 +11,9 @@ import asyncio
 from copy import deepcopy
 import json
 
-from method_loop import EpisodeGoal, EpisodeRequest
-from method_loop.communication import ReportContract
-from method_loop.identities import EpisodeRef
+from gene_annotation_episode.episodic_workflow.root.method_loop import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.method_loop.communication import ReportContract
+from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import DATA_QUERY_OPERATION, DATA_RESULT_OPERATION
 from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
@@ -59,7 +59,7 @@ class HostFixture:
 
     def reopen(self):
         return APIServiceExecution(self.store, run_id=self.run_id, directory=self.directory,
-            configuration=self.configuration, tool_registry=ToolRegistry(self.store),
+            configuration=self.configuration, tool_registry=ToolRegistry(self.store, run_directory=self.store.path / 'tool-run'),
             handoff_unit=3, acquired_record_unit=2)
 
     def context(self, role, assignment, *, parent=None, path=None, schema=None, scope=None):

@@ -40,6 +40,7 @@ from gene_annotation_episode.episodic_workflow.root.practical_receipt_informatio
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -243,7 +244,7 @@ def controller_factory(path, initial):
 
 def assemble(store, directory, provider, configuration):
     factory = ExecutionServiceFactory.from_record(configuration['factory'])
-    tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
+    tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
     application = factory(store, run_id=RUN_ID, directory=directory / 'run', tool_registry=tools)
     flow = Workflow(store, tools, provider, directory / 'run', RUN_ID,
         controller_factory=controller_factory, project_credit=lambda *_args, **_kwargs: 0,
@@ -313,9 +314,9 @@ def workflow_case(directory, *, operation, parser, before_partial=None, before_s
         native_fluorescence=[dict(operation=alias, mode=MODE, parsers=['csv', 'table_snapshot'], software=deepcopy(software))
             for alias in OPERATIONS])}
     factory = ExecutionServiceFactory(resources, {}, 3, 2, 1, log_window_bytes=128)
-    preliminary = ToolRegistry(store, job_limits=deepcopy(POLICY))
+    preliminary = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(POLICY))
     application = factory(store, run_id=RUN_ID, directory=directory / 'run', tool_registry=preliminary)
-    binding = prepare_scientific_binding(run_directory=directory / 'run', source_directory=PUBLICATION,
+    binding = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory / 'run', source_directory=PUBLICATION,
         tool_catalog=preliminary.catalog(), child_roles=('scientific_process', 'launch', 'results'),
         resource_catalogs=application.resource_tool_catalogs)
     library = ScientificProcessLibrary(directory / 'run/scientific-process-library')

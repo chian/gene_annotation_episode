@@ -226,7 +226,7 @@ async def run_case(store,case,directory,*,durable=False,mode='point',broad_label
         binding={'factory_module':__name__,'factory_name':'open_commission',
             'arguments':{'configuration_file':str(path)},'implementation_sha256':fixture_implementation_sha256(),
             'settings_sha256':content_digest(configuration)}
-    result=await run_workflow(store,ToolRegistry(store),provider=provider,run_dir=directory,resume=resume,
+    result=await run_workflow(store,ToolRegistry(store, run_directory=store.path / 'tool-run'),provider=provider,run_dir=directory,resume=resume,
         controller_factory=controllers,project_credit=scorer(),
         initial_known_record_refs=case['source_refs'],episode_binding_factories=(binding_factory(case),),
         episode_record_receipts=True,decision_protocol='decision_exchange_v1',execution_binding=binding,
@@ -252,7 +252,7 @@ async def open_commission(spec):
         settings=json.loads(store.db.execute('SELECT settings FROM runtime_runs WHERE run_id=?',(spec['run_id'],)).fetchone()[0])
         provider=Provider(store,configuration['case'],mode=configuration['mode'],
             broad_label=configuration['broad_label'],durable_child=True)
-        workflow=assemble_workflow(store,ToolRegistry(store),provider,Path(configuration['directory']),spec['run_id'],settings,
+        workflow=assemble_workflow(store,ToolRegistry(store, run_directory=store.path / 'tool-run'),provider,Path(configuration['directory']),spec['run_id'],settings,
             controller_factory=Controllers(3),project_credit=scorer(),
             initial_known_record_refs=configuration['case']['source_refs'],episode_record_receipts=True,
             episode_binding_descriptors=settings['episode_bindings'],execution_binding=binding)

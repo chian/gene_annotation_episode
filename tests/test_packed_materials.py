@@ -133,7 +133,7 @@ def test_components_cross_chunks_and_unicode_header_windows_remain_exact(tmp_pat
         assert "".join(fragments) == title
         with pytest.raises(ContractError, match="header_offset_not_utf8_boundary"):
             store.material_header(member["id"], offset=1, limit=4)
-        selected = execute(ToolRegistry(store), "material.member", {"member_ref": member["id"], "offset": 61, "limit": 13})
+        selected = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": member["id"], "offset": 61, "limit": 13})
         assert selected["sequence"] == sequence[61:74] and selected["quality"] == quality[61:74]
         assert store.get_artifact(store.get(selected["reference_ref"])["sequence_ref"]) == sequence.encode("ascii")
 
@@ -152,7 +152,7 @@ def test_malformed_fastq_preserves_packed_valid_prefix_and_original_bytes(tmp_pa
         check_packed_native(store, member, "good native", "ACGTACGT", "!@+~####")
         assert store.material_errors(attempt["id"])["errors"] == [{"ordinal": 1, "byte_offset": None,
             "code": "malformed_fastq_remaining_scope_unparsed"}]
-        selected = execute(ToolRegistry(store), "material.member", {"member_ref": member["id"]})
+        selected = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": member["id"]})
         assert selected["sequence"] == "ACGTACGT" and selected["quality"] == "!@+~####"
         assert store.get_artifact(store.get(material["source_ref"])["artifact_ref"]) == content
         assert store.problem() == problem and project_credit(store).as_record()["credit"] == 0
@@ -176,7 +176,7 @@ def test_read_fasta_explicit_fragment_binding_stays_fixed_after_evidence_selecti
         for member, title, sequence in zip(members, ("same first", "same selected exact", "third"),
                                            ("ACGT", "TGCAA", "CCCCCC"), strict=True):
             check_packed_native(store, member, title, sequence, None)
-        selected = execute(ToolRegistry(store), "material.member", {"member_ref": members[2]["id"]})
+        selected = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": members[2]["id"]})
         assert selected["quality"] is None
         assert store.coverage(selected["reference_ref"]) == []
         late = store.register_material(data=b">later\nAAAAAAAAAAAAAAAA\n", role="read")
@@ -193,7 +193,7 @@ def test_selected_reference_and_operation_cache_survive_reopen_and_feed_alignmen
         material = store.register_material(data=WRAPPED_FASTQ, molecule="dna")
         attempt = store.parse_material(material["id"])
         native = rows(store, attempt["collection_ref"])
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         result = execute(tools, "material.member", {"member_ref": native[0]["id"], "offset": 1, "limit": 3},
                          operation_key="selected-read")
         reference = store.get(result["reference_ref"])
@@ -204,10 +204,10 @@ def test_selected_reference_and_operation_cache_survive_reopen_and_feed_alignmen
         assert rows(store, attempt["collection_ref"]) == native
     with Store(workspace) as store:
         assert store.parse_material(material["id"]) == attempt
-        replay = execute(ToolRegistry(store), "material.member", {"member_ref": native[0]["id"], "offset": 1, "limit": 3},
+        replay = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": native[0]["id"], "offset": 1, "limit": 3},
                          operation_key="selected-read")
         assert replay == result and artifact_ids(store) == artifacts
-        alignment = execute(ToolRegistry(store), "sequence.align", {"query_ref": problem["subject_refs"][0],
+        alignment = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "sequence.align", {"query_ref": problem["subject_refs"][0],
                             "reference_ref": result["reference_ref"], "molecule": "dna", "mode": "global"})
         observation = store.get(alignment["observation_ref"])
         assert observation["source_subject_refs"] == [result["reference_ref"]]
@@ -227,7 +227,7 @@ def test_portable_index_reconstructs_all_reads_without_exporting_unselected_tiny
         material = store.register_material(data=content)
         attempt = store.parse_material(material["id"])
         members = rows(store, attempt["collection_ref"])
-        selected = execute(ToolRegistry(store), "material.member", {"member_ref": members[4]["id"], "limit": 2})
+        selected = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": members[4]["id"], "limit": 2})
         before = artifact_ids(store)
         exported = export_annotation(store, tmp_path / "portable.json", include_artifacts=True, page_size=2)
         document = json.loads(Path(exported["json"]["path"]).read_text())
@@ -282,14 +282,14 @@ def test_header_only_materialization_remains_outside_form_registry_until_member_
         material = store.register_material(data=content)
         attempt = store.parse_material(material["id"])
         member, = rows(store, attempt["collection_ref"])
-        header = execute(ToolRegistry(store), "material.header", {"member_ref": member["id"]})
+        header = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.header", {"member_ref": member["id"]})
         header_id = "artifact_" + hashlib.sha256(title.encode("utf-8")).hexdigest()
         assert header["artifact_ref"] == header_id and store.get_artifact(header_id) == title.encode("utf-8")
         assert header["start"] == 0 and header["end"] == len(title.encode("utf-8"))
         assert not header["original_header_bytes"]
         assert store.reference_subset([header_id]) == []
         assert header_id not in store.references()["artifact"] and store.list("reference") == []
-        selected = execute(ToolRegistry(store), "material.member", {"member_ref": member["id"], "limit": 1})
+        selected = execute(ToolRegistry(store, run_directory=store.path / 'tool-run'), "material.member", {"member_ref": member["id"], "limit": 1})
         component_refs = ["artifact_" + item["sha256"] for item in member["storage"]["components"].values()]
         assert store.reference_subset(component_refs) == component_refs
         assert set(component_refs) <= set(store.references()["artifact"])
@@ -305,7 +305,7 @@ def test_packed_external_fastq_retains_actual_source_request_and_origin(tmp_path
         source = store.put("source", {"provider": "fixture_external_reads", "accession": "fixture-readset",
             "uri": "https://example.invalid/reads.fastq", "artifact_ref": artifact, "text_ref": artifact,
             "request_ref": request, "version": "fixture1", "retrieved_at": None}, origin="external")
-        tools = ToolRegistry(store)
+        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         wrapped = execute(tools, "material.from_source", {"source_ref": source["id"]})
         material = store.get(wrapped["material_ref"])
         assert material["origin"] == "tool" and material["use"] == "evidence"

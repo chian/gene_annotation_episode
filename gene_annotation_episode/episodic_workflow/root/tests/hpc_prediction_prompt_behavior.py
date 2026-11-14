@@ -28,9 +28,13 @@ class PredictionPromptChecks:
             knowledge=SimpleNamespace(instructions='\nOriginal knowledge guidance.'),
             launch_instructions=SimpleNamespace(instructions='\nOriginal resource-library guidance.'),
             services=SimpleNamespace(instructions=self.module('runtime_prompt').instructions))
+        if self.axis in ('a102', 'a103', 'a104'):
+            task.workflow.services = self.module('episode_services').WorkflowServices(task.workflow)
         return task, binding, context
 
     def renderer(self, binding):
+        if self.axis == 'a104':
+            return self.module('library.hpc_prompt').render_hpc_prompt
         if hasattr(binding, 'decision_prompt_renderer'):
             return binding.decision_prompt_renderer
         return self.module('hpc_prompt').render_hpc_prompt
@@ -98,7 +102,7 @@ class PredictionPromptChecks:
         connection.scientific_prompt_states = {}
         first = {'hpc_commission': {'objective': 'Original prediction'}, 'hpc_model_ref': 'model-before'}
         second = {**first, 'hpc_model_ref': 'model-after'}
-        options = {'prompt_renderer': self.renderer(binding)} if declared else {}
+        options = {'prompt_renderer': binding.decision_prompt_renderer} if declared else {}
         for frame, state in ((runtime.state_frame(first), first), (runtime.state_frame(second, first), second)):
             text, _ = connection._presentation('prediction', 'REASONING', 'Original task', frame, **options)
             assert text == self.renderer(binding)(state, 'Original task')
@@ -109,12 +113,18 @@ class PredictionPromptChecks:
         assert text == self.renderer(binding)(second, 'Original task', lookup_results=[result])
         assert connection.scientific_prompt_states[('prediction', 'REASONING')] == second
 
-    def test_private_composer_omits_unavailable_child_repair(self, tmp_path):
+    def test_private_composer_omits_unavailable_child_repair(self, tmp_path, monkeypatch):
         task, binding, context = self.prompt_setup(tmp_path)
-        task.workflow.services.instructions = lambda *args: pytest.fail('Axis composer selected')
+        if self.axis in ('a102', 'a103', 'a104'):
+            monkeypatch.setattr(self.module('runtime_prompt'), 'instructions', lambda *args: pytest.fail('Axis composer selected'))
+        else:
+            task.workflow.services.instructions = lambda *args: pytest.fail('Axis composer selected')
         assert task.instructions({}) == binding.instructions(context)
         assert 'pending_child_delivery' not in task.instructions({})
-        assert binding.decision_prompt_renderer.__module__ == 'gene_annotation_episode.episodic_workflow.root.'+self.axis+'.library.hpc_prompt'
+        if self.axis == 'a104':
+            assert binding.decision_prompt_renderer.__module__ == binding.__module__.removesuffix('.episode')+'.presentation'
+        else:
+            assert binding.decision_prompt_renderer.__module__ == 'gene_annotation_episode.episodic_workflow.root.'+self.axis+'.library.hpc_prompt'
         assert binding.allowed_children(context, {}) == ()
         assert binding.permitted_common_actions(context) == ('tool',)
 
@@ -150,7 +160,12 @@ class PredictionPromptChecks:
         async def complete(*args, **kwargs):
             calls.append((args, kwargs))
             return wire
-        if declared:
+        if declared and self.axis == 'a104':
+            controlled = self.module('tests.provider_dispatch_fixtures')
+            task.workflow.provider = controlled.controlled_serial_model(
+                controlled.controlled_config(), tmp_path / 'controlled-provider', tmp_path, complete)
+            task.workflow.provider.has_session = lambda *args: True
+        elif declared:
             task.workflow.provider = SimpleNamespace(has_session=lambda *args: True,
                 complete_with_presentation=complete, complete=lambda *args: pytest.fail('Declared renderer was omitted'))
         else:

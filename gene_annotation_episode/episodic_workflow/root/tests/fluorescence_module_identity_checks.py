@@ -11,9 +11,9 @@ import hashlib
 import json
 from pathlib import Path
 
-OLD_DRIVER = 'gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_driver'
+OLD_DRIVER = 'gene_annotation_episode.native_fluorescence_driver'
 NEW_DRIVER = 'gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_driver'
-OLD_WORKER = 'gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_worker'
+OLD_WORKER = 'gene_annotation_episode.fluorescence_result_worker'
 NEW_WORKER = 'gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_worker'
 ORIGINAL_CASES = ('historical_software', 'historical_request',
                   'historical_driver_pin_required', 'historical_worker_control',

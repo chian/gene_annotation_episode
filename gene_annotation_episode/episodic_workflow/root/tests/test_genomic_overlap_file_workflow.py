@@ -20,6 +20,7 @@ from gene_annotation_episode.episodic_workflow.root.practical_receipt_informatio
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -71,9 +72,9 @@ def test_file_only_native_saved_and_full_saved_results_builder(tmp_path, monkeyp
         factory = ExecutionServiceFactory({"here": dict(kind="local", workspace=str(workspace),
             policy=deepcopy(f.POLICY), native_genomic_overlap=[dict(operation=request["operation"],
                 mode=request["mode"], software=deepcopy(software))])}, {}, 3, 2, 1, log_window_bytes=128)
-        preliminary = ToolRegistry(store, job_limits=deepcopy(f.POLICY))
+        preliminary = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(f.POLICY))
         application = factory(store, run_id=f.RUN_ID, directory=directory / "run", tool_registry=preliminary)
-        binding = prepare_scientific_binding(run_directory=directory / "run",
+        binding = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory / "run",
             source_directory=Path(__file__).resolve().parents[4] / "research/slotted_process_library/publications/2026-10-24-001",
             tool_catalog=preliminary.catalog(), child_roles=("scientific_process", "launch", "results"),
             resource_catalogs=application.resource_tool_catalogs)

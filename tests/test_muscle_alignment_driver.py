@@ -50,7 +50,7 @@ def _manifest(request=None):
 
 
 def test_pure_request_software_and_parameters_do_no_io_and_return_detached_values(monkeypatch):
-    monkeypatch.setattr(driver.storage, "file_pin", _forbidden)
+    monkeypatch.setattr(driver, "_storage_file_pin", _forbidden)
     request = _request()
     result = driver.validate_muscle_alignment_native_request(request)
     assert result == request and result is not request and result["input"] is not request["input"]
@@ -113,7 +113,7 @@ def test_explicit_legal_zero_iterations_and_single_alignment_argv(permutation):
 def test_request_rejects_identity_path_and_extra_control_changes_before_io(monkeypatch, tmp_path, change):
     request = _request()
     change(request)
-    monkeypatch.setattr(driver.storage, "file_pin", _forbidden)
+    monkeypatch.setattr(driver, "_storage_file_pin", _forbidden)
     monkeypatch.setattr(driver, "_reserve_native_directory", _forbidden)
     with pytest.raises(ValueError, match="muscle_alignment_"):
         driver.run_muscle_alignment_native(request, output_directory=tmp_path)
@@ -123,13 +123,13 @@ def test_request_rejects_identity_path_and_extra_control_changes_before_io(monke
 def test_staging_preserves_every_supplied_case_label_gap_and_line_ending_byte(tmp_path):
     raw = b">same full label\r\nAcG.-t \r\n>same full label\r\nACGT\r\n"
     operand = _physical_input(tmp_path, raw)
-    original = driver.storage.file_pin(operand["path"])
+    original = driver._storage_file_pin(operand["path"])
     directory = tmp_path / "owned-native"
     directory.mkdir()
     copied = driver._stage_input(operand, directory)
     assert copied == directory / "input.fasta" and copied.read_bytes() == raw
-    assert driver.storage.file_pin(operand["path"]) == original
-    assert driver.storage.file_pin(copied)["sha256"] == operand["file"]["sha256"]
+    assert driver._storage_file_pin(operand["path"]) == original
+    assert driver._storage_file_pin(copied)["sha256"] == operand["file"]["sha256"]
     assert not (directory / "aligned.fasta").exists()
 
 
@@ -159,7 +159,7 @@ def test_physical_software_pin_checks_bytes_without_execution_or_alias_following
     path = tmp_path / "engineered-byte-pin-only"
     path.write_bytes(b"engineered bytes, not a MUSCLE executable")
     path.chmod(0o555)
-    selected = driver.storage.file_pin(path)
+    selected = driver._storage_file_pin(path)
     driver._check_software(selected)
     path.chmod(0o755)
     path.write_bytes(b"changed engineered bytes")
@@ -169,7 +169,7 @@ def test_physical_software_pin_checks_bytes_without_execution_or_alias_following
     alias = tmp_path / "unselected-alias"
     alias.symlink_to(path)
     with pytest.raises(ValueError, match="muscle_alignment_software_identity_conflict"):
-        driver._check_software(dict(driver.storage.file_pin(path), path=str(alias)))
+        driver._check_software(dict(driver._storage_file_pin(path), path=str(alias)))
 
 
 def test_manifest_is_detached_and_preserves_negative_native_returncode():

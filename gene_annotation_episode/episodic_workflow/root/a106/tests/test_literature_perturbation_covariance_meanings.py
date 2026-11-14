@@ -27,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.root.a106.runtime import run_work
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a106.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary import source_data, extract, calculate, covariance
-from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary_integration import fixture, source, binding_for
+from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary_integration import fixture, source, binding_for, literature_factories
 from test_runtime import FixtureController, ScriptedProvider
 
 
@@ -302,8 +302,7 @@ def test_ordinary_child_parent_and_first_read_only_reconstruction_keep_actual_co
         result = asyncio.run(run_workflow(store, ToolRegistry(store), provider=provider, run_dir=tmp_path / 'run',
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 2),
             project_credit=scorer, initial_known_record_refs=list(context.received_record_refs),
-            episode_binding_factories=(partial(LiteratureEpisode, rate_population=True,
-                reference_parent_sources=[args['source_ref']]),), binding_definitions={'credit': scorer.as_record()}))
+            episode_binding_factories=literature_factories(reference_parent_sources=[args['source_ref']]), binding_definitions={'credit': scorer.as_record()}))
         assert set(captured) == {'own', 'parent'}
         rows = captured['parent']['child_reports'][0]['only_variance']
         assert len(rows) == 1 and rows[0]['value'] == 2
@@ -335,7 +334,7 @@ def test_ordinary_child_parent_and_first_read_only_reconstruction_keep_actual_co
             projection = LiteraturePerturbationSummaryProjection(reopened, result['run_id'])
             assert projection.received_cells(parent) == rows
             assert projection.fact_cells(parent, [rows[0]['sheet_ref']], components=['restoration_mean_variance']) == []
-            binding = LiteratureEpisode(WorkflowServices(SimpleNamespace(store=reopened, run_id=result['run_id'])), rate_population=True)
+            binding = LiteratureEpisode(WorkflowServices(SimpleNamespace(store=reopened, run_id=result['run_id'])))
             view = binding._received_fact_display_context(parent)
             text = _steering({'child_reports': [{'only_variance': rows}], **view}, ())
             assert 'uncorrelated' in text and 'conditional_assumption' in text and '987654321' not in text
