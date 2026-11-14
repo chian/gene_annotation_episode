@@ -11,8 +11,11 @@ Usage (through the launcher, output under its run directory):
 from __future__ import annotations
 
 import argparse
+import ast
+import hashlib
 import importlib
 import json
+import re
 import subprocess
 import sys
 import traceback
@@ -21,6 +24,17 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 ROOT = REPO / "gene_annotation_episode" / "episodic_workflow" / "root"
 SKIPPED_PARTS = {"tests", "__pycache__", "fixtures"}
+GUARD = re.compile(r" is not None and | is None or |\.get\([^()]+, [^()]+\)|getattr\([^()]+,[^()]+,[^()]+\)| if .* is None else ")
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def mixin_width(home: Path) -> int:
+    """Largest number of base classes on any class declared in episode.py."""
+    tree = ast.parse((home / "episode.py").read_text(encoding="utf-8"))
+    return max((len(node.bases) for node in ast.walk(tree) if isinstance(node, ast.ClassDef)), default=0)
 
 
 def find_homes() -> list[Path]:
@@ -77,6 +91,11 @@ def main() -> int:
 
     homes = find_homes()
     home_set = set(homes)
+    copies: dict[str, int] = {}
+    for path in ROOT.rglob("*.py"):
+        if "__pycache__" not in path.parts:
+            key = digest(path)
+            copies[key] = copies.get(key, 0) + 1
     records = []
     for home in homes:
         children = [other for other in homes if nearest_home_above(other, home_set) == home]
@@ -99,6 +118,9 @@ def main() -> int:
             "children": [str(child.relative_to(ROOT)) for child in children],
             "modules": len(names),
             "lines": sum(len(path.read_text(encoding="utf-8").splitlines()) for path in modules),
+            "identical_copies": sum(1 for path in modules if copies[digest(path)] > 1),
+            "mixin_width": mixin_width(home),
+            "guard_sites": sum(len(GUARD.findall(path.read_text(encoding="utf-8"))) for path in modules),
             "import_failures": failures,
         })
     Path(arguments.output).write_text(json.dumps(records, indent=1))
