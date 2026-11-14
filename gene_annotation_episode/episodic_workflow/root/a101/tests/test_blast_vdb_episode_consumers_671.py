@@ -19,20 +19,20 @@ from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_driver as driver
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_vdb_utility_execution as offline
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_result_views import FACT_SOURCES, IDENTIFIER_NAMESPACES, NATIVE_BLAST_UTILITY_RESULT_SELECTOR_SCHEMA, NATIVE_BLAST_UTILITY_RESULT_SELECTOR_V2_SCHEMA, PROJECTION_V2_FIELDS, projection_identifiers
-from gene_annotation_episode.communication import form_with_facts
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts
+from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION, RESULTS_VERSION
-from gene_annotation_episode.execution_progress import describe_execution_target
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION, RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.a101.execution_progress import describe_execution_target
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_contracts import JOB_VERSION_V3, requested_job_from_native_blast_utility
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_utility_local import local_blast_utility_plan
-from gene_annotation_episode.numerical import NumericBand, YieldParameters
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-from gene_annotation_episode.practical_execution_records import assess_validations, validate_assignment
-from gene_annotation_episode.practical_execution_state import PracticalState
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_records import assess_validations, validate_assignment
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 from test_blast_utility_episode_wiring_632 import assignment, context
 from test_blast_vdb_native_context_668 import controlled_job, controlled_dependency_job, _reseal_manifest
@@ -417,7 +417,7 @@ def test_legacy_execution_descriptor_shape_is_unchanged(tmp_path):
 
 
 def test_legacy_complete_progress_descriptor_has_no_new_fields(tmp_path, monkeypatch):
-    from gene_annotation_episode.execution_progress import ExecutionTargetReader
+    from gene_annotation_episode.episodic_workflow.root.a101.execution_progress import ExecutionTargetReader
     e = old_environment(tmp_path, monkeypatch, mode="extract_sequences")
     started = e.act(0)
     with Store(tmp_path / "store") as store:

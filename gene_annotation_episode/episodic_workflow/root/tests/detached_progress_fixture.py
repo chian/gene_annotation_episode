@@ -16,18 +16,20 @@ from pathlib import Path
 from method_loop import EpisodeCompletion
 from method_loop.communication import ReportContract
 from method_loop.durable import DurableExecutionError, canonical, content_digest, validate_commission
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.episode_application_services import EpisodeApplicationServices, service_binding
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.episode_application_services import EpisodeApplicationServices, service_binding
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes, read_progress
+from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import read_progress
 from gene_annotation_episode.episode_progress_credit import ProgressInformationCredit
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import HomologyJobs
 from gene_annotation_episode.episodic_workflow.root.a101.homology_progress import HomologyProgressProvider
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.runtime import ReleasingContext, TypedReportContract, assemble_workflow
+from gene_annotation_episode.episodic_workflow.root.workflow_values import ReleasingContext, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from detached_workflow_fixture import FixtureController, until
 
 
@@ -286,7 +288,7 @@ async def open_commission(spec):
         raise DurableExecutionError('identity_conflict', affected_refs=[spec['handle']])
     directory = Path(configuration['run_directory'])
     with Store(configuration['workspace']) as store:
-        from gene_annotation_episode.independent_execution import _check_assignment
+        from gene_annotation_episode.episodic_workflow.root.commissioned_reopening import _check_assignment
         parent_goal, scope = _check_assignment(store, spec)
         saved_run = store.db.execute('SELECT settings FROM runtime_runs WHERE run_id=?',
             (spec['run_id'],)).fetchone()

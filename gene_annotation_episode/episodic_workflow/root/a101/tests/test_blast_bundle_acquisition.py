@@ -253,7 +253,7 @@ def test_only_explicit_local_native_blast_targets_are_selected():
 
 
 def test_source_and_saved_receipt_cannot_swap_valid_artifact_associations(tmp_path):
-    from gene_annotation_episode.practical_execution_records import canonical
+    from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_records import canonical
     origin = launch(tmp_path)
     bundle = json.loads((origin.root / 'bundle.json').read_bytes())
     with Store(tmp_path / 'store') as store:

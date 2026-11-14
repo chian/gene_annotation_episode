@@ -10,16 +10,16 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import bvbrc_gene_tree_bundle_adapter as gene
-from gene_annotation_episode import bvbrc_codon_tree_bundle_adapter as codon
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_gene_tree_bundle_adapter as gene
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_bundle_adapter as codon
 from gene_annotation_episode.bvbrc_appservice_adapters import bind_adapters
-from gene_annotation_episode.bvbrc_phylogeny_returns import phylogeny_fact_sources
-from gene_annotation_episode.communication import plain, form_with_facts
+from gene_annotation_episode.episodic_workflow.root.bvbrc_phylogeny_returns import phylogeny_fact_sources
+from gene_annotation_episode.episodic_workflow.root.communication import plain, form_with_facts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG
 from test_bvbrc_appservice_custody import SavedRecords
 from test_bvbrc_appservice_host import ProductionDriver

@@ -5,7 +5,7 @@ import pytest
 
 from method_loop import (ClosedChildUnit, Context, DeferredUnit, Episode,
                          EpisodeRequest)
-from gene_annotation_episode.episodic_workflow.root.runtime import Record
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from test_independent_episode import Source, child_unit, leaf, world
 
 

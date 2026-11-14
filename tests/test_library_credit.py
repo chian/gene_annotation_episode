@@ -235,7 +235,7 @@ def test_whole_library_context_does_not_invent_a_linear_extent():
 
 
 def _native_fixture(store, tmp_path):
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     path = tmp_path / "fixed.fastq"
     # Equal sequence bytes are still distinct original observations/members.
     path.write_bytes(b"@same first\nATGAAATTTGGG\n+\nIIIIIIIIIIII\n@same second\nATGAAATTTGGG\n+\n!!!!!!!!!!!!\n")
@@ -376,7 +376,7 @@ def test_real_store_translated_read_exact_residue_extent_not_fractionally_scaled
 
 def test_real_scalar_summary_and_detail_page_preserve_frozen_nondefault_policy(tmp_path):
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     with Store(tmp_path / "scalar") as store:
         target = store.create_problem(raw_sequence="ATGAAATTTGGG", molecule="dna")["subject_refs"][0]
         reference = _reference(store, "ATGAAATTTGGG")

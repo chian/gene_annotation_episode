@@ -8,7 +8,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.runtime import WorkflowError
+from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
 from test_runtime import (ScriptedProvider, commission, fixture_credit, obj, reason,
                           run, setup)
 

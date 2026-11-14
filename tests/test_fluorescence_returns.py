@@ -24,7 +24,8 @@ from gene_annotation_episode.episodic_workflow.root.library.fluorescence_return_
 from gene_annotation_episode.episodic_workflow.root.library.original_fluorescence_returns import FluorescenceReturns
 from gene_annotation_episode.episodic_workflow.root.library.original_fluorescence_result_receipts import FluorescenceResultReceipts
 from gene_annotation_episode.native_file_capture import retained_native_file
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
 
 

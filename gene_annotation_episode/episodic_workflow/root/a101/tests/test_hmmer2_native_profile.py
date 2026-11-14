@@ -100,12 +100,12 @@ def test_opt_in_actual_admitted_rrm_h3_fetch_input_evd_typed_saved_and_closed_re
         "input_sha256": PINS["rrm.hmm"][0]}
     from gene_annotation_episode import native_lifecycle
     from gene_annotation_episode.episodic_workflow.root.a101.library import native_hmmer_preparation_worker as worker
-    from gene_annotation_episode.communication import plain
-    from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+    from gene_annotation_episode.episodic_workflow.root.a101.communication import plain
+    from gene_annotation_episode.episodic_workflow.root.a101.episode_return_records import EpisodeReturnRecords
     from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_preparation_result_views import project_preparation_result
     from gene_annotation_episode.native_file_capture import _metadata
     from gene_annotation_episode.native_infernal_contracts import native_infernal_digest
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
     from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_contracts import JOB_VERSION
     from test_native_hmmer_preparation_contracts import BIN
     from test_hmmer2_upstream_fixtures import checkpoint

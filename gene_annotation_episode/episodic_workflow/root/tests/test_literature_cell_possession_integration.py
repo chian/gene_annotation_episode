@@ -16,16 +16,17 @@ from method_loop import EpisodeGoal
 from method_loop.archive import JsonArchive
 from method_loop.durable import content_digest
 from method_loop.identities import EpisodeRef
-from gene_annotation_episode.communication import ReportBoundaryError, plain
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
 from gene_annotation_episode.domain import ContractError, canonical, obj
-from gene_annotation_episode.episode_admission import ReceiverBindingV1, admit_return
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.episode_admission import ReceiverBindingV1, admit_return
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_storage import COMPONENTS, LiteratureRateRepository, rate_cells_schema
-from gene_annotation_episode.runtime import TypedReportContract, run_workflow
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_episode_admission import Value, seal_return
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_episode_integration import service_binding
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_storage import setup_store

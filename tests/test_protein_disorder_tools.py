@@ -20,9 +20,10 @@ from gene_annotation_episode import protein_disorder_tools as adapter
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.task_action_units import ActionFailure
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_molecular_provider_acquisition_host import _controller, _credit, _scope
 from test_protein_disorder_result_contracts import CASES, SOURCE, prepared, request, selection
 from test_runtime import ScriptedProvider

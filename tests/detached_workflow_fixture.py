@@ -20,8 +20,8 @@ from method_loop import EpisodeCompletion, EpisodeGoal
 from method_loop.communication import ReportContract
 from method_loop.durable import (DurableExecutionError, canonical, content_digest,
                                  validate_commission)
-from gene_annotation_episode.episodic_workflow.root.runtime import (ReleasingContext, TypedReportContract,
-                                             assemble_workflow)
+from gene_annotation_episode.episodic_workflow.root.workflow_values import ReleasingContext, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
 from gene_annotation_episode.state import Store
 
 
@@ -277,7 +277,7 @@ async def open_commission(spec):
     with Store(configuration['workspace']) as store:
         # Use the production assignment/input check, including actual saved
         # parent/child identity, original request, normalized scope and hashes.
-        from gene_annotation_episode.independent_execution import _check_assignment
+        from gene_annotation_episode.episodic_workflow.root.commissioned_reopening import _check_assignment
         parent_goal, scope = _check_assignment(store, spec)
         assert parent_goal == EpisodeGoal.from_record(json.loads(store.db.execute(
             'SELECT request FROM runtime_episodes WHERE run_id=? AND episode_id=?',

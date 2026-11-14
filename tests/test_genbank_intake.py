@@ -15,7 +15,7 @@ from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError, canonical
 from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 ACQUISITION = Path(__file__).resolve().parents[1] / "validation/acquisition"

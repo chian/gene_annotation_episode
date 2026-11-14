@@ -15,16 +15,17 @@ import pytest
 from method_loop.durable import DurableExecutionStore, content_digest
 
 from gene_annotation_episode.api_bvbrc_appservice import BVBRCAppServiceService
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, obj, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes, ProgressProvider
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_progress import ExecutionProgressProvider
+from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionProgressProvider
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG, original_request, original_task, result_selector
 
 

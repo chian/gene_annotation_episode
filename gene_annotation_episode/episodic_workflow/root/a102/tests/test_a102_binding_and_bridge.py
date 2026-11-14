@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.root.a102.a102_structural_bridge 
 from gene_annotation_episode.episodic_workflow.root.a102.a102_structures import bind_structure,binding_summary,sequence_map
 from gene_annotation_episode.episodic_workflow.root.a102.a102_tools import A102ToolRegistry
 from gene_annotation_episode.domain import canonical
-from gene_annotation_episode.protein_structure_calculations import calculate_protein_structure_components
+from gene_annotation_episode.episodic_workflow.root.a102.protein_structure_calculations import calculate_protein_structure_components
 from gene_annotation_episode.state import Store
 
 f=import_module('verification.tool_graders_protein_structure_calculations_2026-10-27_389.fixture_helpers')

@@ -9,11 +9,11 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.native_flux_balance_contracts import POLICY
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_flux_balance_execution_inputs_704 import selected
 from test_flux_balance_result_selection_699 import selector
 
@@ -90,7 +90,7 @@ def test_public_fba_commission_has_scientific_operands_without_software_closure(
 
 def test_compact_source_witness_materializes_once_and_preserves_original_request(selected, monkeypatch):
     from gene_annotation_episode.execution_contracts import digest
-    from gene_annotation_episode.flux_balance_request_binding import CONTROL_VERSION, read_request_binding
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import CONTROL_VERSION, read_request_binding
     f = selected; family = _family(f); compact = _compact(f)
     launch = f.records.child(f.records.root, 'launch', _compact_launch(f, compact), 1)
     monkeypatch.setattr(f.store, 'get_artifact', lambda *_: pytest.fail('host read scientific bytes'))
@@ -166,7 +166,7 @@ def _selected_compact_action(f, tool_name='practical.inspect', *, legacy=False):
     family = _family(f); compact = _compact(f)
     launch = f.records.child(f.records.root, 'launch', _compact_launch(f, compact), 1)
     if legacy:
-        from gene_annotation_episode.flux_balance_request_binding import LEGACY_CONTROL_VERSION
+        from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import LEGACY_CONTROL_VERSION
         _, rows = family.flux_balance_requests.preview(launch, plain(launch.assignment))
         family.flux_balance_requests._write(launch, rows, version=LEGACY_CONTROL_VERSION)
     family.initialize(launch)
@@ -199,7 +199,7 @@ def test_async_fba_start_authenticates_store_on_owning_thread_before_preparation
         assert input_binding_receipt == controls[0]['receipt'] and input_binding_file == controls[0]['file']
         assert not (root / 'native.json').exists()
         raise RuntimeError('verified original input reached threaded preparation boundary')
-    monkeypatch.setattr('gene_annotation_episode.native_flux_balance_local.prepare_local_flux_balance', preparation_boundary)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_local.prepare_local_flux_balance', preparation_boundary)
     with pytest.raises(RuntimeError, match='verified original input reached threaded preparation boundary'):
         asyncio.run(family.execute(child, 'practical.job.start', {}, key))
     assert len(controls) == len(preparation_threads) == 1
@@ -219,7 +219,7 @@ def test_direct_async_invalid_fba_selection_precedes_input_reader_and_preparatio
     def no_input_side_effect(*_args, **_kwargs):
         pytest.fail('invalid direct selection reached authenticated input/native preparation')
     operations.flux_balance_input_reader = no_input_side_effect
-    monkeypatch.setattr('gene_annotation_episode.native_flux_balance_local.prepare_local_flux_balance', no_input_side_effect)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_local.prepare_local_flux_balance', no_input_side_effect)
     tool_name, arguments = 'practical.job.start', {}
     if fault == 'assignment':
         state.assignment['requested_job']['native_flux_balance']['software']['python_version'] = 'unselected'
@@ -239,7 +239,7 @@ def test_direct_async_invalid_fba_selection_precedes_input_reader_and_preparatio
 
 
 def test_compact_completed_private_action_reopens_before_public_commit_without_execution(selected, monkeypatch):
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
     f = selected; family, child, key = _selected_compact_action(f)
     original = asyncio.run(family.execute(child, 'practical.inspect', {}, key))
     assert original['result']['version'] == 'flux_balance_practical_outcome_v2'
@@ -263,9 +263,9 @@ def test_compact_completed_private_action_reopens_before_public_commit_without_e
 
 def test_legacy_compact_control_recovery_and_committed_replay_keep_original_projection(selected, monkeypatch):
     from gene_annotation_episode.episode_bindings import BindingContext
-    from gene_annotation_episode.flux_balance_request_binding import LEGACY_CONTROL_VERSION, read_request_binding
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import LEGACY_CONTROL_VERSION, read_request_binding
     from gene_annotation_episode.native_file_capture import retained_native_file
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
     f = selected; family, child, key = _selected_compact_action(f, legacy=True)
     original_control = read_request_binding(f.store, f.records.run_id, child.episode_id)
     parent_value = json.loads(retained_native_file(f.store, original_control['parent_file']).read_bytes())
@@ -298,8 +298,8 @@ def test_legacy_compact_control_recovery_and_committed_replay_keep_original_proj
 
 @pytest.mark.parametrize('interrupted_at', ['reserved', 'private_receipt'])
 def test_compact_reserved_or_unpublished_metadata_action_recovers_original_selection(selected, monkeypatch, interrupted_at):
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-    from gene_annotation_episode.practical_receipt_information import PracticalReceiptInformation
+    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
     f = selected; family, child, key = _selected_compact_action(f)
     actual_execute, actual_publish = LocalPracticalOperations.execute, PracticalReceiptInformation.publish
     async def interrupted_operation(*_args, **_kwargs):
@@ -336,7 +336,7 @@ def test_compact_reserved_or_unpublished_metadata_action_recovers_original_selec
 @pytest.mark.parametrize('fault', ['body', 'added_reference', 'changed_references', 'status', 'pending',
     'malformed_result', 'projection_downgrade'])
 def test_compact_direct_practical_readers_reject_changed_committed_view(selected, fault):
-    from gene_annotation_episode.practical_receipt_information import PracticalReceiptInformation
+    from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
     f = selected; family, child, key = _selected_compact_action(f)
     original = asyncio.run(family.execute(child, 'practical.inspect', {}, key))
     f.store.db.execute('UPDATE runtime_actions SET result=? WHERE run_id=? AND episode_id=? AND decision_index=0',
@@ -394,7 +394,7 @@ def retained_practical217():
 
 @pytest.mark.parametrize('phase', ['start', 'collect'])
 def test_v2_projection_names_authentic_original_output_roles_without_native_reads(retained_practical217, monkeypatch, phase):
-    from gene_annotation_episode.flux_balance_request_binding import CONTROL_VERSION, practical_outcome_view
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import CONTROL_VERSION, practical_outcome_view
     original = retained_practical217
     receipt = original[phase]
     private = deepcopy(receipt)
@@ -412,7 +412,7 @@ def test_v2_projection_names_authentic_original_output_roles_without_native_read
 
 
 def test_retained_v1_projection_is_exact_and_v2_rejects_downgrade_and_unknown_roles(retained_practical217):
-    from gene_annotation_episode.flux_balance_request_binding import (
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import (
         CONTROL_VERSION, LEGACY_CONTROL_VERSION, match_practical_public_outcome, practical_outcome_view)
     original = retained_practical217
     receipt, public = original['start'], original['public_start']
@@ -469,7 +469,7 @@ def test_compact_bound_source_retains_its_received_witness_and_pointer(selected,
 
 
 def test_compact_completed_output_endpoint_preserves_selected_roles_and_keys(selected):
-    from gene_annotation_episode.practical_execution_records import flux_balance_role_paths, validate_assignment
+    from gene_annotation_episode.episodic_workflow.root.practical_execution_records import flux_balance_role_paths, validate_assignment
     f = selected; family = _family(f); compact = _compact(f)
     compact['endpoint'] = 'completed_job_outputs'
     compact['progress_requirements'] = [{'key': 'selected-outputs', 'credit': 9,
@@ -496,7 +496,7 @@ def test_compact_completed_output_endpoint_preserves_selected_roles_and_keys(sel
 def test_forwarded_fba_role_qualification_uses_actual_paths_without_claiming_completion(selected, monkeypatch, changed_execution):
     """Operational port composition only; no native or scientific result is fabricated."""
     from gene_annotation_episode.execution_contracts import digest
-    from gene_annotation_episode.practical_execution_records import flux_balance_role_paths
+    from gene_annotation_episode.episodic_workflow.root.practical_execution_records import flux_balance_role_paths
     f = selected; family = _family(f); assignment = deepcopy(f.assignment)
     assignment['endpoint'] = 'completed_job_outputs'
     assignment['progress_requirements'] = [{'key': 'selected-outputs', 'credit': 9,
@@ -648,9 +648,9 @@ def test_results_schema_and_selector_use_existing_modes_and_common_job(selected,
 
 
 def test_installed_result_and_receiver_sources_are_exact_common_declarations(selected):
-    from gene_annotation_episode.flux_balance_return_views import fba_fact_sources
-    from gene_annotation_episode.flux_balance_returns import FluxBalanceReturns
-    from gene_annotation_episode.native_flux_balance_results import NativeFluxBalanceResults
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_return_views import fba_fact_sources
+    from gene_annotation_episode.episodic_workflow.root.flux_balance_returns import FluxBalanceReturns
+    from gene_annotation_episode.episodic_workflow.root.native_flux_balance_results import NativeFluxBalanceResults
     family = _family(selected)
     assert isinstance(family.native_flux_balance_results, NativeFluxBalanceResults)
     assert isinstance(family.native_flux_balance_returns, FluxBalanceReturns)

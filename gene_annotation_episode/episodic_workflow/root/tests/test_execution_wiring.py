@@ -18,13 +18,15 @@ from gene_annotation_episode import independent_execution as reconstruction
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.episode_reports import report_sources
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.providers import ModelConnection
-from gene_annotation_episode.runtime import Workflow, assemble_workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_execution_episodes_family import launch_assignment, native_assignment
 from test_practical_reconstruction import BeforeModel
 from test_practical_runtime import selected
@@ -339,7 +341,7 @@ def test_configured_ordinary_orf_reconstructs_actual_factory_and_services_withou
     from gene_annotation_episode.domain import ContractError
     from gene_annotation_episode.molecular_sequence_results import MolecularSequenceResults
     from gene_annotation_episode.molecular_sequence_tools import BINDING_VERSION, ORF_TOOL
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
     call, calls = selected_call
     selected = call['selected']
     _guard_molecular_binding_construction(monkeypatch)

@@ -9,7 +9,8 @@ from gene_annotation_episode.episodic_workflow.root.communication import (Report
     validate_closed_schema, validate_form)
 from gene_annotation_episode.domain import identity, obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_reports import closing_yield, report_sources as yield_sources
+from gene_annotation_episode.episodic_workflow.root.closing_episode_yield import closing_yield
+from gene_annotation_episode.episode_reports import report_sources as yield_sources
 from gene_annotation_episode.episodic_workflow.root.numerical import (NumericBand, SignedNumericBand,
     STATUS_INSUFFICIENT, STATUS_UNIDENTIFIABLE, YieldController, YieldEstimate)
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary

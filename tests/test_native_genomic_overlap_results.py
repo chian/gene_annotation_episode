@@ -54,7 +54,7 @@ def receipt(case, position=0):
 
 def selected_outcome(value):
     if "pending_work_after_action" in value:
-        from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
+        from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
         validate_pending(value["pending_work_after_action"])
     return {key: item for key, item in value.items() if key != "pending_work_after_action"}
 

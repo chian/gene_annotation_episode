@@ -6,16 +6,16 @@ from functools import partial
 import json
 from types import SimpleNamespace
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a110.communication import plain
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a110.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a110.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_report_contracts import reaction_semantic_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a110.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a110.library.literature_source_presentation import render_literature_experimental_prompt, _steering
-from gene_annotation_episode.runtime import run_workflow
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a110.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.a110.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_meanings import semantic_fixture, reopen_read_only
 from test_runtime import FixtureController, ScriptedProvider
 
@@ -99,7 +99,7 @@ def test_actual_selected_delivery_named_models_resources_and_first_readonly_disp
         reopen_read_only(store)
         def forbidden(*args, **kwargs): raise AssertionError("readonly display reacquired or mutated scientific data")
         for name in ("get_artifact", "artifact", "put", "transaction", "commit_reasoning"): monkeypatch.setattr(store, name, forbidden)
-        monkeypatch.setattr("gene_annotation_episode.providers.ModelConnection", forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a110.providers.ModelConnection", forbidden)
         monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage.read_reaction_inputs", forbidden)
         monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage.populate_reaction_constraints", forbidden)
         binding = LiteratureEpisode(WorkflowServices(SimpleNamespace(store=store, run_id=result["run_id"])), rate_population=True)

@@ -222,7 +222,7 @@ def test_structure_task_and_conditional_meanings_repeat_at_provider_boundary(tmp
 
 def test_parent_keeps_own_task_and_receives_physical_panel_once(tmp_path):
     from gene_annotation_episode.episodic_workflow.root.a102.decision_context import state_frame
-    from gene_annotation_episode.episodic_workflow.root.a102.literature_reference_parent_prompt import REFERENCE_PARENT_TASK
+    from gene_annotation_episode.episodic_workflow.root.library.literature_reference_parent_presentation import REFERENCE_PARENT_TASK
     from gene_annotation_episode.episodic_workflow.root.a102.literature_structure_prompt import STRUCTURE_TASK
     from test_literature_experimental_prompt_delivery import LiteratureWire, snapshot, complete
     store, context, args = setup_case(tmp_path / 'state')

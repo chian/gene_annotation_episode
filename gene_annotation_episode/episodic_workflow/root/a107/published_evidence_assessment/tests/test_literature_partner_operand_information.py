@@ -7,24 +7,23 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.composition_information import (
+from gene_annotation_episode.episodic_workflow.root.a107.composition_information import (
     CONTRACT_ARGUMENT_TRANSPORT, CONTRACT_INFORMATION_PROFILE,
 )
 from gene_annotation_episode.domain import validate_schema
-from gene_annotation_episode.episode_contract_information import operation_contract_information
-from gene_annotation_episode.episodic_workflow.root.a107.published_evidence_assessment.episode import LiteratureEpisode, _population_catalog
+from gene_annotation_episode.episodic_workflow.root.a107.episode_contract_information import operation_contract_information
+from gene_annotation_episode.episodic_workflow.root.a107.published_evidence_assessment.episode import LiteratureEpisode
+from gene_annotation_episode.episodic_workflow.root.library.root_literature_contracts import _population_catalog
 from gene_annotation_episode.episodic_workflow.root.a107.literature_experimental_contracts import ExperimentalContractError
-from gene_annotation_episode.episodic_workflow.root.a107.literature_experimental_prompt import (
-    EXPERIMENTAL_TASK, render_literature_experimental_prompt,
-)
+from gene_annotation_episode.episodic_workflow.root.library.literature_declared_task_text import EXPERIMENTAL_TASK
+from gene_annotation_episode.episodic_workflow.root.library.literature_prompt_composition import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a107.literature_native_rate_operand_information import (
     rate_source_population_schema_with_information,
 )
 from gene_annotation_episode.episodic_workflow.root.a107 import literature_partner_operand_information as information
-from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_native_inputs import (
-    COMPONENTS, partner_source_population_schema, read_partner_native_inputs,
-)
-from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_prompt import PARTNER_TASK
+from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_native_inputs import COMPONENTS
+from gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_native_inputs import partner_source_population_schema, read_partner_native_inputs
+from gene_annotation_episode.episodic_workflow.root.a107.library.partner_source_instruction_text import PARTNER_TASK
 from gene_annotation_episode.schema_information_text import parse_schema_information
 
 

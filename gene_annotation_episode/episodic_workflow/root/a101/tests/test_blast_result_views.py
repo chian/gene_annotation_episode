@@ -10,12 +10,12 @@ import pytest
 from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode.api_blast import NCBIBlastService
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_result_views import read_blast_hsp, blast_hsp_facts
-from gene_annotation_episode.communication import form_with_facts, validate_form
+from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, validate_form
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a101.episode_services import WorkflowServices
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 
 def snapshot(content, request):

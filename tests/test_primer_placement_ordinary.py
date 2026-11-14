@@ -25,9 +25,10 @@ from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.molecular_sequence_execution_contracts import SOFTWARE_VERSION
 from gene_annotation_episode.molecular_sequence_results import MolecularSequenceResults
-from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.task_action_units import ActionFailure
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_molecular_provider_acquisition_host import _controller, _credit
 from test_runtime import ScriptedProvider
 

@@ -12,11 +12,12 @@ import xml.etree.ElementTree as ET
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_a105_worksheet import a105_worksheet_template, VERSION
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import render_literature_experimental_prompt, EXPERIMENTAL_TASK
-from gene_annotation_episode.episodic_workflow.root.literature_reference_parent_prompt import REFERENCE_PARENT_TASK
+from gene_annotation_episode.episodic_workflow.root.library.literature_prompt_composition import render_literature_experimental_prompt
+from gene_annotation_episode.episodic_workflow.root.library.literature_declared_task_text import EXPERIMENTAL_TASK
+from gene_annotation_episode.episodic_workflow.root.library.literature_reference_parent_presentation import REFERENCE_PARENT_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_stoichiometric_balance_inputs import (
     VERSION as INPUT_VERSION, read_stoichiometric_balance_inputs)
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_stoichiometric_balance_calculations import (
@@ -24,9 +25,9 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_stoi
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_stoichiometric_balance_prompt import STOICHIOMETRIC_BALANCE_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_stoichiometric_balance_storage import (
     LiteratureStoichiometricBalanceRepository, NAMESPACE)
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import FixtureController
 
 ROOT = Path(__file__).resolve().parents[4]

@@ -12,7 +12,7 @@ import tarfile
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a107.communication import plain
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_inputs import partner_population_schema

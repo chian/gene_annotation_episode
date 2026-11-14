@@ -9,8 +9,8 @@ from types import MethodType, SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
-from gene_annotation_episode.scientific_process_prompt import render_episode_steering
-from gene_annotation_episode.episodic_workflow.root.waiting import completed_action_context
+from gene_annotation_episode.episodic_workflow.root.library.decision_steering_display import render_episode_steering
+from gene_annotation_episode.episodic_workflow.root.wait_events import completed_action_context
 from method_loop.durable import EventTargetError
 from method_loop.episode import Context
 from method_loop.suspension import SuspensionState

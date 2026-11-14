@@ -22,9 +22,11 @@ from gene_annotation_episode.episodic_workflow.root.execution_service_setup impo
 from gene_annotation_episode.molecular_measurement_tools import (
     MolecularOperationUnpublished, _publication_profile, _recorded_molecular_action_details,
 )
-from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow, _compile_form
+from gene_annotation_episode.episodic_workflow.root.task_action_units import ActionFailure
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.workflow_values import _compile_form
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_esm_gene_embeddings import RAW, deployment, document, genes, parameters, selection, supplied
 from tests.test_runtime import ScriptedProvider
 from tests.test_vcf_result_workflow import _single_saved_result_controller, _tables, _zero
@@ -176,7 +178,7 @@ def test_unreceived_actual_file_is_denied_before_body_or_worker(tmp_path,monkeyp
             f"{value.flow.run_id}:{context.episode_id}:0",contracts.TOOL)
         runtime=json.loads(row["result"])
         assert set(runtime)==set(details["outcome"])|{"pending_work_after_action"}
-        from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
+        from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
         pending=runtime["pending_work_after_action"]
         assert validate_pending(pending)==pending and pending["items"]==[]
         assert details["outcome"]=={key:item for key,item in runtime.items() if key!="pending_work_after_action"}

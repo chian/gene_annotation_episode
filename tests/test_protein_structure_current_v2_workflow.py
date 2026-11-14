@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.root.protein_structure_operands i
 )
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 F = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.workflow_410")

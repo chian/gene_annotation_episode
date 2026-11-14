@@ -109,7 +109,7 @@ def test_declared_partial_preview_is_nonmutating_and_never_recursive(preview_siz
 
 def test_actual_read_batches_keep_sources_partial_rows_and_exact_selected_reads(tmp_path):
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from test_library_targets import library, members
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
@@ -149,7 +149,7 @@ def test_actual_read_batches_keep_sources_partial_rows_and_exact_selected_reads(
 ])
 def test_actual_small_derivations_share_generated_publication_contract(tmp_path, name, arguments):
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from test_library_targets import library, members
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")
@@ -164,7 +164,7 @@ def test_actual_small_derivations_share_generated_publication_contract(tmp_path,
 def test_actual_all_failed_read_batch_bounds_repeated_feedback_but_observes_only_next_read(tmp_path):
     import asyncio
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from test_library_targets import library, members
     with Store(tmp_path / "state") as store:
         _, target = library(store, tmp_path, molecule="dna")

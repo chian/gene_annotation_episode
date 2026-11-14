@@ -17,26 +17,27 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, validate_schema
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.molecular_measurement_tools import authenticate_molecular_invocation
-from gene_annotation_episode.protein_structure_action_records import (
+from gene_annotation_episode.episodic_workflow.root.protein_structure_action_records import (
     ProteinStructureActionRecords, SAVED_SOURCE, VIEW_SOURCE,
     validate_protein_structure_tool_result,
 )
-from gene_annotation_episode.protein_structure_tools import (
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools import (
     SAVED_WORK_VERSION, normalize_protein_structure_configuration,
     prepare_protein_structure_work, protein_structure_tool_catalog,
     validate_prepared_protein_structure_work,
 )
-from gene_annotation_episode.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.task_action_units import ActionFailure
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.native_protein_structure_contracts import POLICY
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from test_protein_structure_ordinary_configuration import resources, environments
 
 
@@ -90,9 +91,9 @@ def retained(tmp_path, monkeypatch):
         tools.configure_protein_structure_resources(resources(tmp_path), environments())
         for module, names in (
                 ("gene_annotation_episode.native_lifecycle", ("prepare_job", "start_prepared", "resume_start", "wait_job", "status", "collect")),
-                ("gene_annotation_episode.protein_structure_tools", ("run_cancellable_native", "_run_selected", "_prepare_result_worker", "resolve_protein_structure_operands")),
-                ("gene_annotation_episode.protein_structure_formats", ("parse_pdb_structure", "parse_mmcif_structure")),
-                ("gene_annotation_episode.protein_structure_calculations", ("calculate_protein_structure_components", "fit_ca_transform")),
+                ("gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools", ("run_cancellable_native", "_run_selected", "_prepare_result_worker", "resolve_protein_structure_operands")),
+                ("gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats", ("parse_pdb_structure", "parse_mmcif_structure")),
+                ("gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations", ("calculate_protein_structure_components", "fit_ca_transform")),
                 ("gene_annotation_episode.acquisition.PublicClients", ("_http",))):
             for name in names:
                 monkeypatch.setattr(module + "." + name, forbidden)
@@ -156,7 +157,7 @@ def corrupt_summary_values(result):
 
 def test_saved_union_keeps_native_inspect_and_extract_contracts(tmp_path):
     from test_protein_structure_ordinary_workflow import _requests
-    from gene_annotation_episode.protein_structure_tools import _validate_saved_arguments
+    from gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools import _validate_saved_arguments
     configuration = normalize_protein_structure_configuration(resources(tmp_path), environments(), resources(tmp_path)["selected-local"]["policy"])
     catalog = protein_structure_tool_catalog(configuration)
     with Store(tmp_path / "schema-store") as store:

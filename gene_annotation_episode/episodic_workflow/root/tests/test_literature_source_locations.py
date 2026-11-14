@@ -9,17 +9,17 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_inputs import ASSAY_LITERAL_FIELDS, PRIMITIVE_ORDER
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_storage import LiteratureAssayRepository, assay_cells_schema
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes, ROLES
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
 from test_source_locations import source
 
@@ -173,10 +173,10 @@ def test_c7_page_descendants_wrong_page_unreceived_and_ancestor_scope(tmp_path, 
 
 def test_real_catalog_initial_task_delta_restoration_and_helper_fingerprint(tmp_path, monkeypatch):
     from method_loop.durable import DurableExecutionError
-    from gene_annotation_episode.decision_context import state_frame
-    from gene_annotation_episode.episode_composition import compose_episode_bindings
-    from gene_annotation_episode.episode_journal import Journal
-    from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import EXPERIMENTAL_TASK
+    from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+    from gene_annotation_episode.episodic_workflow.root.episode_composition import compose_episode_bindings
+    from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+    from gene_annotation_episode.episodic_workflow.root.library.literature_declared_task_text import EXPERIMENTAL_TASK
     from test_literature_experimental_prompt_delivery import LiteratureWire, snapshot, complete
     store, row, context, binding = fixture(tmp_path/'state')
     with store:

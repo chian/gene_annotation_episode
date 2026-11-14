@@ -13,14 +13,14 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.native_protein_structure_acquisition import retained_protein_structure_file
-from gene_annotation_episode.native_protein_structure_returns import (
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_acquisition import retained_protein_structure_file
+from gene_annotation_episode.episodic_workflow.root.native_protein_structure_returns import (
     FAILURE_SOURCE, PROJECTION_SOURCE, SAVED_SOURCE,
 )
-from gene_annotation_episode.protein_structure_authority import ProteinStructureOperandError
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
 from gene_annotation_episode.state import Store
 
 
@@ -118,9 +118,9 @@ def actual(tmp_path_factory):
 
 def deny_producer(monkeypatch, f):
     from gene_annotation_episode import native_lifecycle
-    from gene_annotation_episode import native_protein_structure_acquisition as acquisition
-    from gene_annotation_episode import native_protein_structure_results as results
-    from gene_annotation_episode import native_protein_structure_worker as worker
+    from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_acquisition as acquisition
+    from gene_annotation_episode.episodic_workflow.root import native_protein_structure_results as results
+    from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_worker as worker
     for name in ("read_target", "describe_target", "observe_target", "read_file"):
         monkeypatch.setattr(f.owner.job_progress_provider.targets, name, forbidden)
     monkeypatch.setattr(acquisition, "_producer_file", forbidden)
@@ -128,7 +128,7 @@ def deny_producer(monkeypatch, f):
     monkeypatch.setattr(worker, "execute_protein_structure_request", forbidden)
     prepare = native_lifecycle.prepare_job
     def saved_worker_only(command, **kwargs):
-        assert command[1:4] == ["-B", "-m", "gene_annotation_episode.protein_structure_result_worker"]
+        assert command[1:4] == ["-B", "-m", "gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_worker"]
         assert len(command) == 5
         assert json.loads(Path(command[4]).read_bytes())["mode"] == "saved_sheet_recalculation"
         return prepare(command, **kwargs)

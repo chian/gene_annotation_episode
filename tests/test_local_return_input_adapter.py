@@ -11,8 +11,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homo
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.wait_estimation_inputs import (WaitInputs,
     validate_local_return_history)
-from gene_annotation_episode.episodic_workflow.root.waiting import (WaitError, completed_action_context,
-    estimate_wait)
+from gene_annotation_episode.episodic_workflow.root.wait_events import WaitError, completed_action_context, estimate_wait
 
 
 STAMP = "2026-10-21T12:00:00+00:00"

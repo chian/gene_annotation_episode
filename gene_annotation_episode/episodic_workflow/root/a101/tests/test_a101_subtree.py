@@ -86,10 +86,10 @@ def test_a101_subtree_returns_auditable_functional_distinctions(tmp_path, fragme
 def test_a101_missing_traceback_returns_partial_findings_and_preserves_native_scores(tmp_path):
     from gene_annotation_episode.episodic_workflow.root.a101.a101_investigation import A101Subtree, initial_report
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
-    from gene_annotation_episode.runtime import Workflow
-    from gene_annotation_episode.tools import ToolRegistry
-    from gene_annotation_episode.numerical import YieldController, YieldEstimate, NumericBand
-    from gene_annotation_episode.investigation_progress import ScientificFindingProgress, FindingProgressPolicy
+    from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.a101.numerical import YieldController, YieldEstimate, NumericBand
+    from gene_annotation_episode.episodic_workflow.root.a101.investigation_progress import ScientificFindingProgress, FindingProgressPolicy
     from a101_subtree_fixture import PUBLICATION, action, reasoning
 
     with Store(tmp_path / "state") as store:

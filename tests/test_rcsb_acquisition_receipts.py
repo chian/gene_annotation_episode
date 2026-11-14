@@ -21,7 +21,7 @@ from gene_annotation_episode.data_acquisition_receipts import acquisition_receip
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
 from test_scientific_process_runtime import action
 

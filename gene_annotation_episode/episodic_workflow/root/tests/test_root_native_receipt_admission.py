@@ -91,7 +91,7 @@ def test_global_store_admits_original_artifact_and_reopens_unknown_measurement(s
     receipt = _receipt(store, operands, measurement)
     before = deepcopy(receipt)
     # Before the coordinated State import correction this actual boundary raises
-    # ModuleNotFoundError for deleted gene_annotation_episode.execution_recording.
+    # ModuleNotFoundError for deleted gene_annotation_episode.episodic_workflow.root.execution_recording.
     # Preserve that baseline; no catch, skip, facade or replacement type hides it.
     admitted = store.put('native_execution', receipt, origin='tool')
     assert receipt == before

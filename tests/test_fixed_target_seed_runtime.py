@@ -20,7 +20,7 @@ from gene_annotation_episode.fixed_target_seed import FixedTargetSeedError, prep
 from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_fixed_target_seed import make_seed_witness
 from test_runtime import FixtureController, ScriptedProvider
 

@@ -19,7 +19,8 @@ from gene_annotation_episode.episodic_workflow.root.library.flux_balance_return_
 )
 from gene_annotation_episode.episodic_workflow.root.flux_balance_returns import FluxBalanceReturns, ORDINARY_PREFIX
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 
 
 MODEL = "flux_balance_model_views"

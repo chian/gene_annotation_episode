@@ -14,7 +14,7 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode import scientific_process_prompt as prompt
-from gene_annotation_episode.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.macs2_peak_presentation import render_macs2_peak_result
 from gene_annotation_episode.macs2_peak_request_binding import (
@@ -24,7 +24,7 @@ from gene_annotation_episode.macs2_peak_result_contracts import (
     VERSION, macs2_peak_fact_sources, macs2_peak_result_schema, validate_macs2_peak_return,
 )
 from gene_annotation_episode import native_macs2_peak_execution as native
-from gene_annotation_episode.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 from gene_annotation_episode.state import Store
 from test_native_atac_differential_contracts import fake_software as atac_engineering_software
 
@@ -268,7 +268,7 @@ def test_malformed_unknown_and_old_profiles_keep_prior_generic_behavior():
 
 def _capture_outcome():
     """Literal acquisition controls, not a native producer or custody witness."""
-    from gene_annotation_episode.local_file_capture_results import ORIGIN
+    from gene_annotation_episode.episodic_workflow.root.local_file_capture_results import ORIGIN
     files = []
     for index, (fmt, availability, size, failure) in enumerate((
         ('macs2_peaks_xls_narrow', 'retained', 15, None),
@@ -285,7 +285,7 @@ def _capture_outcome():
 
 
 def _capture_state():
-    from gene_annotation_episode.local_file_capture_results import OUTCOMES_SCHEMA
+    from gene_annotation_episode.episodic_workflow.root.local_file_capture_results import OUTCOMES_SCHEMA
     state = _science_state()
     state['available_report_facts']['execution_file_capture_outcomes'] = dict(type='array',
         meaning='Engineering declared original capture facts.', report_schema=deepcopy(OUTCOMES_SCHEMA))
@@ -377,7 +377,7 @@ def test_empty_capture_and_literal_scientific_strings_are_preserved():
 def _monitor_service_ports(*, known=True, inside=True, parent_is_macs2=True, role='monitor'):
     """Engineered owner callbacks test ordering, not actual receipt authority."""
     from types import SimpleNamespace
-    from gene_annotation_episode.episode_services import WorkflowServices
+    from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
     events, store = [], object()
     assignment = dict(version='monitor_assignment_v1', target_handle=SOURCE,
         requested_fields=['execution_status', 'result_available'], known_progress_refs=[],

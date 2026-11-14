@@ -4,7 +4,7 @@ from copy import deepcopy
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_prompt import A106_PARENT_TASK
-from gene_annotation_episode.episodic_workflow.root.literature_task_selection import A105_ASSAY_SELECTION_TASK
+from gene_annotation_episode.episodic_workflow.root.library.literature_task_selection import A105_ASSAY_SELECTION_TASK
 from test_literature_reference_parent_prompt import render, split, state
 
 

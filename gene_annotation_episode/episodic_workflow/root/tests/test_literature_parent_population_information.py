@@ -9,21 +9,20 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
 from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
-from gene_annotation_episode.episode_composition import compose_episode_bindings
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes, ROLES, _population_catalog
-from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import SAVED_NUMERICAL_RETURN_TASK
+from gene_annotation_episode.episodic_workflow.root.episode_composition import compose_episode_bindings
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes, ROLES
+from gene_annotation_episode.episodic_workflow.root.library.root_literature_contracts import _population_catalog
+from gene_annotation_episode.episodic_workflow.root.library.literature_declared_task_text import SAVED_NUMERICAL_RETURN_TASK
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_storage import rate_cells_schema
-from gene_annotation_episode.episodic_workflow.root.literature_reference_parent_prompt import (
-    REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt,
-)
-from gene_annotation_episode.runtime import run_workflow
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.library.literature_reference_parent_presentation import REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_literature_experimental_prompt_delivery import (
     LiteratureWire, OUTPUT_SCHEMA, complete, snapshot,
 )
@@ -47,8 +46,8 @@ def baseline():
 
 def current_baseline():
     """Retain the fourteen historical operations and their current input guidance."""
-    from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_native_inputs import partner_source_population_schema
-    from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_operand_information import partner_source_population_schema_with_information
+    from gene_annotation_episode.episodic_workflow.root.library.literature_partner_native_inputs import partner_source_population_schema
+    from gene_annotation_episode.episodic_workflow.root.library.literature_partner_operand_information import partner_source_population_schema_with_information
     rows = baseline()
     partner, = [row for row in rows if row["name"] == "literature.partner.source.populate"]
     assert partner["input_schema"] == partner_source_population_schema()
@@ -82,7 +81,7 @@ def optical_addition():
     """Optical adds only existing q/Vq input population to the sixteen entries."""
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_optical_inputs import optical_arguments_schema
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_optical_storage import optical_cells_schema
-    from gene_annotation_episode.communication import validate_closed_schema
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema
     entry, = [row for row in _population_catalog() if row["name"] == "literature.optical.populate"]
     assert entry["input_schema"] == optical_arguments_schema()
     assert "NADH-depletion" in entry["description"]
@@ -94,7 +93,7 @@ def kinetic_addition():
     """Native kinetic contrast is an additive finite A105 component route."""
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_inputs import kinetic_arguments_schema
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage import kinetic_cells_schema
-    from gene_annotation_episode.communication import validate_closed_schema
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema
     entry, = [row for row in _population_catalog() if row["name"] == "literature.kinetic.populate"]
     assert entry["input_schema"] == kinetic_arguments_schema()
     assert "no covariance/model source reader" in entry["description"]
@@ -105,7 +104,7 @@ def kinetic_addition():
 def kinetic_model_addition():
     """The optional kinetic log-model operation preserves the native fixture."""
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_model_storage import kinetic_model_population_schema, kinetic_model_cells_schema
-    from gene_annotation_episode.communication import validate_closed_schema
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema
     entry, = [row for row in _population_catalog() if row["name"] == "literature.kinetic.model.populate"]
     assert entry["input_schema"] == kinetic_model_population_schema()
     assert "actually received committed native kinetic sheet" in entry["description"]
@@ -126,7 +125,7 @@ def interaction_addition():
 def interaction_model_addition():
     """Prepared-model supplemental operation leaves the frozen native route intact."""
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_interaction_model_storage import binding_interaction_model_population_schema, binding_interaction_model_cells_schema
-    from gene_annotation_episode.communication import validate_closed_schema
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema
     entry, = [row for row in _population_catalog() if row["name"] == "literature.binding.interaction.model.populate"]
     assert entry["input_schema"] == binding_interaction_model_population_schema()
     assert "actually received committed native interaction sheet" in entry["description"]

@@ -19,11 +19,12 @@ from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, _compile_form
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.workflow_values import _compile_form
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG, PREFIX, metadata, OBJECT_UUID
 from test_bvbrc_appservice_inputs import NativeClient
 from test_bvbrc_proteome_directional_returns import DirectionalDriver, DIRECTIONAL_SOURCES, selected_fields

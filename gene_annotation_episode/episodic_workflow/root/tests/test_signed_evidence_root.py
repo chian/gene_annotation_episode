@@ -8,15 +8,16 @@ import math
 import pytest
 
 from method_loop.identities import EpisodeRef
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_a106_subscore import REQUESTED, COMPONENTS, SCORE_COMPONENT
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_a106_subscore_storage import LiteratureA106SubscoreRepository
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_intervention_storage import LiteratureInterventionRepository
-from gene_annotation_episode.runtime import run_workflow, controller_from_settings
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
+from gene_annotation_episode.episodic_workflow.root.saved_run_configuration import controller_from_settings
 from gene_annotation_episode.episodic_workflow.root.scoring import SignedEvidenceRootSupport
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_a106_subscore import final_arguments
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_intervention_storage import intervention_fixture
 from test_runtime import ScriptedProvider
@@ -446,8 +447,8 @@ def test_opposing_axis_report_without_received_finding_earns_no_root_credit(tmp_
     from gene_annotation_episode.domain import identity
     from gene_annotation_episode.episode_bindings import BindingContext
     from gene_annotation_episode.episodic_workflow.root.root_axis_scalars import _result
-    from gene_annotation_episode.scientific_process_records import scientific_invocation_ref
-    from gene_annotation_episode.scientific_process_reports import project_process_result
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_invocation_ref
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import project_process_result
     from test_scientific_process_return_records import _full_row, _libraries
 
     supplied_owner_contributions(monkeypatch, lambda store, context, axis, **options:
@@ -463,8 +464,8 @@ def test_opposing_axis_report_without_received_finding_earns_no_root_credit(tmp_
         child_path = (*root.path, ('scientific_process', 'child_0'))
         selection = _full_row(library, tools)['selection']
         original = _full_row(library, tools)
-        from gene_annotation_episode.investigation_progress import ScientificFindingProgress, FindingProgressPolicy
-        from gene_annotation_episode.scientific_process_reports import credit_binding_ref
+        from gene_annotation_episode.episodic_workflow.root.investigation_progress import ScientificFindingProgress, FindingProgressPolicy
+        from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import credit_binding_ref
         original_definition = {**ScientificFindingProgress(FindingProgressPolicy(1)).as_record(),
             'proposed_annotation_ref': proposal}
         original.update(invocation_ref=scientific_invocation_ref(root.run_id, child_path),
@@ -484,7 +485,7 @@ def test_opposing_axis_report_without_received_finding_earns_no_root_credit(tmp_
             {'message': {'scientific_invocation_ref': scientific_invocation_ref(root.run_id, child_path)}})
         form = {'results': [returned]}
         schema = {'properties': {'results': {'x-source': 'scientific_process_results'}}}
-        monkeypatch.setattr('gene_annotation_episode.episode_return_records.EpisodeReturnRecords.received_attempts',
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.episode_return_records.EpisodeReturnRecords.received_attempts',
             lambda self, context: iter(((child, form, schema), (child, form, schema))))
         view = SignedEvidenceRootSupport(task_credit=True)(store, root.scope,
             known_record_refs=[target, proposal], run_id=root.run_id, episode_id=root.episode_id)
@@ -500,7 +501,7 @@ def test_opposing_axis_report_without_received_finding_earns_no_root_credit(tmp_
 
         changed = deepcopy(form)
         changed['results'][0]['credit'] = 4.5
-        monkeypatch.setattr('gene_annotation_episode.episode_return_records.EpisodeReturnRecords.received_attempts',
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.episode_return_records.EpisodeReturnRecords.received_attempts',
             lambda self, context: iter(((child, form, schema), (child, changed, schema))))
         with pytest.raises(ValueError, match='root_axis_replayed_result_conflict'):
             SignedEvidenceRootSupport(task_credit=True)(store, root.scope,
@@ -510,11 +511,11 @@ def test_opposing_axis_report_without_received_finding_earns_no_root_credit(tmp_
 @pytest.mark.parametrize('with_collection_member', [False, True])
 def test_saved_scientific_return_credits_received_finding_without_using_child_scalar(
         tmp_path, monkeypatch, with_collection_member):
-    from gene_annotation_episode.episode_receipts import EpisodeReceipts
-    from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+    from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+    from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
     from gene_annotation_episode.episodic_workflow.root.returns import receiver_context
-    from gene_annotation_episode.scientific_process_records import scientific_invocation_ref
-    from gene_annotation_episode.scientific_process_reports import credit_binding_ref, project_process_result
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_invocation_ref
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import credit_binding_ref, project_process_result
     from test_investigation_progress import put_finding
     from test_scientific_findings import quoted_observation, target_question
     from test_scientific_process_return_records import _full_row, _libraries
@@ -751,7 +752,7 @@ def test_runtime_discovers_new_proposal_and_updates_score_on_later_decision(tmp_
         # Restricted roots retain their existing action catalog. Inspect the
         # original detail port against this saved receiver without changing it.
         from types import SimpleNamespace
-        from gene_annotation_episode.runtime import assemble_workflow
+        from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
         episode_id = store.db.execute('SELECT episode_id FROM runtime_episodes').fetchone()[0]
         settings = json.loads(store.db.execute('SELECT settings FROM runtime_runs').fetchone()[0])
         workflow = assemble_workflow(store, ToolRegistry(store), ScriptedProvider([]), tmp_path / 'workflow',

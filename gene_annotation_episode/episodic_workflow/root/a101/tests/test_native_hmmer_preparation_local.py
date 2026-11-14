@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparatio
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparation_local import (
     ATTEMPT_NAME, PLAN_NAME, local_hmmer_preparation_plan, prepare_local_hmmer_preparation,
 )
-from gene_annotation_episode.practical_execution_state import _immutable
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable
 from test_native_hmmer_preparation_contracts import job
 from test_native_hmmer_preparation_driver import POLICY
 

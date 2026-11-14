@@ -18,20 +18,20 @@ import pytest
 
 from method_loop.durable import DurableExecutionStore
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a101.communication import plain
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_monitoring import ProgressProvider
-from gene_annotation_episode.execution_progress import ExecutionProgressProvider
+from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.a101.episode_monitoring import ProgressProvider
+from gene_annotation_episode.episodic_workflow.root.a101.execution_progress import ExecutionProgressProvider
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_preparation_result_views import preparation_fact_sources, preparation_projection_catalog
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparation_acquisition import capture_local_bundle
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_contracts import PROGRAM_MODES, requested_job_from_hmmer_preparation
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparation_local import (
     ATTEMPT_NAME, PLAN_NAME, local_hmmer_preparation_plan,
 )
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-from gene_annotation_episode.practical_execution_records import (
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_records import (
     ASSIGNMENT_SCHEMA, canonical, digest, validate_assignment,
 )
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes

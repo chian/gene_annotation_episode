@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.root.library.native_infernal_prep
     native_infernal_preparation_tool_contracts, native_infernal_preparation_tool_information,
     validate_native_infernal_preparation_bindings,
 )
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import ASSIGNMENT_SCHEMA, validate_assignment
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
 from test_native_infernal_preparation_driver import CASES, POLICY, native_job

@@ -17,18 +17,18 @@ from jsonschema import Draft202012Validator
 import pytest
 
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.communication import validate_closed_schema
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, RESULTS_VERSION
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.infernal_preparation_result_views import preparation_fact_sources
-from gene_annotation_episode.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
-from gene_annotation_episode.native_infernal_preparation_local import local_infernal_preparation_plan
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_result_views import preparation_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_local import local_infernal_preparation_plan
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.practical_yield import PracticalYieldEstimator
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_native_infernal_preparation_driver import CASES, POLICY, native_job
 
 
@@ -349,7 +349,7 @@ def test_saved_result_replay_never_reopens_native_paths_or_recalculates(tmp_path
         # asyncio's wakeup socket is local plumbing, not result acquisition.
         monkeypatch.setattr(socket, 'socket', local_socket_only)
         monkeypatch.setattr(subprocess, 'Popen', forbidden)
-        monkeypatch.setattr('gene_annotation_episode.native_infernal_preparation_worker.grade_infernal_preparation', forbidden)
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker.grade_infernal_preparation', forbidden)
         replay = asyncio.run(case.owner.execute(case.contexts[0], 'execution.results.collect', {}, body['operation_key']))
         # Runtime adds its own pending-work snapshot after the operation returns.
         assert replay == {key: value for key, value in original.items() if key != 'pending_work_after_action'}
@@ -372,7 +372,7 @@ def test_failed_acquisition_returns_requested_failure_without_inventing_numerica
         else:
             def unavailable(*args, **kwargs):
                 raise ValueError('Synthetic unexpected grading error with diagnostic prose.')
-            monkeypatch.setattr('gene_annotation_episode.native_infernal_preparation_results.'
+            monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_infernal_preparation_results.'
                 'prepare_native_infernal_preparation_grading', unavailable)
     case = run_case(tmp_path, partial=True, before_collection=fail, form_options={'failures': True})
     try:

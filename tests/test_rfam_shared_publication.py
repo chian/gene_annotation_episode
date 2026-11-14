@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_contracts
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_infernal import HIT_ALIASES
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_views import project_rfam_batch_result
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_rfam_batch_returns import Harness, forbid_read_work, schema_for, selector
 from test_rfam_report_publication_returns import ReportHarness
 

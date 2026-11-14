@@ -140,7 +140,7 @@ def test_recorded_subject_operands_reach_actual_literature_wire(tmp_path, throug
 
 
 def test_source_provider_fields_are_not_promoted_to_host_rejection_feedback():
-    from gene_annotation_episode.episodic_workflow.root.component_axis_literature_prompt import _finding_subject_rejections
+    from gene_annotation_episode.episodic_workflow.root.presentation_fact_contract import _finding_subject_rejections
 
     provider = {'errors': [{'code': 'finding_source_subject_not_in_observation',
         'observation_subject_refs': ['reference_untrusted'],

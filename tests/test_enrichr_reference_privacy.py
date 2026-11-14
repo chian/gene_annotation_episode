@@ -21,10 +21,12 @@ from gene_annotation_episode.episodic_workflow.root.episode_receipts import Epis
 from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode import enrichr_reference_privacy as privacy
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, ReleasingContext, Workflow
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import ReleasingContext
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.episodic_workflow.root.waiting import PENDING_VERSION
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.wait_events import PENDING_VERSION
 from test_enrichr_returns import Harness
 
 

@@ -10,7 +10,7 @@ import pytest
 
 from gene_annotation_episode import protein_disorder_measurements as core
 from gene_annotation_episode import protein_disorder_result_contracts as contracts
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, form_with_facts, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.domain import ContractError

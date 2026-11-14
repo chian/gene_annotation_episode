@@ -18,7 +18,7 @@ import pytest
 from gene_annotation_episode.domain import ContractError, canonical
 from gene_annotation_episode.library_targets import read_ref
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode import materials_packing as packing
 from gene_annotation_episode.restriction_mapping_inputs import (
     restriction_sequence_witness, revalidate_restriction_sequence_witness,

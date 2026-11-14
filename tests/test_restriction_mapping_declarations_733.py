@@ -155,7 +155,7 @@ def save_pending(workflow,source,selected,index):
 
 def freeze_name(workflow,case,parent,child):
     """Unavailable namespace-only engineering fixture, with no measurements."""
-    from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
     context=workflow.binding_context(child.source)
     schema=plain(child.request.as_record())['report_contract']['measurements']['schema']
     group={'selection_policy':'all_own_completed_results','sequence_ref':case.scope['subject_refs'][0],
@@ -276,7 +276,8 @@ def test_journal_migration_preserves_old_attempts_and_unknown_proof(tmp_path):
 
 @pytest.mark.parametrize('fault',['missing','text'])
 def test_attempt_reconstruction_cannot_replace_recorded_declaration(tmp_path,monkeypatch,fault):
-    from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, WorkflowError
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+    from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
     store,case,workflow,parent,child,_=configured_case(tmp_path,monkeypatch)
     with store:
         freeze_name(workflow,case,parent,child)

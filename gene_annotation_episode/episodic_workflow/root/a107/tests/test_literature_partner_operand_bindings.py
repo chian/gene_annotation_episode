@@ -12,19 +12,20 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a107.communication import plain
 from gene_annotation_episode.domain import ContractError, canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a107.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.a107.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a107.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a107.published_evidence_assessment.episode import LiteratureEpisode
-from gene_annotation_episode.episodic_workflow.root.a107.library.literature_source_presentation import _steering, render_literature_experimental_prompt
+from gene_annotation_episode.episodic_workflow.root.a107.library.literature_source_presentation import _steering
+from gene_annotation_episode.episodic_workflow.root.library.literature_prompt_composition import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_storage import LiteraturePartnerRepository
 from gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_sheet_records import partner_cells_schema
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.a107.runtime import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a107.tools import ToolRegistry
 from test_literature_experimental_prompt_delivery import snapshot
 from gene_annotation_episode.episodic_workflow.root.a107.tests.test_literature_partner_native_storage import fixture, source, witness
 from test_runtime import FixtureController, ScriptedProvider
@@ -237,7 +238,7 @@ def test_actual_typed_subset_next_decisions_and_first_readonly_reconstruction(tm
     for name in ('put','artifact','transaction','commit_reasoning'):
         monkeypatch.setattr(reopened,name,forbidden)
     monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a107.literature_partner_storage.read_partner_inputs',forbidden)
-    monkeypatch.setattr('gene_annotation_episode.providers.ModelConnection',forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a107.providers.ModelConnection',forbidden)
     try:
         repo=LiteraturePartnerRepository(reopened,result['run_id'])
         assert repo.received_cells(receiver)==admitted

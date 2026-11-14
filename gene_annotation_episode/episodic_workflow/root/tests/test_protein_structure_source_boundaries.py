@@ -10,11 +10,11 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, RESULT_PROVIDER
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, RESULT_PROVIDER
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 PROTEIN_VERSION = "native_protein_structure_bundle_v1"

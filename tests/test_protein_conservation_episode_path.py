@@ -33,11 +33,12 @@ from gene_annotation_episode.episodic_workflow.root.evidence_axis_instructions i
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
-from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource, ReturnedActionUnit
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource
+from gene_annotation_episode.episodic_workflow.root.workflow_values import ReturnedActionUnit
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from tests.test_homer_motif_saved_workflow import _archive, _archive_value, _encode
 from gene_annotation_episode.episodic_workflow.root.tests.test_tf_binding_tools import (
     POLICY, PUBLICATION, ROOT, _assemble, _history, _inventory, _pin,

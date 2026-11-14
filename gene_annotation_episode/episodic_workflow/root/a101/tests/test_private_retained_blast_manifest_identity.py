@@ -20,7 +20,7 @@ def test_original_standard_bundle_keeps_retained_producer_identity(monkeypatch):
         result=standard.n.validate_standard_blast_database_bundle(bundle,
             original_job=inputs['job'],attempt_identity=inputs['attempt_identity'])
         assert result==before and bundle==before
-        assert bundle['producer_verification']['manifest']['entry_module']=='gene_annotation_episode.native_blast_standard_database_driver'
+        assert bundle['producer_verification']['manifest']['entry_module']=='gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_driver'
 
 
 @pytest.mark.parametrize('family',('database','standard_database'))

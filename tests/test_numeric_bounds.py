@@ -16,9 +16,9 @@ from gene_annotation_episode.domain import ATOM, ContractError, REASONING_SCHEMA
 from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, project_finding_progress
-from gene_annotation_episode.episodic_workflow.root.runtime import _action_generation_schema, _decode_action_response
+from gene_annotation_episode.episodic_workflow.root.task_action_contracts import _action_generation_schema, _decode_action_response
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 BOUNDS = ['less_than', 'less_or_equal', 'greater_than', 'greater_or_equal']

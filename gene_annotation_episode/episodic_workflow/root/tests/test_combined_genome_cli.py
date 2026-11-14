@@ -8,13 +8,13 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.all_evidence_tools import AllEvidenceToolRegistry
 from gene_annotation_episode.cli import main
 from gene_annotation_episode.episodic_workflow.root.root_axis_scalars import AXES, VERSION
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.state import Store
 
 
 def test_cli_run_forwards_combined_root_credit_and_all_axis_registry(tmp_path, monkeypatch, capsys):
     import gene_annotation_episode.cli as cli
-    import gene_annotation_episode.runtime as runtime
+    import gene_annotation_episode.episodic_workflow.root.runtime as runtime
 
     workspace = tmp_path / 'genome'
     with Store(workspace) as store:
@@ -64,7 +64,7 @@ def test_old_root_scalar_sum_binding_is_explicitly_incompatible():
 def test_combined_services_prepare_actual_axis_catalog_without_execution(tmp_path):
     from gene_annotation_episode.episodic_workflow.root.genome_investigation import GenomeEvidenceServices
     from gene_annotation_episode.resource_estimation import ResourceToolEstimator
-    from gene_annotation_episode.tool_configuration import build_tools
+    from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 
     source = Path(__file__).resolve().parents[4]
     resources = json.loads((source / 'examples/aurora_execution_resources.json').read_text())

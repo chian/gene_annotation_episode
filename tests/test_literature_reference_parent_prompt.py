@@ -5,11 +5,10 @@ from types import MappingProxyType
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.decision_context import INSTRUCTIONS
-from gene_annotation_episode.episodic_workflow.root.a105.literature_assay_prompt import ASSAY_TASK
-from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import EXPERIMENTAL_TASK
-from gene_annotation_episode.episodic_workflow.root.literature_reference_parent_prompt import (
-    REFERENCE_PARENT_TASK, VERSION, render_reference_evidence_parent_prompt,
-)
+from gene_annotation_episode.episodic_workflow.root.library.literature_assay_prompt import ASSAY_TASK
+from gene_annotation_episode.episodic_workflow.root.library.literature_declared_task_text import EXPERIMENTAL_TASK
+from gene_annotation_episode.episodic_workflow.root.library.literature_reference_parent_presentation import REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt
+from gene_annotation_episode.episodic_workflow.root.literature_reference_parent_prompt import VERSION
 
 
 def state():

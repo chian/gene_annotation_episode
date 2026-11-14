@@ -4,7 +4,7 @@ import pytest
 
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def fixture(tmp_path):

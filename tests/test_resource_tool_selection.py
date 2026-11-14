@@ -19,7 +19,7 @@ from gene_annotation_episode.scientific_process_setup import prepare_scientific_
 from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_information import selectors
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_hmmer_grading_publication import (QUERY, RetainedClient,
     prohibit_live_network_and_native_execution)
 from test_published_axis_workflow import PUBLICATION, ScriptedDecisions, StopBeforeDecision, select

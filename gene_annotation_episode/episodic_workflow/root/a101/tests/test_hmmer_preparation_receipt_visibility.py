@@ -1,7 +1,7 @@
 """A preparation source delivers selected references, not its retained archive."""
 import pytest
 
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.state import Store
 
 

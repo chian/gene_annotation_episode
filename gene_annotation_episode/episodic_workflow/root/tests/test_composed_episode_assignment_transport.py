@@ -16,11 +16,11 @@ from types import SimpleNamespace
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode import runtime
-from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root import runtime
+from gene_annotation_episode.episodic_workflow.root.composition_information import CONTRACT_INFORMATION_PROFILE
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_execution_episodes_family import native_assignment, launch_assignment
 from test_runtime import FixtureController
 
@@ -406,7 +406,7 @@ def test_current_recorded_full_profile_proves_exact_decoding_before_admission(co
 ])
 def test_unsaved_custody_reuses_runtime_marker_validation(tmp_path, marker):
     from test_bvbrc_appservice_custody import SavedRecords, launch_assignment as app_launch
-    from gene_annotation_episode.bvbrc_appservice_custody import AppServiceCustodyError
+    from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_custody import AppServiceCustodyError
     with Store(tmp_path / 'state') as store:
         records = SavedRecords(store)
         child = records.child(records.root, 'launch', app_launch(), 0, save=False, action=False)

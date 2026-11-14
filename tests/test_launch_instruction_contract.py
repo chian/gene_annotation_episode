@@ -19,7 +19,7 @@ from gene_annotation_episode.practical_resource_episodes import operation_catalo
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.requests import ROLES as HOMOLOGY_ROLES
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.api_execution import HMMERAPIExecution
 
 

@@ -5,7 +5,8 @@ import json
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes, _population_catalog
+from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.root_literature_contracts import _population_catalog
 from gene_annotation_episode.schema_information_text import (
     SchemaInformationError, parse_schema_information, render_schema_information, schema_fingerprint)
 

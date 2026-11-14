@@ -5,20 +5,20 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode import resource_service_setup
-from gene_annotation_episode.episode_application_services import EpisodeApplicationServices
-from gene_annotation_episode.execution_recording import HomologyStatistics
+from gene_annotation_episode.episodic_workflow.root.episode_application_services import EpisodeApplicationServices
+from gene_annotation_episode.episodic_workflow.root.execution_recording import HomologyStatistics
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import FileAsset, HomologyJobs, digest
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.resource_episodes import ResourceEpisodes
+from gene_annotation_episode.episodic_workflow.root.resource_episodes import ResourceEpisodes
 from gene_annotation_episode.episodic_workflow.root.a101.a101_homology_resource_adapter import HomologyResourceAdapter
 from gene_annotation_episode.resource_estimation import ResourceToolEstimator
 from gene_annotation_episode.resource_operational_credit import ResourceOperationalCredit
 from gene_annotation_episode.resource_service_setup import bind_resource_services
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 ROLES = ('launch', 'launch_api', 'launch_local', 'launch_hpc', 'results')

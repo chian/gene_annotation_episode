@@ -3,7 +3,7 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode import numerical
+from gene_annotation_episode.episodic_workflow.root.a106 import numerical
 from tools.replay_a106_yield import band_at_alpha, discovery_tradeoff, replay, validate_trace
 
 

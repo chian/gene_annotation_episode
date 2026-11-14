@@ -368,7 +368,7 @@ def test_real_practical_state_reservation_recovery(tmp_path, software, monkeypat
 
 def test_shared_local_operations_original_start_observe_collect(tmp_path, software, monkeypatch):
     from gene_annotation_episode.practical_execution_state import PracticalState
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
     from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations
     from gene_annotation_episode.native_chromatin_interaction_local import local_chromatin_interaction_plan
     seed = make_plan(tmp_path, software)

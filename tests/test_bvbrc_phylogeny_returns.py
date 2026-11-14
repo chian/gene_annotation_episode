@@ -22,7 +22,8 @@ from gene_annotation_episode.episodic_workflow.root.bvbrc_phylogeny_returns impo
 )
 from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain, validate_closed_schema, validate_form
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, _object
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import _object
 from gene_annotation_episode.state import Store
 from test_bvbrc_appservice_custody import SavedRecords, selector
 

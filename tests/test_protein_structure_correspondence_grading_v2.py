@@ -21,7 +21,8 @@ from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import validate_protein_structure_software
 from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import SequenceWork, ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_values import SequenceWork
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def envelope(version):

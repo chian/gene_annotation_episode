@@ -12,7 +12,8 @@ import shutil
 import pytest
 
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store

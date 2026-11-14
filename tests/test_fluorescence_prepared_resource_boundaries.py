@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_
     OPERATIONS, PREPARATION_METHODS, REPORT_PROFILES, fluorescence_environment,
     requested_job_from_fluorescence,
 )
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
 from native_fluorescence_prepared_test_support import (
     SCALE, declared_software, file_input, selected_preparation,
 )

@@ -15,7 +15,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_alignment_input_blocks import decode_native_block_alignment
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_alignment_input_phylip import decode_native_phylip_alignment
-from gene_annotation_episode.hmmalign_inputs import stockholm_digital_checksum
+from gene_annotation_episode.episodic_workflow.root.a101.library.hmmalign_inputs import stockholm_digital_checksum
 from test_hmmer_alignment_input_native_oracle import (
     _canonical,
     _fixture_bytes,

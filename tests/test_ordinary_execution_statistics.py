@@ -12,7 +12,7 @@ from gene_annotation_episode.resource_estimation import ResourceToolEstimator
 from gene_annotation_episode.run_statistics import RunHistory
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_scientific_hypervolume_runtime import assessment
 
 

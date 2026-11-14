@@ -12,20 +12,20 @@ from unittest.mock import patch
 
 import pytest
 
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.a106.communication import (
     ReportBoundaryError, form_with_facts, plain, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.domain import ContractError, canonical, obj, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a106.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a106.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a106.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_experimental_prompt import _steering
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_summary_storage import LiteraturePerturbationSummaryProjection, perturbation_summary_cells_schema
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.a106.runtime import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a106.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary import source_data, extract, calculate, covariance
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary_integration import fixture, source, binding_for
 from test_runtime import FixtureController, ScriptedProvider
@@ -331,7 +331,7 @@ def test_ordinary_child_parent_and_first_read_only_reconstruction_keep_actual_co
             patch.object(reopened, 'artifact', forbidden), patch.object(reopened, 'transaction', forbidden), \
             patch('gene_annotation_episode.episodic_workflow.root.a106.literature_perturbation_storage.read_perturbation_inputs', forbidden), \
             patch('gene_annotation_episode.episodic_workflow.root.a106.literature_perturbation_storage.populate_source_summary_restoration', forbidden), \
-            patch('gene_annotation_episode.providers.ModelConnection', forbidden):
+            patch('gene_annotation_episode.episodic_workflow.root.a106.providers.ModelConnection', forbidden):
             projection = LiteraturePerturbationSummaryProjection(reopened, result['run_id'])
             assert projection.received_cells(parent) == rows
             assert projection.fact_cells(parent, [rows[0]['sheet_ref']], components=['restoration_mean_variance']) == []

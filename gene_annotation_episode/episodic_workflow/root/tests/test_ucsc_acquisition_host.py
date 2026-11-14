@@ -18,12 +18,12 @@ import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients
 from gene_annotation_episode import ucsc_acquisition as ucsc
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, canonical, identity
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.ucsc_acquisition import (
     ARGUMENTS_SCHEMA, OPERATIONS, ORIGIN, TOOL, ucsc_request_spec,
     ucsc_sequence_interval, validate_ucsc_result,

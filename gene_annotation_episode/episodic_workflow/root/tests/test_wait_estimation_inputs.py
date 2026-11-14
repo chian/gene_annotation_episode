@@ -13,13 +13,14 @@ from method_loop.durable import canonical
 from method_loop.identities import UnitRef
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episode_commissions import CommissionCoordinator
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_monitoring import FIELDS, ProgressProvider
-from gene_annotation_episode.execution_expectations import ExecutionExpectations
+from gene_annotation_episode.episodic_workflow.root.episode_commissions import CommissionCoordinator
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episode_monitoring import FIELDS
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
+from gene_annotation_episode.episodic_workflow.root.execution_expectations import ExecutionExpectations
 from gene_annotation_episode.run_statistics import ExecutionClass, RunHistory, RunStatistic
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.wait_estimation_inputs import VERSION, WaitInputs
+from gene_annotation_episode.episodic_workflow.root.wait_estimation_inputs import VERSION, WaitInputs
 from test_episode_commissions import setup_case
 
 

@@ -104,7 +104,7 @@ def block_science(monkeypatch):
     from gene_annotation_episode.episodic_workflow.root.a105.library import literature_measurement_comparison_calculations as calculations
     from gene_annotation_episode.episodic_workflow.root.a105.library import literature_measurement_comparison_storage as storage
     from gene_annotation_episode.episodic_workflow.root.a105.library import literature_numerical_contracts as contracts
-    from gene_annotation_episode import providers
+    from gene_annotation_episode.episodic_workflow.root.a105 import providers
     for module, names in [(inputs, ['read_measurement_comparison_inputs', 'compile_measurement_comparison_inputs', 'validate_measurement_comparison_extraction', 'validate_measurement_comparison_calculation_inputs', 'measurement_comparison_selection_schema', 'measurement_comparison_extraction_schema', 'measurement_comparison_calculation_inputs_schema', 'measurement_comparison_covariance_schema']), (calculations, ['populate_measurement_comparison', 'validate_measurement_comparison_sheet', 'measurement_comparison_sheet_schema', 'measurement_comparison_cell_schema']), (storage, ['measurement_comparison_cells_schema', 'measurement_comparison_operation_schema', '_project_once', '_context_projection', '_assertion_projection']), (contracts, ['registered_schema']), (providers.ModelConnection, ['complete']), (providers._SessionConnection, ['complete']), (LiteratureMeasurementComparisonRepository, ['populate', 'receive_cells', '_original_implementation'])]:
         for name in names:
             monkeypatch.setattr(module, name, forbid)

@@ -3,7 +3,7 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.communication import validate_form
+from gene_annotation_episode.episodic_workflow.root.a101.communication import validate_form
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_preparation_result_views import preparation_fact_sources
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_failure_views import preparation_failure_facts
 from test_native_hmmer_preparation_acquisition import RETAINED, read_native, selected_native

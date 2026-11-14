@@ -236,7 +236,7 @@ def test_current_native_reservation_keeps_canonical_request_and_operation_identi
 
 def test_actual_default_registry_advertises_only_the_canonical_current_contract(tmp_path):
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
     with Store(tmp_path / "canonical-restriction-catalog") as store:
         store.create_problem(raw_sequence=SEQUENCE, molecule="dna")
@@ -262,7 +262,7 @@ def test_actual_dispatch_denies_unreceived_sequence_before_bytes_or_job_preparat
     from gene_annotation_episode import restriction_mapping_inputs as inputs
     from gene_annotation_episode import restriction_mapping_jobs as jobs
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
     with Store(tmp_path / "unreceived-restriction-input") as store:
         store.create_problem(raw_sequence=SEQUENCE, molecule="dna")

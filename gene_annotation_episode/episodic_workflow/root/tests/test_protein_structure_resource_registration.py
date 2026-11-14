@@ -16,23 +16,24 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode import independent_execution as reconstruction
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, RESULTS_SCHEMA
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.native_protein_structure_contracts import (
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, RESULTS_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import (
     POLICY, requested_job_from_protein_structure,
 )
-from gene_annotation_episode.native_protein_structure_returns import NativeProteinStructureReturns
-from gene_annotation_episode.native_protein_structure_results import NativeProteinStructureResults
-from gene_annotation_episode.native_protein_structure_tool_info import protein_structure_tool_contracts
-from gene_annotation_episode.practical_execution_records import GENERIC_REQUESTED_JOB_SCHEMA
-from gene_annotation_episode.protein_structure_result_receipts import ProteinResultReceipts
-from gene_annotation_episode.protein_structure_selection import protein_structure_result_selector_schema
-from gene_annotation_episode.providers import ModelConnection
-from gene_annotation_episode.runtime import assemble_workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.native_protein_structure_returns import NativeProteinStructureReturns
+from gene_annotation_episode.episodic_workflow.root.native_protein_structure_results import NativeProteinStructureResults
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_tool_info import protein_structure_tool_contracts
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import GENERIC_REQUESTED_JOB_SCHEMA
+from gene_annotation_episode.episodic_workflow.root.protein_structure_result_receipts import ProteinResultReceipts
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_selection import protein_structure_result_selector_schema
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 _f = import_module("gene_annotation_episode.episodic_workflow.root.tests.fixtures.protein_structure_support.execution_390")
@@ -111,7 +112,7 @@ def _rna_binding():
         "software": {"python_executable": sys.executable,
             "python_sha256": hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest(),
             "python_version": _f.software()["python_version"],
-            "worker_module": "gene_annotation_episode.native_rna_structure_worker",
+            "worker_module": "gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker",
             "worker_source_sha256": hashlib.sha256((Path(__file__).resolve().parents[4] /
                 "gene_annotation_episode/native_rna_structure_worker.py").read_bytes()).hexdigest(),
             "viennarna_distribution_version": None, "rna_module_sha256": None, "rna_extension_sha256": None}}
@@ -227,14 +228,14 @@ def test_registration_retains_policy_and_actual_request_validator_rejects_confli
 
 @pytest.mark.parametrize("bound", [False, True])
 def test_real_helpers_construct_inertly_and_only_bound_resource_exposes_tools(tmp_path, monkeypatch, bound):
-    from gene_annotation_episode.execution_progress import ExecutionTargetReader
+    from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionTargetReader
 
     monkeypatch.setattr(ExecutionTargetReader, "read_target", _deny)
     monkeypatch.setattr(ExecutionTargetReader, "observe_target", _deny)
     monkeypatch.setattr(NativeProteinStructureResults, "read_result_authority", _deny)
     monkeypatch.setattr(NativeProteinStructureReturns, "authenticate", _deny)
-    monkeypatch.setattr("gene_annotation_episode.native_protein_structure_local.prepare_local_protein_structure", _deny)
-    monkeypatch.setattr("gene_annotation_episode.native_protein_structure_results.prepare_protein_structure_worker", _deny)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_local.prepare_local_protein_structure", _deny)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.native_protein_structure_results.prepare_protein_structure_worker", _deny)
     resources = {"selected-local": _resource(tmp_path / "uncreated-project", _bindings() if bound else None)}
     with Store(tmp_path / "state") as store:
         ToolRegistry(store)  # Existing tool-owned metadata setup precedes this assertion.

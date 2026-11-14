@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_ma
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_masking_tool_info import (
     native_blast_masking_tool_contracts, validate_native_blast_masking_bindings,
 )
-from gene_annotation_episode.sequence_masking_contracts import sequence_masking_molecule
+from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_contracts import sequence_masking_molecule
 from gene_annotation_episode.state import Store
 
 

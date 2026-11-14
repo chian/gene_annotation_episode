@@ -19,24 +19,24 @@ import pytest
 from method_loop.episode import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, plain, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, native_result_operation_catalog
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, native_result_operation_catalog
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.episode_contract_information import (
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_contract_information import (
     expand_fact_form, return_contract_information, validate_saved_fact_form,
 )
-from gene_annotation_episode.local_file_capture_results import (
+from gene_annotation_episode.episodic_workflow.root.local_file_capture_results import (
     LocalFileSourceResults, SELECTOR_VERSION, SOURCE_REFS_SCHEMA, OUTCOMES_SCHEMA,
     full_window_key, whole_file_bridge,
 )
 from gene_annotation_episode.materials import source_for_artifact
 from gene_annotation_episode.native_file_capture import NativeFileCaptureError, capture_native_file
-from gene_annotation_episode.runtime import Record
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.state import Store
 from test_bvbrc_appservice_custody import SavedRecords
 
@@ -162,7 +162,7 @@ def test_replay_uses_retained_source_after_producer_disappears(captured):
 
 
 def test_independent_file_commit_survives_sibling_storage_failure(tmp_path, monkeypatch):
-    from gene_annotation_episode import local_file_capture_results as module
+    from gene_annotation_episode.episodic_workflow.root import local_file_capture_results as module
     with Store(tmp_path / 'state') as store:
         case = CaptureFixture(store, tmp_path, files=2)
         actual = module.capture_native_file
@@ -235,7 +235,7 @@ def test_capture_and_legacy_complete_window_share_one_acquisition(captured, capt
     selection = {'known_record_refs': [captured.handoff, *refs], 'initial_known_record_refs': [captured.handoff]}
     results = {**captured.results(), legacy_ref: legacy}
     # Credit reads use frozen bridge metadata, never original/model bytes.
-    monkeypatch.setattr('gene_annotation_episode.local_file_capture_results.retained_native_file',
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.local_file_capture_results.retained_native_file',
         lambda *_args, **_kwargs: pytest.fail('credit reopened a full retained file'))
     assert captured.backend.acquisition_counts(captured.context, selection, results) == (
         (0, 1) if capture_first else (1, 0))
@@ -343,7 +343,7 @@ def test_committed_public_capture_outcome_must_match_private_journal(captured, c
 
 
 def test_runtime_pending_metadata_is_validated_without_relaxing_public_body(captured):
-    from gene_annotation_episode.waiting import PENDING_VERSION
+    from gene_annotation_episode.episodic_workflow.root.wait_events import PENDING_VERSION
     original = captured.execute(0)
     public = deepcopy(original)
     public['pending_work_after_action'] = {'version': PENDING_VERSION,
@@ -418,7 +418,7 @@ def test_competing_resume_commits_between_optimistic_read_and_write_lock(capture
 
 @pytest.mark.parametrize('code', ['retained_artifact_unavailable', 'retained_artifact_mismatch'])
 def test_actual_storage_error_crosses_outer_dispatch_and_keeps_same_action_recoverable(tmp_path, monkeypatch, code):
-    from gene_annotation_episode import local_file_capture_results as module
+    from gene_annotation_episode.episodic_workflow.root import local_file_capture_results as module
     with Store(tmp_path / 'state') as store:
         case = CaptureFixture(store, tmp_path, files=2)
         # Use the existing real generic operation schema. These controlled-port
@@ -812,8 +812,8 @@ def test_captured_source_and_file_need_actual_same_scope_receiver_delivery(tmp_p
             guarded.setattr(store, 'artifact', forbidden)
             guarded.setattr(store, 'put', forbidden)
             guarded.setattr(case.backend, 'read_source', forbidden)
-            guarded.setattr('gene_annotation_episode.local_file_capture_results.read_control', forbidden)
-            guarded.setattr('gene_annotation_episode.local_file_capture_results.capture_native_file', forbidden)
+            guarded.setattr('gene_annotation_episode.episodic_workflow.root.local_file_capture_results.read_control', forbidden)
+            guarded.setattr('gene_annotation_episode.episodic_workflow.root.local_file_capture_results.capture_native_file', forbidden)
             for receiver in (case.context, case.parent):
                 for namespace in (None, 'artifact'):
                     assert case.owner.resolve_received_reference(receiver, artifact_ref, namespace) is True

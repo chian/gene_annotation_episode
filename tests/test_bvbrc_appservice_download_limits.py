@@ -30,7 +30,7 @@ from gene_annotation_episode.domain import ContractError, validate_schema
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG
 from test_api_bvbrc_appservice import PREFIX, harness
 from test_bvbrc_analysis_transport import server

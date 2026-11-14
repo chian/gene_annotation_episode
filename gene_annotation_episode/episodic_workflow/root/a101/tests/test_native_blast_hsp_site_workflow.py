@@ -15,14 +15,14 @@ import pytest
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.alignment_site_returns import alignment_site_fact_sources
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_application_services import EpisodeApplicationServices
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.execution_episodes import RESULTS_VERSION
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.a101.episode_application_services import EpisodeApplicationServices
+from gene_annotation_episode.episodic_workflow.root.a101.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_local import local_blast_plan
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_alignment_site_workflow import (
     BLAST, _assert_action_counts, _assert_no_private_sheet, _commission, _context,
     _controller, _descriptor, _redeliver_frozen, _run, _site_form, _snapshot,

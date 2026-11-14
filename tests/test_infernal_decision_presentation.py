@@ -15,9 +15,9 @@ from gene_annotation_episode.episodic_workflow.root import runtime
 from gene_annotation_episode.episodic_workflow.root.decision_context import (
     INSTRUCTIONS, apply_state_frame, model_snapshot, state_frame,
 )
-from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
+from gene_annotation_episode.episodic_workflow.root.library.published_scientific_task_presentation import render_scientific_process_prompt
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_decision_provider_frames import ConversationWire
 from test_runtime import FixtureController, obj, reason
 from test_scientific_process_prompt_delivery import ScientificWire, OUTPUT_SCHEMA

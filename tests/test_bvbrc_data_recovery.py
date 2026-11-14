@@ -27,9 +27,9 @@ from gene_annotation_episode.episodic_workflow.root.episode_receipts import Epis
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.materials import source_for_artifact
 from gene_annotation_episode.molecular_sequence_input_bindings import MolecularSequenceInputBindings
-from gene_annotation_episode.episodic_workflow.root.runtime import Record
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 from bvbrc_host_fixture import HostFixture, envelope, fact_form, request, selector
 from test_api_bvbrc_data_v2 import row_selector

@@ -22,7 +22,7 @@ from gene_annotation_episode.molecular_provider_acquisition import (
 )
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_molecular_provider_acquisition_host import (
     ARGUMENTS, _artifacts, _controller, _tables, forbidden,
 )

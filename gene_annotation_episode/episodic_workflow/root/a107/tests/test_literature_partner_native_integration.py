@@ -9,18 +9,18 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain
+from gene_annotation_episode.episodic_workflow.root.a107.communication import form_with_facts, plain
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a107.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a107.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a107.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_calculations import COMPONENTS
 from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_storage import LiteraturePartnerRepository
 from gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_sheet_records import partner_cells_schema
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.a107.runtime import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a107.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a107.tests.source_helpers import source, witness
 from test_runtime import FixtureController, ScriptedProvider
 
@@ -160,8 +160,8 @@ def check_rows(rows, case):
 
 @pytest.mark.parametrize('case', CASES)
 def test_native_selected_and_saved_only_reconstruction_without_prepared_json(tmp_path, monkeypatch, case):
-    from gene_annotation_episode.episode_composition import compose_episode_bindings
-    from gene_annotation_episode.episode_journal import Journal
+    from gene_annotation_episode.episodic_workflow.root.a107.episode_composition import compose_episode_bindings
+    from gene_annotation_episode.episodic_workflow.root.a107.episode_journal import Journal
     store, context, args = setup_case(tmp_path, case=case)
     with store:
         assert all(not store.get_artifact(store.get(ref)['artifact_ref']).lstrip().startswith(b'{')
@@ -251,7 +251,7 @@ def test_native_ordinary_typed_parent_receives_actual_source_bindings(tmp_path, 
 
 
 def test_native_task_repeats_across_lookup_and_restoration(tmp_path):
-    from gene_annotation_episode.decision_context import state_frame
+    from gene_annotation_episode.episodic_workflow.root.a107.decision_context import state_frame
     from gene_annotation_episode.episodic_workflow.root.a107.library.partner_source_instruction_text import PARTNER_TASK
     from test_literature_experimental_prompt_delivery import LiteratureWire,snapshot,complete
     first=snapshot();first['goal']['objective']='Read native partner values and preserve physical measurement identity'

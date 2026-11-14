@@ -27,7 +27,8 @@ from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation
 from gene_annotation_episode.episodic_workflow.root.native_infernal_preparation_returns import (
     FACT_SOURCES, REFERENCE_SOURCE, NativeInfernalPreparationReturns, requested_sources,
 )
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
 
 

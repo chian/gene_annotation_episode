@@ -12,7 +12,7 @@ from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a102.a102_investigation import (
     A102ServiceFactory,A102Subtree,create_a102_workflow,initial_report)
 from gene_annotation_episode.episodic_workflow.root.a102.a102_tools import A102ToolRegistry
-from gene_annotation_episode.numerical import YieldController,YieldEstimate,NumericBand
+from gene_annotation_episode.episodic_workflow.root.a102.numerical import YieldController,YieldEstimate,NumericBand
 
 
 ROOT=Path(__file__).resolve().parents[5]

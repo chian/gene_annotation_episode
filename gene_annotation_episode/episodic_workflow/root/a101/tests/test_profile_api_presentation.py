@@ -17,20 +17,20 @@ from types import SimpleNamespace
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.decision_context import instructional_model_context, state_frame
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.execution_prompt import select_profile_api_execution_values
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.a101.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a101.decision_context import instructional_model_context, state_frame
+from gene_annotation_episode.episodic_workflow.root.a101.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.a101.execution_prompt import select_profile_api_execution_values
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.a101.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_interval_pending_results import _commission, _new_rows
 from test_interval_results_presentation import (
     _assert_original_rows, _canonical, _inventory, _session, _sha, _source_for_original_context, _tables,
@@ -61,14 +61,14 @@ def _guards(patch):
     for name in (
         "gene_annotation_episode.acquisition.PublicClients._http",
         "gene_annotation_episode.rfam_batch_transport.RfamBatchHTTP._request",
-        "gene_annotation_episode.api_execution.HMMERAPIExecution._http",
-        "gene_annotation_episode.api_service_execution.APIServiceExecution.execute",
-        "gene_annotation_episode.api_execution.HMMERAPIExecution.execute",
-        "gene_annotation_episode.rfam_batch_publication.publish_rfam_batch_result",
-        "gene_annotation_episode.rfam_batch_table.populate_rfam_batch_tblout_sheet",
-        "gene_annotation_episode.rfam_batch_report.populate_rfam_batch_report_sheet",
-        "gene_annotation_episode.infernal_search_inputs.populate_infernal_search_sheet",
-        "gene_annotation_episode.infernal_search_grader.calculate_infernal_search_scores",
+        "gene_annotation_episode.episodic_workflow.root.a101.api_execution.HMMERAPIExecution._http",
+        "gene_annotation_episode.episodic_workflow.root.a101.api_service_execution.APIServiceExecution.execute",
+        "gene_annotation_episode.episodic_workflow.root.a101.api_execution.HMMERAPIExecution.execute",
+        "gene_annotation_episode.episodic_workflow.root.library.rfam_batch_publication.publish_rfam_batch_result",
+        "gene_annotation_episode.episodic_workflow.root.library.rfam_batch_table.populate_rfam_batch_tblout_sheet",
+        "gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report.populate_rfam_batch_report_sheet",
+        "gene_annotation_episode.episodic_workflow.root.library.infernal_search_inputs.populate_infernal_search_sheet",
+        "gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader.calculate_infernal_search_scores",
         "gene_annotation_episode.episodic_workflow.root.a101.hmmer_search_grader.calculate_hmmer_search_scores",
         "gene_annotation_episode.episodic_workflow.root.a101.hmmer_graders.grade_hmmer_api_result",
         "socket.create_connection", "socket.socket.connect", "socket.socket.connect_ex",

@@ -19,7 +19,7 @@ from gene_annotation_episode import molecular_sequence_result_contracts as share
 from gene_annotation_episode import primer_placement_measurements as science
 from gene_annotation_episode import primer_placement_result_contracts as contracts
 from gene_annotation_episode import scientific_process_prompt as presentation
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, form_with_facts, plain, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.domain import ContractError, canonical, identity

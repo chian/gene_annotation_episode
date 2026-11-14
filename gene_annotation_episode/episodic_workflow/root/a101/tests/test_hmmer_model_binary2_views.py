@@ -10,7 +10,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_preparation_result_views as views
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_hmmer_preparation_worker as worker
-from gene_annotation_episode.communication import validate_form
+from gene_annotation_episode.episodic_workflow.root.a101.communication import validate_form
 from gene_annotation_episode.domain import ContractError
 from test_hmmer_artifact_data import payload
 from test_hmmer_model_binary2 import packed

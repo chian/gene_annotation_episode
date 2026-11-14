@@ -27,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_report_co
     REPORT_FORMAT, REPORT_PARSE_VERSION, RFAM_REPORT_METRICS)
 from gene_annotation_episode.episodic_workflow.root.rfam_batch_returns import RfamBatchReturns, rfam_fact_sources
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 from test_rfam_batch_returns import (Harness, SavedClient, LIVE, forbid_read_work,
     schema_for, snapshot)

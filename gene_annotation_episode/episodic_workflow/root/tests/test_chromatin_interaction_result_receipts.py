@@ -16,14 +16,14 @@ from types import SimpleNamespace
 import pytest
 from method_loop.identities import EpisodeRef
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.execution_progress import ExecutionTargetReader
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionTargetReader
 from gene_annotation_episode.chromatin_interaction_return_views import (
     FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE, FAILURE_SOURCE, chromatin_fact_sources,
 )

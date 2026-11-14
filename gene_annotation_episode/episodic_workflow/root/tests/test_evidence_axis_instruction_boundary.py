@@ -11,14 +11,14 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.decision_context import (
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.decision_context import (
     apply_state_frame, instructional_model_context, model_snapshot, state_frame)
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_records import scientific_invocation_ref
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_invocation_ref
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.episodic_workflow.root.tests.test_scientific_process_episodes import ContractServices, INVOCATION, SCHEMA, SCOPE
 
 

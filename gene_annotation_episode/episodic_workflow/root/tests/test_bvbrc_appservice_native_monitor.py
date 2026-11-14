@@ -14,16 +14,17 @@ import pytest
 from method_loop.durable import DurableExecutionStore
 
 from gene_annotation_episode.acquisition import AcquisitionError
-from gene_annotation_episode.bvbrc_appservice_monitor import AppServiceMonitor, PROVIDER
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_monitor import AppServiceMonitor, PROVIDER
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes, ProgressProvider
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_progress import ExecutionProgressProvider
+from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionProgressProvider
 from gene_annotation_episode.practical_execution_state import _read
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG
 from test_bvbrc_appservice_host import ProductionDriver
 from test_durable_episode import commission_spec
@@ -558,7 +559,7 @@ def test_other_task_log_response_is_retained_without_projecting_its_bytes(h, mon
 
 
 def test_interruption_before_issue_stays_unissued_and_does_not_start_on_recovery(h, monkeypatch):
-    from gene_annotation_episode import bvbrc_appservice_monitor as module
+    from gene_annotation_episode.episodic_workflow.root import bvbrc_appservice_monitor as module
     immutable = module._immutable
     def stop_before_issue(path, value):
         if path.name == 'issued.json':
@@ -592,7 +593,7 @@ def test_interruption_carrying_actual_response_retains_it_exactly(h, monkeypatch
 
 
 def test_reopened_production_executor_recovers_same_original_response(h, monkeypatch):
-    from gene_annotation_episode.api_service_execution import APIServiceExecution
+    from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
     key, _ = select(h, 'stdout')
     original = observe(h, 'stdout', key=key)
     h.store.db.commit()

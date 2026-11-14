@@ -5,9 +5,9 @@ import os
 import re
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import closed, require, same
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_contracts import validate_file, validate_path
-from gene_annotation_episode.native_fluorescence_contracts import validate_fluorescence_policy
+from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_contracts import validate_fluorescence_policy
 
-WORKER_MODULE = "gene_annotation_episode.fluorescence_result_worker"
+WORKER_MODULE = "gene_annotation_episode.episodic_workflow.root.library.fluorescence_result_worker"
 INTENT_VERSION = "fluorescence_worker_intent_v1"
 
 

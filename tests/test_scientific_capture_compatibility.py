@@ -15,7 +15,9 @@ from method_loop import Episode, EpisodeGoal, EpisodeRequest
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episodic_workflow.root.episode_composition import scientific_binding_compatible
-from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource, Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_invocation_ref
 from gene_annotation_episode.state import Store
 from test_runtime import FixtureController

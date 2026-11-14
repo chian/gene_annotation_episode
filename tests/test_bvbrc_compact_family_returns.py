@@ -22,7 +22,8 @@ from gene_annotation_episode.episodic_workflow.root.composition_information impo
 )
 from gene_annotation_episode.episodic_workflow.root.episode_contract_information import expand_fact_form
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, Workflow
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 from test_bvbrc_appservice_custody import SavedRecords
 

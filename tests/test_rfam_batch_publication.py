@@ -26,7 +26,7 @@ from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_grader im
 from gene_annotation_episode.episodic_workflow.root.library.rfam_batch_publication import publish_rfam_batch_result
 from gene_annotation_episode.rfam_discovery import BASE_URL, result_url
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[1]

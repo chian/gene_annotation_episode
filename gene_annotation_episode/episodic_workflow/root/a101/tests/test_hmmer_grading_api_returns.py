@@ -12,16 +12,16 @@ import json
 import pytest
 from method_loop.archive import iter_json
 
-from gene_annotation_episode.api_execution import RESULT_DESCRIPTION
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a101.api_execution import RESULT_DESCRIPTION
+from gene_annotation_episode.episodic_workflow.root.a101.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
 from gene_annotation_episode.tool_knowledge import ToolKnowledge
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from api_execution_fixture import APIHarness
 from test_execution_episodes_family import launch_assignment
 from test_execution_wiring import child, form

@@ -9,20 +9,20 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain
+from gene_annotation_episode.episodic_workflow.root.a110.communication import form_with_facts, plain
 from gene_annotation_episode.domain import ContractError, canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a110.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a110.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a110.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a110.library.literature_reaction_inputs import LITERAL_FIELDS
 from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_report_contracts import reaction_semantic_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_native_observations import native_observations_schema, NAMESPACE, POSITIONS_FIELD
 from gene_annotation_episode.episodic_workflow.root.a110.library.literature_source_presentation import render_literature_experimental_prompt
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.a110.runtime import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a110.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_native_inputs_129 import recipe, number, witness
 from test_runtime import FixtureController, ScriptedProvider
 

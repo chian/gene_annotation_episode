@@ -4,7 +4,7 @@ import json
 import pytest
 
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
 from test_blast_result_views import published
 from test_tool_grading_publication import numerical

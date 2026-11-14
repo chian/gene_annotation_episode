@@ -134,7 +134,7 @@ def test_partial_log_evidence_does_not_promote_an_available_subtotal_to_the_fina
 
 def test_nine_axis_composition_uses_each_native_mapping_and_keeps_opposition():
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_a105_aggregation import aggregate_a105
-    from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_calculations import populate_partner_components
+    from gene_annotation_episode.episodic_workflow.root.library.literature_partner_calculations import populate_partner_components
     from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_a105_aggregation_325 import pure_inputs
     from test_literature_partner_calculations import _inputs
     from test_literature_reaction_calculations import calculate, ratio, budget
@@ -163,7 +163,7 @@ def test_nine_axis_composition_uses_each_native_mapping_and_keeps_opposition():
 
 @pytest.mark.parametrize('w,o,a,sign', [(100, 20, 90, 1), (100, 200, 150, -1), (100, 100, 100, 0)])
 def test_partner_mapping_uses_real_calculated_omission_and_restoration_contrasts(w, o, a, sign):
-    from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_calculations import populate_partner_components
+    from gene_annotation_episode.episodic_workflow.root.library.literature_partner_calculations import populate_partner_components
     from test_literature_partner_calculations import _inputs
     native = populate_partner_components(_inputs(w, o, a))
     cells = [dict(component=name, **cell) for name, cell in native['cells'].items()]

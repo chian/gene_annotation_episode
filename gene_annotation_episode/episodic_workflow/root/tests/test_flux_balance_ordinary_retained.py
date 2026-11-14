@@ -16,18 +16,18 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode import flux_balance_tools as ordinary
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library import flux_balance_tools as ordinary
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.native_flux_balance_contracts import POLICY
-from gene_annotation_episode.runtime import DecisionSource
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_flux_balance_ordinary_workflow import (FIELDS, QUESTION, RUN_ID, ScriptedProvider,
     _arguments, _byte_probe_source, _file_selection, _forbidden, _inventory, _json,
     _projection, _retained_file_refs, _tables, _workflow)
@@ -353,7 +353,7 @@ def test_genuine_pending_fba_continuation_saved_calculation_and_closed_replay(tm
                 frozen.setattr(ordinary, name, _forbidden)
             for name in ('parse_cobra_glpk_model_capture', 'parse_cobra_glpk_problem_capture',
                     'parse_cobra_glpk_solution_capture', 'parse_biomni_fba_csv', 'parse_fba_capture'):
-                frozen.setattr('gene_annotation_episode.flux_balance_readers.' + name, _forbidden)
+                frozen.setattr('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.' + name, _forbidden)
             frozen.setattr('gene_annotation_episode.flux_balance_calculations.calculate_flux_balance_sheet', _forbidden)
             frozen.setattr('gene_annotation_episode.flux_balance_result_worker.calculate_flux_balance_sheet', _forbidden)
             frozen.setattr(DecisionSource, 'execute', traced_action)

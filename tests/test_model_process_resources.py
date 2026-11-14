@@ -6,7 +6,8 @@ import sys
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.providers import ModelCallError, _model_process_command
+from gene_annotation_episode.episodic_workflow.root.providers import ModelCallError
+from gene_annotation_episode.episodic_workflow.root.model_transport_resources import _model_process_command
 
 
 def test_native_provider_child_sees_one_cpu_without_changing_parent_affinity():

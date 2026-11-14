@@ -1,6 +1,6 @@
 """Spreadsheet tools publish actual source data/provenance, never annotations."""
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_spreadsheet_tools import workbook
 
 

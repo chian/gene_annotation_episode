@@ -29,11 +29,12 @@ from gene_annotation_episode.episodic_workflow.root.execution_service_setup impo
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.molecular_measurement_tools import MolecularOperationUnpublished
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
-from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.task_action_units import ActionFailure
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_calibrated_signal_measurements import supplied_inputs, selection
 from tests.test_runtime import ScriptedProvider
 from tests.test_vcf_result_workflow import _closed_child, _controller, _single_saved_result_controller, _tables, _zero

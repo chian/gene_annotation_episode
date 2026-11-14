@@ -19,9 +19,10 @@ from method_loop.archive import iter_json
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
-from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, ReturnedActionUnit, _json
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, _json
+from gene_annotation_episode.episodic_workflow.root.workflow_values import ReturnedActionUnit
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode import native_lifecycle
 from test_runtime import FixtureController
 

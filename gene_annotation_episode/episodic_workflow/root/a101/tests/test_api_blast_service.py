@@ -10,14 +10,14 @@ from gene_annotation_episode.acquisition import AcquisitionError, SourceSnapshot
 from gene_annotation_episode.api_blast import NCBIBlastService, blast_wait_forecast
 from gene_annotation_episode.api_services import build_service
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.episode_monitoring import MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.a101.episode_monitoring import MonitorEpisodes
 from gene_annotation_episode.episodic_workflow.root.a101.a101_blast_monitoring import blast_monitor_yield
-from gene_annotation_episode.numerical import YieldParameters, STATUS_UNIDENTIFIABLE
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import YieldParameters, STATUS_UNIDENTIFIABLE
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 
 RID = "FIXTURE_ORIGINAL_RID"
@@ -38,7 +38,7 @@ def test_waiting_forecast_conditions_on_actual_waiting_observations():
 
 def test_scientific_parent_sees_same_saved_rid_and_updated_waiting_estimate(tmp_path, monkeypatch):
     clock_now = ['2026-10-23T00:00:00+00:00']
-    monkeypatch.setattr('gene_annotation_episode.api_service_execution._now',
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a101.api_service_execution._now',
         lambda: clock_now[0])
     class TimedClient(Client):
         def __init__(self):

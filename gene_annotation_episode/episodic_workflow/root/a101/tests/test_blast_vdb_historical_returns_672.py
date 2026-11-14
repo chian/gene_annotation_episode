@@ -26,7 +26,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_historical_fact_schemas import blast_utility_historical_fact_schemas, blast_utility_historical_schema_provenance
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_result_views import blast_utility_fact_sources
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.a101.communication import (
     ReportBoundaryError, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_utility_returns import NativeBLASTUtilityReturns
@@ -194,8 +194,8 @@ def selected_result_actions(database):
 
 def original_owner(key, database, monkeypatch):
     """Read-only constructor shells; all actual validation dependencies remain."""
-    from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-    from gene_annotation_episode.execution_progress import ExecutionProgressProvider, ExecutionTargetReader
+    from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+    from gene_annotation_episode.episodic_workflow.root.a101.execution_progress import ExecutionProgressProvider, ExecutionTargetReader
     from gene_annotation_episode.state import Store
 
     directory = original_case(key)

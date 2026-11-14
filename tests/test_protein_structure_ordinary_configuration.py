@@ -27,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.root.library.protein_structure_to
 from gene_annotation_episode.resource_tool_information import tool_information_contracts
 from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
 from test_scientific_process_library import independent_source
 from test_scientific_process_runtime import Scenario, action

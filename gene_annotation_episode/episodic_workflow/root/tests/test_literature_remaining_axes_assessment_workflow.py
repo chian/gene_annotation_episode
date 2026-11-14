@@ -7,12 +7,12 @@ import json
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.runtime import run_workflow
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_assessments import identify
 from test_runtime import FixtureController, ScriptedProvider
 

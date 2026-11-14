@@ -21,10 +21,10 @@ from types import SimpleNamespace
 from jsonschema import Draft202012Validator
 from method_loop.archive import iter_json
 from gene_annotation_episode import native_lifecycle
-from gene_annotation_episode.communication import plain, validate_closed_schema
+from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_closed_schema
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import RESULTS_VERSION
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_execution_common import identity
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_return_views import (
     PROJECTION_SOURCE, CONTEXT_SOURCE, SAVED_SOURCE, FAILURE_SOURCE,
@@ -35,13 +35,13 @@ from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_
     requested_job_from_fluorescence, validate_fluorescence_software,
 )
 from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_local import local_fluorescence_plan
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.practical_receipt_information import PracticalReceiptInformation
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[4]

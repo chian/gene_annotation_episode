@@ -13,14 +13,15 @@ from method_loop.episode import EpisodeRecord, UnitRecord
 from method_loop.identities import EpisodeRef, UnitRef
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, _CLOSED_CREDIT
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.numerical import YieldController, YieldParameters
-from gene_annotation_episode.runtime import TypedReportContract, Workflow
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, _CLOSED_CREDIT
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 SCHEMA = {"type": "object", "properties": {"completed": {
@@ -278,9 +279,9 @@ def _original_completion_observation(frame, *, mode="verified", bad_original=Non
     authority. This is not a native endpoint or scientific completion claim.
     """
     from unittest.mock import patch
-    from gene_annotation_episode.completion_evidence import validate_completion_evidence
-    from gene_annotation_episode.numerical import NumericBand
-    from gene_annotation_episode.runtime import Record
+    from gene_annotation_episode.episodic_workflow.root.completion_evidence import validate_completion_evidence
+    from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
+    from gene_annotation_episode.episodic_workflow.root.task_values import Record
     proof, unit = _completion_proof(frame), UnitRef(frame.context.episode_id, 0)
     packet = validate_completion_evidence({"version": "completed_action_evidence_v1",
         "run_id": frame.workflow.run_id, "episode_id": frame.context.episode_id, "unit_ref": unit.as_record(),
@@ -333,7 +334,8 @@ def _original_completion_observation(frame, *, mode="verified", bad_original=Non
 
 
 def test_original_verified_completion_replays_existing_controller_without_native_revalidation(frame, monkeypatch):
-    from gene_annotation_episode.runtime import ExecutionContextController, Record
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import ExecutionContextController
+    from gene_annotation_episode.episodic_workflow.root.task_values import Record
     proof, body, unit, original_step = _original_completion_observation(frame)
     before = {table: [tuple(row) for row in frame.store.db.execute("SELECT * FROM " + table)] for table in
         ("runtime_observations", "runtime_estimation_contexts", "runtime_forms", "runtime_actions")}

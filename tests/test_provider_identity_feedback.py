@@ -20,7 +20,7 @@ from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.provider_jobs import HMMER_IDENTITY_VERSION, RemoteSearches
 from gene_annotation_episode.rfam_discovery import submission_failure_feedback
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from api_execution_fixture import APIHarness
 
 FIXTURES=Path(__file__).resolve().parents[1]/'validation/fixtures/provider_identity_feedback'
@@ -240,7 +240,7 @@ def test_unversioned_rfam_request_reopens_same_operation_without_identity_rewrit
 
 def test_native_failure_feedback_reaches_next_owned_choice_without_failed_action_observation(tmp_path):
     from test_runtime import FixtureController,ScriptedProvider
-    from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
+    from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
     sequence=rfam_submitted_sequence();client=SavedRfamFailure()
     store,tools,subject=new_tools(tmp_path,client,sequence,'dna')
     with store:

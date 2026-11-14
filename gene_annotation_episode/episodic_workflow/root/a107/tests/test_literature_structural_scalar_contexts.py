@@ -8,13 +8,13 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain
+from gene_annotation_episode.episodic_workflow.root.a107.communication import form_with_facts, plain
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_composition import compose_episode_bindings
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a107.episode_composition import compose_episode_bindings
+from gene_annotation_episode.episodic_workflow.root.a107.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.a107.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a107.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a107.library.literature_assay_inputs import _Sources
 from gene_annotation_episode.episodic_workflow.root.a107.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a107.literature_experimental_contracts import ExperimentalContractError
@@ -25,9 +25,9 @@ from gene_annotation_episode.episodic_workflow.root.a107.library.literature_part
 )
 from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_storage import LiteraturePartnerRepository
 from gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_sheet_records import partner_cells_schema
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.a107.runtime import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a107.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
 
 

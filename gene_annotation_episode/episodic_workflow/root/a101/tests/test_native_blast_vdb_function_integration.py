@@ -10,9 +10,9 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a101.communication import plain
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import RESULTS_VERSION
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_result_views import FUNCTION_SELECTOR, FUNCTION_FAMILIES, SAVED_INPUT_SOURCE, native_blast_database_fact_sources, native_blast_database_metric_definitions
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_result_publication import _json
 from test_native_blast_database_episode_binding import SyntheticHost, schema_for, selector
@@ -64,7 +64,7 @@ def results_child(h, selected, *, index=1, descriptors=True, parent=None, schema
     if descriptors:
         sources.append(SAVED_INPUT_SOURCE)
     schema = schema or schema_for(*sources, 'execution_blast_database_acquisition', 'execution_blast_database_failures')
-    from gene_annotation_episode.communication import _compile_closed_schema
+    from gene_annotation_episode.episodic_workflow.root.a101.communication import _compile_closed_schema
     assert _compile_closed_schema(schema) == schema
     child = h.child(parent, 'results', prepared, schema, index=index)
     h.family.initialize(child)

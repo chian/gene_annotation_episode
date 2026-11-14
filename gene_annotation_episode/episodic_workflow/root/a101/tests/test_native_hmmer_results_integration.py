@@ -23,18 +23,18 @@ import pytest
 
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, RESULTS_VERSION
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_native_result_views import FAMILY_SOURCES, NATIVE_HMMER_METRICS, family_for_program, native_hmmer_fact_sources
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_contracts import requested_job_from_native
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_local import local_hmmer_plan
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.practical_yield import PracticalYieldEstimator
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[5]
@@ -358,8 +358,8 @@ def test_selected_native_results_reach_requested_parent_form_and_real_credit(tmp
         assert len(list(case.workspace.rglob('hmmer-plan.json'))) == 1
         compare_b003(label, family, scores[COLLECTIONS[family]])
         from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_search_grader import calculate_hmmer_search_scores
-        from gene_annotation_episode.nhmmer_grader import calculate_nhmmer_scores
-        from gene_annotation_episode.hmmalign_grader import calculate_hmmalign_scores
+        from gene_annotation_episode.episodic_workflow.root.a101.library.nhmmer_grader import calculate_nhmmer_scores
+        from gene_annotation_episode.episodic_workflow.root.a101.library.hmmalign_grader import calculate_hmmalign_scores
         calculator = {'protein_domain': calculate_hmmer_search_scores,
             'nucleotide_locus': calculate_nhmmer_scores,
             'alignment_sequence': calculate_hmmalign_scores}[family]

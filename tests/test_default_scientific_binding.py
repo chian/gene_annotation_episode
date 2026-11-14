@@ -9,9 +9,9 @@ import json
 import pytest
 
 from gene_annotation_episode.cli import main
-from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_investigation_progress import put_finding
 from test_runtime import FixtureController, ScriptedProvider
 from test_scientific_findings import finding, target_question

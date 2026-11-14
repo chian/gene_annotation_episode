@@ -16,13 +16,13 @@ import pytest
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_contracts import validate_blast_utility_result
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_result_views import IDENTIFIER_NAMESPACES, PROJECTION_V2_FIELDS, projection_identifiers
-from gene_annotation_episode.episode_monitoring import read_progress
+from gene_annotation_episode.episodic_workflow.root.a101.episode_monitoring import read_progress
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_utility_result_publication import (
     validate_prepared_utility_result, validate_utility_publication,
 )
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_worker_context import qualified_utility_context
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_vdb_utility_context import validate_vdb_context_authentication
-from gene_annotation_episode.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand
 from test_blast_vdb_workflow_673 import (
     INFO_FIELDS, POLICY, fields_for, history, run_case, save, saved_checks,
 )

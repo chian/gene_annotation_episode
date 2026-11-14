@@ -10,16 +10,16 @@ from dataclasses import replace
 from functools import partial
 import json
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a110.communication import plain
 from gene_annotation_episode.domain import canonical, obj
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a110.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a110.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a110.library.literature_reaction_native_inputs import VERSION
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_native_observations import native_observations_schema, POSITIONS_FIELD
 from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_report_contracts import reaction_semantic_cells_schema
-from gene_annotation_episode.runtime import run_workflow
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a110.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.a110.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_integration import setup_case, source
 from test_runtime import FixtureController, ScriptedProvider
 

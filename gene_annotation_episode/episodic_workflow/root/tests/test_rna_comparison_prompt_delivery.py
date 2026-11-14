@@ -8,12 +8,12 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.decision_context import INSTRUCTIONS, state_frame
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.providers import _rna_comparison_receiver_context
-from gene_annotation_episode.rna_structure_comparison_presentation import render_rna_comparison_projections
-from gene_annotation_episode.rna_structure_comparison_views import PROJECTION_SOURCE, rna_comparison_fact_sources
-from gene_annotation_episode.scientific_process_prompt import text_instructions
+from gene_annotation_episode.episodic_workflow.root.decision_context import INSTRUCTIONS, state_frame
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.model_presentation import _rna_comparison_receiver_context
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_presentation import render_rna_comparison_projections
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE, rna_comparison_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.decision_prompt_text import text_instructions
 from test_scientific_process_prompt_delivery import ScientificWire, OUTPUT_SCHEMA, snapshot
 from test_rna_comparison_presentation import pair, scan
 from test_rna_comparison_receiver_prompt import root_state, legacy_state, SUPPLIED_INSTRUCTIONS
@@ -63,7 +63,7 @@ def comparison_form():
 
 
 def results_state(kind='pair', *, collected=False, status=False):
-    from gene_annotation_episode.rna_structure_comparison_results import operation_catalog
+    from gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_results import operation_catalog
     case = recorded_case(kind)
     state = root_state()
     state.pop('received_rna_comparison_values')

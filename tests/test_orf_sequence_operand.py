@@ -15,7 +15,7 @@ from gene_annotation_episode import materials, orf_measurements
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from tests.test_library_targets import library, members, work
 from tests.test_runtime import FixtureController, ScriptedProvider
 

@@ -11,7 +11,7 @@ import pytest
 from gene_annotation_episode.acquisition import AcquisitionError, PublicClients, SourceSnapshot
 from gene_annotation_episode.provider_jobs import RemoteSearches
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_public_search import Client, JOB, snapshot
 
 
@@ -240,7 +240,7 @@ def test_later_submission_failure_preserves_previous_partial_source(tmp_path, mo
 
 def test_deleted_ordinary_bypass_feedback_reaches_runtime_without_observation(tmp_path):
     from test_runtime import FixtureController, ScriptedProvider
-    from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
+    from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
     with Store(tmp_path/'state') as store:
         tools, args = registered_tools(store, Client())
         def see_removed(context):

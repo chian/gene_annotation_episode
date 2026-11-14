@@ -26,7 +26,7 @@ from gene_annotation_episode import geo_tools as geo
 from gene_annotation_episode.materials import artifact_path
 from gene_annotation_episode.molecular_reference_privacy import molecular_reference_restriction
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_geo_acquisition import SOFT
 
 

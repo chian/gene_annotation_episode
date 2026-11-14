@@ -8,8 +8,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.a101.episode_services import WorkflowServices
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_results import REFERENCE_SOURCE
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_result_views import SAVED_INPUT_SOURCE

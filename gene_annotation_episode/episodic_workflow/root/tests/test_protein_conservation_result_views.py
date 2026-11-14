@@ -7,17 +7,17 @@ from types import MappingProxyType
 
 import pytest
 
-from gene_annotation_episode import protein_conservation_result_contracts as contracts
+from gene_annotation_episode.episodic_workflow.root.library import protein_conservation_result_contracts as contracts
 from gene_annotation_episode import protein_conservation_result_views as views
 from gene_annotation_episode import scientific_process_prompt as prompt
 from gene_annotation_episode import phylogeny_calculators, phylogeny_formats
 from gene_annotation_episode import phylogeny_calculation_contracts as numerical_contracts
-from gene_annotation_episode.communication import ReportBoundaryError, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema, validate_form
 from gene_annotation_episode.molecular_result_facts import (
     merge_molecular_facts, requested_molecular_fact_fields, validate_frozen_molecular_return,
     validate_molecular_fact,
 )
-from gene_annotation_episode.rna_structure_comparison_receiver_prompt import render_rna_comparison_receiver_prompt
+from gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_receiver_prompt import render_rna_comparison_receiver_prompt
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
 from test_protein_conservation_result_contracts import FIXTURE, FIXTURE_SHA256, SOURCE, build
 
@@ -173,7 +173,7 @@ def test_fact_registration_merges_exact_source_and_full_ordered_selection(suppli
 
 
 def test_exact_registered_fact_schema_and_semantics_visit_only_outer_source(supplied, monkeypatch):
-    from gene_annotation_episode.runtime import _compile_form
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import _compile_form
     packet = returned(supplied)
     schema = form_schema()
     forbid_science(monkeypatch)

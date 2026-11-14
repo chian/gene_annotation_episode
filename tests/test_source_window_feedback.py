@@ -4,7 +4,7 @@ from copy import deepcopy
 import pytest
 
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def source(store, raw, representation):

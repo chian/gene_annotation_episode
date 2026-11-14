@@ -14,7 +14,7 @@ from gene_annotation_episode.hpc_campaign import accepts, build_plan, validate_c
 from gene_annotation_episode.hpc_ledger import HPCLedger
 from gene_annotation_episode.hpc_episodes import HPCEpisodes
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.domain import validate_schema
 from hpc_helpers import commission, resources, recorded_queue, FIXTURES
 
@@ -197,7 +197,7 @@ def test_episode_can_design_candidates_without_caller_job_commands(tmp_path):
 
 
 def test_hpc_provider_presentation_preserves_executable_preparation_operands():
-    from gene_annotation_episode.hpc_prompt import is_hpc_context, render_hpc_prompt
+    from gene_annotation_episode.episodic_workflow.root.hpc_prompt import is_hpc_context, render_hpc_prompt
     plan = build_plan(commission(), commission()['candidates'][0], resources()['aurora'], {'owner': 'parent'}, 0)
     state = {'hpc_portfolio_preparation': plan, 'execution_assignment': plan['launch_assignment'],
              'available_report_facts': {}, 'scope': {'subject_refs': []}}
@@ -235,7 +235,7 @@ def test_plan_is_real_launch_contract_with_hashed_portfolio():
     plan = build_plan(c, c['candidates'][0], r['aurora'], {'owner': 'parent'}, 0)
     assert plan['manifest_sha256'] == hpc_queue.digest(plan['manifest'])
     assert plan['submission_arguments']['resources'] == ['select=1', 'walltime=01:00:00', 'filesystems=flare']
-    from gene_annotation_episode.practical_execution_records import validate_assignment
+    from gene_annotation_episode.episodic_workflow.root.practical_execution_records import validate_assignment
     validate_assignment(plan['practical_assignment'])
     from gene_annotation_episode.practical_pbs_operations import PBSPracticalOperations
     operation = PBSPracticalOperations(r['aurora'])
@@ -317,7 +317,7 @@ def test_factory_roundtrip_and_binding_composition(tmp_path):
         assert [row['binding_id'] for row in descriptors] == ['execution_episodes', 'monitor', 'hpc']
         assert {'hpc', 'hpc_prediction'} <= set(application.role_credit_bindings)
         # Actual launch schema, no fabricated transport or job.
-        from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+        from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
         execution = ExecutionEpisodes(None, store=store, directory=tmp_path, run_id='test-run',
             resources=resources(), initial_information={}, tool_registry=None, handoff_unit=1,
             acquired_record_unit=1, log_window_bytes=8192, log_roles=('stdout', 'stderr'))
@@ -390,7 +390,7 @@ def test_host_generated_commissions_carry_their_own_role_cutoffs(monkeypatch):
 
 def test_launch_receives_preparation_and_cannot_commission_duplicate_allocation(tmp_path):
     from method_loop.identities import EpisodeRef
-    from gene_annotation_episode.hpc_episodes import authenticate_launch
+    from gene_annotation_episode.episodic_workflow.root.library.hpc_launch_authentication import authenticate_launch
     path = (('annotation', 'root'), ('hpc', 'campaign'))
     owner = EpisodeRef('test-run', path).episode_id
     parent = BindingContext('test-run', owner, 'hpc', path, {'subject_refs': []}, {'commission_id': 'commission'}, {})

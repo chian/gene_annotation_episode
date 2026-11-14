@@ -109,7 +109,7 @@ def test_saved_status_uses_historical_observation_and_publishes_no_science(tmp_p
 
 
 def test_saved_initial_inputs_support_real_before_save_build_boundary(tmp_path):
-    from gene_annotation_episode.native_rna_structure_result_publication import validate_rna_structure_selected_inputs
+    from gene_annotation_episode.episodic_workflow.root.library.rna_result_operand_authority import validate_rna_structure_selected_inputs
     with Store(tmp_path / "store") as store:
         f = F.Fixture(store, tmp_path / "fixture")
         first, body = original(f)
@@ -134,8 +134,7 @@ def test_initial_empty_facts_and_form_validate_before_child_is_saved(tmp_path):
 
 @pytest.mark.parametrize("problem", [None, "persisted_child", "wrong_parent", "changed_prefix", "missing_parent", "own_work", "mismatched_commission"])
 def test_saved_construction_before_parent_commission_is_narrow(tmp_path, problem):
-    from gene_annotation_episode.native_rna_structure_result_publication import (
-        authenticate_rna_results_commission, validate_rna_structure_selected_inputs)
+    from gene_annotation_episode.episodic_workflow.root.library.rna_result_operand_authority import authenticate_rna_results_commission, validate_rna_structure_selected_inputs
     with Store(tmp_path / "store") as store:
         f = F.Fixture(store, tmp_path / "fixture")
         first, body = original(f)

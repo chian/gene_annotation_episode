@@ -13,10 +13,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import ReportBoundaryError, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain, validate_form
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.restriction_mapping_returns import (
     restriction_mapping_fact_sources, requested_restriction_projections,
     project_restriction_action_return, validate_frozen_restriction_return,
@@ -262,7 +262,7 @@ def test_actual_receiver_ports_admit_only_requested_frozen_name_and_record_no_cr
     report attempt and receipt admission are used. This is not a nonempty
     scientific-operation execution or configured-model verification.
     """
-    from gene_annotation_episode.runtime import TypedReportContract
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
     with Store(tmp_path/"store") as store:
         case=Scenario(tmp_path,store)
         workflow=case.workflow(ScriptedProvider([]))

@@ -19,7 +19,7 @@ from gene_annotation_episode import ncbi_entrez_acquisition as native
 from gene_annotation_episode import ncbi_entrez_tools as host
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 
 from test_alphafold_acquisition_host import Provider, _controller, _credit, _selected
@@ -760,7 +760,7 @@ def test_live_retained_sra_accession_search_ordinary_acquisition(tmp_path, monke
 
     from gene_annotation_episode.acquisition import SourceSnapshot
     from gene_annotation_episode.domain import identity
-    from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure
+    from gene_annotation_episode.episodic_workflow.root.task_action_units import ActionFailure
     from test_molecular_acquisition_ordinary import (
         NoModel, _forbidden, _neutral_bookkeeping, _snapshot,
         _live_audit, _live_capture, _live_pin, _live_write,
@@ -1170,7 +1170,7 @@ def test_later_real_docset_file_receipt_cannot_backfill_an_earlier_denied_sra_ac
     from gene_annotation_episode import ncbi_sra_acquisition as sra
     from gene_annotation_episode import ncbi_sra_acquisition_host as sra_host
     from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
-    from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure
+    from gene_annotation_episode.episodic_workflow.root.task_action_units import ActionFailure
     from test_molecular_acquisition_ordinary import NoModel, _neutral_bookkeeping
     from test_ncbi_sra_acquisition import engineered
     http = _sra_chain_transport(monkeypatch)

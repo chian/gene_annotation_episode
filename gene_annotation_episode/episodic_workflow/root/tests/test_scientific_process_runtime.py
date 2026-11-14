@@ -12,15 +12,16 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.composition_information import metadata_catalog
-from gene_annotation_episode.execution_expectations import ExecutionExpectations
+from gene_annotation_episode.episodic_workflow.root.composition_information import metadata_catalog
+from gene_annotation_episode.episodic_workflow.root.execution_expectations import ExecutionExpectations
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.numerical import NumericBand, SignedNumericBand, YieldController, YieldEstimate
-from gene_annotation_episode.runtime import Workflow, run_workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_records import (
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, SignedNumericBand, YieldController, YieldEstimate
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import (
     scientific_digest, scientific_invocation_ref, selector_selection)
-from gene_annotation_episode.scientific_process_reports import credit_binding_ref, report_sources
+from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import credit_binding_ref, report_sources
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
 from test_runtime import FixtureController, ScriptedProvider
@@ -170,9 +171,9 @@ class Scenario:
 
 
 def test_annotation_axis_root_observes_whole_child_return_and_replays_collection(tmp_path):
-    from gene_annotation_episode.numerical import AnnotationAxisYieldController
+    from gene_annotation_episode.episodic_workflow.root.numerical import AnnotationAxisYieldController
     from gene_annotation_episode.episode_reports import report_sources as yield_sources
-    from gene_annotation_episode.episode_journal import decode_credit
+    from gene_annotation_episode.episodic_workflow.root.episode_journal import decode_credit
     with Store(tmp_path / 'state') as store:
         case = Scenario(tmp_path, store)
         subject = case.scope['subject_refs'][0]
@@ -312,7 +313,7 @@ def test_constructor_iteration_prepares_revision_with_fixed_process_and_original
 
 
 def workflow_tools(case):
-    from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+    from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
     return ScientificToolLibrary(case.directory/'scientific-tool-library')
 
 
@@ -323,7 +324,7 @@ def prepared_child(case, workflow):
 
 
 def test_actual_scientific_child_credit_uses_original_annotation_assignment(tmp_path):
-    from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+    from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
     from test_investigation_progress import put_finding
     from test_scientific_hypervolume_runtime import evidence
     with Store(tmp_path/'state') as store:
@@ -616,7 +617,7 @@ def test_initial_filled_request_is_required_before_credit_or_decisions(tmp_path)
         case = Scenario(tmp_path, store)
         workflow = case.workflow(ScriptedProvider([]))
         root = workflow.build('annotation', 'root', 'Resolve fixture uncertainty', case.scope)
-        from gene_annotation_episode.runtime import TypedReportContract
+        from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
         contract = TypedReportContract('Return the exact parent form', FORM, workflow.resolver(case.scope))
         with pytest.raises(ValueError, match='scientific_filled_request_required'):
             workflow.build('scientific_process', 'missing', 'Investigate', case.scope,

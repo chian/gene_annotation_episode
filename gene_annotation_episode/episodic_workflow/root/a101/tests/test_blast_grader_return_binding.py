@@ -3,9 +3,9 @@ import pytest
 
 from gene_annotation_episode.api_blast import NCBIBlastService
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_api_blast_service import Client
 
 

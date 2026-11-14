@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a110.communication import plain
 from gene_annotation_episode.domain import ContractError, identity
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a110.library.literature_reaction_inputs import LITERAL_FIELDS, reaction_population_schema

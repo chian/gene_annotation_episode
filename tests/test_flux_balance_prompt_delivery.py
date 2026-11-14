@@ -23,15 +23,14 @@ from gene_annotation_episode.episodic_workflow.root.library.flux_balance_tools i
 from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_prompt import (
-    _operation_schema_view, _registered_return_schema_view, render_scientific_process_prompt,
-)
+from gene_annotation_episode.episodic_workflow.root.library.decision_schema_display import _operation_schema_view, _registered_return_schema_view
+from gene_annotation_episode.episodic_workflow.root.library.published_scientific_task_presentation import render_scientific_process_prompt
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.schema_information_text import (
     parse_schema_information, schema_fingerprint,
 )
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_published_axis_workflow import (
     PUBLICATION, ScriptedDecisions, StopBeforeDecision, select,
 )

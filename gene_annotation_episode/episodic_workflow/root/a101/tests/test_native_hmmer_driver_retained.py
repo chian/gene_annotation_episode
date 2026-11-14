@@ -7,8 +7,8 @@ import shutil
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_search_grader import calculate_hmmer_search_scores
-from gene_annotation_episode.nhmmer_grader import calculate_nhmmer_scores
-from gene_annotation_episode.hmmalign_grader import calculate_hmmalign_scores
+from gene_annotation_episode.episodic_workflow.root.a101.library.nhmmer_grader import calculate_nhmmer_scores
+from gene_annotation_episode.episodic_workflow.root.a101.library.hmmalign_grader import calculate_hmmalign_scores
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_contracts import validate_native_hmmer_requested_job
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_driver import run_native_hmmer, validate_native_hmmer_bundle_files
 

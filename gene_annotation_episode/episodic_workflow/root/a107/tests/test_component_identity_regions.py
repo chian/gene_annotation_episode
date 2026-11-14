@@ -11,7 +11,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a107.a107_expression_components import calculate
 from gene_annotation_episode.episodic_workflow.root.a107.a107_qualification import _expression
 from gene_annotation_episode.episodic_workflow.root.a107.component_axis_native_hpc import publish, RESULT_PROVIDER
-from gene_annotation_episode.component_sequence_attribution import protein_correspondence, protein_sequence
+from gene_annotation_episode.episodic_workflow.root.a107.component_sequence_attribution import protein_correspondence, protein_sequence
 from gene_annotation_episode.state import Store
 
 

@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_al
 from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_acquisition as acquisition
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_hmmer_preparation_worker as worker
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand
 from test_native_hmmer_preparation_contracts import job, operand
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_contracts import FORMAT_ARGUMENTS
 from test_native_hmmer_preparation_workflow import (

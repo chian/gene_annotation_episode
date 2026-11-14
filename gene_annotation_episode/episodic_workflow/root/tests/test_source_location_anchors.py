@@ -8,11 +8,11 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.domain import ContractError, validate_schema
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_a105_assay_type_binding_322 import grading_fixture
 from test_state import empty_payload, source
 

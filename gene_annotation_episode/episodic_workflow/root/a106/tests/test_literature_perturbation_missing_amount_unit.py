@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts
+from gene_annotation_episode.episodic_workflow.root.a106.communication import form_with_facts
 from gene_annotation_episode.domain import canonical, obj
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_experimental_contracts import ExperimentalContractError
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_inputs import read_perturbation_inputs

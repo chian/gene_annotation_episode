@@ -10,21 +10,21 @@ from jsonschema import Draft202012Validator
 import pytest
 
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.execution_progress import describe_execution_target
-from gene_annotation_episode.native_genomic_overlap_contracts import validate_genomic_overlap_run_plan
-from gene_annotation_episode.native_genomic_overlap_contracts import validate_genomic_overlap_independent_pair_manifest
-from gene_annotation_episode.native_genomic_overlap_observations import (
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.execution_progress import describe_execution_target
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_contracts import validate_genomic_overlap_run_plan
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_contracts import validate_genomic_overlap_independent_pair_manifest
+from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_observations import (
     genomic_overlap_observed_files, read_genomic_overlap_output,
 )
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-from gene_annotation_episode.practical_execution_records import (
+from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import (
     REQUESTED_JOB_SCHEMA, validate_assignment, validate_outcome,
 )
 from gene_annotation_episode.progress_records import validate_resource_observation
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_genomic_overlap_operands import f, problem_template
 
 
@@ -244,7 +244,7 @@ def test_independent_seal_retains_original_facts_without_set_observations(monkey
     fixtures = import_module('verification.tool_graders_genomic_overlap_execution_contracts_2026-10-27_426.fixtures')
     def denied(*args, **kwargs):
         raise AssertionError('independent seal must not invent batch set observations')
-    monkeypatch.setattr('gene_annotation_episode.native_genomic_overlap_contracts._set_outputs', denied)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_contracts._set_outputs', denied)
     for case in (None, 'empty', 'invalid'):
         plan, batch = fixtures.fixture() if case is None else fixtures.c_case(case)
         for pair in batch['pairs']:

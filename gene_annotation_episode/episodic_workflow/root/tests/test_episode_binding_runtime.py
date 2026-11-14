@@ -8,9 +8,9 @@ import json
 
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_recursive_monitoring import assignment, durable_target
 from test_runtime import FixtureController, ScriptedProvider
 from method_loop.durable import DurableExecutionStore
@@ -97,7 +97,7 @@ def test_specialist_resolver_cannot_bypass_actual_progress_delivery(tmp_path):
         workflow, _, _ = build_workflow(tmp_path, store, ScriptedProvider([]))
         scope = target['child']['scope']
         root = workflow.build('annotation', 'root', 'Investigate the fixture', scope)
-        from gene_annotation_episode.runtime import TypedReportContract
+        from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
         schema = obj({'progress': {'type': 'array', 'items': {'type': 'string', 'format': 'reference',
             'x-reference-namespace': 'episode_progress'}}})
         contract = TypedReportContract('Return the actually received progress', schema, workflow.resolver(scope))

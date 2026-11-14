@@ -9,7 +9,7 @@ import struct
 
 from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_native_read_mapping import binary,checked
 
 

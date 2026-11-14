@@ -7,7 +7,7 @@ import json
 
 from gene_annotation_episode.episodic_workflow.root.communication import validate_form
 from gene_annotation_episode.monitoring_credit import MonitoringInformationCredit
-from gene_annotation_episode.episodic_workflow.root.runtime import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from test_resource_monitoring_separation import sample
 from test_runtime import obj, setup
 

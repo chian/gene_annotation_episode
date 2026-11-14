@@ -332,7 +332,7 @@ def test_narrow_context_rejects_selected_numeric_tokens(tmp_path):
 
 def test_full_task_union_lookup_and_failed_history_no_input_dump(tmp_path):
     from gene_annotation_episode.episodic_workflow.root.a105.episode_contract_information import operation_contract_information
-    from gene_annotation_episode.episodic_workflow.root.literature_task_selection import NATIVE_KINETIC_TASK
+    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_task_families import NATIVE_KINETIC_TASK
     store, ctx, args, binding, _ = setup(tmp_path / 'state')
     try:
         current, out, rows = selected(store, ctx, args, binding)

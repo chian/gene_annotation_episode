@@ -13,11 +13,11 @@ from types import MethodType, SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.flux_balance_execution_inputs import FluxBalanceExecutionInputs
-from gene_annotation_episode.native_flux_balance_contracts import (
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.flux_balance_execution_inputs import FluxBalanceExecutionInputs
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
     DRIVER_MODULE, POLICY, RUN_PLAN_FILENAME, SOURCE_FUNCTION_SHA256, flux_balance_environment,
 )
 from gene_annotation_episode.state import Store

@@ -27,7 +27,7 @@ from gene_annotation_episode.episodic_workflow.root.episode_journal import Journ
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import MEDIA_TYPE, retain_tool_grading
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_blast_result_views import published
 
 

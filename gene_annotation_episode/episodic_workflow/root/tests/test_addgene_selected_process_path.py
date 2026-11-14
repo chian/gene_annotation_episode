@@ -23,18 +23,18 @@ from gene_annotation_episode import addgene_sequence_returns as returns
 from gene_annotation_episode import sequence_support_publication as publication
 from gene_annotation_episode.addgene_sequence_facts import FACT_SOURCE, ADDGENE_SEQUENCE_FACTS_SCHEMA
 from gene_annotation_episode.api_sequence_support import COLLECT
-from gene_annotation_episode.communication import ReportBoundaryError, plain
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.numerical import (NumericBand, YieldController, YieldEstimate,
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.numerical import (NumericBand, YieldController, YieldEstimate,
     YieldParameters, estimate_score_yield)
 from gene_annotation_episode.practical_yield import PracticalYieldEstimator
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[4]

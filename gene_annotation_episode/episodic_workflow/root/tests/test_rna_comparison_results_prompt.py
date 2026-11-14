@@ -10,12 +10,12 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.rna_structure_comparison_contracts import SELECTOR_VERSION, SITE_TRANSITIONS
-from gene_annotation_episode.rna_structure_comparison_presentation import render_rna_comparison_projections
-from gene_annotation_episode.rna_structure_comparison_views import PROJECTION_SOURCE, rna_comparison_fact_sources
-import gene_annotation_episode.rna_structure_comparison_prompt as prompt
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_contracts import SELECTOR_VERSION, SITE_TRANSITIONS
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_presentation import render_rna_comparison_projections
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE, rna_comparison_fact_sources
+import gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_prompt as prompt
 from test_rna_comparison_presentation import request, project, receipt
 
 
@@ -316,9 +316,9 @@ def test_rendering_needs_no_store_file_network_native_or_calculator(pair_sheet, 
     before = deepcopy(state)
     def forbidden(*args, **kwargs):
         raise AssertionError("Presentation crossed a side-effect/calculation boundary")
-    calculations = importlib.import_module("gene_annotation_episode.rna_structure_comparison_calculations")
-    inputs = importlib.import_module("gene_annotation_episode.rna_structure_comparison_inputs")
-    publication = importlib.import_module("gene_annotation_episode.rna_structure_comparison_publication")
+    calculations = importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_calculations")
+    inputs = importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_inputs")
+    publication = importlib.import_module("gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_publication")
     from gene_annotation_episode.state import Store
     for target, name in [(builtins, "open"), (Path, "read_text"), (Path, "read_bytes"),
             (socket, "socket"), (subprocess, "Popen"), (Store, "get"),

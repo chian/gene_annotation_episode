@@ -2,9 +2,7 @@
 from copy import deepcopy
 import json
 
-from gene_annotation_episode.episodic_workflow.root.literature_current_results import (
-    current_interpretation_view, render_current_scoring_results,
-)
+from gene_annotation_episode.episodic_workflow.root.library.literature_current_results import current_interpretation_view, render_current_scoring_results
 
 
 class Display:

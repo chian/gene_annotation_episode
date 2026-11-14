@@ -21,13 +21,13 @@ from gene_annotation_episode.chromatin_interaction_execution_information import 
     validate_chromatin_result_selector,
 )
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 from gene_annotation_episode.native_chromatin_interaction_contracts import (
     POLICY, REQUIRED_DEPENDENCIES, REQUIRED_MODULES, requested_job_from_chromatin,
     validate_chromatin_job,
 )
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 WORKED = {row['example_key']: row['record'] for row in json.loads((
@@ -267,12 +267,12 @@ def test_unimplemented_resource_binding_is_explicit(tmp_path, kind):
 
 
 def test_rna_and_chromatin_selectors_are_both_validated_when_bound_together(tmp_path):
-    from gene_annotation_episode.rna_structure_contracts import OPERATIONS
+    from gene_annotation_episode.episodic_workflow.root.library.rna_structure_contracts import OPERATIONS
     config = resource(tmp_path)
     mode = next(key for key, value in OPERATIONS.items() if value == 'analyze_rna_secondary_structure_features')
     config['native_rna_structure'] = [{'operation': OPERATIONS[mode], 'mode': mode, 'software': {
         'python_executable': '/synthetic/python', 'python_sha256': '1' * 64,
-        'python_version': None, 'worker_module': 'gene_annotation_episode.native_rna_structure_worker',
+        'python_version': None, 'worker_module': 'gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker',
         'worker_source_sha256': '2' * 64, 'viennarna_distribution_version': None,
         'rna_module_sha256': None, 'rna_extension_sha256': None}}]
     rna = {'version': 'native_rna_structure_result_selector_v1', 'acquisition': 'complete_bound_bundle',

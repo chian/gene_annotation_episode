@@ -70,7 +70,7 @@ def test_native_document_read_uses_the_actual_workflow_memory_bound(
         tmp_path, monkeypatch, operation, executable_name):
     from gene_annotation_episode.episodic_workflow.root.a106.document_tools import pdf_native
     from gene_annotation_episode.episodic_workflow.root.a106.tool_configuration import build_tools
-    from gene_annotation_episode.episodic_workflow.root.a106.workflow_budget import ENV, active_budget
+    from gene_annotation_episode.workflow_budget import ENV, active_budget
     if not os.environ.get(ENV):
         pytest.skip("Native document execution requires the owned workflow launcher")
     configuration = evaluation_tool_configuration(tmp_path)
@@ -120,7 +120,7 @@ def test_resume_preserves_original_tool_configuration(tmp_path, monkeypatch):
 def test_native_spreadsheet_read_uses_the_actual_workflow_memory_bound(tmp_path, monkeypatch):
     from gene_annotation_episode.episodic_workflow.root.a106.spreadsheet_tools import xlsx_native
     from gene_annotation_episode.episodic_workflow.root.a106.tool_configuration import build_tools
-    from gene_annotation_episode.episodic_workflow.root.a106.workflow_budget import active_budget
+    from gene_annotation_episode.workflow_budget import active_budget
     from test_spreadsheet_tools import workbook
     monkeypatch.setenv("GENE_EPISODE_LOCAL_RESOURCE_DIRECTORY", str(tmp_path / "local-resources"))
     document, _ = workbook(tmp_path)

@@ -14,11 +14,12 @@ import pytest
 from gene_annotation_episode.acquisition import PublicClients
 from gene_annotation_episode.episodic_workflow.root.decision_context import VERSION, state_frame
 from gene_annotation_episode import native_lifecycle
-from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection, _ordinary_runtime_receiver_context
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.model_presentation import _ordinary_runtime_receiver_context
 from gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_receiver_prompt import _source_operands
-from gene_annotation_episode.scientific_process_prompt import text_instructions
+from gene_annotation_episode.episodic_workflow.root.library.decision_prompt_text import text_instructions
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 FIXTURE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/tests/fixtures/runtime_receiver569"

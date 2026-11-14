@@ -24,7 +24,7 @@ from gene_annotation_episode.episode_reports import report_sources
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 EVIDENCE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/tests/fixtures/bvbrc/data_contract'

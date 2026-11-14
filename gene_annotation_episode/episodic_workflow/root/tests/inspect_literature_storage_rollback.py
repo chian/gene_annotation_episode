@@ -12,9 +12,9 @@ import shutil
 import sqlite3
 from types import SimpleNamespace
 
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
 from gene_annotation_episode.state import Store
 

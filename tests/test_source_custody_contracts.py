@@ -10,7 +10,7 @@ from gene_annotation_episode.document_tools import DocumentOutput
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_literature_assets import SavedPmc, supplement
 
 

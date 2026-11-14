@@ -45,7 +45,8 @@ from gene_annotation_episode.episodic_workflow.root.library.protein_structure_pu
 from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views import project_protein_structure_results
 from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_worker import run_protein_structure_result_worker
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry, SequenceWork
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_values import SequenceWork
 
 F = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.execution_390")
 A = import_module("gene_annotation_episode.episodic_workflow.root.a102.tests.fixtures.protein_structure_support.inputs_386")

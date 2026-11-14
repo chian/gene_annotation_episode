@@ -8,7 +8,7 @@ from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode.api_services import build_service
 from gene_annotation_episode.api_uniprot import UniProtService
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def response(body, request, *, next_cursor=None):

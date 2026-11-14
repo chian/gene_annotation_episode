@@ -13,15 +13,17 @@ import pytest
 
 from method_loop import ChildEpisodeUnit, Context, Episode, EpisodeGoal, EpisodeRequest, EpisodeTree, Grain, Leaf
 from gene_annotation_episode.acquisition import SourceSnapshot
-from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, plain
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, form_with_facts, plain
 from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress, project_finding_progress
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress, project_finding_progress
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes, ROLES
-from gene_annotation_episode.runtime import Record, TypedReportContract, run_workflow
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
 from test_scientific_hypervolume_runtime import annotation, assessment
 from test_spreadsheet_tools import workbook

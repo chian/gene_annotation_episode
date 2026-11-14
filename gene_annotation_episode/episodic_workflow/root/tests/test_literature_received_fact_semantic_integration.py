@@ -9,18 +9,19 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import _steering, render_literature_experimental_prompt
+from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import _steering
+from gene_annotation_episode.episodic_workflow.root.library.literature_prompt_composition import render_literature_experimental_prompt
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_storage import LiteratureRateRepository
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_native_storage import setup_native_store
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_episode_integration import service_binding
 from test_runtime import FixtureController, ScriptedProvider
@@ -120,7 +121,7 @@ def test_actual_own_next_parent_next_and_first_readonly_restore_preserve_origina
     reopened.db.create_function('library_scope_record',2,reopened._scope_filter_record)
     for name in ('get_artifact','artifact','put','transaction','commit_reasoning'):
         monkeypatch.setattr(reopened,name,forbidden)
-    monkeypatch.setattr('gene_annotation_episode.providers.ModelConnection',forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.providers.ModelConnection',forbidden)
     monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_storage.populate_rate_contrast',forbidden)
     try:
         binding=LiteratureEpisodes(WorkflowServices(SimpleNamespace(store=reopened,run_id=result['run_id'])),rate_population=True)

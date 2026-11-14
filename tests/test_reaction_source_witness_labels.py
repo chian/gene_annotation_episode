@@ -7,12 +7,9 @@ import pytest
 
 from gene_annotation_episode.domain import LABEL, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_meanings import (
-    MODEL_FIELDS, RESOURCE_FIELDS, publish_meanings,
-)
-from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_source import (
-    populate_source, reaction_source_population_schema,
-)
+from gene_annotation_episode.episodic_workflow.root.library.literature_reaction_meanings import MODEL_FIELDS, RESOURCE_FIELDS, publish_meanings
+from gene_annotation_episode.episodic_workflow.root.literature_reaction_source import populate_source
+from gene_annotation_episode.episodic_workflow.root.library.literature_reaction_source_contracts import reaction_source_population_schema
 from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a110.tests.test_literature_reaction_storage import source

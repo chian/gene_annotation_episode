@@ -60,7 +60,7 @@ def test_predictor_can_acquire_missing_operands_but_cannot_launch(tmp_path):
 
 
 def test_retained_plan_projection_preserves_operands_and_excludes_child_audit_id():
-    from gene_annotation_episode.hpc_prompt import plan_outcome_view
+    from gene_annotation_episode.episodic_workflow.root.hpc_prompt import plan_outcome_view
     original = {'status': 'completed', 'result': {'plan_id': 'original-plan',
         'model_ref': 'selected-model', 'original_prediction': {'resources': {'cpu_seconds': 'distribution'}},
         'practical_assignment': {'argv': ['original-executable']}, 'prediction_episode_id': 'private-child-id'}}

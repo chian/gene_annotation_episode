@@ -17,7 +17,7 @@ def forbid_io(monkeypatch):
 
 def manifest_for():
     return {"version": "native_blast_database_producer_manifest_v1", "module_root": "/deploy",
-        "entry_module": "gene_annotation_episode.native_blast_database_driver",
+        "entry_module": "gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_driver",
         "python": {"path": "/runtime/python", "sha256": "a" * 64, "size_bytes": 23},
         "package_files": [{"relative_path": "gene_annotation_episode/" + n, "sha256": "b" * 64, "size_bytes": 10}
             for n in ("__init__.py", "native_blast_database_contracts.py", "native_blast_database_driver.py")],

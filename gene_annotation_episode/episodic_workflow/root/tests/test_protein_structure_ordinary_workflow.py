@@ -21,25 +21,25 @@ import Bio
 import numpy
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.native_protein_structure_contracts import DRIVER_MODULE, POLICY, WORKER_MODULE
-from gene_annotation_episode.protein_structure_action_records import (
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import DRIVER_MODULE, POLICY, WORKER_MODULE
+from gene_annotation_episode.episodic_workflow.root.protein_structure_action_records import (
     SAVED_SOURCE, SEQUENCE_SOURCE, VIEW_SOURCE, ProteinStructureActionRecords,
     frozen_protein_structure_action_facts, protein_structure_action_fact_sources,
     validate_frozen_protein_structure_action_return,
 )
-from gene_annotation_episode.protein_structure_formats import parse_pdb_structure
-from gene_annotation_episode.protein_structure_sequences import extract_structure_sequence
-from gene_annotation_episode.runtime import DecisionSource, Workflow
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats import parse_pdb_structure
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_sequences import extract_structure_sequence
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource, Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
 from test_scientific_process_runtime import Scenario, action
 
@@ -321,15 +321,15 @@ def test_actual_ordinary_protein_tools_recover_and_return_in_one_scientific_epis
             assert path.is_file()
             path.unlink()
         shutil.rmtree(workspace)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_tools.run_cancellable_native", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_tools.resolve_protein_structure_operands", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools.run_cancellable_native", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_tools.resolve_protein_structure_operands", _forbidden)
         monkeypatch.setattr("gene_annotation_episode.native_lifecycle.prepare_job", _forbidden)
         monkeypatch.setattr("gene_annotation_episode.native_lifecycle.start_prepared", _forbidden)
         monkeypatch.setattr("gene_annotation_episode.native_lifecycle.resume_start", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_formats.parse_pdb_structure", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_formats.parse_mmcif_structure", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_calculations.calculate_protein_structure_components", _forbidden)
-        monkeypatch.setattr("gene_annotation_episode.protein_structure_calculations.fit_ca_transform", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats.parse_pdb_structure", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_formats.parse_mmcif_structure", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations.calculate_protein_structure_components", _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_calculations.fit_ca_transform", _forbidden)
         restored_tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
         restored_tools.configure_protein_structure_resources(resources, environments)
         restored_provider = ScriptedProvider([])
@@ -412,8 +412,8 @@ def test_actual_ordinary_protein_tools_recover_and_return_in_one_scientific_epis
         assert store.db.execute("SELECT count(*) FROM runtime_report_attempts WHERE failure IS NULL").fetchone()[0] == 1
         before = _tables(store)
         with monkeypatch.context() as frozen:
-            frozen.setattr("gene_annotation_episode.protein_structure_result_views.project_protein_structure_results", _forbidden)
-            frozen.setattr("gene_annotation_episode.protein_structure_action_records.project_protein_structure_action_views", _forbidden)
+            frozen.setattr("gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views.project_protein_structure_results", _forbidden)
+            frozen.setattr("gene_annotation_episode.episodic_workflow.root.protein_structure_action_records.project_protein_structure_action_views", _forbidden)
             for field, source in field_sources.items():
                 assert frozen_protein_structure_action_facts(store, restored.run_id, science, fact_source=source) == returned[field]
             replay_provider = ScriptedProvider([])

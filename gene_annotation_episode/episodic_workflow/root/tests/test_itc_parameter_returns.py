@@ -13,9 +13,9 @@ import shutil
 
 import pytest
 
-from gene_annotation_episode.communication import ReportBoundaryError, plain
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
 from gene_annotation_episode.domain import canonical, obj
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.molecular_measurement_tools import (
     ITC_TOOL, ITC_PARAMETER_SOURCE, frozen_itc_parameter_facts,
     itc_parameter_fact_sources, merge_itc_parameter_facts, own_itc_parameter_facts,
@@ -23,12 +23,13 @@ from gene_annotation_episode.molecular_measurement_tools import (
     requested_itc_parameter_fields,
     validate_frozen_itc_parameter_return, validate_itc_parameter_return,
 )
-from gene_annotation_episode.runtime import TypedReportContract, Workflow
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_itc_binding_tool import QUESTION, _RenderedScript, _archives, _libraries, _tables
 from test_runtime import FixtureController
 
@@ -366,7 +367,8 @@ def test_parameter_projection_without_observation_keeps_unknown_call_count(tmp_p
 
 
 def test_unrequested_parameter_source_does_not_enter_new_schema_or_source_readers(monkeypatch):
-    from gene_annotation_episode import communication, molecular_measurement_tools as ordinary
+    from gene_annotation_episode.episodic_workflow.root import communication
+    from gene_annotation_episode import molecular_measurement_tools as ordinary
     monkeypatch.setattr(communication, "validate_closed_schema", _forbidden)
     monkeypatch.setattr(ordinary, "itc_parameter_fact_sources", _forbidden)
     for name in ("own_itc_parameter_facts", "frozen_itc_parameter_facts", "received_itc_parameter_facts"):

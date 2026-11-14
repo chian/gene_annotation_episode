@@ -453,7 +453,7 @@ def test_compact_redelivery_uses_its_actual_frozen_prefix_and_facts(f, alter):
 def test_materialized_scientific_assignment_requires_original_selectors_and_hashes(f, alter):
     from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_digest, scientific_invocation_ref, selector_selection
     from gene_annotation_episode.tool_information import make_tool_info
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     _, view, _ = original(f)
     child = f.child(index=1, role="scientific_process")
     tool = make_tool_info({"name": "sequence.align", **ToolRegistry(f.store).catalog(f.scope)["sequence.align"]}, "local")

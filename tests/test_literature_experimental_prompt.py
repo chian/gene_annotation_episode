@@ -5,10 +5,9 @@ from types import MappingProxyType
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.decision_context import INSTRUCTIONS
-from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import (
-    EXPERIMENTAL_TASK, VERSION, is_literature_experimental_context,
-    render_literature_experimental_prompt,
-)
+from gene_annotation_episode.episodic_workflow.root.library.literature_declared_task_text import EXPERIMENTAL_TASK
+from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import VERSION, is_literature_experimental_context
+from gene_annotation_episode.episodic_workflow.root.library.literature_prompt_composition import render_literature_experimental_prompt
 
 
 def state():
@@ -251,7 +250,7 @@ def test_single_source_quantity_assignment_and_untyped_spread_reach_text():
 
 
 def test_assay_context_and_operand_unknowns_are_factual_steering_without_internal_graph_dump():
-    from gene_annotation_episode.episodic_workflow.root.a105.literature_assay_prompt import ASSAY_TASK
+    from gene_annotation_episode.episodic_workflow.root.library.literature_assay_prompt import ASSAY_TASK
     value = state()
     value['literature_assignment']['requested_assay_components'] = ['corrected_activity','source_presence_index']
     value['last_local_outcome'] = {'status':'completed','result':{

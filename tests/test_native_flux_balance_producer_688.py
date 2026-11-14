@@ -19,9 +19,8 @@ from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_
     flux_balance_driver_argv, flux_balance_environment, flux_balance_output_files,
     validate_flux_balance_run_plan,
 )
-from gene_annotation_episode.native_flux_balance_storage import (
-    decode_json, file_pin, immutable_bytes, immutable_json, read_json, retain_input,
-)
+from gene_annotation_episode.native_flux_balance_storage import decode_json, file_pin, immutable_bytes, immutable_json, read_json
+from gene_annotation_episode.episodic_workflow.root.library.native_artifact_storage import retain_input
 from gene_annotation_episode.episodic_workflow.root.library import native_flux_balance_cobra_glpk as native
 
 ATTEMPT = Path(os.environ["HMMER529_ATTEMPT"]) if "HMMER529_ATTEMPT" in os.environ else None

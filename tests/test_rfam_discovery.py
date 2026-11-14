@@ -26,7 +26,7 @@ from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.provider_jobs import RemoteSearches
 from gene_annotation_episode.rfam_discovery import hit_row, result_body, result_url
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 FIXTURES = Path(__file__).resolve().parents[1] / 'validation/providers/rfam-batch-calibration'
 NATIVE = (FIXTURES / 'result-response-01.body').read_bytes()
@@ -340,7 +340,7 @@ def test_collect_entrypoints_cannot_silently_reinterpret_other_provider_jobs(tmp
 
 def test_real_runtime_boundary_one_selected_search_one_observation_no_progress_manufactured(tmp_path):
     from test_runtime import FixtureController,ScriptedProvider
-    from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
+    from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
     with Store(tmp_path/'state') as store:
         subject=store.create_problem(raw_sequence=QUERY,molecule='dna')['subject_refs'][0]
         client=Client(pending=[b'PEND',b'RUN'])

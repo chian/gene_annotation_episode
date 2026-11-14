@@ -18,7 +18,7 @@ from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.episodic_workflow.root.numerical import YieldController
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def binary():

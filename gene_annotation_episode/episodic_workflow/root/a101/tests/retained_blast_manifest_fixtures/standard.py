@@ -105,7 +105,7 @@ def fixture(program="blastp", *, query=None, kind="sequence", doc=None, options=
     identity["attempt_id"] = sha(encoded(identity["operation_key"]))
     identity["submission_token"] = sha(encoded({k: identity[k] for k in ("run_id", "episode_id", "assignment_sha256", "operation_key")}))
     manifest = dict(version="native_blast_standard_database_producer_manifest_v1", module_root="/synthetic/modules",
-        entry_module="gene_annotation_episode.native_blast_standard_database_driver",
+        entry_module="gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_driver",
         python=dict(path="/synthetic/bin/python", sha256="2" * 64, size_bytes=30),
         package_files=[dict(relative_path="gene_annotation_episode/" + name, sha256="3" * 64, size_bytes=40)
             for name in ("__init__.py", "native_blast_standard_database_contracts.py", "native_blast_standard_database_driver.py", "blast_program_context.py")], runtime_files=[])

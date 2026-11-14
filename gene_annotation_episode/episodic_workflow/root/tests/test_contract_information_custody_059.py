@@ -6,14 +6,14 @@ import json
 
 import pytest
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE as PROFILE
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.composition_information import CONTRACT_INFORMATION_PROFILE as PROFILE
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage import kinetic_cells_schema
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_contract_information_runtime_059 import PresentedProvider, information, populate
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_kinetic_storage import setup
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_kinetic_integration import reason
@@ -91,10 +91,10 @@ def test_original_c1_c4_compact_form_native_custody_rollback_and_readonly_first_
     from method_loop.archive import JsonArchive
     from method_loop.durable import content_digest
     from gene_annotation_episode.domain import ContractError, canonical
-    from gene_annotation_episode.episode_admission import AdmissionError, ReceiverBindingV1, admit_return
-    from gene_annotation_episode.episode_journal import Journal
+    from gene_annotation_episode.episodic_workflow.root.episode_admission import AdmissionError, ReceiverBindingV1, admit_return
+    from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage import LiteratureKineticRepository
-    from gene_annotation_episode.runtime import TypedReportContract
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
     from gene_annotation_episode.state import Store
     from test_contract_information_runtime_059 import run_child
     from test_episode_admission import Value, seal_return

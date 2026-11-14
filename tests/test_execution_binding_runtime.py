@@ -14,7 +14,8 @@ from gene_annotation_episode.episodic_workflow.root import application_execution
 from gene_annotation_episode import independent_execution as reconstruction
 from gene_annotation_episode.episodic_workflow.root.default_scientific_binding import VERSION as DEFAULT_VERSION
 from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
-from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 from test_runtime import ScriptedProvider

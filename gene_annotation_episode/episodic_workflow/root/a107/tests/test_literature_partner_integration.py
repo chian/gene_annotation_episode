@@ -125,8 +125,8 @@ def check_rows(rows, case):
 
 @pytest.mark.parametrize('case', CASES)
 def test_selected_components_saved_only_reconstruction_and_exact_typed_subset(tmp_path, monkeypatch, case):
-    from gene_annotation_episode.episode_composition import compose_episode_bindings
-    from gene_annotation_episode.episode_journal import Journal
+    from gene_annotation_episode.episodic_workflow.root.a107.episode_composition import compose_episode_bindings
+    from gene_annotation_episode.episodic_workflow.root.a107.episode_journal import Journal
     store, context, args = setup_case(tmp_path, case=case)
     with store:
         binding = binding_for(store, context)
@@ -220,8 +220,7 @@ def test_ordinary_partner_child_parent_delivery_preserves_scientific_meanings(tm
 
 
 def test_parent_task_and_requested_qualifications_are_rendered_once(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a107.literature_reference_parent_prompt import (
-        REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt)
+    from gene_annotation_episode.episodic_workflow.root.library.literature_reference_parent_presentation import REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt
     from gene_annotation_episode.episodic_workflow.root.a107.library.partner_source_instruction_text import PARTNER_TASK
     store, context, args = setup_case(tmp_path, components=['partner_loss_fraction', 'addback_fraction'])
     with store:
@@ -247,7 +246,7 @@ def test_parent_task_and_requested_qualifications_are_rendered_once(tmp_path):
 
 
 def test_partner_task_repeats_after_lookup_delta_and_reconstruction(tmp_path):
-    from gene_annotation_episode.decision_context import state_frame
+    from gene_annotation_episode.episodic_workflow.root.a107.decision_context import state_frame
     from gene_annotation_episode.episodic_workflow.root.a107.library.partner_source_instruction_text import PARTNER_TASK
     from test_literature_experimental_prompt_delivery import LiteratureWire, snapshot, complete
     first = snapshot()

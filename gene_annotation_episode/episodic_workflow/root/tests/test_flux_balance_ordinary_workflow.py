@@ -16,18 +16,18 @@ import sqlite3
 import pytest
 
 from gene_annotation_episode.domain import ContractError, obj
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.flux_balance_return_views import fba_fact_sources
-from gene_annotation_episode.flux_balance_tools import ARGUMENT_VERSION, FBA_TOOL
-from gene_annotation_episode import flux_balance_tools as ordinary
-from gene_annotation_episode.native_flux_balance_contracts import POLICY
-from gene_annotation_episode.runtime import DecisionSource, Workflow
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_return_views import fba_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_tools import ARGUMENT_VERSION, FBA_TOOL
+from gene_annotation_episode.episodic_workflow.root.library import flux_balance_tools as ordinary
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource, Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_flux_balance_model_tools import addition
 from test_flux_balance_ordinary import explicit_request
 from test_flux_balance_tools import parameters
@@ -480,11 +480,11 @@ def test_actual_ordinary_fba_model_edit_solve_saved_reads_and_recovery(tmp_path,
             for name in ('run_selected_flux_balance_native', 'run_selected_flux_balance_result_worker',
                     'capture_flux_balance_native_files', 'project_fba_result', 'project_flux_balance_model_result'):
                 frozen.setattr(ordinary, name, _forbidden)
-            frozen.setattr('gene_annotation_episode.flux_balance_readers.parse_cobra_glpk_model_capture', _forbidden)
-            frozen.setattr('gene_annotation_episode.flux_balance_readers.parse_cobra_glpk_problem_capture', _forbidden)
-            frozen.setattr('gene_annotation_episode.flux_balance_readers.parse_cobra_glpk_solution_capture', _forbidden)
-            frozen.setattr('gene_annotation_episode.flux_balance_readers.parse_biomni_fba_csv', _forbidden)
-            frozen.setattr('gene_annotation_episode.flux_balance_readers.parse_fba_capture', _forbidden)
+            frozen.setattr('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_cobra_glpk_model_capture', _forbidden)
+            frozen.setattr('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_cobra_glpk_problem_capture', _forbidden)
+            frozen.setattr('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_cobra_glpk_solution_capture', _forbidden)
+            frozen.setattr('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_biomni_fba_csv', _forbidden)
+            frozen.setattr('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_fba_capture', _forbidden)
             frozen.setattr('gene_annotation_episode.flux_balance_calculations.calculate_flux_balance_sheet', _forbidden)
             frozen.setattr('gene_annotation_episode.flux_balance_result_worker.calculate_flux_balance_sheet', _forbidden)
             frozen.setattr(DecisionSource, 'execute', traced_action)
@@ -584,7 +584,7 @@ def _fba_reaction_inputs():
 
 
 def _fba_reaction_controller(path, initial):
-    from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+    from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
     horizon = 1 if path[-1][0] == 'annotation' else 4
     def estimate(raw, parameters, contexts):
         return YieldEstimate(len(raw), NumericBand.exact(0 if len(raw) >= horizon else 1),
@@ -598,14 +598,15 @@ def test_actual_rhea_source_cited_edit_one_solve_and_requested_parent_return(tmp
         pytest.skip('requires explicit selection of one new ordinary Rhea-cited FBA solve')
     assert os.environ.get('HMMER529_ATTEMPT'), 'requires the selected bounded current runtime closure'
     from gene_annotation_episode.acquisition import SourceSnapshot
-    from gene_annotation_episode.decision_context import state_frame
-    from gene_annotation_episode.providers import _SessionConnection
-    from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+    from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+    from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
-    from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+    from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
     from tests.test_flux_balance_model_tools import bound, edits
     from tests.test_homer_motif_saved_workflow import _archive_value, _encode
-    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import JOURNALS, _checkpoint as checkpoint, _files, _history, _sqlite_pins
+    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import JOURNALS, _files, _history, _sqlite_pins
+    from gene_annotation_episode.episodic_workflow.root.library.hmmer_alignment_input_alphabet import _checkpoint as checkpoint
     import gene_annotation_episode.flux_balance_model_execution as model_execution
     import gene_annotation_episode.flux_balance_calculations as calculations_module
     import gene_annotation_episode.flux_balance_result_worker as result_worker_module
@@ -1037,9 +1038,9 @@ def _fba_retained550_journal_changes(before, after):
 def _fba_retained550_closed_receiver(store, directory, proof, returned, monkeypatch):
     """Replay the newly completed history, then inspect its actual received view."""
     from method_loop.episode import EpisodeView
-    from gene_annotation_episode.decision_context import state_frame
-    from gene_annotation_episode.providers import _SessionConnection
-    from gene_annotation_episode.runtime import ReturnedActionUnit
+    from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+    from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import ReturnedActionUnit
     from tests.test_homer_motif_saved_workflow import _archive, _archive_value
     from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history
     before, run_files, artifacts = _tables(store), _files(directory), _files(store.path / 'artifacts')

@@ -299,7 +299,7 @@ def test_information_never_opens_files_uses_store_observes_executes_or_calculate
     from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_result_worker, genomic_overlap_result_views
     from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_capture, native_genomic_overlap_preparation
     from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_driver
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
     from gene_annotation_episode.state import Store
     original = target()
     native, saved = selector(), selector(saved=True)

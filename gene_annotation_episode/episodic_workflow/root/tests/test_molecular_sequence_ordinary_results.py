@@ -17,17 +17,17 @@ from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.domain import identity
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.genomic_overlap_result_receipts import read_control
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.genomic_overlap_result_receipts import read_control
 from gene_annotation_episode import molecular_sequence_ordinary as ordinary
 from gene_annotation_episode import molecular_sequence_results as results
 from gene_annotation_episode import molecular_sequence_result_contracts as contracts
 from gene_annotation_episode.molecular_measurement_tools import MolecularOperationUnpublished
 from gene_annotation_episode.native_file_capture import retained_native_file
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from tests.test_molecular_sequence_ordinary import selected_call, _lifecycle, _metadata_fixture, _write, _pin
 
 
@@ -614,7 +614,7 @@ def _forbid_ordinary_frozen_work(value, monkeypatch):
 
 def test_registered_orf_form_resolves_only_source_and_keeps_private_identity_strings_opaque(ordinary_owner, monkeypatch):
     """Actual shared form boundary over engineered publication metadata only."""
-    from gene_annotation_episode.communication import validate_closed_schema, validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema, validate_form
     from gene_annotation_episode import molecular_result_facts as facts
     value = ordinary_owner; _roles(value)
     _custody, public, _outcome = _publish(value, _execution(value, monkeypatch))
@@ -637,7 +637,7 @@ def test_registered_orf_form_resolves_only_source_and_keeps_private_identity_str
 
 @pytest.mark.parametrize("damage", ("constraint", "source_type", "source_namespace", "nested"))
 def test_registered_orf_schema_cannot_be_redefined_or_nested(damage):
-    from gene_annotation_episode.communication import ReportBoundaryError, validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_form
     schema = _ordinary_fact_schema()
     if damage == "constraint": schema["properties"]["measurements"]["minItems"] = 1
     elif damage == "source_type": schema["properties"]["measurements"]["items"]["properties"]["source_ref"]["type"] = ["string", "null"]
@@ -651,7 +651,7 @@ def test_registered_orf_schema_cannot_be_redefined_or_nested(damage):
 
 @pytest.mark.parametrize("cell,expected", ((0, "stored_value"), (None, "stored_null")))
 def test_registered_orf_form_preserves_observed_zero_and_stored_null(ordinary_owner, monkeypatch, cell, expected):
-    from gene_annotation_episode.communication import validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import validate_form
     value = ordinary_owner; roles = _roles(value)
     roles.documents["components"]["rows"][0]["interval_length_nt"] = cell
     roles.seal()
@@ -666,7 +666,7 @@ def test_registered_orf_form_preserves_observed_zero_and_stored_null(ordinary_ow
 
 @pytest.mark.parametrize("damage", ("bool_ordinal", "float_ordinal", "native_bool", "native_width", "path_float", "path_unit", "field_unit"))
 def test_registered_orf_strict_cells_reject_before_any_reference_resolution(ordinary_owner, monkeypatch, damage):
-    from gene_annotation_episode.communication import ReportBoundaryError, validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_form
     value = ordinary_owner; _roles(value)
     _custody, public, _outcome = _publish(value, _execution(value, monkeypatch))
     changed = deepcopy(public); rows = changed["values"]["rows"]
@@ -683,7 +683,7 @@ def test_registered_orf_strict_cells_reject_before_any_reference_resolution(ordi
 
 
 def test_registered_orf_form_denies_well_shaped_but_ungranted_source(ordinary_owner, monkeypatch):
-    from gene_annotation_episode.communication import ReportBoundaryError, validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_form
     value = ordinary_owner; _roles(value)
     _custody, public, _outcome = _publish(value, _execution(value, monkeypatch))
     changed = deepcopy(public); changed["source_ref"] = "source_" + "f" * 24
@@ -792,7 +792,7 @@ def test_generic_own_orf_facts_reject_action_operation_conflicts_before_private_
 def test_frozen_orf_fact_rows_and_forms_need_no_private_bytes_or_calculation(ordinary_owner, monkeypatch, state):
     """Engineered own frozen-row control, not a child return or Workflow closure."""
     from gene_annotation_episode import molecular_result_facts as facts
-    from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, validate_form
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, form_with_facts, validate_form
     value = ordinary_owner; _roles(value)
     _custody, public, _outcome = _publish(value, _execution(value, monkeypatch))
     source = contracts.ORDINARY_ORF_FACT_SOURCE
@@ -829,7 +829,7 @@ def test_frozen_orf_fact_rows_and_forms_need_no_private_bytes_or_calculation(ord
 
 def test_ordinary_orf_fact_source_reaches_actual_runtime_form_compilation():
     from gene_annotation_episode.molecular_result_facts import molecular_fact_sources
-    from gene_annotation_episode.runtime import _compile_form
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import _compile_form
     sources = molecular_fact_sources()
     source = contracts.ORDINARY_ORF_FACT_SOURCE
     assert sources[source]["type"] == "array"

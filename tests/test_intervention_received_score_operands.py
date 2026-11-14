@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episodic_workflow.root.a105.literature_binding_model_storage import LiteratureBindingModelRepository
+from gene_annotation_episode.episodic_workflow.root.literature_binding_model_storage import LiteratureBindingModelRepository
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_intervention_inputs import read_intervention_inputs
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_binding_model_storage import fixture
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_intervention_storage import intervention_fixture
@@ -95,10 +95,10 @@ def test_saved_rate_and_assay_scores_are_not_measurements(
         tmp_path, family, components, measurement, component_index, role):
     if family == "rate":
         from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_storage import setup_store
-        from gene_annotation_episode.episodic_workflow.root.a105.literature_rate_storage import LiteratureRateRepository as Repository
+        from gene_annotation_episode.episodic_workflow.root.literature_rate_storage import LiteratureRateRepository as Repository
     else:
         from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_assay_integration import setup_store
-        from gene_annotation_episode.episodic_workflow.root.a105.literature_assay_storage import LiteratureAssayRepository as Repository
+        from gene_annotation_episode.episodic_workflow.root.literature_assay_storage import LiteratureAssayRepository as Repository
     store, context, arguments = setup_store(tmp_path)
     with store:
         if family == "rate":

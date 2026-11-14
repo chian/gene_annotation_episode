@@ -281,7 +281,7 @@ def test_descriptors_do_not_invent_resource_bindings(kind, resource_id):
 
 
 def test_actual_practical_admission_matches_descriptor_for_bound_and_unbound_variant(tmp_path):
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_operations import LocalPracticalOperations
     pair = ('makeprofiledb', 'create_profile_database')
     variant = {'profile_type': 'rps', 'input_format': 'pssm_asn1_text'}
     job = selected_job(tmp_path, pair, variant)

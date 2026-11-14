@@ -17,20 +17,20 @@ import pytest
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.communication import plain, form_with_facts
+from gene_annotation_episode.episodic_workflow.root.communication import plain, form_with_facts
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.flux_balance_result_receipts import (
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_result_receipts import (
     VERSION, FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE, FAILURE_SOURCE,
     FluxBalanceResultReceipts, empty_files, empty_facts, qualified_files, issue,
 )
-from gene_annotation_episode.flux_balance_return_views import fba_fact_sources
-from gene_annotation_episode.flux_balance_returns import FluxBalanceReturns
-from gene_annotation_episode.native_flux_balance_results import NativeFluxBalanceResults, operation_catalog
-from gene_annotation_episode.flux_balance_result_views import project_fba_result
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_return_views import fba_fact_sources
+from gene_annotation_episode.episodic_workflow.root.flux_balance_returns import FluxBalanceReturns
+from gene_annotation_episode.episodic_workflow.root.native_flux_balance_results import NativeFluxBalanceResults, operation_catalog
+from gene_annotation_episode.episodic_workflow.root.library.flux_balance_result_views import project_fba_result
 from gene_annotation_episode.native_file_capture import retained_native_file
-from gene_annotation_episode.native_flux_balance_local import local_flux_balance_plan
+from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_local import local_flux_balance_plan
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
 from test_flux_balance_execution_inputs_704 import selected
 from test_flux_balance_operation_binding_706 import case, _reader
@@ -125,7 +125,7 @@ def test_collect_preserves_unclosed_writer_without_capture(host, monkeypatch, te
     f = host;context = f.child()
     f.c.view.update(state='returned' if terminal else 'running', terminal=terminal, quiescent=quiescent)
     if terminal: f.c.view['metadata']['native_returncode'] = 2
-    monkeypatch.setattr('gene_annotation_episode.native_flux_balance_results.capture_flux_balance_native_files', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_flux_balance_results.capture_flux_balance_native_files', forbidden)
     result = f.action(context)['result']
     assert result['capture'] is None and result['worker_plan'] is None
     assert result['host_failures'][0]['code'] == 'writer_not_closed'
@@ -174,7 +174,7 @@ def test_forwarded_target_handoff_keeps_original_producer(host):
 @pytest.mark.parametrize('legacy', [False, True])
 def test_compact_handoff_metadata_uses_original_projection_control(selected, monkeypatch, legacy):
     """Real v1/v2 custody; synthetic running status never claims native science."""
-    from gene_annotation_episode.flux_balance_request_binding import (
+    from gene_annotation_episode.episodic_workflow.root.library.flux_balance_request_binding import (
         CONTROL_VERSION, LEGACY_CONTROL_VERSION, OUTPUT_ROLES, read_request_binding,
     )
     from test_flux_balance_resource_registration_707 import _compact, _compact_launch, _family
@@ -321,7 +321,7 @@ def assert_receipt_control_faults(host, receipt):
 
 def test_real_finite_partial_worker_and_closed_host_replay(host, monkeypatch):
     f = host;context = f.child();c = f.c
-    from gene_annotation_episode import native_flux_balance_results as module
+    from gene_annotation_episode.episodic_workflow.root import native_flux_balance_results as module
     adapter = module.prepare_flux_balance_result_worker
     c.view.update(state='returned', terminal=True, quiescent=True)
     c.view['metadata'].update(native_returncode=2,
@@ -343,7 +343,7 @@ def test_real_finite_partial_worker_and_closed_host_replay(host, monkeypatch):
     original = local_flux_balance_plan(c.state.assignment, receipt['intent']['target']['execution_id'])
     shutil.rmtree(Path(original['identity']['execution_id']).parent)
     monkeypatch.setattr(native, 'status', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.native_flux_balance_results.prepare_flux_balance_result_worker', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_flux_balance_results.prepare_flux_balance_result_worker', forbidden)
     monkeypatch.setattr('gene_annotation_episode.flux_balance_result_worker.execute_flux_balance_worker', forbidden)
     assert f.host.own_fact_groups(context, verify_artifacts=False) == receipt['facts']
     assert f.host.receipts.read_completed(episode_id=context.episode_id,

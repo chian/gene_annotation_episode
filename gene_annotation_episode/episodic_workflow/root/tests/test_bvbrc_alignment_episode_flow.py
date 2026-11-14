@@ -24,22 +24,22 @@ import pytest
 from method_loop.archive import iter_json
 from method_loop.identities import EpisodeRef
 
-from gene_annotation_episode import bvbrc_msa_bundle_adapter as msa
-from gene_annotation_episode import bvbrc_metacats_bundle_adapter as metacats
-from gene_annotation_episode.bvbrc_alignment_bundle_contracts import decode_reference, encode_reference
-from gene_annotation_episode.bvbrc_alignment_returns import alignment_fact_sources
-from gene_annotation_episode.bvbrc_msa_grader import calculate_msa
-from gene_annotation_episode.bvbrc_metacats_grader import calculate_metacats
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_msa_bundle_adapter as msa
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_metacats_bundle_adapter as metacats
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_alignment_bundle_contracts import decode_reference, encode_reference
+from gene_annotation_episode.episodic_workflow.root.bvbrc_alignment_returns import alignment_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_msa_grader import calculate_msa
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_metacats_grader import calculate_metacats
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldParameters
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.library.published_scientific_task_presentation import render_scientific_process_prompt
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_bvbrc_alignment_bundle_resolution import (
     MSA_NATIVE, META_NATIVE, meta_fixture, msa_native_fixture, slot, xmfa_native_fixture,
 )
@@ -352,7 +352,7 @@ def block_saved_scientific_work(monkeypatch, forbidden):
             if callable(value) and getattr(value, '__module__', None) in defining_modules:
                 targets[id(value)] = value
                 symbols.append(value.__module__ + '.' + value.__name__)
-    native = importlib.import_module('gene_annotation_episode.xmfa_calculation_contracts')
+    native = importlib.import_module('gene_annotation_episode.episodic_workflow.root.library.xmfa_calculation_contracts')
     for name in ('union_intervals', 'interval_length', 'multiplicity_bases', 'complement_intervals',
             'validate_xmfa_alignment_components', 'validate_xmfa_coverage_components'):
         value = getattr(native, name)

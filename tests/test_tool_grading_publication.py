@@ -18,7 +18,7 @@ from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import (
     MEDIA_TYPE, retain_tool_grading, source_tool_gradings,
 )
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -132,7 +132,7 @@ def test_valid_gap_only_native_fixture_does_not_publish_zero_denominator_identit
     case verifies publication of a valid native format, not selectable costs.
     """
     from gene_annotation_episode.domain import canonical
-    from gene_annotation_episode.tools import SequenceWork
+    from gene_annotation_episode.episodic_workflow.root.tool_values import SequenceWork
     native = json.loads((ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/tool_grading/gap_only.native_fixture.json").read_text())
     native_bytes = canonical(native).encode()
     fasta = tmp_path / "pair.fna"

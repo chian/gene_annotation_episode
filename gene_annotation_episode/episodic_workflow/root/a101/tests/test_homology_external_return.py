@@ -1,6 +1,6 @@
 """A bound external query remains transferable evidence, not a new target."""
 import pytest
-from gene_annotation_episode.communication import validate_form, ReportBoundaryError
+from gene_annotation_episode.episodic_workflow.root.a101.communication import validate_form, ReportBoundaryError
 from gene_annotation_episode.episodic_workflow.root.a101.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.homology_job_submission.execution_contracts import obj, reference
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import HomologyJobs, FileAsset, digest

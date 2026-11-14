@@ -21,20 +21,20 @@ from gene_annotation_episode import native_lifecycle
 from gene_annotation_episode import tf_binding_measurements as core
 from gene_annotation_episode import tf_binding_result_contracts as contracts
 from gene_annotation_episode import tf_binding_tools as host
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.molecular_sequence_input_bindings import MolecularSequenceInputBindings
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_homer_motif_saved_workflow import _archive, _archive_value, _encode
 from test_runtime import FixtureController
 
@@ -691,7 +691,7 @@ def _engineered_tf_form():
 
 def _validate_tf_form_without_work(schema, payload, resolver, monkeypatch, *, compile_only=False):
     from Bio.motifs.matrix import PositionSpecificScoringMatrix
-    from gene_annotation_episode import communication
+    from gene_annotation_episode.episodic_workflow.root import communication
     from gene_annotation_episode import tf_binding_driver as driver
     from gene_annotation_episode import tf_binding_result_worker as result_worker
     import builtins
@@ -744,7 +744,7 @@ def test_tf_form_resolves_only_top_source_and_keeps_input_ids_opaque(monkeypatch
 
 @pytest.mark.parametrize('fault', ['modified', 'widened', 'nested', 'unregistered'])
 def test_tf_form_rejects_changed_or_nested_registered_contract(monkeypatch, fault):
-    from gene_annotation_episode.communication import ReportBoundaryError
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
     schema = _form()
     field = schema['properties']['sites']
     if fault == 'modified': field['description'] = field.get('description', '') + ' changed'
@@ -760,7 +760,7 @@ def test_tf_form_rejects_changed_or_nested_registered_contract(monkeypatch, faul
 
 @pytest.mark.parametrize('fault', ['negative_parameter', 'crossfield_count', 'score_bits', 'float_integer'])
 def test_tf_form_rejects_invalid_parameters_and_crossfield_values(monkeypatch, fault):
-    from gene_annotation_episode.communication import ReportBoundaryError
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
     schema, payload = _engineered_tf_form()
     value = payload['sites'][0]
     if fault == 'negative_parameter': value['parameters']['background']['A'] = -1
@@ -776,7 +776,7 @@ def test_tf_form_rejects_invalid_parameters_and_crossfield_values(monkeypatch, f
 
 
 def test_tf_form_revalidates_source_permission_after_cached_schema(monkeypatch):
-    from gene_annotation_episode.communication import ReportBoundaryError
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
     schema, payload = _engineered_tf_form()
     source = payload['sites'][0]['source_ref']
     assert _validate_tf_form_without_work(schema, payload, lambda ref, ns: (ref, ns) == (source, 'source'), monkeypatch) == payload
@@ -788,7 +788,7 @@ def test_tf_form_revalidates_source_permission_after_cached_schema(monkeypatch):
 
 
 def test_tf_registration_does_not_widen_generic_string_forms(monkeypatch):
-    from gene_annotation_episode.communication import ReportBoundaryError
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
     with pytest.raises(ReportBoundaryError) as error:
         _validate_tf_form_without_work(obj(dict(unrestricted=dict(type='string'))), None, None,
             monkeypatch, compile_only=True)

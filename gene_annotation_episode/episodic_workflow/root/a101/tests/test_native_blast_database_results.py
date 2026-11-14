@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a101.communication import plain
 from gene_annotation_episode.materials import artifact_path
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_result_publication import validate_native_blast_database_publication
 from test_native_blast_database_episode_binding import SyntheticHost, selector
@@ -511,7 +511,7 @@ def test_complete_biological_identity_is_required_without_losing_native_rows(tmp
 
 
 def test_original_input_store_possession_does_not_authorize_launch(tmp_path, monkeypatch):
-    from gene_annotation_episode.execution_episodes import LAUNCH_VERSION
+    from gene_annotation_episode.episodic_workflow.root.execution_episodes import LAUNCH_VERSION
     from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_contracts import requested_job_from_native_blast_database
     h = SyntheticHost(tmp_path, monkeypatch)
     try:
@@ -533,7 +533,7 @@ def test_original_input_store_possession_does_not_authorize_launch(tmp_path, mon
 
 
 def test_original_handoff_must_have_been_received_by_commissioning_parent(tmp_path, monkeypatch):
-    from gene_annotation_episode.execution_episodes import RESULTS_VERSION
+    from gene_annotation_episode.episodic_workflow.root.execution_episodes import RESULTS_VERSION
     h = SyntheticHost(tmp_path, monkeypatch)
     try:
         outsider = h.context((('annotation', 'other-root'),), {}, None)

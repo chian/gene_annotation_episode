@@ -40,7 +40,7 @@ def test_negative_and_zero_finite_values_differ_from_unavailable():
 
 
 def test_fact_sources_have_family_specific_enums_and_subject_namespace():
-    from gene_annotation_episode.communication import validate_closed_schema
+    from gene_annotation_episode.episodic_workflow.root.a101.communication import validate_closed_schema
     definitions = native_hmmer_fact_sources()
     assert set(definitions) == {"execution_hmmer_domain_rows", "execution_nhmmer_locus_rows", "execution_hmmalign_sequence_rows"}
     for name, definition in definitions.items():

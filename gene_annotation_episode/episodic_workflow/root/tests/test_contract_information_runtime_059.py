@@ -7,18 +7,21 @@ import json
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.composition_information import (CONTRACT_INFORMATION_PROFILE as PROFILE,
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.composition_information import (CONTRACT_INFORMATION_PROFILE as PROFILE,
     CONTRACT_ARGUMENT_TRANSPORT as TRANSPORT, metadata_catalog)
-from gene_annotation_episode.episode_contract_information import ContractInformationError
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes, _population_catalog
+from gene_annotation_episode.episodic_workflow.root.episode_contract_information import ContractInformationError
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.root_literature_contracts import _population_catalog
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage import kinetic_cells_schema
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import (Workflow, WorkflowError, _action_generation_schema,
-    _decode_action_response, _embedded_tool_schema, TypedReportContract)
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
+from gene_annotation_episode.episodic_workflow.root.task_action_contracts import _action_generation_schema, _decode_action_response
+from gene_annotation_episode.episodic_workflow.root.workflow_values import _embedded_tool_schema, TypedReportContract
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_kinetic_storage import setup
 from test_runtime import FixtureController
 from test_runtime_decision_exchanges import ConversationProvider, lookup, select
@@ -184,7 +187,7 @@ def test_original_standalone_reference_scope_and_host_catalog_agreement_are_chec
         changed = deepcopy(saved)
         entry = next(row for row in changed['context']['tools'] if row['name'] == 'literature.kinetic.populate')
         entry['input_schema']['description'] = 'Wrong independent declaration'
-        from gene_annotation_episode.runtime import _digest
+        from gene_annotation_episode.episodic_workflow.root.runtime import _digest
         changed['contract_information']['catalog_sha256'] = _digest(changed['context']['tools'])
         with pytest.raises(WorkflowError, match='original_operation_contract_mismatch'):
             value.validate_contract_information(changed)
@@ -302,7 +305,7 @@ def test_unknown_wrong_role_and_malformed_information_requests_are_feedback_not_
 
 
 def test_childless_permitted_leaf_has_valid_metadata_schema_and_no_return_sources(tmp_path):
-    from gene_annotation_episode.runtime import DecisionSource
+    from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource
     provider = PresentedProvider([])
     store, value, episode, args = workflow(tmp_path, provider)
     try:

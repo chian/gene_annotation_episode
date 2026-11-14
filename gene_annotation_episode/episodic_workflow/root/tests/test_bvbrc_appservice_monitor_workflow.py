@@ -16,14 +16,14 @@ import pytest
 from method_loop.archive import iter_json
 
 from gene_annotation_episode.api_bvbrc_appservice import BVBRCAppServiceService
-from gene_annotation_episode.bvbrc_appservice_monitor import AppServiceMonitor, PROVIDER
+from gene_annotation_episode.episodic_workflow.root.bvbrc_appservice_monitor import AppServiceMonitor, PROVIDER
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG, PREFIX
 from test_bvbrc_appservice_custody import request
 from test_bvbrc_appservice_inputs import NativeClient

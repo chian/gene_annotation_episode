@@ -10,13 +10,13 @@ import json
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.launch_instructions import LaunchInstructions
-from gene_annotation_episode.practical_execution_records import (
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import (
     ASSIGNMENT_SCHEMA, validate_assignment)
-from gene_annotation_episode.resource_episodes import ResourceEpisodes
+from gene_annotation_episode.episodic_workflow.root.resource_episodes import ResourceEpisodes
 from gene_annotation_episode.resource_records import LAUNCH_SCHEMA
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from test_runtime import FixtureController, obj, setup
 
 
@@ -296,10 +296,10 @@ def test_selected_saved_and_interrupted_contexts_survive_source_revision(tmp_pat
 
 
 def test_practical_assignment_pins_are_optional_and_precede_initial_native_probe(tmp_path, monkeypatch):
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
     from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from test_practical_runtime import make_assignment
 
     source = library_source(tmp_path)

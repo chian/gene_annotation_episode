@@ -6,12 +6,12 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.native_rna_structure_acquisition import ORIGIN
-from gene_annotation_episode.rna_structure_prompt import (
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_acquisition import ORIGIN
+from gene_annotation_episode.episodic_workflow.root.rna_structure_prompt import (
     render_rna_structure_results_prompt, rna_structure_results_instructions,
 )
-from gene_annotation_episode.rna_structure_result_views import (
+from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import (
     FAMILY_METRICS, FAMILY_SOURCES, REFERENCE_SOURCE, SAVED_SOURCE, rna_structure_fact_sources,
 )
 

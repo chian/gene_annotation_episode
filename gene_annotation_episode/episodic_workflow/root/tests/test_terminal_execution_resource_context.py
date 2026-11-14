@@ -5,8 +5,8 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from gene_annotation_episode.episodic_workflow.root.component_axis_literature_prompt import with_fact_contract_instructions
-from gene_annotation_episode.hpc_prompt import render_hpc_prompt
+from gene_annotation_episode.episodic_workflow.root.presentation_fact_contract import with_fact_contract_instructions
+from gene_annotation_episode.episodic_workflow.root.hpc_prompt import render_hpc_prompt
 from gene_annotation_episode.terminal_execution_episodes import TerminalExecutionEpisodes
 
 

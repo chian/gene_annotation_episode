@@ -15,23 +15,23 @@ import sqlite3
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.decision_context import instructional_model_context, state_frame
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.native_profile_presentation import (
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.decision_context import instructional_model_context, state_frame
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.native_profile_presentation import (
     native_profile_scientific_job_view, select_native_profile_execution_values,
     select_native_profile_presentation, render_native_profile_results,
     has_native_profile_receiver_context,
 )
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_interval_pending_results import _commission, _new_rows
 from test_interval_results_presentation import (
     _assert_original_rows, _canonical, _inventory, _session, _sha, _tables, _source_for_original_context,
@@ -77,10 +77,10 @@ def _guards(patch):
         "gene_annotation_episode.episodic_workflow.root.a101.hmmer_graders.grade_hmmer_native_artifacts",
         "gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparation_worker.grade_hmmer_preparation",
         "gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparation_worker.recalculate_hmmer_preparation",
-        "gene_annotation_episode.native_infernal_preparation_worker.grade_infernal_preparation",
-        "gene_annotation_episode.native_infernal_preparation_worker.recalculate_infernal_preparation",
+        "gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker.grade_infernal_preparation",
+        "gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker.recalculate_infernal_preparation",
         "gene_annotation_episode.cmalign_grader.calculate_cmalign_scores",
-        "gene_annotation_episode.infernal_search_grader.calculate_infernal_search_scores",
+        "gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader.calculate_infernal_search_scores",
         "gene_annotation_episode.episodic_workflow.root.a101.hmmer_search_grader.calculate_hmmer_search_scores",
     ):
         patch.setattr(target, _forbidden)
@@ -255,9 +255,9 @@ def test_public_receipts_reenter_deduplicate_and_ignore_unrequested_controls(pro
     assert not has_native_profile_receiver_context(literal_rows)
     assert select_native_profile_presentation(literal_rows)["context"] == literal_rows
     from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_native_result_views
-    from gene_annotation_episode import infernal_native_result_views
+    from gene_annotation_episode.episodic_workflow.root.library import infernal_native_result_views
     from gene_annotation_episode.episodic_workflow.root.a101.library import hmmer_preparation_result_views
-    from gene_annotation_episode import infernal_preparation_result_views
+    from gene_annotation_episode.episodic_workflow.root.library import infernal_preparation_result_views
     facts = {
         "native_hmmer": hmmer_native_result_views.native_hmmer_fact_sources,
         "native_infernal": infernal_native_result_views.native_infernal_fact_sources,

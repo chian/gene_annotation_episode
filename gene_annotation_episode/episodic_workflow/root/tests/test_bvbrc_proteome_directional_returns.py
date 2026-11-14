@@ -9,11 +9,11 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import bvbrc_proteome_bundle_adapter_v2 as adapter
-from gene_annotation_episode import bvbrc_proteome_directional_fact_contracts as c
-from gene_annotation_episode.bvbrc_proteome_returns import proteome_fact_sources, ProteomeReturnError
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter_v2 as adapter
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_directional_fact_contracts as c
+from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns import proteome_fact_sources, ProteomeReturnError
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 from gene_annotation_episode.form_reference_validation import form_reference_validation
 from gene_annotation_episode.state import Store
 from bvbrc_proteome_host_fixture import ProteomeDriver, ControlledClient

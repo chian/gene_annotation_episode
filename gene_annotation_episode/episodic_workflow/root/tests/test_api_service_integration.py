@@ -18,18 +18,20 @@ from method_loop.archive import iter_json
 
 from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode import independent_execution as reconstruction
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.providers import ModelConnection
-from gene_annotation_episode.runtime import Workflow, assemble_workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_execution_episodes_family import context, launch_assignment, select, selection
 from test_execution_wiring import child, controller, form
 from test_practical_reconstruction import BeforeModel

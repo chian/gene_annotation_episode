@@ -18,7 +18,7 @@ import pytest
 
 from gene_annotation_episode import homer_motif_measurements as measurements
 from gene_annotation_episode import homer_motif_result_contracts as contracts
-from gene_annotation_episode.communication import ReportBoundaryError, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema, validate_form
 from gene_annotation_episode.domain import ContractError, canonical
 from gene_annotation_episode.molecular_result_facts import (
     merge_molecular_facts, requested_molecular_fact_fields, requested_molecular_fact_sources,
@@ -230,7 +230,7 @@ def test_unrelated_form_and_frozen_validator_preserve_prior_behavior():
 
 def _engineered_capture_case(stack, directory, *, published=False, status='completed'):
     """Real metadata owners over explicit engineering rows, never a native run."""
-    from gene_annotation_episode.communication import plain
+    from gene_annotation_episode.episodic_workflow.root.communication import plain
     from gene_annotation_episode.domain import identity
     from gene_annotation_episode.molecular_reference_privacy import molecular_reference_restriction
     from test_molecular_sequence_input_bindings import actual_received_input_owner

@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a101.communication import plain
 from gene_annotation_episode.execution_contracts import canonical
 from test_native_blast_standard_database_episode_binding import SyntheticHost, schema_for, selector
 from test_native_blast_standard_database_results import query_selection
@@ -63,10 +63,10 @@ def test_unchanged_scientific_forwarding_uses_immediate_child_forms(tmp_path, mo
 def test_every_native_consumer_qualifies_frozen_measurements_and_missing_reference(tmp_path, monkeypatch):
     from gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_result_publication import validate_standard_blast_database_observation
     from gene_annotation_episode.evidence_geometry import _observation_extent, _observation_extents
-    from gene_annotation_episode.evidence_axis_contracts import native_metric_facts
+    from gene_annotation_episode.episodic_workflow.root.a101.evidence_axis_contracts import native_metric_facts
     from gene_annotation_episode.episodic_workflow.root.a101.library.blast_result_views import _original_hsp
     from gene_annotation_episode.alignment_site_native import source_descriptor, blast_grading
-    from gene_annotation_episode.infernal_result_presentation import infernal_receiver_context
+    from gene_annotation_episode.episodic_workflow.root.infernal_result_presentation import infernal_receiver_context
     from gene_annotation_episode.domain import REASONING_SCHEMA
     from test_evidence_axis_contracts import axis_entry
     h = SyntheticHost(tmp_path, monkeypatch)
@@ -104,7 +104,7 @@ def test_every_native_consumer_qualifies_frozen_measurements_and_missing_referen
 
 
 def test_successful_original_collect_immediately_has_exact_zero_future_expectation(tmp_path, monkeypatch):
-    from gene_annotation_episode.numerical import YieldParameters
+    from gene_annotation_episode.episodic_workflow.root.a101.numerical import YieldParameters
     from test_practical_yield import completion_context
     h = SyntheticHost(tmp_path, monkeypatch)
     try:
@@ -157,7 +157,7 @@ def test_frozen_observation_requires_original_commission_handoff_and_record(tmp_
 
 @pytest.mark.parametrize('reverse', [False, True])
 def test_repeated_projection_receipts_union_only_actual_received_cells(tmp_path, monkeypatch, reverse):
-    from gene_annotation_episode.communication import form_with_facts, validate_form
+    from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, validate_form
     h = SyntheticHost(tmp_path, monkeypatch, program='blastp')
     try:
         source = 'execution_blast_standard_database_hsp_rows'

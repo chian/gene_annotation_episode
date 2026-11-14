@@ -11,9 +11,9 @@ import json
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 
 from test_api_bvbrc_minhash import (
     CONFIGURATION, RESULT_OPERATION, executor, explicit_pair_inputs, harness,

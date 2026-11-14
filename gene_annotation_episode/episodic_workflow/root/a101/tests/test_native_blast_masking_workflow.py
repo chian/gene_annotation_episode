@@ -20,18 +20,18 @@ from method_loop.archive import iter_json
 import pytest
 
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.communication import plain, validate_closed_schema, validate_form
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, RESULTS_VERSION
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.a101.communication import plain, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_masking_contracts import requested_job_from_native_blast_masking
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_masking_local import local_blast_masking_plan
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
-from gene_annotation_episode.sequence_masking_result_views import masking_fact_sources
+from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_result_views import masking_fact_sources
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_native_blast_masking_invocation import POLICY, job_for
 from test_native_hmmer_preparation_nested_workflow import provider_value, walk, history
 
@@ -308,8 +308,8 @@ def test_closed_native_result_and_received_forms_replay_without_work(native_case
         ('gene_annotation_episode.episodic_workflow.root.a101.native_blast_masking_acquisition', 'local_blast_masking_plan'),
         ('gene_annotation_episode.episodic_workflow.root.a101.native_blast_masking_results', 'prepare_native_blast_masking_result'),
         ('gene_annotation_episode.episodic_workflow.root.a101.native_blast_masking_results', 'publish_selected_masking_result'),
-        ('gene_annotation_episode.sequence_masking_calculations', 'calculate_sequence_masking_components'),
-        ('gene_annotation_episode.sequence_masking_inputs', 'parse_sequence_masking_output')):
+        ('gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_calculations', 'calculate_sequence_masking_components'),
+        ('gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_inputs', 'parse_sequence_masking_output')):
         monkeypatch.setattr(module + '.' + name, forbidden)
     monkeypatch.setattr(subprocess, 'Popen', forbidden)
     monkeypatch.setattr(socket, 'create_connection', forbidden)

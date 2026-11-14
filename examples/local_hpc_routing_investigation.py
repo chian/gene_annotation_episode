@@ -22,9 +22,10 @@ from gene_annotation_episode.hpc_monitoring import DEFAULT_POLICY, MonitorCheckp
 from gene_annotation_episode.hpc_scheduler import register_resume
 from gene_annotation_episode.local_resources import LocalResources
 from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection, load_config
-from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, controller_from_settings
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.saved_run_configuration import controller_from_settings
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def local_request(directory, name, *, witness=None):

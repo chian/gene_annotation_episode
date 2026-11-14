@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_
     requested_job_from_fluorescence,
 )
 from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_storage import immutable_json, read_json
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
 from test_native_fluorescence_contracts import event_input, job
 
 

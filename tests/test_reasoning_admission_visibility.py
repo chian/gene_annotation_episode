@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource, Workflow
-from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
+from gene_annotation_episode.episodic_workflow.root.library.published_scientific_task_presentation import render_scientific_process_prompt
 
 
 RECORDED = json.loads((Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/reasoning/'

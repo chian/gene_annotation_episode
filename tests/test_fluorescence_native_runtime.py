@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_
     fluorescence_environment, requested_job_from_fluorescence,
     validate_fluorescence_manifest, validate_fluorescence_parsed_batch,
 )
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
 from gene_annotation_episode.state import Store
 from test_fluorescence_local_routing import SelectedState, target_identity
 import fluorescence_workflow_support as F

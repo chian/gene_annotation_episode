@@ -4,7 +4,7 @@ from dataclasses import replace
 
 import pytest
 
-from gene_annotation_episode.communication import validate_closed_schema
+from gene_annotation_episode.episodic_workflow.root.a102.communication import validate_closed_schema
 from gene_annotation_episode.domain import ContractError, obj, validate_schema
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a102.literature_structure_storage import (

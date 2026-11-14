@@ -13,7 +13,7 @@ from gene_annotation_episode.episodic_workflow.root import runtime
 from gene_annotation_episode.episodic_workflow.root.decision_context import apply_state_frame
 from gene_annotation_episode.episodic_workflow.root.decision_exchanges import DecisionExchanges
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import (FixtureController, ScriptedProvider, fixture_credit,
     reason, run, setup, tool)
 

@@ -10,15 +10,15 @@ from gene_annotation_episode.api_blast import NCBIBlastService
 from gene_annotation_episode.api_bvbrc import BVBRCDataService
 from gene_annotation_episode.api_uniprot import UniProtService
 from gene_annotation_episode.practical_resource_episodes import operation_catalog
-from gene_annotation_episode.execution_episodes import launch_operation_catalog, native_result_operation_catalog
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import launch_operation_catalog, native_result_operation_catalog
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
-from gene_annotation_episode.providers import ModelRole
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
-from gene_annotation_episode.scientific_tool_retrieval import ScientificToolRetriever, tool_info_output_schema
+from gene_annotation_episode.episodic_workflow.root.providers import ModelRole
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_retrieval import ScientificToolRetriever, tool_info_output_schema
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_information import make_tool_info, resource_kind, selectors, tool_info_selection
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 CONFIG = {'version': 'scientific_tool_retrieval_v1', 'mode': 'semantic_fast_v1',

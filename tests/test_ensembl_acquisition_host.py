@@ -26,7 +26,7 @@ from gene_annotation_episode.molecular_reference_privacy import molecular_refere
 from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 
 import test_ensembl_acquisition as captures
@@ -1081,7 +1081,7 @@ def _ensembl_attempt_native_evidence(connection, directory, report):
         if action["result"] is not None:
             actual = json.loads(action["result"])
             if "pending_work_after_action" in actual:
-                from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
+                from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
                 validate_pending(actual.pop("pending_work_after_action"))
             assert canonical(actual) == canonical(outcome)
         evidence[saved["id"]] = {"snapshot": snapshot, "artifact_ref": saved["artifact_ref"]}

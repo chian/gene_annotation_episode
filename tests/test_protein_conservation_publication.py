@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.library import protein_conse
 from gene_annotation_episode import phylogeny_calculators, phylogeny_formats
 from gene_annotation_episode import phylogeny_calculation_contracts as numerical
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 _CAPTURE = "source_" + "c" * 24

@@ -105,7 +105,7 @@ def test_actual_selected_own_and_parent_decisions_then_first_readonly_display_pr
         raise AssertionError('saved presentation acquired, parsed, calculated, modeled or mutated')
     monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_native_inputs.read_rate_source_inputs', forbidden)
     monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate_storage.populate_rate_contrast', forbidden)
-    monkeypatch.setattr('gene_annotation_episode.providers.ModelConnection', forbidden)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.providers.ModelConnection', forbidden)
     reopened = Store.__new__(Store)
     reopened.path = state_path.resolve()
     reopened._savepoint = 0

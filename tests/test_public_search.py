@@ -8,7 +8,7 @@ import pytest
 from gene_annotation_episode.acquisition import AcquisitionError, SourceSnapshot, parse_hmmer, uniprot_pagination
 from gene_annotation_episode.provider_jobs import RemoteSearches, HMMER_IDENTITY_VERSION
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 JOB = "81bddc6e-f6ef-4f16-a8c1-32d262016ccb"

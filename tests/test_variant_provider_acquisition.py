@@ -25,7 +25,7 @@ from jsonschema import Draft202012Validator
 from gene_annotation_episode.acquisition import PublicClients, SourceSnapshot
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode import variant_provider_acquisition as provider
 
 

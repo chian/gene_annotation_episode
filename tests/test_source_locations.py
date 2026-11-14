@@ -5,12 +5,12 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.domain import ContractError, canonical
-from gene_annotation_episode.episodic_workflow.root.a105.literature_assay_inputs import _Sources
-from gene_annotation_episode.episodic_workflow.root.a107.literature_partner_source_fields import read_source_number, read_source_rate_unit
+from gene_annotation_episode.episodic_workflow.root.literature_assay_inputs import _Sources
+from gene_annotation_episode.episodic_workflow.root.library.literature_partner_source_fields import read_source_number, read_source_rate_unit
 from gene_annotation_episode.literature_contract_error import ExperimentalContractError
 from gene_annotation_episode.source_locations import locate
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def source(store, raw, *, text=None, parents=()):

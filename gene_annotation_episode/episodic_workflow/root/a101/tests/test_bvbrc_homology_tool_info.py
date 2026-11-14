@@ -5,11 +5,11 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_homology_bundle_adapter as adapter
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 from gene_annotation_episode.resource_tool_information import bound_resource_tool_contracts
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.a101.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG, original_request
 from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homology_bundle_adapter import c4_fixture
 from test_bvbrc_appservice_custody import selector

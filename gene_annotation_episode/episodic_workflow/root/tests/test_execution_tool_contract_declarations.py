@@ -6,12 +6,12 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.api_execution import hmmer_operation_catalog
+from gene_annotation_episode.episodic_workflow.root.api_execution import hmmer_operation_catalog
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_information import workflow_execution_catalogs
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def prohibited(*args, **kwargs):

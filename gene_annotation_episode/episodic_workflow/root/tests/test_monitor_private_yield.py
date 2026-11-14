@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 
 
 def test_monitor_yield_binding_round_trips_with_its_credit_unit():

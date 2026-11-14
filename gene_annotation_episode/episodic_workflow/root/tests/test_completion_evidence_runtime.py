@@ -16,15 +16,19 @@ from method_loop.archive import ArchivedRecord, JsonArchive
 from method_loop.durable import DurableExecutionStore, canonical, content_digest
 from method_loop.identities import EpisodeRef, UnitRef
 
-from gene_annotation_episode.completion_evidence import CompletionEvidence
-from gene_annotation_episode.episode_admission import ReceiverBindingV1, admit_return
+from gene_annotation_episode.episodic_workflow.root.completion_evidence import CompletionEvidence
+from gene_annotation_episode.episodic_workflow.root.episode_admission import ReceiverBindingV1, admit_return
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_monitoring import MonitorEpisodes, ProgressProvider
+from gene_annotation_episode.episode_monitoring import MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
 from gene_annotation_episode.episode_progress_credit import ProgressInformationCredit
 from gene_annotation_episode.local_return_history import LocalReturnHistory
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate
-from gene_annotation_episode.runtime import (ExecutionContextController, Record, Workflow,
-    WorkflowError, assemble_workflow)
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate
+from gene_annotation_episode.episodic_workflow.root.workflow_values import ExecutionContextController
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
 from gene_annotation_episode.state import Store
 from test_progress_receipt_runtime import (GOAL, UNIT, SavedProgressTools, child,
     observations, own, saved_settings, seed)

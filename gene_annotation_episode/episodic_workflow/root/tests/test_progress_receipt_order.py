@@ -13,7 +13,8 @@ import pytest
 from method_loop.durable import DurableExecutionStore, canonical, content_digest
 from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes, ProgressProvider
+from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
 from gene_annotation_episode.episode_progress_credit import ProgressInformationCredit
 from gene_annotation_episode.state import Store
 from test_recursive_monitoring import assignment, durable_target

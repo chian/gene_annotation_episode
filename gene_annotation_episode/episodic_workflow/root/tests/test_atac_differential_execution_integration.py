@@ -12,17 +12,17 @@ from types import SimpleNamespace
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import ReportBoundaryError, validate_closed_schema, validate_form
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.native_atac_differential_contracts import POLICY, OPERATION, MODE
 from gene_annotation_episode.native_atac_differential_tool_info import atac_tool_information
 from gene_annotation_episode.atac_differential_return_views import (
     FACT_SOURCES, SAVED_SOURCE, atac_fact_sources,
 )
 from gene_annotation_episode.atac_differential_result_contracts import SHEET_FORMAT, TABLE_FORMAT
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_atac_differential_operands import f, make_assignment
 
 

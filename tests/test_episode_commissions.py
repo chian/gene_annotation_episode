@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.root.episode_commissions import C
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal, WorkflowError
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
+from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
 
 
 class BackendFixture:

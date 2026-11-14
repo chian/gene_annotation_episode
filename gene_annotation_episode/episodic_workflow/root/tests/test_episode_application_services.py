@@ -7,14 +7,17 @@ from types import SimpleNamespace
 import pytest
 
 from method_loop.durable import DurableExecutionError
-from gene_annotation_episode.episode_application_services import (
+from gene_annotation_episode.episodic_workflow.root.episode_application_services import (
     EpisodeApplicationServices, job_progress_binding, service_binding)
-from gene_annotation_episode.episode_monitoring import MonitorEpisodes, read_progress
+from gene_annotation_episode.episode_monitoring import MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import read_progress
 from gene_annotation_episode.episode_progress_credit import ProgressInformationCredit
-from gene_annotation_episode.independent_execution import make_runtime_binding
-from gene_annotation_episode.runtime import Workflow, WorkflowError, run_workflow
+from gene_annotation_episode.episodic_workflow.root.commissioned_reopening import make_runtime_binding
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 from test_runtime import ScriptedProvider
 
 

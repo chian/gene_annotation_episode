@@ -17,12 +17,16 @@ from method_loop.identities import UnitRef
 
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
 from gene_annotation_episode.local_return_history import LocalReturnHistory
-from gene_annotation_episode.numerical import YieldController
-from gene_annotation_episode.runtime import (ExecutionContextController, Record,
-    Workflow, WorkflowError, assemble_workflow, run_workflow)
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController
+from gene_annotation_episode.episodic_workflow.root.workflow_values import ExecutionContextController
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.wait_estimation_inputs import WaitInputs
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.wait_estimation_inputs import WaitInputs
 from test_local_return_history import BINDING, Case, LATER, STAMP, forbidden
 import test_local_return_history as return_fixtures
 from test_recursive_monitoring import assignment

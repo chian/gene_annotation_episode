@@ -15,7 +15,7 @@ import sqlite3
 from types import SimpleNamespace
 
 from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
-from gene_annotation_episode.episodic_workflow.root.literature_work_report import completed_work
+from gene_annotation_episode.episodic_workflow.root.literature_completed_work_projection import completed_work
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 
 

@@ -20,7 +20,7 @@ from gene_annotation_episode.domain import canonical, identity
 from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.molecular_sequence_input_bindings import MolecularSequenceInputBindings
 from gene_annotation_episode.tool_grading_artifacts import retain_tool_grading
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_molecular_sequence_input_bindings import actual_received_input_owner
 
 

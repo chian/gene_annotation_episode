@@ -17,8 +17,8 @@ from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_pre
 from gene_annotation_episode.episodic_workflow.root.a101 import native_hmmer_preparation_result_worker as result_worker
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_hmmer_preparation_worker as worker
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.practical_execution_records import canonical as practical_canonical
-from gene_annotation_episode.practical_execution_state import _immutable
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_records import canonical as practical_canonical
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import _immutable
 from test_hmmer_alignment_input_calculations import ORACLE, EMISSION, SELEX, annotated_selex, checks, sheet_for
 from test_hmmer_alignment_preparation_data import payload
 from test_native_hmmer_preparation_contracts import job, operand

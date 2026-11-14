@@ -11,11 +11,11 @@ import subprocess
 import sys
 
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.flux_balance_contracts import validate_flux_balance_record
-from gene_annotation_episode.native_flux_balance_contracts import (
+from gene_annotation_episode.episodic_workflow.root.a110.flux_balance_contracts import validate_flux_balance_record
+from gene_annotation_episode.episodic_workflow.root.a110.native_flux_balance_contracts import (
     flux_balance_environment, path_value, validate_flux_balance_software,
 )
-from gene_annotation_episode.native_flux_balance_storage import (
+from gene_annotation_episode.episodic_workflow.root.a110.native_flux_balance_storage import (
     directory, file_pin, immutable_bytes, immutable_json, read_json, retain_input,
 )
 
@@ -109,9 +109,9 @@ try:
     import optlang.glpk_interface
     import swiglpk
     import libsbml
-    from gene_annotation_episode import native_flux_balance_driver as driver
-    from gene_annotation_episode.native_flux_balance_contracts import validate_flux_balance_software
-    from gene_annotation_episode.native_flux_balance_storage import file_pin, immutable_json, read_json
+    from gene_annotation_episode.episodic_workflow.root.a110 import native_flux_balance_driver as driver
+    from gene_annotation_episode.episodic_workflow.root.a110.native_flux_balance_contracts import validate_flux_balance_software
+    from gene_annotation_episode.episodic_workflow.root.a110.native_flux_balance_storage import file_pin, immutable_json, read_json
     software = read_json(candidate_path)
     known = {row["path"] for row in [software["python"], *software["implementation_files"],
         *software["runtime_files"], *software["solver_runtime_files"]]}

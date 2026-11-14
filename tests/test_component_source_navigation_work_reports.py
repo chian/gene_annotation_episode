@@ -15,9 +15,9 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a107 import a107_work_report
 from gene_annotation_episode.episodic_workflow.root.a110 import a110_work_report
-from gene_annotation_episode.episodic_workflow.root.component_axis_literature_prompt import with_fact_contract_instructions
+from gene_annotation_episode.episodic_workflow.root.presentation_fact_contract import with_fact_contract_instructions
 from gene_annotation_episode.episodic_workflow.root.episode_work_report import completed_action_reports
-from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
+from gene_annotation_episode.episodic_workflow.root.library.published_scientific_task_presentation import render_scientific_process_prompt
 
 
 FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/work_reports/a11038-source-navigation.json.gz'

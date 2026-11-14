@@ -106,7 +106,7 @@ def test_incompatible_information_request_is_rejected(change):
 def test_description_never_reads_scientific_bytes_observes_or_calculates(monkeypatch):
     from gene_annotation_episode.episodic_workflow.root.library import protein_structure_calculations, protein_structure_sheet
     from gene_annotation_episode.episodic_workflow.root.library import native_protein_structure_acquisition
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
     original, selected = target(), selector()
     saved_selection, _ = saved()
     def forbidden(*args, **kwargs):
@@ -138,7 +138,7 @@ def test_actual_target_reader_selects_protein_information_after_authenticated_ta
 
 
 def test_ordinary_local_target_keeps_existing_information():
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
     reader = object.__new__(ExecutionTargetReader)
     reader.api_execution = None
     reader.operations = {"local": object.__new__(LocalPracticalOperations)}

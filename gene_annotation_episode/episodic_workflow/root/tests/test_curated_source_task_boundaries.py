@@ -13,11 +13,11 @@ import pytest
 
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 from test_runtime import FixtureController, ScriptedProvider
 from test_scientific_process_library import independent_source
 

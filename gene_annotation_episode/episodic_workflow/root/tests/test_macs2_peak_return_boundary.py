@@ -13,7 +13,7 @@ from gene_annotation_episode import macs2_peak_components as components
 from gene_annotation_episode import macs2_peak_result_contracts as contracts
 from gene_annotation_episode import macs2_peak_result_worker as worker
 from gene_annotation_episode import native_macs2_peak_execution as native
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     ReportBoundaryError, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.execution_contracts import canonical

@@ -10,7 +10,7 @@ from method_loop.identities import EpisodeRef, UnitRef
 from gene_annotation_episode.episodic_workflow.root.numerical import (NumericBand, STATUS_INSUFFICIENT, STATUS_NORMAL,
     YieldController, YieldEstimate, YieldParameters, estimate_score_yield)
 from gene_annotation_episode.practical_yield import ESTIMATOR_VERSION, PracticalYieldEstimator
-from gene_annotation_episode.episodic_workflow.root.runtime import Record
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
 
 
 def completion_context(*, run_id="run-practical", episode_id="episode-practical",

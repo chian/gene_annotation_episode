@@ -15,17 +15,20 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 from method_loop import EpisodeCompletion
 from method_loop.durable import canonical, content_digest, validate_commission
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.composition_information import CONTRACT_INFORMATION_PROFILE
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.independent_execution import _check_assignment, implementation_sha256
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.commissioned_reopening import _check_assignment
+from gene_annotation_episode.independent_execution import implementation_sha256
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_ratio_source_storage import ratio_source_cells_schema
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import ReleasingContext, assemble_workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.workflow_values import ReleasingContext
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import FixtureController
 
 FORM = obj({'requested_signal': ratio_source_cells_schema()})

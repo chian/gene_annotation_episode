@@ -23,7 +23,7 @@ from gene_annotation_episode.episodic_workflow.root.execution_service_setup impo
 from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG, PREFIX, OBJECT_UUID, SHOCK_UUID, metadata
 from test_bvbrc_appservice_custody import request
 from test_bvbrc_appservice_inputs import NativeClient

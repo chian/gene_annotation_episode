@@ -19,7 +19,8 @@ from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.atac_differential_operands import validate_atac_job_inputs
 from gene_annotation_episode.native_atac_differential_contracts import (
     REQUIRED_DEPENDENCIES, REQUIRED_MODULES, OPERATION, MODE, requested_job_from_atac)
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
 
 

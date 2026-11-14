@@ -48,20 +48,22 @@ async def run(args):
     from gene_annotation_episode.a107_investigation import A107ServiceFactory, create_a107_workflow
     from gene_annotation_episode.a110_investigation import A110ServiceFactory, create_a110_workflow
     from gene_annotation_episode.acquisition import PublicClients
-    from gene_annotation_episode.component_axis_reports import (
-        cell_views, repository as component_repository, received_reports, mark_native_execution)
-    from gene_annotation_episode.component_axis_native_hpc import received_components, execution_findings
-    from gene_annotation_episode.component_axis_workflow import TASKS, INSTRUCTIONS
+    from gene_annotation_episode.episodic_workflow.root.library.component_received_reports import cell_views, repository as component_repository, mark_native_execution
+    from gene_annotation_episode.component_axis_reports import received_reports
+    from gene_annotation_episode.episodic_workflow.root.library.component_native_received_records import received_components, execution_findings
+    from gene_annotation_episode.episodic_workflow.root.library.component_investigation_instructions import TASKS
+    from gene_annotation_episode.component_axis_workflow import INSTRUCTIONS
     from gene_annotation_episode.episodic_workflow.root.decision_context import PROTOCOL
     from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
     from gene_annotation_episode.hpc_monitoring import MonitorCheckpoint
     from gene_annotation_episode.hpc_scheduler import register_resume
     from gene_annotation_episode.materials import artifact_file, source_for_artifact
-    from gene_annotation_episode.a107_tools import A107ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.library.partner_qualification_tool_registry import A107ToolRegistry
     from gene_annotation_episode.a110_tools import A110ToolRegistry
     from gene_annotation_episode.episodic_workflow.root.providers import load_config
     from gene_annotation_episode.public_configuration import configured_tools
-    from gene_annotation_episode.episodic_workflow.root.runtime import controller_from_settings, _plain
+    from gene_annotation_episode.episodic_workflow.root.saved_run_configuration import controller_from_settings
+    from gene_annotation_episode.episodic_workflow.root.runtime import _plain
     from gene_annotation_episode.serial_model_resources import SerialModelConnection
     from gene_annotation_episode.state import Store
     from gene_annotation_episode.workflow_budget import active_budget
@@ -250,7 +252,7 @@ async def run(args):
                 (directory/'parent-completion.json').write_text(json.dumps(
                     completion, indent=2)+'\n')
                 findings = received_reports(store, context=context, services=workflow.services)
-                from gene_annotation_episode.component_axis_reports import current_scoring_sheets
+                from gene_annotation_episode.episodic_workflow.root.literature_sheet_updates import current_scoring_sheets
                 scoring = current_scoring_sheets(store, context=context, services=workflow.services)
                 # Custom typed returns can deliver a saved-cell view without
                 # selecting the canonical axis report. Read only the actual

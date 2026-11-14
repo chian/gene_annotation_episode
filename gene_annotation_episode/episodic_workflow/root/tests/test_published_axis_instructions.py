@@ -8,23 +8,23 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.decision_context import (
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.decision_context import (
     INSTRUCTIONS, TEXT_INSTRUCTIONS, apply_state_frame, instructional_model_context,
     model_snapshot, state_frame)
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_composition import reopen_scientific_binding
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.evidence_axis_instructions import (
+from gene_annotation_episode.episodic_workflow.root.episode_composition import reopen_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.evidence_axis_instructions import (
     VERSION, instruction_view, validate_instruction_entry)
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_library import (
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import (
     ScientificProcessLibrary, instruction_entry)
-from gene_annotation_episode.scientific_process_records import scientific_invocation_ref
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_invocation_ref
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 PUBLICATIONS = Path(__file__).resolve().parents[4] / 'research/slotted_process_library/publications'

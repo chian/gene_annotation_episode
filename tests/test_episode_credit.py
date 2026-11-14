@@ -6,9 +6,10 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.credit import CreditPolicy, project_credit
-from gene_annotation_episode.episodic_workflow.root.runtime import Workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import (FixtureController, FixtureStore, FixtureTools,
                           ScriptedProvider, fixture_credit, reason)
 

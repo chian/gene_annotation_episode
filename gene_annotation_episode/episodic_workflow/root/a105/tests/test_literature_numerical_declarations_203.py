@@ -194,7 +194,7 @@ def test_actual_selected_legacy_child_delivery_preserves_original_type_subset_an
         store.close()
 
 def test_pending_legacy_decision_uses_original_snapshot_before_current_fact_or_catalog_factories(tmp_path, monkeypatch):
-    from gene_annotation_episode import runtime
+    from gene_annotation_episode.episodic_workflow.root.a105 import runtime
     from test_contract_information_custody_059 import COMPACT, LITERAL, commission
     store, seed, args, provider, value, root = world(tmp_path)
     provider.script = iter([OSError('Controlled interruption before response')])
@@ -475,7 +475,7 @@ def test_actual_controlled_provider_wire_sends_complete_science_and_declaration_
     assert context == original
 
 def test_actual_standard_c1_worker_reopens_legacy_alias_original_request_without_model_work(tmp_path, monkeypatch):
-    from gene_annotation_episode import independent_execution as worker
+    from gene_annotation_episode.episodic_workflow.root.a105 import independent_execution as worker
     from gene_annotation_episode.episodic_workflow.root.a105.communication import plain
     from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.source_contracts import _population_catalog
     from gene_annotation_episode.episodic_workflow.root.a105.runtime import assemble_workflow, run_workflow
@@ -531,7 +531,7 @@ def test_actual_standard_c1_worker_reopens_legacy_alias_original_request_without
 
         async def complete(self, *_a, **_kw):
             raise AssertionError('Worker reconstruction must not invoke a model')
-    monkeypatch.setattr('gene_annotation_episode.providers.ModelConnection', ForbiddenModel)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.providers.ModelConnection', ForbiddenModel)
 
     async def reopen():
         async with worker.open_commission(spec) as opened:

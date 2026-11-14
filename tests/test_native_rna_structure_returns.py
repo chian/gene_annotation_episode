@@ -7,7 +7,7 @@ from test_native_rna_structure_acquisition import F
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import FAMILY_SOURCES, REFERENCE_SOURCE, SAVED_SOURCE, IDENTIFIER_NAMESPACES, result_receipt_key
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 
 
 def test_null_source_failure_crosses_real_results_and_scientific_forms(tmp_path):

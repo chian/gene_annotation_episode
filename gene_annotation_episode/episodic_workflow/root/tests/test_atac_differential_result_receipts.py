@@ -13,7 +13,7 @@ from types import MethodType, SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.atac_differential_result_receipts import (
     AtacDifferentialResultReceipts, empty_facts, empty_files, outcome,
 )
@@ -25,10 +25,10 @@ from gene_annotation_episode.native_atac_differential_results import (
     NativeAtacDifferentialResults, ORIGIN, SAVED_ORIGIN,
 )
 from gene_annotation_episode.native_atac_differential_contracts import POLICY
-from gene_annotation_episode.practical_execution_records import assess_validations
-from gene_annotation_episode.practical_receipt_information import PracticalReceiptInformation
+from gene_annotation_episode.episodic_workflow.root.practical_execution_records import assess_validations
+from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PracticalReceiptInformation
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 from gene_annotation_episode.state import Store
 from test_atac_differential_returns import RuntimeFixture, schema_for
 from test_atac_differential_operands import make_request, make_assignment
@@ -62,7 +62,7 @@ def h(tmp_path):
         f.persist(launch)
         f.commission(f.root, launch)
         native = f.context((*launch.path, ('launch_local', 'child_0')), assignment,
-            __import__('gene_annotation_episode.runtime', fromlist=['TypedReportContract']).TypedReportContract(
+            __import__('gene_annotation_episode.episodic_workflow.root.runtime', fromlist=['TypedReportContract']).TypedReportContract(
                 'Return original practical handoff', schema_for(FAILURE_SOURCE), lambda *_: True), launch)
         f.commission(launch, native)
         operation = f'{f.run_id}:{native.episode_id}:0'

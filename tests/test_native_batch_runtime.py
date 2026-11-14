@@ -8,9 +8,11 @@ import json
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.runtime import _references_in, run_workflow
+from gene_annotation_episode.episodic_workflow.root.reference_selection import _references_in
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import SequenceWork, ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_values import SequenceWork
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
 
 

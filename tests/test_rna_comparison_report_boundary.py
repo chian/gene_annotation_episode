@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.library.rna_structure_compar
     PROJECTION_SOURCE, project_rna_comparison, rna_comparison_fact_sources,
 )
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import rna_structure_fact_sources
-from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 
 f = importlib.import_module(
     "gene_annotation_episode.episodic_workflow.root.a107.tests.fixtures.rna_structure_comparison_calculations_367.fixture_helpers")

@@ -10,7 +10,7 @@ from gene_annotation_episode.acquisition import AcquisitionError
 from gene_annotation_episode.episodic_workflow.root.api_execution import HMMERAPIExecution
 from gene_annotation_episode.execution_contracts import digest
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from api_execution_fixture import APIHarness
 from test_public_search import Client, JOB, result, snapshot
 

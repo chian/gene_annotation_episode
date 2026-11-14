@@ -12,7 +12,7 @@ import json
 import os
 from pathlib import Path
 
-from gene_annotation_episode.component_axis_reports import current_scoring_sheets
+from gene_annotation_episode.episodic_workflow.root.literature_sheet_updates import current_scoring_sheets
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.episodic_workflow.root.literature_partner_storage import LiteraturePartnerRepository

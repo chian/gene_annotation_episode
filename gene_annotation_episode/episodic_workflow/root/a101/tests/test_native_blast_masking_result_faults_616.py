@@ -8,10 +8,10 @@ from unittest.mock import patch
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_masking_result_publication as publication
-from gene_annotation_episode import sequence_masking_calculations as calculations
+from gene_annotation_episode.episodic_workflow.root.a101.library import sequence_masking_calculations as calculations
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.sequence_masking_result_views import validate_masking_fact_values, validate_masking_result_selector
+from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_result_views import validate_masking_fact_values, validate_masking_result_selector
 from test_native_blast_masking_results_616 import (
     POLICY, captured_fixture, inline_workers, prepared_fixture, publish, selector, slot,
     test_statistics_preserve_original_reference_rows_thresholds_and_absent_codes as check_statistics,
@@ -89,7 +89,7 @@ def test_changed_retained_sheet_is_rejected_before_any_worker(tmp_path, monkeypa
 
 def test_projection_worker_failure_is_retained_and_never_implicitly_restarted(tmp_path, monkeypatch):
     store, _, _, _, prepared, source = prepared_fixture(tmp_path, monkeypatch)
-    from gene_annotation_episode import sequence_masking_result_views as views
+    from gene_annotation_episode.episodic_workflow.root.a101.library import sequence_masking_result_views as views
     choice = selector(quantities=["masked_positions"])
     with patch.object(views, "project_masking_result", side_effect=ValueError("synthetic_projection_failure")):
         with pytest.raises(ContractError, match="selected_projection_worker_failed"):

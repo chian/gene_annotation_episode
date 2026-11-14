@@ -472,7 +472,8 @@ def test_all_seven_original_sources_have_distinct_compact_meanings():
 
 def test_non_rna_and_comparison_inputs_are_exact_presentation_noops():
     from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_presentation import select_rna_comparison_presentation
-    from gene_annotation_episode.scientific_process_prompt import _steering, render_episode_steering
+    from gene_annotation_episode.scientific_process_prompt import _steering
+    from gene_annotation_episode.episodic_workflow.root.library.decision_steering_display import render_episode_steering
     from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE
     state = {"goal": {"objective": "Other task"}, "child_reports": [{"unrelated": [1, 2]}],
         "last_local_outcome": {"result": {"other": 3}}, "current_report_update": {"decision": "keep"}}

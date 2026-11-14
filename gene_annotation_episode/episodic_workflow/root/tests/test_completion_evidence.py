@@ -11,11 +11,12 @@ import pytest
 from method_loop.durable import canonical
 from method_loop.identities import UnitRef
 
-from gene_annotation_episode.completion_evidence import (
+from gene_annotation_episode.episodic_workflow.root.completion_evidence import (
     CompletionEvidence, VERSION, validate_completion_evidence)
-from gene_annotation_episode.episode_completion import observes_action_outcome
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_monitoring import FIELDS, read_progress
+from gene_annotation_episode.episodic_workflow.root.episode_completion import observes_action_outcome
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episode_monitoring import FIELDS
+from gene_annotation_episode.episodic_workflow.root.progress_observations import read_progress
 from gene_annotation_episode.local_return_history import LocalReturnHistory
 from gene_annotation_episode.state import Store
 from test_local_return_history import Case, SCHEMA, Value, forbidden, read_only

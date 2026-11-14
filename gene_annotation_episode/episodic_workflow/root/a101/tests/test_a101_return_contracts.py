@@ -6,11 +6,11 @@ from types import SimpleNamespace
 import pytest
 from method_loop.durable import DurableExecutionError
 
-from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE
-from gene_annotation_episode.episode_composition import reopen_scientific_binding
+from gene_annotation_episode.episodic_workflow.root.a101.composition_information import CONTRACT_INFORMATION_PROFILE
+from gene_annotation_episode.episodic_workflow.root.a101.episode_composition import reopen_scientific_binding
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from a101_native_return_fixture import NativeReturnCase, PUBLICATION
 
 

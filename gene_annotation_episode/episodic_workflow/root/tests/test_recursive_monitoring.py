@@ -20,14 +20,17 @@ import pytest
 from method_loop import ChildEpisodeUnit, Context, Episode, EpisodeGoal, EpisodeRequest, EpisodeTree, Grain, Leaf
 from method_loop.durable import DurableExecutionStore, content_digest
 from method_loop.identities import EpisodeRef
-from gene_annotation_episode.communication import ReportBoundaryError, form_with_facts, plain
+from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, form_with_facts, plain
 from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes, ProgressProvider
+from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
 from gene_annotation_episode.progress_records import job_status
-from gene_annotation_episode.runtime import Record, TypedReportContract, run_workflow
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_durable_episode import commission_spec, await_event, event_condition, release_gate, returned
 from test_runtime import FixtureController, ScriptedProvider
 

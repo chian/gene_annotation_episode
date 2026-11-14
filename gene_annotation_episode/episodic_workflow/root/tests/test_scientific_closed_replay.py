@@ -15,11 +15,11 @@ import pytest
 
 from method_loop.archive import iter_json
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import WorkflowError
-from gene_annotation_episode.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from test_runtime import ScriptedProvider

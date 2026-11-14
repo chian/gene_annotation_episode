@@ -19,7 +19,7 @@ from gene_annotation_episode import molecular_measurement_tools as ordinary
 from gene_annotation_episode.domain import ContractError, canonical
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_grading_entries
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 RETAINED = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/itc_parameter_delivery/store"

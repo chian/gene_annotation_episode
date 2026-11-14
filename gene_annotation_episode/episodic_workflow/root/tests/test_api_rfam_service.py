@@ -15,14 +15,14 @@ import pytest
 
 from gene_annotation_episode.acquisition import AcquisitionError, SourceSnapshot
 from gene_annotation_episode.api_rfam import RfamBatchService
-from gene_annotation_episode.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.api_services import build_service
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.rfam_discovery import BASE_URL, result_url
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 JOB = "infernal_cmscan-CONTROLLED_ORIGINAL"
@@ -431,7 +431,7 @@ def test_compound_rfam_tools_cannot_create_new_work_but_saved_outcomes_replay(ha
 
 @pytest.mark.parametrize("batch", [False, True])
 def test_original_target_information_requires_selected_format_without_acquisition(harness, batch):
-    from gene_annotation_episode.execution_progress import ExecutionTargetReader
+    from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionTargetReader
 
     h = harness
     if batch:
@@ -459,7 +459,7 @@ def test_original_target_information_requires_selected_format_without_acquisitio
     assert selected["projection"] == selector["projection"]
     assert fetch["parser"].endswith("populate_rfam_batch_tblout_sheet" if batch else "populate_rfam_batch_json_sheet")
     assert fetch["calculators"] == [
-        "gene_annotation_episode.infernal_search_grader.calculate_infernal_search_scores"]
+        "gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader.calculate_infernal_search_scores"]
     assert fetch["calculator_parameters"] == {"hit_scope": "reported"}
     assert fetch["return_fact_sources"] == ["execution_result_refs", "rfam_result_rows", "rfam_result_populations"]
     assert [row[0] for row in h.client.calls] == ["submit"]
@@ -467,7 +467,7 @@ def test_original_target_information_requires_selected_format_without_acquisitio
 
 
 def test_rfam_instructions_and_numerical_sources_reach_only_actual_owners(harness):
-    from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+    from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
     from gene_annotation_episode.tool_information import make_tool_info, workflow_execution_catalogs
 
     h = harness

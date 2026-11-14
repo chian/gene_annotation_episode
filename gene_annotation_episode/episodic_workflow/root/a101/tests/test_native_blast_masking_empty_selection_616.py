@@ -3,8 +3,8 @@ from unittest.mock import patch
 
 import pytest
 
-from gene_annotation_episode import sequence_masking_calculations as calculations
-from gene_annotation_episode.sequence_masking_result_views import project_masking_result
+from gene_annotation_episode.episodic_workflow.root.a101.library import sequence_masking_calculations as calculations
+from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_result_views import project_masking_result
 from test_sequence_masking import operation
 from test_native_blast_masking_results_616 import selector
 

@@ -14,18 +14,18 @@ from jsonschema import Draft202012Validator
 from method_loop.identities import EpisodeRef
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_utility_result_views import FACT_SOURCES, blast_utility_fact_sources
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.a101.communication import (
     ReportBoundaryError, form_with_facts, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest, plain
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION, RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION, RESULTS_VERSION
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_utility_contracts import LEGACY_MODES, requested_job_from_native_blast_utility
-from gene_annotation_episode.numerical import NumericBand, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldParameters
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 from test_blast_utility_contracts_625 import extraction
 from test_blast_utility_result_views_629 import project, selected_sequences, selector

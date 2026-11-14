@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 import pytest
 
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.a106.communication import (
     ReportBoundaryError, form_with_facts, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.domain import ContractError, canonical, obj, validate_schema

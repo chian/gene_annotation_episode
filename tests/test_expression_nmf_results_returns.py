@@ -24,7 +24,8 @@ from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_retur
 from gene_annotation_episode.episodic_workflow.root.expression_nmf_returns import ExpressionNMFReturns
 from gene_annotation_episode.episodic_workflow.root.expression_nmf_result_receipts import ExpressionNMFResultReceipts
 from gene_annotation_episode.native_file_capture import retained_native_file
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
 
 

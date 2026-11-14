@@ -9,18 +9,18 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain
+from gene_annotation_episode.episodic_workflow.root.a106.communication import form_with_facts, plain
 from gene_annotation_episode.domain import ContractError, canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a106.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a106.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.a106.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a106.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_storage import LiteraturePerturbationRepository, perturbation_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a106.library.literature_perturbation_summary_storage import LiteraturePerturbationSummaryProjection, perturbation_summary_cells_schema
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.a106.runtime import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a106.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
 from gene_annotation_episode.episodic_workflow.root.a106.tests.test_literature_perturbation_summary import source_data, paired_data, arguments, TEXT, graph_data, IMAGE
 
@@ -161,9 +161,9 @@ def test_summary_operation_in_ordinary_child_admits_exact_form_once_without_extr
             assert ref not in source_artifacts,'no original source bytes on first read-only reconstruction'
             return old_get(ref)
         from unittest.mock import patch
-        with patch.object(reopened,'get_artifact',saved_only), patch.object(reopened,'put',forbidden), patch.object(reopened,'artifact',forbidden), patch.object(reopened,'transaction',forbidden), patch('gene_annotation_episode.episodic_workflow.root.a106.literature_perturbation_storage.read_perturbation_inputs',forbidden), patch('gene_annotation_episode.episodic_workflow.root.a106.literature_perturbation_storage.populate_source_summary_restoration',forbidden), patch('gene_annotation_episode.providers.ModelConnection',forbidden):
-            from gene_annotation_episode.episode_composition import compose_episode_bindings
-            from gene_annotation_episode.episode_journal import Journal
+        with patch.object(reopened,'get_artifact',saved_only), patch.object(reopened,'put',forbidden), patch.object(reopened,'artifact',forbidden), patch.object(reopened,'transaction',forbidden), patch('gene_annotation_episode.episodic_workflow.root.a106.literature_perturbation_storage.read_perturbation_inputs',forbidden), patch('gene_annotation_episode.episodic_workflow.root.a106.literature_perturbation_storage.populate_source_summary_restoration',forbidden), patch('gene_annotation_episode.episodic_workflow.root.a106.providers.ModelConnection',forbidden):
+            from gene_annotation_episode.episodic_workflow.root.a106.episode_composition import compose_episode_bindings
+            from gene_annotation_episode.episodic_workflow.root.a106.episode_journal import Journal
             services=WorkflowServices(SimpleNamespace(store=reopened,run_id=run))
             journal=Journal.__new__(Journal);journal.store=reopened;journal.db=reopened.db;journal.run_id=run
             composition=compose_episode_bindings(services,store=reopened,journal=journal,

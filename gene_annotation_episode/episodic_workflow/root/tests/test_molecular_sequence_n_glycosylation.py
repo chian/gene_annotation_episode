@@ -21,13 +21,14 @@ from gene_annotation_episode import molecular_sequence_native as native
 from gene_annotation_episode import molecular_sequence_ordinary as ordinary
 from gene_annotation_episode import molecular_sequence_result_contracts as contracts
 from gene_annotation_episode import molecular_sequence_tools as tools
-from gene_annotation_episode.communication import validate_form
+from gene_annotation_episode.episodic_workflow.root.communication import validate_form
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.molecular_measurement_tools import MolecularOperationUnpublished
-from gene_annotation_episode.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.task_action_units import ActionFailure
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from tests.test_glycosylation_measurements import n_log
 from tests.test_molecular_sequence_ordinary import selected_call, _lifecycle, _metadata_fixture, _pin, _write
 from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_tools_native import _controller, _credit
@@ -667,7 +668,8 @@ def test_same_key_cache_authenticates_retained_control_without_new_grants(n_boun
 
 
 def test_n_renderer_unknown_row_issues_do_not_become_known_empty(n_boundary, monkeypatch):
-    from gene_annotation_episode.scientific_process_prompt import _selected_molecular_packet, _selected_molecular_text
+    from gene_annotation_episode.episodic_workflow.root.library.molecular_result_recognition import _selected_molecular_packet
+    from gene_annotation_episode.episodic_workflow.root.library.molecular_value_presentation import _selected_molecular_text
 
     value = n_boundary
     def partial_components(sheet, components):
@@ -687,7 +689,8 @@ def test_n_renderer_unknown_row_issues_do_not_become_known_empty(n_boundary, mon
 
 
 def test_n_renderer_uses_diagnostic_role_without_artifact_identity(n_boundary, monkeypatch):
-    from gene_annotation_episode.scientific_process_prompt import _selected_molecular_packet, _selected_molecular_text
+    from gene_annotation_episode.episodic_workflow.root.library.molecular_result_recognition import _selected_molecular_packet
+    from gene_annotation_episode.episodic_workflow.root.library.molecular_value_presentation import _selected_molecular_text
 
     value = n_boundary
     original = _seed(value)["result"]
@@ -707,7 +710,7 @@ def test_n_renderer_uses_diagnostic_role_without_artifact_identity(n_boundary, m
 
 
 def test_n_frozen_value_and_received_reference_hooks_use_only_public_group(n_boundary, monkeypatch):
-    from gene_annotation_episode.communication import ReportBoundaryError
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
     from gene_annotation_episode.molecular_result_facts import merge_molecular_facts, validate_frozen_molecular_return
     from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
 

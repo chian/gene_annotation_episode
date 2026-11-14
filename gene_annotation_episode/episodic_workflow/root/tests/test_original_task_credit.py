@@ -12,10 +12,10 @@ from jsonschema import Draft202012Validator, ValidationError
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.numerical import (YieldController, AnnotationAxisYieldController,
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.numerical import (YieldController, AnnotationAxisYieldController,
     STATUS_UNIDENTIFIABLE)
-from gene_annotation_episode import runtime
+from gene_annotation_episode.episodic_workflow.root import runtime
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from test_investigation_progress import put_finding
@@ -76,7 +76,7 @@ def test_annotation_root_requires_frozen_evidence_refs_with_child_credit():
 
 
 def test_annotation_root_tells_model_both_required_child_return_sources():
-    from gene_annotation_episode.composition_information import child_options
+    from gene_annotation_episode.episodic_workflow.root.composition_information import child_options
     owner = ScientificProcessEpisodes.__new__(ScientificProcessEpisodes)
     owner.services = SimpleNamespace(annotation_task_required=lambda: True)
     owner.assignment_schema = lambda _role: {'type': 'object', 'required': ['selection']}
@@ -155,7 +155,7 @@ def test_whole_axis_finding_credit_keeps_opposition_and_excludes_other_annotatio
 @pytest.mark.parametrize('axis', ['A102', 'A105', 'A106', 'A107', 'A108', 'A110'])
 def test_axis_owner_counts_one_received_finding_once_across_deliveries(tmp_path, axis):
     from gene_annotation_episode.episodic_workflow.root.credit import axis_progress_from_received
-    from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+    from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
     from gene_annotation_episode.domain import canonical
     with Store(tmp_path/'state') as store:
         target, annotation = target_question(store)

@@ -19,20 +19,20 @@ from method_loop.archive import iter_json
 import pytest
 
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.communication import plain, validate_closed_schema, validate_form
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, RESULTS_VERSION
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.infernal_preparation_result_views import preparation_fact_sources
-from gene_annotation_episode.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
-from gene_annotation_episode.native_infernal_preparation_local import local_infernal_preparation_plan
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_closed_schema, validate_form
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.infernal_preparation_result_views import preparation_fact_sources
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_contracts import requested_job_from_infernal_preparation
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_local import local_infernal_preparation_plan
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.practical_yield import PracticalYieldEstimator
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.library.published_scientific_task_presentation import render_scientific_process_prompt
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_native_infernal_preparation_driver import POLICY, native_job
 from test_native_infernal_preparation_results_integration import choice_for, result_form, selected
 
@@ -632,7 +632,7 @@ def test_received_returns_replay_without_native_work_or_extra_observations(nativ
 
 
 def test_saved_sheet_recalculation_keeps_native_work_and_prior_facts_unchanged(native_case, monkeypatch):
-    from gene_annotation_episode.native_infernal_preparation_worker import recalculate_infernal_preparation
+    from gene_annotation_episode.episodic_workflow.root.library.native_infernal_preparation_worker import recalculate_infernal_preparation
     case = native_case
     prepared = case.outcome['result']['prepared']
     sheet = json.loads(case.store.get_artifact(prepared['sheet_artifact_ref']))

@@ -19,11 +19,11 @@ from gene_annotation_episode.episodic_workflow.root.a101.library import bvbrc_ho
 from gene_annotation_episode.api_bvbrc_appservice import BVBRCAppServiceService
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_homology_grader import calculate_homology_scores
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG, PREFIX, OBJECT_UUID, SHOCK_UUID, metadata
 from test_bvbrc_appservice_inputs import NativeClient
 from gene_annotation_episode.episodic_workflow.root.a101.tests.test_bvbrc_homology_bundle_adapter import c4_fixture

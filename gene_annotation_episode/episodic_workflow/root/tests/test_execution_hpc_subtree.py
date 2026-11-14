@@ -10,10 +10,10 @@ import json
 import sys
 
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_execution_episodes_family import launch_assignment, native_assignment
 from test_execution_wiring import child, controller, form
 from test_practical_pbs_operations import remote  # noqa: F401 - shared pytest fixture

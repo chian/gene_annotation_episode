@@ -126,7 +126,7 @@ def test_actual_converter_values_reach_both_parents_from_one_shared_sheet(conver
     descriptor = case.owner.job_progress_provider.targets.describe_target(case.provider.handoff, case.scope)
     extractor, = [r for r in descriptor["extractors"] if r["operation"] == "execution.results.collect"]
     assert extractor["sheet_population"].endswith("blast_maskinfo_inputs.populate_mask_conversion")
-    assert extractor["calculators"] == ["gene_annotation_episode.sequence_masking_calculations.calculate_sequence_masking_components"]
+    assert extractor["calculators"] == ["gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_calculations.calculate_sequence_masking_components"]
     assert case.store.count("annotation") == case.store.count("observation") == 0
 
 

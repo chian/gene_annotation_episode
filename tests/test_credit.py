@@ -606,7 +606,7 @@ def _commit_comparison_fixture(store, scope, subject, observation, reference, *,
 @pytest.mark.parametrize("molecule", ["protein", "unspecified"])
 def test_real_external_query_input_reference_is_bounded_by_native_reference_interval(tmp_path, molecule):
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
     with Store(tmp_path / "reference-operand") as store:
         target = store.create_problem(raw_sequence="MMADFKGWW", molecule=molecule,
@@ -641,7 +641,7 @@ def test_real_external_query_input_reference_is_bounded_by_native_reference_inte
 
 def test_real_external_query_reference_sites_are_disjoint_or_explicitly_unexamined(tmp_path):
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
     with Store(tmp_path / "native-reference-sites") as store:
         target = store.create_problem(raw_sequence="MMADFKGWW", molecule="protein", role="protein")["subject_refs"][0]
@@ -684,7 +684,7 @@ def test_real_external_query_reference_sites_are_disjoint_or_explicitly_unexamin
 @pytest.mark.parametrize("derived", ["reference", "product", "feature"])
 def test_real_source_only_query_and_derivation_need_explicit_target_attribution(tmp_path, derived):
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
     with Store(tmp_path / "external-only") as store:
         target = store.create_problem(raw_sequence="AAAA", molecule="protein", role="protein")["subject_refs"][0]
@@ -752,7 +752,7 @@ def test_real_derivation_alignment_credit_maps_exact_query_and_reopens(
     """Real local tools/state/projection; synthetic fragment, no biology claim."""
     from Bio.Seq import Seq
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
     coding = "ATGGCTGACTTCAAAGGGTAA"  # MADFKG and a terminal stop.
     region = ("C" if frame else "") + coding
@@ -1067,7 +1067,7 @@ def _three_input_inference_fixture(store, tmp_path):
 def test_inferred_source_role_factor_and_target_scope_are_identity_independent(tmp_path, source_kind):
     """Same actual comparison, same inferred B credit, never a source→B map."""
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
     with Store(tmp_path / source_kind) as store:
         targets = _three_input_inference_fixture(store, tmp_path)
@@ -1114,7 +1114,7 @@ def test_inferred_source_role_factor_and_target_scope_are_identity_independent(t
 
 def test_sibling_loci_same_original_input_can_infer_then_correct_to_observed_extent(tmp_path):
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
     path = tmp_path / 'siblings'
     with Store(path) as store:
@@ -1231,7 +1231,7 @@ def test_inference_missing_extent_notice_and_direct_contradiction_preserve_valid
 @pytest.mark.parametrize('case', ['measured_gap', 'outside_alignment'])
 def test_actual_gap_inference_is_distinct_from_observed_extent_and_unexamined_sites(tmp_path, case):
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
     reference_sequence = 'MKWVTFISLLFLFSSAYSRGVFRRDTHKSEIAHRFKDLGE'
     query_sequence = (reference_sequence[:15] + reference_sequence[16:] if case == 'measured_gap'
@@ -1292,7 +1292,7 @@ def test_actual_gap_inference_is_distinct_from_observed_extent_and_unexamined_si
 def test_native_observed_sibling_query_and_reference_project_independently(tmp_path, same_original):
     """Real local alignment; original packaging cannot clip the other operand."""
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from gene_annotation_episode.domain import ContractError
 
     with Store(tmp_path / 'native-observed-operands') as store:

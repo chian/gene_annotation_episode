@@ -20,14 +20,16 @@ from method_loop.episode import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.native_infernal_preparation_returns import NativeInfernalPreparationReturns
-from gene_annotation_episode.runtime import Record, TypedReportContract, Workflow
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.native_infernal_preparation_returns import NativeInfernalPreparationReturns
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 RUN_ID = 'synthetic-preparation-reference-visibility-258'
@@ -44,8 +46,8 @@ def forbidden(*args, **kwargs):
 def no_external_or_numerical_work(monkeypatch):
     """A passing check cannot launch a native/grade subprocess or use a network."""
     from gene_annotation_episode import native_lifecycle
-    from gene_annotation_episode import native_infernal_preparation_results as result_module
-    from gene_annotation_episode import native_infernal_preparation_result_publication as publication
+    from gene_annotation_episode.episodic_workflow.root import native_infernal_preparation_results as result_module
+    from gene_annotation_episode.episodic_workflow.root.library import native_infernal_preparation_result_publication as publication
     monkeypatch.setattr(socket.socket, 'connect', forbidden)
     monkeypatch.setattr(socket, 'create_connection', forbidden)
     monkeypatch.setattr(subprocess, 'Popen', forbidden)
@@ -383,7 +385,7 @@ def test_unrequested_results_reference_does_not_reopen_original_bundle(boundary,
     read; it does not claim a valid native bundle or production capture. No
     artifact contents are necessary to deny an absent explicit reference.
     """
-    from gene_annotation_episode import native_infernal_preparation_results as result_module
+    from gene_annotation_episode.episodic_workflow.root import native_infernal_preparation_results as result_module
 
     b = boundary
     owner, results = b.bound, b.bound.native_infernal_preparation_results

@@ -18,7 +18,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_alignment_input_alphabet import classify_easel_alphabet_counts, infer_hmmer_alignment_alphabet
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_alignment_input_fasta import decode_native_fasta_alignment
-from gene_annotation_episode.hmmalign_inputs import _normalize, stockholm_digital_checksum
+from gene_annotation_episode.episodic_workflow.root.a101.library.hmmalign_inputs import _normalize, stockholm_digital_checksum
 
 _REPO = Path(__file__).resolve().parents[5]
 _PACKET = Path(__file__).parent / "fixtures/hmmer_input_native_oracle"

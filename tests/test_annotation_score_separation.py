@@ -9,10 +9,11 @@ import json
 import pytest
 
 from gene_annotation_episode.credit import CreditPolicy
-from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow, WorkflowError
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
+from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
 from gene_annotation_episode.scientific_credit import AnnotationSupportScore
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import (FixtureController, FixtureStore, FixtureTools,
     ScriptedProvider, commission, fixture_credit, obj, reason)
 from test_scientific_hypervolume_runtime import assessment, annotation, commit, evidence

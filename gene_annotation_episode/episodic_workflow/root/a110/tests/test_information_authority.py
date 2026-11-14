@@ -142,7 +142,7 @@ def publish_original_setup(v, *, factory_identity):
 
 
 @pytest.mark.parametrize('identity', [
-    'gene_annotation_episode.execution_service_setup.ExecutionServiceFactory',
+    'gene_annotation_episode.episodic_workflow.root.a110.execution_service_setup.ExecutionServiceFactory',
     PREFIX + 'execution_service_setup.ExecutionServiceFactory'])
 def test_old_factory_provenance_does_not_require_new_catalog(original_setup, identity):
     v = original_setup

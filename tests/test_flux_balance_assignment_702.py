@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import ASSIGNMENT_SCHEMA, validate_assignment
 from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import POLICY
 

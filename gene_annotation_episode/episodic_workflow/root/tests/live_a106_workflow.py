@@ -21,7 +21,7 @@ sys.dont_write_bytecode = True
 
 def execution_factory(configuration, *, store, directory, tool_registry):
     """Bind existing AppService roles without submitting work or adding evidence."""
-    from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+    from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
     expected = {"resources", "initial_information", "handoff_unit", "acquired_record_unit",
         "log_window_bytes", "log_roles"}
     if not isinstance(configuration, dict) or set(configuration) != expected:
@@ -105,10 +105,10 @@ def main():
         parser.error("the original run source snapshot is missing")
     sys.path.insert(0, str(snapshot))
     from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-    from gene_annotation_episode.runtime import run_workflow
+    from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tool_configuration import build_tools
-    from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE
+    from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
+    from gene_annotation_episode.episodic_workflow.root.composition_information import CONTRACT_INFORMATION_PROFILE
 
     goal = (
         "Investigate A106 intervention evidence for the supplied anonymous microbial protein sequence. "

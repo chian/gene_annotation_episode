@@ -6,15 +6,15 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.credit import CreditPolicy
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.scientific_credit import AnnotationSupportScore
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_records import scientific_digest
-from gene_annotation_episode.scientific_support_metadata import (
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_digest
+from gene_annotation_episode.episodic_workflow.root.scientific_support_metadata import (
     annotation_policy_routes, support_observation_kinds)
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.episodic_workflow.root.tests.test_scientific_process_episodes import ContractLibrary, ContractServices, make_context
 
 

@@ -16,19 +16,19 @@ from method_loop.episode import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain
+from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION, RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION, RESULTS_VERSION
 from gene_annotation_episode.materials import artifact_path
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_standard_database_contracts import requested_job_from_standard_blast_database
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_standard_database_result_views import standard_blast_database_fact_sources
 from gene_annotation_episode.practical_pbs_operations import PBSPracticalOperations, _REMOTE_WORKER
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_native_blast_standard_database_driver import fixture as producer_fixture, write
 from test_practical_pbs_operations import remote as remote_fixture, REAL_RUN
 from test_execution_episodes_family import native_assignment

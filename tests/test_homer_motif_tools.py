@@ -17,7 +17,7 @@ from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.homer_motif_result_contracts import homer_motif_return
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode import native_lifecycle
 from gene_annotation_episode.molecular_measurement_tools import (MolecularOperationUnpublished,
     read_retained_molecular_publication, run_owned_molecular_worker)

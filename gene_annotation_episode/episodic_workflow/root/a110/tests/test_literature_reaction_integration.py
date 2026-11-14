@@ -9,18 +9,18 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain
+from gene_annotation_episode.episodic_workflow.root.a110.communication import form_with_facts, plain
 from gene_annotation_episode.domain import ContractError, canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_services import WorkflowServices
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a110.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.a110.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.a110.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a110.library.literature_reaction_inputs import LITERAL_FIELDS
 from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_report_contracts import reaction_cells_schema
-from gene_annotation_episode.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.a110.runtime import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a110.tools import ToolRegistry
 from test_runtime import FixtureController, ScriptedProvider
 
 BASE = Path(__file__).parent / 'fixtures/source_records'
@@ -109,8 +109,8 @@ def binding_for(store, context):
 
 @pytest.mark.parametrize('primary,incomplete', [(True, False), (False, False), (False, True)])
 def test_selected_typed_values_and_reconstruction_without_source_bytes(tmp_path, monkeypatch, primary, incomplete):
-    from gene_annotation_episode.episode_composition import compose_episode_bindings
-    from gene_annotation_episode.episode_journal import Journal
+    from gene_annotation_episode.episodic_workflow.root.a110.episode_composition import compose_episode_bindings
+    from gene_annotation_episode.episodic_workflow.root.a110.episode_journal import Journal
     store, context, args = setup_case(tmp_path, primary=primary, incomplete=incomplete)
     with store:
         binding = binding_for(store, context)
@@ -209,7 +209,7 @@ def test_selected_in_ordinary_child_and_received_once(tmp_path, primary):
 
 
 def test_recurring_reaction_task_and_material_qualifications_at_provider(tmp_path):
-    from gene_annotation_episode.decision_context import state_frame
+    from gene_annotation_episode.episodic_workflow.root.a110.decision_context import state_frame
     from gene_annotation_episode.episodic_workflow.root.a110.library.literature_reaction_prompt import REACTION_TASK
     from test_literature_experimental_prompt_delivery import LiteratureWire, snapshot, complete
     first = snapshot()
@@ -247,7 +247,8 @@ def test_recurring_reaction_task_and_material_qualifications_at_provider(tmp_pat
 
 
 def test_parent_steering_groups_only_admitted_reaction_cells_and_keeps_own_task(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.a110.library.literature_reference_parent_presentation import REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt
+    from gene_annotation_episode.episodic_workflow.root.library.literature_reference_parent_presentation import REFERENCE_PARENT_TASK
+    from gene_annotation_episode.episodic_workflow.root.a110.library.literature_reference_parent_presentation import render_reference_evidence_parent_prompt
     store, context, args = setup_case(tmp_path)
     with store:
         binding = binding_for(store, context)

@@ -5,10 +5,10 @@ import json
 import os
 import sys
 
-from gene_annotation_episode.expression_nmf_common import MODE, OPERATION, default_nmf_parameters, digest, identity
-from gene_annotation_episode.native_expression_nmf_contracts import (expression_nmf_environment,
+from gene_annotation_episode.episodic_workflow.root.a107.expression_nmf_common import MODE, OPERATION, default_nmf_parameters, digest, identity
+from gene_annotation_episode.episodic_workflow.root.a107.native_expression_nmf_contracts import (expression_nmf_environment,
     requested_job_from_expression_nmf, validate_expression_nmf_software)
-from gene_annotation_episode.native_expression_nmf_storage import file_pin
+from gene_annotation_episode.episodic_workflow.root.a107.native_expression_nmf_storage import file_pin
 
 
 def prepared_software(attempt):

@@ -6,12 +6,13 @@ import json
 
 import pytest
 
-from gene_annotation_episode.independent_execution import make_runtime_binding, _saved_episode_factories
+from gene_annotation_episode.episodic_workflow.root.commissioned_reopening import make_runtime_binding
+from gene_annotation_episode.episodic_workflow.root.saved_binding_reconstruction import _saved_episode_factories
 from gene_annotation_episode.case_execution import _load_policy
 from gene_annotation_episode.credit import AnnotationScoringUnavailable
-from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from method_loop.durable import DurableExecutionError
 from test_runtime import FixtureController, ScriptedProvider
 

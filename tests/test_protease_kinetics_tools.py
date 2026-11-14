@@ -27,9 +27,10 @@ from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.molecular_measurement_tools import MolecularOperationUnpublished
-from gene_annotation_episode.episodic_workflow.root.runtime import ActionFailure, Workflow
+from gene_annotation_episode.episodic_workflow.root.task_action_units import ActionFailure
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_protease_kinetics_measurements import supplied_fixture
 from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_tools_native import _controller, _credit
 from tests.test_runtime import ScriptedProvider
@@ -659,7 +660,7 @@ def _protease_native_assemble(store, directory, proof, provider):
 
 
 def _protease_native_checkpoint(store, proof, path):
-    from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _checkpoint
+    from gene_annotation_episode.episodic_workflow.root.library.hmmer_alignment_input_alphabet import _checkpoint
     _checkpoint(store, proof, path)
 
 
@@ -904,7 +905,7 @@ class _ProteaseNoNewDecisions:
 
 
 def _protease_native_closed_replay(store, directory, proof, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.runtime import ReturnedActionUnit
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import ReturnedActionUnit
     from tests.test_homer_motif_saved_workflow import _archive, _archive_value
     from gene_annotation_episode.episodic_workflow.root.tests.test_molecular_sequence_n_glycosylation_native import _files, _history
     before_tables, before_files = _tables(store), _files(directory)
@@ -1011,7 +1012,8 @@ def _protease_native_closed_replay(store, directory, proof, monkeypatch):
 ])
 def test_protease_information_filter_preserves_opaque_supplied_assay_conditions(boundary, monkeypatch, conditions):
     """Engineered presentation value; no new custody or scientific claim."""
-    from gene_annotation_episode.scientific_process_prompt import _information, _values
+    from gene_annotation_episode.episodic_workflow.root.library.decision_outcome_presentation import _information
+    from gene_annotation_episode.scientific_process_prompt import _values
     public = deepcopy(_closed_group(boundary))
     public["values"]["context"]["assay"]["value"]["conditions"] = deepcopy(conditions)
     contracts.validate_ordinary_protease_kinetics_return(public)
@@ -1030,7 +1032,7 @@ def test_protease_information_filter_preserves_opaque_supplied_assay_conditions(
 
 def test_protease_failure_presentation_uses_diagnostic_role_without_private_address(boundary, monkeypatch):
     """A valid engineered failure association is not successful-native evidence."""
-    from gene_annotation_episode.scientific_process_prompt import _selected_molecular_text
+    from gene_annotation_episode.episodic_workflow.root.library.molecular_value_presentation import _selected_molecular_text
     public = deepcopy(_closed_group(boundary))
     diagnostic = "artifact_" + "e" * 64
     public["failures"].append(stored.failure("schema_invalid", "load", role="components", diagnostic_ref=diagnostic))
@@ -1043,7 +1045,7 @@ def test_protease_failure_presentation_uses_diagnostic_role_without_private_addr
 
 
 def test_practical_leaf_projects_only_ordinary_protease_metadata_and_rejects_unknown_keys(tmp_path):
-    from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+    from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
     resources, _ = _resources(tmp_path, native_binding=True)
     resource = resources["ordinary"]
     original = deepcopy(resource)

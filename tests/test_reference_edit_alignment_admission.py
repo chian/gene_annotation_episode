@@ -22,7 +22,7 @@ from gene_annotation_episode.domain import ContractError, canonical, identity
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import MEDIA_TYPE, SCHEMA, SCHEMA_V2
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_alignment_site_action_records import RUN, setup_case, saved_context, perform, requested
 
 

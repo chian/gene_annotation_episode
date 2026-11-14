@@ -28,7 +28,7 @@ from gene_annotation_episode.macs2_peak_result_contracts import project_macs2_pe
 from gene_annotation_episode import macs2_peak_result_worker as result_worker
 from gene_annotation_episode.practical_execution_state import PracticalState
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.episodic_workflow.root.local_file_capture_results import (
     MACS2_SELECTOR_VERSION, resolve_macs2_peak_file_selector,

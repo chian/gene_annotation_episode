@@ -105,7 +105,7 @@ def test_shared_descriptor_factory_origin_and_replay_actual_saved_output(tmp_pat
         store.close()
 
 def test_actual_production_open_commission_restores_exact_descriptor_before_transport(tmp_path, monkeypatch):
-    from gene_annotation_episode import independent_execution as worker
+    from gene_annotation_episode.episodic_workflow.root.a105 import independent_execution as worker
     from gene_annotation_episode.episodic_workflow.root.a105.runtime import run_workflow, assemble_workflow
     from gene_annotation_episode.episodic_workflow.root.a105.tool_configuration import build_tools
     from gene_annotation_episode.episodic_workflow.root.a105.communication import plain
@@ -159,7 +159,7 @@ def test_actual_production_open_commission_restores_exact_descriptor_before_tran
 
         async def complete(self, *a, **kw):
             raise AssertionError('production factory invoked transport')
-    monkeypatch.setattr('gene_annotation_episode.providers.ModelConnection', ForbiddenModel)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.providers.ModelConnection', ForbiddenModel)
 
     async def inspect():
         async with worker.open_commission(spec) as opened:

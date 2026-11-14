@@ -19,7 +19,7 @@ from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError, REASONING_SCHEMA
 from gene_annotation_episode.episodic_workflow.root.library.rna_evidence import model_header, parse_fmt3, search_settings
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def fixture_root():

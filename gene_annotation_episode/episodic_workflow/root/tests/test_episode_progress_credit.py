@@ -9,15 +9,15 @@ import json
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
 from gene_annotation_episode.episode_progress_credit import ProgressInformationCredit, VERSION
 from gene_annotation_episode.progress_records import job_status
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from method_loop.durable import DurableExecutionStore
 from test_recursive_monitoring import assignment, durable_target
 from test_runtime import FixtureController, ScriptedProvider

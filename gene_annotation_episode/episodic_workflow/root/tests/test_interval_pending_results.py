@@ -17,16 +17,16 @@ import sys
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import validate_target
-from gene_annotation_episode.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_records import selector_selection
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import selector_selection
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 from test_interval_results_presentation import (
     _assert_original_rows, _canonical, _inventory, _session, _sha,
@@ -71,15 +71,15 @@ def _guard_work(monkeypatch):
             "collect", "cancel", "release"):
         monkeypatch.setattr("gene_annotation_episode.native_lifecycle." + name, _forbidden)
     for target in (
-        "gene_annotation_episode.genomic_overlap_calculations.calculate_genomic_overlap_components",
+        "gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_calculations.calculate_genomic_overlap_components",
         "gene_annotation_episode.chromatin_interaction_calculations.calculate_chromatin_components",
         "gene_annotation_episode.chromatin_interaction_calculations.calculate_contact_enrichment",
         "gene_annotation_episode.chromatin_interaction_calculations.calculate_insulation_components",
-        "gene_annotation_episode.genomic_overlap_result_worker.run_genomic_overlap_result_worker",
+        "gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_result_worker.run_genomic_overlap_result_worker",
         "gene_annotation_episode.chromatin_interaction_result_worker.run_chromatin_result_worker",
-        "gene_annotation_episode.native_genomic_overlap_driver.run_genomic_overlap_driver",
+        "gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_driver.run_genomic_overlap_driver",
         "gene_annotation_episode.native_chromatin_interaction_driver.run_chromatin_interaction_driver",
-        "gene_annotation_episode.native_genomic_overlap_results.NativeGenomicOverlapResults.execute",
+        "gene_annotation_episode.episodic_workflow.root.native_genomic_overlap_results.NativeGenomicOverlapResults.execute",
         "gene_annotation_episode.native_chromatin_interaction_results.NativeChromatinInteractionResults.execute",
         "gene_annotation_episode.acquisition.PublicClients._http",
         "socket.create_connection", "socket.socket.connect", "socket.socket.connect_ex",

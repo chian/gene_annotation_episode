@@ -27,7 +27,8 @@ from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_retu
 )
 from gene_annotation_episode.episodic_workflow.root.genomic_overlap_returns import GenomicOverlapReturns
 from gene_annotation_episode.native_file_capture import retained_native_file
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
 
 

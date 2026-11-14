@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.root.episode_receipts import Epis
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.form_reference_validation import form_reference_validation
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 pytestmark = pytest.mark.skipif("HMMER529_ATTEMPT" not in os.environ, reason="requires bounded529")

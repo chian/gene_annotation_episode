@@ -16,21 +16,20 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.decision_context import instructional_model_context, state_frame
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.runtime import DecisionSource, Workflow
+from gene_annotation_episode.episodic_workflow.root.decision_context import instructional_model_context, state_frame
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource, Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
-from gene_annotation_episode.scientific_process_prompt import (
-    _execution_presentation_values, has_molecular_receiver_context,
-    render_episode_steering,
-)
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.library.selected_execution_task_presentation import _execution_presentation_values
+from gene_annotation_episode.episodic_workflow.root.library.received_molecular_capabilities import has_molecular_receiver_context
+from gene_annotation_episode.episodic_workflow.root.library.decision_steering_display import render_episode_steering
 
 
 CASES = ("overlap_complete", "overlap_invalid_c", "overlap_missing_stdout",
@@ -73,7 +72,7 @@ def _walk(value):
 
 def _domain(name):
     if name.startswith("overlap_"):
-        from gene_annotation_episode.genomic_overlap_presentation import (
+        from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_presentation import (
             genomic_overlap_scientific_job_view, select_genomic_overlap_execution_values,
             select_genomic_overlap_presentation, render_genomic_overlap_projections,
         )
@@ -148,7 +147,7 @@ def _guard_work(monkeypatch):
         monkeypatch.setattr("gene_annotation_episode.native_lifecycle." + name, _forbidden)
     monkeypatch.setattr("gene_annotation_episode.acquisition.PublicClients._http", _forbidden)
     monkeypatch.setattr("socket.create_connection", _forbidden)
-    monkeypatch.setattr("gene_annotation_episode.genomic_overlap_calculations.calculate_genomic_overlap_components", _forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_calculations.calculate_genomic_overlap_components", _forbidden)
     monkeypatch.setattr("gene_annotation_episode.chromatin_interaction_calculations.calculate_chromatin_components", _forbidden)
     monkeypatch.setattr(_SessionConnection, "complete", _forbidden)
 
@@ -231,7 +230,7 @@ def _read_side_application(case, directory):
         factory = ExecutionServiceFactory.from_record(configuration["factory"])
         assert factory.as_record() == configuration["factory"]
         if case["name"].startswith("overlap_"):
-            from gene_annotation_episode.native_genomic_overlap_contracts import POLICY
+            from gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_contracts import POLICY
         else:
             from gene_annotation_episode.native_chromatin_interaction_contracts import POLICY
         tools = ToolRegistry(store, job_limits=deepcopy(POLICY))
@@ -271,7 +270,7 @@ def _retained_receipt_outcomes(case, directory):
     """
     from gene_annotation_episode.execution_contracts import digest
     if case["name"].startswith("overlap_"):
-        from gene_annotation_episode.genomic_overlap_result_receipts import (
+        from gene_annotation_episode.episodic_workflow.root.genomic_overlap_result_receipts import (
             GenomicOverlapResultIntent as Intent, GenomicOverlapResultReceipt as Receipt,
         )
         action_kind = "native-genomic-overlap-actions"

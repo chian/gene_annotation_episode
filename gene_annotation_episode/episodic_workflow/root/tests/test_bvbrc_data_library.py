@@ -19,18 +19,18 @@ from gene_annotation_episode.api_bvbrc import (
     BVBRCDataClient, DATA_QUERY_OPERATION, DATA_RESULT_OPERATION,
     EMPTY_ARGUMENTS, QUERY_OPERATION, RESULT_OPERATION,
 )
-from gene_annotation_episode.bvbrc_data_fields import COLLECTIONS, FIELD_REGISTRY
-from gene_annotation_episode.bvbrc_data_views import FACT_SOURCES
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields import COLLECTIONS, FIELD_REGISTRY
+from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views import FACT_SOURCES
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.execution_progress import describe_execution_target
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.execution_progress import describe_execution_target
 from gene_annotation_episode.resource_tool_information import bound_resource_tool_contracts
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_information import make_tool_info, workflow_execution_catalogs
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 LIBRARY = Path(__file__).resolve().parents[4]/'gene_annotation_episode/launch_instruction_library'
@@ -239,18 +239,18 @@ def test_descriptor_uses_actual_request_selector_and_only_bound_functions(
     assert extractor['return_fact_sources'] == ['execution_result_refs',
         'execution_bvbrc_pages', 'execution_bvbrc_counts', *additional_facts]
     assert set(extractor['return_fact_sources'][1:]) <= set(FACT_SOURCES)
-    assert extractor['parser'] == 'gene_annotation_episode.bvbrc_data_readers.parse_data_snapshot'
-    assert extractor['implementation'] == 'gene_annotation_episode.bvbrc_data_publication.publish_bvbrc_data'
+    assert extractor['parser'] == 'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_readers.parse_data_snapshot'
+    assert extractor['implementation'] == 'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_publication.publish_bvbrc_data'
     assert extractor['service_implementation'] == 'gene_annotation_episode.api_bvbrc.BVBRCDataService.publish'
-    assert extractor['projection_implementation'] == 'gene_annotation_episode.bvbrc_data_views.project_bvbrc_data_facts'
+    assert extractor['projection_implementation'] == 'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_views.project_bvbrc_data_facts'
     assert [name.rsplit('.', 1)[1] for name in extractor['calculators']] == [
         'calculate_page_counts', *additional_calculators]
     if selector['projection']['family'] == 'feature_sequence':
         assert extractor['metadata_extractors'] == [
-            'gene_annotation_episode.bvbrc_data_feature_sequences.extract_feature_sequence_join']
+            'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_feature_sequences.extract_feature_sequence_join']
     elif selector['projection']['family'] == 'molecular_experiment':
         assert extractor['metadata_extractors'] == [
-            'gene_annotation_episode.bvbrc_data_molecular.extract_molecular_experiment_rows']
+            'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_molecular.extract_molecular_experiment_rows']
     else:
         assert extractor['metadata_extractors'] == []
     assert 'extract_collection_rows' not in json.dumps(descriptor)
@@ -259,7 +259,7 @@ def test_descriptor_uses_actual_request_selector_and_only_bound_functions(
         assert callable(function(name))
     if api_request['mode'] == 'facet':
         assert extractor['calculator_parameters'] == {
-            'gene_annotation_episode.bvbrc_data_calculators.calculate_facet_fractions': {
+            'gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_calculators.calculate_facet_fractions': {
                 'denominator_policy': 'same_response_exact_document_count'}}
     else:
         assert extractor['calculator_parameters'] == {}

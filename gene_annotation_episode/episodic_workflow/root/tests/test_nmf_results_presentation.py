@@ -17,24 +17,25 @@ import sys
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import plain
-from gene_annotation_episode.decision_context import instructional_model_context, state_frame
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.communication import plain
+from gene_annotation_episode.episodic_workflow.root.decision_context import instructional_model_context, state_frame
+from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import digest, validate_target
-from gene_annotation_episode.expression_nmf_presentation import (
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_presentation import (
     expression_nmf_scientific_job_view, render_expression_nmf_projections,
     select_expression_nmf_execution_values, select_expression_nmf_presentation,
 )
-from gene_annotation_episode.expression_nmf_result_contracts import validate_file, validate_projection
-from gene_annotation_episode.expression_nmf_result_views import project_nmf_result
-from gene_annotation_episode.expression_nmf_return_views import PROJECTION_SOURCE, SAVED_SOURCE
-from gene_annotation_episode.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_result_contracts import validate_file, validate_projection
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_result_views import project_nmf_result
+from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_return_views import PROJECTION_SOURCE, SAVED_SOURCE
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_prompt import _execution_presentation_values, render_episode_steering
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.library.selected_execution_task_presentation import _execution_presentation_values
+from gene_annotation_episode.episodic_workflow.root.library.decision_steering_display import render_episode_steering
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 from test_interval_pending_results import _commission, _new_rows
 from test_interval_results_presentation import (
@@ -58,12 +59,12 @@ def _guard_work(monkeypatch):
             "collect", "cancel", "release"):
         monkeypatch.setattr("gene_annotation_episode.native_lifecycle." + name, _forbidden)
     for name in ("reconstruct_nmf", "residual_measurements", "component_measurements", "calculate_nmf_sheet"):
-        monkeypatch.setattr("gene_annotation_episode.expression_nmf_calculations." + name, _forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.expression_nmf_calculations." + name, _forbidden)
     for target in (
         "gene_annotation_episode.native_expression_nmf_driver.run_expression_nmf",
         "gene_annotation_episode.native_expression_nmf_driver.execute_expression_nmf_plan",
-        "gene_annotation_episode.expression_nmf_result_worker.execute_expression_nmf_worker",
-        "gene_annotation_episode.native_expression_nmf_results.NativeExpressionNMFResults.execute",
+        "gene_annotation_episode.episodic_workflow.root.library.expression_nmf_result_worker.execute_expression_nmf_worker",
+        "gene_annotation_episode.episodic_workflow.root.native_expression_nmf_results.NativeExpressionNMFResults.execute",
         "gene_annotation_episode.acquisition.PublicClients._http",
         "socket.create_connection", "socket.socket.connect", "socket.socket.connect_ex",
     ):

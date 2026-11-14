@@ -6,8 +6,8 @@ import math
 from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.root.a105.literature_rate_bound_calculations import populate_rate_table_bounds
-from gene_annotation_episode.episodic_workflow.root.a105.literature_rate_reader import read_rate_table
-from gene_annotation_episode.episodic_workflow.root.a105.literature_optical_validation import validate_optical_selection
+from gene_annotation_episode.episodic_workflow.root.library.literature_rate_reader import read_rate_table
+from gene_annotation_episode.episodic_workflow.root.library.literature_optical_validation import validate_optical_selection
 
 
 ROOT = Path(__file__).resolve().parents[1]

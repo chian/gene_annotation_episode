@@ -3,9 +3,7 @@ from copy import deepcopy
 
 from gene_annotation_episode.episodic_workflow.root.a105.decision_context import state_frame
 from gene_annotation_episode.episodic_workflow.root.a105.domain import canonical
-from gene_annotation_episode.episodic_workflow.root.literature_current_results import (
-    current_findings_view, current_scoring_view,
-)
+from gene_annotation_episode.episodic_workflow.root.a105.library.literature_current_results import current_findings_view, current_scoring_view
 from inspect_a105_parent_prompt import (
     recomputed_completed_work, replay_input, retained_input, retained_work_receipts,
     scientific_inventory, validate_scientific_presentation,

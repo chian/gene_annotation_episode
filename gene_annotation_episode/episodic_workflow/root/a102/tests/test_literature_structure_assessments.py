@@ -5,7 +5,7 @@ from dataclasses import replace
 
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts
+from gene_annotation_episode.episodic_workflow.root.a102.communication import form_with_facts
 from gene_annotation_episode.domain import ContractError, obj
 from gene_annotation_episode.episodic_workflow.root.a102.literature_structure_storage import LiteratureStructureRepository, structure_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a102.tests.test_literature_structure_integration import setup_case

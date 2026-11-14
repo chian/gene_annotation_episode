@@ -14,13 +14,13 @@ import shutil
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.communication import (
+from gene_annotation_episode.episodic_workflow.root.communication import (
     form_with_facts, plain, validate_closed_schema, validate_form,
 )
 from gene_annotation_episode.domain import obj
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, NATIVE_RESULT_ORIGIN
-from gene_annotation_episode.execution_progress import ExecutionTargetReader, describe_execution_target
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, NATIVE_RESULT_ORIGIN
+from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionTargetReader, describe_execution_target
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_context_views import project_fluorescence_context
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_calculations import calculate_fluorescence_sheet
 from gene_annotation_episode.episodic_workflow.root.library.fluorescence_event_contracts import canonical as numerical_canonical
@@ -37,9 +37,9 @@ from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_
     OPERATIONS, POLICY, fluorescence_environment, requested_job_from_fluorescence,
 )
 from gene_annotation_episode.episodic_workflow.root.library.original_native_fluorescence_results import ORIGIN, operation_catalog
-from gene_annotation_episode.practical_receipt_information import PROVIDER
+from gene_annotation_episode.episodic_workflow.root.practical_receipt_information import PROVIDER
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_fluorescence_local_routing import (
     assignment_and_configuration, backend, start, target_identity,
 )

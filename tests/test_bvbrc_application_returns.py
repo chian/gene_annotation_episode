@@ -123,7 +123,7 @@ def return_schema():
 
 
 def test_actual_runtime_form_compiler_and_receiver_resolve_only_declared_top_references():
-    from gene_annotation_episode.episodic_workflow.root.runtime import _compile_form
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import _compile_form
     from gene_annotation_episode.episodic_workflow.root.communication import validate_form
     from test_bvbrc_annotation_native import gto
     data = gto()
@@ -147,7 +147,7 @@ def test_actual_runtime_form_compiler_and_receiver_resolve_only_declared_top_ref
 
 @pytest.mark.parametrize("change", ["nested-reference", "definition", "extra-field", "source-type"])
 def test_registered_schema_identity_cannot_be_widened_at_runtime(change):
-    from gene_annotation_episode.episodic_workflow.root.runtime import _compile_form
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import _compile_form
     schema = return_schema(); field = schema["properties"]["observations"]
     if change == "nested-reference":
         field["items"]["properties"]["value"]["oneOf"][0]["properties"]["context"] = {
@@ -163,7 +163,7 @@ def test_registered_schema_identity_cannot_be_widened_at_runtime(change):
 
 
 def test_selected_value_display_preserves_native_keys_and_values_under_frozen_context():
-    from gene_annotation_episode.scientific_process_prompt import _execution_presentation_values
+    from gene_annotation_episode.episodic_workflow.root.library.selected_execution_task_presentation import _execution_presentation_values
     from test_bvbrc_annotation_native import gto
     data = gto()
     data["features"][0].update(source_ref="source_" + "9" * 24,

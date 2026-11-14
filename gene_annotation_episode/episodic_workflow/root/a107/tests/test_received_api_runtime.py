@@ -83,7 +83,7 @@ def test_original_factory_service_result_declares_both_independent_channels(oper
 
 
 @pytest.mark.parametrize('identity', [
-    'gene_annotation_episode.execution_service_setup.ExecutionServiceFactory',
+    'gene_annotation_episode.episodic_workflow.root.a107.execution_service_setup.ExecutionServiceFactory',
     'gene_annotation_episode.episodic_workflow.root.a107.execution_service_setup.ExecutionServiceFactory'])
 def test_authentic_legacy_global_factory_needs_no_new_receiving_catalog(original_setup, identity):
     v = original_setup

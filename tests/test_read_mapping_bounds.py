@@ -7,9 +7,9 @@ import pytest
 from gene_annotation_episode import read_mapping as mapper
 from gene_annotation_episode.cli import main
 from gene_annotation_episode.domain import ContractError, validate_schema
-from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 @pytest.mark.parametrize("name,value",[("kmer",1),("kmer",28),("window",1),("window",255),

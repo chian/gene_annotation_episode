@@ -14,9 +14,9 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.numerical import NumericBand
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.state import Store
 
 
@@ -153,7 +153,7 @@ def connected_case():
                 return _function(handle, *args, **kwargs)
 
             patch.setattr(native_lifecycle, name, saved_lifecycle_only)
-        patch.setattr('gene_annotation_episode.native_flux_balance_results.capture_flux_balance_native_files', deny)
+        patch.setattr('gene_annotation_episode.episodic_workflow.root.native_flux_balance_results.capture_flux_balance_native_files', deny)
         patch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', deny)
         patch.setattr('socket.create_connection', deny)
         patch.setattr('socket.socket.connect', deny)
@@ -533,11 +533,11 @@ def test_closed_workflow_replays_with_scientific_bytes_and_execution_forbidden(c
     for name in ('prepare_job', 'start_prepared', 'resume_start', 'status', 'wait_job', 'collect'):
         monkeypatch.setattr('gene_annotation_episode.native_lifecycle.' + name, deny)
     for name in ('capture_flux_balance_native_files', 'prepare_flux_balance_result_worker'):
-        monkeypatch.setattr('gene_annotation_episode.native_flux_balance_results.' + name, deny)
-    for target in ('gene_annotation_episode.flux_balance_readers.parse_fba_capture',
-            'gene_annotation_episode.flux_balance_sheet.populate_flux_balance_sheet',
+        monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.native_flux_balance_results.' + name, deny)
+    for target in ('gene_annotation_episode.episodic_workflow.root.library.flux_balance_readers.parse_fba_capture',
+            'gene_annotation_episode.episodic_workflow.root.library.flux_balance_sheet.populate_flux_balance_sheet',
             'gene_annotation_episode.flux_balance_calculations.calculate_flux_balance_sheet',
-            'gene_annotation_episode.flux_balance_result_views.project_fba_result'):
+            'gene_annotation_episode.episodic_workflow.root.library.flux_balance_result_views.project_fba_result'):
         monkeypatch.setattr(target, deny)
     monkeypatch.setattr(type(case.owner.job_progress_provider.targets), 'observe_target', deny)
     monkeypatch.setattr('socket.create_connection', deny)

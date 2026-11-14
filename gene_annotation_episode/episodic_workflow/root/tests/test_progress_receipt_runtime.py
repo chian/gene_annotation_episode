@@ -17,11 +17,13 @@ import pytest
 from method_loop.durable import DurableExecutionStore, canonical, content_digest
 from method_loop.identities import EpisodeRef
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_admission import ReceiverBindingV1, admit_return
+from gene_annotation_episode.episodic_workflow.root.episode_admission import ReceiverBindingV1, admit_return
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes, ProgressProvider
+from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
 from gene_annotation_episode.episode_progress_credit import ProgressInformationCredit
-from gene_annotation_episode.runtime import Workflow, assemble_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
 from gene_annotation_episode.state import Store
 from test_recursive_monitoring import assignment, durable_target
 from test_runtime import FixtureController, ScriptedProvider

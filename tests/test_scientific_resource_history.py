@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
-from gene_annotation_episode.scientific_process_prompt import render_episode_steering
+from gene_annotation_episode.episodic_workflow.root.library.decision_steering_display import render_episode_steering
 
 
 FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/work_reports/a107-genomic06-resource-context.json.gz'

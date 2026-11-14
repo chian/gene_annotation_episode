@@ -9,10 +9,11 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema, validate_form
-from gene_annotation_episode.episode_reports import closing_yield, report_sources
+from gene_annotation_episode.episodic_workflow.root.closing_episode_yield import closing_yield
+from gene_annotation_episode.episode_reports import report_sources
 from gene_annotation_episode.episodic_workflow.root.numerical import (NumericBand, SignedNumericBand, STATUS_INSUFFICIENT,
     STATUS_UNIDENTIFIABLE, YieldController, YieldEstimate, YieldState)
-from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from test_runtime import (FixtureController, ScriptedProvider, commission, fixture_credit,
                           obj, reason, setup)
 

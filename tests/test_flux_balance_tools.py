@@ -19,7 +19,7 @@ from gene_annotation_episode.episodic_workflow.root.library import flux_balance_
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.molecular_reference_privacy import molecular_reference_restriction
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_flux_balance_ordinary_configuration import environments, resources
 from test_flux_balance_ordinary import explicit_request
 from test_molecular_reference_privacy import (

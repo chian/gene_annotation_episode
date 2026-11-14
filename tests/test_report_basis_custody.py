@@ -10,7 +10,7 @@ import urllib.request
 from gene_annotation_episode.acquisition import PublicClients
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_alphafold_acquisition_host import _controller, _credit
 from test_ensembl_acquisition_host import HTTP
 from test_ncbi_entrez_acquisition import arguments

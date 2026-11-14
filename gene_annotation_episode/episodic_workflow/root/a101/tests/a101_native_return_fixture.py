@@ -11,17 +11,17 @@ from types import SimpleNamespace
 from gene_annotation_episode.episodic_workflow.root.a101.a101_investigation import A101Subtree, initial_report, resolve_report, create_a101_workflow
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.native_correspondence_credit import A101SequenceCredit
 from gene_annotation_episode.assembled_service_setup import bind_assembled_services
-from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE
-from gene_annotation_episode.decision_context import PROTOCOL, apply_state_frame
+from gene_annotation_episode.episodic_workflow.root.a101.composition_information import CONTRACT_INFORMATION_PROFILE
+from gene_annotation_episode.episodic_workflow.root.a101.decision_context import PROTOCOL, apply_state_frame
 from gene_annotation_episode.episodic_workflow.root.a101.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import HomologyJobs, FileAsset, digest
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a101.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.numerical import YieldController, YieldEstimate, NumericBand
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import YieldController, YieldEstimate, NumericBand
 from gene_annotation_episode.resource_estimation import ResourceToolEstimator
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.a101.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from gene_annotation_episode.domain import obj
 from a101_subtree_fixture import PROGRAM, PUBLICATION, ROLES, action, child, reasoning
 REAL = Path(__file__).with_name('fixtures') / 'a101/real'

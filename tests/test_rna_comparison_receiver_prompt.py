@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.library.rna_structure_compar
     PROJECTION_SOURCE, rna_comparison_fact_sources,
 )
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_presentation import render_rna_comparison_projections
-from gene_annotation_episode.scientific_process_prompt import text_instructions
+from gene_annotation_episode.episodic_workflow.root.library.decision_prompt_text import text_instructions
 import gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_receiver_prompt as prompt
 from test_rna_comparison_presentation import pair, scan
 

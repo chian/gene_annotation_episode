@@ -13,7 +13,8 @@ from method_loop import (ChildEpisodeUnit, Context, Episode, EpisodeGoal,
                          EpisodeRequest, EpisodeTree, Grain, Leaf)
 from method_loop.archive import JsonArchive
 from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from test_runtime import FixtureController, obj
 
 

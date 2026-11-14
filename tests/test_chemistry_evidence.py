@@ -15,7 +15,7 @@ from gene_annotation_episode.chemistry import chebi_response, chemical_row, rhea
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 CALIBRATION = Path(__file__).parents[1] / 'validation/calibration'
 
@@ -679,7 +679,8 @@ def _selected_chebi_workflow_case(tmp_path, monkeypatch, *, operation, arguments
     from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
     from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
-    from gene_annotation_episode.episodic_workflow.root.runtime import FACT_MEANINGS, FACT_SOURCES, Workflow
+    from gene_annotation_episode.episodic_workflow.root.report_facts import FACT_MEANINGS
+    from gene_annotation_episode.episodic_workflow.root.runtime import FACT_SOURCES, Workflow
     from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 

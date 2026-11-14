@@ -17,9 +17,9 @@ from method_loop.durable import DurableExecutionStore, canonical, content_digest
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import FileAsset, HomologyJobs, OUTPUTS, digest
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.progress_records import JOB_STATUS_VERSION, validate_job_status
-from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from detached_workflow_fixture import ScriptedProvider, until
 from detached_progress_fixture import (CONTROLLER_ACTIONS, SERVICE_DEFINITION, ControllerFactory,
     application_services, binding_definitions, gates, job_episodes, launch, make_binding,

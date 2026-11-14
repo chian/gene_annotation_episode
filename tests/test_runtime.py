@@ -11,10 +11,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.runtime import (
-    Journal, Record, WorkflowError, _action_generation_schema,
-    _decode_action_response, run_workflow,
-)
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal, WorkflowError
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.task_action_contracts import _action_generation_schema, _decode_action_response
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
 
 
@@ -529,7 +529,7 @@ def test_actual_default_controller_resume_keeps_unspecified_caller_cost(tmp_path
 
 def test_actual_schema_transport_is_closed_required_and_roundtrips(tmp_path):
     from gene_annotation_episode.domain import REASONING_SCHEMA
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from gene_annotation_episode.state import Store
     with Store(tmp_path / "schema-store") as store:
         store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein", role="protein")
@@ -575,7 +575,7 @@ def test_incompatible_fact_type_is_feedback_before_commission(tmp_path):
 def test_actual_store_partial_reasoning_retains_independent_rows(tmp_path):
     import asyncio
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     with Store(tmp_path / "partial") as store:
         problem = store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein", role="protein")
         subject = problem["subject_refs"][0]
@@ -601,7 +601,7 @@ def test_actual_store_partial_reasoning_retains_independent_rows(tmp_path):
 def test_omitted_optional_contexts_does_not_make_empty_request_a_completed_action(tmp_path):
     import asyncio
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     with Store(tmp_path / "empty-actual") as store:
         problem = store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein")
         empty = {key: [] for key in store.reasoning_schema()["required"]}
@@ -622,7 +622,7 @@ def test_omitted_optional_contexts_does_not_make_empty_request_a_completed_actio
 def test_transport_optional_null_is_decoded_even_when_another_reasoning_row_is_invalid(tmp_path):
     import asyncio
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     with Store(tmp_path / "transport-partial") as store:
         problem = store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein")
         text = "Synthetic construct A"
@@ -783,7 +783,7 @@ def test_async_tool_protocol_runs_on_owning_loop_with_sync_fallback_available(tm
 def test_shared_kernel_sync_delivery_repair_preserves_declarative_child_trace():
     from method_loop import (Context, Episode, EpisodeGoal, EpisodeRequest, EpisodeTree,
         Grain, Leaf, ChildEpisodeUnit, ReportDeliveryError, ReportRedelivery)
-    from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
     factory = lambda path: FixtureController(str(path), 0, 2)
     root_grain = Grain("fixture_root", "Fixture work", "Fixture result", factory)
     child_grain = Grain("fixture_child", "Fixture work", "Fixture result", factory)
@@ -909,8 +909,8 @@ def test_effective_credit_binding_in_context_is_persisted_and_restored(tmp_path)
     import asyncio
     from gene_annotation_episode.credit import AXES, CreditPolicy
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
-    from gene_annotation_episode.episodic_workflow.root.runtime import _credit_binding_from_settings
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.saved_run_configuration import _credit_binding_from_settings
     policy = CreditPolicy(epsilon=.37, scale=42,
         axis_weights=tuple((axis, 2. if axis == "comparative" else 1.) for axis in AXES))
     factory = lambda path, baseline: FixtureController(str(path), baseline, 2)
@@ -1018,7 +1018,7 @@ def test_caller_native_resource_changes_preserve_original_history_on_resume(tmp_
 
 def test_resource_only_run_config_uses_canonical_models_and_resume_keeps_custom_models(tmp_path):
     import tomllib
-    from gene_annotation_episode.episodic_workflow.root.runtime import _effective_configuration
+    from gene_annotation_episode.episodic_workflow.root.saved_run_configuration import _effective_configuration
     from gene_annotation_episode.episodic_workflow.root.providers import default_config_path
     defaults = tomllib.loads(default_config_path().read_text())
     local_only = {"local_tools": {"cmsearch_executable": "/fixture/cmsearch", "cmsearch_cpu": 2}}
@@ -1043,7 +1043,7 @@ def test_actual_store_tools_and_credit_reasoning_commit_existing_evidence(tmp_pa
     """Actual local adapters/semantic state, with labelled scripted reasoning."""
     import asyncio
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from gene_annotation_episode.credit import project_credit
     with Store(tmp_path / "actual") as store:
         problem = store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein", role="protein")
@@ -1091,7 +1091,7 @@ def test_missing_inferred_extent_notice_reaches_owner_then_bounded_revision_gain
     """Informational feedback shares the ordinary outcome; it is not a gate."""
     import asyncio
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from gene_annotation_episode.credit import project_credit
 
     with Store(tmp_path / 'extent-feedback') as store:

@@ -16,11 +16,11 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode import bvbrc_genome_alignment_bundle_adapter as adapter
-from gene_annotation_episode.bvbrc_genome_alignment_returns import FACT_SOURCES
-from gene_annotation_episode.communication import plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_genome_alignment_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.bvbrc_genome_alignment_returns import FACT_SOURCES
+from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_form
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 from gene_annotation_episode.practical_execution_state import _read
 from gene_annotation_episode.state import Store
 from test_api_bvbrc_appservice import CONFIG, PREFIX, OBJECT_UUID, metadata
@@ -478,7 +478,7 @@ def test_saved_host_return_replay_forbids_science_and_adds_no_observations(drive
 
 
 def test_explicit_saved_recalculation_changes_denominator_without_acquisition(driver, monkeypatch):
-    from gene_annotation_episode.bvbrc_genome_alignment_calculators import calculate_genome_alignment_components
+    from gene_annotation_episode.episodic_workflow.root.library.bvbrc_genome_alignment_calculators import calculate_genome_alignment_components
     d = driver
     d.start()
     d.acquire_manifest()

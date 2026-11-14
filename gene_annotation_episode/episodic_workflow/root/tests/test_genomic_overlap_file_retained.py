@@ -15,15 +15,15 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from gene_annotation_episode.acquisition import PublicClients
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.execution_episodes import RESULTS_VERSION
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.genomic_overlap_return_views import FAILURE_SOURCE, PROJECTION_SOURCE
-from gene_annotation_episode.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_return_views import FAILURE_SOURCE, PROJECTION_SOURCE
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.state import Store
 from test_interval_pending_results import _fixture
 from test_interval_results_presentation import _canonical, _inventory, _session, _sha, _tables
@@ -109,8 +109,8 @@ def _history(before, after, *, active_episodes, pending_actions):
 
 
 def _guards(monkeypatch, helper, prefix):
-    from gene_annotation_episode import native_genomic_overlap_driver as driver
-    from gene_annotation_episode import native_genomic_overlap_local as local
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_driver as driver
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_local as local
     from gene_annotation_episode import native_lifecycle
     monkeypatch.setattr(local, 'prepare_local_genomic_overlap', _forbidden)
     monkeypatch.setattr(driver, 'run_genomic_overlap_driver', _forbidden)
@@ -131,7 +131,7 @@ def _guards(monkeypatch, helper, prefix):
         directory = Path(cwd)
         assert directory.is_relative_to(prefix / 'run/execution-results') and directory.name == 'worker'
         assert list(command) == [str(directory / 'runtime/python'), '-B', '-S', '-m',
-            'gene_annotation_episode.genomic_overlap_result_worker', str(directory / 'plan.json')]
+            'gene_annotation_episode.episodic_workflow.root.library.genomic_overlap_result_worker', str(directory / 'plan.json')]
         plan = json.loads((directory / 'plan.json').read_bytes())
         assert plan['mode'] == ('native_result' if not prepared else 'saved_sheet_recalculation')
         assert len(prepared) < 2, 'no retry or repeated collect is selected'
@@ -363,7 +363,7 @@ def test_continue_original521_native_result_saved_builder_and_typed_parent(tmp_p
         assert not changed and proof['native_pins_after'] == NATIVE_PINS and proof['stopped_audit_unchanged']
 
 
-from gene_annotation_episode.episode_composition import scientific_binding_compatible
+from gene_annotation_episode.episodic_workflow.root.episode_composition import scientific_binding_compatible
 
 
 RESUME526_PROOF = Path('/home/chia/repos/gene_annotation_episode/runs/'
@@ -725,13 +725,13 @@ CURRENT_PROVIDER_PROTEASE_IMPLEMENTATION_SHA256 = '39977fe39ea61eccfba5da479cae4
 
 def _closed531_guards(monkeypatch, helper, registry, result_owner):
     """Closed replay may read its controls, forms and archive, not science bodies."""
-    from gene_annotation_episode import genomic_overlap_calculations as calculations
-    from gene_annotation_episode import genomic_overlap_result_worker as worker
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_calculations as calculations
+    from gene_annotation_episode.episodic_workflow.root.library import genomic_overlap_result_worker as worker
     from gene_annotation_episode import native_file_capture
-    from gene_annotation_episode import native_genomic_overlap_driver as driver
-    from gene_annotation_episode import native_genomic_overlap_local as local
-    from gene_annotation_episode import native_genomic_overlap_preparation as preparation
-    from gene_annotation_episode import native_genomic_overlap_results as results
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_driver as driver
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_local as local
+    from gene_annotation_episode.episodic_workflow.root.library import native_genomic_overlap_preparation as preparation
+    from gene_annotation_episode.episodic_workflow.root import native_genomic_overlap_results as results
     from gene_annotation_episode import native_lifecycle
     monkeypatch.setattr(registry, '_execute_operation_async', _forbidden)
     monkeypatch.setattr(result_owner, '_worker', _forbidden)

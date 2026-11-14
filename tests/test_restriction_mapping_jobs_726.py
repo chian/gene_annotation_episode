@@ -12,7 +12,7 @@ import pytest
 
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.restriction_mapping_inputs import restriction_sequence_witness
 from gene_annotation_episode.restriction_mapping_publication import retain_restriction_input
 from gene_annotation_episode.restriction_mapping_bound_contracts import restriction_native_request

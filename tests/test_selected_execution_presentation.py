@@ -2,9 +2,8 @@ from copy import deepcopy
 
 import pytest
 
-from gene_annotation_episode.scientific_process_prompt import (
-    render_scientific_process_prompt, render_selected_execution_prompt,
-)
+from gene_annotation_episode.episodic_workflow.root.library.published_scientific_task_presentation import render_scientific_process_prompt
+from gene_annotation_episode.episodic_workflow.root.library.selected_execution_task_presentation import render_selected_execution_prompt
 from gene_annotation_episode.schema_information_text import parse_schema_information
 
 

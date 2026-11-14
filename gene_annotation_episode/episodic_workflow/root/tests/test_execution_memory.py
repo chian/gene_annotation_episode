@@ -6,11 +6,11 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.execution_memory import ExecutionMemory, ForgettingPolicy
-from gene_annotation_episode.execution_guidance import compare_routes, recipe
+from gene_annotation_episode.episodic_workflow.root.library.execution_guidance import compare_routes, recipe
 from gene_annotation_episode.hpc_episodes import HPCEpisodes
 from gene_annotation_episode import hpc_prediction as prediction
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
 from gene_annotation_episode.episode_bindings import BindingContext
 from hpc_helpers import commission, resources, recorded_queue
 
@@ -214,7 +214,7 @@ def test_closed_receipt_import_is_read_only_and_repeated_export_is_one_sample(tm
 
 def test_existing_native_statistics_export_feeds_the_same_shared_memory(tmp_path, monkeypatch):
     from gene_annotation_episode.run_statistics import ExecutionClass, RunStatistic, RunHistory
-    from gene_annotation_episode.execution_recording import NativeMeasurement, _export_measurement
+    from gene_annotation_episode.episodic_workflow.root.execution_recording import NativeMeasurement, _export_measurement
     path = tmp_path/'native.sqlite3'
     history = RunHistory(path)
     history.close()

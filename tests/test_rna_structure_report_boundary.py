@@ -10,7 +10,7 @@ from gene_annotation_episode.episodic_workflow.root.communication import (
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result_views import (
     FAMILY_SOURCES, rna_structure_fact_sources,
 )
-from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 
 
 def form(fields):

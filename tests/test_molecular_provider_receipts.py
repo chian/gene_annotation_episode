@@ -17,7 +17,7 @@ from gene_annotation_episode.acquisition import PublicClients
 from gene_annotation_episode.data_acquisition_receipts import acquisition_receipt_schema
 from gene_annotation_episode.domain import ContractError, canonical
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_molecular_provider_acquisition import (
     ARGUMENTS, IDS, KEGG_TEXT, NATIVE, PUBCHEM_IDENTITY_FAILURES, SOURCE, snapshot,
 )

@@ -11,11 +11,11 @@ from types import SimpleNamespace
 import pytest
 
 from test_scientific_process_library import synthetic_support_entry
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, identity, obj
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_records import (scientific_digest,
+from gene_annotation_episode.episodic_workflow.root.scientific_process_records import (scientific_digest,
     scientific_invocation_ref, validate_invocation_ref, validate_revision,
     validate_revision_origin)
 
@@ -130,7 +130,7 @@ class ContractServices:
         return {"credit": 7, "binding": "unchanged_fixture_projection"}
 
     def scientific_support_routes(self, context, *, observation_kinds):
-        from gene_annotation_episode.scientific_support_metadata import annotation_policy_routes
+        from gene_annotation_episode.episodic_workflow.root.scientific_support_metadata import annotation_policy_routes
         return annotation_policy_routes(None, None, observation_kinds=observation_kinds)
 
 
@@ -172,7 +172,7 @@ def make_context(binding, *, path=None, **kwargs):
 @pytest.fixture
 def mother(tmp_path):
     library, services = ContractLibrary(), ContractServices()
-    from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+    from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
     tools = ScientificToolLibrary.freeze(tmp_path / "tools", catalog=services.available)
     binding = ScientificProcessEpisodes(services, library=library,
         tool_library=tools,
@@ -526,7 +526,7 @@ def test_mother_report_resolver_honors_process_metadata_and_validates_result_bod
         binding.validate_report(child, {"chosen_name": [forged]}, schema)
     # Shape-valid scalar/selection changes still fail against the actual frozen
     # source; library membership alone cannot authenticate a returned result.
-    from gene_annotation_episode.communication import ReportBoundaryError
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
     for field, value in (("credit", 100), ("initial_credit", 0), ("completed_actions", 2)):
         forged = deepcopy(result)
         forged[field] = value
@@ -564,10 +564,10 @@ def test_declared_child_edges_keep_specialist_branches_separate(mother):
 
 
 def test_setup_freezes_descriptor_without_executable_services_and_reopens_original(tmp_path):
-    from gene_annotation_episode.episode_composition import reopen_scientific_binding
+    from gene_annotation_episode.episodic_workflow.root.episode_composition import reopen_scientific_binding
     from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
-    from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-    from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+    from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
     descriptor = prepare_scientific_binding(run_directory=tmp_path, source_directory=CATALOG,
         tool_catalog=[{**PRIMITIVE, "resources": "local"}],
         child_roles=("scientific_process", "literature"))
@@ -612,7 +612,7 @@ def test_scientific_task_yield_uses_its_own_credit_units_and_cutoff():
 
 
 def test_bounded_sequence_task_privately_binds_its_native_score_range():
-    from gene_annotation_episode.numerical import BoundedYieldController
+    from gene_annotation_episode.episodic_workflow.root.numerical import BoundedYieldController
     assignment = {'proposed_annotation_ref': 'hypothesis_' + 'c' * 24, 'context': {}}
     context = BindingContext('run_fixture', 'episode_fixture', 'scientific_process',
         (('annotation', 'root'), ('scientific_process', 'child')), SCOPE,
@@ -635,7 +635,7 @@ def test_bounded_sequence_task_privately_binds_its_native_score_range():
 
 
 def test_a104_panel_task_privately_binds_delivered_artifact_completion():
-    from gene_annotation_episode.numerical import CompletionYieldController
+    from gene_annotation_episode.episodic_workflow.root.numerical import CompletionYieldController
     assignment = {'proposed_annotation_ref': 'hypothesis_' + 'c' * 24,
         'context': {'a104_task': {'name': 'panel_identity'}}}
     context = BindingContext('run_fixture', 'episode_fixture', 'scientific_process',

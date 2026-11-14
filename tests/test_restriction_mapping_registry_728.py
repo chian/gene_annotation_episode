@@ -16,7 +16,7 @@ from gene_annotation_episode.restriction_mapping_publication import read_publish
 from gene_annotation_episode.restriction_mapping_returns import restriction_mapping_fact_sources
 from gene_annotation_episode import restriction_mapping_registry as module
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode import tools as tools_module
 
 

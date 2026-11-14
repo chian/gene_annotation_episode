@@ -7,10 +7,11 @@ from types import SimpleNamespace
 import pytest
 from method_loop import EpisodeGoal, EpisodeRequest
 
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, Workflow
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.episode_commissions import CommissionCoordinator
-from gene_annotation_episode.scientific_process_prompt import render_episode_steering
-from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
+from gene_annotation_episode.episodic_workflow.root.library.decision_steering_display import render_episode_steering
+from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
 from test_episode_commissions import setup_case
 
 

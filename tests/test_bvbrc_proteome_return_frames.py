@@ -13,7 +13,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns import BVBRCProteomeReturns
 from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_form, form_with_facts, ReportBoundaryError
 from gene_annotation_episode.form_reference_validation import form_reference_validation
-from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from test_bvbrc_proteome_returns import run, MEASUREMENTS, MEAN, fact_form
 
 

@@ -16,7 +16,7 @@ from gene_annotation_episode.api_bvbrc import (
 )
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 # Values captured from an unauthenticated public GET on 2026-10-23 at

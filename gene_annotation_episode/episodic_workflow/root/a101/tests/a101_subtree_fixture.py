@@ -14,16 +14,16 @@ from gene_annotation_episode.episodic_workflow.root.a101.a101_investigation impo
 from gene_annotation_episode.alignment_site_returns import alignment_site_fact_sources
 from gene_annotation_episode.assembled_service_setup import bind_assembled_services
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_monitoring import MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.a101.episode_monitoring import MonitorEpisodes
 from gene_annotation_episode.episodic_workflow.root.a101.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import HomologyJobs, FileAsset, digest
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.a101.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.numerical import YieldController, YieldEstimate, NumericBand
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import YieldController, YieldEstimate, NumericBand
 from gene_annotation_episode.resource_estimation import ResourceToolEstimator
-from gene_annotation_episode.resource_episodes import ResourceEpisodes, LAUNCH_VERSION, RESULTS_VERSION
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.resource_episodes import ResourceEpisodes, LAUNCH_VERSION, RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[5]

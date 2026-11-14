@@ -15,7 +15,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_enrichr_reference_privacy import receiver
 from test_enrichr_returns import Harness
 

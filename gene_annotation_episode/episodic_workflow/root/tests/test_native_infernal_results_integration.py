@@ -20,26 +20,26 @@ import pytest
 
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, RESULTS_VERSION
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-from gene_annotation_episode.infernal_native_result_views import (
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, RESULTS_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.library.infernal_native_result_views import (
     COLLECTIONS, FAMILY_SOURCES, NATIVE_INFERNAL_METRICS, measurement_values,
     native_infernal_fact_sources,
 )
 from gene_annotation_episode.native_infernal_contracts import (
     compile_native_infernal_job, requested_job_from_infernal,
 )
-from gene_annotation_episode.native_infernal_local import local_infernal_plan
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_local import local_infernal_plan
+from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldEstimate, YieldParameters
 from gene_annotation_episode.practical_yield import PracticalYieldEstimator
-from gene_annotation_episode.providers import _SessionConnection
-from gene_annotation_episode.runtime import Workflow
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_process_prompt import render_scientific_process_prompt
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.library.published_scientific_task_presentation import render_scientific_process_prompt
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[4]
@@ -530,7 +530,7 @@ def test_completed_action_accounting_and_exact_zero_without_extra_turn(native_ca
 def test_saved_calculator_replay_without_native_execution_or_acquisition(native_case, monkeypatch):
     case = native_case
     from gene_annotation_episode.cmalign_grader import calculate_cmalign_scores
-    from gene_annotation_episode.infernal_search_grader import calculate_infernal_search_scores
+    from gene_annotation_episode.episodic_workflow.root.library.infernal_search_grader import calculate_infernal_search_scores
     calculator = calculate_cmalign_scores if case.request['native_infernal']['program'] == 'cmalign' else calculate_infernal_search_scores
     body = case.outcomes[0]['result']
     sheet = json.loads(case.store.get_artifact(body['prepared']['sheet_artifact_ref']))
@@ -555,9 +555,9 @@ def test_original_result_and_return_replay_have_no_new_contribution(native_case,
     def forbidden(*args, **kwargs):
         raise AssertionError('saved result replay attempted new work')
     with unavailable_native_attempt(case.plan), monkeypatch.context() as isolated:
-        isolated.setattr('gene_annotation_episode.native_infernal_results.capture_local_bundle', forbidden)
-        isolated.setattr('gene_annotation_episode.native_infernal_results.prepare_native_infernal_grading', forbidden)
-        isolated.setattr('gene_annotation_episode.native_infernal_results.publish_selected_native_infernal_rows', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.native_infernal_results.capture_local_bundle', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.native_infernal_results.prepare_native_infernal_grading', forbidden)
+        isolated.setattr('gene_annotation_episode.episodic_workflow.root.native_infernal_results.publish_selected_native_infernal_rows', forbidden)
         isolated.setattr('gene_annotation_episode.native_infernal_result_worker.run', forbidden)
         isolated.setattr('gene_annotation_episode.native_infernal_result_worker.populate_cmalign_sheet', forbidden)
         isolated.setattr('gene_annotation_episode.native_infernal_result_worker.populate_infernal_search_sheet', forbidden)

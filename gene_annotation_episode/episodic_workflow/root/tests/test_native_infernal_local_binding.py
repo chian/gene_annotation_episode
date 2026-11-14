@@ -17,20 +17,20 @@ from jsonschema import Draft202012Validator
 import pytest
 
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION
-from gene_annotation_episode.infernal_native_result_views import (
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION
+from gene_annotation_episode.episodic_workflow.root.library.infernal_native_result_views import (
     FAMILY_SOURCES, NATIVE_INFERNAL_METRICS, native_infernal_fact_sources,
     row_schema, validate_native_infernal_result_selector,
 )
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_contracts import requested_job_from_native
 from gene_annotation_episode.native_infernal_contracts import requested_job_from_infernal
-from gene_annotation_episode.native_infernal_tool_info import native_infernal_tool_contracts
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.library.native_infernal_tool_info import native_infernal_tool_contracts
+from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[4]

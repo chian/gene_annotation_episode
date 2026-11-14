@@ -31,7 +31,7 @@ from gene_annotation_episode.domain import identity
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode import geo_tools
 from gene_annotation_episode import ncbi_entrez_acquisition as entrez
 from gene_annotation_episode import ncbi_entrez_tools as entrez_host

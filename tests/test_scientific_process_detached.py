@@ -9,7 +9,7 @@ import shutil
 from method_loop.archive import ArchivedRecord
 from method_loop.durable import DurableExecutionStore, canonical
 from gene_annotation_episode.domain import identity, obj
-from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_records import (
     scientific_digest, scientific_invocation_ref, selector_selection)
 from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import report_sources, validate_process_result

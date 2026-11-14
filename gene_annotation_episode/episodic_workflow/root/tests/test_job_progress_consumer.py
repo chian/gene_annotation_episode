@@ -13,9 +13,10 @@ import sqlite3
 import pytest
 
 from method_loop.durable import DurableExecutionStore, canonical, content_digest
-from gene_annotation_episode.communication import form_with_facts
+from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts
 from gene_annotation_episode.domain import ContractError, obj
-from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes, ProgressProvider, read_progress
+from gene_annotation_episode.episode_monitoring import FIELDS, MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider, read_progress
 from gene_annotation_episode.progress_records import JOB_STATUS_VERSION, job_status
 from gene_annotation_episode.state import Store
 from test_recursive_monitoring import (RecursiveConsumer, Services, assignment, bound,

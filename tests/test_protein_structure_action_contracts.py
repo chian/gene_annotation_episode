@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.root.library import protein_struc
 from gene_annotation_episode.episodic_workflow.root import protein_structure_action_records as actions
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.communication import validate_form, ReportBoundaryError
-from gene_annotation_episode.episodic_workflow.root.runtime import _references_in
+from gene_annotation_episode.episodic_workflow.root.reference_selection import _references_in
 
 
 SOURCE = "source_" + "a" * 24

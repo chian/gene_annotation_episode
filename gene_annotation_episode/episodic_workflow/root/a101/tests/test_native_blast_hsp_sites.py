@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.blast_result_vi
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_hsp_views import native_blast_pairwise_hsp
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from test_blast_pairwise_publication import (
     EXAMPLES, fixture, native_path, prepare, publish, replace_report, selector, values,
 )

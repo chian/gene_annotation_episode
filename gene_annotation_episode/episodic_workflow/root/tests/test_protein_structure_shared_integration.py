@@ -10,18 +10,18 @@ from pathlib import Path
 import pytest
 
 from method_loop.identities import EpisodeRef
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.native_protein_structure_contracts import POLICY
-from gene_annotation_episode.native_protein_structure_returns import FACT_SOURCES
-from gene_annotation_episode.protein_structure_authority import ProteinStructureOperandError
-from gene_annotation_episode.protein_structure_result_views import protein_structure_fact_sources
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_contracts import POLICY
+from gene_annotation_episode.episodic_workflow.root.native_protein_structure_returns import FACT_SOURCES
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
+from gene_annotation_episode.episodic_workflow.root.library.protein_structure_result_views import protein_structure_fact_sources
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 SELECTOR = {"version": "protein_structure_result_selector_v1", "acquisition": "complete_bound_bundle",

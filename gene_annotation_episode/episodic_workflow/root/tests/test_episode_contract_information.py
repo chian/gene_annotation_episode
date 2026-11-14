@@ -5,12 +5,13 @@ from types import MappingProxyType
 
 import pytest
 
-from gene_annotation_episode.communication import validate_closed_schema
+from gene_annotation_episode.episodic_workflow.root.communication import validate_closed_schema
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_contract_information import (
+from gene_annotation_episode.episodic_workflow.root.episode_contract_information import (
     ContractInformationError, expand_fact_form, operation_contract_information,
     return_contract_information, validate_saved_fact_form)
-from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes, _population_catalog
+from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.root_literature_contracts import _population_catalog
 from gene_annotation_episode.schema_information_text import parse_schema_information, schema_fingerprint
 
 
@@ -197,7 +198,7 @@ def test_saved_validation_has_no_factory_and_survives_current_catalog_changes(mo
     facts['literature']['measured_values']['report_schema']['items']['type'] = 'integer'
     def forbidden(*args, **kwargs):
         raise AssertionError('No current factory or source lookup during saved validation')
-    import gene_annotation_episode.episode_contract_information as module
+    import gene_annotation_episode.episodic_workflow.root.episode_contract_information as module
     monkeypatch.setattr(module, '_fact', forbidden)
     monkeypatch.setattr(LiteratureEpisodes, '_rate_fact_sources', forbidden)
     assert validate(submitted, result) == result['expanded_schema']

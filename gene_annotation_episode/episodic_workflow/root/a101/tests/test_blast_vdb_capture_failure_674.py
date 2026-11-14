@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_uti
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_utility_contracts as contracts
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_results as results
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_utility_result_publication as publication
-from gene_annotation_episode.communication import form_with_facts
+from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.execution_contracts import canonical
 

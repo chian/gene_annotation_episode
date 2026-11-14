@@ -19,7 +19,7 @@ from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.molecular_reference_privacy import molecular_reference_restriction
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 from test_molecular_sequence_input_bindings import actual_received_input_owner
 

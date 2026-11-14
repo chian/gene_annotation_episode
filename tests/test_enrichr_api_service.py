@@ -24,7 +24,7 @@ from gene_annotation_episode.api_enrichr import (EnrichrService, PROTOCOL_VERSIO
     RESULT, WIRE_PROFILE, validate_enrichr_configuration)
 from gene_annotation_episode import api_enrichr
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def request(profile="standard_enrichr_v1", *, supplied=False):

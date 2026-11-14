@@ -11,7 +11,7 @@ from pathlib import Path
 import sys
 from unittest.mock import patch
 
-OLD = 'gene_annotation_episode.native_blast_database_driver'
+OLD = 'gene_annotation_episode.episodic_workflow.root.library.native_blast_database_driver'
 NEW = 'gene_annotation_episode.episodic_workflow.root.library.native_blast_database_driver'
 ORIGINAL_CASES = ('historical_manifest', 'historical_producer_proof',
     'historical_missing_driver', 'historical_changed_check_rejected',

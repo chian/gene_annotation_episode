@@ -106,7 +106,7 @@ def test_native_parameter_grammar_is_the_drivers_shared_authority(field, value):
 def test_execution_factory_roundtrip_freezes_the_actual_registry_selection(tmp_path):
     from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     selected = configuration()
     row = selected['resources'][0]
     factory = ExecutionServiceFactory(resources={row['resource_id']: row['resource']},
@@ -133,7 +133,7 @@ def test_execution_factory_roundtrip_freezes_the_actual_registry_selection(tmp_p
 def test_default_factory_record_and_saved_only_selection_need_no_native_profile(tmp_path):
     from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     factory = ExecutionServiceFactory(resources={'caller-local': dict(kind='local', policy=POLICY)},
         initial_information={}, handoff_unit=1, acquired_record_unit=1, monitoring_information_unit=1)
     record = factory.as_record()

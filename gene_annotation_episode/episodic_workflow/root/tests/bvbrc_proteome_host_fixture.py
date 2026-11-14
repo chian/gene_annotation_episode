@@ -9,12 +9,12 @@ import hashlib
 import json
 from types import SimpleNamespace
 
-from gene_annotation_episode import bvbrc_proteome_bundle_adapter as adapter
-from gene_annotation_episode.bvbrc_proteome_returns import FACT_SOURCES
-from gene_annotation_episode.communication import plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter as adapter
+from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns import FACT_SOURCES
+from gene_annotation_episode.episodic_workflow.root.communication import plain, validate_form
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from test_api_bvbrc_appservice import CONFIG, metadata
 from test_bvbrc_appservice_custody import SavedRecords, api_assignment, selector as support_selector
 from test_bvbrc_appservice_host import ProductionDriver

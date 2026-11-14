@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.practical_yield import PracticalYieldEstimator
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_api_bvbrc_appservice import CONFIG
 from test_bvbrc_appservice_custody import api_assignment
 from test_runtime_decision_exchanges import select

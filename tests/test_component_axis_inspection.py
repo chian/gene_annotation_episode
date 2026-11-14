@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.episodic_workflow.root.component_axis_inspection import inspection_index
+from gene_annotation_episode.episodic_workflow.root.component_source_inspection import inspection_index
 from gene_annotation_episode.state import Store
 from test_state import source
 

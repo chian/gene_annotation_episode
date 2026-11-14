@@ -246,8 +246,8 @@ def test_runtime_parent_receives_exact_component_operands_from_automatic_grading
     from types import SimpleNamespace
     from method_loop.identities import EpisodeRef
     from gene_annotation_episode.episode_bindings import BindingContext
-    from gene_annotation_episode.runtime import Workflow
-    from gene_annotation_episode.shared_information import SharedInformation
+    from gene_annotation_episode.episodic_workflow.root.a103.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.a103.shared_information import SharedInformation
     store,target,known,a,ab,b,bb,na,sa,nb,sb,raw,definition = context_case
     expected = protein(store,'MNNQKG',definition,'engineering-required-family');known.add(expected)
     measured,raw = _single_locus_comparison(context_case,1,expected)
@@ -468,7 +468,7 @@ def test_protein_domain_traits_lift_to_original_nucleotide_codons(tmp_path):
     with Store(tmp_path/'state') as store:
         target, = store.create_problem(raw_sequence='ATGGATGAAGCTAAAGGTTAA',molecule='dna')['subject_refs']
         known = {target}
-        from gene_annotation_episode.tools import ToolRegistry
+        from gene_annotation_episode.episodic_workflow.root.a103.tools import ToolRegistry
         translation = ToolRegistry(store).execute('sequence.translate',
             {'subject_ref':target,'code':11,'cds':True},operation_key='actual-codon-translation')
         assert translation['status']=='completed',translation

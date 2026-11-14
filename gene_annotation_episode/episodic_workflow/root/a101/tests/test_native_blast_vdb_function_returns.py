@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, validate_form
+from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, validate_form
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.materials import artifact_path
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_result_publication import saved_function_input_descriptor

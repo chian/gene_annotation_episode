@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.a101_investigation impo
 from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 
 PUBLICATION = Path(__file__).resolve().parents[5] / "research/slotted_process_library/publications/2026-10-24-001"

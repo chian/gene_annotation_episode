@@ -16,18 +16,19 @@ from method_loop import Episode
 from method_loop.durable import DurableExecutionError, DurableExecutionStore, content_digest
 
 from gene_annotation_episode import independent_execution as independent
-from gene_annotation_episode.default_scientific_binding import VERSION as DEFAULT_VERSION
+from gene_annotation_episode.episodic_workflow.root.default_scientific_binding import VERSION as DEFAULT_VERSION
 from gene_annotation_episode.episode_monitoring import MonitorEpisodes
-from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
 from gene_annotation_episode.native_timing_information import NativeTimingInformation
-from gene_annotation_episode.numerical import YieldController
-from gene_annotation_episode.providers import ModelConnection
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
 from gene_annotation_episode.resource_estimation import ResourceToolEstimator
-from gene_annotation_episode.runtime import Workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.scientific_credit import AnnotationSupportScore
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 
 
 def forbidden(*args, **kwargs):

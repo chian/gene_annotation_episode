@@ -18,7 +18,9 @@ from gene_annotation_episode.episodic_workflow.root.episode_journal import Journ
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract, Workflow
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
 
 

@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.hpc_prompt import plan_outcome_view, render_hpc_prompt
-from gene_annotation_episode.episodic_workflow.root.component_axis_literature_prompt import with_fact_contract_instructions
+from gene_annotation_episode.episodic_workflow.root.presentation_fact_contract import with_fact_contract_instructions
 
 
 FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/hpc/a107-genomic01-payload-context.json.gz'

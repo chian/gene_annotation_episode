@@ -12,7 +12,7 @@ from gene_annotation_episode.hpc_episodes import HPCEpisodes
 from gene_annotation_episode.hpc_ledger import HPCLedger
 from gene_annotation_episode.hpc_monitoring import (
     DEFAULT_POLICY, HPCContinuationEstimator, MonitorCheckpoint, MonitorCronController, choose_schedule)
-from gene_annotation_episode.numerical import YieldController
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController
 from gene_annotation_episode.hpc_scheduler import resume_spec
 from gene_annotation_episode.state import Store
 from hpc_helpers import commission, resources
@@ -225,7 +225,7 @@ def test_old_unbound_controller_observations_replay_without_changed_provenance()
 
 
 def test_delayed_result_credit_does_not_become_active_grinding_yield():
-    from gene_annotation_episode.numerical import YieldParameters
+    from gene_annotation_episode.episodic_workflow.root.numerical import YieldParameters
     ctx = completion_context(unit_index=2, action_index=7)
     ctx.pop('practical_completion')
     body = {'run_id': 'run-practical', 'episode_id': 'episode-practical',
@@ -294,9 +294,10 @@ def test_pending_allocations_deduplicate_the_same_obligation_and_add_different_w
 
 
 def test_wait_mode_advises_actions_and_preserves_full_catalog(tmp_path):
-    from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
-    from gene_annotation_episode.runtime import Workflow, controller_from_settings
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
+    from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.saved_run_configuration import controller_from_settings
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     with Store(tmp_path/'store') as store:
         manifest = tmp_path/'inputs.json'
         manifest.write_text(json.dumps({'schema_version': 1, 'entries': []}))

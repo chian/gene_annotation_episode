@@ -1,7 +1,7 @@
 """A resource child receives facts only from the adapter it selected."""
 
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.resource_episodes import ResourceEpisodes
+from gene_annotation_episode.episodic_workflow.root.resource_episodes import ResourceEpisodes
 
 
 class _Adapter:

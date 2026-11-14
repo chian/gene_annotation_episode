@@ -13,20 +13,21 @@ import pytest
 from method_loop import Episode
 from method_loop.durable import DurableExecutionError, DurableExecutionStore, canonical
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_composition import (
+from gene_annotation_episode.episodic_workflow.root.episode_composition import (
     EpisodeComposition, compose_episode_bindings, scientific_binding_compatible,
 )
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_monitoring import MonitorEpisodes, ProgressProvider
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episode_monitoring import MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import FileAsset, HomologyJobs, digest
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
 from gene_annotation_episode.local_jobs import LocalJobPolicy
-from gene_annotation_episode.providers import ModelConnection
-from gene_annotation_episode.resource_episodes import ResourceEpisodes, ROLES
+from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
+from gene_annotation_episode.episodic_workflow.root.resource_episodes import ResourceEpisodes, ROLES
 from gene_annotation_episode.episodic_workflow.root.a101.a101_homology_resource_adapter import HomologyResourceAdapter
 from gene_annotation_episode.resource_estimation import ResourceToolEstimator
 from gene_annotation_episode.state import Store

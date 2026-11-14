@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import digest
 from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.library.protein_structure_authority import ProteinStructureOperandError
 from gene_annotation_episode.episodic_workflow.root.protein_structure_operands import authenticate_structure_sequence_reference
 

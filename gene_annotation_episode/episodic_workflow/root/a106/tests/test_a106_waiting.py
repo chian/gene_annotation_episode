@@ -13,9 +13,9 @@ import pytest
 
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a106.published_evidence_assessment.episode import LiteratureEpisode
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.a106.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a106.tools import ToolRegistry
 from test_literature_reference_parent_prompt import state, render, split
 from test_runtime import FixtureController, ScriptedProvider
 

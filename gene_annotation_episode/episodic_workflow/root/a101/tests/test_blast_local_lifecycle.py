@@ -13,15 +13,15 @@ from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.local_jobs import LocalJobPolicy
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_contracts import requested_job_from_native
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_local import prepare_local_blast, local_blast_plan
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldParameters
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-from gene_annotation_episode.practical_execution_records import ASSIGNMENT_SCHEMA, assess_validations, digest, validate_assignment
-from gene_annotation_episode.practical_execution_state import PracticalState, _immutable
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_records import ASSIGNMENT_SCHEMA, assess_validations, digest, validate_assignment
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_state import PracticalState, _immutable
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
-from gene_annotation_episode.practical_receipt_information import PracticalReceiptInformation
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.a101.practical_receipt_information import PracticalReceiptInformation
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 ROOT = Path(__file__).resolve().parents[5]
 EXAMPLES = ROOT / 'gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/blast_pairwise/native_examples'
@@ -248,7 +248,7 @@ def test_original_owner_and_driver_ports_cannot_be_swapped(tmp_path, fault):
 
 def test_actual_practical_workflow_handoff_capture_and_saved_replay(tmp_path, monkeypatch):
     from gene_annotation_episode.episodic_workflow.root.a101.native_blast_acquisition import capture_local_bundle
-    from gene_annotation_episode.execution_progress import ExecutionTargetReader
+    from gene_annotation_episode.episodic_workflow.root.a101.execution_progress import ExecutionTargetReader
     workspace = tmp_path / 'project'; workspace.mkdir()
     assigned = assignment(workspace, request(LABELS[1]))
     config = configuration(workspace, assigned['requested_job'])

@@ -4,7 +4,7 @@ from pathlib import Path
 
 from gene_annotation_episode.acquisition import PublicClients, SourceSnapshot
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def test_translation_is_an_explicit_derived_product_and_replays_once(tmp_path):

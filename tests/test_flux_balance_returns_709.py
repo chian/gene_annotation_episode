@@ -25,7 +25,8 @@ from gene_annotation_episode.episodic_workflow.root.library.flux_balance_return_
 from gene_annotation_episode.episodic_workflow.root.flux_balance_returns import FACT_SOURCES, PROJECTION_SOURCE, SAVED_SOURCE
 from gene_annotation_episode.episodic_workflow.root.flux_balance_returns import FluxBalanceReturns
 from gene_annotation_episode.native_file_capture import retained_native_file
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
 
 

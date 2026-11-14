@@ -7,8 +7,8 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a102.a102_investigation import initial_report
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episode_return_records import EpisodeReturnRecords
-from gene_annotation_episode.numerical import YieldController,YieldEstimate,NumericBand
+from gene_annotation_episode.episodic_workflow.root.a102.episode_return_records import EpisodeReturnRecords
+from gene_annotation_episode.episodic_workflow.root.a102.numerical import YieldController,YieldEstimate,NumericBand
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a102.tests.a102_native_fixture import NativeCase
 

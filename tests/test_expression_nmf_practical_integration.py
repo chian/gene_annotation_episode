@@ -20,11 +20,11 @@ from gene_annotation_episode.episodic_workflow.root.library.expression_nmf_calcu
 from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionTargetReader, describe_execution_target
 from gene_annotation_episode.episodic_workflow.root.library.native_expression_nmf_contracts import POLICY, expression_nmf_environment, requested_job_from_expression_nmf
 from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand, YieldController, YieldParameters
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
 from gene_annotation_episode.practical_resource_episodes import PracticalResourceEpisodes
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 RAW = b'gene,A,B,B\ng,1,2,0\ng,0,1,3\ng3,1,3,3\n'

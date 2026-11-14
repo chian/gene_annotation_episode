@@ -17,8 +17,8 @@ from method_loop.communication import ReportContract
 from method_loop.durable import (DurableExecutionError, canonical, content_digest,
                                  validate_commission)
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
-from gene_annotation_episode.episodic_workflow.root.runtime import (ReleasingContext, TypedReportContract,
-                                             assemble_workflow)
+from gene_annotation_episode.episodic_workflow.root.workflow_values import ReleasingContext, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_digest, selector_selection
 from gene_annotation_episode.state import Store
@@ -211,7 +211,7 @@ async def open_commission(spec):
     library = ScientificProcessLibrary(directory / 'scientific-process-library')
     assert library.as_record() == configuration['library']
     with Store(configuration['workspace']) as store:
-        from gene_annotation_episode.independent_execution import _check_assignment
+        from gene_annotation_episode.episodic_workflow.root.commissioned_reopening import _check_assignment
         parent_goal, scope = _check_assignment(store, spec)
         settings = json.loads(store.db.execute('SELECT settings FROM runtime_runs WHERE run_id=?',
             (spec['run_id'],)).fetchone()[0])

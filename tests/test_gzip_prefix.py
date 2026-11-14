@@ -9,7 +9,7 @@ import pytest
 from gene_annotation_episode.credit import project_credit
 from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 FIRST = b"@one native read\nACGTACGT\n+\nIIIIIIII\n"
@@ -128,7 +128,7 @@ def test_wrapper_failure_without_emitted_bytes_retains_original_and_explicit_emp
 
 
 def test_one_selected_parse_records_partial_work_once_without_scientific_credit(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.runtime import run_workflow
+    from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
     from test_runtime import FixtureController, ScriptedProvider
 
     with Store(tmp_path / "store") as store:

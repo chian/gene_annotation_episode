@@ -30,7 +30,8 @@ from gene_annotation_episode.episodic_workflow.root.episode_journal import Journ
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.native_file_capture import _metadata, retained_native_file
-from gene_annotation_episode.episodic_workflow.root.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
 
 

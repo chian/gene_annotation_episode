@@ -16,9 +16,9 @@ from gene_annotation_episode.acquisition import SourceSnapshot
 from gene_annotation_episode.domain import canonical
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a110.tools import ToolRegistry
 from gene_annotation_episode.episodic_workflow.root.a110.a110_tools import A110ToolRegistry
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a110.communication import plain
 from test_component_axis_source_receipts import saved_context
 import asyncio
 

@@ -17,10 +17,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
-from gene_annotation_episode.protein_structure_result_receipts import (
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.protein_structure_result_receipts import (
     ProteinResultAction, ProteinResultReceipts,
 )
 from gene_annotation_episode.state import Store
@@ -161,10 +161,10 @@ def test_metadata_history_survives_every_artifact_and_producer_loss(f, monkeypat
     monkeypatch.setattr(f.store, "get_artifact", forbid)
     monkeypatch.setattr(f.store, "_validate_record", forbid)
     monkeypatch.setattr(f.store, "put", forbid)
-    monkeypatch.setattr("gene_annotation_episode.native_protein_structure_acquisition.capture_local_protein_structure_bundle", forbid)
-    monkeypatch.setattr("gene_annotation_episode.native_protein_structure_preparation.prepare_protein_structure_worker", forbid)
-    monkeypatch.setattr("gene_annotation_episode.native_protein_structure_preparation.validate_prepared_protein_structure_worker", forbid)
-    monkeypatch.setattr("gene_annotation_episode.native_protein_structure_local.local_protein_structure_plan", forbid)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_acquisition.capture_local_protein_structure_bundle", forbid)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_preparation.prepare_protein_structure_worker", forbid)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_preparation.validate_prepared_protein_structure_worker", forbid)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library.native_protein_structure_local.local_protein_structure_plan", forbid)
     before = list(f.store.db.iterdump())
     assert read(f, context, key) == receipt
     assert f.receipts.completed_receipts(context) == [receipt]
@@ -401,7 +401,7 @@ def test_cancelled_lock_wait_drains_thread_before_fd_close(f, monkeypatch):
             actual(fd, operation)
             acquired.append(os.fstat(fd).st_ino)  # must still be a live descriptor
         else: actual(fd, operation)
-    monkeypatch.setattr("gene_annotation_episode.protein_structure_result_receipts.fcntl.flock", observed)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.protein_structure_result_receipts.fcntl.flock", observed)
     async def cancel_wait():
         async def selected():
             async with f.receipts.locked_action(context, target=f.target, tool_name="execution.results.collect",

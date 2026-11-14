@@ -4,8 +4,8 @@ import hashlib
 import pytest
 
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.episodic_workflow.root.a105.literature_assay_grading_inputs import _literal
-from gene_annotation_episode.episodic_workflow.root.a105.literature_assay_inputs import _Sources
+from gene_annotation_episode.episodic_workflow.root.literature_assay_grading_inputs import _literal
+from gene_annotation_episode.episodic_workflow.root.literature_assay_inputs import _Sources
 
 
 def selection_and_source(gap):

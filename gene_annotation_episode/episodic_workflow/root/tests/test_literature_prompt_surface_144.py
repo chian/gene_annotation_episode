@@ -9,20 +9,18 @@ import json
 
 import pytest
 
-from gene_annotation_episode.composition_information import (
+from gene_annotation_episode.episodic_workflow.root.composition_information import (
     CONTRACT_ARGUMENT_TRANSPORT, CONTRACT_INFORMATION_PROFILE,
 )
-from gene_annotation_episode.decision_context import state_frame
-from gene_annotation_episode.episode_contract_information import (
+from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
+from gene_annotation_episode.episodic_workflow.root.episode_contract_information import (
     operation_contract_information, return_contract_information,
 )
-from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes, _population_catalog
-from gene_annotation_episode.episodic_workflow.root.literature_experimental_prompt import (
-    EXPERIMENTAL_TASK, SAVED_NUMERICAL_RETURN_TASK, render_literature_experimental_prompt,
-)
-from gene_annotation_episode.episodic_workflow.root.literature_reference_parent_prompt import (
-    REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt,
-)
+from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
+from gene_annotation_episode.episodic_workflow.root.library.root_literature_contracts import _population_catalog
+from gene_annotation_episode.episodic_workflow.root.library.literature_declared_task_text import EXPERIMENTAL_TASK, SAVED_NUMERICAL_RETURN_TASK
+from gene_annotation_episode.episodic_workflow.root.library.literature_prompt_composition import render_literature_experimental_prompt
+from gene_annotation_episode.episodic_workflow.root.library.literature_reference_parent_presentation import REFERENCE_PARENT_TASK, render_reference_evidence_parent_prompt
 from test_literature_experimental_prompt_delivery import (
     LiteratureWire, snapshot, complete, SOURCE_TEXT, QUALIFICATION,
 )
@@ -224,12 +222,13 @@ def test_fresh_source_only_caller_retains_exact_bytes_configuration_and_source_a
 
 def test_fresh_factory_default_reaches_actual_runtime_lookup_execution_and_descriptor_reconstruction(tmp_path):
     from functools import partial
-    from gene_annotation_episode.communication import plain
+    from gene_annotation_episode.episodic_workflow.root.communication import plain
     from gene_annotation_episode.domain import obj
-    from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+    from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_storage import kinetic_cells_schema
-    from gene_annotation_episode.runtime import Workflow, TypedReportContract
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from test_contract_information_runtime_059 import PresentedProvider, information, populate, run_child
     from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_kinetic_storage import setup
     from test_runtime import FixtureController
@@ -283,10 +282,10 @@ def test_source_only_owned_model_bootstrap_preserves_default_science_and_declare
     import hashlib
     import importlib.util
     from pathlib import Path
-    from gene_annotation_episode.default_scientific_binding import VERSION as DEFAULT_SCIENCE
-    from gene_annotation_episode.providers import ModelConnection
+    from gene_annotation_episode.episodic_workflow.root.default_scientific_binding import VERSION as DEFAULT_SCIENCE
+    from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from method_loop.durable import DurableExecutionError
 
     path = Path(__file__).parent / 'fixtures/a105_literature_prompt_surface_144/run_configured_primary_144.py'

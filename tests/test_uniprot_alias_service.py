@@ -9,7 +9,7 @@ import pytest
 from gene_annotation_episode.api_uniprot import UniProtService
 from gene_annotation_episode.resource_tool_information import bound_resource_tool_contracts
 from gene_annotation_episode.tool_information import make_tool_info, workflow_execution_catalogs
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_api_service_integration import (assignment, generic_host, service_responses,
     test_shared_loop_service_handoff_monitor_native_result_and_terminal_zero as run_shared_service_case)
 from test_api_service_recovery import remember, selected_intent

@@ -16,22 +16,22 @@ import pytest
 
 from gene_annotation_episode import native_lifecycle as native
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION
-from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, LAUNCH_VERSION
+from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_contracts import compile_native_hmmer_job, requested_job_from_native
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_driver import (
     run_native_hmmer, validate_native_hmmer_bundle_files,
 )
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_local import local_hmmer_plan
-from gene_annotation_episode.numerical import NumericBand, YieldController, YieldParameters
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
-from gene_annotation_episode.practical_execution_records import digest
-from gene_annotation_episode.practical_receipt_information import PracticalReceiptInformation
-from gene_annotation_episode.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.a101.numerical import NumericBand, YieldController, YieldParameters
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.a101.practical_execution_records import digest
+from gene_annotation_episode.episodic_workflow.root.a101.practical_receipt_information import PracticalReceiptInformation
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 
 
 ROOT = Path(__file__).resolve().parents[5]

@@ -7,10 +7,10 @@ import asyncio
 from copy import deepcopy
 import json
 
-from gene_annotation_episode.decision_context import INSTRUCTIONS, state_frame
+from gene_annotation_episode.episodic_workflow.root.decision_context import INSTRUCTIONS, state_frame
 from gene_annotation_episode.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.providers import _SessionConnection, load_config
+from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection, load_config
 
 
 class LiteratureWire(_SessionConnection):

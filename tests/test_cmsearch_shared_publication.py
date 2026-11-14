@@ -14,7 +14,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.library import infernal_search_grader, rna_evidence
 from gene_annotation_episode.episodic_workflow.root.library.infernal_search_contracts import sheet_digest
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 NATIVE = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/native_infernal_result_worker/cmsearch"

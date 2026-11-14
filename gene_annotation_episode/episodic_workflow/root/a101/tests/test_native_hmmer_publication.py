@@ -132,8 +132,8 @@ def test_all_retained_native_modes_populate_full_sheets_and_recalculate_offline(
         else:
             assert scores[collection]
         from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_search_grader import calculate_hmmer_search_scores
-        from gene_annotation_episode.nhmmer_grader import calculate_nhmmer_scores
-        from gene_annotation_episode.hmmalign_grader import calculate_hmmalign_scores
+        from gene_annotation_episode.episodic_workflow.root.a101.library.nhmmer_grader import calculate_nhmmer_scores
+        from gene_annotation_episode.episodic_workflow.root.a101.library.hmmalign_grader import calculate_hmmalign_scores
         calculator = {"protein_domain": calculate_hmmer_search_scores,
             "nucleotide_locus": calculate_nhmmer_scores, "alignment_sequence": calculate_hmmalign_scores}[family_for_program(bundle["program"])]
         before = deepcopy(sheet)

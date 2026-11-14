@@ -13,7 +13,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, plain
 from gene_annotation_episode.domain import ContractError, canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episodic_workflow.root.a105.literature_rate_storage import LiteratureRateRepository
+from gene_annotation_episode.episodic_workflow.root.literature_rate_storage import LiteratureRateRepository
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_rate_episode_integration import service_binding
 

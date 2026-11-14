@@ -17,9 +17,9 @@ import traceback
 
 def build_literature_controller(cost):
     """Apply the caller's A105 calibration to the measured literature role."""
-    from gene_annotation_episode.numerical import YieldController, YieldParameters, provenance
-    from gene_annotation_episode.providers import default_config_path
-    from gene_annotation_episode.runtime import controller_from_settings
+    from gene_annotation_episode.episodic_workflow.root.numerical import YieldController, YieldParameters, provenance
+    from gene_annotation_episode.episodic_workflow.root.providers import default_config_path
+    from gene_annotation_episode.episodic_workflow.root.saved_run_configuration import controller_from_settings
 
     control = tomllib.loads(default_config_path().read_text())['controller']
     parameters = YieldParameters(**{key: value for key, value in control.items() if key != 'cost'})
@@ -63,10 +63,10 @@ def main():
     os.environ['XDG_CACHE_HOME'] = str(run / 'cache')
     sys.path.insert(0, str(args.source_root.resolve()))
     from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-    from gene_annotation_episode.runtime import run_workflow
+    from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
     from gene_annotation_episode.state import Store
-    from gene_annotation_episode.tool_configuration import build_tools
-    from gene_annotation_episode.composition_information import CONTRACT_INFORMATION_PROFILE
+    from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
+    from gene_annotation_episode.episodic_workflow.root.composition_information import CONTRACT_INFORMATION_PROFILE
     controller, controller_definition = build_literature_controller(args.literature_continuation_cost)
 
     goal = (

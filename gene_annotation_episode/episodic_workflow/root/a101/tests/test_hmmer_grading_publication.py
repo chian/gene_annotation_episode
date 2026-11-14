@@ -22,7 +22,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_graders i
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_search_grader import calculate_hmmer_search_scores
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from api_execution_fixture import APIHarness
 
 
@@ -371,7 +371,7 @@ def test_missing_native_query_length_uses_only_shared_explicit_join(tmp_path, al
 @pytest.mark.parametrize('shared_value', [0.125, None, 0.0])
 def test_aliases_copy_shared_cells_and_ignore_parser_alias_sentinels(tmp_path, monkeypatch, algorithm, shared_value):
     """Injected score sentinels establish projection, not scientific measurements."""
-    import gene_annotation_episode.tools as tool_module
+    import gene_annotation_episode.episodic_workflow.root.a101.tools as tool_module
     original_parse = tool_module.parse_hmmer
     def poisoned_parser(*args, **kwargs):
         parsed = original_parse(*args, **kwargs)

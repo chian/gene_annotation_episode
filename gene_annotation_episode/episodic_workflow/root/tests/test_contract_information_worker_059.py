@@ -10,18 +10,20 @@ import json
 import pytest
 
 from gene_annotation_episode import independent_execution as worker
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.runtime import Workflow, assemble_workflow, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tool_configuration import build_tools
+from gene_annotation_episode.episodic_workflow.root.tool_configuration import build_tools
 from test_contract_information_custody_059 import COMPACT, commission
 from test_contract_information_runtime_059 import PROFILE, PresentedProvider
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_kinetic_storage import setup
 
 
 def test_actual_worker_factory_forwards_original_host_declaration_and_reopens_profile(tmp_path, monkeypatch):
-    from gene_annotation_episode.episodic_workflow.root.literature_episodes import _population_catalog
+    from gene_annotation_episode.episodic_workflow.root.library.root_literature_contracts import _population_catalog
     original_operations = _population_catalog()
     store, seed, args = setup(tmp_path / 'state')
     directory = tmp_path / 'run'
@@ -76,7 +78,7 @@ def test_actual_worker_factory_forwards_original_host_declaration_and_reopens_pr
             self.exited = True
         async def complete(self, *_a, **_kw):
             raise AssertionError('Reconstruction must not invoke a model')
-    monkeypatch.setattr('gene_annotation_episode.providers.ModelConnection', ForbiddenModel)
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.providers.ModelConnection', ForbiddenModel)
     async def inspect():
         async with worker.open_commission(spec) as opened:
             episode = opened['episode']
@@ -97,8 +99,8 @@ def test_actual_worker_factory_forwards_original_host_declaration_and_reopens_pr
 
 
 def test_owned_caller_rejects_incompatible_profile_before_provider_entry(tmp_path, monkeypatch):
-    from gene_annotation_episode.episode_contract_information import ContractInformationError
-    from gene_annotation_episode.providers import ModelConnection
+    from gene_annotation_episode.episodic_workflow.root.episode_contract_information import ContractInformationError
+    from gene_annotation_episode.episodic_workflow.root.providers import ModelConnection
     store, seed, args = setup(tmp_path / 'state')
     entered = []
     async def forbidden_entry(_connection):

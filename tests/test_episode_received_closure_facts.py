@@ -10,7 +10,8 @@ import json
 import pytest
 
 from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
-from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract, Workflow
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from tests.test_runtime import (FixtureController, ScriptedProvider, fixture_credit,
     obj, reason, setup)
 

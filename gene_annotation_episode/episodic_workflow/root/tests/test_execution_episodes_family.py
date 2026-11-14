@@ -14,16 +14,16 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.episode_bindings import BindingContext, EpisodeBindingRegistry
-from gene_annotation_episode.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.execution_episodes import (ExecutionEpisodes, LAUNCH_VERSION,
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import (ExecutionEpisodes, LAUNCH_VERSION,
     RESULTS_VERSION, NATIVE_RESULT_ORIGIN)
 from gene_annotation_episode import native_lifecycle as native
-from gene_annotation_episode.practical_execution_operations import LocalPracticalOperations
+from gene_annotation_episode.episodic_workflow.root.library.local_practical_operations import LocalPracticalOperations
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 
 def native_assignment(workspace, resource_id='here', *, kind='local', argv=None):
@@ -117,7 +117,7 @@ def test_one_owner_and_data_descriptor_reconstruct_all_operands(host):
 
 def test_single_execution_task_binds_verified_zero_yield_without_global_factory(host, monkeypatch):
     from test_practical_yield import completion_context
-    from gene_annotation_episode.numerical import NumericBand
+    from gene_annotation_episode.episodic_workflow.root.numerical import NumericBand
 
     h = host
     original = native_assignment(h.workspace)
@@ -150,7 +150,7 @@ def test_single_execution_task_binds_verified_zero_yield_without_global_factory(
     assert seen[0][0] == task.episode_id
     assert owner.as_record()['configuration']['require_private_yield'] is True
     assert owner.as_record()['configuration']['task_yield_profiles'] == owner.task_yield_profiles
-    from gene_annotation_episode.execution_service_setup import ExecutionServiceFactory
+    from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
     factory = ExecutionServiceFactory(resources=h.family.resources, initial_information={},
         handoff_unit=3, acquired_record_unit=2, monitoring_information_unit=1,
         require_private_execution_yield=True, task_yield_profiles=owner.task_yield_profiles)

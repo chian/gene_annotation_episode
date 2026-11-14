@@ -16,16 +16,16 @@ from method_loop.episode import EpisodeGoal, EpisodeRequest
 from method_loop.identities import EpisodeRef
 import pytest
 
-from gene_annotation_episode.communication import form_with_facts, plain, validate_form
+from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, plain, validate_form
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_receipts import EpisodeReceipts
+from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.a101.library.hmmer_preparation_result_views import preparation_fact_sources, project_preparation_result
 from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_preparation_returns import (
     FACT_SOURCES, REFERENCE_SOURCE, NativeHmmerPreparationReturns, requested_sources,
 )
-from gene_annotation_episode.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.a101.runtime import Record, TypedReportContract
 from gene_annotation_episode.state import Store
 
 

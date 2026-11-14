@@ -251,7 +251,7 @@ def test_retained_completed_nmf_replay_finishes_origin_permissions_without_repla
         from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionTargetReader
         from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
         from gene_annotation_episode.state import Store
-        from gene_annotation_episode.tools import ToolRegistry
+        from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
         from method_loop.archive import ArchivedRecord
         store = Store(owned / 'state')
         for row in store.db.execute("SELECT result FROM runtime_actions WHERE run_id=? "

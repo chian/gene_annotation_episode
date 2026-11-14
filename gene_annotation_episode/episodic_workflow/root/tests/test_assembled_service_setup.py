@@ -7,20 +7,21 @@ import pytest
 
 from gene_annotation_episode import assembled_service_setup, episode_monitoring
 from gene_annotation_episode.assembled_service_setup import bind_assembled_services
-from gene_annotation_episode.episode_application_services import EpisodeApplicationServices
-from gene_annotation_episode.episode_monitoring import MonitorEpisodes, ProgressProvider
+from gene_annotation_episode.episodic_workflow.root.episode_application_services import EpisodeApplicationServices
+from gene_annotation_episode.episode_monitoring import MonitorEpisodes
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
 from gene_annotation_episode.episode_progress_credit import ProgressInformationCredit
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.homology_job_submission.episode import HomologyEpisode
 from gene_annotation_episode.episodic_workflow.root.a101.homology_jobs import HomologyJobs
 from gene_annotation_episode.episodic_workflow.root.a101.homology_progress import HomologyProgressProvider
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.numerical import YieldController
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController
 from gene_annotation_episode.episodic_workflow.root.a101.a101_homology_resource_adapter import HomologyResourceAdapter
 from gene_annotation_episode.resource_operational_credit import ResourceOperationalCredit
 from gene_annotation_episode.episodic_workflow.root.scientific_process_episodes import ScientificProcessEpisodes
-from gene_annotation_episode.scientific_process_library import ScientificProcessLibrary
-from gene_annotation_episode.scientific_tool_library import ScientificToolLibrary
-from gene_annotation_episode.scientific_tool_retrieval import ScientificToolRetriever
+from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_retrieval import ScientificToolRetriever
 from test_resource_service_setup import assert_no_work, forbidden, resources
 
 
@@ -52,8 +53,8 @@ def setup(r, **changes):
 
 
 def test_wired_setup_has_one_launch_family_and_actual_tool_registry(resources):
-    from gene_annotation_episode.execution_progress import ExecutionProgressProvider
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.library.execution_progress import ExecutionProgressProvider
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     r = resources
     tools = ToolRegistry(r.store)
     configuration = {'here': {'kind': 'local', 'workspace': str(r.directory/'project'), 'policy': {'memory_bytes': 128 * 1024 ** 2, 'scratch_bytes': 8 * 1024 ** 2}},
@@ -82,7 +83,7 @@ def test_wired_setup_has_one_launch_family_and_actual_tool_registry(resources):
 def test_wired_setup_connects_scientific_parent_to_hpc_and_shared_memory(resources):
     from hpc_helpers import commission, resources as hpc_resources
     from gene_annotation_episode.execution_memory import ExecutionMemory
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     r = resources
     tools = ToolRegistry(r.store)
     memory = ExecutionMemory(r.directory/'shared-memory.sqlite3')

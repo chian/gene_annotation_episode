@@ -12,7 +12,7 @@ from gene_annotation_episode.acquisition import AcquisitionError, PublicClients,
 from gene_annotation_episode.credit import AnnotationScoringUnavailable, project_credit
 from gene_annotation_episode.export import export_annotation
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.tools import ToolRegistry
+from gene_annotation_episode.episodic_workflow.root.a101.tools import ToolRegistry
 from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
 
 
@@ -37,7 +37,7 @@ def stored_database_grading(store, source_ref):
 
 async def assert_root_execution_rejected(store, tools, directory, name, arguments):
     from test_runtime import FixtureController, ScriptedProvider
-    from gene_annotation_episode.runtime import run_workflow
+    from gene_annotation_episode.episodic_workflow.root.a101.runtime import run_workflow
 
     class RootRejectionObserved(Exception):
         pass
@@ -386,7 +386,7 @@ def test_uncertain_submit_never_repeats_and_native_field_requires_trusted_origin
 
 def test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_parent_form(tmp_path):
     from gene_annotation_episode.episodic_workflow.root.a101.library.blast_result_views import BLAST_HSP_FACT_SCHEMA, blast_hsp_facts
-    from gene_annotation_episode.communication import form_with_facts, validate_form
+    from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, validate_form
     client=Client(program='blastx');store,tools,target,(a,b)=setup(tmp_path,client)
     with store:
         result=tools.execute('public.blast.search',{'subject_ref':a['id'],'program':'blastx','database':'swissprot'})
@@ -422,7 +422,8 @@ def test_reasoned_native_hsp_uses_exact_original_member_extent_and_existing_pare
 
 @pytest.mark.parametrize('configured',[False,True])
 def test_cli_selects_shared_access_directory_once_and_exposes_effective_path(tmp_path,monkeypatch,configured):
-    from gene_annotation_episode import cli, tool_configuration
+    from gene_annotation_episode import cli
+    from gene_annotation_episode.episodic_workflow.root.a101 import tool_configuration
     workspace=tmp_path/'workspace'
     with Store(workspace) as store: store.create_problem(raw_sequence='ACGT',molecule='dna')
     home=tmp_path/'home';monkeypatch.setattr(Path,'home',classmethod(lambda cls:home))

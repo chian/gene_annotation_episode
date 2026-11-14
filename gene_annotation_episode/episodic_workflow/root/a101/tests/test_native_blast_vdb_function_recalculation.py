@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.a101.communication import plain
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.materials import artifact_path
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_result_publication import _json
@@ -107,7 +107,7 @@ def test_exact_received_generation_recalculates_and_second_saved_generation_is_s
         proof = h.family.completion_for_action(second, reused['operation_key'])
         assert proof['validation_keys'] == ['original_native_attempt', 'authenticated_saved_function_sheet', 'requested_native_numerical_projection']
         assert h.family.verify_completion(second, proof)
-        from gene_annotation_episode.numerical import YieldParameters
+        from gene_annotation_episode.episodic_workflow.root.a101.numerical import YieldParameters
         from test_practical_yield import completion_context
         expectation = completion_context(run_id=h.run_id, episode_id=second.episode_id, unit_index=0, action_index=0)
         runtime = {k: expectation['practical_completion'][k] for k in ('unit_ref', 'action_index')}
@@ -217,7 +217,7 @@ def test_existing_hsp_family_validates_new_capture_and_saved_projection_adds_no_
             initial_known_record_refs=original['record_refs']))
         assert view['credit'] == 0 and view['new_acquired_record_count'] == 0
         if temperature == 1:
-            from gene_annotation_episode.communication import form_with_facts
+            from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts
             schema = plain(second.request)['report_contract']['measurements']['schema']
             owner = h.family.native_blast_database_returns
             published = received['execution_blast_database_hsp_rows'][0]

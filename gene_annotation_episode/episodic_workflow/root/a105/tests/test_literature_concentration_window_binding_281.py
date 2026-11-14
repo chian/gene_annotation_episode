@@ -112,7 +112,7 @@ def block_science(monkeypatch):
     from gene_annotation_episode.episodic_workflow.root.a105.library import literature_concentration_window_calculations as calculations
     from gene_annotation_episode.episodic_workflow.root.a105.library import literature_concentration_window_storage as storage
     from gene_annotation_episode.episodic_workflow.root.a105.library import literature_numerical_contracts as contracts
-    from gene_annotation_episode import providers
+    from gene_annotation_episode.episodic_workflow.root.a105 import providers
     for module, names in ((inputs, ['read_concentration_window_inputs', 'compile_concentration_window_inputs', 'validate_concentration_window_extraction', 'validate_concentration_window_calculation_inputs', 'concentration_window_selection_schema', 'concentration_window_extraction_schema', 'concentration_window_calculation_inputs_schema', 'concentration_window_sheet_schema', 'concentration_window_covariance_schema']), (calculations, ['populate_concentration_window', 'validate_concentration_window_sheet', 'concentration_window_sheet_schema']), (storage, ['concentration_window_cells_schema', 'concentration_window_operation_schema', '_project_once', '_scoped_context_once', '_validate_windows', '_withheld']), (contracts, ['registered_schema']), (providers.ModelConnection, ['complete']), (providers._SessionConnection, ['complete']), (LiteratureConcentrationWindowRepository, ['populate', 'receive_cells', '_original_implementation'])):
         for name in names:
             monkeypatch.setattr(module, name, forbid)
@@ -309,7 +309,7 @@ def test_partial_pair_meaning_and_exact_nonowner_subset(tmp_path):
         store.close()
 
 def test_recurring_full_task_from_actual_sources_not_capabilities(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.literature_task_selection import selected_literature_task_sections as select
+    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_task_selection import selected_literature_task_sections as select
     store, ctx, args, binding, _ = setup(tmp_path / 'state', [])
     try:
         state = dict(literature_assignment={REQUESTED: []})

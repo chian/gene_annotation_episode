@@ -7,9 +7,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.api_service_execution import APIServiceExecution
+from gene_annotation_episode.episodic_workflow.root.api_service_execution import APIServiceExecution
 from gene_annotation_episode.execution_contracts import digest
-from gene_annotation_episode.execution_episodes import ExecutionEpisodes
+from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes
 from gene_annotation_episode.practical_execution_state import _immutable
 
 

@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.execution_recording import HomologyStatistics
+from gene_annotation_episode.episodic_workflow.root.execution_recording import HomologyStatistics
 
 
 @pytest.fixture

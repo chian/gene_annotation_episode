@@ -6,7 +6,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a110 import a110_experimental_qualification as experimental
 from gene_annotation_episode.episodic_workflow.root.a110.a110_qualification import received
-from gene_annotation_episode.communication import form_with_facts
+from gene_annotation_episode.episodic_workflow.root.a110.communication import form_with_facts
 from gene_annotation_episode.domain import obj, identity
 from gene_annotation_episode.episodic_workflow.root.a110.literature_reaction_storage import LiteratureReactionRepository
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_report_contracts import reaction_cells_schema

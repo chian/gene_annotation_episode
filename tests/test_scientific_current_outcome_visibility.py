@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from gene_annotation_episode.scientific_process_prompt import render_episode_steering
+from gene_annotation_episode.episodic_workflow.root.library.decision_steering_display import render_episode_steering
 
 
 @pytest.mark.parametrize('result,marker', [

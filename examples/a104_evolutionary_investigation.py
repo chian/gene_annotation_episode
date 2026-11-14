@@ -20,7 +20,7 @@ from gene_annotation_episode.a104_credit import A104EvolutionaryCredit
 from gene_annotation_episode.episodic_workflow.root.evidence_root import create_evidence_root_workflow, NativeEvidenceRootCredit
 from gene_annotation_episode.episodic_workflow.root.providers import load_config
 from gene_annotation_episode.serial_model_resources import SerialModelConnection as ModelConnection
-from gene_annotation_episode.episodic_workflow.root.runtime import controller_from_settings
+from gene_annotation_episode.episodic_workflow.root.saved_run_configuration import controller_from_settings
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.decision_context import PROTOCOL
 from gene_annotation_episode.domain import obj

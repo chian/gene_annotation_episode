@@ -5,15 +5,14 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.communication import plain
+from gene_annotation_episode.episodic_workflow.root.communication import plain
 from gene_annotation_episode.domain import ContractError, canonical, obj
 from gene_annotation_episode.episode_bindings import BindingContext
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_services import WorkflowServices
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices
 from gene_annotation_episode.episodic_workflow.root.literature_episodes import LiteratureEpisodes
-from gene_annotation_episode.episodic_workflow.root.literature_task_credit import (
-    VERSION, SCREENING, LEADS, commissioned_task, screening_schema, lead_return_schema,
-)
+from gene_annotation_episode.episodic_workflow.root.literature_task_credit import VERSION, commissioned_task
+from gene_annotation_episode.episodic_workflow.root.library.literature_task_answer_schemas import SCREENING, LEADS, screening_schema, lead_return_schema
 from gene_annotation_episode.state import Store
 from test_investigation_progress import put_finding
 from test_scientific_findings import target_question, quoted_observation
@@ -32,7 +31,7 @@ def commission(context, task, proposed, returned, **assignment):
 
 
 def binding(store, context, **options):
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     services = WorkflowServices(SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store)))
     return LiteratureEpisodes(services, **options)
 
@@ -157,7 +156,7 @@ def test_private_literature_yield_binds_to_each_original_commission(tmp_path):
 def test_finite_literature_forecast_preserves_measured_yield_until_request_is_filled():
     from real_time_credit_fixture import contexts_at
     from gene_annotation_episode.episodic_workflow.root.literature_task_credit import _RemainingCommissionedCredit
-    from gene_annotation_episode.numerical import STATUS_NORMAL, YieldParameters
+    from gene_annotation_episode.episodic_workflow.root.numerical import STATUS_NORMAL, YieldParameters
 
     estimator = _RemainingCommissionedCredit(maximum_credit=14, initial_credit=0)
     parameters = YieldParameters(uncertainty_alpha=.05)
@@ -171,7 +170,7 @@ def test_finite_literature_forecast_preserves_measured_yield_until_request_is_fi
 
 
 def test_literature_private_binding_covers_all_roles_and_task_forms(tmp_path):
-    from gene_annotation_episode.episodic_workflow.root.literature_task_credit import YIELD_TASKS, validate_yield_bindings
+    from gene_annotation_episode.episodic_workflow.root.library.literature_yield_configuration import YIELD_TASKS, validate_yield_bindings
 
     expected = {f'{axis}:{task}' for axis in ('A105', 'A106', 'A108')
         for task in ('verified_source_leads', 'source_answer:assessment',
@@ -199,7 +198,7 @@ def test_literature_private_binding_covers_all_roles_and_task_forms(tmp_path):
 
 
 def test_only_exact_native_lead_and_screening_return_schemas_are_admitted():
-    from gene_annotation_episode.communication import ReportBoundaryError, validate_closed_schema
+    from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema
     for factory in (lead_return_schema, screening_schema):
         validate_closed_schema(obj({'answer': factory()}))
         altered = factory()
@@ -252,7 +251,7 @@ def test_search_hits_are_not_verified_leads_and_original_witnessed_judgment_is_r
         assert project(owner, context, store, known)['credit'] == 7
         returned = owner.facts(context, {'committed_record_refs': []})[LEADS]
         assert returned == [outcome['literature_source_lead']]
-        from gene_annotation_episode.communication import ReportBoundaryError, validate_form
+        from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_form
         with pytest.raises(ReportBoundaryError, match='reference is unavailable'):
             validate_form({'leads': returned}, obj({'leads': lead_return_schema()}),
                 lambda ref, namespace: ref != subject)
@@ -296,7 +295,7 @@ def test_screening_uses_authenticated_original_disposition_not_bytes_or_repeats(
         assert result['source_contributions'][0]['annotation_support'] == 'not_assessed'
         assert not store.db.execute("SELECT 1 FROM records WHERE record_type='assessment'").fetchone()
         assert owner.facts(context, {'committed_record_refs': []})[SCREENING] == result['source_contributions']
-        from gene_annotation_episode.communication import ReportBoundaryError, validate_form
+        from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_form
         with pytest.raises(ReportBoundaryError, match='reference is unavailable'):
             validate_form({'screening': result['source_contributions']}, obj({'screening': screening_schema()}),
                 lambda ref, namespace: ref != span['artifact_ref'])
@@ -306,9 +305,9 @@ def test_lead_only_reason_with_existing_subject_enters_original_runtime_action(t
     import asyncio
     import json
     from functools import partial
-    from gene_annotation_episode.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
-    from gene_annotation_episode.runtime import Workflow
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
+    from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     from test_runtime import FixtureController, ScriptedProvider
     with Store(tmp_path / 'state') as store:
         context, proposed, subject, observation = question_fixture(store)

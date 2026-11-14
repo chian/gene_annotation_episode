@@ -11,7 +11,9 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.execution_expectations import ExecutionExpectations
 from gene_annotation_episode.resource_estimation import ESTIMATE_SCHEMA, ResourceToolEstimator, report_source
-from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource, Record, run_workflow
+from gene_annotation_episode.episodic_workflow.root.runtime import DecisionSource
+from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from test_runtime import FixtureController, ScriptedProvider, fixture_credit, obj, setup, tool
 from test_runtime_expectations import append, make_history
 

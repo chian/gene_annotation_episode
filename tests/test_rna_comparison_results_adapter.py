@@ -10,7 +10,7 @@ from gene_annotation_episode.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import validate_completion_proof
 from gene_annotation_episode.episodic_workflow.root.rna_structure_comparison_results import result_receipt_key, VALIDATION_KEYS, PREPARED_COPY_FIELDS
 from gene_annotation_episode.episodic_workflow.root.library.rna_structure_comparison_views import PROJECTION_SOURCE
-from gene_annotation_episode.episodic_workflow.root.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
 
 

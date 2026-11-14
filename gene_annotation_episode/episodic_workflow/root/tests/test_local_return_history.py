@@ -15,16 +15,17 @@ from method_loop.archive import JsonArchive
 from method_loop.durable import DurableExecutionStore, canonical, content_digest
 from method_loop.identities import EpisodeRef, UnitRef
 
-from gene_annotation_episode.episode_admission import ReceiverBindingV1, admit_return
-from gene_annotation_episode.episode_commissions import CommissionCoordinator
-from gene_annotation_episode.episode_completion import CompletionLedger
-from gene_annotation_episode.episode_journal import Journal
-from gene_annotation_episode.episode_monitoring import FIELDS, ProgressProvider
+from gene_annotation_episode.episodic_workflow.root.episode_admission import ReceiverBindingV1, admit_return
+from gene_annotation_episode.episodic_workflow.root.episode_commissions import CommissionCoordinator
+from gene_annotation_episode.episodic_workflow.root.episode_completion import CompletionLedger
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
+from gene_annotation_episode.episode_monitoring import FIELDS
+from gene_annotation_episode.episodic_workflow.root.progress_observations import ProgressProvider
 from gene_annotation_episode.local_return_history import LocalReturnHistory, VERSION
-from gene_annotation_episode.numerical import YieldController
-from gene_annotation_episode.runtime import TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.numerical import YieldController
+from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.waiting import WaitStore, estimate_wait
+from gene_annotation_episode.episodic_workflow.root.wait_events import WaitStore, estimate_wait
 from test_episode_commissions import setup_case
 
 
