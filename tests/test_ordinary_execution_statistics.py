@@ -97,7 +97,7 @@ def test_case_tool_configuration_binds_caller_history_resource_and_receipt_locat
     with Store(tmp_path/'workspace') as store:
         configured = {'history': str(tmp_path/'global.sqlite'), 'resource_id': 'caller-host',
                       'local_tools': {'native_receipts_dir': str(tmp_path/'caller-receipts')}}
-        tools = build_tools(store, configured)
+        tools = build_tools(store, configured, run_directory=tmp_path/'run')
         assert tools.native_statistics == OrdinaryExecutionStatistics(configured['history'], 'caller-host',
                                                                      tmp_path/'caller-receipts')
         assert tools.resource_binding()['ordinary_execution_statistics'] == tools.native_statistics.as_record()

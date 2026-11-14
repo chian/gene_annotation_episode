@@ -11,7 +11,11 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root import runtime
 from gene_annotation_episode.episodic_workflow.root.decision_context import apply_state_frame
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
+from gene_annotation_episode.episodic_workflow.root.saved_run_assembly import assemble_workflow
+from gene_annotation_episode.episodic_workflow.root.yield_parameters import _category_yield_parameters
 from gene_annotation_episode.episodic_workflow.root.decision_exchanges import DecisionExchanges
+from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal, WorkflowError
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import (FixtureController, ScriptedProvider, fixture_credit,
@@ -25,7 +29,7 @@ def test_category_yield_parameters_default_controller():
     binding = {'factory': 'gene_annotation_episode.episodic_workflow.root.numerical.YieldController',
         'definition': {'cost': .01, 'window_size': 8, 'subsample_size': 3,
             'uncertainty_alpha': .05}}
-    assert runtime._category_yield_parameters(binding) == {
+    assert _category_yield_parameters(binding) == {
         'window_size': 8, 'subsample_size': 3, 'uncertainty_alpha': .05}
 
 
@@ -53,7 +57,7 @@ def test_category_yield_parameters_declared_caller_layout(version, wrapped):
     binding = {'factory': 'fixed_gene_policy_fixture.create_policy.<locals>.controller',
         'versions': {'requirement': 'same_caller_injected_executable'}, 'definition': definition}
     original = deepcopy(binding)
-    assert runtime._category_yield_parameters(binding) == {
+    assert _category_yield_parameters(binding) == {
         'window_size': 11, 'subsample_size': 5, 'uncertainty_alpha': .07}
     assert binding == original
 
@@ -71,7 +75,7 @@ def test_category_yield_parameters_declared_caller_layout(version, wrapped):
     {'definition': {'version': 'existing_yield_controller_explicit_parameters_v1',
         'parameters': {'window_size': 8}}}])
 def test_category_yield_parameters_unknown_or_incomplete_remains_unbound(binding):
-    assert runtime._category_yield_parameters(binding) is None
+    assert _category_yield_parameters(binding) is None
 
 
 def select(action):
@@ -120,7 +124,7 @@ def count(store, table):
 def exchanges(store, index=0):
     row = store.db.execute('SELECT run_id,episode_id FROM runtime_model_calls '
         'WHERE call_index=? ORDER BY episode_id LIMIT 1', (index,)).fetchone()
-    return DecisionExchanges(runtime.Journal(store, row['run_id'])).rows(row['episode_id'], index)
+    return DecisionExchanges(Journal(store, row['run_id'])).rows(row['episode_id'], index)
 
 
 def test_multiple_context_exchanges_complete_one_actual_action_slot_and_observation(tmp_path):
@@ -217,7 +221,7 @@ def test_continuing_decisions_use_deltas_and_compaction_restores(tmp_path):
             return step
     provider = ConversationProvider([select(reason(3)), select(reason(-1)), lookup(), select(reason(0))],
         compact_after=(2,))
-    result = asyncio.run(runtime.run_workflow(store, tools, provider=provider, run_dir=tmp_path / 'run',
+    result = asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path / 'run',
         controller_factory=lambda path, initial: SignedController(str(path), initial, 3),
         project_credit=fixture_credit, decision_protocol=PROTOCOL))
     assert result['credit'] == 2
@@ -354,7 +358,7 @@ def test_injected_legacy_default_and_markerless_resume_do_not_migrate(tmp_path):
     assert 'decision_protocol' not in settings
     assert settings['root_action_boundary'] == 'root_episode_commissioning_v1'
     assert json.loads(original)['context']['tools'] == []
-    with pytest.raises(runtime.WorkflowError, match='original_decision_protocol'):
+    with pytest.raises(WorkflowError, match='original_decision_protocol'):
         run(store, tools, ScriptedProvider([]), None, resume=True, decision_protocol=PROTOCOL)
     resumed = ScriptedProvider([reason(0)])
     result = run(store, tools, resumed, None, resume=True)
@@ -376,11 +380,11 @@ def test_common_assembly_loads_saved_protocol_and_rejects_rebinding(tmp_path):
     assert json.loads((tmp_path / 'run/run.json').read_text())['decision_protocol'] == PROTOCOL
     options = dict(controller_factory=lambda path, initial: FixtureController(str(path), initial, 1),
         project_credit=fixture_credit, episode_binding_descriptors=settings['episode_bindings'])
-    workflow = runtime.assemble_workflow(store, tools, ConversationProvider([]), tmp_path / 'run',
+    workflow = assemble_workflow(store, tools, ConversationProvider([]), tmp_path / 'run',
         row['run_id'], settings, **options)
     assert workflow.decision_protocol == PROTOCOL
-    with pytest.raises(runtime.WorkflowError, match='original_decision_protocol'):
-        runtime.assemble_workflow(store, tools, ConversationProvider([]), tmp_path / 'run',
+    with pytest.raises(WorkflowError, match='original_decision_protocol'):
+        assemble_workflow(store, tools, ConversationProvider([]), tmp_path / 'run',
             row['run_id'], settings, decision_protocol=None, **options)
 
 
@@ -402,7 +406,7 @@ def test_owned_connection_defaults_new_and_explicit_null_keeps_original(tmp_path
     monkeypatch.setattr(application_execution_binding, 'bind_episode_execution',
         lambda *args, settings, **kwargs: SimpleNamespace(settings=settings, runtime_binding=None))
     kwargs = {'decision_protocol': None} if explicit_original else {}
-    result = asyncio.run(runtime.run_workflow(store, tools, run_dir=tmp_path / 'run',
+    result = asyncio.run(run_workflow(store, tools, run_dir=tmp_path / 'run',
         controller_factory=lambda path, initial: FixtureController(str(path), initial, 1),
         project_credit=fixture_credit, **kwargs))
     settings = json.loads(store.db.execute('SELECT settings FROM runtime_runs').fetchone()[0])

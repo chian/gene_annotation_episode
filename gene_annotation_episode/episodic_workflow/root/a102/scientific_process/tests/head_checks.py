@@ -464,12 +464,13 @@ def next_context(v):
 def cold_import(directory,order):
     import os
     import subprocess
+    import sys
     from gene_annotation_episode.workflow_budget import active_budget
     directory=Path(directory).resolve();assert directory.is_relative_to(Path(active_budget()['run_directory']).resolve())
     directory.mkdir(parents=True,exist_ok=True)
     assert order in ('head_first','runtime_first')
     source="import importlib,json; p='"+PREFIX+"'; first='"+('scientific_process.episode' if order=='head_first' else 'runtime')+"'; importlib.import_module(p+'.'+first); h=importlib.import_module(p+'.scientific_process.episode'); r=importlib.import_module(p+'.runtime'); t=getattr(h.ScientificProcessEpisode,'decision_source_type',r.DecisionSource); assert t is r.DecisionSource or (t.__name__=='ScientificProcessTask' and t.__module__==p+'.scientific_process.task'); print(json.dumps({'binding':h.ScientificProcessEpisode.__module__+'.'+h.ScientificProcessEpisode.__qualname__,'valid_original_or_private_task':True}))"
     environment={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','TMPDIR':str(directory),'XDG_CACHE_HOME':str(directory/'cache')}
-    result=subprocess.run(['/usr/bin/python3','-B','-c',source],env=environment,text=True,capture_output=True)
+    result=subprocess.run([sys.executable,'-B','-c',source],env=environment,text=True,capture_output=True)
     assert result.returncode==0,(result.stdout,result.stderr)
     return {'order':order,'result':json.loads(result.stdout),'stderr':result.stderr}

@@ -6,6 +6,7 @@ test_native_infernal_results_integration.py. These tests launch no native tool.
 """
 from copy import deepcopy
 from dataclasses import replace
+import importlib.util
 import json
 from types import SimpleNamespace
 
@@ -173,13 +174,15 @@ def no_scientific_work(monkeypatch):
         raise AssertionError('Return authentication attempted scientific work or acquisition')
     monkeypatch.setattr('socket.create_connection', forbidden)
     monkeypatch.setattr('subprocess.Popen', forbidden)
-    for module, names in (
-        ('native_infernal_results', ['capture_local_bundle', 'prepare_native_infernal_grading',
-                                    'publish_selected_native_infernal_rows']),
-        ('native_infernal_result_worker', ['run', 'populate_cmalign_sheet', 'populate_infernal_search_sheet',
-                                         'calculate_cmalign_scores', 'calculate_infernal_search_scores'])):
-        for name in names:
-            monkeypatch.setattr('gene_annotation_episode.' + module + '.' + name, forbidden)
+    root = 'gene_annotation_episode.episodic_workflow.root.'
+    for name in ('capture_local_bundle', 'prepare_native_infernal_grading', 'publish_selected_native_infernal_rows'):
+        monkeypatch.setattr(root + 'native_infernal_results.' + name, forbidden)
+    # root/library/native_infernal_result_publication.py launches this worker module by
+    # name, but only a107 has a copy of it. While the shared root has none, no worker
+    # function can run in this process and subprocess.Popen is forbidden above.
+    # When the shared root gains the worker, this must fail so its functions get forbidden here.
+    worker = root + 'library.native_infernal_result_worker'
+    assert importlib.util.find_spec(worker) is None, 'shared root now has the Infernal worker: forbid its functions here'
 
 
 @pytest.fixture

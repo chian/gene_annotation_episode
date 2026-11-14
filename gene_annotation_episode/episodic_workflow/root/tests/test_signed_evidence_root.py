@@ -412,7 +412,7 @@ def test_root_rejects_owner_contribution_for_a_different_annotation_subject_or_s
 
 def test_dynamic_task_credit_keeps_scientific_support_separate_from_earned_work(tmp_path, monkeypatch):
     from gene_annotation_episode.episodic_workflow.root.root_axis_scalars import AXES
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.scoring.received_axis_task_credit',
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.credit.received_axis_task_credit',
         lambda store, context: iter(()))
     with Store(tmp_path / 'state') as store:
         target, = store.create_problem(raw_sequence='A' * 100, molecule='protein')['subject_refs']

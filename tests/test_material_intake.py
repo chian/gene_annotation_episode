@@ -327,8 +327,8 @@ def test_portable_export_keeps_material_members_and_quality_reference_closure(tm
 
 
 def test_unbound_cli_run_reports_missing_binding_without_model_call(tmp_path, monkeypatch, capsys):
-    import gene_annotation_episode.episodic_workflow.root.runtime as runtime
-    monkeypatch.setattr(runtime, "run_workflow", lambda *a, **k: pytest.fail("unbound asset must not pretend to be a solved biological target"))
+    import gene_annotation_episode.episodic_workflow.root.run_execution as run_execution
+    monkeypatch.setattr(run_execution, "run_workflow", lambda *a, **k: pytest.fail("unbound asset must not pretend to be a solved biological target"))
     path = tmp_path / "report.txt"
     path.write_text("reported growth conditions: unknown")
     workspace = tmp_path / "state"

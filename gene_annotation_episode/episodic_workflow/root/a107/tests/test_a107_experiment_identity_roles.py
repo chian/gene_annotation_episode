@@ -79,7 +79,7 @@ def test_original_retained_and_native_roles_remain_exact_without_recalculation(t
             raise AssertionError("historical roles must not be re-extracted or recalculated")
         monkeypatch.setattr(store, "get_artifact", saved_only)
         monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a107.literature_partner_storage.read_partner_inputs", forbidden)
-        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a107.literature_partner_calculations.populate_partner_components", forbidden)
+        monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.a107.library.literature_partner_calculations.populate_partner_components", forbidden)
         store.db.execute("pragma query_only=ON")
         before = store.db.total_changes
         saved = repo.read(original["sheet_ref"])

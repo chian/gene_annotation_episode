@@ -242,7 +242,7 @@ def forbid(*args, **kwargs):
 def disable_common_science(monkeypatch):
     for module, names in {'literature_compiled_assay_inputs': ('read_common_assessment_inputs', '_common_source_estimate', '_common_received_estimate', '_common_covariance'), 'literature_compiled_assay_calculations': ('populate_common_assessment', '_common_scoped_context'), 'literature_product_coupling_inputs': ('read_product_coupling_inputs',), 'literature_product_coupling_calculations': ('populate_product_coupling',), 'literature_kinetic_inputs': ('read_kinetic_inputs',), 'literature_kinetic_calculations': ('populate_kinetic_contrast',)}.items():
         for name in names:
-            monkeypatch.setattr('gene_annotation_episode.' + module + '.' + name, forbid)
+            monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.' + module + '.' + name, forbid)
     monkeypatch.setattr(LiteratureCompiledAssayRepository, 'receive_cells', forbid)
 
 def state_hashes(path):

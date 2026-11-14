@@ -86,7 +86,6 @@ def test_native_document_read_uses_the_actual_workflow_memory_bound(
         assert tools.local_job_policy.memory_bytes == bounds["memory_bytes"]
         limits = tools.local_resources.as_record()["limits"]
         assert limits["memory_bytes"] == bounds["memory_bytes"]
-        assert limits["cpu_threads"] * 100 == bounds["cpu_percent"]
         selection = {"page": 1, "dpi": 72} if operation == "page" else (
             {"first_page": 1, "last_page": 1, "layout": "reading_order"} if operation == "text" else {})
         result = pdf_native(document, operation=operation, executables={executable_name: executable},

@@ -256,7 +256,7 @@ def forbid_read_work(monkeypatch, h):
         "rfam_batch_report_grader": ["calculate_rfam_batch_report_components"],
     }.items():
         for name in names:
-            monkeypatch.setattr("gene_annotation_episode." + module + "." + name, forbidden)
+            monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.library." + module + "." + name, forbidden)
 
 
 def test_native_read_uses_actual_api_receipt_and_three_original_sources(saved, monkeypatch):

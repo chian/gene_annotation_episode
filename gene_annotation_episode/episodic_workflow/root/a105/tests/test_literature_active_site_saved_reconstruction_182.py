@@ -55,7 +55,7 @@ def disable_science(monkeypatch):
     modules = {'literature_active_site_storage': ('read_active_site_inputs', 'populate_active_site_components'), 'literature_active_site_inputs': ('read_active_site_inputs', 'validate_active_site_extraction', 'unit_scale', '_derived_quantity', '_number', '_fraction_number'), 'literature_active_site_calculations': ('populate_active_site_components', 'validate_active_site_extraction', '_operand', '_reason', '_divide', '_multiply', '_subtract', '_point', '_encode', '_project'), 'literature_rate_domains': ('_divide', '_multiply', '_subtract', '_point', '_encode', '_project'), 'literature_rate_native_inputs': ('_number', '_saved_number', '_plain_unit', '_converted'), 'literature_partner_source_fields': ('read_source_number', 'convert_source_number')}
     for module, names in modules.items():
         for name in names:
-            monkeypatch.setattr(f'gene_annotation_episode.{module}.{name}', forbidden)
+            monkeypatch.setattr(f'gene_annotation_episode.episodic_workflow.root.a105.library.{module}.{name}', forbidden)
 
 def saved_artifacts_only(monkeypatch, store):
     allowed = {row[field] for row in store.list('source') if row['origin'] == 'tool' for field in ('artifact_ref', 'request_ref')}

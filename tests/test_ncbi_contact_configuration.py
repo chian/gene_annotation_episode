@@ -50,7 +50,7 @@ def test_fresh_registry_freezes_contact_for_both_api_ports_and_worker_reopening(
     original = deepcopy(configuration)
     with Store(tmp_path/"workspace") as store:
         store.create_problem(raw_sequence="MACDEFGH", molecule="protein")
-        tools = build_tools(store, configuration)
+        tools = build_tools(store, configuration, run_directory=tmp_path/"run")
         saved = json.loads(json.dumps(tools.reconstruction_configuration))
         assert configuration == original
         assert tools.clients.ncbi_email == EMAIL
@@ -61,13 +61,13 @@ def test_fresh_registry_freezes_contact_for_both_api_ports_and_worker_reopening(
     save_ncbi_contact("new-default@example.invalid")
     monkeypatch.setenv("NCBI_EMAIL", "different-worker@example.invalid")
     with Store(tmp_path/"workspace") as store:
-        reopened = build_tools(store, saved)
+        reopened = build_tools(store, saved, run_directory=tmp_path/"run")
         assert reopened.clients.ncbi_email == EMAIL
         service = NCBIBlastService(reopened)
         assert service.client.ncbi_email == EMAIL
         assert all(row["configuration"]["ncbi_contact_configured"]
                    for row in service.capabilities())
-        absent = build_tools(store, {"public": {"ncbi_email": None}})
+        absent = build_tools(store, {"public": {"ncbi_email": None}}, run_directory=tmp_path/"run")
         assert absent.clients.ncbi_email is None
         assert absent.reconstruction_configuration["public"]["ncbi_email"] is None
 
@@ -119,7 +119,7 @@ def test_persisted_contact_and_tool_identity_reach_actual_installed_http_request
     monkeypatch.setattr(acquisition.subprocess, "run", in_process_worker)
     with Store(tmp_path/"workspace") as store:
         subject = store.create_problem(raw_sequence="MACDEFGH", molecule="protein")["subject_refs"][0]
-        tools = build_tools(store, {"public": {"provider_access_dir": str(tmp_path/"access")}})
+        tools = build_tools(store, {"public": {"provider_access_dir": str(tmp_path/"access")}}, run_directory=tmp_path/"run")
         request = {"subject_ref": subject, "program": "blastp", "database": "swissprot"}
         if path == "root_tool":
             result = asyncio.run(tools.execute_async("public.blast.search", request))

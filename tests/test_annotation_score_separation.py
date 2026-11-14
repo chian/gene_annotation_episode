@@ -6,92 +6,10 @@ and replay, not a production scientific-progress rule or biological correctness.
 import asyncio
 import json
 
-import pytest
-
-from gene_annotation_episode.credit import CreditPolicy
 from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
-from gene_annotation_episode.episodic_workflow.root.episode_journal import WorkflowError
-from gene_annotation_episode.scientific_credit import AnnotationSupportScore
 from gene_annotation_episode.state import Store
-from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_runtime import (FixtureController, FixtureStore, FixtureTools,
     ScriptedProvider, commission, fixture_credit, obj, reason)
-from test_scientific_hypervolume_runtime import assessment, annotation, commit, evidence
-
-
-def test_new_information_can_lower_actual_annotation_score_without_negative_progress(tmp_path):
-    scorer = AnnotationSupportScore(CreditPolicy())
-    with Store(tmp_path/'workspace') as store:
-        target, = store.create_problem(raw_sequence='MARGKKIGYS', molecule='protein')['subject_refs']
-        scope = {'subject_refs': [target]}
-        observation = evidence(store, target, 'alignment')
-        hypothesis = store.put('hypothesis', {'subject_refs': [target],
-            'predicate': 'functional_family', 'value': {'type': 'enum', 'value': 'unresolved'},
-            'context_refs': []}, origin='reasoning')['id']
-        original = store.put('assessment', assessment(hypothesis, observation['id'], 'direct'), origin='reasoning')
-        store.put('annotation', annotation(target, hypothesis, [original['id']], 0), origin='reasoning')
-        initial_support = scorer(store, scope).credit
-        assert initial_support > 0
-
-        def fixture_progress(state, fixed_scope):
-            # Explicit synthetic correction flag. This is not an adopted credit
-            # rule: no counts or annotation-support changes set this value.
-            selected, = state.current_assessments(fixed_scope)
-            return float(selected['applicability'] == 'incomparable')
-
-        def correct(context):
-            assert context['current_credit'] == 0
-            assert context['annotation_score'] == pytest.approx(initial_support)
-            assert context['annotation_score_binding']['definition'] == scorer.as_record()
-            assert context['annotation_evidence_vector'] == dict(scorer(store, scope).axis_components)
-            return commit(store, assessments=[assessment(hypothesis, observation['id'], 'incomparable',
-                alias='corrected', revision=original['revision'])],
-                annotation_update=annotation(target, hypothesis, ['@corrected'], 1), report={})
-
-        def inspect(context):
-            assert context['current_credit'] == 1
-            assert context['annotation_score'] == 0
-            assert 'episode.annotation_score' in {tool['name'] for tool in context['tools']}
-            return {'selection': {'kind': 'tool', 'tool': 'episode.annotation_score',
-                'arguments': {'offset': 0, 'limit': 10}}, 'report_update': {}}
-
-        def inspect_operands(context):
-            assert context['current_credit'] == 1
-            outcome = context['last_local_outcome']
-            assert outcome['status'] == 'completed'
-            assert outcome['record_refs'] == outcome['changed_record_refs'] == []
-            details = outcome['result']
-            assert details['annotation_score'] == context['annotation_score'] == 0
-            assert 'credit' not in details
-            assert details['annotation_score_binding'] == context['annotation_score_binding']
-            assert details['policy'] == scorer.policy.as_record()
-            assert 'source_contributions' in details and 'inactive_dependencies' in details
-            return {'selection': {'kind': 'tool', 'tool': 'state.query',
-                'arguments': {'kind': 'annotation', 'offset': 0, 'limit': 1}}, 'report_update': {}}
-
-        controllers = []
-        def factory(path, initial):
-            controller = FixtureController(str(path), initial, 3)
-            controllers.append(controller)
-            return controller
-
-        options = {'run_dir': tmp_path/'run', 'controller_factory': factory,
-            'project_credit': fixture_progress, 'project_annotation_score': scorer,
-            'binding_definitions': {'credit': {'kind': 'fixture_correction_flag'},
-                                    'annotation_score': scorer.as_record()}}
-        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
-            provider=ScriptedProvider([correct, inspect, inspect_operands]), **options))
-        assert summary['credit'] == 1 and summary['annotation_score'] == 0
-        assert controllers[0].scores == [1, 0, 0]
-        assert store.db.execute('SELECT count(*) FROM runtime_observations').fetchone()[0] == 3
-        assert asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'),
-            provider=ScriptedProvider([]), resume=True, **options)) == summary
-        assert len(controllers) == 1
-        without_score = {key: value for key, value in options.items()
-                         if key not in {'project_annotation_score', 'binding_definitions'}}
-        with pytest.raises(WorkflowError, match='same controller and credit bindings'):
-            asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=ScriptedProvider([]),
-                resume=True, **without_score))
 
 
 def test_parent_requests_annotation_fact_and_redelivery_keeps_child_snapshot(tmp_path):

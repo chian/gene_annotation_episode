@@ -12,7 +12,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
 from gene_annotation_episode.episodic_workflow.root.method_loop.identities import EpisodeRef
 from gene_annotation_episode.episodic_workflow.root.communication import plain
-from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episodic_workflow.root.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical
@@ -201,10 +201,13 @@ def test_input_authority_does_not_reopen_inputs_or_install_receipts(f,monkeypatc
         path.unlink() if state=='missing' else path.write_bytes(b'changed')
     before=list(f.store.db.iterdump())
     def forbidden(*a,**k): raise AssertionError('Authority opened science or mutated state')
-    for name in ('get_artifact','put','artifact'): monkeypatch.setattr(f.store,name,forbidden)
-    for name in ('read_bytes','read_text','stat','lstat','open','resolve'): monkeypatch.setattr(Path,name,forbidden)
-    for name in ('__init__','bind','receive'): monkeypatch.setattr(EpisodeReceipts,name,forbidden)
-    assert validate(f,assignment)==f.refs
+    # The class-level Path guards are undone before pytest reports the outcome.
+    with monkeypatch.context() as patch:
+        for name in ('get_artifact','put','artifact'): patch.setattr(f.store,name,forbidden)
+        for name in ('read_bytes','read_text','stat','lstat','open','resolve'): patch.setattr(Path,name,forbidden)
+        for name in ('__init__','bind','receive'): patch.setattr(EpisodeReceipts,name,forbidden)
+        result=validate(f,assignment)
+    assert result==f.refs
     assert list(f.store.db.iterdump())==before
 
 

@@ -93,7 +93,7 @@ class ReportHarness(Harness):
         self.journal, self.receipts = Journal(store, self.run_id), EpisodeReceipts(store, self.run_id)
         self.tools = ToolRegistry(store, clients=self.client)
         self.api = APIServiceExecution(store, run_id=self.run_id, directory=directory,
-            configuration={"rfam": {"kind": "api", "service": "rfam_batch", "timeout": 90}},
+            configuration={"rfam": {"kind": "api", "service": "rfam_batch"}},
             tool_registry=self.tools, handoff_unit=3, acquired_record_unit=2)
         self.api.services["rfam"].client = self.client
         self.boundary = RfamBatchReturns(self.api)

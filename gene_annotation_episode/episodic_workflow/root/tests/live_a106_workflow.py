@@ -53,8 +53,7 @@ def evaluation_tool_configuration(run, *, resume=False):
     bounds = active_budget()["environment_bounds"]
     config = {"public": {"provider_access_dir": str(run / "provider-access")},
         "local_jobs": {"memory_bytes": bounds["memory_bytes"]},
-        "local_resources": {"cpu_threads": bounds["cpu_percent"] // 100,
-            "memory_bytes": bounds["memory_bytes"]},
+        "local_resources": {"memory_bytes": bounds["memory_bytes"]},
         "local_tools": {"minimap2_cache_dir": str(run / "cache/minimap2")}}
     for name in ("pdfinfo", "pdftotext", "pdftoppm"):
         executable = shutil.which(name)
@@ -131,7 +130,7 @@ def main():
 
     async def execute():
         with Store(run / "state") as store:
-            tools = build_tools(store, config)
+            tools = build_tools(store, config, run_directory=run / "workflow")
             bindings = [partial(LiteratureEpisodes, **flags)]
             if execution_bytes is not None:
                 bindings.append(execution_factory(json.loads(execution_bytes), store=store,

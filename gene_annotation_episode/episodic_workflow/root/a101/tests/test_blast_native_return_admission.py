@@ -177,9 +177,9 @@ def no_scientific_work(monkeypatch):
     for module, names in (
         ('native_blast_results', ['capture_local_bundle', 'prepare_native_blast_grading',
                                     'publish_selected_native_blast_rows']),
-        ('blast_pairwise_results', ['populate_blast_pairwise_sheet', 'calculate_blast_pairwise_components'])):
+        ('library.blast_pairwise_results', ['populate_blast_pairwise_sheet', 'calculate_blast_pairwise_components'])):
         for name in names:
-            monkeypatch.setattr('gene_annotation_episode.' + module + '.' + name, forbidden)
+            monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a101.' + module + '.' + name, forbidden)
 
 
 @pytest.fixture

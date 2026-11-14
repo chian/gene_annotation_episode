@@ -241,11 +241,11 @@ def no_native_acquisition_or_grading(monkeypatch):
     monkeypatch.setattr('socket.socket', forbidden)
     monkeypatch.setattr('subprocess.Popen', forbidden)
     for module, functions in (
-        ('native_hmmer_preparation_worker', ['grade_hmmer_preparation', 'recalculate_hmmer_preparation']),
+        ('library.native_hmmer_preparation_worker', ['grade_hmmer_preparation', 'recalculate_hmmer_preparation']),
         ('native_hmmer_preparation_acquisition', ['capture_local_bundle']),
     ):
         for function in functions:
-            monkeypatch.setattr('gene_annotation_episode.' + module + '.' + function, forbidden)
+            monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a101.' + module + '.' + function, forbidden)
 
 
 @pytest.fixture

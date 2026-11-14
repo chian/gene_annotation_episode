@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from method_loop.durable import DurableExecutionError
+from gene_annotation_episode.episodic_workflow.root.method_loop.durable import DurableExecutionError
 from gene_annotation_episode.episodic_workflow.root.episode_application_services import EpisodeApplicationServices, service_binding
 from gene_annotation_episode.episodic_workflow.root.saved_binding_reconstruction import _check_bindings
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow

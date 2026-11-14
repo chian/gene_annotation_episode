@@ -47,7 +47,7 @@ async def run(directory):
         "samples": [{"name": name, "investigation": question} for name, question in SAMPLES]}
     (directory / "verification-request.json").write_text(canonical(metadata) + "\n")
     with Store(directory / "isolated-state") as store:
-        actual = build_tools(store)
+        actual = build_tools(store, run_directory=directory / "tool-run")
         library = ScientificToolLibrary.freeze(directory / "actual-tool-map", catalog=actual.catalog())
         (directory / "actual-map-record.json").write_text(canonical(library.as_record()) + "\n")
         results = []

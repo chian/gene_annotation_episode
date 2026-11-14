@@ -5,6 +5,7 @@ import json
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root import runtime
+from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from test_runtime import FixtureController, ScriptedProvider, obj, setup, tool
 
 
@@ -46,11 +47,11 @@ def test_publication_page_preserves_duplicates_status_and_reads_no_archived_body
         def execute(self, *a, **k): return Cursor(original_db.execute(*a, **k))
         def __getattr__(self, name): return getattr(original_db, name)
     store.db = workflow.journal.db = Database()
-    original_loads = runtime.json.loads
+    original_loads = json.loads
     def no_body(text, *args, **kwargs):
         assert marker not in text
         return original_loads(text, *args, **kwargs)
-    monkeypatch.setattr(runtime.json, "loads", no_body)
+    monkeypatch.setattr(json, "loads", no_body)
     # preview zero reuses the ordinary positive page default, not a new limit.
     args = {"view": "publications", "decision_index": 0}
     pages = []
@@ -174,7 +175,7 @@ def test_actual_all_failed_read_batch_bounds_repeated_feedback_but_observes_only
         responses = [{"selection": {"kind": "tool", "tool": "reads.align", "arguments": args}, "report_update": {}},
             {"selection": {"kind": "tool", "tool": "state.query", "arguments": {"refs": [a["id"]]}}, "report_update": {}}]
         provider = ScriptedProvider(responses)
-        summary = asyncio.run(runtime.run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
+        summary = asyncio.run(run_workflow(store, ToolRegistry(store, run_directory=store.path / 'tool-run'), provider=provider,
             run_dir=tmp_path / "run", restoration_settings={"preview_size": 1},
             controller_factory=lambda path, initial: FixtureController(str(path), initial, 1)))
         context = provider.contexts[1]

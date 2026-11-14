@@ -19,7 +19,7 @@ and the remaining time rescaled by that ratio, so whoever is waiting knows
 when to come back and which unit is overdue. Expectations never stop a test.
 
 Usage (through the launcher):
-    python tools/run_tests_by_home.py --run-dir runs/<run> --expect <table> [--per-file] [--match <prefix>...] [--units-file <list>] [--shard K/N]
+    python tools/run_tests_by_home.py --run-dir runs/<run> --expect <table> [--per-file] [--match <prefix>...] [--units-file <list>] [--exclude <unit>...] [--shard K/N]
 """
 from __future__ import annotations
 
@@ -55,6 +55,7 @@ def main() -> int:
     parser.add_argument("--per-file", action="store_true")
     parser.add_argument("--match", nargs="+")
     parser.add_argument("--units-file", help="run exactly the units listed in this file, one path per line, in that order")
+    parser.add_argument("--exclude", nargs="+", default=[], help="unit paths to leave out, for units covered by another run")
     parser.add_argument("--shard", default="0/1", help="K/N: take every Nth unit starting at K")
     arguments = parser.parse_args()
     run_dir = (REPO / arguments.run_dir).resolve()
@@ -77,6 +78,7 @@ def main() -> int:
         if arguments.match and not any(relative.startswith(prefix) for prefix in arguments.match):
             continue
         units.extend(sorted(directory.glob("test_*.py")) if arguments.per_file else [directory])
+    units = [unit for unit in units if str(unit.relative_to(REPO)) not in set(arguments.exclude)]
     shard, shards = (int(part) for part in arguments.shard.split("/"))
     selected = [(index, unit, str(unit.relative_to(REPO))) for index, unit in enumerate(units) if index % shards == shard]
     with open(REPO / arguments.expect, newline="") as handle:

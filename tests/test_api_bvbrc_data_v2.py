@@ -16,7 +16,7 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 import pytest
 
-from gene_annotation_episode.acquisition import SourceSnapshot
+from gene_annotation_episode.episodic_workflow.root.a102.acquisition import SourceSnapshot
 from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import (
     BVBRCDataService, DATA_QUERY_OPERATION, DATA_RESULT_OPERATION,
     DEFAULT_BASE_URL, EMPTY_ARGUMENTS, QUERY_OPERATION, RESULT_OPERATION,
@@ -28,7 +28,7 @@ from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_fields im
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_publication import requested_projection_failures
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query import encode_native_query
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import json_digest
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a102.domain import ContractError
 from gene_annotation_episode.execution_contracts import digest as host_digest
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings

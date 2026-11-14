@@ -287,7 +287,7 @@ def no_native_acquisition_or_grading(monkeypatch):
         ('infernal_preparation_emission_calculations', ['calculate_cmemit_components']),
     ):
         for function in functions:
-            monkeypatch.setattr('gene_annotation_episode.' + module + '.' + function, forbidden)
+            monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.library.' + module + '.' + function, forbidden)
 
 
 @pytest.fixture

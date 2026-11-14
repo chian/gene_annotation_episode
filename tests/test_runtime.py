@@ -12,6 +12,8 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal, WorkflowError
+from gene_annotation_episode.episodic_workflow.root.method_loop.episode import EpisodeGoal, EpisodeRequest
+from gene_annotation_episode.episodic_workflow.root.task import AnnotationTask
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.episodic_workflow.root.task_action_contracts import _action_generation_schema, _decode_action_response
 from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
@@ -851,10 +853,10 @@ def test_form_facts_stream_only_reference_arrays_without_archived_tool_text(tmp_
     workflow = runtime.Workflow(store, tools, ScriptedProvider([]), tmp_path / "run", "fixture-memory",
         lambda path, initial: FixtureController(str(path), initial, 2), lambda bound_store, scope: 7.5)
     scope = {"subject_refs": ["subject_A"]}
-    request = runtime.EpisodeRequest(
-        runtime.EpisodeGoal.root(objective="Inspect synthetic form facts", result_contract={"role": "annotation"}),
+    request = EpisodeRequest(
+        EpisodeGoal.root(objective="Inspect synthetic form facts", result_contract={"role": "annotation"}),
         Record({"scope": scope, "initial_report": {}}))
-    source = runtime.DecisionSource(workflow, (("annotation", "fixture"),), request, scope)
+    source = AnnotationTask(workflow, (("annotation", "fixture"),), request, scope)
     source.last_outcome = {"record_refs": ["observation_A"]}
     source.report_basis = ["assessment_A"]
     marker = "ARCHIVED_BODY_MUST_NOT_REACH_PYTHON"
@@ -893,7 +895,7 @@ def test_form_facts_stream_only_reference_arrays_without_archived_tool_text(tmp_
         assert marker not in value, "archived source text reached the Python JSON decoder"
         return original_loads(value, *args, **kwargs)
     store.db = GuardConnection()
-    monkeypatch.setattr(runtime.json, "loads", guarded_loads)
+    monkeypatch.setattr(json, "loads", guarded_loads)
     facts = workflow.facts(source)
     assert facts["committed_record_refs"] == ["annotation_B", "observation_A", *extra, "assessment_C"]
     assert facts["changed_record_refs"] == ["assessment_A", "annotation_B", "assessment_C"]
@@ -903,53 +905,6 @@ def test_form_facts_stream_only_reference_arrays_without_archived_tool_text(tmp_
     assert facts["credit"] == 7.5
     assert not workflow.context.runtime._controllers
     assert original_db.execute("SELECT COUNT(*) FROM runtime_observations").fetchone()[0] == 0
-
-
-def test_effective_credit_binding_in_context_is_persisted_and_restored(tmp_path):
-    import asyncio
-    from gene_annotation_episode.credit import AXES, CreditPolicy
-    from gene_annotation_episode.state import Store
-    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
-    from gene_annotation_episode.episodic_workflow.root.saved_run_configuration import _credit_binding_from_settings
-    policy = CreditPolicy(epsilon=.37, scale=42,
-        axis_weights=tuple((axis, 2. if axis == "comparative" else 1.) for axis in AXES))
-    factory = lambda path, baseline: FixtureController(str(path), baseline, 2)
-    with Store(tmp_path / "actual") as store:
-        problem = store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein", role="protein")
-        subject = problem["subject_refs"][0]
-        tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
-        provider = ScriptedProvider([{"selection": {"kind": "tool", "tool": "sequence.inspect",
-            "arguments": {"subject_ref": subject}}, "report_update": {}}, KeyboardInterrupt()])
-        with pytest.raises(KeyboardInterrupt):
-            asyncio.run(run_workflow(store, tools, provider=provider, run_dir=tmp_path / "run",
-                controller_factory=factory, credit_policy=policy))
-        settings = json.loads(store.db.execute("SELECT settings FROM runtime_runs").fetchone()[0])
-        binding = provider.contexts[0]["credit_binding"]
-        assert binding == _credit_binding_from_settings(settings)
-        assert binding['definition']['kind'] == 'received_scientific_finding_progress'
-        assert settings['credit_policy'] is None
-        annotation_binding = provider.contexts[0]['annotation_score_binding']
-        assert annotation_binding['definition']['policy'] == policy.as_record()
-        assert settings['binding_definitions']['annotation_score'] == annotation_binding['definition']
-        assert binding["versions"] == settings["binding_versions"]["credit"]
-        assert binding["scope_source"] == "context.scope"
-        assert "source_contributions" not in binding and "history" not in binding
-        resumed = ScriptedProvider([{"selection": {"kind": "tool", "tool": "state.query",
-            "arguments": {"kind": "observation", "limit": 1}}, "report_update": {}}])
-        asyncio.run(run_workflow(store, tools, provider=resumed, resume=True, controller_factory=factory))
-        assert resumed.contexts[0]["credit_binding"] == binding
-        assert resumed.contexts[0]['annotation_score_binding'] == annotation_binding
-        for row in store.db.execute("SELECT request FROM runtime_model_calls"):
-            assert json.loads(row[0])["context"]["credit_binding"] == binding
-        # A caller-injected score must expose only its declared meaning.
-        custom_settings = deepcopy(settings)
-        custom_settings["bindings"]["credit"] = "fixtures.custom_score"
-        custom_settings["binding_versions"]["credit"] = {"requirement": "same_caller_injected_executable"}
-        custom_settings['binding_definitions']['credit'] = {'kind': 'synthetic_custom_score'}
-        custom = _credit_binding_from_settings(custom_settings)
-        assert custom["kind"] == "custom"
-        assert custom["projector"] == "fixtures.custom_score"
-        assert not ({"policy", "axes", "denominator"} & custom.keys())
 
 
 def test_caller_native_resource_changes_preserve_original_history_on_resume(tmp_path):

@@ -114,7 +114,7 @@ def main():
                     'scripted_model_decisions': False, 'targeted_tests': False,
                     'database_focus': args.database_focus,
                 }, indent=2) + '\n')
-            result = await run_workflow(store, build_tools(store, config),
+            result = await run_workflow(store, build_tools(store, config, run_directory=run / 'workflow'),
                 run_dir=run / 'workflow', resume=args.resume, goal=goal,
                 episode_binding_factories=(partial(LiteratureEpisodes, **flags),),
                 controller_factory=controller,

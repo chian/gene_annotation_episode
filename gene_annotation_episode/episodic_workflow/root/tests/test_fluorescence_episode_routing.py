@@ -517,7 +517,7 @@ def progress(tmp_path, backend, monkeypatch):
         monkeypatch.setattr(store, 'get', lambda ref: source if ref == 'controlled-original-handoff' else original_get(ref))
         # The practical receipt reader is the controlled lower authority port;
         # saved resource/attempt identity and live observe/read adapters run.
-        monkeypatch.setattr(reader.receipts, 'read', lambda *_: deepcopy(body))
+        monkeypatch.setattr(reader.receipts, 'read', lambda *_, historical=False: deepcopy(body))
         yield reader, state, execution, body, source, scope, store
 
 

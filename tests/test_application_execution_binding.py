@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from method_loop.durable import DurableExecutionError, canonical, content_digest
+from gene_annotation_episode.episodic_workflow.root.method_loop.durable import DurableExecutionError, canonical, content_digest
 from gene_annotation_episode.episodic_workflow.root import application_execution_binding as application
 from gene_annotation_episode.episodic_workflow.root.default_scientific_binding import VERSION as DEFAULT_VERSION
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
@@ -306,13 +306,13 @@ def test_build_tools_copies_only_actual_configuration_operands_without_changing_
     monkeypatch.setenv('XDG_CONFIG_HOME', str(tmp_path/'user-config'))
     monkeypatch.delenv('NCBI_EMAIL', raising=False)
     configuration = {'local_tools': {'cmsearch_cpu': 2},
-        'public': {'transport_timeout_seconds': 73, 'ncbi_email': None}, 'caller_metadata': {'selection': ['actual']}}
+        'public': {'ncbi_email': None}, 'caller_metadata': {'selection': ['actual']}}
     with Store(tmp_path/'workspace') as store:
         ordinary = ToolRegistry(store, run_directory=store.path / 'tool-run', cmsearch_cpu=2)
-        configured = build_tools(store, configuration)
+        configured = build_tools(store, configuration, run_directory=store.path / 'tool-run')
         assert configured.resource_binding() == ordinary.resource_binding()
         assert not hasattr(ordinary, 'reconstruction_configuration')
         assert configured.reconstruction_configuration == configuration
         configuration['caller_metadata']['selection'].append('later')
         assert configured.reconstruction_configuration['caller_metadata']['selection'] == ['actual']
-        assert build_tools(store).reconstruction_configuration == {'public': {'ncbi_email': None}}
+        assert build_tools(store, run_directory=store.path / 'tool-run').reconstruction_configuration == {'public': {'ncbi_email': None}}
