@@ -14,6 +14,11 @@ from gene_annotation_episode.episodic_workflow.root.a107 import a107_qualificati
 from gene_annotation_episode.episodic_workflow.root.a110 import a110_qualification as chemistry
 from gene_annotation_episode.episodic_workflow.root.a110 import a110_experimental_qualification as experimental
 from gene_annotation_episode.episodic_workflow.root.library import component_source_identity as identity
+from gene_annotation_episode.episodic_workflow.root.a107 import component_source_identity as a107_identity
+from gene_annotation_episode.episodic_workflow.root.a110 import component_source_identity as a110_identity
+# use() and calculate() exist only in the two axis copies; the shared library copy holds TOOLS and catalog.
+AXIS_IDENTITY = {"A107": a107_identity, "A110": a110_identity}
+from gene_annotation_episode.episodic_workflow.root.a107.domain import ContractError as A107ContractError  # the class a107 raises
 from gene_annotation_episode.episodic_workflow.root.a107.a107_expression_components import calculate as expression_components
 from gene_annotation_episode.episodic_workflow.root.a110.a110_chemical_accounting import calculate as chemical_components
 from gene_annotation_episode.episodic_workflow.root.communication import form_with_facts, plain
@@ -162,7 +167,7 @@ def test_identity_requires_original_role_and_native_sequence_witness(tmp_path, a
         assert store.get(case['role']) == original_role
         assert original_role['sequence_ref'] is None and original_role['molecule'] is None
         narrowed = {ref, case['role'], case['experiment'], arguments['observation_ref']}
-        use, used_refs = identity.use(store, ref, case['role'], narrowed, experiment_refs=[case['experiment']])
+        use, used_refs = AXIS_IDENTITY[axis].use(store, ref, case['role'], narrowed, experiment_refs=[case['experiment']])
         assert use['required_record_refs'] == [arguments['actual_ref']]
         assert arguments['actual_ref'] not in used_refs
         assert 'source_identity_endpoints_not_received' in use['missing']
@@ -253,8 +258,8 @@ def test_unreceived_declaration_source_cannot_be_privately_opened(tmp_path, monk
             assert ref != source_ref, 'unreceived source was privately opened'
             return original(ref, *args, **kwargs)
         monkeypatch.setattr(store, 'get', received_only)
-        with pytest.raises(ContractError, match='source_not_received'):
-            identity.calculate(store, arguments, case['context'], case['known'])
+        with pytest.raises(A107ContractError, match='source_not_received'):
+            a107_identity.calculate(store, arguments, case['context'], case['known'])
 
 
 @pytest.mark.parametrize('finding_experiment', [False, True])
@@ -354,7 +359,7 @@ def test_chemical_accounting_keeps_the_source_identity_experiment_link_separate(
     with case['store'] as store:
         arguments = declaration(case)
         identity_ref, _, _ = qualify(case, identity.TOOLS['A110'], arguments)
-        document = json.loads((FIXTURES.parent / 'a110_evaluation/declared-chemical-panel.json').read_text())
+        document = json.loads((Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures/a110_evaluation/declared-chemical-panel.json').read_text())
         native = chemical_components(document, {'reaction_ids': ['r01'],
             'include_declared_pathway': False, 'include_reported_constraints': False})
         accounting = publish_a110(store, RESULT_PROVIDER, {'axis': 'A110',

@@ -443,7 +443,7 @@ def forbid_saved_science(monkeypatch):
     def forbidden(*a, **k):
         raise AssertionError('saved host projection entered numerical verification')
     for name in ('mauve_v4_calculation_contracts', 'mauve_backbone_contracts', 'xmfa_calculation_contracts'):
-        module = importlib.import_module('gene_annotation_episode.' + name)
+        module = importlib.import_module('gene_annotation_episode.episodic_workflow.root.library.' + name)
         for attr in ('union_intervals', 'interval_length', 'multiplicity_bases', 'complement_intervals',
                      '_cell', '_coverage_counts', '_union'):
             if hasattr(module, attr):
@@ -489,7 +489,7 @@ def test_explicit_saved_recalculation_changes_denominator_without_acquisition(dr
     def forbidden(*a, **k):
         raise AssertionError('saved recalculation reacquired or reparsed data')
     for name in ('mauve_v4_formats', 'mauve_backbone_formats', 'xmfa_formats'):
-        module = importlib.import_module('gene_annotation_episode.' + name)
+        module = importlib.import_module('gene_annotation_episode.episodic_workflow.root.library.' + name)
         for attr in ('parse_mauve_v4', 'parse_mauve_backbone', 'parse_mauve_bbcols', 'parse_mauve_xmfa'):
             if hasattr(module, attr):
                 monkeypatch.setattr(module, attr, forbidden)

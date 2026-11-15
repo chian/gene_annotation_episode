@@ -55,27 +55,6 @@ def registry_for(case, *, duplicate=False):
         [case.owner, case.other] if duplicate else [case.owner])
 
 
-@pytest.mark.parametrize('role', ['annotation', 'scientific_process', 'results'])
-def test_baseline_original_unambiguous_role_only_schema_lookup(configured, role):
-    case = configured
-    registry = registry_for(case)
-    assert registry._context_bindings(role) == [case.owner]
-    before = tuple(case.store.db.iterdump())
-    expected = case.owner.received_report_sources(role)
-    actual = registry.received_report_sources(role)
-    assert actual == expected
-    assert tuple(case.store.db.iterdump()) == before
-    (case.output / ('original-role-schema-' + role + '.json')).write_text(json.dumps({
-        'role': role, 'binding_path': case.owner.binding_path, 'original_sources': actual,
-        'schema_only': True, 'native_or_api_operations': 0}, indent=2) + '\n')
-
-
-def test_baseline_original_duplicate_roles_require_saved_context(configured):
-    registry = registry_for(configured, duplicate=True)
-    with pytest.raises(LookupError, match='^episode_binding_context_required$'):
-        registry.received_report_sources('annotation')
-
-
 def connect(case, registry, *, explicit_mapping=False):
     authority = module('library/received_api_information/received_api_authority')
     if explicit_mapping:

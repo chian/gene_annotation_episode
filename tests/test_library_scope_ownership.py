@@ -57,6 +57,8 @@ def current_account(store, tools, subject):
 def resolver(store, scope):
     workflow = Workflow.__new__(Workflow)
     workflow.store = store
+    for name in ("tools", "native_event_information", "scientific_provenance", "progress_provider", "job_episodes"):
+        setattr(workflow, name, None)  # collaborators this double does not have
     return workflow.resolver(scope)
 
 

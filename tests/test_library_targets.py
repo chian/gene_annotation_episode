@@ -257,6 +257,8 @@ def test_parent_form_namespaces_restrict_read_and_selection_references_to_scope(
         broader = work(tools, "library.select", {"library_ref": target["id"], "ordinal_ranges": [{"start": 0, "end": 2}]})
         workflow = Workflow.__new__(Workflow)
         workflow.store = store
+        for name in ("tools", "native_event_information", "scientific_provenance", "progress_provider", "job_episodes"):
+            setattr(workflow, name, None)  # collaborators this double does not have
         resolve = workflow.resolver(chosen["scope"])
         assert resolve(a["id"], "read_subject") and resolve(a["id"], "subject")
         assert not resolve(a["id"], "input") and not resolve(b["id"], "read_subject")
@@ -290,6 +292,8 @@ def test_existing_broad_interpretation_visible_on_child_overlap_without_broader_
         assert store.count("annotation", narrow, current=True) == 1
         workflow = Workflow.__new__(Workflow)
         workflow.store = store
+        for name in ("tools", "native_event_information", "scientific_provenance", "progress_provider", "job_episodes"):
+            setattr(workflow, name, None)  # collaborators this double does not have
         resolve = workflow.resolver(narrow)
         assert resolve(annotation["id"], "annotation") and resolve(assessment["id"], "assessment")
         assert resolve(a["id"], "subject") and not resolve(b["id"], "subject")

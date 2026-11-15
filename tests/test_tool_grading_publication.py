@@ -318,9 +318,9 @@ def test_source_grading_custody_rejects_cross_source_identity(tmp_path, mismatch
 
 
 @pytest.mark.parametrize("operation,module,facade", [
-    ("sequence.align", "biopython_pairwise_grader", "grade_biopython_pairwise"),
-    ("genes.predict", "prodigal_grader", "grade_prodigal"),
-    ("sequence.inspect", "sequence_composition_grader", "grade_sequence_composition"),
+    ("sequence.align", "gene_annotation_episode.episodic_workflow.root.library.biopython_pairwise_grader", "grade_biopython_pairwise"),
+    ("genes.predict", "gene_annotation_episode.prodigal_grader", "grade_prodigal"),
+    ("sequence.inspect", "gene_annotation_episode.episodic_workflow.root.library.sequence_composition_grader", "grade_sequence_composition"),
 ])
 def test_grader_rejection_preserves_native_work_and_explicit_failure_without_zero_scores(
         tmp_path, monkeypatch, operation, module, facade):
@@ -328,7 +328,7 @@ def test_grader_rejection_preserves_native_work_and_explicit_failure_without_zer
     code = "synthetic_malformed_grader_input"
     def reject(*args, **kwargs):
         raise ValueError(code)
-    monkeypatch.setattr(importlib.import_module("gene_annotation_episode." + module), facade, reject)
+    monkeypatch.setattr(importlib.import_module(module), facade, reject)
     with Store(tmp_path / "state") as store:
         target, = store.create_problem(raw_sequence=gene_input(), molecule="dna")["subject_refs"]
         args = ({"query_ref": target, "reference_ref": target, "molecule": "dna", "mode": "global"}
@@ -359,7 +359,7 @@ def test_grader_rejection_preserves_native_work_and_explicit_failure_without_zer
 
 
 def test_read_batch_grading_failure_preserves_valid_neighbor_and_member_identity(tmp_path, monkeypatch):
-    from gene_annotation_episode import sequence_composition_grader as module
+    from gene_annotation_episode.episodic_workflow.root.library import sequence_composition_grader as module
     original = module.grade_sequence_composition
     def reject_low_quality(sequence, **kwargs):
         if kwargs["quality"] == "!" * len(sequence):

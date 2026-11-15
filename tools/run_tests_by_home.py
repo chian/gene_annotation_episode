@@ -39,10 +39,18 @@ TREE = REPO / "gene_annotation_episode" / "episodic_workflow"
 FIELDS = ("directory", "tests", "passed", "failed", "errors", "skipped", "seconds", "exit_code")
 
 
+def test_files(directory: Path) -> list[Path]:
+    """Test files of one tests directory, including helper subdirectories such as tests/proteome_partner."""
+    return sorted(
+        path for path in directory.rglob("test_*.py")
+        if not {"fixtures", "__pycache__"} & set(path.relative_to(directory).parts)
+    )
+
+
 def test_directories() -> list[Path]:
     found = [
         path for path in TREE.rglob("tests")
-        if path.is_dir() and "fixtures" not in path.parts and any(path.glob("test_*.py"))
+        if path.is_dir() and "fixtures" not in path.parts and test_files(path)
     ]
     found.sort(key=lambda path: (-len(path.parts), str(path)))
     return found + [REPO / "tests"]
@@ -77,7 +85,7 @@ def main() -> int:
         relative = str(directory.relative_to(REPO))
         if arguments.match and not any(relative.startswith(prefix) for prefix in arguments.match):
             continue
-        units.extend(sorted(directory.glob("test_*.py")) if arguments.per_file else [directory])
+        units.extend(test_files(directory) if arguments.per_file else [directory])
     units = [unit for unit in units if str(unit.relative_to(REPO)) not in set(arguments.exclude)]
     shard, shards = (int(part) for part in arguments.shard.split("/"))
     selected = [(index, unit, str(unit.relative_to(REPO))) for index, unit in enumerate(units) if index % shards == shard]

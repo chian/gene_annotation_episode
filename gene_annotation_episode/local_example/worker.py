@@ -5,7 +5,7 @@ import sys
 import time
 
 from .service import JobStore, canonical, now
-from ..execution_timing import _process_identity
+from ..episodic_workflow.root.execution_timing import _process_identity
 from ..local_jobs import LocalJobPolicy, run_local_job
 from ..read_mapping import file_digest
 

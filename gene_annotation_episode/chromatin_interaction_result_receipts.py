@@ -1079,7 +1079,7 @@ class ChromatinInteractionResultReceipts:
         require(row["result"] is not None)
         actual = json.loads(row["result"])
         if "pending_work_after_action" in actual:
-            from .episodic_workflow.root.waiting import validate_pending
+            from .episodic_workflow.root.wait_events import validate_pending
             validate_pending(actual.pop("pending_work_after_action"))
         require(same(actual, outcome(receipt)))
 

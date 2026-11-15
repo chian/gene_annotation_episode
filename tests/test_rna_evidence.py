@@ -359,7 +359,7 @@ def test_cli_resource_choice_and_catalog_are_caller_owned(tmp_path, capsys):
     catalog = json.loads(capsys.readouterr().out)
     native = catalog["rna.cmsearch"]["configuration"]
     assert native["executable"] == "/explicit/caller/cmsearch" and native["cpu"] == 3
-    assert native["executable_sha256"] is None and native["work_timeout"] is None
+    assert native["executable_sha256"] is None and "work_timeout" not in native  # the timeout setting no longer exists
     assert native["native_default_settings"]["report_evalue"] == 10
 
 

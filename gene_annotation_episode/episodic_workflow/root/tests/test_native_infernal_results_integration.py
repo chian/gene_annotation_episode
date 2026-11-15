@@ -309,7 +309,11 @@ def run_case(tmp_path, program, *, selectors=None, bind=True, wrong_sequence=Fal
     if incomplete:
         # A fault fixture explicitly yields partial data after its chosen reads.
         # Production completion proof validation remains installed and false.
-        binding = flow.episode_bindings.for_role('results')
+        # The results role has one private binding per parent; this fault
+        # fixture is defined for the results child of the annotation root only.
+        if nested:
+            raise AssertionError('partial-result fixture requires the annotation-owned results child')
+        binding = flow.episode_bindings.for_child((('annotation', 'root'),), 'results')
         original_estimator = binding.practical_estimator
         def partial_estimator(context):
             if context.role != 'results':

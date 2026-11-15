@@ -123,7 +123,9 @@ def test_native_transformation_retains_actual_sheet_numbers_and_original_mapping
 ])
 def test_grading_failure_preserves_native_product_and_exact_partial_replay(
         tmp_path, monkeypatch, operation, family, arguments):
-    module = importlib.import_module("gene_annotation_episode.sequence_" + family + "_grader")
+    # The modules root/tool_scientific_operations.py imports its two graders from.
+    module = importlib.import_module({"translation": "gene_annotation_episode.sequence_translation_grader",
+        "extraction": "gene_annotation_episode.episodic_workflow.root.library.sequence_extraction_grader"}[family])
     def reject(*args, **kwargs):
         raise ValueError("injected_derivation_grading_failure")
     monkeypatch.setattr(module, "grade_" + family, reject)

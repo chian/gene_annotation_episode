@@ -97,6 +97,7 @@ class AdmissionFrame:
         for name in ("store", "run_id", "journal", "receipts"):
             setattr(self.workflow, name, getattr(self, name))
         self.workflow.job_episodes = self.workflow.native_timing_information = None
+        self.workflow.tools = None  # this double has no tool registry
         self.workflow.progress_provider = SimpleNamespace(receive_form=self.progress)
         self.workflow.episode_bindings = SimpleNamespace(received_form_references=self.references_for_form)
 

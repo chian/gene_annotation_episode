@@ -83,7 +83,7 @@ class ProteinStructureReturnOperands:
             and self._equal(json.loads(original["scope"]), context.scope))
         outcome, saved = json.loads(row["result"]), json.loads(original["result"])
         if "pending_work_after_action" in outcome:
-            from .waiting import validate_pending
+            from .wait_events import validate_pending
             validate_pending(outcome.pop("pending_work_after_action"))
         operation_ref = identity("operation", {"key": key, "name": "sequence.align", "arguments": arguments})
         self._require(self._equal(outcome, saved) and saved.get("status") == "completed"

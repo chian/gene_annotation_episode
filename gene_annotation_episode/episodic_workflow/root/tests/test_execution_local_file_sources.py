@@ -24,7 +24,7 @@ from gene_annotation_episode.episodic_workflow.root.communication import (
 )
 from gene_annotation_episode.execution_contracts import canonical
 from gene_annotation_episode.episodic_workflow.root.execution_episodes import ExecutionEpisodes, native_result_operation_catalog
-from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episodic_workflow.root.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episodic_workflow.root.episode_contract_information import (

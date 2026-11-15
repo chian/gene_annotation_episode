@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.method_loop.identities 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.communication import form_with_facts, plain, validate_form
-from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episodic_workflow.root.a101.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.a101.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.a101.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest

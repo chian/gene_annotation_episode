@@ -102,7 +102,7 @@ def test_full_task_and_terse_numeric_views_recur_without_host_ids_or_duplicate_r
 def disable_science(monkeypatch):
     for module, names in {'literature_compiled_assay_storage': ('read_compiled_assay_inputs', 'populate_compiled_assay'), 'literature_compiled_assay_inputs': ('read_compiled_assay_inputs', '_quantity', '_covariance'), 'literature_compiled_assay_calculations': ('populate_compiled_assay', 'populate_corrected_activity'), 'literature_activity_calculations': ('populate_corrected_activity',), 'literature_optical_storage': ('read_optical_rate_operands', 'calculate_nadh_optical_rate'), 'literature_active_site_storage': ('read_active_site_inputs', 'populate_active_site_components'), 'literature_active_site_inputs': ('unit_scale', '_derived_quantity', 'validate_active_site_extraction'), 'literature_calibration_recovery_inputs': ('read_calibration_recovery_inputs',), 'literature_calibration_recovery_calculations': ('populate_calibration_recovery',), 'literature_assay_inputs': ('read_assay_inputs',)}.items():
         for name in names:
-            monkeypatch.setattr('gene_annotation_episode.' + module + '.' + name, forbid)
+            monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.' + module + '.' + name, forbid)
 
 def hashes(path):
     return {str(p.relative_to(path)): hashlib.sha256(p.read_bytes()).hexdigest() for p in path.rglob('*') if p.is_file()}

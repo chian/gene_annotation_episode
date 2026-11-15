@@ -485,7 +485,7 @@ class ExpressionNMFResultReceipts:
         require(row['result'] is not None, 'nmf_completed_result_required')
         actual = json.loads(row['result'])
         if 'pending_work_after_action' in actual:
-            from .waiting import validate_pending
+            from .wait_events import validate_pending
             validate_pending(actual.pop('pending_work_after_action'))
         require(same(actual, outcome(receipt)), 'nmf_completed_result_mismatch')
 

@@ -30,7 +30,7 @@ from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_query imp
 from gene_annotation_episode.episodic_workflow.root.library.bvbrc_data_schema import json_digest
 from gene_annotation_episode.episodic_workflow.root.a102.domain import ContractError
 from gene_annotation_episode.execution_contracts import digest as host_digest
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a102.state import Store
 from gene_annotation_episode.tool_grading_artifacts import source_tool_gradings
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 

@@ -1126,7 +1126,7 @@ class ProteinResultReceipts:
         _require(row["result"] is not None)
         outcome = json.loads(row["result"])
         if "pending_work_after_action" in outcome:
-            from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
+            from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
             validate_pending(outcome.pop("pending_work_after_action"))
         _require(same(outcome, _outcome(receipt)))
 

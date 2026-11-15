@@ -86,7 +86,11 @@ def test_every_current_private_owner_round_trips_with_original_ports(current):
     axis_root = Path(module('episode_composition').__file__).parent
     actual_paths = {str(path.parent.relative_to(axis_root)) for path in axis_root.rglob('episode.py')
                     if 'tests' not in path.parts and path.parent.name != 'method_loop'}
-    assert set(current.catalog) == actual_paths
+    # The annotation root and annotation_improvement homes hold the root task
+    # source and routing functions only: no binding owner, no saved descriptor.
+    function_only_homes = {'.', 'annotation_improvement'}
+    assert function_only_homes <= actual_paths
+    assert set(current.catalog) == actual_paths - function_only_homes
     # The original scientific saved-invocation boundary uses this admission
     # before it can consume an otherwise exactly reconstructed current owner.
     descriptor = current.owners['scientific_process'].as_record()

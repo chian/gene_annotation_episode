@@ -77,7 +77,7 @@ class RnaComparisonResultCustody:
             _require(set(outcome) in (set(expected), {*expected, "pending_work_after_action"})
                 and self.records._equal({key: outcome[key] for key in expected}, expected), "recorded_outcome_mismatch")
             if "pending_work_after_action" in outcome:
-                from gene_annotation_episode.episodic_workflow.root.waiting import validate_pending
+                from gene_annotation_episode.episodic_workflow.root.wait_events import validate_pending
                 validate_pending(outcome["pending_work_after_action"])
         _require(body["original_receipt_keys"] == _original_keys(assignment["selector"])
             and body["calculator_version"] == CALCULATOR_VERSION and type(body["delivery_complete"]) is bool,

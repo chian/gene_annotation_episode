@@ -128,11 +128,11 @@ def test_host_helper_has_exact_read_only_port_and_selected_gap_numbers(gap_case,
     def forbidden(*args, **kwargs):
         pytest.fail("Host HSP validation attempted publication, worker, calculator or execution")
     with monkeypatch.context() as isolated:
-        for target in ("native_blast_result_worker.run", "blast_report_collection.parse_blast_report_collection",
-            "blast_pairwise_results.calculate_blast_pairwise_components",
-            "blast_pairwise_results.populate_blast_pairwise_sheet",
-            "blast_hsp_site_calculators.calculate_blast_hsp_column_components"):
-            isolated.setattr("gene_annotation_episode." + target, forbidden)
+        for target in ("native_blast_result_worker.run", "library.blast_report_collection.parse_blast_report_collection",
+            "library.blast_pairwise_results.calculate_blast_pairwise_components",
+            "library.blast_pairwise_results.populate_blast_pairwise_sheet",
+            "library.blast_hsp_site_calculators.calculate_blast_hsp_column_components"):
+            isolated.setattr("gene_annotation_episode.episodic_workflow.root.a101." + target, forbidden)
         isolated.setattr(case["store"], "put", forbidden)
         isolated.setattr(case["store"], "artifact", forbidden)
         isolated.setattr(socket, "socket", forbidden)

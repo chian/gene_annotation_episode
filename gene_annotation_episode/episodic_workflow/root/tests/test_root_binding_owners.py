@@ -89,7 +89,7 @@ def test_explicit_owner_report_sources_use_only_original_group(root, owner):
         for registry, options in ((expected, {}), (actual, {'owner': owner})):
             with pytest.raises(ValueError, match='received_report_field_conflict:received_report_sources'):
                 registry.received_report_sources('scientific_process', **options)
-    assert actual._report_source_bindings('scientific_process', owner=owner) == list(originals)
+    assert list(actual._report_source_bindings('scientific_process', owner=owner)) == list(originals)
     with pytest.raises(LookupError, match='root_binding_owner_required'):
         actual.received_report_sources('scientific_process')
 

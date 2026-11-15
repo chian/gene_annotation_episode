@@ -642,7 +642,7 @@ def _recorded_molecular_action_details(registry, context, arguments, operation_k
     from .domain import identity
     from .episode_bindings import BindingContext
     from .episodic_workflow.root.episode_return_records import EpisodeReturnRecords
-    from .episodic_workflow.root.waiting import validate_pending
+    from .episodic_workflow.root.wait_events import validate_pending
     prefix = ("somatic_variant_" if tool_name == "detect_and_annotate_somatic_mutations" else "esm_gene_embedding_" if tool_name == "generate_gene_embeddings_with_ESM_models" else
         "protein_phylogeny_" if tool_name == "analyze_protein_phylogeny" else
         "protein_conservation_" if tool_name == "analyze_protein_conservation" else

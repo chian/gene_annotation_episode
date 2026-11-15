@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc import (
     RESULT_OPERATION, SERVICE, request_url,
 )
 from gene_annotation_episode.episodic_workflow.root.a102.domain import ContractError
-from gene_annotation_episode.state import Store
+from gene_annotation_episode.episodic_workflow.root.a102.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
 

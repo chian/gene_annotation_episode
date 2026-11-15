@@ -15,7 +15,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from gene_annotation_episode.acquisition import AcquisitionError, SourceSnapshot
+from gene_annotation_episode.episodic_workflow.root.a102.acquisition import AcquisitionError, SourceSnapshot
 from gene_annotation_episode.episodic_workflow.root.a102 import api_bvbrc_minhash as module
 from gene_annotation_episode.episodic_workflow.root.a102.api_bvbrc_minhash import (
     BVBRCMinhashService, GRADING_SCHEMA, LAUNCH_OPERATIONS, RESULT_OPERATION, SERVICE,

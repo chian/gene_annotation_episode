@@ -26,7 +26,8 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_ma
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_masking_returns import NativeBLASTMaskingReturns
 from gene_annotation_episode.episodic_workflow.root.a101.library.sequence_masking_result_views import FACT_SOURCES, masking_fact_sources
 from gene_annotation_episode.state import Store
-from test_native_blast_masking_invocation import FIXTURES, job_for, pin, plan_for, target_for
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
+from test_native_blast_masking_invocation import FIXTURES, POLICY, job_for, pin, plan_for, target_for
 from test_native_hmmer_preparation_returns import SavedReturns
 
 
@@ -97,6 +98,9 @@ class HostCase(SavedReturns):
         self.store, self.run_id = store, 'invocation615'
         self.journal, self.receipts = Journal(store, self.run_id), EpisodeReceipts(store, self.run_id)
         self.scope = {'subject_refs': store.create_problem(raw_sequence='ACGTACGT', molecule='dna')['subject_refs']}
+        # This generated synthetic custody plan launches real result workers, so it uses the
+        # current worker bound, as test_native_blast_masking_results_616 already does.
+        monkeypatch.setitem(POLICY, 'memory_bytes', ENVIRONMENT_BOUNDS['memory_bytes'])
         self.plan, self.bundle, target = retained_protocol_fixture(tmp_path, program, mode, failure=failure)
         self.native_root = Path(self.plan['attempt_directory'])
         monkeypatch.setattr(acquisition, 'local_blast_masking_plan', lambda *a: deepcopy(self.plan))

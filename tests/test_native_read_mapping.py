@@ -154,6 +154,7 @@ def test_native_pages_parent_form_current_annotation_credit_correction_and_porta
         projected=project_credit(store,details_limit=100)
         assert projected.credit>0 and {row["member_ref"] for row in projected.source_contributions} == {store.get(subject)["member_ref"]}
         workflow=Workflow.__new__(Workflow);workflow.store=store
+        for name in ("tools","native_event_information","scientific_provenance","progress_provider","job_episodes"): setattr(workflow,name,None)  # collaborators this double does not have
         schema={"type":"object","additionalProperties":False,"required":["placements","interpretations","selection"],"properties":{
             "placements":{"type":"array","items":{"type":"string","format":"reference","x-reference-namespace":"observation"}},
             "interpretations":{"type":"array","items":{"type":"string","format":"reference","x-reference-namespace":"annotation"}},
@@ -233,6 +234,7 @@ def test_zero_placement_subset_search_exports_actual_derived_reference_and_custo
         working=store.reasoning_view(child["scope"],limit=100)
         assert summary["id"] in {row["id"] for row in working["observations"]}
         workflow=Workflow.__new__(Workflow);workflow.store=store
+        for name in ("tools","native_event_information","scientific_provenance","progress_provider","job_episodes"): setattr(workflow,name,None)  # collaborators this double does not have
         assert workflow.resolver(child["scope"])(summary["id"],"observation")
         assert project_credit(store).credit == project_credit(store,child["scope"]).credit == 0
         h=store.put("hypothesis",{"subject_refs":[target["id"]],"predicate":"sequence_integrity",

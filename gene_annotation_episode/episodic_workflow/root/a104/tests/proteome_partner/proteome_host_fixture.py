@@ -1,3 +1,4 @@
+import asyncio
 from copy import deepcopy
 from dataclasses import replace
 import hashlib
@@ -8,7 +9,7 @@ from gene_annotation_episode.episodic_workflow.root.a104.library.bvbrc_proteome_
 from gene_annotation_episode.episodic_workflow.root.a104.communication import plain, validate_form
 from gene_annotation_episode.episodic_workflow.root.a104.execution_contracts import canonical, digest
 from gene_annotation_episode.episodic_workflow.root.a104.runtime import TypedReportContract
-from gene_annotation_episode.episodic_workflow.root.a104.tests.proteome_partner.appservice_transport_fixture import CONFIG, metadata
+from gene_annotation_episode.episodic_workflow.root.a104.tests.proteome_partner.appservice_transport_fixture import CONFIG, PREFIX, metadata
 from gene_annotation_episode.episodic_workflow.root.a104.tests.proteome_partner.commissioned_records_fixture import SavedRecords, api_assignment, selector as support_selector
 from gene_annotation_episode.episodic_workflow.root.a104.tests.proteome_partner.appservice_host_fixture import ProductionDriver
 from gene_annotation_episode.episodic_workflow.root.a104.tests.proteome_partner.appservice_input_fixture import NativeClient, receipt_row

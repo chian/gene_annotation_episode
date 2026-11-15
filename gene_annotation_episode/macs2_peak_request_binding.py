@@ -199,7 +199,7 @@ def practical_outcome_view(receipt):
 def match_practical_public_outcome(value, receipt, reference):
     value = deepcopy(plain(value))
     if 'pending_work_after_action' in value:
-        from .episodic_workflow.root.waiting import validate_pending
+        from .episodic_workflow.root.wait_events import validate_pending
         validate_pending(value.pop('pending_work_after_action'))
     _require(canonical(value) == canonical(dict(status='completed', record_refs=[reference],
         changed_record_refs=[reference], result=practical_outcome_view(receipt))), 'public_outcome_conflict')

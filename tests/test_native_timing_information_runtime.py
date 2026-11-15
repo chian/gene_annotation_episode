@@ -10,11 +10,11 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError, validate_closed_schema
 from gene_annotation_episode.domain import ContractError
-from gene_annotation_episode.native_timing_information import (MEASUREMENT_SCHEMA, NativeTimingInformation,
+from gene_annotation_episode.episodic_workflow.root.native_timing_information import (MEASUREMENT_SCHEMA, NativeTimingInformation,
     measurement_fields, read_measurement, validate_native_measurements)
 from gene_annotation_episode.ordinary_execution import OrdinaryExecutionStatistics
 from gene_annotation_episode.run_statistics import RunHistory
-from gene_annotation_episode.resource_estimation import ESTIMATE_SCHEMA, ResourceToolEstimator
+from gene_annotation_episode.episodic_workflow.root.resource_estimation import ESTIMATE_SCHEMA, ResourceToolEstimator
 from gene_annotation_episode.episodic_workflow.root.run_execution import run_workflow
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry

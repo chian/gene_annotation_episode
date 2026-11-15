@@ -55,9 +55,11 @@ class PrivateServices:
             'projectors': 'actual_each_private_owner.project_credit',
             'historical_global_service_claimed': False}
 
-    def __call__(self, store, *, run_id, directory, job_episodes=None,
+    def __call__(self, store, *, run_id, directory, tool_catalog, job_episodes=None,
                  resource_estimator=None, tool_registry=None):
+        # The a104 runtime passes the tool catalogue to every service factory given explicit inputs.
         assert job_episodes is None and resource_estimator is None and tool_registry is not None
+        assert isinstance(tool_catalog, (list, dict))
         owners = [module(home + '/episode').ExecutionEpisode(None,
             **constructor_options(store, Path(directory), run_id, tool_registry)) for home in self.paths]
         projectors = {}

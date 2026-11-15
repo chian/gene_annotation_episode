@@ -72,6 +72,25 @@ def release_gate(path):
         stream.write(b"1")
 
 
+@pytest.fixture(autouse=True)
+def release_held_gates(tmp_path):
+    """A test that fails before its release_gate call must not leave its worker blocked on the gate."""
+    import errno
+    import stat
+    yield
+    for path in tmp_path.iterdir():
+        if not stat.S_ISFIFO(path.lstat().st_mode):
+            continue
+        try:
+            descriptor = os.open(path, os.O_WRONLY | os.O_NONBLOCK)
+        except OSError as error:
+            if error.errno != errno.ENXIO:  # ENXIO: no worker is reading this gate
+                raise
+            continue
+        with os.fdopen(descriptor, "wb", buffering=0) as stream:
+            stream.write(b"1")
+
+
 def returned(store, spec):
     await_event(store, spec["handle"])
     page = store.return_page(spec["parent"]["episode_id"], 0, 10)

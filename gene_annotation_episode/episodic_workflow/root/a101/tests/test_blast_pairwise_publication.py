@@ -25,12 +25,14 @@ from gene_annotation_episode.episodic_workflow.root.a101.native_blast_result_pub
     prepare_native_blast_grading, publish_selected_native_blast_rows, validate_native_blast_publication,
 )
 from gene_annotation_episode.episodic_workflow.root.a101.state import Store
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 
 
 ROOT = Path(__file__).resolve().parents[5]
 NATIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/blast_pairwise"
 EXAMPLES = sorted((NATIVE / "native_examples").glob("*/plan.json")) + sorted((NATIVE / "native_ranges").glob("*/plan.json"))
-POLICY = LocalJobPolicy(memory_bytes=20 * 1024 ** 3, scratch_bytes=4 * 1024 ** 3)
+# The grading worker is a new local job of this test, so it uses the current worker bound.
+POLICY = LocalJobPolicy(memory_bytes=ENVIRONMENT_BOUNDS["memory_bytes"], scratch_bytes=4 * 1024 ** 3)
 
 
 def selector(family="pairwise_hsp", metrics=None, rows=None):

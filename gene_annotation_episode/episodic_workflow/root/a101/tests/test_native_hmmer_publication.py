@@ -20,11 +20,13 @@ from gene_annotation_episode.episodic_workflow.root.a101.native_hmmer_result_pub
     prepare_native_hmmer_grading, publish_selected_native_hmmer_rows)
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_worker_values import _fasta
 from gene_annotation_episode.episodic_workflow.root.a101.state import Store
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 
 
 ROOT = Path(__file__).resolve().parents[5]
 RUNS = ROOT / "gene_annotation_episode/episodic_workflow/root/a101/tests/fixtures/native_hmmer_producer/runs"
-POLICY = LocalJobPolicy(20 * 1024 ** 3, 4 * 1024 ** 3)
+# The grading worker is a new local job of this test, so it uses the current worker bound.
+POLICY = LocalJobPolicy(ENVIRONMENT_BOUNDS["memory_bytes"], 4 * 1024 ** 3)
 
 
 def selector(program, *, offset=0, limit=100, keys=None, metrics=None):

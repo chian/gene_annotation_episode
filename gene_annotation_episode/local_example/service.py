@@ -195,7 +195,7 @@ class JobStore:
         job=self.validate_job(job_ref)
         state=job['state']
         if state=='running':
-            from ..execution_timing import _process_identity
+            from ..episodic_workflow.root.execution_timing import _process_identity
             identity=_process_identity(job['pid'])
             if identity!={'pid':job['pid'],'start_ticks':job['process_start'],'boot_id':job['boot_id']}:
                 state='lost'

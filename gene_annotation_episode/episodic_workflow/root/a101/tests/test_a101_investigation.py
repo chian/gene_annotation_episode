@@ -8,7 +8,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a101.a101_investigation import (
     A101Subtree, initial_report, report_schema, resolve_report,
 )
-from gene_annotation_episode.domain import ContractError
+from gene_annotation_episode.episodic_workflow.root.a101.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process_setup import prepare_scientific_binding
 from gene_annotation_episode.episodic_workflow.root.a101.scientific_process.episode import ScientificProcessEpisode
 from gene_annotation_episode.state import Store
