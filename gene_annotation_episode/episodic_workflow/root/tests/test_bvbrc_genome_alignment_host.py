@@ -513,9 +513,9 @@ def test_latest_partial_recovered_selection_preserves_original_admitted_return(d
     _, later_key = d.selection('download', args, context=d.context)
     actual_download = d.client.download
     d.client.body = b'FormatVersion\t5\nSequenceCount\t0\n'
-    def interrupted(url, *, byte_range=None):
+    def interrupted(url, **arguments):
         error = KeyboardInterrupt()
-        error.snapshot = actual_download(url, byte_range=byte_range)
+        error.snapshot = actual_download(url, **arguments)
         raise error
     monkeypatch.setattr(d.client, 'download', interrupted)
     with pytest.raises(KeyboardInterrupt):

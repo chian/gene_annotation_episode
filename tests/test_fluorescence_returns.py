@@ -15,7 +15,7 @@ from gene_annotation_episode.episodic_workflow.root.method_loop.identities impor
 
 from gene_annotation_episode.episodic_workflow.root.communication import plain, form_with_facts
 from gene_annotation_episode.domain import obj
-from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episodic_workflow.root.receiving_context import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
