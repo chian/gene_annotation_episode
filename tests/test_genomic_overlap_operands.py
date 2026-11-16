@@ -66,11 +66,11 @@ def assignment(store, specs):
     modules = ["native_genomic_overlap_driver", "native_genomic_overlap_contracts",
         "genomic_overlap_contracts", "genomic_overlap_inputs"]
     # These fixture declarations are never native availability evidence.
-    software = {"python_executable": "/fixture/python", "python_sha256": "1" * 64,
+    software = {"python_executable": "/fixture/python",
         "python_version": "3.12.3", "module_root": "/fixture/source",
         "driver_module": "gene_annotation_episode.episodic_workflow.root.library.native_genomic_overlap_driver",
-        "implementation_files": [{"module": "gene_annotation_episode.episodic_workflow.root.library." + name,
-            "sha256": "2" * 64} for name in modules],
+        "implementation_files": [{"module": "gene_annotation_episode.episodic_workflow.root.library." + name}
+            for name in modules],
         "bedtools_executable": "/fixture/bedtools", "bedtools_sha256": "3" * 64,
         "bedtools_version": "bedtools v2.31.1"}
     job = {"version": "native_genomic_overlap_job_v1", "program": "bedtools_intersect_all_pairs",

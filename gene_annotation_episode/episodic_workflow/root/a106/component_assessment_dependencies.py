@@ -4,8 +4,6 @@ An immutable assessment body cannot reveal a later revision by changing its
 digest. Retain the original use and identify received corrections separately;
 never substitute a newer claim or inspect an unreceived assessment.
 """
-from copy import deepcopy
-
 
 VERSION = 'received_component_assessment_dependencies_v1'
 

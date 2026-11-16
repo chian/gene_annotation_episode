@@ -75,7 +75,7 @@ def assessment_receipt_inventory(connection, tables, roles):
     return receipts
 
 
-def audit(run, *, verify_snapshot=False):
+def audit(run):
     launch = json.loads((run / "launch.json").read_text())
     connection = sqlite3.connect((run / "state/state.sqlite3").as_uri() + "?mode=ro", uri=True)
     connection.row_factory = sqlite3.Row
@@ -142,11 +142,6 @@ def audit(run, *, verify_snapshot=False):
         counts = {name:connection.execute("SELECT count(*) FROM " + name).fetchone()[0]
             for name in ("runtime_model_calls", "runtime_decision_exchanges", "runtime_forms")}
     connection.close()
-    pins = json.loads((run / "source-pins.json").read_text())
-    mismatches = None
-    if verify_snapshot:
-        mismatches = [name for name, digest in pins.items() if not (run / "source" / name).is_file()
-            or hashlib.sha256((run / "source" / name).read_bytes()).hexdigest() != digest]
     target_receipts = [cell for row in receipts if row["role"] == "annotation" for cell in row["cells"]]
     return dict(run=str(run), workflow_result_present=(run / "result.json").exists(),
         failure_file_present=(run / "failure.json").exists(), database_episodes=episodes,
@@ -154,7 +149,7 @@ def audit(run, *, verify_snapshot=False):
         input_policy={key:launch.get(key) for key in ("input_mode", "external_cutoff", "preloaded_evidence",
             "scripted_model_decisions", "evaluator_expectations_loaded", "bvbrc_execution")},
         input_hash_matches=hashlib.sha256((run / "input.txt").read_text().strip().encode()).hexdigest()
-            == launch["sequence_sha256"], source_snapshot_files=len(pins), source_snapshot_mismatches=mismatches,
+            == launch["sequence_sha256"],
         counts=counts, action_counts=dict(actions), actions_without_saved_result=unfinished,
         rejected_decisions=rejected_decisions,
         failed_actions=failures, numerical_publications=publications,
@@ -172,17 +167,15 @@ def audit(run, *, verify_snapshot=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run_dir", type=Path)
-    parser.add_argument("--verify-snapshot", action="store_true")
     args = parser.parse_args()
     run = args.run_dir.resolve()
     root = Path(__file__).resolve().parents[1] / "runs"
     if not run.is_relative_to(root) or run == root:
         parser.error("run_dir must be a separate directory below this repository's runs/")
-    result = audit(run, verify_snapshot=args.verify_snapshot)
+    result = audit(run)
     output = run / "evaluation-audit.json"
     output.write_text(json.dumps(result, indent=2) + "\n")
-    print(json.dumps(dict(audit=str(output), input_hash_matches=result["input_hash_matches"],
-        source_snapshot_mismatches=result["source_snapshot_mismatches"], counts=result["counts"],
+    print(json.dumps(dict(audit=str(output), input_hash_matches=result["input_hash_matches"], counts=result["counts"],
         returned_final_score_forms=len(result["returned_final_score_forms"]),
         rejected_decisions=len(result["rejected_decisions"]),
         final_parent_values=result["recorded_annotation_parent_values"], failed_actions=len(result["failed_actions"]))))

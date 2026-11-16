@@ -32,11 +32,11 @@ def bam_bytes(*, text=b"@HD\tVN:1.6\tSO:coordinate\n@SQ\tSN:chrToy\tLN:12000\n",
 def fake_software(required_modules=REQUIRED_MODULES):
     files = ["/fixture/native/macs2", "/fixture/site/MACS2/callpeak_cmd.py", "/fixture/site/MACS2/bdgdiff_cmd.py",
         "/fixture/site/MACS2/IO/Parser.cpython-311-x86_64-linux-gnu.so", "/fixture/site/numpy/__init__.py"]
-    return {"driver_runtime": {"python_executable": "/fixture/python", "python_sha256": "0" * 64,
+    return {"driver_runtime": {"python_executable": "/fixture/python",
         "python_version": "3.12.0", "module_root": "/fixture/source",
-        "implementation_files": [{"module": name, "sha256": digest(name)} for name in sorted(required_modules)],
+        "implementation_files": [{"module": name} for name in sorted(required_modules)],
         "dependencies": [{"distribution": name, "version": "control-fixture", "package_root": "/fixture/deps/" + name,
-            "files": [{"path": "/fixture/deps/" + name + "/__init__.py", "sha256": digest(name), "size_bytes": 1}]}
+            "files": [{"path": "/fixture/deps/" + name + "/__init__.py"}]}
             for name in sorted(REQUIRED_DEPENDENCIES)]},
         "macs2_runtime": {"python_executable": "/fixture/native/python", "python_sha256": "0" * 64,
             "python_version": "3.11.13", "macs2_script": files[0], "macs2_sha256": "0" * 64,

@@ -57,7 +57,7 @@ def selected_call(tmp_path, monkeypatch):
     deployment = dict(version=ordinary.source.DEPLOYMENT_VERSION,
         runtime=dict(executable=python_pin, home=str(software_root)),
         module=dict(path=str(software_root / "original-molecular.py"),
-            sha256=ordinary.source.SOURCE_SHA256, size_bytes=91223),
+            sha256="1" * 64, size_bytes=91223),
         import_roots=[str(software_root)], software_files_file=manifest_pin,
         software_files_ref="artifact_" + manifest_pin["sha256"])
     sequence = "atgAAAtAA"

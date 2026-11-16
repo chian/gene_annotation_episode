@@ -127,7 +127,7 @@ def manifest():
             optlang_version=None, raw_status=None, status="unknown", feasibility_tolerance=number(),
             optimality_tolerance=number(), integrality_tolerance=number(), raw_parameters_file=None,
             diagnostic_file=None, alternate_optimum_claim="not_assessed", alternate_claim_source=None),
-        source_function_sha256="d" * 64, effective_problem_sha256=FILES["effective_problem"]["sha256"],
+        effective_problem_sha256=FILES["effective_problem"]["sha256"],
         files=[dict(role=role, relative_path=role + ".fixture", format=file["format"], state="present",
                     identity={key: file[key] for key in ("sha256", "size_bytes")}) for role, file in FILES.items()],
         solve_call_count=1, execution_outcome="completed", request_realization="exact", issues=[])

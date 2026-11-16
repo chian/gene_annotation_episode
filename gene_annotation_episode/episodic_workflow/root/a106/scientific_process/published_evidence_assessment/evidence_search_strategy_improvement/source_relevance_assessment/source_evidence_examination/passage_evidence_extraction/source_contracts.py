@@ -10,11 +10,9 @@ from __future__ import annotations
 from collections.abc import Mapping
 from copy import deepcopy
 from dataclasses import replace
-import hashlib
 from importlib import import_module
 import inspect
 import json
-from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a106.communication import ReportBoundaryError, plain, validate_form
 from gene_annotation_episode.episodic_workflow.root.a106.composition_information import CONTRACT_INFORMATION_PROFILE
 from gene_annotation_episode.episodic_workflow.root.a106.domain import ContractError, REF, identity, obj, source_location_inputs, validate_schema
@@ -51,7 +49,3 @@ def _population_catalog(*, ratio_source_population=False, controlled_response_po
     positions = {name: index for index, name in enumerate(_CATALOG_ORDER)}
     result.sort(key=lambda entry: positions[entry['name']])
     return result
-_AXIS_DIRECTORY = Path(__file__).resolve().parents[6]
-
-def _binding_source_bytes():
-    return b''.join((path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py'))))

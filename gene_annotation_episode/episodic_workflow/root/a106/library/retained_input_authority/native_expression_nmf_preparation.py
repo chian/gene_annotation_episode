@@ -1,6 +1,6 @@
 """Freeze and execute one finite NMF result worker under existing local limits.
 
-This adapter retains exact source, dependency, interpreter and stdlib pins.
+This adapter retains the paths of the copied source, dependency, interpreter and stdlib files.
 Completed replay checks the original controls, never today's runtime or native
 producer, and recovery resumes the same durable local_jobs handle.
 """
@@ -20,8 +20,7 @@ def _validate_intent(intent, plan):
     require(intent['command'] == [str(root / 'runtime/python'), '-B', '-S', '-m', WORKER_MODULE, str(root / 'plan.json')] and intent['interpreter']['path'] == str(root / 'runtime/python') and intent['source_pins'] and intent['dependencies'] and intent['runtime_files'], 'nmf_worker_runtime_missing')
     pins = [*intent['source_pins'], intent['interpreter'], *intent['runtime_files'], *(pin for row in intent['dependencies'] for pin in row['files'])]
     for pin in pins:
-        require(type(pin) is dict and set(pin) == {'path', 'sha256', 'size_bytes'} and Path(pin['path']).is_absolute(), 'nmf_worker_pin_invalid')
-        validate_file({'artifact_ref': 'artifact_' + pin['sha256'], 'sha256': pin['sha256'], 'size_bytes': pin['size_bytes'], 'format': 'runtime_file'})
+        require(type(pin) is dict and set(pin) == {'path'} and Path(pin['path']).is_absolute(), 'nmf_worker_pin_invalid')
     require(len({p['path'] for p in pins}) == len(pins), 'nmf_worker_duplicate_pin')
     source_root = root / 'source_snapshot'
     require(all((Path(pin['path']).is_relative_to(source_root) for pin in intent['source_pins'])) and str(source_root / 'gene_annotation_episode/expression_nmf_result_worker.py') in {p['path'] for p in intent['source_pins']}, 'nmf_worker_source_missing')

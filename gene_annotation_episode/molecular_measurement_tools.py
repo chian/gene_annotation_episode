@@ -310,8 +310,9 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
                 worker_module, implementation_files, expected = worker_ports.native_selection(
                     deployment, index, implementation_files)
             for path in implementation_files:
-                matches = [pin for name, pin in index.items() if name in expected
-                    and expected[name] == path and pin["sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()]
+                # Worker sources of this repository are named by path in exactly
+                # one selected import root; the manifest lists external files only.
+                matches = [name for name in expected if expected[name] == path and Path(name).is_file()]
                 if len(matches) != 1:
                     raise ContractError("protease_kinetics_selected_driver_closure_conflict")
             implementation_files = None

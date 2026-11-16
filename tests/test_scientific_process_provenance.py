@@ -23,6 +23,19 @@ def encoded(value):
     return json.dumps(value, allow_nan=False)
 
 
+TOOL_INFO = {"name": "fixture.inspect", "resources": "local", "description": "Inspect one fixture record.",
+    "instructions": "Read the selected fixture record."}
+
+
+class ToolInfo:
+    """Stand-in for the frozen tool library: it knows exactly one tool."""
+
+    def resolve_tool_info(self, selection):
+        if any((row["name"], row["resources"]) != (TOOL_INFO["name"], TOOL_INFO["resources"]) for row in selection):
+            raise ValueError("scientific_tool_unknown")
+        return [deepcopy(TOOL_INFO) for _ in selection]
+
+
 class Case:
     def __init__(self, tmp_path):
         self.store = Store(tmp_path / "state")
@@ -31,14 +44,15 @@ class Case:
         self.library = ScientificProcessLibrary.freeze(tmp_path / "library", source=tmp_path / "source")
         problem = self.store.create_problem(raw_sequence="MKWAA", molecule="protein")
         self.scope = {"subject_refs": problem["subject_refs"]}
-        self.provenance = ScientificProcessProvenance(self.store, self.journal, library=self.library)
+        self.provenance = ScientificProcessProvenance(self.store, self.journal, library=self.library,
+            tool_library=ToolInfo())
         self.root = self.context("annotation", "root")
         self.owner = self.context("scientific_process", "child_0", parent=self.root)
 
     def selection(self, thought="P01"):
-        return {"version": "scientific_process_selection_v2",
-            "annotation_ref": self.library.reference("A01"),
-            "thought_ref": self.library.reference(thought), "tools": ["fixture.inspect"]}
+        return {"version": "scientific_process_selection_v3",
+            "evidence_axis": self.library.reference("A01"),
+            "thought_pattern": self.library.reference(thought), "child_tool_info": [deepcopy(TOOL_INFO)]}
 
     def context(self, role, key, *, parent=None, saved=True, origin=None):
         path = (() if parent is None else parent.path) + ((role, key),)
@@ -69,7 +83,7 @@ class Case:
 
     def prepare(self, owner=None, *, index=2, thought="P77", mutation=None):
         owner = self.owner if owner is None else owner
-        arguments = {"thought_ref": self.library.reference(thought), "tools": ["fixture.inspect"]}
+        arguments = {"thought_pattern": self.library.reference(thought), "child_tool_info": [deepcopy(TOOL_INFO)]}
         reference = identity("operation", {"key": f"{owner.run_id}:{owner.episode_id}:{index}",
             "name": "process.revise", "arguments": arguments})
         action = {"kind": "tool", "tool": "process.revise", "arguments": arguments}
@@ -125,7 +139,7 @@ def test_exact_preparation_does_not_fold_latest_selection_and_returns_detached(c
     assert value["proposal"] == outcome["result"]
     assert value["owner_selection"] == case.selection()
     assert value["revision_origin"] == outcome["revision_origin"]
-    value["proposal"]["selection"]["thought_ref"]["option_id"] = "P999"
+    value["proposal"]["selection"]["thought_pattern"]["option_id"] = "P999"
     assert case.provenance.preparation(case.owner, first)["proposal"] == outcome["result"]
 
 
@@ -151,7 +165,7 @@ def test_parent_preparation_for_new_unsaved_child_uses_immediate_saved_parent(ca
     lambda a, o: a.update(kind="reason"),
     lambda a, o: a["arguments"].update(extra=True),
     lambda a, o: o["result"].update(parent_selection_sha256="0" * 64),
-    lambda a, o: o["result"]["selection"].update(thought_ref=deepcopy(o["result"]["selection"]["annotation_ref"])),
+    lambda a, o: o["result"]["selection"].update(thought_pattern=deepcopy(o["result"]["selection"]["evidence_axis"])),
     lambda a, o: o["revision_origin"].update(parent_invocation_ref="scientific_invocation_" + "0" * 24),
     lambda a, o: o["revision_origin"].update(preparation_operation_ref="operation_" + "0" * 24),
     lambda a, o: o.update(feedback={"code": "failed"}),
@@ -368,7 +382,7 @@ def test_construction_and_reads_issue_queries_only_and_never_read_private_histor
     case.store.db.execute("PRAGMA query_only=ON")
     case.store.db.set_authorizer(authorize)
     case.store.db.set_trace_callback(statements.append)
-    producer = ScientificProcessProvenance(case.store, case.journal, library=case.library)
+    producer = ScientificProcessProvenance(case.store, case.journal, library=case.library, tool_library=ToolInfo())
     assert statements == []
     producer.preparation(case.owner, reference)
     producer.received_results(case.root)

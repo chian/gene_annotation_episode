@@ -202,7 +202,7 @@ def test_saved_zero_feature_and_contrast_credit_their_original_annotation(case, 
     local_scope = store.validate_scope({'subject_refs': [target],
         'segments': store.coverage(target)})
     root_reports = [{**report, 'scope': local_scope} for report in reports]
-    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.scoring.received_axis_task_credit',
+    monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.credit.received_axis_task_credit',
         lambda *_: iter(root_reports))
     combined = SignedEvidenceRootSupport(task_credit=True)(store, scope,
         known_record_refs=known, run_id=root.run_id, episode_id=root.episode_id)

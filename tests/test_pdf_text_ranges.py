@@ -64,7 +64,7 @@ def test_selected_pages_can_be_located_without_losing_range_custody(pdf_case, mo
     def forbidden(*_args, **_kwargs):
         pytest.fail("Reading the saved operation must not execute PDF conversion again")
 
-    monkeypatch.setattr("gene_annotation_episode.tools.pdf_native", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.tool_documents.pdf_native", forbidden)
     assert tools.execute("source.pdf.text", arguments, operation_key="selected-text") == result
 
 
@@ -80,7 +80,7 @@ def test_invalid_ranges_and_image_range_requests_do_not_start_native_work(pdf_ca
     def forbidden(*_args, **_kwargs):
         pytest.fail("Invalid page selection must be rejected before native work")
 
-    monkeypatch.setattr("gene_annotation_episode.tools.pdf_native", forbidden)
+    monkeypatch.setattr("gene_annotation_episode.episodic_workflow.root.tool_documents.pdf_native", forbidden)
     before = store.count("source_derivative")
     result = tools.execute(tool, {"source_ref": pdf, **selection})
     assert result["status"] == "invalid", result

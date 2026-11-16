@@ -229,7 +229,7 @@ def prepare_analysis_contract(services, arguments, *, context=None):
     selected = selected_adapter(service, selection)
     if selected is None:
         raise ContractError("intervention_analysis_adapter_unbound")
-    implementation, digest = selected
+    implementation = selected
     try:
         parameters = implementation.validate_parameters(parameters)
         schema = implementation.requested_form_schema(arguments["fields"])
@@ -239,5 +239,5 @@ def prepare_analysis_contract(services, arguments, *, context=None):
     if any(row["selection"]["document_id"] not in documents for row in arguments["fields"]):
         raise ContractError("intervention_analysis_selected_document_unbound")
     return dict(resource_id=arguments["resource_id"], adapter=deepcopy(selection), requested_schema=schema,
-        adapter_implementation_sha256=digest, parent_report_source="bvbrc_application_outcomes",
+        parent_report_source="bvbrc_application_outcomes",
         service_availability="not_observed")

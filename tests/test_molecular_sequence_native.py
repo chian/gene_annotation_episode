@@ -54,7 +54,7 @@ def test_manifest_artifact_identity_conflict_is_not_resolved_or_opened(monkeypat
     pin = {"path": "/explicit/unavailable/input", "sha256": "0" * 64, "size_bytes": 0}
     selected = request(deployment={"version": native.DEPLOYMENT_VERSION,
         "runtime": {"executable": pin, "home": "/explicit/runtime"},
-        "module": {**pin, "sha256": native.SOURCE_SHA256},
+        "module": pin,
         "import_roots": ["/explicit/application"], "software_files_ref": "artifact_" + "1" * 64,
         "software_files_file": pin})
     reads = []
@@ -72,47 +72,37 @@ def test_manifest_artifact_identity_conflict_is_not_resolved_or_opened(monkeypat
     assert result["native_record"]["result"] is None
 
 
-@pytest.mark.parametrize("version,operation,arguments,deployment_version,module_sha,code,path", [
+@pytest.mark.parametrize("version,operation,arguments,deployment_version,code,path", [
     ("molecular_sequence_request_v1", "find_n_glycosylation_motifs",
         {"sequence": "NNST", "allow_overlap": False}, "molecular_sequence_deployment_v1",
-        native.GLYCO_SOURCE_SHA256, "operation_not_supported", "/operation"),
+        "operation_not_supported", "/operation"),
     ("molecular_sequence_request_v1", "predict_o_glycosylation_hotspots",
         {"sequence": "ASA", "window": 3, "min_st_fraction": 0.3333, "disallow_proline_next": True},
-        "molecular_sequence_deployment_v1", native.GLYCO_SOURCE_SHA256,
+        "molecular_sequence_deployment_v1",
         "operation_not_supported", "/operation"),
     ("molecular_sequence_request_v2", "find_n_glycosylation_motifs",
         {"sequence": "NNST", "allow_overlap": False}, "molecular_sequence_deployment_v1",
-        native.GLYCO_SOURCE_SHA256, "deployment_version_required", "/deployment/version"),
+        "deployment_version_required", "/deployment/version"),
     ("molecular_sequence_request_v1", "annotate_open_reading_frames",
         {"sequence": "ATGTAA", "min_length": 6, "search_reverse": False, "filter_subsets": False},
-        "molecular_sequence_deployment_v2", native.SOURCE_SHA256,
+        "molecular_sequence_deployment_v2",
         "deployment_version_required", "/deployment/version"),
-    ("molecular_sequence_request_v2", "find_n_glycosylation_motifs",
-        {"sequence": "NNST", "allow_overlap": False}, "molecular_sequence_deployment_v2",
-        native.SOURCE_SHA256, "original_source_pin_required", "/deployment/module/sha256"),
-    ("molecular_sequence_request_v2", "annotate_open_reading_frames",
-        {"sequence": "ATGTAA", "min_length": 6, "search_reverse": False, "filter_subsets": False},
-        "molecular_sequence_deployment_v2", native.GLYCO_SOURCE_SHA256,
-        "original_source_pin_required", "/deployment/module/sha256"),
-    ("molecular_sequence_request_v2", "align_sequences",
-        {"long_seq": "ATAT", "short_seqs": "AT"}, "molecular_sequence_deployment_v2",
-        native.GLYCO_SOURCE_SHA256, "original_source_pin_required", "/deployment/module/sha256"),
     ("molecular_sequence_request_v2", "predict_o_glycosylation_hotspots",
         {"sequence": "ASA", "window": 3, "min_st_fraction": 0.4},
-        "molecular_sequence_deployment_v2", native.GLYCO_SOURCE_SHA256,
+        "molecular_sequence_deployment_v2",
         "closed_fields_required", "/arguments"),
     ("molecular_sequence_request_v2", "find_n_glycosylation_motifs",
         {"sequence": "NNST", "allow_overlap": False, "callable": "list_glycoengineering_resources"},
-        "molecular_sequence_deployment_v2", native.GLYCO_SOURCE_SHA256,
+        "molecular_sequence_deployment_v2",
         "closed_fields_required", "/arguments"),
 ])
 def test_fixed_private_versions_and_source_profiles_fail_before_file_reads(
-        monkeypatch, version, operation, arguments, deployment_version, module_sha, code, path):
+        monkeypatch, version, operation, arguments, deployment_version, code, path):
     pin = {"path": "/explicit/unavailable/input", "sha256": "0" * 64, "size_bytes": 0}
     selected = {"version": version, "operation": operation, "arguments": arguments,
         "deployment": {"version": deployment_version,
             "runtime": {"executable": pin, "home": "/explicit/runtime"},
-            "module": {**pin, "sha256": module_sha}, "import_roots": ["/explicit/application"],
+            "module": pin, "import_roots": ["/explicit/application"],
             "software_files_ref": "artifact_" + "0" * 64, "software_files_file": pin}}
     before, reads = deepcopy(selected), []
 

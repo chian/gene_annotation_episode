@@ -43,7 +43,6 @@ async def run(directory):
     selection = {"version": VERSION, "mode": SEMANTIC, "model": config["FAST"]}
     metadata = {"purpose": "standalone_actual_FAST_retrieval_verification",
         "configured_model_scientific_investigation": False, "configuration": selection,
-        "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "samples": [{"name": name, "investigation": question} for name, question in SAMPLES]}
     (directory / "verification-request.json").write_text(canonical(metadata) + "\n")
     with Store(directory / "isolated-state") as store:

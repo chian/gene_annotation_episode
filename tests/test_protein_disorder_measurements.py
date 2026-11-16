@@ -4,7 +4,6 @@ Engineered score strings test postprocessing, not IUPred scientific execution.
 """
 from copy import deepcopy
 import csv
-import hashlib
 import importlib.util
 import inspect
 import io
@@ -17,7 +16,7 @@ import traceback
 import pytest
 
 from gene_annotation_episode.protein_disorder_measurements import (
-    SOURCE_SHA256, CALLABLE_SHA256, build_disorder_sheet, calculate_disorder_components,
+    build_disorder_sheet, calculate_disorder_components,
 )
 from gene_annotation_episode.sequence_mapping import VERSION as MAPPING_VERSION
 

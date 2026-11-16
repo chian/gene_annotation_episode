@@ -102,12 +102,12 @@ def selected_references(request):
 def make_assignment(f, request=None):
     request = deepcopy(f.request if request is None else request)
     dependencies = [{"distribution": name, "version": "fixture", "package_root": "/fixture/deps/" + name,
-        "files": [{"path": "/fixture/deps/" + name + "/fixture", "sha256": "3" * 64, "size_bytes": 1}]}
+        "files": [{"path": "/fixture/deps/" + name + "/fixture"}]}
         for name in sorted(REQUIRED_DEPENDENCIES)]
-    software = {"python_executable": "/fixture/python", "python_sha256": "1" * 64,
+    software = {"python_executable": "/fixture/python",
         "python_version": "fixture", "module_root": "/fixture/source",
         "driver_module": DRIVER_MODULE,
-        "implementation_files": [{"module": name, "sha256": "2" * 64} for name in sorted(REQUIRED_MODULES)],
+        "implementation_files": [{"module": name} for name in sorted(REQUIRED_MODULES)],
         "dependencies": dependencies}
     specs = [request["contact"]] + ([request["elements"]] if request["elements"] is not None else [])
     job = {"request": request, "software": software, "input_bindings": [{"input_key": spec["input_key"],

@@ -1,4 +1,3 @@
-import hashlib
 import json
 import math
 from pathlib import Path
@@ -8,7 +7,7 @@ import pytest
 from real_time_credit_fixture import contexts_at, progress_time
 
 from gene_annotation_episode.episodic_workflow.root.numerical import (
-    NumericBand, SOURCE_SHA256, STATUS_INSUFFICIENT, STATUS_NORMAL,
+    NumericBand, STATUS_INSUFFICIENT, STATUS_NORMAL,
     STATUS_UNIDENTIFIABLE, ScalarScoreYieldEstimator, SignedNumericBand,
     BoundedYieldController, CompletionYieldController, YieldController, YieldParameters, estimate_nonnegative_yield,
     estimate_score_yield, estimate_bounded_credit_yield, predicted_gain_upper_bound,

@@ -3,7 +3,6 @@
 Only population reads scientific inputs and calculates. Reconstruction validates
 committed identities and typed cells; it does not rerun a reader or grader.
 """
-from gene_annotation_episode.episodic_workflow.root.a106.literature_implementation_sources import source_file
 from copy import deepcopy
 from hashlib import sha256
 import json

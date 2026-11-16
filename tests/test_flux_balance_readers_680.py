@@ -382,7 +382,7 @@ def bundle(c):
     payloads = {role: {"file": None, "bytes": None, "state": "absent"} for role in ROLES}
     for role, raw in c["raw"].items():
         payloads[role] = {"file": c["files"][role], "bytes": raw, "state": "present"}
-    pin = {"path": "/explicit-test/python", "sha256": "1" * 64, "size_bytes": 1}
+    pin = {"path": "/explicit-test/python"}
     software = {"version": "fba_software_v1", "python": pin, "python_version": "3.12",
         "python_home": "/explicit-test", "module_root": "/explicit-test/modules", "dependency_roots": ["/explicit-test/dependencies"],
         "implementation_files": [], "runtime_files": [], "solver_runtime_files": [],
@@ -396,7 +396,7 @@ def bundle(c):
             "repository_identifier": None, "acquisition_receipt_file": None}, "constraints": None,
         "objective": {"kind": "model_default", "reaction_id": None},
         "solver_options": {"feasibility_tolerance": None, "integrality_tolerance": None, "optimality_tolerance": None},
-        "software": software, "output_prefix": "fba", "flux_output_name": "flux.csv", "source_function_sha256": "2" * 64}
+        "software": software, "output_prefix": "fba", "flux_output_name": "flux.csv"}
     request = {"argv": ["/explicit-test/python", "driver.py"], "environment": {}, "native_flux_balance": job}
     attempt = {"run_id": "test680", "episode_id": "episode680", "resource_id": "local680", "execution_id": "/explicit-test/run",
         "attempt_id": "attempt680", "operation_key": "fba680", "requested_job_sha256": digest(request), "assignment_sha256": "3" * 64}
@@ -409,7 +409,7 @@ def bundle(c):
         "raw_parameters_file": None, "diagnostic_file": None, "alternate_optimum_claim": "not_assessed", "alternate_claim_source": None}
     manifest = {"version": "flux_balance_native_manifest_v1", "sealed": True, "attempt": attempt,
         "software_sha256": digest(software), "model_identity": {key: model[key] for key in ("sha256", "size_bytes")},
-        "actual_distributions": software["distributions"], "actual_solver": solver, "source_function_sha256": job["source_function_sha256"],
+        "actual_distributions": software["distributions"], "actual_solver": solver,
         "effective_problem_sha256": c["files"]["effective_problem"]["sha256"],
         "files": [{"role": role, "relative_path": role, "format": row["file"]["format"], "state": "present",
                    "identity": {key: row["file"][key] for key in ("sha256", "size_bytes")}} for role, row in payloads.items() if role != "manifest"],
@@ -424,13 +424,12 @@ def replace_role(payloads, role, value):
     payloads[role] = {"file": file(raw, payloads[role]["file"]["format"]), "bytes": raw, "state": "present"}
 
 
-@pytest.mark.parametrize("change", ["attempt", "software", "source", "model", "role", "solver", "distribution", "unsealed", "problem_hash"])
+@pytest.mark.parametrize("change", ["attempt", "software", "model", "role", "solver", "distribution", "unsealed", "problem_hash"])
 def test_manifest_identity_conflicts_preserve_independent_csv(captures, change):
     payloads, expected = bundle(captures)
     manifest = json.loads(payloads["manifest"]["bytes"])
     if change == "attempt": manifest["attempt"]["attempt_id"] = "different"
     if change == "software": manifest["software_sha256"] = "8" * 64
-    if change == "source": manifest["source_function_sha256"] = "8" * 64
     if change == "model": manifest["model_identity"]["sha256"] = "8" * 64
     if change == "role": manifest["files"][0]["role"] = "flux_csv"
     if change == "solver": manifest["actual_solver"]["interface"] = "other.interface"

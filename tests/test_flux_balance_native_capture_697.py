@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.library import native_flux_b
 from gene_annotation_episode.native_file_capture import NativeFileCaptureError, retained_native_file
 from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
     DRIVER_MODULE, ENVIRONMENT_FILENAME, OWNER_FILENAME, POLICY,
-    RUN_PLAN_FILENAME, SOURCE_FUNCTION_SHA256, STACK, STARTED_FILENAME,
+    RUN_PLAN_FILENAME, STACK, STARTED_FILENAME,
     bind_flux_balance_environment, flux_balance_environment, flux_balance_output_files,
     validate_flux_balance_run_plan,
 )
@@ -48,18 +48,23 @@ def pin(path):
     return {"path": str(path), "sha256": "c" * 64, "size_bytes": 1}
 
 
+def listed(path):
+    # Software files are named by path; no software is invoked or verified here.
+    return {"path": str(path)}
+
+
 def synthetic_plan(tmp_path, *, v2=False):
     """Minimal shape-valid selected plan, explicitly no execution authority."""
     module_root, python_home, deps = (tmp_path / x for x in ("modules", "python", "deps"))
-    software = {"version": "fba_software_v1", "python": pin(python_home / "bin/python"),
+    software = {"version": "fba_software_v1", "python": listed(python_home / "bin/python"),
         "python_version": "synthetic", "python_home": str(python_home), "module_root": str(module_root),
-        "dependency_roots": [str(deps)], "implementation_files": [pin(module_root / "gene_annotation_episode" / x)
+        "dependency_roots": [str(deps)], "implementation_files": [listed(module_root / "gene_annotation_episode" / x)
             for x in ("__init__.py", "execution_contracts.py",
                 *("episodic_workflow/root/library/" + name for name in ("flux_balance_contracts.py",
                     "native_flux_balance_contracts.py", "native_flux_balance_storage.py",
                     "native_flux_balance_cobra_glpk.py", "native_flux_balance_driver.py")))],
-        "runtime_files": [pin(python_home / "lib/stdlib.py"), pin(deps / "runtime.py")],
-        "solver_runtime_files": [pin(deps / "solver.so")],
+        "runtime_files": [listed(python_home / "lib/stdlib.py"), listed(deps / "runtime.py")],
+        "solver_runtime_files": [listed(deps / "solver.so")],
         "distributions": [{"name": k, "version": v} for k, v in STACK.items()],
         "solver_interface": "optlang.glpk_interface"}
     run, episode, key = "synthetic_capture697", "child", "selected_synthetic_fba"
@@ -71,8 +76,7 @@ def synthetic_plan(tmp_path, *, v2=False):
             "original_loader_selection": "sbml_file", "repository_identifier": None, "acquisition_receipt_file": None},
         "constraints": None, "objective": {"kind": "model_default", "reaction_id": None},
         "solver_options": {"feasibility_tolerance": None, "optimality_tolerance": None, "integrality_tolerance": None},
-        "software": software, "output_prefix": "outputs", "flux_output_name": "flux.csv",
-        "source_function_sha256": SOURCE_FUNCTION_SHA256}
+        "software": software, "output_prefix": "outputs", "flux_output_name": "flux.csv"}
     request = {"argv": [software["python"]["path"], "-B", "-S", "-m", DRIVER_MODULE, RUN_PLAN_FILENAME],
         "environment": flux_balance_environment(software, attempt_directory=str(attempt), lifecycle_directory=str(lifecycle)),
         "native_flux_balance": job}

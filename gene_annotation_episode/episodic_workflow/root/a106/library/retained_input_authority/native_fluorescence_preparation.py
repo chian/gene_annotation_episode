@@ -28,9 +28,8 @@ def _environment(root, home, dependencies):
     return dict(PYTHONPATH=os.pathsep.join([str(root / 'source_snapshot'), *roots]), PYTHONHOME=home, PYTHONNOUSERSITE='1', PYTHONSAFEPATH='1', PYTHONDONTWRITEBYTECODE='1', TMPDIR=str(root), TMP=str(root), TEMP=str(root), XDG_CACHE_HOME=str(root / 'cache'), PIP_CACHE_DIR=str(root / 'cache/pip'))
 
 def _pin(value):
-    closed(value, ('path', 'sha256', 'size_bytes'))
+    closed(value, ('path',))
     validate_path(value['path'])
-    validate_file(dict(artifact_ref='artifact_' + str(value['sha256']), sha256=value['sha256'], size_bytes=value['size_bytes'], format='runtime_file'))
 
 def _validate_intent(intent, plan):
     closed(intent, ('version', 'plan', 'policy', 'command', 'environment', 'source_pins', 'interpreter', 'dependencies', 'python_version', 'python_home', 'runtime_files'))

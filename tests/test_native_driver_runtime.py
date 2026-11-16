@@ -1,4 +1,4 @@
-"""Python-driver pin controls; the temporary native files are never executed."""
+"""Python-driver runtime controls; the temporary native files are never executed."""
 from copy import deepcopy
 import hashlib
 from pathlib import Path
@@ -30,16 +30,16 @@ def _write(path, raw):
 
 def _metadata():
     """Nonexistent paths establish metadata validation has no file dependency."""
-    return dict(python_executable="/engineering/python", python_sha256="0" * 64,
+    return dict(python_executable="/engineering/python",
         python_version="3.12.0", module_root="/engineering/source",
-        implementation_files=[dict(module="gene_annotation_episode.fixture_driver", sha256="1" * 64)],
+        implementation_files=[dict(module="gene_annotation_episode.fixture_driver")],
         dependencies=[dict(distribution="runtime-fixture", version="engineering-only",
             package_root="/engineering/site/runtime_fixture", files=[dict(
-                path="/engineering/site/runtime_fixture/__init__.py", sha256="2" * 64, size_bytes=1)])])
+                path="/engineering/site/runtime_fixture/__init__.py")])])
 
 
 def _actual_driver(tmp_path, monkeypatch):
-    """Use real file pins with an explicitly controlled import inventory."""
+    """Use real files with an explicitly controlled import inventory."""
     source = _write(tmp_path / "source/gene_annotation_episode/fixture_driver.py", b"SEAL_VERSION = 1\n")
     package = _write(tmp_path / "site-packages/runtime_fixture/__init__.py", b"VERSION = 'fixture'\n")
     modules = {"gene_annotation_episode.fixture_driver": SimpleNamespace(__file__=str(source)),
@@ -49,11 +49,10 @@ def _actual_driver(tmp_path, monkeypatch):
         metadata=SimpleNamespace(version=lambda name: "engineering-only"),
         import_module=lambda name: modules[name]))
     record = dict(python_executable=sys.executable,
-        python_sha256=_pin(Path(sys.executable).resolve(strict=True))["sha256"],
         python_version=platform.python_version(), module_root=str(tmp_path / "source"),
-        implementation_files=[dict(module="gene_annotation_episode.fixture_driver", sha256=_pin(source)["sha256"])],
+        implementation_files=[dict(module="gene_annotation_episode.fixture_driver")],
         dependencies=[dict(distribution="runtime-fixture", version="engineering-only",
-            package_root=str(package.parent), files=[_pin(package)])])
+            package_root=str(package.parent), files=[dict(path=str(package))])])
     return record, source, package, modules
 
 
@@ -71,32 +70,28 @@ def _native_files(tmp_path):
         macs2_version="2.2.9.1", import_roots=[str(root)], files=[_pin(path) for path in files])
 
 
-def test_verify_driver_uses_actual_pins_without_native_software(tmp_path, monkeypatch):
+def test_verify_driver_uses_actual_runtime_without_native_software(tmp_path, monkeypatch):
     record, _, _, _ = _actual_driver(tmp_path, monkeypatch)
     assert driver.verify_driver_runtime(record) is None
 
 
-@pytest.mark.parametrize("changed", ["interpreter_hash", "python_version", "source_bytes", "loaded_source",
-    "dependency_version", "package_root", "dependency_bytes", "unpinned_import"])
+@pytest.mark.parametrize("changed", ["python_version", "missing_source", "loaded_source",
+    "dependency_version", "package_root", "unlisted_import"])
 def test_verify_driver_rejects_changed_runtime_closure(tmp_path, monkeypatch, changed):
     record, source, package, modules = _actual_driver(tmp_path, monkeypatch)
-    if changed == "interpreter_hash":
-        record["python_sha256"] = "f" * 64
-    elif changed == "python_version":
+    if changed == "python_version":
         record["python_version"] = "0.0.0"
-    elif changed == "source_bytes":
-        source.write_bytes(b"SEAL_VERSION = 2\n")
+    elif changed == "missing_source":
+        source.unlink()
     elif changed == "loaded_source":
         modules["gene_annotation_episode.fixture_driver"].__file__ = str(tmp_path / "elsewhere.py")
     elif changed == "dependency_version":
         record["dependencies"][0]["version"] = "different-version"
     elif changed == "package_root":
         record["dependencies"][0]["package_root"] = str(tmp_path / "elsewhere")
-    elif changed == "dependency_bytes":
-        package.write_bytes(b"VERSION = 'changed'\n")
     else:
-        unpinned = _write(tmp_path / "site-packages/unpinned/__init__.py", b"UNPINNED = True\n")
-        modules["unpinned"] = SimpleNamespace(__file__=str(unpinned))
+        unlisted = _write(tmp_path / "site-packages/unlisted/__init__.py", b"UNLISTED = True\n")
+        modules["unlisted"] = SimpleNamespace(__file__=str(unlisted))
     with pytest.raises(ValueError, match="native_dependency_unavailable"):
         driver.verify_driver_runtime(record)
 

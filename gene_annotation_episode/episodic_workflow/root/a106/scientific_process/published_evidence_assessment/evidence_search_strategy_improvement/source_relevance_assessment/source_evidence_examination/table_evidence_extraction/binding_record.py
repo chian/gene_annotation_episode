@@ -1,23 +1,10 @@
 """Private A106 literature_table binding record."""
 from __future__ import annotations
-from .source_contracts import VERSION, _AXIS_DIRECTORY, deepcopy, hashlib
+from .source_contracts import VERSION, deepcopy
 
 class LiteratureBindingRecord:
 
     def as_record(self):
-        from pathlib import Path as _context_source_path
-        directory = _AXIS_DIRECTORY
-        digest = hashlib.sha256()
-        for path in sorted(directory.rglob('*')):
-            if 'tests' in path.relative_to(directory).parts or not path.is_file():
-                continue
-            if path.suffix not in {'.py', '.json'}:
-                continue
-            digest.update(path.relative_to(directory).as_posix().encode('utf8'))
-            digest.update(path.read_bytes())
-        for _context_source_key in ('gene_annotation_episode/__init__.py', 'gene_annotation_episode/episodic_workflow/__init__.py', 'gene_annotation_episode/episodic_workflow/root/__init__.py', 'gene_annotation_episode/episodic_workflow/root/receiving_context.py'):
-            digest.update(_context_source_key.encode('utf8'))
-            digest.update((_context_source_path(__file__).resolve().parents[10] / _context_source_key).read_bytes())
         configuration = {'outcome_page_size': self.outcome_page_size}
         for name in ('private_yield_binding', 'ratio_source_population', 'controlled_response_population', 'gel_population', 'completion_time_population', 'product_partition_population', 'active_site_population', 'parent_depletion_population', 'stoichiometric_balance_population', 'compiled_assay_population', 'channel_population', 'ion_discrimination_population'):
             if getattr(self, name):
@@ -36,4 +23,4 @@ class LiteratureBindingRecord:
         if self.gel_population:
             configuration['gel_descriptor'] = deepcopy(self._gel_descriptor)
             configuration['gel_evidence_origin'] = self.gel_evidence_origin
-        return {'version': VERSION, 'binding_id': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'implementation_sha256': digest.hexdigest(), 'configuration': configuration}
+        return {'version': VERSION, 'binding_id': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction', 'configuration': configuration}

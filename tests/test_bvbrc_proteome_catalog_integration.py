@@ -5,7 +5,6 @@ from types import SimpleNamespace
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.episodic_workflow.root.library import bvbrc_proteome_bundle_adapter as adapter
 from gene_annotation_episode.episodic_workflow.root.bvbrc_proteome_returns import FACT_SOURCES
 from gene_annotation_episode.episode_bindings import EpisodeBindingRegistry
 from gene_annotation_episode.episodic_workflow.root.episode_services import WorkflowServices

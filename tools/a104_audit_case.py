@@ -69,7 +69,7 @@ def audit(case):
             native.append({'native_ref': reference, 'pbs_job_id': body['pbs_job_id'],
                 'hpc_result_ref': body['hpc_result_ref'],
                 'request_sha256': body['request_sha256'], 'result_sha256': body['result_sha256'],
-                'worker_sha256': result['worker_sha256'], 'completed': result['completed'],
+                'completed': result['completed'],
                 'compute_hostname': result['compute_hostname'], 'elapsed_seconds': result['elapsed_seconds'],
                 'native_children_peak_rss_kib': result['native_children_peak_rss_kib'],
                 'analyses': [{'name': item['name'], 'purpose': item['purpose'],

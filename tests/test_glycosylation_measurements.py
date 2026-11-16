@@ -1,6 +1,5 @@
 """Explicit log controls; whole genuine module execution is opt-in under529."""
 from copy import deepcopy
-import hashlib
 import importlib.util
 import inspect
 import json
@@ -12,7 +11,7 @@ import traceback
 import pytest
 
 from gene_annotation_episode.glycosylation_measurements import (
-    SOURCE_SHA256, build_glycosylation_sheet, calculate_glycosylation_components,
+    build_glycosylation_sheet, calculate_glycosylation_components,
 )
 from gene_annotation_episode.sequence_mapping import VERSION as MAPPING_VERSION
 

@@ -26,12 +26,12 @@ def deployment():
         layer_count=6, embedding_dimension=320, device="cpu",torch_threads=1,
         checkpoint=pin("/engineering/models/"+contracts.MODEL+".pt"),
         regression_checkpoint=pin("/engineering/models/"+contracts.MODEL+"-contact-regression.pt"),
-        driver=dict(python_executable="/engineering/runtime/bin/python", python_sha256="0"*64,
+        driver=dict(python_executable="/engineering/runtime/bin/python",
             python_version="3.12.0", module_root="/engineering/source", implementation_files=[dict(
-                module="gene_annotation_episode."+name, sha256="2"*64)
+                module="gene_annotation_episode."+name)
                 for name in ("esm_gene_embedding_worker","esm_gene_embedding_contracts")], dependencies=[
                 dict(distribution=name, version="engineering-only", package_root="/engineering/site/"+module,
-                    files=[pin("/engineering/site/"+module+"/__init__.py")])
+                    files=[dict(path="/engineering/site/"+module+"/__init__.py")])
                 for name,module in (("torch","torch"),("fair-esm","esm"))]))
 
 

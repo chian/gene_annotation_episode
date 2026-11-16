@@ -21,7 +21,7 @@ from gene_annotation_episode.episodic_workflow.root.library.native_fluorescence_
 
 
 def pin(path):
-    return {'path': str(path), 'sha256': '1' * 64, 'size_bytes': 1}
+    return {'path': str(path)}
 
 
 def software(*, fcs=False):

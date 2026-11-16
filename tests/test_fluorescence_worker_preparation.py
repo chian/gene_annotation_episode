@@ -87,7 +87,6 @@ def test_closed_capture_replays_without_todays_runtime_or_resubmission(prepared,
         shutil.rmtree(root / name)
     def forbidden(*args, **kwargs): pytest.fail("closed worker consulted current runtime or dispatched")
     monkeypatch.setattr(preparation, "_snapshot", forbidden)
-    monkeypatch.setattr(preparation, "_verify_pins", forbidden)
     monkeypatch.setattr(preparation.native, "prepare_job", forbidden)
     assert preparation.prepare_fluorescence_result_worker(store, plan=plan, policy=LocalJobPolicy(**POLICY)) == capture
 

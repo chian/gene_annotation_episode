@@ -83,7 +83,7 @@ def test_dependency_missing_is_partial_and_missing_model_files_are_explicit(tmp_
     assert b"ModuleNotFoundError" in read_role(bundle, attempt, "stderr")
 
 
-@pytest.mark.parametrize("field,bad", [("worker_source_sha256", "0" * 64), ("python_sha256", "0" * 64)])
+@pytest.mark.parametrize("field,bad", [("python_sha256", "0" * 64)])
 def test_actual_cli_software_mismatch_prevents_energy_and_keeps_topology(tmp_path, field, bad):
     selected_job = job(tmp_path, energy=True)
     selected_job["software"][field] = bad

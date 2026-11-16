@@ -91,8 +91,7 @@ def _code(profile, suffix):
 
 def _deployment(operation, value):
     profile = _profile(operation)
-    source._deployment(value, version=profile["deployment_version"],
-        source_sha256=source._SOURCE_PROFILES[profile["native_source"]]["sha256"])
+    source._deployment(value, version=profile["deployment_version"])
 
 
 def _prepared_profile(prepared):

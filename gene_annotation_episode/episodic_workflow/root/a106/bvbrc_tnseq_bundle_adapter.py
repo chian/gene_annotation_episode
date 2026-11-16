@@ -3,7 +3,6 @@ from . import bvbrc_intervention_bundle_adapter as intervention
 
 ADAPTER_ID = "bvbrc_tnseq"
 ADAPTER_VERSION = "1"
-implementation_sha256 = intervention.implementation_sha256
 parameters_schema = intervention.parameters_schema
 requested_form_schema = intervention.requested_form_schema
 validate_requested_form = intervention.validate_requested_form

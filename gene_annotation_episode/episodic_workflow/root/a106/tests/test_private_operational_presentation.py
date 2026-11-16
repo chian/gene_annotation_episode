@@ -30,6 +30,7 @@ def records(tmp_path_factory):
     with module('state').Store(tmp_path_factory.mktemp('private-presentation')/'state') as store:
         store.create_problem(raw_sequence='MAAA',molecule='protein')
         journal=module('episode_journal').Journal(store,'engineering-presentation-boundaries')
+        module('episode_completion').CompletionLedger(store,journal)
         yield store,journal,module('decision_exchanges').DecisionExchanges(journal)
 
 

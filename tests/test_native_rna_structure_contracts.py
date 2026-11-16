@@ -49,7 +49,6 @@ def rna_input(*, prediction=False, energy=False):
 def software():
     result = {"python_executable": sys.executable, "python_sha256": sha(sys.executable),
         "python_version": platform.python_version(), "worker_module": "gene_annotation_episode.episodic_workflow.root.library.native_rna_structure_worker",
-        "worker_source_sha256": sha(REPO / "gene_annotation_episode/episodic_workflow/root/library/native_rna_structure_worker.py"),
         "viennarna_distribution_version": None, "rna_module_sha256": None, "rna_extension_sha256": None}
     return result
 

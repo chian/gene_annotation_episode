@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from gene_annotation_episode.protease_kinetics_measurements import (
-    SOURCE_FUNCTION_SHA256, SOURCE_FILE_SHA256, ProteaseKineticsContractError,
+    ProteaseKineticsContractError,
     populate_protease_kinetics_sheet, validate_protease_kinetics_sheet,
     calculate_protease_kinetics_components,
 )
@@ -23,7 +23,7 @@ def supplied_fixture():
     # Deliberate constructed retention fixture, separate from genuine-call tests.
     # Structural protocol example only: these paths/pins do not attest a run.
     selected_pin = {"path": "/constructed/runtime/python", "sha256": "0"*64, "size_bytes": 0}
-    source_pin = {"path": "/constructed/biochemistry.py", "sha256": SOURCE_FILE_SHA256, "size_bytes": 41579}
+    source_pin = {"path": "/constructed/biochemistry.py", "sha256": "1"*64, "size_bytes": 41579}
     manifest_pin = {"path": "/constructed/software.json", "sha256": "0"*64, "size_bytes": 0}
     request = {"version": "molecular_sequence_request_v3", "operation": "analyze_protease_kinetics",
         "arguments": {**deepcopy(measurements), "output_prefix": "selected", "output_dir": "/constructed/output/native"},
@@ -34,7 +34,7 @@ def supplied_fixture():
     capture = {"version": "molecular_sequence_execution_v3", "request": request, "request_canonical_sha256": None, "stage": "completed",
         "native_record": {"schema": "biomni_protease_kinetics_native_v1", "outcome": "completed", "result_kind": "analysis_report", "failure": None,
             "result": "Vmax: 12.0000; KM: 3.0000", "source_identity": {"callable": "analyze_protease_kinetics",
-                "sha256": SOURCE_FUNCTION_SHA256, "path": source_pin["path"]}}, "native_call_state": "returned", "reference_data": None,
+                "path": source_pin["path"]}}, "native_call_state": "returned", "reference_data": None,
         "execution_receipt": {}, "stdout": "", "stderr": "", "failure": None,
         "observer": {"schema": "native_selected_return_observation_v1", "mechanism": "selected_code_return_profile",
             "state": "captured", "reason": None, "selected_call_count": 1, "selected_terminal_event_count": 1,
