@@ -78,9 +78,8 @@ class LiteratureRateRepository:
             (self.run_id, context.episode_id, operation_key)).fetchone() if installed else None
 
     def _install_delivery_bindings(self):
-        # New receipt state is created only inside the actual incoming receive
-        # transaction. Old authentic runtime state can remain fully read-only.
-        # Optical004 already uses this exact per-view table/digest naming.
+        # Receipt state is created only inside the actual incoming receive
+        # transaction.
         self.store.db.execute(f"""CREATE TABLE IF NOT EXISTS {self._delivery_table}(
             run_id TEXT NOT NULL, episode_id TEXT NOT NULL, operation_key TEXT NOT NULL,
             cells_digest TEXT NOT NULL, PRIMARY KEY(run_id,episode_id,operation_key))""")
@@ -93,8 +92,7 @@ class LiteratureRateRepository:
         """Authenticate runtime admission; other keys are a trusted manual API.
 
         A saved digest is not proof that runtime admitted the subset. Its actual
-        successful form and original child contract supply that proof. Reading
-        an old authentic runtime receipt needs no backfilled binding or history.
+        successful form and original child contract supply that proof.
         """
         if not isinstance(operation_key, str) or not operation_key:
             raise ContractError("operation_key_required")
@@ -454,13 +452,7 @@ class LiteratureRateRepository:
             raise ContractError("literature_sheet_not_selected_output")
         payload = json.loads(self.store.get_artifact(source["artifact_ref"]))
         native = self.provider == PROVIDER and payload.get("version") == NATIVE_RECORD_VERSION
-        # An adapter can explicitly retain exact old payloads while publishing
-        # a newer version. Reading never upgrades or recalculates those cells.
-        readable_versions = getattr(self, "readable_record_versions", (self.record_version,))
-        if not native and payload.get("version") not in readable_versions:
-            raise ContractError("literature_rate_sheet_version_mismatch")
-        if (hasattr(self, "readable_record_versions")
-                and source.get("version") != payload.get("version")):
+        if not native and payload.get("version") != self.record_version:
             raise ContractError("literature_rate_sheet_version_mismatch")
         if source.get("parent_source_refs") != payload.get("input_source_refs", [payload["input_source_ref"]]):
             raise ContractError("literature_rate_sheet_source_mismatch")
@@ -784,12 +776,8 @@ class LiteratureRateRepository:
             bound = self._delivery_binding(context, operation_key)
             if bound is not None and bound[0] != digest:
                 raise ContractError("literature_delivery_binding_mismatch")
-            if old is not None and bound is None and original is None:
-                raise ContractError("literature_delivery_binding_unavailable")
             if old is not None and bound is None:
-                # The original runtime form is sufficient proof. Preserve old
-                # state rather than backfilling a newly invented admission.
-                return
+                raise ContractError("literature_delivery_binding_unavailable")
             self._install_delivery_bindings()
             self.store.db.execute(f"INSERT OR IGNORE INTO {self.received_table} VALUES(?,?,?,?)",
                 (self.run_id, context.episode_id, operation_key, data))

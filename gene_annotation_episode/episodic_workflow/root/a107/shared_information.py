@@ -99,9 +99,6 @@ class SharedInformation:
             or self._recipient(row, body) == self._participant(context.episode_id))
 
     def _episode_state(self, episode_id):
-        columns = {row[1] for row in self.store.db.execute('PRAGMA table_info(runtime_episodes)')}
-        if 'state' not in columns:
-            return 'unknown'
         row = self.store.db.execute('SELECT state FROM runtime_episodes WHERE run_id=? AND episode_id=?',
             (self.run_id, episode_id)).fetchone()
         return 'unknown' if row is None else row['state']

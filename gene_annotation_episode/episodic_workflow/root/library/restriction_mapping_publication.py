@@ -109,7 +109,7 @@ def retain_restriction_input(store, *, operation_key, tool_name, arguments, scop
     # Reuse the actual resolver/checker methods without constructing/configuring
     # a ToolRegistry. The caller already checked externally received references;
     # this internal revalidation authenticates supplied bytes and packed SQL joins.
-    from gene_annotation_episode.tools import ToolRegistry
+    from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
     class _SelectedStoreOperand:
         _sequence = ToolRegistry._sequence
         _check_sequence_operand = ToolRegistry._check_sequence_operand

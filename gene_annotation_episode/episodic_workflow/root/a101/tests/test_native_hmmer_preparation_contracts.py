@@ -169,23 +169,13 @@ def test_simulation_records_actual_false_flags_without_changing_command(mode):
     assert recorded_tail_masses(compiled["operation"]["settings"]) == ([.02], None)
 
 
-def test_explicit_simulation_flags_and_original_incomplete_records():
+def test_explicit_simulation_flags_are_recorded_and_required():
     selected = job("hmmsim", "viterbi", ["--fast", "--tlinear"])
     chosen = compile_native_hmmer_preparation_job(selected)["operation"]
     assert chosen["settings"]["--fast"] is True and chosen["settings"]["--tlinear"] is True
     absent_selected = deepcopy(chosen)
     del absent_selected["settings"]["--fast"]
     assert not recorded_operation_matches_compiled(absent_selected, chosen)
-    current = compile_native_hmmer_preparation_job(job("hmmsim", "viterbi"))["operation"]
-    old = deepcopy(current)
-    del old["settings"]["--fast"], old["settings"]["--tlinear"]
-    original = deepcopy(old)
-    assert recorded_operation_matches_compiled(old, current)
-    assert old == original
-    for field, value in [("--seed", 99), ("-N", 20), ("--fast", 0)]:
-        changed = deepcopy(old)
-        changed["settings"][field] = value
-        assert not recorded_operation_matches_compiled(changed, current)
 
 
 @pytest.mark.parametrize("fault", ["alias", "traversal", "parent_child", "reserved", "copy_overlap", "metadata", "environment", "unknown_field"])

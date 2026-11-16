@@ -1,4 +1,4 @@
-"""Original selected fluorescence action, launch, worker and publication authority.
+"""Selected fluorescence action, launch, worker and publication authority.
 
 These durable controls retain outcomes before credit. Historical validation
 uses frozen controls and artifact metadata; it neither loads event arrays nor polls

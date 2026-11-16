@@ -56,7 +56,7 @@ SCHEMAS = {
     OPERATIONS[1]: ("primer_placement_sheet_v1", ("primer_placement_components_v1",)),
     OPERATIONS[2]: ("glycosylation_measurement_sheet_v1", ("glycosylation_measurement_components_v1",)),
     OPERATIONS[3]: ("glycosylation_measurement_sheet_v1", ("glycosylation_measurement_components_v1",)),
-    OPERATIONS[4]: ("protease_kinetics_sheet_v1", ("protease_kinetics_components_v1", "protease_kinetics_components_v2")),
+    OPERATIONS[4]: ("protease_kinetics_sheet_v1", ("protease_kinetics_components_v2",)),
 }
 QUANTITIES = ("product_vmax", "product_formation_per_enzyme_concentration", "apparent_turnover", "kcat",
     "apparent_catalytic_efficiency", "catalytic_efficiency")
@@ -77,8 +77,7 @@ REASONS_COMMON = ("native_fit_parameters_unavailable", "native_fit_population_in
     "propagated_variance_numerical_range", "not_supplied_or_estimated", "calibration_enzyme_and_joint_relationships_unknown",
     "native_rate_vector_unavailable", "native_substrate_vector_unavailable", "insufficient_residual_population",
     "residual_summary_unavailable", "zero_model_denominator", "native_vector_slot_has_no_measured_curve", "model_numerical_range")
-REASONS = {"protease_kinetics_components_v1": (*REASONS_COMMON, "native_covariance_asymmetric", "native_covariance_indefinite"),
-    "protease_kinetics_components_v2": (*REASONS_COMMON, "native_covariance_symmetric_part_indefinite",
+REASONS = {"protease_kinetics_components_v2": (*REASONS_COMMON, "native_covariance_symmetric_part_indefinite",
         "propagated_variance_negative", "propagated_variance_overflow", "propagated_variance_positive_underflow",
         "physical_ratio_overflow", "physical_ratio_positive_underflow")}
 
@@ -1479,7 +1478,7 @@ def molecular_sequence_fact_sources(*, profile=_LEGACY_PROFILE):
             if not table: continue
             specs = {}; unavailable = {role: empty_file_state() for role in FILE_ROLES}
             qualifier = _qualifiers(operation, identity, None, {"schema": SCHEMAS[operation][1][-1]}, unavailable, specs)
-            reason_union = tuple(dict.fromkeys((*REASONS["protease_kinetics_components_v1"], *REASONS["protease_kinetics_components_v2"])))
+            reason_union = REASONS["protease_kinetics_components_v2"]
             qualifier_schema = obj({"schema": {"type": "string", "const": qualifier["schema"]},
                 "operation": {"type": "string", "const": operation}, "component_schema": nullable({"type": "string", "enum": list(SCHEMAS[operation][1])}),
                 "states": obj({name: stored_schema(reason_union if "reason" in name and operation == OPERATIONS[4] else spec[1]) for name, spec in specs.items()}),

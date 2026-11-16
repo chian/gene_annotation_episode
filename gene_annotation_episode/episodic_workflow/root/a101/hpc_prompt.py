@@ -26,8 +26,7 @@ def _candidate_view(candidate):
 def plan_outcome_view(outcome):
     """Present typed plans/candidates consistently through outcome/history wrappers.
 
-    This also projects retained pre-fix plan outcomes without changing their
-    stored receipts. Launch receives the original executable bytes through its
+    Stored receipts are not changed. Launch receives the original executable bytes through its
     existing immutable input file; model identity and forecasts remain exact.
     """
     def project(value):

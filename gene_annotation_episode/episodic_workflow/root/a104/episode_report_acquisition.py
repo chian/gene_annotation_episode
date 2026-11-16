@@ -76,9 +76,7 @@ def acquire_report_evidence(workflow, source, selection, index, *,
                 'record_refs': references, 'changed_record_refs': [],
                 'progress_refs': additions['progress_refs'], 'report_origin': origin,
                 'received_evidence_additions': additions}
-            if acquired and (workflow.execution_binding is not None
-                    or workflow.wait_inputs_version == 'wait_inputs_binding_v2'
-                    or workflow.completed_action_inputs_version is not None):
+            if acquired:
                 outcome['pending_work_after_action'] = workflow.pending_work(source)
             # Host projections can consult the recorded own outcome. Publish
             # it inside this transaction before projecting actual parent credit.

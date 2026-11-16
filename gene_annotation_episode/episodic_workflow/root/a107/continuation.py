@@ -21,7 +21,7 @@ def controller(workflow, path, *, identity, row, role, binding):
         pass
     native = workflow.has_native_estimation()
     episode_id = identity.episode_id
-    capture = None if workflow.completed_action_inputs_version is None else lambda unit_ref, index, value: workflow.capture_completion_evidence(episode_id, original_decision_index=index, unit_ref=unit_ref, controller_input=value)
+    capture = lambda unit_ref, index, value: workflow.capture_completion_evidence(episode_id, original_decision_index=index, unit_ref=unit_ref, controller_input=value)
     return _original_runtime.ExecutionContextController(controller, workflow.journal, episode_id, include_native=native, capture_current_completion=capture)
 
 def controller_value(workflow, source, index, credit):

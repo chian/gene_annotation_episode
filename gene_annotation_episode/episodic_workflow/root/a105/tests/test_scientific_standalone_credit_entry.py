@@ -26,7 +26,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.native_timing_informati
 def test_original_scientific_projector_and_optional_timing_scope(tmp_path, standalone, credit, native_information):
     library = ScientificProcessLibrary.freeze(tmp_path / 'scientific-process-library',
         source=Path(__file__).resolve().parents[5] / 'research/slotted_process_library/publications/2026-10-24-001')
-    tool_library = ScientificToolLibrary.freeze(tmp_path / 'tool-library', catalog=[], tool_info=True)
+    tool_library = ScientificToolLibrary.freeze(tmp_path / 'tool-library', catalog=[])
     calls = []
     class Projector:
         def __call__(self, store, scope, **arguments):

@@ -1,6 +1,6 @@
 """Supplied-byte preparation and direct standard BLAST database sheet population.
 
-The accepted 327 contract (including additive 002) owns these ports.  They do
+These ports do
 no acquisition, file access, execution, scoring or episode work.  ``contents``
 is keyed by artifact_ref for both captured and explicitly retained sources;
 ``subject_contents`` is keyed by sequence_artifact_ref.  Paths are audit data.

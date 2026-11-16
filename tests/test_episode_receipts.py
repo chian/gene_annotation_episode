@@ -255,7 +255,7 @@ def test_native_workbook_pages_return_one_finding_through_child_form_and_replay(
                 'source_ref': result['source_ref'], 'measurements': [], 'dependencies': [],
                 'anchor': {'source_ref': result['source_ref'],
                     'artifact_ref': result['artifact_ref'], 'start': 0,
-                    'end': len(raw.encode()), 'quote': raw}}]
+                    'end': len(raw.encode())}}]
             row = assessment(hypothesis, '@cells', 'incomparable', alias='finding')
             row['investigation_finding'] = finding(target)
             payload['assessments'] = [row]

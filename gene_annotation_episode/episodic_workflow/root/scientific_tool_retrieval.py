@@ -17,13 +17,12 @@ from .method_loop.durable import canonical, content_digest
 
 from .boundary_validation import ModelOutputError, schema_failure_diagnostic
 from gene_annotation_episode.domain import identity
-from .scientific_tool_library import tool_names
 from gene_annotation_episode.tool_information import selectors as tool_selectors
 
 
 from .library.scientific_tool_configuration import configuration, VERSION, SEMANTIC, LITERAL
-from .library.scientific_tool_selection_schema import output_schema, tool_info_output_schema
-from .library.scientific_tool_retrieval_instructions import INSTRUCTIONS, TOOL_INFO_INSTRUCTIONS
+from .library.scientific_tool_selection_schema import tool_info_output_schema
+from .library.scientific_tool_retrieval_instructions import TOOL_INFO_INSTRUCTIONS
 
 
 def _outcome(status, operation_ref, *, result=None, code=None, detail=None):
@@ -67,23 +66,19 @@ class ScientificToolRetriever:
                 or not isinstance(episode_id, str) or not episode_id
                 or not isinstance(operation_key, str) or not operation_key):
             return _outcome("invalid", operation_ref, code="scientific_tool_retrieval_input_invalid")
-        has_info = self.library.supports_tool_info
-        catalog = (self.library.parent_tool_info(available_catalog) if has_info else self.library.catalog())
+        catalog = self.library.parent_tool_info(available_catalog)
         names = [entry["name"] for entry in catalog]
-        if not has_info:
-            self.library.resolve(names, available_catalog)
-        schema = tool_info_output_schema(catalog) if has_info else output_schema(names)
-        instructions = TOOL_INFO_INSTRUCTIONS if has_info else INSTRUCTIONS
+        schema = tool_info_output_schema(catalog)
+        instructions = TOOL_INFO_INSTRUCTIONS
         context = {"investigation": investigation, "catalog": catalog}
         call_id = "scientific_tool_retrieval_" + content_digest({
             "run_id": self.run_id, "episode_id": episode_id, "operation_key": operation_key})[:32]
-        request = {"version": "scientific_tool_retrieval_request_v2" if has_info else "scientific_tool_retrieval_request_v1",
+        request = {"version": "scientific_tool_retrieval_request_v2",
             "owner": {"run_id": self.run_id, "episode_id": episode_id,
                 "operation_key": operation_key}, "configuration": self.configuration,
             "library": self.library.as_record(), "call_identity": call_id,
             "role": "FAST", "instructions": instructions, "context": context,
-            "selection_schema": schema, "output_schema": tool_info_output_schema(catalog, transport=True)
-                if has_info else output_schema(names, transport=True)}
+            "selection_schema": schema, "output_schema": tool_info_output_schema(catalog, transport=True)}
         serialized, digest = canonical(request), content_digest(request)
         key, token = (self.run_id, episode_id, operation_key), uuid.uuid4().hex
         with self.store.transaction():
@@ -104,8 +99,7 @@ class ScientificToolRetriever:
                 (*key, digest, serialized, token))
         if not names:
             result = _outcome("completed", operation_ref,
-                result={"investigation": investigation, "child_tool_info": []} if has_info else
-                       {"investigation": investigation, "tools": [], "catalog": []})
+                result={"investigation": investigation, "child_tool_info": []})
             self._publish(key, digest, token, None, result)
             return result
         response = None
@@ -126,17 +120,11 @@ class ScientificToolRetriever:
                         deepcopy(context), deepcopy(request["output_schema"]))
                     response = json.loads(canonical(response))
                     Draft202012Validator(schema).validate(response)
-                    if has_info:
-                        selected = tool_selectors(response['child_tool_info'])
-                        canonical_rows = self.library.resolve_tool_info(selected, available_catalog)
-                        from gene_annotation_episode.tool_information import parent_view
-                        result = _outcome('completed', operation_ref, result={
-                            'investigation': investigation, 'child_tool_info': parent_view(canonical_rows)})
-                    else:
-                        selected = tool_names(response["tools"])
-                        result = _outcome("completed", operation_ref, result={
-                            "investigation": investigation, "tools": selected,
-                            "catalog": self.library.resolve(selected, available_catalog)})
+                    selected = tool_selectors(response['child_tool_info'])
+                    canonical_rows = self.library.resolve_tool_info(selected, available_catalog)
+                    from gene_annotation_episode.tool_information import parent_view
+                    result = _outcome('completed', operation_ref, result={
+                        'investigation': investigation, 'child_tool_info': parent_view(canonical_rows)})
             except ValidationError as error:
                 result = _outcome("invalid", operation_ref,
                     code="scientific_tool_retrieval_output_invalid",
@@ -181,5 +169,5 @@ class ScientificToolRetriever:
                     await released
 
 
-__all__ = ["ScientificToolRetriever", "configuration", "output_schema", "VERSION",
+__all__ = ["ScientificToolRetriever", "configuration", "VERSION",
     "SEMANTIC", "LITERAL", "tool_info_output_schema", "TOOL_INFO_INSTRUCTIONS"]

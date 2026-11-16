@@ -664,7 +664,7 @@ class ModelConnection:
             return await self._complete_serial(episode_id, role, instructions, context, output_schema)
 
     async def complete_with_presentation(self, episode_id, role, instructions, context, output_schema, *, prompt_renderer):
-        """Accept a predefined episode renderer without changing legacy calls."""
+        """Complete with a predefined episode renderer."""
         async with self.worker_lock:
             return await self._complete_serial(episode_id, role, instructions, context, output_schema, prompt_renderer=prompt_renderer)
 

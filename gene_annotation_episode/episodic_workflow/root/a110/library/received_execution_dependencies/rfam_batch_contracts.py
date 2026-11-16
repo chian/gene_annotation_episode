@@ -281,10 +281,10 @@ RFAM_TABLE_PROJECTION_SCHEMA = {'oneOf': [_object({'family': {'const': family}, 
 RFAM_SINGLE_REQUEST_SCHEMA = _object({'version': {'const': 'rfam_batch_request_v1'}, 'mode': {'const': 'single_sequence'}, 'subject_ref': _TEXT})
 RFAM_FILE_REQUEST_SCHEMA = _object({'version': {'const': 'rfam_batch_request_v2'}, 'mode': {'const': 'sequence_batch'}, 'subject_refs': {'type': 'array', 'minItems': 1, 'items': _TEXT}})
 RFAM_BATCH_REQUEST_SCHEMA = {'oneOf': [RFAM_SINGLE_REQUEST_SCHEMA, RFAM_FILE_REQUEST_SCHEMA]}
-RFAM_LEGACY_RESULT_SELECTOR_SCHEMA = _object({'version': {'enum': ['rfam_batch_result_selector_v1', 'rfam_batch_result_selector_v2']}, 'representation': {'enum': ['json', 'tblout', 'out']}, 'model_metadata_ref': {'type': ['string', 'null'], 'minLength': 1}, 'projection': {'anyOf': [RFAM_PROJECTION_SCHEMA, RFAM_TABLE_PROJECTION_SCHEMA, {'type': 'null'}]}})
+RFAM_RESULT_SELECTOR_SCHEMA = _object({'version': {'const': 'rfam_batch_result_selector_v2'}, 'representation': {'enum': ['json', 'tblout', 'out']}, 'model_metadata_ref': {'type': ['string', 'null'], 'minLength': 1}, 'projection': {'anyOf': [RFAM_PROJECTION_SCHEMA, RFAM_TABLE_PROJECTION_SCHEMA, {'type': 'null'}]}})
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.rfam_batch_report_contracts import RFAM_REPORT_PROJECTION_SCHEMA
 RFAM_REPORT_RESULT_SELECTOR_SCHEMA = _object({'version': {'const': 'rfam_batch_result_selector_v3'}, 'representation': {'const': 'out'}, 'model_metadata_ref': {'type': 'null'}, 'projection': {'anyOf': [RFAM_REPORT_PROJECTION_SCHEMA, {'type': 'null'}]}})
-RFAM_BATCH_RESULT_SELECTOR_SCHEMA = {'oneOf': [RFAM_LEGACY_RESULT_SELECTOR_SCHEMA, RFAM_REPORT_RESULT_SELECTOR_SCHEMA]}
+RFAM_BATCH_RESULT_SELECTOR_SCHEMA = {'oneOf': [RFAM_RESULT_SELECTOR_SCHEMA, RFAM_REPORT_RESULT_SELECTOR_SCHEMA]}
 REQUEST_SCHEMA = RFAM_BATCH_REQUEST_SCHEMA
 SELECTOR_SCHEMA = RFAM_BATCH_RESULT_SELECTOR_SCHEMA
 

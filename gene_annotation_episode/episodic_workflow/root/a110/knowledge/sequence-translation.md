@@ -8,7 +8,7 @@ names, starts and stops so the selecting episode can inspect the available
 models. Reference sequences remain reference evidence when transformed.
 
 The current callable is local `ToolRegistry` operation `sequence.translate`.
-It uses installed Biopython with the existing caller limits of 20 GiB RAM and
+It uses installed Biopython with the existing caller limits of 5 GiB RAM and
 4 GiB scratch and no wall-time limit. No remote API or HPC translation binding
 is claimed by this entry.
 

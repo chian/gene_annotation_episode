@@ -196,10 +196,7 @@ class AnnotationOperations:
                         decision_index=index, operation_key=key)
                 if _runtime.inspect.isawaitable(result):
                     result = await result
-            if (self.workflow.execution_binding is not None
-                    or self.workflow.wait_inputs_version == 'wait_inputs_binding_v2'
-                    or self.workflow.completed_action_inputs_version is not None):
-                result = {**result, 'pending_work_after_action': self.workflow.pending_work(self)}
+            result = {**result, 'pending_work_after_action': self.workflow.pending_work(self)}
             with (self.workflow.store.transaction() if self.workflow.execution_binding is not None else _runtime.nullcontext()):
                 journal.save("runtime_actions", {"episode_id": self.episode_id, "decision_index": index,
                     "action": _runtime._json(selection), "result": _runtime._json(result), "credit": None})

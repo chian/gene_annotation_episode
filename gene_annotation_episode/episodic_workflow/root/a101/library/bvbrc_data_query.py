@@ -1,8 +1,7 @@
 """Pure validation and reproducible native requests for BV-BRC Data API v2.
 
 No acquisition, file access, Store access, retry, pagination or scoring occurs
-here. Explicit field flags come from the versioned production registry. This
-module deliberately does not import or alter the legacy RQL service.
+here. Explicit field flags come from the versioned production registry.
 """
 from __future__ import annotations
 
@@ -646,7 +645,6 @@ def validate_data_query(request: dict) -> dict:
 
 
 def _base_url(value: str) -> str:
-    # Keep the legacy caller-owned endpoint rules, without importing its client.
     if type(value) is not str:
         raise _ContractError("bvbrc_invalid_base_url")
     try:

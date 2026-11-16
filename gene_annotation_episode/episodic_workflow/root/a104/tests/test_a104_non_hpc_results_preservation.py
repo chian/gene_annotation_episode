@@ -241,7 +241,7 @@ def test_results_task_retains_complete_returned_outcome_and_single_replay(frame,
     assert calls == [('execution.results.read', selected['arguments'], f'{frame.run_id}:{case.task.episode_id}:5')]
     assert case.receipts == [(5, status)] and len(case.projections) == 1
     assert json.loads(case.saved[5]['action']) == selected
-    assert json.loads(case.saved[5]['result']) == payload
+    assert json.loads(case.saved[5]['result']) == {**payload, 'pending_work_after_action': case.task.workflow.pending_work(case.task)}
     assert case.runtime.observes_action_outcome('tool', status)
 
 @pytest.mark.parametrize('kind,status', [('wait', 'completed'), ('wait', 'failed'), ('reason', 'completed')])

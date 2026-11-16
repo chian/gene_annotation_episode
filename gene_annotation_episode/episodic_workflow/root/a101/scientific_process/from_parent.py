@@ -99,7 +99,7 @@ class ScientificAssignment:
         validate_schema(arguments, _REVISION_ARGUMENTS)
         prepared_origin = validate_revision_origin(preparation['revision_origin'])
         expected_invocation = scientific_invocation_ref(context.run_id, expected_path)
-        if preparation['operation_ref'] != origin['preparation_operation_ref'] or preparation['invocation_ref'] != expected_invocation or origin['parent_invocation_ref'] != expected_invocation or (prepared_origin != origin) or (proposal['parent_selection_sha256'] != scientific_digest(initial)) or (proposal['selection'] != assignment['selection']) or (proposal['selection'] != self._proposed_selection(initial, arguments, proposal['selection']['version'], context.scope)):
+        if preparation['operation_ref'] != origin['preparation_operation_ref'] or preparation['invocation_ref'] != expected_invocation or origin['parent_invocation_ref'] != expected_invocation or (prepared_origin != origin) or (proposal['parent_selection_sha256'] != scientific_digest(initial)) or (proposal['selection'] != assignment['selection']) or (proposal['selection'] != self._proposed_selection(initial, arguments, context.scope)):
             raise ContractError('scientific_revision_preparation_mismatch')
 
     def prepare_invocation(self, parent, role, inputs, scope, operation_key, *, invocation, closed_context=None):
@@ -159,29 +159,19 @@ class ScientificAssignment:
         if assignment != message.get('episode_assignment') or plain(context.scope) != message['scope'] or message.get('scientific_invocation_ref') != scientific_invocation_ref(context.run_id, context.path) or (filled['selection'] != assignment['selection']) or (filled['assignment_sha256'] != scientific_digest(assignment)) or (filled['invocation_sha256'] != scientific_digest(original)):
             raise ContractError('scientific_filled_identity_mismatch')
         if scientific_digest(self.as_record()) != scientific_digest(filled['mechanics_binding']):
-            read_saved = getattr(self.services, 'scientific_saved_request', None)
-            recorded = read_saved(context, active_only=False) if callable(read_saved) else None
-            restored = self.restore_saved_process(context, original_request=recorded, active_only=False) if recorded is not None else None
-            if restored != filled and self.restore_closed_process(context) != filled:
-                raise ContractError('scientific_filled_identity_mismatch')
+            raise ContractError('scientific_filled_identity_mismatch')
         if 'revision_origin' in assignment:
             self._validate_origin(context, assignment, preparation_reader=self.services.scientific_parent_preparation, expected_path=context.path[:-1])
 
     def validate_execution_context(self, context) -> None:
-        """Historical closure permits inspection/replay, never new dispatch."""
-        from gene_annotation_episode.episodic_workflow.root.a101.episode_composition import scientific_binding_compatible
+        """A closed request permits inspection/replay, never new dispatch."""
         self.validate_context(context)
-        current = self.as_record()
-        filled = plain(context.request['message']['scientific_process']['mechanics_binding'])
-        if self.restore_closed_process(context) is not None or not scientific_binding_compatible(current, filled):
+        if self.restore_closed_process(context) is not None:
             raise ContractError('scientific_execution_identity_mismatch')
         read_saved = getattr(self.services, 'scientific_saved_request', None)
         active = read_saved(context) if callable(read_saved) else None
         if active is None and callable(read_saved) and (read_saved(context, active_only=False) is not None):
             raise ContractError('scientific_execution_identity_mismatch')
-        if scientific_digest(current) != scientific_digest(filled):
-            if active is None:
-                raise ContractError('scientific_execution_identity_mismatch')
 
     def _original_selection(self, context):
         self.validate_context(context)

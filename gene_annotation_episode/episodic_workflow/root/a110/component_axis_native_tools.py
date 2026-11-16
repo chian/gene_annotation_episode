@@ -52,8 +52,7 @@ class ComponentNativeHPCMixin:
         extra = ComponentNativeHPCMixin.component_native_catalog(self)
         from .a110_qualification import catalog
         extra.update(catalog())
-        # This new registry offers no local heavy FBA fallback. Preserve the
-        # original backend and its configuration for historical workflows.
+        # This registry runs no local native FBA; it only reads received output.
         if 'perform_flux_balance_analysis' in entries:
             stored = [row for row in entries['perform_flux_balance_analysis']['input_schema'].get('oneOf', [])
                 if row.get('properties', {}).get('mode', {}).get('const') == 'read_stored']

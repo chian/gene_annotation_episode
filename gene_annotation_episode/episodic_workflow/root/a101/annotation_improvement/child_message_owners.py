@@ -31,13 +31,13 @@ def exchange_for_child(workflow, source, selection, role):
             return None
         if improvement:
             from .to_child_annotation_improvement import prepare_request
-            from .from_child_annotation_improvement import admit_return, admit_unowned_return
-            return prepare_request, admit_return, admit_unowned_return
+            from .from_child_annotation_improvement import admit_return
+            return prepare_request, admit_return
         from ..episode import is_annotation_parent
         if is_annotation_parent(workflow, source):
             from ..to_child_annotation_improvement import prepare_request
-            from ..from_child_annotation_improvement import admit_return, admit_unowned_return
-            return prepare_request, admit_return, admit_unowned_return
+            from ..from_child_annotation_improvement import admit_return
+            return prepare_request, admit_return
         return None
     if not improvement:
         return None
@@ -74,5 +74,5 @@ def exchange_for_child(workflow, source, selection, role):
         from importlib import import_module
         outgoing = import_module(__package__ + '.to_child_' + home)
         incoming = import_module(__package__ + '.from_child_' + home)
-        return outgoing.prepare_request, incoming.admit_return, incoming.admit_unowned_return
+        return outgoing.prepare_request, incoming.admit_return
     return None

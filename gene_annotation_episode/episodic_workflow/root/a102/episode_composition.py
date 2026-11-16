@@ -41,13 +41,6 @@ def _same_record(actual, saved, reference):
     if canonical(actual) != canonical(saved):
         raise _failure('identity_conflict', reference)
 
-def scientific_binding_compatible(actual, recorded):
-    """Only the exact private A102 descriptor can reopen its saved binding."""
-    try:
-        return canonical(actual) == canonical(recorded)
-    except (TypeError, ValueError, OverflowError):
-        return False
-
 def reopen_scientific_binding(services, *, descriptor, directory):
     """Reopen this exact private scientific implementation from its saved libraries."""
     from .scientific_process.episode import ScientificProcessEpisode

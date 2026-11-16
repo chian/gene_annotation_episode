@@ -149,8 +149,8 @@ class PracticalReceiptInformation:
                     message = json.loads(episode['request'])['message']
                     assignment = message.get('episode_assignment', message.get('assignment', {}))
                     if is_compact_assignment(assignment):
-                        control = read_request_binding(self.store, self.run_id, body['episode_id'])
-                        options = {'assignment': snapshot['assignment'], 'control_version': control['version']}
+                        read_request_binding(self.store, self.run_id, body['episode_id'])
+                        options = {'assignment': snapshot['assignment']}
                         match_practical_public_outcome(result, recorded, reference, **options)
                         recorded = practical_outcome_view(recorded, **options)
                     from gene_annotation_episode.episodic_workflow.root.a105.library.retained_input_authority.macs2_peak_request_binding import is_compact_assignment as is_macs2_assignment, match_practical_public_outcome as match_macs2_outcome, practical_outcome_view as macs2_outcome_view

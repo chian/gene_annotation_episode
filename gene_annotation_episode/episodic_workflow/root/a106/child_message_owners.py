@@ -32,7 +32,7 @@ def _nominal_child(workflow, role):
     matches = []
     for candidate in candidates:
         entries = getattr_static(candidate, 'entry_roles', None)
-        parent = getattr_static(candidate, 'commissioning_parent', 'legacy_annotation')
+        parent = getattr_static(candidate, 'commissioning_parent', None)
         if type(entries) is not tuple or any(type(value) is not str for value in entries) or type(parent) is not str:
             return False
         if role in entries and parent in ('legacy_annotation', 'annotation'):
@@ -46,22 +46,22 @@ def exchange_for_child(workflow, source, role):
         return None
     if role == 'launch':
         from .to_child_execution_job_submission import prepare_request
-        from .from_child_execution_job_submission import admit_return, admit_unowned_return
-        return (prepare_request, admit_return, admit_unowned_return)
+        from .from_child_execution_job_submission import admit_return
+        return (prepare_request, admit_return)
     if role == 'monitor':
         from .to_child_execution_progress_assessment import prepare_request
-        from .from_child_execution_progress_assessment import admit_return, admit_unowned_return
-        return (prepare_request, admit_return, admit_unowned_return)
+        from .from_child_execution_progress_assessment import admit_return
+        return (prepare_request, admit_return)
     if role == 'results':
         from .to_child_execution_result_acquisition import prepare_request
-        from .from_child_execution_result_acquisition import admit_return, admit_unowned_return
-        return (prepare_request, admit_return, admit_unowned_return)
+        from .from_child_execution_result_acquisition import admit_return
+        return (prepare_request, admit_return)
     if role == 'literature':
         from .to_child_published_evidence_assessment import prepare_request
-        from .from_child_published_evidence_assessment import admit_return, admit_unowned_return
-        return (prepare_request, admit_return, admit_unowned_return)
+        from .from_child_published_evidence_assessment import admit_return
+        return (prepare_request, admit_return)
     if role == 'scientific_process':
         from .to_child_scientific_process import prepare_request
-        from .from_child_scientific_process import admit_return, admit_unowned_return
-        return (prepare_request, admit_return, admit_unowned_return)
+        from .from_child_scientific_process import admit_return
+        return (prepare_request, admit_return)
     return None

@@ -54,7 +54,7 @@ class WorkflowSetup:
         if episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE:
             raise ValueError('original_episode_lifecycle_requires_its_pinned_implementation')
         self.episode_branch_lifecycle = episode_branch_lifecycle
-        if root_action_boundary not in (None, ROOT_BOUNDARY_VERSION):
+        if root_action_boundary != ROOT_BOUNDARY_VERSION:
             raise ValueError('unsupported_root_action_boundary')
         self.root_action_boundary = root_action_boundary
         self.decision_protocol = _decision_protocol(decision_protocol)

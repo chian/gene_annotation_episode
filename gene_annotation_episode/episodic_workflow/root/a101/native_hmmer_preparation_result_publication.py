@@ -157,10 +157,7 @@ def validate_prepared_grading(store, prepared, *, bundle, verify_files=True):
     if verify_files:
         _validate_rows(store, capture, bundle)
     occurrences, custody_failures = qualified_occurrences(bundle, prepared["bundle_artifact_ref"], capture)
-    # A saved publication keeps its original interpretation. Absence of this
-    # optional field is historical absence, never permission to upgrade it.
-    metadata, metadata_failures = effective_metadata(bundle, occurrences,
-        include_map_context="map_reconstruction_context" in stable["effective_metadata"])
+    metadata, metadata_failures = effective_metadata(bundle, occurrences)
     if (native_record_digest(occurrences) != native_record_digest(prepared["occurrences"])
             or native_record_digest(stable["effective_metadata"]) != native_record_digest(metadata)
             or native_record_digest(stable["grading_context"]) != native_record_digest(grading_context(bundle, occurrences, metadata))
@@ -340,26 +337,22 @@ def _worker_selection(directory, *, task, policy, plan=None):
             or any(not Path(path).resolve().is_relative_to(directory) for path in paths.values())):
         _error("result_worker_original_handle_conflict")
     raw = Path(paths["request"]).read_bytes()
-    expected_request = {"command": selected["command"], "cwd": str(directory),
-        "file_bytes": policy.scratch_bytes, "ready_path": paths["ready"], "release_path": paths["release"],
-        "result_path": paths["result"], "stdin_path": None, "env": selected["environment"]}
     if hashlib.sha256(raw).hexdigest() != body["request_sha256"]:
         _error("result_worker_original_request_conflict")
-    request = json.loads(raw)
-    if request != expected_request:
-        # New native reservations retain the original enclosing workflow in
-        # their request. Older sealed requests keep their exact original form.
-        # Never substitute the workflow currently reading a saved handle.
-        workflow = body["metadata"].get("whole_workflow_budget")
-        if (type(workflow) is not dict
-                or type(workflow.get("run_directory")) is not str
-                or type(workflow.get("window_id")) is not str):
-            _error("result_worker_original_request_conflict")
-        expected_request["env"] = {**selected["environment"],
+    # A native reservation names its enclosing workflow in its request. Never
+    # substitute the workflow currently reading a saved handle.
+    workflow = body["metadata"].get("whole_workflow_budget")
+    if (type(workflow) is not dict
+            or type(workflow.get("run_directory")) is not str
+            or type(workflow.get("window_id")) is not str):
+        _error("result_worker_original_request_conflict")
+    expected_request = {"command": selected["command"], "cwd": str(directory),
+        "file_bytes": policy.scratch_bytes, "ready_path": paths["ready"], "release_path": paths["release"],
+        "result_path": paths["result"], "stdin_path": None, "env": {**selected["environment"],
             "GENE_EPISODE_WORKFLOW_BUDGET_FILE": str(Path(workflow["run_directory"]) / "workflow-budget.json"),
-            "GENE_EPISODE_WORKFLOW_SLOT": workflow["window_id"]}
-        if request != expected_request:
-            _error("result_worker_original_request_conflict")
+            "GENE_EPISODE_WORKFLOW_SLOT": workflow["window_id"]}}
+    if json.loads(raw) != expected_request:
+        _error("result_worker_original_request_conflict")
     return selected, handle
 
 
@@ -519,7 +512,7 @@ def prepare_native_hmmer_preparation_grading(store, *, target, capture, capture_
     original_plan = _read_record(capture_directory, "capture-plan.json")
     bundle = validate_original_bundle(bundle, original_plan)
     occurrences, problems = qualified_occurrences(bundle, capture["bundle_artifact_ref"], capture)
-    metadata, metadata_failures = effective_metadata(bundle, occurrences, include_map_context=True)
+    metadata, metadata_failures = effective_metadata(bundle, occurrences)
     failures = unique_failures([*problems, *metadata_failures])
     files = [{"occurrence_id": r["occurrence_id"], "path": str(_artifact_path(store, r["artifact_ref"]))}
              for r in eligible_occurrences(occurrences)]

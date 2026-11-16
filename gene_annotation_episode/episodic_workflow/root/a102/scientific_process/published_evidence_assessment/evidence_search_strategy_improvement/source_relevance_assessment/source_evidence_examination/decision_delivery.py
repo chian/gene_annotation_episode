@@ -104,10 +104,9 @@ class SourceDecisionDelivery:
         if not has_session(self.episode_id, 'REASONING') and 'restored_episode_history' not in context:
             context = {**context, 'restored_episode_history': self.workflow.history_preview(self, before=index)}
         context = _live_original_runtime.instructional_model_context(context)
-        transport = saved.get('assignment_transport') if row is not None else {'version': _live_original_runtime._ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _live_original_runtime._digest(schema)}
+        transport = saved['assignment_transport'] if row is not None else {'version': _live_original_runtime._ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _live_original_runtime._digest(schema)}
         saved = {'context': context, 'schema': schema, **({'literature_numerical_contracts': saved['literature_numerical_contracts']} if 'literature_numerical_contracts' in saved else {})}
-        if transport is not None:
-            saved['assignment_transport'] = transport
+        saved['assignment_transport'] = transport
         if self.workflow.receipts is not None and (not self.workflow.is_job_source(self)) and (not self.workflow.uses_received_record_context(self)):
             self.workflow.receipts.receive(self.episode_id, context['visible_record_refs'], kind='decision_input', source_index=index)
         journal.save('runtime_model_calls', {'episode_id': self.episode_id, 'call_index': index, 'purpose': 'decision', 'request': _live_original_runtime._json(saved), 'response': None})

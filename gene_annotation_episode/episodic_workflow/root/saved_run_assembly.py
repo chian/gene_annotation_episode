@@ -59,11 +59,8 @@ def assemble_workflow(store, tools, provider, directory, run_id, settings, *,
     if settings.get('completed_action_inputs') != {'version': 'completed_action_inputs_binding_v1'}:
         raise WorkflowError('unsupported_completed_action_inputs_binding')
     completed_action_inputs_version = settings['completed_action_inputs']['version']
-    episode_branch_lifecycle = None
-    if 'episode_branch_lifecycle' in settings:
-        if settings['episode_branch_lifecycle'] != {'version': EPISODE_BRANCH_LIFECYCLE}:
-            raise WorkflowError('unsupported_episode_branch_lifecycle')
-        episode_branch_lifecycle = EPISODE_BRANCH_LIFECYCLE
+    if settings.get('episode_branch_lifecycle') != {'version': EPISODE_BRANCH_LIFECYCLE}:
+        raise WorkflowError('unsupported_episode_branch_lifecycle')
     return Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit,
                         credit_binding=_credit_binding_from_settings(settings),
                         restoration_settings=settings["restoration"],
@@ -83,7 +80,7 @@ def assemble_workflow(store, tools, provider, directory, run_id, settings, *,
                         annotation_child_roles=annotation_child_roles,
                         decision_protocol=decision_protocol,
                         root_action_boundary=settings.get('root_action_boundary'),
-                        episode_branch_lifecycle=episode_branch_lifecycle,
+                        episode_branch_lifecycle=EPISODE_BRANCH_LIFECYCLE,
                         episode_record_receipts=episode_record_receipts,
                         native_job_events=native_job_events,
                         progress_receipt_order=settings.get('episode_progress_receipts', {}).get('version'),

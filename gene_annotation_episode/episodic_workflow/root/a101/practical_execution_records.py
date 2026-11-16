@@ -21,8 +21,8 @@ from .launch_instructions import (SELECTION_SCHEMA as LAUNCH_INSTRUCTION_SELECTI
 ASSIGNMENT_VERSION = 'practical_assignment_v1'
 RECEIPT_VERSION = 'practical_action_receipt_v1'
 COMPLETION_VERSION = 'practical_completion_v1'
-# Legacy native receipts remain readable; current execution uses the ordinary
-# general terminal action and authenticates its actual native command custody.
+# Execution uses the ordinary general terminal action and authenticates its
+# actual native command custody.
 JOB_TOOLS = frozenset({'exec_command', 'practical.job.start', 'practical.job.status', 'practical.job.collect'})
 PREDICATE_FIELDS = {
     'context_cwd': {'kind', 'path'},

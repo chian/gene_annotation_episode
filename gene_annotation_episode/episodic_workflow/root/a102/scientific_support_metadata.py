@@ -1,4 +1,4 @@
-"""Historical instruction validation and explicit scoring-route availability.
+"""Instruction validation and explicit scoring-route availability.
 
 Instruction metadata neither supplies evidence nor chooses a projector. The
 old observation-kind-to-score-axis dispatch is retired. No replacement field

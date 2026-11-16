@@ -165,8 +165,8 @@ def bind_episode_execution(store, run_directory, *, settings, requested_binding=
     """Bind explicit C1 or saved known reconstruction, without starting work.
 
     Call after the run's scientific/specialist descriptors are frozen in Store.
-    A legacy resume retains its semantics. Once marked, recovery uses the saved
-    factory intent, even if descriptor publication never completed.
+    Once marked, recovery uses the saved factory intent, even if descriptor
+    publication never completed.
     """
     directory = Path(run_directory).expanduser().resolve()
     supplied = _object(settings)

@@ -51,9 +51,9 @@ def test_R1_R2_kernel_temperature_census_and_single_scientific_call(monkeypatch)
     sheets = run(inputs)
     calls = []
     original = c._sequence.calculate_blast_sequence_database_components
-    def counted(sheet, *, model):
+    def counted(sheet, *, model, _retain_correspondence):
         calls.append((deepcopy(sheet), deepcopy(model)))
-        return original(sheet, model=model)
+        return original(sheet, model=model, _retain_correspondence=_retain_correspondence)
     monkeypatch.setattr(c._sequence, "calculate_blast_sequence_database_components", counted)
     for temperature, probabilities in ((1, (.8, .2)), (2, (2 / 3, 1 / 3))):
         model = dict(temperature_bits=temperature, function_priors={"F": .5, "G": .5})
@@ -94,9 +94,9 @@ def test_R1_search_specific_incompatible_priors_keep_native_and_sibling(monkeypa
     # calculator exception tests the catch boundary without replacement model.
     original = c._sequence.calculate_blast_sequence_database_components
     calls = []
-    def counted(sheet, *, model):
+    def counted(sheet, *, model, _retain_correspondence):
         calls.append(model)
-        return original(sheet, model=model)
+        return original(sheet, model=model, _retain_correspondence=_retain_correspondence)
     monkeypatch.setattr(c._sequence, "calculate_blast_sequence_database_components", counted)
     result = c.calculate_standard_blast_database_sheets(sheets, sequence_model={"function_priors": {"other": 1}})
     assert calls == [{"function_priors": {"other": 1}}]
@@ -370,10 +370,10 @@ def test_R10_search_exception_preserves_successful_real_sibling(monkeypatch):
     native["BlastOutput2"].append(deepcopy(native["BlastOutput2"][0]))
     inputs = fixture(doc=native); sheets = run(inputs)
     original = c._sequence.calculate_blast_sequence_database_components; calls = []
-    def sometimes(sheet, *, model):
+    def sometimes(sheet, *, model, _retain_correspondence):
         calls.append(sheet["search"]["search_key"]["report_index"])
         if calls[-1] == 0: raise ValueError("retained synthetic first-search failure")
-        return original(sheet, model=model)
+        return original(sheet, model=model, _retain_correspondence=_retain_correspondence)
     monkeypatch.setattr(c._sequence, "calculate_blast_sequence_database_components", sometimes)
     results = c.calculate_standard_blast_database_sheets(sheets, sequence_model=None)
     assert calls == [0, 1]

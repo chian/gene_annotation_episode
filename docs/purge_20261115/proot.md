@@ -5,14 +5,20 @@ JSON) plus `root/method_loop/` and `root/vendor/`.
 
 ## Coverage — read this first
 
-This area was NOT reviewed line by line. No sub-agents could be started (the concurrent sub-agent limit was already
-reached), so one agent worked from a keyword scan (2,431 hit lines in 323 files) and followed the code-level hits.
-Every item under "Removed" was read and edited; everything under "Not reviewed / not established" still needs a
-decision. Comment and docstring narration (class 7) was only removed where it sat next to an edited site: most of it
-remains.
+First pass: one agent worked from a keyword scan (2,431 hit lines in 323 files). Second pass: the 121 files with no
+keyword hit were each read in full by two sub-agents (14 + 31 edited, the rest clean), and a third sub-agent worked
+the multi-version sites; it was cut off by a usage limit and later by the session restart, so the lead finished its
+list and it left no report of its own. Narration comments (class 7) were removed only next to edited sites and in
+about 30 docstrings in the second pass; roughly 170 keyword-scan narration lines remain.
 
-Totals: 78 `*.py` files changed in the area (+287 / -1,234 lines; this count is from `git diff` and includes any
-edits agent `h4` made to the same files), 4 files deleted (-2,477 lines), 0 tests deleted (the area holds no tests).
+Totals against the starting commit a0d9f1666: 153 `*.py` files changed in the area (+515 / -2,181 lines; the count
+is from `git diff` and includes edits agent `h4` and others made to the same files), 4 files deleted (-2,477
+lines), 0 tests deleted (the area holds no tests).
+
+Correction to the first report: `task_action_contracts._recorded_assignment_transport` at first refused every saved
+request without the transport proof. That was wrong for decision-exchange requests, which the current program saves
+with a protocol marker and no proof (`task_decision.py:139-147`). It now refuses only a direct request without a
+valid proof. A correcting row went to `roothomes`.
 
 ## Removed, by class
 
@@ -24,7 +30,7 @@ Class 1 — parameters, branches and helpers for the past (9 sites)
 - `atac_differential_result_receipts.py`, `chromatin_interaction_result_receipts.py`: `retained_policy` and
   `_historical` imports removed; only `POLICY` is used.
 - `task_action_contracts.py`: old expanded-assignment transport removed (`_legacy_episode_assignments`, the second
-  decoder, `unproven_replay`); `_recorded_assignment_transport` now refuses a request without the proof. Callers
+  decoder, `unproven_replay`); `_recorded_assignment_transport` refuses a direct request without the proof. Callers
   updated in `task_actions.py`, `task_decision.py`, `bvbrc_appservice_custody.py`.
 - `bvbrc_appservice_host.py`: `legacy_cached_download` (142 lines, uncapped downloads from before `max_bytes`) and
   the `_completed_download` / `_completed_appservice_download` flag chain through `bvbrc_appservice_records.py`,
@@ -120,49 +126,83 @@ set to 5 GiB (`5368709120`, the literal the root library uses); the two RNA prom
   hashes) were not changed.
 - No pin was re-pinned. Every edited file changed digest, so current pin tables naming them now mismatch.
 
-## Not reviewed / not established (still open)
-- `flux_balance_returns.py` `_LEGACY_SOURCES` and the non-ordinary-prefix branch (`legacy_source` identity).
-- `alignment_site_action_records.py:122` `legacy_result_ungraded`.
-- `local_file_capture_results.py:135,809-819` "legacy complete byte windows".
-- `practical_execution_records.py:24` `JOB_TOOLS` comment says `practical.job.*` receipts are legacy, yet four
-  receipt modules require those tool names.
-- Multi-version acceptance not examined: `bvbrc_proteome_returns._ADAPTER_VERSIONS ('1','2')`,
-  `rfam_batch_returns.py:219,341`, `execution_prompt.py:46`, `execution_scientific_inputs.py:360`,
-  `literature_a105_worksheet.py:115`, `protein_structure_operands.py:204,354`, `native_blast_database_results.py:109`,
-  `episode_application_services.py:28`, `execution_request_custody.py:24`.
-- `literature_required_grading.py:170` still passes `allow_legacy_quote=True`; `domain.source_location_inputs`
-  (area `ptop`) still takes it.
-- `action_history.py:13` (journals without the effects table), `decision_context.py:34`, `evidence_axis_contracts.py:116,179`,
-  `literature_amount_inputs.py:229,461`, `literature_optical_inputs.py:198`, `literature_rate_storage.py:825-874`,
-  `default_scientific_binding.py:66`, unowned-registry paths in `root_binding_selection.py` / `private_episode_selection.py`.
-- About 200 narration comments in the scan (`narr.txt` in the scratchpad) were not edited.
-- The ~105 files with no keyword hit were not opened.
+## Second pass (after the first report)
+
+Removed
+- Non-owned branch lifecycle: `workflow_setup.py:54` refuses every lifecycle but `owned_child_turn_taking_v2`, so the
+  not-owned alternatives and `admit_unowned_return` went from 14 `from_child_*.py` files, `child_commission.py`,
+  `action_execution.py` (including the unreachable tail of `report`), `child_delivery.py`, `episode_construction.py`,
+  `report_redelivery.py`, `workflow_values.py`, `report_validation.py`, `predefined_child_message_owners.py`.
+- Saved tool-action results without `pending_work_after_action` are refused (every writer adds it:
+  `task_actions.py:142`): `rna_result_custody.py`, `rna_comparison_result_custody.py`,
+  `protein_structure_return_operands.py`, `protein_structure_result_receipts.py`, `fluorescence_result_receipts.py`,
+  `expression_nmf_result_receipts.py`, `genomic_overlap_result_receipts.py`, `local_file_capture_results.py`,
+  `api_saved_records.py`.
+- `episode_receipts.read_manifest`: a manifest with a NULL `received_report_prefix` is refused (`bind` always writes it).
+- Names-only tool library (`scientific_tool_library_v1`, `tool_info=` switch, `supports_tool_info`, `resolve(names)`,
+  retrieval request v1): `scientific_tool_library.py`, `scientific_tool_retrieval.py`, `action_execution.py`,
+  `scientific_process_setup.py`.
+- `legacy_result_ungraded` (`alignment_site_action_records.py`): a result without the grading envelope is refused.
+- `episode_application_services.py`: `actual_tool_catalog_v1`; `execution_prompt.py`: `rfam_batch_result_selector_v1`;
+  `rfam_batch_returns.py`: validation of `rfam_batch_tblout_parse_result_v1` (no writer).
+- `literature_required_grading.py`: `allow_legacy_quote`. Unused `action_execution as _original` imports in six
+  `to_child_*.py`. Wrong comment above `JOB_TOOLS`.
+
+Traced to a current writer and kept (both forms are current)
+- `flux_balance_returns._LEGACY_SOURCES`: `native_flux_balance_results.py:215`, `flux_balance_returns.py:522`.
+- `JOB_TOOLS`: `practical.job.*` is written by `library/local_practical_operations.py:1020,1541,1853`, `exec_command`
+  by `terminal_execution.py:298`.
+- Byte windows in `local_file_capture_results.py` (current capture form; only the word "legacy" was removed).
+- `bvbrc_proteome` adapters '1' and '2': `library/bvbrc_proteome_bundle_resolution.py:686` and
+  `library/bvbrc_proteome_bundle_adapter_v2.py:76`.
+- `rfam_batch_retained_grading_v1`/`_v2`: both written at `library/rfam_batch_publication.py:411,414`.
+- `native_blast_database_results` `VERSION`/`FUNCTION_VERSION`: both written at line 212.
+- `native_protein_structure_bundle_v1` and `SAVED_ACTION_SOURCE_VERSION`: two source kinds, not two versions.
+- `api_execution_assignment_v1` beside `api_service_assignment_v1`: the HMMER API binding (`hmmer_api` resources).
+- Molecular-sequence selectors v1/v3/v4: `library/molecular_sequence_result_contracts.py:1885`.
+- `_validate_historical` / `_historical` in `*_returns.py`: they read `runtime_report_attempts` rows of the same run,
+  written by `episode_admission.py:90`. `legacy_returns`: the live `NativeProteinStructureReturns` object built at
+  `execution_result_selection.py:38-41`; `retained_protein_structure_reader` is called by
+  `library/protein_structure_tools.py:935`.
+- No file in the area handles `max_bytes`; `bvbrc_appservice_records.py:291` only calls the top-level
+  `download_request`, and the uncapped `legacy_cached_download` path was removed in the first pass.
+
+## Not established (still open)
+- `literature_a105_worksheet.py:115,149`: `VERSION` and `VERSION_V2`. The only builder defaults to v1 and has no
+  non-test caller; three library modules read both.
+- `protein_structure_operands.py:346-356` `GRADING_SCHEMA` / `GRADING_SCHEMA_V2` and
+  `execution_scientific_inputs.py:360` blast-utility selectors v1/v2: both forms are still defined and read in
+  `root/library`; which is written was not traced.
+- `local_execution_validation.py:116-117,153-160`: blast-utility job v2/v3 and fluorescence v2 branches (library
+  still defines v1-v3).
+- `execution_binding_catalogue.py:35-70`: path for an owner without `_private_execution_bindings`; both product
+  constructors register, about 30 test files do not.
+- `getattr(..., None)` defaults on workflow/service attributes that every product `Workflow` sets (partial hosts in
+  tests rely on them); `type(job_episodes) is HomologyEpisodes ... else` branches in the `to_child_*` files.
+- Seventeen `"received_report_prefix" in manifest` guards are now unreachable (the manifest reader refuses first).
+- `saved_run_configuration.py:22-33` (provider config flat or under `models`), `method_loop/reconstruction.py:62-66`
+  (vendored, no user), `default_scientific_binding.py:66`, `decision_context.py:34`, `evidence_axis_contracts.py:116,179`,
+  `literature_amount_inputs.py:229`, `literature_optical_inputs.py:198`, `literature_rate_storage.py:825-874`.
 
 ## Verification
-- Import check of all 440 modules (428 top-level, `method_loop`, `vendor`): `{}` (0 failures), last run
-  `runs/claude_proot_016` (after the class 3 removals).
-- Test files run (before → after; root/tests belongs to `roothomes` and was changing during the run):
-  - `test_root_journal_support.py`: 2 passed → 2 passed.
-  - `test_root_native_factory.py`: 8 passed → 7 passed, 0 failed (one test removed by another area).
-  - `test_signed_evidence_root.py`: 21 passed / 10 failed → 21 passed / 10 failed.
-  - `test_execution_local_file_sources.py`: 69 passed / 7 failed (76) → 66 passed / 8 failed (74); the new failure was
-    not identified.
-  - `test_annotation_task_boundaries.py`: 12 passed → 5 passed / 7 failed. Cause: its stub workflows model the removed
-    older wait-input mode (no `pending_work`) and saved requests without `assignment_transport`. Handed to `roothomes`.
-- No other test files were run, and none were rerun after the class 3 removals (import check only).
+- Import check of all modules in the area: `{}` (0 failures), last run `runs/claude_proot_028`.
+- Root test files (owned by `roothomes`, not edited here), last run after all edits:
+  - `test_root_journal_support.py`: 2 passed (was 2 passed).
+  - `test_root_native_factory.py`: 7 passed (was 8; one test removed by another area).
+  - `test_signed_evidence_root.py`: 21 passed / 10 failed (unchanged).
+  - `test_annotation_task_boundaries.py`: 5 passed (the 7 that failed in the first pass were deleted by `roothomes`;
+    two of them may have failed only because of the transport-proof mistake corrected above).
+  - `test_execution_local_file_sources.py`: 43 passed / 31 failed (first pass: 66 / 8). Eighteen new failures are
+    `execution_file_capture_public_outcome_conflict`: the test fixture saves action results without
+    `pending_work_after_action`. One failure is a fixture request without the transport proof. The other new
+    failures were not examined.
+- No other test files were run.
 
 ## Handoffs
-Written (12 rows from `proot`): 5 to `rootlib` (keep/removal of names the ATAC/chromatin receipt files import;
-`historical=` call sites in library; library functions no longer passed `historical=`; delete
-`blast_utility_historical_fact_schemas.py`), 7 to `roothomes` (`LEGACY_SELECTION_VERSION` / `LEGACY_RETURN_VERSION`
-users in `scientific_process/`; `unproven_replay` / `recorded_transport` in ~100 sub-home `task_actions.py` and
-siblings; `YieldParameters(100, 50)` in 7 test files; two tests passing `historical=`; the task-boundary tests;
-a redirect of rows misaddressed to `proot`).
-Applied (rows to `proot` that name root top-level files): `communication.py` chromatin and perturbation-summary
-schemas, `control_version=` in `terminal_scientific_evidence.py` / `practical_receipt_information.py`,
-`_accept_legacy_quotes` in `task_actions.py`, `legacy_report_schema` in `episode_work_report.py`, 20 GiB sites (h2),
-`literature_product_coupling_storage.py` (`_meaning_v1`, `projection_version`), a105 test comment in
-`literature_binding_interaction_storage.py`, `literature_sheet_updates.py` (deleted adapter-definitions module), old
-release branches in summary-precision / endpoint-signal / kinetic storage.
-Not applied: 51 `ptop` rows and 4 `prootlib` rows addressed to `proot` name files under `root/tests` or sub-home
-directories, which are `roothomes` files; a redirect row was written.
+Written from `proot`: 16 rows (6 to `rootlib`, 10 to `roothomes`), including the correction about the transport proof
+and the fixtures that must save `pending_work_after_action`. One of the ten is an informational row a sub-agent
+wrote (256 sub-home files still carry the not-owned lifecycle alternative).
+Applied: every row addressed to `proot` that names a file directly in `root/` (see the first-pass list, plus
+`literature_required_grading.py`, `scientific_tool_library.py`, `task_action_contracts.py`). Row 22 from `ptop`
+(`bvbrc_appservice_records.py:291`) needed no change. Rows that name `root/tests` or sub-home files were redirected
+to `roothomes`; its sub-home call sites for `_accept_legacy_quotes` and `control_version=` were already at zero.

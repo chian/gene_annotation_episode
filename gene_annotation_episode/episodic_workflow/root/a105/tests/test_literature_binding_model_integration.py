@@ -49,7 +49,7 @@ def setup_synthetic(path, *, limit=False):
     owners = binding_model_operand_keys(populate_binding_contrast(extracted))
     model = {'version': 'known_normal_log_binding_v1', 'parameter_kind': 'ic50', 'measurement_order': ['reference', 'test'], 'measurement_keys': [owners['reference'], owners['test']], 'log_covariance': [[0.04, 0.01], [0.01, 0.09]], 'variance_status': 'known', 'censoring_model': 'threshold_of_log_estimate' if limit else 'none', 'log_basis': 'natural_log_nM', 'origin': 'synthetic'}
     model_source = source(canonical(model), [table_source['id']])
-    witness = {'source_ref': methods['id'], 'representation': 'original', 'start': 0, 'end': len(words.encode()), 'quote': words}
+    witness = {'source_ref': methods['id'], 'representation': 'original', 'start': 0, 'end': len(words.encode())}
     args = {'source_ref': table_source['id'], 'representation': 'synthetic_fixture', 'subject': 'FixtureProtein', 'state': 'apo', 'experiment': 'synthetic_contrast', 'reference_ligand': 'reference', 'test_ligand': 'test', 'parameter_kind': 'ic50', 'design': 'equilibrium_competition', 'protein_arrangement': 'single_preparation', 'interpretation_witnesses': [witness]}
     refs = [methods['id'], table_source['id'], model_source['id']]
     assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': refs, 'requested_binding_model_components': COMPONENTS}
@@ -119,7 +119,7 @@ def test_selected_model_action_returns_conditional_values_once(tmp_path, limit):
             assert ('threshold_censoring_of_log_estimate' in rows[2]['conditional_on']) is limit
             paper = store.get(context.received_record_refs[0])
             commit = {name: [] for name in store.reasoning_schema()['required']}
-            commit['source_subjects'] = [{'alias': 'reported_source', 'reference_type': 'assay', 'source_ref': paper['id'], 'label': 'FixtureProtein', 'anchor': {'source_ref': paper['id'], 'artifact_ref': paper['artifact_ref'], 'start': 0, 'end': len('FixtureProtein'), 'quote': 'FixtureProtein'}}]
+            commit['source_subjects'] = [{'alias': 'reported_source', 'reference_type': 'assay', 'source_ref': paper['id'], 'label': 'FixtureProtein', 'anchor': {'source_ref': paper['id'], 'artifact_ref': paper['artifact_ref'], 'start': 0, 'end': len('FixtureProtein')}}]
             return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
 
         def controller(path, initial):

@@ -1,0 +1,72 @@
+# a110: code that hashes this codebase's own files (or carries a digest of them) to compare with a stored value. Listed only; not removed (h4).
+# format: file:line: text
+gene_annotation_episode/episodic_workflow/root/a110/acquisition.py:169:            'adapter_module': __name__, 'adapter_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+gene_annotation_episode/episodic_workflow/root/a110/acquisition.py:206:if hashlib.sha256(pathlib.Path(capture_adapter.__file__).read_bytes()).hexdigest() != adapter_sha256:
+gene_annotation_episode/episodic_workflow/root/a110/independent_execution.py:30:def implementation_sha256():
+gene_annotation_episode/episodic_workflow/root/a110/independent_execution.py:43:        digest.update(hashlib.sha256(path.read_bytes()).digest())
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_phylogeny_bundle_projection.py:6:def implementation_sha256():
+gene_annotation_episode/episodic_workflow/root/a110/execution_progress.py:452:            'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+gene_annotation_episode/episodic_workflow/root/a110/native_flux_balance_contracts.py:23:SOURCE_FUNCTION_SHA256 = "ab47e2640366833d05cf896091e1c3803ce69aae940bfa46ba993abda51983b9"
+gene_annotation_episode/episodic_workflow/root/a110/execution_job_submission/binding_record.py:18:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_variation_bundle_adapter.py:37:def implementation_sha256():
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_influenza_ha_bundle_adapter.py:21:def implementation_sha256():
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_comparative_systems_bundle_adapter.py:10:def implementation_sha256():
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_annotation_bundle_adapter.py:14:def implementation_sha256():
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_proteome_bundle_adapter_v2.py:10:def implementation_sha256():
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_msa_bundle_adapter.py:15:def implementation_sha256() -> str:
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_subspecies_bundle_adapter.py:20:def implementation_sha256():
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/adapter_source_identity.py:88:def _current(owner, record):
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/adapter_source_identity.py:99:def current_implementation_sha256(owner):
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/adapter_source_identity.py:106:def authenticate_adapter_source(adapter_id, adapter_version, module_name,
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_assembly_bundle_adapter.py:20:def implementation_sha256():
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_homology_bundle_adapter.py:15:def implementation_sha256() -> str:
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_genome_alignment_bundle_adapter.py:8:def implementation_sha256() -> str:
+gene_annotation_episode/episodic_workflow/root/a110/hpc_work_planning/binding_record.py:19:        hashes = {name: hashlib.sha256(p.read_bytes()).hexdigest() for name, p in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/hpc_work_planning/hpc_allocation_execution/execution_job_submission/binding_record.py:17:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_information/received_configuration.py:119:        if implementation_record() != self.source_record or self._record() != self.reader_record:
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_intervention_bundle_adapter.py:19:def implementation_sha256():
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_proteome_bundle_adapter.py:9:def implementation_sha256() -> str:
+gene_annotation_episode/episodic_workflow/root/a110/library/execution_initial_information/information_readers.py:83:            if not roots or hashlib.sha256((roots[0] / row['path']).read_bytes()).hexdigest() != row['sha256']:
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_information/received_reader_sources.py:6:def implementation_record():
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_information/received_reader_sources.py:11:    return {'version': 'received_execution_reader_sources_v1', 'sources': [{'path': path, 'sha256': hashlib.sha256((root / path).read_bytes
+gene_annotation_episode/episodic_workflow/root/a110/scientific_process/binding_record.py:8:        implementation = scientific_digest({str(path.relative_to(Path(__file__).parent.parent)): hashlib.sha256(path.read_bytes()).hexdigest() for path in Path(__file__)
+gene_annotation_episode/episodic_workflow/root/a110/hpc_work_planning/execution_job_submission/binding_record.py:17:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_information/historical_execution_progress.py:431:        return {'version': VERSION, 'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), 'configuration
+gene_annotation_episode/episodic_workflow/root/a110/library/execution_initial_information/information_sources.py:6:def implementation_record():
+gene_annotation_episode/episodic_workflow/root/a110/library/execution_initial_information/information_sources.py:11:    return {'version': 'initial_information_reader_sources_v1', 'sources': [{'path': path, 'sha256': hashlib.sha256((root / path).read_bytes()).
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/bvbrc_fastqutils_bundle_adapter.py:9:def implementation_sha256() -> str:
+gene_annotation_episode/episodic_workflow/root/a110/hpc_work_planning/hpc_allocation_execution/binding_record.py:19:        hashes = {name: hashlib.sha256(p.read_bytes()).hexdigest() for name, p in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/scientific_process/execution_job_submission/binding_record.py:18:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/hpc_work_planning/hpc_resource_prediction/binding_record.py:16:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/binding_record.py:18:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/hpc_work_planning/execution_result_acquisition/binding_record.py:18:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/scientific_process/hpc_work_planning/hpc_resource_prediction/binding_record.py:16:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/scientific_process/hpc_work_planning/execution_result_acquisition/binding_record.py:18:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/scientific_process/hpc_work_planning/binding_record.py:19:        hashes = {name: hashlib.sha256(p.read_bytes()).hexdigest() for name, p in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/scientific_process/hpc_work_planning/hpc_allocation_execution/binding_record.py:19:        hashes = {name: hashlib.sha256(p.read_bytes()).hexdigest() for name, p in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/binding_record.py:18:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.
+gene_annotation_episode/episodic_workflow/root/a110/scientific_process/hpc_work_planning/execution_job_submission/binding_record.py:17:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/scientific_process/execution_result_acquisition/binding_record.py:18:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/binding_record.py:17:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.item
+gene_annotation_episode/episodic_workflow/root/a110/execution_result_acquisition/binding_record.py:18:        hashes = {name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in sources.items()}
+gene_annotation_episode/episodic_workflow/root/a110/private_reconstruction_protocol.py:43:            fields.add('implementation_sha256')
+gene_annotation_episode/episodic_workflow/root/a110/private_reconstruction_protocol.py:52:            fingerprint = record['implementation_sha256']
+gene_annotation_episode/episodic_workflow/root/a110/episode_composition.py:60:    fields = {'version', 'binding_id', 'implementation_sha256', 'configuration'}
+gene_annotation_episode/episodic_workflow/root/a110/episode_composition.py:67:                or type(value['implementation_sha256']) is not str
+gene_annotation_episode/episodic_workflow/root/a110/episode_composition.py:68:                or len(value['implementation_sha256']) != 64
+gene_annotation_episode/episodic_workflow/root/a110/episode_composition.py:69:                or any(c not in '0123456789abcdef' for c in value['implementation_sha256'])
+gene_annotation_episode/episodic_workflow/root/a110/private_scientific_literature_reconstruction.py:153:    if (set(record) != {'version', 'binding_id', 'configuration', 'implementation_sha256'}
+gene_annotation_episode/episodic_workflow/root/a110/private_scientific_literature_reconstruction.py:161:    fingerprint = record['implementation_sha256']
+gene_annotation_episode/episodic_workflow/root/a110/private_execution_hpc_reconstruction.py:322:        fields.add('implementation_sha256')
+gene_annotation_episode/episodic_workflow/root/a110/private_execution_hpc_reconstruction.py:331:        fingerprint = record['implementation_sha256']
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_information/received_reader_sources.py:4:
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_information/received_reader_sources.py:12
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_information/received_reader_sources.py:13
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_information/received_reader_sources.py:14
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_information/received_reader_sources.py:15
+gene_annotation_episode/episodic_workflow/root/a110/library/execution_initial_information/information_sources.py:4:SOURC
+gene_annotation_episode/episodic_workflow/root/a110/library/execution_initial_information/information_sources.py:12:SOUR
+gene_annotation_episode/episodic_workflow/root/a110/library/execution_initial_information/information_sources.py:13:SOUR
+gene_annotation_episode/episodic_workflow/root/a110/library/execution_initial_information/information_sources.py:14:SOUR
+gene_annotation_episode/episodic_workflow/root/a110/library/execution_initial_information/information_sources.py:15:SOUR
+gene_annotation_episode/episodic_workflow/root/a110/library/received_execution_dependencies/adapter_source_identity.json: owners[*].current.{implementation_sha256,members[].sha256} (stored digests of 14 adapter owners)

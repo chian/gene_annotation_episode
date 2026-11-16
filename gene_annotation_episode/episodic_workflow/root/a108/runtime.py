@@ -500,7 +500,7 @@ class FeedbackEpisode(Episode):
 
     async def _stop_end_async(self, ctx, scope, records, step):
         workflow = self.source.workflow
-        if workflow.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE and workflow.execution_binding is not None:
+        if workflow.execution_binding is not None:
             while step.stop:
                 item = await workflow.next_branch_return(self.source, self._view(ctx, scope, records))
                 if item is None:
@@ -1192,20 +1192,19 @@ class Workflow:
         by_handle = {item['handle'] for item in self.commissions.pending(source.episode_id)['items']}
         for spec in self.commissions.recover_selected(source.episode_id):
             if spec['handle'] in by_handle:
-                if self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE:
-                    try:
-                        status = self.execution_backend.status(spec['handle'])
-                    except KeyError:
-                        pass
-                    else:
-                        if status['failure'] is not None and status['execution_identity'] is None and (not status['return_available']):
-                            continue
+                try:
+                    status = self.execution_backend.status(spec['handle'])
+                except KeyError:
+                    pass
+                else:
+                    if status['failure'] is not None and status['execution_identity'] is None and (not status['return_available']):
+                        continue
                 action = self.store.db.execute("SELECT decision_index FROM runtime_actions WHERE run_id=? AND episode_id=? AND json_extract(result,'$.pending_handle')=?", (self.run_id, source.episode_id, spec['handle'])).fetchone()
                 self.dispatch_commission(source, action[0], spec)
 
     def settle_unclaimed_child_failures(self, source):
         """Account for an attempted bootstrap without inventing child science."""
-        if self.episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE or self.journal.row('runtime_episodes', source.episode_id)['state'] != 'active':
+        if self.journal.row('runtime_episodes', source.episode_id)['state'] != 'active':
             return
         rows = self.store.db.execute("SELECT decision_index,result FROM runtime_actions WHERE run_id=? AND episode_id=? AND json_extract(result,'$.status')='pending' AND json_extract(result,'$.pending_handle') IS NOT NULL ORDER BY decision_index", (self.run_id, source.episode_id)).fetchall()
         for row in rows:
@@ -1231,8 +1230,6 @@ class Workflow:
                 source.checkpoint()
 
     def pending_delivery(self, source, delivery_ref=None):
-        if self.episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE:
-            return None
         rows = self.store.db.execute("SELECT a.* FROM runtime_report_attempts a JOIN runtime_actions work ON work.run_id=a.run_id AND work.episode_id=a.parent_episode_id AND work.decision_index=a.decision_index WHERE a.run_id=? AND a.parent_episode_id=? AND a.failure IS NOT NULL AND (work.result IS NULL OR json_extract(work.result,'$.status')='pending') ORDER BY a.decision_index", (self.run_id, source.episode_id)).fetchall()
         for original in rows:
             if delivery_ref is None or original['delivery_ref'] == delivery_ref:
@@ -1342,7 +1339,7 @@ class Workflow:
                 index = action[0]
                 request = self.returned_request(spec)
                 returned = self.execution_backend.load_return(item['handle'], item['return_id'])
-                receiver = ReceiverBindingV1(self.store, self.journal, index, request.report_contract, lambda form: None, lambda form: self.receive_form(source, form, request.report_contract.schema, index), lambda: self.source_credit_view(source)['credit'], lambda original_index, credit: self.controller_value(source, original_index, credit), defer_failed_delivery=self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE)
+                receiver = ReceiverBindingV1(self.store, self.journal, index, request.report_contract, lambda form: None, lambda form: self.receive_form(source, form, request.report_contract.schema, index), lambda: self.source_credit_view(source)['credit'], lambda original_index, credit: self.controller_value(source, original_index, credit), defer_failed_delivery=True)
                 slot = None
                 with self.store.transaction():
                     parent_open = self.journal.row('runtime_episodes', source.episode_id)['state'] == 'active'
@@ -2254,7 +2251,7 @@ class Workflow:
 
     def report_sources(self, grain, *, path=None, parent_path=None):
         sources = runtime_report_sources() | (self.job_episodes.fact_sources(grain) if self.job_episodes else {})
-        sources['pending_handles'] = {'type': 'array', 'meaning': 'Original selected child executions awaiting their outcome and parent receipt. Numerical yield suspends new selection while these owned returns remain; normal branch closure follows their settlement and does not establish scientific completion.' if self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE else 'Original selected child executions still pending when this episode closed. These handles survive parent closure; closure does not cancel them or establish scientific completion.', 'report_schema': {'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'execution_handle'}, 'x-source': 'pending_handles'}}
+        sources['pending_handles'] = {'type': 'array', 'meaning': 'Original selected child executions awaiting their outcome and parent receipt. Numerical yield suspends new selection while these owned returns remain; normal branch closure follows their settlement and does not establish scientific completion.', 'report_schema': {'type': 'array', 'uniqueItems': True, 'items': {'type': 'string', 'format': 'reference', 'x-reference-namespace': 'execution_handle'}, 'x-source': 'pending_handles'}}
         if grain in self.episode_bindings.roles:
             binding = self.episode_bindings.for_path(path) if path is not None else self.episode_bindings.for_child(parent_path, grain) if parent_path is not None else self.episode_bindings.for_role(grain)
             sources.update(binding.fact_sources(grain))
@@ -3095,10 +3092,9 @@ class Workflow:
             if child_exchange is not None:
                 return child_exchange[1](self, source, child, index, schema, contract, result, request)
             delivery_ref = 'delivery_' + _digest({'run': self.run_id, 'parent': source.episode_id, 'index': index})[:24]
-            owned = self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE
             action = self.journal.row('runtime_actions', source.episode_id, index)
             frozen_index = None if action['result'] is None else json.loads(action['result']).get('delivery_resolution_index')
-            saved = self.store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND ' + ('decision_index=?' if frozen_index is not None or not owned else 'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'), (self.run_id, source.episode_id, frozen_index if frozen_index is not None else delivery_ref if owned else index)).fetchone()
+            saved = self.store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND ' + ('decision_index=?' if frozen_index is not None else 'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'), (self.run_id, source.episode_id, frozen_index if frozen_index is not None else delivery_ref)).fetchone()
             if saved is not None:
                 if saved['failure'] is not None:
                     raise ReportDeliveryError(Record(json.loads(saved['failure'])))
@@ -3120,10 +3116,9 @@ class Workflow:
             old = self.journal.row('runtime_actions', source.episode_id, index)
             if old['result'] is None:
                 facts = self.facts(child.source)
-                if self.receipts is not None or self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE:
-                    _, returned = admitted_report(result, request)
-                    changed = set(facts['changed_record_refs'])
-                    facts = {'committed_record_refs': returned, 'changed_record_refs': [ref for ref in returned if ref in changed]}
+                _, returned = admitted_report(result, request)
+                changed = set(facts['changed_record_refs'])
+                facts = {'committed_record_refs': returned, 'changed_record_refs': [ref for ref in returned if ref in changed]}
                 outcome = {'status': 'completed', 'record_refs': facts['committed_record_refs'], 'changed_record_refs': facts['changed_record_refs']}
                 original_delivery = self.store.db.execute('SELECT MAX(decision_index) FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND delivery_ref=?', (self.run_id, source.episode_id, 'delivery_' + _digest({'run': self.run_id, 'parent': source.episode_id, 'index': index})[:24])).fetchone()[0]
                 outcome['delivery_resolution_index'] = original_delivery
@@ -3141,25 +3136,12 @@ class Workflow:
             return self.controller_value(source, index, value)
 
         async def report(result, completion, request):
-            if self.receipts is not None or self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE:
-                try:
-                    return admitted_report(result, request)[0]
-                except ReportDeliveryError as error:
-                    source.feedback = error.feedback.as_record()
-                    await self.resolve_pending_deliveries(source, source._selection_view, only_delivery_ref=source.feedback['delivery_ref'])
-                    return admitted_report(result, request)[0]
-            if child_exchange is not None:
-                return child_exchange[2](self, source, child, index, schema, contract, result, request)
-            delivery_ref = 'delivery_' + _digest({'run': self.run_id, 'parent': source.episode_id, 'index': index})[:24]
             try:
-                admitted = contract.admit(result.as_record()['form'], audit_identifiers=(child.source.episode_id, request.goal.goal_id)).as_record()
-            except ReportBoundaryError as error:
-                feedback = self.delivery_feedback(delivery_ref, error)
-                self.save_attempt(source.episode_id, index, delivery_ref, child.source.episode_id, contract, failure=feedback)
-                raise ReportDeliveryError(Record(feedback)) from error
-            self.save_attempt(source.episode_id, index, delivery_ref, child.source.episode_id, contract, form=admitted)
-            self.receive_form(source, admitted, schema, index)
-            return admitted
+                return admitted_report(result, request)[0]
+            except ReportDeliveryError as error:
+                source.feedback = error.feedback.as_record()
+                await self.resolve_pending_deliveries(source, source._selection_view, only_delivery_ref=source.feedback['delivery_ref'])
+                return admitted_report(result, request)[0]
         scheduled = 'delay_seconds' in selection
         if scheduled:
             self.journal.schedule_child(source.episode_id, index, selection, child.source.episode_id)
@@ -3183,7 +3165,6 @@ class Workflow:
             resolved_index = None if action['result'] is None else json.loads(action['result']).get('delivery_resolution_index')
             latest = self.store.db.execute('SELECT contract FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND ' + ('decision_index=?' if resolved_index is not None else 'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'), (self.run_id, source.episode_id, resolved_index if resolved_index is not None else 'delivery_' + _digest({'run': self.run_id, 'parent': source.episode_id, 'index': index})[:24])).fetchone()
             return contract if latest is None else self.saved_delivery_contract(child.source.episode_id, json.loads(latest['contract']))
-        owned = self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE
 
         def failed_child(error):
             outcome = {'status': 'failed', 'record_refs': [], 'changed_record_refs': [], 'feedback': {'category': 'child_execution', 'exception_type': type(error).__name__}}
@@ -3196,7 +3177,7 @@ class Workflow:
             source.last_outcome, source.last_outcome_index = (outcome, index)
             source.feedback = outcome['feedback']
             return self.controller_value(source, index, value)
-        return TimedChildUnit(child, resolved_credit if owned else credit, report, self.journal, source.episode_id, index, scheduled=scheduled, delivery_contract=delivery_contract if owned else None, receive_failure=failed_child, allow_suspension=allow_suspension)
+        return TimedChildUnit(child, resolved_credit, report, self.journal, source.episode_id, index, scheduled=scheduled, delivery_contract=delivery_contract, receive_failure=failed_child, allow_suspension=allow_suspension)
 
     @staticmethod
     def delivery_feedback(delivery_ref, error):
@@ -3276,7 +3257,7 @@ class Workflow:
             action = self.journal.row('runtime_actions', source.episode_id, original_index)
             source.last_outcome, source.last_outcome_index = (json.loads(action['result']), original_index)
             source.feedback = None
-        elif pending is not None or self.episode_branch_lifecycle != EPISODE_BRANCH_LIFECYCLE:
+        elif pending is not None:
             self.receive_form(source, admitted.as_record(), schema, index, redelivery=True)
         else:
             from gene_annotation_episode.episodic_workflow.root.a108.episode_report_acquisition import acquire_report_evidence
@@ -3425,7 +3406,7 @@ class Workflow:
                 if json.loads(old['completion']) != {'ended_by': record.ended_by, 'actions': record.units_consumed} or json.loads(old['archive']) != self.archive.store(record).descriptor():
                     raise WorkflowError('inprocess_closed_history_replay_differs')
                 return
-            if self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE and old['state'] == 'active':
+            if old['state'] == 'active':
                 pending = self.store.db.execute("SELECT 1 FROM runtime_actions WHERE run_id=? AND episode_id=? AND json_extract(action,'$.kind') IN ('child','job_child','episode_child') AND (result IS NULL OR json_extract(result,'$.status')='pending') LIMIT 1", (self.run_id, identity.episode_id)).fetchone()
                 unobserved = self.store.db.execute('SELECT 1 FROM runtime_completion_slots s LEFT JOIN runtime_observations o ON o.run_id=s.run_id AND o.episode_id=s.episode_id AND o.unit_index=s.sequence WHERE s.run_id=? AND s.episode_id=? AND o.unit_index IS NULL LIMIT 1', (self.run_id, identity.episode_id)).fetchone()
                 unobserved_action = self.store.db.execute("SELECT 1 FROM runtime_actions a WHERE a.run_id=? AND a.episode_id=? AND a.credit IS NOT NULL AND NOT EXISTS (SELECT 1 FROM runtime_observations o WHERE o.run_id=a.run_id AND o.episode_id=a.episode_id AND json_extract(o.observation,'$.decision_index')=a.decision_index) LIMIT 1", (self.run_id, identity.episode_id)).fetchone()

@@ -139,7 +139,7 @@ def test_tf_dispatch_authenticates_first_allocation_before_work(tmp_path, fault)
 def _render_tf_without_work(packet, monkeypatch):
     """Engineered display control, not an actual Source or native observation."""
     from Bio.motifs.matrix import PositionSpecificScoringMatrix
-    from gene_annotation_episode import scientific_process_prompt as prompt
+    from gene_annotation_episode.episodic_workflow.root.library import molecular_value_presentation as prompt
     from gene_annotation_episode import tf_binding_driver as driver
     from gene_annotation_episode import tf_binding_result_worker as result_worker
     import builtins

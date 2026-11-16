@@ -43,7 +43,7 @@ def source_fixture(store):
         found = re.search(pattern, raw, re.DOTALL)
         assert found, identifier
         return {"source_ref": source["id"], "artifact_ref": source["artifact_ref"],
-            "start": found.start(), "end": found.end(), "quote": found.group().decode("utf-8")}
+            "start": found.start(), "end": found.end()}
 
     return source, {key: anchor(key) for key in ("P7", "P10", "P20", "P21")}, anchor("F1", "fig")
 

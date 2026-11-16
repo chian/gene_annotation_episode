@@ -166,7 +166,7 @@ class LaunchConnectedChecks:
             specialist=lambda source: v.registry.for_path(source.path),
             job_episodes=None, scientific_process_binding=None,
             annotation_child_roles=None, project_credit=lambda *args: 0,
-            execution_binding=None, inprocess_replay=None, episode_branch_lifecycle=None,
+            execution_binding=None, inprocess_replay=None,
             receipts=None, progress_provider=None, native_timing_information=None,
             services=SimpleNamespace(capabilities=lambda: {},
                 tool_invocation=lambda *args, **kwargs: nullcontext()),

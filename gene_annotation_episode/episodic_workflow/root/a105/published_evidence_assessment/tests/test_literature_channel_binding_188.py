@@ -34,6 +34,16 @@ from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_c
 REQUESTED = ['chord_conductance', 'charge_equivalent_rate', 'chord_conductance_variance']
 FORM = {'type': 'object', 'properties': {'electrical': channel_cells_schema()}, 'required': ['electrical'], 'additionalProperties': False}
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def binding_for(store, context, *, enabled=True):
     host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
     binding = LiteratureEpisode(WorkflowServices(host), rate_population=True, channel_population=enabled)
@@ -332,7 +342,7 @@ def test_optional_binding_exact_registered_form_and_requested_omission(tmp_path)
         del weakened['properties']['electrical']['items']['properties']['source_kind']
         with pytest.raises(ReportBoundaryError):
             validate_closed_schema(weakened)
-        outcome = asyncio.run(enabled.execute(context, 'literature.channel.populate', args, 'binding-selected'))
+        outcome = asyncio.run(enabled.execute(context, 'literature.channel.populate', location_only(args), 'binding-selected'))
         assert outcome['status'] == 'completed', outcome
         current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
         form = form_with_facts({}, FORM, enabled.facts(current, {'committed_record_refs': outcome['record_refs']}))

@@ -32,7 +32,7 @@ def source_fixture(store):
         'text_ref': artifact, 'request_ref': None, 'version': 'fixture',
         'retrieved_at': None}, origin='external')
     anchor = {'source_ref': source['id'], 'artifact_ref': artifact,
-        'start': 0, 'end': len(text.encode()), 'quote': text}
+        'start': 0, 'end': len(text.encode())}
     return source, anchor
 
 

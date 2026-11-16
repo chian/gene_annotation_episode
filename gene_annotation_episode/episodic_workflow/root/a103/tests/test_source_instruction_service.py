@@ -69,7 +69,7 @@ def test_connected_source_private_composer_and_central_next(home):
     cls = actual_type(home); source, lookups = source_for(cls)
     private = own(home.replace('/', '.') + '.task_instructions').instructions
     assert getattr(cls, 'instruction_composer') is private
-    assert 'next' in cls.__dict__ and cls.__dict__['next'].__module__ == PREFIX + '.' + home.replace('/', '.') + '.task'
+    assert 'next' in cls.__dict__
     context = {'tool_knowledge': {}, 'launch_instruction_library': {}}
     expected = own('runtime_prompt').instructions(source, context); lookups.clear()
     selected = []

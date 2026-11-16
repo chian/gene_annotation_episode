@@ -1,6 +1,5 @@
 """Bounded original utility reading and separate saved-result selection.
 
-Internal ports were frozen with the host before implementation (631/010).
 ``parse_original`` plans contain capture, exact qualified context, bundle_file
 and occurrence-associated files. ``project_saved`` plans contain source_ref,
 context, selector, saved_data and nullable result/prepared_database/

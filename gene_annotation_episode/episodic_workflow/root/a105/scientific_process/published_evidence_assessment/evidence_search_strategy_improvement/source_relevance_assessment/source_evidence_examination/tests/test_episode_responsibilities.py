@@ -146,7 +146,7 @@ def test_private_tool_contract_error_returns_an_invalid_action():
     from ..tools.literature_contract_error import ExperimentalContractError
     binding = LiteratureEpisode(object())
     binding._tool_arguments = lambda context, name, arguments: arguments
-    binding._materialize_text_arguments = lambda context, arguments, repo: arguments
+    binding._materialize_text_arguments = lambda context, arguments, repo, operation_key: arguments
     def invalid(*args):
         raise ExperimentalContractError('missing_measurement', 'effect')
     binding._assay_grading_repository = lambda: SimpleNamespace(populate=invalid)
@@ -216,8 +216,7 @@ def test_task_observes_scoring_before_credit_and_does_not_repeat_completed_work(
         events.append('credit')
         return {'credit': 7}
     workflow = SimpleNamespace(journal=Journal(),run_id='pilot',
-        execution_binding=None,wait_inputs_version=None,completed_action_inputs_version=None,
-        specialist=lambda source: binding,binding_context=lambda source: commissioned_context(),
+        execution_binding=None,pending_work=lambda source: {'version': 'pending_work_v1', 'captured_at': '2026-10-27T00:00:00+00:00', 'items': []},         specialist=lambda source: binding,binding_context=lambda source: commissioned_context(),
         receive_native_outcome=lambda *args: None,receive_outcome=lambda *args: events.append('receive'),
         automatic_score_updates=score,source_credit_view=credit,
         controller_value=lambda source,index,value: value)

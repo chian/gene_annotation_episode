@@ -273,11 +273,9 @@ class ScientificProcessProvenance:
                     if parent["invocation_ref"] is None:
                         return None
                     selection = self._selection(parent)
-                    # Legacy name-only selections contain no four-field
-                    # ToolInfos. Do not manufacture their missing guidance.
                     return _detached({"version": "scientific_parent_task_v1",
                         "scientific_question": parent["goal"]["objective"],
-                        "selected_tool_info": selection.get("child_tool_info", [])})
+                        "selected_tool_info": selection["child_tool_info"]})
                 parent = self._parent(parent["path"], {"goal": parent["goal"]}, parent["scope"])
             return None
 

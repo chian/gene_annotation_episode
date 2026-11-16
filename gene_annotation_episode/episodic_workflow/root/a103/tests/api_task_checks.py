@@ -66,7 +66,7 @@ def actual(home,directory):
                 journal=journal,run_id=run_id,store=store,source_credit_view=credit,
                 expose_assigned_job=lambda source:None,receive_tool_attributions=lambda *args,**kwargs:None,
                 archive=SimpleNamespace(store=lambda value:value),launch_instructions=SimpleNamespace(materialize=lambda value:None),
-                execution_binding=None,inprocess_replay=None,wait_inputs_version=None,completed_action_inputs_version=None,
+                execution_binding=None,inprocess_replay=None,pending_work=lambda source:[],
                 execute=execute,receive_native_outcome=lambda *args:None,
                 receive_outcome=lambda source,selected,result,index:received.append((index,result['status'])),
                 automatic_score_updates=score,controller_value=lambda source,index,credit:{'index':index,'credit':credit})
@@ -130,7 +130,6 @@ class APIJobTaskBehavior:
         assert type(f.task) is getattr(f.binding,'decision_source_type',f.runtime.DecisionSource)
         assert f.task.episode_id==f.context.episode_id
         if hasattr(f.binding,'decision_source_type'):
-            assert type(f.task).__module__==f.binding.__module__.removesuffix('.episode')+'.task'
             assert not isinstance(f.task,f.runtime.DecisionSource)
 
     def test_actual_local_prepare_invalid_outcome_and_saved_replay(self,actual_task):
@@ -199,7 +198,6 @@ class APIJobTaskBehavior:
         original=module('execution_prompt').render_api_launch_prompt(state,instructions)
         renderer=getattr(f.binding,'decision_prompt_renderer',None)
         if renderer is not None:
-            assert renderer.__module__==f.binding.__module__.removesuffix('.episode')+'.decision_presentation'
             assert renderer(state,instructions)==original
         assert 'TASK' in original
 
@@ -228,11 +226,8 @@ class APIJobTaskBehavior:
         assert delivered==[(parent_id,value,schema,f.context.scope,f'{f.context.run_id}:{parent_id}:7:typed_form')]
         selector=getattr(parent,'child_report_receiver',None)
         if selector is not None:
-            assert selector('launch_api').__module__==parent.__module__.removesuffix('.episode')+'.from_child_api_job_execution'
             # The private Launch names all three counterparts (same rule as launch_task_checks.py).
             assert hasattr(parent,'decision_source_type')
-            assert selector('launch_local').__module__==parent.__module__.removesuffix('.episode')+'.from_child_local_job_execution'
-            assert selector('launch_hpc').__module__==parent.__module__.removesuffix('.episode')+'.from_child_hpc_job_execution'
             assert selector('unrelated') is None
         f.journal.save('runtime_actions',{'episode_id':parent_id,'decision_index':8,
             'action':json.dumps({'kind':'tool','tool':'unrelated','arguments':{}}),'result':None,'credit':None})
@@ -317,4 +312,4 @@ class APIJobTaskBehavior:
         assert f.received==([] if completed else [(11,'completed')])
         assert len(f.projections)==(0 if completed else 1)
         saved=f.journal.row('runtime_actions',f.context.episode_id,11)
-        assert json.loads(saved['action'])==selected and json.loads(saved['result'])==outcome and saved['credit']==0
+        assert json.loads(saved['action'])==selected and json.loads(saved['result'])==(outcome if completed else {**outcome,'pending_work_after_action':[]}) and saved['credit']==0

@@ -20,6 +20,16 @@ from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures 
 COMPONENTS = ['selected_fraction_sum', 'partition_a_over_b']
 FORM = obj({'partition': product_partition_cells_schema()})
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def binding_for(store, context, enabled=True):
     host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
     binding = LiteratureEpisode(WorkflowServices(host), rate_population=True, product_partition_population=enabled)
@@ -37,7 +47,7 @@ def test_original_source_selected_population_c7_exact_return_and_default_exclusi
         assert 'product_partition_population' not in legacy.as_record()['configuration']
         assert 'requested_product_partition_components' not in legacy.assignment_schema('literature')['properties']
         context = replace(context, assignment={**plain(context.assignment), 'requested_product_partition_components': COMPONENTS})
-        outcome = asyncio.run(binding.execute(context, 'literature.product_partition.populate', args, 'selected'))
+        outcome = asyncio.run(binding.execute(context, 'literature.product_partition.populate', location_only(args), 'selected'))
         assert outcome['status'] == 'completed', outcome
         assert [row['component'] for row in outcome['result']['cells']] == COMPONENTS
         current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))

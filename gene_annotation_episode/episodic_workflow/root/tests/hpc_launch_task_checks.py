@@ -188,7 +188,8 @@ class LaunchTaskChecks:
         selected = {'kind': 'tool', 'tool': launch_case.binding.catalog(launch_case.context)[0]['name'], 'arguments': {}}
         actual = asyncio.run(f.task.execute(selected, 4))
         assert asyncio.run(f.task.execute(selected, 4)) == actual
-        assert json.loads(f.saved[4]['result']) == payload
+        assert json.loads(f.saved[4]['result']) == {**payload,
+            'pending_work_after_action': f.task.workflow.pending_work(f.task)}
         assert f.receipts == [(4, status)] and len(f.executions) == len(f.projections) == 1
 
     def test_pending_original_child_and_changed_redelivery(self, launch_case, tmp_path):
@@ -209,7 +210,8 @@ class LaunchTaskChecks:
         selected = ({'kind': 'wait', 'condition': {'original_condition': 'retained'}} if kind == 'wait'
             else {'kind': 'reason', 'commit': {'original_commit': 'retained'}})
         payload = {'status': status, 'record_refs': [], 'changed_record_refs': [],
-            'result': {'original_saved_outcome': kind}, 'feedback': None}
+            'result': {'original_saved_outcome': kind}, 'feedback': None,
+            'pending_work_after_action': f.task.workflow.pending_work(f.task)}
         f.saved[9] = {'episode_id': f.task.episode_id, 'decision_index': 9,
             'action': f.runtime._json(selected), 'result': f.runtime._json(payload), 'credit': 7.25}
         assert kind not in launch_case.binding.permitted_common_actions(launch_case.context)
@@ -318,7 +320,7 @@ class LaunchTaskChecks:
             episode_bindings=registry, specialist=lambda current: value.binding,
             binding_context=binding_context,
             annotation_child_roles=None, execution_binding=None, inprocess_replay=None,
-            scientific_process_binding=None, episode_branch_lifecycle=None,
+            scientific_process_binding=None,
             validate_child_choice=lambda *args, **kwargs: None,
             permits_common_action=permits,
             _closed_child_commission=lambda *args: None,

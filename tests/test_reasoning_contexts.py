@@ -20,7 +20,7 @@ def setup(tmp_path):
         "uri": None, "artifact_ref": artifact, "text_ref": None, "request_ref": None,
         "version": None, "retrieved_at": None}, origin="external")
     anchor = {"source_ref": source["id"], "artifact_ref": artifact, "start": 0,
-              "end": len(TEXT.encode()), "quote": TEXT}
+              "end": len(TEXT.encode())}
     return store, source, anchor
 
 

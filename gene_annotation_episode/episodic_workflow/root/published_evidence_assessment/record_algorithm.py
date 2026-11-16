@@ -137,7 +137,7 @@ def current_aggregate_record(self):
                      'experimental_database_acquisition.py', 'experimental_database_records.py',
                      'experimental_database_measurements.py',
                      'literature_assay_grading_storage.py', 'literature_assay_grading_render.py',
-                     'literature_assay_grading_prompt.py', 'literature_assay_grading_legacy_cells_v1.json',
+                     'literature_assay_grading_prompt.py',
                      'literature_a105_aggregation.py', 'literature_a105_aggregation_storage.py',
                      'literature_a105_aggregation_prompt.py', 'literature_a105_aggregation_render.py'):
             implementation += descriptor_operand_bytes(name)

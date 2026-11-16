@@ -117,7 +117,7 @@ def test_executed_outcome_journal_credit_and_saved_replay(binding_type,tmp_path,
     async def automatic(source,index,outcome):
         visits.append(('scores',index,outcome['status']));return outcome
     workflow=SimpleNamespace(store=store,journal=journal,run_id='private-source-run',
-        execution_binding=None,inprocess_replay=None,wait_inputs_version=None,completed_action_inputs_version=None,
+        execution_binding=None,inprocess_replay=None,pending_work=lambda source:[],
         execute=lambda source,name,args,**kw:visits.append(('execute',name,kw['operation_key'])) or deepcopy(result),
         receive_native_outcome=lambda source,outcome,index:visits.append(('native',index,outcome['status'])),
         receive_outcome=lambda source,selection,outcome,index:visits.append(('receipt',index,outcome['status'])),
@@ -130,8 +130,9 @@ def test_executed_outcome_journal_credit_and_saved_replay(binding_type,tmp_path,
     first=asyncio.run(task.execute(selection,7))
     assert first=={'original_action':7,'credit':-0.5}
     saved=journal.row('runtime_actions',task.episode_id,7)
-    assert json.loads(saved['action'])==selection and json.loads(saved['result'])==result and saved['credit']==-0.5
-    assert task.last_outcome==result and task.last_outcome_index==7
+    recorded={**result,'pending_work_after_action':[]}
+    assert json.loads(saved['action'])==selection and json.loads(saved['result'])==recorded and saved['credit']==-0.5
+    assert task.last_outcome==recorded and task.last_outcome_index==7
     again=asyncio.run(task.execute(selection,7))
     assert again==first
     assert [v[0] for v in visits].count('execute')==1

@@ -74,7 +74,7 @@ def actual(directory):
 
                     async def updates(source, index, result):
                         return result
-                    workflow = SimpleNamespace(context=object(), grains={'job_monitor': object(), 'annotation': object()}, inprocess_completion_order=None, receipts=None, scientific_process_binding=None, episode_bindings=module('episode_bindings').EpisodeBindingRegistry(()), job_episodes=binding, contract_information_profile=lambda source: None, binding_context=lambda source: source, specialist=lambda source: None, journal=journal, run_id=run_id, store=store, source_credit_view=credit, expose_assigned_job=lambda source: None, receive_tool_attributions=lambda *a, **kw: None, archive=SimpleNamespace(store=lambda value: value), execution_binding=None, inprocess_replay=None, wait_inputs_version=None, completed_action_inputs_version=None, execute=execute, receive_native_outcome=lambda *a: None, receive_outcome=lambda source, selection, result, index: received.append((index, result['status'])), automatic_score_updates=updates, controller_value=lambda source, index, value: {'index': index, 'credit': value}, is_job_source=lambda source: source.path[-1][0] == 'job_monitor', permits_common_action=lambda source, kind: kind in {'tool', 'wait'}, native_event_information=None, decision_protocol=None, services=SimpleNamespace(instructions=module('runtime_prompt').instructions), progress_provider=None, native_timing_information=None)
+                    workflow = SimpleNamespace(context=object(), grains={'job_monitor': object(), 'annotation': object()}, inprocess_completion_order=None, receipts=None, scientific_process_binding=None, episode_bindings=module('episode_bindings').EpisodeBindingRegistry(()), job_episodes=binding, contract_information_profile=lambda source: None, binding_context=lambda source: source, specialist=lambda source: None, journal=journal, run_id=run_id, store=store, source_credit_view=credit, expose_assigned_job=lambda source: None, receive_tool_attributions=lambda *a, **kw: None, archive=SimpleNamespace(store=lambda value: value), execution_binding=None, inprocess_replay=None, pending_work=lambda source:[],  execute=execute, receive_native_outcome=lambda *a: None, receive_outcome=lambda source, selection, result, index: received.append((index, result['status'])), automatic_score_updates=updates, controller_value=lambda source, index, value: {'index': index, 'credit': value}, is_job_source=lambda source: source.path[-1][0] == 'job_monitor', permits_common_action=lambda source, kind: kind in {'tool', 'wait'}, native_event_information=None, decision_protocol=None, services=SimpleNamespace(instructions=module('runtime_prompt').instructions), progress_provider=None, native_timing_information=None)
                     workflow.homology_episode_bindings = families
                     for name in ('legacy_parent_for_path', 'job_episode_for_child', 'job_episode_for_path'):
                         setattr(workflow, name, MethodType(getattr(runtime.Workflow, name), workflow))
@@ -99,7 +99,6 @@ def f(tmp_path):
 def test_actual_build_selects_registered_legacy_monitor(f):
     assert type(f.task) is getattr(f.binding, 'decision_source_type', f.runtime.DecisionSource)
     if hasattr(f.binding, 'decision_source_type'):
-        assert type(f.task).__module__ == PACKAGE + '.homology_job_monitoring.task'
         assert not isinstance(f.task, f.runtime.DecisionSource)
 
 @pytest.mark.parametrize('variant', ['no-job-binding', 'submission-sibling', 'registry-priority'])
@@ -322,7 +321,6 @@ def test_original_nonowner_fact_source_and_incoming_guards(f, role):
 
 def test_monitor_credit_uses_original_lexical_callback_and_binding(f):
     method = f.binding._monitor_credit
-    assert method.__module__ == PACKAGE + '.homology_job_monitoring.credit'
     assert method.__qualname__ == 'HomologyEpisodeCredit._monitor_credit'
     descriptor = f.binding.as_record()
     assert descriptor['job_credit_calculator'] == operational.__module__ + '.' + operational.__qualname__
@@ -335,7 +333,6 @@ def test_monitor_credit_uses_original_lexical_callback_and_binding(f):
     for role, home, name in (('job_launch', 'homology_job_submission', '_launch_credit'), ('job_results', 'homology_result_acquisition', '_results_credit')):
         callback = getattr(f.bindings[role], name)
         assert callback.__self__ is f.bindings[role]
-        assert callback.__module__ == PACKAGE + '.' + home + '.credit'
         assert callback.__qualname__ == 'HomologyEpisodeCredit.' + name
 
 def test_actual_saved_monitor_facts_bypass_new_projection(f):

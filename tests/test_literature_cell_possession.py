@@ -52,7 +52,7 @@ def ratio_case(path):
         "paragraph_index": 0, "subject": "Protein P", "variant": "A12G", "reference_literal": "tagged WT levels",
         "visual_source_refs": [], "signal_kind": "protein_band", "reference_role": "tagged_wt_complementation",
         "arrangement": "replacement", "interpretation_witnesses": [{"source_ref": source["id"],
-            "representation": "original", "start": 0, "end": len(text.encode()), "quote": text}]}
+            "representation": "original", "start": 0, "end": len(text.encode())}]}
     return store, context, args
 
 

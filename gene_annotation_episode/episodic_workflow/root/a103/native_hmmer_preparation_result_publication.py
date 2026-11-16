@@ -161,10 +161,7 @@ def validate_prepared_grading(store, prepared, *, bundle, verify_files=True):
     if verify_files:
         _validate_rows(store, capture, bundle)
     occurrences, custody_failures = qualified_occurrences(bundle, prepared["bundle_artifact_ref"], capture)
-    # A saved publication keeps its original interpretation. Absence of this
-    # optional field is historical absence, never permission to upgrade it.
-    metadata, metadata_failures = effective_metadata(bundle, occurrences,
-        include_map_context="map_reconstruction_context" in stable["effective_metadata"])
+    metadata, metadata_failures = effective_metadata(bundle, occurrences)
     if (native_record_digest(occurrences) != native_record_digest(prepared["occurrences"])
             or native_record_digest(stable["effective_metadata"]) != native_record_digest(metadata)
             or native_record_digest(stable["grading_context"]) != native_record_digest(grading_context(bundle, occurrences, metadata))
@@ -509,7 +506,7 @@ def prepare_native_hmmer_preparation_grading(store, *, target, capture, capture_
     original_plan = _read_record(capture_directory, "capture-plan.json")
     bundle = validate_original_bundle(bundle, original_plan)
     occurrences, problems = qualified_occurrences(bundle, capture["bundle_artifact_ref"], capture)
-    metadata, metadata_failures = effective_metadata(bundle, occurrences, include_map_context=True)
+    metadata, metadata_failures = effective_metadata(bundle, occurrences)
     failures = unique_failures([*problems, *metadata_failures])
     files = [{"occurrence_id": r["occurrence_id"], "path": str(_artifact_path(store, r["artifact_ref"]))}
              for r in eligible_occurrences(occurrences)]

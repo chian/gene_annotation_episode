@@ -271,8 +271,9 @@ def _acquisition(value, original_task, native):
              'content_digest_conflict')
     _require(transfer['body_complete'] is snapshot['transport']['body_complete'])
     call = native['call']
-    _require(set(call) == {'url', 'byte_range'} and type(call['url']) is str and bool(call['url']) and
-             call['byte_range'] == args['byte_range'])
+    _require(set(call) == {'url', 'byte_range', 'max_bytes'} and type(call['url']) is str and bool(call['url']) and
+             call['byte_range'] == args['byte_range'] and type(call['max_bytes']) is int and
+             call['max_bytes'] > 0 and call['max_bytes'] == args.get('max_bytes'))
     # The real download URL and object/capability dependency were authenticated
     # by the host. Compare transport fields when retained; never invent them.
     transport = snapshot['transport']

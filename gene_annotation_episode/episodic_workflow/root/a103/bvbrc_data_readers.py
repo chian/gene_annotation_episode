@@ -1,8 +1,7 @@
 """Pure, source-preserving readers for retained BV-BRC Data responses.
 
 The public reader verifies the persisted v2 request and actual transport before
-decoding. The private payload decoder also supports explicitly selected legacy
-array/header evidence; it never upgrades that evidence into a v2 acquisition.
+decoding.
 Complete raw bytes remain the source of unselected fields and invalid objects.
 There is no acquisition, retry, pagination, Store access or scientific score.
 """
@@ -402,16 +401,13 @@ def parse_data_snapshot(snapshot: SourceSnapshot, *, prepared: dict) -> dict:
         return _failed(snapshot, [_issue("bvbrc_response_request_mismatch", "transport")])
     if snapshot.media_type.split(";", 1)[0].strip().lower() != "application/solr+json":
         return _failed(snapshot, [_issue("bvbrc_unsupported_media_type", "format")])
-    return _decode_native_payload(snapshot, prepared=prepared, qualified_request=True)
+    return _decode_native_payload(snapshot, prepared=prepared)
 
 
-def _decode_native_payload(snapshot, *, prepared, qualified_request=False):
-    """Explicit native-format decoder; legacy fixture use remains unqualified.
+def _decode_native_payload(snapshot, *, prepared):
+    """Explicit native-format decoder.
 
-    ``prepared`` supplies explicit selected field/population meanings. Unless
-    called after the public request check, request_matches=False remains in the
-    sheet and query count is unavailable for v2 claims. No saved legacy receipt
-    is modified by this offline decoder.
+    ``prepared`` supplies explicit selected field/population meanings.
     """
     prepared = validate("PreparedQuery", prepared)
     effective = prepared["effective_request"]
@@ -427,27 +423,22 @@ def _decode_native_payload(snapshot, *, prepared, qualified_request=False):
     if http_status is None or not 200 <= http_status < 300:
         return _failed(snapshot, [_issue("bvbrc_provider_http_error", "transport", http=http_status)])
     issues = []
-    if not qualified_request:
-        issues.append(_issue("bvbrc_response_request_mismatch", "transport"))
     if not transport["body_complete"]:
         issues.append(_issue("bvbrc_response_body_incomplete", "transport"))
     media = snapshot.media_type.split(";", 1)[0].strip().lower()
-    if media not in ("application/json", "application/solr+json"):
+    if media != "application/solr+json":
         return _failed(snapshot, issues + [_issue("bvbrc_unsupported_media_type", "format")])
     try:
         payload = _decode_json(snapshot.content)
     except (ValueError, UnicodeError, RecursionError):
         return _failed(snapshot, issues + [_issue("bvbrc_invalid_json_response", "format")])
-    is_solr = media == "application/solr+json"
-    profile = "solr_json_envelope_v1" if is_solr else "json_array_with_headers_v1"
-    if (is_solr and (type(payload) is not dict or type(payload.get("response")) is not dict
-                    or type(payload["response"].get("docs")) is not list)):
+    profile = "solr_json_envelope_v1"
+    if (type(payload) is not dict or type(payload.get("response")) is not dict
+            or type(payload["response"].get("docs")) is not list):
         code = "bvbrc_native_error" if type(payload) is dict and "error" in payload else "bvbrc_expected_solr_response"
         return _failed(snapshot, issues + [_issue(code, "format", path="/response")])
-    if not is_solr and type(payload) is not list:
-        return _failed(snapshot, issues + [_issue("bvbrc_expected_native_row_array", "format")])
-    docs = payload["response"]["docs"] if is_solr else payload
-    rows = [_row(raw, index=index, path=("/response/docs/" if is_solr else "/") + str(index),
+    docs = payload["response"]["docs"]
+    rows = [_row(raw, index=index, path="/response/docs/" + str(index),
                  native_sha256=snapshot.sha256, collection=collection, fields=fields)
             for index, raw in enumerate(docs)]
     for row in rows:
@@ -470,60 +461,59 @@ def _decode_native_payload(snapshot, *, prepared, qualified_request=False):
         population_issue(path, "bvbrc_invalid_native_field")
         return None
 
-    if is_solr:
-        response = payload["response"]
-        start = integer(response.get("start"), "/response/start")
-        total = integer(response.get("numFound"), "/response/numFound")
-        location = "/response/numFound"
-        if "numFoundExact" in response:
-            if type(response["numFoundExact"]) is bool:
-                exact = response["numFoundExact"]
+    response = payload["response"]
+    start = integer(response.get("start"), "/response/start")
+    total = integer(response.get("numFound"), "/response/numFound")
+    location = "/response/numFound"
+    if "numFoundExact" in response:
+        if type(response["numFoundExact"]) is bool:
+            exact = response["numFoundExact"]
+        else:
+            population_issue("/response/numFoundExact", "bvbrc_invalid_native_field")
+    header = payload.get("responseHeader", {})
+    if type(header) is not dict:
+        format_issues.append(_issue("bvbrc_expected_solr_response", "format", path="/responseHeader"))
+        header = {}
+    if "error" in payload or "status" in header and (
+            not isinstance(header["status"], _Number) or not header["status"].integer
+            or header["status"].project() != 0):
+        native_error = True
+        format_issues.append(_issue("bvbrc_native_error", "format", path="/error" if "error" in payload else "/responseHeader/status"))
+    if "QTime" in header:
+        qtime = header["QTime"].project() if isinstance(header["QTime"], _Number) else None
+        if qtime is not None and qtime >= 0:
+            transport["native_query_time_ms"] = qtime
+        else:
+            format_issues.append(_issue("bvbrc_invalid_native_field", "format", path="/responseHeader/QTime"))
+    for source, path in ((header, "/responseHeader"), (response, "/response"), (payload, "")):
+        if "partialResults" in source:
+            value = source["partialResults"]
+            if type(value) is bool:
+                partial = (partial is True or value)
             else:
-                population_issue("/response/numFoundExact", "bvbrc_invalid_native_field")
-        header = payload.get("responseHeader", {})
-        if type(header) is not dict:
-            format_issues.append(_issue("bvbrc_expected_solr_response", "format", path="/responseHeader"))
-            header = {}
-        if "error" in payload or "status" in header and (
-                not isinstance(header["status"], _Number) or not header["status"].integer
-                or header["status"].project() != 0):
-            native_error = True
-            format_issues.append(_issue("bvbrc_native_error", "format", path="/error" if "error" in payload else "/responseHeader/status"))
-        if "QTime" in header:
-            qtime = header["QTime"].project() if isinstance(header["QTime"], _Number) else None
-            if qtime is not None and qtime >= 0:
-                transport["native_query_time_ms"] = qtime
-            else:
-                format_issues.append(_issue("bvbrc_invalid_native_field", "format", path="/responseHeader/QTime"))
-        for source, path in ((header, "/responseHeader"), (response, "/response"), (payload, "")):
-            if "partialResults" in source:
-                value = source["partialResults"]
-                if type(value) is bool:
-                    partial = (partial is True or value)
-                else:
-                    partial = True
-                    format_issues.append(_issue("bvbrc_invalid_native_field", "format", path=path + "/partialResults"))
-                if partial:
-                    format_issues.append(_issue("bvbrc_native_partial_results", "format", path=path + "/partialResults"))
-        params = header.get("params", {})
-        if type(params) is not dict:
-            population_issue("/responseHeader/params")
-            params = {}
-        if "q" in params:
-            if type(params["q"]) is str:
-                echoed = params["q"]
-            if echoed != compiled:
-                population_issue("/responseHeader/params/q")
-        if "fq" in params:
-            fq = params["fq"] if type(params["fq"]) is list else [params["fq"]]
-            if all(type(value) is str for value in fq):
-                filter_queries = fq
-            if filter_queries != ["public:true"]:
-                population_issue("/responseHeader/params/fq")
-        for item in prepared["native_request"]["query_parameters"]:
-            name = item["name"]
-            if name in params and params[name] != item["value"]:
-                population_issue("/responseHeader/params/" + _escape(name))
+                partial = True
+                format_issues.append(_issue("bvbrc_invalid_native_field", "format", path=path + "/partialResults"))
+            if partial:
+                format_issues.append(_issue("bvbrc_native_partial_results", "format", path=path + "/partialResults"))
+    params = header.get("params", {})
+    if type(params) is not dict:
+        population_issue("/responseHeader/params")
+        params = {}
+    if "q" in params:
+        if type(params["q"]) is str:
+            echoed = params["q"]
+        if echoed != compiled:
+            population_issue("/responseHeader/params/q")
+    if "fq" in params:
+        fq = params["fq"] if type(params["fq"]) is list else [params["fq"]]
+        if all(type(value) is str for value in fq):
+            filter_queries = fq
+        if filter_queries != ["public:true"]:
+            population_issue("/responseHeader/params/fq")
+    for item in prepared["native_request"]["query_parameters"]:
+        name = item["name"]
+        if name in params and params[name] != item["value"]:
+            population_issue("/responseHeader/params/" + _escape(name))
     ranges = _header_values(transport["headers"], "content-range")
     native_range = ranges[0] if ranges else None
     if any(value != native_range for value in ranges):
@@ -539,13 +529,11 @@ def _decode_native_payload(snapshot, *, prepared, qualified_request=False):
                 population_issue("/headers/Content-Range")
             if start is not None and start != range_start or total is not None and range_total is not None and total != range_total:
                 population_issue("/headers/Content-Range")
-            if not is_solr:
-                start, total, location = range_start, range_total, "/headers/Content-Range"
     if start is not None and start != effective["offset"]:
-        population_issue("/response/start" if is_solr else "/headers/Content-Range")
+        population_issue("/response/start")
     if docs and total is not None and start is not None and start + len(docs) > total:
         population_issue(location)
-    if qualified_request and len(docs) > effective["limit"]:
+    if len(docs) > effective["limit"]:
         population_issue("/response/docs")
     content_types = _header_values(transport["headers"], "content-type")
     if any(value.split(";", 1)[0].strip().lower() != media for value in content_types):
@@ -558,8 +546,7 @@ def _decode_native_payload(snapshot, *, prepared, qualified_request=False):
                   "reported_total": total, "native_num_found_exact": exact,
                   "exactness": exactness, "native_location": location}
     issues.extend(format_issues + population_issues)
-    count_reason = ("incompatible_input" if not qualified_request else
-                    "transport_incomplete" if not transport["body_complete"] else
+    count_reason = ("transport_incomplete" if not transport["body_complete"] else
                     "native_partial_results" if partial else
                     "native_value_invalid" if native_error or format_issues else
                     "population_conflict" if any(issue["code"] == "bvbrc_population_metadata_conflict" for issue in population_issues) else
@@ -590,7 +577,7 @@ def _decode_native_payload(snapshot, *, prepared, qualified_request=False):
     facets = []
     if mode == "facet":
         facet, facet_issues = _facets(payload, snapshot.sha256, transport["headers"],
-                                    effective["facet"], population_key, is_solr=is_solr,
+                                    effective["facet"], population_key,
                                     complete=response_complete)
         if exact is True and total is not None:
             for bucket in facet["buckets"]:
@@ -620,7 +607,7 @@ def _decode_native_payload(snapshot, *, prepared, qualified_request=False):
                          "field_contract_version": FIELD_CONTRACT_VERSION},
              "transport": transport,
              "qualification": {"service_matches": snapshot.service == "bvbrc_data",
-                               "request_matches": qualified_request,
+                               "request_matches": True,
                                "transport_complete": transport["body_complete"], "http_success": True,
                                "format_valid": not format_issues,
                                "population_metadata_valid": not population_issues,
@@ -632,9 +619,9 @@ def _decode_native_payload(snapshot, *, prepared, qualified_request=False):
                     "sheet": sheet, "failures": failures, "retained_native_sha256": snapshot.sha256})
 
 
-def _facets(payload, digest, headers, request, population_key, *, is_solr, complete):
+def _facets(payload, digest, headers, request, population_key, *, complete):
     field = request["field"]
-    location = ("/facet_counts" if is_solr else "/headers/facet_counts")
+    location = "/facet_counts"
     issues = []
     header_values = _header_values(headers, "facet_counts")
     decoded_headers = []
@@ -644,7 +631,7 @@ def _facets(payload, digest, headers, request, population_key, *, is_solr, compl
         except (ValueError, UnicodeError, RecursionError):
             issues.append(_issue("bvbrc_invalid_facet_pairs", "format", field=field,
                                  path="/headers/facet_counts"))
-    source = payload.get("facet_counts") if is_solr else decoded_headers[0] if decoded_headers else None
+    source = payload.get("facet_counts")
     if any(value != source for value in decoded_headers):
         issues.append(_issue("bvbrc_population_metadata_conflict", "population",
                              field=field, path="/headers/facet_counts"))

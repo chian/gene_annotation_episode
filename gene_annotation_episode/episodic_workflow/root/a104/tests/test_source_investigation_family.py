@@ -291,8 +291,8 @@ def test_returned_outcome_and_saved_replay_reach_original_action_unit(family, ho
         projections.append(source.episode_id)
         return binding.credit_view(context, {})
     task.workflow = SimpleNamespace(run_id=context.run_id, store=family.store,
-        journal=journal, execution_binding=None, wait_inputs_version=None,
-        completed_action_inputs_version=None, execute=execute,
+        journal=journal, execution_binding=None, pending_work=lambda source: {'items': []},
+        execute=execute,
         receive_native_outcome=lambda *args: None,
         receive_outcome=lambda source, selection, result, index: receipts.append((index, result['status'])),
         automatic_score_updates=score, source_credit_view=project,
@@ -334,7 +334,8 @@ def test_saved_full_decision_payload_is_returned_without_rebuilding_inputs(famil
         'required': ['selected'], 'additionalProperties': False}
     response = {'selected': 'saved'}
     journal.save('runtime_model_calls', {'episode_id': context.episode_id, 'call_index': 0,
-        'purpose': 'decision', 'request': runtime._json({'context': original, 'schema': schema}),
+        'purpose': 'decision', 'request': runtime._json({'context': original, 'schema': schema, 'assignment_transport': {
+            'version': runtime._ASSIGNMENT_TRANSPORT, 'action_schema_sha256': runtime._digest(schema)}}),
         'response': runtime._json(response)})
     before = journal.row('runtime_model_calls', context.episode_id, 0)
     task.workflow = SimpleNamespace(journal=journal,

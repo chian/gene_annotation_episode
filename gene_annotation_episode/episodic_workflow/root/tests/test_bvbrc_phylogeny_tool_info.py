@@ -282,7 +282,7 @@ def test_enumeration_has_no_io_job_model_or_scientific_action(monkeypatch):
 def test_information_retrieval_keeps_instructions_and_invocations_separate(tmp_path):
     rows = [row for provider in ("bvbrc_gene_tree", "bvbrc_codon_tree")
         for row in phylogeny_tool_contracts(resource_id="selected-api", assignment_schema=assignment_schema(), provider=provider)]
-    library = ScientificToolLibrary.freeze(tmp_path / "library", catalog=[], tool_info=True,
+    library = ScientificToolLibrary.freeze(tmp_path / "library", catalog=[],
         resource_catalogs={"api": rows})
     selected = [{"name": row["name"], "resources": "api"} for row in rows]
     instructions = library.resolve_tool_info(selected, rows)

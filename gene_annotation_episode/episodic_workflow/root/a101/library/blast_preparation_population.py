@@ -490,7 +490,7 @@ def _validate_preparation_record(record):
                 _require(r["reason"] == "native_disposition_unavailable" and r["evidence_occurrence_id"] is None
                     and r["evidence_line_number"] is None and r["volume_key"] is None and r["native_profile_ordinal"] is None, "profile_unknown_disposition")
             else:
-                # This initial port has exclusion/error text, but no authoritative
+                # There is exclusion/error text, but no authoritative
                 # included-input membership source. Aux order alone cannot supply it.
                 _require(r["disposition"] in {"excluded", "failed"} and r["evidence_occurrence_id"] in outputs
                     and outputs[r["evidence_occurrence_id"]]["role"] in {"stdout", "stderr", "diagnostics"}

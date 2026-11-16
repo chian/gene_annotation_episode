@@ -42,7 +42,7 @@ def test_reopen_rejects_changed_frozen_library(tmp_path):
     binding, directory = frozen_scientific_binding(tmp_path)
     saved = binding.as_record()
     path = directory / 'scientific-tool-library/index.json'
-    path.write_text(path.read_text().replace('scientific_tool_library_v1', 'forged_library'))
+    path.write_text(path.read_text().replace(import_module(AXIS + '.scientific_tool_library').INFO_VERSION, 'forged_library'))
     failure = import_module('gene_annotation_episode.episodic_workflow.root.method_loop.durable').DurableExecutionError
     composition = import_module(AXIS + '.episode_composition')
     with pytest.raises(failure):

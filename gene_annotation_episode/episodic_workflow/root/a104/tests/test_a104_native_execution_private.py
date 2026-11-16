@@ -196,7 +196,7 @@ def test_returned_native_outcome_enters_original_task_once(native_frame, tmp_pat
     selected = {'kind': 'tool', 'tool': 'exec_command', 'arguments': {'retained': True}}
     outcome = asyncio.run(case.task.execute(selected, 4))
     assert asyncio.run(case.task.execute(selected, 4)) == outcome
-    assert json.loads(case.saved[4]['result']) == payload and json.loads(case.saved[4]['action']) == selected
+    assert json.loads(case.saved[4]['result']) == {**payload, 'pending_work_after_action': case.task.workflow.pending_work(case.task)} and json.loads(case.saved[4]['action']) == selected
     assert case.receipts == [(4, status)] and len(calls) == len(case.projections) == 1
 
 

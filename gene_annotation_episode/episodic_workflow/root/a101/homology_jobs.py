@@ -134,7 +134,7 @@ class HomologyJobs:
     def __init__(self, directory):
         self.directory = Path(directory).expanduser().resolve()
         self.config = json.loads((self.directory/'configuration.json').read_text())
-        if self.config['version'] not in (VERSION, CONFIGURATION_VERSION):
+        if self.config['version'] != CONFIGURATION_VERSION:
             raise ValueError('unsupported_homology_job_registry')
         self.db = sqlite3.connect((self.directory/'jobs.sqlite').as_uri()+'?mode=rw', uri=True)
         self.db.row_factory = sqlite3.Row
@@ -150,10 +150,8 @@ class HomologyJobs:
 
     @property
     def configured_cpu_forecasts(self):
-        """Retain the caller's historical forecast grid, never an admission bound."""
-        historical = (self.config['historical_forecast_configuration']
-            if self.config['version'] == CONFIGURATION_VERSION else self.config)
-        return tuple(range(1, historical['max_cpu'] + 1))
+        """Configured forecast counts; none is a selected-thread admission bound."""
+        return tuple(range(1, self.config['historical_forecast_configuration']['max_cpu'] + 1))
 
     @property
     def cpu_forecast_choices(self):
@@ -224,9 +222,7 @@ class HomologyJobs:
         row = self._row(job_ref)
         return {'job_ref': job_ref, 'executable_exists': Path(self.config['executable']['path']).is_file(),
             'reference_database_exists': Path(self.config['reference_database']['path']).is_file(),
-            'historical_forecast_configuration': {'max_cpu': (
-                self.config['historical_forecast_configuration']['max_cpu']
-                if self.config['version'] == CONFIGURATION_VERSION else self.config['max_cpu'])},
+            'historical_forecast_configuration': {'max_cpu': self.config['historical_forecast_configuration']['max_cpu']},
             'cpu_forecast_choices': list(self.cpu_forecast_choices),
             'configured_cpu': row['cpu'], 'staged': bool(row['staged']),
             'submission_requested': self._has_intent(row), 'job_limits': self.config['job_limits'],
@@ -306,8 +302,8 @@ class HomologyJobs:
         handle = self._handle(job_ref)
         self._validate_native_event_binding(job_ref, handle, native_events)
         if row['submission_requested'] and not handle.path.is_file():
-            # A missing reservation for a recorded request is corruption or an
-            # older incomplete protocol. Absence does not authorize execution.
+            # A missing reservation for a recorded request is corruption.
+            # Absence does not authorize execution.
             return {'job_ref': job_ref, 'new_submission': False, 'status': self.status(job_ref)}
         if handle.path.is_file() and handle.read()['stage'] != 'prepared':
             return {'job_ref': job_ref, 'new_submission': False, 'status': self.status(job_ref)}

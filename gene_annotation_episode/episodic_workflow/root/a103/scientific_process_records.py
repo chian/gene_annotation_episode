@@ -36,7 +36,7 @@ def scientific_digest(value) -> str:
 
 
 def canonical_slot(value):
-    """Compare slot meanings: both slot names denote the evidence axis."""
+    """Compare slot meanings without rewriting an old pinned option record."""
     return 'evidence_axis' if value == LEGACY_EVIDENCE_SLOT else value
 
 
@@ -127,9 +127,9 @@ def validate_selection(value) -> dict:
 
 def selection_fields(value):
     """Read a versioned identity without normalizing its original dictionary."""
-    if value.get('version') != SELECTION_VERSION:
-        raise ValueError('scientific_process_selection_invalid')
-    return 'evidence_axis', 'thought_pattern', 'child_tool_info'
+    if value.get('version') == SELECTION_VERSION:
+        return 'evidence_axis', 'thought_pattern', 'child_tool_info'
+    raise ValueError('scientific_process_selection_invalid')
 
 
 def selector_selection(value):
@@ -185,7 +185,7 @@ def validate_filled_process(value) -> dict:
 
 
 def validate_revision(value) -> dict:
-    """Parse saved historical revisions without selecting any active process."""
+    """Parse saved revisions without selecting any active process."""
     value = _plain(value)
     code = "scientific_process_revision_invalid"
     _exact(value, "version initial_selection_sha256 previous_selection_sha256 selection", code)

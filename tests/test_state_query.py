@@ -109,7 +109,7 @@ def test_reverse_query_finds_real_semantic_paths_and_anchor_provenance_not_quote
         # must not become a dependency, while the anchor's real references do.
         src = source(store, assumption["id"])
         anchor = {"source_ref": src["id"], "artifact_ref": src["text_ref"],
-            "start": 0, "end": len(assumption["id"]), "quote": assumption["id"]}
+            "start": 0, "end": len(assumption["id"])}
         o = observation(store, target, src, anchor=anchor)
         a = assessment(store, h, o, assumptions=[assumption["id"]])
         n = annotation(store, target, h, a, contexts=[assumption["id"]])

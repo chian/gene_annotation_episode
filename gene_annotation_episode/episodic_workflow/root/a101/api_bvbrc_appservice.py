@@ -355,9 +355,8 @@ class BVBRCAppServiceService:
                 local_failure = _failure("capability_unavailable", phase="association", effect_outcome=None)
             else:
                 _url(entry["url"])
-            call = {"url": entry["url"], "byte_range": arguments["byte_range"]}
-            if "max_bytes" in arguments:
-                call["max_bytes"] = arguments["max_bytes"]
+            call = {"url": entry["url"], "byte_range": arguments["byte_range"],
+                "max_bytes": arguments.get("max_bytes")}
         else:
             raise ContractError("bvbrc_appservice_operation_not_available")
 
@@ -693,9 +692,9 @@ class BVBRCAppServiceService:
                and type(snapshot.request) is dict
                and snapshot.request.get("kind") == "download"
                and _same(snapshot.request.get("requested_byte_range"), inputs["current_operation"]["arguments"]["byte_range"])
-               and ("max_bytes" in snapshot.request) == ("max_bytes" in inputs["current_operation"]["arguments"])
-               and ("max_bytes" not in snapshot.request or _same(snapshot.request["max_bytes"],
-                    inputs["current_operation"]["arguments"]["max_bytes"])),
+               and "max_bytes" in snapshot.request
+               and _same(snapshot.request["max_bytes"],
+                    inputs["current_operation"]["arguments"].get("max_bytes")),
                "publication_dependency_conflict")
         current = inputs["current_snapshot"]
         content = current["content"]

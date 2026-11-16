@@ -219,17 +219,17 @@ class WorkflowServices(WorkflowToolServices, WorkflowReferenceAccess, WorkflowCr
         return self.molecular_received_facts(context, fact_source='itc_binding_parameters')
 
     def molecular_own_facts(self, context, *, fact_source):
-        from .molecular_result_facts import own_molecular_facts
+        from .library.molecular_result_facts import own_molecular_facts
         if context.run_id != self.workflow.run_id:
             raise ValueError('molecular_facts_receiver_identity_mismatch')
         return own_molecular_facts(self.workflow.tools, context, read_received=self.read_received_molecular_input, fact_source=fact_source)
 
     def molecular_frozen_facts(self, context, *, fact_source):
-        from .molecular_result_facts import frozen_molecular_facts
+        from .library.molecular_result_facts import frozen_molecular_facts
         return frozen_molecular_facts(self.workflow.store, self.workflow.run_id, context, fact_source=fact_source)
 
     def molecular_received_facts(self, context, *, fact_source):
-        from .molecular_result_facts import received_molecular_facts
+        from .library.molecular_result_facts import received_molecular_facts
         return received_molecular_facts(self.workflow.store, self.workflow.run_id, context, fact_source=fact_source)
 
     def protein_structure_action_own_facts(self, context, *, fact_source):

@@ -145,8 +145,6 @@ class ScientificHeadBoundaryChecks:
 
     def test_fresh_private_descriptor_allows_original_execution(self, scientific):
         v = scientific
-        descriptor = v.binding.as_record()
-        assert self.module('episode_composition').scientific_binding_compatible(descriptor, descriptor)
         v.binding.validate_execution_context(v.context)
 
     def test_current_binding_reopens_its_original_frozen_libraries(self, scientific):

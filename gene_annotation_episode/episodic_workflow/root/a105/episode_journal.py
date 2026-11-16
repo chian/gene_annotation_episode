@@ -76,24 +76,6 @@ class Journal:
             for statement in schema.split(";"):
                 if statement.strip():
                     self.db.execute(statement)
-            # Declare the native scalar-or-collection storage type explicitly.
-            # Existing scalar values retain their SQLite numeric type and all
-            # original action identities. No replacement score is introduced.
-            for table, column in (('runtime_episodes', 'initial_credit'), ('runtime_actions', 'credit')):
-                columns = list(self.db.execute('PRAGMA table_info(' + table + ')'))
-                if next(row[2] for row in columns if row[1] == column) == 'REAL':
-                    declaration = next(statement.strip() for statement in schema.split(';')
-                        if 'CREATE TABLE IF NOT EXISTS ' + table + ' (' in statement)
-                    temporary = table + '_credit_migration'
-                    self.db.execute(declaration.replace('IF NOT EXISTS ' + table, temporary))
-                    names = ','.join(row[1] for row in columns)
-                    self.db.execute(f'INSERT INTO {temporary} ({names}) SELECT {names} FROM {table}')
-                    self.db.execute('DROP TABLE ' + table)
-                    self.db.execute(f'ALTER TABLE {temporary} RENAME TO {table}')
-            if 'timing_receipts' not in {row[1] for row in self.db.execute('PRAGMA table_info(runtime_report_attempts)')}:
-                self.db.execute('ALTER TABLE runtime_report_attempts ADD COLUMN timing_receipts TEXT')
-            if 'report_contract_declaration' not in {row[1] for row in self.db.execute('PRAGMA table_info(runtime_report_attempts)')}:
-                self.db.execute('ALTER TABLE runtime_report_attempts ADD COLUMN report_contract_declaration TEXT')
 
     def row(self, table, episode_id=None, index=None):
         keys, args = ["run_id=?"], [self.run_id]

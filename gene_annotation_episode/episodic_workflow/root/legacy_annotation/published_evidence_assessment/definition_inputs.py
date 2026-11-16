@@ -1101,9 +1101,6 @@ DESCRIPTOR_OPERANDS = {
     "literature_assay_grading_inputs.py": (
         "gene_annotation_episode/episodic_workflow/root/literature_assay_grading_inputs.py",
     ),
-    "literature_assay_grading_legacy_cells_v1.json": (
-        "gene_annotation_episode/episodic_workflow/root/literature_assay_grading_legacy_cells_v1.json",
-    ),
     "literature_assay_grading_prompt.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_assay_grading_prompt.py",
     ),
@@ -1743,7 +1740,6 @@ DESCRIPTOR_OPERANDS = {
         "gene_annotation_episode/episodic_workflow/root/literature_sheet_updates.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_sheet_dependency_contracts.py",
         "gene_annotation_episode/episodic_workflow/root/library/literature_a108_revision_calculations.py",
-        "gene_annotation_episode/episodic_workflow/root/library/literature_saved_adapter_definitions.py",
     ),
     "literature_source_inputs.py": (
         "gene_annotation_episode/episodic_workflow/root/library/literature_source_inputs.py",

@@ -9,9 +9,9 @@ import pytest
 
 def progress(reference, *, target='target', returned=False, committed=()):
     return {'version':'progress_snapshot_v1','progress_ref':reference,'target_handle':target,
-        'observed_at':'2026-11-11T00:00:00Z','execution_status':{'version':'execution_status_v1',
+        'observed_at':'2026-11-11T00:00:00Z','execution_status':{'version':'execution_status_v2',
             'handle':target,'lifecycle_state':'returned' if returned else 'executing',
-            'liveness':'not_live' if returned else 'live','failure':None},
+            'liveness':'not_live' if returned else 'live','failure':None,'suspension':None},
         'result_available':returned,'dependencies':[],'committed_record_refs':list(committed),
         'log_windows':[],'provenance_refs':[],'measurements':[]}
 
@@ -95,8 +95,8 @@ class MonitorCreditBehaviorChecks:
         def receive(source,selected,result,index):delivered.extend(result['progress_refs'])
         def observe(source,index,credit):
             controller_inputs.append((index,credit));return {'decision_index':index,'credit':credit}
-        workflow=SimpleNamespace(run_id='run',execution_binding=None,wait_inputs_version=None,
-            completed_action_inputs_version=None,pending_work=lambda source: {'version': 'pending_work_v2', 'captured_at': '2026-11-01T00:00:00+00:00', 'items': []},native_timing_information=None,
+        workflow=SimpleNamespace(run_id='run',execution_binding=None,
+            pending_work=lambda source: {'version': 'pending_work_v2', 'captured_at': '2026-11-01T00:00:00+00:00', 'items': []},native_timing_information=None,
             journal=SimpleNamespace(row=lambda table,episode,index:saved.get(index),
                 save=lambda table,row:saved.__setitem__(row['decision_index'],row),measure=lambda *args:nullcontext()),
             execute=execute,receive_native_outcome=lambda *args:None,receive_outcome=receive,

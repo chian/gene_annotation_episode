@@ -4,7 +4,7 @@ from .scientific_contracts import SELECTION_VERSION, _REVISION_ARGUMENTS, select
 
 class AlternateProcessSelection:
 
-    def _proposed_selection(self, initial, arguments, version, scope):
+    def _proposed_selection(self, initial, arguments, scope):
         axis_field = selection_fields(initial)[0]
         validate_schema(arguments, _REVISION_ARGUMENTS)
         return self._selection({'version': SELECTION_VERSION, 'evidence_axis': initial[axis_field], 'thought_pattern': arguments['thought_pattern'], 'child_tool_info': self.tool_library.resolve_tool_info(arguments['child_tool_info'], self._information_catalog(scope))})

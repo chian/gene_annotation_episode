@@ -26,5 +26,5 @@ def exchange_for_child(workflow, source, role):
     if len(candidates) != 1 or candidates[0] is not parent:
         return None
     from .to_child_scientific_process import prepare_request
-    from .from_child_scientific_process import admit_return, admit_unowned_return, receive_report
-    return prepare_request, admit_return, admit_unowned_return, receive_report
+    from .from_child_scientific_process import admit_return, receive_report
+    return prepare_request, admit_return, receive_report

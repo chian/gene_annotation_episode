@@ -19,7 +19,6 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_meas
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_validation_calculations import populate_measurement_validation, measurement_validation_sheet_schema
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_measurement_validation_prompt import MEASUREMENT_VALIDATION_TASK
 ROOT = Path(__file__).resolve().parents[5]
-ARTIFACT = ROOT / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_measurement_validation_pure_205'
 PACKET = ROOT / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_common_scoring_gap_review_200/SOURCE_PACKET_001.json'
 
 class Source:

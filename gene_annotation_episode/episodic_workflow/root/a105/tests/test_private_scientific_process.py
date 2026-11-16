@@ -35,8 +35,8 @@ def test_scientific_task_validates_original_assignment_before_operation():
         seen.append(('execute',kwargs['operation_key']))
         return {'status':'unavailable','record_refs':[],'changed_record_refs':[],'result':None}
     async def scores(source,index,result):return result
-    source.workflow=SimpleNamespace(run_id='run',execution_binding=None,wait_inputs_version=None,
-        completed_action_inputs_version=None,binding_context=lambda source:'original-context',
+    source.workflow=SimpleNamespace(run_id='run',execution_binding=None,pending_work=lambda source: {'version': 'pending_work_v1', 'captured_at': '2026-10-27T00:00:00+00:00', 'items': []}, 
+        binding_context=lambda source:'original-context',
         scientific_process_binding=SimpleNamespace(validate_execution_context=lambda context:seen.append(('validated',context))),
         journal=SimpleNamespace(row=lambda table,episode,index:saved.get(index),
             save=lambda table,row:saved.__setitem__(row['decision_index'],dict(row)),measure=lambda *args:nullcontext()),

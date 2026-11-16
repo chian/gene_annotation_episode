@@ -15,7 +15,7 @@ def selection_and_source(gap):
     artifact_ref = "artifact_" + hashlib.sha256(raw).hexdigest()
     def witness(token, start):
         return dict(source_ref=source_ref, representation="text", start=start,
-            end=start + len(token.encode()), quote=token)
+            end=start + len(token.encode()))
     selection = dict(kind="source_number", origin="reported",
         number=dict(witness=witness("32", len(prefix)), number_start=0, number_end=2),
         unit=witness("min", len(prefix) + 2 + len(gap)))

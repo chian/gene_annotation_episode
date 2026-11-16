@@ -22,7 +22,7 @@ def module(name):
 def test_actual_standalone_scientific_constructor_preserves_caller_credit_and_timing(tmp_path,credit,timing):
     library=module('scientific_process_library').ScientificProcessLibrary.freeze(
         tmp_path/'scientific-process-library',source=ROOT.parents[3]/'research/slotted_process_library/publications/2026-10-24-001')
-    tools_library=module('scientific_tool_library').ScientificToolLibrary.freeze(tmp_path/'tool-library',catalog=[],tool_info=True)
+    tools_library=module('scientific_tool_library').ScientificToolLibrary.freeze(tmp_path/'tool-library',catalog=[])
     calls=[]
     class EngineeringProjector:
         def __call__(self,store,scope,**arguments):

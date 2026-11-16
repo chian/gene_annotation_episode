@@ -45,7 +45,7 @@ def test_five_distinct_explicit_hpc_contracts_with_actual_selected_request_shape
 
 def test_existing_library_freezes_instructions_and_exact_invocation_contracts(tmp_path):
     rows=standard_blast_database_tool_contracts(bindings(),resource_kind='hpc',resource_id='declared-hpc')
-    library=ScientificToolLibrary.freeze(tmp_path/'library',catalog=[],tool_info=True,resource_catalogs={'hpc':rows})
+    library=ScientificToolLibrary.freeze(tmp_path/'library',catalog=[],resource_catalogs={'hpc':rows})
     selection=[{'name':r['name'],'resources':r['resources']} for r in rows]
     info=library.resolve_tool_info(selection)
     assert info==[{k:r[k] for k in ['name','description','resources','instructions']} for r in rows]

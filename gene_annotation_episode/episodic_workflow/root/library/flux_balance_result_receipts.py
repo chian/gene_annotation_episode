@@ -127,8 +127,7 @@ class FluxBalanceResultReceipts:
         control = read_request_binding(self.store, context.run_id, context.episode_id)
         require(same(control['context'], context.as_record()) and len(control['requests']) == 1,
             'fba_result_original_context_conflict')
-        return practical_outcome_view(receipt, assignment=control['requests'][0]['assignment'],
-            control_version=control['version'])
+        return practical_outcome_view(receipt, assignment=control['requests'][0]['assignment'])
 
     # Reuse selected-action locking, immutable controls and retained-file
     # metadata checks. None of these shared ports interprets tool measurements.

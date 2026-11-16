@@ -41,7 +41,7 @@ class PlanningAllocationTaskBehavior:
             projections.append(result)
             return result
         task.workflow = SimpleNamespace(run_id=context.run_id, execution_binding=None, inprocess_replay=None,
-            wait_inputs_version=None, completed_action_inputs_version=None,pending_work=lambda source: {'version': 'pending_work_v2', 'captured_at': '2026-11-01T00:00:00+00:00', 'items': []},
+            pending_work=lambda source: {'version': 'pending_work_v2', 'captured_at': '2026-11-01T00:00:00+00:00', 'items': []},
             journal=SimpleNamespace(row=lambda table, episode, index=None: saved.get(index),
                 save=lambda table, row: saved.__setitem__(row['decision_index'], deepcopy(row)), measure=lambda *args: nullcontext()),
             execute=execute, receive_native_outcome=lambda *args: None,

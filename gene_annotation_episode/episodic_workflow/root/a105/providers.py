@@ -665,7 +665,7 @@ class _SessionConnection:
             (directory / "response.txt").write_text(text)
             # The decision exchange journal must retain a finite but invalid
             # envelope (including JSON null) so the runtime can give structured
-            # feedback inside the same decision. Legacy callers still require
+            # feedback inside the same decision. A direct request requires
             # an object. Malformed, duplicate-key and nonfinite JSON stay errors.
             parser = (parse_json_value if context.get("version") == "decision_context_v1"
                       else parse_json_object)
@@ -715,8 +715,8 @@ class _SessionConnection:
                     if context.get('result') not in lookups:
                         lookups.append(context.get('result'))
         elif has_text_task(context):
-            # The legacy exchange protocol can carry a newly published process.
-            # It already supplies the full state; its response schema is intact.
+            # A direct request can carry a newly published process. It already
+            # supplies the full state; its response schema is intact.
             state = deepcopy(context)
         if state is not None and has_text_task(state):
             renderer = (render_scientific_process_prompt

@@ -187,19 +187,13 @@ class EpisodeBindingRegistry:
                 or any(not isinstance(role, str) or not role for role in roles)):
             raise ValueError('unique_nonempty_episode_roles_required')
         path = getattr(binding, 'binding_path', None)
-        if path is not None:
-            parent = getattr(binding, 'commissioning_parent', None)
-            if (not isinstance(path, str) or not path
-                    or any(not part or part in {'.', '..'} for part in path.split('/'))
-                    or not isinstance(parent, str) or not parent):
-                raise ValueError('explicit_episode_binding_path_required')
-            if path in self._by_path:
-                raise ValueError('duplicate_episode_binding_path:' + path)
-        conflicts = {role for role in roles if role in self._by_role
-            and (path is None or any(getattr(other, 'binding_path', None) is None
-                                    for other in self._by_role[role]))}
-        if conflicts:
-            raise ValueError('duplicate_episode_role:' + ','.join(sorted(conflicts)))
+        parent = getattr(binding, 'commissioning_parent', None)
+        if (not isinstance(path, str) or not path
+                or any(not part or part in {'.', '..'} for part in path.split('/'))
+                or not isinstance(parent, str) or not parent):
+            raise ValueError('explicit_episode_binding_path_required')
+        if path in self._by_path:
+            raise ValueError('duplicate_episode_binding_path:' + path)
         for role in roles:
             if binding.credit_kind(role) not in {'scientific', 'operational', 'monitoring'}:
                 raise ValueError('declared_credit_kind_required:' + role)
@@ -212,8 +206,7 @@ class EpisodeBindingRegistry:
         self._bindings.append(binding)
         for role in roles:
             self._by_role.setdefault(role, []).append(binding)
-        if path is not None:
-            self._by_path[path] = binding
+        self._by_path[path] = binding
 
 
 
@@ -403,32 +396,22 @@ class EpisodeBindingRegistry:
         candidates = self._by_role.get(role, ())
         if not candidates:
             raise LookupError('episode_role_not_bound:' + str(role))
-        parent_path = getattr(parent, 'binding_path', None)
-        if parent_path is not None:
+        if parent is None:
+            parent_path = None
+            matches = [binding for binding in candidates if role in binding.entry_roles
+                and binding.commissioning_parent == 'legacy_annotation']
+        else:
+            parent_path = parent.binding_path
             from .homology_service_setup import legacy_parent_types
-            actual_parents = legacy_parent_types()
-            legacy_entry = any(parent is actual for actual in actual_parents.values())
-            accepted_parents = {'legacy_annotation', 'annotation'} if parent is actual_parents['annotation'] else {parent_path}
-            default_parent = 'legacy_annotation' if parent is actual_parents['annotation'] else None
+            legacy_entry = any(parent is actual for actual in legacy_parent_types().values())
             matches = [binding for binding in candidates
-                if getattr(binding, 'commissioning_parent', default_parent) in accepted_parents
+                if binding.commissioning_parent == parent_path
                 and (not legacy_entry or role in binding.entry_roles)]
             # Recursive invocations reuse their existing source home. A declared
             # direct child takes precedence over recursion of the same role.
             child_roles = getattr(parent, 'child_roles', None)
             if not matches and role in parent.roles and child_roles is not None and role in child_roles(role):
                 matches = [parent]
-            # Caller-supplied bindings without a private commissioning path.
-            if not matches:
-                matches = [binding for binding in candidates
-                           if getattr(binding, 'binding_path', None) is None]
-        elif parent is None:
-            matches = [binding for binding in candidates if role in binding.entry_roles
-                and getattr(binding, 'commissioning_parent', 'legacy_annotation')
-                    in {'legacy_annotation', 'annotation'}]
-        else:
-            # A parent without path identity; only a unique role is safe.
-            matches = list(candidates)
         if len(matches) != 1:
             raise LookupError('episode_child_not_bound:' + str(parent_path) + ':' + str(role))
         return matches[0]
@@ -442,9 +425,6 @@ class EpisodeBindingRegistry:
         if not path or any(len(part) != 2 or any(not isinstance(item, str) or not item
                                                for item in part) for part in path):
             raise ValueError('episode_binding_runtime_path_required')
-        candidates = self._by_role.get(path[-1][0], ())
-        if len(candidates) == 1 and getattr(candidates[0], 'binding_path', None) is None:
-            return candidates[0]
         parent = None
         for index, (role, _) in enumerate(path):
             if index == 0 and role in {'annotation', 'improvement'} and role not in self._by_role:
@@ -464,9 +444,6 @@ class EpisodeBindingRegistry:
 
     def for_child(self, parent_path, role):
         """Select this parent's private child before preparing its assignment."""
-        candidates = self._by_role.get(role, ())
-        if len(candidates) == 1 and getattr(candidates[0], 'binding_path', None) is None:
-            return candidates[0]
         path = tuple(parent_path)
         parent = self.for_path(path)
         return self._child_binding(parent, role)

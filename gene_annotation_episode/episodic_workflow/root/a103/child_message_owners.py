@@ -34,72 +34,72 @@ def exchange_for_child(workflow, source, role):
         child = registry._by_path.get('resource_work_submission')
         if type(child) is ResourceEpisode:
             from gene_annotation_episode.episodic_workflow.root.a103.to_child_resource_work_submission import prepare_request
-            from gene_annotation_episode.episodic_workflow.root.a103.from_child_resource_work_submission import admit_return, admit_unowned_return
+            from gene_annotation_episode.episodic_workflow.root.a103.from_child_resource_work_submission import admit_return
         else:
             from gene_annotation_episode.episodic_workflow.root.a103.execution_job_submission.episode import ExecutionEpisode
             child = registry._by_path.get('execution_job_submission')
             if type(child) is not ExecutionEpisode:
                 return None
             from gene_annotation_episode.episodic_workflow.root.a103.to_child_execution_job_submission import prepare_request
-            from gene_annotation_episode.episodic_workflow.root.a103.from_child_execution_job_submission import admit_return, admit_unowned_return
+            from gene_annotation_episode.episodic_workflow.root.a103.from_child_execution_job_submission import admit_return
             if not any(candidate is child for candidate in registry._by_role.get(role, ())):
                 return None
-            return prepare_request, admit_return, admit_unowned_return, True
+            return prepare_request, admit_return, True
     elif role == 'results':
         from gene_annotation_episode.episodic_workflow.root.a103.resource_result_acquisition.episode import ResourceEpisode
         child = registry._by_path.get('resource_result_acquisition')
         if type(child) is ResourceEpisode:
             from gene_annotation_episode.episodic_workflow.root.a103.to_child_resource_result_acquisition import prepare_request
-            from gene_annotation_episode.episodic_workflow.root.a103.from_child_resource_result_acquisition import admit_return, admit_unowned_return
+            from gene_annotation_episode.episodic_workflow.root.a103.from_child_resource_result_acquisition import admit_return
         else:
             from gene_annotation_episode.episodic_workflow.root.a103.execution_result_acquisition.episode import ExecutionEpisode
             child = registry._by_path.get('execution_result_acquisition')
             if type(child) is not ExecutionEpisode:
                 return None
             from gene_annotation_episode.episodic_workflow.root.a103.to_child_execution_result_acquisition import prepare_request
-            from gene_annotation_episode.episodic_workflow.root.a103.from_child_execution_result_acquisition import admit_return, admit_unowned_return
+            from gene_annotation_episode.episodic_workflow.root.a103.from_child_execution_result_acquisition import admit_return
             if not any(candidate is child for candidate in registry._by_role.get(role, ())):
                 return None
-            return prepare_request, admit_return, admit_unowned_return, True
+            return prepare_request, admit_return, True
     elif role == 'literature':
         from gene_annotation_episode.episodic_workflow.root.a103.published_evidence_assessment.episode import LiteratureEpisode
         child = registry._by_path.get('published_evidence_assessment')
         if type(child) is not LiteratureEpisode:
             return None
         from gene_annotation_episode.episodic_workflow.root.a103.to_child_published_evidence_assessment import prepare_request
-        from gene_annotation_episode.episodic_workflow.root.a103.from_child_published_evidence_assessment import admit_return, admit_unowned_return
+        from gene_annotation_episode.episodic_workflow.root.a103.from_child_published_evidence_assessment import admit_return
     elif role == 'scientific_process':
         from gene_annotation_episode.episodic_workflow.root.a103.scientific_process.episode import ScientificProcessEpisode
         child = registry._by_path.get('scientific_process')
         if type(child) is not ScientificProcessEpisode:
             return None
         from gene_annotation_episode.episodic_workflow.root.a103.to_child_scientific_process import prepare_request
-        from gene_annotation_episode.episodic_workflow.root.a103.from_child_scientific_process import admit_return, admit_unowned_return
+        from gene_annotation_episode.episodic_workflow.root.a103.from_child_scientific_process import admit_return
     elif role == 'hpc':
         from gene_annotation_episode.episodic_workflow.root.a103.hpc_work_planning.episode import HPCEpisode
         child = registry._by_path.get('hpc_work_planning')
         if type(child) is not HPCEpisode:
             return None
         from gene_annotation_episode.episodic_workflow.root.a103.to_child_hpc_work_planning import prepare_request
-        from gene_annotation_episode.episodic_workflow.root.a103.from_child_hpc_work_planning import admit_return, admit_unowned_return
+        from gene_annotation_episode.episodic_workflow.root.a103.from_child_hpc_work_planning import admit_return
         if not any(candidate is child for candidate in registry._by_role.get(role, ())):
             return None
-        return prepare_request, admit_return, admit_unowned_return, True
+        return prepare_request, admit_return, True
     elif role == 'monitor':
         from gene_annotation_episode.episodic_workflow.root.a103.execution_progress_assessment.episode import MonitorEpisode
         child = registry._by_path.get('execution_progress_assessment')
         if type(child) is not MonitorEpisode:
             return None
         from gene_annotation_episode.episodic_workflow.root.a103.to_child_execution_progress_assessment import prepare_request
-        from gene_annotation_episode.episodic_workflow.root.a103.from_child_execution_progress_assessment import admit_return, admit_unowned_return
+        from gene_annotation_episode.episodic_workflow.root.a103.from_child_execution_progress_assessment import admit_return
         if not any(candidate is child for candidate in registry._by_role.get(role, ())):
             return None
-        return prepare_request, admit_return, admit_unowned_return, True
+        return prepare_request, admit_return, True
     else:
         return None
     if not any(candidate is child for candidate in registry._by_role.get(role, ())):
         return None
-    return prepare_request, admit_return, admit_unowned_return
+    return prepare_request, admit_return
 
 
 
@@ -132,10 +132,10 @@ def exchange_for_improvement(workflow, source, selection, role):
         if len(path) != 1 or path[0][0] != 'annotation':
             return None
         from gene_annotation_episode.episodic_workflow.root.a103.to_child_legacy_improvement import prepare_request
-        from gene_annotation_episode.episodic_workflow.root.a103.from_child_legacy_improvement import admit_return, admit_unowned_return
+        from gene_annotation_episode.episodic_workflow.root.a103.from_child_legacy_improvement import admit_return
     else:
         if path[-1][0] != 'improvement' or any(part[0] not in ('annotation', 'improvement') for part in path):
             return None
         from gene_annotation_episode.episodic_workflow.root.a103.legacy_improvement.to_child_legacy_improvement import prepare_request
-        from gene_annotation_episode.episodic_workflow.root.a103.legacy_improvement.from_child_legacy_improvement import admit_return, admit_unowned_return
-    return prepare_request, admit_return, admit_unowned_return, True
+        from gene_annotation_episode.episodic_workflow.root.a103.legacy_improvement.from_child_legacy_improvement import admit_return
+    return prepare_request, admit_return, True

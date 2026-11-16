@@ -134,7 +134,6 @@ def test_native_mapping_public_type_and_cleanup_stay_at_acquisition_owner(tmp_pa
     directory=tmp_path/'owned-native';directory.mkdir();(directory/'retained.txt').write_text('controlled')
     metadata={'version':'controlled-metadata'};mapping=read_mapping.NativeMapping(directory,metadata)
     assert type(mapping) is read_mapping.NativeMapping
-    assert mapping.__class__.__module__=='gene_annotation_episode.episodic_workflow.root.a101.read_mapping'
     assert [field.name for field in fields(mapping)]==['directory','metadata']
     assert mapping.metadata is metadata and mapping.path('retained.txt')==directory/'retained.txt'
     mapping.close();assert not directory.exists()

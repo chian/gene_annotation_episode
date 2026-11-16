@@ -1,6 +1,7 @@
 """Selected original-attempt acquisition, numerical views and practical endpoint."""
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 import json
 from pathlib import Path

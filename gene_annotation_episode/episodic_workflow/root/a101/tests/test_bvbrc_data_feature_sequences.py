@@ -20,7 +20,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_sche
 from gene_annotation_episode.episodic_workflow.root.a101.library.bvbrc_data_calculators import calculate_feature_sequence_counts
 
 
-def fixture_sheet(collection, native_rows, fields=None, *, raw_bytes=None, profile="json_array_with_headers_v1"):
+def fixture_sheet(collection, native_rows, fields=None, *, raw_bytes=None):
     """TEST ONLY: construct frozen-shape supplied sheets with labeled custody.
 
     Native cells below copy supplied JSON values. Population/prepared/time fields
@@ -28,14 +28,14 @@ def fixture_sheet(collection, native_rows, fields=None, *, raw_bytes=None, profi
     """
     registry = FIELD_REGISTRY[collection]
     fields = list(dict.fromkeys(key for row in native_rows for key in row)) if fields is None else fields
-    native_body = native_rows if profile == "json_array_with_headers_v1" else {
+    native_body = {
         "responseHeader": {"status": 0}, "response": {"docs": native_rows, "start": 0, "numFound": len(native_rows)}}
     raw_bytes = json.dumps(native_body, separators=(",", ":")).encode() if raw_bytes is None else raw_bytes
     digest = hashlib.sha256(raw_bytes).hexdigest()
     rows = []
     for index, native in enumerate(native_rows):
         row_key = digest + "/row/" + str(index)
-        path = ("/response/docs/" if profile == "solr_json_envelope_v1" else "/") + str(index)
+        path = "/response/docs/" + str(index)
         cells, numeric = [], []
         for field in fields:
             spec = registry["fields"][field]
@@ -89,8 +89,8 @@ def fixture_sheet(collection, native_rows, fields=None, *, raw_bytes=None, profi
         "custody": {"native_sha256": digest, "retrieved_at": "synthetic_supplied_sheet_fixture",
                     "requested_url": "https://fixture.invalid/" + collection,
                     "effective_url": "https://fixture.invalid/" + collection,
-                    "media_type": "application/json" if profile == "json_array_with_headers_v1" else "application/solr+json",
-                    "native_profile": profile, "prepared_sha256": "0" * 64,
+                    "media_type": "application/solr+json",
+                    "native_profile": "solr_json_envelope_v1", "prepared_sha256": "0" * 64,
                     "field_contract_version": "bvbrc_data_fields_2026_10_24_v1"},
         "transport": {"http_status": 200, "body_complete": True, "headers": [], "failure_code": None,
                       "automatic_redirects": False, "native_query_time_ms": None},
@@ -210,7 +210,8 @@ def test_empty_pages_absent_pages_and_unselected_feature_are_distinct():
     assert [e["reason"] for e in empty["edges"]] == ["missing_feature_record"] * 2
     assert absent["input_page_counts"] == []
     assert [p["retained_row_count"] for p in empty["input_page_counts"]] == [0, 0]
-    assert empty["input_native_sha256s"] == [hashlib.sha256(b"[]").hexdigest()]
+    empty_body = json.dumps({"responseHeader": {"status": 0}, "response": {"docs": [], "start": 0, "numFound": 0}}, separators=(",", ":")).encode()
+    assert empty["input_native_sha256s"] == [hashlib.sha256(empty_body).hexdigest()]
     assert len(empty["input_page_counts"]) == 2  # Same bytes, distinct collections.
     assert len(empty["requirements"]) == 1
 
@@ -373,7 +374,7 @@ def test_solr_paths_resolve_and_partial_rows_keep_usable_values():
     features, sequences = small_fixture()
     raw = [{"feature_id": "F", "aa_sequence_md5": hashlib.md5(b"MAb ").hexdigest(), "aa_length": 4,
             "start": "bad coordinate"}]
-    features = fixture_sheet("genome_feature", raw, profile="solr_json_envelope_v1")
+    features = fixture_sheet("genome_feature", raw)
     features["qualification"]["native_partial_results"] = True
     issue = {"code": "bvbrc_native_partial_results", "phase": "format", "row_index": None,
              "field": None, "native_path": "/responseHeader/partialResults", "http_status": None}

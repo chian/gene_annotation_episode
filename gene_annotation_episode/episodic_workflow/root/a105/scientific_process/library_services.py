@@ -9,8 +9,7 @@ class ScientificLibraryServices:
 
     def scientific_retriever_catalog(self):
         from ..scientific_tool_library import catalog
-        configuration = self.tool_retrieval
-        return catalog(retrieval_mode=None if configuration is None else configuration['mode'], tool_info=self.tool_library.supports_tool_info)
+        return catalog()
 
     def execute_scientific_library(self, context, name, arguments):
         from ..scientific_support_metadata import SUPPORT_ENTRY_VERSION, support_observation_kinds

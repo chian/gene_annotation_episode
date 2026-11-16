@@ -110,7 +110,7 @@ def _category_yield_parameters(controller_binding):
     definition = controller_binding.get('definition')
     if not isinstance(definition, Mapping):
         return None
-    keys = ('window_size', 'subsample_size', 'uncertainty_alpha')
+    keys = ('uncertainty_alpha',)
     if 'version' not in definition and 'uncertainty_alpha' in definition:
         parameters = definition
     else:
@@ -316,10 +316,17 @@ def _recorded_action_generation_schema(generated, schema):
     return _same_action_schema_required_members(generated, _action_generation_schema(schema))
 
 def _recorded_assignment_transport(saved):
-    """Validate the private current-generator proof."""
+    """Validate the generator proof of a saved direct decision request.
+
+    A decision saved under the exchange protocol is proven by its recorded
+    exchanges and carries no transport member.
+    """
+    if saved.get('decision_protocol') == DECISION_EXCHANGE_PROTOCOL:
+        if 'assignment_transport' in saved:
+            raise ValueError('original_assignment_transport_mismatch')
+        return
     if saved.get('assignment_transport') != {'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(saved['schema'])}:
         raise ValueError('original_assignment_transport_mismatch')
-    return True
 
 def _same_action_schema_required_members(left, right):
     """Only schema required-member order is lost by markerless serialization."""
@@ -1380,7 +1387,7 @@ class Workflow:
                 index = action[0]
                 request = self.returned_request(spec)
                 returned = self.execution_backend.load_return(item['handle'], item['return_id'])
-                receiver = ReceiverBindingV1(self.store, self.journal, index, request.report_contract, lambda form: None, lambda form: (_direct_receive_callback := self.receive_form)(source, form, request.report_contract.schema, index, **{'child_role': spec['child']['role']} if isinstance(_direct_receive_callback, MethodType) and _direct_receive_callback.__self__ is self and (_direct_receive_callback.__func__ is Workflow.receive_form) else {}), lambda: self.source_credit_view(source)['credit'], lambda original_index, credit: self.controller_value(source, original_index, credit), defer_failed_delivery=self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE)
+                receiver = ReceiverBindingV1(self.store, self.journal, index, request.report_contract, lambda form: None, lambda form: (_direct_receive_callback := self.receive_form)(source, form, request.report_contract.schema, index, **{'child_role': spec['child']['role']} if isinstance(_direct_receive_callback, MethodType) and _direct_receive_callback.__self__ is self and (_direct_receive_callback.__func__ is Workflow.receive_form) else {}), lambda: self.source_credit_view(source)['credit'], lambda original_index, credit: self.controller_value(source, original_index, credit), defer_failed_delivery=True)
                 slot = None
                 with self.store.transaction():
                     parent_open = self.journal.row('runtime_episodes', source.episode_id)['state'] == 'active'
@@ -3507,13 +3514,6 @@ class Workflow:
                 request = EpisodeRequest(goal, Record(message), contract)
                 source = source_type(self, path, request, scope)
         row = self.journal.row('runtime_episodes', identity.episode_id)
-        restore_active = getattr(self.scientific_process_binding, 'restore_saved_process', None)
-        if name == 'scientific_process' and callable(restore_active) and (row is not None) and (row['state'] == 'active') and (row['completion'] is None) and (row['archive'] is None):
-            restored = restore_active(self.binding_context(source), original_request=json.loads(row['request']))
-            if restored is not None:
-                message['scientific_process'] = restored
-                request = EpisodeRequest(goal, Record(message), contract)
-                source = source_type(self, path, request, scope)
         if row is not None and json.loads(row['request']) != _plain(request.as_record()):
             raise WorkflowError('reconstructed immutable assignment differs')
         if name == 'scientific_process':
@@ -3700,7 +3700,7 @@ def _effective_configuration(provider_config=None, controller_settings=None):
     controller.update(supplied.get('controller', {}))
     if controller_settings is not None:
         controller.update(controller_settings)
-    unknown = set(controller) - {'cost', 'window_size', 'subsample_size', 'uncertainty_alpha'}
+    unknown = set(controller) - {'cost', 'uncertainty_alpha'}
     if unknown:
         raise ValueError(f'unknown controller settings: {sorted(unknown)}')
     from .numerical import YieldParameters
@@ -3788,7 +3788,6 @@ def assemble_workflow(store, tools, provider, directory, run_id, settings, *, co
     completed_action_inputs_version = 'completed_action_inputs_binding_v1'
     if settings.get('episode_branch_lifecycle') != {'version': EPISODE_BRANCH_LIFECYCLE}:
         raise WorkflowError('unsupported_episode_branch_lifecycle')
-    episode_branch_lifecycle = EPISODE_BRANCH_LIFECYCLE
     if initial_information_configuration is None and episode_service_factory is None and (settings.get('episode_initial_information_configuration') is not None):
         from .library.execution_initial_information.information_configuration import InitialInformationConfiguration
         initial_information_configuration = InitialInformationConfiguration.from_record(settings['episode_initial_information_configuration'])
@@ -3802,7 +3801,7 @@ def assemble_workflow(store, tools, provider, directory, run_id, settings, *, co
         recorded_received_execution = settings.get('episode_received_execution_configuration')
         if recorded_received_execution is not None:
             received_execution_configuration = ReceivedExecutionConfiguration.from_record(recorded_received_execution)
-    workflow = Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit, credit_binding=_credit_binding_from_settings(settings), restoration_settings=settings['restoration'], execution_expectations=execution_expectations, job_episodes=job_episodes, resource_estimator=resource_estimator, native_timing_information=native_timing_information, initial_known_record_refs=initial_known_record_refs, episode_binding_factories=episode_binding_factories, episode_binding_descriptors=episode_binding_descriptors, role_credit_bindings=role_credit_bindings, job_progress_provider=job_progress_provider, execution_binding=execution_binding, episode_service_factory=episode_service_factory, episode_service_binding=episode_service_binding, initial_information_configuration=initial_information_configuration, received_execution_configuration=received_execution_configuration, received_api_configuration=received_api_configuration, episode_service_inputs=episode_service_inputs, annotation_child_roles=annotation_child_roles, decision_protocol=decision_protocol, root_action_boundary=settings.get('root_action_boundary'), episode_branch_lifecycle=episode_branch_lifecycle, episode_record_receipts=episode_record_receipts, progress_receipt_order=settings.get('episode_progress_receipts', {}).get('version'), wait_inputs_version=wait_inputs_version, completed_action_inputs_version=completed_action_inputs_version, project_annotation_score=project_annotation_score, annotation_score_binding={'projector': bindings['annotation_score'], 'versions': versions['annotation_score'], 'definition': settings.get('binding_definitions', {}).get('annotation_score'), 'scope_source': 'context.scope', 'meaning': 'Annotation support, separately bound from investigation progress and numerical yield.'} if project_annotation_score is not None else None, project_child_credit=project_child_credit, child_credit_binding={'kind': 'custom', 'projector': settings['bindings']['scientific_child_credit'], 'versions': settings['binding_versions']['scientific_child_credit'], 'definition': settings.get('binding_definitions', {}).get('scientific_child_credit'), 'scope_source': 'context.scope', 'assignment_source': 'original_parent_commission', 'meaning': 'Local scientific investigation credit; not an additive parent task score.'} if project_child_credit is not None else None, controller_binding={'factory': settings['bindings']['controller'], 'versions': settings['binding_versions']['controller'], 'definition': settings.get('binding_definitions', {}).get('controller') if settings['controller'] is None else settings['controller']})
+    workflow = Workflow(store, tools, provider, directory, run_id, controller_factory, project_credit, credit_binding=_credit_binding_from_settings(settings), restoration_settings=settings['restoration'], execution_expectations=execution_expectations, job_episodes=job_episodes, resource_estimator=resource_estimator, native_timing_information=native_timing_information, initial_known_record_refs=initial_known_record_refs, episode_binding_factories=episode_binding_factories, episode_binding_descriptors=episode_binding_descriptors, role_credit_bindings=role_credit_bindings, job_progress_provider=job_progress_provider, execution_binding=execution_binding, episode_service_factory=episode_service_factory, episode_service_binding=episode_service_binding, initial_information_configuration=initial_information_configuration, received_execution_configuration=received_execution_configuration, received_api_configuration=received_api_configuration, episode_service_inputs=episode_service_inputs, annotation_child_roles=annotation_child_roles, decision_protocol=decision_protocol, root_action_boundary=settings.get('root_action_boundary'), episode_branch_lifecycle=EPISODE_BRANCH_LIFECYCLE, episode_record_receipts=episode_record_receipts, progress_receipt_order=settings.get('episode_progress_receipts', {}).get('version'), wait_inputs_version=wait_inputs_version, completed_action_inputs_version=completed_action_inputs_version, project_annotation_score=project_annotation_score, annotation_score_binding={'projector': bindings['annotation_score'], 'versions': versions['annotation_score'], 'definition': settings.get('binding_definitions', {}).get('annotation_score'), 'scope_source': 'context.scope', 'meaning': 'Annotation support, separately bound from investigation progress and numerical yield.'} if project_annotation_score is not None else None, project_child_credit=project_child_credit, child_credit_binding={'kind': 'custom', 'projector': settings['bindings']['scientific_child_credit'], 'versions': settings['binding_versions']['scientific_child_credit'], 'definition': settings.get('binding_definitions', {}).get('scientific_child_credit'), 'scope_source': 'context.scope', 'assignment_source': 'original_parent_commission', 'meaning': 'Local scientific investigation credit; not an additive parent task score.'} if project_child_credit is not None else None, controller_binding={'factory': settings['bindings']['controller'], 'versions': settings['binding_versions']['controller'], 'definition': settings.get('binding_definitions', {}).get('controller') if settings['controller'] is None else settings['controller']})
     if 'episode_bindings' in settings:
         workflow.check_original_initial_information(settings)
         workflow.check_original_received_execution_information(settings)

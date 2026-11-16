@@ -388,7 +388,7 @@ def test_shared_episode_loop_records_two_actions_and_exact_zero_without_extra_tu
         def parent_estimate(raw, parameters, contexts):
             return YieldEstimate(len(raw), NumericBand.exact(0), parameters,
                 {'fixture': 'parent_has_one_requested_child_return'})
-        return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+        return YieldController(str(path), initial, 0, YieldParameters(),
             estimate_with_context=parent_estimate if path[-1][0] == 'annotation' else None)
 
     flow = Workflow(h.store, tools, Choices(), tmp_path / 'run', h.journal.run_id,

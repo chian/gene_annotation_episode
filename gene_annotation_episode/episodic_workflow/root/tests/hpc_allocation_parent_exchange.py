@@ -244,7 +244,6 @@ class AllocationParentExchangeChecks:
             return child
         w = v.workflow
         w.annotation_child_roles = w.execution_binding = w.inprocess_replay = w.scientific_process_binding = None
-        w.episode_branch_lifecycle = None
         w.validate_child_choice = lambda *args, **kwargs: None
         w.permits_common_action = lambda source, action: source is v.source and action == 'child'
         w._closed_child_commission = lambda *args: None

@@ -33,7 +33,6 @@ from gene_annotation_episode.episodic_workflow.root.practical_yield import Pract
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.scientific_process_setup import prepare_scientific_binding
-from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -119,7 +118,7 @@ class _SelectedRun:
         factory = ExecutionServiceFactory(RESOURCES, {}, 3, 2, .5)
         application = factory(store, run_id=self.run_id, directory=self.directory,
             tool_registry=tools, tool_catalog=tools.catalog())
-        self.descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=self.directory,
+        self.descriptor = prepare_scientific_binding(run_directory=self.directory,
             source_directory=PUBLICATION, tool_catalog=tools.catalog(),
             child_roles=("scientific_process", "launch", "results"),
             resource_catalogs=application.resource_tool_catalogs)

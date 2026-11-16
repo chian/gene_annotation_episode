@@ -226,6 +226,8 @@ class TestA104ScientificTask:
             'report_update': {}}
         saved = {'context': deepcopy(context), 'schema': schema}
         if protocol: saved['decision_protocol'] = protocol
+        else: saved['assignment_transport'] = {'version': value.runtime._ASSIGNMENT_TRANSPORT,
+            'action_schema_sha256': value.runtime._digest(schema)}
         host.journal.save('runtime_model_calls', {'episode_id': task.episode_id, 'call_index': 0,
             'purpose': 'decision', 'request': value.runtime._json(saved),
             'response': value.runtime._json(response) if answered else None})

@@ -19,7 +19,6 @@ from .waiting import PendingWorkV1, validate_pending
 from .local_return_history import LocalReturnHistoryV1, VERSION as LOCAL_RETURN_VERSION
 
 
-VERSION = "wait_inputs_v1"
 IDENTITY_VERSION = "wait_inputs_v2"
 
 
@@ -35,12 +34,6 @@ class OwnCompletedActionV1(TypedDict):
     controller_input: Any
     controller_step: Any
 
-
-class WaitInputsV1(TypedDict):
-    version: Literal["wait_inputs_v1"]
-    progress_records: list[dict]
-    duration_expectations: list[DurationExpectationV1]
-    own_completed_action_history: list[OwnCompletedActionV1]
 
 
 class OwnCompletedActionV2(OwnCompletedActionV1):
@@ -207,8 +200,8 @@ class WaitInputs:
         self.progress_provider = progress_provider
 
     def capture(self, episode_id, *, pending: PendingWorkV1, known_progress_refs,
-                current_duration_expectations=(), include_identities=False,
-                local_return_history=None) -> WaitInputsV1 | WaitInputsV2:
+                current_duration_expectations=(),
+                local_return_history=None) -> WaitInputsV2:
         if not _text(episode_id):
             raise ValueError("wait_inputs_episode_identity_required")
         pending = validate_pending(pending)
@@ -217,10 +210,6 @@ class WaitInputs:
             raise ValueError("wait_inputs_progress_references_required")
         if not isinstance(current_duration_expectations, (list, tuple)):
             raise ValueError("wait_inputs_expectation_capture_sequence_required")
-        if type(include_identities) is not bool:
-            raise ValueError("wait_inputs_identity_selection_required")
-        if local_return_history is not None and not include_identities:
-            raise ValueError("wait_inputs_history_requires_identities")
         if local_return_history is not None:
             local_return_history = validate_local_return_history(local_return_history,
                 run_id=self.journal.run_id, episode_id=episode_id)
@@ -284,7 +273,7 @@ class WaitInputs:
             # well as object-valued controller records, without reconstructing
             # gains, inventing semantic references or reading child histories.
             identity_fields = (", json_quote(json_extract(observation,'$.unit_ref')) AS unit_ref, "
-                "json_quote(json_extract(observation,'$.label')) AS label" if include_identities else "")
+                "json_quote(json_extract(observation,'$.label')) AS label")
             rows = self.store.db.execute("""
                 SELECT unit_index,
                     json_extract(observation,'$.decision_index') AS decision_index,
@@ -300,20 +289,19 @@ class WaitInputs:
                         "decision_index": row["decision_index"],
                         "controller_input": json.loads(row["controller_input"]),
                         "controller_step": json.loads(row["controller_step"])}
-                if include_identities:
-                    unit, label = json.loads(row["unit_ref"]), json.loads(row["label"])
-                    if unit is not None:
-                        try:
-                            reference = UnitRef.from_record(unit)
-                        except (TypeError, ValueError) as error:
-                            raise ValueError("wait_inputs_observation_identity_conflict") from error
-                        if reference.episode_id != episode_id or reference.unit_index != row["unit_index"]:
-                            raise ValueError("wait_inputs_observation_identity_conflict")
-                    if label is not None and not isinstance(label, str):
-                        raise ValueError("wait_inputs_observation_label_invalid")
-                    observed.update(unit_ref=unit, label=label)
+                unit, label = json.loads(row["unit_ref"]), json.loads(row["label"])
+                if unit is not None:
+                    try:
+                        reference = UnitRef.from_record(unit)
+                    except (TypeError, ValueError) as error:
+                        raise ValueError("wait_inputs_observation_identity_conflict") from error
+                    if reference.episode_id != episode_id or reference.unit_index != row["unit_index"]:
+                        raise ValueError("wait_inputs_observation_identity_conflict")
+                if label is not None and not isinstance(label, str):
+                    raise ValueError("wait_inputs_observation_label_invalid")
+                observed.update(unit_ref=unit, label=label)
                 history.append(observed)
-            result = {"version": IDENTITY_VERSION if include_identities else VERSION,
+            result = {"version": IDENTITY_VERSION,
                     "progress_records": [json.loads(value) for value in progress.values()],
                     "duration_expectations": [json.loads(value) for value in durations.values()],
                     "own_completed_action_history": history}
@@ -322,5 +310,5 @@ class WaitInputs:
             return result
 
 
-__all__ = ["WaitInputs", "WaitInputsV1", "WaitInputsV2", "DurationExpectationV1",
-    "OwnCompletedActionV1", "OwnCompletedActionV2", "validate_local_return_history", "VERSION", "IDENTITY_VERSION"]
+__all__ = ["WaitInputs", "WaitInputsV2", "DurationExpectationV1",
+    "OwnCompletedActionV1", "OwnCompletedActionV2", "validate_local_return_history", "IDENTITY_VERSION"]

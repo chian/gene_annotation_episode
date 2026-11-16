@@ -74,8 +74,7 @@ def build_case(original, *, task_name=None, standalone=False):
         'a104-private-scientific-head', controller_factory=forbidden, project_credit=projector,
         episode_binding_factories=[factory], episode_record_receipts=True,
         initial_known_record_refs=[v.target, proposed], annotation_child_roles=('scientific_process',),
-        root_role='scientific_process' if standalone else 'annotation',
-        wait_inputs_version='wait_inputs_binding_v1', completed_action_inputs_version=None)
+        root_role='scientific_process' if standalone else 'annotation')
     binding = host.scientific_process_binding
     parent_path = (('annotation', 'original_parent'),)
     parent_id = own('method_loop.identities').EpisodeRef(host.run_id, parent_path).episode_id

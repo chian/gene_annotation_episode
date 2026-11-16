@@ -19,6 +19,16 @@ from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures 
 COMPONENTS = ['apparent_km', 'condition_response', 'log_condition_response', 'condition_response_variance']
 FORM = obj({'measurements': transport_response_cells_schema()})
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def witness(source, raw, quote):
     token = quote.encode('utf-8')
     start = raw.index(token)
@@ -50,12 +60,12 @@ def test_selected_transport_response_actual_typed_delivery_and_observation_accou
     received, controllers = ([], [])
     try:
         commission = {'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': plain(context.assignment), 'goal': 'Evaluate the source substrate response and actual kinetic curve', 'scope': plain(context.scope), 'purpose': 'Return only requested native and conditional response cells', 'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
-        quantity = {'selection': {'kind': 'tool', 'tool': 'literature.quantity.populate', 'arguments': quantity_args}, 'report_update': {}}
+        quantity = {'selection': {'kind': 'tool', 'tool': 'literature.quantity.populate', 'arguments': location_only(quantity_args)}, 'report_update': {}}
 
         def transport(inputs):
             assert inputs['last_local_outcome']['status'] == 'completed'
             selected = {**args, 'km_sheet_ref': inputs['last_local_outcome']['result']['sheet_ref']}
-            return {'selection': {'kind': 'tool', 'tool': 'literature.transport.response.populate', 'arguments': selected}, 'report_update': {}}
+            return {'selection': {'kind': 'tool', 'tool': 'literature.transport.response.populate', 'arguments': location_only(selected)}, 'report_update': {}}
 
         def receive(inputs):
             form, = inputs['child_reports']
@@ -108,10 +118,10 @@ def test_saved_transport_binding_reconstructs_and_replays_without_input_reading(
         host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
         binding = LiteratureEpisode(WorkflowServices(host), rate_population=True)
         host.episode_bindings = EpisodeBindingRegistry((binding,))
-        first = asyncio.run(binding.execute(context, 'literature.quantity.populate', quantity_args, 'native'))
+        first = asyncio.run(binding.execute(context, 'literature.quantity.populate', location_only(quantity_args), 'native'))
         context = replace(context, received_record_refs=(*context.received_record_refs, *first['record_refs']))
         args = {**args, 'km_sheet_ref': first['result']['sheet_ref']}
-        outcome = asyncio.run(binding.execute(context, 'literature.transport.response.populate', args, 'response'))
+        outcome = asyncio.run(binding.execute(context, 'literature.transport.response.populate', location_only(args), 'response'))
         assert outcome['status'] == 'completed', outcome.get('feedback')
         context = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
         sheet_ref = outcome['result']['sheet_ref']
@@ -137,7 +147,7 @@ def test_saved_transport_binding_reconstructs_and_replays_without_input_reading(
         monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_transport_storage.read_transport_inputs', forbidden)
         monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a105.library.literature_transport_storage.populate_transport_response', forbidden)
         store.db.execute('pragma query_only=ON')
-        assert asyncio.run(reconstructed.execute(context, 'literature.transport.response.populate', args, 'response')) == outcome
+        assert asyncio.run(reconstructed.execute(context, 'literature.transport.response.populate', location_only(args), 'response')) == outcome
         restored_facts = reconstructed.facts(context, {'committed_record_refs': [sheet_ref]})
         assert form_with_facts({}, FORM, restored_facts) == form
     finally:

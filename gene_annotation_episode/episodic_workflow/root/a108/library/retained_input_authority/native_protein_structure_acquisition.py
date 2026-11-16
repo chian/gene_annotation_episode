@@ -78,7 +78,7 @@ def _target(value):
 def qualify_protein_structure_target_plan(target: dict, plan: NativeProteinRunPlan) -> NativeProteinRunPlan:
     """Qualify the original target/plan relationship without filesystem reads."""
     target = _target(target)
-    plan = validate_protein_structure_run_plan(plan, retained_read=True)
+    plan = validate_protein_structure_run_plan(plan)
     owner = plan['identity']
     _require(same(target['assignment']['requested_job'], plan['requested_job']), 'original_commission_mismatch')
     from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority.terminal_scientific_evidence import is_terminal_target, terminal_plan_identity

@@ -176,9 +176,8 @@ class _Sources:
         return self.cache[key]
 
     def witness(self, value, field):
-        # New selections identify only the retained source interval. Explicit
-        # quotations remain a supported legacy contract and must still match;
-        # a bad supplied quotation must never be silently repaired.
+        # A selection identifies the retained source interval. A witness that
+        # carries its quotation must match it exactly; it is never repaired.
         quoted = isinstance(value, dict) and "quote" in value
         _keys(value, _WITNESS_FIELDS if quoted else _WITNESS_LOCATION_FIELDS, field)
         if quoted:

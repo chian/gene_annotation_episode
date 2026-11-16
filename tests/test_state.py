@@ -100,7 +100,7 @@ def test_exact_source_extraction_aliases_and_partial_feedback(store):
     raw = store.get_artifact(src["text_ref"])
     start = raw.index(quote.encode())
     anchor = {"source_ref": src["id"], "artifact_ref": src["text_ref"], "start": start,
-              "end": start+len(quote), "quote": quote}
+              "end": start+len(quote)}
     payload = empty_payload()
     payload["terms"] = [{"alias": "zinc", "label": "zinc",
         "term_type": "chemical", "source_ref": src["id"], "anchor": anchor}]
@@ -246,7 +246,7 @@ def test_one_acquisition_extracts_real_source_entity_and_commits_interpretation(
     target = store.targets()[0]["id"]
     text = "@construct: Construct A bound zinc in vitro."
     src = source(store, text=text)
-    anchor = {"source_ref": src["id"], "artifact_ref": src["text_ref"], "start": 0, "end": len(text), "quote": text}
+    anchor = {"source_ref": src["id"], "artifact_ref": src["text_ref"], "start": 0, "end": len(text)}
     payload = empty_payload()
     payload["source_subjects"] = [{"alias": "construct", "reference_type": "construct", "source_ref": src["id"],
                                    "label": "Construct A", "anchor": anchor}]

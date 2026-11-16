@@ -70,9 +70,9 @@ def fixture(home,output,task_kind='verified_source_leads'):
             assert clients.ncbi_email is None
             host.native_timing_information=None;host.native_event_information=None
             host.project_credit=forbidden;host.project_annotation_score=None;host.annotation_score_binding=None
-            host.execution_binding=None;host.inprocess_replay=None;host.completed_action_inputs_version=None
+            host.execution_binding=None;host.inprocess_replay=None;host.pending_work=lambda source:[]
             host.episode_branch_lifecycle=runtime.EPISODE_BRANCH_LIFECYCLE;host.resource_estimator=None
-            host.wait_inputs_version=None;host.progress_receipt_order='received_progress_order_v1'
+            host.progress_receipt_order='received_progress_order_v1'
             host.decision_protocol=None;host.annotation_child_roles=None;host.execution_handle=None
             host.services=own('episode_services').WorkflowServices(host)
             declarations={key:{'credit_unit':2.5,'kind':'accumulation' if key.endswith('verified_source_leads') else 'remaining_commissioned_credit',
@@ -144,7 +144,6 @@ def make_task(v):
     assert task.episode_id==v.context.episode_id and v.workflow.specialist(task) is v.binding
     if hasattr(v.binding,'decision_source_type'):
         assert not isinstance(task,v.runtime.DecisionSource)
-        assert type(task).__module__==PREFIX+'.'+v.home.replace('/','.')+'.task'
     return task
 
 
@@ -427,7 +426,7 @@ def scientific_trace(v):
     task=make_task(v);kind=v.assignment['literature_task'].get('answer_kind','verified_source_leads')
     before=credit_view(v)
     commit={key:[] for key in v.store.reasoning_schema()['properties']}
-    anchor={'source_ref':v.source['id'],'artifact_ref':v.artifact,'start':0,'end':len(v.raw),'quote':v.raw.decode()}
+    anchor={'source_ref':v.source['id'],'artifact_ref':v.artifact,'start':0,'end':len(v.raw)}
     commit['source_subjects']=[{'alias':'construct','reference_type':'construct','source_ref':v.source['id'],
         'label':'Original synthetic source subject','anchor':anchor}]
     if kind=='assessment':
@@ -444,7 +443,7 @@ def scientific_trace(v):
     if kind=='verified_source_leads':
         selection['source_lead']={'proposed_annotation_ref':v.proposed,'source_ref':v.source['id'],'subject_ref':'@construct',
             'disposition':'relevant','relevance_rationale':'The exact source-bound synthetic subject is the selected engineering question.',
-            'witness':{'source_ref':v.source['id'],'representation':'original','start':0,'end':len(v.raw),'quote':v.raw.decode()}}
+            'witness':{'source_ref':v.source['id'],'representation':'original','start':0,'end':len(v.raw)}}
     if kind=='screening':
         selection['evidence_processing']={'kind':'no_applicable_evidence','reason':'The engineering source explicitly contains no biological result.',
             'examined':[{'source_ref':v.source['id'],'representation':'original','start':0,'end':len(v.raw)}]}

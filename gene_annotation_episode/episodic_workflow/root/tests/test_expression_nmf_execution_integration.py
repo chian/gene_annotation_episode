@@ -103,7 +103,7 @@ def test_actual_library_contract_and_selected_resource_route(selected):
     factory = ExecutionServiceFactory(f.resources, {}, 3, 2, 1, log_window_bytes=128)
     application = factory(f.store, run_id=f.run_id, directory=f.directory / 'factory', tool_registry=f.tools)
     library = ScientificToolLibrary.freeze(f.directory / 'library', catalog=f.tools.catalog(),
-        tool_info=True, resource_catalogs=application.resource_tool_catalogs)
+        resource_catalogs=application.resource_tool_catalogs)
     info, = [r for r in library.parent_tool_info() if r['name'] == OPERATION]
     assert set(info) == {'name', 'description', 'resources'}
     choice = [{'name': OPERATION, 'resources': 'local'}]

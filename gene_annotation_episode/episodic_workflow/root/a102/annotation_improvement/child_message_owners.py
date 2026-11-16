@@ -11,10 +11,10 @@ def exchange_for_child(workflow, source, role):
         if workflow.scientific_process_binding is not None:
             return None
         from ..to_child_annotation_improvement import prepare_request
-        from ..from_child_annotation_improvement import admit_return, admit_unowned_return
+        from ..from_child_annotation_improvement import admit_return
     elif is_improvement_parent(workflow, source):
         from .to_child_annotation_improvement import prepare_request
-        from .from_child_annotation_improvement import admit_return, admit_unowned_return
+        from .from_child_annotation_improvement import admit_return
     else:
         return None
-    return prepare_request, admit_return, admit_unowned_return
+    return prepare_request, admit_return

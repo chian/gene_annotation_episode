@@ -7,7 +7,7 @@ class LiteratureSourceOperations:
 
     def _tool_arguments(self, context, tool_name, arguments):
         assignment = self._validate_assignment('literature_table', context.assignment, context.scope, context=context)
-        entries = {entry['name']: entry for entry in self.catalog(context, _accept_legacy_quotes=True)}
+        entries = {entry['name']: entry for entry in self.catalog(context)}
         if tool_name not in entries:
             raise ContractError('tool_not_available_to_literature_role')
         arguments = plain(arguments)
@@ -64,8 +64,11 @@ class LiteratureSourceOperations:
                     self._concentration_window_repository().authorize_record_access(context, self.services.read_record(ref))
         return arguments
 
-    def _materialize_text_arguments(self, context, arguments, repository):
-        from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_inputs import materialize_text_witness_inputs
+    def _materialize_text_arguments(self, context, arguments, repository, operation_key):
+        from gene_annotation_episode.episodic_workflow.root.a105.library.literature_assay_inputs import materialize_text_witness_inputs, saved_text_witness_inputs
+        saved = saved_text_witness_inputs(arguments, repository=repository, episode_id=context.episode_id, operation_key=operation_key)
+        if saved is not None:
+            return saved
 
         def read_source(ref, representation):
             source = repository._native_source(context, ref)

@@ -88,8 +88,6 @@ def _headers(transport, diagnostics):
 def _bounded_capture(request, transport, byte_count, headers):
     """Check local cap evidence without inferring an unseen body or object."""
     complete, diagnostics = (transport['body_complete'], [])
-    if 'max_bytes' not in request:
-        return (complete, diagnostics)
     limit = request['max_bytes']
     conflicts = []
     observed = transport.get('observed_body_bytes')
@@ -137,9 +135,7 @@ def qualify_download(snapshot, *, capability: dict, object_binding: dict) -> dic
     request, transport = (_check_json(snapshot.request), _check_json(snapshot.transport))
     if type(request) is not dict or request.get('kind') != 'download' or 'requested_byte_range' not in request:
         raise ContractValidationError('download_request_invalid')
-    call = {'url': request.get('url'), 'byte_range': request['requested_byte_range']}
-    if 'max_bytes' in request:
-        call['max_bytes'] = request['max_bytes']
+    call = {'url': request.get('url'), 'byte_range': request['requested_byte_range'], 'max_bytes': request.get('max_bytes')}
     if not _same(request, download_request(call)):
         raise ContractValidationError('download_request_invalid')
     selected_range = request['requested_byte_range']

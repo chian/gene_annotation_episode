@@ -24,6 +24,16 @@ from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures 
 COMPONENTS = ['amount_ratio', 'conditional_mass_denominator_factor', 'amount_ratio_variance']
 FORM = obj({'requested_amounts': amount_cells_schema()})
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def binding_for(store, context):
     host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
     binding = LiteratureEpisode(WorkflowServices(host), rate_population=True)
@@ -35,7 +45,7 @@ def test_c7_selected_amount_operation_exact_return_and_parent_subset(tmp_path):
     try:
         context = replace(context, assignment={**plain(context.assignment), 'requested_amount_components': COMPONENTS})
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.amount.populate', args, 'selected'))
+        outcome = asyncio.run(binding.execute(context, 'literature.amount.populate', location_only(args), 'selected'))
         assert outcome['status'] == 'completed', outcome
         current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
         facts = binding.facts(current, {'committed_record_refs': [outcome['result']['sheet_ref']]})
@@ -62,7 +72,7 @@ def test_c7_unknown_unit_preserves_source_inequality_in_closed_parent_cell(tmp_p
     try:
         context = replace(context, assignment={**plain(context.assignment), 'requested_amount_components': ['numerator_amount']})
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.amount.populate', args, 'known-bound-unknown-unit'))
+        outcome = asyncio.run(binding.execute(context, 'literature.amount.populate', location_only(args), 'known-bound-unknown-unit'))
         assert outcome['status'] == 'completed', outcome
         current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
         form = form_with_facts({}, FORM, binding.facts(current, {'committed_record_refs': [outcome['result']['sheet_ref']]}))

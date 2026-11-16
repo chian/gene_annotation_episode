@@ -246,8 +246,8 @@ def test_returned_outcome_and_saved_replay_reach_original_action_unit(family, ho
         projections.append(source.episode_id)
         return binding.credit_view(context, {})
     task.workflow = SimpleNamespace(run_id=context.run_id, store=family.store,
-        journal=journal, execution_binding=None, wait_inputs_version=None,
-        completed_action_inputs_version=None, execute=execute,
+        journal=journal, execution_binding=None, pending_work=lambda source:[],
+         execute=execute,
         receive_native_outcome=lambda *args: None,
         receive_outcome=lambda source, selection, result, index: receipts.append((index, result['status'])),
         automatic_score_updates=score, source_credit_view=project,

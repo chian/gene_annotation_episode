@@ -25,6 +25,16 @@ from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_c
 REQUEST = ['recovery', 'percent_bias', 'measured_cv', 'reported_recovery', 'displayed_minus_reported_recovery', 'correction_for_other_measurement', 'recovery_variance']
 FORM = obj({'calibration': calibration_recovery_cells_schema()})
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def rebind(value, original, reference):
     if isinstance(value, dict):
         return {k: rebind(v, original, reference) for k, v in value.items()}
@@ -93,12 +103,12 @@ def test_selected_operation_exact_scope_subsets_and_genuine_empty(tmp_path):
     try:
         services, binding = binding_for(store, context)
         binding.validate_report(context, {'calibration': []}, FORM)
-        missing = asyncio.run(binding.execute(replace(context, received_record_refs=()), 'literature.calibration.recovery.populate', args, 'not-received'))
+        missing = asyncio.run(binding.execute(replace(context, received_record_refs=()), 'literature.calibration.recovery.populate', location_only(args), 'not-received'))
         assert missing['feedback']['code'] == 'literature_source_not_received'
         bad = deepcopy(args)
         bad['nominal_value'] = 10
-        assert asyncio.run(binding.execute(context, 'literature.calibration.recovery.populate', bad, 'invented'))['status'] == 'invalid'
-        out = asyncio.run(binding.execute(context, 'literature.calibration.recovery.populate', args, 'selected'))
+        assert asyncio.run(binding.execute(context, 'literature.calibration.recovery.populate', location_only(bad), 'invented'))['status'] == 'invalid'
+        out = asyncio.run(binding.execute(context, 'literature.calibration.recovery.populate', location_only(args), 'selected'))
         assert out['status'] == 'completed', out
         binding.validate_report(context, {'calibration': []}, FORM)
         current = replace(context, received_record_refs=(*context.received_record_refs, *out['record_refs']))
@@ -269,7 +279,7 @@ def test_original_source_shared_loop_typed_return_and_readonly_factory(tmp_path,
             task, steering = prompt.split('\n\nSTEERING\n')
             child_tasks.append(task)
             assert CALIBRATION_RECOVERY_TASK in task and CALIBRATION_RECOVERY_TASK not in steering, inputs.get('feedback')
-            return {'selection': {'kind': 'tool', 'tool': 'literature.calibration.recovery.populate', 'arguments': args[index]}, 'report_update': {}}
+            return {'selection': {'kind': 'tool', 'tool': 'literature.calibration.recovery.populate', 'arguments': location_only(args[index])}, 'report_update': {}}
         return work
 
     def integrate(inputs):
@@ -376,7 +386,7 @@ def test_page_scope_applies_to_every_received_witness_source(tmp_path):
         scoped = replace(context, role='literature_page', path=(('literature_page', context.episode_id),), assignment=page, received_record_refs=(*context.received_record_refs, alias))
         args['matrix']['source_ref'] = alias
         _, binding = binding_for(store, scoped)
-        out = asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(scoped, 'literature.calibration.recovery.populate', args, 'outside-assigned-paper'))
+        out = asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(scoped, 'literature.calibration.recovery.populate', location_only(args), 'outside-assigned-paper'))
         assert out['status'] == 'invalid' and out['feedback']['code'] == 'literature_reading_outside_assigned_source'
     finally:
         store.close()

@@ -151,7 +151,7 @@ def acquisition_record(task, request, data, *, raw=b'>native candidate\nACGT\n',
            'producer_source_ref': None, 'transformation_evidence': []}
     obj = {'kind': 'manifest_member', 'manifest_receipt_ref': 'synthetic:manifest', 'output_index': 0}
     cap = {'kind': 'acquired', 'receipt_ref': 'synthetic:capability', 'input_index': 0}
-    args = {'object': obj, 'capability': cap, 'byte_range': None, 'requirement_ids': ['synthetic:output'],
+    args = {'object': obj, 'capability': cap, 'byte_range': None, 'max_bytes': 1048576, 'requirement_ids': ['synthetic:output'],
             'role': 'genome_alignment_staged_input', 'declared_format': fmt}
     selector = {'version': 'bvbrc_appservice_result_selector_v1', 'endpoint': 'requested_artifacts',
         'requirements': [{'requirement_id': 'synthetic:output', 'role': args['role'], 'required': True,
@@ -159,7 +159,7 @@ def acquisition_record(task, request, data, *, raw=b'>native candidate\nACGT\n',
         'adapter': None, 'requested_schema': {'type': 'object', 'additionalProperties': False,
         'properties': {}, 'required': []}, 'supplied_metadata': [], 'supplied_contents': [], 'supplied_capabilities': []}
     snap = snapshot(raw, name + ':native', selected(request, 'download', args,
-        {'url': 'https://synthetic.invalid/selected', 'byte_range': None}, selector), complete=complete)
+        {'url': 'https://synthetic.invalid/selected', 'byte_range': None, 'max_bytes': 1048576}, selector), complete=complete)
     receipt = common(name, snap, 'acquisition', complete=complete)
     c = snap['content']
     artifact = {'role': args['role'], 'source_ref': c['source_ref'], 'raw_artifact_ref': c['artifact_ref'],

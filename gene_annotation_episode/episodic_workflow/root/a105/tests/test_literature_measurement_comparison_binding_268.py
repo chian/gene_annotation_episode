@@ -19,6 +19,16 @@ from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegist
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_measurement_comparison_components_258 import source_fixture, original_nfn_fixture
 SELECTED = ['protocol_ratio', 'combined_estimate']
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def setup(path, components=SELECTED, *, original=False, optical=False, covariance=None, variance_status='known', values=None, table=False):
     if original:
         selection, docs, _ = original_nfn_fixture()
@@ -83,7 +93,7 @@ def setup(path, components=SELECTED, *, original=False, optical=False, covarianc
     return (store, ctx, args, binding, source)
 
 def selected(store, ctx, args, binding, key='selected268'):
-    outcome = asyncio.run(binding.execute(ctx, OPERATION, args, key))
+    outcome = asyncio.run(binding.execute(ctx, OPERATION, location_only(args), key))
     assert outcome['status'] == 'completed', outcome
     current = replace(ctx, received_record_refs=(*ctx.received_record_refs, *outcome['record_refs']))
     schema = obj({'numbers': measurement_comparison_cells_schema()})
@@ -122,7 +132,7 @@ def test_exact_contracts_and_lazy_discovery(tmp_path):
         assert rows[0]['cell']['value'] == pytest.approx(20 / 22)
         assert rows[1]['cell']['value'] is None
         assert rows[0]['covariance_provenance'] == []
-        assert asyncio.run(binding.execute(ctx, OPERATION, args, 'selected268')) == out
+        assert asyncio.run(binding.execute(ctx, OPERATION, location_only(args), 'selected268')) == out
     finally:
         store.close()
 
@@ -164,7 +174,7 @@ def test_closed_preflight_and_selected_source_custody(tmp_path, failure):
                 args['return_assertion_context']['functional_assertion'] = [{'start': start, 'end': end}]
         else:
             args['version'] = 'literature_measurement_comparison_population_v1'
-        out = asyncio.run(binding.execute(ctx, OPERATION, args, 'invalid268'))
+        out = asyncio.run(binding.execute(ctx, OPERATION, location_only(args), 'invalid268'))
         assert out['status'] == 'invalid' and out['feedback']
         assert not store.db.execute("SELECT 1 FROM sqlite_master WHERE name='literature_measurement_comparison_operations'").fetchone()
     finally:
@@ -179,7 +189,7 @@ def test_nested_covariance_source_must_belong_to_assigned_page(tmp_path):
         ctx = replace(ctx, role='literature_page', path=(('literature_page', ctx.episode_id),), assignment={**page, REQUESTED: SELECTED}, received_record_refs=(*ctx.received_record_refs, alien))
         args['selection']['covariance_source_refs'] = [alien]
         binding = literature_binding_for_role(binding, 'literature_page')
-        out = asyncio.run(binding.execute(ctx, OPERATION, args, 'alien268'))
+        out = asyncio.run(binding.execute(ctx, OPERATION, location_only(args), 'alien268'))
         assert out['status'] == 'invalid'
         assert out['feedback']['code'] == 'literature_reading_outside_assigned_source'
     finally:
@@ -208,7 +218,7 @@ def test_original_input_record_identity_preserves_legitimate_origins_and_rejects
         forged = store.get(ref)
         forged['provider'] = 'altered_without_new_identity268'
         store.db.execute('UPDATE records SET data=? WHERE id=?', (canonical(forged), ref))
-        out = asyncio.run(binding.execute(ctx, OPERATION, args, 'forged268'))
+        out = asyncio.run(binding.execute(ctx, OPERATION, location_only(args), 'forged268'))
         assert out['status'] == 'invalid'
         assert out['feedback']['code'] == 'measurement_comparison_input_source_identity_mismatch'
         assert not store.db.execute("SELECT 1 FROM sqlite_master WHERE name='literature_measurement_comparison_operations'").fetchone()

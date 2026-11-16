@@ -104,5 +104,5 @@ def admission_for_prepared_request(workflow, source, preparer, role):
             return None
         from importlib import import_module
         incoming = import_module(__package__ + '.from_child_' + home)
-        return incoming.admit_return, incoming.admit_unowned_return
+        return (incoming.admit_return,)
     return None

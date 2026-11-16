@@ -119,7 +119,7 @@ def _grade(plan, directory, manifest):
     from gene_annotation_episode.episodic_workflow.root.a101.library.native_hmmer_preparation_worker import grade_hmmer_preparation
     bundle = validate_original_bundle(plan["bundle"], plan["original_plan"])
     occurrences, problems = qualified_occurrences(bundle, plan["bundle_artifact_ref"], plan["capture"])
-    metadata, metadata_failures = effective_metadata(bundle, occurrences, include_map_context=True)
+    metadata, metadata_failures = effective_metadata(bundle, occurrences)
     if (native_record_digest(plan["occurrences"]) != native_record_digest(occurrences)
             or native_record_digest(plan["effective_metadata"]) != native_record_digest(metadata)
             or native_record_digest(plan["failures"]) != native_record_digest(unique_failures([*problems, *metadata_failures]))):

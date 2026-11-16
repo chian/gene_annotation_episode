@@ -161,7 +161,7 @@ def test_runtime_return_contract_discovery_uses_commissioning_parent(registry_ty
     first.fact_sources = lambda role: {'private_owner': {'meaning': 'investigation'}}
     second.fact_sources = lambda role: {'private_owner': {'meaning': 'allocation'}}
     workflow = SimpleNamespace(episode_bindings=registry, job_episodes=None,
-        episode_branch_lifecycle=None, native_timing_information=None,
+        native_timing_information=None,
         native_event_information=None, project_annotation_score=None, resource_estimator=None)
     facts = runtime.Workflow.report_sources(workflow, 'monitor',
         parent_path=(('annotation', 'root'), ('allocate', 'saved')))

@@ -31,7 +31,6 @@ from gene_annotation_episode.episodic_workflow.root.providers import _SessionCon
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.scientific_process_setup import prepare_scientific_binding
-from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 
@@ -263,7 +262,7 @@ def test_actual_SR_resource_child_capture_shared_VCF_saved_selection_and_parent_
         tools = ToolRegistry(store, run_directory=store.path / 'tool-run', job_limits=deepcopy(native.POLICY))
         run_id = 'genuine-LUMPY-SR-resource'
         application = factory(store, run_id=run_id, directory=directory / 'run', tool_registry=tools)
-        scientific = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=directory / 'run', source_directory=PUBLICATION,
+        scientific = prepare_scientific_binding(run_directory=directory / 'run', source_directory=PUBLICATION,
             tool_catalog=tools.catalog(), resource_catalogs=application.resource_tool_catalogs,
             child_roles=['scientific_process', 'launch', 'results'])
         library = ScientificProcessLibrary(directory / 'run/scientific-process-library')

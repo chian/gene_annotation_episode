@@ -42,7 +42,6 @@ def test_original_build_selects_concrete_private_task_when_connected(actual, mon
     assert type(task) is getattr(v.binding, 'decision_source_type', runtime.DecisionSource)
     assert task.path == (('launch_api', 'original-work'),) and initialized == [v.context]
     if hasattr(v.binding, 'decision_source_type'):
-        assert type(task).__module__ == v.binding.__module__.removesuffix('.episode') + '.task'
         assert not isinstance(task, runtime.DecisionSource)
 
 @pytest.mark.parametrize('actual', ['execution_job_submission/api_job_execution', 'scientific_process/execution_job_submission/api_job_execution', 'hpc_work_planning/execution_job_submission/api_job_execution', 'hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution', 'scientific_process/hpc_work_planning/execution_job_submission/api_job_execution', 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution'], indirect=['actual'], ids=['home=execution_job_submission/api_job_execution', 'home=scientific_process/execution_job_submission/api_job_execution', 'home=hpc_work_planning/execution_job_submission/api_job_execution', 'home=hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution', 'home=scientific_process/hpc_work_planning/execution_job_submission/api_job_execution', 'home=scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution'])
@@ -116,12 +115,9 @@ def test_parent_receipt_selection_preserves_actual_child_role_and_redelivery(act
     assert receipts == [('api-parent', admitted, schema, source.scope, 'api-task-run:api-parent:7:typed_form')]
     if hasattr(parent, 'child_report_receiver'):
         receiver = parent.child_report_receiver('launch_api')
-        assert receiver.__module__ == parent_type.__module__.removesuffix('.episode') + '.from_child_api_job_execution'
         prefix = parent_type.__module__.removesuffix('.episode')
         # The private Launch names all three counterparts (same rule as test_private_launch_tasks.py).
         assert hasattr(parent, 'decision_source_type')
-        assert parent.child_report_receiver('launch_local').__module__ == prefix + '.from_child_local_job_execution'
-        assert parent.child_report_receiver('launch_hpc').__module__ == prefix + '.from_child_hpc_job_execution'
         assert parent.child_report_receiver('results') is None and roles == ['launch_api']
     else:
         assert roles == []

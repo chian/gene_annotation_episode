@@ -12,7 +12,7 @@ from gene_annotation_episode.episodic_workflow.root.a104.episode_bindings import
 from gene_annotation_episode.episodic_workflow.root.a104.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.a104.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.episodic_workflow.root.a104.execution_contracts import canonical, digest
-from gene_annotation_episode.episodic_workflow.root.a104.runtime import Record, TypedReportContract
+from gene_annotation_episode.episodic_workflow.root.a104.runtime import Record, TypedReportContract, _ASSIGNMENT_TRANSPORT, _digest
 from gene_annotation_episode.episodic_workflow.root.a104.state import Store
 
 def refs_schema(namespace='source'):
@@ -58,7 +58,7 @@ class SavedRecords:
             self.journal.save('runtime_episodes', {'episode_id': episode_id, 'path': canonical(path), 'request': canonical(req), 'initial_credit': 0, 'state': 'active', 'completion': None, 'archive': None})
         return ctx
 
-    def child(self, parent, role, assignment, index, *, schema=None, save=True, action=True, model=True, encoded=False):
+    def child(self, parent, role, assignment, index, *, schema=None, save=True, action=True, model=True, encoded=True):
         schema = refs_schema() if schema is None else schema
         contract = TypedReportContract('Return only the requested source references', schema, lambda *_: True)
         goal = EpisodeGoal.child(EpisodeGoal.from_record(plain(parent.request)['goal']), objective='Perform selected fixture work', result_contract=schema)
@@ -70,7 +70,7 @@ class SavedRecords:
             if encoded:
                 response['selection']['assignment'] = canonical(assignment)
             original_schema = {'type': 'object', 'properties': {'selection': {'type': 'object', 'properties': {'kind': {'const': 'episode_child'}, 'assignment': {'type': 'object'}}, 'required': list(selection)}}}
-            self.journal.save('runtime_model_calls', {'episode_id': parent.episode_id, 'call_index': index, 'purpose': 'decision', 'request': canonical({'context': {}, 'schema': original_schema}), 'response': canonical(response)})
+            self.journal.save('runtime_model_calls', {'episode_id': parent.episode_id, 'call_index': index, 'purpose': 'decision', 'request': canonical({'context': {}, 'schema': original_schema, 'assignment_transport': {'version': _ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _digest(original_schema)}}), 'response': canonical(response)})
         if action:
             self.journal.save('runtime_actions', {'episode_id': parent.episode_id, 'decision_index': index, 'action': canonical(selection), 'result': None, 'credit': None})
         return ctx

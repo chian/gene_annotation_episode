@@ -46,7 +46,7 @@ class ScientificOperations:
         if axis.get('entry_version') == INSTRUCTION_VERSION:
             description = "Prepare a different thought pattern and/or selected actual tools for a new child investigating the same evidence axis. Return its selection for a separately selected episode_child commission with the child's job, scope, constraints and typed return form. Copy result.selection and revision_origin into that assignment. Changes no current process, starts no child and records no biological observation. Select the actual tool/resource choices returned by process.tools for the desired investigation."
         entries.append({'name': 'process.revise', 'description': description, 'input_schema': deepcopy(_REVISION_ARGUMENTS)})
-        if getattr(self.services, 'workflow', None) is not None and self.tool_library.supports_tool_info:
+        if getattr(self.services, 'workflow', None) is not None:
             from gene_annotation_episode.episodic_workflow.root.a103.execution_planning import catalog
             entries.extend(catalog())
         return entries

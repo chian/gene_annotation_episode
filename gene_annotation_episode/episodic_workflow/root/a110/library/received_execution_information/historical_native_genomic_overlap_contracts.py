@@ -6,6 +6,7 @@ G1 owns scientific records; these checks validate supplied execution facts and
 associations, never observe files, grant source authority or execute work.
 """
 from __future__ import annotations
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 from copy import deepcopy
 from functools import lru_cache
 import math
@@ -13,7 +14,6 @@ from pathlib import PurePosixPath
 import re
 from jsonschema import Draft202012Validator, FormatChecker, validators
 from .historical_genomic_overlap_contracts import Request, genomic_overlap_schema, validate_genomic_overlap_record
-from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 RUN_PLAN_FILENAME = 'genomic-overlap-plan.json'
 BATCH_FILENAME = 'bundle.json'
 OWNER_FILENAME = '.native-genomic-overlap-owner.json'

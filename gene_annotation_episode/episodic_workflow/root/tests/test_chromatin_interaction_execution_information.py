@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolReg
 def software():
     return {'python_executable': '/synthetic/python', 'python_sha256': '1' * 64,
         'python_version': 'synthetic', 'module_root': '/synthetic/source',
-        'driver_module': 'gene_annotation_episode.native_chromatin_interaction_driver',
+        'driver_module': 'gene_annotation_episode.episodic_workflow.root.library.native_chromatin_interaction_driver',
         'implementation_files': [{'module': name, 'sha256': '2' * 64}
             for name in sorted(REQUIRED_MODULES)],
         'dependencies': [{'distribution': name, 'version': 'synthetic',

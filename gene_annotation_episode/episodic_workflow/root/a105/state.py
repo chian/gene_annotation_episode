@@ -1478,7 +1478,7 @@ class Store:
                 for section, kind, origin in sections:
                     for index, proposed in enumerate(payload.get(section, [])):
                         try:
-                            validate_schema(proposed, source_location_inputs(REASONING_SCHEMA['properties'][section]['items'], allow_legacy_quote=True))
+                            validate_schema(proposed, source_location_inputs(REASONING_SCHEMA['properties'][section]['items']))
                             alias = proposed['alias']
                             if alias in aliases_seen:
                                 raise ContractError('duplicate_alias')

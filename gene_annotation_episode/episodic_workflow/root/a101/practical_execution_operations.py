@@ -5,6 +5,7 @@ action reopens its original handle; it never creates a replacement command.
 """
 from __future__ import annotations
 
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 import asyncio
 import base64
 from datetime import datetime, timezone

@@ -132,9 +132,9 @@ class EpisodeReceipts:
         columns = dict(zip((column[0] for column in cursor.description), row))
         manifest = {'version': RECEIPT_VERSION, 'parent_episode_id': columns['parent_episode_id'],
                     'through_receipt_index': columns['through_receipt_index']}
-        saved = columns.get('received_report_prefix')
-        if saved is not None:
-            manifest['received_report_prefix'] = _validate_report_prefix(json.loads(saved))
+        if columns['received_report_prefix'] is None:
+            raise ValueError('episode_receipts_not_bound')
+        manifest['received_report_prefix'] = _validate_report_prefix(json.loads(columns['received_report_prefix']))
         return manifest
 
     def selection(self, episode_id, *, record_type=None, baseline=False):

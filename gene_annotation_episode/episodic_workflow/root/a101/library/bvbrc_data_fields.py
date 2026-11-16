@@ -5,8 +5,6 @@ field contracts do not claim that all fields have populated live measurements.
 Native numeric identifiers remain metadata. Unknown units and native variants
 are retained without inventing measurement meanings.
 
-The static table is materialized from the reviewed D1 contract (SHA256
-23483aed4a1f84a4ec265a4223f66385322e73a1fc82f9889168f5251586c714).
 There is no file read, discovery or schema refresh at runtime.
 """
 
@@ -500,7 +498,6 @@ ISSUE_CODES = ['bvbrc_response_service_mismatch',
  'bvbrc_response_body_incomplete',
  'bvbrc_unsupported_media_type',
  'bvbrc_invalid_json_response',
- 'bvbrc_expected_native_row_array',
  'bvbrc_expected_solr_response',
  'bvbrc_native_error',
  'bvbrc_native_partial_results',

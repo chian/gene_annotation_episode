@@ -134,14 +134,7 @@ class ExecutionTargetReader:
             raise ValueError('practical_execution_handoff_identity_conflict')
         resource_id = assignment.get('resource_id')
         if resource_id is None:
-            # Legacy assignments predate resource IDs. A single exact bound
-            # resource is unambiguous; several candidates are never selected.
-            candidates = [key for key, config in self.resources.items()
-                if config['kind'] == ('local' if assignment['resource_kind'] == 'local' else 'pbs_ssh')
-                and Path(assignment['workspace']).is_relative_to(config['workspace'])]
-            if len(candidates) != 1:
-                raise ValueError('practical_execution_resource_identity_required')
-            resource_id = candidates[0]
+            raise ValueError('practical_execution_resource_identity_required')
         config = self.resources.get(resource_id)
         if (config is None or config['kind'] != ('local' if assignment['resource_kind'] == 'local' else 'pbs_ssh')
                 or not Path(assignment['workspace']).is_relative_to(config['workspace'])):

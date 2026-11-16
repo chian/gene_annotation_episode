@@ -82,12 +82,6 @@ def test_original_evd_pair_is_selectable_through_existing_profile_and_typed_fact
             lambda ref, namespace: (ref, namespace) in received and ref != row["source_ref"])
 
 
-def test_old_saved_legacy_pair_does_not_require_a_newly_recorded_common_calibration():
-    grading, occurrences = prepared(synthetic(extra_headers="EVD -2.5 0.7\n"), format="hmmer2_ascii")
-    replace_model(grading, lambda row: row.update(calibration=[]))
-    assert [q["value"] for q in project(grading, occurrences)["rows"][0]["quantities"]] == [-2.5, 0.7]
-
-
 @pytest.mark.parametrize("kind", ["ascii", "binary"])
 def test_absent_native_calibration_is_missing_not_zero_or_another_hmmer_mode(kind):
     raw = synthetic() if kind == "ascii" else packed(evd=False)[0]

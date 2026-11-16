@@ -105,12 +105,12 @@ def exchange_for_improvement(workflow, source, selection, role):
     from ..episode import is_annotation_parent
     if is_annotation_parent(workflow, source) and unbound_improvement_domain(workflow):
         from ..to_child_annotation_improvement import prepare_request
-        from ..from_child_annotation_improvement import admit_return, admit_unowned_return
-        return prepare_request, admit_return, admit_unowned_return
+        from ..from_child_annotation_improvement import admit_return
+        return prepare_request, admit_return
     if is_improvement_parent(workflow, source):
         from .to_child_annotation_improvement import prepare_request
-        from .from_child_annotation_improvement import admit_return, admit_unowned_return
-        return prepare_request, admit_return, admit_unowned_return
+        from .from_child_annotation_improvement import admit_return
+        return prepare_request, admit_return
     return None
 
 

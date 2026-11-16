@@ -26,7 +26,7 @@ from test_runtime import ScriptedProvider
 def supplied_owner_contributions(monkeypatch, callback, *, axes=('A105', 'A106', 'A107', 'A108', 'A110')):
     """Explicit composition fixture; native owner behavior is tested separately."""
     from gene_annotation_episode.episodic_workflow.root.returns import axis_contribution_readers
-    from gene_annotation_episode.episodic_workflow.root.root_axis_scalars import bind_contribution
+    from gene_annotation_episode.episodic_workflow.root.communication import plain
     def readers(store, run_id):
         bound = axis_contribution_readers(store, run_id)
         for axis in axes:
@@ -36,8 +36,8 @@ def supplied_owner_contributions(monkeypatch, callback, *, axes=('A105', 'A106',
                 scalar, details = result if isinstance(result, tuple) else (result, [])
                 transfer = {'status': 'established' if scalar['value'] is not None else 'unresolved',
                     'missing_inputs': scalar['missing_inputs'], 'needed_refs': [], 'link_refs': []}
-                return bind_contribution(scalar, annotation=annotation, subject=target, scope=scope,
-                    transfer=transfer), details
+                return {**scalar, 'proposed_annotation_ref': annotation['id'], 'subject_ref': target,
+                    'scope': plain(scope), 'transfer': plain(transfer), 'source_refs': []}, details
             bound[axis] = supplied
         return bound
     monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.scoring.axis_contribution_readers', readers)
@@ -448,7 +448,7 @@ def test_opposing_axis_report_without_received_finding_earns_no_root_credit(tmp_
     from gene_annotation_episode.episode_bindings import BindingContext
     from gene_annotation_episode.episodic_workflow.root.root_axis_scalars import _result
     from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_invocation_ref
-    from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import project_process_result
+    from gene_annotation_episode.episodic_workflow.root.scientific_process.report_generation import project_process_result
     from test_scientific_process_return_records import _full_row, _libraries
 
     supplied_owner_contributions(monkeypatch, lambda store, context, axis, **options:
@@ -515,7 +515,8 @@ def test_saved_scientific_return_credits_received_finding_without_using_child_sc
     from gene_annotation_episode.episodic_workflow.root.investigation_progress import FindingProgressPolicy, ScientificFindingProgress
     from gene_annotation_episode.episodic_workflow.root.returns import receiver_context
     from gene_annotation_episode.episodic_workflow.root.scientific_process_records import scientific_invocation_ref
-    from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import credit_binding_ref, project_process_result
+    from gene_annotation_episode.episodic_workflow.root.scientific_process_reports import credit_binding_ref
+    from gene_annotation_episode.episodic_workflow.root.scientific_process.report_generation import project_process_result
     from test_investigation_progress import put_finding
     from test_scientific_findings import quoted_observation, target_question
     from test_scientific_process_return_records import _full_row, _libraries

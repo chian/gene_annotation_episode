@@ -9,6 +9,9 @@ from types import SimpleNamespace
 import pytest
 
 
+PENDING_WORK={'version':'pending_work_v2','captured_at':'2026-11-01T00:00:00+00:00','items':[]}
+
+
 class MonitorTaskBehaviorChecks:
     def setup_task(self):
         binding_type=importlib.import_module(self.home+'.episode').MonitorEpisode
@@ -52,8 +55,8 @@ class MonitorTaskBehaviorChecks:
         def credit(source):
             projected.append('original_monitor_credit')
             return {'credit':2.5}
-        task.workflow=SimpleNamespace(run_id='run',execution_binding=None,wait_inputs_version=None,
-            completed_action_inputs_version=None,journal=SimpleNamespace(
+        task.workflow=SimpleNamespace(run_id='run',execution_binding=None,pending_work=lambda source:deepcopy(PENDING_WORK),
+            journal=SimpleNamespace(
                 row=lambda table,episode,index:saved.get(index),
                 save=lambda table,row:saved.__setitem__(row['decision_index'],row),measure=lambda *args:nullcontext()),
             execute=execute,receive_native_outcome=lambda *args:None,
@@ -68,7 +71,7 @@ class MonitorTaskBehaviorChecks:
         assert executions==['run:monitor:4'] and receipts==[(4,status)]
         assert projected==['original_monitor_credit']
         assert json.loads(saved[4]['action'])==selection
-        assert json.loads(saved[4]['result'])==result
+        assert json.loads(saved[4]['result'])=={**result,'pending_work_after_action':PENDING_WORK}
 
     def test_selected_wait_retains_last_observed_credit(self):
         task,binding,context,runtime=self.setup_task()
@@ -76,8 +79,8 @@ class MonitorTaskBehaviorChecks:
         async def wait(source,condition,index):
             waits.append((condition,index))
             return {'status':'completed','record_refs':[],'changed_record_refs':[]}
-        task.workflow=SimpleNamespace(run_id='run',execution_binding=None,wait_inputs_version=None,
-            completed_action_inputs_version=None,journal=SimpleNamespace(row=lambda table,episode,index:saved.get(index),
+        task.workflow=SimpleNamespace(run_id='run',execution_binding=None,pending_work=lambda source:deepcopy(PENDING_WORK),
+            journal=SimpleNamespace(row=lambda table,episode,index:saved.get(index),
                 save=lambda table,row:saved.__setitem__(row['decision_index'],row),measure=lambda *args:nullcontext()),
             perform_selected_wait=wait,receive_native_outcome=lambda *args:None,
             receive_outcome=lambda source,selection,result,index:receipts.append(index),

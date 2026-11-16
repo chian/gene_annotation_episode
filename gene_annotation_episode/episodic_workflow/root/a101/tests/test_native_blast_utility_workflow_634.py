@@ -164,7 +164,7 @@ def run_case(directory):
             horizon = 1 if path[-1][0] == 'annotation' else 2 * len(MODES)
             return YieldEstimate(len(raw), NumericBand.exact(0 if len(raw) >= horizon else 1), parameters,
                 {'fixture': 'explicit_scientific_test_horizon_not_production_stopping'})
-        return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+        return YieldController(str(path), initial, 0, YieldParameters(),
             estimate_with_context=estimate if path[-1][0] in {'annotation', 'scientific_process'} else None)
 
     class Choices:

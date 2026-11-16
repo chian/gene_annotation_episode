@@ -1546,9 +1546,7 @@ def _hmmer2_evd_quantity(row, path):
         if expected is None:
             state, value = "invalid", None
         else:
-            # Older saved extractions retained the pair only in legacy.evd.
-            # Its literal source tokens remain sufficient for this new view.
-            if row.get("calibration") not in ([], [expected]):
+            if row.get("calibration") != [expected]:
                 _error("evd_projection_conflict")
             state, value = "present", expected["parameters"][0 if path.endswith(".mu") else 1]["value"]
     if state != "present" and row.get("calibration") != []:

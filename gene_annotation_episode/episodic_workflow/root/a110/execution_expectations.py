@@ -84,7 +84,7 @@ class ExecutionExpectations:
     def as_record(self):
         return {"version": VERSION, "path": str(self.path),
                 "by_grain": {name: [asdict(scope) for scope in scopes]
-                             for name, scopes in sorted(self.by_grain.items())}, "homology": None}  # Historical descriptor field; no assigned adapter.
+                             for name, scopes in sorted(self.by_grain.items())}, "homology": None}  # No adapter is assigned to this descriptor field.
 
     @classmethod
     def from_record(cls, record):

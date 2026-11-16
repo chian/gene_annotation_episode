@@ -309,7 +309,7 @@ class A103ToolRegistry(ToolRegistry):
                 source = publish(self.store,body,[args['binding_ref'],*args['definition_source_refs'],*[r['component_ref'] for r in args['regions']]])
                 records.append(source); result = {'fusion_ref':source,**body}
             elif name=='context.detection_inventory':
-                from ..a103.a103_detection import search_receipt
+                from ..a103.homology_search_receipt import search_receipt
                 target,regions = self._target(args['target_ref'],known,scope)
                 metadata,query = search_receipt(self.store,args['snapshot_ref'],args['native_source_ref'],args['component_ref'],known)
                 native_path,_ = self._file(args['native_source_ref'],'hmmer3_text',known,invocation)

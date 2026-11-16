@@ -163,87 +163,87 @@ def parent_exchange(workflow, source, selection, role):
             if not unbound_improvement_domain(workflow):
                 return None
             from .to_child_annotation_improvement import prepare_parent_request, assemble_parent_request
-            from .from_child_annotation_improvement import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .from_child_annotation_improvement import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'episode_child' and role == 'launch':
             if not _nominal_episode_child(workflow, role, 'execution_job_submission', 'ExecutionEpisode', None):
                 return None
             from .to_child_execution_job_submission import prepare_parent_request, assemble_parent_request
-            from .from_child_execution_job_submission import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .from_child_execution_job_submission import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'episode_child' and role == 'monitor':
             if not _nominal_episode_child(workflow, role, 'execution_progress_assessment', 'MonitorEpisode', None):
                 return None
             from .to_child_execution_progress_assessment import prepare_parent_request, assemble_parent_request
-            from .from_child_execution_progress_assessment import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .from_child_execution_progress_assessment import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'episode_child' and role == 'results':
             if not _nominal_episode_child(workflow, role, 'execution_result_acquisition', 'ExecutionEpisode', None):
                 return None
             from .to_child_execution_result_acquisition import prepare_parent_request, assemble_parent_request
-            from .from_child_execution_result_acquisition import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .from_child_execution_result_acquisition import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'episode_child' and role == 'literature':
             if not _nominal_episode_child(workflow, role, 'published_evidence_assessment', 'LiteratureEpisode', None):
                 return None
             from .to_child_published_evidence_assessment import prepare_parent_request, assemble_parent_request
-            from .from_child_published_evidence_assessment import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .from_child_published_evidence_assessment import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'episode_child' and role == 'hpc':
             if not _nominal_episode_child(workflow, role, 'hpc_work_planning', 'HPCEpisode', None):
                 return None
             from .to_child_hpc_work_planning import prepare_parent_request, assemble_parent_request
-            from .from_child_hpc_work_planning import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .from_child_hpc_work_planning import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'episode_child' and role == 'scientific_process':
             if not _nominal_episode_child(workflow, role, 'scientific_process', 'ScientificProcessEpisode', None):
                 return None
             from .to_child_scientific_process import prepare_parent_request, assemble_parent_request
-            from .from_child_scientific_process import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .from_child_scientific_process import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'job_child' and role == 'job_launch':
             if not _nominal_job_child(workflow, role, 'homology_job_submission'):
                 return None
             from .to_child_homology_job_submission import prepare_parent_request, assemble_parent_request
-            from .from_child_homology_job_submission import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .from_child_homology_job_submission import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'job_child' and role == 'job_monitor':
             if not _nominal_job_child(workflow, role, 'homology_job_monitoring'):
                 return None
             from .to_child_homology_job_monitoring import prepare_parent_request, assemble_parent_request
-            from .from_child_homology_job_monitoring import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .from_child_homology_job_monitoring import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'job_child' and role == 'job_results':
             if not _nominal_job_child(workflow, role, 'homology_result_acquisition'):
                 return None
             from .to_child_homology_result_acquisition import prepare_parent_request, assemble_parent_request
-            from .from_child_homology_result_acquisition import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .from_child_homology_result_acquisition import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         return None
     from .annotation_improvement.episode import is_improvement_parent
     if is_improvement_parent(workflow, source):
         if kind == 'child' and role == 'improvement':
             from .annotation_improvement.to_child_annotation_improvement import prepare_parent_request, assemble_parent_request
-            from .annotation_improvement.from_child_annotation_improvement import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .annotation_improvement.from_child_annotation_improvement import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'job_child' and role == 'job_launch':
             if not _nominal_job_child(workflow, role, 'homology_job_submission'):
                 return None
             from .annotation_improvement.to_child_homology_job_submission import prepare_parent_request, assemble_parent_request
-            from .annotation_improvement.from_child_homology_job_submission import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .annotation_improvement.from_child_homology_job_submission import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'job_child' and role == 'job_monitor':
             if not _nominal_job_child(workflow, role, 'homology_job_monitoring'):
                 return None
             from .annotation_improvement.to_child_homology_job_monitoring import prepare_parent_request, assemble_parent_request
-            from .annotation_improvement.from_child_homology_job_monitoring import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .annotation_improvement.from_child_homology_job_monitoring import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         if kind == 'job_child' and role == 'job_results':
             if not _nominal_job_child(workflow, role, 'homology_result_acquisition'):
                 return None
             from .annotation_improvement.to_child_homology_result_acquisition import prepare_parent_request, assemble_parent_request
-            from .annotation_improvement.from_child_homology_result_acquisition import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-            return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, assemble_parent_request)
+            from .annotation_improvement.from_child_homology_result_acquisition import admit_parent_return, receive_parent_child_failure
+            return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, assemble_parent_request)
         return None
     if kind != 'episode_child' or not _scientific_parent(workflow, source):
         return None
@@ -251,12 +251,12 @@ def parent_exchange(workflow, source, selection, role):
         if not _nominal_episode_child(workflow, role, 'scientific_process', 'ScientificProcessEpisode', 'scientific_process'):
             return None
         from .scientific_process.to_child_scientific_process import prepare_parent_request
-        from .scientific_process.from_child_scientific_process import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-        return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, None)
+        from .scientific_process.from_child_scientific_process import admit_parent_return, receive_parent_child_failure
+        return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, None)
     if role == 'hpc':
         if not _nominal_episode_child(workflow, role, 'scientific_process/hpc_work_planning', 'HPCEpisode', 'scientific_process'):
             return None
         from .scientific_process.to_child_hpc_work_planning import prepare_parent_request
-        from .scientific_process.from_child_hpc_work_planning import admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure
-        return (prepare_parent_request, admit_parent_return, admit_parent_return_without_receipts, receive_parent_child_failure, None)
+        from .scientific_process.from_child_hpc_work_planning import admit_parent_return, receive_parent_child_failure
+        return (prepare_parent_request, admit_parent_return, receive_parent_child_failure, None)
     return None

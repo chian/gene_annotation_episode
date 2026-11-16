@@ -145,13 +145,12 @@ class ImprovementDecisionDelivery:
         # Save the exact supplied context, including its bounded operational
         # index, before dispatch. Completed historical calls are returned above
         # unchanged. Metadata contains no old contexts, so it cannot nest them.
-        transport = (saved.get('assignment_transport') if row is not None else
+        transport = (saved['assignment_transport'] if row is not None else
             {'version': _runtime._ASSIGNMENT_TRANSPORT, 'action_schema_sha256': _runtime._digest(schema)})
         saved = {"context": context, "schema": schema,
             **({'literature_numerical_contracts': saved['literature_numerical_contracts']}
                 if 'literature_numerical_contracts' in saved else {})}
-        if transport is not None:
-            saved['assignment_transport'] = transport
+        saved['assignment_transport'] = transport
         if (self.workflow.receipts is not None and not self.workflow.is_job_source(self)
                 and not self.workflow.uses_received_record_context(self)):
             # Scientific information is admitted through explicit inputs,

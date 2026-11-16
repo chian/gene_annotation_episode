@@ -39,16 +39,13 @@ _DESCRIPTOR = {"oneOf": [views._object(dict(input_key=views.TOKEN, consumer={"co
 _SNAPSHOT = dict(subject_ref=views.REF, record_type={"enum": ["input", "feature", "product", "read_subject"]},
     molecule={"enum": ["dna", "rna", "protein"]}, length={"type": "integer", "minimum": 1},
     sequence_sha256=views.SHA, sequence_artifact_ref=views.REF)
-_ROLES_V1 = {"inputs": ("inputs.json", metadata.PREPARED_INPUTS_SCHEMA),
+_ROLES = {"inputs": ("inputs.json", metadata.PREPARED_INPUTS_SCHEMA),
     "collection": ("collection.json", "blast_report_collection_v1"), "sheets": ("sheets.json", metadata.SHEET_SET_SCHEMA),
     "calculations": ("calculations.json", calculators.CALCULATION_SCHEMA),
     "rows": ("rows.ndjson", PREFIX + "numeric_row_v1"), "row_index": ("row-index.json", PREFIX + "row_index_v1"),
     "metric_definitions": ("metric-definitions.json", PREFIX + "metric_definitions_v1"),
     "diagnostics": ("diagnostics.json", PREFIX + "diagnostics_v1")}
-_ROLES_V2 = {**_ROLES_V1, "calculations": ("calculations.json", calculators.CALCULATION_SCHEMA_V2)}
-_ROLES = _ROLES_V2
-_MANIFEST_ROLES = {PREFIX + "result_worker_manifest_v1": _ROLES_V1,
-                   PREFIX + "result_worker_manifest_v2": _ROLES_V2}
+_MANIFEST_VERSION = PREFIX + "result_worker_manifest_v2"
 
 STANDARD_BLAST_DATABASE_WORKER_REQUEST_SCHEMA = views._object(dict(
     version={"const": PREFIX + "result_worker_request_v1"}, calculation_id=views.SHA,
@@ -62,7 +59,7 @@ STANDARD_BLAST_DATABASE_WORKER_REQUEST_SCHEMA = views._object(dict(
     sequence_model=_MODEL, output_directory=_ABS, reuse=views._nullable(views._object(dict(
         manifest_path=_ABS, manifest_sha256=views.SHA, manifest_size_bytes=views.I0, collection_path=_ABS, sheets_path=_ABS)))))
 STANDARD_BLAST_DATABASE_WORKER_MANIFEST_SCHEMA = views._object(dict(
-    version={"enum": list(_MANIFEST_ROLES)}, calculation_id=views.SHA, request_sha256=views.SHA,
+    version={"const": _MANIFEST_VERSION}, calculation_id=views.SHA, request_sha256=views.SHA,
     status={"enum": ["complete", "partial", "failed"]}, input_identity=views.SHA, input_interpretation_id=views.SHA,
     input_implementation_sha256=views.SHA, implementation_manifest_sha256=views.SHA, sequence_model=_MODEL,
     artifacts=views._array(views._object(dict(role={"enum": list(_ROLES)}, relative_path=views.TOKEN,
@@ -296,12 +293,11 @@ def _reuse(request, input_identity, catalog, contents, subject_contents):
     if manifest["status"] == "failed" or manifest["input_identity"] != input_identity or any(manifest[k] != v for k, v in ids.items()):
         raise _WorkerFailure("inputs", "frozen_artifact_changed", "frozen_value_changed", pointer="/reuse")
     artifacts = {r["role"]: r for r in manifest["artifacts"]}
-    original_roles = _MANIFEST_ROLES[manifest["version"]]
-    if set(artifacts) != set(original_roles) or len(artifacts) != len(manifest["artifacts"]):
+    if set(artifacts) != set(_ROLES) or len(artifacts) != len(manifest["artifacts"]):
         raise _WorkerFailure("inputs", "sheet_invalid", "calculator_contract_invalid", pointer="/reuse")
     values = {}
     for role, artifact in artifacts.items():
-        if (artifact["relative_path"], artifact["schema"]) != original_roles[role]:
+        if (artifact["relative_path"], artifact["schema"]) != _ROLES[role]:
             raise _WorkerFailure("inputs", "sheet_invalid", "calculator_contract_invalid", pointer="/reuse")
         path = reused[role + "_path"] if role in {"collection", "sheets"} else str(Path(reused["manifest_path"]).parent / artifact["relative_path"])
         raw = _verified_bytes(path, artifact["sha256"], artifact["size_bytes"], frozen=True, pointer="/reuse/" + role)
@@ -421,7 +417,7 @@ def run_standard_blast_database_result_worker(request_path: str) -> dict:
     input_impl = request["implementation"]["manifest_sha256"]
     initial = standard_blast_database_calculation_identity(input_identity=input_id, input_implementation_sha256=input_impl,
         sequence_model=request["sequence_model"], implementation_manifest_sha256=input_impl)
-    manifest = dict(version=PREFIX + "result_worker_manifest_v2", calculation_id=request["calculation_id"],
+    manifest = dict(version=_MANIFEST_VERSION, calculation_id=request["calculation_id"],
         request_sha256=hashlib.sha256(request_bytes).hexdigest(), status="failed", input_identity=input_id,
         input_interpretation_id=initial["input_interpretation_id"], input_implementation_sha256=input_impl,
         implementation_manifest_sha256=input_impl, sequence_model=deepcopy(request["sequence_model"]), artifacts=[],
@@ -488,8 +484,7 @@ def run_standard_blast_database_result_worker(request_path: str) -> dict:
         manifest["counts"]["searches"] = len(collection["searches"])
         stage = "calculation"
         calculation_errors = []
-        calculations = calculators._calculate(sheets, sequence_model=request["sequence_model"], diagnostics=calculation_errors,
-            _retain_correspondence=True)
+        calculations = calculators._calculate(sheets, sequence_model=request["sequence_model"], diagnostics=calculation_errors)
         save("calculations", calculations)
         resolved = _resolved_population_failures(metadata_issues, sheets, calculations)
         failures[:] = [failure for failure in failures if failure not in resolved]

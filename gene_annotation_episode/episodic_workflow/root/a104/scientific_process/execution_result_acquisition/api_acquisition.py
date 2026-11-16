@@ -48,7 +48,7 @@ class APIResultAcquisition(APIRecordAccess):
     def _legacy_context(self, context):
         return self.store.get(context.assignment['handoff_ref']).get('provider') == LEGACY_PROVIDER
 
-    def _context(self, context, *, verify_artifacts=True, _completed_appservice_download=False):
+    def _context(self, context, *, verify_artifacts=True):
         if context.run_id != self.run_id:
             raise ValueError('api_execution_run_conflict')
         if context.role != 'results':
@@ -56,7 +56,7 @@ class APIResultAcquisition(APIRecordAccess):
         raw = plain(context.assignment)
         if set(raw) != {'version', 'handoff_ref', 'selector'} or raw['version'] != 'execution_results_assignment_v1':
             raise ValueError('invalid_api_results_assignment')
-        target = self.read_target(raw['handoff_ref'], context.scope, verify_artifacts=verify_artifacts, **{'_completed_appservice_download': True} if _completed_appservice_download else {})
+        target = self.read_target(raw['handoff_ref'], context.scope, verify_artifacts=verify_artifacts)
         self.validate_result_selector(target, raw['selector'])
         return (target['assignment'], self.services[target['resource_id']], target)
 
@@ -86,10 +86,6 @@ class APIResultAcquisition(APIRecordAccess):
             return await self._legacy_binding().execute(context, name, arguments, operation_key)
         try:
             arguments = plain(arguments)
-            if name == 'api.bvbrc_appservice.download' and type(arguments) is dict and ('max_bytes' not in arguments):
-                cached = self.appservice.legacy_cached_download(context, name, arguments, operation_key)
-                if cached is not None:
-                    return cached
             self.initialize(context)
             assignment, service, target = self._context(context)
             entry = next((row for row in self.catalog(context) if row['name'] == name), None)

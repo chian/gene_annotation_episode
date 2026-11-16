@@ -44,7 +44,6 @@ def test_original_build_selects_concrete_private_task_when_connected(actual, mon
     assert type(task) is getattr(v.binding, 'decision_source_type', runtime.DecisionSource)
     assert task.path == (('launch', 'original-work'),) and initialized == [v.context]
     if hasattr(v.binding, 'decision_source_type'):
-        assert type(task).__module__ == v.binding.__module__.removesuffix('.episode') + '.task'
         assert not isinstance(task, runtime.DecisionSource)
 
 @pytest.mark.parametrize('actual', ['execution_job_submission', 'scientific_process/execution_job_submission', 'hpc_work_planning/execution_job_submission', 'hpc_work_planning/hpc_allocation_execution/execution_job_submission', 'scientific_process/hpc_work_planning/execution_job_submission', 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission'], indirect=['actual'], ids=['home=execution_job_submission', 'home=scientific_process/execution_job_submission', 'home=hpc_work_planning/execution_job_submission', 'home=hpc_work_planning/hpc_allocation_execution/execution_job_submission', 'home=scientific_process/hpc_work_planning/execution_job_submission', 'home=scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission'])
@@ -120,7 +119,6 @@ def test_parent_receipt_selection_preserves_actual_child_role_and_redelivery(act
     receiver = parent.child_report_receiver(child_role)
     if child_role == 'launch_api' or hasattr(parent, 'decision_source_type'):
         child = {'launch_api': 'api_job_execution', 'launch_local': 'local_job_execution', 'launch_hpc': 'hpc_job_execution'}[child_role]
-        assert receiver.__module__ == parent_type.__module__.removesuffix('.episode') + '.from_child_' + child
     else:
         assert receiver is None
     assert parent.child_report_receiver('results') is None and roles == [child_role]

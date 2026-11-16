@@ -291,7 +291,7 @@ def test_no_execution_or_io_during_information_enumeration(monkeypatch):
 def test_library_selects_multiple_real_tools_and_delivers_exact_instructions(tmp_path):
     rows = [row for provider in ("bvbrc_msa", "bvbrc_metacats") for row in alignment_tool_contracts(
         resource_id="selected-api", assignment_schema=assignment_schema(), provider=provider)]
-    library = ScientificToolLibrary.freeze(tmp_path / "library", catalog=[], tool_info=True,
+    library = ScientificToolLibrary.freeze(tmp_path / "library", catalog=[],
         resource_catalogs={"api": rows})
     parent = library.parent_tool_info(rows)
     assert len(parent) == 8

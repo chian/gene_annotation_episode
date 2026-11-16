@@ -1,8 +1,6 @@
 """A101 closed typed parent forms, adapted from the supplied method_loop boundary.
 
-Sources: episodic_workflow/method_loop/communication.py and the restricted
-schema guard in orbital_workflow/orbital_workflow/communication.py. This module
-adapts domain string types and reference validation; it never assesses science.
+This module adapts domain string types and reference validation; it never assesses science.
 Recorded fields bind to facts instead of asking a second model to compose them.
 """
 from __future__ import annotations

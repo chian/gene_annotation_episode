@@ -65,7 +65,7 @@ def test_selected_library_entry_reaches_only_bound_local_commission(f, selected,
     factory = ExecutionServiceFactory(selected.resources, {}, 3, 2, 1, log_window_bytes=128)
     application = factory(f.store, run_id=f.run_id, directory=tmp_path / 'factory', tool_registry=selected.tools)
     library = ScientificToolLibrary.freeze(tmp_path / 'tools', catalog=selected.tools.catalog(),
-        tool_info=True, resource_catalogs=application.resource_tool_catalogs)
+        resource_catalogs=application.resource_tool_catalogs)
     parent, = [row for row in library.parent_tool_info() if row['name'] == OPERATION]
     assert set(parent) == {'name', 'description', 'resources'}
     selection = [{'name': OPERATION, 'resources': 'local'}]

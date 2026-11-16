@@ -71,7 +71,7 @@ class NativeContractChecks:
         assert asyncio.run(f.task.execute(selected, 8)) == {'index': 8, 'credit': 3.25}
         assert asyncio.run(f.task.execute(selected, 8)) == {'index': 8, 'credit': 3.25}
         assert calls == [(selected['tool'], selected['arguments'], f'{case.context.run_id}:{case.context.episode_id}:8')]
-        assert json.loads(f.saved[8]['action']) == selected and json.loads(f.saved[8]['result']) == payload
+        assert json.loads(f.saved[8]['action']) == selected and json.loads(f.saved[8]['result']) == {**payload, 'pending_work_after_action': f.task.workflow.pending_work(f.task)}
         assert f.receipts == [(8, status)] and len(f.projections) == 1
         # Replay the actual recorded credit even if a current projector changes.
         monkeypatch.setattr(case.binding, 'credit_view', forbidden)

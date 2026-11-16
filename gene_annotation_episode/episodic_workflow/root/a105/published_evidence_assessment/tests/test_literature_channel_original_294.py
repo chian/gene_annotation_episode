@@ -25,6 +25,16 @@ SHA256 = '83867d6966a972f32899bdfe545c9952cb9d10393dc54d68dce29b6f4954b053'
 REQUESTED = ['chord_conductance', 'charge_equivalent_rate', 'chord_conductance_variance']
 FORM = {'type': 'object', 'properties': {'electrical': channel_cells_schema()}, 'required': ['electrical'], 'additionalProperties': False}
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def _witness(raw, source, quote, *, occurrence=0):
     needle = quote.encode('utf-8')
     start = -1
@@ -77,7 +87,7 @@ def test_original_fluc_selected_channel_cells_and_typed_return(tmp_path):
     with store:
         binding = _binding(store, context)
         assert 'literature.channel.populate' in {item['name'] for item in binding.catalog(context)}
-        outcome = asyncio.run(binding.execute(context, 'literature.channel.populate', args, 'fluc-selected'))
+        outcome = asyncio.run(binding.execute(context, 'literature.channel.populate', location_only(args), 'fluc-selected'))
         assert outcome['status'] == 'completed', outcome
         rows = outcome['result']['cells']
         validate_schema(rows, channel_cells_schema())
@@ -110,7 +120,7 @@ def test_original_biionic_reversal_cannot_enter_salt_gradient_chord(tmp_path):
     args['measurements']['reversal_voltage'] = _measurement(raw, args['source_ref'], '119 ± 3 mV', '119', 'mV', spread='3', context='for salt-gradient and bi-ionic conditions, respectively')
     args['arrangement_relation'] = {'value': 'different_electrical_arrangements', 'witnesses': [_witness(raw, args['source_ref'], 'for salt-gradient and bi-ionic conditions, respectively')]}
     with store:
-        result = asyncio.run(_binding(store, context).execute(context, 'literature.channel.populate', args, 'biionic-not-chord'))
+        result = asyncio.run(_binding(store, context).execute(context, 'literature.channel.populate', location_only(args), 'biionic-not-chord'))
         rows = {row['component']: row for row in result['result']['cells']}
         assert rows['chord_conductance']['value'] is None
         assert rows['chord_conductance']['unavailable_reason'] == 'different_electrical_arrangements'
@@ -120,7 +130,7 @@ def test_original_biionic_reversal_cannot_enter_salt_gradient_chord(tmp_path):
 def test_original_fluc_cold_saved_reconstruction_does_not_reparse_source(tmp_path, monkeypatch):
     store, context, args, _raw = _setup(tmp_path)
     binding = _binding(store, context)
-    outcome = asyncio.run(binding.execute(context, 'literature.channel.populate', args, 'fluc-selected'))
+    outcome = asyncio.run(binding.execute(context, 'literature.channel.populate', location_only(args), 'fluc-selected'))
     ref = outcome['result']['sheet_ref']
     saved = LiteratureChannelRepository(store, context.run_id).read(ref)
     store.db.execute('PRAGMA wal_checkpoint(TRUNCATE)')

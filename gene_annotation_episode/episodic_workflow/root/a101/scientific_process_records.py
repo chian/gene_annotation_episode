@@ -185,7 +185,7 @@ def validate_filled_process(value) -> dict:
 
 
 def validate_revision(value) -> dict:
-    """Parse saved historical revisions without selecting any active process."""
+    """Parse saved revisions without selecting any active process."""
     value = _plain(value)
     code = "scientific_process_revision_invalid"
     _exact(value, "version initial_selection_sha256 previous_selection_sha256 selection", code)

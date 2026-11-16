@@ -149,7 +149,7 @@ class AppServiceCustody(EpisodeReturnRecords):
             if type(candidate) is dict and type(candidate.get("assignment")) is str:
                 self._json(candidate["assignment"])
             # Reuse the runtime's exact transport normalization and the saved
-            # original schema; today's catalog never rewrites old selections.
+            # original schema.
             from .runtime import _decode_recorded_action_response, _recorded_assignment_transport
             try:
                 exchanges = []

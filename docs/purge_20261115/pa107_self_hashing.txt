@@ -1,0 +1,85 @@
+# pa107: a107 code that hashes this codebase's own files (candidates for the later removal task)
+# Method: AST scan of every non-test a107 module for a function containing both a hash call and a reference to
+# the program's own files (__file__, module_root, SOURCE_PATHS, _source_closure, current_worker_sources, find_spec,
+# sys.modules[...], implementation_record), plus module constants named *SOURCE*/*IMPLEMENTATION*/*FUNCTION*SHA256.
+# 'compares=yes' means the same function also contains a comparison or a raise; it was not confirmed line by line
+# that the comparison is against a stored value. Read by hand and confirmed: acquisition.py _skill,
+# execution_progress.py as_record, ordinary_execution.py spreadsheet_class, native_rna_structure_worker.py _software,
+# hpc_campaign.py build_plan, numerical.py SOURCE_SHA256 (vendored-source digest),
+# library/received_execution_information/received_reader_sources.py and
+# library/execution_initial_information/information_sources.py implementation_record (SOURCE_PATHS lists; the check
+# that raises initial_information_reader_implementation_changed is information_readers.py validate_original_setup).
+# Dropped after reading (hash something else): rna_evidence.py/read_mapping.py local_configuration (external
+# executables), tool_knowledge.py freeze (knowledge files), method_loop/durable.py start, native_lifecycle.py
+# _dispatch_prepared.
+# file:line<TAB>function<TAB>own-file reference<TAB>compares
+gene_annotation_episode/episodic_workflow/root/a107/a103_hpc.py:71	freeze	owns=__file__,_source_closure	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/a103_hpc_worker.py:29	main	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/a107_genomic_detection_hpc.py:54	freeze	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/acquisition.py:173	_skill	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/bvbrc_homology_bundle_adapter.py:47	implementation_sha256	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/component_axis_native_hpc.py:103	freeze	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/component_axis_native_worker.py:30	main	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/execution_job_submission/binding_record.py:13	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/execution_progress.py:1275	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/execution_result_acquisition/binding_record.py:13	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/hpc_campaign.py:146	build_plan	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/binding_record.py:10	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/execution_job_submission/binding_record.py:12	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/execution_result_acquisition/binding_record.py:13	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_allocation_execution/binding_record.py:10	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_allocation_execution/execution_job_submission/binding_record.py:12	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/binding_record.py:13	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/hpc_work_planning/hpc_resource_prediction/binding_record.py:11	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/independent_execution.py:30	implementation_sha256	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/library/execution_initial_information/information_readers.py:46	validate_original_setup	owns=__file__,implementation_record	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/library/execution_initial_information/information_sources.py:1899	implementation_record	owns=SOURCE_PATHS,__file__,implementation_record	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/library/molecular_deployment_contracts.py:6	(module constant)	SOURCE_SHA256	compares=stored-value
+gene_annotation_episode/episodic_workflow/root/a107/library/molecular_deployment_contracts.py:7	(module constant)	GLYCO_SOURCE_SHA256	compares=stored-value
+gene_annotation_episode/episodic_workflow/root/a107/library/native_flux_balance_preparation.py:149	_selected_snapshot	owns=_source_closure,module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/library/native_flux_balance_preparation.py:170	_snapshot	owns=_source_closure,current_worker_sources	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/library/native_genomic_overlap_preparation.py:264	_snapshot	owns=current_worker_sources	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/library/received_execution_information/historical_native_flux_balance_contracts.py:102	validate_flux_balance_run_plan	owns=module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/library/received_execution_information/historical_native_flux_balance_contracts.py:16	(module constant)	SOURCE_FUNCTION_SHA256	compares=stored-value
+gene_annotation_episode/episodic_workflow/root/a107/library/received_execution_information/historical_native_genomic_overlap_contracts.py:347	validate_genomic_overlap_batch	owns=module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/library/received_execution_information/received_reader_sources.py:1927	implementation_record	owns=SOURCE_PATHS,__file__,implementation_record	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/lumpy_request_binding.py:91	_materialize	owns=module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/macs2_peak_request_binding.py:74	_materialize	owns=module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_database_contracts.py:757	_producer_files	owns=module_root	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_database_contracts.py:764	_validate_producer_verification	owns=module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_database_driver.py:202	_verify_producer	owns=__file__,module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_database_result_publication.py:222	_implementation	owns=__file__,sys.modules[	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_database_result_worker.py:1352	_verify_implementation	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_masking_result_publication.py:221	_execute_worker	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_result_publication.py:113	prepare_native_blast_grading	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_standard_database_contracts.py:770	_producer_files	owns=module_root	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_standard_database_contracts.py:777	_validate_producer_verification	owns=module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_standard_database_driver.py:181	_verify_producer	owns=__file__,module_root,sys.modules[	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_standard_database_result_publication.py:199	_implementation	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_standard_database_result_worker.py:177	_verify_implementation	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_blast_utility_result_publication.py:263	_execute_worker	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_driver_runtime.py:169	verify_driver_runtime	owns=__file__,module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_driver_runtime.py:294	freeze_driver_runtime	owns=_source_closure,module_root	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/native_expression_nmf_driver.py:120	verify_expression_nmf_software	owns=__file__,module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_expression_nmf_preparation.py:41	_snapshot	owns=__file__,_source_closure	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_hmmer_local.py:19	prepare_local_hmmer	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_hmmer_preparation_result_publication.py:214	_runtime_files	owns=module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_hmmer_result_publication.py:77	prepare_native_hmmer_grading	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_infernal_preparation_result_publication.py:158	_execute_worker	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_infernal_result_publication.py:183	prepare_native_infernal_grading	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/native_rna_structure_worker.py:49	_software	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/numerical.py:39	(module constant)	SOURCE_SHA256	compares=stored-value
+gene_annotation_episode/episodic_workflow/root/a107/ordinary_execution.py:43	alignment_class	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/ordinary_execution.py:74	spreadsheet_class	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/scientific_process/binding_record.py:7	as_record	owns=__file__	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/scientific_process/execution_job_submission/binding_record.py:13	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/scientific_process/execution_result_acquisition/binding_record.py:13	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/binding_record.py:10	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/execution_job_submission/binding_record.py:12	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/execution_result_acquisition/binding_record.py:13	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_allocation_execution/binding_record.py:10	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/binding_record.py:12	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/binding_record.py:13	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/scientific_process/hpc_work_planning/hpc_resource_prediction/binding_record.py:11	as_record	owns=__file__	compares=no
+gene_annotation_episode/episodic_workflow/root/a107/terminal_scientific_evidence.py:163	scientific_command_proof	owns=module_root	compares=yes
+gene_annotation_episode/episodic_workflow/root/a107/terminal_scientific_evidence.py:236	_identified_file_values	owns=module_root	compares=no

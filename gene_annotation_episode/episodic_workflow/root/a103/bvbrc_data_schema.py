@@ -1,9 +1,5 @@
 """Static closed BV-BRC Data shapes and strict, detached JSON validation.
 
-The 46 original record definitions and six fact schemas preserve the frozen
-interface reviewed on 2026-10-24 (contract SHA256
-c6cbae6f7c804d274e1a6e0f30d1162e6426999ba6e4809fb70e5cca7df30cd5),
-with additive supplied-location (002) and unavailable-return (003) corrections.
 Repeated enums are factored locally. No documentation, verification file,
 Store, service or mutable registry is consulted at runtime. Relationship
 validation belongs to the reader, join or projection that owns that meaning.
@@ -450,8 +446,7 @@ _DEFINITIONS['DataSheet'] = {'type': 'object',
                                            'effective_url': {'type': 'string'},
                                            'media_type': {'type': 'string'},
                                            'native_profile': {'type': 'string',
-                                                              'enum': ['json_array_with_headers_v1',
-                                                                       'solr_json_envelope_v1']},
+                                                              'enum': ['solr_json_envelope_v1']},
                                            'prepared_sha256': {'type': 'string',
                                                                'pattern': '^[0-9a-f]{64}$'},
                                            'field_contract_version': {'const': 'bvbrc_data_fields_2026_10_24_v1'}},
@@ -1564,7 +1559,6 @@ _DEFINITIONS['IssueCode'] = {'type': 'string',
           'bvbrc_response_body_incomplete',
           'bvbrc_unsupported_media_type',
           'bvbrc_invalid_json_response',
-          'bvbrc_expected_native_row_array',
           'bvbrc_expected_solr_response',
           'bvbrc_native_error',
           'bvbrc_native_partial_results',
@@ -2609,8 +2603,7 @@ _FACT_SCHEMAS = {'execution_bvbrc_pages': {'type': 'array',
                                                'additionalProperties': False},
                                      'x-source': 'execution_bvbrc_expression_rows'}}
 
-# Additive correction 2026-10-24_002: supplied source locators are not native
-# BV-BRC artifact locations. Preserve the original frozen artifact on disk.
+# Supplied source locators are not native BV-BRC artifact locations.
 _DEFINITIONS["SuppliedCellLocation"] = {
     "type": "object",
     "properties": {

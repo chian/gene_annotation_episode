@@ -49,7 +49,7 @@ def test_original_payload_reference_and_saved_work_guards(tmp_path, task_kind):
             from dataclasses import replace
             commit = {key: [] for key in v.store.reasoning_schema()['properties']}
             anchor = {'source_ref': v.source['id'], 'artifact_ref': v.artifact,
-                'start': 0, 'end': len(v.raw), 'quote': v.raw.decode()}
+                'start': 0, 'end': len(v.raw)}
             commit['source_subjects'] = [{'alias': 'construct', 'reference_type': 'construct',
                 'source_ref': v.source['id'], 'label': 'Original synthetic source',
                 'anchor': anchor}]
@@ -61,7 +61,7 @@ def test_original_payload_reference_and_saved_work_guards(tmp_path, task_kind):
                 received_record_refs=tuple(v.workflow.receipts.known(v.context.episode_id)))
             record = v.store.get(subject)
             assert record['record_type'] == 'reference' and record['source_ref'] == v.source['id']
-            assert record['anchor'] == anchor
+            assert record['anchor'] == {**anchor, 'quote': v.raw.decode()}
             assert not resolve(v.store.problem()['subject_refs'][0], 'reference')
             row = {'proposed_annotation_ref': v.proposed, 'source_ref': v.source['id'],
                 'subject_ref': subject, 'disposition': 'relevant',

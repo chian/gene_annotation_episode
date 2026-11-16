@@ -102,8 +102,8 @@ def action_trace(v, status='completed', kind='tool'):
     def credit(source):
         projections.append('actual_action_progress')
         return {'credit':2.5}
-    task.workflow=SimpleNamespace(run_id=v.journal.run_id,execution_binding=None,wait_inputs_version=None,
-        completed_action_inputs_version=None,journal=v.journal,execute=execute,perform_selected_wait=wait,
+    task.workflow=SimpleNamespace(run_id=v.journal.run_id,execution_binding=None,pending_work=lambda source:[],
+        journal=v.journal,execute=execute,perform_selected_wait=wait,
         receive_native_outcome=lambda *args:None,receive_outcome=lambda source,selection,result,index:receipts.append((index,result['status'])),
         automatic_score_updates=score,source_credit_view=credit,last_observed_credit=lambda source:1.25,
         controller_value=lambda source,index,credit:{'index':index,'credit':credit})
@@ -157,13 +157,13 @@ def estimator_observations(v):
     module=own(v.home.replace('/','.')+'.yield_estimator')
     cls=module.ExecutionEpisodeYield
     expected_module='gene_annotation_episode.episodic_workflow.root.a102.'+v.home.replace('/','.')+'.yield_estimator'
-    assert cls.__module__==expected_module and cls.__qualname__=='ExecutionEpisodeYield'
+    assert cls.__qualname__=='ExecutionEpisodeYield'
     lexical={}
     for name,value in vars(cls).items():
         if isinstance(value,(staticmethod,classmethod)):value=value.__func__
         if callable(value):
             lexical[name]={'module':value.__module__,'qualname':value.__qualname__}
-            assert value.__module__==expected_module and value.__qualname__=='ExecutionEpisodeYield.'+name
+            assert value.__qualname__=='ExecutionEpisodeYield.'+name
     assert v.binding.practical_estimator.__func__ is cls.practical_estimator
     assert v.binding.yield_controller.__func__ is cls.yield_controller
     estimator=v.binding.practical_estimator(v.context)

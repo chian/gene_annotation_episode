@@ -44,7 +44,7 @@ def validate_sequence_model(model):
     return model
 
 def validate_standard_blast_correspondence(calculations, *, admission=False):
-    """Compare the required v2 common companion to its unchanged legacy cells."""
+    """Compare the required common companion to the cells it points at."""
     if set(calculations) != _CALC_FIELDS | {'correspondence'} or calculations['schema'] != CALCULATION_SCHEMA:
         raise ValueError(views.PREFIX + 'correspondence_calculations_invalid')
     companion = validate_correspondence_artifacts(calculations['correspondence'], admission=admission)

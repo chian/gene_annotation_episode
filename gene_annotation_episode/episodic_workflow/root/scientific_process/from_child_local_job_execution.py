@@ -2,17 +2,15 @@
 from __future__ import annotations
 import json
 from gene_annotation_episode.episodic_workflow.root.task_values import Record, _digest
-from gene_annotation_episode.episodic_workflow.root.workflow_values import EPISODE_BRANCH_LIFECYCLE
 from gene_annotation_episode.episodic_workflow.root.communication import ReportBoundaryError
 from gene_annotation_episode.episodic_workflow.root.method_loop import ReportDeliveryError
 
 
 def admit_return(workflow, source, child, index, schema, contract, result, request):
     delivery_ref = 'delivery_' + _request_runtime._digest({'run': workflow.run_id, 'parent': source.episode_id, 'index': index})[:24]
-    owned = workflow.episode_branch_lifecycle == _request_runtime.EPISODE_BRANCH_LIFECYCLE
     action = workflow.journal.row('runtime_actions', source.episode_id, index)
     frozen_index = None if action['result'] is None else _request_runtime.json.loads(action['result']).get('delivery_resolution_index')
-    saved = workflow.store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND ' + ('decision_index=?' if frozen_index is not None or not owned else 'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'), (workflow.run_id, source.episode_id, frozen_index if frozen_index is not None else delivery_ref if owned else index)).fetchone()
+    saved = workflow.store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND ' + ('decision_index=?' if frozen_index is not None else 'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'), (workflow.run_id, source.episode_id, frozen_index if frozen_index is not None else delivery_ref)).fetchone()
     if saved is not None:
         if saved['failure'] is not None:
             raise _request_runtime.ReportDeliveryError(_request_runtime.Record(_request_runtime.json.loads(saved['failure'])))

@@ -18,7 +18,6 @@ def test_existing_root_credit_context_keeps_original_completed_work_and_yield_ta
         '_completed_work_axis_results':{'a102_sheet':{'original':'saved-context'}}}
     retained=deepcopy(context)
     owner=task.credit_presentation(MappingProxyType(context))
-    assert owner.__module__.endswith('.scientific_process.standalone_credit_presentation')
     result=owner.completed_work(task,context,0)
     assert result=={key:value for key,value in retained.items() if key!='_completed_work_axis_results'}
     assert 'completed_action_reports' not in result

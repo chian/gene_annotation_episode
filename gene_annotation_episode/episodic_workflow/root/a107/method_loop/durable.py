@@ -397,8 +397,6 @@ class DurableExecutionStore:
                     receipt_bytes BLOB NOT NULL,
                     cursor INTEGER NOT NULL UNIQUE REFERENCES events(cursor));
             """)
-            if "failure" not in {row["name"] for row in db.execute("PRAGMA table_info(commissions)")}:
-                db.execute("ALTER TABLE commissions ADD COLUMN failure TEXT")
 
     @contextmanager
     def _connect(self, *, write=False):

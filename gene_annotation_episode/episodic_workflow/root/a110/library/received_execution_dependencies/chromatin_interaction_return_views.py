@@ -32,7 +32,7 @@ def chromatin_fact_sources() -> dict:
     return {source: {'type': 'array', 'meaning': _MEANINGS[source], 'report_schema': _array_schema(source)} for source in FACT_SOURCES}
 
 def chromatin_fact_schema_alternatives(source: str) -> tuple[dict, ...]:
-    """Current tree and the single exact supported historical field tree."""
+    """The fact schema accepted for a source."""
     if type(source) is not str or source not in FACT_SOURCES:
         raise ValueError('chromatin_return_unknown_source')
     current = _array_schema(source)

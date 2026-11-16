@@ -21,7 +21,7 @@ def test_reasoning_reports_selected_range_and_quote_bytes_without_repairing(
         store.create_problem(raw_sequence="MACD", molecule="protein")
         src = source(store, raw)
         anchor = dict(source_ref=src["id"], artifact_ref=src["artifact_ref"],
-            start=0, end=len(raw.encode()), quote=raw)
+            start=0, end=len(raw.encode()))
         if mistake == "missing_newline":
             anchor["quote"] = raw[:-1]
         elif mistake == "character_count_as_byte_count":

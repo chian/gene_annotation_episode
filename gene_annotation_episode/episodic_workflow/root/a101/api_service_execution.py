@@ -110,7 +110,7 @@ class APIServiceExecution:
         return self._uniprot_returns
 
     def __getattr__(self, name):
-        # Preserve existing inspection ports for the unchanged legacy binding.
+        # Inspection ports of the HMMER API binding.
         legacy = self.__dict__.get('legacy')
         if legacy is not None:
             return getattr(legacy, name)
@@ -164,7 +164,7 @@ class APIServiceExecution:
     def capabilities(self, resource_id):
         if resource_id in self.services:
             return self.services[resource_id].capabilities()
-        # Legacy schemas are fixed and do not require an invented query.
+        # HMMER API schemas are fixed and do not require an invented query.
         return [{'name': name} for name in ('api.hmmer.databases', 'api.hmmer.prepare',
             'api.hmmer.submit', 'api.hmmer.status', 'api.hmmer.check_handoff')]
 

@@ -80,7 +80,7 @@ def actual(directory,scenario='original_instruction',standalone=False):
             host.project_credit=projector;host.project_annotation_score=None;host.annotation_score_binding=None
             host.job_episodes=None;host.progress_provider=None;host.native_timing_information=None;host.native_event_information=None
             host.execution_binding=None;host.execution_handle=None;host.inprocess_replay=None;host.inprocess_completion_order=None
-            host.wait_inputs_version=None;host.completed_action_inputs_version=None;host.progress_receipt_order='received_progress_order_v1'
+            host.pending_work=lambda source:[];host.progress_receipt_order='received_progress_order_v1'
             host.annotation_child_roles=None;host.decision_protocol=None;host.decision_exchanges=None;host.resource_estimator=None
             host.episode_branch_lifecycle=runtime.EPISODE_BRANCH_LIFECYCLE;host.initial_known_record_refs=(target,proposed)
             host.archive=runtime.JsonArchive(directory/'archive')
@@ -306,7 +306,8 @@ def saved_model(v,declared,answered):
         'arguments':v.runtime._object({'record':{'type':'string'}})}),'report_update':v.runtime._object({})})
     response={'selection':{'kind':'tool','tool':'fixture.inspect','arguments':{'record':v.target}},'report_update':{}}
     v.journal.save('runtime_model_calls',{'episode_id':task.episode_id,'call_index':0,'purpose':'decision',
-        'request':v.runtime._json({'context':context,'schema':schema}),'response':v.runtime._json(response) if answered else None})
+        'request':v.runtime._json({'context':context,'schema':schema,'assignment_transport':{
+            'version':v.runtime._ASSIGNMENT_TRANSPORT,'action_schema_sha256':v.runtime._digest(schema)}}),'response':v.runtime._json(response) if answered else None})
     connection=object.__new__(own('providers')._SessionConnection);connection.scientific_prompt_states={};calls=[]
     async def complete(episode,role,guidance,value,output_schema,**kwargs):
         calls.append(connection._presentation(episode,role,guidance,value,**kwargs));return deepcopy(response)
@@ -431,7 +432,7 @@ def cold_import(directory,order):
     directory=Path(directory).resolve();assert directory.is_relative_to(Path(active_budget()['run_directory']).resolve())
     directory.mkdir(parents=True,exist_ok=True)
     assert order in ('head_first','runtime_first')
-    source="import importlib,json; p='"+PREFIX+"'; first='"+('scientific_process.episode' if order=='head_first' else 'runtime')+"'; importlib.import_module(p+'.'+first); h=importlib.import_module(p+'.scientific_process.episode'); r=importlib.import_module(p+'.runtime'); t=getattr(h.ScientificProcessEpisode,'decision_source_type',r.DecisionSource); assert t is r.DecisionSource or (t.__name__=='ScientificProcessTask' and t.__module__==p+'.scientific_process.task'); print(json.dumps({'binding':h.ScientificProcessEpisode.__module__+'.'+h.ScientificProcessEpisode.__qualname__,'valid_original_or_private_task':True}))"
+    source="import importlib,json; p='"+PREFIX+"'; first='"+('scientific_process.episode' if order=='head_first' else 'runtime')+"'; importlib.import_module(p+'.'+first); h=importlib.import_module(p+'.scientific_process.episode'); r=importlib.import_module(p+'.runtime'); t=getattr(h.ScientificProcessEpisode,'decision_source_type',r.DecisionSource); assert t is r.DecisionSource or t.__name__=='ScientificProcessTask'; print(json.dumps({'binding':h.ScientificProcessEpisode.__module__+'.'+h.ScientificProcessEpisode.__qualname__,'valid_original_or_private_task':True}))"
     environment={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','TMPDIR':str(directory),'XDG_CACHE_HOME':str(directory/'cache')}
     result=subprocess.run([sys.executable,'-B','-c',source],env=environment,text=True,capture_output=True)
     assert result.returncode==0,(result.stdout,result.stderr)

@@ -16,8 +16,7 @@ def scientific_retriever_catalog(self):
     if catalog is not None:
         return catalog()
     from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import catalog
-    configuration = self.scientific_process_binding.tool_retrieval
-    return catalog(retrieval_mode=None if configuration is None else configuration['mode'], tool_info=self.scientific_process_binding.tool_library.supports_tool_info)
+    return catalog()
 
 def catalog(self, scope, source=None):
     from gene_annotation_episode.episodic_workflow.root.commissioning_policy import annotation_catalog

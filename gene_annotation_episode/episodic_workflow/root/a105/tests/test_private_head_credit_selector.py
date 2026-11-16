@@ -26,7 +26,7 @@ def selected_binding(tmp_path_factory):
     library = module('scientific_process_library').ScientificProcessLibrary.freeze(
         directory / 'library', source=ROOT.parents[3] / 'research/slotted_process_library/publications/2026-10-24-001')
     tools = module('scientific_tool_library').ScientificToolLibrary.freeze(
-        directory / 'tools', catalog=[], tool_info=True)
+        directory / 'tools', catalog=[])
     services = SimpleNamespace(tool_catalog=lambda scope: [])
     Binding = module('scientific_process.episode').ScientificProcessEpisode
     binding = Binding(services, library=library, tool_library=tools, child_roles=('scientific_process',))

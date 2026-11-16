@@ -46,7 +46,7 @@ class TestPrivateScientificHead(ScientificHeadBoundaryChecks):
             credits.append(source.episode_id)
             return scientific.binding.credit_view(scientific.context, None)
         task.workflow = SimpleNamespace(run_id=scientific.context.run_id, execution_binding=None,
-            wait_inputs_version=None, completed_action_inputs_version=None,
+            pending_work=lambda source: [],
             scientific_process_binding=scientific.binding, binding_context=lambda source: scientific.context,
             journal=SimpleNamespace(row=lambda table, episode, index: saved.get(index),
                 save=lambda table, row: saved.__setitem__(row['decision_index'], deepcopy(row)), measure=lambda *args: nullcontext()),
@@ -60,7 +60,7 @@ class TestPrivateScientificHead(ScientificHeadBoundaryChecks):
         assert first == saved and len(scientific.calls) == 1
         assert receipts == [(3,status)] and credits == [task.episode_id]
         assert json.loads(saved[3]['action']) == selection
-        assert json.loads(saved[3]['result']) == scientific.outcome
+        assert json.loads(saved[3]['result']) == {**scientific.outcome, 'pending_work_after_action': []}
 
     def test_next_revisits_actual_outcome_with_same_goal_and_progress_definition(self, scientific):
         task = self.task(scientific); seen = []; units = [object(), object()]

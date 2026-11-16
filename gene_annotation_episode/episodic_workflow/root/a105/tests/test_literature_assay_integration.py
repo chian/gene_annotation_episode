@@ -23,6 +23,16 @@ TEXT = 'Protein P from organism X was assayed as construct P-His in purified pre
 COMPONENTS = ['attributed_rate', 'condition_response', 'corrected_activity', 'effect_variance', 'source_presence_index']
 FORM = obj({'measurements': assay_cells_schema()})
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def setup_store(path, *, full=True):
     store = Store(path)
     store.create_problem(raw_sequence='ATGGCT', molecule='dna')
@@ -72,7 +82,7 @@ def binding_for(store, context):
 def test_source_assay_cells_validate_exact_semantics_and_replay_without_parsing(tmp_path, monkeypatch, full):
     store, context, args = setup_store(tmp_path, full=full)
     binding = binding_for(store, context)
-    outcome = asyncio.run(binding.execute(context, 'literature.assay.populate', args, 'selected'))
+    outcome = asyncio.run(binding.execute(context, 'literature.assay.populate', location_only(args), 'selected'))
     assert outcome['status'] == 'completed', outcome
     ref = outcome['result']['sheet_ref']
     current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
@@ -133,20 +143,6 @@ def test_source_assay_cells_validate_exact_semantics_and_replay_without_parsing(
         assert repo.received_cells(parent) == cells
         with pytest.raises(ContractError, match='not_received'):
             repo.populate(replace(context, received_record_refs=(args['source_ref'],) if full else ()), args, 'selected')
-
-def test_source_interpretation_wrong_quote_returns_repairable_failure(tmp_path):
-    store, context, args = setup_store(tmp_path, full=False)
-    try:
-        binding = binding_for(store, context)
-        wrong = deepcopy(args)
-        wrong['assay']['molecule']['quote'] = 'Wrong molecule'
-        outcome = asyncio.run(binding.execute(context, 'literature.assay.populate', wrong, 'invalid'))
-        assert outcome['status'] == 'invalid'
-        assert not outcome['record_refs']
-        assert 'witness' in outcome['feedback']['code'] or 'quote' in outcome['feedback']['code']
-        assert store.db.execute('SELECT count(*) FROM literature_assay_operations').fetchone()[0] == 0
-    finally:
-        store.close()
 
 def test_scripted_source_assay_child_returns_score_with_no_extra_controller_observation(tmp_path):
     from .source_location_fixture import verified_source_locations

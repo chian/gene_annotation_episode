@@ -7,8 +7,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.providers import ModelRole
 from gene_annotation_episode.episodic_workflow.root.scientific_tool_library import ScientificToolLibrary
-from gene_annotation_episode.episodic_workflow.root.scientific_tool_retrieval import (
-    ScientificToolRetriever, configuration, output_schema)
+from gene_annotation_episode.episodic_workflow.root.scientific_tool_retrieval import ScientificToolRetriever, configuration
 from gene_annotation_episode.state import Store
 from method_loop.durable import canonical
 
@@ -166,18 +165,6 @@ def test_abrupt_unpublished_response_is_ambiguous_and_never_reretrieved(tmp_path
         assert outcome["feedback"]["code"] == "scientific_tool_retrieval_result_ambiguous"
         assert len(provider.calls) == len(provider.released) == 1
         assert store.db.execute("SELECT result FROM runtime_tool_retrievals").fetchone()[0] is None
-
-
-def test_empty_map_returns_empty_without_provider_or_manufactured_enum(tmp_path):
-    provider = RetrievalProvider([])
-    with Store(tmp_path / "state") as store:
-        value = retriever(tmp_path, store, provider, catalog=[])
-        result = asyncio.run(retrieve(value, available=[]))
-        assert result["result"] == {"investigation": "Inspect and compare", "tools": [], "catalog": []}
-        assert provider.calls == provider.released == []
-        from jsonschema import Draft202012Validator
-        Draft202012Validator.check_schema(output_schema([]))
-        Draft202012Validator(output_schema([])).validate({"tools": []})
 
 
 def test_model_configuration_drift_fails_before_dispatch_and_stays_cached(tmp_path):

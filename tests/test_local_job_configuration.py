@@ -33,6 +33,6 @@ def test_invalid_caller_limits_are_not_silently_replaced(config):
 
 def test_packaged_defaults_match_user_limits_without_a_time_budget():
     policy = LocalJobPolicy.from_config()
-    assert policy.memory_bytes == 20 * 1024**3
+    assert policy.memory_bytes == 5 * 1024**3
     assert policy.scratch_bytes == 4 * 1024**3
     assert not hasattr(policy, 'wall_seconds')

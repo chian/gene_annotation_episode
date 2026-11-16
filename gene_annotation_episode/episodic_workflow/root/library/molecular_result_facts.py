@@ -470,7 +470,7 @@ def validate_frozen_molecular_return(form, schema, frozen, *, fact_source):
 
 def received_molecular_facts(store, run_id, context, *, fact_source):
     """Consume authenticated child forms and original ancestor prefixes."""
-    from gene_annotation_episode.episode_receipts import EpisodeReceipts
+    from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
     from gene_annotation_episode.episodic_workflow.root.episode_return_records import EpisodeReturnRecords
     from gene_annotation_episode.execution_contracts import digest
     from gene_annotation_episode.molecular_reference_privacy import molecular_reference_restriction

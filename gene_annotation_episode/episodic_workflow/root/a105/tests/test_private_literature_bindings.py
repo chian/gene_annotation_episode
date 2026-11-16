@@ -100,8 +100,7 @@ def test_task_records_original_result_before_credit_and_replays(binding, status)
         events.append('credit')
         return {'credit': 0 if status in {'invalid', 'failed', 'unavailable'} else 7}
     workflow = SimpleNamespace(journal=Journal(), run_id='private-boundary',
-        execution_binding=None, wait_inputs_version=None, completed_action_inputs_version=None,
-        specialist=lambda source: binding, binding_context=lambda source: SimpleNamespace(role=binding.roles[0]),
+        execution_binding=None, pending_work=lambda source: {'version': 'pending_work_v1', 'captured_at': '2026-10-27T00:00:00+00:00', 'items': []},         specialist=lambda source: binding, binding_context=lambda source: SimpleNamespace(role=binding.roles[0]),
         receive_native_outcome=lambda *args: None, receive_outcome=lambda *args: events.append('receive'),
         automatic_score_updates=score, source_credit_view=credit,
         controller_value=lambda source, index, value: value)

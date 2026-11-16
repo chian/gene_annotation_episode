@@ -3,7 +3,7 @@
 The episode nominates experimental meanings and exact source selectors. This
 boundary retains that nomination, never a model-authored measured value. The
 original native reader, numerical calculator, publication and return validator
-remain the authorities. Historical retained-dataset operations are unchanged.
+remain the authorities.
 """
 from gene_annotation_episode.episodic_workflow.root.a110.library.reaction_population import populate
 from copy import deepcopy

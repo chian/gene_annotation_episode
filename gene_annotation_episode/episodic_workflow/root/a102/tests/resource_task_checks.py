@@ -148,8 +148,8 @@ def action_trace(v, status='completed', kind='tool'):
     def credit(source):
         projections.append('actual_action_progress')
         return {'credit':2.5}
-    task.workflow=SimpleNamespace(run_id=v.journal.run_id,execution_binding=None,wait_inputs_version=None,
-        completed_action_inputs_version=None,journal=v.journal,execute=execute,perform_selected_wait=wait,
+    task.workflow=SimpleNamespace(run_id=v.journal.run_id,execution_binding=None,pending_work=lambda source:[],
+        journal=v.journal,execute=execute,perform_selected_wait=wait,
         inprocess_replay=None,scientific_process_binding=None,
         permits_common_action=lambda source,kind:kind in v.binding.permitted_common_actions(v.context),
         _closed_child_commission=lambda *args:None,validate_wait_selection=lambda *args:None,

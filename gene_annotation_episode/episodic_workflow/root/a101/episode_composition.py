@@ -55,7 +55,7 @@ def scientific_binding_compatible(actual, recorded):
     except (TypeError, ValueError, OverflowError):
         return False
     fields = {'version', 'binding_id', 'implementation_sha256', 'configuration'}
-    if type(actual) is not dict or type(recorded) is not dict or set(actual) != fields or (set(recorded) != fields) or any((type(value['version']) is not str or value['version'] not in {'scientific_process_episodes_v5', 'scientific_process_episodes_v6', 'scientific_process_episodes_v7', 'scientific_process_episodes_v8', 'scientific_process_episodes_v9', 'scientific_process_episodes_v10', 'scientific_process_episode_v10'} or value['binding_id'] != 'scientific_process' or (type(value['configuration']) is not dict) or (type(value['implementation_sha256']) is not str) or (len(value['implementation_sha256']) != 64) or any((c not in '0123456789abcdef' for c in value['implementation_sha256'])) for value in (actual, recorded))):
+    if type(actual) is not dict or type(recorded) is not dict or set(actual) != fields or (set(recorded) != fields) or any((type(value['version']) is not str or value['version'] != 'scientific_process_episode_v10' or value['binding_id'] != 'scientific_process' or (type(value['configuration']) is not dict) or (type(value['implementation_sha256']) is not str) or (len(value['implementation_sha256']) != 64) or any((c not in '0123456789abcdef' for c in value['implementation_sha256'])) for value in (actual, recorded))):
         return False
     return actual_text == recorded_text
 
@@ -68,15 +68,15 @@ def reopen_scientific_binding(services, *, descriptor, directory):
     if directory is None:
         raise _failure('unavailable_binding', reference)
     try:
-        if descriptor.get('version') not in {'scientific_process_episodes_v5', 'scientific_process_episodes_v6', 'scientific_process_episodes_v7', 'scientific_process_episodes_v8', 'scientific_process_episodes_v9', 'scientific_process_episodes_v10', 'scientific_process_episode_v10'}:
+        if descriptor.get('version') != 'scientific_process_episode_v10':
             raise _failure('unavailable_binding', reference)
         configuration = descriptor['configuration']
         expected = {'library', 'tool_library', 'child_roles'}
-        if descriptor['version'] == 'scientific_process_episodes_v6' or (descriptor['version'] in {'scientific_process_episodes_v7', 'scientific_process_episodes_v8', 'scientific_process_episodes_v9', 'scientific_process_episodes_v10', 'scientific_process_episode_v10'} and 'tool_retrieval' in configuration):
+        if 'tool_retrieval' in configuration:
             expected.add('tool_retrieval')
-        if descriptor['version'] in {'scientific_process_episodes_v8', 'scientific_process_episodes_v9', 'scientific_process_episodes_v10', 'scientific_process_episode_v10'} and 'contract_information_profile' in configuration:
+        if 'contract_information_profile' in configuration:
             expected.add('contract_information_profile')
-        if descriptor['version'] in {'scientific_process_episodes_v10', 'scientific_process_episode_v10'} and 'yield_bindings' in configuration:
+        if 'yield_bindings' in configuration:
             expected.add('yield_bindings')
         if set(configuration) != expected:
             raise _failure('unavailable_binding', reference)

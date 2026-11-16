@@ -70,20 +70,8 @@ def _limits(settings):
     return result
 
 
-def _saved_limits(limits):
-    """Original saved CPU/job counts remain typed metadata, never admission."""
-    if (not isinstance(limits, dict)
-            or set(limits)-{'max_running_jobs', 'cpu_threads', 'memory_bytes', 'scratch_bytes'}):
-        raise ValueError('invalid_local_resource_settings')
-    for key in ('max_running_jobs', 'cpu_threads'):
-        if key in limits and (type(limits[key]) is not int or limits[key] <= 0):
-            raise ValueError('invalid_local_resource_limits')
-    return _limits({key: value for key, value in limits.items()
-                    if key not in {'max_running_jobs', 'cpu_threads'}})
-
-
 class LocalResources:
-    def __init__(self, directory, settings=None, *, workflow_slice=None, _restoring_definition=None):
+    def __init__(self, directory, settings=None, *, workflow_slice=None):
         if settings is not None and not isinstance(settings, dict):
             raise ValueError('invalid_local_resource_settings')
         self.directory = Path(directory).expanduser().resolve()
@@ -102,12 +90,6 @@ class LocalResources:
                     'directory': str(self.directory), 'limits': _limits(settings or {})}
                 if workflow_slice is not None:
                     definition['workflow_slice'] = workflow_slice
-                # Preserve original default initialization on rejected reopen attempts.
-                # Only an exact new default descriptor selects the new byte-only format.
-                historical = {**definition, 'limits': {**definition['limits'],
-                    'max_running_jobs': 1, 'cpu_threads': 1}}
-                if settings is None and _restoring_definition is not None and _restoring_definition != definition:
-                    definition = historical
                 db.execute('INSERT INTO configuration VALUES(1,?)', (json.dumps(definition, sort_keys=True),))
             else:
                 definition = json.loads(saved[0])
@@ -115,22 +97,9 @@ class LocalResources:
                         or definition.get('directory') != str(self.directory)
                         or definition.get('workflow_slice') != workflow_slice):
                     raise ValueError('local_resource_binding_conflict')
-                _saved_limits(definition['limits'])
+                active = _limits(definition['limits'])
                 if settings is not None:
-                    active = _saved_limits(definition['limits'])
-                    supplied = dict(settings)
-                    for key in ('max_running_jobs', 'cpu_threads'):
-                        if key not in supplied:
-                            continue
-                        if key not in definition['limits']:
-                            raise ValueError('invalid_local_resource_settings')
-                        value = supplied.pop(key)
-                        if type(value) is not int or value <= 0:
-                            raise ValueError('invalid_local_resource_limits')
-                        if value != definition['limits'][key]:
-                            raise ValueError('local_resource_limits_conflict')
-                    requested = {**active, **supplied}
-                    if _limits(requested) != active:
+                    if _limits({**active, **settings}) != active:
                         raise ValueError('local_resource_limits_conflict')
             self.definition = definition
 
@@ -147,8 +116,7 @@ class LocalResources:
 
     @classmethod
     def reopen(cls, definition):
-        value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'),
-                    _restoring_definition=definition)
+        value = cls(definition['directory'], workflow_slice=definition.get('workflow_slice'))
         if value.as_record() != definition:
             raise ValueError('local_resource_binding_conflict')
         return value
@@ -205,7 +173,7 @@ class LocalResources:
                 else 'execution_unknown')
             jobs.append({'reservation_ref': row['token'], 'execution_handle': row['unit'], 'state': state,
                 'allocation': {key: row[key] for key in ('cpu_threads', 'memory_bytes', 'scratch_bytes')}})
-        # Older or independently configured registries can already have native
+        # Independently configured registries can already have native
         # services on this host. Unknown allocations conservatively occupy the
         # entire budget rather than advertising those resources as free.
         try:
@@ -216,7 +184,7 @@ class LocalResources:
         if inventory is None or inventory.returncode != 0:
             jobs.append({'reservation_ref': None, 'execution_handle': None,
                 'state': 'capacity_unavailable',
-                'allocation': _saved_limits(self.definition['limits'])})
+                'allocation': _limits(self.definition['limits'])})
         else:
             for line in inventory.stdout.splitlines():
                 fields = line.split()
@@ -227,11 +195,11 @@ class LocalResources:
                             continue
                     jobs.append({'reservation_ref': None, 'execution_handle': fields[0],
                         'state': 'untracked_running',
-                        'allocation': _saved_limits(self.definition['limits'])})
+                        'allocation': _limits(self.definition['limits'])})
         return jobs
 
     def _view(self, jobs):
-        limits = _saved_limits(self.definition['limits'])
+        limits = _limits(self.definition['limits'])
         used = {key: sum(job['allocation'][key] for job in jobs)
             for key in ('memory_bytes', 'scratch_bytes')}
         remaining = {key: max(0, limits[key]-used[key]) for key in used}

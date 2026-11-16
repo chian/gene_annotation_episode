@@ -26,8 +26,8 @@ class AppServiceRecordAccess:
     def bind_inputs(self, context, name, arguments, *, operation_key):
         return self.inputs.bind_inputs(context, name, arguments, operation_key=operation_key)
 
-    def read_handoff(self, reference, scope=None, *, require_completed=True, _completed_download=False):
-        record = self.records.read(reference, require_completed=require_completed, **{'_completed_download': True} if _completed_download else {})
+    def read_handoff(self, reference, scope=None, *, require_completed=True):
+        record = self.records.read(reference, require_completed=require_completed)
         if record['contract'] != 'TaskHandoff':
             raise ValueError('appservice_original_task_handoff_required')
         value, common = (record['value'], record['value']['receipt'])
@@ -38,8 +38,7 @@ class AppServiceRecordAccess:
         task = value['original_task']
         if context.role != 'launch_api' or canonical(original_context) != canonical(value['original_job_owner']) or common['origin']['name'] != 'api.bvbrc_appservice.submit' or (common['status'] != 'ok') or (common['purpose'] != 'handoff') or (task['submission_receipt_ref'] != reference) or (task['submission_operation_key'] != common['origin']['operation_key']) or (task['resource_id'] != context.assignment['resource_id']):
             raise ValueError('appservice_original_handoff_conflict')
-        effect_reader = self.api.selected_effects.read_completed if _completed_download else self.api.selected_effects.read
-        effect = effect_reader(value['effect_receipt_ref'], original_job_context=original_context)
+        effect = self.api.selected_effects.read(value['effect_receipt_ref'], original_job_context=original_context)
         if effect['state'] != 'confirmed' or effect['descriptor']['kind'] != 'appservice_submit' or effect['operation_key'] != common['origin']['operation_key'] or (effect['confirmation_source_ref'] != task['submission_source_ref']) or (effect['native_effect_identifiers'].get('task_id') != task['task_id']):
             raise ValueError('appservice_original_submission_unconfirmed')
         directory = self.api._manifest(context, create=False) / 'actions' / digest(common['origin']['operation_key'])
@@ -53,8 +52,8 @@ class AppServiceRecordAccess:
         body = self.read_handoff(reference)
         return {'reference': reference, 'origin_context': body['origin_context'], 'original_job_owner': body['task_handoff']['original_job_owner']}
 
-    def read_target(self, reference, scope, *, _completed_download=False):
-        body = self.read_handoff(reference, scope, **{'_completed_download': True} if _completed_download else {})
+    def read_target(self, reference, scope):
+        body = self.read_handoff(reference, scope)
         return validate_target({'version': 'execution_target_v1', 'handle': reference, 'run_id': self.run_id, 'resource_id': body['assignment']['resource_id'], 'resource_kind': 'api', 'execution_id': body['task_handoff']['original_task']['task_id'], 'request_sha256': digest(body['assignment']), 'origin_episode_id': body['episode_id'], 'assignment': body['assignment'], 'scope': body['scope']})
 
     def _native_refs(self, directory, binding):

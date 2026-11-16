@@ -159,7 +159,7 @@ def test_locate_preserves_partial_scan_without_a_new_whole_file_rehash(case, mon
     assert result["status"] == "completed", result
     assert result["result"]["matches"][0]["witness"] == {
         "source_ref": source["id"], "representation": "original",
-        "start": len(b"ignored-prefix "), "end": len(b"ignored-prefix target"), "quote": "target"}
+        "start": len(b"ignored-prefix "), "end": len(b"ignored-prefix target")}
 
 
 def test_locate_still_requires_the_original_explicitly_received_source(case, monkeypatch):

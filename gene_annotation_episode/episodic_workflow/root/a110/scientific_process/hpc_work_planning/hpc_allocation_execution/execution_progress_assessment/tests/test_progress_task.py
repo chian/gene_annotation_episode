@@ -112,7 +112,7 @@ def test_private_task_preserves_invalid_action_and_replays_without_observing_aga
     task.episode_id, task.path, task.scope = 'monitor', context.path, {}
     task.checkpoint = lambda: None
     task.workflow = SimpleNamespace(journal=journal, run_id='run', execution_binding=None,
-        wait_inputs_version=None, completed_action_inputs_version=None, execute=execute,
+        pending_work=lambda source: [], execute=execute,
         receive_native_outcome=lambda *args: None,
         receive_outcome=lambda source, selection, result, index: outcomes.append((index, result['status'])),
         automatic_score_updates=score, source_credit_view=lambda source: {'credit': 0},

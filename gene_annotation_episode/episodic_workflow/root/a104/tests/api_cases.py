@@ -269,8 +269,8 @@ def task_case(case):
     task.checkpoint = lambda: None  # Source checkpoint is outside this iterator-only fixture.
     observations, projections, executions = [], [], []
     workflow = SimpleNamespace(store=case.store, run_id=case.run_id, journal=case.journal,
-        execution_binding=None, inprocess_replay=None, wait_inputs_version=None,
-        completed_action_inputs_version=None, receipts=case.receipts, progress_provider=None,
+        execution_binding=None, inprocess_replay=None, pending_work=lambda source: {'items': []},
+        receipts=case.receipts, progress_provider=None,
         progress_receipt_order='received_progress_order_v1',
         specialist=lambda source: case.binding, binding_context=lambda source: case.context,
         is_job_source=lambda source: False, receive_tool_attributions=lambda *a, **k: [],

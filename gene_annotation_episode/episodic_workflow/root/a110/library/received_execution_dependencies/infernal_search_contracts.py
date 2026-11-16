@@ -92,9 +92,9 @@ def _identity(identity, metadata):
         _closed(identity, ('kind', 'artifact_index', 'list_index'))
         _require(identity['kind'] == 'native_query_list' and _int(identity['artifact_index']) and _int(identity['list_index']))
 
-def _locator(locator, artifacts, *, legacy=False):
+def _locator(locator, artifacts):
     _require(isinstance(locator, dict))
-    kind = locator.get('kind', 'tblout' if legacy else None)
+    kind = locator.get('kind', 'tblout')
     _require(kind in ('tblout', 'json', 'report'))
     field = 'json_pointer' if kind == 'json' else 'line'
     _closed(locator, ('artifact_id', 'artifact_index', field), ('kind',))
@@ -249,7 +249,7 @@ def validate_infernal_search_sheet(sheet: dict) -> dict:
     ids = [hit.get('hit_id') for hit in sheet['hits'] if isinstance(hit, dict)]
     _require(len(ids) == len(sheet['hits']) and all((_text(i) for i in ids)) and (len(set(ids)) == len(ids)))
     for hit in sheet['hits']:
-        _locator(hit['locator'], artifacts, legacy=True)
+        _locator(hit['locator'], artifacts)
         details = hit['source_details']
         _require(isinstance(details, dict) and details.get('profile') in SOURCE_DETAILS_FIELDS)
         _closed(details, ('profile',), SOURCE_DETAILS_FIELDS[details['profile']] - {'profile'})
@@ -263,7 +263,7 @@ def validate_infernal_search_sheet(sheet: dict) -> dict:
         _closed(attribution, ('sequence', 'model', 'source_locators'))
         _require(all((attribution[k] in ('valid', 'unresolved', 'conflict') for k in ('sequence', 'model'))))
         for locator in attribution['source_locators']:
-            _locator(locator, artifacts, legacy=True)
+            _locator(locator, artifacts)
         for kind in ('sequence', 'model'):
             _require(isinstance(hit[kind], dict) and (hit[kind].get('name') is None or _text(hit[kind]['name'])))
             _length_cell(hit['lengths'][kind])
@@ -305,7 +305,7 @@ def validate_infernal_search_sheet(sheet: dict) -> dict:
         _require(type(population['reported_set_complete']) is bool and (population['reported_row_count'] is None or _int(population['reported_row_count'])))
         _require(population['membership_basis'] in ('frozen_complete_input', 'native_report', 'both', 'native_query_list'))
         for locator in population['source_locators']:
-            _locator(locator, artifacts, legacy=True)
+            _locator(locator, artifacts)
     _saved_input_links(sheet)
     return sheet
 

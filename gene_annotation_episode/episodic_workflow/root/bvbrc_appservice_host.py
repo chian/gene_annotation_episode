@@ -122,6 +122,90 @@ class BVBRCAppServiceHost:
             refs.extend(_read(definition)['source_refs'])
         return list(dict.fromkeys(refs))
 
+    async def execute_locked(self, context, assignment, service, target, name, arguments, key, directory):
+        from .api_service_operations import _now, _outcome
+        intent_path, outcome_path = directory / 'intent.json', directory / 'outcome.json'
+        original = {'run_id': self.run_id, 'episode_id': context.episode_id, 'name': name,
+            'arguments': arguments, 'assignment_sha256': digest(context.assignment), 'operation_key': key}
+        if intent_path.exists():
+            intent = _read(intent_path)
+            if any(canonical(intent.get(field)) != canonical(value) for field, value in original.items()):
+                return _outcome(key, status='invalid', code='api_operation_key_reused_for_different_work')
+            if outcome_path.exists():
+                outcome = _read(outcome_path)
+                if (outcome.get('result') or {}).get('publication_ref') is not None:
+                    self.api._index_result(context, directory, outcome)
+                return outcome
+            fresh = False
+        else:
+            try:
+                if name == 'api.bvbrc_appservice.download':
+                    if type(arguments.get('max_bytes')) is not int or arguments['max_bytes'] <= 0:
+                        raise ValueError('bvbrc_download_byte_limit_required')
+                if self.completion(context) is not None:
+                    raise ValueError('api_assignment_already_completed')
+                bound = self.bind_inputs(context, name, arguments, operation_key=key)
+                prepared = service.prepare(name, assignment['request'], arguments,
+                    scope=plain(context.scope), previous_events=self.api._events(context.episode_id),
+                    handle=None if target is None else {'task_id': target['execution_id']},
+                    selector=None if target is None else plain(context.assignment)['selector'],
+                    bound_inputs=bound)
+                if prepared['purpose'] == 'acquisition' and prepared['native_kind'] == 'download':
+                    self.publications.validate_selected_inputs(context, prepared, key)
+                intent = {**original, 'prepared': prepared, 'started_at': _now()}
+                _immutable(intent_path, intent)
+                fresh = True
+            except (ValueError, ContractError, KeyError, TypeError) as error:
+                return _outcome(key, status='invalid', code=getattr(error, 'code', str(error)))
+        prepared = validate_contract('PreparedOperation', intent['prepared'])
+        try:
+            call = await perform_selected_call(self.api, context, service, prepared,
+                operation_key=key, directory=directory, fresh=fresh)
+        except EffectConflict as error:
+            return _outcome(key, status='invalid', code=error.code,
+                affected_effect_refs=list(error.effect_refs))
+        snapshot, failure = call['snapshot'], call['failure']
+        binding = (None if snapshot is None else self.records.retain_snapshot(
+            context, prepared, snapshot, operation_key=key))
+        if snapshot is None and failure is not None:
+            event = native_event('metadata', 'unknown', failure_code=failure['code'],
+                facts={'operation': name, 'failure': failure, 'diagnostics': []})
+        else:
+            event = service.decode(prepared, snapshot)
+        event = self.api._event(event)
+        _immutable(directory / 'event.json', event)
+        effects = call['effect_receipts']
+        if effects:
+            effects = self.api.selected_effects.record_outcome(
+                _read(directory / 'effect_reservation.json'), confirm_appservice_effects(
+                    prepared, event, snapshot, snapshot_binding=binding, effect_receipts=effects))
+        origin = self.records._origin(context, prepared, key)
+        diagnostics = [] if failure is None else [_diagnostic(failure['code'],
+            phase=failure['phase'], refs=failure['valid_record_refs'])]
+        common = validate_contract('CommonReceipt', {
+            'version': 'bvbrc_appservice_support_receipt_v1', 'receipt_ref': provisional_receipt_ref(origin),
+            'purpose': prepared['purpose'], 'origin': origin, 'snapshot': binding,
+            'effect_receipt_refs': [row['effect_ref'] for row in effects],
+            'status': 'ok' if failure is None else 'partial', 'diagnostics': diagnostics})
+        if prepared['purpose'] == 'acquisition':
+            return self.publish_acquisition(context, prepared, event, snapshot,
+                common_receipt=common, operation_key=key)
+        value = build_appservice_receipt(prepared, event, snapshot,
+            common_receipt=common, effect_receipts=effects)
+        published = self.records.publish(context, value['contract'], value['value'], operation_key=key)
+        refs = [published['source_ref'], *self._native_refs(directory, binding)]
+        receipt = _common(published)
+        result = {'service': SERVICE, 'event': event, 'support_receipt_ref': published['source_ref'],
+            'receipt_contract': published['contract']}
+        if published['contract'] == 'TaskHandoff':
+            result.pop('support_receipt_ref')
+            result.update(handoff_ref=published['source_ref'], receipt=receipt)
+        outcome = _outcome(key, result, refs=refs,
+            status='completed' if receipt['status'] == 'ok' else 'partial',
+            code=None if receipt['status'] == 'ok' else event['failure_code'] or 'appservice_operation_qualified')
+        _immutable(outcome_path, outcome)
+        return outcome
+
     def _own_receipts(self, context):
         if not self.owns_context(context):
             return []

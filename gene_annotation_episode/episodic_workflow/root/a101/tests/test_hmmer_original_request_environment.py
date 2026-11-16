@@ -16,7 +16,7 @@ from ..local_jobs import LocalJobPolicy
 
 @pytest.fixture
 def sealed_request(tmp_path, monkeypatch):
-    def create(form, mutation=None):
+    def create(mutation=None):
         directory = tmp_path / 'grading' / 'native-hmmer-preparation-grading'
         directory.mkdir(parents=True)
         policy = LocalJobPolicy(memory_bytes=1024, scratch_bytes=1024 * 1024)
@@ -50,13 +50,10 @@ def sealed_request(tmp_path, monkeypatch):
         paths = {name: str(directory / ('control.' + name)) for name in ('request', 'ready', 'release', 'result')}
         original_workflow = {'run_directory': str(tmp_path / 'original-workflow'),
             'window_id': '11111111-1111-1111-1111-111111111111'}
-        metadata = {'policy': policy.to_dict()}
-        if form != 'legacy_without_metadata':
-            metadata['whole_workflow_budget'] = deepcopy(original_workflow)
+        metadata = {'policy': policy.to_dict(), 'whole_workflow_budget': deepcopy(original_workflow)}
         request_environment = dict(environment)
-        if form == 'propagated':
-            request_environment.update(GENE_EPISODE_WORKFLOW_BUDGET_FILE=str(Path(original_workflow['run_directory']) / 'workflow-budget.json'),
-                GENE_EPISODE_WORKFLOW_SLOT=original_workflow['window_id'])
+        request_environment.update(GENE_EPISODE_WORKFLOW_BUDGET_FILE=str(Path(original_workflow['run_directory']) / 'workflow-budget.json'),
+            GENE_EPISODE_WORKFLOW_SLOT=original_workflow['window_id'])
         request = {'command': selected['command'], 'cwd': str(directory),
             'file_bytes': policy.scratch_bytes, 'ready_path': paths['ready'],
             'release_path': paths['release'], 'result_path': paths['result'],
@@ -79,9 +76,8 @@ def sealed_request(tmp_path, monkeypatch):
     return create
 
 
-@pytest.mark.parametrize('form', ['legacy_without_metadata', 'legacy_with_metadata', 'propagated'])
-def test_original_request_forms_do_not_use_current_workflow(sealed_request, monkeypatch, form):
-    directory, policy, plan, selected, body = sealed_request(form)
+def test_original_request_does_not_use_current_workflow(sealed_request, monkeypatch):
+    directory, policy, plan, selected, body = sealed_request()
     monkeypatch.setenv('GENE_EPISODE_WORKFLOW_BUDGET_FILE', '/unrelated/current/workflow-budget.json')
     monkeypatch.setenv('GENE_EPISODE_WORKFLOW_SLOT', '22222222-2222-2222-2222-222222222222')
     restored, handle = publication._worker_selection(directory, task='grade', policy=policy, plan=plan)
@@ -119,13 +115,13 @@ def test_pinned_request_still_requires_every_original_operand(sealed_request, ch
             request['file_bytes'] += 1
         else:
             request[change] = '/unselected/' + change
-    directory, policy, plan, _, _ = sealed_request('propagated', mutate)
+    directory, policy, plan, _, _ = sealed_request(mutate)
     with pytest.raises(publication.ContractError, match='result_worker_original_request_conflict'):
         publication._worker_selection(directory, task='grade', policy=policy, plan=plan)
 
 
 def test_original_request_hash_remains_mandatory(sealed_request):
-    directory, policy, plan, _, body = sealed_request('propagated')
+    directory, policy, plan, _, body = sealed_request()
     request_path = Path(body['paths']['request'])
     request_path.write_bytes(request_path.read_bytes() + b'\n')
     with pytest.raises(publication.ContractError, match='result_worker_original_request_conflict'):

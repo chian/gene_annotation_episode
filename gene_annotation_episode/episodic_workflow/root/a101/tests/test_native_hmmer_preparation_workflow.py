@@ -206,7 +206,7 @@ def run_case(tmp_path, program='hmmemit', mode='consensus_simple', *, selectors=
         def estimate(raw, parameters, contexts):
             return YieldEstimate(len(raw), NumericBand.exact(0 if len(raw) >= 1 + len(selectors) else 1),
                 parameters, {'fixture': 'selected_engineering_cases'})
-        return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+        return YieldController(str(path), initial, 0, YieldParameters(),
             estimate_with_context=estimate if path[-1][0] == 'annotation' else None)
 
     class Choices:

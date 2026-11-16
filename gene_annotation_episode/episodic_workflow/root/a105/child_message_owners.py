@@ -29,10 +29,10 @@ def exchange_for_parent(workflow, source, role):
             return None
         if annotation:
             from .to_child_scientific_process import prepare_request
-            from .from_child_scientific_process import admit_return, admit_unowned_return
+            from .from_child_scientific_process import admit_return
         else:
             prepare_request = None
-            from .scientific_process.from_child_scientific_process import admit_return, admit_unowned_return
+            from .scientific_process.from_child_scientific_process import admit_return
     else:
         from .published_evidence_assessment.episode import LiteratureEpisode as EntryLiterature
         from .scientific_process.published_evidence_assessment.episode import LiteratureEpisode as NestedLiterature
@@ -43,11 +43,11 @@ def exchange_for_parent(workflow, source, role):
             return None
         if annotation:
             from .to_child_published_evidence_assessment import prepare_request
-            from .from_child_published_evidence_assessment import admit_return, admit_unowned_return
+            from .from_child_published_evidence_assessment import admit_return
         else:
             prepare_request = None
-            from .scientific_process.from_child_published_evidence_assessment import admit_return, admit_unowned_return
-    return prepare_request, admit_return, admit_unowned_return
+            from .scientific_process.from_child_published_evidence_assessment import admit_return
+    return prepare_request, admit_return
 
 
 def exchange_for_improvement(workflow, source, selection, role):
@@ -64,10 +64,10 @@ def exchange_for_improvement(workflow, source, selection, role):
         return None
     if is_annotation_parent(workflow, source):
         from .to_child_annotation_improvement import prepare_request
-        from .from_child_annotation_improvement import admit_return, admit_unowned_return
+        from .from_child_annotation_improvement import admit_return
     elif is_improvement_parent(workflow, source):
         from .annotation_improvement.to_child_annotation_improvement import prepare_request
-        from .annotation_improvement.from_child_annotation_improvement import admit_return, admit_unowned_return
+        from .annotation_improvement.from_child_annotation_improvement import admit_return
     else:
         return None
-    return prepare_request, admit_return, admit_unowned_return
+    return prepare_request, admit_return

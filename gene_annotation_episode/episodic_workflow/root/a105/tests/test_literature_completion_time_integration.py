@@ -24,6 +24,16 @@ from gene_annotation_episode.episodic_workflow.root.a105.tests.runtime_fixtures 
 COMPONENTS = ['completion_time_ratio', 'inverse_completion_time_ratio']
 FORM = obj({'requested_times': completion_time_cells_schema()})
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def binding_for(store, context, *, enabled=True):
     host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
     binding = LiteratureEpisode(WorkflowServices(host), rate_population=True, completion_time_population=enabled)
@@ -36,7 +46,7 @@ def test_c7_selected_operation_returns_only_explicit_requested_cells_and_preserv
         binding = binding_for(store, context)
         assert 'literature.completion_time.populate' not in {entry['name'] for entry in binding_for(store, context, enabled=False).catalog(context)}
         context = replace(context, assignment={**plain(context.assignment), 'requested_completion_time_components': COMPONENTS})
-        result = asyncio.run(binding.execute(context, 'literature.completion_time.populate', args, 'selected'))
+        result = asyncio.run(binding.execute(context, 'literature.completion_time.populate', location_only(args), 'selected'))
         assert result['status'] == 'completed', result
         current = replace(context, received_record_refs=(*context.received_record_refs, *result['record_refs']))
         facts = binding.facts(current, {'committed_record_refs': result['record_refs']})

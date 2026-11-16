@@ -17,7 +17,7 @@ def _matched_report_member(query, membership, row_identities):
     return members[0]
 
 def select_rfam_common_sheet(value, *, representation):
-    """Select a newly populated common sheet; legacy conversion is never implicit."""
+    """Select a populated common sheet."""
     if type(value) is dict and value.get('version') == PARSE_VERSION:
         closed_object(value, ('version', 'representation', 'status', 'format', 'sheet', 'issues'), code='rfam_sheet_invalid')
         if value['representation'] != representation or value['status'] not in {'complete', 'partial'}:

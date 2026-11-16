@@ -216,8 +216,8 @@ def test_native_omissions_and_all_scope_are_not_replaced_by_inferences():
     ("A?", "dna", ("A?", None)), ("M*AA", "protein", ("M*AA", 4)),
 ])
 def test_one_public_normalization_calculation_preserves_original_semantics(original, molecule, expected):
-    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_extraction import normalize_blast_utility_sequence_symbols, _sequence_symbols
-    assert normalize_blast_utility_sequence_symbols(original, molecule) == _sequence_symbols(original, molecule) == expected
+    from gene_annotation_episode.episodic_workflow.root.a101.library.blast_database_extraction import normalize_blast_utility_sequence_symbols
+    assert normalize_blast_utility_sequence_symbols(original, molecule) == expected
 
 
 def test_classic_parser_and_vdb_validation_use_the_public_symbol_authority(monkeypatch):

@@ -84,7 +84,7 @@ def actual(home,directory):
     specialist=lambda s:binding,binding_context=lambda s:replace(context,request=plain(s.request.as_record())),journal=journal,run_id=run_id,store=store,
     source_credit_view=credit,expose_assigned_job=lambda s:None,receive_tool_attributions=lambda *a,**kw:None,
     archive=SimpleNamespace(store=lambda value:value),launch_instructions=SimpleNamespace(materialize=lambda value:None),
-    execution_binding=None,inprocess_replay=None,wait_inputs_version=None,completed_action_inputs_version=None,
+    execution_binding=None,inprocess_replay=None,pending_work=lambda source:[],
     execute=execute,receive_native_outcome=lambda *a:None,
     receive_outcome=lambda source,selection,result,index:received.append((index,result['status'])),
     automatic_score_updates=unchanged_score,controller_value=lambda source,index,credit:{'index':index,'credit':credit})
@@ -137,7 +137,6 @@ class NativeTaskBehavior:
         f=actual_task
         assert type(f.task) is getattr(f.binding,'decision_source_type',f.runtime.DecisionSource)
         if hasattr(f.binding,'decision_source_type'):
-            assert type(f.task).__module__==f.binding.__module__.removesuffix('.episode')+'.task'
             assert not isinstance(f.task,f.runtime.DecisionSource)
 
     @pytest.mark.parametrize('status',['failed','unavailable'])
@@ -240,8 +239,6 @@ class NativeTaskBehavior:
         assert b.scientific_prompt_states==a.scientific_prompt_states
         selected_private=scenario=='selected-full' and hasattr(f.binding,'decision_source_type')
         assert calls==([{'prompt_renderer':f.binding.decision_prompt_renderer}] if selected_private else [{}])
-        if selected_private:
-            assert f.binding.decision_prompt_renderer.__module__==f.binding.__module__.removesuffix('.episode')+'.decision_presentation'
 
     @pytest.mark.parametrize('declared',[False,True],ids=['legacy','declared'])
     def test_original_pending_decision_and_completed_replay(self,actual_task,declared):
@@ -254,7 +251,8 @@ class NativeTaskBehavior:
             'report_update':f.runtime._object({})})
         response={'selection':{'kind':'tool','tool':'exec_command','arguments':{}},'report_update':{}}
         f.journal.save('runtime_model_calls',{'episode_id':f.context.episode_id,'call_index':0,'purpose':'decision',
-            'request':json.dumps({'context':state,'schema':schema}),'response':None})
+            'request':json.dumps({'context':state,'schema':schema,'assignment_transport':{'version':f.runtime._ASSIGNMENT_TRANSPORT,
+                'action_schema_sha256':f.runtime._digest(schema)}}),'response':None})
         session=object.__new__(providers._SessionConnection); session.scientific_prompt_states={}; calls=[]
         async def complete(episode,role,instructions,context,output_schema,**kw):
             calls.append((session._presentation(episode,role,instructions,context,**kw),kw,(episode,role,instructions,deepcopy(context))))
@@ -328,7 +326,6 @@ class NativeTaskBehavior:
         f.binding._delegate(f.context)._states.clear()
         restored=f.binding.state(f.context)
         assert restored is not state and (restored.receipts(),restored.context(),restored.credit_view())==snapshot
-        assert type(f.binding._delegate(f.context)).__module__==f.binding.__module__.removesuffix('.episode')+'.terminal_execution'
 
     def test_actual_parent_admission_and_registered_identity(self,actual_task):
         f=actual_task;result=parent_admission(f)
@@ -363,7 +360,6 @@ class NativeTaskBehavior:
         f=actual_task;delegate=f.binding._delegate(f.context);estimator=delegate.practical_estimator(f.context)
         assert type(estimator) is module('practical_yield').PracticalYieldEstimator
         assert type(delegate.state(f.context)) is module('practical_execution_state').PracticalState
-        assert delegate.practical_estimator.__func__.__module__==f.binding.__module__.removesuffix('.episode')+'.terminal_execution'
 
     def test_original_private_yield_profile_is_required(self,actual_task):
         f=actual_task;f.binding.private_yield_binding=True

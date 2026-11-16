@@ -138,25 +138,14 @@ def _original_hsp(store, observation_ref, permitted_inputs, scope):
             hit_ordinal=native_locator["hit_ordinal"], hsp_ordinal=native_locator["hsp_ordinal"])
         if original_marker != {key: value for key, value in native_locator.items() if key != "shared_projection"}:
             raise ValueError("blast_hsp_native_geometry_conflict")
-        binding = native_locator.get("shared_projection")
-        source_projection = metadata.get("transport", {}).get("hsp_projection_version")
-        if binding is not None:
-            if source_projection != blast.HSP_PROJECTION_VERSION:
-                raise ValueError("blast_shared_hsp_source_projection_conflict")
-            component = retained_hsp_component(store, observation, source)
-            row = blast.hsp_row(native, component=component, program=request["algorithm"],
-                query_length=request["query_length"], reference_length=reference["length"],
-                hit_ordinal=native_locator["hit_ordinal"], hsp_ordinal=native_locator["hsp_ordinal"])
-        else:
-            if source_projection is not None:
-                raise ValueError("blast_shared_hsp_binding_missing")
-            # Immutable historical measurements retain their original meaning.
-            # Only native endpoint custody is normalized here; no legacy scorer
-            # or division is retained, and no saved number is rewritten.
-            row = {"query_interval": [min(native["query_from"], native["query_to"]) - 1,
-                                      max(native["query_from"], native["query_to"])],
-                   "reference_interval": [min(native["hit_from"], native["hit_to"]) - 1,
-                                          max(native["hit_from"], native["hit_to"])]}
+        if native_locator.get("shared_projection") is None:
+            raise ValueError("blast_shared_hsp_binding_missing")
+        if metadata.get("transport", {}).get("hsp_projection_version") != blast.HSP_PROJECTION_VERSION:
+            raise ValueError("blast_shared_hsp_source_projection_conflict")
+        component = retained_hsp_component(store, observation, source)
+        row = blast.hsp_row(native, component=component, program=request["algorithm"],
+            query_length=request["query_length"], reference_length=reference["length"],
+            hit_ordinal=native_locator["hit_ordinal"], hsp_ordinal=native_locator["hsp_ordinal"])
         expected_intervals = [
             {"role": role, "subject_ref": ref, "start": interval[0], "end": interval[1],
              "unit": store.subject_unit(ref), "model_unit": blast.PROGRAM_UNITS[request["algorithm"]][2]}
@@ -167,12 +156,11 @@ def _original_hsp(store, observation_ref, permitted_inputs, scope):
         measured = {item["name"]: item["value"] for item in observation["measurements"]}
         if measured.get("reference_ref") != {"type": "reference", "ref": reference_ref}:
             raise ValueError("blast_hsp_reference_identity_conflict")
-        if binding is not None:
-            expected = {"reference_ref": {"type": "reference", "ref": reference_ref},
-                **{name: {"type": "number", "value": value, "unit_ref": None}
-                   for name, value in row["measurements"].items()}}
-            if measured != expected:
-                raise ValueError("blast_hsp_native_measurement_conflict")
+        expected = {"reference_ref": {"type": "reference", "ref": reference_ref},
+            **{name: {"type": "number", "value": value, "unit_ref": None}
+               for name, value in row["measurements"].items()}}
+        if measured != expected:
+            raise ValueError("blast_hsp_native_measurement_conflict")
         original_rids = []
         for ref in source.get("parent_source_refs", []):
             parent = store.get(ref)
@@ -239,13 +227,12 @@ def read_blast_hsp(store, observation_ref, column_offset, column_limit, *, permi
     preview = ([{key: row[key] for key in preview_fields} for row in columns[:12]]
                if columns is not None else None)
     marker = "native_blast_pairwise" if "native_blast_pairwise" in observation else "native_blast"
-    whole = (retained_hsp_component(store, observation, source)
-             if observation.get("native_blast", {}).get("shared_projection") else None)
+    whole = retained_hsp_component(store, observation, source) if marker == "native_blast" else None
     return {"observation_ref": observation_ref, "source_ref": source["id"], "reference_ref": reference["id"],
             marker: deepcopy(observation[marker]),
             "measurements": deepcopy(observation["measurements"]),
             "measurement_semantics": (blast.HSP_PROJECTION_VERSION if whole is not None else
-                "native_pairwise_retained" if marker == "native_blast_pairwise" else "legacy_saved_native_reported"),
+                "native_pairwise_retained"),
             "reported_counts": deepcopy(whole["reported_counts"]) if whole is not None else None,
             "reported_percentages": deepcopy(whole["reported_percentages"]) if whole is not None else None,
             "hsp_component_issues": deepcopy(whole["issues"]) if whole is not None else None,

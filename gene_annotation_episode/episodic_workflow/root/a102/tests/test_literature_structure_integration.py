@@ -42,6 +42,17 @@ COMPONENTS = ['local_fit_index', 'geometry_support_fraction', 'source_geometry_p
 FORM = obj({'measurements': structure_cells_schema()})
 
 
+def tool_arguments(value):
+    """Model-supplied form of the arguments: source locations only; the host reads each quote."""
+    if isinstance(value, dict):
+        if set(value) == {'source_ref', 'representation', 'start', 'end', 'quote'}:
+            return {key: child for key, child in value.items() if key != 'quote'}
+        return {key: tool_arguments(child) for key, child in value.items()}
+    if isinstance(value, list):
+        return [tool_arguments(child) for child in value]
+    return value
+
+
 def setup_case(path, *, validation=True):
     store = Store(path)
     store.create_problem(raw_sequence='ATGGCT', molecule='dna')
@@ -92,7 +103,7 @@ def test_original_source_selected_cells_and_saved_only_binding_reconstruction(tm
         host = SimpleNamespace(store=store, run_id=context.run_id, tools=ToolRegistry(store))
         binding = LiteratureEpisode(WorkflowServices(host), structure_population=True)
         host.episode_bindings = EpisodeBindingRegistry((binding,))
-        outcome = asyncio.run(binding.execute(context, 'literature.structure.populate', args, 'selected'))
+        outcome = asyncio.run(binding.execute(context, 'literature.structure.populate', tool_arguments(args), 'selected'))
         assert outcome['status'] == 'completed', outcome.get('feedback')
         current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
         selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
@@ -140,7 +151,7 @@ def test_original_source_selected_cells_and_saved_only_binding_reconstruction(tm
         monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.literature_structure_storage.read_structure_inputs', forbidden)
         monkeypatch.setattr('gene_annotation_episode.episodic_workflow.root.a102.literature_structure_storage.populate_source_geometry', forbidden)
         store.db.execute('pragma query_only=ON')
-        assert asyncio.run(reconstructed.execute(context, 'literature.structure.populate', args, 'selected')) == outcome
+        assert asyncio.run(reconstructed.execute(context, 'literature.structure.populate', tool_arguments(args), 'selected')) == outcome
         assert form_with_facts({}, FORM, reconstructed.facts(current, selected)) == form
 
 
@@ -153,7 +164,7 @@ def test_structure_selected_in_ordinary_child_and_received_once(tmp_path, valida
             'assignment': plain(context.assignment), 'goal': 'Evaluate the four stated contacts in the selected apo-IscR model',
             'scope': plain(context.scope), 'purpose': 'Return only requested source geometry and fit components',
             'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
-        action = {'selection': {'kind': 'tool', 'tool': 'literature.structure.populate', 'arguments': args}, 'report_update': {}}
+        action = {'selection': {'kind': 'tool', 'tool': 'literature.structure.populate', 'arguments': tool_arguments(args)}, 'report_update': {}}
         def receive(inputs):
             form, = inputs['child_reports']
             received.append(form)
@@ -169,7 +180,7 @@ def test_structure_selected_in_ordinary_child_and_received_once(tmp_path, valida
             start = raw.index(b'IscR')
             commit['source_subjects'] = [{'alias': 'studied_molecule', 'reference_type': 'assay',
                 'source_ref': paper['id'], 'label': 'IscR', 'anchor': {'source_ref': paper['id'],
-                    'artifact_ref': paper['artifact_ref'], 'start': start, 'end': start+4, 'quote': 'IscR'}}]
+                    'artifact_ref': paper['artifact_ref'], 'start': start, 'end': start+4}}]
             return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
         scorer = ScientificFindingProgress(FindingProgressPolicy(1))
         summary = asyncio.run(run_workflow(store, ToolRegistry(store), provider=ScriptedProvider([

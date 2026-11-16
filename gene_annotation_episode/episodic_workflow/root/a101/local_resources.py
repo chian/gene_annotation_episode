@@ -69,16 +69,6 @@ def _limits(settings):
     return result
 
 
-def _saved_limits(limits):
-    """Validate saved byte quantities; retired counts remain identity metadata."""
-    counts = {'max_running_jobs', 'cpu_threads'}
-    if not isinstance(limits, dict) or set(limits)-counts-{'memory_bytes', 'scratch_bytes'}:
-        raise ValueError('invalid_local_resource_settings')
-    if any(type(limits[key]) is not int or limits[key] <= 0 for key in counts & set(limits)):
-        raise ValueError('invalid_local_resource_limits')
-    return _limits({key: value for key, value in limits.items() if key not in counts})
-
-
 class LocalResources:
     def __init__(self, directory, settings=None, *, workflow_slice=None):
         if settings is not None and not isinstance(settings, dict):
@@ -106,21 +96,9 @@ class LocalResources:
                         or definition.get('directory') != str(self.directory)
                         or definition.get('workflow_slice') != workflow_slice):
                     raise ValueError('local_resource_binding_conflict')
-                _saved_limits(definition['limits'])
+                active = _limits(definition['limits'])
                 if settings is not None:
-                    active = _saved_limits(definition['limits'])
-                    supplied = dict(settings)
-                    for field in ('max_running_jobs', 'cpu_threads'):
-                        if field in supplied:
-                            if field not in definition['limits']:
-                                raise ValueError('invalid_local_resource_settings')
-                            count = supplied.pop(field)
-                            if type(count) is not int or count <= 0:
-                                raise ValueError('invalid_local_resource_limits')
-                            if count != definition['limits'][field]:
-                                raise ValueError('local_resource_limits_conflict')
-                    requested = {**active, **supplied}
-                    if _limits(requested) != active:
+                    if _limits({**active, **settings}) != active:
                         raise ValueError('local_resource_limits_conflict')
             self.definition = definition
 
@@ -194,7 +172,7 @@ class LocalResources:
                 else 'execution_unknown')
             jobs.append({'reservation_ref': row['token'], 'execution_handle': row['unit'], 'state': state,
                 'allocation': {key: row[key] for key in ('memory_bytes', 'scratch_bytes')}})
-        # Older or independently configured registries can already have native
+        # Independently configured registries can already have native
         # services on this host. Unknown allocations conservatively occupy the
         # entire budget rather than advertising those resources as free.
         try:
@@ -222,7 +200,7 @@ class LocalResources:
         return jobs
 
     def _view(self, jobs):
-        limits = _saved_limits(self.definition['limits'])
+        limits = _limits(self.definition['limits'])
         from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
         limits['memory_bytes'] = min(limits['memory_bytes'], ENVIRONMENT_BOUNDS['memory_bytes'])
         used = {key: sum(job['allocation'][key] for job in jobs)

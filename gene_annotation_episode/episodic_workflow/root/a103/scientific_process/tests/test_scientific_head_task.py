@@ -42,7 +42,7 @@ def actual(directory,standalone=False,timing=False):
    w=SimpleNamespace(context=object(),grains={'annotation':object(),'scientific_process':object()},run_id=run_id,store=v.store,journal=journal,
     episode_bindings=module('episode_bindings').EpisodeBindingRegistry((binding,)),scientific_process_binding=binding,job_episodes=None,
     receipts=None,inprocess_completion_order=None,inprocess_replay=None,execution_binding=None,
-    wait_inputs_version=None,completed_action_inputs_version=None,progress_receipt_order='received_progress_order_v1',
+    pending_work=lambda source:[],progress_receipt_order='received_progress_order_v1',
     contract_information_profile=lambda source:None,specialist=lambda source:binding,is_job_source=lambda source:False,
     launch_instructions=SimpleNamespace(materialize=lambda value:None,instructions='Controlled empty launch manual.'),
     receive_tool_attributions=lambda *a,**kw:None,expose_assigned_job=lambda source:None,archive=SimpleNamespace(store=lambda value:value),
@@ -79,7 +79,7 @@ class TestScientificHeadTask(ScientificHeadBoundaryChecks):
  def test_actual_build_registry_credit_and_original_invocation(self,tmp_path,standalone,timing):
   with actual(tmp_path,standalone,timing) as f:
    assert type(f.task) is getattr(f.binding,'decision_source_type',f.runtime.DecisionSource)
-   if hasattr(f.binding,'decision_source_type'): assert type(f.task).__module__==PACKAGE+'.scientific_process.task' and not isinstance(f.task,f.runtime.DecisionSource)
+   if hasattr(f.binding,'decision_source_type'): assert not isinstance(f.task,f.runtime.DecisionSource)
    assert f.binding.binding_path=='scientific_process' and f.binding.commissioning_parent=='legacy_annotation'
    f.binding.validate_execution_context(f.workflow.binding_context(f.task))
    view=f.workflow.source_credit_view(f.task); assert view['credit']==0
@@ -96,7 +96,7 @@ class TestScientificHeadTask(ScientificHeadBoundaryChecks):
    first=action(f,status,0); again=action(f,status,0)
    row=f.journal.row('runtime_actions',f.episode_id,0)
    assert first==again=={'index':0,'credit':0} and row['credit']==0
-   assert json.loads(row['result'])==f.v.outcome
+   assert json.loads(row['result'])=={**f.v.outcome,'pending_work_after_action':[]}
    assert f.received==[(0,status)] and len(f.projected)==len(f.operations)==len(f.v.calls)==1
    assert f.operations==[f'{f.workflow.run_id}:{f.episode_id}:0']
 
@@ -181,29 +181,13 @@ class TestScientificHeadTask(ScientificHeadBoundaryChecks):
    if scenario in {'minimal','bootstrap-unrecognized','lost-task-update'}: assert observed==(json.dumps(context,allow_nan=False),instructions)
    else: assert observed[0] and key in private.scientific_prompt_states
 
- @pytest.mark.parametrize('declared',[False,True],ids=['legacy','declared'])
- @pytest.mark.parametrize('saved_kind',['scientific','root-credit'])
- def test_saved_model_context_resumes_without_new_action(self,tmp_path,declared,saved_kind):
-  with actual(tmp_path) as f:
-   state={'scope':f.task.scope,**f.binding.decision_context(f.workflow.binding_context(f.task),None)}
-   if saved_kind=='root-credit': state={'current_credit':{'mode':'annotation_axis_credit','root_score':0},'controller':{'arms':[],'annotation_credits':{},'root_score':0,'decision':None}}
-   schema=f.runtime._object({'selection':f.runtime._object({'kind':{'const':'tool'},'tool':{'const':'fixture.inspect'},'arguments':f.runtime._object({'record':{'type':'string'}})}),'report_update':f.runtime._object({})})
-   response={'selection':{'kind':'tool','tool':'fixture.inspect','arguments':{'record':f.v.target}},'report_update':{}}
-   f.journal.save('runtime_model_calls',{'episode_id':f.episode_id,'call_index':0,'purpose':'decision','request':json.dumps({'context':state,'schema':schema}),'response':None})
-   provider=object.__new__(module('providers')._SessionConnection); provider.scientific_prompt_states={}; calls=[]
-   async def complete(episode,role,instructions,context,output_schema,**kw): calls.append(provider._presentation(episode,role,instructions,context,**kw)); return deepcopy(response)
-   f.workflow.provider=SimpleNamespace(has_session=lambda *a:True,complete=complete)
-   if declared: f.workflow.provider.complete_with_presentation=complete
-   first=asyncio.run(f.task.call({},schema)); f.task.calls=0; second=asyncio.run(f.task.call({},schema))
-   assert first==second and first[0]==response and first[2]==state and len(calls)==1
-   assert f.store.db.execute('SELECT count(*) FROM runtime_actions').fetchone()[0]==0 and f.projected==[]
 
  @pytest.mark.parametrize('order',['head-first','runtime-first'])
  def test_cold_import_order_retains_real_class(self,tmp_path,order):
   import os
   import subprocess
   import sys
-  code="import importlib; p='"+PACKAGE+"'; order='"+order+"'; first='scientific_process.episode' if order=='head-first' else 'runtime'; importlib.import_module(p+'.'+first); h=importlib.import_module(p+'.scientific_process.episode'); r=importlib.import_module(p+'.runtime'); t=getattr(h.ScientificProcessEpisode,'decision_source_type',r.DecisionSource); assert t is r.DecisionSource or (t.__name__=='ScientificProcessTask' and t.__module__==p+'.scientific_process.task')"
+  code="import importlib; p='"+PACKAGE+"'; order='"+order+"'; first='scientific_process.episode' if order=='head-first' else 'runtime'; importlib.import_module(p+'.'+first); h=importlib.import_module(p+'.scientific_process.episode'); r=importlib.import_module(p+'.runtime'); t=getattr(h.ScientificProcessEpisode,'decision_source_type',r.DecisionSource); assert t is r.DecisionSource or t.__name__=='ScientificProcessTask'"
   env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','TMPDIR':str(tmp_path),'XDG_CACHE_HOME':str(tmp_path/'cache')}
   completed=subprocess.run([sys.executable,'-B','-c',code],env=env,text=True,capture_output=True)
   assert completed.returncode==0,(completed.stdout,completed.stderr)

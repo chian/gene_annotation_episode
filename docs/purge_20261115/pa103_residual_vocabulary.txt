@@ -1,0 +1,1563 @@
+hmmer_alignment_preparation_data.py:512:    """Consume saved input facts, preserving explicit-only legacy absence."""
+molecular_sequence_input_bindings.py:3:This binding captures current admitted metadata only. Historical selected versions
+goal.py:73:withdrawn means the finding itself is no longer valid, with its declared reason.
+goal.py:95:replacement when the corrected binding supersedes the earlier finding, rather
+goal.py:188:ordinary episode.history tool when an older selected action, exact outcome or
+provider_jobs.py:1:"""Ordinary BLAST/Rfam protocols and read-only historical provider job records.
+provider_jobs.py:24:        return {"identity_compatibility": "unsupported_historical_hmmer_request",
+provider_jobs.py:117:        compatibility = request_identity_feedback(json.loads(row["request"]))
+provider_jobs.py:121:                "collectable": not compatibility and json.loads(row["request"]).get("provider", "hmmer") != "hmmer"
+provider_jobs.py:123:                "cause": json.loads(failure[0]) if failure else None, **compatibility}
+domain.py:387:    "superseded_evidence"]
+domain.py:396:    'description': 'Optional typed scientific information in this assessment. source_claim names the actual observed/source-reported subject, proposition and conditions, not a transferred target measurement. The assessment hyp
+homology_job_monitoring/task.py:167:        old = journal.row('runtime_actions', self.episode_id, index)
+homology_job_monitoring/task.py:168:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+homology_job_monitoring/task.py:170:        if old and old['result'] is not None:
+homology_job_monitoring/task.py:171:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+execution_job_submission/hpc_job_execution/instructions.py:19:        old_history_guidance = _live_original_runtime_prompt.INSTRUCTIONS[_live_original_runtime_prompt.INSTRUCTIONS.index('On a fresh provider conversation,'):_live_original_run
+execution_job_submission/hpc_job_execution/instructions.py:20:        instructions = instructions.replace(old_history_guidance, 'Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed acti
+homology_jobs.py:201:        old = self.db.execute('SELECT * FROM orders WHERE operation_key=?', (operation_key,)).fetchone()
+homology_jobs.py:202:        if old:
+homology_jobs.py:203:            old_mode = old['search_mode'] if 'search_mode' in old.keys() else 'native_defaults'
+homology_jobs.py:204:            if (old['query_ref'] != query_ref or old['query_fasta'] != normalized or old['cpu'] != cpu
+homology_jobs.py:205:                    or old_mode != search_mode):
+homology_jobs.py:207:            return old['job_ref']
+homology_jobs.py:520:        old = self.db.execute('SELECT job_ref,body FROM samples WHERE operation_key=?', (operation_key,)).fetchone()
+homology_jobs.py:521:        if old:
+homology_jobs.py:522:            if old['job_ref'] != handoff['job_ref']:
+homology_jobs.py:526:            return json.loads(old['body'])
+resource_work_submission/to_child_hpc_resource_work_execution.py:4:This owner preserves the original A103 legacy lookup, envelope, live runtime
+native_blast_utility_materializations.py:140:        else [p['source_database_key']] if mode == 'create_megablast_index' and not p['old_style_index'] else [])
+native_blast_utility_materializations.py:211:        if p['old_style_index']:
+native_blast_utility_materializations.py:376:                 '-iformat', p['input_format'], '-old_style_index', str(p['old_style_index']).lower(),
+native_blast_utility_materializations.py:377:                 '-legacy', str(p['legacy']).lower(), '-idmap', str(p['idmap']).lower(), '-verbosity', p['verbosity']]
+execution_job_submission/api_job_execution/task.py:166:        old = journal.row('runtime_actions', self.episode_id, index)
+execution_job_submission/api_job_execution/task.py:167:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+execution_job_submission/api_job_execution/task.py:169:        if old and old['result'] is not None:
+execution_job_submission/api_job_execution/task.py:170:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+native_blast_database_metadata.py:1212:    def add_record(entry, ordinal, symbols, native_id, native_title, molecule, *, compatible=True, identity=None):
+native_blast_database_metadata.py:1222:            if compatible and len(candidates) == 1:
+native_blast_database_metadata.py:1243:        if compatible:
+native_blast_database_metadata.py:1273:    for entry, ordinal, symbols, native_id, native_title, molecule, compatible, issues in query_candidates:
+native_blast_database_metadata.py:1282:        compatible = compatible and set(symbols) <= set(alphabet)
+native_blast_database_metadata.py:1283:        add_record(entry, ordinal, symbols, native_id, native_title, molecule, compatible=compatible)
+native_blast_database_metadata.py:1285:            if code == "unexpected_symbol_for_declared_molecule" and compatible:
+native_blast_database_metadata.py:1509:        old = record["profile_key"]
+native_blast_database_metadata.py:1510:        if old in keys:
+native_blast_database_metadata.py:1512:        keys[old] = "profile-" + _sha(_token([input_key, record["database_identity"], record["model_identifier"], old]).encode())
+native_blast_database_metadata.py:1513:        record["profile_key"] = keys[old]
+bvbrc_genome_alignment_inputs.py:405:    # Partial older snapshots do not erase a complete independent later record;
+blast_pairwise_results.py:288:            {'legacy_pointer': '/components', 'axis_basis': 'qualified',
+investigation_progress.py:96:    frozen belief state: an authoritative correction can retire an old known
+a103_detection.py:58:                # legacy return and the translation/scoring rules are unchanged.
+execution_memory.py:45:    """Hard compatibility boundaries; sizes/allocation belong in features.
+execution_memory.py:54:        raise ValueError('explicit_execution_compatibility_profile_required')
+execution_memory.py:79:            '(attempt TEXT PRIMARY KEY, compatibility TEXT, resource TEXT, observed REAL, body TEXT)')
+execution_memory.py:81:            'ON execution_measurements(compatibility,observed DESC)')
+execution_memory.py:150:                old = db.execute('SELECT body FROM execution_measurements WHERE attempt=?', (attempt_id,)).fetchone()
+execution_memory.py:151:                if old and old[0] != body:
+execution_memory.py:166:        column, key = ('resource', profile['resource_id']) if queue_only else ('compatibility', digest(profile))
+execution_memory.py:195:        """Discover existing compatibility keys without guessing fingerprints."""
+execution_memory.py:203:            query = ('SELECT compatibility,MAX(observed),COUNT(*),json_extract(body,\'$.profile\') '
+execution_memory.py:209:            rows = db.execute(query+' GROUP BY compatibility ORDER BY MAX(observed) DESC LIMIT ?',
+scientific_tool_library.py:236:            raise ValueError('scientific_tool_info_not_in_legacy_snapshot')
+scientific_tool_library.py:310:        """Compatibility name for the original, explicitly literal test mode."""
+practical_execution_operations.py:776:                    old = native.status(handle)
+practical_execution_operations.py:778:                        self._job_fact(state, handle, old)
+practical_execution_operations.py:780:                            or not old['terminal'] or old['metadata'].get('native_returncode') == 0
+practical_execution_operations.py:782:                                and old['metadata'].get('native_returncode') is None
+practical_execution_operations.py:784:                                old['state'] != 'returned' or type(old['metadata'].get('native_returncode')) is not int
+practical_execution_operations.py:785:                                or (old['metadata'].get('service_exit') or {}).get('EXIT_CODE') == 'killed')
+practical_execution_operations.py:788:                        return {'facts': {'requested_job': self._job_fact(state, handle, old),
+practical_execution_operations.py:791:                            'observation': old,
+hmmer_alignment_input_fasta.py:291:            # Exact last allocation in Read: old this_ncons + physical tail n + 1.
+execution_job_submission/saved_decision_exchange.py:25:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+execution_job_submission/saved_decision_exchange.py:26:                    if not older:
+execution_job_submission/saved_decision_exchange.py:28:                    previous = older[0]['request']['restoration']['snapshot']
+api_service_execution.py:21:from .api_execution import HMMERAPIExecution, PROVIDER as LEGACY_PROVIDER
+api_service_execution.py:72:        legacy = {}
+api_service_execution.py:75:                legacy[resource_id] = config
+api_service_execution.py:80:        self.legacy = None if not legacy else HMMERAPIExecution(store, run_id=run_id,
+api_service_execution.py:81:            directory=directory, configuration=legacy, tool_registry=tool_registry,
+api_service_execution.py:99:        # Preserve existing inspection ports for the unchanged legacy binding.
+api_service_execution.py:100:        legacy = self.__dict__.get('legacy')
+api_service_execution.py:101:        if legacy is not None:
+api_service_execution.py:102:            return getattr(legacy, name)
+api_service_execution.py:105:    def _legacy_binding(self):
+api_service_execution.py:106:        if self.legacy is None:
+api_service_execution.py:107:            raise ValueError('legacy_api_resource_not_bound')
+api_service_execution.py:108:        return self.legacy
+api_service_execution.py:129:            self._legacy_binding()._constraints(assignment)
+api_service_execution.py:153:        # Legacy schemas are fixed and do not require an invented query.
+api_service_execution.py:183:            return self.store.get(reference).get('provider') in {PROVIDER, LEGACY_PROVIDER}
+api_service_execution.py:187:    def _legacy_context(self, context):
+api_service_execution.py:189:            return self.store.get(context.assignment['handoff_ref']).get('provider') == LEGACY_PROVIDER
+api_service_execution.py:238:        if self._legacy_context(context):
+api_service_execution.py:239:            return self._legacy_binding().initialize(context)
+api_service_execution.py:267:        if self._legacy_context(context):
+api_service_execution.py:268:            return self._legacy_binding().catalog(context)
+api_service_execution.py:328:        if self._legacy_context(context):
+api_service_execution.py:329:            return await self._legacy_binding().execute(context, name, arguments, operation_key)
+api_service_execution.py:392:                    for old in self._action_paths(context.episode_id):
+api_service_execution.py:393:                        if _read(old)['prepared'].get('mutates_remote'):
+api_service_execution.py:394:                            prior_path = old.parent/'outcome.json'
+api_service_execution.py:585:        historical_uniprot = not verify_artifacts and assignment.get('service') == 'uniprot'
+api_service_execution.py:586:        if historical_uniprot:
+api_service_execution.py:623:        if self.store.get(handoff_ref).get('provider') == LEGACY_PROVIDER:
+api_service_execution.py:624:            return self._legacy_binding().scope(handoff_ref)
+api_service_execution.py:632:        if self.store.get(handoff_ref).get('provider') == LEGACY_PROVIDER:
+api_service_execution.py:633:            return self._legacy_binding().read_target(handoff_ref, scope)
+api_service_execution.py:693:            # old WAITING reply is never presented as a fresh status check.
+api_service_execution.py:728:            return self._legacy_binding().observe_target(target, operation_key=operation_key)
+api_service_execution.py:810:                historical_uniprot = uniprot and not verify_artifacts
+api_service_execution.py:811:                if historical_uniprot:
+api_service_execution.py:819:                historical = historical_uniprot
+api_service_execution.py:820:                snapshot = None if historical else self._load_snapshot(metadata)
+api_service_execution.py:821:                snapshot_sha256 = receipt['snapshot_sha256'] if historical else snapshot.sha256
+api_service_execution.py:853:                if not historical and self.store.get_artifact(source['artifact_ref']) != snapshot.content:
+api_service_execution.py:862:        if self.legacy is not None and episode_id is None and operation_key is None:
+api_service_execution.py:863:            return self._legacy_binding().read_result(reference, scope)
+api_service_execution.py:871:            return self._legacy_binding().result_identity(reference, scope)
+api_service_execution.py:907:        if self._legacy_context(context):
+api_service_execution.py:908:            return {**self._legacy_binding().facts(context, completion_snapshot), 'execution_blast_hsps': []}
+api_service_execution.py:940:        if self._legacy_context(context):
+api_service_execution.py:941:            return self._legacy_binding().credit_view(context, receiver_selection)
+api_service_execution.py:947:        old_handoffs, old_results = set(), set()
+api_service_execution.py:951:                old_handoffs.add((target['resource_id'], target['execution_id']))
+api_service_execution.py:955:                old_results.add(self.result_identity(reference, context.scope))
+api_service_execution.py:963:        new_handoffs, new_results = len(handoffs-old_handoffs), len(results-old_results)
+api_service_execution.py:1005:        if self._legacy_context(context):
+api_service_execution.py:1006:            return self._legacy_binding().completion_for_action(context, operation_key)
+api_service_execution.py:1011:        if self._legacy_context(context):
+api_service_execution.py:1012:            return self._legacy_binding().verify_completion(context, proof)
+api_service_execution.py:1051:        if self._legacy_context(context):
+api_service_execution.py:1052:            return self._legacy_binding().decision_context(context, current_view)
+homology_job_monitoring/goal.py:9:        return 'You own an iterative scoped job investigation in the shared method_loop. ' + responsibilities[role] + " Revise selected work from actual outcomes. Select one of your available ordinary tools
+uniprot_return_contracts.py:654:                                            'uniprot_legacy_label_unrepresentable',
+uniprot_return_contracts.py:655:                                            'uniprot_legacy_term_unrepresentable',
+uniprot_return_contracts.py:656:                                            'uniprot_legacy_reference_unrepresentable',
+uniprot_return_contracts.py:657:                                            'uniprot_legacy_source_version_omitted']},
+uniprot_return_contracts.py:672:                                             'legacy_publication',
+uniprot_return_contracts.py:673:                                             'legacy_source']},
+blast_database_population_associations.py:177:    beside a valid one. An empty list grants no relation. Old exact-identity
+bvbrc_appservice_custody.py:152:            # original schema; today's catalog never rewrites old selections.
+native_blast_masking_result_worker.py:55:    """Reconstruct typed custody facts from a previously authenticated Bundle."""
+bvbrc_proteome_native.py:1:"""Read the inspected GenomeComparison legacy JSON or TSV from supplied bytes.
+bvbrc_proteome_native.py:6:legacy abs(subject_end-subject_start)/subject_length fraction, omitting the
+bvbrc_proteome_native.py:156:        # JSON-compatible finite numerical storage; lexeme retains exact spelling.
+bvbrc_proteome_native.py:283:        self.qualify("legacy_hsp_data_not_retained", fields=[root_field], required_input="directional_blast_report")
+native_blast_database_tool_info.py:24:    "rpsblast": "Reference coordinates denote model positions. A displayed model master is not a biological reference sequence and does not establish a taxonomy population. Automatic native thread selec
+native_blast_database_tool_info.py:94:                "not calibrated annotation probabilities; full census correction needs actual complete compatible enumeration. "
+native_blast_database_tool_info.py:95:                "The saved_function_sheet mode selects the exact generation descriptor previously received through the "
+bvbrc_data_host.py:486:            old = self.db.execute('SELECT * FROM runtime_bvbrc_admissions WHERE run_id=? '
+bvbrc_data_host.py:488:            if old is not None:
+bvbrc_data_host.py:489:                _require(all(_same(json.loads(old[k]), v) for k, v in record.items()), 'admission_replay_conflict')
+episode_report_acquisition.py:52:        old = journal.row('runtime_actions', source.episode_id, index)
+episode_report_acquisition.py:53:        if old is not None:
+episode_report_acquisition.py:54:            if canonical(json.loads(old['action'])) != canonical(selection):
+episode_report_acquisition.py:56:            if old['result'] is not None:
+episode_report_acquisition.py:57:                outcome = json.loads(old['result'])
+episode_report_acquisition.py:62:                if outcome['status'] != 'completed' or old['credit'] is None:
+resource_work_submission/task.py:149:        old = journal.row('runtime_actions', self.episode_id, index)
+resource_work_submission/task.py:150:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+resource_work_submission/task.py:152:        if old and old['result'] is not None:
+resource_work_submission/task.py:153:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/task.py:139:        old = journal.row('runtime_actions', self.episode_id, index)
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/task.py:140:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/task.py:142:        if old and old['result'] is not None:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/task.py:143:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/saved_decision_exchange.py:24:                    older = self.workflow.decision_exchanges.rows(self.episode_id, inde
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/saved_decision_exchange.py:25:                    if not older:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/saved_decision_exchange.py:27:                    previous = older[0]['request']['restoration']['snapshot']
+genomic_overlap_operands.py:96:        # The shared validator's one legacy code lacks the family prefix.
+execution_job_submission/local_job_execution/task.py:166:        old = journal.row('runtime_actions', self.episode_id, index)
+execution_job_submission/local_job_execution/task.py:167:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+execution_job_submission/local_job_execution/task.py:169:        if old and old['result'] is not None:
+execution_job_submission/local_job_execution/task.py:170:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+bvbrc_appservice_receipt_values.py:412:    # Host failures are not upgraded by a local representation projection.
+biopython_pairwise_grader.py:207:    """Project an existing legacy envelope into the common numerical sheet.
+biopython_pairwise_grader.py:209:    Production/saved calculations validate the complete legacy sheet first.
+biopython_pairwise_grader.py:234:    measurements. Markerless legacy results retain their original required
+biopython_pairwise_grader.py:428:    """Select the legacy score cells from stored common calculated cells."""
+biopython_pairwise_grader.py:456:    """Calculate the legacy view through the same common numerical authority."""
+biopython_pairwise_grader.py:470:            "instances": [{"legacy_pointer": "", "axis_basis": "direct", "sheet": common,
+biopython_pairwise_grader.py:479:    if (instance["legacy_pointer"] != "" or instance["axis_basis"] != "direct"
+resource_work_submission/local_resource_work_execution/task.py:149:        old = journal.row('runtime_actions', self.episode_id, index)
+resource_work_submission/local_resource_work_execution/task.py:150:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+resource_work_submission/local_resource_work_execution/task.py:152:        if old and old['result'] is not None:
+resource_work_submission/local_resource_work_execution/task.py:153:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+hpc_work_planning/hpc_resource_prediction/prediction_operations.py:48:        old = ledger.cached(operation_key, selection)
+hpc_work_planning/hpc_resource_prediction/prediction_operations.py:49:        if old is not None:
+hpc_work_planning/hpc_resource_prediction/prediction_operations.py:50:            return old
+hpc_work_planning/hpc_resource_prediction/prediction_operations.py:116:            historical_selected = selected.intersection(row['id'] for row in commission['history'])
+hpc_work_planning/hpc_resource_prediction/prediction_operations.py:117:            if historical_selected and heldout and max(cases[key]['observed_at'] for key in historical_selected) >= min(row['observed_at'] for row in heldout):
+hpc_work_planning/hpc_resource_prediction/prediction_operations.py:121:            # Fixed historical validation cannot measure a model trained on
+blast_database_grader.py:546:    def compatible(left, right):
+blast_database_grader.py:572:                if compatible(index, previous):
+blast_database_grader.py:791:        # historical exact-name route. An empty list grants no new equivalence.
+blast_database_grader.py:892:    Both binding arguments omitted preserves the legacy matcher and grouping.
+blast_database_grader.py:901:    legacy output or supplies missing extended-program semantics. Explicit
+blast_database_grader.py:1005:            _correspondence_instances.append({"legacy_pointer": "/hits/" + str(len(hits)),
+blast_database_grader.py:1126:    Both binding lists omitted preserves legacy accession matching. Supplying
+blast_database_grader.py:1294:    if (sheet.get("association_mode") in ("explicit_bindings_v1", "explicit_bindings_v2")
+native_blast_vdb_function_metadata.py:87:    """Closed field relationships only; scientific compatibility belongs to342."""
+native_blast_vdb_function_metadata.py:168:The exact legacy envelope and normalization map retain rejected original inputs.
+bvbrc_minhash_views.py:357:    _require(grading["schema"] in ("bvbrc_minhash_grading_v1", "bvbrc_minhash_grading_v2"),
+mauve_v4_calculation_contracts.py:1:"""Detached checks for explicit legacy-Mauve selections and saved numbers.
+hpc_work_planning/goal.py:10:        return 'Iterate toward the original accomplishment while balancing expected credit against real elapsed time and resource demand. The hpc parent can commission hpc_prediction and hpc_execution as sisters
+sequence_masking_result_views.py:231:                _error("fact_statistics_threshold_invalid")
+library/hpc_prediction.py:130:        raise ValueError('select_at_most_2000_historical_observations')
+library/hpc_prediction.py:144:            raise ValueError('historical_weight_must_be_between_zero_and_one')
+library/hpc_prediction.py:151:                continue  # Older timing-only models make no resource forecast.
+library/hpc_prediction.py:157:                raise ValueError('historical_weight_must_be_between_zero_and_one')
+library/hpc_prediction.py:179:                old = model['ranges'].get(name, [value, value])
+library/hpc_prediction.py:180:                model['ranges'][name] = [min(value, old[0]), max(value, old[1])]
+library/progress_information_credit.py:59:    if version in {'execution_status_v1', 'execution_status_v2'}:
+native_hmmer_preparation_result_publication.py:165:    # optional field is historical absence, never permission to upgrade it.
+bvbrc_genome_alignment_associations.py:313:    """Bind observed native objects while preserving missing historical joins."""
+bvbrc_genome_alignment_associations.py:392:                or version is not None and declared['version'] not in (None, version))):
+genomic_overlap_result_receipts.py:1:"""Selected overlap action controls and historical completed-action authority.
+genomic_overlap_result_receipts.py:5:Historical checks use frozen controls and Store metadata, never scientific bytes.
+genomic_overlap_result_receipts.py:648:        """Historical shape and provenance qualification, without scientific I/O."""
+genomic_overlap_result_receipts.py:765:            # for this exact sheet and historical target suffices.
+genomic_overlap_result_receipts.py:1039:                # Only one synchronous historical read shares verified origins;
+execution_progress_assessment/task_instructions.py:29:ordinary episode.history tool when an older selected action, exact outcome or
+execution_progress_assessment/task_instructions.py:43:EXCHANGE_HISTORY_GUIDANCE = """Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observation. Read exact previously rec
+bvbrc_data_readers.py:4:decoding. The private payload decoder also supports explicitly selected legacy
+bvbrc_data_readers.py:5:array/header evidence; it never upgrades that evidence into a v2 acquisition.
+bvbrc_data_readers.py:150:    compatible = (exception or (spec["multi_valued"] == (type(value) is list)
+bvbrc_data_readers.py:152:    if not compatible:
+bvbrc_data_readers.py:159:        if compatible:
+bvbrc_data_readers.py:409:    """Explicit native-format decoder; legacy fixture use remains unqualified.
+bvbrc_data_readers.py:413:    sheet and query count is unavailable for v2 claims. No saved legacy receipt
+genomic_overlap_inputs.py:520:def _compatible_supplied_argv(argv):
+genomic_overlap_inputs.py:583:    if not _compatible_supplied_argv(native["realized_argv"]):
+genomic_overlap_inputs.py:681:    if not _compatible_supplied_argv(native["realized_argv"]) and not any(
+blast_utility_contracts.py:132:        "legacy_file_checks": _BOOL, "require_taxids": _BOOL, "cdd_delta": _BOOL}),
+blast_utility_contracts.py:192:# Preserve the exact legacy branch objects; explicit registries must not inspect
+blast_utility_contracts.py:210:# preparation branches have been frozen. Never widen an old nested enum.
+blast_utility_contracts.py:584:    if value["compatibility"] == "validated":
+blast_utility_contracts.py:593:            "database_compatibility_evidence")
+blast_utility_contracts.py:661:    legacy = {("makeblastdb", "create_sequence_database"): "blast_database_artifact_set_v1",
+blast_utility_contracts.py:666:    if pair in legacy:
+blast_utility_contracts.py:667:        return legacy[pair]
+blast_iteration_calculators.py:27:native_count_conflict native_row_invalid threshold_unavailable threshold_invalid
+blast_iteration_calculators.py:28:threshold_conflict effective_option_source_unavailable phase_semantics_unavailable
+blast_iteration_calculators.py:330:            issues.append(_issue("threshold_invalid", search["search_key"], pointer=pointer, value=value, kind=kind))
+blast_iteration_calculators.py:348:                issues.append(_issue("threshold_conflict", search["search_key"], threshold=output, candidates=selected))
+blast_iteration_calculators.py:352:                issues.append(_issue("threshold_unavailable", search["search_key"], threshold=output))
+blast_iteration_calculators.py:447:        reporting=deepcopy(search["reporting"]), counts=counts, thresholds=thresholds, threshold_candidates=candidates,
+blast_iteration_calculators.py:831:        threshold_sources="Finite nonnegative native params.include is retained. Only qualified sequence stages apply it and/or agreeing source-qualified effective inclusion_ethresh; DELTA domain stages ap
+decision_exchanges.py:93:            old = self._row(key)
+decision_exchanges.py:94:            if old is not None:
+decision_exchanges.py:95:                if old["request"] != encoded:
+decision_exchanges.py:97:                return _decoded(old)
+decision_exchanges.py:126:            old = self._row(key)
+decision_exchanges.py:127:            if old is None:
+decision_exchanges.py:129:            if old[column] is not None:
+decision_exchanges.py:130:                if old[column] != encoded:
+decision_exchanges.py:132:                return _decoded(old)
+decision_exchanges.py:133:            if column == "lookup_result" and old["response"] is None:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py:139:        old = journal.row('runtime_actions', self.episode_id, index)
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py:140:        if old and _live_original_runtime.json.loads(old['action']) != select
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py:142:        if old and old['result'] is not None:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/task.py:143:            result, credit = (_live_original_runtime.json.loads(old['result']
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/task.py:139:        old = journal.row('runtime_actions', self.episode_id, index)
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/task.py:140:        if old and _live_original_runtime.json.loads(old['action']) != selectio
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/task.py:142:        if old and old['result'] is not None:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/task.py:143:            result, credit = (_live_original_runtime.json.loads(old['result']),
+execution_job_submission/api_job_execution/instructions.py:17:        old_history_guidance = _live_original_runtime_prompt.INSTRUCTIONS[_live_original_runtime_prompt.INSTRUCTIONS.index('On a fresh provider conversation,'):_live_original_run
+execution_job_submission/api_job_execution/instructions.py:18:        instructions = instructions.replace(old_history_guidance, 'Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed acti
+alignment_correspondence.py:340:        active = [(i, old) for i, old in active if old[axis + "_end"] > row[axis + "_start"]]
+alignment_correspondence.py:341:        for i, old in active:
+alignment_correspondence.py:343:            if tuple(old[field] for field in fields) != tuple(row[field] for field in fields):
+alignment_correspondence.py:430:    """The canonical meanings, independent of legacy field names or sources."""
+alignment_correspondence.py:518:            "explicitly supplied numerical interval; observed, original-complete, legacy non-disqualification and known-success populations remain separate",
+alignment_correspondence.py:520:            "absent selection stays null; incomplete observations may retain a lower-bound numerator; execution_qualified_* retains legacy non-disqualification (not failed/incomplete), where unknown is not su
+alignment_correspondence.py:539:    Frozen readers compare stored facts and legacy projections in their source
+alignment_correspondence.py:549:        _closed(instance, {"legacy_pointer", "axis_basis", "sheet", "components"}, path)
+alignment_correspondence.py:550:        pointer, basis = instance["legacy_pointer"], instance["axis_basis"]
+api_bvbrc_minhash.py:151:        # Preserve historical launch and legacy {} result intents byte for byte.
+blast_vdb_function_calculators.py:81:            or result["unknown_source_dependency"] not in {"qualify_separate", "withhold_weights"}):
+blast_vdb_function_calculators.py:338:        if model["unknown_source_dependency"] == "withhold_weights":
+blast_vdb_function_calculators.py:647:            and model["unknown_source_dependency"] == "withhold_weights"):
+blast_vdb_function_calculators.py:734:    unused = ["taxonomy", "target_compatibility", "assembly_quality", "annotation_evidence", "native_evalue", "alignment_coverage", "alignment_identity"]
+bvbrc_homology_metadata.py:304:                old_links = [link for link in collection.get("description_links", []) if isinstance(link, dict)
+bvbrc_homology_metadata.py:311:                invalid = (len(old_links) != 1 or len(current_links) != 1
+bvbrc_homology_metadata.py:312:                    or old_links[0].get("status") != "validated" or current_links[0].get("status") != "validated"
+bvbrc_homology_metadata.py:313:                    or any(old_links[0].get(key) != current_links[0].get(key) for key in compared))
+hmmer_emission_data.py:130:        # ASCII-compatible replacement keeps earlier complete records available;
+practical_execution_records.py:24:# Legacy native receipts remain readable; current execution uses the ordinary
+hmmer_model_binary2.py:39:            "native_fields": [], "legacy": {"null_emissions": None, "special_transitions": None,
+hmmer_model_binary2.py:77:        legacy = record["representation"]["legacy"]
+hmmer_model_binary2.py:125:            legacy["checksum"] = {"token": str(checksum), "value": checksum,
+hmmer_model_binary2.py:126:                "line": None, "meaning": "hmmer2_legacy_checksum"}
+hmmer_model_binary2.py:137:            legacy["special_transitions"] = {"symbols": _SPECIAL[:], "cells": [
+hmmer_model_binary2.py:139:            legacy["null_transitions"] = {"symbols": ["slot_0"],
+hmmer_model_binary2.py:141:            legacy["null_emissions"] = {"symbols": symbols[:], "cells": [
+hmmer_model_binary2.py:148:                legacy["evd"].append({"tokens": tokens[:], "values": values[:], "line": None, "unit": None})
+hmmer_model_binary2.py:154:            legacy["begin_transitions"] = {"symbols": ["B->D1"],
+hmmer_model_binary2.py:161:            legacy["entry_exit"] = [{"position": position, "cells": [entry, exit], "line": None}
+hmmer_model_binary2.py:230:    if name == "legacy.null_emissions" and 0 <= cell_index < width:
+hmmer_model_binary2.py:232:    elif name == "legacy.special_transitions" and 0 <= cell_index < 8:
+hmmer_model_binary2.py:234:    elif name == "legacy.null_transitions" and cell_index == 0:
+hmmer_model_binary2.py:236:    elif name == "legacy.begin_transitions" and cell_index == 0:
+hmmer_model_binary2.py:238:    elif name == "legacy.entry_exit" and type(position_ordinal) is int and 0 <= position_ordinal < length and cell_index in (0, 1):
+bvbrc_genome_alignment_returns.py:5:facts use the latest publication; historical returns retain their named source.
+component_assessment_dependencies.py:35:    superseding = ([latest[key]['id']] if key in latest
+component_assessment_dependencies.py:51:        'superseding_assessment_refs': superseding,
+component_assessment_dependencies.py:53:        'retired': status == 'withdrawn' or bool(superseding or replacements),
+component_assessment_dependencies.py:58:    return set(dependency['superseding_assessment_refs']) | set(dependency['replacement_refs'])
+component_assessment_dependencies.py:71:        return []  # Historical result without an admitted original identity.
+bvbrc_proteome_directional.py:1:"""Read supplied legacy BLASTP pairwise text without executing or acquiring work.
+a103_tools.py:106:        legacy = entries['reference.neighborhood']
+a103_tools.py:110:            extra['reference.neighborhood']['input_schema'],legacy['input_schema']]}
+a103_tools.py:217:            old = self.store.db.execute('SELECT result FROM a103_operations WHERE request=? LIMIT 1',(request,)).fetchone()
+a103_tools.py:218:            if old and name!='context.request_hpc':
+a103_tools.py:219:                outcome = json.loads(old[0])
+a103_tools.py:314:                            if k in {'gene','locus_tag','old_locus_tag','protein_id','product'}},
+mauve_v4_formats.py:1:"""Loss-preserving reader for the native legacy Mauve v4 segment format.
+comparative_ops.py:116:        for key in ("locus_tag", "old_locus_tag", "protein_id", "gene", "product", "EC_number")}
+hmmalign_grader.py:95:        "trimmed_residues": ("mapping.trimmed_residues", "supplied_original_sequence_residues", "original_length - retained_residues when trim is true and lengths/sequence compatible; zero when trim is false and join c
+shared_information.py:20:DISPOSITIONS = ('partially_fulfilled', 'fulfilled', 'unavailable', 'superseded')
+shared_information.py:31:            'description':'Operational reason for unavailable or superseded information. Evidence results and qualifications come from saved grading, not a rewritten assessment.'}},
+shared_information.py:33:    disposition['allOf'] = [{'if':{'properties':{'status':{'enum':['unavailable','superseded']}}},
+shared_information.py:41:        {'name':TOOLS[2],'description':'Answer a need addressed to this parent by selecting evidence it actually received. Fulfilled and partially fulfilled replies carry saved results and their qualifications throu
+shared_information.py:45:        {'name':TOOLS[4],'description':'Page existing parent/child exchange metadata omitted from the automatic preview. This is historical navigation, not polling for a promised reply, and delivers no scientific ev
+shared_information.py:202:            old=self.store.db.execute('SELECT * FROM shared_investigation_operations WHERE operation_key=?',
+shared_information.py:204:            if old is not None:
+shared_information.py:205:                if (old['run_id'],old['episode_id'],old['request'])!=(self.run_id,context.episode_id,request):
+shared_information.py:207:                return json.loads(old['result'])
+shared_information.py:314:        # The latest disposition is enough to steer; older versions remain in
+native_database_terminal_custody.py:122:    """Recheck saved current custody; legacy submission ledgers remain separate."""
+hpc_ledger.py:104:        old = self.cached(operation_key, selection)
+hpc_ledger.py:105:        if old is not None:
+hpc_ledger.py:106:            if canonical(old) != canonical(result):
+hpc_ledger.py:108:            return old
+native_lifecycle.py:454:    """Delete transient control files only after the unit is no longer live.
+blast_profile_calculators.py:52:    "blast_profile_model_length_conflict", "blast_profile_threshold_unavailable",
+blast_profile_calculators.py:53:    "blast_profile_threshold_conflict", "blast_profile_threshold_margin_nonfinite",
+blast_profile_calculators.py:54:    "blast_profile_threshold_release_unavailable", "blast_profile_table_layout_unavailable",
+blast_profile_calculators.py:125:    compatible, available, geometry = True, True, None
+blast_profile_calculators.py:128:        nonlocal compatible, available
+blast_profile_calculators.py:131:        compatible &= not conflict
+blast_profile_calculators.py:193:    return geometry, available, compatible
+blast_profile_calculators.py:400:def _bindings(sheet, descriptions, eligible, compatible, source_ok, issues):
+blast_profile_calculators.py:493:    geometry, eligible, compatible = _qualify_context(sheet, issues)
+blast_profile_calculators.py:496:    bindings = _bindings(sheet, descriptions, eligible, compatible, source_ok, issues)
+blast_profile_calculators.py:531:                    local.append(_issue(key, "blast_profile_threshold_" + reason, hit=hit, hsp=j,
+blast_profile_calculators.py:539:                    local.append(_issue(key, "blast_profile_threshold_release_unavailable", hit=hit, hsp=j,
+blast_profile_calculators.py:547:                    local.append(_issue(key, "blast_profile_threshold_margin_nonfinite", hit=hit, hsp=j,
+blast_profile_calculators.py:655:    if not compatible:
+execution_result_acquisition/terminal_execution.py:54:        # Inventory is historical resource context. It does not define a menu of
+execution_result_acquisition/terminal_execution.py:130:            'desired outputs and acceptance criteria. Historical inventory is context, not '
+homology_results.py:184:    Historical snapshots without captured inventory keep unknowns as null.
+homology_results.py:360:        old = self.store.db.execute('SELECT reference_ref FROM homology_reference_bindings WHERE binding_key=?', (binding,)).fetchone()
+homology_results.py:361:        if old:
+homology_results.py:362:            return self.store.get(old[0])
+homology_results.py:384:            return None  # Historical worker semantics, not an unperformed grade.
+homology_results.py:471:                        old = self.store.db.execute('SELECT observation_ref FROM homology_measurements WHERE measurement_key=?', (key,)).fetchone()
+homology_results.py:472:                        if old:
+homology_results.py:473:                            observation_ref = old[0]
+blast_vdb_utility_contracts.py:114:    """Build detached additive branches without changing any legacy schema."""
+finding_validity.py:98:                old = self.store.get(prior)
+finding_validity.py:99:                if not correction_eligible(self.store, old, self.scope):
+finding_validity.py:102:                db.execute('INSERT OR IGNORE INTO fv_nodes VALUES(?,?)', (prior, canonical(old)))
+vendor/nano_rarefaction.py:1439:ADAPTIVE_THRESHOLD_VERSION = "adaptive_marginal_credit_threshold_v2"
+vendor/nano_rarefaction.py:1440:FIXED_THRESHOLD_VERSION = "fixed_marginal_credit_threshold_v1"
+vendor/nano_rarefaction.py:1606:    def threshold_state(self) -> dict[str, object]:
+vendor/nano_rarefaction.py:1765:            version=FIXED_THRESHOLD_VERSION,
+vendor/nano_rarefaction.py:1792:    threshold_update: ThresholdUpdate
+vendor/nano_rarefaction.py:1803:            "threshold_update": self.threshold_update.as_record(),
+vendor/nano_rarefaction.py:1814:        self._threshold_update = ThresholdUpdate.fixed(config.gamma)
+vendor/nano_rarefaction.py:1839:            threshold_update=self._threshold_update,
+vendor/nano_rarefaction.py:1859:        self._threshold_update = update
+vendor/nano_rarefaction.py:2444:        version=ADAPTIVE_THRESHOLD_VERSION,
+vendor/nano_rarefaction.py:2546:        threshold_adapter: Optional[ThresholdAdapter] = None,
+vendor/nano_rarefaction.py:2559:        self._threshold_adapter = threshold_adapter or _keep_current_thresholds
+vendor/nano_rarefaction.py:2694:            threshold_update = self._threshold_adapter(
+vendor/nano_rarefaction.py:2697:                    current_thresholds=self._controller.config.threshold_state(),
+vendor/nano_rarefaction.py:2704:            if not isinstance(threshold_update, ThresholdUpdate):
+vendor/nano_rarefaction.py:2709:                threshold_update.productive_unit_baseline.status_code
+vendor/nano_rarefaction.py:2711:                and threshold_update.productive_unit_baseline.value > 0.0
+vendor/nano_rarefaction.py:2714:                    threshold_update.productive_unit_baseline.value
+vendor/nano_rarefaction.py:2716:            threshold_state = self._controller.config.threshold_state()
+vendor/nano_rarefaction.py:2717:            if threshold_update.ready:
+vendor/nano_rarefaction.py:2718:                threshold_state = {
+vendor/nano_rarefaction.py:2719:                    "gamma": threshold_update.gamma.value,
+vendor/nano_rarefaction.py:2720:                    "rho": threshold_state["rho"],
+vendor/nano_rarefaction.py:2723:                self._controller.config.with_thresholds(threshold_state),
+vendor/nano_rarefaction.py:2724:                threshold_update,
+vendor/nano_rarefaction.py:2730:            if threshold_update.ready:
+vendor/nano_rarefaction.py:2738:                    "threshold_insufficient",
+vendor/nano_rarefaction.py:2763:            threshold_adapter=self._threshold_adapter,
+vendor/nano_rarefaction.py:2775:    threshold_adapter: Optional[ThresholdAdapter] = None,
+vendor/nano_rarefaction.py:2798:            threshold_adapter=threshold_adapter,
+execution_job_submission/api_job_execution/terminal_execution.py:102:        instructions = "You are the execution agent for the actual job and resource assigned below. Use exec_command to write and run the shell code needed for that job. C
+from_child_homology_result_acquisition.py:3:"""Original legacy parent admission of its saved homology monitor report."""
+blast_pairwise_grader.py:311:    """Select common calculated cells into the unchanged legacy HSP shape."""
+blast_pairwise_grader.py:369:    """Legacy HSP view of the common correspondence sheet/calculator."""
+blast_pairwise_grader.py:585:def validate_blast_correspondence_instance(legacy, instance, *, program=None):
+blast_pairwise_grader.py:589:    if legacy.get("schema") == "blast_pairwise_sheet_v1":
+blast_pairwise_grader.py:590:        components = [row["components"] for row in legacy["hsps"]]
+blast_pairwise_grader.py:591:        program = legacy["input"]["search"].get("program")
+blast_pairwise_grader.py:592:        lengths = legacy["union"]["denominators"]
+blast_pairwise_grader.py:594:        if not _same(legacy["union"], project_blast_union(calculated["union"],
+blast_pairwise_grader.py:597:        if "selected_operand_coverage" in legacy:
+blast_pairwise_grader.py:602:            if not _same(expected, legacy["selected_operand_coverage"]):
+blast_pairwise_grader.py:604:    elif "hsp_components" in legacy and "measurements" in legacy:
+blast_pairwise_grader.py:605:        components = legacy["hsp_components"]
+blast_pairwise_grader.py:608:        union, measured = calculated["union"], legacy["measurements"]
+blast_pairwise_grader.py:622:        components, keys = [legacy], [""]
+blast_pairwise_grader.py:623:        lengths = legacy["denominators"]
+episode_admission.py:130:    old = receiver.store.db.execute("SELECT * FROM runtime_report_attempts WHERE run_id=? "
+episode_admission.py:133:    if old is not None:
+episode_admission.py:134:        if any(old[key] != value for key, value in values.items()):
+episode_admission.py:234:        old = db.execute("SELECT * FROM runtime_return_admissions WHERE run_id=? AND "
+episode_admission.py:237:        if old is not None:
+episode_admission.py:239:            if (old["return_id"] != returned["return_id"] or old["handle"] != spec["handle"]
+episode_admission.py:240:                    or old["commission_sha256"] != commission_sha256
+episode_admission.py:241:                    or old["parent_episode_id"] != parent_id
+episode_admission.py:242:                    or old["original_decision_index"] != index
+episode_admission.py:245:                    or content_digest(json.loads(original_action["action"])) != old["selection_sha256"]
+library/hpc_prompt.py:99:            'These historical observations remain available across decisions. '
+library/hpc_prompt.py:100:            'Newer actual observations supersede older state; retaining a read '
+library/hpc_prompt.py:104:    # Historical work/credit summaries do not contain every callable plan
+library/hpc_prompt.py:132:    # Instructions are supplied once. Frozen files, historical receipts and
+bvbrc_comparative_systems_calculators.py:596:    # an otherwise compatible explicit subset must not change that denominator.
+bvbrc_comparative_systems_calculators.py:673:    result. The sheet, previous components, and all historical credit are untouched.
+wait_estimation_inputs.py:198:    history, old model context or scientific/source body is materialized.
+wait_estimation_inputs.py:241:            # expose old support. JSON projections stay inside SQLite; whole
+execution_progress_assessment/task_decision.py:146:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+execution_progress_assessment/task_decision.py:147:                    if not older:
+execution_progress_assessment/task_decision.py:149:                    previous = older[0]['request']['restoration']['snapshot']
+execution_job_submission/api_job_execution/completion.py:53:        historical = self._closed_completion_verdict(context, proof)
+execution_job_submission/api_job_execution/completion.py:54:        if historical is not None:
+execution_job_submission/api_job_execution/completion.py:55:            return historical
+bvbrc_genome_alignment_bundle_projection.py:33:            if not any(c._same(row, old) for old in result):
+alignment_site_native.py:275:    # admission; hashing raw manifests adds no interpretation of legacy fields.
+alignment_site_native.py:321:    for publication. Legacy grading and missing companions remain literal.
+alignment_site_native.py:359:        # canonical companion. A missing legacy companion remains missing; no
+alignment_site_native.py:581:def compatibility_sites(sheet):
+alignment_site_native.py:600:def compatibility_insertions(sheet):
+alignment_site_native.py:611:           'operand_descriptor', 'original_mappings', 'compatibility_sites', 'immutable_record',
+alignment_site_native.py:612:           'paf_row_bytes', 'read_quality', 'compatibility_insertions',
+bvbrc_proteome_fact_contracts.py:192:        method=enum(*dict.fromkeys((*TRACK_METHODS.values(), "legacy_first_hsp_percent", "legacy_subject_endpoint_percent",
+independent_execution.py:114:    # Missing descriptors preserve old saved runs' original two scientific roles.
+homology_progress.py:131:        old = self._custody(row['job_ref'], 'status', signature)
+homology_progress.py:132:        if old is not None:
+homology_progress.py:133:            return old['source_ref'], old['observed_at']
+homology_progress.py:156:        old = self._custody(row['job_ref'], 'log:' + role, signature)
+homology_progress.py:157:        if old is None:
+homology_progress.py:171:            reference, captured = old['source_ref'], old['observed_at']
+homology_progress.py:180:        old = None if operation_key is None else self.store.db.execute(
+homology_progress.py:183:        if old is not None and old['signature'] != signature:
+homology_progress.py:185:        return signature, old
+homology_progress.py:202:            operation_signature, old = self._operation(operation_key, selection)
+homology_progress.py:203:            if old is not None:
+homology_progress.py:204:                return json.loads(old['result'])
+homology_progress.py:237:            old = self.store.db.execute('SELECT snapshot FROM runtime_homology_progress_snapshots '
+homology_progress.py:241:            if old is not None:
+homology_progress.py:242:                value = json.loads(old['snapshot'])
+homology_progress.py:263:            signature, old = self._operation(operation_key, {'operation': 'dependency', 'spec': spec})
+homology_progress.py:264:            if old is not None:
+homology_progress.py:265:                return json.loads(old['result'])
+homology_progress.py:302:            old = self._custody(row['job_ref'], 'dependency', relation_signature)
+homology_progress.py:303:            if old is None:
+homology_progress.py:308:                reference, captured = old['source_ref'], old['observed_at']
+ordinary_execution.py:3:No episode decisions or scores belong here. Shared compatibility contains run
+ordinary_execution.py:102:                      'compatibility': 'same_input_size_and_technical_selection_features_v1'}
+genomic_overlap_returns.py:5:Historical delivery is independent of the availability of scientific bytes.
+genomic_overlap_returns.py:151:    def _historical(self, context, form, schema, sources):
+genomic_overlap_returns.py:174:            # silently reconstruct a different historical publication.
+genomic_overlap_returns.py:187:            values, child_origins = self._historical(child, form, schema, wanted)
+genomic_overlap_returns.py:262:        values, _ = self._historical(child, saved, declared, requested_genomic_overlap_sources(plain(declared)))
+episode_bindings.py:94:    Omission preserves the old call and persisted-selection shapes. This is
+episode_bindings.py:347:        """Retain unambiguous legacy lookup; never choose between private parents."""
+episode_bindings.py:410:            legacy_entry = any(parent is actual for actual in actual_parents.values())
+episode_bindings.py:415:                and (not legacy_entry or role in binding.entry_roles)]
+episode_bindings.py:421:            # Older caller-supplied bindings have no private commissioning path.
+episode_bindings.py:430:            # A legacy parent has no path identity; only a unique role is safe.
+sequence_ops.py:29:        "compatible_alphabets": [name for name, yes in
+sequence_ops.py:36:        "interpretation": "alphabet_compatibility_is_not_biological_identity",
+native_blast_utility_tool_info.py:14:    MODES, LEGACY_MODES, PREPARATION_MODES, VDB_MODES, SOFTWARE_SCHEMA,
+native_blast_utility_tool_info.py:61:# Key information by the selected pair, without changing any legacy wording.
+native_blast_utility_tool_info.py:62:_DESCRIPTIONS = {pair: _DESCRIPTIONS[pair[1]] for pair in LEGACY_MODES}
+native_blast_utility_tool_info.py:63:_INSTRUCTIONS = {pair: _INSTRUCTIONS[pair[1]] for pair in LEGACY_MODES}
+native_blast_utility_tool_info.py:118:        'Select input format, old-style flag and legacy flag independently within the configured variant. Supply '
+native_blast_utility_tool_info.py:119:        'nucleotide FASTA for an old-style build or the complete prepared nucleotide database. A new-style build '
+native_blast_utility_tool_info.py:121:        'copy; copied source files remain dependencies. Old-style builds require an explicit output prefix. Native '
+native_blast_utility_tool_info.py:143:        'do not establish biological measurements, included-profile membership or search compatibility. '),
+native_blast_utility_tool_info.py:237:                          for key in ('input_format', 'old_style_index', 'legacy')})
+native_blast_utility_tool_info.py:238:        schema['anyOf'] = [{'properties': {'old_style_index': {'const': True}}},
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/saved_decision_exchange.py:24:                    older = self.workflow.decision_exchanges.
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/saved_decision_exchange.py:25:                    if not older:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/saved_decision_exchange.py:27:                    previous = older[0]['request']['restorati
+homology_job_monitoring/instructions.py:22:        old_history_guidance = _live_original_runtime_prompt.INSTRUCTIONS[_live_original_runtime_prompt.INSTRUCTIONS.index('On a fresh provider conversation,'):_live_original_runtime_prompt.INSTRUC
+homology_job_monitoring/instructions.py:23:        instructions = instructions.replace(old_history_guidance, 'Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observation. 
+execution_job_submission/completion.py:101:        historical = self._closed_completion_verdict(context, proof)
+execution_job_submission/completion.py:102:        if historical is not None:
+execution_job_submission/completion.py:103:            return historical
+bvbrc_appservice_saved_results.py:5:content bindings directly. It does not authenticate every older scientific
+bvbrc_appservice_saved_results.py:19:an older result. A newer partial result remains newer than an older completed
+hpc_work_planning/hpc_allocation_execution/goal.py:10:        return 'Iterate toward the original accomplishment while balancing expected credit against real elapsed time and resource demand. The hpc parent can commission hpc_prediction and
+execution_job_submission/hpc_job_execution/terminal_goal.py:7:        instructions = "You are the execution agent for the actual job and resource assigned below. Use exec_command to write and run the shell code needed for that job. Choose s
+library/literature_investigation_prompt.py:5:INSTRUCTIONS = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within the parent\'s fixed subject and optional original-coordinate\ns
+published_evidence_assessment/evidence_search_strategy_improvement/task.py:139:        old = journal.row('runtime_actions', self.episode_id, index)
+published_evidence_assessment/evidence_search_strategy_improvement/task.py:140:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+published_evidence_assessment/evidence_search_strategy_improvement/task.py:142:        if old and old['result'] is not None:
+published_evidence_assessment/evidence_search_strategy_improvement/task.py:143:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/saved_decision_exchange.py:24:                    older = self.workflow.decision_exchange
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/saved_decision_exchange.py:25:                    if not older:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/saved_decision_exchange.py:27:                    previous = older[0]['request']['restora
+hmmer_statistics_data.py:172:            if any(old["occurrence_id"] == occurrence["occurrence_id"] for old in occurrences):
+bvbrc_appservice_contracts.py:455:    """Exact retained legacy or capped download identity, without normalization.
+bvbrc_appservice_contracts.py:457:    A legacy identity is readable evidence only. The transport and fresh host
+decision_context.py:27:decision_indices to read exact previously received outcomes together. That
+decision_context.py:29:execute the historical actions or earn their old credit again. The reader
+decision_context.py:38:and revision identifies the resulting state. Newer state replaces older values,
+decision_context.py:39:including yield expectations; older estimates remain historical. A bootstrap
+decision_context.py:41:decision_lookup_result supplies only the requested own historical information.
+decision_context.py:62:    'remain historical. A requested own-history lookup continues this same pending decision. '
+decision_context.py:63:    'Previously answered lookups remain answered after reconstruction; do not repeat them '
+decision_context.py:86:    older full process.entry result. Preserve that record on disk and project
+bvbrc_minhash_host.py:148:                # mandatory and this prospective proof is no longer available.
+native_hmmer_preparation_driver.py:414:    if decoded["metadata"] and decoded["metadata"]["dna_reader_compatibility"] != "compatible":
+native_blast_result_worker.py:172:        # Legacy component envelopes did not contain this calculated cell.
+native_blast_result_worker.py:284:    if {instance["legacy_pointer"] for instance in companion["instances"]} != set(expected):
+native_blast_result_worker.py:289:        validate_blast_correspondence_instance(expected[instance["legacy_pointer"]], instance)
+native_blast_result_worker.py:339:                instance["legacy_pointer"] = "/searches/" + str(len(scores["searches"])) + "/scores/components"
+native_blast_result_worker.py:365:                        correspondence["instances"].append({"legacy_pointer": "/fallback_hsp_components/" + str(fallback_index) + "/component",
+native_blast_standard_database_calculators.py:273:                    instance["legacy_pointer"] = f"/sequence/{index}/components" + instance["legacy_pointer"]
+native_blast_standard_database_calculators.py:318:            out["correspondence"]["instances"].append({"legacy_pointer": f"/native_hsp_components/{len(out['native_hsp_components'])}/component",
+native_blast_standard_database_calculators.py:335:    """Compare the required v2 common companion to its unchanged legacy cells."""
+native_blast_standard_database_calculators.py:347:    if {(item["legacy_pointer"], item["axis_basis"]) for item in companion["instances"]} != expected:
+native_blast_standard_database_calculators.py:350:        legacy = _at(calculations, instance["legacy_pointer"])
+native_blast_standard_database_calculators.py:351:        database = (_at(calculations, instance["legacy_pointer"].rsplit("/hits/", 1)[0])
+native_blast_standard_database_calculators.py:354:        validate_blast_correspondence_instance(legacy, instance, program=program)
+native_blast_standard_database_calculators.py:356:            sequence_pointer = instance["legacy_pointer"].split("/components/components/database_sheet/")[0]
+native_blast_standard_database_calculators.py:358:            rowkey = next(row["row_key"] for row in result["row_keys"]["hits"] if row["row_key"]["hit_ordinal"] == legacy["hit_index"])
+native_blast_utility_contracts.py:36:LEGACY_MODES = MODES
+native_blast_utility_contracts.py:37:MODES = LEGACY_MODES + PREPARATION_MODES + VDB_MODES
+native_blast_utility_contracts.py:59:# Both old native schema objects historically embedded this exact v1+v2 union.
+native_blast_utility_contracts.py:61:_HISTORICAL_OPERATION_SCHEMA = {"anyOf": [blast_utility_schema_for_version(version)
+native_blast_utility_contracts.py:62:    for version in ("blast_utility_operation_v1", "blast_utility_operation_v2")]}
+native_blast_utility_contracts.py:64:    "operation": _HISTORICAL_OPERATION_SCHEMA, "software": SOFTWARE_SCHEMA, "environment": _ENV,
+native_blast_utility_contracts.py:68:# Keep the old object branch byte-for-byte representable; new fields are v2 only.
+native_blast_utility_contracts.py:96:    "operation": deepcopy(_HISTORICAL_OPERATION_SCHEMA), "software": SOFTWARE_SCHEMA, "environment": _ENV,
+native_blast_utility_contracts.py:262:    if op["version"] != "blast_utility_operation_v1" or (op["program"], op["mode"]) not in LEGACY_MODES:
+native_blast_utility_contracts.py:407:                              ('legacy_file_checks','-legacy'),('require_taxids','-must_have_taxids'),
+native_blast_utility_contracts.py:532:    """Qualify original output bytes, preserving undiscriminated legacy facts.
+episode.py:1:"""Actual predefined annotation parent; preserves the unbound legacy action API."""
+blast_utility_result_views.py:36:                      "inventory_complete", "detail", "compatibility")
+blast_utility_result_views.py:162:_LEGACY_FACT_SCHEMAS = deepcopy(_FACT_SCHEMAS)
+blast_utility_result_views.py:324:    """Dispatch closed selector versions without enriching a legacy result."""
+blast_utility_result_views.py:541:        **{name: schema if name == "status" else _array(schema) for name, schema in _LEGACY_FACT_SCHEMAS.items()},
+blast_utility_result_views.py:543:    for name in _LEGACY_FACT_SCHEMAS:
+blast_utility_result_views.py:743:    projection = {name: [] for name in _LEGACY_FACT_SCHEMAS if name != "status"}
+execution_progress_assessment/task.py:134:        old = journal.row('runtime_actions', self.episode_id, index)
+execution_progress_assessment/task.py:135:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+execution_progress_assessment/task.py:137:        if old and old['result'] is not None:
+execution_progress_assessment/task.py:138:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+bvbrc_proteome_directional_projection.py:13:from . import bvbrc_proteome_fact_contracts as old
+bvbrc_proteome_directional_projection.py:27:    return old.canonical(a) == old.canonical(b)
+bvbrc_proteome_directional_projection.py:31:    old.require(condition, "directional_saved_projection_conflict", path)
+bvbrc_proteome_directional_projection.py:78:class _LegacyProjection(_Projection):
+bvbrc_proteome_directional_projection.py:86:            pointer = "/components/legacy" + pointer[len("/components"):]
+bvbrc_proteome_directional_projection.py:109:        return old.encode_reference(kind, self.aid, pointer)
+bvbrc_proteome_directional_projection.py:168:        scope = selector['scope'] if selector['scope'] not in {'correspondence', 'compatible_pairs'} else 'subject'
+bvbrc_proteome_directional_projection.py:188:    def compatible_support(self, context, row, path):
+bvbrc_proteome_directional_projection.py:199:    def population(counts, *, compatible=False, graph=None):
+bvbrc_proteome_directional_projection.py:200:        names = ("resolved_pairs", "unresolved_pairs", "stop_containing_pairs") if compatible else (
+bvbrc_proteome_directional_projection.py:202:        cells = [None if graph is None else graph["distinct_pair_count"]] if compatible else [None if counts is None else counts["paired_columns"]]
+bvbrc_proteome_directional_projection.py:256:        elif scope == "compatible_pairs": suffix = "/compatible_pair_counts/" + metric
+bvbrc_proteome_directional_projection.py:263:        if scope in {"correspondence", "compatible_pairs"} or metric.startswith("compatible_unique_pair_"):
+bvbrc_proteome_directional_projection.py:264:            self.compatible_support(context, row, path)
+bvbrc_proteome_directional_projection.py:272:            elif metric.startswith("compatible_unique_pair_"):
+bvbrc_proteome_directional_projection.py:273:                population = self.population(None if row is None else row["compatible_pair_counts"], compatible=True,
+bvbrc_proteome_directional_projection.py:404:            self.compatible_support(context, located["calculated"], located["calculated_path"])
+bvbrc_proteome_directional_projection.py:416:        requirement = dict(requirement_id="proteome_requirement_" + hashlib.sha256(old.canonical(payload).encode()).hexdigest(),
+bvbrc_proteome_directional_projection.py:464:        legacy_selectors = {field: selector for field, selector in selectors.items()
+bvbrc_proteome_directional_projection.py:466:        if legacy_selectors:
+bvbrc_proteome_directional_projection.py:469:            legacy_result = _LegacyProjection(self.sheet, None if self.components is None else self.components["legacy"],
+bvbrc_proteome_directional_projection.py:470:                self.parameters, old.requested_form_schema(legacy_selectors), requirements, diagnostics, global_root=self.root).build()
+bvbrc_proteome_directional_projection.py:471:            facts.update(legacy_result["facts"])
+bvbrc_proteome_directional_projection.py:473:                self.root[name] = _unique([*self.root[name], *legacy_result[name]])
+bvbrc_proteome_directional_projection.py:493:        old._validate(self.form, facts, "saved_facts_invalid")
+bvbrc_comparative_systems_returns.py:299:        # supersedes previous publications. The shared helper locates only
+bvbrc_comparative_systems_returns.py:300:        # named result sources; do not let that locator revive older science.
+native_blast_database_contracts.py:298:    native compatibility, deployment, or application of offline configuration.
+acquisition.py:424:                # A slow worker must not make its old reservation look like an
+acquisition.py:425:                # old contact. Keep the lock until this conservative completion
+acquisition.py:842:        """Acquire one literal legacy BioMart request prepared by its host."""
+acquisition.py:863:    """Legacy keys from the shared native parser; original request is unknown."""
+acquisition.py:864:    from .uniprot_native import legacy_uniprot_records, parse_uniprot_native
+acquisition.py:866:    return legacy_uniprot_records(parsed, content)
+acquisition.py:1078:    """Compatibility fields from the same native/header interpretation."""
+native_blast_utility_result_publication.py:123:        "blast_database_artifact_set_v1", "blast_database_artifact_set_v2"}
+native_blast_hsp_views.py:51:        if grading.get("schema") not in {"native_blast_retained_grading_v1", "native_blast_retained_grading_v2"}:
+native_blast_hsp_views.py:90:            if item["legacy_pointer"] == pointer and item["axis_basis"] == "qualified"), "common_components_required")
+hmmer_model_binary.py:5:ABI, convert a model, synthesize consensus, expand legacy calibration, or load
+hmmer_model_binary.py:19:_OLD_MAGICS = {0xE8EDEDB1: "HMMER1.0", 0xE8EDEDB2: "HMMER1.1",
+hmmer_model_binary.py:49:            "legacy": None,
+hmmer_model_binary.py:319:        old_format = None
+hmmer_model_binary.py:325:                if magic in _OLD_MAGICS:
+hmmer_model_binary.py:326:                    old_format = _OLD_MAGICS[magic]
+hmmer_model_binary.py:333:            elif old_format:
+hmmer_model_binary.py:335:                details["format"] = old_format + " binary"
+monitoring_credit.py:84:        # Historical runs retain the exact sample-only projection/definition.
+native_blast_utility_results.py:46:_SELECTOR_VERSIONS = {'native_blast_utility_result_selector_v1', 'native_blast_utility_result_selector_v2'}
+waiting.py:311:    expectation refs bind compatibility; no other resource/workload is pooled.
+waiting.py:352:        compatible = []
+waiting.py:367:            compatible.append(handle)
+waiting.py:368:        if compatible:
+waiting.py:370:            for handle in compatible:
+waiting.py:407:            reasons.append("no_compatible_duration_support")
+waiting.py:643:        # module's condition validator. This only validates/copies supplied old
+homology_job_submission/instructions.py:21:        old_history_guidance = _live_original_runtime_prompt.INSTRUCTIONS[_live_original_runtime_prompt.INSTRUCTIONS.index('On a fresh provider conversation,'):_live_original_runtime_prompt.INSTRUC
+homology_job_submission/instructions.py:22:        instructions = instructions.replace(old_history_guidance, 'Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observation. 
+runtime.py:159:        versions = ('existing_yield_controller_explicit_parameters_v1', 'existing_yield_controller_explicit_role_costs_v2', 'existing_yield_controller_explicit_role_costs_v3')
+runtime.py:498:        old = self.journal.db.execute('SELECT data FROM runtime_estimation_contexts WHERE run_id=? AND episode_id=? AND decision_index=?', key).fetchone()
+runtime.py:499:        if old:
+runtime.py:500:            context = json.loads(old[0])
+runtime.py:924:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+runtime.py:925:                    if not older:
+runtime.py:927:                    previous = older[0]['request']['restoration']['snapshot']
+runtime.py:1321:        old = journal.row('runtime_actions', self.episode_id, index)
+runtime.py:1322:        if old and json.loads(old['action']) != selection:
+runtime.py:1324:        if old and old['result'] is not None:
+runtime.py:1325:            result, credit = (json.loads(old['result']), old['credit'])
+runtime.py:1411:    def __init__(self, store, tools, provider, directory, run_id, controller_factory, project_credit, credit_binding=None, restoration_settings=None, execution_expectations=None, job_episodes=None, controller_binding=None, p
+runtime.py:1422:        if root_action_boundary not in (None, ROOT_BOUNDARY_VERSION):
+runtime.py:3216:        entries.append({'name': 'episode.history', 'description': "Read only this Episode's prior decisions: metadata index, exact selected actions/outcomes and admitted direct-child forms, or a bounded publication-ID page f
+runtime.py:3288:        """Read an actual own rejection; older journals may have no effects table."""
+runtime.py:3547:            old = self.journal.row('runtime_actions', source.episode_id, index) if self.annotation_child_roles is not None else None
+runtime.py:3548:            original = old is not None and json.loads(old['action']) == selection
+runtime.py:3582:                old = self.journal.row('runtime_actions', source.episode_id, index)
+runtime.py:3583:                if old is not None and json.loads(old['action']) != selection:
+runtime.py:3585:                if old is None:
+runtime.py:3589:            old = self.journal.row('runtime_actions', source.episode_id, index)
+runtime.py:3590:            if old is not None:
+runtime.py:3591:                if json.loads(old['action']) != selection:
+runtime.py:3593:                result = json.loads(old['result']) if old['result'] is not None else {}
+runtime.py:3690:            old = self.journal.row('runtime_actions', source.episode_id, index)
+runtime.py:3691:            if old is None:
+runtime.py:3693:            elif json.loads(old['action']) != selection:
+runtime.py:3695:            legacy_request_assembler = None
+runtime.py:3699:                legacy_request_assembler = parent.child_request_assembler(role)
+runtime.py:3700:            child = self.build(role, f'child_{index}', selection['goal'], scope, parent=source.request.goal, parent_path=source.path, contract=contract, initial=initial, job_assignment=assignment, episode_assignment=episode_
+runtime.py:3733:            old = self.journal.row('runtime_actions', source.episode_id, index)
+runtime.py:3734:            if old['result'] is None:
+runtime.py:3747:                old = self.journal.row('runtime_actions', source.episode_id, index)
+runtime.py:3748:            value = old['credit']
+runtime.py:3751:                self.journal.save('runtime_actions', {'episode_id': source.episode_id, 'decision_index': index, 'action': old['action'], 'result': old['result'], 'credit': value})
+runtime.py:3752:            source.last_outcome, source.last_outcome_index = (json.loads(old['result']), index)
+runtime.py:3822:        old = self.store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND decision_index=?', (self.run_id, parent_id, index)).fetchone()
+runtime.py:3823:        if old is not None:
+runtime.py:3824:            if any((old[key] != value for key, value in values.items())):
+runtime.py:3861:        old_interpretations = facts.pop('interpretations')
+runtime.py:3867:                if name not in old_interpretations or node != original_fields.get(name):
+runtime.py:3869:            values = {name: old_interpretations[name] for name in requested}
+runtime.py:4006:                old = self.journal.row('runtime_observations', identity.episode_id, view.unit_ref.unit_index)
+runtime.py:4007:                if old and json.loads(old['observation']) != data:
+runtime.py:4009:                if not old:
+runtime.py:4016:            old = self.journal.row('runtime_episodes', identity.episode_id)
+runtime.py:4017:            if self.inprocess_replay is not None and old['state'] == 'yielded':
+runtime.py:4018:                if json.loads(old['completion']) != {'ended_by': record.ended_by, 'actions': record.units_consumed} or json.loads(old['archive']) != self.archive.store(record).descriptor():
+runtime.py:4021:            if self.episode_branch_lifecycle == EPISODE_BRANCH_LIFECYCLE and old['state'] == 'active':
+runtime.py:4027:            self.journal.save('runtime_episodes', {**{key: old[key] for key in ('episode_id', 'path', 'request', 'initial_credit')}, 'state': 'yielded', 'completion': _json({'ended_by': record.ended_by, 'actions': record.uni
+runtime.py:4199:    freshly remeasured score for historical work.
+runtime.py:4219:    old = journal.row('runtime_runs')
+runtime.py:4221:        decision_protocol = json.loads(old['settings']).get('decision_protocol') if old else DECISION_EXCHANGE_PROTOCOL if provider is None or isinstance(provider, ModelConnection) else None
+runtime.py:4223:    if old and decision_protocol != json.loads(old['settings']).get('decision_protocol'):
+runtime.py:4227:    saved_native_information = json.loads(old['settings']).get('native_timing_information') if old else None
+runtime.py:4228:    if old and json.loads(old['settings']).get('episode_record_receipts') != requested_receipts:
+runtime.py:4230:    if old and json.loads(old['settings']).get('native_job_events') != requested_native_events:
+runtime.py:4280:        if old is None:
+runtime.py:4282:        settings = json.loads(old['settings'])
+runtime.py:4341:        if old['state'] in ('yielded', 'yielded_with_pending_work') and old['summary'] is not None:
+runtime.py:4342:            return json.loads(old['summary'])
+runtime.py:4387:    recover_service_publication = resume and requested_services is not None and ('episode_bindings' not in settings) and (old['state'] == 'created') and (old['summary'] is None) and (store.db.execute('SELECT 1 FROM runtime_e
+blast_maskinfo_inputs.py:245:                if name not in ("accession", "version", "name", "release") or name in fields:
+episode_completion.py:168:            old = self.db.execute("SELECT sequence,slot FROM runtime_completion_slots "
+episode_completion.py:171:            sequence = (old["sequence"] if old else self.db.execute(
+episode_completion.py:177:            if old is not None:
+episode_completion.py:178:                if canonical(slot) != old["slot"]:
+episode_completion.py:180:                return json.loads(old["slot"])
+episode_completion.py:244:            old = self.journal.row("runtime_observations", episode_id, sequence)
+episode_completion.py:245:            if old is not None:
+episode_completion.py:246:                if canonical(json.loads(old["observation"])) != canonical(observation):
+episode_completion.py:259:            old = self.db.execute("SELECT effect FROM runtime_decision_effects WHERE run_id=? "
+episode_completion.py:262:            if old is not None:
+episode_completion.py:263:                if old[0] != canonical(effect):
+episode_completion.py:265:                return json.loads(old[0])
+episode_completion.py:312:            old = self.db.execute("SELECT source_state FROM runtime_source_states "
+episode_completion.py:314:            previous = None if old is None else json.loads(old[0])
+episode_completion.py:320:            if old is not None and old[0] == canonical(state):
+episode_completion.py:338:        Legacy actions without slots retain unknown historical completion order.
+instructions.py:39:        old_history_guidance = INSTRUCTIONS[INSTRUCTIONS.index('On a fresh provider conversation,'):
+instructions.py:41:        instructions = instructions.replace(old_history_guidance,
+instructions.py:43:            'these create no completed action or observation. Read exact previously received '
+instructions.py:46:            'does not execute or credit the historical work again.\n')
+native_blast_database_acquisition.py:208:        # Finish only a previously sealed outcome. This is the same selected
+api_selected_effects.py:186:            for old, row in zip(receipts, rows):
+api_selected_effects.py:188:                self._transition(old, row)
+api_selected_effects.py:189:                changed |= not _same(old, row)
+api_selected_effects.py:196:    def _transition(old, row):
+api_selected_effects.py:198:            if not _same(old[field], row[field]):
+api_selected_effects.py:200:        if _same(old, row):
+api_selected_effects.py:202:        if old['state'] in {'confirmed', 'not_sent'}:
+api_selected_effects.py:204:        if old['state'] == 'prepared_not_issued':
+api_selected_effects.py:212:            expected = {**old, 'state': 'issued_unknown', 'issued_at': row['issued_at']}
+api_selected_effects.py:217:        if old['state'] != 'issued_unknown' or row['issued_at'] != old['issued_at']:
+api_selected_effects.py:430:                for old, row in zip(receipts, updated):
+api_selected_effects.py:431:                    self._transition(old, row)
+api_selected_effects.py:449:            for old in receipts:
+api_selected_effects.py:450:                row = _validate('EffectReceipt', {**old, **deepcopy(by_ref[old['effect_ref']])})
+api_selected_effects.py:451:                self._transition(old, row)
+blast_sequence_database.py:28:legacy codes); surviving native data always remains in the saved outer sheet.
+blast_sequence_database.py:557:    legacy_issues = []
+blast_sequence_database.py:558:    report, hits, _, _, _ = _explicit_inputs(normalized, descriptions, sequences, legacy_issues)
+blast_sequence_database.py:559:    links = _sequence_links(sequences, normalized, report, hits, legacy_issues, geometry_program=geometry,
+blast_sequence_database.py:561:    for issue in legacy_issues:
+blast_sequence_database.py:674:        instance["legacy_pointer"] = "/components/database_sheet" + instance["legacy_pointer"]
+hpc_work_planning/work_operations.py:30:        old = ledger.cached(operation_key, selection)
+hpc_work_planning/work_operations.py:31:        if old is not None:
+hpc_work_planning/work_operations.py:32:            return old
+native_blast_standard_database_acquisition.py:208:        # Finish only a previously sealed outcome. This is the same selected
+published_evidence_assessment/evidence_search_strategy_improvement/saved_decision_exchange.py:24:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+published_evidence_assessment/evidence_search_strategy_improvement/saved_decision_exchange.py:25:                    if not older:
+published_evidence_assessment/evidence_search_strategy_improvement/saved_decision_exchange.py:27:                    previous = older[0]['request']['restoration']['snapshot']
+execution_result_acquisition/completion.py:38:        historical = self._closed_completion_verdict(context, proof)
+execution_result_acquisition/completion.py:39:        if historical is not None:
+execution_result_acquisition/completion.py:40:            return historical
+bvbrc_appservice_inputs.py:87:        # The older generic selected-action checker uses Python equality. Keep
+bvbrc_appservice_inputs.py:522:            old = _one(previous, lambda item: self.identity(item["object"], [reference]) == obj["identity"],
+bvbrc_appservice_inputs.py:527:                and row["descriptor"]["slot"]["object_identity"] == old["identity"]
+native_blast_standard_database_metadata.py:499:                    compatible = (master["status"] == "complete" and mapping is not None and
+native_blast_standard_database_metadata.py:502:                        *_native_pssm_names(records[record["record_ordinal"]]), compatible))
+native_blast_standard_database_metadata.py:512:    for ordinal, symbols, native_id, native_title, compatible in candidates:
+native_blast_standard_database_metadata.py:528:                valid = (compatible and actual == symbols and snap["molecule"] == molecule and snap["length"] == len(symbols)
+native_blast_standard_database_metadata.py:535:        compatible = compatible and bool(symbols) and set(symbols) <= set(_ALPHABETS[molecule])
+native_blast_standard_database_metadata.py:540:            compatible = compatible and end <= len(symbols)
+native_blast_standard_database_metadata.py:541:        if not compatible:
+native_blast_standard_database_metadata.py:548:        if compatible:
+native_blast_standard_database_metadata.py:1682:        if sheet["schema"] not in {"blast_sequence_database_result_sheet_v1", "blast_sequence_database_result_sheet_v2", "blast_sequence_database_result_sheet_v3"}:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/task_instructions.py:4:INSTRUCTIONS = 'You own an iterative scientific annotation improve
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/task_instructions.py:24:        old_history_guidance = INSTRUCTIONS[INSTRUCTIONS.index('O
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/task_instructions.py:25:        instructions = instructions.replace(old_history_guidance,
+method_loop/episode.py:126:            f"{type(item).__name__} is not a JSON-compatible Goal value"
+method_loop/episode.py:139:        raise TypeError("EpisodeGoal values must be JSON-compatible") from exc
+method_loop/episode.py:204:        raise TypeError(f"{type(item).__name__} is not a JSON-compatible closed record value")
+method_loop/episode.py:680:    """One previously completed input restored at a durable boundary."""
+method_loop/episode.py:1690:        old = updates[index]
+method_loop/episode.py:1692:            identifiers = tuple(dict.fromkeys((old.record_id, old.goal.goal_id, *old._audit_identifiers)))
+method_loop/episode.py:1695:        updated = replace(old, report=delivery.report if delivery.report is not None else old.report,
+method_loop/episode.py:1696:            delivery_failures=old.delivery_failures + ((delivery.failure,) if delivery.failure is not None else ()))
+method_loop/episode.py:1698:                     if record.episode_update is not None and record.episode_update.record_id == old.record_id]
+string_acquisition.py:179:# The private evidence has no invented Source identity. The legacy schema above
+string_acquisition.py:461:    # This invokes the same native identity/parser authority as the legacy DTO.
+execution_job_submission/hpc_job_execution/result_records.py:34:        return assignment.get('selector', {}).get('version') in {'native_blast_utility_result_selector_v1', 'native_blast_utility_result_selector_v2'}
+execution_job_submission/result_records.py:34:        return assignment.get('selector', {}).get('version') in {'native_blast_utility_result_selector_v1', 'native_blast_utility_result_selector_v2'}
+scientific_process/yield_estimator.py:26:        continuation cutoff and the exact credit units. An old workflow with
+native_blast_standard_database_result_publication.py:47:_ROLES_V2 = {**_ROLES_V1, 'calculations': ('calculations.json', 'native_blast_standard_database_calculations_v2')}
+evidence_geometry.py:132:    An older aggregate parent footprint is not a residue map: its fractional
+hmmer_emission_calculations.py:334:        threshold_valid = (isinstance(thresholds, dict) and set(thresholds) == {"minl", "minu"}
+hmmer_emission_calculations.py:371:                if thresholded and threshold_valid:
+hmmer_emission_calculations.py:395:                "thresholds": {name: _component(thresholds[name] if threshold_valid else None,
+hmmer_emission_calculations.py:396:                    state="present" if threshold_valid else "missing", unit="probability", inputs=[{"field": "parameters.consensus_thresholds."+name}]) for name in ("minl", "minu")},
+hmmer_emission_calculations.py:412:        missing_state = "missing" if actual is None or thresholded and not threshold_valid else "incomplete"
+hmmer_emission_calculations.py:437:        if thresholded and not threshold_valid:
+hmmer_emission_calculations.py:447:    It never changes model probabilities, output data, or historical credit.
+execution_result_acquisition/saved_decision_exchange.py:28:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+execution_result_acquisition/saved_decision_exchange.py:29:                    if not older:
+execution_result_acquisition/saved_decision_exchange.py:31:                    previous = older[0]['request']['restoration']['snapshot']
+hmmer_fm_calculations.py:225:    _check(checks, "dna_reader_compatibility", dbkey, "unknown" if not dbknown else _truth(metadata["dna_reader_compatibility"] == "compatible"),
+hmmer_fm_calculations.py:247:            compatible = first is not None and all(header[f] == first["header"][f] for f in ("N", "seq_offset", "seq_cnt", "ambig_offset", "ambig_cnt")) and header["overlap"] == 0
+hmmer_fm_calculations.py:248:            _check(checks, "paired_block_metadata", key, _truth(compatible), "paired sections share populations; reverse writer overlap is zero", [key, first["record_key"] if first else None])
+hmmer_fm_calculations.py:273:                   "label agreement only, not historical custody or unique identity", [skey, source["record_key"] if source else None])
+hmmer_fm_calculations.py:489:                     and metadata is not None and metadata["dna_reader_compatibility"] == "compatible")
+bvbrc_proteome_native_contracts.py:1:"""Closed, data-only contracts for the legacy GenomeComparison projection.
+sequence_composition_grader.py:166:    """Check saved associations without repairing or mutating historical cells."""
+homology_result_acquisition/saved_decision_exchange.py:25:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+homology_result_acquisition/saved_decision_exchange.py:26:                    if not older:
+homology_result_acquisition/saved_decision_exchange.py:28:                    previous = older[0]['request']['restoration']['snapshot']
+hmmer_artifact_calculations.py:87:    """Common core slots only; HMMER2 configured fields remain in legacy data."""
+hmmer_artifact_calculations.py:272:                compatible = sd is None or od is None or sd["symbols"] == od["symbols"]
+hmmer_artifact_calculations.py:392:                expected_format = {"ascii": "hmmer3_ascii", "binary": "hmmer_binary", "legacy_hmmer2": "hmmer2_ascii"}[self.sheet["operation"]["mode"]]
+hmmer_alignment_preparation_calculations.py:197:    or a shape-compatible record produced from the same pure Stockholm reader.
+hmmer_alignment_preparation_calculations.py:348:            "threshold_float32": _f32(threshold), "is_model_position": is_match})
+hmmer_alignment_preparation_calculations.py:414:    compatible = True
+hmmer_alignment_preparation_calculations.py:422:        compatible = compatible and same
+hmmer_alignment_preparation_calculations.py:432:    output["sequence_content"] = "pass" if compatible else "fail"
+hmmer_alignment_preparation_calculations.py:433:    if compatible:
+hmmer_alignment_preparation_calculations.py:500:        compatible = association.get("status") != "conflicting"
+hmmer_alignment_preparation_calculations.py:502:            unit="match_states_per_input_alignment_column", association=compatible)
+hmmer_alignment_preparation_calculations.py:504:            unit="effective_sequences_per_input_sequence", association=compatible)
+hmmer_alignment_preparation_calculations.py:507:        _check(result, "association", "pass" if association["status"] == "validated" else "fail" if not compatible else "unknown",
+hmmer_alignment_preparation_calculations.py:693:    old, old_state = _mm(source, absent_is_empty=True)
+hmmer_alignment_preparation_calculations.py:696:    old_inputs = [_operand(source, "column_annotations.MM", absent_annotation_means="empty_mask")] if source else []
+hmmer_alignment_preparation_calculations.py:698:    components["input_masked_count"] = _component(len(old) if old is not None else None, state=old_state, unit="alignment_column_count", inputs=old_inputs)
+hmmer_alignment_preparation_calculations.py:703:    for name, values in (("newly_masked_count", actual - old if joint_state == "present" else None),
+hmmer_alignment_preparation_calculations.py:704:                         ("removed_masked_count", old - actual if joint_state == "present" else None),
+hmmer_alignment_preparation_calculations.py:705:                         ("retained_masked_count", actual & old if joint_state == "present" else None)):
+hmmer_alignment_preparation_calculations.py:707:                                     inputs=old_inputs + actual_inputs)
+hmmer_alignment_preparation_calculations.py:710:    expected = union | old if old is not None and settings.get("--appendmask") else union
+hmmer_alignment_preparation_calculations.py:712:    if union_state == "present" and actual is not None and (not settings.get("--appendmask") or old is not None):
+hpc_work_planning/yield_estimator.py:29:        old = [row for row in ledger.records('continuation') if row['id'] == reference]
+hpc_work_planning/yield_estimator.py:30:        if old:
+hpc_work_planning/yield_estimator.py:31:            return {'reference': reference, 'evidence': old[0]['body']}
+bvbrc_proteome_directional_numerical_contracts.py:712:    state = {'compatible_displayed_partial_map':'value', 'observed_conflict':'conflict',
+bvbrc_proteome_directional_numerical_contracts.py:714:    compatible_reasons = ([c['code'] for c in graph['conflicts']] if state == 'conflict' else
+bvbrc_proteome_directional_numerical_contracts.py:727:        _cell(value['compatible_pair_counts'][name], 'coordinate_pair', count, refs,
+bvbrc_proteome_directional_numerical_contracts.py:728:              path + '/compatible_pair_counts/' + name, state=state, reasons=compatible_reasons)
+bvbrc_proteome_directional_numerical_contracts.py:730:        ('compatible_unique_pair_symbol_identity', counts['identical_symbol_pairs'], len(columns)),
+bvbrc_proteome_directional_numerical_contracts.py:731:        ('compatible_unique_pair_resolved_identity', counts['resolved_identical_pairs'], counts['resolved_pairs']),
+bvbrc_proteome_directional_numerical_contracts.py:732:        ('compatible_unique_pair_resolved_fraction', counts['resolved_pairs'], len(columns)),
+bvbrc_proteome_directional_numerical_contracts.py:735:        ratio_reasons = list(compatible_reasons)
+bvbrc_proteome_directional_numerical_contracts.py:736:        if name != 'compatible_unique_pair_resolved_identity':
+bvbrc_proteome_directional_numerical_contracts.py:831:    threshold_kinds = {'sequences_better_than','hsps_better_than_without_gapping'}
+bvbrc_proteome_directional_numerical_contracts.py:834:        if row['kind'] in threshold_kinds and threshold is None: continue
+bvbrc_proteome_directional_numerical_contracts.py:835:        scope = Decimal(threshold) if row['kind'] in threshold_kinds else None
+bvbrc_data_feature_sequences.py:219:        # compatible projections by exact locator; no representation gains a row.
+bvbrc_data_feature_sequences.py:221:        for old, new in zip(previous["rows"], page["rows"]):
+bvbrc_data_feature_sequences.py:222:            if any(old[key] != new[key] for key in ("row_key", "row_index", "native_path", "native_id")):
+bvbrc_data_feature_sequences.py:225:                by_field = {cell["field"]: cell for cell in old[key]}
+bvbrc_data_feature_sequences.py:230:                old[key] = [by_field[field] for field in selected if field in by_field]
+bvbrc_data_feature_sequences.py:231:            old["issues"] = _unique(old["issues"] + new["issues"])
+bvbrc_data_feature_sequences.py:233:                old["status"] = "invalid" if "invalid" in (old["status"], new["status"]) else "partial"
+bvbrc_data_feature_sequences.py:408:    requirements, never automatic queries. Identical delivery and compatible
+library/action_contracts.py:4:Unbound legacy defaults and every late callback retain their original order.
+bvbrc_proteome_returns.py:318:        # supersedes previous publications. The shared helper locates only
+bvbrc_proteome_returns.py:319:        # named result sources; do not let that locator revive older science.
+native_hmmer_preparation_tool_info.py:30:        "legacy_hmmer2": "Convert supplied profile HMMs to legacy HMMER2 text format.",
+native_hmmer_preparation_tool_info.py:71:        "ascii": "The compiler adds -a. Optional --outfmt selects 3/a through 3/f; the recorded default is 3/f. Preserve the actual revision: older revisions omit newer annotations or represent calib
+native_hmmer_preparation_tool_info.py:113:    "hmmfetch": "Input models and optional explicitly selected ssi retain their original association; no ambient sidecar is discovered. The producer stages models and SSI with matching private stems
+native_hmmer_preparation_tool_info.py:114:    "hmmpress": "Use complete ordinary model-file bytes with native names and a consistent alphabet. Preserve model occurrences, source hashes and original private-copy relationships outside model-f
+native_hmmer_preparation_tool_info.py:115:    "hmmsim": "Supply a same-alphabet model collection and retain full ordered scores, summary and every selected auxiliary output. -N is generated sequences per model (at least 10); -L is their fix
+native_hmmer_preparation_tool_info.py:118:    "hmmerfm-exactmatch": "queries is one nonempty literal canonical A/C/G/T sequence per LF-terminated line, at most 254 symbols; it is not FASTA. Current binding rejects U, CR, whitespace and unsu
+execution_job_submission/api_job_execution/result_records.py:34:        return assignment.get('selector', {}).get('version') in {'native_blast_utility_result_selector_v1', 'native_blast_utility_result_selector_v2'}
+native_blast_masking_returns.py:142:        # actual old fact without replacing it with today's expanded facts.
+api_execution.py:368:                old = self.store.db.execute('SELECT * FROM provider_jobs WHERE operation_key=?', (operation_key,)).fetchone()
+api_execution.py:369:                if old is None:
+phmmer_result_worker.py:63:        old = db.execute('SELECT data FROM hits WHERE id=?', (row['reference_id'],)).fetchone()
+phmmer_result_worker.py:65:            if old is None:
+phmmer_result_worker.py:67:            elif {k:v for k,v in json.loads(old[0]).items() if k != 'table_byte_span'} != {
+phmmer_result_worker.py:89:            old = db.execute('SELECT data FROM refs WHERE id=?', (reference.id,)).fetchone()
+phmmer_result_worker.py:90:            if old:
+phmmer_result_worker.py:91:                if json.loads(old[0])['sequence_sha256'] != sha:
+phmmer_result_worker.py:104:            # No selected reference can be published under an old database
+resource_information.py:282:            legacy = self.store.db.execute("SELECT json_extract(result,'$.execution_handoff') "
+resource_information.py:286:            if not any(json.loads(row[0]) == original for row in legacy if row[0] is not None):
+resource_information.py:329:            old = self._sources(accession=accession)
+resource_information.py:330:            if old:
+resource_information.py:331:                if len(old) != 1 or self.read_handoff_source(old[0]['id'], scope=plain(context.scope)) != body:
+resource_information.py:333:                return self._with_reference(outcome, old[0]['id'])
+scientific_process/goal.py:16:        return "Investigate the parent's assigned scientific problem iteratively in the shared Episode loop. The selected scientific support proposition and operands define the support problem; the thought patt
+hmmer_model_source_cells.py:27:    Original legacy EVD rows remain separately retained, including defects.
+hpc_result_receipts.py:20:    """Read original supplied inputs from current or historical HPC plans.
+hpc_result_receipts.py:24:    Neither the immutable plan nor its historical field meanings are changed.
+bvbrc_proteome_directional_saved_validation.py:259:    counts = subject['compatible_pair_counts']
+bvbrc_proteome_directional_saved_validation.py:260:    expected_state = {'compatible_displayed_partial_map':'value','observed_conflict':'conflict','incomplete_geometry':'missing'}[graph['mapping_state']]
+bvbrc_proteome_directional_saved_validation.py:261:    for cell in counts.values(): _require(cell['state'] == expected_state,path + '/compatible_pair_counts')
+bvbrc_proteome_directional_saved_validation.py:269:    for name,num,den in (('compatible_unique_pair_symbol_identity',counts['identical_symbol_pairs'],graph['distinct_pair_count']),
+bvbrc_proteome_directional_saved_validation.py:270:            ('compatible_unique_pair_resolved_identity',counts['resolved_identical_pairs'],counts['resolved_pairs']),
+bvbrc_proteome_directional_saved_validation.py:271:            ('compatible_unique_pair_resolved_fraction',counts['resolved_pairs'],graph['distinct_pair_count'])):
+bvbrc_proteome_directional_saved_validation.py:372:    c._require(components['legacy'] is not None or components['directional'] is not None,path='/components')
+bvbrc_proteome_directional_saved_validation.py:373:    c._require((components['legacy'] is not None) == (native is not None) and
+bvbrc_proteome_directional_saved_validation.py:375:    if components['legacy'] is not None:
+bvbrc_proteome_directional_saved_validation.py:376:        legacy=c._checked(validate_proteome_sheet_data,'NativeComponentsResult',components['legacy'],path='/components/legacy')
+bvbrc_proteome_directional_saved_validation.py:377:        if legacy['value'] is not None:
+bvbrc_proteome_directional_saved_validation.py:378:            c._require(legacy['value']['sheet_sha256'] == c.digest(native) and
+bvbrc_proteome_directional_saved_validation.py:379:                c.canonical(legacy['value']['parameters']) == c.canonical(parameters['calculation_parameters']),path='/components/legacy/value')
+evidence_axis_contracts.py:4:cites actual witnesses. Validation keeps historical draft records readable; it
+evidence_axis_contracts.py:116:# Older immutable definitions remain readable without a scoring proposal.
+evidence_axis_contracts.py:179:    """Validate retained draft structure, including withdrawn historical rules.
+evidence_axis_contracts.py:181:    Readability is separate from execution: accepting an old ordinal/grade
+execution_job_submission/instructions.py:19:        old_history_guidance = _live_original_runtime_prompt.INSTRUCTIONS[_live_original_runtime_prompt.INSTRUCTIONS.index('On a fresh provider conversation,'):_live_original_runtime_prompt.INSTRU
+execution_job_submission/instructions.py:20:        instructions = instructions.replace(old_history_guidance, 'Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observation.
+execution_job_submission/hpc_job_execution/completion.py:53:        historical = self._closed_completion_verdict(context, proof)
+execution_job_submission/hpc_job_execution/completion.py:54:        if historical is not None:
+execution_job_submission/hpc_job_execution/completion.py:55:            return historical
+bvbrc_proteome_bundle_projection.py:256:            method = "legacy_first_hsp_percent" if metric == c.ASSOCIATION_METRICS[0] else "legacy_subject_endpoint_percent"
+genomic_overlap_result_worker.py:626:                    # Previously batch-authenticated capture rows remain their
+execution_job_submission/api_job_execution/saved_decision_exchange.py:25:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+execution_job_submission/api_job_execution/saved_decision_exchange.py:26:                    if not older:
+execution_job_submission/api_job_execution/saved_decision_exchange.py:28:                    previous = older[0]['request']['restoration']['snapshot']
+bvbrc_genome_alignment_calculators.py:59:                # of an old check or an acquisition of missing source bytes.
+uniprot_native.py:273:        compatible = binding == "entry_sequence" and valid_order and b <= sequence["observed_length_aa"]
+uniprot_native.py:274:        interval = [a - 1, b] if exact and compatible else None
+uniprot_native.py:321:def _legacy_publication(row, pointer, reader):
+uniprot_native.py:626:        legacy = _legacy_publication(raw, pointer, record_reader)
+uniprot_native.py:630:                        "legacy_publication": legacy})
+uniprot_native.py:781:    legacy = record["legacy_publication"]
+uniprot_native.py:782:    _require(legacy["source_name"] is None or legacy["source_name_pointer"] is not None,
+uniprot_native.py:783:             "legacy_name_pointer_missing")
+uniprot_native.py:784:    _require(len(legacy["source_ec_numbers"]) == len(legacy["source_ec_number_pointers"]),
+uniprot_native.py:785:             "legacy_ec_pointer_count_conflict")
+uniprot_native.py:787:    if legacy["source_name_pointer"] is not None:
+uniprot_native.py:788:        _require(re.fullmatch(prefix + r"/fullName/value", legacy["source_name_pointer"]) is not None,
+uniprot_native.py:789:                 "legacy_name_pointer_conflict")
+uniprot_native.py:790:    for ec_pointer in legacy["source_ec_number_pointers"]:
+uniprot_native.py:792:                 "legacy_ec_pointer_conflict")
+uniprot_native.py:803:    The legacy compatibility helper additionally checks the retained digest.
+uniprot_native.py:870:def legacy_uniprot_records(parsed: dict, content: bytes) -> list[dict]:
+uniprot_native.py:871:    """Project old parser keys using the single native parser's decisions.
+uniprot_native.py:885:        legacy = record["legacy_publication"]
+uniprot_native.py:891:            "source_name": legacy["source_name"], "source_ec_numbers": list(legacy["source_ec_numbers"]),
+uniprot_native.py:895:            "entry_audit": raw.get("entryAudit", {}), "interpretation": legacy["interpretation"]})
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/task.py:139:        old = journal.row('runtime_actions', self.episode_id, index)
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/task.py:140:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/task.py:142:        if old and old['result'] is not None:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/task.py:143:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/saved_decision_exchange.py:24:                    older = self.workflow.decision_exchange
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/saved_decision_exchange.py:25:                    if not older:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/saved_decision_exchange.py:27:                    previous = older[0]['request']['restora
+execution_planning.py:66:            'Use process.execution for selected-tool recipes and compatible timing history.'}
+execution_planning.py:75:        'shared age-weighted timing cases for explicit compatibility profiles. No job, probe or credit.',
+method_loop/durable.py:773:            old = db.execute("SELECT * FROM returns WHERE handle=?", (handle,)).fetchone()
+method_loop/durable.py:774:            if old:
+method_loop/durable.py:775:                if old["return_id"] != payload["return_id"] or old["envelope"] != canonical(payload):
+method_loop/durable.py:777:                cursor = old["cursor"]
+method_loop/durable.py:869:            old = db.execute("SELECT * FROM events WHERE handle=? AND event='progress_committed' AND operation_key=?",
+method_loop/durable.py:871:            if old:
+method_loop/durable.py:872:                if old["record_ref"] != record_ref:
+method_loop/durable.py:874:                cursor = old["cursor"]
+execution_result_acquisition/task.py:169:        old = journal.row('runtime_actions', self.episode_id, index)
+execution_result_acquisition/task.py:170:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+execution_result_acquisition/task.py:172:        if old and old['result'] is not None:
+execution_result_acquisition/task.py:173:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+credit.py:1:"""Original caller-owned scientific credit for this actual legacy parent."""
+local_file_capture_results.py:74:    """Freeze the exact digest already used by legacy complete byte windows."""
+local_file_capture_results.py:657:        Only retained control/legacy-window metadata is read here. Partial
+local_file_capture_results.py:667:            return None  # Preserve the legacy-only projector exactly.
+blast_preparation_population.py:240:        return {**{k: p[k] for k in ("input_format", "source_database_key", "input_occurrence_id", "old_style_index", "legacy")},
+blast_preparation_population.py:345:            and not op["parameters"]["old_style_index"]):
+blast_preparation_population.py:478:        _require(all(detail[k] == p[k] for k in ("input_format", "source_database_key", "input_occurrence_id", "old_style_index", "legacy")), "artifact_set_detail")
+blast_preparation_population.py:483:            _require(observation["parameter"] in {"nmer", "ws_hint", "stride", "legacy", "old_style_index", "output_prefix"}, "parameter_document_kind")
+blast_preparation_population.py:513:    # The branch currently has no authentic compatible validator attachment.
+blast_preparation_population.py:514:    _require(record["compatibility"] != "validated", "database_compatibility_evidence")
+blast_preparation_population.py:569:        "detail": {}, "compatibility": "unverified", "checks": checks, "failures": failures}
+windowmasker_statistics.py:97:                fail("statistics_threshold_syntax", number)
+windowmasker_statistics.py:103:                    fail("statistics_threshold_syntax", number)
+windowmasker_statistics.py:165:        "statistics_percentile_syntax", "statistics_percentile_nonfinite", "statistics_threshold_syntax",
+windowmasker_statistics.py:181:    check("statistics_threshold_presence", all(v is not None for v in statistics["thresholds"].values()),
+windowmasker_statistics.py:182:          "statistics_threshold_missing")
+windowmasker_statistics.py:183:    check("statistics_threshold_values", all(v is None or v >= (0 if k == "t_extend" else 1)
+windowmasker_statistics.py:184:          for k, v in statistics["thresholds"].items()), "statistics_threshold_range")
+bvbrc_proteome_calculators.py:26:_LEGACY = ("legacy_first_hsp_only", "legacy_rounded_fraction",
+bvbrc_proteome_calculators.py:27:           "legacy_subject_endpoint_difference", "legacy_zero_fallback_possible",
+bvbrc_proteome_calculators.py:264:    qualifications = list(_LEGACY)
+bvbrc_proteome_calculators.py:348:        "used_component_families": ["legacy_identity", "legacy_subject_endpoint_difference", "native_category",
+scientific_process_records.py:25:LEGACY_EVIDENCE_SLOT = "annotation_distinction"
+scientific_process_records.py:26:ALL_SLOTS = (*SLOTS, LEGACY_EVIDENCE_SLOT)
+scientific_process_records.py:27:_PREFIXES = {"evidence_axis": "A", LEGACY_EVIDENCE_SLOT: "A", "thought_pattern": "P"}
+scientific_process_records.py:39:    """Compare slot meanings without rewriting an old pinned option record."""
+scientific_process_records.py:40:    return 'evidence_axis' if value == LEGACY_EVIDENCE_SLOT else value
+scientific_process_records.py:188:    """Parse saved historical revisions without selecting any active process."""
+homology_result_acquisition/task.py:166:        old = journal.row('runtime_actions', self.episode_id, index)
+homology_result_acquisition/task.py:167:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+homology_result_acquisition/task.py:169:        if old and old['result'] is not None:
+homology_result_acquisition/task.py:170:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+hmmer_model_data.py:387:            from .hmmer_model_legacy import decode_hmmer2_ascii
+native_blast_utility_result_worker.py:554:        "blast_database_artifact_set_v1", "blast_database_artifact_set_v2"}
+hmmer_fm_data.py:276:    Amino writer data are decoded but downstream DNA-reader compatibility fails.
+native_hmmer_tool_info.py:32:    "hmmalign": "Retain all Stockholm rows, RF, PP and original annotations. Model occupancy is match-state residues divided by profile length; sequence match coverage uses original sequence length. PP character
+execution_job_submission/task.py:176:        old = journal.row('runtime_actions', self.episode_id, index)
+execution_job_submission/task.py:177:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+execution_job_submission/task.py:179:        if old and old['result'] is not None:
+execution_job_submission/task.py:180:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+execution_result_acquisition/instructions.py:20:        old_history_guidance = _live_original_runtime_prompt.INSTRUCTIONS[_live_original_runtime_prompt.INSTRUCTIONS.index('On a fresh provider conversation,'):_live_original_runtime_prompt.IN
+execution_result_acquisition/instructions.py:21:        instructions = instructions.replace(old_history_guidance, 'Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observat
+blast_profile_inputs.py:206:                raise ValueError("blast_profile_threshold_invalid")
+blast_profile_inputs.py:213:                    raise ValueError("blast_profile_threshold_invalid")
+task.py:215:        old = journal.row('runtime_actions', self.episode_id, index)
+task.py:216:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+task.py:218:        if old and old['result'] is not None:
+task.py:219:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+tool_grading_artifacts.py:23:        "blast_database_sheet_v1", "blast_database_sheet_v2", "blast_database_sheet_v3"}
+tool_grading_artifacts.py:42:        for instance, (pointer, legacy) in zip(instances, expected):
+tool_grading_artifacts.py:43:            if instance['legacy_pointer'] != pointer or instance['axis_basis'] != 'reported':
+tool_grading_artifacts.py:46:            validate_blast_correspondence_instance(legacy, instance, program=program)
+tool_grading_artifacts.py:79:    Legacy sources without grading artifacts return an empty list.
+published_evidence_assessment/saved_decision_exchange.py:24:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+published_evidence_assessment/saved_decision_exchange.py:25:                    if not older:
+published_evidence_assessment/saved_decision_exchange.py:27:                    previous = older[0]['request']['restoration']['snapshot']
+scientific_process_provenance.py:275:                    # Legacy name-only selections contain no four-field
+execution_progress.py:250:            # Legacy assignments predate resource IDs. A single exact bound
+execution_progress.py:311:            # The immutable receipt establishes historical identity. A selected
+execution_progress.py:1206:        signature, old = self._operation(operation_key, selection)
+execution_progress.py:1207:        if old is not None:
+execution_progress.py:1208:            return json.loads(old['result'])
+execution_progress.py:1234:            signature, old = self._operation(operation_key, selection)
+execution_progress.py:1235:            if old is not None:
+execution_progress.py:1236:                return json.loads(old['result'])
+execution_progress.py:1372:            signature, old = self._operation('dependency:'+operation_key,
+execution_progress.py:1374:            if old is not None:
+execution_progress.py:1375:                return json.loads(old['result'])
+episode_journal.py:88:                    temporary = table + '_credit_migration'
+episode_journal.py:197:            # when that row is no longer the newest record. Count only those
+episode_journal.py:199:            # materializing historical requests/results or all timing arrays.
+blast_vdb_inputs.py:665:            # after its legacy width/empty/N/A filtering has taken place.
+blast_vdb_inputs.py:778:                compatible = len(intervals) == 1
+blast_vdb_inputs.py:784:                    compatible &= (first is not None and last is not None and first > 0 and last > 0
+blast_vdb_inputs.py:788:                if not compatible:
+execution_result_acquisition/selector_coverage_credit.py:31:            old_bytes = covered((window for reference, window in windows if reference in initial), start, end)
+execution_result_acquisition/selector_coverage_credit.py:32:            fractions.append((all_bytes - old_bytes) / (end - start))
+bvbrc_proteome_joins.py:96:                old = found.get(reference)
+bvbrc_proteome_joins.py:97:                if old is not None and (old[0] != digest or size is not None and old[1] is not None and old[1] != size):
+bvbrc_proteome_joins.py:99:                found[reference] = (digest, size if size is not None else old[1] if old is not None else None)
+practical_execution_credit.py:4:returns cumulative credit, so losing a previously established fact produces the
+bvbrc_appservice_host.py:95:        # This is a read-only compatibility projection, not another stored
+resource_work_submission/to_child_api_resource_work_execution.py:4:This owner preserves the original A103 legacy lookup, envelope, live runtime
+inprocess_replay.py:100:            old = None if previous is None else json.loads(previous['snapshot'])
+inprocess_replay.py:102:            if old is not None and old['episode_update'] == update:
+inprocess_replay.py:128:            if old is not None:
+inprocess_replay.py:129:                require(all(snapshot[key] == old[key] for key in (
+inprocess_replay.py:132:                require(update is not None and admission_index > old['admission_decision_index'],
+homology_job_monitoring/saved_decision_exchange.py:28:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+homology_job_monitoring/saved_decision_exchange.py:29:                    if not older:
+homology_job_monitoring/saved_decision_exchange.py:31:                    previous = older[0]['request']['restoration']['snapshot']
+native_blast_database_returns.py:150:        backward = self._row_context_subset(row, accumulated)
+native_blast_database_returns.py:151:        self._require(forward or backward, 'received_row_context_conflict')
+native_blast_database_returns.py:161:        if forward and not backward:
+native_blast_database_returns.py:289:                    # Retained source custody and old expanded receipt rows do
+from_child_homology_job_monitoring.py:3:"""Original legacy parent admission of its saved homology monitor report."""
+native_hmmer_preparation_results.py:359:        delivered references retain their normal resolver; old source-expanded
+bvbrc_proteome_bundle_resolution.py:242:        old = self.sources.get(key)
+bvbrc_proteome_bundle_resolution.py:243:        if old is not None and (old["sha256"], old["byte_count"]) != (content["sha256"], content["byte_count"]):
+hpc_work_planning/hpc_allocation_execution/work_operations.py:30:        old = ledger.cached(operation_key, selection)
+hpc_work_planning/hpc_allocation_execution/work_operations.py:31:        if old is not None:
+hpc_work_planning/hpc_allocation_execution/work_operations.py:32:            return old
+bvbrc_comparative_systems_sheet.py:536:        exact, compatible = set(), set()
+bvbrc_comparative_systems_sheet.py:542:                compatible.add(assignment["population_id"])
+bvbrc_comparative_systems_sheet.py:545:        choices = exact if exact else compatible
+resource_work_submission/api_resource_work_execution/task.py:149:        old = journal.row('runtime_actions', self.episode_id, index)
+resource_work_submission/api_resource_work_execution/task.py:150:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+resource_work_submission/api_resource_work_execution/task.py:152:        if old and old['result'] is not None:
+resource_work_submission/api_resource_work_execution/task.py:153:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+native_hmmer_preparation_contracts.py:21:    "hmmconvert": ("ascii", "binary", "legacy_hmmer2"),
+native_hmmer_preparation_contracts.py:37:    "hmmconvert": {"ascii": ["-a"], "binary": ["-b"], "legacy_hmmer2": ["-2"]},
+native_hmmer_preparation_contracts.py:134:        fmt = {"ascii": "hmmer3_ascii", "binary": "hmmer_binary", "legacy_hmmer2": "hmmer2_ascii"}[mode]
+native_hmmer_preparation_contracts.py:254:        if mode == "legacy_hmmer2" or result["--outfmt"] not in {"3/" + c for c in "abcdef"}:
+native_hmmer_preparation_contracts.py:362:        for old_role, old in paths:
+native_hmmer_preparation_contracts.py:363:            alias = program == "hmmconvert" and {role, old_role} == {"stdout", "converted_models"} and path == old
+native_hmmer_preparation_contracts.py:364:            if not alias and (path == old or path in old.parents or old in path.parents):
+native_hmmer_preparation_contracts.py:402:    elif program == "hmmconvert" and mode != "legacy_hmmer2":
+native_hmmer_preparation_contracts.py:530:    """Validate original operations without rewriting old incomplete records.
+native_hmmer_preparation_contracts.py:535:    cannot pass through this historical-record check. New compilation always
+native_hmmer_preparation_contracts.py:547:    historical = deepcopy(compiled)
+native_hmmer_preparation_contracts.py:549:        if flag not in recorded["settings"] and historical["settings"].get(flag) is False:
+native_hmmer_preparation_contracts.py:550:            del historical["settings"][flag]
+native_hmmer_preparation_contracts.py:551:    return native_record_digest(recorded) == native_record_digest(historical)
+from_child_homology_job_submission.py:3:"""Original legacy parent admission of its saved homology monitor report."""
+scientific_process/instructions.py:22:        old_history_guidance = _live_original_runtime_prompt.INSTRUCTIONS[_live_original_runtime_prompt.INSTRUCTIONS.index('On a fresh provider conversation,'):_live_original_runtime_prompt.INSTRUCTIONS
+scientific_process/instructions.py:23:        instructions = instructions.replace(old_history_guidance, 'Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observation. Read 
+hpc_work_planning/hpc_allocation_execution/task.py:134:        old = journal.row('runtime_actions', self.episode_id, index)
+hpc_work_planning/hpc_allocation_execution/task.py:135:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+hpc_work_planning/hpc_allocation_execution/task.py:137:        if old and old['result'] is not None:
+hpc_work_planning/hpc_allocation_execution/task.py:138:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+published_evidence_assessment/task.py:139:        old = journal.row('runtime_actions', self.episode_id, index)
+published_evidence_assessment/task.py:140:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+published_evidence_assessment/task.py:142:        if old and old['result'] is not None:
+published_evidence_assessment/task.py:143:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+hpc_work_planning/hpc_allocation_execution/task_decision.py:131:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+hpc_work_planning/hpc_allocation_execution/task_decision.py:132:                    if not older:
+hpc_work_planning/hpc_allocation_execution/task_decision.py:134:                    previous = older[0]['request']['restoration']['snapshot']
+native_blast_standard_database_result_worker.py:48:_ROLES_V2 = {**_ROLES_V1, "calculations": ("calculations.json", calculators.CALCULATION_SCHEMA_V2)}
+bvbrc_proteome_directional_fact_contracts.py:13:from . import bvbrc_proteome_fact_contracts as legacy
+bvbrc_proteome_directional_fact_contracts.py:15:obj, arr, enum, nullable = legacy.obj, legacy.arr, legacy.enum, legacy.nullable
+bvbrc_proteome_directional_fact_contracts.py:16:N, P = legacy.UINT, {"type": "integer", "minimum": 1}
+bvbrc_proteome_directional_fact_contracts.py:17:TEXT = legacy.TEXT
+bvbrc_proteome_directional_fact_contracts.py:37:COMPATIBLE_COUNTS = tuple(_DEFS["CompatiblePairCounts"]["properties"])
+bvbrc_proteome_directional_fact_contracts.py:38:SUBJECT_FRACTIONS = ("compatible_unique_pair_symbol_identity", "compatible_unique_pair_resolved_identity",
+bvbrc_proteome_directional_fact_contracts.py:39:    "compatible_unique_pair_resolved_fraction", "nonoverlapping_hsp_reported_identity_over_columns")
+bvbrc_proteome_directional_fact_contracts.py:70:KEYS["correspondence"] = KEYS["compatible_pairs"] = KEYS["subject"]
+bvbrc_proteome_directional_fact_contracts.py:79:    "compatible_pairs": COMPATIBLE_COUNTS}
+bvbrc_proteome_directional_fact_contracts.py:97:    "subject": {"mapping_state": ("compatible_displayed_partial_map", "observed_conflict", "incomplete_geometry")}}
+bvbrc_proteome_directional_fact_contracts.py:131:    legacy._validate({"oneOf": list(SELECTORS.values())}, value, "directional_selector_invalid")
+bvbrc_proteome_directional_fact_contracts.py:132:    legacy.require(all(type(v) is not str or bool(v.strip()) for v in value.values()), "directional_selector_invalid")
+bvbrc_proteome_directional_fact_contracts.py:141:    return legacy.reference_schema(kind)
+bvbrc_proteome_directional_fact_contracts.py:175:        return obj(availability=legacy.AVAILABILITY, quantity=enum(*dict.fromkeys(metrics)), context=context, **props)
+bvbrc_proteome_directional_fact_contracts.py:213:        out[kind] = obj(availability=legacy.AVAILABILITY, context=context, collection=enum(*collections[kind]),
+bvbrc_proteome_directional_fact_contracts.py:223:    legacy.require(type(selections) is dict and all(type(n) is str and bool(n.strip()) for n in selections), "form_invalid")
+bvbrc_proteome_directional_fact_contracts.py:225:                     else legacy.validate_selector(value)) for name, value in selections.items()}
+bvbrc_proteome_directional_fact_contracts.py:228:            legacy.require(value["field"] in checked and checked[value["field"]]["kind"] != "request_status", "status_target_invalid")
+bvbrc_proteome_directional_fact_contracts.py:229:    schemas = {**legacy.fact_schemas(), **directional_fact_schemas()}
+bvbrc_proteome_directional_fact_contracts.py:234:    legacy.require(type(value) is dict and set(value) == {"type", "properties", "required", "additionalProperties"}, "form_invalid")
+bvbrc_proteome_directional_fact_contracts.py:236:    legacy.require(type(props) is dict and type(required) is list and all(type(n) is str for n in required), "form_invalid")
+bvbrc_proteome_directional_fact_contracts.py:237:    legacy.require(len(required) == len(set(required)) and set(required) == set(props), "form_required_conflict")
+bvbrc_proteome_directional_fact_contracts.py:238:    legacy.require(all(type(v) is dict and "x-bvbrc-proteome" in v for v in props.values()), "form_invalid")
+bvbrc_proteome_directional_fact_contracts.py:241:    legacy._plain_json(value)
+bvbrc_proteome_directional_fact_contracts.py:242:    legacy.require(legacy.canonical(value) == legacy.canonical(expected), "form_noncanonical")
+bvbrc_proteome_directional_fact_contracts.py:248:    legacy.require(type(value) is str, "directional_decimal_invalid")
+bvbrc_proteome_directional_fact_contracts.py:250:    legacy.require(match is not None, "directional_decimal_invalid")
+bvbrc_proteome_directional_fact_contracts.py:269:    legacy.require(kind in schemas, "directional_fact_invalid")
+bvbrc_proteome_directional_fact_contracts.py:270:    legacy._validate(schemas[kind], value, "directional_fact_invalid")
+bvbrc_proteome_directional_fact_contracts.py:277:                legacy.require((digits == [0] and node["sign"] == 0 and node["exponent"] == 0)
+bvbrc_proteome_directional_fact_contracts.py:280:                legacy.require((node["state"] in {"value", "present", "position"}) == (node["value"] is not None), "directional_cell_conflict")
+bvbrc_proteome_directional_fact_contracts.py:282:                    legacy.require(not node["reason_codes"], "directional_cell_conflict")
+bvbrc_proteome_directional_fact_contracts.py:284:                legacy.require(node["end"] > node["start"], "directional_interval_invalid")
+bvbrc_proteome_directional_fact_contracts.py:286:                legacy.require((node["block_key"] is None) != (node["hsp_key"] is None), "directional_support_invalid")
+bvbrc_proteome_directional_fact_contracts.py:288:                legacy.require(node["numerator"] <= node["denominator"] and node["rendered_decimal"]["sign"] == 0,
+bvbrc_proteome_directional_fact_contracts.py:292:                    legacy.decode_reference(item)
+bvbrc_proteome_directional_fact_contracts.py:294:                    legacy.require(re.fullmatch(r"[A-Za-z*\-]", item) is not None, "directional_symbol_invalid")
+bvbrc_proteome_directional_fact_contracts.py:299:        legacy.require(value["returned_count"] == len(value["items"]) == returned, "directional_page_conflict")
+bvbrc_proteome_directional_fact_contracts.py:301:        legacy.require(value["next_offset"] == expected, "directional_page_conflict")
+bvbrc_proteome_directional_fact_contracts.py:305:            legacy.require(value["value_code"] is None, "directional_state_conflict")
+bvbrc_proteome_directional_fact_contracts.py:308:            legacy.require(value["value_boolean"] is None and (value["value_code"] is None or value["value_code"] in codes), "directional_state_conflict")
+bvbrc_proteome_directional_fact_contracts.py:312:        legacy.require(bool(target["document_id"].strip()), "directional_target_conflict")
+bvbrc_proteome_directional_fact_contracts.py:315:            legacy.require((cell['state'] is None) == (context['value_ref'] is None), 'directional_cell_reference_conflict')
+bvbrc_proteome_directional_fact_contracts.py:317:                legacy.require(context['native_source_ref'] is not None and target['report_ordinal'] is not None,
+bvbrc_proteome_directional_fact_contracts.py:329:                legacy.require(cell["unit"] == unit, "directional_unit_conflict")
+bvbrc_proteome_directional_fact_contracts.py:332:                has_population = quantity in TRACE_FRACTIONS or quantity.startswith("compatible_unique_pair_")
+bvbrc_proteome_directional_fact_contracts.py:333:                legacy.require((pop is not None) == has_population, "directional_population_conflict")
+bvbrc_proteome_directional_fact_contracts.py:335:                    legacy.require(pop["total_pairs"] == pop["resolved_pairs"] + pop["unresolved_pairs"] + pop["stop_containing_pairs"], "directional_population_conflict")
+bvbrc_proteome_directional_fact_contracts.py:337:                legacy.require(value["count"]["state"] == "value" and value["reported_length"]["state"] == "present"
+bvbrc_proteome_directional_fact_contracts.py:347:                legacy.require(value["unit"] == unit, "directional_unit_conflict")
+bvbrc_proteome_directional_fact_contracts.py:348:                legacy.require((value["statistic_kind"] is not None) == (target["statistic_ordinal"] is not None and context["value_ref"] is not None),
+bvbrc_proteome_directional_fact_contracts.py:356:                    legacy.require(value["expectation_display"] == display, "directional_expectation_conflict")
+bvbrc_proteome_directional_fact_contracts.py:357:                    legacy.require((value["expect_group_count"] is not None) == (quantity == "expect" and target["hsp_ordinal"] is not None),
+bvbrc_proteome_directional_fact_contracts.py:366:                legacy.require(selected_cell is not None and selected_cell["state"] == "present"
+bvbrc_proteome_directional_fact_contracts.py:368:            legacy.require((value["native_decimal"] is None if raw else value["native_integer"] is None), "directional_extremum_conflict")
+bvbrc_proteome_directional_fact_contracts.py:372:        legacy.require(value["availability"] == expected, "directional_availability_conflict")
+bvbrc_proteome_directional_fact_contracts.py:375:        legacy.require(selected["kind"] == kind, "directional_selector_conflict")
+bvbrc_proteome_directional_fact_contracts.py:377:            legacy.require(value["quantity"] == selected["metric"], "directional_selector_conflict")
+bvbrc_proteome_directional_fact_contracts.py:380:            legacy.require(target["document_id"] == selected["document_id"] and all(
+bvbrc_proteome_directional_fact_contracts.py:384:        legacy.require(len(refs) == len(set(refs)), 'directional_requirement_conflict')
+blast_preparation_contracts.py:62:        "source_database_key": _nullable(_STR), "old_style_index": _BOOL, "legacy": _BOOL,
+blast_preparation_contracts.py:86:    "output_prefix": _STR, "legacy": _BOOL, "old_style_index": _BOOL}
+blast_preparation_contracts.py:159:        "old_style_index": _BOOL, "legacy": _BOOL,
+blast_preparation_contracts.py:242:        _require(p["old_style_index"] or not fasta, "index_new_style_database")
+blast_preparation_contracts.py:243:        _require(not p["old_style_index"] or p["output_prefix"] is not None, "index_output_prefix")
+blast_preparation_contracts.py:359:                _require(parameter["parameter"] in {"nmer", "ws_hint", "stride", "legacy", "old_style_index", "output_prefix"}, "parameter_document_kind")
+episode_monitoring.py:57:_EPISODE_STATUS = {'oneOf': [_EPISODE_STATUS_V1, _EPISODE_STATUS_V2]}
+episode_monitoring.py:137:    through observation_context; old providers receive neither new keyword.
+episode_monitoring.py:456:            old = self.store.db.execute("SELECT snapshot FROM runtime_progress_observations "
+episode_monitoring.py:459:            if old:
+episode_monitoring.py:460:                value = json.loads(old[0])
+episode_monitoring.py:531:        old = self.store.db.execute("SELECT signature,progress_refs FROM runtime_progress_deliveries "
+episode_monitoring.py:534:        if old is None:
+episode_monitoring.py:536:        if old["signature"] != signature:
+episode_monitoring.py:538:        return json.loads(old["progress_refs"])
+execution_job_submission/hpc_job_execution/task.py:166:        old = journal.row('runtime_actions', self.episode_id, index)
+execution_job_submission/hpc_job_execution/task.py:167:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+execution_job_submission/hpc_job_execution/task.py:169:        if old and old['result'] is not None:
+execution_job_submission/hpc_job_execution/task.py:170:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+genomic_overlap_result_views.py:261:    populations. Paging never upgrades the underlying scientific extent.
+bvbrc_proteome_directional_geometry.py:433:    for side, legacy in (("query", "query"), ("subject", "reference")):
+bvbrc_proteome_directional_geometry.py:434:        witnesses = _mapping_conflicts(pair_rows, legacy)
+bvbrc_proteome_directional_geometry.py:484:                     if not known_geometry or not support["complete_for_displayed_blocks"] else "compatible_displayed_partial_map")
+bvbrc_proteome_bundle_v2_resolution.py:11:from . import bvbrc_proteome_bundle_resolution as legacy
+bvbrc_proteome_bundle_v2_resolution.py:27:class _ResolutionV2(legacy._Resolution):
+bvbrc_proteome_bundle_v2_resolution.py:42:        self.requirements = legacy._unique([*self.requirements, req])
+bvbrc_proteome_bundle_v2_resolution.py:43:        self.diagnostics = legacy._unique([*self.diagnostics, dict(code=code, phase=phase, path=path,
+bvbrc_proteome_bundle_v2_resolution.py:67:            if declaration['format'] not in legacy._FORMATS or declaration['version'] is not None or declaration['mode'] is not None:
+bvbrc_proteome_bundle_v2_resolution.py:79:            result = legacy.parse_genome_comparison(raw, source=source, declared_format=declaration['format'], source_contract=contract)
+bvbrc_proteome_bundle_v2_resolution.py:96:        content = row['content'] = legacy._content(member)
+bvbrc_proteome_bundle_v2_resolution.py:141:        raise c.ProteomeBundleV2Error(code, c.legacy._error_path(error)) from error
+bvbrc_proteome_bundle_v2_resolution.py:153:        c.legacy.validate_shape('SuppliedValue', value, code='supplied_data_invalid', path=f'/supplied_values/{i}')
+bvbrc_proteome_bundle_v2_resolution.py:164:        for name, _, result_name, _, _ in legacy._INPUTS}
+bvbrc_proteome_bundle_v2_resolution.py:168:        joins = legacy.build_native_joins(primary, **data,
+bvbrc_proteome_bundle_v2_resolution.py:172:        native_sheet = legacy.build_native_sheet(resolution.native_results, primary_source_ref=primary['source']['content']['source_ref'],
+bvbrc_proteome_bundle_v2_resolution.py:176:            native_components = legacy.calculate_native_components(native_sheet['value'], parameters=parameters['calculation_parameters'])
+bvbrc_proteome_bundle_v2_resolution.py:177:            resolution.pure(native_components, '/components/legacy', role='proteome_native_projection')
+bvbrc_proteome_bundle_v2_resolution.py:191:    old_value = None if native_sheet is None else native_sheet['value']
+bvbrc_proteome_bundle_v2_resolution.py:193:    numerical = None if old_value is None and new_value is None else build_proteome_numerical_sheet(legacy_sheet=old_value, directional_sheet=new_value)
+bvbrc_proteome_bundle_v2_resolution.py:202:        version='bvbrc_proteome_provider_components_v2', provider_sheet_sha256=c.digest(saved), legacy=native_components, directional=directional)
+bvbrc_application_definitions.py:224:        compatible = (required_id == "GenomeAnnotation"
+bvbrc_application_definitions.py:230:               severity="qualification" if compatible or identical else "error",
+resource_result_acquisition/saved_decision_exchange.py:24:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+resource_result_acquisition/saved_decision_exchange.py:25:                    if not older:
+resource_result_acquisition/saved_decision_exchange.py:27:                    previous = older[0]['request']['restoration']['snapshot']
+blast_result_views.py:153:            # Immutable historical measurements retain their original meaning.
+blast_result_views.py:154:            # Only native endpoint custody is normalized here; no legacy scorer
+blast_result_views.py:248:                "native_pairwise_retained" if marker == "native_blast_pairwise" else "legacy_saved_native_reported"),
+blast_graders.py:50:            "version": ARTIFACT_SCHEMA, "instances": [{"legacy_pointer": "/sheet", "axis_basis": "reported",
+blast_graders.py:61:            instance["legacy_pointer"] = "/sheet" + instance["legacy_pointer"]
+native_blast_database_results.py:109:        if type(body) is not dict or set(body) != expected or body['version'] not in (VERSION, FUNCTION_VERSION) or body['run_id'] != self.owner.run_id:
+hpc_work_planning/hpc_resource_prediction/task_decision.py:140:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+hpc_work_planning/hpc_resource_prediction/task_decision.py:141:                    if not older:
+hpc_work_planning/hpc_resource_prediction/task_decision.py:143:                    previous = older[0]['request']['restoration']['snapshot']
+hmmer_statistics_calculations.py:123:                        if item["code"] == "background_compatible" and item["record_key"] == key), "unknown")
+hmmer_statistics_calculations.py:153:                old = occupancy[-1]
+hmmer_statistics_calculations.py:154:                occupancy.append(old * (transition[0] + transition[1]) + (1 - old) * transition[5])
+bvbrc_comparative_systems_data_inputs.py:484:    when compatible; it is never the sum of page totals. ``raw_occurrence_count``
+bvbrc_comparative_systems_data_inputs.py:490:    None of these counts is a score, biological absence, or historical proof.
+scientific_support_metadata.py:1:"""Historical instruction validation and explicit scoring-route availability.
+scientific_support_metadata.py:4:old observation-kind-to-score-axis dispatch is retired. No replacement field
+bvbrc_genome_alignment_tool_info.py:51:    "source and transformation evidence; a current refetch cannot prove historical "
+bvbrc_genome_alignment_tool_info.py:56:    "data with changed parameters without rewriting historical observations.\n\n"
+native_blast_utility_returns.py:145:        # actual old fact without replacing it with today's expanded facts.
+hpc_work_planning/execution_job_submission/task.py:175:        old = journal.row('runtime_actions', self.episode_id, index)
+hpc_work_planning/execution_job_submission/task.py:176:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+hpc_work_planning/execution_job_submission/task.py:178:        if old and old['result'] is not None:
+hpc_work_planning/execution_job_submission/task.py:179:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+resource_estimation.py:77:        'Observed minimum/maximum are historical ranges, not calibrated prediction intervals. '
+bvbrc_proteome_numerical_sheet.py:1:"""Compose separately measured legacy and directional sheets without a join."""
+bvbrc_proteome_numerical_sheet.py:9:def build_proteome_numerical_sheet(*, legacy_sheet, directional_sheet):
+bvbrc_proteome_numerical_sheet.py:10:    _require(legacy_sheet is not None or directional_sheet is not None, path='/numerical_sheet')
+bvbrc_proteome_numerical_sheet.py:11:    if legacy_sheet is not None:
+bvbrc_proteome_numerical_sheet.py:12:        validate_proteome_sheet_data('NativeSheet', legacy_sheet)
+bvbrc_proteome_numerical_sheet.py:16:        'version':'bvbrc_proteome_numerical_sheet_v2', 'legacy_sheet':deepcopy(legacy_sheet),
+scientific_process/decision_delivery.py:200:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+scientific_process/decision_delivery.py:201:                    if not older:
+scientific_process/decision_delivery.py:203:                    previous = older[0]['request']['restoration']['snapshot']
+blast_database_preparation.py:198:        _fail("legacy_preparation_context_forbidden")
+blast_database_preparation.py:215:        "compatibility": "unverified", "checks": [], "failures": [],
+blast_database_preparation.py:270:    contract. It never upgrades ``compatibility`` or implies a native integrity
+scientific_tool_retrieval.py:172:            old = self.store.db.execute("SELECT * FROM runtime_tool_retrievals WHERE "
+scientific_tool_retrieval.py:174:            if old is not None:
+scientific_tool_retrieval.py:175:                if old["request_sha256"] != digest or old["request"] != serialized:
+scientific_tool_retrieval.py:178:                if old["result"] is not None:
+scientific_tool_retrieval.py:179:                    return json.loads(old["result"])
+sequence_translation_grader.py:5:and a selection fraction. Codon compatibility uses only the frozen supplied
+sequence_translation_grader.py:307:            compatibility, reason = "unknown", "native_settings_unverified"
+sequence_translation_grader.py:309:            compatibility, reason = "unknown", "native_product_correspondence_unverified"
+sequence_translation_grader.py:313:            compatibility = "unknown"
+sequence_translation_grader.py:319:        if compatibility != "compatible":
+sequence_translation_grader.py:320:            _issue(issues, reason or "codon_compatibility_unknown", codon_index=index)
+sequence_translation_grader.py:326:            "compatibility": compatibility, "compatibility_reason": reason, "table_operands": operands})
+sequence_translation_grader.py:364:        "compatible_codon_count": ("codons[].compatibility", "count compatible", "codons", "all complete selected codons including omitted terminal stop"),
+sequence_translation_grader.py:366:        "unknown_codon_count": ("codons[].compatibility", "count unknown or missing/corrupt saved rows", "codons", "same complete selected codon population"),
+sequence_translation_grader.py:377:        "meaning": "deterministic compatibility of transformation, not biological confidence",
+sequence_translation_grader.py:423:            rows.append({"codon_index": index, "saved_row": row, "compatibility": "unknown",
+sequence_translation_grader.py:424:                "compatibility_reason": "saved_codon_row_conflicts_with_operands",
+sequence_translation_grader.py:447:        values[f"{state}_codon_count"] = sum(row["compatibility"] == state for row in rows)
+resource_result_acquisition/task.py:149:        old = journal.row('runtime_actions', self.episode_id, index)
+resource_result_acquisition/task.py:150:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+resource_result_acquisition/task.py:152:        if old and old['result'] is not None:
+resource_result_acquisition/task.py:153:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+hpc_work_planning/task.py:134:        old = journal.row('runtime_actions', self.episode_id, index)
+hpc_work_planning/task.py:135:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+hpc_work_planning/task.py:137:        if old and old['result'] is not None:
+hpc_work_planning/task.py:138:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+bvbrc_appservice_tool_info.py:20:        "Select a packaged, originally supplied, or previously acquired indexed definition. The host supplies "
+application_execution_binding.py:168:    A legacy resume retains its semantics. Once marked, recovery uses the saved
+resource_reconstruction.py:3:No historical A101/shared descriptor conversion and no capability observation is
+ncbi_entrez_acquisition.py:534:            # A secondary/base accession does not declare its historical version.
+ncbi_entrez_acquisition.py:544:    Unknown aliases and qualified historical mappings are unavailable identity,
+ncbi_entrez_acquisition.py:568:                # No undocumented status number or historical replacement is inferred.
+native_correspondence_scoring.py:85:    elif sheet['schema'] in {'blast_database_sheet_v1', 'blast_database_sheet_v2', 'blast_database_sheet_v3'}:
+default_scientific_binding.py:60:        # Reconstruct only the actual saved historical choice. Absence in a
+decision_protocol_prompt.py:11:decision_indices to read exact previously received outcomes together. That
+decision_protocol_prompt.py:13:execute the historical actions or earn their old credit again. The reader
+decision_protocol_prompt.py:22:and revision identifies the resulting state. Newer state replaces older values,
+decision_protocol_prompt.py:23:including yield expectations; older estimates remain historical. A bootstrap
+decision_protocol_prompt.py:25:decision_lookup_result supplies only the requested own historical information.
+decision_protocol_prompt.py:46:    'remain historical. A requested own-history lookup continues this same pending decision. '
+decision_protocol_prompt.py:47:    'Previously answered lookups remain answered after reconstruction; do not repeat them '
+hmmer_preparation_result_views.py:374:_F_DATABASE_CHECKS = {"source_custody", "decoded_layout", "dna_reader_compatibility", "metadata_partition", "total_char_count"}
+hmmer_preparation_result_views.py:379:    "dna_reader_compatibility": {"HMMER 3.4 fm_readFMmeta accepts DNA only; amino writer decoding is separate"},
+hmmer_preparation_result_views.py:872:            old = self.records[key]
+hmmer_preparation_result_views.py:873:            if not (model and old.get("kind") == "model" and old.get("locator") == row.get("locator") and self.record_occurrences[key] == oid):
+hmmer_preparation_result_views.py:1505:    legacy = rep.get("legacy")
+hmmer_preparation_result_views.py:1506:    if type(legacy) is not dict or type(legacy.get("evd")) is not list:
+hmmer_preparation_result_views.py:1508:    entries = legacy["evd"]
+hmmer_preparation_result_views.py:1549:            # Older saved extractions retained the pair only in legacy.evd.
+homology_service_setup.py:1:"""Construct the actual parent-private legacy Homology implementations."""
+bvbrc_proteome_directional_calculators.py:1:"""Pure measurements of the complete displayed legacy BLASTP population.
+bvbrc_proteome_directional_calculators.py:5:choosing work, changing historical data, or assigning annotation credit.
+bvbrc_proteome_directional_calculators.py:40:COMPATIBLE_FIELDS = {
+bvbrc_proteome_directional_calculators.py:402:def _compatible_counts(graph, hsps):
+bvbrc_proteome_directional_calculators.py:404:    if graph['mapping_state'] != 'compatible_displayed_partial_map':
+bvbrc_proteome_directional_calculators.py:408:            state='conflict' if conflicting else 'missing', reasons=reasons) for name in COMPATIBLE_FIELDS}
+bvbrc_proteome_directional_calculators.py:412:    counts = dict.fromkeys(COMPATIBLE_FIELDS, 0)
+bvbrc_proteome_directional_calculators.py:416:        for name, kinds in COMPATIBLE_FIELDS.items():
+bvbrc_proteome_directional_calculators.py:474:    counts = _compatible_counts(graph, hsps)
+bvbrc_proteome_directional_calculators.py:476:        'compatible_unique_pair_symbol_identity': _ratio_cells(counts['identical_symbol_pairs'], graph['distinct_pair_count'], parameters),
+bvbrc_proteome_directional_calculators.py:477:        'compatible_unique_pair_resolved_identity': _ratio_cells(counts['resolved_identical_pairs'], counts['resolved_pairs'], parameters, empty_reason='zero_resolved_population'),
+bvbrc_proteome_directional_calculators.py:478:        'compatible_unique_pair_resolved_fraction': _ratio_cells(counts['resolved_pairs'], graph['distinct_pair_count'], parameters),
+bvbrc_proteome_directional_calculators.py:480:    if graph['mapping_state'] != 'compatible_displayed_partial_map':
+bvbrc_proteome_directional_calculators.py:501:        'correspondence': graph, 'compatible_pair_counts': counts,
+bvbrc_proteome_directional_calculators.py:539:    threshold_kinds = {'sequences_better_than', 'hsps_better_than_without_gapping'}
+bvbrc_proteome_directional_calculators.py:544:        if statistic['kind'] in threshold_kinds:
+episode_composition.py:64:# The reference-edit addition preserves those old profiles and return meanings;
+episode_composition.py:67:_SCIENTIFIC_IMPLEMENTATION_COMPATIBILITY = (
+episode_composition.py:144:    # Finite N-glycosylation registration preserves the reviewed old branches.
+episode_composition.py:254:def scientific_binding_compatible(actual, recorded):
+episode_composition.py:296:    if pair not in _SCIENTIFIC_IMPLEMENTATION_COMPATIBILITY:
+uniprot_returns.py:88:    synthesized from old cells, even when a caller could infer a narrower value.
+uniprot_returns.py:122:            page["page_fields"].append(_cell([cell for old, _ in candidates for cell in old["page_fields"]],
+uniprot_returns.py:126:            for old, declared in candidates:
+uniprot_returns.py:127:                for old_ri, old_clause in enumerate(declared["records"]):
+uniprot_returns.py:128:                    exact = _same(clause["record"], old_clause["record"])
+uniprot_returns.py:131:                        clause_failures.extend(_reindex(f, pi, ri) for f in old["failures"]
+uniprot_returns.py:132:                                               if f["record_selection_index"] == old_ri)
+uniprot_returns.py:133:                    matches.extend(row for row in old["records"]
+uniprot_returns.py:134:                                   if row["record_selection_index"] == old_ri and (exact or
+uniprot_returns.py:153:                row["fields"] = [_cell([cell for old in rows for cell in old["fields"]], field, pi, ri, fi)
+uniprot_returns.py:155:                grants = [old["sequence_grant"] for old in rows if old["sequence_grant_status"] == "available"]
+uniprot_returns.py:166:        grants = [old["source_grant"] for old, _ in candidates if old["source_grant_status"] == "available"]
+uniprot_returns.py:468:        """Authenticate saved witnesses without reprojecting historical fields."""
+uniprot_returns.py:516:    def _historical(self, context, form, schema):
+uniprot_returns.py:547:            self._historical(child, form, schema)
+uniprot_returns.py:620:        return self._grants(self._historical(child, saved, declared))
+uniprot_returns.py:633:        # Preserve initial/inherited and earlier own-action receipts. Historical
+hmmalign_inputs.py:19:checksum is the uint32 HMM CKSUM. Claiming compatibility without actual seed
+hmmalign_inputs.py:296:    This is the HMMER compatibility check, not a cryptographic identity. Names
+hmmalign_inputs.py:375:        result["status"] = "compatible"
+hmmalign_inputs.py:582:                    compatible = mapali["status"] == "compatible" and mask is not None and row["geometry_valid"]
+hmmalign_inputs.py:583:                    if compatible:
+hmmalign_inputs.py:586:                        compatible = _normalize(a, alphabet).replace(".", "-").replace("_", "-") == _normalize(b, alphabet).replace(".", "-").replace("_", "-")
+hmmalign_inputs.py:589:                        compatible = compatible and (retained_symbols == original_symbols if trim is False else
+hmmalign_inputs.py:592:                                 "status": "verified" if compatible else "unverified"}
+hmmalign_inputs.py:593:                    if not compatible:
+hmmalign_inputs.py:595:                    if metadata is None and compatible:
+hmmalign_inputs.py:613:            if origin == "unknown" and mapali["status"] == "compatible" and row["row_index"] >= len(mapali["rows"]):
+blast_preparation_inputs.py:103:            conflict = any((old["value"], old["unit"]) != (field["value"], field["unit"])
+blast_preparation_inputs.py:104:                           for old in previous)
+blast_preparation_inputs.py:284:    ignored = {"Warning: -stride has no effect upon legacy index creation": "stride",
+blast_preparation_inputs.py:285:        "Warning: -ws_hint has no effect upon legacy index creation": "ws_hint",
+native_hmmer_contracts.py:249:        raise ValueError("native_hmmer_conflicting_threshold_options")
+hpc_work_planning/hpc_allocation_execution/yield_estimator.py:29:        old = [row for row in ledger.records('continuation') if row['id'] == reference]
+hpc_work_planning/hpc_allocation_execution/yield_estimator.py:30:        if old:
+hpc_work_planning/hpc_allocation_execution/yield_estimator.py:31:            return {'reference': reference, 'evidence': old[0]['body']}
+blast_iteration_inputs.py:233:    if type(sheet) is not dict or set(sheet) != fields or version not in ("blast_iteration_sheet_v1", "blast_iteration_sheet_v2", "blast_iteration_sheet_v3"):
+native_genomic_overlap_preparation.py:173:    old = _read(fd, name)
+native_genomic_overlap_preparation.py:174:    if old is not None:
+native_genomic_overlap_preparation.py:175:        _require(old == raw, "genomic_overlap_preparation_intent_conflict")
+native_genomic_overlap_preparation.py:412:        # Legacy receipts retain exactly their original environment. Absence of
+native_genomic_overlap_preparation.py:495:    """Exact private legacy/new fields, shared with historical receipt readers."""
+state.py:436:        historical and current-only inventories coincide. ``references`` OR-
+state.py:548:        A product needs an explicit native-tool mapping; old aggregate footprints
+state.py:591:        for ownership/credit are normalized unions. Legacy unmapped products can
+state.py:1270:                    "compatible_applicability": ["transfer", "contextual", "scope_limited", "incomparable"]})
+state.py:1595:            # must not create a new scientific revision or invalidate old links.
+state.py:1872:            # Historical digest label: retain original acquisition identity.
+episode_work_report.py:4:not run a calculator, reprice historical work, infer biological support or read a
+episode_work_report.py:308:        # an unrelated current sibling view is not its historical result.
+scientific_process_reports.py:160:    if value["version"] not in (VERSION, RETURN_VERSION):
+uniprot_native_contracts.py:304:                                 'legacy_publication': {'$ref': '#/$defs/LegacyPublication'}},
+uniprot_native_contracts.py:313:                               'legacy_publication'],
+uniprot_native_contracts.py:407: 'LegacyPublication': {'type': 'object',
+hpc_work_planning/hpc_resource_prediction/goal.py:9:        return ('Iterate on a generalized time/resource model using measured historical cases. '
+blast_vdb_function_inputs.py:973:    """Check legacy numerical-cell types without recomputing legacy science."""
+blast_vdb_function_inputs.py:1099:    Endpoints remain independent of traceback and paired geometry. Historical
+scientific_process/from_parent.py:182:        from gene_annotation_episode.episodic_workflow.root.a103.episode_composition import scientific_binding_compatible
+scientific_process/from_parent.py:196:            if not scientific_binding_compatible(current, saved['mechanics_binding']):
+scientific_process/from_parent.py:230:        """Historical closure permits inspection/replay, never new dispatch."""
+scientific_process/from_parent.py:231:        from gene_annotation_episode.episodic_workflow.root.a103.episode_composition import scientific_binding_compatible
+scientific_process/from_parent.py:235:        if self.restore_closed_process(context) is not None or not scientific_binding_compatible(current, filled):
+bvbrc_homology_bundle_adapter.py:609:        # Legacy details remain intact in the sheet. C4 diagnostics contain only
+episode_return_records.py:37:    """Compare ordinary normalized trees directly, preserving the old fallback.
+episode_return_records.py:458:        callbacks already ran. Older outcomes without that projection retain
+decision_delivery.py:248:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+decision_delivery.py:249:                    if not older:
+decision_delivery.py:251:                    previous = older[0]['request']['restoration']['snapshot']
+execution_timing.py:55:    Cross-boot subtraction and historical reconstruction are unavailable.
+episode_commissions.py:99:                old = self.store.db.execute("SELECT * FROM runtime_commission_intents "
+episode_commissions.py:102:                if old is not None:
+episode_commissions.py:103:                    original = self._spec(old)
+episode_commissions.py:104:                    if (old["spec"] != canonical(spec) or old["selection"] != serialized_selection
+episode_commissions.py:105:                            or old["selected_at"] != selected_at or action is None
+scientific_process/credit.py:18:        if self.library.resolve(axis).get('entry_version') not in (INSTRUCTION_VERSION,):
+native_hmmer_preparation_returns.py:143:        # actual old fact without replacing it with today's expanded facts.
+runtime_prompt.py:73:withdrawn means the finding itself is no longer valid, with its declared reason.
+runtime_prompt.py:95:replacement when the corrected binding supersedes the earlier finding, rather
+runtime_prompt.py:188:ordinary episode.history tool when an older selected action, exact outcome or
+runtime_prompt.py:243:        old_history_guidance = INSTRUCTIONS[INSTRUCTIONS.index('On a fresh provider conversation,'):
+runtime_prompt.py:245:        instructions = instructions.replace(old_history_guidance,
+runtime_prompt.py:247:            'these create no completed action or observation. Read exact previously received '
+runtime_prompt.py:250:            'does not execute or credit the historical work again.\n')
+scientific_process/task.py:213:        old = journal.row('runtime_actions', self.episode_id, index)
+scientific_process/task.py:214:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+scientific_process/task.py:216:        if old and old['result'] is not None:
+scientific_process/task.py:217:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+homology_job_submission/goal.py:8:        return 'You own an iterative scoped job investigation in the shared method_loop. ' + responsibilities[role] + " Revise selected work from actual outcomes. Select one of your available ordinary tools
+hmmer_model_calculations.py:33:    "background_compatible", "probability_mass", "match_population_complete"})
+hmmer_model_calculations.py:53:                          "header_semantics", "native_fields", "legacy"}
+hmmer_model_calculations.py:54:_LEGACY_FIELDS = {"null_emissions", "special_transitions", "null_transitions",
+hmmer_model_calculations.py:73:        legacy_valid = (type(rep["legacy"]) is dict and set(rep["legacy"]) == _LEGACY_FIELDS
+hmmer_model_calculations.py:74:            if h2 else rep["legacy"] is None)
+hmmer_model_calculations.py:77:                or rep["header_semantics"] != "binary_field_projection" or not legacy_valid):
+hmmer_model_calculations.py:100:                and rep["native_fields"] == [] and type(rep["legacy"]) is dict
+hmmer_model_calculations.py:101:                and set(rep["legacy"]) == _LEGACY_FIELDS and record.get("format_tag") == "HMMER2.0"):
+hmmer_model_calculations.py:258:            else {"kind": "uniform_alphabet", "denominator": len(symbols)} if name == "legacy.null_emissions"
+hmmer_model_calculations.py:264:            nulls = record["representation"]["legacy"]["null_emissions"]
+hmmer_model_calculations.py:278:                        field="legacy.null_emissions", position_ordinal=None, cell_index=cell_index)
+hmmer_model_calculations.py:355:        exits = record["representation"]["legacy"]["entry_exit"]
+hmmer_model_calculations.py:364:            field="legacy.entry_exit", position_ordinal=position_ordinal, cell_index=1)
+hmmer_model_calculations.py:411:        self.check("background_compatible", check, key=key, field="background", inputs=source)
+hmmer_model_calculations.py:615:    Tolerance controls mass checks and background compatibility, never silently
+sequence_masking_calculations.py:54:            # Equal length alone does not authenticate compatibility. Only exact
+sequence_masking_contracts.py:333:                 "legacy_custody_variant")
+execution_result_acquisition/retained_utility_reader.py:8:        return assignment.get('selector', {}).get('version') in {'native_blast_utility_result_selector_v1', 'native_blast_utility_result_selector_v2'}
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/task.py:139:        old = journal.row('runtime_actions', self.episode_id, index)
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/task.py:140:        if old and _live_original_runtime.json.loads(old['action']) != select
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/task.py:142:        if old and old['result'] is not None:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/task.py:143:            result, credit = (_live_original_runtime.json.loads(old['result']
+native_event_information.py:21:from .homology_jobs import HANDOFF_SCHEMA as LEGACY_HANDOFF_SCHEMA, normalize_query_fasta
+native_event_information.py:166:    def _legacy_assignment(self, assigned, row):
+native_event_information.py:173:            handoff = _validate(assigned['handoff'], LEGACY_HANDOFF_SCHEMA)
+native_event_information.py:181:        legacy = None
+native_event_information.py:184:            legacy = message.get('job_assignment')
+native_event_information.py:185:            if not isinstance(legacy, dict) or not legacy.get('job_ref'):
+native_event_information.py:187:            candidates.append(legacy['job_ref'])
+native_event_information.py:195:                legacy = adapter
+native_event_information.py:201:            legacy = assignment.get('adapter_assignment')
+native_event_information.py:202:            if legacy is not None:
+native_event_information.py:203:                candidates.append(legacy.get('job_ref'))
+native_event_information.py:214:        if legacy is not None:
+native_event_information.py:215:            self._legacy_assignment(legacy, row)
+bvbrc_proteome_tool_info.py:55:    "The current numerical path preserves reported first-HSP identity, the legacy "
+bvbrc_proteome_tool_info.py:61:    "changing thresholds does not rerun the service or rewrite historical results. "
+bvbrc_proteome_tool_info.py:112:    "Version 2 also accepts the unchanged finite legacy selectors for separately selected custom "
+bvbrc_proteome_tool_info.py:114:    "measurements keep their original meaning. Mixed selections do not join legacy rows to HSPs "
+bvbrc_proteome_tool_info.py:134:            or any(type(v) is not str or v not in ('1', '2') for v in adapter_versions)
+local_return_history.py:221:                # a legacy observation's own unit_index is retained only as its
+resource_result_acquisition/instructions.py:23:        old_history_guidance = _live_original_runtime_prompt.INSTRUCTIONS[_live_original_runtime_prompt.INSTRUCTIONS.index('On a fresh provider conversation,'):_live_original_runtime_prompt.INS
+resource_result_acquisition/instructions.py:24:        instructions = instructions.replace(old_history_guidance, 'Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observati
+resource_work_submission/hpc_resource_work_execution/task.py:149:        old = journal.row('runtime_actions', self.episode_id, index)
+resource_work_submission/hpc_resource_work_execution/task.py:150:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+resource_work_submission/hpc_resource_work_execution/task.py:152:        if old and old['result'] is not None:
+resource_work_submission/hpc_resource_work_execution/task.py:153:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+hmmer_alignment_input_validation.py:170:    threshold_index = 0
+hmmer_alignment_input_validation.py:192:            if (threshold_index >= 3 or type(item["threshold"]) is not int
+hmmer_alignment_input_validation.py:193:                    or item["threshold"] != (500, 5000, 50000)[threshold_index]
+hmmer_alignment_input_validation.py:196:            threshold_index += 1
+hmmer_alignment_input_validation.py:808:    """Validate optional new facts after ordinary B1 admission; legacy stays absent."""
+method_loop/archive.py:3:Archive files are ordinary JSON with references to previously archived values.
+run_statistics.py:56:    """Exact compatibility grouping; no inferred cross-size/hardware pooling.
+run_statistics.py:226:            old = self.db.execute("SELECT id FROM execution_conditions WHERE operation_sha256=?",
+run_statistics.py:228:            if old and old[0] != ref:
+run_statistics.py:230:            if not old:
+run_statistics.py:258:            old = self.db.execute("SELECT class_ref,data FROM run_statistics WHERE attempt_sha256=?",
+run_statistics.py:260:            if old:
+run_statistics.py:261:                if old != (scope.ref, body):
+bvbrc_data_query.py:5:module deliberately does not import or alter the legacy RQL service.
+bvbrc_data_query.py:649:    # Keep the legacy caller-owned endpoint rules, without importing its client.
+hmmer_artifact_data.py:19:MODES = {"hmmconvert": frozenset({"ascii", "binary", "legacy_hmmer2"}),
+resource_work_submission/to_child_local_resource_work_execution.py:4:This owner preserves the original A103 legacy lookup, envelope, live runtime
+hmmer_model_legacy.py:26:class _LegacyReader:
+hmmer_model_legacy.py:44:        legacy = {"null_emissions": None, "special_transitions": None,
+hmmer_model_legacy.py:65:                "legacy": legacy},
+hmmer_model_legacy.py:171:            legacy["checksum"] = {"token": checksum["tokens"][0] if len(checksum["tokens"]) == 1 else None,
+hmmer_model_legacy.py:172:                "value": value, "line": checksum["line"], "meaning": "hmmer2_legacy_checksum"}
+hmmer_model_legacy.py:175:            legacy["evd"].append({"tokens": header["tokens"][:], "values": values,
+hmmer_model_legacy.py:181:        if len(legacy["evd"]) == 1:
+hmmer_model_legacy.py:182:            observed = legacy["evd"][0]
+hmmer_model_legacy.py:198:                    nulls = legacy["null_emissions"]
+hmmer_model_legacy.py:226:                legacy[field] = distribution(header["tokens"], names, count, "legacy." + field,
+hmmer_model_legacy.py:268:            legacy["begin_transitions"] = distribution(tokens, _BEGIN, 3,
+hmmer_model_legacy.py:269:                "legacy.begin_transitions", None, line, "unit")
+hmmer_model_legacy.py:272:            problem("distribution_missing", "legacy.begin_transitions")
+hmmer_model_legacy.py:317:                legacy["entry_exit"].append({"position": position,
+hmmer_model_legacy.py:323:                legacy["entry_exit"].append({"position": position, "cells": [], "line": None})
+hmmer_model_legacy.py:337:    reader = _LegacyReader(content, occurrence)
+numerical.py:55:    # Compatibility operands for saved caller definitions only. Neither value
+numerical.py:65:                raise ValueError(name + "_legacy_value_requires_nonnegative_integer_or_none")
+numerical.py:74:            "window_semantics": "legacy_ignored_no_minimum_history",
+numerical.py:75:            "subsample_semantics": "legacy_ignored_full_history",
+numerical.py:293:                   "initialization": "cold_template_prior",
+numerical.py:410:                   "initialization": "cold_template_prior",
+numerical.py:864:            old = previous.get(key)
+numerical.py:869:            if (key not in self._estimators or old is not None
+numerical.py:870:                    and dependency(old) != dependency(arm)):
+numerical.py:917:            # zero historical fit cannot establish a zero future yield here.
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/saved_decision_exchange.py:24:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/saved_decision_exchange.py:25:                    if not older:
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/saved_decision_exchange.py:27:                    previous = older[0]['request']['restoration']['snapshot']
+bvbrc_minhash_contracts.py:66:    """Return a detached closed schema for legacy {} or the supplied V2 selector."""
+bvbrc_minhash_contracts.py:251:    Legacy {} selection has no publication-input envelope. Each supplied nonnull
+homology_job_submission/saved_decision_exchange.py:25:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+homology_job_submission/saved_decision_exchange.py:26:                    if not older:
+homology_job_submission/saved_decision_exchange.py:28:                    previous = older[0]['request']['restoration']['snapshot']
+native_blast_database_result_worker.py:1359:    # The parent may previously have used another mode and retained more of the
+completion_evidence.py:324:                    # references, including legacy runs without this ledger.
+blast_database_extraction.py:131:    """Compatibility name for the common symbol calculation."""
+homology_job_submission/task.py:166:        old = journal.row('runtime_actions', self.episode_id, index)
+homology_job_submission/task.py:167:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+homology_job_submission/task.py:169:        if old and old['result'] is not None:
+homology_job_submission/task.py:170:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+bvbrc_proteome_bundle_v2_contracts.py:13:from . import bvbrc_proteome_bundle_contracts as legacy
+bvbrc_proteome_bundle_v2_contracts.py:20:canonical, digest = legacy.canonical, legacy.digest
+bvbrc_proteome_bundle_v2_contracts.py:34:BINDING_DETAILS = {**legacy.BINDING_DETAILS, **DIRECTIONAL_BINDING_DETAILS}
+bvbrc_proteome_bundle_v2_contracts.py:95:            for key in error.absolute_path: path = legacy._pointer(path, key)
+bvbrc_proteome_bundle_v2_contracts.py:177:    """Validate the envelope, unchanged legacy relationships and observed copies."""
+bvbrc_proteome_bundle_v2_contracts.py:186:    for kind, (name, contract) in legacy._RESULTS.items():
+bvbrc_proteome_bundle_v2_contracts.py:189:            _checked(legacy._validate_result, contract, result, f'/{name}/{i}')
+bvbrc_proteome_bundle_v2_contracts.py:199:            _require(code in BINDING_CODES or code in legacy._PURE_CODES, path=f'/{name}/{i}')
+bvbrc_proteome_bundle_v2_contracts.py:203:    supplied = legacy._selected_data(saved)
+bvbrc_proteome_bundle_v2_contracts.py:205:    _checked(legacy._validate_resolution, view, supplied)
+bvbrc_proteome_bundle_v2_contracts.py:206:    _checked(legacy._index_task, saved)
+bvbrc_proteome_bundle_v2_contracts.py:236:    _legacy_copies(saved, supplied)
+bvbrc_proteome_bundle_v2_contracts.py:237:    legacy_sheet = None if saved['native_sheet_result'] is None else saved['native_sheet_result']['value']
+bvbrc_proteome_bundle_v2_contracts.py:240:    _require((numerical is None) == (legacy_sheet is None and directional_sheet is None), path='/numerical_sheet')
+bvbrc_proteome_bundle_v2_contracts.py:242:        _require(canonical(numerical['legacy_sheet']) == canonical(legacy_sheet) and numerical['directional_sheet'] == directional_sheet,
+bvbrc_proteome_bundle_v2_contracts.py:247:def _legacy_copies(saved, supplied):
+native_blast_database_result_publication.py:48:_ROLES_V2 = {**_ROLES_V1, 'sheets': ('sheets.json', 'native_blast_database_sheet_set_v2'),
+hpc_campaign.py:76:                raise ValueError('numeric_acceptance_threshold_required')
+hpc_campaign.py:125:            raise ValueError('historical_observation_provenance_required')
+native_blast_contracts.py:107:# assuming an older formatter's defaults (2.17.0 documents qaccver/saccver).
+phylogeny_calculation_contracts.py:298:        "literal_conservation_threshold_invalid")
+phylogeny_calculation_contracts.py:348:            "literal_conservation_threshold_invalid")
+tools.py:216:            "sequence.inspect": ("Measure sequence composition and compatible alphabets; do not classify its biology.", obj({"subject_ref": REF})),
+tools.py:383:                    # remains in request_ref; the old version label is optional.
+tools.py:694:                        # content, historical child work or a query response.
+tools.py:1672:        # Compatibility names project the common calculated cells. Coverage
+tools.py:1713:        from .alignment_site_native import (reference_grading, compatibility_sites,
+tools.py:1714:            compatibility_insertions)
+tools.py:1744:        sites = compatibility_sites(sheet) if sheet is not None else None
+tools.py:1745:        insertions = compatibility_insertions(sheet) if sheet is not None else None
+tools.py:2314:        from .uniprot_native import legacy_uniprot_records
+tools.py:2335:            result["projection_qualifications"] = [{"code": "uniprot_legacy_source_version_omitted",
+tools.py:2337:                "field": "legacy_source", "effect": "qualification"}]
+tools.py:2343:                "field": "legacy_publication", "effect": effect})
+tools.py:2345:        def legacy_label(value, fallback, native, pointer):
+tools.py:2350:                # old label column has a narrower representation contract.
+tools.py:2351:                projection_failure(native, pointer, "uniprot_legacy_label_unrepresentable")
+tools.py:2355:        def legacy_term(namespace, accession, label, kind, native, pointer):
+tools.py:2361:                projection_failure(native, pointer, "uniprot_legacy_term_unrepresentable")
+tools.py:2368:                                   legacy_uniprot_records(parsed, snapshot.content), strict=True):
+tools.py:2371:                raise ContractError("uniprot_legacy_record_identity_conflict")
+tools.py:2376:                                   "uniprot_legacy_reference_unrepresentable", "record_unpublishable")
+tools.py:2381:                label = legacy_label(protein["organism"] or taxon_id, taxon_id, native,
+tools.py:2383:                terms.append(legacy_term("ncbi_taxonomy", taxon_id, label, "taxon", native,
+tools.py:2385:            legacy = native["legacy_publication"]
+tools.py:2386:            if legacy["source_name"]:
+tools.py:2387:                terms.append(legacy_term("uniprot_source_name", protein["accession"],
+tools.py:2388:                    legacy["source_name"], "molecular_role", native, legacy["source_name_pointer"]))
+tools.py:2389:            for ec, pointer in zip(legacy["source_ec_numbers"], legacy["source_ec_number_pointers"], strict=True):
+tools.py:2390:                terms.append(legacy_term("EC", ec, "EC " + ec, "molecular_role", native, pointer))
+tools.py:2398:            label = legacy_label(legacy["source_name"] or protein["accession"], protein["accession"],
+tools.py:2399:                                 native, legacy["source_name_pointer"])
+tools.py:2413:                    error.get("code") == "uniprot_legacy_reference_unrepresentable" and
+homology_result_acquisition/goal.py:8:        return 'You own an iterative scoped job investigation in the shared method_loop. ' + responsibilities[role] + " Revise selected work from actual outcomes. Select one of your available ordinary t
+execution_job_submission/hpc_job_execution/saved_decision_exchange.py:25:                    older = self.workflow.decision_exchanges.rows(self.episode_id, index - 1) if index else []
+execution_job_submission/hpc_job_execution/saved_decision_exchange.py:26:                    if not older:
+execution_job_submission/hpc_job_execution/saved_decision_exchange.py:28:                    previous = older[0]['request']['restoration']['snapshot']
+a103_homology_resource_adapter.py:140:            legacy = self._native_handoff(handoff)
+a103_homology_resource_adapter.py:141:            job = self.jobs._row(legacy['job_ref'])
+a103_homology_resource_adapter.py:144:                'cpu': job['cpu'], 'handoff': legacy}
+a103_homology_resource_adapter.py:194:    def _legacy(self, context):
+a103_homology_resource_adapter.py:207:        source = self._legacy(context)
+a103_homology_resource_adapter.py:214:        source = self._legacy(context)
+a103_homology_resource_adapter.py:381:            candidates.append(('legacy:' + str(row[0]), handoff))
+a103_homology_resource_adapter.py:422:        source = self._legacy(context)
+a103_homology_resource_adapter.py:437:            legacy_role = source.path[-1][0]
+a103_homology_resource_adapter.py:438:            if legacy_role == 'job_launch':
+a103_homology_resource_adapter.py:440:            if self.homology[legacy_role].has_information_channel(legacy_role):
+a103_homology_resource_adapter.py:444:            if legacy_role == 'job_results':
+a103_homology_resource_adapter.py:469:        source = self._legacy(context)
+a103_homology_resource_adapter.py:488:        source = self._legacy(context)
+a103_homology_resource_adapter.py:494:        source = self._legacy(context)
+a103_homology_resource_adapter.py:504:        source = self._legacy(context)
+scientific_process_library.py:20:    LEGACY_EVIDENCE_SLOT, canonical_slot, _exact,
+scientific_process_library.py:67:            # These fields mix useful scientific limits with historical reader
+scientific_process_library.py:527:            if name == 'process.search' and arguments.get('slot') == LEGACY_EVIDENCE_SLOT:
+bvbrc_proteome_sheet.py:441:    for code in ("full_reports_not_retained", "legacy_first_hsp_only", "legacy_rounded_fraction",
+bvbrc_proteome_sheet.py:442:                 "legacy_subject_endpoint_difference", "legacy_zero_fallback_possible",
+hpc_work_planning/hpc_resource_prediction/task.py:111:        old = journal.row('runtime_actions', self.episode_id, index)
+hpc_work_planning/hpc_resource_prediction/task.py:112:        if old and _live_original_runtime.json.loads(old['action']) != selection:
+hpc_work_planning/hpc_resource_prediction/task.py:114:        if old and old['result'] is not None:
+hpc_work_planning/hpc_resource_prediction/task.py:115:            result, credit = (_live_original_runtime.json.loads(old['result']), old['credit'])
+bvbrc_proteome_bundle_adapter_v2.py:14:from .bvbrc_proteome_bundle_adapter import _DEPENDENCIES as _LEGACY_DEPENDENCIES
+bvbrc_proteome_bundle_adapter_v2.py:18:_DEPENDENCIES = tuple(sorted(set(_LEGACY_DEPENDENCIES) | {
+bvbrc_proteome_directional_contracts.py:1:"""Closed, data-only legacy BLASTP report contracts.
+shared_information_results.py:25:    """Keep old publications immutable without repeating their authored summary."""
+shared_information_results.py:52:    later delivery or revision cannot enter this action's historical result.
+blast_database_inspection.py:234:    r"(?:ISAM|Legacy|TaxID) testing is (?:ENABLED|DISABLED)\.",
+task_state.py:64:            raise TypeError('legacy_parent_must_remain_unbound')
+providers.py:667:        """Accept a predefined episode renderer without changing legacy calls."""
+receiver_prompt.py:108:        # The older instructions explicitly describe these supplied meanings.

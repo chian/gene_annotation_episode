@@ -63,7 +63,7 @@ def _metadata_schema():
 
 
 def minhash_result_selector_schema() -> dict:
-    """Return a detached closed schema for legacy {} or the supplied V2 selector."""
+    """Return a detached closed schema for the empty selector or the V2 selector."""
     reference = {"type": "string", "pattern": "^" + _SOURCE_PATTERN + r"(?![\s\S])",
                  "format": "reference", "x-reference-namespace": "execution_result"}
     selected = _object({
@@ -248,7 +248,7 @@ def _saved_result(value, *, request, source_ref, code):
 def validate_minhash_publication_inputs(value, *, request, selector) -> dict:
     """Validate a frozen V2 envelope; custody and byte verification stay in host.
 
-    Legacy {} selection has no publication-input envelope. Each supplied nonnull
+    The empty selection has no publication-input envelope. Each supplied nonnull
     field has exactly one binding keyed by its original metadata-list position.
     Binding order and duplicate pair candidates are preserved, never coalesced.
     """

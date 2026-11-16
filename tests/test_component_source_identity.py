@@ -48,7 +48,7 @@ def observation(store, source_ref, subjects, *, end=None):
         'source_subject_refs': list(subjects), 'kind': 'source_content',
         'source_ref': source_ref, 'measurements': [], 'dependencies': [],
         'anchor': {'source_ref': source_ref, 'artifact_ref': artifact,
-            'start': 0, 'end': end, 'quote': content[:end].decode('utf-8')}}, origin='extracted')['id']
+            'start': 0, 'end': end}}, origin='extracted')['id']
 
 
 def received_case(tmp_path, axis, *, finding_experiment=True):

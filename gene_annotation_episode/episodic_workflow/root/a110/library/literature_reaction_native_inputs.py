@@ -4,7 +4,7 @@ Scientists select experimental meanings and the relevant spans. Shared native
 scalar readers verify the actual bytes and literal numbers; this module performs
 only explicit ratio/unit arithmetic. It does not infer chemistry, digitize spectra,
 fit calibration, establish independence, or evaluate a physiological pathway.
-Prepared historical datasets keep their own unchanged input path.
+Prepared datasets have their own input path.
 """
 from __future__ import annotations
 from copy import deepcopy

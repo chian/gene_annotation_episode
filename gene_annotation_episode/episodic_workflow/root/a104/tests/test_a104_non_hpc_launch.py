@@ -113,7 +113,7 @@ def test_returned_failure_enters_original_iterator_once(launch_frame, tmp_path, 
     selected = {'kind': 'tool', 'tool': 'execution.capabilities', 'arguments': {}}
     expected = asyncio.run(case.task.execute(selected, 4))
     assert asyncio.run(case.task.execute(selected, 4)) == expected
-    assert json.loads(case.saved[4]['result']) == payload
+    assert json.loads(case.saved[4]['result']) == {**payload, 'pending_work_after_action': case.task.workflow.pending_work(case.task)}
     assert case.receipts == [(4, status)] and len(calls) == len(case.projections) == 1
 
 

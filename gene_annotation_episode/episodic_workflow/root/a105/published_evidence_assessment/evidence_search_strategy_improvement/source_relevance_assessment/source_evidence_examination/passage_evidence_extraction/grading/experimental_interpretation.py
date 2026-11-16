@@ -14,20 +14,17 @@ from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_asse
 
 class ExperimentalInterpretation:
 
-    def reasoning_action_schema(self, context, commit_schema, *, _accept_legacy_quotes=False):
+    def reasoning_action_schema(self, context, commit_schema):
         repository = self._required_grading_repository(context)
         leads = context.assignment.get('literature_task', {}).get('kind') == 'verified_source_leads'
         if repository is None and (not leads):
             return None
-        schema = obj({'kind': {'const': 'reason'}, 'commit': deepcopy(commit_schema)}) if repository is None else _required_grading_logic(repository).action_schema(commit_schema, source_location_inputs(repository.population_schema(), allow_legacy_quote=_accept_legacy_quotes))
+        schema = obj({'kind': {'const': 'reason'}, 'commit': deepcopy(commit_schema)}) if repository is None else _required_grading_logic(repository).action_schema(commit_schema, source_location_inputs(repository.population_schema()))
         if leads:
             from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.credit import lead_schema
             schema['properties']['source_lead'] = lead_schema()
-        return source_location_inputs(schema, allow_legacy_quote=_accept_legacy_quotes)
+        return source_location_inputs(schema)
 
-    def accept_reasoning_action_schema(self, context, commit_schema):
-        """Admit original quoted actions without requesting quotes from a model."""
-        return self.reasoning_action_schema(context, commit_schema, _accept_legacy_quotes=True)
 
     def reasoning_has_task_content(self, context, selection):
         from gene_annotation_episode.episodic_workflow.root.a105.published_evidence_assessment.evidence_search_strategy_improvement.source_relevance_assessment.source_evidence_examination.passage_evidence_extraction.goal import commissioned_task
@@ -37,7 +34,7 @@ class ExperimentalInterpretation:
         task, _ = commissioned_task(context)
         if task['kind'] != 'verified_source_leads':
             return False
-        validate_schema(plain(selection['source_lead']), source_location_inputs(lead_schema(), allow_legacy_quote=True))
+        validate_schema(plain(selection['source_lead']), source_location_inputs(lead_schema()))
         return True
 
     def execute_reasoning(self, context, selection, operation_key):

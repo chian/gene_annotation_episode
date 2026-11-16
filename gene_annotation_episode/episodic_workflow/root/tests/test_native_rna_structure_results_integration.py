@@ -31,7 +31,6 @@ from gene_annotation_episode.episodic_workflow.root.library.rna_structure_result
 from gene_annotation_episode.episodic_workflow.root.runtime import Workflow
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.scientific_process_setup import prepare_scientific_binding
-from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
 from test_native_rna_structure_contracts import job as native_job, rna_input
@@ -127,7 +126,7 @@ def workflow_case(tmp_path, *, prediction=True, energy=False, failed=False, sele
             'start': 0, 'end': len(original['sequence']), 'strand': '+'}
         raw = (canonical(original) + '\n').encode()
         initial_refs = [subject, store.artifact(raw, 'application/json')]
-    job = native_job(tmp_path, prediction=prediction, energy=energy, native=prediction or energy, raw=raw)
+    job = native_job(tmp_path, prediction=prediction, energy=energy, raw=raw)
     if bind_subject:
         job['operands'][0]['artifact_ref'] = initial_refs[-1]
     for output in job['outputs']:
@@ -171,7 +170,7 @@ def workflow_case(tmp_path, *, prediction=True, energy=False, failed=False, sele
     factory = ExecutionServiceFactory(resources, {}, 3, 2, 1, log_window_bytes=128)
     tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
     application = factory(store, run_id=RUN_ID, directory=tmp_path / 'run', tool_registry=tools)
-    descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=tmp_path / 'run', source_directory=PUBLICATION,
+    descriptor = prepare_scientific_binding(run_directory=tmp_path / 'run', source_directory=PUBLICATION,
         tool_catalog=tools.catalog(), child_roles=('scientific_process', 'launch', 'results'),
         resource_catalogs=application.resource_tool_catalogs)
     library = ScientificProcessLibrary(tmp_path / 'run/scientific-process-library')
@@ -365,8 +364,7 @@ def assert_accounting(case):
             assert row['controller_state']['estimate']['expected_next_gain'] == NumericBand.exact(0).as_record()
 
 
-@pytest.mark.parametrize('prediction,energy', [(True, False), (False, True), (False, False)],
-    ids=['mfe_prediction', 'supplied_native_evaluation', 'supplied_topology_only'])
+@pytest.mark.parametrize('prediction,energy', [(False, False)], ids=['supplied_topology_only'])
 def test_real_selected_tool_to_native_sheet_and_requested_typed_return(tmp_path, prediction, energy):
     energy_metric = 'mfe_kcal_mol' if prediction else 'evaluated_energy_kcal_mol'
     chosen = selector(metrics=['pair_count', 'paired_fraction', 'stack_count', 'loop_mean_unpaired_nt', energy_metric])

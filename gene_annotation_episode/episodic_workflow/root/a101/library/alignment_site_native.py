@@ -264,8 +264,7 @@ def _selected_reference_alignment_authority(store, context, alignment_ref, *, be
     if producer.run_id == context.run_id and producer.episode_id == context.episode_id:
         require(type(row['producer_decision_index']) is int
             and row['producer_decision_index'] < before_decision_index, 'producer_after_cutoff')
-    if 'operand_refs' in source:
-        require(source['operand_refs'] == expected_refs, 'source_operand_conflict')
+    require(source.get('operand_refs') == expected_refs, 'source_operand_conflict')
     grading_refs = [ref for ref in source.get('auxiliary_artifact_refs', [])
         if _reference_alignment_artifact(store, ref)['media_type'] == MEDIA_TYPE]
     require(len(grading_refs) <= 1, 'ambiguous_grading')
@@ -413,31 +412,16 @@ def reference_operands(store, alignment, body, *, molecule):
 def reference_source_operands(store, alignment, source):
     """Bind the original producer's operands, independently of a new observation.
 
-    New pairwise sources retain the ordered operands. Earlier Biopython
-    publications can be proved by their saved original tool operation. Merely
-    supplying an observation with a valid hash and equal lengths is not proof.
+    Pairwise sources retain the ordered operands. Merely supplying an
+    observation with a valid hash and equal lengths is not proof.
     """
     query, = alignment['subject_refs']
     reference, = alignment['source_subject_refs']
     expected = list(dict.fromkeys([query, reference]))
-    if 'operand_refs' in source:
-        if source['operand_refs'] != expected:
-            raise ContractError('site_native_source_operand_conflict')
-        return
-    if source['provider'] != 'biopython.alignment':
+    if 'operand_refs' not in source:
         raise ContractError('site_native_source_operands_unavailable')
-    rows = store.db.execute("SELECT name,arguments FROM tool_operations WHERE "
-        "name IN ('sequence.align','reads.align') "
-        "AND json_extract(result,'$.status') IN ('completed','partial') "
-        "AND EXISTS(SELECT 1 FROM json_each(result,'$.record_refs') WHERE value=?)",
-        (alignment['id'],))
-    for row in rows:
-        arguments = json.loads(row['arguments'])
-        queries = ([arguments['query_ref']] if row['name'] == 'sequence.align'
-                   else arguments['subject_refs'])
-        if query in queries and reference == arguments['reference_ref']:
-            return
-    raise ContractError('site_native_source_operand_conflict')
+    if source['operand_refs'] != expected:
+        raise ContractError('site_native_source_operand_conflict')
 
 
 def biopython_molecule(store, source, body):

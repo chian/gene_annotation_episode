@@ -1,4 +1,4 @@
-"""Pure native database PSI/DELTA convergence binding (accepted 325).
+"""Pure native database PSI/DELTA convergence binding.
 
 Fresh binding selects actual captured bytes and a unique actual operand before
 calling 316. Saved validation checks retained structure and identities only:

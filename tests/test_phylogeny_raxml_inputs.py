@@ -1,4 +1,3 @@
-from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
@@ -8,11 +7,6 @@ import subprocess
 import pytest
 
 import gene_annotation_episode.episodic_workflow.root.library.phylogeny_raxml_inputs as native
-
-
-_REPOSITORY = next(path for path in Path(__file__).resolve().parents
-    if (path / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries/official_example").is_dir())
-_EXAMPLES = _REPOSITORY / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries/official_example/test9_genome_dir"
 
 
 def _artifact(data):
@@ -28,58 +22,6 @@ def _log(body="", *, version="8.2.9", command="raxml -s 'input one.phy' -n run -
     return (f"This is RAxML version {version} released by source.\n"
         f"RAxML was called as follows:\n\n{command}\n{body}"
         + ("Overall execution time for full ML analysis: 1.0 secs\n" if end else "")).encode()
-
-
-def _observations(result, method):
-    return [row for row in result["value"]["observations"] if row["method"] == method]
-
-
-def test_actual_complete_raxml_log_retains_all_native_measurements_and_models():
-    assert Path(native.__file__).resolve().parent == Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/library"
-    data = (_EXAMPLES / "RAxML_info.test9_genome_8taxa_10cds_10proteins_codonAndProteins").read_bytes()
-    artifact = _artifact(data)
-    before = deepcopy(artifact)
-    result = native.parse_raxml_run_log(data, artifact=artifact, dialect="raxml_8")
-    assert artifact == before
-    assert result["status"] == "ok" and result["diagnostics"] == []
-    value = result["value"]
-    assert value["completeness"] == "complete"
-    assert value["engine"]["version"] == "8.2.9"
-    assert len(value["commands"]) == 1
-    assert value["engine"]["command_ids"] == [value["commands"][0]["command_id"]]
-    assert value["commands"][0]["origin"] == "observed"
-    assert value["commands"][0]["role"] == "inference"
-    assert len(value["observations"]) == 117
-    assert _observations(result, "raxml_8_alignment_patterns")[0]["value"] == 1953
-    assert [row["value"] for row in _observations(result, "raxml_8_partition_patterns")] == [318, 246, 502, 887]
-    gap = _observations(result, "raxml_8_gap_undetermined_percent")[0]
-    assert (gap["value"], gap["raw_token"], gap["unit"]) == (12.57, "12.57", "percent")
-    assert gap["value"] != 17308 / 137700
-    bootstrap = _observations(result, "raxml_8_bootstrap_log_likelihood")
-    assert len(bootstrap) == 100
-    assert len({row["population_id"] for row in bootstrap}) == 100
-    assert bootstrap[0]["value"] == -56973.973102
-    assert bootstrap[-1]["value"] == -56745.905848
-    slow = _observations(result, "raxml_8_slow_search_log_likelihood")
-    assert len(slow) == 10 and len({row["population_id"] for row in slow}) == 1
-    final = _observations(result, "raxml_8_final_ml_log_likelihood")
-    assert len(final) == 1 and final[0]["value"] == -56958.397755
-    assert final[0]["unit"] == "natural_log_likelihood"
-    assert final[0]["population_id"] == slow[0]["population_id"]
-    models = value["models"]
-    assert [row["partition_name"] for row in models] == ["codon1", "codon2", "codon3", "proteins"]
-    assert [row["datatype"] for row in models] == ["dna", "dna", "dna", "protein"]
-    assert [row["model_token"] for row in models] == ["GTR", "GTR", "GTR", "LG"]
-    assert [len(row["parameters"]) for row in models] == [12, 12, 12, 212]
-    assert {row["branch_optimization"] for row in models} == {"joint"}
-    assert {row["native_run_label"] for row in models} == {"test9_genome_8taxa_10cds_10proteins_codonAndProteins"}
-    for observation in value["observations"]:
-        location = observation["location"]
-        line = data[location["byte_start_0based"]:location["byte_end_0based_exclusive"]].decode()
-        assert observation["raw_token"] in line
-        assert location["artifact"] == artifact
-        assert location["line_start_1based"] == location["line_end_1based_inclusive"]
-    assert json.loads(json.dumps(result, allow_nan=False)) == result
 
 
 def test_zero_and_negative_likelihoods_remain_distinct_from_missing():

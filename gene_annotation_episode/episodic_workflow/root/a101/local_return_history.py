@@ -154,11 +154,10 @@ class LocalReturnHistory:
         with (nullcontext() if self.store.db.in_transaction else self.store.read_snapshot()):
             tables = {row[0] for row in self.store.db.execute(
                 "SELECT name FROM sqlite_master WHERE type='table'")}
-            episode = (self.store.db.execute(
+            episode = self.store.db.execute(
                 "SELECT path,json_extract(request,'$.goal.goal_id') AS goal_id "
                 "FROM runtime_episodes WHERE run_id=? AND episode_id=?",
                 (self.journal.run_id, episode_id)).fetchone()
-                if "runtime_episodes" in tables else None)
             if episode is None:
                 raise ValueError("local_return_history_episode_unavailable")
             if "runtime_return_admissions" not in tables:
@@ -178,14 +177,13 @@ class LocalReturnHistory:
                 raise ValueError("local_return_history_identity_conflict") from error
             if reference.episode_id != episode_id:
                 _conflict()
-            if "runtime_commission_intents" in tables:
-                original = self.store.db.execute("SELECT json_extract(spec,'$.parent.path') AS path, "
-                    "json_extract(spec,'$.parent.goal_id') AS goal_id FROM runtime_commission_intents "
-                    "WHERE run_id=? AND parent_episode_id=? AND original_decision_index=?",
-                    (self.journal.run_id, episode_id, original_decision_index)).fetchone()
-                if original is not None and (original["goal_id"] != episode["goal_id"]
-                        or canonical(_load(original["path"])) != canonical(_load(episode["path"]))):
-                    _conflict()
+            original = self.store.db.execute("SELECT json_extract(spec,'$.parent.path') AS path, "
+                "json_extract(spec,'$.parent.goal_id') AS goal_id FROM runtime_commission_intents "
+                "WHERE run_id=? AND parent_episode_id=? AND original_decision_index=?",
+                (self.journal.run_id, episode_id, original_decision_index)).fetchone()
+            if original is not None and (original["goal_id"] != episode["goal_id"]
+                    or canonical(_load(original["path"])) != canonical(_load(episode["path"]))):
+                _conflict()
             reasons = []
             sample = self._sample(row, episode_id, tables, reasons)
             sample.pop("_observation_index", None)
@@ -204,7 +202,7 @@ class LocalReturnHistory:
         with self.store.read_snapshot():
             tables = {row[0] for row in self.store.db.execute(
                 "SELECT name FROM sqlite_master WHERE type='table'")}
-            if "runtime_episodes" not in tables or self.store.db.execute(
+            if self.store.db.execute(
                     "SELECT 1 FROM runtime_episodes WHERE run_id=? AND episode_id=?",
                     (self.journal.run_id, episode_id)).fetchone() is None:
                 raise ValueError("local_return_history_episode_unavailable")
@@ -217,9 +215,8 @@ class LocalReturnHistory:
                     (self.journal.run_id, episode_id)).fetchall()
                 samples = [self._sample(row, episode_id, tables, reasons) for row in rows]
                 self._link_waits(samples, episode_id, tables, reasons)
-                # Missing F2 does not turn decision order into completion order:
-                # a legacy observation's own unit_index is retained only as its
-                # original observation order, with completion_sequence null.
+                # Decision order is not completion order: an observed sample without a
+                # completion slot keeps its own observation order, with completion_sequence null.
                 samples.sort(key=lambda sample: (
                     0 if sample["observation_state"] == "observed" else 1,
                     sample["_observation_index"] if sample["observation_state"] == "observed"
@@ -257,8 +254,7 @@ class LocalReturnHistory:
             _conflict()
         if state in {"delivery_pending", "receiver_closed"} and admission.get("controller_input") is not None:
             _conflict()
-        action = (self.journal.row("runtime_actions", episode_id, index)
-                  if "runtime_actions" in tables else None)
+        action = self.journal.row("runtime_actions", episode_id, index)
         if action is None:
             reasons.append("original_action_unavailable")
         elif content_digest(_load(action["action"])) != row["selection_sha256"]:
@@ -272,11 +268,9 @@ class LocalReturnHistory:
             if (not isinstance(outcome, dict) or outcome.get("status") not in statuses
                     or outcome.get("record_refs") != refs or action["credit"] != snapshot):
                 _conflict()
-        intent = None
-        if "runtime_commission_intents" in tables:
-            intent = self.store.db.execute("SELECT * FROM runtime_commission_intents "
-                "WHERE run_id=? AND parent_episode_id=? AND original_decision_index=?",
-                (self.journal.run_id, episode_id, index)).fetchone()
+        intent = self.store.db.execute("SELECT * FROM runtime_commission_intents "
+            "WHERE run_id=? AND parent_episode_id=? AND original_decision_index=?",
+            (self.journal.run_id, episode_id, index)).fetchone()
         spec, contract, selected_at = None, None, None
         if intent is None:
             reasons.append("original_commission_unavailable")
@@ -297,7 +291,6 @@ class LocalReturnHistory:
             selected_at = intent["selected_at"] if _utc(intent["selected_at"]) is not None else None
             if selected_at is None:
                 reasons.append("selected_at_invalid")
-        attempt = None
         delivery_index = admission.get('repair_decision_index', index)
         if delivery_index != index:
             original_attempt = self.store.db.execute('SELECT contract,failure FROM runtime_report_attempts '
@@ -307,10 +300,9 @@ class LocalReturnHistory:
                     or canonical(_load(original_attempt['contract'])) != canonical(contract)):
                 _conflict()
             contract = admission['delivery_contract']
-        if "runtime_report_attempts" in tables:
-            attempt = self.store.db.execute("SELECT child_episode_id,contract,form,failure "
-                "FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND decision_index=?",
-                (self.journal.run_id, episode_id, delivery_index)).fetchone()
+        attempt = self.store.db.execute("SELECT child_episode_id,contract,form,failure "
+            "FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND decision_index=?",
+            (self.journal.run_id, episode_id, delivery_index)).fetchone()
         if attempt is not None:
             saved_contract = _load(attempt["contract"])
             if (contract is not None and canonical(contract) != canonical(saved_contract)
@@ -395,11 +387,9 @@ class LocalReturnHistory:
 
     def _observe(self, sample, admission, episode_id, tables, reasons):
         index = sample["original_decision_index"]
-        slot_row = None
-        if "runtime_completion_slots" in tables:
-            slot_row = self.store.db.execute("SELECT sequence,slot FROM runtime_completion_slots "
-                "WHERE run_id=? AND episode_id=? AND original_decision_index=?",
-                (self.journal.run_id, episode_id, index)).fetchone()
+        slot_row = self.store.db.execute("SELECT sequence,slot FROM runtime_completion_slots "
+            "WHERE run_id=? AND episode_id=? AND original_decision_index=?",
+            (self.journal.run_id, episode_id, index)).fetchone()
         slot = None if slot_row is None else _load(slot_row["slot"])
         if slot is not None:
             if (slot.get("version") != "episode_completion_slot_v1" or slot.get("episode_id") != episode_id
@@ -412,12 +402,10 @@ class LocalReturnHistory:
             sample["completion_sequence"] = slot_row["sequence"]
         elif admission.get('controller_input') is not None:
             reasons.append("completion_slot_unavailable")
-        observations = []
-        if "runtime_observations" in tables:
-            observations = self.store.db.execute("SELECT unit_index,observation FROM runtime_observations "
-                "WHERE run_id=? AND episode_id=? AND (json_extract(observation,'$.decision_index')=? "
-                "OR unit_index=?) ORDER BY unit_index", (self.journal.run_id, episode_id, index,
-                    None if slot is None else slot_row["sequence"])).fetchall()
+        observations = self.store.db.execute("SELECT unit_index,observation FROM runtime_observations "
+            "WHERE run_id=? AND episode_id=? AND (json_extract(observation,'$.decision_index')=? "
+            "OR unit_index=?) ORDER BY unit_index", (self.journal.run_id, episode_id, index,
+                None if slot is None else slot_row["sequence"])).fetchall()
         if len(observations) > 1:
             _conflict()
         if not observations:
@@ -458,10 +446,6 @@ class LocalReturnHistory:
             _conflict()
 
     def _link_waits(self, samples, episode_id, tables, reasons):
-        if "episode_waits" not in tables:
-            if samples:
-                reasons.append("wait_records_unavailable")
-            return
         by_handle = {sample["child_handle"]: sample for sample in samples}
         rows = self.store.db.execute("SELECT wait_id,original_decision_index,request_sha256,request,wake,outcome "
             "FROM episode_waits WHERE run_id=? AND parent_episode_id=? "

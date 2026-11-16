@@ -48,8 +48,7 @@ def case(tmp_path):
     distributions = ("jsonschema", "attrs", "referencing", "rpds-py", "jsonschema-specifications")
     driver = dict(python_executable=str(driver_root / "bin/python"), python_sha256="b" * 64,
         python_version="engineered", module_root=str(driver_root / "source"),
-        implementation_files=[dict(module=module, sha256="c" * 64) for module in (
-            lumpy.DRIVER_MODULE, "gene_annotation_episode.native_atac_differential_reference")],
+        implementation_files=[dict(module=module, sha256="c" * 64) for module in lumpy._REQUIRED_MODULES],
         dependencies=[dict(distribution=name, version="engineered", package_root=str(driver_root / name),
             files=[_pin(driver_root / name / "__init__.py")]) for name in distributions])
     software = dict(driver_runtime=driver, native_runtime=dict(

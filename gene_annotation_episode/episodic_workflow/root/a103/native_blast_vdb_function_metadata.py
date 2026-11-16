@@ -1,6 +1,6 @@
 """Supplied VDB function metadata, using the original document/search boundary.
 
-These standalone ports implement accepted338 and its wire addenda. They do not
+These standalone ports do not
 register a consumer, acquire bytes or dispatch a worker. Callers retain every
 validation envelope, including rejected originals. The existing342 populator
 owns scientific links and original-HSP measurements; its unchanged base reader

@@ -284,12 +284,10 @@ class APIRecordAccess:
         body = self._artifact_json(self.store.get(handoff_ref)['artifact_ref'])
         return self._read_handoff(handoff_ref, body['scope'])['scope']
 
-    def read_target(self, handoff_ref, scope, *, verify_artifacts=True, _completed_appservice_download=False):
+    def read_target(self, handoff_ref, scope, *, verify_artifacts=True):
         from gene_annotation_episode.episodic_workflow.root.a104.bvbrc_appservice_records import PROVIDER as APPSERVICE_PROVIDER
         if self.store.get(handoff_ref).get('provider') == APPSERVICE_PROVIDER:
-            return self.appservice.read_target(handoff_ref, scope, **{'_completed_download': True} if _completed_appservice_download else {})
-        if _completed_appservice_download:
-            raise ValueError('appservice_cached_download_context_conflict')
+            return self.appservice.read_target(handoff_ref, scope)
         if self.store.get(handoff_ref).get('provider') == LEGACY_PROVIDER:
             return self._legacy_binding().read_target(handoff_ref, scope)
         body = self._read_handoff(handoff_ref, scope, verify_artifacts=verify_artifacts)
@@ -490,7 +488,7 @@ class APIRecordAccess:
     def received_bvbrc_context(self, context):
         return self.bvbrc_data.received_context(context)
 
-    def _saved_result_context(self, context, *, verify_artifacts=True, _completed_appservice_download=False):
+    def _saved_result_context(self, context, *, verify_artifacts=True):
         if context.run_id != self.run_id:
             raise ValueError('api_execution_run_conflict')
         if context.role != 'results':
@@ -498,6 +496,6 @@ class APIRecordAccess:
         raw = plain(context.assignment)
         if set(raw) != {'version', 'handoff_ref', 'selector'} or raw['version'] != 'execution_results_assignment_v1':
             raise ValueError('invalid_api_results_assignment')
-        target = self.read_target(raw['handoff_ref'], context.scope, verify_artifacts=verify_artifacts, **{'_completed_appservice_download': True} if _completed_appservice_download else {})
+        target = self.read_target(raw['handoff_ref'], context.scope, verify_artifacts=verify_artifacts)
         self.validate_result_selector(target, raw['selector'])
         return (target['assignment'], self.services[target['resource_id']], target)

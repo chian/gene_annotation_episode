@@ -38,7 +38,7 @@ def test_six_explicit_hpc_contracts_are_pure_actual_request_shapes(monkeypatch):
 
 def test_existing_library_freezes_and_resolves_substantive_child_tool_info(tmp_path):
     rows = native_blast_database_tool_contracts(bindings(), resource_kind="hpc", resource_id="explicit-hpc")
-    library = ScientificToolLibrary.freeze(tmp_path / "library", catalog=[], tool_info=True, resource_catalogs={"hpc": rows})
+    library = ScientificToolLibrary.freeze(tmp_path / "library", catalog=[], resource_catalogs={"hpc": rows})
     information = [{"name": r["name"], "resources": r["resources"]} for r in rows[:2]]
     child_tool_info = library.resolve_tool_info(information)
     assert all(set(row) == {"name", "description", "resources", "instructions"} for row in child_tool_info)

@@ -15,6 +15,16 @@ from gene_annotation_episode.episodic_workflow.root.a105.tools import ToolRegist
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_concentration_window_275 import synthetic, load, CASE
 SELECTED = ['substrate_loss', 'chemical_discrepancy', 'fate_fraction', 'source_interval_average_total_product', 'scenario_interval_average_total_product', 'chemical_discrepancy_variance']
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def setup(path, components=SELECTED, *, original=False, covariance=None, partial_pair=False):
     if original:
         selection = load('SOURCE_SELECTION_PROPOSAL_002.json')
@@ -96,11 +106,11 @@ def test_source_bytes_and_nested_covariance_custody(tmp_path):
     try:
         alien = source(b'unreceived covariance')
         args['selection'].update(covariance_source_ref=alien, covariance_material='unsupported_observation_table')
-        out = asyncio.run(binding.execute(ctx, OPERATION, args, 'unreceived281'))
+        out = asyncio.run(binding.execute(ctx, OPERATION, location_only(args), 'unreceived281'))
         assert out['status'] == 'invalid' and 'not_received' in out['feedback']['code']
         page = dict(version='page_assignment_v1', source_ref=args['selection']['source_ref'], representation='original', artifact_ref=store.get(args['selection']['source_ref'])['artifact_ref'], question_context_refs=[], prior_delivery_refs=[], **{REQUESTED: ['substrate_loss_variance']})
         page_ctx = replace(ctx, role='literature_page', path=(('literature_page', ctx.episode_id),), assignment=page, received_record_refs=(*ctx.received_record_refs, alien))
-        out = asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(page_ctx, OPERATION, args, 'outside281'))
+        out = asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(page_ctx, OPERATION, location_only(args), 'outside281'))
         assert out['status'] == 'invalid' and 'outside_assigned_source' in out['feedback']['code']
     finally:
         store.close()
@@ -129,7 +139,7 @@ def test_selected_preflight_failures_do_not_commit(tmp_path, failure):
             entry['windows'] = [dict(start=index + 1, end=len(raw))]
         else:
             args['return_context'][0]['windows'] *= 2
-        outcome = asyncio.run(binding.execute(ctx, OPERATION, args, 'bad281'))
+        outcome = asyncio.run(binding.execute(ctx, OPERATION, location_only(args), 'bad281'))
         assert outcome['status'] == 'invalid' and outcome['feedback']
         assert not store.db.execute("SELECT 1 FROM sqlite_master WHERE name='literature_concentration_window_operations'").fetchone()
     finally:

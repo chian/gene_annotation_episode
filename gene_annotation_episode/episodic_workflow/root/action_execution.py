@@ -78,9 +78,7 @@ class ActionExecution:
                     try:
                         Draft202012Validator(retriever_catalog[0]['input_schema']).validate(arguments)
                         tools = self.scientific_process_binding.tool_library
-                        available = self.services.tool_information_catalog(source.scope) if tools.supports_tool_info else self.services.tool_catalog(source.scope)
-                        if not tools.supports_tool_info:
-                            tools.resolve([entry['name'] for entry in tools.catalog()], available)
+                        available = self.services.tool_information_catalog(source.scope)
                         if self.scientific_tool_retriever is not None:
                             return await self.scientific_tool_retriever.retrieve(arguments['investigation'], episode_id=source.episode_id, operation_key=operation_key, available_catalog=available)
                         result = tools.retrieve_literal_test(arguments['investigation'], available_catalog=available)

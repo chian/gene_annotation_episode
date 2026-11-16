@@ -36,6 +36,13 @@ from gene_annotation_episode.native_file_capture import NativeFileCaptureError, 
 from gene_annotation_episode.episodic_workflow.root.task_values import Record
 from gene_annotation_episode.state import Store
 from test_bvbrc_appservice_custody import SavedRecords
+from gene_annotation_episode.episodic_workflow.root.wait_events import PENDING_VERSION
+
+
+def saved_result(outcome):
+    """The form the task saves: its outcome plus the pending work captured after the action."""
+    return {**deepcopy(outcome), 'pending_work_after_action': {'version': PENDING_VERSION,
+        'captured_at': '2026-10-29T00:00:00Z', 'items': []}}
 
 
 class CaptureFixture:
@@ -106,7 +113,7 @@ class CaptureFixture:
         key = f'{self.saved.run_id}:{self.context.episode_id}:{index}' if selected else self.select(index, tool)
         outcome = asyncio.run(self.backend.execute(self.context, self.target, tool, {}, key))
         row = self.saved.journal.row('runtime_actions', self.context.episode_id, index)
-        self.saved.journal.save('runtime_actions', {**row, 'result': canonical(outcome)})
+        self.saved.journal.save('runtime_actions', {**row, 'result': canonical(saved_result(outcome))})
         self.saved.receipts.receive(self.context.episode_id, outcome['record_refs'], kind='own_action', source_index=index)
         self.outcomes.append(outcome)
         return outcome
@@ -289,7 +296,7 @@ def test_rejected_intent_does_not_bypass_later_first_admission(captured):
     'refs', 'changed_refs', 'extra', 'pending'])
 def test_committed_public_capture_outcome_must_match_private_journal(captured, change):
     original = captured.execute(0)
-    altered = deepcopy(original)
+    altered = saved_result(original)
     if change == 'null':
         altered = None
     elif change == 'scalar':
@@ -317,11 +324,8 @@ def test_committed_public_capture_outcome_must_match_private_journal(captured, c
 
 
 def test_runtime_pending_metadata_is_validated_without_relaxing_public_body(captured):
-    from gene_annotation_episode.episodic_workflow.root.wait_events import PENDING_VERSION
     original = captured.execute(0)
-    public = deepcopy(original)
-    public['pending_work_after_action'] = {'version': PENDING_VERSION,
-        'captured_at': '2026-10-29T00:00:00Z', 'items': []}
+    public = saved_result(original)
     row = captured.saved.journal.row('runtime_actions', captured.context.episode_id, 0)
     captured.saved.journal.save('runtime_actions', {**row, 'result': canonical(public)})
     assert captured.backend.read_source(original['record_refs'][1], captured.context.scope)['source_ref'] == original['record_refs'][1]
@@ -429,7 +433,7 @@ def test_actual_storage_error_crosses_outer_dispatch_and_keeps_same_action_recov
             'execution.results.collect', {}, key))
         assert resumed['status'] == 'completed' and resumed['record_refs'][1] == first_source
         row = case.saved.journal.row('runtime_actions', case.context.episode_id, 0)
-        case.saved.journal.save('runtime_actions', {**row, 'result': canonical(resumed)})
+        case.saved.journal.save('runtime_actions', {**row, 'result': canonical(saved_result(resumed))})
         case.saved.receipts.receive(case.context.episode_id, resumed['record_refs'], kind='own_action', source_index=0)
         case.outcomes.append(resumed)
         assert store.db.execute('SELECT admission FROM runtime_execution_file_capture_admissions').fetchone()[0] == admission
@@ -658,7 +662,7 @@ def test_local_file_source_probe_preserves_registered_capture_authority(tmp_path
     with Store(tmp_path / 'state') as store:
         if condition == 'foreign_scope':
             manifest = tmp_path / 'scope-targets.json'
-            manifest.write_text(canonical({'schema_version': 1, 'entries': [
+            manifest.write_text(canonical({'schema_version': 2, 'entries': [
                 {'sequence': 'ACGT', 'molecule': 'dna', 'name': 'capture-A'},
                 {'sequence': 'CGTA', 'molecule': 'dna', 'name': 'receiver-B'}]}))
             saved = SavedRecords(store, manifest_path=manifest)

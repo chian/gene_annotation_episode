@@ -64,7 +64,7 @@ def test_exact_search_witness_and_context_survive_later_reads_without_reexecutio
         text = store.get_artifact(src['artifact_ref']).decode()
         start = text.index('1:1')
         witness = {'source_ref': src['id'], 'representation': 'text',
-                   'start': start, 'end': start + 3, 'quote': '1:1'}
+                   'start': start, 'end': start + 3}
         context = {'artifact_ref': src['artifact_ref'], 'start': 0,
                    'end': len(text.encode()), 'text': text}
         match = {'artifact_ref': src['artifact_ref'], 'witness': witness, 'context': context}

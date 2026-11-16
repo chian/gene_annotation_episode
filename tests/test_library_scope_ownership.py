@@ -218,7 +218,7 @@ def test_context_original_member_branches_cannot_bypass_disjoint_hypothesis_and_
         fresh["contexts"] = [{"alias": "outsideSourceContext", "context_type": "assay_condition", "name": "read B condition",
             "source_ref": source["id"], "attributes": [], "related_refs": [b["id"]],
             "anchor": {"source_ref": source["id"], "artifact_ref": source["artifact_ref"],
-                "start": start, "end": start + len(b"read B condition"), "quote": "read B condition"}}]
+                "start": start, "end": start + len(b"read B condition")}}]
         rejected = store.commit_reasoning(fresh, child_scope, "disjoint-anchored-context-is-still-outside")
         assert rejected["status"] == "invalid" and rejected["errors"][0]["code"] == "record_subject_member_outside_scope"
         assert rejected["errors"][0]["field_path"] == ["related_refs", 0]

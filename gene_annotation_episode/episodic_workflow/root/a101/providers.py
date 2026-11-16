@@ -725,7 +725,7 @@ class _SessionConnection:
                     if context.get('result') not in lookups:
                         lookups.append(context.get('result'))
         elif has_text_task(context):
-            # The legacy exchange protocol can carry a newly published process.
+            # The decision-exchange protocol can carry a newly published process.
             # It already supplies the full state; its response schema is intact.
             state = deepcopy(context)
         if state is not None and has_text_task(state):
@@ -825,7 +825,7 @@ class ModelConnection:
             return await self._complete_serial(episode_id,role,instructions,context,output_schema)
 
     async def complete_with_presentation(self, episode_id, role, instructions, context, output_schema, *, prompt_renderer):
-        """Accept a predefined episode renderer without changing legacy calls."""
+        """Complete with a predefined episode renderer."""
         async with self.worker_lock:
             return await self._complete_serial(episode_id, role, instructions, context,
                 output_schema, prompt_renderer=prompt_renderer)

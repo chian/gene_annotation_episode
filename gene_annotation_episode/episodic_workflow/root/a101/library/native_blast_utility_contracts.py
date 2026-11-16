@@ -60,7 +60,6 @@ NATIVE_BLAST_UTILITY_JOB_SCHEMA = _object({"version": {"const": JOB_VERSION},
     "inputs": {"type": "array", "items": INPUT_SCHEMA},
     "databases": {"type": "array", "maxItems": 1, "items": DATABASE_OPERAND_SCHEMA},
     "outputs": {"type": "array", "minItems": 2, "maxItems": 3, "items": OUTPUT_SCHEMA}})
-# Keep the old object branch byte-for-byte representable; new fields are v2 only.
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_preparation_contracts import MATERIALIZATION_ENTRY_SCHEMA
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_contracts import DATABASE_OPERAND_SCHEMA as ADDITIONAL_DATABASE_OPERAND_SCHEMA
 INPUT_SCHEMA_V2 = deepcopy(INPUT_SCHEMA)

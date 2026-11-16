@@ -40,12 +40,20 @@ class Responses:
         self.submission_error = None
         self.result_body = {"jobId": JOB, "searchSequence": SEQUENCE, "numHits": 0, "hits": {}}
 
-    def _snapshot(self, action, url, request, body, media_type="application/json"):
+    def _snapshot(self, action, url, request, body, media_type="application/json", submitted=None):
         self.calls.append((action, deepcopy(request)))
+        transport = {"status": 200, "body_complete": True, "representation": "controlled_native_response"}
+        if submitted is not None:
+            content, filename = submitted
+            raw = (b'--boundary\r\nContent-Disposition: form-data; name="sequence_file"; filename="'
+                + filename.encode("ascii") + b'"\r\nContent-Type: text/plain\r\n\r\n' + content + b'\r\n--boundary--\r\n')
+            transport["request"] = {"method": "POST", "url": url,
+                "headers": {"Content-Type": "multipart/form-data; boundary=boundary"},
+                "body_base64": base64.b64encode(raw).decode("ascii"),
+                "body_sha256": hashlib.sha256(raw).hexdigest(), "body_bytes": len(raw)}
         return SourceSnapshot("rfam_batch", url, {"action": action, **request},
             f"2026-10-26T00:00:{len(self.calls):02d}+00:00",
-            body if isinstance(body, bytes) else json.dumps(body).encode(), media_type,
-            {"status": 200, "body_complete": True, "representation": "controlled_native_response"})
+            body if isinstance(body, bytes) else json.dumps(body).encode(), media_type, transport)
 
     def submit(self, sequence):
         if self.submission_error:
@@ -53,7 +61,8 @@ class Responses:
             raise self.submission_error
         return self._snapshot("submit", BASE_URL + "/submit-job",
             {"sequence_sha256": hashlib.sha256(sequence.encode("ascii")).hexdigest(),
-             "sequence_length": len(sequence)}, {"jobId": JOB, "resultURL": result_url(JOB)})
+             "sequence_length": len(sequence)}, {"jobId": JOB, "resultURL": result_url(JOB)},
+            submitted=((sequence + "\n").encode("ascii"), "sequence.seq"))
 
     def status(self, job_id):
         return self._snapshot("status", BASE_URL + "/status/" + job_id,
@@ -63,7 +72,7 @@ class Responses:
         return self._snapshot("submit", BASE_URL + "/submit-job", {
             "filename": filename, "file_sha256": hashlib.sha256(content).hexdigest(),
             "file_bytes": len(content), "file_base64": base64.b64encode(content).decode("ascii")},
-            {"jobId": JOB, "resultURL": result_url(JOB)})
+            {"jobId": JOB, "resultURL": result_url(JOB)}, submitted=(content, filename))
 
     def result(self, job_id, *, representation):
         suffix = "" if representation == "json" else "/" + representation
@@ -226,7 +235,7 @@ def test_observed_finished_status_is_job_information_not_scientific_publication(
 def _execution(h):
     journal = Journal(h.store, "rfam-selected-fixture")
     execution = APIServiceExecution(h.store, run_id=journal.run_id, directory=h.tmp_path / "run",
-        configuration={"rfam": {"kind": "api", "service": "rfam_batch", "timeout": 90}},
+        configuration={"rfam": {"kind": "api", "service": "rfam_batch"}},
         tool_registry=h.tools, handoff_unit=3, acquired_record_unit=2)
     execution.services["rfam"].client = h.client
     assignment = {"version": "api_service_assignment_v1", "resource_id": "rfam",
@@ -307,12 +316,12 @@ def test_uncertain_submission_is_not_repeated_on_replay_or_later_action(harness)
     assert len(h.client.calls) == 1 and execution.completion_for_action(ctx, key) is None
 
 
-def test_configuration_uses_explicit_actual_transport_timeout(harness):
+def test_configuration_refuses_transport_timeout_and_other_base_url(harness):
     h = harness
-    service = build_service("rfam_batch", {"kind": "api", "service": "rfam_batch", "timeout": 12.5}, h.tools)
+    service = build_service("rfam_batch", {"kind": "api", "service": "rfam_batch"}, h.tools)
     assert service.service == "rfam_batch"
-    with pytest.raises(ValueError):
-        build_service("rfam_batch", {"kind": "api", "service": "rfam_batch", "timeout": 0}, h.tools)
+    with pytest.raises(ValueError, match="^transport_timeout_configuration_not_supported$"):
+        build_service("rfam_batch", {"kind": "api", "service": "rfam_batch", "timeout": 12.5}, h.tools)
     with pytest.raises(ValueError):
         build_service("rfam_batch", {"kind": "api", "service": "rfam_batch", "base_url": "https://other.invalid"}, h.tools)
 
@@ -472,7 +481,7 @@ def test_rfam_instructions_and_numerical_sources_reach_only_actual_owners(harnes
 
     h = harness
     binding = ExecutionEpisodes(None, store=h.store, directory=h.tmp_path / "run",
-        run_id="rfam-owner-information", resources={"rfam": {"kind": "api", "service": "rfam_batch", "timeout": 90}},
+        run_id="rfam-owner-information", resources={"rfam": {"kind": "api", "service": "rfam_batch"}},
         initial_information={}, tool_registry=h.tools, handoff_unit=3, acquired_record_unit=2,
         log_window_bytes=512, log_roles=("stdout", "stderr"))
     families = {"rfam_result_rows", "rfam_result_populations"}

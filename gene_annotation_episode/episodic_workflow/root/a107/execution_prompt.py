@@ -37,8 +37,7 @@ def select_profile_api_execution_values(value):
             assignment = validate_api_assignment(value)
             request = checked(assignment["request"], REQUEST_SCHEMA, "rfam_request_invalid")
             return {"service": assignment["service"], "request": request}
-        if version in ("rfam_batch_result_selector_v1", "rfam_batch_result_selector_v2",
-                "rfam_batch_result_selector_v3"):
+        if version in ("rfam_batch_result_selector_v2", "rfam_batch_result_selector_v3"):
             from .rfam_batch_contracts import validate_rfam_result_selector
             return validate_rfam_result_selector(dict(value))
     except (ValueError, TypeError):

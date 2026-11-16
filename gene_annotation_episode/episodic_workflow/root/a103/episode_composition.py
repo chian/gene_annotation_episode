@@ -52,45 +52,6 @@ def _same_record(actual, saved, reference):
         raise _failure('identity_conflict', reference)
 
 
-def scientific_binding_compatible(actual, recorded):
-    """Accept exact private implementation descriptors.
-
-    This does not relabel the executing implementation or change a saved
-    request. Library, callable, role and configuration identities stay exact.
-    """
-    try:
-        actual_text, recorded_text = canonical(actual), canonical(recorded)
-        actual = json.loads(actual_text)
-        recorded = json.loads(recorded_text)
-    except (TypeError, ValueError, OverflowError):
-        return False
-    fields = {'version', 'binding_id', 'implementation_sha256', 'configuration'}
-    if (type(actual) is dict and type(recorded) is dict
-            and actual.get('version') == recorded.get('version') == 'scientific_process_episode_v10'):
-        return (set(actual) == set(recorded) == fields
-            and actual['binding_id'] == recorded['binding_id'] == 'scientific_process'
-            and type(actual['configuration']) is dict and type(recorded['configuration']) is dict
-            and type(actual['implementation_sha256']) is str
-            and len(actual['implementation_sha256']) == 64
-            and all(character in '0123456789abcdef' for character in actual['implementation_sha256'])
-            and actual_text == recorded_text)
-    if (type(actual) is not dict or type(recorded) is not dict
-            or set(actual) != fields or set(recorded) != fields
-            or any(type(value['version']) is not str
-                or value['version'] not in {'scientific_process_episodes_v5',
-                'scientific_process_episodes_v6', 'scientific_process_episodes_v7',
-                'scientific_process_episodes_v8', 'scientific_process_episodes_v9',
-                'scientific_process_episodes_v10'}
-                or value['binding_id'] != 'scientific_process'
-                or type(value['configuration']) is not dict
-                or type(value['implementation_sha256']) is not str
-                or len(value['implementation_sha256']) != 64
-                or any(c not in '0123456789abcdef' for c in value['implementation_sha256'])
-                for value in (actual, recorded))):
-        return False
-    return actual_text == recorded_text
-
-
 def reopen_scientific_binding(services, *, descriptor, directory):
     """Reopen this exact private scientific implementation from its saved libraries."""
     from .scientific_process.episode import ScientificProcessEpisode

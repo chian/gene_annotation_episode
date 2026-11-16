@@ -36,8 +36,8 @@ def exchange_for_child(workflow, source, role):
         if len(candidates) != 1 or candidates[0] is not parent:
             return None
         from .to_child_scientific_process import prepare_request
-        from .from_child_scientific_process import admit_return, admit_unowned_return
-        return prepare_request, admit_return, admit_unowned_return
+        from .from_child_scientific_process import admit_return
+        return prepare_request, admit_return
     if role == 'literature':
         from .published_evidence_assessment.episode import LiteratureEpisode
         from ..published_evidence_assessment.episode import LiteratureEpisode as StandaloneLiteratureEpisode
@@ -48,6 +48,6 @@ def exchange_for_child(workflow, source, role):
         if any(type(candidate) is not LiteratureEpisode and type(candidate) is not StandaloneLiteratureEpisode for candidate in candidates):
             return None
         from .to_child_published_evidence_assessment import prepare_request
-        from .from_child_published_evidence_assessment import admit_return, admit_unowned_return
-        return prepare_request, admit_return, admit_unowned_return
+        from .from_child_published_evidence_assessment import admit_return
+        return prepare_request, admit_return
     return None

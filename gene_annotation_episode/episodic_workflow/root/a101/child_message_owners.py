@@ -138,5 +138,5 @@ def exchange_for_child(workflow, source, selection, role):
         from importlib import import_module
         outgoing = import_module(__package__ + '.to_child_' + home)
         incoming = import_module(__package__ + '.from_child_' + home)
-        return outgoing.prepare_request, incoming.admit_return, incoming.admit_unowned_return
+        return outgoing.prepare_request, incoming.admit_return
     return None

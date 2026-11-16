@@ -4,10 +4,9 @@ from gene_annotation_episode.episodic_workflow.root import action_execution as _
 
 def admit_return(workflow, source, child, index, schema, contract, result, request):
     delivery_ref = 'delivery_' + _original._digest({'run': workflow.run_id, 'parent': source.episode_id, 'index': index})[:24]
-    owned = workflow.episode_branch_lifecycle == _original.EPISODE_BRANCH_LIFECYCLE
     action = workflow.journal.row('runtime_actions', source.episode_id, index)
     frozen_index = None if action['result'] is None else _original.json.loads(action['result']).get('delivery_resolution_index')
-    saved = workflow.store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND ' + ('decision_index=?' if frozen_index is not None or not owned else 'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'), (workflow.run_id, source.episode_id, frozen_index if frozen_index is not None else delivery_ref if owned else index)).fetchone()
+    saved = workflow.store.db.execute('SELECT * FROM runtime_report_attempts WHERE run_id=? AND parent_episode_id=? AND ' + ('decision_index=?' if frozen_index is not None else 'delivery_ref=? ORDER BY decision_index DESC LIMIT 1'), (workflow.run_id, source.episode_id, frozen_index if frozen_index is not None else delivery_ref)).fetchone()
     if saved is not None:
         if saved['failure'] is not None:
             raise _original.ReportDeliveryError(_original.Record(_original.json.loads(saved['failure'])))

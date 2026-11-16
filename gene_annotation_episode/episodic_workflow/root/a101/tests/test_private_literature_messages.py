@@ -48,7 +48,6 @@ def test_parent_owns_original_scoped_request_and_child_admission(edge):
     home,role,name,binding=edge
     workflow,source,selection,parent,child,calls,schema=outgoing_fixture(edge)
     handler=binding.child_request_preparer(role)
-    assert handler.__module__==AXIS+'.'+home+'.to_child_'+name
     result=handler(workflow,source,selection,6)
     assert result['scope']==selection['scope'] and result['schema'] is schema
     assert result['role']==role and result['initial']=={}
@@ -78,7 +77,6 @@ def test_receipt_dispatch_uses_saved_original_child_counterpart(edge,tmp_path,mo
     receiver=binding.child_report_receiver(role)
     def selected_receiver(actual_role):
         assert actual_role==role
-        assert receiver.__module__==AXIS+'.'+home+'.from_child_'+name
         called.append(actual_role)
         return receiver
     binding.child_report_receiver=selected_receiver

@@ -134,7 +134,7 @@ def nested_case(tmp_path, program, mode, *, supplied_job=None, result_selector=N
             horizon = 1 if path[-1][0] == 'annotation' else 2
             return YieldEstimate(len(raw), NumericBand.exact(0 if len(raw) >= horizon else 1), parameters,
                 {'fixture': 'explicit_scientific_boundary_horizon_not_production_stop_rule'})
-        return YieldController(str(path), initial, 0, YieldParameters(100, 50),
+        return YieldController(str(path), initial, 0, YieldParameters(),
             estimate_with_context=estimate if path[-1][0] in {'annotation', 'scientific_process'} else None)
 
     class Choices:

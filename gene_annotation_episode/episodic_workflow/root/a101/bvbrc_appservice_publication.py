@@ -253,7 +253,7 @@ class AppServicePublications:
             # These new contracts make status authoritative for the exact
             # requested projection. Other retained scientific dependencies need
             # not be required by it. Original required output artifacts still
-            # determine bundle status. Older saved adapter semantics stay fixed.
+            # determine bundle status.
             status = 'partial'
         return status, missing
 

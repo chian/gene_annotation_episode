@@ -1,7 +1,7 @@
 """Original resource-child FBA input controls, outside selected native work.
 
 Only this host's fixed immutable receiving-context controls are replayed.
-Arbitrary supplied receipt JSON is never accepted as historical authority.
+Arbitrary supplied receipt JSON is never accepted as authority.
 """
 from copy import deepcopy
 import hashlib

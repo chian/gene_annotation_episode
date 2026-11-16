@@ -1,4 +1,4 @@
-"""Original private information accumulation continuation calculations."""
+"""Private information accumulation continuation calculations."""
 from __future__ import annotations
 from dataclasses import replace
 

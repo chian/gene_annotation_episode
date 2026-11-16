@@ -40,9 +40,7 @@ class EpisodeReceipts:
         self.store, self.db, self.run_id = store, store.db, run_id
         tables = {row[0] for row in self.db.execute("SELECT name FROM sqlite_master WHERE type='table' "
             "AND name IN ('runtime_receipt_inheritance','runtime_record_receipts')")}
-        if (tables == {'runtime_receipt_inheritance', 'runtime_record_receipts'}
-                and 'received_report_prefix' in {row[1] for row in self.db.execute(
-                    'PRAGMA table_info(runtime_receipt_inheritance)')}):
+        if tables == {'runtime_receipt_inheritance', 'runtime_record_receipts'}:
             # Existing storage is also used by immutable retained readers.
             # Do not acquire a write transaction merely to read real receipts.
             return

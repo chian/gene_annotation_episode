@@ -18,8 +18,6 @@ from test_atac_differential_inputs import artifact, callpeak, XLS_HEADER
 from test_atac_differential_sheet import native_inputs, reference
 
 
-# Byte-for-byte required fixture from the immutable original:
-# verification/tool_graders_atac_result_worker_finish_2026-10-27_475/check008/FILLED_ACTUAL_NATIVE_EXAMPLE.json
 PROFILE = 'matched_control_native_model'
 FIELDS = ('reference', 'callpeak_bindings', 'peaks_xls', 'narrowpeaks', 'summits')
 

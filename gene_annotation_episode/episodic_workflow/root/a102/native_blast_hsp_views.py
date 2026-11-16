@@ -48,7 +48,7 @@ def _source_grading(store, source, bundle):
             continue
         envelope = _read_json(store, reference)
         grading = envelope.get("grading", {})
-        if grading.get("schema") not in {"native_blast_retained_grading_v1", "native_blast_retained_grading_v2"}:
+        if grading.get("schema") != "native_blast_retained_grading_v2":
             continue
         _require(set(envelope) == {"schema", "provider", "native_artifact_ref", "grading"}
             and envelope["schema"] == SCHEMA and envelope["provider"] == source["provider"]
@@ -83,14 +83,11 @@ def _selected_native(store, bundle, grading, sheet, scores, row, marker):
         zip(hit["hsps"], mapping["hsp_ordinals"])) if ordinal == marker["hsp_ordinal"]),
         "original_hsp_conflict")
     component = saved_scores["scores"]["components"]["hsps"][index]
-    if grading["schema"] == "native_blast_retained_grading_v2":
-        search_index = scores["searches"].index(saved_scores)
-        pointer = "/searches/" + str(search_index) + "/scores/components"
-        instance = _one((item for item in scores["correspondence"]["instances"]
-            if item["legacy_pointer"] == pointer and item["axis_basis"] == "qualified"), "common_components_required")
-        expected_values = _hsp_values(component["components"], instance["components"]["rows"][index])
-    else:
-        expected_values = _hsp_values(component["components"], archived_values=row["values"])
+    search_index = scores["searches"].index(saved_scores)
+    pointer = "/searches/" + str(search_index) + "/scores/components"
+    instance = _one((item for item in scores["correspondence"]["instances"]
+        if item["legacy_pointer"] == pointer and item["axis_basis"] == "qualified"), "common_components_required")
+    expected_values = _hsp_values(component["components"], instance["components"]["rows"][index])
     _require(component["hsp_index"] == index and _equal(component["native"], native)
         and _equal(row["values"], expected_values), "frozen_measurement_conflict")
 
@@ -209,12 +206,10 @@ def _native_blast_pairwise_hsp(store, observation):
     # Unrelated unavailable outputs may survive in a partial source. Required
     # input/report custody is checked below against the actual captured files.
     sheet, scores = (_read_json(store, grading[key]) for key in ("sheet_artifact_ref", "scores_artifact_ref"))
-    version = "v2" if grading["schema"] == "native_blast_retained_grading_v2" else "v1"
-    _require(sheet["schema"] == grading["sheet_schema"] == "native_blast_sheet_collection_" + version
-        and scores["schema"] == grading["scores_schema"] == "native_blast_scores_collection_" + version,
+    _require(sheet["schema"] == grading["sheet_schema"] == "native_blast_sheet_collection_v2"
+        and scores["schema"] == grading["scores_schema"] == "native_blast_scores_collection_v2",
         "grading_collection_required")
-    if version == "v2":
-        validate_native_blast_correspondence_collections(sheet, scores)
+    validate_native_blast_correspondence_collections(sheet, scores)
     _require(marker["record_key"] == record_key(bundle, marker["search_key"], "pairwise_hsp",
         marker["hit_ordinal"], marker["hsp_ordinal"]), "complete_row_identity_conflict")
     with artifact_path(store, grading["complete_rows_artifact_ref"]).open(encoding="utf-8") as stream:

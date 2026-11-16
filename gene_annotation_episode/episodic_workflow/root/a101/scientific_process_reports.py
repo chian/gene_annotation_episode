@@ -73,7 +73,7 @@ def _selection_schema(library, tool_library):
             "option_id": {"type": "string", "enum": sorted(ref["option_id"] for ref in refs)},
             "entry_sha256": _reference("scientific_option_digest", identifier=True),
         })
-    information = tool_library.parent_tool_info() if tool_library.supports_tool_info else []
+    information = tool_library.parent_tool_info()
     names = sorted({entry["name"] for entry in [*tool_library.catalog(), *information]})
     resources = sorted({entry["resources"] for entry in information})
     fields["child_tool_info"] = {"type": "array", "items": _object({

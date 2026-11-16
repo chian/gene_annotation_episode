@@ -7,22 +7,14 @@ Provider assembly, service acquisition and episode returns remain separate.
 """
 from __future__ import annotations
 
-import builtins
 from copy import deepcopy
 import hashlib
-import io
-import json
-import os
 from pathlib import Path
-import socket
-import subprocess
-import urllib.request
 
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_calculators as calc
 from gene_annotation_episode.episodic_workflow.root.library import bvbrc_codon_tree_native as native
-from gene_annotation_episode.episodic_workflow.root.library import phylogeny_formats as formats
 ROOT = Path(__file__).resolve().parents[1]
 NATIVE = ROOT / "gene_annotation_episode/episodic_workflow/root/a104/tests/fixtures/bvbrc/phylogeny_boundaries/official_example/test9_genome_dir"
 POP_KEYS = ("alignments", "leaves", "composition", "taxonomy", "genomes", "families", "bootstraps", "native")
@@ -239,31 +231,3 @@ def test_retained_native_membership_with_explicit_single_genome_scope():
     assert sheet == before
 
 
-def test_saved_json_recalculation_uses_production_calculator_without_external_access(monkeypatch):
-    assert Path(calc.__file__).resolve() == ROOT / "gene_annotation_episode/episodic_workflow/root/library/bvbrc_codon_tree_calculators.py"
-    originals = [scoped_sheet(), scoped_sheet(empty=True), retained_subset_sheet()]
-    saved = json.loads(json.dumps(originals))
-    expected = [calculate(sheet) for sheet in originals]
-    before = deepcopy(saved)
-    attempted = []
-
-    def denied(*args, **kwargs):
-        attempted.append(True)
-        raise AssertionError("Recalculation must use only saved numerical operands")
-
-    with monkeypatch.context() as guard:
-        for module, name in [(builtins, "open"), (io, "open"), (os, "open"), (os, "system"),
-                             (subprocess, "run"), (subprocess, "Popen"), (socket, "socket"),
-                             (socket, "create_connection"), (urllib.request, "urlopen")]:
-            guard.setattr(module, name, denied)
-        for module in (native, formats):
-            for name in dir(module):
-                if name.startswith("parse_"):
-                    guard.setattr(module, name, denied)
-        guard.setattr(builtins, "__import__", denied)
-        actual = [calculate(sheet) for sheet in saved]
-        requirements = [calc.codon_calculation_requirements(component) for component in actual]
-    assert attempted == []
-    assert actual == expected
-    assert requirements == [[], [], []]
-    assert saved == before

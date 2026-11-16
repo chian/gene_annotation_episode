@@ -1,4 +1,4 @@
-"""Private Launch integration checks; see LAUNCH_CONNECTED_TEST_PORTS.md.
+"""Private Launch integration checks.
 
 Actual Store/Journal, HPC planning, private constructors, registry, runtime
 selection, task execution and report validation are exercised. The provider,
@@ -166,7 +166,7 @@ class LaunchConnectedChecks:
             specialist=lambda source: v.registry.for_path(source.path),
             job_episodes=None, scientific_process_binding=None,
             annotation_child_roles=None, project_credit=lambda *args: 0,
-            execution_binding=None, inprocess_replay=None, episode_branch_lifecycle=None,
+            execution_binding=None, inprocess_replay=None,
             receipts=None, progress_provider=None, native_timing_information=None,
             services=SimpleNamespace(capabilities=lambda: {},
                 tool_invocation=lambda *args, **kwargs: nullcontext()),
@@ -367,6 +367,7 @@ class LaunchConnectedChecks:
         w.receive_outcome = lambda source, selection, result, index: observations.append((index, deepcopy(result)))
         w.controller_value = lambda source, index, credit: {"index": index, "credit": credit}
         w.wait_inputs_version = w.completed_action_inputs_version = None
+        w.pending_work = lambda source: []
         return SimpleNamespace(task=task, workflow=w, executions=executions,
             observations=observations, projections=projections)
 
@@ -517,7 +518,7 @@ class LaunchConnectedChecks:
             return response
         if declared_renderer:
             # The private task hands its declared renderer only to the genuine provider type
-            # (task_decision.decision_completion); built as in test_private_task_refinement.py.
+            # (task_decision.decision_completion).
             w.provider = object.__new__(self.module("providers").ModelConnection)
             w.provider.worker_lock = asyncio.Lock()
             w.provider.workers = {}
@@ -558,7 +559,7 @@ class LaunchConnectedChecks:
         progress, receipts, cached = [], [], {"references": None}
         w.progress_provider = SimpleNamespace(receive_form=lambda *args: progress.append(args))
         w.receipts = SimpleNamespace(receive=lambda *args, **kwargs: receipts.append((args, kwargs)))
-        # Registry receipt references are a controlled port here, as in test_private_task_refinement.py.
+        # Registry receipt references are a controlled port here.
         monkeypatch.setattr(v.registry, "received_form_references", lambda *args: [])
         monkeypatch.setattr(self.module("episode_return_records").EpisodeReturnRecords,
             "recorded_admission_references", lambda *args: cached["references"])

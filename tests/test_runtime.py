@@ -607,7 +607,7 @@ def test_transport_optional_null_is_decoded_even_when_another_reasoning_row_is_i
         payload["source_subjects"] = [{"alias": "construct", "reference_type": "construct",
             "source_ref": source["id"], "label": "construct A", "anchor": {
                 "source_ref": source["id"], "artifact_ref": artifact, "start": 0,
-                "end": len(text.encode()), "quote": text}}]
+                "end": len(text.encode())}}]
         payload["hypotheses"] = [{"alias": "@bad", "subject_refs": problem["subject_refs"],
             "predicate": "sequence_integrity", "value": {"type": "enum", "value": "unknown"},
             "context_refs": []}]

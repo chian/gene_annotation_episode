@@ -48,7 +48,7 @@ class APIJobService(APIRecordAccess):
     def _legacy_context(self, context):
         return plain(context.assignment).get('version') == 'api_execution_assignment_v1'
 
-    def _context(self, context, *, verify_artifacts=True, _completed_appservice_download=False):
+    def _context(self, context, *, verify_artifacts=True):
         if context.run_id != self.run_id:
             raise ValueError('api_execution_run_conflict')
         if context.role != 'launch_api':
@@ -82,10 +82,6 @@ class APIJobService(APIRecordAccess):
             return await self._legacy_binding().execute(context, name, arguments, operation_key)
         try:
             arguments = plain(arguments)
-            if name == 'api.bvbrc_appservice.download' and type(arguments) is dict and ('max_bytes' not in arguments):
-                cached = self.appservice.legacy_cached_download(context, name, arguments, operation_key)
-                if cached is not None:
-                    return cached
             self.initialize(context)
             assignment, service, target = self._context(context)
             entry = next((row for row in self.catalog(context) if row['name'] == name), None)

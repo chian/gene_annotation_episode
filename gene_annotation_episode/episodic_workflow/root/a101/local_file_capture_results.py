@@ -71,7 +71,7 @@ def is_file_source_selector(value):
 
 
 def whole_file_bridge(store, file):
-    """Freeze the exact digest already used by legacy complete byte windows."""
+    """Freeze the exact digest used by complete byte windows."""
     raw_digest, encoded_digest, size = hashlib.sha256(), hashlib.sha256(b'"'), 0
     # Every nonfinal block has a multiple-of-three length: concatenated base64
     # is the encoding of the complete stream, including its final padding.
@@ -654,7 +654,7 @@ class LocalFileSourceResults:
     def acquisition_counts(self, context, selection, results):
         """Count acquired information, with complete-file equivalence both ways.
 
-        Only retained control/legacy-window metadata is read here. Partial
+        Only retained control/byte-window metadata is read here. Partial
         windows are never joined into a supposedly atomic full-file version.
         """
         known = list(dict.fromkeys(selection['known_record_refs']))
@@ -664,7 +664,7 @@ class LocalFileSourceResults:
             if self.store.get(reference).get('provider') == FILE_PROVIDER:
                 captures[reference] = self.source_key(reference, context.scope)
         if not captures and not any(body.get('captured_files') for body in results.values()):
-            return None  # Preserve the legacy-only projector exactly.
+            return None  # No whole-file capture: the byte-window projector applies.
 
         def window_bundle(body):
             return (body['target']['resource_id'], body['target']['execution_id'], tuple(sorted(

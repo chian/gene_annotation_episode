@@ -140,7 +140,7 @@ def test_library_retrieval_separates_parent_information_and_child_instructions(f
     create, _ = factory
     family = create({'selected-api': configuration()})
     available = family.resource_tool_contracts()
-    library = ScientificToolLibrary.freeze(tmp_path / 'library', catalog=[], tool_info=True,
+    library = ScientificToolLibrary.freeze(tmp_path / 'library', catalog=[],
         resource_catalogs={'api': available})
     retrieved = library.retrieve_literal_test('BV-BRC Homology aligned residues functions', available)
     picked = [row for row in retrieved['child_tool_info'] if row['name'].startswith('bvbrc.homology.')]

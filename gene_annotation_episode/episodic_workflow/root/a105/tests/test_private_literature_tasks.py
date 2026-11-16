@@ -32,7 +32,7 @@ def test_active_assay_reader_exception_is_an_original_invalid_result(binding):
     def invalid(*args):
         raise error_type('source_quote_mismatch', 'assay.molecule')
     binding._tool_arguments = lambda context, name, arguments: arguments
-    binding._materialize_text_arguments = lambda context, arguments, repository: arguments
+    binding._materialize_text_arguments = lambda context, arguments, repository, operation_key: arguments
     binding.literature_assay_repository = lambda: SimpleNamespace(populate=invalid)
     outcome = asyncio.run(binding.execute(SimpleNamespace(role=binding.roles[0]), 'literature.assay.populate', {}, 'original-assay-action'))
     assert outcome['status'] == 'invalid'

@@ -133,7 +133,7 @@ def test_v2_information_resolves_actual_catalog_and_bound_commission_routes(owne
     actual = workflow_execution_catalogs()
     contracts = bound_resource_tool_contracts(owner.family)
     library = ScientificToolLibrary.freeze(owner.directory/'tool-information', catalog=owner.tools.catalog(),
-        tool_info=True, resource_catalogs={'api': contracts})
+        resource_catalogs={'api': contracts})
     for name, entry_role, resource_role in ((DATA_QUERY_OPERATION, 'launch', 'launch_api'),
                                           (DATA_RESULT_OPERATION, 'results', 'results')):
         declared = next(row for row in actual['api'] if row['name'] == name)
@@ -230,13 +230,13 @@ def test_frozen_v2_information_reopens_without_replacing_original_instructions(o
     contracts = bound_resource_tool_contracts(owner.family)
     directory = owner.directory/'frozen-information'
     library = ScientificToolLibrary.freeze(directory, catalog=owner.tools.catalog(),
-        tool_info=True, resource_catalogs={'api': contracts})
+        resource_catalogs={'api': contracts})
     selected = [{'name': DATA_RESULT_OPERATION, 'resources': 'api'}]
     original = library.resolve_tool_info(selected, contracts)
     frozen_bytes = (directory/'index.json').read_bytes()
     monkeypatch.setattr('gene_annotation_episode.tool_information._documents',
         lambda *_: 'A later manual is not retroactive information.')
     restored = ScientificToolLibrary.freeze(directory, catalog=owner.tools.catalog(),
-        tool_info=True, resource_catalogs={'api': contracts})
+        resource_catalogs={'api': contracts})
     assert restored.resolve_tool_info(selected, contracts) == original
     assert (directory/'index.json').read_bytes() == frozen_bytes

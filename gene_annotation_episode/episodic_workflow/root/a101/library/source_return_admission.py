@@ -23,7 +23,7 @@ def _receive_form(self, source, admitted, schema, index, *, redelivery=False):
         from .scientific_process.child_message_owners import exchange_for_child
         child_exchange = exchange_for_child(self, source, original_role)
         if child_exchange is not None:
-            return child_exchange[3](self, source, admitted, schema, index, redelivery=redelivery)
+            return child_exchange[2](self, source, admitted, schema, index, redelivery=redelivery)
     if self.receipts is not None and (not redelivery) and (not self.is_job_source(source)):
         from .episode_return_records import EpisodeReturnRecords
         references = EpisodeReturnRecords(self.store, self.run_id, failure_prefix='recorded_admission_').recorded_admission_references(self.binding_context(source), admitted, schema, index)

@@ -25,7 +25,7 @@ def controller(self, path, identity, row, role, binding, bound, task_controller)
         pass
     native = self.has_native_estimation()
     episode_id = identity.episode_id
-    capture = None if self.completed_action_inputs_version is None else lambda unit_ref, index, value: self.capture_completion_evidence(episode_id, original_decision_index=index, unit_ref=unit_ref, controller_input=value)
+    capture = lambda unit_ref, index, value: self.capture_completion_evidence(episode_id, original_decision_index=index, unit_ref=unit_ref, controller_input=value)
     return ExecutionContextController(controller, self.journal, episode_id, include_native=native, capture_current_completion=capture)
 
 def _bind_original_runtime(namespace):

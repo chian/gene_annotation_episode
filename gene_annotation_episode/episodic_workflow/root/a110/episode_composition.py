@@ -50,7 +50,7 @@ def _same_record(actual, saved, reference):
 
 
 def scientific_binding_compatible(actual, recorded):
-    """Require the original exact scientific descriptor and configuration."""
+    """Accept only the exact recorded descriptor."""
     try:
         actual_text, recorded_text = canonical(actual), canonical(recorded)
         actual = json.loads(actual_text)

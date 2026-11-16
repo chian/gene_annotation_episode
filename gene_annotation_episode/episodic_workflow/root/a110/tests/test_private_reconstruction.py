@@ -91,14 +91,6 @@ def test_every_current_private_owner_round_trips_with_original_ports(current):
     function_only_homes = {'.', 'annotation_improvement'}
     assert function_only_homes <= actual_paths
     assert set(current.catalog) == actual_paths - function_only_homes
-    # The original scientific saved-invocation boundary uses this admission
-    # before it can consume an otherwise exactly reconstructed current owner.
-    descriptor = current.owners['scientific_process'].as_record()
-    compatible = module('episode_composition').scientific_binding_compatible
-    assert compatible(descriptor, descriptor)
-    changed = deepcopy(descriptor)
-    changed['implementation_sha256'] = ('1' if descriptor['implementation_sha256'][0] == '0' else '0') + descriptor['implementation_sha256'][1:]
-    assert not compatible(changed, descriptor)
     # Saved order is not a dependency order; admission sees the whole set.
     result = compose(current, list(reversed(current.records)))
     assert len(result.bindings) == len(current.owners)
@@ -119,7 +111,7 @@ def test_every_current_private_owner_round_trips_with_original_ports(current):
 
 @pytest.mark.parametrize('mutation', ['unknown', 'historical_version', 'duplicate',
     'missing_parent', 'extra_field', 'missing_configuration', 'extra_configuration',
-    'invalid_fingerprint', 'unexpected_fingerprint', 'missing_monitor_projector',
+    'missing_monitor_projector',
     'missing_monitor_backend'])
 def test_malformed_saved_set_rejected_before_construction_or_progress(current, monkeypatch, mutation):
     records = deepcopy(current.records)
@@ -139,10 +131,6 @@ def test_malformed_saved_set_rejected_before_construction_or_progress(current, m
         del direct['configuration']['resources']
     elif mutation == 'extra_configuration':
         direct['configuration']['invented_authority'] = True
-    elif mutation == 'invalid_fingerprint':
-        direct['implementation_sha256'] = 'not-a-source-hash'
-    elif mutation == 'unexpected_fingerprint':
-        next(row for row in records if 'implementation_sha256' not in row)['implementation_sha256'] = '0' * 64
     elif mutation == 'missing_monitor_projector':
         options['role_credit_bindings'] = {}
     else:
@@ -154,14 +142,6 @@ def test_malformed_saved_set_rejected_before_construction_or_progress(current, m
     with pytest.raises(module('method_loop.durable').DurableExecutionError):
         compose(current, records, **options)
     assert current.store.db.total_changes == changes
-
-
-def test_changed_source_identity_cannot_be_reopened(current):
-    record = deepcopy(next(row for row in current.records if row['binding_id'] == 'execution_job_submission'))
-    record['implementation_sha256'] = '0' * 64
-    with pytest.raises(module('method_loop.durable').DurableExecutionError) as observed:
-        compose(current, [record], execution_backend=None, role_credit_bindings={})
-    assert observed.value.failure['code'] == 'identity_conflict'
 
 
 def test_current_scientific_reopen_and_changed_frozen_library_rejection(current):

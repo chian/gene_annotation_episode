@@ -3,7 +3,7 @@
 These helpers validate metadata and existing receipt authority, not source
 interpretation or scientific bytes. A frozen receipt must itself arrive through
 the host's authenticated immutable control artifact; self-consistent JSON alone
-does not authenticate a historical Store record. No helper writes or grants it.
+does not authenticate a frozen Store record. No helper writes or grants it.
 """
 from __future__ import annotations
 import json

@@ -52,28 +52,14 @@ def _score(value: object, name: str) -> float:
 
 @dataclass(frozen=True)
 class YieldParameters:
-    # Compatibility operands for saved caller definitions only. Neither value
-    # controls fit availability, truncates history, or changes a prediction.
-    window_size: int | None = None
-    subsample_size: int | None = None
     uncertainty_alpha: float = template.DEFAULT_ALPHA
 
     def __post_init__(self):
-        for name in ("window_size", "subsample_size"):
-            value = getattr(self, name)
-            if value is not None and (type(value) is not int or value < 0):
-                raise ValueError(name + "_legacy_value_requires_nonnegative_integer_or_none")
         if not 0 < _score(self.uncertainty_alpha, "uncertainty_alpha") < 1:
             raise ValueError("uncertainty_alpha must be between zero and one")
 
     def as_record(self):
-        return {
-            "window_size": self.window_size,
-            "subsample_size": self.subsample_size,
-            "uncertainty_alpha": self.uncertainty_alpha,
-            "window_semantics": "legacy_ignored_no_minimum_history",
-            "subsample_semantics": "legacy_ignored_full_history",
-        }
+        return {"uncertainty_alpha": self.uncertainty_alpha}
 
 
 def provenance():
@@ -381,11 +367,10 @@ def _parameters(value=None):
     if isinstance(value, YieldParameters):
         return value
     if isinstance(value, Mapping):
-        keys = {"window_size", "subsample_size", "uncertainty_alpha"}
-        unknown = set(value) - keys - {"window_semantics", "subsample_semantics"}
+        unknown = set(value) - {"uncertainty_alpha"}
         if unknown:
             raise ValueError(f"Unknown yield settings: {sorted(unknown)}")
-        return YieldParameters(**{key: value[key] for key in keys if key in value})
+        return YieldParameters(**value)
     raise TypeError("settings must be YieldParameters or their record")
 
 
@@ -400,8 +385,7 @@ def estimate_score_yield(scores: Sequence[Real], parameters=None, *, contexts=No
     # observed action's other sign, never an invented failure/action observation.
     gains = tuple(max(value, 0.0) for value in history)
     losses = tuple(max(-value, 0.0) for value in history)
-    component_parameters = YieldParameters(parameters.window_size,
-        parameters.subsample_size, parameters.uncertainty_alpha / 2.0)
+    component_parameters = YieldParameters(parameters.uncertainty_alpha / 2.0)
     contexts = None if contexts is None else tuple(contexts)
     gain = estimate_nonnegative_yield(gains, component_parameters, contexts=contexts, evaluation_time=evaluation_time)
     loss = estimate_nonnegative_yield(losses, component_parameters, contexts=contexts, evaluation_time=evaluation_time)

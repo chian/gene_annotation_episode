@@ -162,26 +162,9 @@ def _invocation(bundle, records):
             "producer_complete": bundle["returncode"] == 0 and not bundle["failures"]}}, bindings
 
 
-def _hsp_values(component, common=None, *, archived_values=None):
+def _hsp_values(component, common):
     if component is None:
         return {}
-    if common is None:
-        if archived_values is None:
-            raise ValueError("native_blast_common_hsp_components_required")
-        # Explicit v1 read only: the archived result is already a frozen fact.
-        # Legacy component envelopes did not contain this calculated cell.
-        counts, scores = component["counts"], component["native_scores"]
-        values = {name: scores[source] for name, source in (("native_score_bits", "bit_score"),
-            ("native_raw_score", "score"), ("native_evalue", "evalue"))}
-        values.update({name: counts.get(source) for name, source in (
-            ("alignment_columns", "alignment_columns"), ("paired_positions", "paired_columns"),
-            ("identical_positions", "identical_pairs"), ("query_gap_columns", "query_gap_columns"),
-            ("reference_gap_columns", "reference_gap_columns"), ("query_aligned_positions", "paired_query_positions"),
-            ("reference_aligned_positions", "paired_reference_positions"))})
-        values["substituted_positions"] = archived_values["substituted_positions"]
-        values.update({name: component["denominators"][name] for name in ("query_length", "reference_length")})
-        values.update(component["fractions"])
-        return values
     counts, scores = common["counts"], component["native_scores"]
     values = {name: scores[source] for name, source in (("native_score_bits", "bit_score"),
               ("native_raw_score", "score"), ("native_evalue", "evalue"))}

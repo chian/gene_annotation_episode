@@ -16,7 +16,6 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_prod
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_product_coupling_prompt import PRODUCT_COUPLING_TASK
 ROOT = Path(__file__).resolve().parents[5]
 CASE = ROOT / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_identified_product_scoring_case_207'
-TASK = ROOT / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_identified_product_review_211/TASK_PROPOSAL_001.txt'
 
 class Source:
 

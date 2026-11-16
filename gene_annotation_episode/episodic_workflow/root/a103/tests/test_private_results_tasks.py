@@ -17,7 +17,6 @@ def actual(request, tmp_path):
 def test_actual_constructor_registry_and_original_configuration(actual):
     v = actual
     b = v.binding
-    assert type(b).__module__ == 'gene_annotation_episode.episodic_workflow.root.a103.' + v.home.replace('/', '.') + '.episode'
     assert b.as_record() == {'binding_id': v.home, 'version': b.as_record()['version'], 'configuration': v.configuration}
     assert b.binding_path == v.home and b.roles == ('results',)
     assert b.entry_roles == {'execution_result_acquisition': ('results',), 'scientific_process/execution_result_acquisition': ('results',), 'hpc_work_planning/execution_result_acquisition': (), 'hpc_work_planning/hpc_allocation_execution/execution_result_acquisition': (), 'scientific_process/hpc_work_planning/execution_result_acquisition': (), 'scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition': ()}[v.home]

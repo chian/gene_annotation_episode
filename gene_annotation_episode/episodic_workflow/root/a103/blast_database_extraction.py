@@ -127,11 +127,6 @@ def normalize_blast_utility_sequence_symbols(original: str, molecule: str) -> tu
     return parsed.sequence, len(parsed.sequence)
 
 
-def _sequence_symbols(original, molecule):
-    """Compatibility name for the common symbol calculation."""
-    return normalize_blast_utility_sequence_symbols(original, molecule)
-
-
 def parse_blastdbcmd_sequences(content: bytes, *, occurrence: dict, operation: dict,
         database_binding: dict, outcome: dict, record_bindings: list[dict] | None = None) -> dict:
     """Read original native rows, preserving missing requests and partial work.

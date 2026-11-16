@@ -105,10 +105,9 @@ def _acquisition(row, inputs, task):
     transport = binding['transport']
     _require(type(transport.get('status')) is int and 100 <= transport['status'] <= 599 and (type(transport.get('body_complete')) is bool) and (type(transport.get('received_body_bytes')) is int) and (transport['received_body_bytes'] == artifact['byte_count']) and (transport.get('effective_url') == call['url']) and (transport.get('automatic_redirects') is False) and (type(transport.get('request')) is dict) and (transport['request'].get('method') == 'GET') and (transport['request'].get('url') == call['url']), 'acquisition_transport_conflict')
     _require(not artifact['transfer']['body_complete'] or transport['body_complete'], 'acquisition_transport_conflict')
-    if 'max_bytes' in call:
-        complete, diagnostics = _bounded_capture(download_request(call, arguments=args), transport, artifact['byte_count'], _headers(transport, []))
-        _require(not artifact['transfer']['body_complete'] or complete, 'acquisition_transport_conflict')
-        _require(not diagnostics or receipt['status'] != 'ok', 'acquisition_transport_conflict')
+    complete, diagnostics = _bounded_capture(download_request(call, arguments=args), transport, artifact['byte_count'], _headers(transport, []))
+    _require(not artifact['transfer']['body_complete'] or complete, 'acquisition_transport_conflict')
+    _require(not diagnostics or receipt['status'] != 'ok', 'acquisition_transport_conflict')
     _require(transport['status'] in (200, 206) or receipt['status'] == 'failed', 'acquisition_status_conflict')
     return (ref, receipt)
 

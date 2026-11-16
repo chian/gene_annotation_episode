@@ -20,7 +20,7 @@ def module(name):
 def selected_binding(tmp_path_factory):
     directory = tmp_path_factory.mktemp('private-head-credit')
     library = module('scientific_process_library').ScientificProcessLibrary.freeze(directory / 'library', source=ROOT.parents[3] / 'research/slotted_process_library/publications/2026-10-24-001')
-    tools = module('scientific_tool_library').ScientificToolLibrary.freeze(directory / 'tools', catalog=[], tool_info=True)
+    tools = module('scientific_tool_library').ScientificToolLibrary.freeze(directory / 'tools', catalog=[])
     services = SimpleNamespace(tool_catalog=lambda scope: [])
     Binding = module('scientific_process.episode').ScientificProcessEpisode
     binding = Binding(services, library=library, tool_library=tools, child_roles=('scientific_process',))

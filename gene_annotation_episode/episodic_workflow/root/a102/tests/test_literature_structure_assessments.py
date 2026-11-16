@@ -14,7 +14,7 @@ from gene_annotation_episode.episodic_workflow.root.a102.episode_services import
 from gene_annotation_episode.episodic_workflow.root.a102.literature_structure_storage import LiteratureStructureRepository, structure_cells_schema
 from gene_annotation_episode.episodic_workflow.root.a102.published_evidence_assessment.episode import LiteratureEpisode
 from gene_annotation_episode.episodic_workflow.root.a102.tools import ToolRegistry
-from gene_annotation_episode.episodic_workflow.root.a102.tests.test_literature_structure_integration import setup_case
+from gene_annotation_episode.episodic_workflow.root.a102.tests.test_literature_structure_integration import setup_case, tool_arguments
 from test_literature_perturbation_assessments import identify
 
 
@@ -37,7 +37,7 @@ def test_structural_reassessment_keeps_one_dataset_and_native_saved_only_results
             limitations=["Coordinate uncertainty and population occupancy remain unreported."])
         binding = binding_for(store, context)
         repo = LiteratureStructureRepository(store, context.run_id)
-        first = asyncio.run(binding.execute(context, "literature.structure.populate", args, "first"))
+        first = asyncio.run(binding.execute(context, "literature.structure.populate", tool_arguments(args), "first"))
         assert first["status"] == "completed", first.get("feedback")
         first_ref = first["result"]["sheet_ref"]
         context = replace(context, received_record_refs=tuple(dict.fromkeys((*context.received_record_refs, *first["record_refs"]))))

@@ -62,7 +62,7 @@ def actual(home,directory):
                 specialist=lambda s:binding,binding_context=lambda s:context,journal=journal,run_id=run_id,store=store,
                 source_credit_view=credit,expose_assigned_job=lambda s:None,receive_tool_attributions=lambda *a,**kw:None,
                 archive=SimpleNamespace(store=lambda value:value),launch_instructions=SimpleNamespace(materialize=lambda value:None),
-                execution_binding=None,inprocess_replay=None,wait_inputs_version=None,completed_action_inputs_version=None,
+                execution_binding=None,inprocess_replay=None,pending_work=lambda source:[],
                 execute=execute,receive_native_outcome=lambda *a:None,
                 receive_outcome=lambda source,selection,result,index:received.append((index,result['status'])),
                 automatic_score_updates=unchanged_score,controller_value=lambda source,index,credit:{'index':index,'credit':credit})
@@ -113,7 +113,6 @@ class LaunchTaskBehavior:
         f=actual_task
         assert type(f.task) is getattr(f.binding,'decision_source_type',f.runtime.DecisionSource)
         if hasattr(f.binding,'decision_source_type'):
-            assert type(f.task).__module__==f.binding.__module__.removesuffix('.episode')+'.task'
             assert not isinstance(f.task,f.runtime.DecisionSource)
 
     def test_actual_capability_invalid_outcomes_and_replay(self,actual_task):
@@ -176,7 +175,6 @@ class LaunchTaskBehavior:
         for role,child in f.children.items():
             assert f.registry.for_child(f.context.path,role) is child
             assert child.binding_path==self.home+'/'+CHILDREN[role] and child.commissioning_parent==self.home
-        assert f.children['launch_api'].decision_source_type.__module__.endswith('.api_job_execution.task')
 
     def test_actual_api_child_admission_retains_inherited_contract(self,actual_task):
         f=actual_task; original=deepcopy(f.api); observation=child_admission(f); outcome=observation['result']
@@ -223,9 +221,7 @@ class LaunchTaskBehavior:
         assert f.runtime.Workflow.receive_form(f.workflow,f.task,form,schema,7,redelivery=redelivery)==[]
         assert values==[(f.context.episode_id,form,schema,f.task.scope,f'{f.context.run_id}:{f.context.episode_id}:7:typed_form')]
         callback=f.binding.child_report_receiver(role)
-        if hasattr(f.binding,'decision_source_type') or role=='launch_api':
-            assert callback.__module__==f.binding.__module__.removesuffix('.episode')+'.from_child_'+CHILDREN[role]
-        else: assert callback is None
+        if not (hasattr(f.binding,'decision_source_type') or role=='launch_api'): assert callback is None
         assert f.binding.child_report_receiver('unrelated') is None
 
     def test_original_yield_opt_in_error_identity(self,actual_task):
@@ -260,7 +256,6 @@ class LaunchTaskBehavior:
         if callback is not None:
             b._declared_presentation=forbidden
             observed=b._presentation(*key,instructions,deepcopy(context),prompt_renderer=callback)
-            assert callback.__module__==f.binding.__module__.removesuffix('.episode')+'.decision_presentation'
         else: observed=b._presentation(*key,instructions,deepcopy(context))
         assert observed==expected and b.scientific_prompt_states==a.scientific_prompt_states
         if scenario in {'minimal','unrecognized-bootstrap'}: assert observed==(json.dumps(context,allow_nan=False),instructions)

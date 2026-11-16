@@ -28,6 +28,16 @@ COMPONENTS = ['first_ordinate', 'second_ordinate', 'ordinate_difference']
 FORM = obj({'measurements': figure_cells_schema()})
 CASES = ['primary_swap', 'primary_representation', 'missing_second', 'cropped_first']
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def synthetic_image(top):
     image = Image.new('RGB', (12, 12), 'white')
     for y in range(top, 10):
@@ -132,7 +142,7 @@ def test_selected_native_cells_and_saved_only_binding_reconstruction(tmp_path, m
     store, context, args = setup_case(tmp_path, case=case)
     with store:
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.figure.populate', args, 'selected'))
+        outcome = asyncio.run(binding.execute(context, 'literature.figure.populate', location_only(args), 'selected'))
         assert outcome['status'] == 'completed', outcome.get('feedback')
         current = replace(context, received_record_refs=(*context.received_record_refs, *outcome['record_refs']))
         selected = {'committed_record_refs': [outcome['result']['sheet_ref']]}
@@ -165,7 +175,7 @@ def test_selected_native_cells_and_saved_only_binding_reconstruction(tmp_path, m
             monkeypatch.setattr(reader, name, forbidden)
             monkeypatch.setattr(native, name, forbidden)
         store.db.execute('PRAGMA query_only=ON')
-        assert asyncio.run(restored.execute(context, 'literature.figure.populate', args, 'selected')) == outcome
+        assert asyncio.run(restored.execute(context, 'literature.figure.populate', location_only(args), 'selected')) == outcome
         assert form_with_facts({}, FORM, restored.facts(current, selected)) == form
 
 @pytest.mark.parametrize('case', CASES)
@@ -174,7 +184,7 @@ def test_ordinary_figure_child_parent_delivery_and_observation_counts(tmp_path, 
     received = []
     with store:
         commission = {'selection': {'kind': 'episode_child', 'role': 'literature', 'assignment': plain(context.assignment), 'goal': 'Evaluate the paired experimental graph measurements', 'scope': plain(context.scope), 'purpose': 'Return the requested source figure components and meanings', 'schema_json': json.dumps(FORM), 'initial_report_json': '{}'}, 'report_update': {}}
-        action = {'selection': {'kind': 'tool', 'tool': 'literature.figure.populate', 'arguments': args}, 'report_update': {}}
+        action = {'selection': {'kind': 'tool', 'tool': 'literature.figure.populate', 'arguments': location_only(args)}, 'report_update': {}}
 
         def receive(inputs):
             form, = inputs['child_reports']
@@ -209,7 +219,7 @@ def test_parent_receives_requested_difference_and_experimental_meanings_once(tmp
     store, context, args = setup_case(tmp_path, components=['ordinate_difference'])
     with store:
         binding = binding_for(store, context)
-        outcome = asyncio.run(binding.execute(context, 'literature.figure.populate', args, 'selected'))
+        outcome = asyncio.run(binding.execute(context, 'literature.figure.populate', location_only(args), 'selected'))
         assert outcome['status'] == 'completed', outcome.get('feedback')
         rows = LiteratureFigureRepository(store, context.run_id).project_cells([outcome['result']['sheet_ref']], permitted_record_refs=outcome['record_refs'], components=['ordinate_difference'])
         state = {'literature_experimental_work': {'version': 'literature_experimental_task_v1', 'aspect': 'reference_evidence_parent'}, 'reference_evidence_parent': {'version': 'reference_evidence_parent_v1', 'source_refs': [args['source_ref']]}, 'goal': {'objective': 'Decide what the partner swap establishes'}, 'child_reports': [{'measurements': rows}]}

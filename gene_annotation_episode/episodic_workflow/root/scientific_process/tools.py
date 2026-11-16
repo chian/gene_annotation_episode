@@ -71,7 +71,7 @@ class ScientificTools:
                 "actual tool/resource choices returned by process.tools for the desired investigation.")
         entries.append({"name": "process.revise", "description": description,
             "input_schema": deepcopy(_REVISION_ARGUMENTS)})
-        if getattr(self.services, 'workflow', None) is not None and self.tool_library.supports_tool_info:
+        if getattr(self.services, 'workflow', None) is not None:
             from gene_annotation_episode.episodic_workflow.root.execution_planning import catalog
             entries.extend(catalog())
         return entries

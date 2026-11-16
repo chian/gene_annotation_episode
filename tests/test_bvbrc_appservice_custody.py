@@ -23,7 +23,8 @@ from gene_annotation_episode.episodic_workflow.root.receiving_context import Bin
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical, digest
-from gene_annotation_episode.episodic_workflow.root.task_values import Record
+from gene_annotation_episode.episodic_workflow.root.task_action_contracts import _ASSIGNMENT_TRANSPORT
+from gene_annotation_episode.episodic_workflow.root.task_values import Record, _digest
 from gene_annotation_episode.episodic_workflow.root.workflow_values import TypedReportContract
 from gene_annotation_episode.state import Store
 
@@ -112,7 +113,9 @@ class SavedRecords:
                 "properties": {"kind": {"const": "episode_child"}, "assignment": {"type": "object"}},
                 "required": list(selection)}}}
             self.journal.save("runtime_model_calls", {"episode_id": parent.episode_id, "call_index": index,
-                "purpose": "decision", "request": canonical({"context": {}, "schema": original_schema}),
+                "purpose": "decision", "request": canonical({"context": {}, "schema": original_schema,
+                    "assignment_transport": {"version": _ASSIGNMENT_TRANSPORT,
+                        "action_schema_sha256": _digest(original_schema)}}),
                 "response": canonical(response)})
         if action:
             self.journal.save("runtime_actions", {"episode_id": parent.episode_id, "decision_index": index,

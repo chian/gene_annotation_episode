@@ -35,5 +35,4 @@ def test_original_build_selects_actual_operational_task(home,name,monkeypatch):
     task=runtime.Workflow.build(workflow,role,'original','Resolve original operational assignment',{})
     assert type(task) is binding.decision_source_type
     assert not isinstance(task,runtime.DecisionSource)
-    assert type(task).__module__==Binding.__module__.rsplit('.',1)[0]+'.task'
     assert task.path==((role,'original'),)

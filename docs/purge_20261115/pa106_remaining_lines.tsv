@@ -1,430 +1,320 @@
-acquisition.py:635	1	"""Legacy keys from the shared native parser; original request is unknown."""
-acquisition.py:636	1	from .uniprot_native import legacy_uniprot_records, parse_uniprot_native
-acquisition.py:638	1	return legacy_uniprot_records(parsed, content)
-api_service_execution.py:275	1	cached = self.appservice.legacy_cached_download(context, name, arguments, operation_key)
-application_execution_binding.py:168	1	A legacy resume retains its semantics. Once marked, recovery uses the saved
-bvbrc_appservice_contracts.py:390	1	"""Exact retained legacy or capped download identity, without normalization.
-bvbrc_appservice_contracts.py:392	1	A legacy identity is readable evidence only. The transport and fresh host
-bvbrc_appservice_host.py:132	1	def legacy_cached_download(self, context, name, arguments, key):
-bvbrc_appservice_receipt_values.py:412	1	# Host failures are not upgraded by a local representation projection.
-bvbrc_appservice_tool_info.py:99	1	# always name their cap; no default or historical rewrite is supplied.
-child_message_owners.py:35	1	parent = getattr_static(candidate, 'commissioning_parent', 'legacy_annotation')
-child_message_owners.py:38	1	if role in entries and parent in ('legacy_annotation', 'annotation'):
-completion_evidence.py:321	1	# references, including legacy runs without this ledger.
-decision_context.py:147	1	"fields": current, "removed_fields": []}
-decision_context.py:153	1	"removed_fields": sorted(set(previous) - set(current))}
-decision_context.py:159	1	required = {"version", "kind", "base_revision", "revision", "fields", "removed_fields"}
-decision_context.py:163	1	or not isinstance(frame["removed_fields"], list)
-decision_context.py:164	1	or any(not isinstance(key, str) for key in frame["removed_fields"])
-decision_context.py:165	1	or len(set(frame["removed_fields"])) != len(frame["removed_fields"])
-decision_context.py:166	1	or set(frame["removed_fields"]).intersection(frame["fields"])):
-decision_context.py:176	1	if frame["base_revision"] is not None or frame["removed_fields"]:
-decision_context.py:183	1	if not set(frame["removed_fields"]) <= set(previous):
-decision_context.py:186	1	if key not in frame["removed_fields"]}
-decision_context.py:29	2	execute the historical actions or earn their old credit again. The reader
-decision_context.py:36	2	replaces the listed top-level fields and removes exactly removed_fields; omitted
-decision_context.py:39	2	including yield expectations; older estimates remain historical. A bootstrap
-decision_context.py:41	2	decision_lookup_result supplies only the requested own historical information.
-decision_context.py:62	2	'remain historical. A requested own-history lookup continues this same pending decision. '
-default_scientific_binding.py:60	1	# Reconstruct only the actual saved historical choice. Absence in a
-domain.py:31	1	def source_location_inputs(schema, *, allow_legacy_quote=False):
-domain.py:387	1	"superseded_evidence"]
-domain.py:39	1	return [source_location_inputs(value, allow_legacy_quote=allow_legacy_quote)
-domain.py:396	1	'description': 'Optional typed scientific information in this assessment. source_claim names the actual observed/source-reported subject, proposition and conditions, not a transferred target measurement. The assessment h
-domain.py:43	1	result = {key: source_location_inputs(value, allow_legacy_quote=allow_legacy_quote)
-domain.py:52	1	if not allow_legacy_quote:
-episode_binding_graph.py:166	1	_require(not any(role in self._by_role and (path is None or any(node.binding_path is None for node in self._by_role[role])) for role in roles), 'duplicate_legacy_role')
-episode_binding_graph.py:21	1	"""Retain unambiguous legacy lookup; never choose between private parents."""
-episode_binding_graph.py:57	2	and getattr(binding, 'commissioning_parent', 'legacy_annotation')
-episode_binding_graph.py:58	1	in {'legacy_annotation', 'annotation'}]
-episode_binding_graph.py:60	1	# A legacy parent has no path identity; only a unique role is safe.
-episode_bindings.py:352	1	if parent in ('legacy_annotation', 'annotation', None):
-episode_bindings.py:359	1	in {'legacy_annotation', 'annotation'} for binding in candidates):
-episode_completion.py:338	1	Legacy actions without slots retain unknown historical completion order.
-episode_journal.py:197	1	# when that row is no longer the newest record. Count only those
-episode_journal.py:199	1	# materializing historical requests/results or all timing arrays.
-episode_journal.py:88	1	temporary = table + '_credit_migration'
-episode_services.py:522	1	legacy = getattr(owner, 'native_protein_structure_returns', None)
-episode_services.py:523	1	if legacy is not None:
-episode_services.py:525	1	legacy = reader_from_bound_owner(self.workflow, owner)
-episode_services.py:526	1	return ProteinStructureActionRecords(self.workflow.store, self.workflow.run_id, legacy_returns=legacy)
-episode_work_report.py:307	1	# an unrelated current sibling view is not its historical result.
-episode_work_report.py:4	1	not run a calculator, reprice historical work, infer biological support or read a
-evidence_axis_contracts.py:179	1	"""Validate retained draft structure, including withdrawn historical rules.
-evidence_axis_contracts.py:4	1	cites actual witnesses. Validation keeps historical draft records readable; it
-execution_job_submission/api_job_execution/credit.py:236	12	historical = self._closed_completion_verdict(context, proof)
-execution_job_submission/api_job_execution/credit.py:237	12	if historical is not None:
-execution_job_submission/episode.py:25	5	commissioning_parent = 'legacy_annotation'
-execution_job_submission/received_evidence.py:48	13	returns.records._validate_historical(child, form, schema, received_facts=lambda child_context, child_schema: returns.received_facts(child_context, child_schema))
-execution_job_submission/received_evidence.py:76	13	returns.records._validate_historical(child, saved, original_schema, received_facts=lambda child_context, child_schema: returns.received_facts(child_context, child_schema))
-execution_job_submission/task_instructions.py:4	13	INSTRUCTIONS = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within the parent\'s fixed subject and optional original-coordinate\nsegments. Those bounds set
-execution_progress_assessment/task_instructions.py:43	2	EXCHANGE_HISTORY_GUIDANCE = """Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observation. Read exact previously received outcomes with the ordinary e
-execution_progress.py:466	1	removed = max(0, len(raw) - self.log_window_bytes)
-execution_progress.py:467	1	raw, offset = raw[removed:], offset + removed
-execution_timing.py:55	1	Cross-boot subtraction and historical reconstruction are unavailable.
-library/annotation_selection_protocol.py:128	20	envelope = self.workflow.reasoning_action_schema(self, {'type': 'object'}, _accept_legacy_quotes=True)
-library/bvbrc_application_return_records.py:3	1	Historical owner checks describe authenticated saved forms. The private caller
-library/bvbrc_application_return_records.py:80	1	def _validate_historical(self, context, form, schema, *, received_facts):
-library/literature_a106_render.py:120	1	'Historical saved version: another received version explicitly supersedes it. '
-library/literature_a106_subscore_storage.py:254	1	superseded = {row['revises_subscore_ref'] for row in rows if row.get('revises_subscore_ref')}
-library/literature_a106_subscore_storage.py:260	1	return [row for row in rows if row['sheet_ref'] not in superseded and not any(
-library/literature_a106_subscore_storage.py:461	1	heads, superseded = [], set()
-library/literature_a106_subscore_storage.py:467	1	superseded.add(saved["selection"]["revises_subscore_ref"])
-library/literature_a106_subscore_storage.py:468	1	current_subscores = [ref for ref in heads if ref not in superseded]
-library/literature_amount_inputs.py:215	1	The legacy keyword ``rate`` selects signed scalar bounds/approximation and
-library/literature_assay_grading_inputs.py:384	1	# wider estimate rosters and legacy full-model context are not its operands.
-library/literature_assay_grading_inputs.py:530	1	# Known-variance likelihood must not silently upgrade estimated uncertainty
-library/literature_assay_grading_render.py:28	1	('Experiment', label or ('Experiment ' + str(experiment_number) if experiment else 'Historical experiment identity unrecorded')),
-library/literature_assay_inputs.py:180	1	# quotations remain a supported legacy contract and must still match;
-library/literature_assay_storage.py:34	1	# Legacy reasons remain valid for exact saved v1 returns. New population only
-library/literature_binding_interaction_model_storage.py:107	2	# Native read has no writes. Avoid its legacy table-installing constructor.
-library/literature_compiled_assay_calculations.py:349	1	legacy = deepcopy(extraction)
-library/literature_compiled_assay_calculations.py:350	1	legacy['version'] = 'a105_compiled_assay_inputs_v1'
-library/literature_compiled_assay_calculations.py:351	1	legacy.pop('covariance_sources')
-library/literature_compiled_assay_calculations.py:352	1	legacy['covariance_source'] = None
-library/literature_compiled_assay_calculations.py:354	1	legacy['covariance_source'] = deepcopy(full_block)
-library/literature_compiled_assay_calculations.py:355	1	data = legacy['covariance_source']['data']
-library/literature_compiled_assay_calculations.py:360	1	legacy['variance_status'] = ('unknown' if extraction['variance_status'] == 'unknown'
-library/literature_compiled_assay_calculations.py:362	1	sheet = populate_compiled_assay(legacy)
-library/literature_compiled_assay_calculations.py:404	1	# The legacy total/profile still require the distinct residual and supported
-library/literature_compiled_assay_prompt.py:7	1	Determine which corrections have already been applied. Distinguish sample-minus-blank rate from gross signal, separately measured contamination from background already removed, instrument recovery from an enzyme-spike re
-library/literature_compiled_assay_storage.py:34	1	from gene_annotation_episode.episodic_workflow.root.a106.library.literature_compiled_assay_inputs import compiled_assay_operation_schema as legacy, common_assessment_population_schema
-library/literature_compiled_assay_storage.py:35	1	return {'type': 'object', 'anyOf': [*legacy()['anyOf'], common_assessment_population_schema()]}
-library/literature_compiled_assay_storage.py:753	1	# Preserve historical v1/v2 empty-family behavior. The explicit common
-library/literature_controlled_response_inputs.py:1227	1	# The legacy ordering (meaning, measurement, context) is retained.
-library/literature_controlled_response_inputs.py:1493	1	legacy = {}
-library/literature_controlled_response_inputs.py:1499	1	legacy[key] = {"selector": {**saved["selection"], "witness": original},
-library/literature_controlled_response_inputs.py:1502	1	legacy[key] = {**{k:v for k,v in saved["selection"].items() if k != "kind"}, "artifact_ref": saved["artifact_ref"]}
-library/literature_controlled_response_inputs.py:1503	1	if record["canonical_unit"] != "umol/min/mg" or _fraction(record["exact_scale"]) != _definition_scale(legacy) / 1000000:
-library/literature_controlled_response_inputs.py:2959	1	# Legacy saved shape: reconstruction above still requires every
-library/literature_controlled_response_v3_inputs.py:70	1	# Optional only for saved legacy extractions. Live reads retain each local
-library/literature_current_results.py:1	1	"""Present current saved literature results without replaying historical forms.
-library/literature_endpoint_signal_render.py:132	1	shown['literature_legacy_figure_contract_work'] = True
-library/literature_endpoint_signal_render.py:164	1	'legacy_task_relevant', 'lookup_relevant', 'hidden_records', 'render_received', 'state_view', 'sanitize_private',
-library/literature_endpoint_signal_render.py:36	1	if state.get('literature_legacy_figure_contract_work'):
-library/literature_experimental_prompt.py:36	1	"base_revision", "revision", "removed_fields", "created_at", "updated_at",
-library/literature_figure_measurements.py:92	1	"""Nearest float, optionally moved outward to contain an exact rational."""
-library/literature_gel_inputs.py:385	1	association this validates consistency, not historical pixel/source custody.
-library/literature_intervention_storage.py:78	1	heads, superseded = {}, set()
-library/literature_intervention_storage.py:86	1	result = [dict(sheet_ref=ref, **value) for ref, value in heads.items() if ref not in superseded]
-library/literature_measurement_comparison_prompt.py:3	1	MEASUREMENT_COMPARISON_TASK = 'Determine whether the selected experimental estimates measure the same activity of the studied molecule under sufficiently comparable conditions to assess agreement. Start with the supplied
-library/literature_measurement_comparison_prompt.py:5	1	INTERPRETATION_QUESTIONS = (('construct', 'Are the selected estimates from the same actual molecular construct, an intended variant, or different molecules? Matching names alone do not establish identity.', ('same_constr
-library/literature_numerical_contracts.py:161	1	A custom legacy form remains usable through its original literal route. It
-library/literature_numerical_contracts.py:4	1	New legacy decisions can freeze their available declarations before selection.
-library/literature_optical_inputs.py:190	1	# Legacy role='rate' requests the signed scalar lexical grammar only. No
-library/literature_partner_prompt.py:5	1	Use the partner_requirement assessment type across chemical systems and report layouts. Record optional experiment_assessment only with a received reference identifying the actual experiment, a stable assessment_key, sci
-library/literature_partner_source_fields.py:40	1	# are NOT removed by the classifier and cannot authorize positive coordination.
-library/literature_perturbation_assessments.py:102	2	superseded.add(assessment["revises_sheet_ref"])
-library/literature_perturbation_assessments.py:103	1	heads = [{"sheet_ref": ref, **value} for ref, value in histories.items() if ref not in superseded]
-library/literature_perturbation_assessments.py:86	1	Historical unlinked sheets remain available through their original APIs.
-library/literature_perturbation_assessments.py:88	1	histories, superseded = {}, set()
-library/literature_perturbation_operands.py:4	1	no new scientific calculation. Historical point/summary return contracts remain
-library/literature_perturbation_prompt.py:21	1	Use the reusable intervention_response assessment type for deletion, inhibition, replacement, reconstitution and restoration experiments. Their design determines which numerical comparisons are meaningful; a new molecule
-library/literature_perturbation_prompt.py:25	1	Assessments with different assessment_key values can concern the same experiment without revising each other. Follow the explicit revises_sheet_ref chain to establish which assessment is superseded; creation order alone 
-library/literature_perturbation_summary.py:160	1	# Omission preserves historical v2 inputs/payloads exactly. A supplied basis
-library/literature_perturbation_summary.py:463	1	legacy = populate_source_restoration(inputs)
-library/literature_perturbation_summary.py:469	1	"error_cap_scale":"unknown","spread_reading":"not_applicable"} for name, cell in legacy["cells"].items()}
-library/literature_perturbation_summary.py:528	1	for prefix, a, b, prerequisite in (("perturbation", "W", "K", legacy["cells"]["perturbation_difference"]),
-library/literature_publisher_binding.py:5	1	scientific validators. Historical receipt versions do not call this interface.
-library/literature_publisher_binding.py:87	1	and carries no ownership claim; historical versions retain their own checks.
-library/literature_rate_domains.py:211	1	"basis": {"type": "string", "enum": ["reported_point", "reported_censoring", "reported_operand_algebra", "stored_numerical_point", "legacy_stored_cell"]},
-library/literature_rate_observation_calculations.py:128	1	# Versioned reported-curve grid section; legacy complete v1 prefix is unchanged.
-library/literature_rate_observation_inputs.py:178	1	# Explicit grid version; the complete legacy v1 implementation above is retained.
-library/literature_rate_observation_prompt.py:99	3	def legacy_task_relevant(state):
-library/literature_rate_storage.py:458	1	# a newer version. Reading never upgrades or recalculates those cells.
-library/literature_rate_storage.py:855	1	raise ContractError("native_rate_return_view_cannot_publish_legacy_table")
-library/literature_rate_storage.py:896	1	# Historical cells supply only their actually saved point or
-library/literature_rate_storage.py:904	1	domain = _project(interval, basis="legacy_stored_cell", conditioning="stored_source_cell",
-library/literature_ratio_source_validation.py:5	1	arithmetic identities rather than constructing a replacement historical sheet.
-library/literature_reaction_prompt.py:5	1	Use reaction_prediction for measured chemical or isotopologue ratios against specified predictions, and resource_requirement for usable supply against reaction demand. Isotopologue ratios need source-supported atom-sourc
-library/literature_required_grading.py:169	1	action_schema({'type': 'object'}, repository.population_schema()), allow_legacy_quote=True))
-library/literature_sheet_updates.py:233	1	# its historical calculation and exact declared bindings, and
-library/literature_sheet_updates.py:280	1	# reconstruct that historical result without changing what was returned.
-library/literature_sheet_updates.py:393	1	Old scientific artifacts and archived report forms remain historical.
-library/literature_source_population_catalog.py:69	1	"description": "Populate the existing source-rate comparison sheet directly from selected literal paper spans, without a prepared CSV/TSV or model-authored scientific numbers. Request literature_rate_source_domain_cells 
-library/literature_work_report.py:94	1	"""Describe an admitted result without retransmitting historical cell bodies.
-library/live_runtime_functions.py:1	1	"""Bind moved source functions to their authentic live provider namespace.
-library/live_runtime_functions.py:17	1	raise ValueError('exact_moved_function_names_required')
-library/live_runtime_functions.py:21	1	raise TypeError('closure_free_moved_function_required')
-library/retained_input_authority/alignment_correspondence.py:296	1	"""The canonical meanings, independent of legacy field names or sources."""
-library/retained_input_authority/alignment_correspondence.py:316	1	selected[axis] = field('length(union(paired intervals clipped to the supplied selection)) / selection width', ['rows.pairs', 'selected_intervals.' + axis, 'population'], 'fraction', 'explicitly supplied numerical interva
-library/retained_input_authority/alignment_site_returns.py:33	1	"site_legacy_result_ungraded")
-library/retained_input_authority/atac_differential_result_receipts.py:1	1	"""Selected atac action controls and historical completed-action authority.
-library/retained_input_authority/atac_differential_result_receipts.py:5	3	Historical checks use frozen controls and Store metadata, never scientific bytes.
-library/retained_input_authority/atac_differential_returns.py:5	2	runtime records only. Historical delivery never opens scientific artifacts.
-library/retained_input_authority/biopython_pairwise_grader.py:153	1	measurements. Markerless legacy results retain their original required
-library/retained_input_authority/blast_preparation_contracts.py:194	1	_require((row['native_output_reference'] is not None) == (row['category'] in {'member_created', 'empty_member_removed'}), 'diagnostic_output_category')
-library/retained_input_authority/blast_preparation_contracts.py:198	1	_require(parameter['parameter'] in {'nmer', 'ws_hint', 'stride', 'legacy', 'old_style_index', 'output_prefix'}, 'parameter_document_kind')
-library/retained_input_authority/blast_preparation_contracts.py:29	1	OPERATION_PARAMETERS = {('blastdb_aliastool', 'convert_gi_list'): _object({'input_occurrence_id': _STR, 'output_path': _STR}), ('blastdb_aliastool', 'convert_seqid_list'): _object({'input_occurrence_id': _STR, 'output_pa
-library/retained_input_authority/blast_preparation_contracts.py:31	1	_PARAMETER_TYPES = {**{k: {'type': 'integer'} for k in ('nmer', 'ws_hint', 'stride', 'gap_open', 'gap_extend')}, 'scale': _NUMBER, 'word_score_threshold': _NUMBER, 'matrix': _STR, 'output_prefix': _STR, 'legacy': _BOOL, 
-library/retained_input_authority/blast_preparation_contracts.py:44	1	rows = {'list': _object({'ordinal': _INT, 'line_number': _POS, 'token_ordinal': _INT, 'original_token': _STR, 'start_byte': _INT, 'end_byte': _INT}), 'alias': _object({'row_ordinal': _INT, 'line_number': _POS, 'native_ke
-library/retained_input_authority/blast_preparation_contracts.py:49	1	index_detail = _object({'input_format': _enum('fasta blastdb'), 'source_database_key': _nullable(_STR), 'input_occurrence_id': _nullable(_STR), 'old_style_index': _BOOL, 'legacy': _BOOL, 'index_members': _array(_object({
-library/retained_input_authority/blast_preparation_population.py:181	1	return {**{k: p[k] for k in ('input_format', 'source_database_key', 'input_occurrence_id', 'old_style_index', 'legacy')}, 'index_members': members, 'parameter_observations': [r['parameter_observation'] for d in documents
-library/retained_input_authority/blast_preparation_population.py:387	1	_require(all((detail[k] == p[k] for k in ('input_format', 'source_database_key', 'input_occurrence_id', 'old_style_index', 'legacy'))), 'artifact_set_detail')
-library/retained_input_authority/blast_preparation_population.py:392	1	_require(observation['parameter'] in {'nmer', 'ws_hint', 'stride', 'legacy', 'old_style_index', 'output_prefix'}, 'parameter_document_kind')
-library/retained_input_authority/blast_utility_contracts.py:35	1	_PARAMETERS = {('makeblastdb', 'create_sequence_database'): _object({**_DETAIL['properties'], 'output_prefix': _STR, 'title': _TEXT, 'max_file_size': _nullable(_TEXT)}), ('blastdbcmd', 'extract_sequences'): _object({'sel
-library/retained_input_authority/blast_vdb_utility_contracts.py:41	1	"""Build detached additive branches without changing any legacy schema."""
-library/retained_input_authority/chromatin_interaction_result_receipts.py:1	1	"""Selected chromatin action controls and historical completed-action authority.
-library/retained_input_authority/enrichr_contracts.py:19	1	QUALIFICATIONS = ('response_incomplete', 'invalid_utf8', 'invalid_json', 'duplicate_json_key', 'response_not_object', 'library_missing', 'library_null', 'library_not_array', 'nonstandard_numeric_token', 'malformed_row', 
-library/retained_input_authority/fluorescence_event_contracts.py:22	1	_CONTROL_METRICS = ('control_difference_fraction', 'control_difference_percentage_points', 'legacy_nonnegative_difference_percentage_points')
-library/retained_input_authority/fluorescence_event_contracts.py:352	1	metrics = _CONTROL_METRICS if item['include_legacy_clipping'] else _CONTROL_METRICS[:2]
-library/retained_input_authority/fluorescence_native_report_contracts.py:153	1	kind, metrics = ('control', {'legacy_nonnegative_difference_percentage_points'})
-library/retained_input_authority/fluorescence_native_report_contracts.py:3	1	These declarations never authenticate a historical execution or calculate a
-library/retained_input_authority/fluorescence_result_contracts.py:105	1	keys = {'fraction_requests': 'gate_key denominator', 'intensity_requests': 'gate_key domain_key channel_key', 'control_requests': 'control_key include_legacy_clipping'}[name]
-library/retained_input_authority/fluorescence_result_contracts.py:110	1	elif key == 'include_legacy_clipping':
-library/retained_input_authority/fluorescence_result_receipts.py:137	1	"""Authenticate retained identities without reopening historical scientific bytes."""
-library/retained_input_authority/fluorescence_result_receipts.py:3	3	These durable controls retain outcomes before credit. Historical validation
-library/retained_input_authority/flux_balance_contracts.py:252	1	native_glpk=_NUMBER, native_optlang=_NUMBER, native_cobra=_NUMBER, native_legacy=_NUMBER,
-library/retained_input_authority/flux_balance_contracts.py:253	1	glpk_minus_calculated=_CELL, optlang_minus_calculated=_CELL, cobra_minus_calculated=_CELL, legacy_minus_calculated=_CELL,
-library/retained_input_authority/flux_balance_contracts.py:254	1	glpk_comparison=_AGREEMENT, optlang_comparison=_AGREEMENT, cobra_comparison=_AGREEMENT, legacy_comparison=_AGREEMENT)
-library/retained_input_authority/flux_balance_execution_inputs.py:4	1	Arbitrary supplied receipt JSON is never accepted as historical authority.
-library/retained_input_authority/flux_balance_operands.py:6	1	does not authenticate a historical Store record. No helper writes or grants it.
-library/retained_input_authority/flux_balance_request_binding.py:118	1	def practical_outcome_view(receipt, *, assignment=None, control_version=LEGACY_CONTROL_VERSION):
-library/retained_input_authority/flux_balance_request_binding.py:141	1	def match_practical_public_outcome(value, receipt, reference, *, assignment=None, control_version=LEGACY_CONTROL_VERSION):
-library/retained_input_authority/flux_balance_request_binding.py:21	1	LEGACY_CONTROL_VERSION = 'flux_balance_request_binding_v1'
-library/retained_input_authority/flux_balance_request_binding.py:23	1	_PUBLIC_VERSIONS = {LEGACY_CONTROL_VERSION: 'flux_balance_practical_outcome_v1', CONTROL_VERSION: 'flux_balance_practical_outcome_v2'}
-library/retained_input_authority/flux_balance_result_contracts.py:33	1	removed = {'Unit': {'source'}, 'Number': {'source'}, 'Bound': {'source'}, 'Issue': {'detail_file'}, 'Association': {'source'}, 'ReactionVariables': {'flux_expression_pointer'}}.get(record, set())
-library/retained_input_authority/flux_balance_result_contracts.py:35	1	if removed:
-library/retained_input_authority/flux_balance_result_contracts.py:36	1	result['properties'] = {k: v for k, v in result['properties'].items() if k not in removed}
-library/retained_input_authority/flux_balance_result_contracts.py:37	1	result['required'] = [k for k in result['required'] if k not in removed]
-library/retained_input_authority/flux_balance_returns.py:137	1	self._require(type(groups) is dict and all((source in groups for source in _LEGACY_SOURCES)), 'original_facts_required')
-library/retained_input_authority/flux_balance_returns.py:156	5	def _historical(self, context, form, schema, sources):
-library/retained_input_authority/flux_balance_returns.py:158	1	values, metadata = self._historical_ordinary(context, form, schema, sources)
-library/retained_input_authority/flux_balance_returns.py:195	5	values, child_origins = self._historical(child, form, schema, wanted)
-library/retained_input_authority/flux_balance_returns.py:28	1	_LEGACY_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE, 'flux_balance_failures')
-library/retained_input_authority/flux_balance_returns.py:289	1	values, identities = self._historical_ordinary(child, form, schema, wanted)
-library/retained_input_authority/flux_balance_returns.py:291	1	values, origins = self._historical(child, form, schema, wanted)
-library/retained_input_authority/flux_balance_returns.py:292	1	identities = {source: [{'identity': canonical({'legacy_source': source, 'value': row}), 'origins': origins.get(canonical(row), [])} for row in rows] for source, rows in values.items()}
-library/retained_input_authority/flux_balance_returns.py:318	1	def _historical_ordinary(self, context, form, schema, sources):
-library/retained_input_authority/flux_balance_returns.py:5	3	Historical delivery is independent of the availability of scientific bytes.
-library/retained_input_authority/genomic_overlap_result_receipts.py:1	1	"""Selected overlap action controls and historical completed-action authority.
-library/retained_input_authority/infernal_preparation_schema.py:8	1	PROGRAM_MODES = {'cmbuild': frozenset({'build', 'refine'}), 'cmcalibrate': frozenset({'calibrate', 'forecast', 'memory_estimate', 'split_commands', 'partition_scores', 'merge_scores'}), 'cmconvert': frozenset({'ascii', '
-library/retained_input_authority/molecular_sequence_result_contracts.py:1124	1	selection_profile = _N_PROFILE if operation == OPERATIONS[2] else _O_PROFILE if operation == OPERATIONS[3] else _LEGACY_PROFILE
-library/retained_input_authority/molecular_sequence_result_contracts.py:229	2	return _LEGACY_PROFILE
-library/retained_input_authority/molecular_sequence_result_contracts.py:30	1	_LEGACY_PROFILE = 'legacy_v1'
-library/retained_input_authority/molecular_sequence_result_contracts.py:847	1	def molecular_sequence_fact_sources(*, profile=_LEGACY_PROFILE):
-library/retained_input_authority/molecular_sequence_result_contracts.py:849	1	require(profile in (_LEGACY_PROFILE, _N_PROFILE, _O_PROFILE, _PROTEASE_PROFILE, _PLACEMENT_PROFILE))
-library/retained_input_authority/molecular_sequence_result_contracts.py:91	1	def field_table(operation, identity, *, profile=_LEGACY_PROFILE):
-library/retained_input_authority/molecular_sequence_result_contracts.py:93	1	require(profile == _LEGACY_PROFILE or (profile == _N_PROFILE and operation == OPERATIONS[2]) or (profile == _O_PROFILE and operation == OPERATIONS[3]) or (profile == _PROTEASE_PROFILE and operation == OPERATIONS[4]) or (
-library/retained_input_authority/molecular_sequence_result_contracts.py:998	1	projection = obj({'schema': {'type': 'string', 'const': {_LEGACY_PROFILE: PUBLIC_VERSION, _N_PROFILE: N_PUBLIC_VERSION, _O_PROFILE: O_PUBLIC_VERSION, _PROTEASE_PROFILE: PROTEASE_PUBLIC_VERSION, _PLACEMENT_PROFILE: PLACEM
-library/retained_input_authority/native_blast_database_result_views.py:47	1	add('iteration_comparison', 'added_count removed_count retained_count earlier_target_count later_target_count', 'count count count count count', 'iteration.round_comparisons', 'Explicitly related complete retained return
-library/retained_input_authority/native_blast_database_result_views.py:91	1	for name, formula in (('added_count', '|L\\E|'), ('removed_count', '|E\\L|'), ('retained_count', '|E intersection L|'), ('earlier_target_count', '|E|'), ('later_target_count', '|L|')):
-library/retained_input_authority/native_blast_utility_contracts.py:181	1	if op['version'] != 'blast_utility_operation_v1' or (op['program'], op['mode']) not in LEGACY_MODES:
-library/retained_input_authority/native_blast_utility_contracts.py:25	1	LEGACY_MODES = MODES
-library/retained_input_authority/native_blast_utility_contracts.py:26	1	MODES = LEGACY_MODES + PREPARATION_MODES + VDB_MODES
-library/retained_input_authority/native_blast_utility_contracts.py:320	1	for key, flag in (('full', '-full'), ('no_isam', '-no_isam'), ('legacy_file_checks', '-legacy'), ('require_taxids', '-must_have_taxids'), ('cdd_delta', '-cdd_delta')):
-library/retained_input_authority/native_blast_utility_contracts.py:36	1	_HISTORICAL_OPERATION_SCHEMA = {'anyOf': [blast_utility_schema_for_version(version) for version in ('blast_utility_operation_v1', 'blast_utility_operation_v2')]}
-library/retained_input_authority/native_blast_utility_contracts.py:37	1	NATIVE_BLAST_UTILITY_JOB_SCHEMA = _object({'version': {'const': JOB_VERSION}, 'operation': _HISTORICAL_OPERATION_SCHEMA, 'software': SOFTWARE_SCHEMA, 'environment': _ENV, 'inputs': {'type': 'array', 'items': INPUT_SCHEMA
-library/retained_input_authority/native_blast_utility_contracts.py:391	1	"""Qualify original output bytes, preserving undiscriminated legacy facts.
-library/retained_input_authority/native_blast_utility_contracts.py:50	1	NATIVE_BLAST_UTILITY_JOB_V2_SCHEMA = _object({'version': {'const': JOB_VERSION_V2}, 'operation': deepcopy(_HISTORICAL_OPERATION_SCHEMA), 'software': SOFTWARE_SCHEMA, 'environment': _ENV, 'inputs': {'type': 'array', 'item
-library/retained_input_authority/native_blast_utility_materializations.py:125	1	_require(not any((PurePosixPath(s).suffix in {'.nal', '.pal', '.nvl', '.pvl'} for s in sources)), 'database_alias_relocation_unsupported')
-library/retained_input_authority/native_blast_utility_materializations.py:132	1	_require(len(matches) == 1 and relative == prefix_map[matches[0]] + item['source_path'][len(matches[0]):], 'database_copy_relocation_unresolved')
-library/retained_input_authority/native_blast_utility_materializations.py:270	1	args += ['-input', input_paths[p['input_occurrence_id']] if p['input_format'] == 'fasta' else db(p['source_database_key']), '-iformat', p['input_format'], '-old_style_index', str(p['old_style_index']).lower(), '-legacy',
-library/retained_input_authority/native_expression_nmf_contracts.py:107	1	legacy = execution.name == 'native.json' and owner['attempt_id'] == digest(owner['operation_key']) and (owner['requested_job_sha256'] == digest(request)) and (execution.parent.name == owner['attempt_id']) and (execution.
-library/retained_input_authority/native_expression_nmf_contracts.py:108	1	require((current or legacy) and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME and (owner['attempt_id'] == digest(owner['operation_key'])) and (owner['requested_job_sha256'] == digest(request)), 'nmf_original_attem
-library/retained_input_authority/native_fluorescence_contracts.py:225	1	core._keys(row, 'control_key include_legacy_clipping', 'invalid_parameters')
-library/retained_input_authority/native_fluorescence_contracts.py:227	1	require(row['control_key'] in controls and type(row['include_legacy_clipping']) is bool, 'fluorescence_parameter_control_mismatch')
-library/retained_input_authority/native_fluorescence_contracts.py:330	2	legacy = execution.name == 'native.json' and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME and (execution.parent.name == owner['attempt_id']) and (execution.parent.parent.name == digest({'run': owner['run_id'], 'e
-library/retained_input_authority/native_fluorescence_contracts.py:331	1	require((legacy or terminal_plan_identity(owner, attempt_directory=str(attempt))) and owner['attempt_id'] == digest(owner['operation_key']) and (owner['requested_job_sha256'] == digest(request)), 'fluorescence_original_a
-library/retained_input_authority/native_fluorescence_contracts.py:56	1	PARAMETERS_SCHEMA = obj({'fraction_requests': array(obj({'gate_key': TEXT, 'denominator': {'enum': ['parent', 'evaluable']}})), 'intensity_requests': array(obj({'gate_key': TEXT, 'domain_key': TEXT, 'channel_key': TEXT})
-library/retained_input_authority/native_fluorescence_preparation.py:4	1	handle. Historical validation authenticates saved controls without requiring
-library/retained_input_authority/native_flux_balance_contracts.py:102	1	return {'version': 'flux_balance_environment_binding_v1', 'selection': deepcopy(selection), 'requested_job_sha256': digest(request), 'requested_environment': deepcopy(selected), 'realized_environment': actual, 'relocatio
-library/retained_input_authority/native_flux_balance_contracts.py:120	1	require((legacy or terminal_plan_identity(owner, attempt_directory=str(attempt))) and owner['attempt_id'] == digest(owner['operation_key']) and (owner['requested_job_sha256'] == digest(request)), 'fba_original_attempt_mi
-library/retained_input_authority/native_hmmer_preparation_contracts.py:14	1	PROGRAM_MODES = {'alimask': ('mask_alignment', 'mask_model', 'model_to_alignment', 'alignment_to_model'), 'hmmbuild': ('build_alignment', 'build_single_sequence_matrix'), 'hmmconvert': ('ascii', 'binary', 'legacy_hmmer2'
-library/retained_input_authority/native_hmmer_preparation_contracts.py:207	1	if mode == 'legacy_hmmer2' or result['--outfmt'] not in {'3/' + c for c in 'abcdef'}:
-library/retained_input_authority/native_hmmer_preparation_contracts.py:23	1	_MODES = {'hmmbuild': {'build_alignment': [], 'build_single_sequence_matrix': ['--singlemx']}, 'hmmconvert': {'ascii': ['-a'], 'binary': ['-b'], 'legacy_hmmer2': ['-2']}, 'hmmemit': {'sample_core_unaligned': [], 'sample_
-library/retained_input_authority/native_hmmer_preparation_contracts.py:347	1	elif program == 'hmmconvert' and mode != 'legacy_hmmer2':
-library/retained_input_authority/native_hmmer_preparation_contracts.py:92	1	fmt = {'ascii': 'hmmer3_ascii', 'binary': 'hmmer_binary', 'legacy_hmmer2': 'hmmer2_ascii'}[mode]
-library/retained_input_authority/native_infernal_preparation_contracts.py:15	1	_MODEL_FORMATS = {'infernal_cm_ascii', 'infernal_cm_legacy_ascii', 'infernal_cm_binary'}
-library/retained_input_authority/native_infernal_preparation_contracts.py:18	1	_MODE_OPTIONS = {'cmcalibrate': {'calibrate': [], 'forecast': ['--forecast'], 'memory_estimate': ['--memreq'], 'split_commands': ['--split'], 'partition_scores': [], 'merge_scores': ['--merge']}, 'cmconvert': {'ascii': [
-library/retained_input_authority/native_infernal_preparation_contracts.py:85	1	fmt = {'ascii': 'infernal_cm_ascii', 'binary': 'infernal_cm_binary', 'legacy_ascii': 'infernal_cm_legacy_ascii'}.get(mode, 'hmmer_hmm_ascii')
-library/retained_input_authority/native_protein_structure_results.py:5	1	Receipt proof owns durable action state and historical authority. Scientific
-library/retained_input_authority/native_protein_structure_returns.py:292	1	def _historical(self, context, form, schema, *, verify_artifacts=False, active=()):
-library/retained_input_authority/native_protein_structure_returns.py:314	1	values = self._historical(child, form, schema, verify_artifacts=verify_artifacts, active=active)
-library/retained_input_authority/protease_kinetics_result_contracts.py:80	1	meaning = 'Selected retained protease native-fit and separately qualified physical values, with original assay, population, calibration, covariance and uncertainty qualifications even for an empty selection. Supplied his
-library/retained_input_authority/protein_disorder_measurements.py:14	1	return {'scope': 'supplied IUPred2A-style data and declared original wrapper postprocessing; no scientific service, experiment, score calibration, transport completeness or invocation proof', 'cleaning': 'retain each ori
-library/retained_input_authority/protein_disorder_result_contracts.py:126	1	return _obj({'input': _obj({'protein_sequence': _nullable(_TEXT), 'input_ref': _nullable({'type': 'string', 'minLength': 1}), 'input_mapping': _LITERAL}), 'parameters': _obj({'threshold': _nullable(_NUMBER), 'native_outc
-library/retained_input_authority/protein_disorder_result_contracts.py:186	1	for name in ('original_symbol_count', 'cleaned_symbol_count', 'removed_character_count'):
-library/retained_input_authority/protein_disorder_result_contracts.py:61	1	_SUMMARY_FIELDS = {'original_symbol_count': ('count', 'original_characters', ()), 'cleaned_symbol_count': ('count', 'ASCII_letters', ()), 'removed_character_count': ('count', 'original_characters', ()), 'retained_data_ro
-library/retained_input_authority/protein_structure_action_records.py:242	1	"""Ordinary action authority, with optional real legacy Results authority."""
-library/retained_input_authority/protein_structure_action_records.py:244	1	def __init__(self, store, run_id, *, legacy_returns=None):
-library/retained_input_authority/protein_structure_action_records.py:246	1	if legacy_returns is not None:
-library/retained_input_authority/protein_structure_action_records.py:247	1	_require(legacy_returns.store is store and legacy_returns.run_id == run_id)
-library/retained_input_authority/protein_structure_action_records.py:248	1	self.legacy_returns = legacy_returns
-library/retained_input_authority/protein_structure_action_records.py:252	1	_require(self.legacy_returns is not None)
-library/retained_input_authority/protein_structure_action_records.py:253	1	return self.legacy_returns.owner
-library/retained_input_authority/protein_structure_action_records.py:262	2	if self.legacy_returns is not None:
-library/retained_input_authority/protein_structure_action_records.py:263	1	self.legacy_returns.authenticate(context, allow_unsaved=allow_unsaved)
-library/retained_input_authority/protein_structure_action_records.py:441	1	This view owns no connection or writes. It does not relocate a plan,
-library/retained_input_authority/protein_structure_action_records.py:544	1	_require(self.legacy_returns is not None, 'sequence_not_received')
-library/retained_input_authority/protein_structure_action_records.py:545	1	return self.legacy_returns.authenticate_received_sequence(context, descriptor, required_use=required_use)
-library/retained_input_authority/protein_structure_action_records.py:553	1	_require(self.legacy_returns is not None, 'saved_sheet_not_received')
-library/retained_input_authority/protein_structure_action_records.py:554	1	value = self.legacy_returns.authenticate_received_saved_sheet(context, descriptor, required_use=required_use)
-library/retained_input_authority/protein_structure_action_records.py:578	1	return self.legacy_returns.authenticate_received_alignment(context, alignment)
-library/retained_input_authority/protein_structure_action_records.py:606	1	_require(self.legacy_returns is not None, 'invalid_transform')
-library/retained_input_authority/protein_structure_action_records.py:607	1	values = self.legacy_returns.received_transform_projections(context, transform)
-library/retained_input_authority/protein_structure_contracts.py:1612	1	# These authority types are deliberately defined AFTER the legacy cohort was
-library/retained_input_authority/protein_structure_contracts.py:1613	1	# constructed. Default exported definitions and their historical digests stay
-library/retained_input_authority/protein_structure_contracts.py:1653	1	legacy = deepcopy(_DEFINITIONS[name])
-library/retained_input_authority/protein_structure_contracts.py:1654	1	legacy["properties"]["custody"] = {"$ref": "#/$defs/ResultCustodyV1"}
-library/retained_input_authority/protein_structure_contracts.py:1655	1	definitions[name + "V1"] = legacy
-library/retained_input_authority/protein_structure_contracts.py:1656	1	action = deepcopy(legacy)
-library/retained_input_authority/protein_structure_tools.py:128	1	def _selected_legacy_parameter_reader(authority, transform):
-library/retained_input_authority/protein_structure_tools.py:132	1	legacy = getattr(authority, 'legacy_returns', None)
-library/retained_input_authority/protein_structure_tools.py:133	1	owner = getattr(legacy, 'owner', None)
-library/retained_input_authority/protein_structure_tools.py:134	1	_require(type(owner) is ExecutionEpisodes and legacy is owner.native_protein_structure_returns and (legacy.results is owner.native_protein_structure_results) and (owner.store is authority.store) and (owner.run_id == auth
-library/retained_input_authority/protein_structure_tools.py:135	1	return dict(version='protein_structure_legacy_parameter_reader_v1', run_id=owner.run_id, directory=str(owner.directory))
-library/retained_input_authority/protein_structure_tools.py:143	1	legacy = transform['received_from']['saved_sheet']['version'] == 'protein_structure_saved_sheet_v1'
-library/retained_input_authority/protein_structure_tools.py:144	1	if not legacy:
-library/retained_input_authority/protein_structure_tools.py:150	1	_require(type(reader) is dict and set(reader) == {'version', 'run_id', 'directory'} and (reader['version'] == 'protein_structure_legacy_parameter_reader_v1') and (reader['run_id'] == context.run_id), 'original_commission
-library/retained_input_authority/protein_structure_tools.py:152	1	records = ProteinStructureActionRecords(store, context.run_id, legacy_returns=retained)
-library/retained_input_authority/protein_structure_tools.py:154	1	if authority.legacy_returns is not None:
-library/retained_input_authority/protein_structure_tools.py:155	1	_require(same(reader, _selected_legacy_parameter_reader(authority, transform)), 'original_commission_mismatch')
-library/retained_input_authority/retained_protein_owner.py:8	1	"""Construct only this owner's unchanged legacy protein read authority.
-library/retained_input_authority/rna_structure_contracts.py:19	1	RNA_ISSUE_MEANINGS = {'not_requested': 'The selected operation did not request this quantity.', UNCERTAINTY_REASON: 'Neither selected single-structure algorithm produces this uncertainty.', 'no_sequence_supplied': 'The o
-library/retained_input_authority/sequence_masking_contracts.py:274	1	_require(value['custody']['order_basis'] in ('native_fasta_iteration', 'caller_declared', 'unknown') and all((r['basis'] in ('native_fasta_iteration', 'caller_declared') for r in value['custody']['record_bindings'])), 'l
-library/retained_input_authority/uniprot_return_contracts.py:654	1	'uniprot_legacy_label_unrepresentable',
-library/retained_input_authority/uniprot_return_contracts.py:655	1	'uniprot_legacy_term_unrepresentable',
-library/retained_input_authority/uniprot_return_contracts.py:656	1	'uniprot_legacy_reference_unrepresentable',
-library/retained_input_authority/uniprot_return_contracts.py:657	1	'uniprot_legacy_source_version_omitted']},
-library/retained_input_authority/uniprot_return_contracts.py:672	1	'legacy_publication',
-library/retained_input_authority/uniprot_return_contracts.py:673	1	'legacy_source']},
-library/retained_input_authority/uniprot_return_contracts.py:94	1	'FeatureLocationValue': {'type': 'object',
-library/retained_input_authority/uniprot_return_contracts.py:989	1	'value': {'anyOf': [{'$ref': '#/$defs/FeatureLocationValue'},
-local_return_history.py:221	1	# a legacy observation's own unit_index is retained only as its
-materials_packing.py:74	1	# Original Store/parser custody dependencies retained after axis relocation.
-materials_packing.py:87	1	"""Transient parser bookkeeping on disk, removed when an attempt finalizes."""
-native_lifecycle.py:428	1	"""Delete transient control files only after the unit is no longer live.
-ncbi_entrez_acquisition.py:534	1	# A secondary/base accession does not declare its historical version.
-ncbi_entrez_acquisition.py:544	1	Unknown aliases and qualified historical mappings are unavailable identity,
-ncbi_entrez_acquisition.py:568	1	# No undocumented status number or historical replacement is inferred.
-numerical.py:65	1	raise ValueError(name + "_legacy_value_requires_nonnegative_integer_or_none")
-numerical.py:74	1	"window_semantics": "legacy_ignored_no_minimum_history",
-numerical.py:75	1	"subsample_semantics": "legacy_ignored_full_history",
-numerical.py:8	1	removed, smoothed, or appended twice. Each mark fits the full observed history.
-numerical.py:917	1	# zero historical fit cannot establish a zero future yield here.
-providers.py:673	1	# feedback inside the same decision. Legacy callers still require
-providers.py:723	1	# The legacy exchange protocol can carry a newly published process.
-providers.py:814	1	"""Accept a predefined episode renderer without changing legacy calls."""
-providers.py:853	1	"local_session_removed": True, "remaining_active_workers": len(self.workers),
-published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_operations.py:11	14	def reasoning_action_schema(self, context, commit_schema, *, _accept_legacy_quotes=False):
-published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_operations.py:127	14	entries = {entry['name']: entry for entry in self.catalog(context, _accept_legacy_quotes=True)}
-published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_operations.py:16	14	schema = obj({'kind': {'const': 'reason'}, 'commit': deepcopy(commit_schema)}) if repository is None else _required_grading_logic(repository).action_schema(commit_schema, source_location_inputs(repository.population_sche
-published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_operations.py:20	14	return source_location_inputs(schema, allow_legacy_quote=_accept_legacy_quotes)
-published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_operations.py:24	14	return self.reasoning_action_schema(context, commit_schema, _accept_legacy_quotes=True)
-published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_operations.py:34	14	validate_schema(plain(selection['source_lead']), source_location_inputs(lead_schema(), allow_legacy_quote=True))
-published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_operations.py:59	14	def catalog(self, context, *, _accept_legacy_quotes=False):
-published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_operations.py:82	14	return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'], allow_legacy_quote=_accept_legacy_quotes)} for entry in result]
-published_evidence_assessment/evidence_search_strategy_improvement/to_parent.py:61	14	result = {'literature_kinetic_summary_precision_cells': {'type': 'array', 'meaning': 'Exactly requested source/scenario precision cells for one kinetic summary with actual subject/context, units, physical versus estimato
-received_input_bindings.py:3	1	This binding captures current admitted metadata only. Historical selected versions
-resource_estimation.py:77	1	'Observed minimum/maximum are historical ranges, not calibrated prediction intervals. '
-runtime_prompt.py:23	30	instructions = instructions.replace(old_history_guidance, 'Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observation. Read exact previously received 
-runtime.py:177	1	def _action_generation_schema(schema, *, _legacy_episode_assignments=False):
-runtime.py:190	1	if _json_episode_assignment(value, composed=not _legacy_episode_assignments):
-runtime.py:260	1	def _decode_action_response(value, schema, *, _legacy_episode_assignments=False):
-runtime.py:264	1	is removed only where the original host contract made that field optional;
-runtime.py:2642	1	def reasoning_action_schema(self, source, commit_schema=None, *, _accept_legacy_quotes=False):
-runtime.py:2645	1	schema = getattr(specialist, 'accept_reasoning_action_schema', None) if _accept_legacy_quotes else None
-runtime.py:266	1	every supplied value. Historical expanded assignments use their original
-runtime.py:271	1	return _decode_action_response(item, contract, _legacy_episode_assignments=_legacy_episode_assignments)
-runtime.py:302	1	encoded_assignment = _json_episode_assignment(schema, composed=not _legacy_episode_assignments)
-runtime.py:310	1	return _same_action_schema_required_members(generated, _action_generation_schema(schema)) or _same_action_schema_required_members(generated, _action_generation_schema(schema, _legacy_episode_assignments=True))
-runtime.py:3361	1	wait_inputs_version = 'wait_inputs_binding_v1'
-runtime.py:3364	1	if recorded_wait_inputs not in ({'version': 'wait_inputs_binding_v1'}, {'version': 'wait_inputs_binding_v2'}):
-runtime.py:3401	1	freshly remeasured score for historical work.
-runtime.py:343	1	decoder, including its limits; it does not repair historical scientific data.
-runtime.py:351	2	historical = _decode_action_response(value, schema, _legacy_episode_assignments=True)
-runtime.py:352	1	if _json(historical.get('selection')) != _json(decoded.get('selection')):
-runtime.py:359	1	if _json(historical.get('selection')) == _json(recorded_selection):
-runtime.py:360	13	return historical
-runtime.py:380	1	if _same_action_schema_required_members(generated, _action_generation_schema(exchange_schema, _legacy_episode_assignments=True)):
-runtime.py:381	2	return _decode_action_response(value, schema, _legacy_episode_assignments=True)
-runtime.py:387	1	if _same_action_schema_required_members(alternatives[1], _action_generation_schema(selected_schema, _legacy_episode_assignments=True)):
-runtime.py:752	1	if wait_inputs_version not in {'wait_inputs_binding_v1', 'wait_inputs_binding_v2'}:
-scientific_process/from_child_scientific_process.py:63	1	# surrounding admission transaction; legacy callers use this boundary.
-scientific_process/from_parent.py:175	1	"""Historical closure permits inspection/replay, never new dispatch."""
-scientific_process_library.py:20	1	LEGACY_EVIDENCE_SLOT, canonical_slot, _exact,
-scientific_process_library.py:527	1	if name == 'process.search' and arguments.get('slot') == LEGACY_EVIDENCE_SLOT:
-scientific_process_library.py:67	1	# These fields mix useful scientific limits with historical reader
-scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/credit.py:33	14	validate_schema(value, source_location_inputs(lead_schema(), allow_legacy_quote=True))
-scientific_process_records.py:188	1	"""Parse saved historical revisions without selecting any active process."""
-scientific_process_records.py:25	1	LEGACY_EVIDENCE_SLOT = "annotation_distinction"
-scientific_process_records.py:26	1	ALL_SLOTS = (*SLOTS, LEGACY_EVIDENCE_SLOT)
-scientific_process_records.py:27	1	_PREFIXES = {"evidence_axis": "A", LEGACY_EVIDENCE_SLOT: "A", "thought_pattern": "P"}
-scientific_process_records.py:40	1	return 'evidence_axis' if value == LEGACY_EVIDENCE_SLOT else value
-scientific_process/tests/test_private_head_applicability.py:1	1	"""Actual fresh head actions and preserved historical/vector state are distinct."""
-scientific_process/tests/test_private_head_applicability.py:19	1	scientific_process_binding=binding,job_episodes=SimpleNamespace(commission_schemas=lambda schema:pytest.fail('head cannot acquire a legacy job_child')),
-scientific_process/tests/test_private_head_applicability.py:31	1	task.feedback={'actual':'historical failure'} if vector else None
-scientific_process/tests/test_private_head_applicability.py:38	1	wf.journal.row=lambda *args:{'action':json.dumps({'kind':'job_child','role':'legacy-job'})}
-scientific_process/tests/test_private_head_applicability.py:49	1	wf.job_episode_options=lambda source:{'legacy_job':{'not_in_current_schema':True}}
-scientific_process/tests/test_private_head_applicability.py:60	1	def test_current_head_state_does_not_present_unavailable_legacy_job_choices():
-scientific_process/tests/test_private_head_applicability.py:64	1	def test_head_state_retains_original_vector_and_historical_job_result_summary():
-scientific_support_metadata.py:1	1	"""Historical instruction validation and explicit scoring-route availability.
-scientific_tool_library.py:236	1	raise ValueError('scientific_tool_info_not_in_legacy_snapshot')
-shared_information.py:20	1	DISPOSITIONS = ('partially_fulfilled', 'fulfilled', 'unavailable', 'superseded')
-shared_information.py:31	1	'description':'Operational reason for unavailable or superseded information. Evidence results and qualifications come from saved grading, not a rewritten assessment.'}},
-shared_information.py:33	1	disposition['allOf'] = [{'if':{'properties':{'status':{'enum':['unavailable','superseded']}}},
-shared_information.py:41	1	{'name':TOOLS[2],'description':'Answer a need addressed to this parent by selecting evidence it actually received. Fulfilled and partially fulfilled replies carry saved results and their qualifications through the receip
-shared_information.py:45	1	{'name':TOOLS[4],'description':'Page existing parent/child exchange metadata omitted from the automatic preview. This is historical navigation, not polling for a promised reply, and delivers no scientific evidence.',
-shared_information_results.py:50	1	later delivery or revision cannot enter this action's historical result.
-source_sequences.py:193	1	chars, positions, removed, unresolved = [], [], [], []
-source_sequences.py:206	1	removed.append({'start': left, 'end': right, 'kind': kind})
-source_sequences.py:212	1	removed.append({'start': spans[left][0], 'end': spans[right - 1][1], 'kind': kind})
-source_sequences.py:215	1	'position_map': _position_map(positions), 'removed_formatting': removed,
-state.py:1465	1	# Keep the historical digest labels so existing account IDs stay stable.
-state.py:1739	1	REASONING_SCHEMA["properties"][section]["items"], allow_legacy_quote=True))
-state.py:436	1	historical and current-only inventories coincide. ``references`` OR-
-state.py:591	1	for ownership/credit are normalized unions. Legacy unmapped products can
-state.py:668	1	# Explicit historical quotes retain their exact validation below.
-tests/perturbation_summary_fixtures.py:3	1	Moved verbatim from test_literature_perturbation_summary_integration. These are
-tests/test_private_api_credit_ownership.py:88	1	context=SimpleNamespace();selection={'declared':'original selection'};saved={'credit':-1.25,'historical':'controlled saved view'};calls=[]
-tests/test_private_api_report_callbacks.py:4	1	These controls do not manufacture historical records or scientific observations.
-tests/test_private_literature_provider_routing.py:23	1	async def legacy(episode,role,instructions,context,schema):
-tests/test_private_literature_provider_routing.py:29	1	provider=SimpleNamespace(complete=legacy)
-tests/test_private_operational_live_prefixes.py:143	1	def test_completion_verdict_preserves_invalid_historical_and_api_paths(parent,suffix,role):
-tests/test_private_publisher_binding.py:75	1	# Existing A106 provider traversal is independent of the five moved methods.
-tests/test_resource_policy_reopening.py:3	1	These are explicit controlled SQLite records, not claimed historical workflows.
-tools.py:1134	1	from .uniprot_native import legacy_uniprot_records
-tools.py:1155	1	result["projection_qualifications"] = [{"code": "uniprot_legacy_source_version_omitted",
-tools.py:1157	1	"field": "legacy_source", "effect": "qualification"}]
-tools.py:1163	1	"field": "legacy_publication", "effect": effect})
-tools.py:1165	1	def legacy_label(value, fallback, native, pointer):
-tools.py:1171	1	projection_failure(native, pointer, "uniprot_legacy_label_unrepresentable")
-tools.py:1175	1	def legacy_term(namespace, accession, label, kind, native, pointer):
-tools.py:1181	1	projection_failure(native, pointer, "uniprot_legacy_term_unrepresentable")
-tools.py:1188	1	legacy_uniprot_records(parsed, snapshot.content), strict=True):
-tools.py:1191	1	raise ContractError("uniprot_legacy_record_identity_conflict")
-tools.py:1196	1	"uniprot_legacy_reference_unrepresentable", "record_unpublishable")
-tools.py:1201	1	label = legacy_label(protein["organism"] or taxon_id, taxon_id, native,
-tools.py:1203	1	terms.append(legacy_term("ncbi_taxonomy", taxon_id, label, "taxon", native,
-tools.py:1205	1	legacy = native["legacy_publication"]
-tools.py:1206	1	if legacy["source_name"]:
-tools.py:1207	1	terms.append(legacy_term("uniprot_source_name", protein["accession"],
-tools.py:1208	1	legacy["source_name"], "molecular_role", native, legacy["source_name_pointer"]))
-tools.py:1209	1	for ec, pointer in zip(legacy["source_ec_numbers"], legacy["source_ec_number_pointers"], strict=True):
-tools.py:1210	1	terms.append(legacy_term("EC", ec, "EC " + ec, "molecular_role", native, pointer))
-tools.py:1218	1	label = legacy_label(legacy["source_name"] or protein["accession"], protein["accession"],
-tools.py:1219	1	native, legacy["source_name_pointer"])
-tools.py:1233	1	error.get("code") == "uniprot_legacy_reference_unrepresentable" and
-tools.py:196	1	'description': 'Recognize candidate protein sequence blocks in received source text/XML/HTML, preserving original UTF-8 positions. Normalize case, whitespace, numbering and soft hyphens; report exact containment, extra r
-tools.py:522	1	# content, historical child work or a query response.
-uniprot_native_contracts.py:304	1	'legacy_publication': {'$ref': '#/$defs/LegacyPublication'}},
-uniprot_native_contracts.py:313	1	'legacy_publication'],
-uniprot_native_contracts.py:407	1	'LegacyPublication': {'type': 'object',
-uniprot_native.py:321	1	def _legacy_publication(row, pointer, reader):
-uniprot_native.py:626	1	legacy = _legacy_publication(raw, pointer, record_reader)
-uniprot_native.py:630	1	"legacy_publication": legacy})
-uniprot_native.py:781	2	legacy = record["legacy_publication"]
-uniprot_native.py:782	1	_require(legacy["source_name"] is None or legacy["source_name_pointer"] is not None,
-uniprot_native.py:783	1	"legacy_name_pointer_missing")
-uniprot_native.py:784	1	_require(len(legacy["source_ec_numbers"]) == len(legacy["source_ec_number_pointers"]),
-uniprot_native.py:785	1	"legacy_ec_pointer_count_conflict")
-uniprot_native.py:787	1	if legacy["source_name_pointer"] is not None:
-uniprot_native.py:788	1	_require(re.fullmatch(prefix + r"/fullName/value", legacy["source_name_pointer"]) is not None,
-uniprot_native.py:789	1	"legacy_name_pointer_conflict")
-uniprot_native.py:790	1	for ec_pointer in legacy["source_ec_number_pointers"]:
-uniprot_native.py:792	1	"legacy_ec_pointer_conflict")
-uniprot_native.py:803	1	The legacy compatibility helper additionally checks the retained digest.
-uniprot_native.py:870	1	def legacy_uniprot_records(parsed: dict, content: bytes) -> list[dict]:
-uniprot_native.py:891	1	"source_name": legacy["source_name"], "source_ec_numbers": list(legacy["source_ec_numbers"]),
-uniprot_native.py:895	1	"entry_audit": raw.get("entryAudit", {}), "interpretation": legacy["interpretation"]})
+file:line	copies	why it remains	text
+acquisition.py:635	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Legacy keys from the shared native parser; original request is unknown."""
+acquisition.py:636	1	live: current UniProt projection (tools.py, acquisition.py)	from .uniprot_native import legacy_uniprot_records, parse_uniprot_native
+acquisition.py:638	1	live: current UniProt projection (tools.py, acquisition.py)	return legacy_uniprot_records(parsed, content)
+bvbrc_appservice_receipt_values.py:412	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# Host failures are not upgraded by a local representation projection.
+bvbrc_appservice_tool_info.py:99	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# always name their cap; no default or historical rewrite is supplied.
+child_message_owners.py:38	1	live: current commissioning-parent value set by current homes	if role in entries and parent in ('legacy_annotation', 'annotation'):
+decision_context.py:29	2	wording or name not yet reviewed line by line	execute the historical actions or earn their old credit again. The reader
+decision_context.py:39	2	wording or name not yet reviewed line by line	including yield expectations; older estimates remain historical. A bootstrap
+decision_context.py:41	2	comment/docstring wording (mostly history inside one run); class-7 sweep not done	decision_lookup_result supplies only the requested own historical information.
+decision_context.py:62	2	wording or name not yet reviewed line by line	'remain historical. A requested own-history lookup continues this same pending decision. '
+default_scientific_binding.py:60	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# Reconstruct only the actual saved historical choice. Absence in a
+domain.py:386	1	live: current disposition/status vocabulary	"superseded_evidence"]
+domain.py:395	1	wording or name not yet reviewed line by line	'description': 'Optional typed scientific information in this assessment. source_claim names the actual observed/source-reported subject, proposition and conditions, not a transferred target measureme
+episode_binding_graph.py:46	1	live: current commissioning-parent value set by current homes	and binding.commissioning_parent in {'legacy_annotation', 'annotation'}]
+episode_bindings.py:343	1	live: current commissioning-parent value set by current homes	if parent in ('legacy_annotation', 'annotation'):
+episode_bindings.py:349	1	live: current commissioning-parent value set by current homes	and binding.commissioning_parent in {'legacy_annotation', 'annotation'}
+episode_journal.py:179	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# when that row is no longer the newest record. Count only those
+episode_journal.py:181	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# materializing historical requests/results or all timing arrays.
+episode_services.py:522	1	wording or name not yet reviewed line by line	legacy = getattr(owner, 'native_protein_structure_returns', None)
+episode_services.py:523	1	wording or name not yet reviewed line by line	if legacy is not None:
+episode_services.py:525	1	wording or name not yet reviewed line by line	legacy = reader_from_bound_owner(self.workflow, owner)
+episode_services.py:526	1	live: reads forms saved earlier in the same run (traced by pa106c)	return ProteinStructureActionRecords(self.workflow.store, self.workflow.run_id, legacy_returns=legacy)
+episode_work_report.py:307	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# an unrelated current sibling view is not its historical result.
+episode_work_report.py:4	1	wording or name not yet reviewed line by line	not run a calculator, reprice historical work, infer biological support or read a
+evidence_axis_contracts.py:179	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Validate retained draft structure, including withdrawn historical rules.
+evidence_axis_contracts.py:4	1	wording or name not yet reviewed line by line	cites actual witnesses. Validation keeps historical draft records readable; it
+execution_job_submission/api_job_execution/received_evidence.py:48	13	live: reads forms saved earlier in the same run (traced by pa106c)	returns.records._validate_historical(child, form, schema, received_facts=lambda child_context, child_schema: returns.received_facts(child_context, child_schema))
+execution_job_submission/api_job_execution/received_evidence.py:76	13	live: reads forms saved earlier in the same run (traced by pa106c)	returns.records._validate_historical(child, saved, original_schema, received_facts=lambda child_context, child_schema: returns.received_facts(child_context, child_schema))
+execution_job_submission/api_job_execution/task_instructions.py:4	13	wording or name not yet reviewed line by line	INSTRUCTIONS = 'You own an iterative scientific annotation improvement, not a tool itinerary.\nUse the fixed caller material within the parent\'s fixed subject and optional original-coordinate\nsegmen
+execution_job_submission/credit.py:203	12	live: reads forms saved earlier in the same run (traced by pa106c)	historical = self._closed_completion_verdict(context, proof)
+execution_job_submission/credit.py:204	12	live: reads forms saved earlier in the same run (traced by pa106c)	if historical is not None:
+execution_job_submission/credit.py:205	12	live: reads forms saved earlier in the same run (traced by pa106c)	return historical
+execution_job_submission/episode.py:25	5	live: current commissioning-parent value set by current homes	commissioning_parent = 'legacy_annotation'
+execution_progress_assessment/task_instructions.py:43	2	wording or name not yet reviewed line by line	EXCHANGE_HISTORY_GUIDANCE = """Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observation. Read exact previously received outcomes
+execution_timing.py:55	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	Cross-boot subtraction and historical reconstruction are unavailable.
+library/bvbrc_application_return_records.py:3	1	wording or name not yet reviewed line by line	Historical owner checks describe authenticated saved forms. The private caller
+library/bvbrc_application_return_records.py:80	1	live: reads forms saved earlier in the same run (traced by pa106c)	def _validate_historical(self, context, form, schema, *, received_facts):
+library/literature_a106_render.py:120	1	wording or name not yet reviewed line by line	'Historical saved version: another received version explicitly supersedes it. '
+library/literature_a106_subscore_storage.py:254	1	live: current disposition/status vocabulary	superseded = {row['revises_subscore_ref'] for row in rows if row.get('revises_subscore_ref')}
+library/literature_a106_subscore_storage.py:260	1	live: current disposition/status vocabulary	return [row for row in rows if row['sheet_ref'] not in superseded and not any(
+library/literature_a106_subscore_storage.py:461	1	live: current disposition/status vocabulary	heads, superseded = [], set()
+library/literature_a106_subscore_storage.py:467	1	live: current disposition/status vocabulary	superseded.add(saved["selection"]["revises_subscore_ref"])
+library/literature_a106_subscore_storage.py:468	1	live: current disposition/status vocabulary	current_subscores = [ref for ref in heads if ref not in superseded]
+library/literature_amount_inputs.py:215	1	wording or name not yet reviewed line by line	The legacy keyword ``rate`` selects signed scalar bounds/approximation and
+library/literature_assay_grading_inputs.py:384	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# wider estimate rosters and legacy full-model context are not its operands.
+library/literature_assay_grading_inputs.py:530	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# Known-variance likelihood must not silently upgrade estimated uncertainty
+library/literature_assay_grading_render.py:28	1	wording or name not yet reviewed line by line	('Experiment', label or ('Experiment ' + str(experiment_number) if experiment else 'Historical experiment identity unrecorded')),
+library/literature_assay_inputs.py:180	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# quotations remain a supported legacy contract and must still match;
+library/literature_binding_interaction_model_storage.py:107	2	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# Native read has no writes. Avoid its legacy table-installing constructor.
+library/literature_compiled_assay_calculations.py:349	1	live: name of a current value/variable; writer is current code	legacy = deepcopy(extraction)
+library/literature_compiled_assay_calculations.py:350	1	live: current UniProt projection (tools.py, acquisition.py)	legacy['version'] = 'a105_compiled_assay_inputs_v1'
+library/literature_compiled_assay_calculations.py:351	1	live: name of a current value/variable; writer is current code	legacy.pop('covariance_sources')
+library/literature_compiled_assay_calculations.py:352	1	live: current UniProt projection (tools.py, acquisition.py)	legacy['covariance_source'] = None
+library/literature_compiled_assay_calculations.py:354	1	live: current UniProt projection (tools.py, acquisition.py)	legacy['covariance_source'] = deepcopy(full_block)
+library/literature_compiled_assay_calculations.py:355	1	live: current UniProt projection (tools.py, acquisition.py)	data = legacy['covariance_source']['data']
+library/literature_compiled_assay_calculations.py:360	1	live: current UniProt projection (tools.py, acquisition.py)	legacy['variance_status'] = ('unknown' if extraction['variance_status'] == 'unknown'
+library/literature_compiled_assay_calculations.py:362	1	wording or name not yet reviewed line by line	sheet = populate_compiled_assay(legacy)
+library/literature_compiled_assay_calculations.py:404	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# The legacy total/profile still require the distinct residual and supported
+library/literature_compiled_assay_storage.py:34	1	live: name of a current value/variable; writer is current code	from gene_annotation_episode.episodic_workflow.root.a106.library.literature_compiled_assay_inputs import compiled_assay_operation_schema as legacy, common_assessment_population_schema
+library/literature_compiled_assay_storage.py:35	1	live: name of a current value/variable; writer is current code	return {'type': 'object', 'anyOf': [*legacy()['anyOf'], common_assessment_population_schema()]}
+library/literature_controlled_response_inputs.py:1219	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# The legacy ordering (meaning, measurement, context) is retained.
+library/literature_controlled_response_inputs.py:1484	1	wording or name not yet reviewed line by line	legacy = {}
+library/literature_controlled_response_inputs.py:1490	1	live: current UniProt projection (tools.py, acquisition.py)	legacy[key] = {"selector": {**saved["selection"], "witness": original},
+library/literature_controlled_response_inputs.py:1493	1	live: current UniProt projection (tools.py, acquisition.py)	legacy[key] = {**{k:v for k,v in saved["selection"].items() if k != "kind"}, "artifact_ref": saved["artifact_ref"]}
+library/literature_controlled_response_inputs.py:1494	1	wording or name not yet reviewed line by line	if record["canonical_unit"] != "umol/min/mg" or _fraction(record["exact_scale"]) != _definition_scale(legacy) / 1000000:
+library/literature_current_results.py:1	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Present current saved literature results without replaying historical forms.
+library/literature_endpoint_signal_render.py:118	1	live: name of a current value/variable; writer is current code	shown['literature_legacy_figure_contract_work'] = True
+library/literature_figure_measurements.py:92	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Nearest float, optionally moved outward to contain an exact rational."""
+library/literature_gel_inputs.py:385	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	association this validates consistency, not historical pixel/source custody.
+library/literature_intervention_storage.py:78	1	live: current disposition/status vocabulary	heads, superseded = {}, set()
+library/literature_intervention_storage.py:85	2	live: current disposition/status vocabulary	superseded.add(assessment["revises_sheet_ref"])
+library/literature_intervention_storage.py:86	1	live: current disposition/status vocabulary	result = [dict(sheet_ref=ref, **value) for ref, value in heads.items() if ref not in superseded]
+library/literature_measurement_comparison_prompt.py:3	1	wording or name not yet reviewed line by line	MEASUREMENT_COMPARISON_TASK = 'Determine whether the selected experimental estimates measure the same activity of the studied molecule under sufficiently comparable conditions to assess agreement. Sta
+library/literature_measurement_comparison_prompt.py:5	1	wording or name not yet reviewed line by line	INTERPRETATION_QUESTIONS = (('construct', 'Are the selected estimates from the same actual molecular construct, an intended variant, or different molecules? Matching names alone do not establish ident
+library/literature_numerical_contracts.py:160	1	wording or name not yet reviewed line by line	A custom legacy form remains usable through its original literal route. It
+library/literature_optical_inputs.py:190	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# Legacy role='rate' requests the signed scalar lexical grammar only. No
+library/literature_partner_prompt.py:5	1	wording or name not yet reviewed line by line	Use the partner_requirement assessment type across chemical systems and report layouts. Record optional experiment_assessment only with a received reference identifying the actual experiment, a stable
+library/literature_perturbation_assessments.py:102	1	live: current disposition/status vocabulary	heads = [{"sheet_ref": ref, **value} for ref, value in histories.items() if ref not in superseded]
+library/literature_perturbation_assessments.py:87	1	live: current disposition/status vocabulary	histories, superseded = {}, set()
+library/literature_perturbation_prompt.py:21	1	wording or name not yet reviewed line by line	Use the reusable intervention_response assessment type for deletion, inhibition, replacement, reconstitution and restoration experiments. Their design determines which numerical comparisons are meanin
+library/literature_perturbation_prompt.py:25	1	live: current disposition/status vocabulary	Assessments with different assessment_key values can concern the same experiment without revising each other. Follow the explicit revises_sheet_ref chain to establish which assessment is superseded; c
+library/literature_perturbation_summary.py:160	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# Omission preserves historical v2 inputs/payloads exactly. A supplied basis
+library/literature_perturbation_summary.py:463	1	wording or name not yet reviewed line by line	legacy = populate_source_restoration(inputs)
+library/literature_perturbation_summary.py:469	1	live: current UniProt projection (tools.py, acquisition.py)	"error_cap_scale":"unknown","spread_reading":"not_applicable"} for name, cell in legacy["cells"].items()}
+library/literature_perturbation_summary.py:528	1	live: current UniProt projection (tools.py, acquisition.py)	for prefix, a, b, prerequisite in (("perturbation", "W", "K", legacy["cells"]["perturbation_difference"]),
+library/literature_publisher_binding.py:5	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	scientific validators. Historical receipt versions do not call this interface.
+library/literature_publisher_binding.py:87	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	and carries no ownership claim; historical versions retain their own checks.
+library/literature_rate_domains.py:211	1	live: name of a current value/variable; writer is current code	"basis": {"type": "string", "enum": ["reported_point", "reported_censoring", "reported_operand_algebra", "stored_numerical_point", "legacy_stored_cell"]},
+library/literature_rate_storage.py:853	1	wording or name not yet reviewed line by line	raise ContractError("native_rate_return_view_cannot_publish_legacy_table")
+library/literature_rate_storage.py:894	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# Historical cells supply only their actually saved point or
+library/literature_rate_storage.py:902	1	live: name of a current value/variable; writer is current code	domain = _project(interval, basis="legacy_stored_cell", conditioning="stored_source_cell",
+library/literature_ratio_source_validation.py:5	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	arithmetic identities rather than constructing a replacement historical sheet.
+library/literature_reaction_prompt.py:5	1	wording or name not yet reviewed line by line	Use reaction_prediction for measured chemical or isotopologue ratios against specified predictions, and resource_requirement for usable supply against reaction demand. Isotopologue ratios need source-
+library/literature_sheet_updates.py:233	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# its historical calculation and exact declared bindings, and
+library/literature_sheet_updates.py:392	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	Old scientific artifacts and archived report forms remain historical.
+library/literature_source_population_catalog.py:69	1	wording or name not yet reviewed line by line	"description": "Populate the existing source-rate comparison sheet directly from selected literal paper spans, without a prepared CSV/TSV or model-authored scientific numbers. Request literature_rate_
+library/literature_work_report.py:94	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Describe an admitted result without retransmitting historical cell bodies.
+library/live_runtime_functions.py:1	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Bind moved source functions to their authentic live provider namespace.
+library/retained_input_authority/alignment_correspondence.py:296	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""The canonical meanings, independent of legacy field names or sources."""
+library/retained_input_authority/alignment_correspondence.py:316	1	wording or name not yet reviewed line by line	selected[axis] = field('length(union(paired intervals clipped to the supplied selection)) / selection width', ['rows.pairs', 'selected_intervals.' + axis, 'population'], 'fraction', 'explicitly suppli
+library/retained_input_authority/alignment_site_returns.py:33	1	wording or name not yet reviewed line by line	"site_legacy_result_ungraded")
+library/retained_input_authority/atac_differential_result_receipts.py:1	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Selected atac action controls and historical completed-action authority.
+library/retained_input_authority/atac_differential_result_receipts.py:5	3	comment/docstring wording (mostly history inside one run); class-7 sweep not done	Historical checks use frozen controls and Store metadata, never scientific bytes.
+library/retained_input_authority/atac_differential_returns.py:193	5	live: reads forms saved earlier in the same run (traced by pa106c)	def _historical(self, context, form, schema, sources):
+library/retained_input_authority/atac_differential_returns.py:227	5	live: reads forms saved earlier in the same run (traced by pa106c)	values, child_origins = self._historical(child, form, schema, wanted)
+library/retained_input_authority/atac_differential_returns.py:5	2	comment/docstring wording (mostly history inside one run); class-7 sweep not done	runtime records only. Historical delivery never opens scientific artifacts.
+library/retained_input_authority/biopython_pairwise_grader.py:153	1	wording or name not yet reviewed line by line	measurements. Markerless legacy results retain their original required
+library/retained_input_authority/blast_preparation_contracts.py:198	1	wording or name not yet reviewed line by line	_require(parameter['parameter'] in {'nmer', 'ws_hint', 'stride', 'legacy', 'old_style_index', 'output_prefix'}, 'parameter_document_kind')
+library/retained_input_authority/blast_preparation_contracts.py:29	1	wording or name not yet reviewed line by line	OPERATION_PARAMETERS = {('blastdb_aliastool', 'convert_gi_list'): _object({'input_occurrence_id': _STR, 'output_path': _STR}), ('blastdb_aliastool', 'convert_seqid_list'): _object({'input_occurrence_i
+library/retained_input_authority/blast_preparation_contracts.py:31	1	wording or name not yet reviewed line by line	_PARAMETER_TYPES = {**{k: {'type': 'integer'} for k in ('nmer', 'ws_hint', 'stride', 'gap_open', 'gap_extend')}, 'scale': _NUMBER, 'word_score_threshold': _NUMBER, 'matrix': _STR, 'output_prefix': _ST
+library/retained_input_authority/blast_preparation_contracts.py:49	1	wording or name not yet reviewed line by line	index_detail = _object({'input_format': _enum('fasta blastdb'), 'source_database_key': _nullable(_STR), 'input_occurrence_id': _nullable(_STR), 'old_style_index': _BOOL, 'legacy': _BOOL, 'index_member
+library/retained_input_authority/blast_preparation_population.py:181	1	wording or name not yet reviewed line by line	return {**{k: p[k] for k in ('input_format', 'source_database_key', 'input_occurrence_id', 'old_style_index', 'legacy')}, 'index_members': members, 'parameter_observations': [r['parameter_observation'
+library/retained_input_authority/blast_preparation_population.py:387	1	wording or name not yet reviewed line by line	_require(all((detail[k] == p[k] for k in ('input_format', 'source_database_key', 'input_occurrence_id', 'old_style_index', 'legacy'))), 'artifact_set_detail')
+library/retained_input_authority/blast_preparation_population.py:392	1	wording or name not yet reviewed line by line	_require(observation['parameter'] in {'nmer', 'ws_hint', 'stride', 'legacy', 'old_style_index', 'output_prefix'}, 'parameter_document_kind')
+library/retained_input_authority/blast_utility_contracts.py:35	1	wording or name not yet reviewed line by line	_PARAMETERS = {('makeblastdb', 'create_sequence_database'): _object({**_DETAIL['properties'], 'output_prefix': _STR, 'title': _TEXT, 'max_file_size': _nullable(_TEXT)}), ('blastdbcmd', 'extract_sequen
+library/retained_input_authority/blast_vdb_utility_contracts.py:41	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Build detached additive branches without changing any legacy schema."""
+library/retained_input_authority/chromatin_interaction_result_receipts.py:1	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Selected chromatin action controls and historical completed-action authority.
+library/retained_input_authority/enrichr_contracts.py:19	1	wording or name not yet reviewed line by line	QUALIFICATIONS = ('response_incomplete', 'invalid_utf8', 'invalid_json', 'duplicate_json_key', 'response_not_object', 'library_missing', 'library_null', 'library_not_array', 'nonstandard_numeric_token
+library/retained_input_authority/fluorescence_event_contracts.py:22	1	wording or name not yet reviewed line by line	_CONTROL_METRICS = ('control_difference_fraction', 'control_difference_percentage_points', 'legacy_nonnegative_difference_percentage_points')
+library/retained_input_authority/fluorescence_event_contracts.py:352	1	wording or name not yet reviewed line by line	metrics = _CONTROL_METRICS if item['include_legacy_clipping'] else _CONTROL_METRICS[:2]
+library/retained_input_authority/fluorescence_native_report_contracts.py:153	1	wording or name not yet reviewed line by line	kind, metrics = ('control', {'legacy_nonnegative_difference_percentage_points'})
+library/retained_input_authority/fluorescence_native_report_contracts.py:3	1	wording or name not yet reviewed line by line	These declarations never authenticate a historical execution or calculate a
+library/retained_input_authority/fluorescence_result_contracts.py:105	1	wording or name not yet reviewed line by line	keys = {'fraction_requests': 'gate_key denominator', 'intensity_requests': 'gate_key domain_key channel_key', 'control_requests': 'control_key include_legacy_clipping'}[name]
+library/retained_input_authority/fluorescence_result_contracts.py:110	1	wording or name not yet reviewed line by line	elif key == 'include_legacy_clipping':
+library/retained_input_authority/fluorescence_result_receipts.py:137	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Authenticate retained identities without reopening historical scientific bytes."""
+library/retained_input_authority/flux_balance_contracts.py:252	1	wording or name not yet reviewed line by line	native_glpk=_NUMBER, native_optlang=_NUMBER, native_cobra=_NUMBER, native_legacy=_NUMBER,
+library/retained_input_authority/flux_balance_contracts.py:253	1	wording or name not yet reviewed line by line	glpk_minus_calculated=_CELL, optlang_minus_calculated=_CELL, cobra_minus_calculated=_CELL, legacy_minus_calculated=_CELL,
+library/retained_input_authority/flux_balance_contracts.py:254	1	wording or name not yet reviewed line by line	glpk_comparison=_AGREEMENT, optlang_comparison=_AGREEMENT, cobra_comparison=_AGREEMENT, legacy_comparison=_AGREEMENT)
+library/retained_input_authority/flux_balance_execution_inputs.py:4	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	Arbitrary supplied receipt JSON is never accepted as historical authority.
+library/retained_input_authority/flux_balance_operands.py:6	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	does not authenticate a historical Store record. No helper writes or grants it.
+library/retained_input_authority/flux_balance_result_receipts.py:3	3	wording or name not yet reviewed line by line	These durable controls retain outcomes before credit. Historical validation
+library/retained_input_authority/flux_balance_returns.py:137	1	wording or name not yet reviewed line by line	self._require(type(groups) is dict and all((source in groups for source in _LEGACY_SOURCES)), 'original_facts_required')
+library/retained_input_authority/flux_balance_returns.py:158	1	live: reads forms saved earlier in the same run (traced by pa106c)	values, metadata = self._historical_ordinary(context, form, schema, sources)
+library/retained_input_authority/flux_balance_returns.py:28	1	wording or name not yet reviewed line by line	_LEGACY_SOURCES = (PROJECTION_SOURCE, SAVED_SOURCE, 'flux_balance_failures')
+library/retained_input_authority/flux_balance_returns.py:289	1	live: reads forms saved earlier in the same run (traced by pa106c)	values, identities = self._historical_ordinary(child, form, schema, wanted)
+library/retained_input_authority/flux_balance_returns.py:291	1	live: reads forms saved earlier in the same run (traced by pa106c)	values, origins = self._historical(child, form, schema, wanted)
+library/retained_input_authority/flux_balance_returns.py:292	1	wording or name not yet reviewed line by line	identities = {source: [{'identity': canonical({'legacy_source': source, 'value': row}), 'origins': origins.get(canonical(row), [])} for row in rows] for source, rows in values.items()}
+library/retained_input_authority/flux_balance_returns.py:318	1	live: reads forms saved earlier in the same run (traced by pa106c)	def _historical_ordinary(self, context, form, schema, sources):
+library/retained_input_authority/flux_balance_returns.py:5	3	comment/docstring wording (mostly history inside one run); class-7 sweep not done	Historical delivery is independent of the availability of scientific bytes.
+library/retained_input_authority/genomic_overlap_result_receipts.py:1	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Selected overlap action controls and historical completed-action authority.
+library/retained_input_authority/infernal_preparation_schema.py:8	1	wording or name not yet reviewed line by line	PROGRAM_MODES = {'cmbuild': frozenset({'build', 'refine'}), 'cmcalibrate': frozenset({'calibrate', 'forecast', 'memory_estimate', 'split_commands', 'partition_scores', 'merge_scores'}), 'cmconvert': f
+library/retained_input_authority/molecular_sequence_result_contracts.py:1124	1	wording or name not yet reviewed line by line	selection_profile = _N_PROFILE if operation == OPERATIONS[2] else _O_PROFILE if operation == OPERATIONS[3] else _LEGACY_PROFILE
+library/retained_input_authority/molecular_sequence_result_contracts.py:229	2	wording or name not yet reviewed line by line	return _LEGACY_PROFILE
+library/retained_input_authority/molecular_sequence_result_contracts.py:30	1	wording or name not yet reviewed line by line	_LEGACY_PROFILE = 'legacy_v1'
+library/retained_input_authority/molecular_sequence_result_contracts.py:847	1	wording or name not yet reviewed line by line	def molecular_sequence_fact_sources(*, profile=_LEGACY_PROFILE):
+library/retained_input_authority/molecular_sequence_result_contracts.py:849	1	wording or name not yet reviewed line by line	require(profile in (_LEGACY_PROFILE, _N_PROFILE, _O_PROFILE, _PROTEASE_PROFILE, _PLACEMENT_PROFILE))
+library/retained_input_authority/molecular_sequence_result_contracts.py:91	1	wording or name not yet reviewed line by line	def field_table(operation, identity, *, profile=_LEGACY_PROFILE):
+library/retained_input_authority/molecular_sequence_result_contracts.py:93	1	wording or name not yet reviewed line by line	require(profile == _LEGACY_PROFILE or (profile == _N_PROFILE and operation == OPERATIONS[2]) or (profile == _O_PROFILE and operation == OPERATIONS[3]) or (profile == _PROTEASE_PROFILE and operation ==
+library/retained_input_authority/molecular_sequence_result_contracts.py:998	1	wording or name not yet reviewed line by line	projection = obj({'schema': {'type': 'string', 'const': {_LEGACY_PROFILE: PUBLIC_VERSION, _N_PROFILE: N_PUBLIC_VERSION, _O_PROFILE: O_PUBLIC_VERSION, _PROTEASE_PROFILE: PROTEASE_PUBLIC_VERSION, _PLACE
+library/retained_input_authority/native_blast_utility_contracts.py:181	1	wording or name not yet reviewed line by line	if op['version'] != 'blast_utility_operation_v1' or (op['program'], op['mode']) not in LEGACY_MODES:
+library/retained_input_authority/native_blast_utility_contracts.py:25	1	wording or name not yet reviewed line by line	LEGACY_MODES = MODES
+library/retained_input_authority/native_blast_utility_contracts.py:26	1	wording or name not yet reviewed line by line	MODES = LEGACY_MODES + PREPARATION_MODES + VDB_MODES
+library/retained_input_authority/native_blast_utility_contracts.py:320	1	wording or name not yet reviewed line by line	for key, flag in (('full', '-full'), ('no_isam', '-no_isam'), ('legacy_file_checks', '-legacy'), ('require_taxids', '-must_have_taxids'), ('cdd_delta', '-cdd_delta')):
+library/retained_input_authority/native_blast_utility_contracts.py:36	1	live: reads forms saved earlier in the same run (traced by pa106c)	_HISTORICAL_OPERATION_SCHEMA = {'anyOf': [blast_utility_schema_for_version(version) for version in ('blast_utility_operation_v1', 'blast_utility_operation_v2')]}
+library/retained_input_authority/native_blast_utility_contracts.py:37	1	live: reads forms saved earlier in the same run (traced by pa106c)	NATIVE_BLAST_UTILITY_JOB_SCHEMA = _object({'version': {'const': JOB_VERSION}, 'operation': _HISTORICAL_OPERATION_SCHEMA, 'software': SOFTWARE_SCHEMA, 'environment': _ENV, 'inputs': {'type': 'array', '
+library/retained_input_authority/native_blast_utility_contracts.py:391	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Qualify original output bytes, preserving undiscriminated legacy facts.
+library/retained_input_authority/native_blast_utility_contracts.py:50	1	live: reads forms saved earlier in the same run (traced by pa106c)	NATIVE_BLAST_UTILITY_JOB_V2_SCHEMA = _object({'version': {'const': JOB_VERSION_V2}, 'operation': deepcopy(_HISTORICAL_OPERATION_SCHEMA), 'software': SOFTWARE_SCHEMA, 'environment': _ENV, 'inputs': {'t
+library/retained_input_authority/native_blast_utility_materializations.py:125	1	wording or name not yet reviewed line by line	_require(not any((PurePosixPath(s).suffix in {'.nal', '.pal', '.nvl', '.pvl'} for s in sources)), 'database_alias_relocation_unsupported')
+library/retained_input_authority/native_blast_utility_materializations.py:132	1	wording or name not yet reviewed line by line	_require(len(matches) == 1 and relative == prefix_map[matches[0]] + item['source_path'][len(matches[0]):], 'database_copy_relocation_unresolved')
+library/retained_input_authority/native_blast_utility_materializations.py:270	1	wording or name not yet reviewed line by line	args += ['-input', input_paths[p['input_occurrence_id']] if p['input_format'] == 'fasta' else db(p['source_database_key']), '-iformat', p['input_format'], '-old_style_index', str(p['old_style_index'])
+library/retained_input_authority/native_expression_nmf_contracts.py:107	1	wording or name not yet reviewed line by line	legacy = execution.name == 'native.json' and owner['attempt_id'] == digest(owner['operation_key']) and (owner['requested_job_sha256'] == digest(request)) and (execution.parent.name == owner['attempt_i
+library/retained_input_authority/native_expression_nmf_contracts.py:108	1	wording or name not yet reviewed line by line	require((current or legacy) and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME and (owner['attempt_id'] == digest(owner['operation_key'])) and (owner['requested_job_sha256'] == digest(request)),
+library/retained_input_authority/native_fluorescence_contracts.py:225	1	wording or name not yet reviewed line by line	core._keys(row, 'control_key include_legacy_clipping', 'invalid_parameters')
+library/retained_input_authority/native_fluorescence_contracts.py:227	1	wording or name not yet reviewed line by line	require(row['control_key'] in controls and type(row['include_legacy_clipping']) is bool, 'fluorescence_parameter_control_mismatch')
+library/retained_input_authority/native_fluorescence_contracts.py:331	1	wording or name not yet reviewed line by line	require((legacy or terminal_plan_identity(owner, attempt_directory=str(attempt))) and owner['attempt_id'] == digest(owner['operation_key']) and (owner['requested_job_sha256'] == digest(request)), 'flu
+library/retained_input_authority/native_fluorescence_contracts.py:56	1	wording or name not yet reviewed line by line	PARAMETERS_SCHEMA = obj({'fraction_requests': array(obj({'gate_key': TEXT, 'denominator': {'enum': ['parent', 'evaluable']}})), 'intensity_requests': array(obj({'gate_key': TEXT, 'domain_key': TEXT, '
+library/retained_input_authority/native_fluorescence_preparation.py:4	1	wording or name not yet reviewed line by line	handle. Historical validation authenticates saved controls without requiring
+library/retained_input_authority/native_flux_balance_contracts.py:102	1	wording or name not yet reviewed line by line	return {'version': 'flux_balance_environment_binding_v1', 'selection': deepcopy(selection), 'requested_job_sha256': digest(request), 'requested_environment': deepcopy(selected), 'realized_environment'
+library/retained_input_authority/native_flux_balance_contracts.py:119	2	wording or name not yet reviewed line by line	legacy = execution.name == 'native.json' and attempt == execution.parent / ATTEMPT_DIRECTORY_NAME and (execution.parent.name == owner['attempt_id']) and (execution.parent.parent.name == digest({'run':
+library/retained_input_authority/native_flux_balance_contracts.py:120	1	wording or name not yet reviewed line by line	require((legacy or terminal_plan_identity(owner, attempt_directory=str(attempt))) and owner['attempt_id'] == digest(owner['operation_key']) and (owner['requested_job_sha256'] == digest(request)), 'fba
+library/retained_input_authority/native_hmmer_preparation_contracts.py:14	1	wording or name not yet reviewed line by line	PROGRAM_MODES = {'alimask': ('mask_alignment', 'mask_model', 'model_to_alignment', 'alignment_to_model'), 'hmmbuild': ('build_alignment', 'build_single_sequence_matrix'), 'hmmconvert': ('ascii', 'bina
+library/retained_input_authority/native_hmmer_preparation_contracts.py:207	1	wording or name not yet reviewed line by line	if mode == 'legacy_hmmer2' or result['--outfmt'] not in {'3/' + c for c in 'abcdef'}:
+library/retained_input_authority/native_hmmer_preparation_contracts.py:23	1	wording or name not yet reviewed line by line	_MODES = {'hmmbuild': {'build_alignment': [], 'build_single_sequence_matrix': ['--singlemx']}, 'hmmconvert': {'ascii': ['-a'], 'binary': ['-b'], 'legacy_hmmer2': ['-2']}, 'hmmemit': {'sample_core_unal
+library/retained_input_authority/native_hmmer_preparation_contracts.py:347	1	wording or name not yet reviewed line by line	elif program == 'hmmconvert' and mode != 'legacy_hmmer2':
+library/retained_input_authority/native_hmmer_preparation_contracts.py:92	1	wording or name not yet reviewed line by line	fmt = {'ascii': 'hmmer3_ascii', 'binary': 'hmmer_binary', 'legacy_hmmer2': 'hmmer2_ascii'}[mode]
+library/retained_input_authority/native_infernal_preparation_contracts.py:15	1	wording or name not yet reviewed line by line	_MODEL_FORMATS = {'infernal_cm_ascii', 'infernal_cm_legacy_ascii', 'infernal_cm_binary'}
+library/retained_input_authority/native_infernal_preparation_contracts.py:18	1	wording or name not yet reviewed line by line	_MODE_OPTIONS = {'cmcalibrate': {'calibrate': [], 'forecast': ['--forecast'], 'memory_estimate': ['--memreq'], 'split_commands': ['--split'], 'partition_scores': [], 'merge_scores': ['--merge']}, 'cmc
+library/retained_input_authority/native_infernal_preparation_contracts.py:85	1	wording or name not yet reviewed line by line	fmt = {'ascii': 'infernal_cm_ascii', 'binary': 'infernal_cm_binary', 'legacy_ascii': 'infernal_cm_legacy_ascii'}.get(mode, 'hmmer_hmm_ascii')
+library/retained_input_authority/native_protein_structure_results.py:5	1	wording or name not yet reviewed line by line	Receipt proof owns durable action state and historical authority. Scientific
+library/retained_input_authority/native_protein_structure_returns.py:292	1	live: reads forms saved earlier in the same run (traced by pa106c)	def _historical(self, context, form, schema, *, verify_artifacts=False, active=()):
+library/retained_input_authority/native_protein_structure_returns.py:314	1	live: reads forms saved earlier in the same run (traced by pa106c)	values = self._historical(child, form, schema, verify_artifacts=verify_artifacts, active=active)
+library/retained_input_authority/protease_kinetics_result_contracts.py:80	1	wording or name not yet reviewed line by line	meaning = 'Selected retained protease native-fit and separately qualified physical values, with original assay, population, calibration, covariance and uncertainty qualifications even for an empty sel
+library/retained_input_authority/protein_structure_action_records.py:242	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Ordinary action authority, with optional real legacy Results authority."""
+library/retained_input_authority/protein_structure_action_records.py:244	1	live: reads forms saved earlier in the same run (traced by pa106c)	def __init__(self, store, run_id, *, legacy_returns=None):
+library/retained_input_authority/protein_structure_action_records.py:246	1	live: reads forms saved earlier in the same run (traced by pa106c)	if legacy_returns is not None:
+library/retained_input_authority/protein_structure_action_records.py:247	1	live: reads forms saved earlier in the same run (traced by pa106c)	_require(legacy_returns.store is store and legacy_returns.run_id == run_id)
+library/retained_input_authority/protein_structure_action_records.py:248	1	live: reads forms saved earlier in the same run (traced by pa106c)	self.legacy_returns = legacy_returns
+library/retained_input_authority/protein_structure_action_records.py:252	1	live: reads forms saved earlier in the same run (traced by pa106c)	_require(self.legacy_returns is not None)
+library/retained_input_authority/protein_structure_action_records.py:253	1	live: reads forms saved earlier in the same run (traced by pa106c)	return self.legacy_returns.owner
+library/retained_input_authority/protein_structure_action_records.py:262	2	live: reads forms saved earlier in the same run (traced by pa106c)	if self.legacy_returns is not None:
+library/retained_input_authority/protein_structure_action_records.py:263	1	live: reads forms saved earlier in the same run (traced by pa106c)	self.legacy_returns.authenticate(context, allow_unsaved=allow_unsaved)
+library/retained_input_authority/protein_structure_action_records.py:441	1	wording or name not yet reviewed line by line	This view owns no connection or writes. It does not relocate a plan,
+library/retained_input_authority/protein_structure_action_records.py:544	1	live: reads forms saved earlier in the same run (traced by pa106c)	_require(self.legacy_returns is not None, 'sequence_not_received')
+library/retained_input_authority/protein_structure_action_records.py:545	1	live: reads forms saved earlier in the same run (traced by pa106c)	return self.legacy_returns.authenticate_received_sequence(context, descriptor, required_use=required_use)
+library/retained_input_authority/protein_structure_action_records.py:553	1	live: reads forms saved earlier in the same run (traced by pa106c)	_require(self.legacy_returns is not None, 'saved_sheet_not_received')
+library/retained_input_authority/protein_structure_action_records.py:554	1	live: reads forms saved earlier in the same run (traced by pa106c)	value = self.legacy_returns.authenticate_received_saved_sheet(context, descriptor, required_use=required_use)
+library/retained_input_authority/protein_structure_action_records.py:578	1	live: reads forms saved earlier in the same run (traced by pa106c)	return self.legacy_returns.authenticate_received_alignment(context, alignment)
+library/retained_input_authority/protein_structure_action_records.py:606	1	live: reads forms saved earlier in the same run (traced by pa106c)	_require(self.legacy_returns is not None, 'invalid_transform')
+library/retained_input_authority/protein_structure_action_records.py:607	1	live: reads forms saved earlier in the same run (traced by pa106c)	values = self.legacy_returns.received_transform_projections(context, transform)
+library/retained_input_authority/protein_structure_contracts.py:1612	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# These authority types are deliberately defined AFTER the legacy cohort was
+library/retained_input_authority/protein_structure_contracts.py:1613	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# constructed. Default exported definitions and their historical digests stay
+library/retained_input_authority/protein_structure_contracts.py:1653	1	live: name of a current value/variable; writer is current code	legacy = deepcopy(_DEFINITIONS[name])
+library/retained_input_authority/protein_structure_contracts.py:1654	1	live: current UniProt projection (tools.py, acquisition.py)	legacy["properties"]["custody"] = {"$ref": "#/$defs/ResultCustodyV1"}
+library/retained_input_authority/protein_structure_contracts.py:1655	1	wording or name not yet reviewed line by line	definitions[name + "V1"] = legacy
+library/retained_input_authority/protein_structure_contracts.py:1656	1	wording or name not yet reviewed line by line	action = deepcopy(legacy)
+library/retained_input_authority/protein_structure_tools.py:128	1	wording or name not yet reviewed line by line	def _selected_legacy_parameter_reader(authority, transform):
+library/retained_input_authority/protein_structure_tools.py:132	1	live: reads forms saved earlier in the same run (traced by pa106c)	legacy = getattr(authority, 'legacy_returns', None)
+library/retained_input_authority/protein_structure_tools.py:133	1	wording or name not yet reviewed line by line	owner = getattr(legacy, 'owner', None)
+library/retained_input_authority/protein_structure_tools.py:134	1	wording or name not yet reviewed line by line	_require(type(owner) is ExecutionEpisodes and legacy is owner.native_protein_structure_returns and (legacy.results is owner.native_protein_structure_results) and (owner.store is authority.store) and (
+library/retained_input_authority/protein_structure_tools.py:135	1	wording or name not yet reviewed line by line	return dict(version='protein_structure_legacy_parameter_reader_v1', run_id=owner.run_id, directory=str(owner.directory))
+library/retained_input_authority/protein_structure_tools.py:143	1	wording or name not yet reviewed line by line	legacy = transform['received_from']['saved_sheet']['version'] == 'protein_structure_saved_sheet_v1'
+library/retained_input_authority/protein_structure_tools.py:144	1	wording or name not yet reviewed line by line	if not legacy:
+library/retained_input_authority/protein_structure_tools.py:150	1	wording or name not yet reviewed line by line	_require(type(reader) is dict and set(reader) == {'version', 'run_id', 'directory'} and (reader['version'] == 'protein_structure_legacy_parameter_reader_v1') and (reader['run_id'] == context.run_id), 
+library/retained_input_authority/protein_structure_tools.py:152	1	live: reads forms saved earlier in the same run (traced by pa106c)	records = ProteinStructureActionRecords(store, context.run_id, legacy_returns=retained)
+library/retained_input_authority/protein_structure_tools.py:154	1	live: reads forms saved earlier in the same run (traced by pa106c)	if authority.legacy_returns is not None:
+library/retained_input_authority/protein_structure_tools.py:155	1	wording or name not yet reviewed line by line	_require(same(reader, _selected_legacy_parameter_reader(authority, transform)), 'original_commission_mismatch')
+library/retained_input_authority/retained_protein_owner.py:8	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Construct only this owner's unchanged legacy protein read authority.
+library/retained_input_authority/rna_structure_contracts.py:19	1	wording or name not yet reviewed line by line	RNA_ISSUE_MEANINGS = {'not_requested': 'The selected operation did not request this quantity.', UNCERTAINTY_REASON: 'Neither selected single-structure algorithm produces this uncertainty.', 'no_sequen
+library/retained_input_authority/sequence_masking_contracts.py:274	1	wording or name not yet reviewed line by line	_require(value['custody']['order_basis'] in ('native_fasta_iteration', 'caller_declared', 'unknown') and all((r['basis'] in ('native_fasta_iteration', 'caller_declared') for r in value['custody']['rec
+library/retained_input_authority/uniprot_return_contracts.py:654	1	live: current UniProt projection (tools.py, acquisition.py)	'uniprot_legacy_label_unrepresentable',
+library/retained_input_authority/uniprot_return_contracts.py:655	1	live: current UniProt projection (tools.py, acquisition.py)	'uniprot_legacy_term_unrepresentable',
+library/retained_input_authority/uniprot_return_contracts.py:656	1	live: current UniProt projection (tools.py, acquisition.py)	'uniprot_legacy_reference_unrepresentable',
+library/retained_input_authority/uniprot_return_contracts.py:657	1	live: current UniProt projection (tools.py, acquisition.py)	'uniprot_legacy_source_version_omitted']},
+library/retained_input_authority/uniprot_return_contracts.py:672	1	live: current UniProt projection (tools.py, acquisition.py)	'legacy_publication',
+library/retained_input_authority/uniprot_return_contracts.py:673	1	wording or name not yet reviewed line by line	'legacy_source']},
+library/retained_input_authority/uniprot_return_contracts.py:94	1	wording or name not yet reviewed line by line	'FeatureLocationValue': {'type': 'object',
+library/retained_input_authority/uniprot_return_contracts.py:989	1	wording or name not yet reviewed line by line	'value': {'anyOf': [{'$ref': '#/$defs/FeatureLocationValue'},
+local_return_history.py:221	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# a legacy observation's own unit_index is retained only as its
+native_lifecycle.py:428	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Delete transient control files only after the unit is no longer live.
+ncbi_entrez_acquisition.py:534	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# A secondary/base accession does not declare its historical version.
+ncbi_entrez_acquisition.py:544	1	wording or name not yet reviewed line by line	Unknown aliases and qualified historical mappings are unavailable identity,
+ncbi_entrez_acquisition.py:568	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# No undocumented status number or historical replacement is inferred.
+numerical.py:902	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# zero historical fit cannot establish a zero future yield here.
+providers.py:673	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# feedback inside the same decision. Legacy callers still require
+providers.py:723	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# The legacy exchange protocol can carry a newly published process.
+providers.py:814	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Accept a predefined episode renderer without changing legacy calls."""
+received_input_bindings.py:3	1	wording or name not yet reviewed line by line	This binding captures current admitted metadata only. Historical selected versions
+resource_estimation.py:77	1	wording or name not yet reviewed line by line	'Observed minimum/maximum are historical ranges, not calibrated prediction intervals. '
+runtime_prompt.py:23	30	wording or name not yet reviewed line by line	instructions = instructions.replace(old_history_guidance, 'Use request_context exchanges for your own attempt metadata and selected inputs; these create no completed action or observation. Read exact 
+runtime.py:3360	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	freshly remeasured score for historical work.
+scientific_process/from_child_scientific_process.py:63	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# surrounding admission transaction; legacy callers use this boundary.
+scientific_process/from_parent.py:175	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Historical closure permits inspection/replay, never new dispatch."""
+scientific_process_library.py:20	1	live: slot name used by the current process library data	LEGACY_EVIDENCE_SLOT, canonical_slot, _exact,
+scientific_process_library.py:527	1	live: slot name used by the current process library data	if name == 'process.search' and arguments.get('slot') == LEGACY_EVIDENCE_SLOT:
+scientific_process_library.py:67	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# These fields mix useful scientific limits with historical reader
+scientific_process/published_evidence_assessment/to_parent.py:61	14	wording or name not yet reviewed line by line	result = {'literature_kinetic_summary_precision_cells': {'type': 'array', 'meaning': 'Exactly requested source/scenario precision cells for one kinetic summary with actual subject/context, units, phys
+scientific_process_records.py:188	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Parse saved historical revisions without selecting any active process."""
+scientific_process_records.py:25	1	live: slot name used by the current process library data	LEGACY_EVIDENCE_SLOT = "annotation_distinction"
+scientific_process_records.py:26	1	live: slot name used by the current process library data	ALL_SLOTS = (*SLOTS, LEGACY_EVIDENCE_SLOT)
+scientific_process_records.py:27	1	live: slot name used by the current process library data	_PREFIXES = {"evidence_axis": "A", LEGACY_EVIDENCE_SLOT: "A", "thought_pattern": "P"}
+scientific_process_records.py:40	1	live: slot name used by the current process library data	return 'evidence_axis' if value == LEGACY_EVIDENCE_SLOT else value
+scientific_process/tests/test_private_head_applicability.py:1	1	test text; not swept	"""Actual fresh head actions and preserved historical/vector state are distinct."""
+scientific_process/tests/test_private_head_applicability.py:19	1	test text; not swept	scientific_process_binding=binding,job_episodes=SimpleNamespace(commission_schemas=lambda schema:pytest.fail('head cannot acquire a legacy job_child')),
+scientific_process/tests/test_private_head_applicability.py:31	1	test text; not swept	task.feedback={'actual':'historical failure'} if vector else None
+scientific_process/tests/test_private_head_applicability.py:38	1	test text; not swept	wf.journal.row=lambda *args:{'action':json.dumps({'kind':'job_child','role':'legacy-job'})}
+scientific_process/tests/test_private_head_applicability.py:49	1	test text; not swept	wf.job_episode_options=lambda source:{'legacy_job':{'not_in_current_schema':True}}
+scientific_process/tests/test_private_head_applicability.py:60	1	test text; not swept	def test_current_head_state_does_not_present_unavailable_legacy_job_choices():
+scientific_process/tests/test_private_head_applicability.py:64	1	live: reads forms saved earlier in the same run (traced by pa106c)	def test_head_state_retains_original_vector_and_historical_job_result_summary():
+scientific_support_metadata.py:1	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	"""Historical instruction validation and explicit scoring-route availability.
+shared_information.py:20	1	live: current disposition/status vocabulary	DISPOSITIONS = ('partially_fulfilled', 'fulfilled', 'unavailable', 'superseded')
+shared_information.py:31	1	live: current disposition/status vocabulary	'description':'Operational reason for unavailable or superseded information. Evidence results and qualifications come from saved grading, not a rewritten assessment.'}},
+shared_information.py:33	1	live: current disposition/status vocabulary	disposition['allOf'] = [{'if':{'properties':{'status':{'enum':['unavailable','superseded']}}},
+shared_information.py:41	1	wording or name not yet reviewed line by line	{'name':TOOLS[2],'description':'Answer a need addressed to this parent by selecting evidence it actually received. Fulfilled and partially fulfilled replies carry saved results and their qualification
+shared_information.py:45	1	wording or name not yet reviewed line by line	{'name':TOOLS[4],'description':'Page existing parent/child exchange metadata omitted from the automatic preview. This is historical navigation, not polling for a promised reply, and delivers no scient
+shared_information_results.py:50	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	later delivery or revision cannot enter this action's historical result.
+state.py:1465	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# Keep the historical digest labels so existing account IDs stay stable.
+state.py:436	1	wording or name not yet reviewed line by line	historical and current-only inventories coincide. ``references`` OR-
+state.py:591	1	wording or name not yet reviewed line by line	for ownership/credit are normalized unions. Legacy unmapped products can
+tests/perturbation_summary_fixtures.py:3	1	test text; not swept	Moved verbatim from test_literature_perturbation_summary_integration. These are
+tests/test_private_api_credit_ownership.py:88	1	test text; not swept	context=SimpleNamespace();selection={'declared':'original selection'};saved={'credit':-1.25,'historical':'controlled saved view'};calls=[]
+tests/test_private_api_report_callbacks.py:4	1	test text; not swept	These controls do not manufacture historical records or scientific observations.
+tests/test_private_literature_provider_routing.py:23	1	test text; not swept	async def legacy(episode,role,instructions,context,schema):
+tests/test_private_literature_provider_routing.py:29	1	test text; not swept	provider=SimpleNamespace(complete=legacy)
+tests/test_private_operational_live_prefixes.py:143	1	live: reads forms saved earlier in the same run (traced by pa106c)	def test_completion_verdict_preserves_invalid_historical_and_api_paths(parent,suffix,role):
+tests/test_private_publisher_binding.py:75	1	test text; not swept	# Existing A106 provider traversal is independent of the five moved methods.
+tests/test_resource_policy_reopening.py:3	1	test text; not swept	These are explicit controlled SQLite records, not claimed historical workflows.
+tools.py:1134	1	live: current UniProt projection (tools.py, acquisition.py)	from .uniprot_native import legacy_uniprot_records
+tools.py:1155	1	live: current UniProt projection (tools.py, acquisition.py)	result["projection_qualifications"] = [{"code": "uniprot_legacy_source_version_omitted",
+tools.py:1157	1	wording or name not yet reviewed line by line	"field": "legacy_source", "effect": "qualification"}]
+tools.py:1163	1	live: current UniProt projection (tools.py, acquisition.py)	"field": "legacy_publication", "effect": effect})
+tools.py:1165	1	live: current UniProt projection (tools.py, acquisition.py)	def legacy_label(value, fallback, native, pointer):
+tools.py:1171	1	live: current UniProt projection (tools.py, acquisition.py)	projection_failure(native, pointer, "uniprot_legacy_label_unrepresentable")
+tools.py:1175	1	live: current UniProt projection (tools.py, acquisition.py)	def legacy_term(namespace, accession, label, kind, native, pointer):
+tools.py:1181	1	live: current UniProt projection (tools.py, acquisition.py)	projection_failure(native, pointer, "uniprot_legacy_term_unrepresentable")
+tools.py:1188	1	live: current UniProt projection (tools.py, acquisition.py)	legacy_uniprot_records(parsed, snapshot.content), strict=True):
+tools.py:1191	1	live: current UniProt projection (tools.py, acquisition.py)	raise ContractError("uniprot_legacy_record_identity_conflict")
+tools.py:1196	1	live: current UniProt projection (tools.py, acquisition.py)	"uniprot_legacy_reference_unrepresentable", "record_unpublishable")
+tools.py:1201	1	live: current UniProt projection (tools.py, acquisition.py)	label = legacy_label(protein["organism"] or taxon_id, taxon_id, native,
+tools.py:1203	1	live: current UniProt projection (tools.py, acquisition.py)	terms.append(legacy_term("ncbi_taxonomy", taxon_id, label, "taxon", native,
+tools.py:1205	1	live: current UniProt projection (tools.py, acquisition.py)	legacy = native["legacy_publication"]
+tools.py:1206	1	live: current UniProt projection (tools.py, acquisition.py)	if legacy["source_name"]:
+tools.py:1207	1	live: current UniProt projection (tools.py, acquisition.py)	terms.append(legacy_term("uniprot_source_name", protein["accession"],
+tools.py:1208	1	live: current UniProt projection (tools.py, acquisition.py)	legacy["source_name"], "molecular_role", native, legacy["source_name_pointer"]))
+tools.py:1209	1	live: current UniProt projection (tools.py, acquisition.py)	for ec, pointer in zip(legacy["source_ec_numbers"], legacy["source_ec_number_pointers"], strict=True):
+tools.py:1210	1	live: current UniProt projection (tools.py, acquisition.py)	terms.append(legacy_term("EC", ec, "EC " + ec, "molecular_role", native, pointer))
+tools.py:1218	1	live: current UniProt projection (tools.py, acquisition.py)	label = legacy_label(legacy["source_name"] or protein["accession"], protein["accession"],
+tools.py:1219	1	live: current UniProt projection (tools.py, acquisition.py)	native, legacy["source_name_pointer"])
+tools.py:1233	1	live: current UniProt projection (tools.py, acquisition.py)	error.get("code") == "uniprot_legacy_reference_unrepresentable" and
+tools.py:522	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	# content, historical child work or a query response.
+uniprot_native_contracts.py:304	1	live: current UniProt projection (tools.py, acquisition.py)	'legacy_publication': {'$ref': '#/$defs/LegacyPublication'}},
+uniprot_native_contracts.py:313	1	live: current UniProt projection (tools.py, acquisition.py)	'legacy_publication'],
+uniprot_native_contracts.py:407	1	live: current UniProt projection (tools.py, acquisition.py)	'LegacyPublication': {'type': 'object',
+uniprot_native.py:321	1	live: current UniProt projection (tools.py, acquisition.py)	def _legacy_publication(row, pointer, reader):
+uniprot_native.py:626	1	live: current UniProt projection (tools.py, acquisition.py)	legacy = _legacy_publication(raw, pointer, record_reader)
+uniprot_native.py:630	1	live: current UniProt projection (tools.py, acquisition.py)	"legacy_publication": legacy})
+uniprot_native.py:781	2	live: current UniProt projection (tools.py, acquisition.py)	legacy = record["legacy_publication"]
+uniprot_native.py:782	1	live: current UniProt projection (tools.py, acquisition.py)	_require(legacy["source_name"] is None or legacy["source_name_pointer"] is not None,
+uniprot_native.py:783	1	live: current UniProt projection (tools.py, acquisition.py)	"legacy_name_pointer_missing")
+uniprot_native.py:784	1	live: current UniProt projection (tools.py, acquisition.py)	_require(len(legacy["source_ec_numbers"]) == len(legacy["source_ec_number_pointers"]),
+uniprot_native.py:785	1	live: current UniProt projection (tools.py, acquisition.py)	"legacy_ec_pointer_count_conflict")
+uniprot_native.py:787	1	live: current UniProt projection (tools.py, acquisition.py)	if legacy["source_name_pointer"] is not None:
+uniprot_native.py:788	1	live: current UniProt projection (tools.py, acquisition.py)	_require(re.fullmatch(prefix + r"/fullName/value", legacy["source_name_pointer"]) is not None,
+uniprot_native.py:789	1	live: current UniProt projection (tools.py, acquisition.py)	"legacy_name_pointer_conflict")
+uniprot_native.py:790	1	live: current UniProt projection (tools.py, acquisition.py)	for ec_pointer in legacy["source_ec_number_pointers"]:
+uniprot_native.py:792	1	live: current UniProt projection (tools.py, acquisition.py)	"legacy_ec_pointer_conflict")
+uniprot_native.py:803	1	comment/docstring wording (mostly history inside one run); class-7 sweep not done	The legacy compatibility helper additionally checks the retained digest.
+uniprot_native.py:870	1	live: current UniProt projection (tools.py, acquisition.py)	def legacy_uniprot_records(parsed: dict, content: bytes) -> list[dict]:
+uniprot_native.py:891	1	live: current UniProt projection (tools.py, acquisition.py)	"source_name": legacy["source_name"], "source_ec_numbers": list(legacy["source_ec_numbers"]),
+uniprot_native.py:895	1	live: current UniProt projection (tools.py, acquisition.py)	"entry_audit": raw.get("entryAudit", {}), "interpretation": legacy["interpretation"]})

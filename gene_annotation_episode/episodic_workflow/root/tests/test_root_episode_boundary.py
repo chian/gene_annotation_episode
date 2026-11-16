@@ -12,14 +12,13 @@ from types import SimpleNamespace
 import pytest
 from jsonschema import Draft202012Validator
 
-from gene_annotation_episode.episodic_workflow.root import runtime
+from gene_annotation_episode.episodic_workflow.root import run_execution, runtime, saved_run_assembly, task_decision, workflow_values
 from gene_annotation_episode.episodic_workflow.root.composition_information import (
     ROOT_BOUNDARY_VERSION, child_options, lookup_schema, metadata_catalog)
 from gene_annotation_episode.episodic_workflow.root.episode_contract_information import validate_saved_fact_form
 from gene_annotation_episode.episodic_workflow.root.execution_service_setup import ExecutionServiceFactory
 from gene_annotation_episode.episodic_workflow.root.scientific_process_library import ScientificProcessLibrary
 from gene_annotation_episode.episodic_workflow.root.scientific_process_setup import prepare_scientific_binding
-from gene_annotation_episode.episodic_workflow.root.scientific_process.episode import ScientificProcessEpisodes
 from gene_annotation_episode.episodic_workflow.root.scoring import SignedEvidenceRootSupport
 from gene_annotation_episode.state import Store
 from gene_annotation_episode.episodic_workflow.root.tool_registry import ToolRegistry
@@ -127,7 +126,7 @@ def test_combined_root_child_form_comes_from_declared_facts(tmp_path):
         assert set(form['properties']) == set(sources)
         assert all(form['properties'][name] == {'$ref': 'episode-fact:' + name}
             for name in sources)
-        facts = runtime.common_fact_sources()
+        facts = workflow_values.common_fact_sources()
         facts['scientific_process_results'] = {'type': 'array', 'meaning': 'Axis results',
             'report_schema': {'type': 'array', 'items': {'type': 'string',
                 'format': 'reference'}, 'x-source': 'scientific_process_results'}}
@@ -151,7 +150,7 @@ def test_metadata_then_real_child_translation_typed_return_and_root_reason(tmp_p
         tools = ToolRegistry(store, run_directory=store.path / 'tool-run')
         source, run_dir = tmp_path/'fixture-source', tmp_path/'run'
         independent_source(source)
-        descriptor = prepare_scientific_binding(episode_type=ScientificProcessEpisodes, run_directory=run_dir, source_directory=source,
+        descriptor = prepare_scientific_binding(run_directory=run_dir, source_directory=source,
             tool_catalog=tools.catalog(), child_roles=('scientific_process',))
         library = ScientificProcessLibrary(run_dir/'scientific-process-library')
         scope = {'subject_refs': [target]}
@@ -210,7 +209,7 @@ def test_metadata_then_real_child_translation_typed_return_and_root_reason(tmp_p
                 'subject_ref': target, 'code': 11, 'start': 0, 'end': 9,
                 'strand': '+', 'frame': 0, 'cds': True}}, {'products': [], 'observations': []}),
             child_reports_derived_records, parent_interprets])
-        result = asyncio.run(runtime.run_workflow(store, tools, provider=provider, run_dir=run_dir,
+        result = asyncio.run(run_execution.run_workflow(store, tools, provider=provider, run_dir=run_dir,
             controller_factory=controller, project_credit=zero,
             episode_binding_descriptors=[descriptor], annotation_child_roles=('scientific_process',),
             episode_record_receipts=True, initial_known_record_refs=[],
@@ -224,7 +223,7 @@ def test_metadata_then_real_child_translation_typed_return_and_root_reason(tmp_p
         assert store.db.execute("SELECT count(*) FROM records WHERE record_type='hypothesis'").fetchone()[0] == 1
         saved = json.loads((run_dir/'run.json').read_text())
         assert saved['root_action_boundary'] == ROOT_BOUNDARY_VERSION
-        reconstruction = runtime.assemble_workflow(store, tools, object(), run_dir, saved['run_id'], saved,
+        reconstruction = saved_run_assembly.assemble_workflow(store, tools, object(), run_dir, saved['run_id'], saved,
             controller_factory=controller, project_credit=zero,
             episode_binding_descriptors=saved['episode_bindings'],
             annotation_child_roles=('scientific_process',), episode_record_receipts=True,
@@ -260,21 +259,21 @@ def test_recovery_reuses_metadata_reply_without_an_action_or_duplicate_lookup(tm
         target, = store.create_problem(raw_sequence='ATGAAATAA', molecule='dna')['subject_refs']
         tools, run_dir = ToolRegistry(store, run_directory=store.path / 'tool-run'), tmp_path/'run'
         lookups = []
-        original = runtime.child_option_information
+        original = task_decision.child_option_information
 
         def counted(workflow, source, role=None):
             if role is not None:
                 lookups.append(role)
             return original(workflow, source, role)
 
-        monkeypatch.setattr(runtime, 'child_option_information', counted)
+        monkeypatch.setattr(task_decision, 'child_option_information', counted)
         options = dict(run_dir=run_dir, controller_factory=one_action_controller,
             project_credit=zero, episode_binding_factories=(),
             goal='Synthetic recovery', decision_protocol='decision_exchange_v1')
         first = ConversationProvider([lookup({'view': 'child_options', 'role': 'improvement'}),
             RuntimeError('fixture interrupted transport')])
         with pytest.raises(RuntimeError, match='fixture interrupted transport'):
-            asyncio.run(runtime.run_workflow(store, tools, provider=first, **options))
+            asyncio.run(run_execution.run_workflow(store, tools, provider=first, **options))
         assert lookups == ['improvement']
         assert table_count(store, 'runtime_actions') == table_count(store, 'runtime_observations') == 0
 
@@ -287,7 +286,7 @@ def test_recovery_reuses_metadata_reply_without_an_action_or_duplicate_lookup(tm
                 'alias': 'input_molecule', 'subject_refs': [target], 'predicate': 'molecule_type',
                 'value': {'type': 'enum', 'value': 'dna'}, 'context_refs': []}])})
 
-        result = asyncio.run(runtime.run_workflow(store, tools,
+        result = asyncio.run(run_execution.run_workflow(store, tools,
             provider=ConversationProvider([restored]), resume=True, **options))
         assert result['completed_actions'] == 1 and lookups == ['improvement']
         assert table_count(store, 'runtime_actions') == table_count(store, 'runtime_observations') == 1

@@ -113,7 +113,6 @@ _ENTRY = obj({
     'transfer_chain': obj({name: TEXT for name in _CHAIN_FIELDS}),
     'evidence': rows(_SOURCE, minimum=1),
 })
-# Older immutable definitions remain readable without a scoring proposal.
 _ENTRY['properties']['scoring_rubric'] = _SCORING
 
 

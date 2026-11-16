@@ -62,7 +62,7 @@ def h(tmp_path):
         f.persist(launch)
         f.commission(f.root, launch)
         native = f.context((*launch.path, ('launch_local', 'child_0')), assignment,
-            __import__('gene_annotation_episode.episodic_workflow.root.runtime', fromlist=['TypedReportContract']).TypedReportContract(
+            __import__('gene_annotation_episode.episodic_workflow.root.workflow_values', fromlist=['TypedReportContract']).TypedReportContract(
                 'Return original practical handoff', schema_for(FAILURE_SOURCE), lambda *_: True), launch)
         f.commission(launch, native)
         operation = f'{f.run_id}:{native.episode_id}:0'

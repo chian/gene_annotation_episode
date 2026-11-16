@@ -1,7 +1,6 @@
 """Versioned scientific ownership of comparative and experimental structure.
 
-This contract contains no execution policy or new scientific score. Historical
-A102/A111 publications and calculation versions keep their original meanings.
+This contract contains no execution policy or new scientific score.
 """
 from copy import deepcopy
 

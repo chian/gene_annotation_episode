@@ -1,7 +1,7 @@
 """Original returned action information custody for the parent and compatible sources."""
 
 def receive_outcome(self, source, selection, result, index):
-    if self.progress_provider is not None and self.progress_receipt_order == 'received_progress_order_v1':
+    if self.progress_provider is not None:
         self.progress_provider.receive_outcome(source.episode_id, result, source.scope, f'{self.run_id}:{source.episode_id}:{index}:own_progress')
     if self.receipts is not None and (not self.is_job_source(source)):
         references = list(result.get('record_refs', []))

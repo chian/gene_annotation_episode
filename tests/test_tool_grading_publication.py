@@ -96,7 +96,7 @@ def test_real_pairwise_worker_retains_complete_sheet_on_existing_observation(tmp
         assert registry.execute("sequence.align", args, operation_key="align") == result
         assert store.count("observation") == 1 and operation_count(store, "sequence.align") == 1
         assert "sheet" not in result["result"] and "scores" not in result["result"]
-        assert result["result"]["local_job"]["policy"]["memory_bytes"] == 20 * 1024**3
+        assert result["result"]["local_job"]["policy"]["memory_bytes"] == 5 * 1024**3
         assert result["result"]["local_job"]["policy"]["scratch_bytes"] == 4 * 1024**3
     with Store(directory) as store:
         saved = only_grading(store, source["id"])

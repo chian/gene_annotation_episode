@@ -143,7 +143,6 @@ class BVBRCMinhashService:
                 if not result:
                     raise ContractError("minhash_result_selector_invalid")
                 validate_minhash_pair_metadata(selector["pair_metadata"], request=original)
-        # Preserve historical launch and legacy {} result intents byte for byte.
         prepared = {"operation": name, "request": original, "rpc_request": rpc,
             "mutates_remote": not result, "cache_original": result}
         if result and selector:

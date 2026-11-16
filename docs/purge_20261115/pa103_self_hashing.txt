@@ -1,0 +1,254 @@
+bvbrc_genome_alignment_returns.py:162:    pin = inputs.get('adapter_implementation_sha256')
+ordinary_execution.py:63:            resource_id=self.resource_id, implementation_sha256=implementation,
+ordinary_execution.py:104:            implementation_sha256=implementation, parameters_sha256=_sha(parameters),
+native_blast_standard_database_result_worker.py:67:    input_implementation_sha256=views.SHA, implementation_manifest_sha256=views.SHA, sequence_model=_MODEL,
+native_blast_standard_database_result_worker.py:122:def standard_blast_database_calculation_identity(*, input_identity: str, input_implementation_sha256: str,
+native_blast_standard_database_result_worker.py:124:    for digest in (input_identity, input_implementation_sha256, implementation_manifest_sha256): _shape(digest, views.SHA)
+native_blast_standard_database_result_worker.py:127:        input_identity=input_identity, input_implementation_sha256=input_implementation_sha256))
+native_blast_standard_database_result_worker.py:294:        input_implementation_sha256=manifest["input_implementation_sha256"], sequence_model=manifest["sequence_model"],
+native_blast_standard_database_result_worker.py:331:    return values["collection"], sheets, manifest["input_implementation_sha256"]
+native_blast_standard_database_result_worker.py:422:    initial = standard_blast_database_calculation_identity(input_identity=input_id, input_implementation_sha256=input_impl,
+native_blast_standard_database_result_worker.py:426:        input_interpretation_id=initial["input_interpretation_id"], input_implementation_sha256=input_impl,
+native_blast_standard_database_result_worker.py:476:        ids = standard_blast_database_calculation_identity(input_identity=input_id, input_implementation_sha256=input_impl,
+native_blast_standard_database_result_worker.py:478:        manifest.update(input_implementation_sha256=input_impl, input_interpretation_id=ids["input_interpretation_id"])
+bvbrc_homology_bundle_adapter.py:47:def implementation_sha256() -> str:
+bvbrc_homology_bundle_adapter.py:744:           "requested_form_schema", "validate_requested_form", "implementation_sha256", "consume_bundle"]
+acquisition.py:174:            'adapter_module': __name__, 'adapter_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+bvbrc_proteome_bundle_adapter_v2.py:31:def implementation_sha256():
+bvbrc_proteome_bundle_adapter_v2.py:49:           'requested_form_schema','validate_requested_form','implementation_sha256','consume_bundle']
+bvbrc_appservice_adapters.py:23:        if implementation.implementation_sha256() != row['implementation_sha256']:
+bvbrc_appservice_adapters.py:25:        bound[key] = (implementation, row['implementation_sha256'])
+episode.py:56:                'implementation_sha256': sha256(b''.join(path.read_bytes() for path in files)).hexdigest()}
+bvbrc_comparative_systems_bundle_adapter.py:34:def implementation_sha256():
+bvbrc_comparative_systems_bundle_adapter.py:37:        raw = Path(__file__).with_name(name).read_bytes()
+bvbrc_comparative_systems_bundle_adapter.py:42:__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "implementation_sha256", "parameters_schema",
+execution_progress.py:1126:            'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+run_statistics.py:65:    implementation_sha256: str | None
+run_statistics.py:81:        if self.implementation_sha256 is not None:
+run_statistics.py:82:            _hash(self.implementation_sha256)
+execution_recording.py:141:            implementation_sha256=configuration['executable']['sha256'],
+native_blast_database_result_worker.py:206:def native_blast_database_calculation_identity(*, input_identity, input_implementation_sha256, sequence_model, implementation_manifest_sha256, vdb_function_m
+native_blast_database_result_worker.py:208:    for digest in (input_identity, input_implementation_sha256, implementation_manifest_sha256):
+native_blast_database_result_worker.py:212:        input_identity=input_identity, input_implementation_sha256=input_implementation_sha256))
+native_blast_database_result_worker.py:1279:        input_interpretation_id=_views._SHA, input_implementation_sha256=_views._SHA, implementation_manifest_sha256=_views._SHA,
+native_blast_database_result_worker.py:1490:        input_implementation_sha256=manifest["input_implementation_sha256"], sequence_model=manifest["sequence_model"],
+native_blast_database_result_worker.py:1545:    return values["collection"], values["sheets"], manifest["input_implementation_sha256"], manifest["version"], saved_calculations
+native_blast_database_result_worker.py:1583:        input_implementation_sha256=input_implementation, sequence_model=request["sequence_model"],
+native_blast_database_result_worker.py:1589:        input_interpretation_id=initial["input_interpretation_id"], input_implementation_sha256=input_implementation,
+native_blast_database_result_worker.py:1659:        identities = native_blast_database_calculation_identity(input_identity=input_identity, input_implementation_sha256=input_implementation,
+native_blast_database_result_worker.py:1662:        manifest.update(input_implementation_sha256=input_implementation, input_interpretation_id=identities["input_interpretation_id"])
+bvbrc_genome_alignment_bundle_adapter.py:63:def implementation_sha256() -> str:
+bvbrc_genome_alignment_bundle_adapter.py:67:        content = Path(__file__).with_name(name).read_bytes()
+bvbrc_genome_alignment_bundle_adapter.py:73:    'requested_form_schema', 'validate_requested_form', 'consume_bundle', 'implementation_sha256']
+bvbrc_appservice_contracts.py:362:        _require(value["adapter"] is not None or value["adapter_implementation_sha256"] is None,
+homology_progress.py:65:            'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+homology_results.py:288:        worker_fingerprint = hashlib.sha256(b''.join((Path(__file__).resolve().parent/name).read_bytes()
+homology_results.py:304:            'parser_implementation_sha256': worker_fingerprint}
+bvbrc_appservice_publication.py:146:            'adapter_implementation_sha256': None if adapter is None else adapter[1]})
+bvbrc_appservice_publication.py:186:        if value['adapter_implementation_sha256'] is not None:
+bvbrc_appservice_publication.py:191:                'implementation_sha256': value['adapter_implementation_sha256']} for row in configured),
+bvbrc_appservice_publication.py:205:        if inputs['adapter_implementation_sha256'] is None:
+bvbrc_appservice_publication.py:208:        _require(binding is not None and binding[1] == inputs['adapter_implementation_sha256'],
+bvbrc_appservice_publication.py:385:                _require(inputs['adapter_implementation_sha256'] is not None
+bvbrc_appservice_publication.py:449:            'implementation_sha256': inputs['adapter_implementation_sha256']})
+a103_resource_implementation.py:22:            own = sorted((directory / home).glob('*.py'))
+bvbrc_proteome_bundle_adapter.py:38:def implementation_sha256() -> str:
+bvbrc_proteome_bundle_adapter.py:42:        raw = Path(__file__).with_name(name).read_bytes()
+bvbrc_proteome_bundle_adapter.py:47:__all__ = ["ADAPTER_ID", "ADAPTER_VERSION", "consume_bundle", "implementation_sha256", "parameters_schema",
+bvbrc_proteome_returns.py:229:    pin = inputs.get('adapter_implementation_sha256')
+bvbrc_proteome_returns.py:294:        pin = body['publication_inputs'].get('adapter_implementation_sha256')
+bvbrc_proteome_returns.py:300:            'implementation_sha256': pin}) for row in configuration.get('scientific_adapters', [])),
+a103_hpc_worker.py:37:        'request_sha256': sha(raw_request), 'worker_sha256': sha(Path(__file__).read_bytes()),
+a103_hpc_worker.py:55:                require(sha(Path(__file__).read_bytes()) == expected, 'a103_hpc_worker_conflict')
+execution_memory.py:219:            'implementation': scope.implementation_sha256 or 'unknown:'+scope.ref,
+hpc_scientific_commission.py:13:               implementation_sha256, parameters, files, worker_name, request_name,
+hpc_scientific_commission.py:21:        ('code_manifest_sha256',implementation_sha256))]
+hpc_scientific_commission.py:24:            'implementation':implementation_sha256,'parameters':digest(parameters),'hardware':hardware},
+episode_composition.py:67:    fields = {'version', 'binding_id', 'implementation_sha256', 'configuration'}
+episode_composition.py:73:            and type(actual['implementation_sha256']) is str
+episode_composition.py:74:            and len(actual['implementation_sha256']) == 64
+episode_composition.py:75:            and all(character in '0123456789abcdef' for character in actual['implementation_sha256'])
+episode_composition.py:88:    if (set(descriptor) != {'version', 'binding_id', 'implementation_sha256', 'configuration'}
+episode_composition.py:179:            fields.add('implementation_sha256')
+episode_composition.py:187:            fingerprint = descriptor['implementation_sha256']
+independent_execution.py:30:def implementation_sha256():
+independent_execution.py:38:    files = sorted(path for path in root.rglob('*.py')
+independent_execution.py:99:        'implementation_sha256': implementation_sha256(), 'settings_sha256': content_digest(settings)}
+independent_execution.py:300:    if binding['implementation_sha256'] != implementation_sha256():
+independent_execution.py:456:__all__ = ['make_runtime_binding', 'open_commission', 'implementation_sha256', 'VERSION']
+bvbrc_comparative_systems_host_inputs.py:122:    _require(binding is not None and binding[1] == inputs['adapter_implementation_sha256'], 'adapter_pin_conflict')
+bvbrc_comparative_systems_returns.py:223:    pin = inputs.get('adapter_implementation_sha256')
+bvbrc_comparative_systems_returns.py:275:        pin = body['publication_inputs'].get('adapter_implementation_sha256')
+bvbrc_comparative_systems_returns.py:281:            'implementation_sha256': pin}) for row in configuration.get('scientific_adapters', [])),
+native_blast_database_result_publication.py:351:            input_implementation_sha256=implementation['manifest_sha256'], sequence_model=request['sequence_model'],
+native_blast_database_result_publication.py:367:        'input_implementation_sha256', 'implementation_manifest_sha256', 'sequence_model', 'artifacts', 'counts', 'failures'}
+native_blast_database_result_publication.py:385:        input_implementation_sha256=value['input_implementation_sha256'], sequence_model=value['sequence_model'],
+native_blast_database_result_publication.py:540:        input_implementation_sha256=frozen['manifest']['input_implementation_sha256'], sequence_model=request['sequence_model'],
+application_execution_binding.py:52:                      'implementation_sha256', 'settings_sha256'}:
+application_execution_binding.py:61:    for field in ('implementation_sha256', 'settings_sha256'):
+application_execution_binding.py:133:        'implementation_sha256': reconstruction.implementation_sha256(),
+application_execution_binding.py:138:    if selection['implementation_sha256'] != reconstruction.implementation_sha256():
+application_execution_binding.py:139:        raise _failure('identity_conflict', 'implementation_sha256')
+application_execution_binding.py:154:            or binding['implementation_sha256'] != selection['implementation_sha256']
+native_blast_standard_database_result_publication.py:320:            input_implementation_sha256=implementation['manifest_sha256'], sequence_model=request['sequence_model'],
+native_blast_standard_database_result_publication.py:338:        'input_implementation_sha256', 'implementation_manifest_sha256', 'sequence_model', 'artifacts', 'counts', 'failures'}
+native_blast_standard_database_result_publication.py:350:        input_implementation_sha256=value['input_implementation_sha256'], sequence_model=value['sequence_model'],
+execution_job_submission/local_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+execution_job_submission/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/hpc_resource_prediction/binding_record.py:14:        sources = {str(path.relative_to(axis)): path for path in sorted(home.glob('*.py'))}
+hpc_work_planning/hpc_resource_prediction/binding_record.py:18:            'implementation_sha256': hpc_queue.digest(hashes),
+execution_job_submission/api_job_execution/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+a103_hpc.py:123:        implementation_sha256=body['code_manifest_sha256'],parameters={'operation':body['operation'],'profile':SCIENTIFIC_PROFILE},
+execution_job_submission/hpc_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/binding_record.py:15:        sources = {str(p.relative_to(axis)): p for p in sorted(home.glob('*.py'))}
+hpc_work_planning/binding_record.py:18:        return {'version': 'hpc_episode_v1', 'binding_id': 'hpc_work_planning', 'implementation_sha256': hpc_queue.digest(hashes), 'configuration': {'resources':
+hpc_work_planning/execution_job_submission/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/execution_job_submission/api_job_execution/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/execution_job_submission/hpc_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/execution_job_submission/local_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/execution_result_acquisition/execution_contracts.py:59:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/execution_progress_assessment/binding_record.py:10:        return {'version': VERSION, 'binding_id': 'hpc_work_planning/execution_progress_assessment', 'implementation_sha256': hashl
+hpc_work_planning/execution_progress_assessment/binding_record.py:15:    private = b''.join(path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py')))
+method_loop/durable.py:264:    _exact(binding, "factory_module factory_name arguments implementation_sha256 settings_sha256", "runtime binding")
+method_loop/durable.py:271:    _digest(binding["implementation_sha256"], "implementation digest")
+hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/execution_job_submission/api_job_execution/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/hpc_allocation_execution/execution_job_submission/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/hpc_allocation_execution/binding_record.py:15:        sources = {str(p.relative_to(axis)): p for p in sorted(home.glob('*.py'))}
+hpc_work_planning/hpc_allocation_execution/binding_record.py:18:        return {'version': 'hpc_episode_v1', 'binding_id': 'hpc_work_planning/hpc_allocation_execution', 'implementation_sha256': hpc_qu
+scientific_process/episode.py:26:        implementation = scientific_digest({str(path.relative_to(Path(__file__).parent.parent)): hashlib.sha256(path.read_bytes()).hexdigest() for path in Path(__file_
+scientific_process/episode.py:27:        return {'version': VERSION, 'binding_id': ROLE, 'implementation_sha256': implementation, 'configuration': {'library': deepcopy(self._library_record), 'tool_lib
+hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/execution_contracts.py:59:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/from_parent.py:162:            saved_hash = saved_binding['implementation_sha256']
+scientific_process/from_parent.py:168:        if {**saved_binding, 'implementation_sha256': current['implementation_sha256']} != current or filled['mechanics_binding'] not in (current, saved_binding):
+scientific_process/from_parent.py:170:        candidate['message']['scientific_process']['mechanics_binding']['implementation_sha256'] = saved_hash
+hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/binding_record.py:10:        return {'version': VERSION, 'binding_id': 'hpc_work_planning/hpc_allocation_execution/execution_pr
+hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/binding_record.py:15:    private = b''.join(path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py')))
+scientific_process/execution_job_submission/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/execution_job_submission/local_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/hpc_work_planning/binding_record.py:15:        sources = {str(p.relative_to(axis)): p for p in sorted(home.glob('*.py'))}
+scientific_process/hpc_work_planning/binding_record.py:18:        return {'version': 'hpc_episode_v1', 'binding_id': 'scientific_process/hpc_work_planning', 'implementation_sha256': hpc_queue.digest(h
+scientific_process/execution_job_submission/hpc_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/api_job_execution/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob(
+scientific_process/hpc_work_planning/hpc_resource_prediction/binding_record.py:14:        sources = {str(path.relative_to(axis)): path for path in sorted(home.glob('*.py'))}
+scientific_process/hpc_work_planning/hpc_resource_prediction/binding_record.py:18:            'implementation_sha256': hpc_queue.digest(hashes),
+scientific_process/hpc_work_planning/execution_job_submission/local_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/execution_result_acquisition/execution_contracts.py:59:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/hpc_work_planning/execution_progress_assessment/binding_record.py:10:        return {'version': VERSION, 'binding_id': 'scientific_process/hpc_work_planning/execution_progress_asses
+scientific_process/hpc_work_planning/execution_progress_assessment/binding_record.py:15:    private = b''.join(path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py')))
+scientific_process/hpc_work_planning/hpc_allocation_execution/binding_record.py:15:        sources = {str(p.relative_to(axis)): p for p in sorted(home.glob('*.py'))}
+scientific_process/hpc_work_planning/hpc_allocation_execution/binding_record.py:18:        return {'version': 'hpc_episode_v1', 'binding_id': 'scientific_process/hpc_work_planning/hpc_allocation_execu
+scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/local_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glo
+scientific_process/hpc_work_planning/execution_job_submission/api_job_execution/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/hpc_work_planning/execution_job_submission/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/published_evidence_assessment/source_contracts.py:32:    private = b''.join((path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/published_evidence_assessment/source_contracts.py:33:    selected_instructions = (_AXIS_DIRECTORY / 'library/literature_investigation_prompt.py').read_bytes()
+scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/contracts.py:64:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/hpc_work_planning/execution_job_submission/hpc_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/binding_record.py:10:        return {'version': VERSION, 'binding_id': 'scientific_process/hpc_work_planning
+scientific_process/hpc_work_planning/hpc_allocation_execution/execution_progress_assessment/binding_record.py:15:    private = b''.join(path.read_bytes() for path in sorted(Path(__file__).parent.glob(
+scientific_process/hpc_work_planning/hpc_allocation_execution/execution_job_submission/hpc_job_execution/contracts.py:65:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob(
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/source_contracts.py:32:    pri
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/source_contracts.py:33:    sel
+scientific_process/hpc_work_planning/execution_result_acquisition/execution_contracts.py:59:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/hpc_work_planning/hpc_allocation_execution/execution_result_acquisition/execution_contracts.py:59:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.p
+scientific_process/resource_work_submission/local_resource_work_execution/resource_contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/execution_progress_assessment/binding_record.py:10:        return {'version': VERSION, 'binding_id': 'scientific_process/execution_progress_assessment', 'implementation_sha256': has
+scientific_process/execution_progress_assessment/binding_record.py:15:    private = b''.join(path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py')))
+scientific_process/resource_work_submission/resource_contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/resource_work_submission/api_resource_work_execution/binding_record.py:11:        implementation += (_AXIS_DIRECTORY / 'resource_records.py').read_bytes()
+scientific_process/resource_work_submission/api_resource_work_execution/binding_record.py:12:        implementation += (_AXIS_DIRECTORY / 'launch_instructions.py').read_bytes()
+scientific_process/resource_work_submission/api_resource_work_execution/binding_record.py:16:        return {'version': 'resource_episode_binding_v1', 'binding_id': 'scientific_process/resource_work_s
+scientific_process/resource_work_submission/binding_record.py:11:        implementation += (_AXIS_DIRECTORY / 'resource_records.py').read_bytes()
+scientific_process/resource_work_submission/binding_record.py:12:        implementation += (_AXIS_DIRECTORY / 'launch_instructions.py').read_bytes()
+scientific_process/resource_work_submission/binding_record.py:16:        return {'version': 'resource_episode_binding_v1', 'binding_id': 'scientific_process/resource_work_submission', 'implementation_
+scientific_process/resource_work_submission/hpc_resource_work_execution/resource_contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/resource_work_submission/hpc_resource_work_execution/binding_record.py:11:        implementation += (_AXIS_DIRECTORY / 'resource_records.py').read_bytes()
+scientific_process/resource_work_submission/hpc_resource_work_execution/binding_record.py:12:        implementation += (_AXIS_DIRECTORY / 'launch_instructions.py').read_bytes()
+scientific_process/resource_work_submission/hpc_resource_work_execution/binding_record.py:16:        return {'version': 'resource_episode_binding_v1', 'binding_id': 'scientific_process/resource_work_s
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/binding_record.py:9:        return {'version': VERSION, 'b
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/binding_record.py:9:        return {'version': VERSION, 'binding_id': 'scientific_process/published_evidence_asses
+scientific_process/resource_work_submission/local_resource_work_execution/binding_record.py:11:        implementation += (_AXIS_DIRECTORY / 'resource_records.py').read_bytes()
+scientific_process/resource_work_submission/local_resource_work_execution/binding_record.py:12:        implementation += (_AXIS_DIRECTORY / 'launch_instructions.py').read_bytes()
+scientific_process/resource_work_submission/local_resource_work_execution/binding_record.py:16:        return {'version': 'resource_episode_binding_v1', 'binding_id': 'scientific_process/resource_work
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_contracts.py:32:    pri
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_contracts.py:33:    sel
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_contracts.py:32:    private = b''.join((path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_contracts.py:33:    selected_instructions = (_AXIS_DIRECTORY / 'library/literature_investigation_prompt.py'
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_contracts.py:32:    private = b''.join((path.read_bytes() for path in sorted(Pa
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_contracts.py:33:    selected_instructions = (_AXIS_DIRECTORY / 'library/literat
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_contracts.py:32:    private = b''.join((path.read_b
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_contracts.py:33:    selected_instructions = (_AXIS_
+legacy_improvement/episode.py:51:        files = sorted(Path(__file__).parent.glob('*.py'))
+legacy_improvement/episode.py:56:                'implementation_sha256': sha256(b''.join(path.read_bytes() for path in files)).hexdigest()}
+scientific_process/published_evidence_assessment/binding_record.py:9:        return {'version': VERSION, 'binding_id': 'scientific_process/published_evidence_assessment', 'implementation_sha256': hash
+legacy_improvement/homology_job_monitoring/binding_record.py:9:        return {'binding_id': 'legacy_improvement/homology_job_monitoring', 'version': 'homology_episode_bindings_v5', 'commissioning_par
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/binding_record.py:9:        retu
+legacy_improvement/homology_job_monitoring/contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/resource_work_submission/api_resource_work_execution/resource_contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/resource_result_acquisition/resource_contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+legacy_improvement/homology_result_acquisition/binding_record.py:8:        return {'binding_id': 'legacy_improvement/homology_result_acquisition', 'version': 'homology_episode_bindings_v5', 'commissio
+legacy_improvement/homology_result_acquisition/contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/source_contracts.py:32:    priva
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/source_contracts.py:33:    selec
+legacy_improvement/homology_job_submission/binding_record.py:8:        return {'binding_id': 'legacy_improvement/homology_job_submission', 'version': 'homology_episode_bindings_v5', 'commissioning_par
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/binding_record.py:9:        re
+execution_result_acquisition/execution_contracts.py:59:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/binding_record.py:9:        re
+resource_work_submission/local_resource_work_execution/binding_record.py:11:        implementation += (_AXIS_DIRECTORY / 'resource_records.py').read_bytes()
+resource_work_submission/local_resource_work_execution/binding_record.py:12:        implementation += (_AXIS_DIRECTORY / 'launch_instructions.py').read_bytes()
+resource_work_submission/local_resource_work_execution/binding_record.py:16:        return {'version': 'resource_episode_binding_v1', 'binding_id': 'resource_work_submission/local_resource_work_execut
+scientific_process/resource_result_acquisition/binding_record.py:11:        implementation += (_AXIS_DIRECTORY / 'resource_records.py').read_bytes()
+scientific_process/resource_result_acquisition/binding_record.py:12:        implementation += (_AXIS_DIRECTORY / 'launch_instructions.py').read_bytes()
+scientific_process/resource_result_acquisition/binding_record.py:16:        return {'version': 'resource_episode_binding_v1', 'binding_id': 'scientific_process/resource_result_acquisition', 'implement
+homology_job_monitoring/binding_record.py:9:        return {'binding_id': 'legacy_annotation/homology_job_monitoring', 'version': 'homology_episode_bindings_v5', 'commissioning_parent': 'legacy_annota
+homology_job_monitoring/contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+published_evidence_assessment/binding_record.py:9:        return {'version': VERSION, 'binding_id': 'published_evidence_assessment', 'implementation_sha256': hashlib.sha256(implementation).hexdigest()
+scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/binding_record.py:9:        return {'version': VERSION, 'binding_id': 'scientific_proc
+execution_progress_assessment/binding_record.py:10:        return {'version': VERSION, 'binding_id': 'execution_progress_assessment', 'implementation_sha256': hashlib.sha256(_binding_source_bytes()).h
+execution_progress_assessment/binding_record.py:15:    private = b''.join(path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py')))
+resource_work_submission/binding_record.py:11:        implementation += (_AXIS_DIRECTORY / 'resource_records.py').read_bytes()
+resource_work_submission/binding_record.py:12:        implementation += (_AXIS_DIRECTORY / 'launch_instructions.py').read_bytes()
+resource_work_submission/binding_record.py:16:        return {'version': 'resource_episode_binding_v1', 'binding_id': 'resource_work_submission', 'implementation_sha256': hashlib.sha256(implementation
+tests/test_source_investigation_family.py:115:    raw = (Path(__file__).parent / 'fixtures/source_investigation/article.xml').read_bytes()
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/binding_record.py:9:        return {'version': VE
+resource_work_submission/local_resource_work_execution/resource_contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+resource_work_submission/hpc_resource_work_execution/resource_contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+resource_work_submission/resource_contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+resource_result_acquisition/resource_contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+published_evidence_assessment/evidence_search_strategy_improvement/binding_record.py:9:        return {'version': VERSION, 'binding_id': 'published_evidence_assessment/evidence_search_strategy_improve
+homology_result_acquisition/contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+legacy_improvement/homology_job_submission/contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+published_evidence_assessment/source_contracts.py:32:    private = b''.join((path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py'))))
+published_evidence_assessment/source_contracts.py:33:    selected_instructions = (_AXIS_DIRECTORY / 'library/literature_investigation_prompt.py').read_bytes()
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_contracts.py:32:    private = b''.join((path.read_bytes() for path in 
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_contracts.py:33:    selected_instructions = (_AXIS_DIRECTORY / 'librar
+resource_work_submission/api_resource_work_execution/binding_record.py:11:        implementation += (_AXIS_DIRECTORY / 'resource_records.py').read_bytes()
+resource_work_submission/api_resource_work_execution/binding_record.py:12:        implementation += (_AXIS_DIRECTORY / 'launch_instructions.py').read_bytes()
+resource_work_submission/api_resource_work_execution/binding_record.py:16:        return {'version': 'resource_episode_binding_v1', 'binding_id': 'resource_work_submission/api_resource_work_execution'
+resource_work_submission/api_resource_work_execution/resource_contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))
+resource_work_submission/hpc_resource_work_execution/binding_record.py:11:        implementation += (_AXIS_DIRECTORY / 'resource_records.py').read_bytes()
+resource_work_submission/hpc_resource_work_execution/binding_record.py:12:        implementation += (_AXIS_DIRECTORY / 'launch_instructions.py').read_bytes()
+resource_work_submission/hpc_resource_work_execution/binding_record.py:16:        return {'version': 'resource_episode_binding_v1', 'binding_id': 'resource_work_submission/hpc_resource_work_execution'
+homology_result_acquisition/binding_record.py:8:        return {'binding_id': 'legacy_annotation/homology_result_acquisition', 'version': 'homology_episode_bindings_v5', 'commissioning_parent': 'legac
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_contracts.py:32:    private = b''.join((pa
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/source_contracts.py:33:    selected_instructions 
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/source_coverage_improvement/binding_record.py:9:        return {'version': VE
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_contracts.py:32:    private = b''.join((path.read_bytes() for path in sorted(Path(__file__).parent
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_contracts.py:33:    selected_instructions = (_AXIS_DIRECTORY / 'library/literature_investigation_p
+published_evidence_assessment/evidence_search_strategy_improvement/source_contracts.py:32:    private = b''.join((path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py'))))
+published_evidence_assessment/evidence_search_strategy_improvement/source_contracts.py:33:    selected_instructions = (_AXIS_DIRECTORY / 'library/literature_investigation_prompt.py').read_bytes()
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/source_contracts.py:32:    private = b''.join((pa
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/passage_evidence_extraction/source_contracts.py:33:    selected_instructions 
+resource_result_acquisition/binding_record.py:11:        implementation += (_AXIS_DIRECTORY / 'resource_records.py').read_bytes()
+resource_result_acquisition/binding_record.py:12:        implementation += (_AXIS_DIRECTORY / 'launch_instructions.py').read_bytes()
+resource_result_acquisition/binding_record.py:16:        return {'version': 'resource_episode_binding_v1', 'binding_id': 'resource_result_acquisition', 'implementation_sha256': hashlib.sha256(implemen
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/binding_record.py:9:        return {'version': VERSION, 'binding_id': 'published_evidence_assessment/evid
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/binding_record.py:9:        return {'version': VERSION, 'binding_id': 'publis
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/source_contracts.py:32:    private = b''.join((path
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/source_contracts.py:33:    selected_instructions = 
+published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination/table_evidence_extraction/binding_record.py:9:        return {'version': VERS
+homology_job_submission/binding_record.py:8:        return {'binding_id': 'legacy_annotation/homology_job_submission', 'version': 'homology_episode_bindings_v5', 'commissioning_parent': 'legacy_annota
+homology_job_submission/contracts.py:43:    return b''.join((p.read_bytes() for p in sorted(Path(__file__).parent.glob('*.py'))))

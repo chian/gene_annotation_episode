@@ -95,8 +95,7 @@ RESULT_OPERATIONS = tuple(PREFIX + suffix for suffix in (
 def _schema(suffix):
     schema = contract_schema("Arguments_" + suffix)
     if suffix == "download":
-        # Retained contracts accept the exact old shape. Current selections
-        # always name their cap; no default or historical rewrite is supplied.
+        # Selections always name their cap; no default is supplied.
         schema["$defs"]["Arguments_download"]["required"].append("max_bytes")
     # An explicit resource boundary keeps local refs correct when the common
     # episode embeds this schema inside its operation-selection schema.

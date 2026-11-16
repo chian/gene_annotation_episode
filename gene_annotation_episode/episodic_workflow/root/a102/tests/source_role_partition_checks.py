@@ -176,7 +176,7 @@ def retained_cells(value,binding,context):
     literals={};offset=0
     for field,quote in zip(('molecule','construct','experimental_system','condition','partner','experiment'),text.split('|')):
         literals[field]={'source_ref':literal['id'],'representation':'original','start':offset,
-            'end':offset+len(quote),'quote':quote};offset+=len(quote)+1
+            'end':offset+len(quote)};offset+=len(quote)+1
     arguments={'source_ref':root['id'],'coordinate_source_ref':coordinates['id'],
         'validation_source_ref':validation['id'],'source_kind':'synthetic_fixture','model_number':1,'literals':literals,
         'geometry_panel':[{'endpoint_a':{**selector(),'atom_names':['OE1','OE2']},

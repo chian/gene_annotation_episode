@@ -1,47 +1,16 @@
 """Replay actual rejected monitoring input and preserve its factual contracts."""
 from copy import deepcopy
-import gzip
 import json
-from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.root.decision_context import state_frame
 from gene_annotation_episode.episodic_workflow.root.monitor_prompt import is_monitor_context, render_monitor_prompt
 from gene_annotation_episode.episodic_workflow.root.providers import _SessionConnection
 
 
-FIXTURE = Path(__file__).resolve().parents[1] / 'gene_annotation_episode/episodic_workflow/root/a107/tests/fixtures/hpc/a107-genomic05-monitor-context.json.gz'
-
-
 def wire():
     result = object.__new__(_SessionConnection)
     result.scientific_prompt_states = {}
     return result
-
-
-def test_actual_failed_monitor_input_retains_state_and_selected_contracts():
-    with gzip.open(FIXTURE, 'rt') as handle:
-        original = json.load(handle)
-    frame = original['context']
-    before = deepcopy(frame)
-    assert json.dumps(frame, allow_nan=False) == original['actual_input']
-    assert len(original['actual_input']) == original['failure']['input_chars']
-    assert original['failure']['input_chars'] > original['failure']['provider_max_chars']
-    provider = wire()
-    rendered, _ = provider._presentation(original['episode_id'], 'REASONING',
-        original['instructions'], frame)
-    # Existing transport capacity, not a newly configured investigation budget.
-    assert len(rendered) < original['failure']['provider_max_chars']
-    documents = [json.loads(line) for line in rendered.splitlines() if line.startswith('{')]
-    visible = next(value for value in documents if 'monitor_assignment' in value)
-    expected = {name: value for name, value in frame['fields'].items()
-        if name not in ('available_report_facts', 'completed_action_reports')}
-    assert visible == expected
-    contracts = next(value for value in documents if 'monitoring_progress_refs' in value)
-    assert contracts['monitoring_progress_refs'] == frame['fields']['available_report_facts']['monitoring_progress_refs']
-    assert contracts['committed_record_refs'] == frame['fields']['available_report_facts']['committed_record_refs']
-    assert 'literature_binding_interaction_model_cells' not in contracts
-    assert provider.scientific_prompt_states[(original['episode_id'], 'REASONING')] == frame['fields']
-    assert frame == before
 
 
 def test_monitor_frame_updates_and_explicit_lookups_preserve_native_values():

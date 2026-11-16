@@ -136,19 +136,13 @@ class EpisodeBindingRegistry(BindingPathResolver):
                 or any(not isinstance(role, str) or not role for role in roles)):
             raise ValueError('unique_nonempty_episode_roles_required')
         path = getattr(binding, 'binding_path', None)
-        if path is not None:
-            parent = getattr(binding, 'commissioning_parent', None)
-            if (not isinstance(path, str) or not path
-                    or any(not part or part in {'.', '..'} for part in path.split('/'))
-                    or not isinstance(parent, str) or not parent):
-                raise ValueError('explicit_episode_binding_path_required')
-            if path in self._by_path:
-                raise ValueError('duplicate_episode_binding_path:' + path)
-        conflicts = {role for role in roles if role in self._by_role
-            and (path is None or any(getattr(other, 'binding_path', None) is None
-                                    for other in self._by_role[role]))}
-        if conflicts:
-            raise ValueError('duplicate_episode_role:' + ','.join(sorted(conflicts)))
+        parent = getattr(binding, 'commissioning_parent', None)
+        if (not isinstance(path, str) or not path
+                or any(not part or part in {'.', '..'} for part in path.split('/'))
+                or not isinstance(parent, str) or not parent):
+            raise ValueError('explicit_episode_binding_path_required')
+        if path in self._by_path:
+            raise ValueError('duplicate_episode_binding_path:' + path)
         for role in roles:
             if binding.credit_kind(role) not in {'scientific', 'operational', 'monitoring'}:
                 raise ValueError('declared_credit_kind_required:' + role)
@@ -161,8 +155,7 @@ class EpisodeBindingRegistry(BindingPathResolver):
         self._bindings.append(binding)
         for role in roles:
             self._by_role.setdefault(role, []).append(binding)
-        if path is not None:
-            self._by_path[path] = binding
+        self._by_path[path] = binding
 
     @property
     def roles(self):

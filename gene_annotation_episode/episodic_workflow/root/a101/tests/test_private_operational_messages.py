@@ -55,7 +55,6 @@ def test_named_parent_request_uses_actual_child_binding_path_and_original_admiss
     parent,child,role,binding=edge
     workflow,source,selection,context,target,calls,schema=outgoing(edge)
     callback=binding.child_request_preparer_for_binding(role,child)
-    assert callback.__module__==AXIS+'.'+parent.replace('/','.')+'.to_child_'+Path(child).name
     result=callback(workflow,source,selection,7)
     assert result=={'scope':selection['scope'],'role':role,'schema':schema,
         'report_declaration':{'original':'declaration'},'initial':{},
@@ -90,7 +89,6 @@ def test_saved_counterpart_dispatch_retains_private_path_and_receipt_identity(ed
     monkeypatch.setattr(ParentRecords,'recorded_admission_references',lambda *args:None)
     source=SimpleNamespace(path=(('annotation','root'),(binding.roles[0],'parent')),episode_id='parent',scope={})
     receiver=binding.child_report_receiver_for_binding(role,child);calls=[]
-    assert receiver.__module__==AXIS+'.'+parent.replace('/','.')+'.from_child_'+Path(child).name
     def choose(actual_role,actual_path):
         calls.append((actual_role,actual_path));assert (actual_role,actual_path)==(role,child)
         return receiver

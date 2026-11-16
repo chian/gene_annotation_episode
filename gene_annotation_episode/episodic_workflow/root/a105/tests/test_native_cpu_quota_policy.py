@@ -1,4 +1,4 @@
-"""No-native checks for independent child quota and authenticated legacy replay."""
+"""No-native checks for independent child quota."""
 from importlib import import_module
 import json
 from pathlib import Path
@@ -52,24 +52,21 @@ def test_dispatch_uses_fixed_child_quota_without_changing_request(prepared, monk
 
 
 
-@pytest.mark.parametrize('legacy', [False, True])
 @pytest.mark.parametrize('wrong_child_quota', [False, True])
 def test_resume_verifies_recorded_child_quota_with_real_authenticated_ancestor(
-        prepared, tmp_path, monkeypatch, legacy, wrong_child_quota):
+        prepared, tmp_path, monkeypatch, wrong_child_quota):
     native, handle, command = prepared
     from gene_annotation_episode import workflow_budget
     actual = workflow_budget.active_budget()
     assert actual['environment_bounds']['cpu_percent'] == 100
     body = handle.read()
     body['stage'] = 'submitting'
-    if legacy:
-        body['metadata'].pop('cpu_quota_percent', None)
     native.atomic_json(handle.path, body)
     original = Path(body['paths']['request']).read_bytes()
     Path(body['paths']['ready']).write_text(json.dumps({'request_sha256':body['request_sha256']}))
     group = tmp_path/'observed-child'; group.mkdir()
-    expected_percent = 400 if legacy else 100
-    percent = (100 if legacy else 400) if wrong_child_quota else expected_percent
+    expected_percent = 100
+    percent = 400 if wrong_child_quota else expected_percent
     (group/'cpu.max').write_text(f'{percent*1000} 100000\n')
     memory = body['metadata']['policy']['memory_bytes']
     (group/'memory.max').write_text(str(memory))
@@ -92,10 +89,7 @@ def test_resume_verifies_recorded_child_quota_with_real_authenticated_ancestor(
         assert native.resume_start(handle) is handle
         assert handle.read()['stage'] == 'released'
         verified = handle.read()['metadata']['verified_cgroup']
-        if legacy:
-            assert 'cpu_quota_percent' not in verified
-        else:
-            assert verified['cpu_quota_percent'] == expected_percent
+        assert verified['cpu_quota_percent'] == expected_percent
     assert handle.read()['metadata']['cpu_threads'] == 4
     assert handle.read()['command'] == command
     assert Path(body['paths']['request']).read_bytes() == original

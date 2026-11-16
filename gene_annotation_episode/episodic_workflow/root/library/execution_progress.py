@@ -1268,7 +1268,7 @@ class ExecutionTargetReader:
 
     def _describe_appservice(self, value, target, body, service, selector):
         """Describe exact saved task operands and installed support readers."""
-        from gene_annotation_episode.api_bvbrc_appservice import _NATIVE_STATES, _RAW_STATES
+        from gene_annotation_episode.bvbrc_appservice_service_values import _NATIVE_STATES, _RAW_STATES
         prefix = 'api.bvbrc_appservice.'
         handoff = body['task_handoff']
         original = handoff['original_task']

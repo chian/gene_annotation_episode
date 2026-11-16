@@ -58,8 +58,7 @@ def build_case(store, directory, home, role, client):
         controller_factory=forbidden, project_credit=lambda *args, **kwargs: 0,
         episode_binding_factories=[factory(path) for path in paths],
         episode_record_receipts=True, initial_known_record_refs=[],
-        annotation_child_roles=(), root_role=role,
-        wait_inputs_version='wait_inputs_binding_v1', completed_action_inputs_version=None)
+        annotation_child_roles=(), root_role=role)
     # Root-role standalone invocation is a supported constructor interface;
     # factory/caller provenance remains explicit rather than a forged run row.
     return workflow, {'kind': 'explicit_literal_private_factories_v1',

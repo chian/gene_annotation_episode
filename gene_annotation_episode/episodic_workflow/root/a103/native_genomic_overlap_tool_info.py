@@ -21,7 +21,7 @@ _INSTRUCTIONS = (
     "executable, byte identity and version. The requested_job contains the compiled argument list, explicit "
     "environment with LC_ALL=C, and native_genomic_overlap. Its nominal command is the selected Python executable "
     "followed by -B -m gene_annotation_episode.episodic_workflow.root.a103.native_genomic_overlap_driver genomic-overlap-plan.json. "
-    "Commission launch and its bound launch_local child with the original allocation: 20 GiB RAM, 4 GiB scratch, "
+    "Commission launch and its bound launch_local child with the original allocation: 5 GiB RAM, 4 GiB scratch, "
     "zero swap and no wall-time budget. Preparation only reserves the selected attempt; the owning child selects "
     "practical.job.start. The driver retains exact original bytes and G1 occurrence maps, writes canonical BED4, "
     "and invokes the selected bedtools intersect -a A -b B -wo -sorted once for each eligible nonempty pair. "

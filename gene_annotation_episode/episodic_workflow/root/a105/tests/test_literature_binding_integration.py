@@ -36,7 +36,7 @@ def setup_primary(path):
     transcription = source(canonical(table), 'retained_manual_visual_transcription', [picture['id']])
     start = html.index(b'Equilibrium competition fluorescence assays')
     end = html.index(b'</p>', start)
-    witness = {'source_ref': paper['id'], 'representation': 'original', 'start': start, 'end': end, 'quote': html[start:end].decode('utf-8')}
+    witness = {'source_ref': paper['id'], 'representation': 'original', 'start': start, 'end': end}
     refs = [paper['id'], picture['id'], transcription['id']]
     arguments = {'source_ref': transcription['id'], 'representation': 'retained_visual_transcription', 'subject': 'IscR', 'state': 'apo', 'experiment': 'Table3 competition', 'reference_ligand': 'hya', 'test_ligand': 'hya (7C to G)', 'parameter_kind': 'ic50', 'design': 'equilibrium_competition', 'protein_arrangement': 'single_preparation', 'interpretation_witnesses': [witness]}
     assignment = {'version': 'literature_assignment_v1', 'question_context_refs': [], 'source_refs': refs, 'requested_binding_components': COMPONENTS}
@@ -97,7 +97,7 @@ def test_primary_selected_child_return_preserves_limit_once_with_ordinary_accoun
             original = store.get_artifact(source['artifact_ref'])
             start = original.index(b'IscR')
             commit = {name: [] for name in store.reasoning_schema()['required']}
-            commit['source_subjects'] = [{'alias': 'reported_source', 'reference_type': 'assay', 'source_ref': source['id'], 'label': 'IscR', 'anchor': {'source_ref': source['id'], 'artifact_ref': source['artifact_ref'], 'start': start, 'end': start + 4, 'quote': 'IscR'}}]
+            commit['source_subjects'] = [{'alias': 'reported_source', 'reference_type': 'assay', 'source_ref': source['id'], 'label': 'IscR', 'anchor': {'source_ref': source['id'], 'artifact_ref': source['artifact_ref'], 'start': start, 'end': start + 4}}]
             return {'selection': {'kind': 'reason', 'commit': commit}, 'report_update': {}}
 
         def controller(path, initial):

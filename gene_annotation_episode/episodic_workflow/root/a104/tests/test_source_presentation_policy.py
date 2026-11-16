@@ -242,7 +242,8 @@ def test_pending_saved_task_call_and_completed_replay_use_original_payload(famil
     # JSON provider input when the original pending record is read again.
     payload = json.loads(runtime._json({**frames('minimal')[0],
         'restored_episode_history': {'saved': 'original metadata'}}))
-    saved = {'context': payload, 'schema': SCHEMA}
+    saved = {'context': payload, 'schema': SCHEMA, 'assignment_transport': {
+        'version': runtime._ASSIGNMENT_TRANSPORT, 'action_schema_sha256': runtime._digest(SCHEMA)}}
     journal.save('runtime_model_calls', {'episode_id': context.episode_id, 'call_index': 0,
         'purpose': 'decision', 'request': runtime._json(saved), 'response': None})
     worker = session(tmp_path / 'actual-session')

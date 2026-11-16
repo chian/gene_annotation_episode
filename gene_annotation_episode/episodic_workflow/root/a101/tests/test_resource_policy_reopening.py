@@ -1,4 +1,4 @@
-"""Saved V1 resource identities remain exact while active count gates disappear."""
+"""Local resource definitions carry byte limits only."""
 from importlib import import_module
 import pytest
 

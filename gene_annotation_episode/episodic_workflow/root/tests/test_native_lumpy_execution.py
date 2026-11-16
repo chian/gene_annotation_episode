@@ -25,11 +25,9 @@ from gene_annotation_episode.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.execution_job_submission.local_job_execution.resource_state_records import PracticalState
 
 
-def fake_software(*, current=False):
+def fake_software():
     """Deliberately invented metadata pins, never a working software witness."""
-    modules = (native.DRIVER_MODULE, 'gene_annotation_episode.native_atac_differential_reference')
-    if current:
-        modules = native._CURRENT_REQUIRED_MODULES
+    modules = native._REQUIRED_MODULES
     dependencies = ('jsonschema', 'attrs', 'referencing', 'rpds-py', 'jsonschema-specifications')
     return dict(driver_runtime=dict(python_executable='/fixture/python', python_sha256='0' * 64,
         python_version='3.12.0', module_root='/fixture/source',
@@ -280,7 +278,7 @@ def test_freezer_accepts_original_supplied_locations_and_returns_frozen_native_p
     for pin in [source['executable'], source['loader'], source['libraries'][0]['file']]:
         before = Path(pin['path']); after = before.with_name(before.name + '.original')
         before.rename(after); pin['path'] = str(after)
-    driver = fake_software(current=True)['driver_runtime']
+    driver = fake_software()['driver_runtime']
     monkeypatch.setattr(software, 'freeze_driver_runtime', lambda **_kwargs: deepcopy(driver))
     target = tmp_path / 'snapshot'
     # The real source walker uses the selected tree; only the original runtime-freezing port stays controlled.
@@ -299,7 +297,7 @@ def test_freezer_accepts_original_supplied_locations_and_returns_frozen_native_p
 
 @pytest.mark.parametrize('returncode', [0, 7])
 def test_one_engineered_call_retains_partial_bytes_headers_and_original_outcome_without_retry(tmp_path, monkeypatch, returncode):
-    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software(current=True)))
+    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software()))
     calls = mocked_command(monkeypatch, returncode=returncode)
     seal = native.run_lumpy(plan)
     assert seal['outcome'] == ('succeeded' if returncode == 0 else 'failed') and seal['returncode'] == returncode
@@ -315,7 +313,7 @@ def test_one_engineered_call_retains_partial_bytes_headers_and_original_outcome_
 
 
 def test_header_failure_qualifies_successful_native_exit_without_inventing_valid_vcf(tmp_path, monkeypatch):
-    job = job_fixture(tmp_path, kinds=('split_read',), software=fake_software(current=True))
+    job = job_fixture(tmp_path, kinds=('split_read',), software=fake_software())
     raw = b'not a BAM envelope'
     Path(job['input_bindings'][0]['path']).write_bytes(raw)
     job['request']['signals'][0]['bam'] = job['input_bindings'][0]['file'] = _file(raw, 'bam')
@@ -330,7 +328,7 @@ def test_header_failure_qualifies_successful_native_exit_without_inventing_valid
 
 @pytest.mark.parametrize('defect', ['input_missing', 'digest_conflict', 'software_unavailable'])
 def test_unavailable_selected_inputs_or_software_cannot_reach_dispatch(tmp_path, monkeypatch, defect):
-    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software(current=True)))
+    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software()))
     calls = mocked_command(monkeypatch)
     first = plan['requested_job']['native_lumpy']['input_bindings'][0]
     if defect == 'input_missing': Path(first['path']).unlink()
@@ -356,7 +354,7 @@ def test_unavailable_selected_inputs_or_software_cannot_reach_dispatch(tmp_path,
 
 
 def test_partial_failed_staging_is_sealed_as_observed_bytes_and_never_reissued(tmp_path, monkeypatch):
-    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software(current=True)))
+    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software()))
     calls = mocked_command(monkeypatch)
     original_stage = native._stage
     stage_calls = []
@@ -380,7 +378,7 @@ def test_partial_failed_staging_is_sealed_as_observed_bytes_and_never_reissued(t
 
 
 def test_runtime_change_after_verified_staging_seals_not_run_without_retry(tmp_path, monkeypatch):
-    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software(current=True)))
+    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software()))
     calls = mocked_command(monkeypatch)
     checks = []
     def verify(_value):
@@ -397,7 +395,7 @@ def test_runtime_change_after_verified_staging_seals_not_run_without_retry(tmp_p
 
 @pytest.mark.parametrize('defect', ['identity', 'argv', 'returncode', 'staged_identity', 'inspection_ordinal'])
 def test_seal_cannot_relabel_original_command_input_or_outcome(tmp_path, monkeypatch, defect):
-    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software(current=True)))
+    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software()))
     calls = mocked_command(monkeypatch)
     seal = native.run_lumpy(plan)
     if defect == 'identity': seal['identity']['episode_id'] = 'different-child'
@@ -411,7 +409,7 @@ def test_seal_cannot_relabel_original_command_input_or_outcome(tmp_path, monkeyp
 
 @pytest.mark.parametrize('defect', ['changed', 'missing', 'symlink'])
 def test_completed_outputs_cannot_be_resealed_or_reexecuted_after_tamper(tmp_path, monkeypatch, defect):
-    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software(current=True)))
+    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software()))
     calls = mocked_command(monkeypatch)
     native.run_lumpy(plan)
     original = output_path(plan, 'seal').read_bytes()
@@ -435,7 +433,7 @@ def test_orphaned_original_attempt_never_starts_another_command(tmp_path, monkey
 
 @pytest.mark.parametrize('terminal,quiescent,closed', [(False, False, False), (True, False, False), (True, True, True)])
 def test_observed_semantic_roles_and_bounded_reads_preserve_writer_state(tmp_path, monkeypatch, terminal, quiescent, closed):
-    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software(current=True)))
+    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software()))
     mocked_command(monkeypatch)
     native.run_lumpy(plan)
     outputs, logs, available = lumpy_observations.lumpy_observed_files(plan, dict(terminal=terminal, quiescent=quiescent),
@@ -453,7 +451,7 @@ def test_observed_semantic_roles_and_bounded_reads_preserve_writer_state(tmp_pat
 @pytest.mark.parametrize('stdout_bytes', [b'', b'engineered wrapper stdout\n'])
 def test_stdout_and_stderr_logs_have_matching_shared_resource_outputs(tmp_path, monkeypatch, stdout_bytes):
     """A real shared observation validator over explicitly engineered execution."""
-    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software(current=True)))
+    plan = plan_fixture(tmp_path, job=job_fixture(tmp_path, software=fake_software()))
     calls = mocked_command(monkeypatch)
     native.run_lumpy(plan)
     wrapper_stdout = Path(plan['identity']['execution_id']).parent / 'stdout.log'
@@ -477,7 +475,7 @@ def test_stdout_and_stderr_logs_have_matching_shared_resource_outputs(tmp_path, 
 
 
 def test_real_pending_intent_reserves_one_original_handle_without_dispatch_or_input_reads_on_restore(tmp_path):
-    job = job_fixture(tmp_path, software=fake_software(current=True))
+    job = job_fixture(tmp_path, software=fake_software())
     assignment = practical_assignment(tmp_path, job)
     state = PracticalState(tmp_path / 'state', 'engineered-lumpy-run', 'local-child', assignment)
     root = tmp_path / '.episode-operations' / digest(dict(run=state.run_id, episode=state.episode_id)) / digest('selected-start')
@@ -496,7 +494,7 @@ def test_real_pending_intent_reserves_one_original_handle_without_dispatch_or_in
 
 @pytest.mark.parametrize('defect', [None, 'command', 'environment', 'request_digest', 'duplicate_path', 'policy'])
 def test_original_controls_authenticate_literal_bytes_without_reopening_paths(tmp_path, monkeypatch, defect):
-    job = job_fixture(tmp_path, software=fake_software(current=True))
+    job = job_fixture(tmp_path, software=fake_software())
     assignment = practical_assignment(tmp_path, job)
     state = PracticalState(tmp_path / 'state', 'engineered-lumpy-run', 'local-child', assignment)
     root = tmp_path / '.episode-operations' / digest(dict(run=state.run_id, episode=state.episode_id)) / digest('selected-start')

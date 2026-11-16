@@ -22,6 +22,16 @@ ROOT = Path(__file__).resolve().parents[5]
 OWN = ROOT / 'gene_annotation_episode/episodic_workflow/root/a105/tests/fixtures/retained_reference/a105_endpoint_signal_binding_244'
 SELECTED = ['retained_fraction', 'retained_fraction_variance']
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def setup(path, components=SELECTED):
     args, blobs = _paper()
     store = Store(path)
@@ -53,7 +63,7 @@ def setup(path, components=SELECTED):
     return (store, ctx, request, binding, source)
 
 def selected(store, ctx, args, binding):
-    outcome = asyncio.run(binding.execute(ctx, 'literature.figure.populate', args, 'selected244'))
+    outcome = asyncio.run(binding.execute(ctx, 'literature.figure.populate', location_only(args), 'selected244'))
     assert outcome['status'] == 'completed', outcome
     current = replace(ctx, received_record_refs=(*ctx.received_record_refs, *outcome['record_refs']))
     schema = obj({'numbers': endpoint_signal_cells_schema()})
@@ -80,7 +90,7 @@ def test_source_custody_and_request_preflight(tmp_path, part):
             args['selection']['covariance_source_ref'] = alien
         else:
             args['selection']['requested_cells'].reverse()
-        out = asyncio.run(binding.execute(ctx, 'literature.figure.populate', args, 'bad244'))
+        out = asyncio.run(binding.execute(ctx, 'literature.figure.populate', location_only(args), 'bad244'))
         assert out['status'] == 'invalid'
         assert out['feedback']['code'] == ('endpoint_assignment_request_roster_mismatch' if part == 'order' else 'literature_source_not_received')
         assert not store.db.execute("SELECT 1 FROM sqlite_master WHERE name='literature_endpoint_signal_operations'").fetchone()
@@ -138,7 +148,7 @@ def test_all_sources_keep_assigned_page_ancestry(tmp_path):
         alien = source(store.get_artifact(store.get(args['selection']['image']['source_ref'])['artifact_ref']), 'controlled_unrelated_image244')
         args['selection']['image']['source_ref'] = alien
         pagectx = replace(pagectx, received_record_refs=(*pagectx.received_record_refs, alien))
-        out = asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(pagectx, 'literature.figure.populate', args, 'page244'))
+        out = asyncio.run(literature_binding_for_role(binding, 'literature_page').execute(pagectx, 'literature.figure.populate', location_only(args), 'page244'))
         assert out['status'] == 'invalid' and out['feedback']['code'] == 'literature_reading_outside_assigned_source'
     finally:
         store.close()

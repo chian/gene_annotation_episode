@@ -1,9 +1,9 @@
 """A110 received execution information."""
 from __future__ import annotations
+from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 import json
 from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a110.local_jobs import LocalJobPolicy
-from gene_annotation_episode.workflow_budget import ENVIRONMENT_BOUNDS
 
 def confined(path, workspace):
     path = Path(path)

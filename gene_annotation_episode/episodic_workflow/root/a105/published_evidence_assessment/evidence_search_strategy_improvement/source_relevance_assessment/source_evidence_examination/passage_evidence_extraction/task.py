@@ -9,7 +9,7 @@ class LiteratureOperations:
         self._role(context.role)
         return ('tool', 'reason', 'child', 'redeliver_report')
 
-    def catalog(self, context, *, _accept_legacy_quotes=False):
+    def catalog(self, context):
         self._role(context.role)
         available = self.services.tool_catalog(context.scope)
         entries = [{'name': name, **entry} for name, entry in available.items()] if isinstance(available, Mapping) else list(available)
@@ -33,7 +33,7 @@ class LiteratureOperations:
                 from gene_annotation_episode.episodic_workflow.root.a105.composition_information import CONTRACT_ARGUMENT_TRANSPORT
                 populations = [{**row, 'argument_transport': CONTRACT_ARGUMENT_TRANSPORT} for row in populations]
             result.extend(populations)
-        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'], allow_legacy_quote=_accept_legacy_quotes)} for entry in result]
+        return [{**entry, 'input_schema': source_location_inputs(entry['input_schema'])} for entry in result]
 
     async def execute(self, context, tool_name, arguments, operation_key):
         try:
@@ -45,12 +45,12 @@ class LiteratureOperations:
             try:
                 if tool_name == 'literature.figure.populate' and arguments.get('version') == 'literature_figure_endpoint_signal_population_v1':
                     repo = self._endpoint_signal_repository()
-                    return repo.populate(context, self._materialize_text_arguments(context, arguments, repo), operation_key)
+                    return repo.populate(context, self._materialize_text_arguments(context, arguments, repo, operation_key), operation_key)
                 if tool_name == 'literature.kinetic.populate' and arguments.get('version') == 'literature_kinetic_summary_precision_population_v1':
                     repo = self._summary_precision_repository()
-                    return repo.populate(context, self._materialize_text_arguments(context, arguments, repo), operation_key)
+                    return repo.populate(context, self._materialize_text_arguments(context, arguments, repo, operation_key), operation_key)
                 repo = {'literature.concentration_window.populate': self._concentration_window_repository, 'literature.measurement_comparison.populate': self._measurement_comparison_repository, 'literature.product_coupling.populate': self._product_coupling_repository, 'literature.measurement_validation.populate': self._measurement_validation_repository, 'literature.ion_discrimination.populate': self._ion_discrimination_repository, 'literature.channel.populate': self._channel_repository, 'literature.assay.components.populate': self._compiled_assay_repository, 'literature.rate.populate': self.literature_rate_repository, 'literature.calibration.recovery.populate': self.literature_calibration_recovery_repository, 'literature.rate.observations.populate': self.literature_rate_observation_repository, 'literature.rate.replicates.populate': self.literature_rate_replicate_repository, 'literature.rate.source.populate': self.literature_rate_repository, 'literature.quantity.populate': self.literature_quantity_repository, 'literature.assay.populate': self.literature_assay_repository, 'literature.amount.populate': self.literature_amount_repository, 'literature.completion_time.populate': self._completion_time_repository, 'literature.active_site.populate': self._active_site_repository, 'literature.parent_depletion.populate': self._parent_depletion_repository, 'literature.stoichiometric_balance.populate': self._stoichiometric_balance_repository, 'literature.assay_grading.populate': self._assay_grading_repository, 'literature.a105.aggregate': self._a105_aggregation_repository, 'literature.product_partition.populate': self._product_partition_repository, 'literature.optical.populate': self.literature_optical_repository, 'literature.kinetic.populate': self.literature_kinetic_repository, 'literature.kinetic.model.populate': self._kinetic_model_repository, 'literature.binding.interaction.populate': self.literature_binding_interaction_repository, 'literature.binding.interaction.model.populate': self._binding_interaction_model_repository, 'literature.ratio.populate': self.literature_ratio_repository, 'literature.ratio.source.populate': self._ratio_source_repository, 'literature.controlled_response.source_v3.populate': self._controlled_response_repository, 'literature.gel.populate': self._gel_repository, 'literature.binding.populate': self.literature_binding_repository, 'literature.binding.model.populate': self.literature_binding_model_repository, 'literature.transport.response.populate': self.literature_transport_repository, 'literature.figure.populate': self.literature_figure_repository}[tool_name]()
-                arguments = self._materialize_text_arguments(context, arguments, repo)
+                arguments = self._materialize_text_arguments(context, arguments, repo, operation_key)
                 if tool_name == 'literature.controlled_response.source_v3.populate':
                     return repo.populate_v3(context, arguments, operation_key)
                 return repo.populate_native(context, arguments, operation_key) if tool_name == 'literature.rate.source.populate' else repo.populate(context, arguments, operation_key)
@@ -185,14 +185,14 @@ class LiteratureTask(LiteratureTaskState, LiteratureTaskDecision):
             original = self.workflow.journal.row('runtime_actions', self.episode_id, index)
             call = self.workflow.journal.row('runtime_model_calls', self.episode_id, index) if original is None and self.workflow.decision_exchanges is not None else None
             saved = {} if call is None else _original_runtime.json.loads(call['request'])
-            response = _original_runtime._decode_recorded_action_response(response, schema, recorded_selection=None if original is None else _original_runtime.json.loads(original['action']), exchanges=() if original is not None or self.workflow.decision_exchanges is None else self.workflow.decision_exchanges.rows(self.episode_id, index), exchange_schema=saved.get('contract_information', {}).get('exchange_schema'), unproven_replay=getattr(self, '_unproven_direct_response_index', None) == index)
+            response = _original_runtime._decode_recorded_action_response(response, schema, recorded_selection=None if original is None else _original_runtime.json.loads(original['action']), exchanges=() if original is not None or self.workflow.decision_exchanges is None else self.workflow.decision_exchanges.rows(self.episode_id, index), exchange_schema=saved.get('contract_information', {}).get('exchange_schema'))
             selection = response['selection']
             if self._delivery_resolution_ref is not None:
                 _original_runtime.Draft202012Validator(schema).validate(response)
                 if response['report_update'] != self.report_values:
                     raise ValueError('delivery_resolution_must_preserve_current_interpretation')
             if self.workflow.permits_common_action(self, 'reason') and isinstance(selection, _original_runtime.Mapping) and (selection.get('kind') == 'reason'):
-                envelope = self.workflow.reasoning_action_schema(self, {'type': 'object'}, _accept_legacy_quotes=True)
+                envelope = self.workflow.reasoning_action_schema(self, {'type': 'object'})
                 _original_runtime.Draft202012Validator(envelope).validate(selection)
                 payload = selection['commit']
                 commit_schema = self.workflow.store.reasoning_schema()
@@ -260,8 +260,7 @@ class LiteratureTask(LiteratureTaskState, LiteratureTaskDecision):
                     result = self.workflow.execute(self, selection['tool'], selection['arguments'], decision_index=index, operation_key=key)
                 if _original_runtime.inspect.isawaitable(result):
                     result = await result
-            if self.workflow.execution_binding is not None or self.workflow.wait_inputs_version == 'wait_inputs_binding_v2' or self.workflow.completed_action_inputs_version is not None:
-                result = {**result, 'pending_work_after_action': self.workflow.pending_work(self)}
+            result = {**result, 'pending_work_after_action': self.workflow.pending_work(self)}
             with self.workflow.store.transaction() if self.workflow.execution_binding is not None else _original_runtime.nullcontext():
                 journal.save('runtime_actions', {'episode_id': self.episode_id, 'decision_index': index, 'action': _original_runtime._json(selection), 'result': _original_runtime._json(result), 'credit': None})
                 self.last_outcome, self.last_outcome_index = (result, index)

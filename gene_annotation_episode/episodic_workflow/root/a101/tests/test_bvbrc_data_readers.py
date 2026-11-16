@@ -1,8 +1,7 @@
 """Native-byte fixtures plus clearly synthetic transport and fault cases.
 
-Retained arrays are decoded with their actual legacy transports, never claimed
-as newly qualified v2 acquisitions. V2 transport fixtures are synthetic bindings
-around either unchanged retained native bytes or explicitly synthetic bodies.
+V2 transport fixtures are synthetic bindings around either unchanged native
+bytes or explicitly synthetic bodies.
 """
 from copy import deepcopy
 from dataclasses import replace
@@ -292,15 +291,6 @@ def test_saved_native_cell_integrity_is_checked_before_extraction(change):
                                        reason="native_format_unverified", origin="unavailable")
     with pytest.raises(ValueError):
         extract_collection_rows(sheet, fields=("plasmids",))
-
-
-def test_array_unknown_total_has_forward_candidate_without_fabricated_count():
-    binding = prepared(fields=["genome_id"], offset=4, limit=2)
-    source = replace(snapshot(binding, '[{"genome_id":"a"},{"genome_id":"b"}]'), media_type="application/json")
-    result = _decode_native_payload(source, prepared=binding)
-    assert result["sheet"]["population"]["reported_total"] is None
-    assert result["sheet"]["page"]["next_offset"] == 6
-    assert result["sheet"]["page"]["next_offset_basis"] == "total_unknown"
 
 
 @pytest.mark.parametrize("mutation", ["status", "q", "fq", "rows", "content_type", "content_length"])

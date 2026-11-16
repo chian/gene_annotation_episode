@@ -23,6 +23,16 @@ PRIMARY = Path(__file__).resolve().parents[5] / 'gene_annotation_episode/episodi
 COMPONENTS = ['reported_ratio', 'difference_from_reference', 'calibrated_amount_ratio', 'source_signed_index']
 FORM = obj({'measurements': ratio_cells_schema()})
 
+def location_only(value):
+    """The model's input form: a source location without the quotation the host reads."""
+    if isinstance(value, list):
+        return [location_only(item) for item in value]
+    if isinstance(value, dict):
+        located = 'start' in value and 'end' in value
+        return {key: location_only(item) for key, item in value.items() if not (located and key == 'quote')}
+    return value
+
+
 def setup_store(path, variant='K426A', *, visual=True):
     store = Store(path)
     store.create_problem(raw_sequence='ATGGCT', molecule='dna')
@@ -57,7 +67,7 @@ def test_primary_source_ratios_keep_actual_reference_conflicts_and_unknown_calib
     store, context, args, _ = setup_store(tmp_path, variant)
     try:
         binding = binding_for(store, context)
-        result = asyncio.run(binding.execute(context, 'literature.ratio.populate', args, 'selected'))
+        result = asyncio.run(binding.execute(context, 'literature.ratio.populate', location_only(args), 'selected'))
         assert result['status'] == 'completed', result
         ref = result['result']['sheet_ref']
         current = replace(context, received_record_refs=(*context.received_record_refs, *result['record_refs']))
@@ -148,11 +158,11 @@ def test_visual_annotation_must_bind_the_actual_received_image_and_valid_region(
         fields['artifact_ref'] = artifact
         wrong = store.put('source', fields, origin='caller')
         allowed = replace(context, received_record_refs=(*context.received_record_refs, wrong['id']))
-        result = asyncio.run(binding_for(store, context).execute(allowed, 'literature.ratio.populate', {**args, 'visual_source_refs': [wrong['id']]}, 'wrong-box'))
+        result = asyncio.run(binding_for(store, context).execute(allowed, 'literature.ratio.populate', location_only({**args, 'visual_source_refs': [wrong['id']]}), 'wrong-box'))
         assert result['status'] == 'invalid'
         assert result['feedback']['code'] == 'retained_visual_region_outside_image'
         assert store.db.execute('SELECT count(*) FROM literature_ratio_operations').fetchone()[0] == 0
-        denied = asyncio.run(binding_for(store, context).execute(replace(context, received_record_refs=(args['source_ref'],)), 'literature.ratio.populate', args, 'foreign-image'))
+        denied = asyncio.run(binding_for(store, context).execute(replace(context, received_record_refs=(args['source_ref'],)), 'literature.ratio.populate', location_only(args), 'foreign-image'))
         assert denied['status'] == 'invalid'
         assert denied['feedback']['code'] == 'literature_source_not_received'
     finally:

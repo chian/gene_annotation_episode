@@ -50,7 +50,7 @@ def literal_observation(store, target, source, alias):
     return {"alias": alias, "subject_refs": [target], "source_subject_refs": [], "kind": "source_content",
         "source_ref": source["id"], "measurements": [], "dependencies": [],
         "anchor": {"source_ref": source["id"], "artifact_ref": source["artifact_ref"],
-            "start": start, "end": start + len(quote), "quote": quote}}
+            "start": start, "end": start + len(quote)}}
 
 
 @pytest.mark.parametrize("mutation,code", [
