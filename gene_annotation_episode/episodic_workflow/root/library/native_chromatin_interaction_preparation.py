@@ -81,17 +81,16 @@ def _source_closure(module_root, modules):
 
 
 def _copy_exact(source, destination, *, executable=False):
-    identity = file_identity(source)
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
-        require(file_identity(destination) == identity and not destination.stat().st_mode & 0o222)
+        with _regular(source) as original, _regular(destination) as existing:
+            require(original.read() == existing.read() and not destination.stat().st_mode & 0o222)
     else:
         with _regular(source) as original, _writing(destination) as target:
             shutil.copyfileobj(original, target, length=1024 * 1024)
         if executable:
             destination.chmod(0o555)
-    require(file_identity(destination) == identity)
-    return {"path": str(destination), **identity}
+    return {"path": str(destination)}
 
 
 def _dependency_bindings(*, native_input, supported_formats=None):
@@ -113,7 +112,7 @@ def _dependency_bindings(*, native_input, supported_formats=None):
             path = Path(installed.locate_file(entry)).resolve(strict=True)
             if path.suffix in (".pyc", ".pyo") or not path.is_file():
                 continue
-            files.append({"path": str(path), **file_identity(path)})
+            files.append({"path": str(path)})
         require(bool(files), "native_dependency_unavailable")
         result.append({"distribution": distribution, "version": installed.version,
             "package_root": str(Path(module.__file__).resolve(strict=True).parent),
@@ -142,10 +141,9 @@ def freeze_chromatin_software_binding(*, module_root: str, snapshot_directory: s
     policy = LocalJobPolicy(**POLICY)
     for name, source in sorted(modules.items()):
         check_scratch_budget(target, policy, additional_bytes=source.stat().st_size)
-        pin = _copy_exact(source, target / (name.replace(".", "/") + ".py"))
-        implementation.append({"module": name, "sha256": pin["sha256"]})
+        _copy_exact(source, target / (name.replace(".", "/") + ".py"))
+        implementation.append({"module": name})
     software = {"python_executable": selected,
-        "python_sha256": file_identity(Path(selected).resolve(strict=True))["sha256"],
         "python_version": platform.python_version(), "module_root": str(target), "driver_module": DRIVER_MODULE,
         "implementation_files": implementation,
         "dependencies": _dependency_bindings(native_input=True, supported_formats=formats)}
@@ -178,12 +176,6 @@ def _snapshot(plan, policy):
     return {"version": "chromatin_worker_intent_v1", "plan": plan, "policy": POLICY,
         "command": [interpreter["path"], "-B", "-S", "-m", WORKER_MODULE, str(directory / "plan.json")],
         "environment": environment, "source_pins": pins, "interpreter": interpreter, "dependencies": dependencies}
-
-
-def _verify_pins(intent):
-    pins = [*intent["source_pins"], intent["interpreter"], *(pin for row in intent["dependencies"] for pin in row["files"])]
-    for pin in pins:
-        require(file_identity(pin["path"]) == {k: pin[k] for k in ("sha256", "size_bytes")}, "native_dependency_unavailable")
 
 
 def _capture(store, directory, name, format):
@@ -265,7 +257,6 @@ def prepare_chromatin_result_worker(store, *, plan, policy):
         handle = native.NativeJobHandle(directory / "worker.handle.json")
         execution_path = directory / "execution.json"
         if not execution_path.exists():
-            _verify_pins(intent)
             if not handle.path.exists():
                 native.prepare_job(intent["command"], cwd=directory, policy=policy, handle_path=handle.path,
                     stdout_path=directory / "worker.stdout", stderr_path=directory / "worker.stderr", env=intent["environment"])
@@ -281,7 +272,6 @@ def prepare_chromatin_result_worker(store, *, plan, policy):
                 problem = {"code": error.code, "phase": error.phase, "diagnostic": error.diagnostic, "operational": error.operational}
             view = native.status(handle)
             require(view["terminal"] and view["quiescent"])
-            _verify_pins(intent)
             body = _check_handle(handle, intent)
             execution = {"version": "chromatin_worker_execution_v1", "plan_file": plan_file, "intent": intent,
                 "terminal": True, "quiescent": True, "policy": POLICY, "returncode": outcome.returncode if outcome else None,

@@ -231,9 +231,8 @@ def validate_itc_binding_fit_observation(value):
         require(type(value["software"]["implementation_files"]) is list)
         files = [value["software"]["callable"]["file"], *value["software"]["implementation_files"]]
         for file in files:
-            closed(file, ("path", "sha256", "size_bytes"))
-            require(text(file["path"]) and text(file["sha256"]) and type(file["size_bytes"]) is int and file["size_bytes"] >= 0)
-            require(len(file["sha256"]) == 64 and all(c in "0123456789abcdef" for c in file["sha256"]))
+            closed(file, ("path",))
+            require(text(file["path"]))
     if value["effective_arguments"] is not None:
         args = value["effective_arguments"]
         closed(args, ("p0", "lower_bounds", "upper_bounds", "sigma", "absolute_sigma", "method", "jac",

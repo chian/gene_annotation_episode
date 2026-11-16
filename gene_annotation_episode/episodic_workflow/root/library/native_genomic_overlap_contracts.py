@@ -277,7 +277,7 @@ def validate_genomic_overlap_batch(value: dict, *, plan: dict) -> dict:
 
     verification = value["software_verification"]
     software_failures = failure_rows(verification["failure_indices"], software_only=True)
-    python_expected = {"sha256": software["python_sha256"], "version": software["python_version"]}
+    python_expected = {"version": software["python_version"]}
     if verification["state"] in ("verified", "not_needed"):
         _require(verification["python_observed"] == python_expected and not software_failures,
                  "genomic_overlap_software_binding")

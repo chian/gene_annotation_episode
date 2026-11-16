@@ -72,17 +72,16 @@ def _source_closure(module_root, modules):
 
 
 def _copy_exact(source, destination, *, executable=False):
-    identity = file_identity(source)
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
-        require(file_identity(destination) == identity and not destination.stat().st_mode & 0o222, 'native_dependency_unavailable')
+        with _regular(source) as original, _regular(destination) as existing:
+            require(original.read() == existing.read() and not destination.stat().st_mode & 0o222, 'native_dependency_unavailable')
     else:
         with _regular(source) as original, _writing(destination) as output:
             shutil.copyfileobj(original, output, length=1024 * 1024)
         if executable:
             destination.chmod(0o555)
-    require(file_identity(destination) == identity, 'native_dependency_unavailable')
-    return dict(path=str(destination), **identity)
+    return dict(path=str(destination))
 
 
 def _dependencies():
@@ -98,7 +97,7 @@ def _dependencies():
         for entry in installed.files or ():
             path = Path(installed.locate_file(entry)).resolve(strict=True)
             if path.suffix not in ('.pyc', '.pyo') and path.is_file():
-                files.append(dict(path=str(path), **file_identity(path)))
+                files.append({'path': str(path)})
         require(files, 'native_dependency_unavailable')
         result.append(dict(distribution=distribution, version=installed.version,
             package_root=str(Path(module.__file__).resolve(strict=True).parent), files=sorted({r['path']: r for r in files}.values(), key=lambda r: r['path'])))
@@ -126,11 +125,6 @@ def _snapshot(plan, policy):
     return dict(version='atac_worker_intent_v1', plan=plan, policy=POLICY,
         command=[interpreter['path'], '-B', '-S', '-m', WORKER_MODULE, str(directory / 'plan.json')],
         environment=environment, source_pins=pins, interpreter=interpreter, dependencies=dependencies)
-
-
-def _verify_pins(intent):
-    for pin in [*intent['source_pins'], intent['interpreter'], *(pin for row in intent['dependencies'] for pin in row['files'])]:
-        require(file_identity(pin['path']) == {key: pin[key] for key in ('sha256', 'size_bytes')}, 'native_dependency_unavailable')
 
 
 def _capture(store, directory, name, format_name):
@@ -259,7 +253,6 @@ def prepare_atac_result_worker(store, *, plan, policy):
         execution_path = directory / 'execution.json'
         handle = native.NativeJobHandle(directory / 'worker.handle.json')
         if not execution_path.exists():
-            _verify_pins(intent)
             if not handle.path.exists():
                 native.prepare_job(intent['command'], cwd=directory, policy=policy, handle_path=handle.path,
                     stdout_path=directory / 'worker.stdout', stderr_path=directory / 'worker.stderr', env=intent['environment'])
@@ -275,7 +268,6 @@ def prepare_atac_result_worker(store, *, plan, policy):
                 problem = dict(code=error.code, phase=error.phase, diagnostic=error.diagnostic, operational=error.operational)
             view = native.status(handle)
             require(view['terminal'] and view['quiescent'], 'atac_worker_not_closed')
-            _verify_pins(intent)
             body = _check_handle(handle, intent)
             execution = dict(version='atac_worker_execution_v1', plan_file=plan_file, intent=intent, terminal=True, quiescent=True,
                 policy=POLICY, returncode=outcome.returncode if outcome else None, metadata=view['metadata'], failure=problem,

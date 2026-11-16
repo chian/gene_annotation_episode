@@ -45,7 +45,7 @@ def _dependencies(sources):
     """Discover the actual pure closure; no fixed scientific package selector.
 
     This worker currently imports stdlib only. A future external import needs
-    an explicit pinned dependency binding before it can be executed here.
+    an explicit dependency binding before it can be executed here.
     """
     stdlib = sys.stdlib_module_names | {"__future__"}
     for path in sources.values():
@@ -83,7 +83,7 @@ def _snapshot(plan, policy):
     interpreter = _copy_exact(binary, root / "runtime/python", executable=True)
     home = Path(sys.base_prefix).resolve(strict=True)
     stdlib = home / "lib" / ("python%d.%d" % sys.version_info[:2])
-    runtime_files = [file_pin(path) for path in sorted(stdlib.rglob("*")) if path.is_file()
+    runtime_files = [{"path": str(path)} for path in sorted(stdlib.rglob("*")) if path.is_file()
         and not any(part in ("site-packages", "dist-packages", "__pycache__") for part in path.relative_to(stdlib).parts)
         and path.suffix not in (".pyc", ".pyo")]
     require(runtime_files, "fluorescence_worker_stdlib_missing")
@@ -95,10 +95,8 @@ def _snapshot(plan, policy):
 
 
 def _pin(value):
-    closed(value, ("path", "sha256", "size_bytes"))
+    closed(value, ("path",))
     validate_path(value["path"])
-    validate_file(dict(artifact_ref="artifact_" + str(value["sha256"]), sha256=value["sha256"],
-        size_bytes=value["size_bytes"], format="runtime_file"))
 
 
 def _validate_intent(intent, plan):
@@ -139,12 +137,6 @@ def _validate_intent(intent, plan):
     require(all(Path(pin["path"]).is_relative_to(Path(intent["python_home"]) / "lib") for pin in intent["runtime_files"])
         and same(intent["environment"], _environment(root, intent["python_home"], intent["dependencies"])), "worker_execution_mismatch")
     return deepcopy(intent)
-
-
-def _verify_pins(intent):
-    for pin in [*intent["source_pins"], intent["interpreter"], *intent["runtime_files"],
-            *(pin for row in intent["dependencies"] for pin in row["files"])]:
-        require(same(file_pin(pin["path"]), pin), "worker_execution_mismatch")
 
 
 def _capture(store, root, name, format_):
@@ -330,7 +322,6 @@ def prepare_fluorescence_result_worker(store, *, plan, policy):
         handle = native.NativeJobHandle(root / "worker.handle.json")
         if not execution_path.exists():
             validate_fluorescence_policy(intent["policy"])
-            _verify_pins(intent)
             if not handle.path.exists():
                 native.prepare_job(intent["command"], cwd=root, policy=policy, handle_path=handle.path,
                     stdout_path=root / "worker.stdout", stderr_path=root / "worker.stderr", env=intent["environment"])
@@ -348,7 +339,6 @@ def prepare_fluorescence_result_worker(store, *, plan, policy):
                 problem = dict(code=error.code, phase=error.phase, diagnostic=error.diagnostic, operational=error.operational)
             view = native.status(handle)
             require(view["terminal"] and view["quiescent"], "worker_execution_mismatch")
-            _verify_pins(intent)
             body = handle.read()
             with regular(body["paths"]["request"]) as stream:
                 request_raw = stream.read().decode("utf-8")

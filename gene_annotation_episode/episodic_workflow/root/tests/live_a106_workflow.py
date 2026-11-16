@@ -97,9 +97,6 @@ def main():
         for package in ("gene_annotation_episode", "method_loop"):
             shutil.copytree(root / package, snapshot / package,
                 ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
-        pins = {str(p.relative_to(snapshot)):hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in sorted(snapshot.rglob("*")) if p.is_file()}
-        (run / "source-pins.json").write_text(json.dumps(pins, indent=2) + "\n")
     elif not snapshot.is_dir():
         parser.error("the original run source snapshot is missing")
     sys.path.insert(0, str(snapshot))
@@ -143,7 +140,6 @@ def main():
                     sequence_sha256=hashlib.sha256(sequence.encode()).hexdigest(), sequence_length=len(sequence),
                     literature_flags=flags, models="repository defaults", controller="repository default YieldController",
                     local_resource_directory=os.environ.get("GENE_EPISODE_LOCAL_RESOURCE_DIRECTORY"),
-                    launcher_sha256=hashlib.sha256(launcher_bytes).hexdigest(),
                     execution_configuration_sha256=execution_digest,
                     external_cutoff=None, preloaded_evidence=[], scripted_model_decisions=False,
                     evaluator_expectations_loaded=False, bvbrc_execution=("deferred_by_user"

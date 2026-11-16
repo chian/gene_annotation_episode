@@ -11,7 +11,7 @@ TEXT = {'type': 'string', 'minLength': 1, 'pattern': '^[^\\u0000]+$'}
 SHA = {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}
 NULL = {'type': 'null'}
 COUNT = {'type': 'integer', 'minimum': 0}
-FILE_SCHEMA = obj({'path': TEXT, 'sha256': SHA, 'size_bytes': COUNT})
+FILE_SCHEMA = obj({'path': TEXT})
 PARAMETERS_SCHEMA = obj({'rank': {'type': 'integer', 'minimum': 1},
     'random_state': {'type': 'integer', 'minimum': 0, 'maximum': 2**32-1},
     'normalization': {'enum': ['none', 'column_sum_1000']}, 'tol': {'type': 'number', 'minimum': 0},

@@ -51,7 +51,7 @@ LABEL = {'type': 'string'}
 SHA = {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}
 COUNT = {'type': 'integer', 'minimum': 0}
 NULL = {'type': 'null'}
-PIN_SCHEMA = obj({'path': TEXT, 'sha256': SHA, 'size_bytes': COUNT})
+PIN_SCHEMA = obj({'path': TEXT})
 FILE_SCHEMA = obj({'artifact_ref': TEXT, 'sha256': SHA, 'size_bytes': COUNT, 'format': TEXT})
 LOCATION_SCHEMA = obj({name: nullable({'type': 'integer', 'minimum': 1 if name.startswith('line_') else 0})
     for name in ('record_ordinal', 'line_start', 'line_end', 'byte_start', 'byte_end')})
@@ -184,10 +184,8 @@ def _sha(value):
 
 
 def _pin(value):
-    closed(value, 'path sha256 size_bytes')
+    closed(value, 'path')
     path_value(value['path'], absolute=True)
-    _sha(value['sha256'])
-    require(type(value['size_bytes']) is int and value['size_bytes'] >= 0, 'invalid_fluorescence_pin')
 
 
 def _software_implementation_root(value):

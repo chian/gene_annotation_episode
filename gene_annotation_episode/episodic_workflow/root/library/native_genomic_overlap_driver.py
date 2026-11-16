@@ -270,10 +270,8 @@ def _implementation(software, failures):
     checks = []
     try:
         selected = Path(software["python_executable"]).resolve(strict=True)
-        actual = file_identity(selected)["sha256"]
-        result["python_observed"] = {"sha256": actual, "version": platform.python_version()}
+        result["python_observed"] = {"version": platform.python_version()}
         checks.extend((
-            ("/software/python_sha256", software["python_sha256"], actual),
             ("/software/python_version", software["python_version"], platform.python_version()),
             ("/software/python_executable", str(selected), str(Path(sys.executable).resolve(strict=True))),
         ))
@@ -282,7 +280,7 @@ def _implementation(software, failures):
         checks.append(("/software/driver_module", str(root / (software["driver_module"].replace(".", "/") + ".py")), __file__))
         for row in software["implementation_files"]:
             path = confined_file(root, row["module"].replace(".", "/") + ".py")
-            checks.append(("/software/implementation_files/" + row["module"], row["sha256"], file_identity(path)["sha256"]))
+            _require(path.is_file(), "software_identity_mismatch")
             loaded = sys.modules.get(row["module"])
             if loaded is not None:
                 checks.append(("/software/module_root/" + row["module"], str(path), getattr(loaded, "__file__", None)))

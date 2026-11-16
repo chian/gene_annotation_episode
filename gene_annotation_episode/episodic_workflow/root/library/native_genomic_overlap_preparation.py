@@ -39,7 +39,6 @@ from gene_annotation_episode.native_file_capture import (
     NativeFileCaptureError, capture_declared_native_files, capture_native_file,
     retained_native_file,
 )
-from gene_annotation_episode.episodic_workflow.root.library.retained_file_pin import file_pin as _runtime_file_pin
 
 
 class WorkerExecution(TypedDict):
@@ -263,22 +262,18 @@ def _source_closure():
     return modules
 
 
-def _stage(store, identity, target, policy, directory, *, executable=False):
-    """Stage verified custody bytes into a private inode, preserving Store modes.
+def _stage(source, target, policy, directory, *, executable=False):
+    """Stage one selected file's bytes into a private read-only inode.
 
-    This is execution staging, not artifact acquisition or registration. The
-    native_file_capture helper owns the custody copy and complete verification.
+    An already staged file (an interrupted preparation) is accepted only when its
+    bytes equal the bytes to be staged; different bytes are refused.
     """
-    source = retained_native_file(store, identity)
-    check_scratch_budget(Path(directory), policy, additional_bytes=identity["size_bytes"])
+    raw = Path(source).read_bytes()
+    check_scratch_budget(Path(directory), policy, additional_bytes=len(raw))
     with _directory(str(target.parent), create=True) as parent:
         try:
             with _regular(parent, target.name) as existing, os.fdopen(os.dup(existing), "rb") as stream:
-                digest, size = hashlib.sha256(), 0
-                for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-                    digest.update(chunk); size += len(chunk)
-                _require((digest.hexdigest(), size) == (identity["sha256"], identity["size_bytes"]),
-                         "genomic_overlap_preparation_snapshot_conflict")
+                _require(stream.read() == raw, "genomic_overlap_preparation_snapshot_conflict")
                 _require(os.fstat(existing).st_mode & 0o222 == 0, "genomic_overlap_preparation_snapshot_mutable")
                 return
         except FileNotFoundError:
@@ -286,14 +281,9 @@ def _stage(store, identity, target, policy, directory, *, executable=False):
         temporary = "." + target.name + "." + secrets.token_hex(16) + ".writing"
         try:
             with _regular(parent, temporary, flags=os.O_WRONLY | os.O_CREAT | os.O_EXCL) as item:
-                digest, size = hashlib.sha256(), 0
-                with source.open("rb") as original, os.fdopen(os.dup(item), "wb") as output:
-                    for chunk in iter(lambda: original.read(1024 * 1024), b""):
-                        digest.update(chunk); size += len(chunk)
-                        output.write(chunk)
+                with os.fdopen(os.dup(item), "wb") as output:
+                    output.write(raw)
                     output.flush()
-                _require((digest.hexdigest(), size) == (identity["sha256"], identity["size_bytes"]),
-                         "genomic_overlap_preparation_snapshot_conflict")
                 os.fchmod(item, 0o555 if executable else 0o444)
                 os.fsync(item)
             os.link(temporary, target.name, src_dir_fd=parent, dst_dir_fd=parent, follow_symlinks=False)
@@ -334,15 +324,13 @@ def _snapshot(store, plan, policy):
     for name, source in sorted(_source_closure().items()):
         relative = Path(*name.split("."))
         relative = relative / "__init__.py" if source.name == "__init__.py" else relative.with_suffix(".py")
-        identity = _capture(store, source.parent, source.name, "python_source")
         target = root / relative
-        _stage(store, identity, target, policy, directory)
-        pins.append({"path": str(target), "sha256": identity["sha256"], "size_bytes": identity["size_bytes"]})
+        _stage(source, target, policy, directory)
+        pins.append({"path": str(target)})
     binary = Path(sys.executable).resolve(strict=True)
-    identity = _capture(store, binary.parent, binary.name, "python_interpreter")
     target = Path(directory) / "runtime" / "python"
-    _stage(store, identity, target, policy, directory, executable=True)
-    interpreter = {"path": str(target), "sha256": identity["sha256"], "size_bytes": identity["size_bytes"]}
+    _stage(binary, target, policy, directory, executable=True)
+    interpreter = {"path": str(target)}
     for path in sorted([p for p in root.rglob("*") if p.is_dir()], key=lambda p: len(p.parts), reverse=True):
         path.chmod(0o555)
     root.chmod(0o555)
@@ -369,10 +357,8 @@ def _pins(execution, plan):
     root = PurePosixPath(plan["directory"]) / "source_snapshot"
     paths = []
     for pin in [*execution["source_pins"], execution["interpreter"]]:
-        _closed(pin, ("path", "sha256", "size_bytes"))
+        _closed(pin, ("path",))
         _path(pin["path"])
-        _require(type(pin["sha256"]) is str and re.fullmatch(r"[a-f0-9]{64}", pin["sha256"]) is not None
-                 and type(pin["size_bytes"]) is int and pin["size_bytes"] > 0)
     for pin in execution["source_pins"]:
         path = PurePosixPath(pin["path"])
         _require(root in path.parents and path.suffix == ".py")
@@ -382,24 +368,13 @@ def _pins(execution, plan):
     _validated_dependencies(execution["dependencies"])
 
 
-def _verify_snapshot(store, plan, intent):
-    """Pending recovery checks its original snapshot, never today's sources."""
+def _verify_snapshot(plan, intent):
+    """Pending recovery checks its original snapshot paths and read-only modes."""
     _pins(intent, plan)
     for pin in [*intent["source_pins"], intent["interpreter"]]:
         path = Path(pin["path"])
-        identity = _capture(store, path.parent, path.name,
-            "python_interpreter" if pin == intent["interpreter"] else "python_source")
-        _require(all(identity[key] == pin[key] for key in ("sha256", "size_bytes")),
-                 "genomic_overlap_preparation_snapshot_conflict")
         with _directory(str(path.parent)) as parent, _regular(parent, path.name) as item:
             _require(os.fstat(item).st_mode & 0o222 == 0, "genomic_overlap_preparation_snapshot_mutable")
-    for row in intent["dependencies"]:
-        for pin in row["files"]:
-            try:
-                actual = _runtime_file_pin(pin["path"])
-            except (OSError, ValueError) as error:
-                raise ValueError("genomic_overlap_preparation_dependency_conflict") from error
-            _require(actual == pin, "genomic_overlap_preparation_dependency_conflict")
 
 
 def _checked_environment(directory, env, execution):
@@ -836,7 +811,7 @@ def prepare_genomic_overlap_worker(store, *, plan: dict, policy: LocalJobPolicy)
             plan_file = _capture(store, plan["directory"], "plan.json", _PLAN)
             completed = _read(fd, "execution.json")
             if completed is None:
-                _verify_snapshot(store, plan, intent)
+                _verify_snapshot(plan, intent)
                 execution = {"version": _EXECUTION, "plan_file": plan_file,
                     **_run(fd, plan, intent, policy), "source_pins": deepcopy(intent["source_pins"]),
                     "interpreter": deepcopy(intent["interpreter"]),

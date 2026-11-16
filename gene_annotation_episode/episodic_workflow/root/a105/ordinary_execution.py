@@ -4,7 +4,6 @@ No episode decisions or scores belong here. Shared compatibility contains run
 characteristics only; actual sequence identities stay in local tool records.
 """
 from dataclasses import dataclass
-import hashlib
 from importlib.metadata import version
 import inspect
 import json

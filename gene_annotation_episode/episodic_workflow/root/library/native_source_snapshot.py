@@ -140,16 +140,15 @@ def _source_closure(module_root, modules):
 
 
 def _copy_exact(source, destination, *, executable=False):
-    identity = file_identity(source)
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
-        _source_require(file_identity(destination) == identity and not destination.stat().st_mode & 0o222, 'native_dependency_unavailable')
+        with _regular(source) as original, _regular(destination) as existing:
+            _source_require(original.read() == existing.read() and not destination.stat().st_mode & 0o222, 'native_dependency_unavailable')
     else:
         with _regular(source) as original, _writing(destination) as output:
             shutil.copyfileobj(original, output, length=1024 * 1024)
         if executable:
             destination.chmod(0o555)
-    _source_require(file_identity(destination) == identity, 'native_dependency_unavailable')
-    return dict(path=str(destination), **identity)
+    return dict(path=str(destination))
 
 

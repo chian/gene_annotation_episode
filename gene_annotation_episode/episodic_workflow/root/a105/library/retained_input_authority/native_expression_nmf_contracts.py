@@ -50,7 +50,7 @@ def validate_expression_nmf_software(value):
     pins = [value['python'], *value['implementation_files'], *value['runtime_files']]
     for row in pins:
         path_value(row['path'], absolute=True)
-['path'] for row in pins]
+    paths = [row['path'] for row in pins]
     require(len(paths) == len(set(paths)), 'duplicate_nmf_runtime_file')
     modules = {str(PurePosixPath(value['module_root']) / 'gene_annotation_episode' / name) for name in ('__init__.py', 'expression_nmf_common.py', 'expression_nmf_inputs.py', 'native_expression_nmf_contracts.py', 'native_expression_nmf_storage.py', 'native_expression_nmf_driver.py')}
     require(modules <= {r['path'] for r in value['implementation_files']}, 'nmf_implementation_closure_incomplete')

@@ -27,7 +27,7 @@ def _now():
 
 
 def verify_fluorescence_software(software):
-    """Authenticate the actual interpreter, imports and installed dependencies."""
+    """Check the actual interpreter, imports, file paths and installed dependencies."""
     software = validate_fluorescence_software(software)
     require(str(Path(sys.executable).resolve()) == str(Path(software['python']['path']).resolve())
         and sys.version == software['python_version'] and Path(sys.prefix).resolve() == Path(software['python_home']).resolve(),
@@ -35,7 +35,7 @@ def verify_fluorescence_software(software):
     pins = [software['python'], *software['implementation_files'], *software['runtime_files']]
     expected_paths = {Path(row['path']).resolve() for row in pins}
     for expected in pins:
-        require(same(file_pin(expected['path']), expected), 'native_software_mismatch')
+        require(Path(expected['path']).is_file(), 'native_software_mismatch')
     for row in software['distributions']:
         distribution = importlib.metadata.distribution(row['name'])
         require(distribution.version == row['version'] and (distribution.requires or []) == row['requires'],

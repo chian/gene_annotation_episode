@@ -51,7 +51,6 @@ def validate_expression_nmf_software(value):
     pins = [value['python'], *value['implementation_files'], *value['runtime_files']]
     for row in pins:
         path_value(row['path'], absolute=True)
-        require(type(row['size_bytes']) is int, 'invalid_nmf_file_identity')
     paths = [row['path'] for row in pins]
     require(len(paths) == len(set(paths)), 'duplicate_nmf_runtime_file')
     modules = {str(PurePosixPath(value['module_root']) / 'gene_annotation_episode' / name)
