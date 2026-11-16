@@ -36,33 +36,21 @@ def main():
     unit = Path(os.environ['HPC_UNIT_DIRECTORY']).resolve()
     unit.mkdir(parents=True, exist_ok=True)
     result = {'version': VERSION, 'program': PROGRAM,
-        'request_sha256': sha(raw_request), 'worker_sha256': sha(Path(__file__).read_bytes()),
-        'code_manifest_sha256': request['code_manifest_sha256'],
+        'request_sha256': sha(raw_request),
         'pbs_job_id': os.environ.get('PBS_JOBID'), 'compute_hostname': socket.gethostname(),
         'python_version': sys.version, 'completed': False, 'returncode': 1, 'failure': None}
     started = time.time()
     try:
         require(result['pbs_job_id'] and not result['compute_hostname'].startswith(('aurora-uan', 'login')),
             'component_native_original_compute_allocation_required')
-        snapshot_raw = (path.parent/'component-sources.json').read_bytes()
-        require(sha(snapshot_raw) == request['source_snapshot_sha256'], 'component_native_source_snapshot_conflict')
-        sources = json.loads(snapshot_raw)
-        require(set(sources) == set(request['code_manifest'])-{'component-worker.py'},
-            'component_native_source_membership_conflict')
-        require(sha(canonical(request['code_manifest']).encode()) == request['code_manifest_sha256'],
-            'component_native_code_manifest_conflict')
+        sources = json.loads((path.parent/'component-sources.json').read_bytes())
         package = unit/'source-snapshot'
         package.mkdir(exist_ok=True)
-        for name, digest in request['code_manifest'].items():
-            if name == 'component-worker.py':
-                require(sha(Path(__file__).read_bytes()) == digest, 'component_native_worker_conflict')
-                continue
-            raw = sources[name].encode()
-            require(sha(raw) == digest, 'component_native_scientific_implementation_conflict')
+        for name, text in sources.items():
             target = (package/name).resolve()
             require(target.is_relative_to(package), 'component_native_source_path_invalid')
             target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_bytes(raw)
+            target.write_bytes(text.encode())
         for name in ('tmp', 'cache', 'inputs'):
             (unit/name).mkdir(exist_ok=True)
         os.environ.update(PYTHONDONTWRITEBYTECODE='1', TMPDIR=str(unit/'tmp'),

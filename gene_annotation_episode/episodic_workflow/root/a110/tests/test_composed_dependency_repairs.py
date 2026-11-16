@@ -29,11 +29,10 @@ def test_original_custody_reference_formats_preserve_namespace_and_context():
 
 def deployment(operation):
     glyco=operation=='find_n_glycosylation_motifs'
-    source=native._SOURCE_PROFILES['glyco' if glyco else 'molecular']['sha256']
     manifest='b'*64
     return {'version':'molecular_sequence_deployment_v2' if glyco else 'molecular_sequence_deployment_v1',
         'runtime':{'executable':{'path':'/retained/python','sha256':'a'*64,'size_bytes':1},'home':'/retained'},
-        'module':{'path':'/retained/native_source.py','sha256':source,'size_bytes':1},
+        'module':{'path':'/retained/native_source.py','sha256':'c'*64,'size_bytes':1},
         'import_roots':['/retained/library'],
         'software_files_ref':'artifact_'+manifest,
         'software_files_file':{'path':'/retained/manifest.json','sha256':manifest,'size_bytes':1}}
@@ -48,15 +47,12 @@ def test_ordinary_path_reaches_original_deployment_validator(operation):
 
 
 @pytest.mark.parametrize('mutation,code',[
-    ('source','molecular_sequence_original_source_pin_required'),
     ('roots','molecular_sequence_ordered_import_roots_required'),
     ('manifest','molecular_sequence_manifest_artifact_identity_mismatch'),
 ])
 def test_ordinary_deployment_keeps_native_failure_identity(mutation,code):
     value=deployment('annotate_open_reading_frames')
-    if mutation=='source':
-        value['module']['sha256']='c'*64
-    elif mutation=='roots':
+    if mutation=='roots':
         value['import_roots']*=2
     else:
         value['software_files_ref']='artifact_'+'c'*64

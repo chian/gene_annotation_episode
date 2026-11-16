@@ -1,6 +1,4 @@
 from copy import deepcopy
-import hashlib
-from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_annotation_bundle_adapter import _record
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_annotation_native import _canonical, _finite_json
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_assembly_bundle_adapter import _select_members
@@ -10,16 +8,10 @@ from gene_annotation_episode.episodic_workflow.root.a110.library.received_execut
 SHEET_VERSION = 'bvbrc_intervention_observations_v1'
 COMPONENTS_VERSION = 'bvbrc_intervention_retained_components_v1'
 APPLICATION_ADAPTERS = {'TnSeq': 'bvbrc_tnseq', 'RNASeq': 'bvbrc_rnaseq'}
-_DEPENDENCIES = ('bvbrc_intervention_bundle_adapter.py', 'bvbrc_intervention_contracts.py', 'intervention_analysis_native.py', 'bvbrc_tnseq_bundle_adapter.py', 'bvbrc_rnaseq_bundle_adapter.py', 'bvbrc_assembly_bundle_adapter.py', 'bvbrc_assembly_contracts.py', 'bvbrc_assembly_native.py', 'bvbrc_annotation_bundle_adapter.py', 'bvbrc_annotation_contracts.py', 'bvbrc_annotation_native.py', 'bvbrc_appservice_contracts.py', 'bvbrc_appservice_schemas.json', 'domain.py', 'alignment_correspondence.py', 'sequence_composition_grader.py', 'sequence_composition_counts.py', 'ucsc_acquisition.py', 'data_acquisition_receipts.py', 'acquisition.py', 'public_configuration.py', 'phylogeny_formats.py', 'phylogeny_format_contracts.py', '__init__.py')
 
 def _require(condition, code='bvbrc_intervention_bundle_invalid'):
     if not condition:
         raise ValueError(code)
-
-def implementation_sha256():
-    """Actual installed A110 reader identity; retained epochs are authenticated separately."""
-    from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.adapter_source_identity import current_implementation_sha256
-    return current_implementation_sha256('bvbrc_intervention_bundle_adapter')
 
 def _saved(sheet, components, parameters):
     _finite_json(sheet)

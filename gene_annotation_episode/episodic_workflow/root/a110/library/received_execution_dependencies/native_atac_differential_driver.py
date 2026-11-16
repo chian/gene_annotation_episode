@@ -1,6 +1,5 @@
 from __future__ import annotations
 from contextlib import ExitStack, contextmanager
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -43,19 +42,6 @@ def _regular(value):
         require(stat.S_ISREG(os.fstat(descriptor).st_mode), 'input_unavailable')
         with os.fdopen(os.dup(descriptor), 'rb') as stream:
             yield stream
-
-def stream_identity(stream):
-    stream.seek(0)
-    hasher, size = (hashlib.sha256(), 0)
-    for block in iter(lambda: stream.read(1024 * 1024), b''):
-        hasher.update(block)
-        size += len(block)
-    stream.seek(0)
-    return {'sha256': hasher.hexdigest(), 'size_bytes': size}
-
-def file_identity(path):
-    with _regular(path) as stream:
-        return stream_identity(stream)
 
 def decode_json(raw):
 

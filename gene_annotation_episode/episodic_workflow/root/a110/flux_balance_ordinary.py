@@ -16,7 +16,7 @@ from .flux_balance_worker_contracts import validate_flux_balance_worker_plan
 from .flux_balance_invocation import FluxBalanceOperationUnpublished
 from .native_flux_balance_bindings import validate_flux_balance_bindings
 from .native_flux_balance_contracts import (ATTEMPT_DIRECTORY_NAME, DRIVER_MODULE,
-    RUN_PLAN_FILENAME, SOURCE_FUNCTION_SHA256, STARTED_FILENAME, flux_balance_environment,
+    RUN_PLAN_FILENAME, STARTED_FILENAME, flux_balance_environment,
     path_value, validate_flux_balance_requested_job, validate_flux_balance_software)
 from .native_flux_balance_local import prepare_selected_local_flux_balance, local_flux_balance_plan
 from .native_flux_balance_preparation import prepare_flux_balance_result_worker
@@ -81,8 +81,7 @@ def compile_flux_balance_requested_job(scientific_request, *, binding, resolved_
         "constraints": None if request["constraints"] is None else [{"reaction_id": row["reaction_id"],
             "lower": bound(row["lower"]), "upper": bound(row["upper"])} for row in request["constraints"]],
         "objective": deepcopy(request["objective"]), "solver_options": deepcopy(request["solver_options"]),
-        "software": software, "output_prefix": "fba-output", "flux_output_name": "fluxes.csv",
-        "source_function_sha256": SOURCE_FUNCTION_SHA256}
+        "software": software, "output_prefix": "fba-output", "flux_output_name": "fluxes.csv"}
     return validate_flux_balance_requested_job({"argv": [software["python"]["path"], "-B", "-S", "-m",
         DRIVER_MODULE, RUN_PLAN_FILENAME], "environment": flux_balance_environment(software,
             attempt_directory=str(Path(lifecycle) / ATTEMPT_DIRECTORY_NAME), lifecycle_directory=lifecycle),

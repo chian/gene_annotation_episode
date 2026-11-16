@@ -18,7 +18,7 @@ from .flux_balance_calculations import calculate_flux_balance_sheet
 from .flux_balance_result_views import project_fba_result
 from .flux_balance_result_contracts import validate_fba_projection
 from .native_flux_balance_contracts import (ATTEMPT_DIRECTORY_NAME, POLICY,
-    SOURCE_FUNCTION_SHA256, RUN_PLAN_FILENAME, DRIVER_MODULE, OWNER_FILENAME,
+    RUN_PLAN_FILENAME, DRIVER_MODULE, OWNER_FILENAME,
     STARTED_FILENAME, ENVIRONMENT_FILENAME, flux_balance_environment,
     flux_balance_output_files, flux_balance_driver_argv, validate_flux_balance_run_plan)
 
@@ -88,8 +88,7 @@ def calculate(request, unit):
         'constraints': None if science['constraints'] is None else [{'reaction_id': row['reaction_id'],
             'lower': bound(row['lower']), 'upper': bound(row['upper'])} for row in science['constraints']],
         'objective': deepcopy(science['objective']), 'solver_options': deepcopy(science['solver_options']),
-        'software': software, 'output_prefix': 'fba-output', 'flux_output_name': 'fluxes.csv',
-        'source_function_sha256': SOURCE_FUNCTION_SHA256}
+        'software': software, 'output_prefix': 'fba-output', 'flux_output_name': 'fluxes.csv'}
     environment = flux_balance_environment(software, attempt_directory=str(attempt), lifecycle_directory=str(lifecycle))
     requested_job = {'argv': [software['python']['path'], '-B', '-S', '-m', DRIVER_MODULE, RUN_PLAN_FILENAME],
         'environment': environment, 'native_flux_balance': job}

@@ -21,13 +21,13 @@ from ..runtime import Record
 from ..execution_contracts import canonical
 from ..flux_balance_execution_inputs import FluxBalanceExecutionInputs
 from ..native_flux_balance_contracts import (STACK, DRIVER_MODULE, RUN_PLAN_FILENAME,
-    SOURCE_FUNCTION_SHA256, flux_balance_environment)
+    flux_balance_environment)
 from ..hpc_work_planning.execution_result_acquisition.episode import ExecutionEpisode
 
 
 def synthetic_software():
     root = PurePosixPath('/unexecuted-synthetic-fba-callback-fixture')
-    def pin(path): return {'path': str(path), 'sha256': '0' * 64, 'size_bytes': 1}
+    def pin(path): return {'path': str(path)}
     module_root, python_home, dependencies = root / 'source', root / 'python', root / 'dependencies'
     private = module_root / 'gene_annotation_episode/episodic_workflow/root/a110'
     return {'version': 'fba_software_v1', 'python': pin(python_home / 'bin/python'),
@@ -73,7 +73,6 @@ def selected(tmp_path, monkeypatch):
         lifecycle = str(tmp_path / 'unexecuted')
         job = {'version': 'native_flux_balance_job_v1', 'operation': 'perform_flux_balance_analysis',
             'mode': 'steady_state_linear_fba', 'source_alias': 'biomni.tool.systems_biology.perform_flux_balance_analysis',
-            'source_function_sha256': SOURCE_FUNCTION_SHA256,
             'model_input': {'file': {'path': str(store.path / 'artifacts' / digest[:2] / digest),
                 'sha256': digest, 'size_bytes': len(raw)}, 'artifact_ref': artifact, 'format': 'cobra_json',
                 'original_loader_selection': 'json_file', 'repository_identifier': None, 'acquisition_receipt_file': None},

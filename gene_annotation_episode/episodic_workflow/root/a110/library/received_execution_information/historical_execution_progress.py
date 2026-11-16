@@ -5,7 +5,6 @@ owns observation custody, never an episode loop, retry, or continuation rule.
 """
 from __future__ import annotations
 from copy import deepcopy
-import hashlib
 import json
 from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a110.communication import plain
@@ -428,7 +427,7 @@ class ExecutionProgressProvider:
             store.db.execute('CREATE TABLE IF NOT EXISTS runtime_execution_progress_dependencies (\n                run_id TEXT NOT NULL, physical_identity TEXT NOT NULL,\n                target_handle TEXT NOT NULL, relationship TEXT NOT NULL,\n                PRIMARY KEY(run_id,physical_identity))')
 
     def as_record(self):
-        return {'version': VERSION, 'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), 'configuration': {'resources': deepcopy(self.resources), 'log_window_bytes': self.log_window_bytes, 'log_roles': list(self.log_roles)}}
+        return {'version': VERSION, 'configuration': {'resources': deepcopy(self.resources), 'log_window_bytes': self.log_window_bytes, 'log_roles': list(self.log_roles)}}
 
     def latest_saved_observation(self, handle, scope, *, require_native_state=False):
         """Read saved progress, optionally only an actual native job state."""

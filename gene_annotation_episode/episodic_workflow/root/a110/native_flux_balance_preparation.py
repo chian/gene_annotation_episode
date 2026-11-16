@@ -27,7 +27,7 @@ from .native_file_capture import (NativeFileCaptureError, capture_native_file,
 from .native_flux_balance_contracts import (ATTEMPT_DIRECTORY_NAME, POLICY,
     flux_balance_environment, path_value, validate_flux_balance_software)
 from .native_flux_balance_storage import (_directory_fd, confined_file, decode_json,
-    directory, file_pin, immutable_bytes, read_bytes)
+    directory, immutable_bytes, read_bytes)
 
 
 __all__ = ["prepare_flux_balance_result_worker", "validate_prepared_flux_balance_worker",
@@ -83,10 +83,8 @@ def _file(value, format_=None):
 
 
 def _pin(value):
-    _require(type(value) is dict and set(value) == {"path", "sha256", "size_bytes"}, "pin_invalid")
+    _require(type(value) is dict and set(value) == {"path"}, "pin_invalid")
     path_value(value["path"], absolute=True)
-    _file({"artifact_ref": "artifact_" + str(value["sha256"]), "sha256": value["sha256"],
-        "size_bytes": value["size_bytes"], "format": "runtime_file"})
     return value
 
 
@@ -207,17 +205,15 @@ def _selected_snapshot(plan, policy, software):
         and not any(_overlap(common, path) for path in
             (software["python_home"], software["module_root"], *software["dependency_roots"])),
         "runtime_directory_overlap")
-    for pin in originals:
-        _require(_same(file_pin(pin["path"]), pin), "runtime_changed")
     sources = _source_closure(Path(software["module_root"]), [WORKER_MODULE])
     _require({str(path) for path in sources.values()}
         <= {pin["path"] for pin in software["implementation_files"]}, "selected_source_closure_incomplete")
     pins = _selected_source_pins(software, root)
     for original, expected in zip(sorted(software["implementation_files"], key=lambda row: row["path"]), pins):
-        check_scratch_budget(common, policy, additional_bytes=original["size_bytes"])
+        check_scratch_budget(common, policy, additional_bytes=Path(original["path"]).stat().st_size)
         copied = _copy_exact(Path(original["path"]), Path(expected["path"]))
         _require(_same(copied, expected), "runtime_changed")
-    check_scratch_budget(common, policy, additional_bytes=software["python"]["size_bytes"])
+    check_scratch_budget(common, policy, additional_bytes=Path(software["python"]["path"]).stat().st_size)
     interpreter = _copy_exact(Path(software["python"]["path"]), root / "runtime/python", executable=True)
     _require(_same(interpreter, {**software["python"], "path": str(root / "runtime/python")}), "runtime_changed")
     directory(root / ATTEMPT_DIRECTORY_NAME / "cache/pip", create=True)
@@ -247,7 +243,7 @@ def _snapshot(plan, policy, *, software=None):
     destination = confined_file(root, "runtime/python", create_parents=True)
     interpreter = _copy_exact(binary, destination, executable=True)
     stdlib = home / "lib" / ("python%d.%d" % sys.version_info[:2])
-    runtime_files = [file_pin(path) for path in sorted(stdlib.rglob("*")) if path.is_file()
+    runtime_files = [{"path": str(path)} for path in sorted(stdlib.rglob("*")) if path.is_file()
         and not any(part in ("site-packages", "dist-packages", "__pycache__") for part in path.relative_to(stdlib).parts)
         and path.suffix not in (".pyc", ".pyo")]
     _require(runtime_files, "stdlib_missing")
@@ -324,11 +320,6 @@ def _validate_intent(value, plan, *, software=None):
     _require(_same(value["environment"], _environment(root, common, value["python_home"], value["dependencies"])),
         "environment_mismatch")
     return value
-
-
-def _verify_pins(intent):
-    for pin in _all_pins(intent):
-        _require(_same(file_pin(pin["path"]), pin), "runtime_changed")
 
 
 def _controls(body, request, intent):
@@ -508,7 +499,6 @@ def prepare_flux_balance_result_worker(store, *, plan, policy, software=None):
                     _require(not any(output.iterdir()), "unsealed_output")
                 _require(not any(path.name.startswith(".local-job-") for path in common.iterdir()),
                     "unsealed_native_controls")
-            _verify_pins(intent)
             if not handle.path.exists():
                 native.prepare_job(intent["command"], cwd=common, policy=policy, handle_path=handle.path,
                     stdout_path=root / "worker.stdout", stderr_path=root / "worker.stderr", env=intent["environment"])
@@ -524,7 +514,6 @@ def prepare_flux_balance_result_worker(store, *, plan, policy, software=None):
                 failure = {"code": error.code, "phase": error.phase, "diagnostic": error.diagnostic, "operational": error.operational}
             view = native.status(handle)
             _require(view["terminal"] and view["quiescent"], "worker_not_closed")
-            _verify_pins(intent)
             body, raw = _validate_live_controls(handle, intent)
             execution = {"version": EXECUTION_VERSION, "plan_file": plan_file, "intent": intent,
                 "terminal": True, "quiescent": True, "policy": deepcopy(POLICY),

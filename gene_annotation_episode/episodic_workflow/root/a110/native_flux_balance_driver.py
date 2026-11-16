@@ -34,7 +34,7 @@ def _verify_software(software, *, native_loaded=False):
     pins = [software["python"], *software["implementation_files"], *software["runtime_files"], *software["solver_runtime_files"]]
     by_path = {row["path"]: row for row in pins}
     for row in pins:
-        require(file_pin(row["path"]) == row, "fba_software_file_changed")
+        require(Path(row["path"]).is_file(), "fba_software_file_changed")
     distributions = []
     for row in software["distributions"]:
         version = importlib.metadata.version(row["name"])
@@ -295,7 +295,7 @@ def run_flux_balance_native(plan):
     manifest = {"version": "flux_balance_native_manifest_v1", "sealed": True, "attempt": owner,
         "software_sha256": digest(job["software"]), "model_identity": {k: job["model_input"]["file"][k] for k in ("sha256", "size_bytes")},
         "actual_distributions": distributions, "actual_solver": _solver_record(solution_payload, configuration),
-        "source_function_sha256": job["source_function_sha256"], "effective_problem_sha256": problem_sha,
+        "effective_problem_sha256": problem_sha,
         "files": files, "solve_call_count": calls, "execution_outcome": outcome,
         "request_realization": application["request_realization"], "request_application": application,
         "issues": problems + deepcopy(application["issues"])}

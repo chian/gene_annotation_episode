@@ -1,6 +1,5 @@
 from __future__ import annotations
 import gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_alignment_bundle_contracts as contracts
-from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_msa_bundle_adapter import implementation_sha256
 ADAPTER_ID = 'bvbrc_metacats'
 ADAPTER_VERSION = '1'
 

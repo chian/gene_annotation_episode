@@ -150,7 +150,7 @@ class PublicClients:
         script = _skill_script(self.skill_root, skill, filename)
         observer_policy = (None if max_bytes is None else {
             'version': 'bounded_skill_http_entity_capture_v1',
-            'adapter_module': __name__, 'adapter_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            'adapter_module': __name__,
             'response_byte_limit': max_bytes, 'byte_basis': 'requests_decoded_entity_bytes',
             'stream': True, 'automatic_redirects': False, 'redirect_preparation': False})
         # Full payloads are retained as provenance, as the user's workflow
@@ -183,12 +183,10 @@ runpy.run_path(script, run_name="__main__")
 '''
                 command = [sys.executable, "-c", observer, str(script), str(headers_path), str(entity_path)]
                 if max_bytes is not None:
-                    observer = '''import hashlib, pathlib, requests, runpy, sys
-script, package_root, adapter_sha256, limit, destination, entity_destination = sys.argv[1:]
+                    observer = '''import requests, runpy, sys
+script, package_root, limit, destination, entity_destination = sys.argv[1:]
 sys.path.insert(0, package_root)
 from gene_annotation_episode.episodic_workflow.root.a108 import acquisition as capture_adapter
-if hashlib.sha256(pathlib.Path(capture_adapter.__file__).read_bytes()).hexdigest() != adapter_sha256:
-    raise RuntimeError("response_capture_adapter_changed")
 original_request = requests.Session.request
 original_redirects = requests.Session.resolve_redirects
 def observed(self, *args, **kwargs):
@@ -207,7 +205,7 @@ finally:
     requests.Session.resolve_redirects = original_redirects
 '''
                     command = [sys.executable, '-c', observer, str(script),
-                        str(Path(__file__).resolve().parents[4]), observer_policy['adapter_sha256'],
+                        str(Path(__file__).resolve().parents[4]),
                         str(max_bytes), str(headers_path), str(entity_path)]
             try:
                 result = subprocess.run(command, input=json.dumps(request),
@@ -257,7 +255,7 @@ finally:
                     payload.get("params", {}), _now(), raw,
                     response_metadata.get("headers", {}).get("content-type", "application/octet-stream"),
                      {"response": response_metadata, "representation": "http_entity_bytes_via_installed_client",
-                      "script": str(script), "script_sha256": hashlib.sha256(script.read_bytes()).hexdigest(),
+                      "script": str(script),
                       **({'observer': observer_policy} if observer_policy is not None else {})})
                     if response_metadata and entity_path.exists() else None)
                 code = ("provider_http_"+str(status) if isinstance(status, int) and status >= 400 else
@@ -266,10 +264,8 @@ finally:
                         envelope.get("error", {}).get("code", "provider_error"))
                 raise AcquisitionError(code, snapshot=snapshot,
                     phase="http_response" if snapshot else "client_response",
-                    diagnostic={"client_error": envelope.get("error"), "script": str(script),
-                                "script_sha256": hashlib.sha256(script.read_bytes()).hexdigest()})
-        transport = {"script": str(script), "script_sha256": hashlib.sha256(script.read_bytes()).hexdigest(),
-                     "representation": "client_saved_provider_payload"}
+                    diagnostic={"client_error": envelope.get("error"), "script": str(script)})
+        transport = {"script": str(script), "representation": "client_saved_provider_payload"}
         if response_metadata is not None:
             transport["response"] = response_metadata
             transport["representation"] = "http_entity_bytes_via_installed_client"

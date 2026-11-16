@@ -463,11 +463,9 @@ class ExecutionContextController:
             packet = None
             if unit_ref is not None and self.capture_current_completion is not None:
                 packet = self._completion_packet(self.capture_current_completion(unit_ref, index, value), index, unit_ref)
-            if 'pending_work' in decision_context and (after.get('pending_work_after_action') is not None or after.get('wait_outcome') is not None or packet is not None):
+            if after.get('pending_work_after_action') is not None or after.get('wait_outcome') is not None or packet is not None:
                 support = decision_context.get('waiting_support', {})
                 context = completed_action_context(context, pending_at_selection=decision_context['pending_work'], pending_after_action=after.get('pending_work_after_action'), wait_estimate_at_selection=after.get('wait_estimate'), wait_outcome=after.get('wait_outcome'), progress_records=support.get('progress_records', ()), duration_expectations=support.get('duration_expectations', ()), own_completed_action_history=support.get('own_completed_action_history', ()), local_return_history_at_selection=support.get('local_return_history'), current_completion_evidence=packet)
-            elif packet is not None:
-                context = completed_action_context(context, pending_at_selection=None, pending_after_action=after.get('pending_work_after_action'), current_completion_evidence=packet)
             if 'resource_tool_estimates' in decision_context or 'resource_tool_estimates' in after:
                 context['resource_tool_estimates_at_selection'] = decision_context.get('resource_tool_estimates', [])
                 context['resource_tool_estimates_after_action'] = after.get('resource_tool_estimates', [])
@@ -3595,7 +3593,7 @@ async def _run_bound_workflow(store, tools, *, provider=None, provider_config=No
         raise ValueError('episode_service_factory_and_direct_services_are_exclusive')
     if episode_binding_descriptors is not None and episode_binding_factories is not None:
         raise ValueError('episode_descriptors_and_factories_are_exclusive')
-    from gene_annotation_episode.episodic_workflow.root.a108.numerical import YieldController, ESTIMATOR_VERSION, SOURCE_SHA256
+    from gene_annotation_episode.episodic_workflow.root.a108.numerical import YieldController, ESTIMATOR_VERSION
     from gene_annotation_episode.episodic_workflow.root.a108.providers import ModelConnection
     directory, run_id = _run_location(store, run_dir, resume)
     journal = Journal(store, run_id)
@@ -3648,7 +3646,7 @@ async def _run_bound_workflow(store, tools, *, provider=None, provider_config=No
     problem = _plain(store.problem())
     tool_resources = _plain(tools.resource_binding()) if callable(getattr(tools, 'resource_binding', None)) else {}
     bindings = {'controller': _binding_name(controller_factory, 'gene_annotation_episode.episodic_workflow.root.a108.numerical.YieldController'), 'credit': _binding_name(project_credit, 'caller_injected')}
-    versions = {'controller': {'estimator_version': ESTIMATOR_VERSION, 'template_sha256': SOURCE_SHA256} if controller_factory is None else {'requirement': 'same_caller_injected_executable'}, 'credit': {'requirement': 'same_caller_injected_executable'}}
+    versions = {'controller': {'estimator_version': ESTIMATOR_VERSION} if controller_factory is None else {'requirement': 'same_caller_injected_executable'}, 'credit': {'requirement': 'same_caller_injected_executable'}}
     if project_child_credit is not None:
         bindings['scientific_child_credit'] = _binding_name(project_child_credit, 'caller_injected')
         versions['scientific_child_credit'] = {'requirement': 'same_caller_injected_executable'}

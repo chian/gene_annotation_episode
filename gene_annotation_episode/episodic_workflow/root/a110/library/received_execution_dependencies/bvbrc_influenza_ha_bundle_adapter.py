@@ -1,6 +1,5 @@
 from copy import deepcopy
 import hashlib
-from pathlib import Path
 import re
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_annotation_bundle_adapter import _record
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_annotation_native import _canonical, _finite_json, _issue
@@ -11,17 +10,11 @@ ADAPTER_ID = 'bvbrc_influenza_ha'
 ADAPTER_VERSION = '1'
 SHEET_VERSION = 'bvbrc_influenza_ha_observations_v1'
 COMPONENTS_VERSION = 'bvbrc_influenza_ha_retained_components_v1'
-_DEPENDENCIES = ('__init__.py', 'acquisition.py', 'domain.py', 'public_configuration.py', 'bvbrc_influenza_ha_native.py', 'bvbrc_influenza_ha_contracts.py', 'bvbrc_influenza_ha_bundle_adapter.py', 'bvbrc_annotation_native.py', 'bvbrc_annotation_contracts.py', 'bvbrc_annotation_bundle_adapter.py', 'phylogeny_formats.py', 'phylogeny_format_contracts.py', 'phylogeny_calculators.py', 'phylogeny_calculation_contracts.py', 'bvbrc_appservice_contracts.py', 'bvbrc_appservice_schemas.json', 'alignment_correspondence.py', 'sequence_composition_grader.py', 'sequence_composition_counts.py', 'ucsc_acquisition.py', 'data_acquisition_receipts.py')
 _NATIVE_FIELDS = {'version', 'document_sha256', 'representation', 'status', 'native_scores', 'alignment_selection', 'alignment_population', 'alignment_components', 'ungapped_coordinates', 'query_reference_correspondence', 'definitions', 'issues'}
 
 def _require(condition, code='bvbrc_influenza_ha_bundle_invalid'):
     if not condition:
         raise ValueError(code)
-
-def implementation_sha256():
-    """Actual installed A110 reader identity; retained epochs are authenticated separately."""
-    from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.adapter_source_identity import current_implementation_sha256
-    return current_implementation_sha256('bvbrc_influenza_ha_bundle_adapter')
 
 def _original_task(task):
     task = validate_contract('OriginalTask', task)

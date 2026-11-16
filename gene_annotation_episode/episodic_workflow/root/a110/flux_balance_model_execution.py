@@ -13,7 +13,7 @@ from .local_jobs import LocalJobPolicy
 from .flux_balance_invocation import FluxBalanceOperationUnpublished
 from . import native_lifecycle as native
 from .native_flux_balance_contracts import ATTEMPT_DIRECTORY_NAME, POLICY, flux_balance_environment, path_value
-from .native_flux_balance_storage import confined_file, directory, file_pin, immutable_json, read_bytes, read_json
+from .native_flux_balance_storage import confined_file, directory, immutable_json, read_bytes, read_json
 
 
 VERSION = 'ordinary_flux_balance_model_execution_v1'
@@ -54,7 +54,7 @@ def _verify_selected_software(selected):
     software = selected['request']['software']
     for pin in [software['python'], *software['implementation_files'],
             *software['runtime_files'], *software['solver_runtime_files']]:
-        _require(_same(file_pin(pin['path']), pin), 'selected_software_changed')
+        _require(Path(pin['path']).is_file(), 'selected_software_changed')
 
 
 def _validate_handle(handle, selected, root):

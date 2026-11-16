@@ -36,7 +36,7 @@ class AppServicePublications:
     @staticmethod
     def _bundle_content_kind(inputs):
         selected = inputs['adapter']
-        if selected is not None and inputs['adapter_implementation_sha256'] is not None and ((selected['adapter_id'], selected['adapter_version']) in {('bvbrc_annotation', '1'), ('bvbrc_assembly', '1'), ('bvbrc_variation', '1'), ('bvbrc_influenza_ha', '1'), ('bvbrc_subspecies', '1'), ('bvbrc_tnseq', '1'), ('bvbrc_rnaseq', '1')}):
+        if selected is not None and ((selected['adapter_id'], selected['adapter_version']) in {('bvbrc_annotation', '1'), ('bvbrc_assembly', '1'), ('bvbrc_variation', '1'), ('bvbrc_influenza_ha', '1'), ('bvbrc_subspecies', '1'), ('bvbrc_tnseq', '1'), ('bvbrc_rnaseq', '1')}):
             return 'application_artifact_bundle'
         return 'artifact_bundle'
 
@@ -98,10 +98,6 @@ class AppServicePublications:
             self.host.custody.content(context, binding, before=before)
         selected = value['adapter']
         _require(canonical(selected) == canonical(value['selector']['adapter']), 'appservice_publication_adapter_conflict')
-        if value['adapter_implementation_sha256'] is not None:
-            target = self.host.read_target(value['original_handoff_ref'], context.scope)
-            configured = self.api.configuration[target['resource_id']]['scientific_adapters']
-            _require(any((row == {'adapter_id': selected['adapter_id'], 'adapter_version': selected['adapter_version'], 'implementation_sha256': value['adapter_implementation_sha256']} for row in configured)), 'appservice_publication_adapter_configuration_conflict')
         return value
 
     def _bundle(self, inputs, current):
@@ -187,7 +183,7 @@ class AppServicePublications:
             if retained_adapter.exists():
                 _require(canonical(_read(retained_adapter)) == canonical({'adapter_result': adapter}), 'appservice_adapter_publication_conflict')
             if adapter is not None:
-                _require(inputs['adapter_implementation_sha256'] is not None and (adapter['adapter_id'], adapter['adapter_version']) == (inputs['adapter']['adapter_id'], inputs['adapter']['adapter_version']), 'appservice_adapter_result_identity_conflict')
+                _require(inputs['adapter'] is not None and (adapter['adapter_id'], adapter['adapter_version']) == (inputs['adapter']['adapter_id'], inputs['adapter']['adapter_version']), 'appservice_adapter_result_identity_conflict')
                 contents = {}
                 for name in ('sheet', 'components'):
                     content = adapter[name + '_content']

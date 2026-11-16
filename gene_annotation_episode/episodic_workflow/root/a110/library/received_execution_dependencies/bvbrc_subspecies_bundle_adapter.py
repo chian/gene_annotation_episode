@@ -1,6 +1,5 @@
 from copy import deepcopy
 import hashlib
-from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_annotation_bundle_adapter import _record
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_annotation_native import _canonical, _finite_json
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_assembly_bundle_adapter import _select_members
@@ -11,16 +10,10 @@ ADAPTER_ID = 'bvbrc_subspecies'
 ADAPTER_VERSION = '1'
 SHEET_VERSION = 'bvbrc_subspecies_observations_v1'
 COMPONENTS_VERSION = 'bvbrc_subspecies_retained_components_v1'
-_DEPENDENCIES = ('__init__.py', 'acquisition.py', 'domain.py', 'public_configuration.py', 'bvbrc_subspecies_native.py', 'bvbrc_subspecies_contracts.py', 'bvbrc_subspecies_bundle_adapter.py', 'bvbrc_assembly_bundle_adapter.py', 'bvbrc_assembly_contracts.py', 'bvbrc_assembly_native.py', 'bvbrc_annotation_bundle_adapter.py', 'bvbrc_annotation_native.py', 'bvbrc_annotation_contracts.py', 'alignment_correspondence.py', 'sequence_composition_grader.py', 'sequence_composition_counts.py', 'ucsc_acquisition.py', 'data_acquisition_receipts.py', 'bvbrc_appservice_contracts.py', 'bvbrc_appservice_schemas.json', 'phylogeny_formats.py', 'phylogeny_format_contracts.py')
 
 def _require(condition, code='bvbrc_subspecies_bundle_invalid'):
     if not condition:
         raise ValueError(code)
-
-def implementation_sha256():
-    """Actual installed A110 reader identity; retained epochs are authenticated separately."""
-    from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.adapter_source_identity import current_implementation_sha256
-    return current_implementation_sha256('bvbrc_subspecies_bundle_adapter')
 
 def _saved(sheet, components, parameters):
     """Read saved associations only; host ContentBindings authenticate values."""

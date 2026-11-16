@@ -10,10 +10,8 @@ from __future__ import annotations
 from collections.abc import Mapping
 from copy import deepcopy
 from dataclasses import replace
-import hashlib
 import inspect
 import json
-from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a110.communication import ReportBoundaryError, plain, validate_form
 from gene_annotation_episode.episodic_workflow.root.a110.composition_information import CONTRACT_INFORMATION_PROFILE
 from gene_annotation_episode.episodic_workflow.root.a110.domain import ContractError, REF, identity, obj, source_location_inputs, validate_schema
@@ -39,7 +37,3 @@ def _population_catalog():
     """A110 reaction operations owned by this episode."""
     from gene_annotation_episode.episodic_workflow.root.a110.library.literature_component_binding import population_catalog_entries
     return list(population_catalog_entries())
-_AXIS_DIRECTORY = Path(__file__).resolve().parents[5]
-
-def _binding_source_bytes():
-    return b''.join((path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py'))))

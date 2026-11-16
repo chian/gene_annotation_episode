@@ -9,19 +9,18 @@ from .execution_guidance import resource_identity
 from .hpc_queue import digest
 
 
-def commission(*, resource_id, resource, tool, request_sha256, worker_sha256,
-               implementation_sha256, parameters, files, worker_name, request_name,
+def commission(*, resource_id, resource, tool, request_sha256,
+               parameters, files, worker_name, request_name,
                program, version, features, preparation, objective):
     root = '{allocation_workspace}'
     features = {'nodes': 1, 'wall_seconds': 900, **features}
     hardware = resource_identity(resource_id, resource)
     predicates = [{'field':[key], 'operator':'eq', 'value':value} for key,value in (
         ('program',program),('version',version),('completed',True),('returncode',0),
-        ('request_sha256',request_sha256),('worker_sha256',worker_sha256),
-        ('code_manifest_sha256',implementation_sha256))]
+        ('request_sha256',request_sha256))]
     return {'objective':objective,'resource_id':resource_id,
         'execution_profile':{'resource_id':hardware,'backend':'hpc','tool':tool,
-            'implementation':implementation_sha256,'parameters':digest(parameters),'hardware':hardware},
+            'implementation':version,'parameters':digest(parameters),'hardware':hardware},
         'monitoring':{'min_interval_seconds':60.,'max_interval_seconds':120.,'monitor_cost':.001},
         'yield_bindings':{
             'hpc':{'cutoff':.01,'parameters':{'uncertainty_alpha':.05}},

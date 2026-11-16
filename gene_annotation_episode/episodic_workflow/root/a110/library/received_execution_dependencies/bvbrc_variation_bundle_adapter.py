@@ -1,6 +1,4 @@
 from copy import deepcopy
-import hashlib
-from pathlib import Path
 from jsonschema import Draft202012Validator
 import gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.vcf_result_measurements as vcf
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_annotation_contracts import selected_field_schema as _literal_schema
@@ -14,7 +12,6 @@ VALUE_VERSION = 'bvbrc_variation_selected_field_v1'
 DOCUMENT_VERSION = 'bvbrc_variation_native_document_v1'
 SHEET_VERSION = 'bvbrc_variation_observations_v1'
 COMPONENTS_VERSION = 'bvbrc_variation_retained_components_v1'
-_DEPENDENCIES = ('__init__.py', 'acquisition.py', 'domain.py', 'public_configuration.py', 'bvbrc_variation_bundle_adapter.py', 'bvbrc_annotation_bundle_adapter.py', 'bvbrc_annotation_contracts.py', 'bvbrc_annotation_native.py', 'vcf_result_measurements.py', 'alignment_correspondence.py', 'sequence_composition_grader.py', 'sequence_composition_counts.py', 'ucsc_acquisition.py', 'data_acquisition_receipts.py', 'bvbrc_appservice_contracts.py', 'bvbrc_appservice_schemas.json')
 
 def _require(condition, code='bvbrc_variation_bundle_invalid'):
     if not condition:
@@ -33,11 +30,6 @@ def _validate(value, schema, code):
     except Exception as error:
         raise ValueError(code) from error
     return deepcopy(value)
-
-def implementation_sha256():
-    """Actual installed A110 reader identity; retained epochs are authenticated separately."""
-    from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.adapter_source_identity import current_implementation_sha256
-    return current_implementation_sha256('bvbrc_variation_bundle_adapter')
 
 def parameters_schema():
     return _object(dict(version=dict(const=PARAMETERS_VERSION), analysis_id=_text(), application_id=dict(const='Variation'), documents=dict(type='array', minItems=1, items=_object(dict(document_id=_text(), requirement_id=_text(), representation=dict(const='vcf'))))))

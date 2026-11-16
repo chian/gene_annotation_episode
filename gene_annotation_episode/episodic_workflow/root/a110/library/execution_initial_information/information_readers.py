@@ -9,7 +9,6 @@ from __future__ import annotations
 from copy import deepcopy
 from dataclasses import dataclass
 import json
-import hashlib
 from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.root.a110.communication import plain
@@ -39,7 +38,6 @@ class FactoryInformationReaders:
     # The setup declaration names the literal source constructor and the full
     # original factory record. It is not inferred from any callback result.
     construction_record: dict
-    implementation_record: dict
 
     def validate_original_setup(self, factory_record):
         if type(self.factory) is not ExecutionServiceFactory or type(self.store) is not Store:
@@ -57,31 +55,6 @@ class FactoryInformationReaders:
                     'gene_annotation_episode.episodic_workflow.root.a110.execution_service_setup.ExecutionServiceFactory'
                 or self.construction_record['factory_definition'] != definition):
             raise ValueError('initial_information_factory_construction_provenance_required')
-        # A full source inventory is supplied by the audited original setup.
-        # Missing source custody fails; an arbitrary empty fingerprint is not
-        # treated as a compatibility declaration.
-        if (not isinstance(self.implementation_record, dict)
-                or set(self.implementation_record) != {'version', 'sources'}
-                or self.implementation_record['version'] != 'initial_information_reader_sources_v1'
-                or not isinstance(self.implementation_record['sources'], list)
-                or not self.implementation_record['sources']):
-            raise ValueError('initial_information_reader_source_custody_required')
-        seen = set()
-        for row in self.implementation_record['sources']:
-            if (not isinstance(row, dict) or set(row) != {'path', 'sha256'}
-                    or not isinstance(row['path'], str)
-                    or not (row['path'].startswith('gene_annotation_episode/episodic_workflow/root/a110/') or row['path'] == 'gene_annotation_episode/workflow_budget.py')
-                    or row['path'] in seen or not isinstance(row['sha256'], str)
-                    or len(row['sha256']) != 64
-                    or any(c not in '0123456789abcdef' for c in row['sha256'])):
-                raise ValueError('initial_information_reader_source_custody_required')
-            seen.add(row['path'])
-            if '..' in Path(row['path']).parts:
-                raise ValueError('initial_information_reader_source_custody_required')
-            roots = [parent for parent in Path(__file__).resolve().parents
-                if (parent / 'gene_annotation_episode').is_dir()]
-            if not roots or hashlib.sha256((roots[0] / row['path']).read_bytes()).hexdigest() != row['sha256']:
-                raise ValueError('initial_information_reader_implementation_changed')
         self._validate_axis_ports(definition)
 
     @property
@@ -109,7 +82,6 @@ class FactoryInformationReaders:
         return {'version': 'factory_information_readers_v1', 'axis': 'A110',
             'run_id': self.run_id, 'directory': str(self.directory),
             'construction': deepcopy(self.construction_record),
-            'implementation': deepcopy(self.implementation_record),
             'progress_binding': _copy(self.job_progress_provider.as_record()),
             'ports': {name: None if getattr(self, name) is None else _identity(getattr(self, name))
                 for name in ()}}

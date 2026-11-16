@@ -9,7 +9,7 @@ import shutil
 import sys
 from gene_annotation_episode.episodic_workflow.root.a110.local_jobs import LocalJobPolicy, check_scratch_budget
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.native_atac_differential_contracts import require, validate_driver_runtime
-from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.native_atac_differential_driver import _directory, _regular, _writing, file_identity
+from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.native_atac_differential_driver import _directory, _regular, _writing
 _PACKAGES = {'jsonschema': 'jsonschema', 'attrs': 'attr', 'referencing': 'referencing', 'rpds-py': 'rpds', 'jsonschema-specifications': 'jsonschema_specifications'}
 _OPTIONAL = {'typing-extensions': 'typing_extensions', 'idna': 'idna', 'jsonpointer': 'jsonpointer', 'fqdn': 'fqdn', 'rfc3987': 'rfc3987', 'rfc3986-validator': 'rfc3986_validator', 'rfc3987-syntax': 'rfc3987_syntax', 'rfc3339-validator': 'rfc3339_validator', 'webcolors': 'webcolors', 'uri-template': 'uri_template', 'isoduration': 'isoduration', 'lark': 'lark', 'arrow': 'arrow', 'python-dateutil': 'dateutil', 'six': 'six'}
 
@@ -42,15 +42,14 @@ def _source_closure(module_root, modules):
     return paths
 
 def _copy_exact(source, destination):
-    identity = file_identity(source)
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
-        require(file_identity(destination) == identity and (not destination.stat().st_mode & 146))
+        with _regular(source) as original, _regular(destination) as existing:
+            require(original.read() == existing.read() and (not destination.stat().st_mode & 146))
     else:
         with _regular(source) as original, _writing(destination) as target:
             shutil.copyfileobj(original, target, length=1024 * 1024)
-    require(file_identity(destination) == identity)
-    return {'path': str(destination), **identity}
+    return {'path': str(destination)}
 
 def _dependency_bindings(*, contained_records=False, exclusions=None):
     selected, result = (dict(_PACKAGES), [])
@@ -78,7 +77,7 @@ def _dependency_bindings(*, contained_records=False, exclusions=None):
                 path = Path(installed.locate_file(entry)).resolve(strict=True)
             if path.suffix in ('.pyc', '.pyo') or not path.is_file():
                 continue
-            files.append({'path': str(path), **file_identity(path)})
+            files.append({'path': str(path)})
         require(bool(files), 'native_dependency_unavailable')
         result.append({'distribution': distribution, 'version': installed.version, 'package_root': str(Path(module.__file__).resolve(strict=True).parent), 'files': sorted({r['path']: r for r in files}.values(), key=lambda r: r['path'])})
     return result
@@ -98,6 +97,6 @@ def freeze_driver_runtime(*, module_root, snapshot_directory, driver_modules, po
     implementation = []
     for name, source in sorted(modules.items()):
         check_scratch_budget(target, policy, additional_bytes=source.stat().st_size)
-        pin = _copy_exact(source, target / (name.replace('.', '/') + '.py'))
-        implementation.append({'module': name, 'sha256': pin['sha256']})
-    return validate_driver_runtime(dict(python_executable=sys.executable, python_sha256=file_identity(Path(sys.executable).resolve(strict=True))['sha256'], python_version=platform.python_version(), module_root=str(target), implementation_files=implementation, dependencies=_dependency_bindings(contained_records=True, exclusions=dependency_exclusions) if contained_dependency_records else _dependency_bindings()))
+        _copy_exact(source, target / (name.replace('.', '/') + '.py'))
+        implementation.append({'module': name})
+    return validate_driver_runtime(dict(python_executable=sys.executable, python_version=platform.python_version(), module_root=str(target), implementation_files=implementation, dependencies=_dependency_bindings(contained_records=True, exclusions=dependency_exclusions) if contained_dependency_records else _dependency_bindings()))

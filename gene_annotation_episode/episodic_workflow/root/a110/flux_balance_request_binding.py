@@ -16,7 +16,7 @@ from .flux_balance_contracts import flux_balance_schema, validate_flux_balance_r
 from .native_file_capture import _metadata, capture_native_file, retained_native_file
 from .native_flux_balance_bindings import validate_flux_balance_bindings
 from .native_flux_balance_contracts import (
-    ATTEMPT_DIRECTORY_NAME, DRIVER_MODULE, RUN_PLAN_FILENAME, SOURCE_FUNCTION_SHA256,
+    ATTEMPT_DIRECTORY_NAME, DRIVER_MODULE, RUN_PLAN_FILENAME,
     flux_balance_environment,
 )
 from .practical_execution_records import validate_assignment
@@ -176,8 +176,7 @@ def _materialize(store, row):
         'constraints': None if changes is None else [{'reaction_id': change['reaction_id'],
             'lower': bound(change['lower']), 'upper': bound(change['upper'])} for change in changes],
         'objective': deepcopy(request['objective']), 'solver_options': deepcopy(request['solver_options']),
-        'software': deepcopy(binding['software']), 'output_prefix': 'fba-output', 'flux_output_name': 'fluxes.csv',
-        'source_function_sha256': SOURCE_FUNCTION_SHA256}
+        'software': deepcopy(binding['software']), 'output_prefix': 'fba-output', 'flux_output_name': 'fluxes.csv'}
     software = binding['software']
     lifecycle = str(Path(row['workspace']) / '.fba-selected-runtime' / row['assignment_id'])
     environment = flux_balance_environment(software, attempt_directory=str(Path(lifecycle) / ATTEMPT_DIRECTORY_NAME),

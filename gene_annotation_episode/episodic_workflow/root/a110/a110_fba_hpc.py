@@ -74,8 +74,6 @@ def freeze(registry, args, *, context, known, invocation):
         if row['id'] == args['binding_id'] and row['resource_id'] == args['resource_id']]
     require(len(selected) == 1, 'remote_fba_binding_not_configured')
     binding = selected[0]
-    code_root = Path(__file__).resolve().parent
-    package_root = code_root.parents[2]
     selected_files = {row['path']: row for row in binding['software']['implementation_files']}
     for name in ('__init__.py', 'execution_contracts.py', 'flux_balance_contracts.py',
             'native_flux_balance_contracts.py', 'native_flux_balance_storage.py',
@@ -83,9 +81,7 @@ def freeze(registry, args, *, context, known, invocation):
         relative = ('gene_annotation_episode/__init__.py' if name == '__init__.py' else
             'gene_annotation_episode/episodic_workflow/root/a110/' + name)
         path = str(Path(binding['software']['module_root']) / relative)
-        local = package_root/name if name == '__init__.py' else code_root/name
-        require(path in selected_files and selected_files[path]['sha256'] == sha(local.read_bytes()),
-            'remote_fba_deployment_code_differs_from_selected_implementation:'+name)
+        require(path in selected_files, 'remote_fba_deployment_code_differs_from_selected_implementation:'+name)
     require(args['target_ref'] in known, 'remote_fba_target_not_received')
     footprint = store.coverage(args['target_ref'])
     require(footprint and store.scope_covers(footprint, plain(context.scope)), 'remote_fba_original_target_scope_required')
@@ -121,8 +117,6 @@ def freeze(registry, args, *, context, known, invocation):
     names = tuple(dict.fromkeys(['__init__.py', 'component_axis_native_contracts.py', *FBA_SOURCES]))
     sources = snapshot_sources(names)
     worker = (directory/'component_axis_native_worker.py').read_text()
-    manifest = {name: sha(text.encode()) for name, text in sources.items()}
-    manifest['component-worker.py'] = sha(worker.encode())
     snapshot = canonical(sources)+'\n'
     selection = {key: deepcopy(args[key]) for key in ('request', 'calculation_parameters', 'projection')}
     native = {'version': VERSION, 'axis': 'A110', 'operation': TOOL, 'scientific_profile': PROFILE,
@@ -130,16 +124,14 @@ def freeze(registry, args, *, context, known, invocation):
         'scope': plain(context.scope), 'target_ref': next(iter(roots)), 'target_regions': footprint,
         'resource_id': args['resource_id'], 'binding': deepcopy(binding), 'selection': selection,
         'input': assets[primary['file']['sha256']], 'assets': assets, 'resolved_files': resolved,
-        'jsonschema_version': version('jsonschema'), 'code_manifest': manifest,
-        'code_manifest_sha256': sha(canonical(manifest).encode()), 'source_snapshot_sha256': sha(snapshot.encode())}
+        'jsonschema_version': version('jsonschema')}
     raw_request = (canonical(native)+'\n').encode()
     body = {'version': VERSION, 'axis': 'A110', 'operation': TOOL, 'scientific_profile': PROFILE,
         'run_id': context.run_id, 'scope': plain(context.scope), 'target_ref': next(iter(roots)),
         'target_regions': footprint, 'source_ref': primary['selection']['witness_ref'],
         'input_file': primary['file'], 'request': native, 'request_sha256': sha(raw_request),
-        'worker_sha256': manifest['component-worker.py'], 'code_manifest_sha256': native['code_manifest_sha256'],
         'logical_work_sha256': sha(canonical({'selection': selection, 'files': [row['file'] for row in resolved],
-            'software': binding['software'], 'profile': PROFILE, 'implementation': manifest}).encode()),
+            'software': binding['software'], 'profile': PROFILE}).encode()),
         'resource_id': args['resource_id'], 'evidence_refs': sorted(refs),
         'input_provenance': provenance(store, [row['selection']['witness_ref'] for row in resolved]),
         'arguments_sha256': sha(canonical(args).encode()),

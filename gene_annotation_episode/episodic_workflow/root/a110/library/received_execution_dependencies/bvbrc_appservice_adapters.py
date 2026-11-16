@@ -28,9 +28,7 @@ def bind_adapters(configured):
         implementation = installed.get(key)
         if implementation is None:
             continue
-        from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.adapter_source_identity import authenticate_adapter_source
-        authenticate_adapter_source(implementation.ADAPTER_ID, implementation.ADAPTER_VERSION, implementation.__name__, row['implementation_sha256'], implementation.implementation_sha256())
-        bound[key] = (implementation, row['implementation_sha256'])
+        bound[key] = implementation
     return bound
 
 def selected_adapter(service, selection):

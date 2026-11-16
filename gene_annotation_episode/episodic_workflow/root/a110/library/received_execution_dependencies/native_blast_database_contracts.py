@@ -36,9 +36,8 @@ OUTPUT_SELECTION_SCHEMA = _object({'output_key': _KEY, 'role': {'enum': ['stdout
 MODEL_SCHEMA = {'type': 'object', 'properties': {'temperature_bits': {'type': 'number', 'exclusiveMinimum': 0}, 'function_priors': _nullable({'type': 'object', 'additionalProperties': {'type': 'number', 'minimum': 0}})}, 'additionalProperties': False}
 NATIVE_BLAST_DATABASE_JOB_SCHEMA = _object({'version': {'const': 'native_blast_database_job_v1'}, 'program': {'enum': list(PROGRAMS)}, 'mode': {'const': 'database'}, 'software': SOFTWARE_SCHEMA, 'environment': _ENV, 'inputs': _array(_object({'input_key': _KEY, 'role': {'enum': ['query_sequence', 'query_msa', 'query_pssm', 'metadata']}, 'path': _ABS, 'format': {'enum': ['fasta', 'clustal', 'scoremat_asn_text', 'json', 'text']}, 'sha256': _SHA, 'size_bytes': _INT, 'artifact_ref': _nullable(_STR)}), minItems=1), 'query': _object({'kind': {'enum': ['sequence', 'msa', 'pssm']}, 'input_key': _KEY, 'msa_master_record_ordinal': _nullable(_INT), 'ignore_msa_master': _nullable(_BOOL)}), 'databases': _array(DATABASE_OPERAND_SCHEMA, minItems=1, maxItems=2), 'options': _array(_STR), 'outputs': _array(OUTPUT_SELECTION_SCHEMA, minItems=3, maxItems=5), 'metadata_inputs': _array(_object({'input_key': _KEY, 'consumer': {'enum': ['query_identity', 'sequence_database', 'profile', 'iteration', 'vdb']}, 'schema_id': _STR}), uniqueItems=True), 'grading_parameters': _object({'sequence_database_model': _nullable(MODEL_SCHEMA)})})
 NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA = _object({'argv': _array(_STR, minItems=1), 'environment': _ENV, 'native_blast_database': NATIVE_BLAST_DATABASE_JOB_SCHEMA})
-PRODUCER_MANIFEST_SCHEMA = _object({'version': {'const': 'native_blast_database_producer_manifest_v1'}, 'module_root': _ABS, 'entry_module': {'const': 'gene_annotation_episode.native_blast_database_driver'}, 'python': _FILE, 'package_files': _array(_object({'relative_path': _STR, 'sha256': _SHA, 'size_bytes': _INT}), minItems=3), 'runtime_files': _array(_FILE)})
 IDENTITY_SCHEMA = _object({**{key: _STR for key in ('run_id', 'episode_id', 'resource_id', 'operation_key')}, **{key: _SHA for key in ('attempt_id', 'assignment_sha256', 'requested_job_sha256', 'submission_token')}, 'execution_id': _nullable(_STR)})
-PLAN_SCHEMA = _object({'version': {'const': 'native_blast_database_run_plan_v1'}, 'identity': IDENTITY_SCHEMA, 'requested_job': NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA, 'attempt_directory': _ABS, 'input_paths': {'type': 'object', 'additionalProperties': _ABS}, 'database_paths': {'type': 'object', 'additionalProperties': _array(_ABS, minItems=1)}, 'output_directory': _ABS, 'resource_environment': _ENV, 'producer_manifest': FILE_IDENTITY_SCHEMA})
+PLAN_SCHEMA = _object({'version': {'const': 'native_blast_database_run_plan_v1'}, 'identity': IDENTITY_SCHEMA, 'requested_job': NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA, 'attempt_directory': _ABS, 'input_paths': {'type': 'object', 'additionalProperties': _ABS}, 'database_paths': {'type': 'object', 'additionalProperties': _array(_ABS, minItems=1)}, 'output_directory': _ABS, 'resource_environment': _ENV})
 
 def _fail(code):
     raise ValueError(_PREFIX + code)
@@ -471,30 +470,6 @@ def validate_native_blast_database_requested_job(request):
         _fail('requested_job_compiler_mismatch')
     return request
 
-def validate_native_blast_database_producer_manifest(manifest, *, module_root, python_executable):
-    manifest = _copy(manifest)
-    _schema(manifest, PRODUCER_MANIFEST_SCHEMA)
-    _absolute(module_root)
-    _absolute(python_executable)
-    if manifest['module_root'] != module_root or manifest['python']['path'] != python_executable:
-        _fail('producer_manifest_binding_mismatch')
-    package = _unique(manifest['package_files'], 'relative_path')
-    required = {'gene_annotation_episode/__init__.py', 'gene_annotation_episode/native_blast_database_driver.py', 'gene_annotation_episode/native_blast_database_contracts.py'}
-    if not required <= package.keys():
-        _fail('producer_required_package_file_missing')
-    for path in package:
-        _relative(path)
-    _disjoint(list(package), 'producer_package_path_overlap')
-    runtime = _unique(manifest['runtime_files'], 'path')
-    for row in [manifest['python'], *runtime.values()]:
-        _absolute(row['path'])
-        if _inside(row['path'], module_root, equal=True):
-            _fail('producer_external_file_inside_module_root')
-    if python_executable in runtime:
-        _fail('producer_duplicate_interpreter_file')
-    _disjoint([python_executable, *runtime], 'producer_external_path_overlap')
-    return manifest
-
 def _identity(identity, request, *, final):
     _schema(identity, IDENTITY_SCHEMA)
     if (identity['execution_id'] is None) == final or identity['requested_job_sha256'] != _digest(request) or identity['attempt_id'] != _digest(identity['operation_key']) or (identity['submission_token'] != _digest({k: identity[k] for k in ('run_id', 'episode_id', 'assignment_sha256', 'operation_key')})):
@@ -512,7 +487,6 @@ def _validate_plan(plan):
     if not _inside(plan['output_directory'], root, equal=True):
         _fail('output_directory_outside_attempt')
     _environment(plan['resource_environment'])
-    _file_identity(plan['producer_manifest'])
     job = request['native_blast_database']
     compiled = compile_native_blast_database_job(job, input_paths=plan['input_paths'], database_paths=plan['database_paths'], output_directory=plan['output_directory'])
     paths = list(plan['input_paths'].values())
@@ -522,8 +496,6 @@ def _validate_plan(plan):
     controls = [str(PurePosixPath(root) / n) for n in _CONTROL_NAMES]
     if any((_overlap(a, b) for a in paths for b in controls)):
         _fail('selected_path_control_overlap')
-    if any((_overlap(p, plan['producer_manifest']['path']) for p in paths)):
-        _fail('selected_path_producer_manifest_overlap')
     originals = [r['path'] for r in job['inputs'] if r['path'] != plan['input_paths'][r['input_key']]] + [job['software']['executable']]
     for db in job['databases']:
         m = db['manifest']
@@ -535,12 +507,11 @@ def _validate_plan(plan):
 def _effective_environment(plan):
     root = PurePosixPath(plan['attempt_directory'])
     return {**plan['resource_environment'], **plan['requested_job']['environment'], **{k: str(root / 'tmp') for k in ('TMPDIR', 'TMP', 'TEMP')}, 'XDG_CACHE_HOME': str(root / 'cache'), 'PYTHONDONTWRITEBYTECODE': '1'}
-FAILURE_CODES = frozenset({'software_missing', 'software_identity_mismatch', 'input_missing', 'input_identity_mismatch', 'input_native_incompatible', 'database_manifest_invalid', 'database_file_missing', 'database_identity_mismatch', 'database_file_unreadable', 'offline_configuration_unestablished', 'native_start_failed', 'native_nonzero_exit', 'required_output_missing', 'output_path_escape', 'output_inventory_incomplete', 'output_unreadable', 'output_changed_during_seal', 'producer_manifest_invalid', 'producer_file_missing', 'producer_file_identity_mismatch', 'producer_file_unreadable', 'producer_package_inventory_mismatch', 'producer_runtime_path_mismatch', 'producer_input_parser_unavailable'})
+FAILURE_CODES = frozenset({'software_missing', 'software_identity_mismatch', 'input_missing', 'input_identity_mismatch', 'input_native_incompatible', 'database_manifest_invalid', 'database_file_missing', 'database_identity_mismatch', 'database_file_unreadable', 'offline_configuration_unestablished', 'native_start_failed', 'native_nonzero_exit', 'required_output_missing', 'output_path_escape', 'output_inventory_incomplete', 'output_unreadable', 'output_changed_during_seal', 'producer_input_parser_unavailable'})
 _TIMESTAMP = _STR
 _MEASUREMENT = {'observed_sha256': _nullable(_SHA), 'size_bytes': _nullable(_INT), 'checked_at': _nullable(_TIMESTAMP), 'status': {'enum': ['verified', 'missing', 'mismatch', 'unreadable', 'not_checked']}}
-_ARTIFACT_SCHEMA = _object({'artifact_key': _KEY, 'input_key': _nullable(_KEY), 'output_key': _nullable(_KEY), 'database_key': _nullable(_KEY), 'role': {'enum': ['query_sequence', 'query_msa', 'query_pssm', 'metadata', 'database_manifest', 'preparation_receipt', 'stdout', 'stderr', 'primary_report', 'checkpoint_asn', 'checkpoint_ascii', 'producer_manifest']}, 'relative_path': _STR, 'format': _STR, 'fields': _array({'enum': sorted(TABULAR_FIELDS)}, uniqueItems=True), 'delimiter': _nullable({'type': 'string', 'minLength': 1, 'maxLength': 1}), 'sha256': _SHA, 'size_bytes': _INT, 'content_assessment': {'const': 'not_parsed'}})
-_PRODUCER_VERIFICATION_SCHEMA = _object({'manifest': _nullable(PRODUCER_MANIFEST_SCHEMA), 'manifest_observed_sha256': _nullable(_SHA), 'package_inventory_exact': _nullable(_BOOL), 'running_module_paths_match': _nullable(_BOOL), 'checks': _array(_object({'kind': {'enum': ['python', 'package', 'runtime']}, 'path': _ABS, **_MEASUREMENT})), 'status': {'enum': ['verified', 'failed']}})
-NATIVE_BLAST_DATABASE_BUNDLE_SCHEMA = _object({'version': {'const': 'native_blast_database_bundle_v1'}, 'identity': IDENTITY_SCHEMA, 'plan': PLAN_SCHEMA, 'requested_job': NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA, 'program': {'enum': list(PROGRAMS)}, 'mode': {'const': 'database'}, 'software': _object({'selected': SOFTWARE_SCHEMA, 'observed_sha256': _nullable(_SHA), 'version_source': _nullable(PROVENANCE_SCHEMA)}), 'producer_verification': _PRODUCER_VERIFICATION_SCHEMA, 'realized_argv': _array(_STR, minItems=1), 'environment': _ENV, 'input_manifest': _array(_object({'input_key': _KEY, 'original_path': _ABS, 'realized_path': _ABS, 'artifact_key': _KEY, 'expected_sha256': _SHA, 'observed_sha256': _SHA, 'size_bytes': _INT})), 'database_manifest': _array(_object({'database_key': _KEY, 'native_paths': _array(_ABS, minItems=1), 'manifest_artifact_key': _nullable(_KEY), 'preparation_receipt_artifact_key': _nullable(_KEY), 'metadata_manifest_artifacts': _array(_object({'identity': FILE_IDENTITY_SCHEMA, 'artifact_key': _nullable(_KEY)})), 'sidecar_artifacts': _array(_object({'role': {'enum': ['preparation_input_manifest', 'offline_configuration']}, 'identity': FILE_IDENTITY_SCHEMA, 'artifact_key': _nullable(_KEY)})), 'checks': _array(_object({'path': _ABS, 'expected_sha256': _SHA, **_MEASUREMENT}))})), 'output_manifest': _array(_object({'output_key': _KEY, 'presence': {'enum': ['present', 'missing', 'not_emitted', 'unknown']}, 'artifact_keys': _array(_KEY, uniqueItems=True), 'inventory_complete': _BOOL})), 'artifacts': _array(_ARTIFACT_SCHEMA), 'associations': _object({'query_input_key': _KEY, 'master_record_ordinal': _nullable(_INT), 'ignore_msa_master': _nullable(_BOOL), 'selected_options': _array(_STR), 'external_manifest_keys': _array(_KEY, uniqueItems=True)}), 'process': _object({'started': _BOOL, 'returncode': _nullable({'type': 'integer'}), 'started_at': _nullable(_TIMESTAMP), 'finished_at': _nullable(_TIMESTAMP), 'native_elapsed_seconds': _nullable({'type': 'number', 'minimum': 0})}), 'failures': _array(_object({'code': {'enum': sorted(FAILURE_CODES)}, 'input_key': _nullable(_KEY), 'database_key': _nullable(_KEY), 'output_key': _nullable(_KEY), 'artifact_key': _nullable(_KEY), 'native_returncode': _nullable({'type': 'integer'})}), uniqueItems=True), 'sealed_at': _TIMESTAMP})
+_ARTIFACT_SCHEMA = _object({'artifact_key': _KEY, 'input_key': _nullable(_KEY), 'output_key': _nullable(_KEY), 'database_key': _nullable(_KEY), 'role': {'enum': ['query_sequence', 'query_msa', 'query_pssm', 'metadata', 'database_manifest', 'preparation_receipt', 'stdout', 'stderr', 'primary_report', 'checkpoint_asn', 'checkpoint_ascii']}, 'relative_path': _STR, 'format': _STR, 'fields': _array({'enum': sorted(TABULAR_FIELDS)}, uniqueItems=True), 'delimiter': _nullable({'type': 'string', 'minLength': 1, 'maxLength': 1}), 'sha256': _SHA, 'size_bytes': _INT, 'content_assessment': {'const': 'not_parsed'}})
+NATIVE_BLAST_DATABASE_BUNDLE_SCHEMA = _object({'version': {'const': 'native_blast_database_bundle_v1'}, 'identity': IDENTITY_SCHEMA, 'plan': PLAN_SCHEMA, 'requested_job': NATIVE_BLAST_DATABASE_REQUESTED_JOB_SCHEMA, 'program': {'enum': list(PROGRAMS)}, 'mode': {'const': 'database'}, 'software': _object({'selected': SOFTWARE_SCHEMA, 'observed_sha256': _nullable(_SHA), 'version_source': _nullable(PROVENANCE_SCHEMA)}), 'realized_argv': _array(_STR, minItems=1), 'environment': _ENV, 'input_manifest': _array(_object({'input_key': _KEY, 'original_path': _ABS, 'realized_path': _ABS, 'artifact_key': _KEY, 'expected_sha256': _SHA, 'observed_sha256': _SHA, 'size_bytes': _INT})), 'database_manifest': _array(_object({'database_key': _KEY, 'native_paths': _array(_ABS, minItems=1), 'manifest_artifact_key': _nullable(_KEY), 'preparation_receipt_artifact_key': _nullable(_KEY), 'metadata_manifest_artifacts': _array(_object({'identity': FILE_IDENTITY_SCHEMA, 'artifact_key': _nullable(_KEY)})), 'sidecar_artifacts': _array(_object({'role': {'enum': ['preparation_input_manifest', 'offline_configuration']}, 'identity': FILE_IDENTITY_SCHEMA, 'artifact_key': _nullable(_KEY)})), 'checks': _array(_object({'path': _ABS, 'expected_sha256': _SHA, **_MEASUREMENT}))})), 'output_manifest': _array(_object({'output_key': _KEY, 'presence': {'enum': ['present', 'missing', 'not_emitted', 'unknown']}, 'artifact_keys': _array(_KEY, uniqueItems=True), 'inventory_complete': _BOOL})), 'artifacts': _array(_ARTIFACT_SCHEMA), 'associations': _object({'query_input_key': _KEY, 'master_record_ordinal': _nullable(_INT), 'ignore_msa_master': _nullable(_BOOL), 'selected_options': _array(_STR), 'external_manifest_keys': _array(_KEY, uniqueItems=True)}), 'process': _object({'started': _BOOL, 'returncode': _nullable({'type': 'integer'}), 'started_at': _nullable(_TIMESTAMP), 'finished_at': _nullable(_TIMESTAMP), 'native_elapsed_seconds': _nullable({'type': 'number', 'minimum': 0})}), 'failures': _array(_object({'code': {'enum': sorted(FAILURE_CODES)}, 'input_key': _nullable(_KEY), 'database_key': _nullable(_KEY), 'output_key': _nullable(_KEY), 'artifact_key': _nullable(_KEY), 'native_returncode': _nullable({'type': 'integer'})}), uniqueItems=True), 'sealed_at': _TIMESTAMP})
 
 def _time(value):
     try:
@@ -567,51 +538,6 @@ def _measurement(row, expected):
         elif row['observed_sha256'] is not None or row['size_bytes'] is not None:
             _fail('unavailable_file_has_measurement')
 
-def _producer_files(manifest):
-    return [{'kind': 'python', **manifest['python']}, *[{'kind': 'package', 'path': str(PurePosixPath(manifest['module_root']) / r['relative_path']), 'sha256': r['sha256'], 'size_bytes': r['size_bytes']} for r in manifest['package_files']], *[{'kind': 'runtime', **r} for r in manifest['runtime_files']]]
-
-def _validate_producer_verification(bundle, artifacts, has):
-    proof, plan = (bundle['producer_verification'], bundle['plan'])
-    started = bundle['process']['started']
-    manifest, selected = (proof['manifest'], plan['producer_manifest'])
-    candidates = [r for r in artifacts.values() if r['role'] == 'producer_manifest']
-    if len(candidates) > 1:
-        _fail('duplicate_producer_manifest_artifact')
-    capture = candidates[0] if candidates else None
-    manifest_matches = capture is not None and capture['sha256'] == selected['sha256'] and (capture['size_bytes'] == selected['size_bytes']) and (proof['manifest_observed_sha256'] == selected['sha256'])
-    if capture is not None and capture['sha256'] != proof['manifest_observed_sha256']:
-        _fail('producer_manifest_observation_conflict')
-    if capture is None and proof['manifest_observed_sha256'] is not None:
-        _fail('producer_manifest_capture_missing')
-    if manifest is None:
-        if proof['checks'] or proof['package_inventory_exact'] is not None or proof['running_module_paths_match'] is not None or (not has('producer_manifest_invalid')):
-            _fail('producer_invalid_manifest_relationship')
-    else:
-        validate_native_blast_database_producer_manifest(manifest, module_root=manifest['module_root'], python_executable=manifest['python']['path'])
-        if _inside(selected['path'], manifest['module_root'], equal=True) or not manifest_matches or capture['format'] != 'json':
-            _fail('producer_manifest_identity_conflict')
-        expected = {(r['kind'], r['path']): r for r in _producer_files(manifest)}
-        seen = set()
-        for check in proof['checks']:
-            key = (check['kind'], check['path'])
-            if key not in expected or key in seen:
-                _fail('producer_check_inventory_conflict')
-            seen.add(key)
-            _measurement(check, expected[key])
-            code = {'missing': 'producer_file_missing', 'mismatch': 'producer_file_identity_mismatch', 'unreadable': 'producer_file_unreadable'}.get(check['status'])
-            if code and (not has(code)):
-                _fail('producer_check_failure_missing')
-        if seen != expected.keys():
-            _fail('producer_check_inventory_incomplete')
-    for field, code in (('package_inventory_exact', 'producer_package_inventory_mismatch'), ('running_module_paths_match', 'producer_runtime_path_mismatch')):
-        if proof[field] is False and (not has(code)):
-            _fail('producer_boolean_failure_missing')
-    verified = manifest is not None and manifest_matches and (proof['package_inventory_exact'] is True) and (proof['running_module_paths_match'] is True) and all((r['status'] == 'verified' for r in proof['checks']))
-    if (proof['status'] == 'verified') != verified or (started and (not verified)):
-        _fail('producer_verification_status_conflict')
-    if not verified and (not any((f['code'].startswith('producer_') for f in bundle['failures']))):
-        _fail('producer_failure_missing')
-
 def validate_native_blast_database_bundle(bundle, *, original_job, attempt_identity):
     """Qualify a sealed record against an independently authenticated plan hash."""
     bundle, envelope = (_copy(bundle), _copy(attempt_identity))
@@ -635,30 +561,26 @@ def validate_native_blast_database_bundle(bundle, *, original_job, attempt_ident
         if row['relative_path'] in {'bundle.json', '.native-blast-database-owner.json'}:
             _fail('artifact_control_file_forbidden')
         owners = [k for k in ('input_key', 'database_key', 'output_key') if row[k] is not None]
-        if row['role'] == 'producer_manifest':
-            if owners or row['format'] not in {'json', 'opaque'} or row['fields'] or (row['delimiter'] is not None):
-                _fail('producer_artifact_contract_invalid')
-        elif len(owners) != 1:
+        if len(owners) != 1:
             _fail('artifact_single_owner_required')
-        if owners:
-            owner = owners[0]
-            selected = {'input_key': inputs, 'database_key': databases, 'output_key': outputs}[owner]
-            if row[owner] not in selected:
-                _fail('artifact_owner_not_selected')
-            if owner == 'input_key':
-                descriptor = selected[row[owner]]
-                expected_path = str(PurePosixPath(plan['input_paths'][row[owner]]).relative_to(plan['attempt_directory']))
-                if row['role'] != descriptor['role'] or row['format'] != descriptor['format'] or row['relative_path'] != expected_path or row['fields'] or (row['delimiter'] is not None):
-                    _fail('input_artifact_contract_conflict')
-            elif owner == 'database_key':
-                if row['role'] not in {'database_manifest', 'preparation_receipt', 'metadata'} or row['format'] not in ({'json', 'opaque'} if row['role'] == 'database_manifest' else {'opaque'}) or row['fields'] or (row['delimiter'] is not None):
-                    _fail('database_artifact_contract_conflict')
-            else:
-                descriptor = selected[row[owner]]
-                resolved = next((r['path'] for r in compiled['outputs'] if r['output_key'] == row[owner]))
-                path = str(PurePosixPath(plan['attempt_directory']) / row['relative_path'])
-                if any((row[k] != descriptor[k] for k in ('role', 'format', 'fields', 'delimiter'))) or (descriptor['path_kind'] == 'file' and path != resolved) or (descriptor['path_kind'] == 'prefix' and (not _inside(path, str(PurePosixPath(resolved).parent)))):
-                    _fail('output_artifact_contract_conflict')
+        owner = owners[0]
+        selected = {'input_key': inputs, 'database_key': databases, 'output_key': outputs}[owner]
+        if row[owner] not in selected:
+            _fail('artifact_owner_not_selected')
+        if owner == 'input_key':
+            descriptor = selected[row[owner]]
+            expected_path = str(PurePosixPath(plan['input_paths'][row[owner]]).relative_to(plan['attempt_directory']))
+            if row['role'] != descriptor['role'] or row['format'] != descriptor['format'] or row['relative_path'] != expected_path or row['fields'] or (row['delimiter'] is not None):
+                _fail('input_artifact_contract_conflict')
+        elif owner == 'database_key':
+            if row['role'] not in {'database_manifest', 'preparation_receipt', 'metadata'} or row['format'] not in ({'json', 'opaque'} if row['role'] == 'database_manifest' else {'opaque'}) or row['fields'] or (row['delimiter'] is not None):
+                _fail('database_artifact_contract_conflict')
+        else:
+            descriptor = selected[row[owner]]
+            resolved = next((r['path'] for r in compiled['outputs'] if r['output_key'] == row[owner]))
+            path = str(PurePosixPath(plan['attempt_directory']) / row['relative_path'])
+            if any((row[k] != descriptor[k] for k in ('role', 'format', 'fields', 'delimiter'))) or (descriptor['path_kind'] == 'file' and path != resolved) or (descriptor['path_kind'] == 'prefix' and (not _inside(path, str(PurePosixPath(resolved).parent)))):
+                _fail('output_artifact_contract_conflict')
     process, failures = (bundle['process'], bundle['failures'])
     started, rc = (process['started'], process['returncode'])
     sealed = _time(bundle['sealed_at'])
@@ -679,7 +601,7 @@ def validate_native_blast_database_bundle(bundle, *, original_job, attempt_ident
             artifact = artifacts.get(row['artifact_key'])
             if artifact is None or (applicable is not None and artifact[applicable] != row[applicable]):
                 _fail('failure_artifact_relationship_invalid')
-            if applicable is None and (code != 'producer_manifest_invalid' or artifact['role'] != 'producer_manifest'):
+            if applicable is None:
                 _fail('failure_unrelated_artifact')
         if code == 'producer_input_parser_unavailable':
             if row['input_key'] != job['query']['input_key'] or row['artifact_key'] is None or inputs[row['input_key']]['role'] != 'query_pssm':
@@ -707,8 +629,7 @@ def validate_native_blast_database_bundle(bundle, *, original_job, attempt_ident
         code = 'software_missing' if software['observed_sha256'] is None else 'software_identity_mismatch'
         if started or not has(code):
             _fail('software_measurement_failure_missing')
-    _validate_producer_verification(bundle, artifacts, has)
-    used = {r['artifact_key'] for r in artifacts.values() if r['role'] == 'producer_manifest'}
+    used = set()
     captures = _unique(bundle['input_manifest'], 'input_key')
     for key, descriptor in inputs.items():
         row = captures.get(key)
@@ -782,9 +703,6 @@ def validate_native_blast_database_bundle(bundle, *, original_job, attempt_ident
                 _fail('started_process_unverified_database')
             if check['checked_at'] is not None and _time(check['checked_at']) > (_time(process['started_at']) if started else sealed):
                 _fail('database_check_not_prelaunch')
-    for check in bundle['producer_verification']['checks']:
-        if check['checked_at'] is not None and _time(check['checked_at']) > (_time(process['started_at']) if started else sealed):
-            _fail('producer_check_not_prelaunch')
     captures = _unique(bundle['output_manifest'], 'output_key')
     if captures.keys() != outputs.keys():
         _fail('output_capture_inventory_mismatch')

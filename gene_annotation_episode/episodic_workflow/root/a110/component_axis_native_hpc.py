@@ -148,17 +148,13 @@ def freeze(registry, args, *, context, known, invocation):
     directory = Path(__file__).parent
     sources = snapshot_sources(('__init__.py', *SOURCE_FILES))
     worker = (directory/'component_axis_native_worker.py').read_text()
-    manifest = {name: sha(text.encode()) for name, text in sources.items()}
-    manifest['component-worker.py'] = sha(worker.encode())
     snapshot = canonical(sources)+'\n'
     request = {'version': VERSION, 'axis': axis, 'operation': OPERATIONS[axis],
         'scientific_profile': PROFILES[axis], 'selection': deepcopy(args['selection']),
         'run_id': context.run_id, 'scope': plain(context.scope), 'target_ref': next(iter(roots)),
         'target_regions': footprint, 'resource_id': args['resource_id'],
         'jsonschema_version': version('jsonschema'),
-        'input': {'file': file, 'bytes_base64': base64.b64encode(raw).decode()},
-        'code_manifest': manifest, 'code_manifest_sha256': sha(canonical(manifest).encode()),
-        'source_snapshot_sha256': sha(snapshot.encode())}
+        'input': {'file': file, 'bytes_base64': base64.b64encode(raw).decode()}}
     request_raw = (canonical(request)+'\n').encode()
     body = {'version': VERSION, 'axis': axis, 'operation': OPERATIONS[axis],
         'scientific_profile': PROFILES[axis], 'run_id': context.run_id,
@@ -166,9 +162,8 @@ def freeze(registry, args, *, context, known, invocation):
         'target_regions': footprint, 'source_ref': args['source_ref'], 'input_file': file,
         'request': request, 'request_sha256': sha(request_raw),
         'logical_work_sha256': sha(canonical({'axis': axis, 'input_sha256': file['sha256'],
-            'selection': args['selection'], 'profile': PROFILES[axis], 'code': manifest}).encode()),
-        'worker_sha256': manifest['component-worker.py'],
-        'code_manifest_sha256': request['code_manifest_sha256'], 'resource_id': args['resource_id'],
+            'selection': args['selection'], 'profile': PROFILES[axis]}).encode()),
+        'resource_id': args['resource_id'],
         'evidence_refs': sorted({args['target_ref'], args['source_ref']}),
         'files': {'component-worker.py': worker, 'component-sources.json': snapshot,
             'component-request.json': request_raw.decode()},
@@ -183,7 +178,6 @@ def commission(body, resources):
     from .hpc_scientific_commission import commission as describe
     return describe(resource_id=body['resource_id'], resource=resources[body['resource_id']],
         tool=body['operation'], request_sha256=body['request_sha256'],
-        worker_sha256=body['worker_sha256'], implementation_sha256=body['code_manifest_sha256'],
         parameters={'axis': body['axis'], 'selection': body['request']['selection']}, files=body['files'],
         worker_name='component-worker.py', request_name='component-request.json',
         program=PROGRAM, version=VERSION,
@@ -220,8 +214,6 @@ def admit(registry, expected, hpc_ref, *, context, known, reader):
         workspace+'/component-request.json'], 'original_native_command_conflict')
     require(result.get('program') == PROGRAM and result.get('version') == VERSION
         and result.get('request_sha256') == expected['request_sha256']
-        and result.get('worker_sha256') == expected['worker_sha256']
-        and result.get('code_manifest_sha256') == expected['code_manifest_sha256']
         and result.get('pbs_job_id') == receipt['job_id'] and result.get('compute_hostname')
         and not result['compute_hostname'].startswith(('aurora-uan', 'login')), 'original_native_identity_conflict')
     require(result['returncode'] == receipt['unit']['returncode'], 'execution_outcome_conflict')

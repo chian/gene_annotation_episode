@@ -71,14 +71,13 @@ def native_blast_database_input_identity(request):
         raise ValueError('native_blast_database_input_identity_invalid') from error
     return _hash(value)
 
-def native_blast_database_calculation_identity(*, input_identity, input_implementation_sha256, sequence_model, implementation_manifest_sha256, vdb_function_model=None):
+def native_blast_database_calculation_identity(*, input_identity, sequence_model, vdb_function_model=None):
     """Separate input interpretation from the selected numerical generation."""
-    for digest in (input_identity, input_implementation_sha256, implementation_manifest_sha256):
-        _shape(digest, _views._SHA)
+    _shape(input_identity, _views._SHA)
     model = _model(sequence_model)
-    interpretation = _hash(dict(version='native_blast_database_interpretation_identity_v1', input_identity=input_identity, input_implementation_sha256=input_implementation_sha256))
+    interpretation = _hash(dict(version='native_blast_database_interpretation_identity_v1', input_identity=input_identity))
     if vdb_function_model is not None:
         from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.blast_vdb_function_calculators import validate_blast_vdb_function_model
         function_model = validate_blast_vdb_function_model(vdb_function_model)
-        return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(version='native_blast_vdb_function_calculation_identity_v1', input_interpretation_id=interpretation, base_calculation_contract=dict(schema='native_blast_database_calculations_v1', sequence_model=model), model=function_model, calculator_implementation_identity=implementation_manifest_sha256)))
-    return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(version='native_blast_database_calculation_identity_v1', input_interpretation_id=interpretation, sequence_model=model, implementation_manifest_sha256=implementation_manifest_sha256)))
+        return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(version='native_blast_vdb_function_calculation_identity_v1', input_interpretation_id=interpretation, base_calculation_contract=dict(schema='native_blast_database_calculations_v1', sequence_model=model), model=function_model)))
+    return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(version='native_blast_database_calculation_identity_v1', input_interpretation_id=interpretation, sequence_model=model)))

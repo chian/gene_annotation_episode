@@ -4,7 +4,7 @@ from fractions import Fraction
 import math
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.rna_structure_contracts import _same
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.rna_structure_comparison_contracts import ARRAY_SETTING_NAMES, CALCULATOR_VERSION, COMPATIBILITY_FIELDS, COMPONENTS_VERSION, ENERGY_METRICS, METRIC_SPECS, MODEL_SETTING_NAMES, OTHER_SCALAR_SETTING_NAMES, PAIR_METRICS, PROFILE, SITE_METRICS, UNCERTAINTY_REASON, comparison_digest, comparison_issue, validate_rna_comparison_components, validate_rna_comparison_sheet
-_RECOGNIZED_SOFTWARE = {'worker_source_sha256': 'd1c2e045856aa235e14ef5e7807139243e4e184d26d5978ce046726269f9d0c7', 'rna_module_sha256': '3d136533fd55f2ca6bb4cbb7428004b5da2e79c8cee53aef76c6662624d91946', 'rna_extension_sha256': '451e5ac69fba96b9d9a0640d1311b844962a1f97143d050446ebd459dfd0494d', 'viennarna_distribution_version': '2.7.0'}
+_RECOGNIZED_SOFTWARE = {'rna_module_sha256': '3d136533fd55f2ca6bb4cbb7428004b5da2e79c8cee53aef76c6662624d91946', 'rna_extension_sha256': '451e5ac69fba96b9d9a0640d1311b844962a1f97143d050446ebd459dfd0494d', 'viennarna_distribution_version': '2.7.0'}
 _CHANGED = frozenset(('lost_pairing', 'gained_pairing', 'reassigned_partner'))
 _UNCHANGED = frozenset(('unchanged_unpaired', 'unchanged_partner'))
 _DECIDABLE = _CHANGED | _UNCHANGED

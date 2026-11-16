@@ -267,10 +267,11 @@ _ATTEMPT = _record("FBAAttemptIdentity", run_id=_TEXT, episode_id=_TEXT, resourc
 _DISTRIBUTION = _record("Distribution", name=_TEXT, version=_TEXT)
 _ABS_PATH = {**_TEXT, "pattern": r"^/[^\x00-\x1f\x7f]+$"}
 _FILE_PIN = _record("FilePin", path=_ABS_PATH, sha256=_SHA, size_bytes=_UINT)
-_SOFTWARE = _record("FBASoftware", version=_enum("fba_software_v1"), python=_FILE_PIN, python_version=_TEXT,
+_SOFTWARE_FILE = _record("SoftwareFile", path=_ABS_PATH)
+_SOFTWARE = _record("FBASoftware", version=_enum("fba_software_v1"), python=_SOFTWARE_FILE, python_version=_TEXT,
     python_home=_ABS_PATH, module_root=_ABS_PATH, dependency_roots=_array(_ABS_PATH),
-    implementation_files=_array(_FILE_PIN), runtime_files=_array(_FILE_PIN), distributions=_array(_DISTRIBUTION),
-    solver_interface=_TEXT, solver_runtime_files=_array(_FILE_PIN))
+    implementation_files=_array(_SOFTWARE_FILE), runtime_files=_array(_SOFTWARE_FILE),
+    distributions=_array(_DISTRIBUTION), solver_interface=_TEXT, solver_runtime_files=_array(_SOFTWARE_FILE))
 _REQUESTED_CHANGE = _record("RequestedBoundChange", reaction_id=_TEXT, lower=_BOUND, upper=_BOUND)
 _OPTIONS = _record("RequestedSolverOptions", feasibility_tolerance=_nullable(_REAL),
     optimality_tolerance=_nullable(_REAL), integrality_tolerance=_nullable(_REAL))
@@ -279,7 +280,7 @@ _JOB = _record("FBAJob", version=_enum("native_flux_balance_job_v1"), operation=
     model_input=_object(file=_FILE_PIN, artifact_ref=_nullable(_TEXT), format=_enum("sbml cobra_json"),
         original_loader_selection=_enum("sbml_file json_file repository_identifier"), repository_identifier=_nullable(_TEXT),
         acquisition_receipt_file=_nullable(_FILE)), constraints=_nullable(_array(_REQUESTED_CHANGE)), objective=_REQUEST,
-    solver_options=_OPTIONS, software=_SOFTWARE, output_prefix=_TEXT, flux_output_name=_TEXT, source_function_sha256=_SHA)
+    solver_options=_OPTIONS, software=_SOFTWARE, output_prefix=_TEXT, flux_output_name=_TEXT)
 _REQUESTED_JOB = _record("FBARequestedJob", argv=_array(_TEXT),
     environment={"type": "object", "propertyNames": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"},
         "additionalProperties": _RAW}, native_flux_balance=_JOB)
@@ -288,7 +289,7 @@ _MANIFEST_FILE = _record("ManifestFile", role=_enum("original_model selected_req
     relative_path=_TEXT, format=_TEXT, state=_STATE, identity=_nullable(_IDENTITY))
 _MANIFEST = _record("FBANativeManifest", version=_enum("flux_balance_native_manifest_v1"), sealed=_BOOL, attempt=_ATTEMPT,
     software_sha256=_SHA, model_identity=_IDENTITY, actual_distributions=_array(_DISTRIBUTION), actual_solver=_SOLVER,
-    source_function_sha256=_SHA, effective_problem_sha256=_nullable(_SHA), files=_array(_MANIFEST_FILE),
+    effective_problem_sha256=_nullable(_SHA), files=_array(_MANIFEST_FILE),
     solve_call_count=_UINT, execution_outcome=_OUTCOME, request_realization=_REALIZATION, issues=_array(_ISSUE))
 _optional(_MANIFEST, request_application=_nullable(_REQUEST_APPLICATION))
 _PAYLOADS = _object(**{role: _object(file=_nullable(_FILE), bytes=_nullable({"type": "bytes"}), state=_STATE)

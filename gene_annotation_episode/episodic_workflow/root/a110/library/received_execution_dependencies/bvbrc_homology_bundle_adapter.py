@@ -1,8 +1,6 @@
 from __future__ import annotations
 from copy import deepcopy
-import hashlib
 import math
-from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_information.historical_appservice_contracts import ContractValidationError, _finite_json, _same, _Validator, contract_schema, validate_contract
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_homology_inputs import FIELDS, FORMATS, _index, _text
 ADAPTER_ID = 'bvbrc_homology'
@@ -10,12 +8,6 @@ ADAPTER_VERSION = '1'
 PARAMETERS_VERSION = 'bvbrc_homology_bundle_parameters_v1'
 _PRIMARY = {'raw': 'blast_json15_raw', 'processed': 'homology_processed_json', 'tabular': 'blast_tabular'}
 _ROLES = tuple(FORMATS)
-_DEPENDENCIES = ('bvbrc_homology_bundle_adapter.py', 'bvbrc_homology_inputs.py', 'bvbrc_homology_metadata.py', 'bvbrc_homology_grader.py', 'bvbrc_homology_subject_binding.py', 'blast_grading_inputs.py', 'blast_database_grader.py', 'blast_pairwise_grader.py', 'alignment_correspondence.py', 'blast_search.py', 'bvbrc_appservice_contracts.py', 'bvbrc_appservice_schemas.json')
-
-def implementation_sha256() -> str:
-    """Actual installed A110 reader identity; retained epochs are authenticated separately."""
-    from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.adapter_source_identity import current_implementation_sha256
-    return current_implementation_sha256('bvbrc_homology_bundle_adapter')
 
 def _object(properties):
     return {'type': 'object', 'properties': properties, 'required': list(properties), 'additionalProperties': False}

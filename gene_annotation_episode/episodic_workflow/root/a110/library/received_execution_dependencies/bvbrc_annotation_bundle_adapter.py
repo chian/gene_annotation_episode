@@ -1,7 +1,6 @@
 from __future__ import annotations
 from copy import deepcopy
 import hashlib
-from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_information.historical_appservice_contracts import validate_contract
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_annotation_contracts import APPLICATIONS, validate_parameters, validate_requested_form, validate_facts, VALUE_VERSION
 from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.bvbrc_annotation_native import COMPONENTS_VERSION as NATIVE_COMPONENTS_VERSION, _canonical, _finite_json, _field, _issue, validate_annotation_document
@@ -9,12 +8,6 @@ ADAPTER_ID = 'bvbrc_annotation'
 ADAPTER_VERSION = '1'
 SHEET_VERSION = 'bvbrc_annotation_observations_v1'
 COMPONENTS_VERSION = 'bvbrc_annotation_retained_components_v1'
-_DEPENDENCIES = ('__init__.py', 'acquisition.py', 'domain.py', 'public_configuration.py', 'bvbrc_annotation_native.py', 'bvbrc_annotation_contracts.py', 'bvbrc_annotation_bundle_adapter.py', 'alignment_correspondence.py', 'sequence_composition_grader.py', 'sequence_composition_counts.py', 'ucsc_acquisition.py', 'data_acquisition_receipts.py', 'bvbrc_appservice_contracts.py', 'bvbrc_appservice_schemas.json')
-
-def implementation_sha256():
-    """Actual installed A110 reader identity; retained epochs are authenticated separately."""
-    from gene_annotation_episode.episodic_workflow.root.a110.library.received_execution_dependencies.adapter_source_identity import current_implementation_sha256
-    return current_implementation_sha256('bvbrc_annotation_bundle_adapter')
 
 def _require(condition, code='bvbrc_annotation_bundle_invalid'):
     if not condition:

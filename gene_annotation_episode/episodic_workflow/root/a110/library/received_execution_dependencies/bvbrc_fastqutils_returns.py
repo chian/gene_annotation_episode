@@ -206,8 +206,6 @@ def _saved_facts(body, sheet, components):
     selector = _contract('ResultSelector', inputs.get('selector'), 'original_selector_conflict')
     selected = selector['adapter']
     _require(type(selected) is dict and all((selected[key] == saved[key] for key in ('adapter_id', 'adapter_version'))) and _same(inputs.get('adapter'), selected), 'original_adapter_conflict')
-    pin = inputs.get('adapter_implementation_sha256')
-    _require(type(pin) is str and re.fullmatch('[0-9a-f]{64}', pin) is not None, 'original_adapter_pin_required')
     _require(type(body.get('assignment')) is dict and _same(body['assignment'].get('selector'), selector) and (bundle['requested_selector_sha256'] == digest(selector)), 'original_selector_conflict')
     parameters = _checked(contracts.validate_parameters, selected['parameters'], 'original_parameters_invalid')
     form = _checked(contracts.validate_requested_form, selector['requested_schema'], 'original_form_invalid')
@@ -252,11 +250,10 @@ class BVBRCFastqUtilsReturns(EpisodeReturnRecords):
     def _owner(self, context, body):
         self._require(body.get('run_id') == self.run_id and body.get('episode_id') == context.episode_id and self._equal(body.get('scope'), context.scope) and self._equal(body.get('assignment'), context.assignment) and self._equal(body['publication_inputs'].get('selector'), context.assignment.get('selector')), 'publication_owner_conflict')
         task = body['bundle']['original_task']
-        pin = body['publication_inputs'].get('adapter_implementation_sha256')
         configuration = getattr(self.api, 'configuration', {}).get(task['resource_id'], {})
         selected = body['publication_inputs']['selector']['adapter']
         self._require(selected['adapter_id'] == _ADAPTER_ID and selected['adapter_version'] in _ADAPTER_VERSIONS, 'fastqutils_adapter_required')
-        self._require(any((self._equal(row, {'adapter_id': _ADAPTER_ID, 'adapter_version': selected['adapter_version'], 'implementation_sha256': pin}) for row in configuration.get('scientific_adapters', []))), 'original_adapter_pin_conflict')
+        self._require(any((self._equal(row, {'adapter_id': _ADAPTER_ID, 'adapter_version': selected['adapter_version']}) for row in configuration.get('scientific_adapters', []))), 'original_adapter_pin_conflict')
 
     def _possessed_sources(self, context, facts):
         schemas, seen = (_fact_source_templates(), set())

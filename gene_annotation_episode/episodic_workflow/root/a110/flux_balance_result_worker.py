@@ -162,7 +162,6 @@ def _manifest_transport(original, payloads, issues):
         return None
     job = original["requested_job"]["native_flux_balance"]
     expected = {"attempt": original["identity"], "software_sha256": digest(job["software"]),
-        "source_function_sha256": job["source_function_sha256"],
         "model_identity": {k: job["model_input"]["file"][k] for k in ("sha256", "size_bytes")}}
     conflict = False
     for key, value in expected.items():

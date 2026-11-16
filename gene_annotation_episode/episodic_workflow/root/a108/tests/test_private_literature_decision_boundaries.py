@@ -26,6 +26,7 @@ def decision_store(tmp_path_factory):
     with module('state').Store(tmp_path_factory.mktemp('literature-decisions') / 'state') as store:
         store.create_problem(raw_sequence='MAAA', molecule='protein')
         journal = module('episode_journal').Journal(store, 'engineering-decision-boundaries')
+        module('episode_completion').CompletionLedger(store, journal)
         exchanges = module('decision_exchanges').DecisionExchanges(journal)
         yield store, journal, exchanges
 

@@ -3,10 +3,8 @@ from __future__ import annotations
 from collections.abc import Mapping
 from copy import deepcopy
 from dataclasses import replace
-import hashlib
 import inspect
 import json
-from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a108.communication import ReportBoundaryError, plain, validate_form
 from gene_annotation_episode.episodic_workflow.root.a108.composition_information import CONTRACT_INFORMATION_PROFILE
 from gene_annotation_episode.episodic_workflow.root.a108.domain import ContractError, REF, identity, obj, source_location_inputs, validate_schema
@@ -37,9 +35,3 @@ def _required_grading_logic(repository):
     return literature_required_grading
 _READ_TOOLS = ('source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references', 'source.xlsx.rows', 'source.pdf.text', 'image.view')
 _ROLE_INSTRUCTIONS = {'literature_ordered': 'Investigate the source in document order as useful for the assigned question. Use returned UTF-8 byte continuations and retain representation identity. Decide whether to continue, reread, change the examined window or interpret obtained evidence from actual outcomes.'}
-_AXIS_DIRECTORY = Path(__file__).resolve().parents[5]
-
-def _binding_source_bytes():
-    private = b''.join((path.read_bytes() for path in sorted(Path(__file__).parent.rglob('*.py')) if 'tests' not in path.relative_to(Path(__file__).parent).parts))
-    selected_library = b''.join((path.read_bytes() for path in sorted((_AXIS_DIRECTORY / 'library').rglob('*.py'))))
-    return private + selected_library
