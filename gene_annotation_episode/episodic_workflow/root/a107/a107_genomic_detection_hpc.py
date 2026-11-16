@@ -118,8 +118,6 @@ def freeze(registry, args, *, context, known, invocation):
         'a107_genomic_detection_native.py']))
     sources = snapshot_sources(names)
     worker = (directory/'component_axis_native_worker.py').read_text()
-    manifest = {name: sha(text.encode()) for name, text in sources.items()}
-    manifest['component-worker.py'] = sha(worker.encode())
     snapshot = canonical(sources)+'\n'
     selection = {key: deepcopy(args[key]) for key in (
         'component_ref', 'database_source_ref', 'genomic_records', 'binding_refs')}
@@ -132,19 +130,16 @@ def freeze(registry, args, *, context, known, invocation):
         'query_sequence': query, 'query_sequence_sha256': sha(query.encode()),
         'input': primary, 'assets': {ref: asset for ref, asset in assets.items()
             if ref != args['database_source_ref']}, 'genomic_records': records,
-        'biopython_version': version('biopython'), 'jsonschema_version': version('jsonschema'),
-        'code_manifest': manifest, 'code_manifest_sha256': sha(canonical(manifest).encode()),
-        'source_snapshot_sha256': sha(snapshot.encode())}
+        'biopython_version': version('biopython'), 'jsonschema_version': version('jsonschema')}
     raw_request = (canonical(native)+'\n').encode()
     require(len(raw_request) <= 2*MAX_INPUT_BYTES, 'a107_detector_frozen_request_exceeds_transfer_capacity')
     body = {'version': VERSION, 'axis': 'A107', 'operation': TOOL, 'scientific_profile': PROFILE,
         'run_id': context.run_id, 'scope': plain(context.scope), 'target_ref': next(iter(roots)),
         'target_regions': footprint, 'source_ref': args['database_source_ref'], 'input_file': primary['file'],
-        'request': native, 'request_sha256': sha(raw_request), 'worker_sha256': manifest['component-worker.py'],
-        'code_manifest_sha256': native['code_manifest_sha256'],
+        'request': native, 'request_sha256': sha(raw_request),
         'logical_work_sha256': sha(canonical({'selection': selection, 'query_sha256': sha(query.encode()),
             'files': {ref: asset['file'] for ref, asset in assets.items()}, 'binding': candidates[0],
-            'profile': PROFILE, 'implementation': manifest}).encode()),
+            'profile': PROFILE}).encode()),
         'resource_id': args['resource_id'], 'evidence_refs': sorted(refs),
         'input_provenance': provenance(store, refs), 'arguments_sha256': sha(canonical(args).encode()),
         'features': {'input_bytes': total, 'query_symbols': len(query), 'genomic_records': len(records)},

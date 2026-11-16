@@ -16,7 +16,7 @@ CATALOG = {
         'version': 'scientific_process_episode_v10',
         'required': ('library', 'tool_library', 'child_roles'),
         'optional': ('tool_retrieval', 'contract_information_profile', 'yield_bindings'),
-        'fingerprinted': True, 'parent': 'legacy_annotation',
+        'parent': 'legacy_annotation',
         'roles': ('scientific_process',), 'entry_roles': ('scientific_process',),
         'owner_class': 'ScientificProcessEpisode',
     },
@@ -24,7 +24,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'legacy_annotation',
+        'parent': 'legacy_annotation',
         'roles': ('literature',), 'entry_roles': ('literature',),
         'owner_class': 'LiteratureEpisode',
     },
@@ -32,7 +32,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'published_evidence_assessment',
+        'parent': 'published_evidence_assessment',
         'roles': ('literature_strategy',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -40,7 +40,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'published_evidence_assessment/evidence_search_strategy_improvement',
+        'parent': 'published_evidence_assessment/evidence_search_strategy_improvement',
         'roles': ('literature_search',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -48,7 +48,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment',
+        'parent': 'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment',
         'roles': ('literature_page',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -56,7 +56,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
+        'parent': 'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
         'roles': ('literature_table',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -64,7 +64,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
+        'parent': 'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
         'roles': ('literature_ordered',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -72,7 +72,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
+        'parent': 'published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
         'roles': ('literature_targeted',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -80,7 +80,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'scientific_process',
+        'parent': 'scientific_process',
         'roles': ('literature',), 'entry_roles': ('literature',),
         'owner_class': 'LiteratureEpisode',
     },
@@ -88,7 +88,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'scientific_process/published_evidence_assessment',
+        'parent': 'scientific_process/published_evidence_assessment',
         'roles': ('literature_strategy',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -96,7 +96,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement',
+        'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement',
         'roles': ('literature_search',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -104,7 +104,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment',
+        'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment',
         'roles': ('literature_page',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -112,7 +112,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
+        'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
         'roles': ('literature_table',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -120,7 +120,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
+        'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
         'roles': ('literature_ordered',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -128,7 +128,7 @@ CATALOG = {
         'version': 'literature_episode_binding_v1',
         'required': ('outcome_page_size',),
         'optional': ('reference_parent_sources', 'contract_information_profile'),
-        'fingerprinted': True, 'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
+        'parent': 'scientific_process/published_evidence_assessment/evidence_search_strategy_improvement/source_relevance_assessment/source_evidence_examination',
         'roles': ('literature_targeted',), 'entry_roles': (),
         'owner_class': 'LiteratureEpisode',
     },
@@ -150,17 +150,13 @@ def reconstruct(services, descriptor, *, store, journal, directory, tool_registr
     if not isinstance(name, str) or name not in CATALOG:
         raise _failure('unavailable_binding', reference)
     declaration = CATALOG[name]
-    if (set(record) != {'version', 'binding_id', 'configuration', 'implementation_sha256'}
+    if (set(record) != {'version', 'binding_id', 'configuration'}
             or record['version'] != declaration['version']):
         raise _failure('unavailable_binding', reference)
     configuration = record['configuration']
     required, optional = set(declaration['required']), set(declaration['optional'])
     if (type(configuration) is not dict or not required <= configuration.keys()
             or configuration.keys() - required - optional):
-        raise _failure('unavailable_binding', reference)
-    fingerprint = record['implementation_sha256']
-    if (type(fingerprint) is not str or len(fingerprint) != 64
-            or any(character not in '0123456789abcdef' for character in fingerprint)):
         raise _failure('unavailable_binding', reference)
     try:
         if name == 'scientific_process':

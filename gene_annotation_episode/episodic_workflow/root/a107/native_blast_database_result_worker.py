@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 import hashlib
-import importlib
 import json
 import math
 import os
@@ -164,24 +163,6 @@ _SNAPSHOT_ID = dict(subject_ref=_views._REF, record_type={"enum": ["input", "fea
     sequence_sha256=_views._SHA, sequence_artifact_ref=_views._REF)
 
 
-def native_blast_database_implementation_identity(files):
-    """Identity of exact implementation bytes, independent of their paths."""
-    files = _views._copy(files)
-    if type(files) is not list or not files:
-        raise ValueError("native_blast_database_implementation_files_required")
-    projected = []
-    for row in files:
-        if type(row) is not dict or set(row) not in ({"module", "sha256"}, {"module", "path", "sha256"}):
-            raise ValueError("native_blast_database_implementation_file_invalid")
-        _shape({k: row[k] for k in ("module", "sha256")}, _views._object(dict(module=_views._TOKEN, sha256=_views._SHA)))
-        if "path" in row:
-            _absolute_path(row["path"])
-        projected.append({k: row[k] for k in ("module", "sha256")})
-    if len({r["module"] for r in projected}) != len(projected):
-        raise ValueError("native_blast_database_implementation_module_duplicate")
-    return _hash(dict(version="native_blast_database_implementation_identity_v1", files=sorted(projected, key=lambda r: r["module"])))
-
-
 def native_blast_database_input_identity(request):
     """Identity of selected captured inputs; no path lookup or interpretation."""
     request = _views._copy(request)
@@ -203,22 +184,21 @@ def native_blast_database_input_identity(request):
     return _hash(value)
 
 
-def native_blast_database_calculation_identity(*, input_identity, input_implementation_sha256, sequence_model, implementation_manifest_sha256, vdb_function_model=None):
+def native_blast_database_calculation_identity(*, input_identity, sequence_model, vdb_function_model=None):
     """Separate input interpretation from the selected numerical generation."""
-    for digest in (input_identity, input_implementation_sha256, implementation_manifest_sha256):
-        _shape(digest, _views._SHA)
+    _shape(input_identity, _views._SHA)
     model = _model(sequence_model)
     interpretation = _hash(dict(version="native_blast_database_interpretation_identity_v1",
-        input_identity=input_identity, input_implementation_sha256=input_implementation_sha256))
+        input_identity=input_identity))
     if vdb_function_model is not None:
         from .blast_vdb_function_calculators import validate_blast_vdb_function_model
         function_model = validate_blast_vdb_function_model(vdb_function_model)
         return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(
             version="native_blast_vdb_function_calculation_identity_v1", input_interpretation_id=interpretation,
             base_calculation_contract=dict(schema="native_blast_database_calculations_v1", sequence_model=model),
-            model=function_model, calculator_implementation_identity=implementation_manifest_sha256)))
+            model=function_model)))
     return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(version="native_blast_database_calculation_identity_v1",
-        input_interpretation_id=interpretation, sequence_model=model, implementation_manifest_sha256=implementation_manifest_sha256)))
+        input_interpretation_id=interpretation, sequence_model=model)))
 
 
 def _search_binding_rows(sheet_set):
@@ -1261,7 +1241,6 @@ def _request_schema(version="native_blast_database_result_worker_request_v1"):
         authenticated_attempt=_ATTEMPT, artifacts=_views._array(_views._object(dict(artifact_key=_views._TOKEN, path=_ABS, **_FILE_ID))),
         metadata_descriptors=_views._array(_descriptor(function_mode)), retained_sources=_views._array(_views._object(dict(source_ref=_views._REF, path=_ABS, **_FILE_ID))),
         subject_snapshots=_views._array(_views._object(dict(**_SNAPSHOT_ID, sequence_path=_ABS))),
-        implementation=_views._object(dict(manifest_sha256=_views._SHA, files=_views._array(_views._object(dict(module=_views._TOKEN, path=_ABS, sha256=_views._SHA)), minItems=1))),
         sequence_model=_MODEL, output_directory=_ABS, reuse=_views._nullable(_views._object(dict(
             manifest_path=_ABS, manifest_sha256=_views._SHA, manifest_size_bytes=_views._I0, collection_path=_ABS, sheets_path=_ABS)))))
     if function_mode:
@@ -1276,7 +1255,7 @@ def _manifest_schema(version="native_blast_database_result_worker_manifest_v1"):
     roles = _artifact_roles(version)
     value = _views._object(dict(version={"const": version}, calculation_id=_views._SHA,
         request_sha256=_views._SHA, status={"enum": ["complete", "partial", "failed"]}, input_identity=_views._SHA,
-        input_interpretation_id=_views._SHA, input_implementation_sha256=_views._SHA, implementation_manifest_sha256=_views._SHA,
+        input_interpretation_id=_views._SHA,
         sequence_model=_MODEL, artifacts=_views._array(_views._object(dict(role={"enum": list(roles)},
             relative_path=_views._TOKEN, sha256=_views._SHA, size_bytes=_views._I0, schema=_views._TOKEN))),
         counts=_views._object(dict(searches=_views._I0, native_hsp_slots=_views._I0, numerical_rows=_views._I0)),
@@ -1318,62 +1297,6 @@ def _verified_bytes(path, sha256, size_bytes, *, frozen=False, pointer="", artif
         raise _WorkerFailure("capture", "native_blast_database_frozen_artifact_changed" if frozen else "native_blast_database_artifact_identity_mismatch",
             "frozen_value_changed" if frozen else "artifact_digest_conflict", pointer=pointer, artifact_key=artifact_key)
     return data
-
-
-_DEPENDENCY_ROOTS = {"Bio", "numpy", "jsonschema", "jsonschema_specifications", "referencing", "rpds", "attr", "attrs"}
-
-
-def _module_name(name):
-    return "gene_annotation_episode.episodic_workflow.root.a107." + name
-
-
-def _implementation_modules(*, execution_program=None, vdb_function=False):
-    """Actual loaded scientific dependency closure, excluding unrelated callers."""
-    names = [_module_name(name) for name in (
-        "native_blast_database_result_worker", "native_blast_database_result_views", "native_blast_database_metadata",
-        "native_blast_database_contracts", "native_blast_database_population_metadata", "blast_database_population_associations",
-        "blast_report_collection", "blast_grading_inputs", "blast_program_context", "blast_fasta_record_identity",
-        "blast_sequence_database", "blast_database_grader", "blast_pairwise_grader", "alignment_correspondence", "blast_profile_inputs", "blast_profile_calculators",
-        "blast_pssm_inputs", "blast_pssm_calculators", "blast_pssm_master_inputs", "blast_iteration_inputs", "blast_iteration_calculators",
-        "blast_vdb_inputs", "blast_vdb_calculators", "blast_search", "domain")]
-    if execution_program in ("psiblast", "deltablast"):
-        names.extend(_module_name(name) for name in
-            ("native_blast_database_convergence", "blast_native_iteration_records"))
-    if vdb_function:
-        names.extend(_module_name(name) for name in
-            ("blast_vdb_function_inputs", "blast_vdb_function_calculators", "native_blast_vdb_function_metadata"))
-    for name in names:
-        importlib.import_module(name)
-    names.extend(name for name, module in tuple(sys.modules.items()) if name.split(".")[0] in _DEPENDENCY_ROOTS and getattr(module, "__file__", None))
-    names.append("gene_annotation_episode")
-    return {name: sys.modules[name] for name in sorted(set(names))}
-
-
-def _verify_implementation(implementation, *, execution_program=None, vdb_function=False):
-    expected = native_blast_database_implementation_identity(implementation["files"])
-    if implementation["manifest_sha256"] != expected:
-        raise _WorkerFailure("worker", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/implementation/manifest_sha256")
-    files = {r["module"]: r for r in implementation["files"]}
-    # The parent may previously have used another mode and retained more of the
-    # same allowed dependency packages. Load exactly its declared dependencies
-    # in this fresh process before verifying their actual files. This does not
-    # import unrelated project operations or invoke their scientific functions.
-    for name in files:
-        if name not in sys.modules and name.split(".")[0] in _DEPENDENCY_ROOTS:
-            importlib.import_module(name)
-    modules = _implementation_modules(execution_program=execution_program, vdb_function=vdb_function)
-    if not set(modules) <= set(files):
-        raise _WorkerFailure("worker", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/implementation/files")
-    if Path(__file__).resolve() != Path(files["gene_annotation_episode.episodic_workflow.root.a107.native_blast_database_result_worker"]["path"]).resolve():
-        raise _WorkerFailure("worker", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/implementation/files")
-    for name, row in files.items():
-        module = sys.modules.get(name)
-        path = getattr(module, "__file__", None)
-        if path is None or Path(path).resolve() != Path(row["path"]).resolve():
-            raise _WorkerFailure("worker", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/implementation/files")
-        raw = Path(row["path"]).read_bytes()
-        if hashlib.sha256(raw).hexdigest() != row["sha256"]:
-            raise _WorkerFailure("worker", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/implementation/files")
 
 
 def _atomic_bytes(directory, filename, raw):
@@ -1485,8 +1408,7 @@ def _reuse(request, input_identity):
         raise _WorkerFailure("population", "native_blast_database_sheet_invalid", "metadata_shape_invalid", pointer="/reuse")
     roles = _artifact_roles(manifest["version"])
     identities = native_blast_database_calculation_identity(input_identity=manifest["input_identity"],
-        input_implementation_sha256=manifest["input_implementation_sha256"], sequence_model=manifest["sequence_model"],
-        implementation_manifest_sha256=manifest["implementation_manifest_sha256"], vdb_function_model=manifest.get("vdb_function_model"))
+        sequence_model=manifest["sequence_model"], vdb_function_model=manifest.get("vdb_function_model"))
     if (manifest["status"] == "failed" or manifest["input_identity"] != input_identity
             or any(manifest[k] != value for k, value in identities.items())):
         raise _WorkerFailure("inputs", "native_blast_database_frozen_artifact_changed", "frozen_value_changed", pointer="/reuse")
@@ -1540,7 +1462,7 @@ def _reuse(request, input_identity):
         saved_calculations = _decode(_verified_bytes(path, artifact["sha256"], artifact["size_bytes"], frozen=True, pointer="/reuse/calculations"))
         if saved_calculations.get("schema") != _FUNCTION_CALCULATIONS:
             raise _WorkerFailure("population", "native_blast_database_sheet_invalid", "metadata_shape_invalid", pointer="/reuse/calculations")
-    return values["collection"], values["sheets"], manifest["input_implementation_sha256"], manifest["version"], saved_calculations
+    return values["collection"], values["sheets"], manifest["version"], saved_calculations
 
 
 def _metadata_failures(issues):
@@ -1576,16 +1498,13 @@ def run_native_blast_database_result_worker(request_path):
     if any(directory.iterdir()):
         raise FileExistsError("native_blast_database_generation_directory_not_empty")
     input_identity = native_blast_database_input_identity(request)
-    input_implementation = request["implementation"]["manifest_sha256"]
     initial = native_blast_database_calculation_identity(input_identity=input_identity,
-        input_implementation_sha256=input_implementation, sequence_model=request["sequence_model"],
-        implementation_manifest_sha256=request["implementation"]["manifest_sha256"], vdb_function_model=request.get("vdb_function_model"))
+        sequence_model=request["sequence_model"], vdb_function_model=request.get("vdb_function_model"))
     program = request["bundle"]["requested_job"]["native_blast_database"]["program"]
     version = _FUNCTION_MANIFEST if function_mode else "native_blast_database_result_worker_manifest_v2" if program in ("psiblast", "deltablast") else "native_blast_database_result_worker_manifest_v1"
     manifest = dict(version=version, calculation_id=request["calculation_id"],
         request_sha256=hashlib.sha256(request_bytes).hexdigest(), status="failed", input_identity=input_identity,
-        input_interpretation_id=initial["input_interpretation_id"], input_implementation_sha256=input_implementation,
-        implementation_manifest_sha256=request["implementation"]["manifest_sha256"], sequence_model=deepcopy(request["sequence_model"]),
+        input_interpretation_id=initial["input_interpretation_id"], sequence_model=deepcopy(request["sequence_model"]),
         artifacts=[], counts=dict(searches=0, native_hsp_slots=0, numerical_rows=0), failures=[])
     if function_mode:
         manifest["vdb_function_model"] = deepcopy(request["vdb_function_model"])
@@ -1608,7 +1527,6 @@ def run_native_blast_database_result_worker(request_path):
             raise _WorkerFailure("capture", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/bundle_capture")
         bundle = _contracts.validate_native_blast_database_bundle(request["bundle"],
             original_job=request["bundle"]["requested_job"]["native_blast_database"], attempt_identity=request["authenticated_attempt"])
-        _verify_implementation(request["implementation"], execution_program=program, vdb_function=function_mode)
         population_selected = any(r["schema_id"] == "native_blast_database_sequence_metadata_v3" for r in request["metadata_descriptors"])
         catalog, contents = _catalog(request, failures) if request["reuse"] is None or population_selected else (None, None)
         for i, native_failure in enumerate(bundle["failures"]):
@@ -1616,7 +1534,7 @@ def run_native_blast_database_result_worker(request_path):
                 artifact_key=native_failure["artifact_key"], input_key=native_failure["input_key"], pointer=f"/bundle/failures/{i}").failure)
         stage = "inputs"
         if request["reuse"] is not None:
-            collection, sheets, input_implementation, saved_version, saved_calculations = _reuse(request, input_identity)
+            collection, sheets, saved_version, saved_calculations = _reuse(request, input_identity)
             manifest["version"] = saved_version
             prepared = sheets["prepared_inputs"]
         else:
@@ -1654,11 +1572,7 @@ def run_native_blast_database_result_worker(request_path):
                 sheets["issues"].extend(populated["issues"])
             _population_capture_binding(sheets, request, catalog)
             save("sheets", sheets)
-        identities = native_blast_database_calculation_identity(input_identity=input_identity, input_implementation_sha256=input_implementation,
-            sequence_model=request["sequence_model"], implementation_manifest_sha256=request["implementation"]["manifest_sha256"],
-            vdb_function_model=request.get("vdb_function_model"))
-        manifest.update(input_implementation_sha256=input_implementation, input_interpretation_id=identities["input_interpretation_id"])
-        if request["calculation_id"] != identities["calculation_id"]:
+        if request["calculation_id"] != initial["calculation_id"]:
             raise _WorkerFailure("inputs", "native_blast_database_artifact_identity_mismatch", "artifact_digest_conflict", pointer="/calculation_id")
         if request["reuse"] is not None:
             if population_selected:
@@ -1693,7 +1607,6 @@ def run_native_blast_database_result_worker(request_path):
         save("row_index", dict(schema="native_blast_database_row_index_v1", calculation_id=request["calculation_id"], rows=index))
         manifest["counts"]["numerical_rows"] = len(rows)
         save("metric_definitions", _views.native_blast_database_metric_definitions(include_vdb_function=function_mode))
-        _verify_implementation(request["implementation"], execution_program=program, vdb_function=function_mode)
         manifest["status"] = "partial" if failures else "complete"
     except _WorkerFailure as error:
         failures.append(error.failure)
@@ -1717,7 +1630,7 @@ def run_native_blast_database_result_worker(request_path):
 
 
 __all__ = ["calculate_native_blast_database_sheets", "populate_native_blast_database_search_facts",
-    "build_native_blast_database_rows", "run_native_blast_database_result_worker", "native_blast_database_implementation_identity",
+    "build_native_blast_database_rows", "run_native_blast_database_result_worker",
     "native_blast_database_input_identity", "native_blast_database_calculation_identity"]
 
 

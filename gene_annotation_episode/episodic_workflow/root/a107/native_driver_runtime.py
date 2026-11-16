@@ -3,7 +3,6 @@ from __future__ import annotations
 from contextlib import contextmanager, ExitStack
 from copy import deepcopy
 import ast
-import hashlib
 import importlib
 import importlib.metadata
 import json
@@ -39,13 +38,11 @@ def _arr(items, **kwargs):
 
 _TEXT = {"type": "string", "minLength": 1, "maxLength": 4096, "pattern": r"^[^\x00-\x1f\x7f]+$"}
 _ID = {"type": "string", "minLength": 1, "maxLength": 512, "pattern": r"^[A-Za-z0-9_.:/@+\-]+$"}
-_SHA = {"type": "string", "pattern": "^[0-9a-f]{64}$"}
-_INT = {"type": "integer", "minimum": 0}
 
-_PIN = _obj(path=_TEXT, sha256=_SHA, size_bytes=_INT)
-_DRIVER = _obj(python_executable=_TEXT, python_sha256=_SHA, python_version=_ID, module_root=_TEXT,
-    implementation_files=_arr(_obj(module=_ID, sha256=_SHA), minItems=1),
-    dependencies=_arr(_obj(distribution=_ID, version=_TEXT, package_root=_TEXT, files=_arr(_PIN, minItems=1)), minItems=1))
+_DRIVER = _obj(python_executable=_TEXT, python_version=_ID, module_root=_TEXT,
+    implementation_files=_arr(_obj(module=_ID), minItems=1),
+    dependencies=_arr(_obj(distribution=_ID, version=_TEXT, package_root=_TEXT,
+        files=_arr(_obj(path=_TEXT), minItems=1)), minItems=1))
 _SCHEMAS = {"DriverRuntime": _DRIVER}
 
 def _validate_record(kind, value):
@@ -78,8 +75,8 @@ def validate_driver_runtime(value, *, required_modules=(), required_dependencies
     require(len(names) == len(set(names)) and required_names <= set(names), "native_dependency_unavailable")
     for row in dependencies:
         path_value(row["package_root"], absolute=True)
-    for pins in (r["files"] for r in dependencies):
-        paths = [str(path_value(r["path"], absolute=True)) for r in pins]
+    for files in (r["files"] for r in dependencies):
+        paths = [str(path_value(r["path"], absolute=True)) for r in files]
         require(len(paths) == len(set(paths)), "native_dependency_unavailable")
     return driver
 
@@ -128,19 +125,6 @@ def _regular(value):
         with os.fdopen(os.dup(descriptor), "rb") as stream:
             yield stream
 
-def stream_identity(stream):
-    stream.seek(0)
-    hasher, size = hashlib.sha256(), 0
-    for block in iter(lambda: stream.read(1024 * 1024), b""):
-        hasher.update(block)
-        size += len(block)
-    stream.seek(0)
-    return {"sha256": hasher.hexdigest(), "size_bytes": size}
-
-def file_identity(path):
-    with _regular(path) as stream:
-        return stream_identity(stream)
-
 def _sync_directory(path):
     descriptor = os.open(path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
     try:
@@ -167,15 +151,14 @@ def _writing(path):
     _publish(temporary, path)
 
 def verify_driver_runtime(driver):
-    """Verify the selected Python, implementation and dependency file closure."""
+    """Verify the selected Python, implementation paths and dependency versions."""
     driver = validate_driver_runtime(driver)
     selected = Path(driver["python_executable"]).resolve(strict=True)
     require(os.path.samefile(selected, "/proc/self/exe") and
-        file_identity(selected)["sha256"] == driver["python_sha256"] and
         platform.python_version() == driver["python_version"], "native_dependency_unavailable")
     for row in driver["implementation_files"]:
         path = confined_file(driver["module_root"], row["module"].replace(".", "/") + ".py")
-        require(file_identity(path)["sha256"] == row["sha256"], "native_dependency_unavailable")
+        require(path.is_file(), "native_dependency_unavailable")
         loaded = sys.modules.get(row["module"])
         if loaded is not None:
             require(Path(loaded.__file__) == path, "native_dependency_unavailable")
@@ -185,13 +168,11 @@ def verify_driver_runtime(driver):
         require(importlib.metadata.version(name) == dependency["version"], "native_dependency_unavailable")
         module = importlib.import_module(module_names.get(name, name.replace("-", "_")))
         require(Path(module.__file__).parent == Path(dependency["package_root"]), "native_dependency_unavailable")
-        for pin in dependency["files"]:
-            require(file_identity(pin["path"]) == {k: pin[k] for k in ("sha256", "size_bytes")}, "native_dependency_unavailable")
-    pinned = {p["path"] for row in driver["dependencies"] for p in row["files"]}
+    listed = {p["path"] for row in driver["dependencies"] for p in row["files"]}
     for module in list(sys.modules.values()):
         filename = getattr(module, "__file__", None)
         if filename and "site-packages" in Path(filename).parts:
-            require(str(Path(filename).resolve(strict=True)) in pinned, "native_dependency_unavailable")
+            require(str(Path(filename).resolve(strict=True)) in listed, "native_dependency_unavailable")
 
 _PACKAGES = {"jsonschema": "jsonschema", "attrs": "attr", "referencing": "referencing", "rpds-py": "rpds",
     "jsonschema-specifications": "jsonschema_specifications"}
@@ -240,16 +221,11 @@ def _source_closure(module_root, modules):
                 pending.extend(a.name for a in node.names if a.name.startswith("gene_annotation_episode."))
     return paths
 
-def _copy_exact(source, destination):
-    identity = file_identity(source)
+def _copy_source(source, destination):
+    require(not destination.exists(), "native_dependency_unavailable")
     destination.parent.mkdir(parents=True, exist_ok=True)
-    if destination.exists():
-        require(file_identity(destination) == identity and not destination.stat().st_mode & 0o222)
-    else:
-        with _regular(source) as original, _writing(destination) as target:
-            shutil.copyfileobj(original, target, length=1024 * 1024)
-    require(file_identity(destination) == identity)
-    return {"path": str(destination), **identity}
+    with _regular(source) as original, _writing(destination) as target:
+        shutil.copyfileobj(original, target, length=1024 * 1024)
 
 def _dependency_bindings(*, contained_records=False, exclusions=None):
     selected, result = dict(_PACKAGES), []
@@ -284,7 +260,7 @@ def _dependency_bindings(*, contained_records=False, exclusions=None):
                 path = Path(installed.locate_file(entry)).resolve(strict=True)
             if path.suffix in (".pyc", ".pyo") or not path.is_file():
                 continue
-            files.append({"path": str(path), **file_identity(path)})
+            files.append({"path": str(path)})
         require(bool(files), "native_dependency_unavailable")
         result.append({"distribution": distribution, "version": installed.version,
             "package_root": str(Path(module.__file__).resolve(strict=True).parent),
@@ -310,10 +286,9 @@ def freeze_driver_runtime(*, module_root, snapshot_directory, driver_modules, po
     implementation = []
     for name, source in sorted(modules.items()):
         check_scratch_budget(target, policy, additional_bytes=source.stat().st_size)
-        pin = _copy_exact(source, target / (name.replace(".", "/") + ".py"))
-        implementation.append({"module": name, "sha256": pin["sha256"]})
+        _copy_source(source, target / (name.replace(".", "/") + ".py"))
+        implementation.append({"module": name})
     return validate_driver_runtime(dict(python_executable=sys.executable,
-        python_sha256=file_identity(Path(sys.executable).resolve(strict=True))["sha256"],
         python_version=platform.python_version(), module_root=str(target), implementation_files=implementation,
         dependencies=(_dependency_bindings(contained_records=True, exclusions=dependency_exclusions)
             if contained_dependency_records else _dependency_bindings())))

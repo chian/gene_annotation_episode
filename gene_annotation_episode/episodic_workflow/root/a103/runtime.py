@@ -513,11 +513,9 @@ class ExecutionContextController:
             packet = None
             if unit_ref is not None and self.capture_current_completion is not None:
                 packet = self._completion_packet(self.capture_current_completion(unit_ref, index, value), index, unit_ref)
-            if 'pending_work' in decision_context and (after.get('pending_work_after_action') is not None or after.get('wait_outcome') is not None or packet is not None):
+            if after.get('pending_work_after_action') is not None or after.get('wait_outcome') is not None or packet is not None:
                 support = decision_context.get('waiting_support', {})
                 context = completed_action_context(context, pending_at_selection=decision_context['pending_work'], pending_after_action=after.get('pending_work_after_action'), wait_estimate_at_selection=after.get('wait_estimate'), wait_outcome=after.get('wait_outcome'), progress_records=support.get('progress_records', ()), duration_expectations=support.get('duration_expectations', ()), own_completed_action_history=support.get('own_completed_action_history', ()), local_return_history_at_selection=support.get('local_return_history'), current_completion_evidence=packet)
-            elif packet is not None:
-                context = completed_action_context(context, pending_at_selection=None, pending_after_action=after.get('pending_work_after_action'), current_completion_evidence=packet)
             if 'resource_tool_estimates' in decision_context or 'resource_tool_estimates' in after:
                 context['resource_tool_estimates_at_selection'] = decision_context.get('resource_tool_estimates', [])
                 context['resource_tool_estimates_after_action'] = after.get('resource_tool_estimates', [])

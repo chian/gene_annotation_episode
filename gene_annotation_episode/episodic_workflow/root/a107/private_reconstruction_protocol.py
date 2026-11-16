@@ -38,21 +38,13 @@ def admit_descriptors(descriptors, catalog):
             raise _failure('identity_conflict', reference)
         seen.add(name)
         declaration = catalog[name]
-        fields = {'version', 'binding_id', 'configuration'}
-        if declaration['fingerprinted']:
-            fields.add('implementation_sha256')
-        if set(record) != fields or record['version'] != declaration['version']:
+        if set(record) != {'version', 'binding_id', 'configuration'} or record['version'] != declaration['version']:
             raise _failure('unavailable_binding', reference)
         configuration = record['configuration']
         required, optional = set(declaration['required']), set(declaration['optional'])
         if (not isinstance(configuration, dict) or not required <= configuration.keys()
                 or configuration.keys() - required - optional):
             raise _failure('unavailable_binding', reference)
-        if declaration['fingerprinted']:
-            fingerprint = record['implementation_sha256']
-            if (type(fingerprint) is not str or len(fingerprint) != 64
-                    or any(character not in '0123456789abcdef' for character in fingerprint)):
-                raise _failure('unavailable_binding', reference)
         admitted.append(record)
     for record in admitted:
         name = record['binding_id']

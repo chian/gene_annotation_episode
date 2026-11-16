@@ -10,7 +10,6 @@ from ...communication import plain
 from ...method_loop.identities import EpisodeRef
 from ...execution_service_setup import ExecutionServiceFactory
 from .historical_receiving_owner import HistoricalReceivedExecutionOwner
-from .received_reader_sources import implementation_record
 VERSION = 'a107_received_execution_configuration_v1'
 CATALOG_VERSION = 'a107_received_execution_catalog_v1'
 FACTORY = 'gene_annotation_episode.episodic_workflow.root.a107.execution_service_setup.ExecutionServiceFactory'
@@ -91,14 +90,13 @@ class ReceivedExecutionSetup:
         self.factory, self.owner = (factory, owner)
         self.original_ports = (owner.store, owner.tool_registry, owner.services)
         self.factory_record = copy(factory.as_record())
-        self.source_record = implementation_record()
         self.reader_record = self._record()
 
     def _record(self):
         owner = self.owner
         if any((actual is not original for actual, original in zip((owner.store, owner.tool_registry, owner.services), self.original_ports))):
             raise ValueError('received_execution_original_service_ports_changed')
-        return {'version': 'a107_received_execution_setup_v1', 'factory': FACTORY, 'factory_definition': copy(self.factory.as_record()), 'run_id': owner.run_id, 'directory': str(owner.directory), 'implementation': implementation_record(), 'progress_binding': copy(owner.job_progress_provider.as_record())}
+        return {'version': 'a107_received_execution_setup_v1', 'factory': FACTORY, 'factory_definition': copy(self.factory.as_record()), 'run_id': owner.run_id, 'directory': str(owner.directory), 'progress_binding': copy(owner.job_progress_provider.as_record())}
 
     def check(self):
         if copy(self.factory.as_record()) != self.factory_record:
@@ -114,7 +112,7 @@ class ReceivedExecutionSetup:
             expected = {} if original is None else original
             if copy(getattr(owner, field)) != expected:
                 raise ValueError('received_execution_reader_configuration_changed:' + field)
-        if implementation_record() != self.source_record or self._record() != self.reader_record:
+        if self._record() != self.reader_record:
             raise ValueError('received_execution_reader_implementation_changed')
         return owner
 

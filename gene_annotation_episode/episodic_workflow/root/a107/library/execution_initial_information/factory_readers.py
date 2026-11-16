@@ -2,7 +2,6 @@
 from pathlib import Path
 from copy import deepcopy
 from .information_readers import FactoryInformationReaders
-from .information_sources import implementation_record
 from ...communication import plain
 from ...execution_service_setup import ExecutionServiceFactory
 from ...execution_progress import ExecutionProgressProvider
@@ -37,6 +36,6 @@ def construct_factory_information_readers(factory, *, store, run_id, directory, 
         rna_structure_comparison_returns=None if host is None else host.rna_structure_comparison_returns,
         construction_record={'version': 'factory_information_reader_construction_v1',
             'constructor': 'gene_annotation_episode.episodic_workflow.root.a107.execution_service_setup.ExecutionServiceFactory',
-            'factory_definition': definition}, implementation_record=implementation_record())
+            'factory_definition': definition})
     readers.validate_original_setup(definition)
     return readers

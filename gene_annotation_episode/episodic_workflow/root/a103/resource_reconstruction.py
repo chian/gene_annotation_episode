@@ -20,7 +20,7 @@ RESOURCE_BINDINGS = (
 )
 RESOURCE_RECONSTRUCTION = {
     name: ('resource_episode_binding_v1', ('resource_adapters',),
-           ('contract_information_profile',), True)
+           ('contract_information_profile',))
     for name in RESOURCE_BINDINGS
 }
 
