@@ -8,7 +8,6 @@
     {
       "path": "episode.py",
       "upstream_sha256": "1b5d37613b9e76530d5b6d207e4a7f0424a5cf60484bb3a7a8cef63fb8fd336d",
-      "local_sha256": "68c78ed2324a34be35c040287cf06dd2e4b9999f1d7e9314aacbb4d4605c2cd8",
       "details": [
         "EpisodeUpdate retains typed delivery failures and optional admitted report; views expose only admitted reports.",
         "ChildEpisodeUnit catches explicitly typed ReportDeliveryError after independent credit projection, retaining child trace/result.",
@@ -25,7 +24,6 @@
     {
       "path": "__init__.py",
       "upstream_sha256": "15329d32cc2ae6160c2d292d6dd7f9f727b2a3a382e05eef51b45b7ccc3599a9",
-      "local_sha256": "26c578540bba572ab67fec9981754525067e9717b70fb040ed193ab9c1e6166d",
       "details": [
         "Export ReportDeliveryError and ReportRedelivery public composition types.",
         "Export IndependentChild for explicit execution/collection composition.",
@@ -35,7 +33,6 @@
     {
       "path": "archive.py",
       "upstream_sha256": "776caa19fc335d71f9731a2f4e6b948cf0bca236bf0255fa8b7995284ebd54b6",
-      "local_sha256": "e28c18b01dd0f7e0d11f9c413442f71a412264066de349b19f73394f718cc5a6",
       "details": [
         "Address each stored JSON value by its canonical content and byte-offset index hashes rather than a fresh UUID.",
         "Repeated child closure, parent archival and resumed reconstruction reuse the same file addresses.",
@@ -45,7 +42,6 @@
     {
       "path": "independent.py",
       "upstream_sha256": null,
-      "local_sha256": "0b2cd709cfba7cba98e4ecf4f6b288de465e1961c20ae73cdb787af42138ecd4",
       "details": [
         "New in-process execution primitive: existing Episode.run_async and local controllers; parent-owned exactly-once collection; cancellation shielding; optional completed trace/result archival. Does not claim durable process execution or application commissioning integration.",
         "Closing an owner releases its pending result-projection closures without cancelling children; successful receipt likewise releases no-longer-needed closures. Focused weak-reference tests cover both closed child and closed parent sources."
@@ -54,7 +50,6 @@
     {
       "path": "durable.py",
       "upstream_sha256": null,
-      "local_sha256": "5f99292dbda5d770b0b440359880bdeb2e86cddefedca2872e87408b885454c7",
       "details": [
         "Persist immutable versioned commissions, single claimed process identities, typed returns, acknowledgments and exposed progress events.",
         "Spawn detached workers and recover existing identities without automatic work retry; public status does not load child archives.",
@@ -64,7 +59,6 @@
     {
       "path": "durable_worker.py",
       "upstream_sha256": null,
-      "local_sha256": "fb3cfc5df0f4ecda40d56b99ddd18375bfeeb8ee80b7cbd124ce697252b602d4",
       "details": [
         "Reconstruct exactly one selected child through the caller factory and run its ordinary Episode/controller.",
         "Archive closure and preserve structured failed/interrupted outcomes and committed partial references; no report composer.",
@@ -84,10 +78,5 @@
     "tests/test_episode_admission.py",
     "tests/test_episode_completion.py",
     "tests/test_ready_child_delivery.py::test_ready_zero_credit_reports_are_admitted_before_running_sibling_finishes (causal fixture only; no autonomous scientific validation claim)"
-  ],
-  "previous_patch_ids": [
-    "controlled_report_delivery_and_archive_recovery_v2",
-    "independent_child_execution_foundation_v3",
-    "durable_independent_episode_ports_v4"
   ]
 }
