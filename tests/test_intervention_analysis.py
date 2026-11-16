@@ -136,7 +136,7 @@ def publication(args, result):
     ref = "source_" + "f" * 24
     return dict(version=returns.RESULT_VERSION, source_ref=ref, reference=ref,
         publication=dict(bundle_content=content(args["bundle"], "f"), result_record_refs=[ref], adapter_result=saved),
-        publication_inputs=dict(selector=selector, adapter=selector["adapter"], adapter_implementation_sha256=tnseq.implementation_sha256()),
+        publication_inputs=dict(selector=selector, adapter=selector["adapter"]),
         assignment=dict(selector=selector), record_refs=[ref], bundle=args["bundle"])
 
 

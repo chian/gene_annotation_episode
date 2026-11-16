@@ -6,7 +6,6 @@ identity. They inspect environment delivery, not Aurora execution or science.
 import base64
 from importlib.metadata import version
 import json
-from pathlib import Path
 import sys
 from types import ModuleType
 
@@ -46,14 +45,11 @@ def test_unspecified_native_threads_are_not_presented_as_known_single_thread():
 def test_worker_passes_environment_without_installing_thread_ceilings(tmp_path, monkeypatch, axis):
     worker = worker_a107 if axis == 'A107' else worker_a110
     input_bytes = b'{}'
-    manifest = {'component-worker.py': worker.sha(Path(worker.__file__).read_bytes())}
     (tmp_path / 'component-sources.json').write_text('{}')
     request = {'version': worker.VERSION, 'axis': axis,
         'operation': 'partner.request_expression_hpc' if axis == 'A107' else 'chemistry.request_accounting_hpc',
         'selection': {}, 'scientific_profile': 'fixture_environment_probe_v1',
-        'jsonschema_version': version('jsonschema'), 'code_manifest': manifest,
-        'code_manifest_sha256': worker.sha(worker.canonical(manifest).encode()),
-        'source_snapshot_sha256': worker.sha(b'{}'),
+        'jsonschema_version': version('jsonschema'),
         'input': {'bytes_base64': base64.b64encode(input_bytes).decode(),
             'file': {'sha256': worker.sha(input_bytes), 'size_bytes': len(input_bytes)}}}
     path = tmp_path / 'request.json'

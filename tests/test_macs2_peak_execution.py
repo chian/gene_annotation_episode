@@ -37,10 +37,10 @@ from test_native_atac_differential_contracts import fake_software as atac_contro
 
 
 def fake_software():
-    """Deliberately fake engineering pins, never a native runtime witness."""
+    """Deliberately fake engineering software, never a native runtime witness."""
     value = atac_control_software()
     value['driver_runtime']['implementation_files'].append(
-        dict(module=native.DRIVER_MODULE, sha256=digest(native.DRIVER_MODULE)))
+        dict(module=native.DRIVER_MODULE))
     return value
 
 

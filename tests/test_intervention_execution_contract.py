@@ -5,7 +5,6 @@ from types import SimpleNamespace
 import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a106.bvbrc_appservice_adapters import bind_adapters
-from gene_annotation_episode.episodic_workflow.root.a106 import bvbrc_rnaseq_bundle_adapter as rnaseq
 from gene_annotation_episode.episodic_workflow.root.a106.domain import ContractError, validate_schema
 from gene_annotation_episode.episodic_workflow.root.a106.library.standalone_intervention_execution import contract_catalog, prepare_analysis_contract
 from test_intervention_analysis import arguments
@@ -13,7 +12,7 @@ from test_intervention_analysis import arguments
 
 def fixture():
     service = SimpleNamespace(service="bvbrc_appservice", scientific_adapters=bind_adapters([
-        dict(adapter_id="bvbrc_rnaseq", adapter_version="1", implementation_sha256=rnaseq.implementation_sha256())]))
+        dict(adapter_id="bvbrc_rnaseq", adapter_version="1")]))
     binding = SimpleNamespace(api_execution=SimpleNamespace(services={"analysis":service}))
     registry = SimpleNamespace(roles=("launch", "results"),
         for_context_role=lambda role, *, path=None, owner=None: binding)

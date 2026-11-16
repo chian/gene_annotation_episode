@@ -33,6 +33,7 @@ class Value(ClosedRecord):
 def saved(tmp_path):
     with Store(tmp_path / "workspace") as store:
         journal = Journal(store, "run_A")
+        CompletionLedger(store, journal)
         journal.save("runtime_episodes", {"episode_id": "owner", "path": canonical([["annotation", "root"]]),
             "request": canonical({"never_expose_prompt": "private request"}), "initial_credit": 100,
             "state": "active", "completion": None, "archive": None})
