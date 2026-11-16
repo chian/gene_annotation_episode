@@ -5459,7 +5459,7 @@ async def _run_bound_workflow(store, tools, *, provider=None, provider_config=No
         raise ValueError('episode_service_factory_and_direct_services_are_exclusive')
     if episode_binding_descriptors is not None and episode_binding_factories is not None:
         raise ValueError('episode_descriptors_and_factories_are_exclusive')
-    from .numerical import YieldController, ESTIMATOR_VERSION, SOURCE_SHA256
+    from .numerical import YieldController, ESTIMATOR_VERSION
     from .providers import ModelConnection
 
     directory, run_id = _run_location(store, run_dir, resume)
@@ -5521,7 +5521,7 @@ async def _run_bound_workflow(store, tools, *, provider=None, provider_config=No
     bindings = {"controller": _binding_name(controller_factory, "gene_annotation_episode.episodic_workflow.root.a102.numerical.YieldController"),
                 "credit": _binding_name(project_credit, "caller_injected")}
     versions = {
-        "controller": ({"estimator_version": ESTIMATOR_VERSION, "template_sha256": SOURCE_SHA256}
+        "controller": ({"estimator_version": ESTIMATOR_VERSION}
                        if controller_factory is None else {"requirement": "same_caller_injected_executable"}),
         "credit": {"requirement": "same_caller_injected_executable"},
     }

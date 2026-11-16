@@ -1,6 +1,6 @@
 """Connect the original own-A102 scientific process."""
 from __future__ import annotations
-from .scientific_contracts import ContractError, INSTRUCTION_VERSION, Path, ROLE, ROLES, VERSION, _object, deepcopy, hashlib, scientific_digest
+from .scientific_contracts import ContractError, INSTRUCTION_VERSION, ROLE, ROLES, VERSION, _object, deepcopy
 from .configuration import ScientificConfiguration
 from .goal import ScientificGoal
 from .child_commissioning import ScientificChildCommissioning
@@ -60,8 +60,7 @@ class ScientificProcessEpisode(ScientificConfiguration, ScientificGoal, Scientif
                     raise ContractError('scientific_yield_task_binding_invalid:' + task) from error
 
     def as_record(self):
-        implementation = scientific_digest({str(path.relative_to(Path(__file__).parent.parent)): hashlib.sha256(path.read_bytes()).hexdigest() for path in Path(__file__).parent.parent.rglob('*.py') if 'tests' not in path.parts})
-        return {'version': VERSION, 'binding_id': ROLE, 'implementation_sha256': implementation, 'configuration': {'library': deepcopy(self._library_record), 'tool_library': deepcopy(self._tools_record), 'child_roles': list(self._child_roles), **({'tool_retrieval': deepcopy(self.tool_retrieval)} if self.tool_retrieval else {}), **({'contract_information_profile': self._contract_information_profile} if self._contract_information_profile is not None else {}), **({'yield_bindings': deepcopy(self._yield_bindings)} if self._yield_bindings is not None else {})}}
+        return {'version': VERSION, 'binding_id': ROLE, 'configuration': {'library': deepcopy(self._library_record), 'tool_library': deepcopy(self._tools_record), 'child_roles': list(self._child_roles), **({'tool_retrieval': deepcopy(self.tool_retrieval)} if self.tool_retrieval else {}), **({'contract_information_profile': self._contract_information_profile} if self._contract_information_profile is not None else {}), **({'yield_bindings': deepcopy(self._yield_bindings)} if self._yield_bindings is not None else {})}}
 
     @staticmethod
     def _role(role):

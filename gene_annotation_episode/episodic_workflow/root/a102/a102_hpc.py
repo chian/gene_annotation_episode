@@ -131,17 +131,13 @@ def prepare_request(store, arguments, *, context, known):
         for name, source in implementations.items()}
     snapshot = canonical(sources)+'\n'
     files = {'a102-sources.json': snapshot, 'a102-worker.py': (directory/'a102_hpc_worker.py').read_text()}
-    manifest = {name: sha(text.encode()) for name, text in sources.items()}
-    manifest['a102-worker.py'] = sha(files['a102-worker.py'].encode())
     request = {'version': NATIVE_VERSION, 'algorithm': algorithm, 'software_pin': deepcopy(PINS[algorithm]),
-        'native_request': native, 'code_manifest': manifest, 'source_snapshot_sha256': sha(snapshot.encode()),
-        'code_manifest_sha256': sha(canonical(manifest).encode())}
+        'native_request': native}
     raw = (canonical(request)+'\n').encode()
     body = {'version': VERSION, 'run_id': context.run_id, 'scope': scope,
         'target_binding_ref': arguments['target_binding_ref'], 'reference_binding_refs': references,
         'attribution': plain(attribution), 'request': request, 'request_json': raw.decode(),
-        'request_sha256': sha(raw), 'files': files, 'worker_sha256': manifest['a102-worker.py'],
-        'code_manifest_sha256': request['code_manifest_sha256'], 'resource_id': arguments['resource_id']}
+        'request_sha256': sha(raw), 'files': files, 'resource_id': arguments['resource_id']}
     with store.transaction():
         reference = _source(store, REQUEST_PROVIDER, body, scope)
         store.db.execute('INSERT OR IGNORE INTO a102_hpc_requests VALUES(?,?)', (reference, canonical(body)))
@@ -164,7 +160,7 @@ def commission(store, reference, resources):
     from .execution_guidance import resource_identity
     resource_key = resource_identity(body['resource_id'], resource)
     profile = {'resource_id': resource_key, 'backend': 'hpc', 'tool': 'a102.structural_comparison',
-        'implementation': body['code_manifest_sha256'], 'parameters': digest({
+        'implementation': NATIVE_VERSION, 'parameters': digest({
             'algorithm': request['algorithm'], 'pin': request['software_pin'], 'native_profile': 'CA'}),
         'hardware': resource_key}
     candidate = {'id': 'a102_'+body['request_sha256'][:16], 'queue': 'debug', 'nodes': 1,
@@ -183,8 +179,7 @@ def commission(store, reference, resources):
             'on the allocated compute nodes. Retain the original result in HPC_UNIT_DIRECTORY.'}
     predicates = [{'field': [key], 'operator': 'eq', 'value': value} for key, value in (
         ('version', NATIVE_VERSION), ('program', 'a102_structural_native'), ('completed', True), ('returncode', 0),
-        ('request_sha256', body['request_sha256']), ('worker_sha256', body['worker_sha256']),
-        ('code_manifest_sha256', body['code_manifest_sha256']))]
+        ('request_sha256', body['request_sha256']))]
     return {'objective': 'Execute this exact received A102 structural comparison on Aurora. Return '
         'native correspondences, transforms, extent, qualifiers and original provenance. Structural '
         'opposition or an uninformative search is useful; no particular similarity or function is expected.',
@@ -237,8 +232,6 @@ def admit_result(store, request_ref, hpc_result_ref, *, context, known, read_res
         'a102_hpc_original_native_command_conflict')
     require(result.get('version') == NATIVE_VERSION and result.get('program') == 'a102_structural_native'
         and result.get('request_sha256') == expected['request_sha256']
-        and result.get('worker_sha256') == expected['worker_sha256']
-        and result.get('code_manifest_sha256') == expected['code_manifest_sha256']
         and result.get('pbs_job_id') == receipt['job_id']
         and result.get('compute_hostname') and not result['compute_hostname'].startswith(('aurora-uan', 'login')),
         'a102_hpc_original_native_identity_conflict')
@@ -285,7 +278,6 @@ def admit_result(store, request_ref, hpc_result_ref, *, context, known, read_res
                 'native_command': native['native_metrics'].pop('command', None),
                 'stdout_sha256': native['native_metrics'].pop('original_stdout_sha256', None)}
             native['execution_provenance'] = {'request_ref': request_ref,
-                'code_manifest_sha256': expected['code_manifest_sha256'],
                 'original_execution': 'separately_received_A102_HPC_admission'}
             reference = publish_comparison(store, native)['source_ref']
             refs.append(reference)

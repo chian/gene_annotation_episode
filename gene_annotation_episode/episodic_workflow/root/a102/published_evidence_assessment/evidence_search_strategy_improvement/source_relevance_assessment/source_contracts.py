@@ -32,19 +32,9 @@ from gene_annotation_episode.episodic_workflow.root.a102.experimental_database_a
 _ACCESS_TOOLS = ('state.query', 'source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references', 'source.experimental.records', 'image.view', 'source.archive.members', 'source.archive.extract', 'source.xlsx.sheets', 'source.xlsx.rows', 'source.pdf.info', 'source.pdf.text', 'source.pdf.page', 'execution.estimate')
 _ACQUISITION_TOOLS = ('public.literature.search', 'public.literature.read', 'public.literature.sequence_identity', 'public.ncbi.search', 'public.pmc.versions', 'public.pmc.files', 'public.pmc.asset', *EXPERIMENT_DATABASE_TOOLS)
 
-def _implementation_path(name):
-    """Resolve only A102's retained implementation files."""
-    path = _AXIS_DIRECTORY / name
-    if not path.is_file():
-        path = _AXIS_DIRECTORY / 'library' / name
-    return path
 _READ_TOOLS = ('source.read', 'source.locate', 'source.sequence.scan', 'source.sequence.references', 'source.experimental.records', 'source.xlsx.rows', 'source.pdf.text', 'image.view')
 _CATALOG_ORDER = ('literature.structure.populate',)
 
 def _population_catalog(**_configuration):
     from gene_annotation_episode.episodic_workflow.root.a102.a102_literature_bindings import population_catalog_entry
     return [population_catalog_entry()]
-_AXIS_DIRECTORY = Path(__file__).resolve().parents[3]
-
-def _binding_source_bytes():
-    return b''.join((path.read_bytes() for path in sorted(Path(__file__).parent.glob('*.py'))))

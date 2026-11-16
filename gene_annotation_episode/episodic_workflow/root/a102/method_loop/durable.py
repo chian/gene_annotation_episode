@@ -261,14 +261,13 @@ def validate_commission(spec):
         if item["content_sha256"] is not None:
             _digest(item["content_sha256"], "input content digest")
     binding = spec["runtime_binding"]
-    _exact(binding, "factory_module factory_name arguments implementation_sha256 settings_sha256", "runtime binding")
+    _exact(binding, "factory_module factory_name arguments settings_sha256", "runtime binding")
     for name in ("factory_module", "factory_name"):
         _text(binding[name], name)
         if any(not part.isidentifier() for part in binding[name].split(".")):
             raise ValueError("factory references must be module/attribute names")
     if not isinstance(binding["arguments"], dict) or not isinstance(spec["constraints"], dict):
         raise ValueError("binding arguments and constraints must be JSON objects")
-    _digest(binding["implementation_sha256"], "implementation digest")
     _digest(binding["settings_sha256"], "settings digest")
     selected = spec["resource_selection"]
     if selected is not None:

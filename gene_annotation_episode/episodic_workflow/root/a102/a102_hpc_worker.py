@@ -1,6 +1,6 @@
 """Portable runner for the existing A102 native algorithms inside an allocation.
 
-The staged package is a hash-pinned snapshot of the existing implementation.
+The staged package is a snapshot of the existing implementation.
 Preparation acquires official assets only. Compilation and structural algorithms
 run in the original HPC unit; this module is never a local execution fallback.
 """
@@ -64,8 +64,7 @@ def main(argv=None):
     unit = Path(os.environ['HPC_UNIT_DIRECTORY']).resolve()
     unit.mkdir(parents=True, exist_ok=True)
     result = {'version': VERSION, 'program': 'a102_structural_native',
-        'request_sha256': sha(request_raw), 'worker_sha256': sha(Path(__file__).read_bytes()),
-        'code_manifest_sha256': request['code_manifest_sha256'],
+        'request_sha256': sha(request_raw),
         'pbs_job_id': os.environ.get('PBS_JOBID'), 'compute_hostname': socket.gethostname(),
         'python_version': sys.version,
         'completed': False, 'returncode': 1, 'failure': None}
@@ -73,25 +72,14 @@ def main(argv=None):
     try:
         require(result['pbs_job_id'] and not result['compute_hostname'].startswith(('aurora-uan', 'login')),
             'a102_native_execution_requires_original_compute_allocation')
-        snapshot_raw = (root/'a102-sources.json').read_bytes()
-        require(sha(snapshot_raw) == request['source_snapshot_sha256'], 'a102_hpc_source_snapshot_conflict')
-        sources = json.loads(snapshot_raw)
-        require(set(sources) == set(request['code_manifest'])-{'a102-worker.py'},
-            'a102_hpc_source_snapshot_membership_conflict')
+        sources = json.loads((root/'a102-sources.json').read_bytes())
         package = unit/'source-snapshot'
         package.mkdir(exist_ok=True)
-        for relative, expected in request['code_manifest'].items():
-            if relative == 'a102-worker.py':
-                require(sha(Path(__file__).read_bytes()) == expected, 'a102_hpc_staged_worker_conflict')
-                continue
-            data = sources[relative].encode()
-            require(sha(data) == expected, 'a102_hpc_staged_implementation_conflict')
+        for relative, text in sources.items():
             path = (package/relative).resolve()
             require(path.is_relative_to(package), 'a102_hpc_snapshot_path_invalid')
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(data)
-        require(sha(canonical(request['code_manifest']).encode()) == request['code_manifest_sha256'],
-            'a102_hpc_code_manifest_conflict')
+            path.write_bytes(text.encode())
         for name in ('tmp', 'cache'):
             (unit/name).mkdir(exist_ok=True)
         os.environ.update(PYTHONDONTWRITEBYTECODE='1', TMPDIR=str(unit/'tmp'),

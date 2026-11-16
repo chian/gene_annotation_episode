@@ -21,7 +21,7 @@ FACT_CONTRACT_TASK = ('For a declared A102 child return, request episode.return_
     'a top-level {"$ref":"episode-fact:<source>"} field. The host supplies the saved '
     'value; write interpretations in separate closed fields.')
 _PRIVATE = frozenset(('private_history', 'private_reasoning', 'provider_result',
-    'implementation_sha256', 'calculation_implementation', 'report_contract_declaration'))
+    'calculation_implementation', 'report_contract_declaration'))
 
 
 def is_literature_experimental_context(state):

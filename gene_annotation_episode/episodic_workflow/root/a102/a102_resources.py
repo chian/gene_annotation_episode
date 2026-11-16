@@ -48,8 +48,7 @@ class A102ResourceAdapter:
     def as_record(self):
         return {'version':VERSION,'resource_id':self.resource_id,'registry_ref':self.registry_ref,
             'software':deepcopy(self.tools.a102_software),'directory':str(self.tools.a102_directory),
-            'policy':self.tools.a102_policy.to_dict(),
-            'implementation_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
+            'policy':self.tools.a102_policy.to_dict()}
 
     def selection(self):
         return {'resource_id':self.resource_id,'kind':'local','allocation':{'cpu':1,**self.tools.a102_policy.to_dict()},
