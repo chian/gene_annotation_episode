@@ -8,7 +8,7 @@ from .operations import ScientificOperations
 from .internal_summary import ScientificSummary
 from .goal import ScientificGoal
 from .configuration import ScientificConfiguration
-from .contracts import ContractError, EVIDENCE_AXIS_VERSION, INSTRUCTION_VERSION, Path, ROLE, ROLES, SELECTION_VERSION, VERSION, _COMMON_TOOLS, _REVISION_ARGUMENTS, _object, deepcopy, evidence_axis_instruction_view, hashlib, identity, inspect, instruction_view, plain, scientific_digest, scientific_invocation_ref, selection_fields, selector_selection, support_observation_kinds, validate_child_selection, validate_revision_origin, validate_schema, validate_selection
+from .contracts import ContractError, EVIDENCE_AXIS_VERSION, INSTRUCTION_VERSION, ROLE, ROLES, SELECTION_VERSION, VERSION, _COMMON_TOOLS, _REVISION_ARGUMENTS, _object, deepcopy, evidence_axis_instruction_view, identity, inspect, instruction_view, plain, scientific_invocation_ref, selection_fields, selector_selection, support_observation_kinds, validate_child_selection, validate_revision_origin, validate_schema, validate_selection
 from .credit import ScientificProcessCredit
 from importlib import import_module as _import_module
 from .yield_estimator import ScientificProcessYield
@@ -23,8 +23,7 @@ class ScientificProcessEpisode(ScientificConfiguration, ScientificGoal, Scientif
     entry_roles = ROLES
 
     def as_record(self):
-        implementation = scientific_digest({str(path.relative_to(Path(__file__).parent.parent)): hashlib.sha256(path.read_bytes()).hexdigest() for path in Path(__file__).parent.parent.rglob('*.py') if 'tests' not in path.parts})
-        return {'version': VERSION, 'binding_id': ROLE, 'implementation_sha256': implementation, 'configuration': {'library': deepcopy(self._library_record), 'tool_library': deepcopy(self._tools_record), 'child_roles': list(self._child_roles), **({'tool_retrieval': deepcopy(self.tool_retrieval)} if self.tool_retrieval else {}), **({'contract_information_profile': self._contract_information_profile} if self._contract_information_profile is not None else {}), **({'yield_bindings': deepcopy(self._yield_bindings)} if self._yield_bindings is not None else {})}}
+        return {'version': VERSION, 'binding_id': ROLE, 'configuration': {'library': deepcopy(self._library_record), 'tool_library': deepcopy(self._tools_record), 'child_roles': list(self._child_roles), **({'tool_retrieval': deepcopy(self.tool_retrieval)} if self.tool_retrieval else {}), **({'contract_information_profile': self._contract_information_profile} if self._contract_information_profile is not None else {}), **({'yield_bindings': deepcopy(self._yield_bindings)} if self._yield_bindings is not None else {})}}
 
     def resource_information_catalog(self, registry):
         from .scientific_commission_catalog import resource_information_catalog

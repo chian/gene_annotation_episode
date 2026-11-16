@@ -136,13 +136,10 @@ def _artifact(bundle, path, measured, *, role, format, input_key=None, database_
     return key
 
 
-def _check_file(expected, *, kind=None):
+def _check_file(expected):
     row = {"path": expected["path"], "observed_sha256": None, "size_bytes": None,
         "checked_at": _now(), "status": "not_checked"}
-    if kind is not None:
-        row["kind"] = kind
-    else:
-        row["expected_sha256"] = expected["sha256"]
+    row["expected_sha256"] = expected["sha256"]
     try:
         measured = _measure(expected["path"])
     except FileNotFoundError:
@@ -197,55 +194,6 @@ def validate_selected_vdb_file_inventory(database):
         elif not actual.is_file():
             raise ValueError("native_blast_database_vdb_prepared_path_missing")
     return True
-
-
-def _verify_producer(bundle):
-    plan, proof = bundle["plan"], bundle["producer_verification"]
-    selected = plan["producer_manifest"]
-    destination = Path(plan["attempt_directory"]) / "custody" / "producer-manifest"
-    artifact_key = None
-    try:
-        measured = _copy_file(selected["path"], destination)
-        proof["manifest_observed_sha256"] = measured["sha256"]
-        artifact_key = _artifact(bundle, destination, measured, role="producer_manifest", format="opaque")
-        if any(measured[k] != selected[k] for k in measured):
-            raise ValueError("producer_manifest_identity")
-        manifest = _json(destination.read_bytes())
-        contracts._schema(manifest, contracts.PRODUCER_MANIFEST_SCHEMA)
-        manifest = contracts.validate_native_blast_database_producer_manifest(manifest,
-            module_root=manifest["module_root"], python_executable=manifest["python"]["path"])
-        if contracts._inside(selected["path"], manifest["module_root"], equal=True):
-            raise ValueError("producer_manifest_inside_inventory")
-    except (OSError, ValueError, TypeError, UnicodeError):
-        _failure(bundle, "producer_manifest_invalid", artifact_key=artifact_key)
-        return
-    proof["manifest"] = manifest
-    next(r for r in bundle["artifacts"] if r["artifact_key"] == artifact_key)["format"] = "json"
-    try:
-        observed, invalid = _inventory(manifest["module_root"])
-        paths = {str(p.relative_to(manifest["module_root"])) for p in observed}
-        proof["package_inventory_exact"] = not invalid and paths == {r["relative_path"] for r in manifest["package_files"]}
-    except (OSError, ValueError):
-        proof["package_inventory_exact"] = False
-    if not proof["package_inventory_exact"]:
-        _failure(bundle, "producer_package_inventory_mismatch")
-    for expected in contracts._producer_files(manifest):
-        row = _check_file(expected, kind=expected["kind"])
-        proof["checks"].append(row)
-        code = {"missing": "producer_file_missing", "mismatch": "producer_file_identity_mismatch",
-                "unreadable": "producer_file_unreadable"}.get(row["status"])
-        if code:
-            _failure(bundle, code)
-    root = Path(manifest["module_root"])
-    proof["running_module_paths_match"] = (
-        Path(__file__).resolve() == root / "gene_annotation_episode/episodic_workflow/root/a103/native_blast_database_driver.py"
-        and Path(contracts.__file__).resolve() == root / "gene_annotation_episode/episodic_workflow/root/a103/native_blast_database_contracts.py"
-        and Path(sys.executable).resolve() == Path(manifest["python"]["path"]))
-    if not proof["running_module_paths_match"]:
-        _failure(bundle, "producer_runtime_path_mismatch")
-    if (proof["package_inventory_exact"] and proof["running_module_paths_match"]
-            and all(r["status"] == "verified" for r in proof["checks"])):
-        proof["status"] = "verified"
 
 
 def _fasta(path, job):
@@ -311,16 +259,10 @@ def _msa(path, job):
         raise ValueError("selected_msa_master_unavailable")
 
 
-def _pssm(path, job, *, producer_manifest):
+def _pssm(path, job):
     # Reuse 306's supplied-byte syntax parser, not its numerical calculator or
     # biological master mapper. The producer retains the original input bytes.
-    relative = "gene_annotation_episode/episodic_workflow/root/a103/blast_pssm_inputs.py"
-    if relative not in {r["relative_path"] for r in producer_manifest["package_files"]}:
-        raise ModuleNotFoundError("selected_deployment_pssm_parser_unavailable")
     from . import blast_pssm_inputs
-    expected = Path(producer_manifest["module_root"]) / relative
-    if Path(blast_pssm_inputs.__file__).resolve() != expected:
-        raise ImportError("selected_deployment_pssm_parser_shadowed")
     sheet = blast_pssm_inputs.read_blast_pssm(Path(path).read_bytes(), format="scoremat_asn_text",
         artifact_key=job["query"]["input_key"], source_ref="producer-input-syntax-check")
     if sheet["status"] != "complete" or len(sheet["pssms"]) != 1:
@@ -358,11 +300,9 @@ def _inputs(bundle):
             continue
         if row["role"] == "metadata":
             continue  # Even a declared JSON payload is opaque to this producer.
-        if bundle["producer_verification"]["status"] != "verified":
-            continue  # Retain input bytes; never import unverified package code.
         try:
             if job["query"]["kind"] == "pssm":
-                _pssm(destination, job, producer_manifest=bundle["producer_verification"]["manifest"])
+                _pssm(destination, job)
             else:
                 {"sequence": _fasta, "msa": _msa}[job["query"]["kind"]](destination, job)
         except ImportError:
@@ -579,15 +519,12 @@ def run_native_blast_database_plan(plan_path):
     bundle = {"version": "native_blast_database_bundle_v1", "identity": envelope["identity"], "plan": plan,
         "requested_job": plan["requested_job"], "program": job["program"], "mode": "database",
         "software": {"selected": job["software"], "observed_sha256": None, "version_source": None},
-        "producer_verification": {"manifest": None, "manifest_observed_sha256": None,
-            "package_inventory_exact": None, "running_module_paths_match": None, "checks": [], "status": "failed"},
         "realized_argv": compiled["argv"], "environment": contracts._effective_environment(plan),
         "input_manifest": [], "database_manifest": [], "output_manifest": [], "artifacts": [],
         "associations": {"query_input_key": q["input_key"], "master_record_ordinal": q["msa_master_record_ordinal"],
             "ignore_msa_master": q["ignore_msa_master"], "selected_options": job["options"], "external_manifest_keys": []},
         "process": {"started": False, "returncode": None, "started_at": None, "finished_at": None, "native_elapsed_seconds": None},
         "failures": [], "sealed_at": None}
-    _verify_producer(bundle)
     try:
         measured = _measure(job["software"]["executable"])
     except (OSError, ValueError):

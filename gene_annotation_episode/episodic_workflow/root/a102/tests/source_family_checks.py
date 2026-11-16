@@ -62,6 +62,7 @@ def fixture(home,output,task_kind='verified_source_leads'):
                 'parent_source_refs':[]},origin='caller')
             runtime=own('runtime');host=object.__new__(runtime.Workflow)
             host.store=store;host.run_id='a102-source-family-run';host.directory=output/'workflow'
+            host.root_action_boundary=runtime.ROOT_BOUNDARY_VERSION
             host.journal=own('episode_journal').Journal(store,host.run_id)
             host.receipts=own('episode_receipts').EpisodeReceipts(store,host.run_id)
             clients=own('acquisition').PublicClients(ncbi_email=None)

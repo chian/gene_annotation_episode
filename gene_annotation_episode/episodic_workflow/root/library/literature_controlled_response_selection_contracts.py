@@ -65,11 +65,7 @@ defs["BarSelection"] = obj({
     "minimum_row_fraction": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
     "minimum_run_rows": {"type": "integer", "minimum": 1},
     "edge_tolerance_pixels": {"type": "number", "minimum": 0}})
-defs["GraphMeasurement"] = obj({"kind": {"const": "linear_bar"}, "image_id": TEXT,
-    "bar_selection": ref("BarSelection"), "axis": obj({
-        "first": obj({"pixel": {"type": "number", "minimum": 0}, "tick": ref("AxisLiteral")}),
-        "second": obj({"pixel": {"type": "number", "minimum": 0}, "tick": ref("AxisLiteral")}),
-        "unit": ref("AxisLiteral")})})
+defs['GraphMeasurement'] = obj({'kind': {'const': 'linear_bar'}, 'image_id': TEXT, 'bar_selection': ref('BarSelection'), 'axis': obj({'first': obj({'pixel': {'type': 'number', 'minimum': 0}, 'tick': ref('AxisLiteral')}), 'second': obj({'pixel': {'type': 'number', 'minimum': 0}, 'tick': ref('AxisLiteral')}), 'unit': ref('AxisLiteral'), 'scale': ref('AxisScale')}), 'terminal_edge': enum(('upper', 'lower'))})
 defs["CISelector"] = obj({"witness": ref("NativeTextWitness"),
     **{name: OFFSET for name in ("lower_start", "lower_end", "upper_start", "upper_end")}})
 defs["Uncertainty"] = obj({
@@ -98,21 +94,17 @@ defs["Relationships"] = obj({"condition1_target": ref("Meaning"), "condition0_ta
     "intended_factor": nullable(ref("Witness"))})
 defs["CovarianceBinding"] = obj({"variable_index": OFFSET, "label_witness": ref("NativeTextWitness"),
     "owner_witness": ref("Witness"), "correspondence": ref("Correspondence")})
-selection = obj({"version": {"const": "controlled_response_source_selection_v1"},
-    "source_ref": deepcopy(REF), "images": array(ref("Image")),
-    "arms": obj({role: nullable(ref("Arm")) for role in ROLES}), "relationships": ref("Relationships"),
-    "covariance": nullable(obj({"source_ref": deepcopy(REF),
-        "bindings": obj({role: nullable(ref("CovarianceBinding")) for role in ROLES})})),
-    "variance_status": interpretation(("known", "estimated", "unknown")),
-    "model_kind": interpretation(("none", "known_joint_normal_source_means"))})
+defs['AxisScale'] = obj({'status': enum(('known', 'unknown', 'conflicting')), 'kind': nullable(enum(('linear', 'logarithmic', 'nonlinear'))), 'basis': enum(('source_text_literal', 'image_episode_interpretation', 'unresolved')), 'witnesses': {'type': 'array', 'items': ref('Witness')}})
+defs['AxisScale']['allOf'] = [{'if': {'properties': {'status': {'const': 'known'}}}, 'then': {'properties': {'kind': enum(('linear', 'logarithmic', 'nonlinear')), 'basis': enum(('source_text_literal', 'image_episode_interpretation')), 'witnesses': {'minItems': 1}}}, 'else': {'properties': {'kind': {'type': 'null'}, 'basis': {'const': 'unresolved'}}}}]
+selection = obj({'version': {'const': 'controlled_response_source_selection_v3'}, 'source_ref': deepcopy(REF), 'images': array(ref('Image')), 'arms': obj({role: nullable(ref('Arm')) for role in ROLES}), 'relationships': ref('Relationships'), 'covariance': nullable(obj({'source_ref': deepcopy(REF), 'bindings': obj({role: nullable(ref('CovarianceBinding')) for role in ROLES})})), 'variance_status': interpretation(('known', 'estimated', 'unknown')), 'model_kind': interpretation(('none', 'known_joint_normal_source_means'))})
 selection["$defs"] = defs
 selection["$schema"] = "https://json-schema.org/draft/2020-12/schema"
 
 _SELECTION_SCHEMA = selection
 
 
-def controlled_response_arguments_schema():
-    """Closed nominations only; numerical scientific operands are never inputs."""
+def _selection_core_schema():
+    """Closed arm, relationship and covariance nominations; numerical scientific operands are never inputs."""
     return deepcopy(_SELECTION_SCHEMA)
 
 

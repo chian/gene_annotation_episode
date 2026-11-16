@@ -1,7 +1,5 @@
 """Predefined annotation parent."""
-from hashlib import sha256
 from importlib import import_module
-from pathlib import Path
 from gene_annotation_episode.episodic_workflow.root.a103.task import LegacyAnnotationTask
 from gene_annotation_episode.episodic_workflow.root.a103.instructions import instructions
 from gene_annotation_episode.episodic_workflow.root.a103.from_parent import assemble_request, validate_path
@@ -48,9 +46,6 @@ class LegacyAnnotationEpisode:
 
     @staticmethod
     def as_record():
-        from .implementation import annotation_implementation_files
-        files = annotation_implementation_files()
         return {'version': 'legacy_annotation_episode_v1', 'binding_id': 'legacy_annotation', 'role': 'annotation',
                 'owner_class': 'gene_annotation_episode.episodic_workflow.root.a103.episode.LegacyAnnotationEpisode',
-                'task_class': 'gene_annotation_episode.episodic_workflow.root.a103.task.LegacyAnnotationTask',
-                'implementation_sha256': sha256(b''.join(path.read_bytes() for path in files)).hexdigest()}
+                'task_class': 'gene_annotation_episode.episodic_workflow.root.a103.task.LegacyAnnotationTask'}

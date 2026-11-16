@@ -10,7 +10,6 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
-from pathlib import Path
 
 from gene_annotation_episode.episodic_workflow.root.a103.method_loop.durable import content_digest, validate_commission
 
@@ -62,7 +61,6 @@ class HomologyProgressProvider:
 
     def as_record(self):
         return {'version': VERSION,
-            'implementation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'registry_ref': self._configuration['registry_ref'],
             'registry_configuration_sha256': self._configuration_sha256,
             'configuration': {'log_window_bytes': self.log_window_bytes,

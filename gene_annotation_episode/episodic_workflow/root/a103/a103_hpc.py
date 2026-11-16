@@ -95,17 +95,13 @@ def freeze(registry,operation,args,resource_id,*,context,scope,known,invocation)
         for name in SOURCES})
     snapshot = canonical(sources)+'\n'
     worker = (directory/'a103_hpc_worker.py').read_text()
-    manifest = {name:sha(text.encode()) for name,text in sources.items()}
-    manifest['a103-worker.py'] = sha(worker.encode())
     logical = digest({'operation':operation,'arguments':args,'scope':scope,'profile':SCIENTIFIC_PROFILE,
         'updates':plan['updates'],'target_mapping':plan['target_mapping']})
     request = {'version':NATIVE_VERSION,'scientific_profile':SCIENTIFIC_PROFILE,'biopython_version':Bio.__version__,
-        'plan':plan,'assets':assets,'code_manifest':manifest,'code_manifest_sha256':sha(canonical(manifest).encode()),
-        'source_snapshot_sha256':sha(snapshot.encode())}
+        'plan':plan,'assets':assets}
     raw = (canonical(request)+'\n').encode()
     body = {'version':VERSION,'run_id':context.run_id,'scope':plain(scope),'operation':operation,
         'logical_work_sha256':logical,'request':request,'request_sha256':sha(raw),
-        'worker_sha256':manifest['a103-worker.py'],'code_manifest_sha256':request['code_manifest_sha256'],
         'resource_id':resource_id,'evidence_refs':plan['evidence_refs'],
         'files':{'a103-worker.py':worker,'a103-sources.json':snapshot,'a103-request.json':raw.decode()}}
     with store.transaction():
@@ -119,8 +115,8 @@ def commission(body,resources):
     request = body['request']
     native = request['plan']['native_request']
     return describe(resource_id=body['resource_id'],resource=resources[body['resource_id']],
-        tool='a103.'+native['operation'],request_sha256=body['request_sha256'],worker_sha256=body['worker_sha256'],
-        implementation_sha256=body['code_manifest_sha256'],parameters={'operation':body['operation'],'profile':SCIENTIFIC_PROFILE},
+        tool='a103.'+native['operation'],request_sha256=body['request_sha256'],
+        parameters={'operation':body['operation'],'profile':SCIENTIFIC_PROFILE},
         files=body['files'],worker_name='a103-worker.py',request_name='a103-request.json',
         program='a103_gene_context_native',version=NATIVE_VERSION,
         features={'input_bytes':sum(asset['byte_length'] for asset in request['assets'].values()),
@@ -156,8 +152,6 @@ def admit(registry,expected,hpc_ref,*,context,known,reader):
         'a103_hpc_original_command_conflict')
     require(result.get('program')=='a103_gene_context_native' and result.get('version')==NATIVE_VERSION
         and result.get('request_sha256')==expected['request_sha256']
-        and result.get('worker_sha256')==expected['worker_sha256']
-        and result.get('code_manifest_sha256')==expected['code_manifest_sha256']
         and result.get('pbs_job_id')==receipt['job_id'] and result.get('compute_hostname')
         and not result['compute_hostname'].startswith(('aurora-uan','login')),'a103_hpc_original_identity_conflict')
     require(result['returncode']==receipt['unit']['returncode'],'a103_hpc_execution_outcome_conflict')

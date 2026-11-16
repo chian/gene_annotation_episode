@@ -45,7 +45,7 @@ from .native_genomic_overlap_contracts import (
     validate_genomic_overlap_requested_job, validate_genomic_overlap_run_plan,
 )
 from .native_genomic_overlap_preparation import (
-    WorkerCapture, WorkerExecution, _execution_fields, _validated_dependencies,
+    WorkerCapture, WorkerExecution, _validated_dependencies,
 )
 from .practical_execution_records import validate_receipt
 from .practical_receipt_information import PracticalReceiptInformation
@@ -672,9 +672,8 @@ class GenomicOverlapResultReceipts:
             require(execution is None)
             return
         closed(capture, WorkerCapture.__annotations__)
-        closed(execution, _execution_fields(execution))
-        if "dependencies" in execution:
-            _validated_dependencies(execution["dependencies"])
+        closed(execution, WorkerExecution.__annotations__)
+        _validated_dependencies(execution["dependencies"])
         require(capture["version"] == "genomic_overlap_worker_capture_v1"
             and execution["version"] == "genomic_overlap_worker_execution_v1"
             and same(execution["plan_file"], capture["plan_file"]))
@@ -696,11 +695,9 @@ class GenomicOverlapResultReceipts:
         require(type(execution["source_pins"]) is list and bool(execution["source_pins"]))
         paths = []
         for pin in [*execution["source_pins"], execution["interpreter"]]:
-            closed(pin, ("path", "sha256", "size_bytes"))
+            closed(pin, ("path",))
             require(type(pin["path"]) is str and Path(pin["path"]).is_absolute()
-                and str(Path(pin["path"])) == pin["path"] and type(pin["sha256"]) is str
-                and re.fullmatch(r"[0-9a-f]{64}", pin["sha256"]) is not None
-                and type(pin["size_bytes"]) is int and pin["size_bytes"] > 0)
+                and str(Path(pin["path"])) == pin["path"])
             paths.append(pin["path"])
         require(len(paths) == len(set(paths)))
         for failure in capture["failures"]:

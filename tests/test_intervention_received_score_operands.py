@@ -142,8 +142,6 @@ def controlled_response_rows(store):
         return references.get(value, value) if isinstance(value, str) else value
 
     args = remap(fixture["selection"])
-    args.update(version="controlled_response_source_selection_v3", companion_readings=[],
-        joint_reading_assignments=[], joint_scopes=[], reading_reconciliations=[], local_pair_assignments=[])
     assignment = dict(source_ref=args["source_ref"],
         requested_controlled_response_components=list(storage.COMPONENTS),
         requested_controlled_response_views=["native_raw", "final"])

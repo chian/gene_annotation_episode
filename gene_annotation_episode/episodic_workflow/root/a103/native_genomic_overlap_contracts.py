@@ -1,7 +1,7 @@
 """Pure records for the selected native all-pairs genomic overlap operation.
 
-Fixed G2 definitions implement packet425 DATA_CONTRACT.json, SHA-256
-4b8f38595549bd32484121129132474bc6fd3f5e9f7be1130433a6b3a208c00e.
+Fixed G2 definitions follow packet425 DATA_CONTRACT.json, without its
+interpreter and implementation-file digests.
 G1 owns scientific records; these checks validate supplied execution facts and
 associations, never observe files, grant source authority or execute work.
 """
@@ -40,13 +40,11 @@ _EXECUTION_DEFINITIONS = {'Policy': {'type': 'object',
             'required': ['memory_bytes', 'scratch_bytes'],
             'additionalProperties': False},
  'ImplementationFile': {'type': 'object',
-                        'properties': {'module': {'type': 'string', 'minLength': 1},
-                                       'sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}},
-                        'required': ['module', 'sha256'],
+                        'properties': {'module': {'type': 'string', 'minLength': 1}},
+                        'required': ['module'],
                         'additionalProperties': False},
  'SoftwareBinding': {'type': 'object',
                      'properties': {'python_executable': {'type': 'string', 'minLength': 1},
-                                    'python_sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'},
                                     'python_version': {'type': 'string', 'minLength': 1},
                                     'module_root': {'type': 'string', 'minLength': 1},
                                     'driver_module': {'const': 'gene_annotation_episode.episodic_workflow.root.a103.native_genomic_overlap_driver'},
@@ -57,7 +55,6 @@ _EXECUTION_DEFINITIONS = {'Policy': {'type': 'object',
                                     'bedtools_sha256': {'type': 'string', 'pattern': '^[0-9a-f]{64}$'},
                                     'bedtools_version': {'type': 'string', 'minLength': 1}},
                      'required': ['python_executable',
-                                  'python_sha256',
                                   'python_version',
                                   'module_root',
                                   'driver_module',
@@ -265,11 +262,9 @@ _EXECUTION_DEFINITIONS = {'Policy': {'type': 'object',
  'SoftwareVerification': {'type': 'object',
                           'properties': {'state': {'enum': ['verified', 'not_needed', 'failed']},
                                          'python_observed': {'anyOf': [{'type': 'object',
-                                                                        'properties': {'sha256': {'type': 'string',
-                                                                                                  'pattern': '^[0-9a-f]{64}$'},
-                                                                                       'version': {'type': 'string',
+                                                                        'properties': {'version': {'type': 'string',
                                                                                                    'minLength': 1}},
-                                                                        'required': ['sha256', 'version'],
+                                                                        'required': ['version'],
                                                                         'additionalProperties': False},
                                                                        {'type': 'null'}]},
                                          'bedtools_observed': {'anyOf': [{'$ref': '#/$defs/Software'},
@@ -827,7 +822,7 @@ def validate_genomic_overlap_batch(value: dict, *, plan: dict) -> dict:
 
     verification = value["software_verification"]
     software_failures = failure_rows(verification["failure_indices"], software_only=True)
-    python_expected = {"sha256": software["python_sha256"], "version": software["python_version"]}
+    python_expected = {"version": software["python_version"]}
     if verification["state"] in ("verified", "not_needed"):
         _require(verification["python_observed"] == python_expected and not software_failures,
                  "genomic_overlap_software_binding")
@@ -835,8 +830,7 @@ def validate_genomic_overlap_batch(value: dict, *, plan: dict) -> dict:
         _require(bool(software_failures), "genomic_overlap_software_binding")
     implementation_failed = verification["python_observed"] != python_expected or any(
         f["code"] == "software_identity_mismatch" and (f["field_path"] == "/software" or
-            (f["field_path"] or "").startswith(("/software/python_", "/software/implementation_files/",
-                                                "/software/module_root/"))) for f in software_failures)
+            (f["field_path"] or "").startswith(("/software/python_", "/software/module_root/"))) for f in software_failures)
     if implementation_failed:
         _require(verification["state"] == "failed" and
             any(f["code"] == "software_identity_mismatch" for f in software_failures) and

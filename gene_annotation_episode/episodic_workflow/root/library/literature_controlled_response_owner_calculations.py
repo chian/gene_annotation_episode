@@ -10,7 +10,7 @@ from __future__ import annotations
 from copy import deepcopy
 from itertools import combinations
 
-from gene_annotation_episode.episodic_workflow.root.library import literature_controlled_response_calculations as _old
+from gene_annotation_episode.episodic_workflow.root.library import literature_controlled_response_calculations as arithmetic
 from gene_annotation_episode.episodic_workflow.root.library.literature_rate_return_schema import RATE_UNITS
 
 
@@ -33,7 +33,7 @@ from gene_annotation_episode.episodic_workflow.root.library.literature_controlle
 def _context_reasons(left, right):
     """Scientific disagreement, independently of unused numerical readings."""
     reasons = set()
-    for meaning in _old._MEANINGS[:-1]:
+    for meaning in arithmetic._MEANINGS[:-1]:
         a, b = left[meaning + "_id"], right[meaning + "_id"]
         if a is not None and b is not None and a != b:
             reasons.add("conflicting_owner_context")
@@ -47,57 +47,57 @@ def _context_reasons(left, right):
 def _validate_covariance(inputs):
     raw, status = inputs["covariance"], inputs["variance_status"]
     if (raw is None) != (status == "unknown"):
-        _old._fail("covariance_status_mismatch", "variance_status")
+        arithmetic._fail("covariance_status_mismatch", "variance_status")
     if raw is None:
         return None
     if not isinstance(raw, dict):
-        _old._fail("closed_fields_required", "covariance")
+        arithmetic._fail("closed_fields_required", "covariance")
     role_form = "primitive_order" in raw
     fields = ("physical_observation_ids", "units", "matrix")
-    _old._closed(raw, (("primitive_order",) + fields) if role_form else fields, "covariance")
+    arithmetic._closed(raw, (("primitive_order",) + fields) if role_form else fields, "covariance")
     owners, units, matrix = (raw[name] for name in fields)
     if not isinstance(owners, list) or not 1 <= len(owners) <= 4:
-        _old._fail("covariance_owner_roster_required", "covariance.physical_observation_ids")
+        arithmetic._fail("covariance_owner_roster_required", "covariance.physical_observation_ids")
     size = len(owners)
     if role_form and (raw["primitive_order"] != list(_ROLES) or size != 4):
-        _old._fail("covariance_order_mismatch", "covariance.primitive_order")
+        arithmetic._fail("covariance_order_mismatch", "covariance.primitive_order")
     if not isinstance(units, list) or len(units) != size:
-        _old._fail("covariance_unit_roster_mismatch", "covariance.units")
+        arithmetic._fail("covariance_unit_roster_mismatch", "covariance.units")
     arms = [inputs["arms"][role] for role in _ROLES]
     for i, owner in enumerate(owners):
-        _old._identity(owner, "covariance.physical_observation_ids", nullable=False)
-        _old._enum(units[i], tuple(RATE_UNITS), "covariance.units")
+        arithmetic._identity(owner, "covariance.physical_observation_ids", nullable=False)
+        arithmetic._enum(units[i], tuple(RATE_UNITS), "covariance.units")
         matches = [arm for arm in arms if arm is not None and arm["physical_observation_id"] == owner]
         if not matches or role_form and (arms[i] is None or arms[i]["physical_observation_id"] != owner):
-            _old._fail("covariance_owner_mismatch", "covariance.physical_observation_ids")
+            arithmetic._fail("covariance_owner_mismatch", "covariance.physical_observation_ids")
         if any(arm["unit"] is not None and RATE_UNITS[arm["unit"]][0] != RATE_UNITS[units[i]][0] for arm in matches):
-            _old._fail("covariance_unit_mismatch", "covariance.units")
+            arithmetic._fail("covariance_unit_mismatch", "covariance.units")
     if not role_form and len(set(owners)) != size:
-        _old._fail("unique_covariance_owners_required", "covariance.physical_observation_ids")
+        arithmetic._fail("unique_covariance_owners_required", "covariance.physical_observation_ids")
     if not isinstance(matrix, list) or len(matrix) != size or any(
             not isinstance(row, list) or len(row) != size for row in matrix):
-        _old._fail("square_covariance_required", "covariance.matrix")
+        arithmetic._fail("square_covariance_required", "covariance.matrix")
     for i, row in enumerate(matrix):
         for j, value in enumerate(row):
-            _old._finite(value, f"covariance.matrix[{i}][{j}]")
-    exact = [[_old._q(value) for value in row] for row in matrix]
+            arithmetic._finite(value, f"covariance.matrix[{i}][{j}]")
+    exact = [[arithmetic._q(value) for value in row] for row in matrix]
     if any(exact[i][j] != exact[j][i] for i in range(size) for j in range(size)):
-        _old._fail("symmetric_covariance_required", "covariance.matrix")
+        arithmetic._fail("symmetric_covariance_required", "covariance.matrix")
     for order in range(1, size + 1):
         for indices in combinations(range(size), order):
-            if _old._determinant([[exact[i][j] for j in indices] for i in indices]) < 0:
-                _old._fail("positive_semidefinite_covariance_required", "covariance.matrix")
-    scales = [_old._scale(unit) for unit in units]
+            if arithmetic._determinant([[exact[i][j] for j in indices] for i in indices]) < 0:
+                arithmetic._fail("positive_semidefinite_covariance_required", "covariance.matrix")
+    scales = [arithmetic._scale(unit) for unit in units]
     normalized = [[exact[i][j] * scales[i] * scales[j] for j in range(size)] for i in range(size)]
     for i in range(size):
         for j in range(i):
             if owners[i] == owners[j]:
                 if RATE_UNITS[units[i]][0] != RATE_UNITS[units[j]][0]:
-                    _old._fail("covariance_unit_mismatch", "covariance.units")
+                    arithmetic._fail("covariance_unit_mismatch", "covariance.units")
                 if role_form and _context_reasons(arms[i], arms[j]):
-                    _old._fail("shared_measurement_context_mismatch", "covariance.physical_observation_ids")
+                    arithmetic._fail("shared_measurement_context_mismatch", "covariance.physical_observation_ids")
                 if normalized[i] != normalized[j]:
-                    _old._fail("shared_measurement_covariance_mismatch", "covariance.matrix")
+                    arithmetic._fail("shared_measurement_covariance_mismatch", "covariance.matrix")
     unique = list(dict.fromkeys(owners))
     positions = [owners.index(owner) for owner in unique]
     return {"owners": unique, "units": list(units),
@@ -109,78 +109,78 @@ def _validate_arm(arm, field):
     # Validate actual fields directly; retain synthetic origin and graph bounds.
     if arm is None:
         return
-    _old._closed(arm, _old.ARM_FIELDS, field)
-    _old._enum(arm["status"], ("point", "bound", "missing", "ambiguous", "conflicting",
+    arithmetic._closed(arm, arithmetic.ARM_FIELDS, field)
+    arithmetic._enum(arm["status"], ("point", "bound", "missing", "ambiguous", "conflicting",
                            "unsupported"), field + ".status")
-    _old._enum(arm["relation"], ("eq", "lt", "le", "gt", "ge", "interval", "none"),
+    arithmetic._enum(arm["relation"], ("eq", "lt", "le", "gt", "ge", "interval", "none"),
           field + ".relation")
-    _old._enum(arm["origin"], ("reported", "graph_derived", "synthetic"), field + ".origin")
-    _old._enum(arm["protein_arrangement"], _old._ARRANGEMENTS, field + ".protein_arrangement")
+    arithmetic._enum(arm["origin"], ("reported", "graph_derived", "synthetic"), field + ".origin")
+    arithmetic._enum(arm["protein_arrangement"], arithmetic._ARRANGEMENTS, field + ".protein_arrangement")
     if type(arm["approximate"]) is not bool:
-        _old._fail("boolean_required", field + ".approximate")
+        arithmetic._fail("boolean_required", field + ".approximate")
     if arm["unit"] is not None:
-        _old._enum(arm["unit"], tuple(RATE_UNITS), field + ".unit")
-    _old._finite(arm["value"], field + ".value", nullable=True)
-    _old._finite(arm["threshold"], field + ".threshold", nullable=True)
+        arithmetic._enum(arm["unit"], tuple(RATE_UNITS), field + ".unit")
+    arithmetic._finite(arm["value"], field + ".value", nullable=True)
+    arithmetic._finite(arm["threshold"], field + ".threshold", nullable=True)
     status, relation = arm["status"], arm["relation"]
     if status == "point":
         if arm["value"] is None or arm["threshold"] is not None or relation not in ("eq", "interval"):
-            _old._fail("point_contract_mismatch", field)
+            arithmetic._fail("point_contract_mismatch", field)
     elif status == "bound":
         if arm["value"] is not None or arm["threshold"] is None or relation not in ("lt", "le", "gt", "ge"):
-            _old._fail("bound_contract_mismatch", field)
+            arithmetic._fail("bound_contract_mismatch", field)
     elif arm["value"] is not None or arm["threshold"] is not None or relation != "none":
-        _old._fail("unavailable_measurement_must_be_null", field)
+        arithmetic._fail("unavailable_measurement_must_be_null", field)
     interval = arm["digitization_interval"]
     if interval is not None:
-        _old._closed(interval, ("lower", "upper"), field + ".digitization_interval")
+        arithmetic._closed(interval, ("lower", "upper"), field + ".digitization_interval")
         for side in ("lower", "upper"):
-            _old._finite(interval[side], field + ".digitization_interval." + side)
+            arithmetic._finite(interval[side], field + ".digitization_interval." + side)
         if (status != "point" or relation != "interval" or arm["origin"] not in ("graph_derived", "synthetic")
                 or not interval["lower"] <= arm["value"] <= interval["upper"]):
-            _old._fail("digitization_interval_mismatch", field)
+            arithmetic._fail("digitization_interval_mismatch", field)
     elif relation == "interval":
-        _old._fail("digitization_interval_required", field)
-    _old._closed(arm["meaning_statuses"], _old._MEANINGS, field + ".meaning_statuses")
-    for meaning in _old._MEANINGS:
+        arithmetic._fail("digitization_interval_required", field)
+    arithmetic._closed(arm["meaning_statuses"], arithmetic._MEANINGS, field + ".meaning_statuses")
+    for meaning in arithmetic._MEANINGS:
         state = arm["meaning_statuses"][meaning]
-        _old._enum(state, _old._STATES, field + ".meaning_statuses." + meaning)
+        arithmetic._enum(state, arithmetic._STATES, field + ".meaning_statuses." + meaning)
         identity = arm[meaning + "_id"]
-        _old._identity(identity, field + "." + meaning + "_id")
+        arithmetic._identity(identity, field + "." + meaning + "_id")
         if (state == "known") != (identity is not None):
-            _old._fail("meaning_identity_mismatch", field + "." + meaning + "_id")
-    _old._identity(arm["source_observation_id"], field + ".source_observation_id",
+            arithmetic._fail("meaning_identity_mismatch", field + "." + meaning + "_id")
+    arithmetic._identity(arm["source_observation_id"], field + ".source_observation_id",
               nullable=status == "missing")
     if status == "missing" and arm["source_observation_id"] is not None:
-        _old._fail("missing_source_identity_must_be_null", field)
+        arithmetic._fail("missing_source_identity_must_be_null", field)
 
 
 def _validate(inputs):
-    _old._closed(inputs, ("version", "arms", "relationships", "covariance", "variance_status", "model_kind"), "inputs")
+    arithmetic._closed(inputs, ("version", "arms", "relationships", "covariance", "variance_status", "model_kind"), "inputs")
     if inputs["version"] != _INPUT_VERSION:
-        _old._fail("unsupported_input_version", "version")
-    _old._closed(inputs["arms"], _old.PRIMITIVE_ORDER, "arms")
+        arithmetic._fail("unsupported_input_version", "version")
+    arithmetic._closed(inputs["arms"], arithmetic.PRIMITIVE_ORDER, "arms")
     for name, arm in inputs["arms"].items():
         _validate_arm(arm, "arms." + name)
     relationships = inputs["relationships"]
-    _old._closed(relationships, _old.RELATIONSHIP_FIELDS, "relationships")
+    arithmetic._closed(relationships, arithmetic.RELATIONSHIP_FIELDS, "relationships")
     for name in ("condition1_target", "condition0_target"):
         target = relationships[name]
-        _old._closed(target, ("status", "canonical_id"), "relationships." + name)
-        _old._enum(target["status"], _old._STATES, "relationships." + name + ".status")
-        _old._identity(target["canonical_id"], "relationships." + name + ".canonical_id")
+        arithmetic._closed(target, ("status", "canonical_id"), "relationships." + name)
+        arithmetic._enum(target["status"], arithmetic._STATES, "relationships." + name + ".status")
+        arithmetic._identity(target["canonical_id"], "relationships." + name + ".canonical_id")
         if (target["status"] == "known") != (target["canonical_id"] is not None):
-            _old._fail("meaning_identity_mismatch", "relationships." + name)
+            arithmetic._fail("meaning_identity_mismatch", "relationships." + name)
     for name in ("condition_levels_relation", "subject_construct_across_conditions"):
-        _old._enum(relationships[name], ("same", "different", "unknown", "conflicting"), "relationships." + name)
+        arithmetic._enum(relationships[name], ("same", "different", "unknown", "conflicting"), "relationships." + name)
     for name in ("condition1_control_application", "condition0_control_application"):
-        _old._enum(relationships[name], _old._APPLICATIONS, "relationships." + name)
-    _old._enum(relationships["control_reference_reuse"], _old._REUSE, "relationships.control_reference_reuse")
-    _old._enum(relationships["nonintended_conditions"], ("matched", "different", "unknown", "conflicting"),
+        arithmetic._enum(relationships[name], arithmetic._APPLICATIONS, "relationships." + name)
+    arithmetic._enum(relationships["control_reference_reuse"], arithmetic._REUSE, "relationships.control_reference_reuse")
+    arithmetic._enum(relationships["nonintended_conditions"], ("matched", "different", "unknown", "conflicting"),
           "relationships.nonintended_conditions")
-    _old._identity(relationships["intended_factor"], "relationships.intended_factor")
-    _old._enum(inputs["variance_status"], ("known", "estimated", "unknown"), "variance_status")
-    _old._enum(inputs["model_kind"], ("none", "known_joint_normal_source_means"), "model_kind")
+    arithmetic._identity(relationships["intended_factor"], "relationships.intended_factor")
+    arithmetic._enum(inputs["variance_status"], ("known", "estimated", "unknown"), "variance_status")
+    arithmetic._enum(inputs["model_kind"], ("none", "known_joint_normal_source_means"), "model_kind")
     return _validate_covariance(inputs)
 
 
@@ -209,7 +209,7 @@ def _scientific_pair_reasons(inputs, indices, label):
     arms = [inputs["arms"][_ROLES[i]] for i in indices]
     reasons = {"missing_arm"} if any(arm is None for arm in arms) else set()
     for meaning in ("endpoint", "normalization"):
-        reasons |= _old._identity_reasons(arms, meaning)
+        reasons |= arithmetic._identity_reasons(arms, meaning)
     for arm, allowed in zip(arms, (("protein_present",), ("protein_free_control", "empty_vector_control"))):
         if arm is not None and arm["protein_arrangement"] not in allowed:
             reasons.add({"unknown": "unknown_protein_arrangement", "conflicting": "conflicting_protein_arrangement"}.get(
@@ -236,8 +236,8 @@ def _scientific_reasons(inputs, arms, covariance):
     reasons |= _scientific_pair_reasons(inputs, (2, 3), "condition0")
     relationships = inputs["relationships"]
     for meaning in ("endpoint", "normalization"):
-        reasons |= _old._identity_reasons(arms, meaning)
-    reasons |= _old._identity_reasons([arms[0], arms[2]], "subject_construct")
+        reasons |= arithmetic._identity_reasons(arms, meaning)
+    reasons |= arithmetic._identity_reasons([arms[0], arms[2]], "subject_construct")
     subject = relationships["subject_construct_across_conditions"]
     if subject != "same":
         reasons.add(subject + "_subject_correspondence")
@@ -281,17 +281,17 @@ def _scientific_reasons(inputs, arms, covariance):
 def _reading_signature(arm):
     if arm["unit"] is None:
         return None
-    scale = _old._scale(arm["unit"])
+    scale = arithmetic._scale(arm["unit"])
     interval = arm["digitization_interval"]
     return (arm["status"], arm["relation"], arm["approximate"],
         RATE_UNITS[arm["unit"]][0],
-        _old._q(arm["value"]) * scale if arm["value"] is not None else None,
-        _old._q(arm["threshold"]) * scale if arm["threshold"] is not None else None,
-        tuple(_old._q(interval[side]) * scale for side in ("lower", "upper")) if interval else None)
+        arithmetic._q(arm["value"]) * scale if arm["value"] is not None else None,
+        arithmetic._q(arm["threshold"]) * scale if arm["threshold"] is not None else None,
+        tuple(arithmetic._q(interval[side]) * scale for side in ("lower", "upper")) if interval else None)
 
 
 def _disjoint(left, right):
-    a, b = _old._range(left), _old._range(right)
+    a, b = arithmetic._range(left), arithmetic._range(right)
     for x, y in ((a, b), (b, a)):
         if x.upper is not None and y.lower is not None and (x.upper < y.lower or
                 x.upper == y.lower and not (x.upper_closed and y.lower_closed)):
@@ -321,7 +321,7 @@ def _reading_dependencies(inputs, groups):
         else:
             active_roles.extend(group["roles"])
             for role, arm in rows:
-                active_reasons |= _old._operand_reasons(arm)
+                active_reasons |= arithmetic._operand_reasons(arm)
                 if arm and arm["status"] == "conflicting":
                     conflict_roles.add(role)
         for i, (role, arm) in enumerate(rows):
@@ -351,18 +351,18 @@ def _reading_dependencies(inputs, groups):
 def _raw_local_cells(inputs, arms):
     cells = {}
     for i, arm in enumerate(arms):
-        reasons = _old._operand_reasons(arm)
-        cells[_old.COMPONENTS[i]] = _old._cell(_old._range(arm) if not reasons else None,
-            _old._unit([arm]), _old._FORMULAS[i], [arm], reasons=reasons,
-            qualifications=_old._qualifications(inputs, [arm]), raw=True)
+        reasons = arithmetic._operand_reasons(arm)
+        cells[arithmetic.COMPONENTS[i]] = arithmetic._cell(arithmetic._range(arm) if not reasons else None,
+            arithmetic._unit([arm]), arithmetic._FORMULAS[i], [arm], reasons=reasons,
+            qualifications=arithmetic._qualifications(inputs, [arm]), raw=True)
     for index, (indices, label) in enumerate((((0, 1), "condition1"), ((2, 3), "condition0"))):
         selected = [arms[i] for i in indices]
-        reasons = _old._pair_reasons(inputs, indices, label)
-        qualifications = _old._qualifications(inputs, selected)
+        reasons = arithmetic._pair_reasons(inputs, indices, label)
+        qualifications = arithmetic._qualifications(inputs, selected)
         if inputs["relationships"][label + "_control_application"] == "shared_reference_assumption":
             qualifications.add("shared_reference_assumption")
-        cells[_old.COMPONENTS[4 + index]] = _old._cell(_old._linear(selected, (1, -1)) if not reasons else None,
-            _old._unit(selected), _old._FORMULAS[4 + index], selected,
+        cells[arithmetic.COMPONENTS[4 + index]] = arithmetic._cell(arithmetic._linear(selected, (1, -1)) if not reasons else None,
+            arithmetic._unit(selected), arithmetic._FORMULAS[4 + index], selected,
             reasons=reasons, qualifications=qualifications)
     return cells
 
@@ -385,14 +385,14 @@ def populate_controlled_response_owner(inputs):
     effect = None
     if not reasons:
         representatives = [inputs["arms"][group["roles"][0]] for group in active_groups]
-        effect = _old._linear(representatives, [group["coefficient"] for group in active_groups])
-    unit = _old._unit(active)
-    qualifications = _old._qualifications(inputs, active, cross=True) | canceled_qualifications
+        effect = arithmetic._linear(representatives, [group["coefficient"] for group in active_groups])
+    unit = arithmetic._unit(active)
+    qualifications = arithmetic._qualifications(inputs, active, cross=True) | canceled_qualifications
     if any(inputs["relationships"][label + "_control_application"] == "shared_reference_assumption"
            for label in ("condition1", "condition0")):
         qualifications.add("shared_reference_assumption")
     cells = _raw_local_cells(inputs, arms)
-    cells[_old.COMPONENTS[6]] = _old._cell(effect, unit, _old._FORMULAS[6], active,
+    cells[arithmetic.COMPONENTS[6]] = arithmetic._cell(effect, unit, arithmetic._FORMULAS[6], active,
         reasons=reasons, qualifications=qualifications)
     variance_reasons = set(reasons)
     if effect is not None and effect.point is None:
@@ -406,15 +406,15 @@ def populate_controlled_response_owner(inputs):
         positions = [provided.index(group["physical_observation_id"]) for group in active_groups]
         variance = sum(group_i["coefficient"] * group_j["coefficient"] * covariance["matrix"][positions[i]][positions[j]]
             for i, group_i in enumerate(active_groups) for j, group_j in enumerate(active_groups))
-    variance_qualifications = qualifications | _old._qualifications(inputs, active, covariance=True)
+    variance_qualifications = qualifications | arithmetic._qualifications(inputs, active, covariance=True)
     variance_unit = "(" + unit + ")^2" if unit is not None else None
-    cells[_old.COMPONENTS[7]] = _old._cell(_old._point(variance), variance_unit, _old._FORMULAS[7], active,
+    cells[arithmetic.COMPONENTS[7]] = arithmetic._cell(arithmetic._point(variance), variance_unit, arithmetic._FORMULAS[7], active,
         reasons=variance_reasons, qualifications=variance_qualifications)
-    cells[_old.COMPONENTS[8]] = _old._cell(_old._point(_old._sqrt(variance)) if variance is not None else None,
-        unit, _old._FORMULAS[8], active, reasons=variance_reasons, qualifications=variance_qualifications)
+    cells[arithmetic.COMPONENTS[8]] = arithmetic._cell(arithmetic._point(arithmetic._sqrt(variance)) if variance is not None else None,
+        unit, arithmetic._FORMULAS[8], active, reasons=variance_reasons, qualifications=variance_qualifications)
     positive_reasons = variance_reasons | ({"nonpositive_variance_for_model"} if variance is not None and variance <= 0 else set())
-    cells[_old.COMPONENTS[9]] = _old._cell(_old._point(1 / variance) if variance is not None and variance > 0 else None,
-        "(" + unit + ")^-2" if unit is not None else None, _old._FORMULAS[9], active,
+    cells[arithmetic.COMPONENTS[9]] = arithmetic._cell(arithmetic._point(1 / variance) if variance is not None and variance > 0 else None,
+        "(" + unit + ")^-2" if unit is not None else None, arithmetic._FORMULAS[9], active,
         reasons=positive_reasons, qualifications=variance_qualifications)
     model_reasons = set(positive_reasons)
     if inputs["variance_status"] == "estimated":
@@ -426,11 +426,11 @@ def populate_controlled_response_owner(inputs):
     if any(arm and (arm["origin"] == "graph_derived" or arm["approximate"] or arm["digitization_interval"] is not None) for arm in active):
         model_reasons.add("unresolved_reading_model")
     score = effect.point * abs(effect.point) / (2 * variance) if not model_reasons else None
-    model_qualifications = variance_qualifications | _old._qualifications(inputs, active, model=True)
-    cells[_old.COMPONENTS[10]] = _old._cell(_old._point(score), "dimensionless", _old._FORMULAS[10], active,
+    model_qualifications = variance_qualifications | arithmetic._qualifications(inputs, active, model=True)
+    cells[arithmetic.COMPONENTS[10]] = arithmetic._cell(arithmetic._point(score), "dimensionless", arithmetic._FORMULAS[10], active,
         reasons=model_reasons, qualifications=model_qualifications)
-    index = _old._bounded_index(score) if score is not None else None
-    cells[_old.COMPONENTS[11]] = _old._cell(_old._point(index), "dimensionless", _old._FORMULAS[11], active,
+    index = arithmetic._bounded_index(score) if score is not None else None
+    cells[arithmetic.COMPONENTS[11]] = arithmetic._cell(arithmetic._point(index), "dimensionless", arithmetic._FORMULAS[11], active,
         reasons=model_reasons | ({"numeric_range_failure"} if score is not None and index is None else set()),
         qualifications=model_qualifications)
     dependencies = {"coefficient_order": list(_ROLES), "role_coefficients": list(_COEFFICIENTS),

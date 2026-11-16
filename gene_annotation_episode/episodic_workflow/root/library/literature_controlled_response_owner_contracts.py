@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from . import literature_controlled_response_declarations as _old
+from . import literature_controlled_response_declarations as declarations
 from .literature_rate_return_schema import RATE_UNITS
 
 _INPUT_VERSION = "controlled_response_owner_inputs_v2"
 
-_ROLES = _old.PRIMITIVE_ORDER
+_ROLES = declarations.PRIMITIVE_ORDER
 
 def _obj(properties):
     return {"type": "object", "properties": properties, "required": list(properties),
@@ -28,18 +28,18 @@ def _schema():
         "relation": enum(("eq", "lt", "le", "gt", "ge", "interval", "none")),
         "approximate": {"type": "boolean"}, "unit": nullable(enum(RATE_UNITS)),
         "status": enum(("point", "bound", "missing", "ambiguous", "conflicting", "unsupported")),
-        **{name + "_id": nullable(text) for name in _old._MEANINGS},
+        **{name + "_id": nullable(text) for name in declarations._MEANINGS},
         "source_observation_id": nullable(text), "origin": enum(("reported", "graph_derived", "synthetic")),
         "digitization_interval": nullable(_obj({"lower": number, "upper": number})),
-        "protein_arrangement": enum(_old._ARRANGEMENTS),
-        "meaning_statuses": _obj({name: state for name in _old._MEANINGS})})
+        "protein_arrangement": enum(declarations._ARRANGEMENTS),
+        "meaning_statuses": _obj({name: state for name in declarations._MEANINGS})})
     target = _obj({"status": state, "canonical_id": nullable(text)})
     relationships = _obj({"condition1_target": target, "condition0_target": target,
         "condition_levels_relation": enum(("same", "different", "unknown", "conflicting")),
         "subject_construct_across_conditions": enum(("same", "different", "unknown", "conflicting")),
-        **{name: enum(_old._APPLICATIONS) for name in
+        **{name: enum(declarations._APPLICATIONS) for name in
            ("condition1_control_application", "condition0_control_application")},
-        "control_reference_reuse": enum(_old._REUSE),
+        "control_reference_reuse": enum(declarations._REUSE),
         "nonintended_conditions": enum(("matched", "different", "unknown", "conflicting")),
         "intended_factor": nullable(text)})
     role_covariance = _obj({"primitive_order": {"const": list(_ROLES)},

@@ -4,8 +4,6 @@ An immutable assessment body cannot reveal a later revision by changing its
 digest. Retain the original use and identify received corrections separately;
 never substitute a newer claim or inspect an unreceived assessment.
 """
-from copy import deepcopy
-
 
 VERSION = 'received_component_assessment_dependencies_v1'
 
@@ -52,24 +50,6 @@ def assessment_dependencies(store, reference, known, *, anchor=None):
         'replacement_refs': sorted(replacements),
         'retired': status == 'withdrawn' or bool(superseding or replacements),
         'scope': 'received_assessment_revisions_and_explicit_corrections_only'}
-
-
-def correction_refs(dependency):
-    return set(dependency['superseding_assessment_refs']) | set(dependency['replacement_refs'])
-
-
-def qualification_assessment_changes(store, qualification, known):
-    result = qualification['result']
-    finding = result.get('source_function_finding')
-    if finding is None and qualification.get('operation') == 'partner.requirement_evidence':
-        finding = result
-    if not finding or finding.get('assessment_ref') is None:
-        return []
-    dependency = assessment_dependencies(store, finding['assessment_ref'], known,
-        anchor=deepcopy(finding.get('assessment_revision_dependency')))
-    if dependency is None:
-        return []  # Historical result without an admitted original identity.
-    return sorted(correction_refs(dependency) - set(qualification['qualification_dependencies']))
 
 
 def annotation_assessments(store, known_record_refs, annotation, subject, scope):

@@ -55,9 +55,9 @@ def requested_contract_information(public_exchanges):
 
 
 def restricted_root(workflow, source):
-    return (getattr(workflow, 'root_action_boundary', None) == ROOT_BOUNDARY_VERSION
-        and source is not None and len(source.path) == 1
-        and source.path[0][0] == 'annotation')
+    return (source is not None and len(source.path) == 1
+        and source.path[0][0] == 'annotation'
+        and workflow.root_action_boundary == ROOT_BOUNDARY_VERSION)
 
 
 def metadata_catalog(workflow, source):

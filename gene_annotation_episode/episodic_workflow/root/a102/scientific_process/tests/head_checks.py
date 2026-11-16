@@ -83,6 +83,7 @@ def actual(directory,scenario='original_instruction',standalone=False):
             host.pending_work=lambda source:[];host.progress_receipt_order='received_progress_order_v1'
             host.annotation_child_roles=None;host.decision_protocol=None;host.decision_exchanges=None;host.resource_estimator=None
             host.episode_branch_lifecycle=runtime.EPISODE_BRANCH_LIFECYCLE;host.initial_known_record_refs=(target,proposed)
+            host.root_action_boundary=runtime.ROOT_BOUNDARY_VERSION
             host.archive=runtime.JsonArchive(directory/'archive')
             host.launch_instructions=SimpleNamespace(materialize=lambda selected:None,instructions='Original empty fixture launch information.')
             host.services=own('episode_services').WorkflowServices(host)

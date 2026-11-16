@@ -1,7 +1,5 @@
 """Predefined improvement parent."""
-from hashlib import sha256
 from importlib import import_module
-from pathlib import Path
 from .task import LegacyImprovementTask
 from .instructions import instructions
 from .from_parent import assemble_request, validate_path
@@ -48,9 +46,6 @@ class LegacyImprovementEpisode:
 
     @staticmethod
     def as_record():
-        files = sorted(Path(__file__).parent.glob('*.py'))
-        files.append(Path(__file__).parent.parent / 'library/hpc_handoff_report_contract.py')
         return {'version': 'legacy_improvement_episode_v1', 'binding_id': 'legacy_improvement', 'role': 'improvement',
                 'owner_class': 'gene_annotation_episode.episodic_workflow.root.a103.legacy_improvement.episode.LegacyImprovementEpisode',
-                'task_class': 'gene_annotation_episode.episodic_workflow.root.a103.legacy_improvement.task.LegacyImprovementTask',
-                'implementation_sha256': sha256(b''.join(path.read_bytes() for path in files)).hexdigest()}
+                'task_class': 'gene_annotation_episode.episodic_workflow.root.a103.legacy_improvement.task.LegacyImprovementTask'}
