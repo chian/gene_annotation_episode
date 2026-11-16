@@ -29,7 +29,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.blast_sequence_
 from gene_annotation_episode.episodic_workflow.root.a101.library.blast_fasta_record_identity import blast_record_identity
 from gene_annotation_episode.episodic_workflow.root.a101.domain import parse_sequences
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_metadata import metadata_schema_registry, validate_native_blast_database_metadata_payload, _schema_for, _SEQUENCE_V2, _SEQUENCE_V3, _record_address_status, _record_relation_failed
-from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_standard_database_contracts import requested_job_from_standard_blast_database, standard_blast_database_program_spec, validate_retained_standard_blast_database_bundle, validate_standard_blast_database_job, validate_standard_blast_database_options
+from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_standard_database_contracts import requested_job_from_standard_blast_database, standard_blast_database_program_spec, validate_standard_blast_database_bundle, validate_standard_blast_database_job, validate_standard_blast_database_options
 
 
 PREPARED_INPUTS_SCHEMA = "native_blast_standard_database_prepared_inputs_v1"
@@ -636,7 +636,7 @@ def prepare_standard_blast_database_inputs(*, job: dict, bundle: dict, attempt_i
     contracts raise stable ValueErrors before any scientific interpretation.
     """
     job = validate_standard_blast_database_job(job)
-    bundle = validate_retained_standard_blast_database_bundle(bundle, original_job=job, attempt_identity=attempt_identity)
+    bundle = validate_standard_blast_database_bundle(bundle, original_job=job, attempt_identity=attempt_identity)
     payloads, snapshots = _copy(metadata_payloads), _copy(subject_snapshots)
     if type(payloads) is not list or type(snapshots) is not list:
         _fail("supplied_inputs_arrays_required")
@@ -1550,7 +1550,7 @@ def validate_standard_blast_database_prepared_inputs(value: dict) -> dict:
     job = validate_standard_blast_database_job(_job(value))
     attempt = _attempt(value)
     _keys(attempt, {"bundle", "attempt_identity", "bundle_source_ref", "bundle_artifact_ref", "bundle_sha256"}, "prepared_attempt_fields_invalid")
-    validate_retained_standard_blast_database_bundle(attempt["bundle"], original_job=job, attempt_identity=attempt["attempt_identity"])
+    validate_standard_blast_database_bundle(attempt["bundle"], original_job=job, attempt_identity=attempt["attempt_identity"])
     if (type(attempt["bundle_sha256"]) is not str or re.fullmatch(r"[0-9a-f]{64}", attempt["bundle_sha256"]) is None
             or invocation["request"] != requested_job_from_standard_blast_database(job)):
         _fail("prepared_attempt_identity_conflict")

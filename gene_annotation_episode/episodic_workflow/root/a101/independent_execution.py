@@ -27,27 +27,6 @@ FACTORY_MODULE = 'gene_annotation_episode.episodic_workflow.root.a101.independen
 FACTORY_NAME = 'open_commission'
 
 
-def implementation_sha256():
-    """Identity of the implementation imported by this executable binding.
-
-    Relative names participate so moving an unchanged pinned checkout is safe.
-    Source in both the application and shared loop participates; mutable run
-    data, histories, tests and bytecode do not redefine the implementation.
-    """
-    from pathlib import Path as _context_source_path
-    root = Path(__file__).resolve().parent
-    files = sorted(path for path in root.rglob('*.py')
-                   if not {'tests', '__pycache__'}.intersection(path.parts))
-    digest = hashlib.sha256()
-    for path in files:
-        digest.update(str(path.relative_to(root)).encode('utf-8') + b'\0')
-        digest.update(hashlib.sha256(path.read_bytes()).digest())
-    for _context_source_key in ('gene_annotation_episode/__init__.py', 'gene_annotation_episode/episodic_workflow/__init__.py', 'gene_annotation_episode/episodic_workflow/root/__init__.py', 'gene_annotation_episode/episodic_workflow/root/receiving_context.py'):
-        digest.update(_context_source_key.encode('utf-8') + b'\0')
-        digest.update(hashlib.sha256((_context_source_path(__file__).resolve().parents[4] / _context_source_key).read_bytes()).digest())
-    return digest.hexdigest()
-
-
 def _read_json(path):
     try:
         return json.loads(Path(path).read_text())
@@ -104,7 +83,7 @@ def make_runtime_binding(workspace, run_dir, *, kind='standard_default', tool_co
     # Finite JSON is the only persisted argument representation.
     arguments = json.loads(canonical(arguments))
     return {'factory_module': FACTORY_MODULE, 'factory_name': FACTORY_NAME, 'arguments': arguments,
-        'implementation_sha256': implementation_sha256(), 'settings_sha256': content_digest(settings)}
+        'settings_sha256': content_digest(settings)}
 
 
 def _saved_episode_factories(settings, directory=None):
@@ -299,8 +278,6 @@ async def open_commission(spec):
                              'tool_configuration', 'caller_binding_pins'}
             or args['version'] != VERSION or args['kind'] not in {'standard_default'}):
         raise _failure('unavailable_binding', handle)
-    if binding['implementation_sha256'] != implementation_sha256():
-        raise _failure('identity_conflict', handle)
     workspace, directory = (Path(args[name]).expanduser().resolve() for name in ('workspace', 'run_directory'))
     if not (workspace/'state.sqlite3').is_file():
         raise _failure('unavailable_binding', str(workspace))
@@ -456,4 +433,4 @@ def receiver_snapshot(spec):
 
 open_commission.receiver_snapshot = receiver_snapshot
 
-__all__ = ['make_runtime_binding', 'open_commission', 'implementation_sha256', 'VERSION']
+__all__ = ['make_runtime_binding', 'open_commission', 'VERSION']

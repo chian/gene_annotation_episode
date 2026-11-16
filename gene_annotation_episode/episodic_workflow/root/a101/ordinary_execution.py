@@ -43,7 +43,6 @@ class OrdinaryExecutionStatistics:
     def alignment_class(self, arguments, policy):
         from Bio.Align import _pairwisealigner
         from gene_annotation_episode.episodic_workflow.root.a101.library import sequence_ops
-        from gene_annotation_episode.episodic_workflow.root.a101 import sequence_worker
         from .native_lifecycle import VERSION as lifecycle_version
         # Bind the same arguments/defaults used by the native operation, rather
         # than maintaining another set of algorithm settings in the recorder.
@@ -53,10 +52,7 @@ class OrdinaryExecutionStatistics:
         implementation = _sha({'biopython_version': version('biopython'),
             'python_version': sys.version,
             'native_lifecycle_version': lifecycle_version,
-            'files': {name: hashlib.sha256(Path(path).read_bytes()).hexdigest()
-                for name, path in (('sequence_ops', sequence_ops.__file__),
-                    ('sequence_worker', sequence_worker.__file__),
-                    ('native_pairwise_aligner', _pairwisealigner.__file__))}})
+            'native_pairwise_aligner_sha256': hashlib.sha256(Path(_pairwisealigner.__file__).read_bytes()).hexdigest()})
         # Sequence content and gene labels do not cross the shared boundary.
         # This initial exact-size grouping makes no cross-size extrapolation.
         parameters = {key: value for key, value in values.items() if key not in {'query', 'reference'}}
@@ -73,7 +69,7 @@ class OrdinaryExecutionStatistics:
                                         recovery_directory=self.recovery_directory)
 
     def spreadsheet_class(self, path, operation, arguments, policy):
-        from . import spreadsheet_tools, spreadsheet_worker
+        from . import spreadsheet_tools
         from .native_lifecycle import VERSION as lifecycle_version
         if operation == 'sheets':
             if arguments:
@@ -96,9 +92,7 @@ class OrdinaryExecutionStatistics:
         else:
             raise ValueError('unsupported_spreadsheet_statistics_operation')
         implementation = _sha({'python_version': sys.version, 'native_lifecycle_version': lifecycle_version,
-            'adapter_version': spreadsheet_tools.VERSION,
-            'files': {name: hashlib.sha256(Path(path).read_bytes()).hexdigest() for name, path in
-                (('adapter', spreadsheet_tools.__file__), ('worker', spreadsheet_worker.__file__))}})
+            'adapter_version': spreadsheet_tools.VERSION})
         parameters = {'operation': operation, 'input_bytes': Path(path).stat().st_size, 'selection': selection,
                       'compatibility': 'same_input_size_and_technical_selection_features_v1'}
         return ExecutionClass(phase='spreadsheet_selection', backend='local', resource_id=self.resource_id,

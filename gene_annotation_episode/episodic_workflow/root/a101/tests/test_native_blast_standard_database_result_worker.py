@@ -17,12 +17,6 @@ import gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_
 def sha(raw): return hashlib.sha256(raw).hexdigest()
 
 
-def implementation():
-    files = [dict(module=name, path=str(Path(module.__file__).resolve()), sha256=sha(Path(module.__file__).read_bytes()))
-        for name, module in w._implementation_modules().items()]
-    return dict(files=files, manifest_sha256=_scientific_native_blast_standard_database_result_worker.standard_blast_database_implementation_identity(files))
-
-
 def request_for(tmp_path, *, inputs=None, model=None):
     inputs = numerical() if inputs is None else inputs
     root = tmp_path / "original"; root.mkdir(parents=True)
@@ -43,16 +37,15 @@ def request_for(tmp_path, *, inputs=None, model=None):
         bundle_artifact_ref="artifact-bundle", bundle_capture=dict(path=str(path), sha256=sha(raw), size_bytes=len(raw)),
         authenticated_attempt=inputs["attempt_identity"], artifacts=artifacts,
         metadata_descriptors=[r["descriptor"] for r in inputs["metadata_payloads"]], retained_sources=retained,
-        subject_snapshots=snapshots, implementation=implementation(), sequence_model=model,
+        subject_snapshots=snapshots, sequence_model=model,
         output_directory=str(tmp_path / "generation-1"), reuse=None)
     set_identity(request)
     return request
 
 
-def set_identity(request, input_impl=None):
+def set_identity(request):
     ids = _scientific_native_blast_standard_database_result_worker.standard_blast_database_calculation_identity(input_identity=_scientific_native_blast_standard_database_result_worker.standard_blast_database_input_identity(request),
-        input_implementation_sha256=input_impl or request["implementation"]["manifest_sha256"], sequence_model=request["sequence_model"],
-        implementation_manifest_sha256=request["implementation"]["manifest_sha256"])
+        sequence_model=request["sequence_model"])
     request["calculation_id"] = ids["calculation_id"]
 
 
@@ -74,7 +67,7 @@ def reuse(request, manifest, output):
     request["reuse"] = dict(manifest_path=str(directory / "worker-manifest.json"), manifest_sha256=sha(raw), manifest_size_bytes=len(raw),
         collection_path=str(directory / "collection.json"), sheets_path=str(directory / "sheets.json"))
     request["output_directory"] = str(output); request["sequence_model"] = {"temperature_bits": 2}
-    set_identity(request, manifest["input_implementation_sha256"])
+    set_identity(request)
     return request
 
 
@@ -130,15 +123,12 @@ def test_R8_identity_recipes_keep_paths_and_parameters_separate(tmp_path):
     assert _scientific_native_blast_standard_database_result_worker.standard_blast_database_input_identity(changed) == original
     changed["artifacts"].reverse()
     assert _scientific_native_blast_standard_database_result_worker.standard_blast_database_input_identity(changed) != original
-    files = deepcopy(request["implementation"]["files"])
-    for row in files: row["path"] += "-moved"
-    assert _scientific_native_blast_standard_database_result_worker.standard_blast_database_implementation_identity(list(reversed(files))) == request["implementation"]["manifest_sha256"]
-    first = _scientific_native_blast_standard_database_result_worker.standard_blast_database_calculation_identity(input_identity=original, input_implementation_sha256="a" * 64, sequence_model=None, implementation_manifest_sha256="b" * 64)
-    second = _scientific_native_blast_standard_database_result_worker.standard_blast_database_calculation_identity(input_identity=original, input_implementation_sha256="a" * 64, sequence_model=None, implementation_manifest_sha256="c" * 64)
+    first = _scientific_native_blast_standard_database_result_worker.standard_blast_database_calculation_identity(input_identity=original, sequence_model=None)
+    second = _scientific_native_blast_standard_database_result_worker.standard_blast_database_calculation_identity(input_identity=original, sequence_model={"temperature_bits": 2})
     assert first["input_interpretation_id"] == second["input_interpretation_id"] and first["calculation_id"] != second["calculation_id"]
 
 
-@pytest.mark.parametrize("change", ["missing_report", "malformed_metadata", "tampered_capture", "wrong_attempt", "implementation"])
+@pytest.mark.parametrize("change", ["missing_report", "malformed_metadata", "tampered_capture", "wrong_attempt"])
 def test_R7_specific_failures_keep_complete_diagnostics(tmp_path, change):
     request = request_for(tmp_path)
     if change == "missing_report":
@@ -150,7 +140,6 @@ def test_R7_specific_failures_keep_complete_diagnostics(tmp_path, change):
         row.update(sha256=sha(raw), size_bytes=len(raw)); descriptor.update(sha256=sha(raw), size_bytes=len(raw)); set_identity(request)
     if change == "tampered_capture": Path(request["bundle_capture"]["path"]).write_bytes(b"changed")
     if change == "wrong_attempt": request["authenticated_attempt"]["identity"]["execution_id"] = "wrong-execution"
-    if change == "implementation": request["implementation"]["files"][0]["sha256"] = "0" * 64
     manifest, diagnostics = invoke(request)
     assert manifest["status"] in {"partial", "failed"}
     assert manifest["failures"] and diagnostics["failures"] == manifest["failures"]

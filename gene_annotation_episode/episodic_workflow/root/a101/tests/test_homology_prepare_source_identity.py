@@ -8,16 +8,12 @@ import asyncio
 from dataclasses import replace
 import hashlib
 import json
-from pathlib import Path
 
 import pytest
 from .. import homology_results as actual
 from ..state import Store
 from ..local_jobs import LocalJobPolicy
 
-NAMES=('phmmer_format.py','phmmer_result_worker.py','phmmer_grading_worker.py',
-       'hmmer_search_inputs.py','hmmer_search_grader.py','hmmer_graders.py')
-LIBRARY=('hmmer_graders.py', 'hmmer_search_grader.py', 'hmmer_search_inputs.py', 'phmmer_format.py', 'phmmer_grading_values.py', 'phmmer_alignment_values.py')
 sha=lambda data:hashlib.sha256(data).hexdigest()
 
 
@@ -30,9 +26,7 @@ def source_class(tmp_path,monkeypatch,epoch,calls):
     monkeypatch.setattr(actual,'run_cancellable_native',controlled_parser)
     if epoch!='installed':
         raise ValueError('unplanned_source_epoch:'+epoch)
-    base=Path(actual.__file__).parent
-    expected=sha(b''.join((base/('library' if name in LIBRARY else '')/name).read_bytes() for name in (*NAMES, 'phmmer_grading_values.py', 'phmmer_alignment_values.py')))
-    return actual.HomologyResults,expected
+    return actual.HomologyResults
 
 
 def inputs(store,tmp_path):
@@ -47,14 +41,13 @@ def inputs(store,tmp_path):
 
 
 @pytest.mark.parametrize('epoch',('installed',))
-def test_actual_prepare_captures_source_identity_and_reuses_cache_without_claiming_results(tmp_path,monkeypatch,epoch):
-    calls=[];cls,expected=source_class(tmp_path,monkeypatch,epoch,calls)
+def test_actual_prepare_captures_metadata_and_reuses_cache_without_claiming_results(tmp_path,monkeypatch,epoch):
+    calls=[];cls=source_class(tmp_path,monkeypatch,epoch,calls)
     with Store(tmp_path/'state') as store:
         supplied,scope,query_hash=inputs(store,tmp_path);adapter=cls(store,policy=LocalJobPolicy.from_config())
         first=asyncio.run(adapter.prepare(supplied,scope))
         first_row=store.db.execute('SELECT signature,body FROM homology_result_snapshots WHERE source_ref=?',(first,)).fetchone();first_body=json.loads(first_row['body'])
         assert len(calls)==1 and calls[0]['request']['expected_query_sha256']==query_hash
-        assert first_body['parser_implementation_sha256']==expected
         assert first_body['query_ref']==supplied.query_ref and first_body['database_sha256']==supplied.database_sha256
         assert first_body['parse_execution']['failure']['code']=='controlled_parser_boundary_not_executed'
         assert first_body['parse_execution']['native']=={'controlled_boundary':True,'executed':False}
@@ -66,14 +59,13 @@ def test_actual_prepare_captures_source_identity_and_reuses_cache_without_claimi
         assert len(calls)==1 and first!=second and first_row['signature']==second_row['signature']
         assert first_body['execution_source_ref']!=second_body['execution_source_ref']
         assert second_body['native_parameters']=={'command':['controlled','not-executed']}
-        assert second_body['parser_implementation_sha256']==expected
         assert store.count('observation')==store.count('assessment')==store.count('annotation')==0
         assert store.db.execute('SELECT count(*) FROM homology_parse_cache').fetchone()[0]==1
 
 
 @pytest.mark.parametrize('epoch',('installed',))
 def test_actual_prepare_rejects_changed_reference_before_parser(tmp_path,monkeypatch,epoch):
-    calls=[];cls,_=source_class(tmp_path,monkeypatch,epoch,calls)
+    calls=[];cls=source_class(tmp_path,monkeypatch,epoch,calls)
     with Store(tmp_path/'state') as store:
         supplied,scope,_=inputs(store,tmp_path);adapter=cls(store,policy=LocalJobPolicy.from_config())
         supplied.reference_fasta.write_text('>controlled-reference\nMCHANGED\n')

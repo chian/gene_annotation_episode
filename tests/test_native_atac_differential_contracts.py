@@ -29,12 +29,12 @@ def bam_bytes(*, text=b"@HD\tVN:1.6\tSO:coordinate\n@SQ\tSN:chrToy\tLN:12000\n",
     return gzip.compress(raw, mtime=0)
 
 
-def fake_software():
+def fake_software(required_modules=REQUIRED_MODULES):
     files = ["/fixture/native/macs2", "/fixture/site/MACS2/callpeak_cmd.py", "/fixture/site/MACS2/bdgdiff_cmd.py",
         "/fixture/site/MACS2/IO/Parser.cpython-311-x86_64-linux-gnu.so", "/fixture/site/numpy/__init__.py"]
     return {"driver_runtime": {"python_executable": "/fixture/python", "python_sha256": "0" * 64,
         "python_version": "3.12.0", "module_root": "/fixture/source",
-        "implementation_files": [{"module": name, "sha256": digest(name)} for name in sorted(REQUIRED_MODULES)],
+        "implementation_files": [{"module": name, "sha256": digest(name)} for name in sorted(required_modules)],
         "dependencies": [{"distribution": name, "version": "control-fixture", "package_root": "/fixture/deps/" + name,
             "files": [{"path": "/fixture/deps/" + name + "/__init__.py", "sha256": digest(name), "size_bytes": 1}]}
             for name in sorted(REQUIRED_DEPENDENCIES)]},

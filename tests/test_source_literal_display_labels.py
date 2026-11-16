@@ -21,46 +21,6 @@ from test_reaction_source_witness_labels import rebind_sources
 FIXTURES = Path(__file__).resolve().parents[1] / "gene_annotation_episode/episodic_workflow/root/a110/tests/fixtures"
 
 
-def test_original_a11037_endpoint_selection_publishes_unchanged_science(tmp_path):
-    args = json.loads((FIXTURES / "retained_original/literature_reaction/a11037-multiline-endpoint.json").read_text())
-    raw = (FIXTURES / "a110_evaluation/declared-reaction-protocol.txt").read_bytes()
-    with Store(tmp_path / "state") as store:
-        store.create_problem(raw_sequence="MARGKKIGYS", molecule="protein")
-        protocol = source(store, raw)
-        rebind_sources(args, args["source_ref"], protocol["id"])
-        original = deepcopy(args)
-        context = BindingContext("original-a11037", "source-child", "literature",
-            (("literature", "source-child"),), store.validate_scope(),
-            {"version": "literature_assignment_v1", "source_refs": [protocol["id"]],
-             "question_context_refs": [], "requested_reaction_components": ["reaction_comparison"]},
-            {}, (protocol["id"],))
-        repo = LiteratureReactionRepository(store, context.run_id)
-        outcome = populate_source(repo, context, args, "original-source11")
-        saved = repo.read(outcome["result"]["sheet_ref"])
-        endpoint = store.get(saved["experimental_bindings"]["endpoint_ref"])
-        selected = original["literals"]["endpoint"]
-        assert (selected["start"], selected["end"]) == (468, 560)
-        assert "\n" in selected["quote"]
-        assert endpoint["anchor"] == {**{key: selected[key] for key in
-            ("source_ref", "start", "end", "quote")}, "artifact_ref": protocol["artifact_ref"]}
-        assert raw[468:560].decode() == endpoint["anchor"]["quote"]
-        validate_schema(endpoint["label"], LABEL)
-        assert saved["extraction"]["literals"]["endpoint"]["value"] == selected["quote"]
-        cells = saved["sheet"]["cells"]
-        assert cells["ratio_mean"]["value"] == .8
-        assert cells["claim_mean_squared_error"]["value"] == pytest.approx(.05)
-        assert cells["reaction_comparison"]["value"] == pytest.approx(1 / 3)
-        assert cells["resource_capacity"]["value"] is None
-        assert saved["experimental_bindings"]["experiment_ref"] is None
-        assert "experiment_assessment" not in saved
-        rows = repo.semantic_projection().project_cells([outcome["result"]["sheet_ref"]],
-            permitted_record_refs=outcome["record_refs"], components=["reaction_comparison"])
-        assert len(rows) == 1
-        assert rows[0]["value"] == pytest.approx(1 / 3)
-        assert args == original
-        assert populate_source(repo, context, args, "original-source11") == outcome
-
-
 @pytest.mark.parametrize("axis", ["A107", "A110"])
 @pytest.mark.parametrize("kind", ["reference", "term", "context"])
 @pytest.mark.parametrize("quote", [

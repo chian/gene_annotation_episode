@@ -201,7 +201,7 @@ class StandardBLASTDatabaseResults:
                         body['diagnostic_artifact_refs'].append(_json_artifact(self.store,
                             {'schema': 'native_blast_standard_database_diagnostics_v1', 'failures': [failure], 'metadata_issues': [],
                              'errors': [_exception_diagnostic(error)]}))
-                        for name in ('invalid-request.json', 'invalid-request-diagnostics.json', 'implementation-receipt.json'):
+                        for name in ('invalid-request.json', 'invalid-request-diagnostics.json'):
                             path = directory / 'grading' / name
                             if path.exists():
                                 from .materials import artifact_file

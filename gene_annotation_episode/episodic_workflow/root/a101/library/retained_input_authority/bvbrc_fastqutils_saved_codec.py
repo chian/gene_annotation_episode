@@ -223,8 +223,8 @@ def validate_saved_projection(sheet: dict | None, saved_components: dict, *, fac
     requested_form: dict, parameters: dict, original_task: dict, bundle: dict) -> None:
     """Check stored identities/relationships and reproject; never parse or score.
 
-    The host separately authenticates the full original selector and provider
-    implementation pin. Those operands are intentionally not invented here.
+    The host separately authenticates the full original selector and the
+    configured provider adapter. Those operands are intentionally not invented here.
     """
     saved = decode_saved_components(saved_components)
     parameters = validate_parameters(parameters)

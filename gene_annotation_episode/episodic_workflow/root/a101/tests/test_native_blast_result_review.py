@@ -56,9 +56,7 @@ def test_actual_worker_missing_artifact_diagnostics_are_hash_seed_independent(tm
     request["artifacts"] = [r for r in request["artifacts"] if r["artifact_key"] not in omitted]
     request["calculation_id"] = _scientific_native_blast_database_result_worker.native_blast_database_calculation_identity(
         input_identity=_scientific_native_blast_database_result_worker.native_blast_database_input_identity(request),
-        input_implementation_sha256=request["implementation"]["manifest_sha256"],
-        sequence_model=request["sequence_model"],
-        implementation_manifest_sha256=request["implementation"]["manifest_sha256"])["calculation_id"]
+        sequence_model=request["sequence_model"])["calculation_id"]
     outputs = []
     for seed in ("1", "2", "91"):
         current = deepcopy(request)

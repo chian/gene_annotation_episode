@@ -33,7 +33,7 @@ class CapturedReader:
 
 def original_attempt(tmp_path, program='psiblast'):
     workspace = tmp_path / 'project'
-    path, plan, manifest = fixture(workspace / 'selected', program=program, checkpoint_output=False)
+    path, plan, deploy = fixture(workspace / 'selected', program=program, checkpoint_output=False)
     assignment = native_assignment(workspace, 'synthetic-hpc', kind='hpc')
     assignment['requested_job'] = deepcopy(plan['requested_job'])
     owner = dict(run_id='synthetic-321', episode_id='original-hpc-child', resource_id='synthetic-hpc',
@@ -46,7 +46,7 @@ def original_attempt(tmp_path, program='psiblast'):
     plan.update(identity=owner, attempt_directory=str(root), output_directory=str(root / 'outputs'),
         input_paths={r['input_key']: str(root / 'inputs' / r['input_key']) for r in assignment['requested_job']['native_blast_database']['inputs']})
     path = root / 'native-blast-database-plan.json'; save_json(path, plan)
-    process, bundle = run_fixture(path, plan)
+    process, bundle = run_fixture(path, plan, shadow=deploy)
     assert process.returncode == 0, process.stderr.decode()
     target = dict(version='execution_target_v1', handle='source_synthetic_original_receipt',
         run_id=owner['run_id'], resource_id=owner['resource_id'], resource_kind='hpc', execution_id='313.synthetic',

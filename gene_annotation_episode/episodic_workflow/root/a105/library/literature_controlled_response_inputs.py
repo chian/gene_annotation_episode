@@ -2,9 +2,8 @@
 
 Selections assign scientific meanings. Exact bytes/geometry establish custody
 only; original runtime authorization and outcome binding remain caller owned.
-The v1 profile retains its original text/structured covariance semantics and
-unimplemented graph nominations. Explicit HOST stages also serve full v2, whose
-graph facade supplies actual063 measurements before shared science assembly.
+Explicit HOST stages read registered readings and covariance scopes; the graph
+reader supplies bar measurements before shared science assembly.
 """
 from __future__ import annotations
 from copy import deepcopy
@@ -24,9 +23,7 @@ from gene_annotation_episode.episodic_workflow.root.a105.library.literature_rate
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_partner_defined_units import defined_rate_unit_schema, _definition_scale
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_kinetic_inputs import _count_reading, _interval, _confidence, _cardinal_count
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_binding_visual_inputs import _Inputs
-from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_calculations import INPUT_VERSION, PRIMITIVE_ORDER, validate_controlled_response_inputs
-VERSION = 'controlled_response_source_extraction_v1'
-SELECTION_VERSION = 'controlled_response_source_selection_v1'
+from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_calculations import PRIMITIVE_ORDER
 COVARIANCE_VERSION = 'controlled_response_covariance_source_v1'
 
 def obj(properties):
@@ -62,13 +59,15 @@ defs['AxisLiteral'] = obj({'status': enum(('exact', 'ambiguous', 'unreadable', '
 defs['Image'] = obj({'image_id': TEXT, 'source_ref': deepcopy(REF), 'original_source_ref': deepcopy(REF), 'mapping': nullable(obj({'original_region': ref('Box'), 'colour_conversion': enum(('preserve', 'rgb'))}))})
 defs['TextMeasurement'] = obj({'kind': {'const': 'source_literal'}, 'literal': ref('Literal'), 'unit': nullable(ref('UnitSelection'))})
 defs['BarSelection'] = obj({'roi': obj({name: OFFSET for name in ('left', 'top', 'right', 'bottom')}), 'rgb_min': {'type': 'array', 'items': {'type': 'integer', 'minimum': 0, 'maximum': 255}, 'minItems': 3, 'maxItems': 3}, 'rgb_max': {'type': 'array', 'items': {'type': 'integer', 'minimum': 0, 'maximum': 255}, 'minItems': 3, 'maxItems': 3}, 'minimum_row_fraction': {'type': 'number', 'exclusiveMinimum': 0, 'maximum': 1}, 'minimum_run_rows': {'type': 'integer', 'minimum': 1}, 'edge_tolerance_pixels': {'type': 'number', 'minimum': 0}})
-defs['GraphMeasurement'] = obj({'kind': {'const': 'linear_bar'}, 'image_id': TEXT, 'bar_selection': ref('BarSelection'), 'axis': obj({'first': obj({'pixel': {'type': 'number', 'minimum': 0}, 'tick': ref('AxisLiteral')}), 'second': obj({'pixel': {'type': 'number', 'minimum': 0}, 'tick': ref('AxisLiteral')}), 'unit': ref('AxisLiteral')})})
+defs['GraphMeasurement'] = obj({'kind': {'const': 'linear_bar'}, 'image_id': TEXT, 'bar_selection': ref('BarSelection'), 'axis': obj({'first': obj({'pixel': {'type': 'number', 'minimum': 0}, 'tick': ref('AxisLiteral')}), 'second': obj({'pixel': {'type': 'number', 'minimum': 0}, 'tick': ref('AxisLiteral')}), 'unit': ref('AxisLiteral'), 'scale': ref('AxisScale')}), 'terminal_edge': enum(('upper', 'lower'))})
 defs['CISelector'] = obj({'witness': ref('NativeTextWitness'), **{name: OFFSET for name in ('lower_start', 'lower_end', 'upper_start', 'upper_end')}})
 defs['Uncertainty'] = obj({'statistic': interpretation(('sd', 'sem', 'ci', 'unspecified', 'unreported', 'unknown', 'conflicting')), 'magnitude': nullable(ref('NumberSelector')), 'interval': nullable(ref('CISelector')), 'unit': nullable(ref('UnitSelection')), 'unit_relationship': interpretation(('same_as_response', 'explicit_unit', 'unknown', 'conflicting')), 'confidence_level': nullable(ref('NativeTextWitness')), 'count': nullable(ref('NumberSelector')), 'repetition_basis': interpretation(('biological_preparations', 'technical_measurements', 'unspecified', 'unknown', 'conflicting')), 'estimate_basis': interpretation(('fit_to_averaged_curve', 'between_fitted_parameters', 'unknown', 'conflicting'))})
 defs['Arm'] = obj({'source_kind': enum(('primary_source', 'retained_extraction', 'synthetic_fixture')), 'context': obj({name: nullable(ref('Witness')) for name in ('subject', 'organism', 'genotype', 'construct', 'preparation', 'experimental_system')}), 'protein_arrangement': interpretation(('protein_present', 'protein_free_control', 'empty_vector_control', 'other_specified', 'unknown', 'conflicting')), **{name: ref('Meaning') for name in ('subject_construct', 'condition', 'endpoint', 'normalization', 'physical_observation')}, 'intended_factor_level': nullable(ref('Witness')), 'measurement': nullable({'oneOf': [ref('TextMeasurement'), ref('GraphMeasurement')]}), 'reported_uncertainty': ref('Uncertainty')})
 defs['Relationships'] = obj({'condition1_target': ref('Meaning'), 'condition0_target': ref('Meaning'), 'condition_levels_relation': interpretation(('same', 'different', 'unknown', 'conflicting')), 'subject_construct_across_conditions': interpretation(('same', 'different', 'unknown', 'conflicting')), **{name: interpretation(('matched_condition_control', 'shared_reference_assumption', 'unknown', 'conflicting')) for name in ('condition1_control_application', 'condition0_control_application')}, 'control_reference_reuse': interpretation(('distinct_observations', 'same_reference_with_stated_invariance', 'unknown', 'conflicting')), 'nonintended_conditions': interpretation(('matched', 'different', 'unknown', 'conflicting')), 'intended_factor': nullable(ref('Witness'))})
 defs['CovarianceBinding'] = obj({'variable_index': OFFSET, 'label_witness': ref('NativeTextWitness'), 'owner_witness': ref('Witness'), 'correspondence': ref('Correspondence')})
-selection = obj({'version': {'const': 'controlled_response_source_selection_v1'}, 'source_ref': deepcopy(REF), 'images': array(ref('Image')), 'arms': obj({role: nullable(ref('Arm')) for role in ROLES}), 'relationships': ref('Relationships'), 'covariance': nullable(obj({'source_ref': deepcopy(REF), 'bindings': obj({role: nullable(ref('CovarianceBinding')) for role in ROLES})})), 'variance_status': interpretation(('known', 'estimated', 'unknown')), 'model_kind': interpretation(('none', 'known_joint_normal_source_means'))})
+defs['AxisScale'] = obj({'status': enum(('known', 'unknown', 'conflicting')), 'kind': nullable(enum(('linear', 'logarithmic', 'nonlinear'))), 'basis': enum(('source_text_literal', 'image_episode_interpretation', 'unresolved')), 'witnesses': {'type': 'array', 'items': ref('Witness')}})
+defs['AxisScale']['allOf'] = [{'if': {'properties': {'status': {'const': 'known'}}}, 'then': {'properties': {'kind': enum(('linear', 'logarithmic', 'nonlinear')), 'basis': enum(('source_text_literal', 'image_episode_interpretation')), 'witnesses': {'minItems': 1}}}, 'else': {'properties': {'kind': {'type': 'null'}, 'basis': {'const': 'unresolved'}}}}]
+selection = obj({'version': {'const': 'controlled_response_source_selection_v3'}, 'source_ref': deepcopy(REF), 'images': array(ref('Image')), 'arms': obj({role: nullable(ref('Arm')) for role in ROLES}), 'relationships': ref('Relationships'), 'covariance': nullable(obj({'source_ref': deepcopy(REF), 'bindings': obj({role: nullable(ref('CovarianceBinding')) for role in ROLES})})), 'variance_status': interpretation(('known', 'estimated', 'unknown')), 'model_kind': interpretation(('none', 'known_joint_normal_source_means'))})
 selection['$defs'] = defs
 selection['$schema'] = 'https://json-schema.org/draft/2020-12/schema'
 _SELECTION_SCHEMA = selection
@@ -118,18 +117,14 @@ def _unique_diagnostics(value, *, stable=False):
     records = {json.dumps(d, sort_keys=True): d for d in _all_diagnostics(value)}
     return [records[key] for key in sorted(records)] if stable else list(records.values())
 
-def controlled_response_arguments_schema():
-    """Closed nominations only; numerical scientific operands are never inputs."""
+def _selection_core_schema():
+    """Closed arm, relationship and covariance nominations; numerical scientific operands are never inputs."""
     return deepcopy(_SELECTION_SCHEMA)
 
 def _nomination_key(witness):
     if witness.get('kind') == 'image':
         return ('image', witness['image_id'], tuple(witness['region']))
     return ('text', witness['source_ref'], witness['representation'], witness['start'], witness['end'])
-
-def validate_controlled_response_selection(arguments):
-    """Validate the whole closed nomination before any callback or decoding."""
-    return _validate_selection(arguments, _SELECTION_SCHEMA)
 
 def _validate_selection(arguments, schema):
     try:
@@ -412,17 +407,6 @@ def _measurement(context, selected, endpoint, field):
     if selected is None:
         result['diagnostics'] = [_diag('measurement_not_selected', field, 'source_interpretation')]
         return result
-    if selected['kind'] == 'linear_bar':
-        for part in ('first', 'second', 'unit'):
-            literal = selected['axis'][part]['tick'] if part != 'unit' else selected['axis'][part]
-            result['graph_witnesses'].extend((context.witness(w, field + '.axis') for w in literal['candidates'] + literal['fragments']))
-        image = context.visual.images[selected['image_id']]
-        roi = selected['bar_selection']['roi']
-        if not image['error']:
-            context.visual.location(selected['image_id'], [roi[k] for k in ('left', 'top', 'right', 'bottom')])
-            result['source_observation_id'] = identity('controlled_graph_nomination', {'artifact_ref': image['artifact_ref'], 'byte_sha256': image['byte_sha256'], 'nomination': selected})
-        result.update(reading_status='graph_unimplemented', diagnostics=[_diag('graph_rate_reader_unimplemented', field, 'reader_capability')])
-        return result
     literal = selected['literal']
     result['candidates'] = [_number(context, item, field + '.candidates') for item in literal['candidates']]
     result['fragments'] = [context.witness(w, field + '.fragments') for w in literal['fragments']]
@@ -462,7 +446,7 @@ def _uncertainty_piece(context, selected, field, kind):
     if witness['canonical_locator'] is None:
         return result
     try:
-        parse_selection = _ci_literal_subselection(selected) if kind == 'interval' and getattr(context, 'profile', 'v1') in ('v2', 'v3') else selected
+        parse_selection = _ci_literal_subselection(selected) if kind == 'interval' else selected
         reading = {'interval': _interval, 'confidence': _confidence, 'count': _count_reading}[kind](parse_selection, context.native)
     except ExperimentalContractError as error:
         sentence_stop = False
@@ -491,9 +475,8 @@ def _uncertainty(context, selected, response_unit, endpoint, field):
         if saved['selection'] != selected:
             _fail('saved_selection_mismatch', field)
         return deepcopy(saved['value'])
-    tagged = getattr(context, 'profile', 'v1') in ('v2', 'v3')
     response_carrier = response_unit
-    response_unit = response_unit['record'] if tagged and response_unit is not None else response_unit
+    response_unit = response_unit['record'] if response_unit is not None else response_unit
     meanings = {key: _interpretation(context, selected[key], field + '.' + key) for key in ('statistic', 'unit_relationship', 'repetition_basis', 'estimate_basis')}
     magnitude = _number(context, selected['magnitude'], field + '.magnitude', 'spread') if selected['magnitude'] else None
     interval = _uncertainty_piece(context, selected['interval'], field + '.interval', 'interval')
@@ -512,7 +495,7 @@ def _uncertainty(context, selected, response_unit, endpoint, field):
     if magnitude and magnitude['status'] == 'parsed' and effective_unit and (effective_unit['status'] == 'supported'):
         try:
             actual_number = _native_number(magnitude['selection'], context.native, 'spread')
-            actual_unit = _native_unit(effective_unit['selection'], context.native, effective_unit['selection']['definition']['endpoint'] if effective_unit['definition_witnesses'] else None) if not tagged or relationship == 'explicit_unit' else {'canonical_unit': effective_unit['canonical_unit'], 'raw_unit': effective_unit['raw_unit'], 'source_defined_unit': None}
+            actual_unit = _native_unit(effective_unit['selection'], context.native, effective_unit['selection']['definition']['endpoint'] if effective_unit['definition_witnesses'] else None) if relationship == 'explicit_unit' else {'canonical_unit': effective_unit['canonical_unit'], 'raw_unit': effective_unit['raw_unit'], 'source_defined_unit': None}
             _check_explicit_unit(actual_number, actual_unit, context.native)
         except ExperimentalContractError as error:
             if error.code == 'source_spread_unit_mismatch':
@@ -520,19 +503,19 @@ def _uncertainty(context, selected, response_unit, endpoint, field):
                 diagnostics.append(_diag('source_uncertainty_unit_conflicting', field, 'source_interpretation'))
             else:
                 raise
-    if tagged and interval and (interval['status'] == 'parsed') and effective_unit and (effective_unit['status'] == 'supported'):
+    if interval and (interval['status'] == 'parsed') and effective_unit and (effective_unit['status'] == 'supported'):
         narrowed = _ci_literal_subselection(interval['selection'])
         witness = {**narrowed['witness'], 'artifact_ref': interval['witness']['artifact_ref']}
         _, suffix = _field_contexts(context.native, witness, 0, len(witness['quote']))
         if _retained_printed_unit_conflict(suffix, effective_unit):
             effective_unit = None
             diagnostics.append(_diag('source_uncertainty_unit_conflicting', field, 'source_interpretation'))
-    result = _assemble_uncertainty(selected, meanings=meanings, magnitude=magnitude, interval=interval, confidence=confidence, count=count, unit=unit, effective_unit=effective_unit, diagnostics=diagnostics, field=field, stable=tagged)
-    if tagged and result['effective_unit'] is not None:
+    result = _assemble_uncertainty(selected, meanings=meanings, magnitude=magnitude, interval=interval, confidence=confidence, count=count, unit=unit, effective_unit=effective_unit, diagnostics=diagnostics, field=field)
+    if result['effective_unit'] is not None:
         result['effective_unit'] = deepcopy(response_carrier) if relationship == 'same_as_response' else {'kind': 'text', 'record': result['effective_unit']}
     return result
 
-def _assemble_uncertainty(selected, *, meanings, magnitude, interval, confidence, count, unit, effective_unit, diagnostics, field, stable=False):
+def _assemble_uncertainty(selected, *, meanings, magnitude, interval, confidence, count, unit, effective_unit, diagnostics, field):
     """Arithmetic on retained readings shared by live and detached science."""
     statistic = meanings['statistic']['effective_value']
     if statistic == 'unreported' and any((item is not None for item in (magnitude, interval, confidence))) or (statistic == 'ci' and magnitude is not None) or (statistic in ('sd', 'sem') and any((item is not None for item in (interval, confidence)))):
@@ -551,14 +534,13 @@ def _assemble_uncertainty(selected, *, meanings, magnitude, interval, confidence
         diagnostics.append(_diag('source_uncertainty_unit_unknown', field, 'source_interpretation'))
     exact_count = count['reading']['value'] if count and count['reading'] and (count['reading']['status'] == 'exact') else None
     result = {'selection': deepcopy(selected), 'meanings': meanings, 'magnitude': magnitude, 'interval': interval, 'unit': unit, 'effective_unit': deepcopy(effective_unit), 'confidence_level': confidence, 'count': count, 'canonical': {'statistic': statistic, 'magnitude': spread, 'interval': bounds, 'confidence_level': confidence['value'] if confidence else None, 'count': exact_count, 'repetition_basis': meanings['repetition_basis']['effective_value'], 'estimate_basis': meanings['estimate_basis']['effective_value']}, 'diagnostics': diagnostics}
-    result['diagnostics'].extend(_unique_diagnostics([meanings, magnitude, interval, unit, confidence, count], stable=stable))
-    if stable:
-        result['diagnostics'] = _unique_diagnostics(result['diagnostics'], stable=True)
+    result['diagnostics'].extend(_unique_diagnostics([meanings, magnitude, interval, unit, confidence, count], stable=True))
+    result['diagnostics'] = _unique_diagnostics(result['diagnostics'], stable=True)
     return result
 
 def _operand_from_arm(arm):
     measurement = arm['measurement']
-    if measurement['reading_status'] == 'dependency_unavailable' or (measurement['reading_status'] == 'graph_unimplemented' and measurement['source_observation_id'] is None):
+    if measurement['reading_status'] == 'dependency_unavailable':
         return None
     state = measurement['reading_status']
     item = measurement['candidates'][0] if state == 'exact' else None
@@ -586,24 +568,7 @@ def _operand_from_arm(arm):
             native_value, relation = (number, 'eq')
         else:
             threshold, relation, status = (number, item['relation'], 'bound')
-    result = {'value': native_value, 'threshold': threshold, 'relation': relation, 'approximate': approximate, 'unit': pure_unit, 'status': status, **{name + '_id': arm['meanings'][name]['canonical_id'] for name in _MEANINGS}, 'source_observation_id': measurement['source_observation_id'], 'origin': 'synthetic' if arm['selection']['source_kind'] == 'synthetic_fixture' else 'graph_derived' if state == 'graph_unimplemented' else 'reported', 'digitization_interval': None, 'protein_arrangement': arm['protein_arrangement']['effective_value'], 'meaning_statuses': {name: arm['meanings'][name]['resolved_state'] for name in _MEANINGS}}
-    return result
-
-def _arm(context, selected, field):
-    if selected is None:
-        return None
-    meanings = {name: _meaning(context, selected[name], name, field + '.' + name) for name in _MEANINGS}
-    measurement = _measurement(context, selected['measurement'], meanings['endpoint'], field + '.measurement')
-    result = {'selection': deepcopy(selected), 'context': {name: context.witness(w, field + '.context.' + name) if w is not None else None for name, w in selected['context'].items()}, 'protein_arrangement': _interpretation(context, selected['protein_arrangement'], field + '.protein_arrangement'), 'meanings': meanings, 'intended_factor_level': context.witness(selected['intended_factor_level'], field + '.intended_factor_level'), 'measurement': measurement, 'reported_uncertainty': _uncertainty(context, selected['reported_uncertainty'], measurement['unit'], meanings['endpoint'], field + '.reported_uncertainty'), 'calculation_operand': None, 'diagnostics': []}
-    result['calculation_operand'] = _operand_from_arm(result)
-    operand = result['calculation_operand']
-    if operand and measurement['reading_status'] == 'exact':
-        item = measurement['candidates'][0]
-        if operand['approximate'] and (not item['approximate']):
-            result['diagnostics'].append(_diag('numeric_projection_rounding', field, 'reader_capability'))
-        if operand['status'] == 'unsupported':
-            result['diagnostics'].append(_diag('custom_unit_projection_unrepresentable', field, 'reader_capability'))
-    result['diagnostics'].extend(_unique_diagnostics([result['context'], meanings, result['protein_arrangement'], measurement, result['reported_uncertainty']]))
+    result = {'value': native_value, 'threshold': threshold, 'relation': relation, 'approximate': approximate, 'unit': pure_unit, 'status': status, **{name + '_id': arm['meanings'][name]['canonical_id'] for name in _MEANINGS}, 'source_observation_id': measurement['source_observation_id'], 'origin': 'synthetic' if arm['selection']['source_kind'] == 'synthetic_fixture' else 'reported', 'digitization_interval': None, 'protein_arrangement': arm['protein_arrangement']['effective_value'], 'meaning_statuses': {name: arm['meanings'][name]['resolved_state'] for name in _MEANINGS}}
     return result
 
 class _CovarianceError(Exception):
@@ -750,7 +715,7 @@ def _source_model_shape(document):
         raise _CovarianceError('source_covariance_shape_invalid')
 
 def _empty_covariance(selected):
-    return {'selection': deepcopy(selected), 'source_ref': selected['source_ref'], 'artifact_ref': None, 'byte_sha256': None, 'raw_text': None, 'variables': [], 'matrix_tokens': None, 'exact_matrix': None, 'source_model': None, 'bindings': {role: {'selection': deepcopy(selected['bindings'][role]), 'label_witness': None, 'owner_witness': None, 'correspondence': None, 'source_variable_index': None, 'resolved_owner_id': None, 'state': 'unknown', 'diagnostics': []} for role in PRIMITIVE_ORDER}, 'projection_indices': None, 'projected_exact_matrix': None, 'calculation_covariance': None, 'source_validation': 'unassessed', 'projection_state': 'unavailable', 'diagnostics': []}
+    return {'selection': deepcopy(selected), 'source_ref': selected['source_ref'], 'artifact_ref': None, 'byte_sha256': None, 'raw_text': None, 'variables': [], 'matrix_tokens': None, 'exact_matrix': None, 'source_model': None, 'bindings': {role: {'selection': deepcopy(selected['bindings'][role]), 'label_witness': None, 'owner_witness': None, 'correspondence': None, 'source_variable_index': None, 'resolved_owner_id': None, 'state': 'unknown', 'diagnostics': []} for role in PRIMITIVE_ORDER}, 'projected_exact_matrix': None, 'calculation_covariance': None, 'source_validation': 'unassessed', 'projection_state': 'unavailable', 'diagnostics': [], 'provided_owner_projection': []}
 
 def _covariance_document_facts(context, selected):
     if selected is None:
@@ -796,123 +761,8 @@ def _covariance_document_facts(context, selected):
         result['source_validation'] = 'valid'
     return result
 
-def _covariance(context, selected, arms, relationships, *, owner_profile=False):
-    result = _covariance_document_facts(context, selected)
-    if result is None or result['exact_matrix'] is None:
-        return result
-    reference = selected['source_ref']
-    matrix = [[_fraction(v) for v in row] for row in result['exact_matrix']]
-    for role in PRIMITIVE_ORDER:
-        nominated = selected['bindings'][role]
-        binding = result['bindings'][role]
-        if nominated is None:
-            continue
-        index = nominated['variable_index']
-        if index >= len(matrix):
-            _fail('source_variable_index_out_of_bounds', 'covariance.bindings.' + role)
-        label = context.witness(nominated['label_witness'], 'covariance.bindings.' + role + '.label')
-        actual = result['variables'][index]['label_witness']
-        if label['canonical_locator'] is not None and label['canonical_locator'] != actual['canonical_locator']:
-            _fail('source_label_token_binding_mismatch', 'covariance.bindings.' + role)
-        owner = context.witness(nominated['owner_witness'], 'covariance.bindings.' + role + '.owner')
-        correspondence = _interpretation(context, nominated['correspondence'], 'covariance.bindings.' + role + '.correspondence')
-        arm = arms[role]
-        physical = arm['meanings']['physical_observation'] if arm else None
-        declared = [w['selection'] for w in physical['witnesses']] + ([physical['canonical_witness']['selection']] if physical['canonical_witness'] else []) if physical else []
-        if arm and nominated['owner_witness'] not in declared:
-            _fail('owner_witness_not_in_role', 'covariance.bindings.' + role)
-        state = 'conflicting' if correspondence['effective_value'] == 'conflicting' else 'unknown'
-        if physical and physical['resolved_state'] == 'known' and (label['canonical_locator'] is not None) and (owner['canonical_locator'] is not None) and (correspondence['effective_value'] == 'same'):
-            state = 'known'
-        binding.update(label_witness=label, owner_witness=owner, correspondence=correspondence, source_variable_index=index, resolved_owner_id=physical['canonical_id'] if state == 'known' else None, state=state, diagnostics=_unique_diagnostics([label, owner, correspondence]))
-    if owner_profile:
-        return _project_owner_covariance(result, matrix, arms, relationships)
-    if result['source_validation'] != 'valid':
-        return result
-    states = [result['bindings'][role]['state'] for role in PRIMITIVE_ORDER]
-    if any((state != 'known' for state in states)):
-        conflicting = 'conflicting' in states
-        result.update(projection_state='binding_conflicting' if conflicting else 'binding_unresolved', diagnostics=[_diag('covariance_owner_conflicting' if conflicting else 'covariance_owner_unresolved', 'covariance.bindings', 'source_binding', [reference])])
-        return result
-    indices = [result['bindings'][role]['source_variable_index'] for role in PRIMITIVE_ORDER]
-    result['projection_indices'] = indices
-    projected = [[matrix[i][j] for j in indices] for i in indices]
-    result['projected_exact_matrix'] = [[_rational(v) for v in row] for row in projected]
-    if _cross_control_alias_conflict(arms):
-        result.update(projection_state='binding_conflicting', diagnostics=[_diag('covariance_shared_values_conflicting', 'covariance.bindings.empty_condition1|empty_condition0', 'source_binding', [reference])])
-        return result
-    variables = [result['variables'][i] for i in indices]
-    if any((v['native_registry_unit'] is None for v in variables)):
-        result.update(projection_state='unavailable', diagnostics=[_diag('source_covariance_unit_unsupported', 'covariance.projection', 'reader_capability', [reference])])
-        return result
-    operands = [arms[role]['calculation_operand'] for role in PRIMITIVE_ORDER]
-    if any((arm is None or arm['unit'] is None for arm in operands)):
-        result.update(projection_state='unavailable', diagnostics=[_diag('source_dependency_unavailable', 'covariance.projection.operands', 'dependency', [reference])])
-        return result
-    owners = [b['physical_observation_id'] for b in operands]
-    scales = [_fraction(v['exact_scale']) for v in variables]
-    for i in range(4):
-        for j in range(i):
-            if indices[i] == indices[j] and owners[i] != owners[j]:
-                result.update(projection_state='binding_conflicting', diagnostics=[_diag('covariance_owner_conflicting', 'covariance.projection', 'source_binding', [reference])])
-                return result
-            if owners[i] != owners[j]:
-                continue
-            a, b = (indices[i], indices[j])
-            if any((scales[i] * matrix[a][k] != scales[j] * matrix[b][k] for k in range(len(matrix)))):
-                result.update(projection_state='binding_conflicting', diagnostics=[_diag('covariance_shared_rows_conflicting', 'covariance.projection', 'source_binding', [reference])])
-                return result
-    finite_matrix = [[_finite(v) for v in row] for row in projected]
-    if any((v is None for row in finite_matrix for v in row)):
-        result.update(projection_state='numeric_range', diagnostics=[_diag('covariance_projection_numeric_range', 'covariance.projection', 'reader_capability', [reference])])
-        return result
-    finite_exact = [[Fraction(str(v)) for v in row] for row in finite_matrix]
-    if not _psd(finite_exact):
-        result.update(projection_state='precision_invalid', diagnostics=[_diag('covariance_projection_precision_invalid', 'covariance.projection', 'reader_capability', [reference])])
-        return result
-    covariance = {'primitive_order': list(PRIMITIVE_ORDER), 'physical_observation_ids': owners, 'units': [v['native_registry_unit'] for v in variables], 'matrix': finite_matrix}
-    trial = {'version': INPUT_VERSION, 'arms': {r: arms[r]['calculation_operand'] for r in PRIMITIVE_ORDER}, 'relationships': _relationships_inputs(relationships), 'covariance': covariance, 'variance_status': 'known', 'model_kind': 'none'}
-    try:
-        validate_controlled_response_inputs(trial)
-    except ExperimentalContractError as error:
-        if error.code == 'shared_measurement_covariance_mismatch':
-            result.update(projection_state='precision_invalid', diagnostics=[_diag('covariance_projection_precision_invalid', 'covariance.projection', 'reader_capability', [reference])])
-            return result
-        result.update(projection_state='binding_conflicting', diagnostics=[_diag('covariance_shared_values_conflicting' if error.code == 'shared_measurement_context_mismatch' else 'source_covariance_unit_unsupported', 'covariance.projection', 'source_binding', [reference])])
-        return result
-    result.update(calculation_covariance=covariance, projection_state='available')
-    if finite_exact != projected:
-        result['diagnostics'].append(_diag('numeric_projection_rounding', 'covariance.projection', 'reader_capability', [reference]))
-    return result
-
 def _relationships(context, selected):
     return {key: _meaning(context, value, 'condition', 'relationships.' + key) if key.endswith('_target') else context.witness(value, 'relationships.intended_factor') if key == 'intended_factor' else _interpretation(context, value, 'relationships.' + key) for key, value in selected.items()}
-
-def _cross_control_alias_conflict(arms):
-    left, right = (arms[role] for role in ('empty_condition1', 'empty_condition0'))
-    if left is None or right is None:
-        return False
-    owner = left['meanings']['physical_observation']['canonical_id']
-    if owner is None or owner != right['meanings']['physical_observation']['canonical_id']:
-        return False
-    values = []
-    for arm in (left, right):
-        measurement = arm['measurement']
-        unit = measurement['unit']
-        if measurement['reading_status'] != 'exact' or unit is None or unit['status'] != 'supported':
-            return False
-        candidate = measurement['candidates'][0]
-        exact = Fraction(candidate['raw_expression'].replace('−', '-')) * _fraction(unit['exact_scale'])
-        values.append((exact, candidate['relation'], candidate['approximate'], unit['canonical_unit']))
-    return values[0] != values[1]
-
-def _resolve_control_alias(arms, relationships):
-    if not _cross_control_alias_conflict(arms):
-        return
-    refs = [arms[role]['measurement']['candidates'][0]['source_locator']['source_ref'] for role in ('empty_condition1', 'empty_condition0')]
-    record = relationships['control_reference_reuse']
-    record['effective_value'] = 'conflicting'
-    record['diagnostics'].append(_diag('source_literal_conflicting', 'arms.empty_condition1|arms.empty_condition0', 'source_binding', refs))
 
 def _relationships_inputs(relationships):
     result = {}
@@ -958,32 +808,9 @@ def _effective_model(requested, covariance, arms):
     return result
 
 def _calculation_inputs(arms, relationships, covariance, effective):
-    return {'version': INPUT_VERSION, 'arms': {role: deepcopy(arms[role]['calculation_operand']) if arms[role] else None for role in PRIMITIVE_ORDER}, 'relationships': _relationships_inputs(relationships), 'covariance': deepcopy(covariance['calculation_covariance']) if covariance and effective['variance_status'] != 'unknown' else None, 'variance_status': effective['variance_status'], 'model_kind': effective['model_kind']}
+    return {'version': 'controlled_response_owner_inputs_v2', 'arms': {role: deepcopy(arms[role]['calculation_operand']) if arms[role] else None for role in PRIMITIVE_ORDER}, 'relationships': _relationships_inputs(relationships), 'covariance': deepcopy(covariance['calculation_covariance']) if covariance and effective['variance_status'] != 'unknown' else None, 'variance_status': effective['variance_status'], 'model_kind': effective['model_kind']}
 
-def read_controlled_response_inputs(arguments, *, read_source):
-    """Read selected authorized bytes into the frozen parsed-input contract.
-
-    ``read_source`` must authorize actual received/scope/ancestry references. Its
-    ContractError or malformed success is never swallowed by image helper catches.
-    Only explicit ENOENT/EIO/ETIMEDOUT OSError, or the callback's explicit EOFError
-    signal for unavailable/truncated retained bytes, become availability partials.
-    Other exceptions (including OSError with no errno) propagate as callback
-    failures, not source findings.
-    This function never calls a sheet calculator or makes an episode observation.
-    """
-    selected = validate_controlled_response_selection(arguments)
-    with SourceContext(selected, read_source) as context:
-        arms = {}
-        for role in PRIMITIVE_ORDER:
-            nominated = context.arguments['arms'][role]
-            if nominated is None:
-                arms[role] = None
-            else:
-                arms[role] = _arm(context, nominated, 'arms.' + role)
-        return finish_controlled_response_inputs(context, arms=arms)
-_RESULT_FIELDS = {'Diagnostic': ('code', 'field', 'domain', 'source_refs'), 'SourceRecord': ('source_ref', 'representation', 'artifact_ref', 'byte_sha256', 'state', 'diagnostics'), 'WitnessRecord': ('selection', 'artifact_ref', 'byte_sha256', 'canonical_locator', 'authentication', 'attribution', 'diagnostics'), 'TextLocator': ('kind', 'source_ref', 'artifact_ref', 'byte_sha256', 'start', 'end'), 'ImageLocator': ('kind', 'original_source_ref', 'original_artifact_ref', 'original_byte_sha256', 'region'), 'InterpretationExtraction': ('selection', 'witnesses', 'effective_value', 'diagnostics'), 'MeaningExtraction': ('selection', 'witnesses', 'canonical_witness', 'canonical_correspondence', 'resolved_state', 'canonical_id', 'diagnostics'), 'NumberCandidate': ('selection', 'witness', 'raw_expression', 'native_value', 'relation', 'approximate', 'source_locator', 'status', 'diagnostics'), 'UnitRecord': ('selection', 'witness', 'raw_unit', 'canonical_unit', 'exact_scale', 'native_registry_unit', 'definition_witnesses', 'status', 'diagnostics'), 'Rational': ('numerator', 'denominator'), 'CanonicalDisplay': ('value', 'threshold', 'unit', 'relation', 'approximate', 'diagnostics'), 'MeasurementExtraction': ('selection', 'candidates', 'fragments', 'unit', 'graph_witnesses', 'reading_status', 'source_observation_id', 'canonical_display', 'pixel_result', 'diagnostics'), 'UncertaintyExtraction': ('selection', 'meanings', 'magnitude', 'interval', 'unit', 'effective_unit', 'confidence_level', 'count', 'canonical', 'diagnostics'), 'IntervalRecord': ('selection', 'witness', 'raw_values', 'values', 'status', 'diagnostics'), 'ConfidenceRecord': ('selection', 'witness', 'value', 'status', 'diagnostics'), 'CountRecord': ('selection', 'witness', 'reading', 'diagnostics'), 'UncertaintyCanonical': ('statistic', 'magnitude', 'interval', 'confidence_level', 'count', 'repetition_basis', 'estimate_basis'), 'ArmExtraction': ('selection', 'context', 'protein_arrangement', 'meanings', 'intended_factor_level', 'measurement', 'reported_uncertainty', 'calculation_operand', 'diagnostics'), 'RelationshipExtraction': ('condition1_target', 'condition0_target', 'condition_levels_relation', 'subject_construct_across_conditions', 'condition1_control_application', 'condition0_control_application', 'control_reference_reuse', 'nonintended_conditions', 'intended_factor'), 'CovarianceBindingExtraction': ('selection', 'label_witness', 'owner_witness', 'correspondence', 'source_variable_index', 'resolved_owner_id', 'state', 'diagnostics'), 'CovarianceSourceVariable': ('index', 'label', 'label_witness', 'unit', 'unit_witness', 'description', 'description_witness', 'native_registry_unit', 'exact_scale', 'diagnostics'), 'CovarianceExtraction': ('selection', 'source_ref', 'artifact_ref', 'byte_sha256', 'raw_text', 'variables', 'matrix_tokens', 'exact_matrix', 'source_model', 'bindings', 'projection_indices', 'projected_exact_matrix', 'calculation_covariance', 'source_validation', 'projection_state', 'diagnostics'), 'RequestedModel': ('variance_status', 'model_kind'), 'EffectiveModel': ('variance_status', 'model_kind', 'diagnostics'), 'DependencyRecord': ('reader_contract_version', 'calculator_contract_version')}
-_ROOT_FIELDS = ('version', 'selection', 'sources', 'images', 'arms', 'relationships', 'covariance', 'requested_model', 'effective_model', 'calculation_inputs', 'diagnostics', 'implementation_dependencies')
-
+_RESULT_FIELDS = {'WitnessRecord': ('selection', 'artifact_ref', 'byte_sha256', 'canonical_locator', 'authentication', 'attribution', 'diagnostics'), 'ImageLocator': ('kind', 'original_source_ref', 'original_artifact_ref', 'original_byte_sha256', 'region'), 'InterpretationExtraction': ('selection', 'witnesses', 'effective_value', 'diagnostics'), 'MeaningExtraction': ('selection', 'witnesses', 'canonical_witness', 'canonical_correspondence', 'resolved_state', 'canonical_id', 'diagnostics'), 'NumberCandidate': ('selection', 'witness', 'raw_expression', 'native_value', 'relation', 'approximate', 'source_locator', 'status', 'diagnostics'), 'UnitRecord': ('selection', 'witness', 'raw_unit', 'canonical_unit', 'exact_scale', 'native_registry_unit', 'definition_witnesses', 'status', 'diagnostics')}
 def _saved_witness(record, selected, sources, field):
     if selected is None:
         if record is not None:
@@ -1010,15 +837,13 @@ def _saved_witness(record, selected, sources, field):
         if record['authentication'] != 'image_bytes_and_geometry_only' or record['attribution'] != 'investigating_episode_interpretation':
             _fail('saved_image_authentication_mismatch', field)
 
-def _saved_interpretation(record, selected, sources, field, *, control_alias=False):
+def _saved_interpretation(record, selected, sources, field):
     _closed(record, _RESULT_FIELDS['InterpretationExtraction'], field)
     if record['selection'] != selected or len(record['witnesses']) != len(selected['witnesses']):
         _fail('saved_selection_mismatch', field)
     for w, nominated in zip(record['witnesses'], selected['witnesses']):
         _saved_witness(w, nominated, sources, field)
     effective = selected['value'] if all((w['canonical_locator'] is not None for w in record['witnesses'])) else 'unknown'
-    if control_alias:
-        effective = 'conflicting'
     if record['effective_value'] != effective:
         _fail('saved_interpretation_mismatch', field)
 
@@ -1095,16 +920,16 @@ def _saved_unit(record, selected, sources, field):
             else:
                 _saved_witness(definitions[key], nomination, sources, field + '.definition.' + key)
         if record['status'] == 'supported':
-            legacy = {}
+            scale_inputs = {}
             for key, saved in definitions.items():
                 if key == 'amount':
                     witness = saved['witness']
                     original = {k: v for k, v in witness['selection'].items() if k != 'kind'}
                     original['artifact_ref'] = witness['artifact_ref']
-                    legacy[key] = {'selector': {**saved['selection'], 'witness': original}, 'raw_number': saved['raw_expression'], 'value': saved['native_value'], 'relation': saved['relation']}
+                    scale_inputs[key] = {'selector': {**saved['selection'], 'witness': original}, 'raw_number': saved['raw_expression'], 'value': saved['native_value'], 'relation': saved['relation']}
                 else:
-                    legacy[key] = {**{k: v for k, v in saved['selection'].items() if k != 'kind'}, 'artifact_ref': saved['artifact_ref']}
-            if record['canonical_unit'] != 'umol/min/mg' or _fraction(record['exact_scale']) != _definition_scale(legacy) / 1000000:
+                    scale_inputs[key] = {**{k: v for k, v in saved['selection'].items() if k != 'kind'}, 'artifact_ref': saved['artifact_ref']}
+            if record['canonical_unit'] != 'umol/min/mg' or _fraction(record['exact_scale']) != _definition_scale(scale_inputs) / 1000000:
                 _fail('saved_unit_scale_mismatch', field)
     elif record['status'] == 'supported':
         actual = _plain_unit(record['raw_unit'])
@@ -1115,251 +940,7 @@ def _saved_unit(record, selected, sources, field):
         if record['native_registry_unit'] != expected:
             _fail('saved_unit_registry_mismatch', field)
 
-def _validate_v1_saved_science(arguments, extraction):
-    """Check detached saved consistency, never grant custody or source access.
-
-    No callback, acquisition, image decoder or source literal reader is invoked.
-    Original runtime request/source/operation/outcome binding is still required:
-    self-consistent hashes/quotes are not independent authentication of evidence.
-    """
-    selected = validate_controlled_response_selection(arguments)
-    _closed(extraction, _ROOT_FIELDS, 'extraction')
-    if extraction['version'] != VERSION or extraction['selection'] != selected:
-        _fail('saved_selection_mismatch', 'extraction')
-    expected_dependencies = {'reader_contract_version': VERSION, 'calculator_contract_version': INPUT_VERSION}
-    if extraction['implementation_dependencies'] != expected_dependencies:
-        _fail('saved_dependency_contract_mismatch', 'implementation_dependencies')
-    source_map = {}
-    for source in extraction['sources']:
-        _closed(source, _RESULT_FIELDS['SourceRecord'], 'sources')
-        key = (source['source_ref'], source['representation'])
-        if key in source_map:
-            _fail('saved_duplicate_source', 'sources')
-        source_map[key] = source
-        if source['state'] == 'available':
-            if not isinstance(source['artifact_ref'], str) or not re.fullmatch('[0-9a-f]{64}', source['byte_sha256'] or ''):
-                _fail('saved_source_identity_mismatch', 'sources')
-        elif source['state'] != 'unavailable' or source['artifact_ref'] is not None or source['byte_sha256'] is not None:
-            _fail('saved_source_state_mismatch', 'sources')
-    if set(source_map) != set(_reference_closure(selected)):
-        _fail('saved_source_roster_mismatch', 'sources')
-    if len(extraction['images']) != len(selected['images']):
-        _fail('saved_image_roster_mismatch', 'images')
-    image_fields = ('image_id', 'source_ref', 'artifact_ref', 'byte_sha256', 'original_source_ref', 'original_artifact_ref', 'original_byte_sha256', 'actual_format', 'actual_mode', 'width', 'height', 'frame_count', 'mapping', 'pillow_version', 'error')
-    for image, nominated in zip(extraction['images'], selected['images']):
-        _closed(image, image_fields, 'images')
-        if any((image[k] != nominated[k] for k in ('image_id', 'source_ref', 'original_source_ref', 'mapping'))):
-            _fail('saved_image_selection_mismatch', 'images')
-        for prefix, reference in (('', image['source_ref']), ('original_', image['original_source_ref'])):
-            source = source_map[reference, 'original']
-            if image[prefix + 'artifact_ref'] is not None and (image[prefix + 'artifact_ref'] != source['artifact_ref'] or image[prefix + 'byte_sha256'] != source['byte_sha256']):
-                _fail('saved_image_source_mismatch', 'images')
-    _closed(extraction['arms'], PRIMITIVE_ORDER, 'arms')
-    for role, arm in extraction['arms'].items():
-        nomination = selected['arms'][role]
-        if nomination is None:
-            if arm is not None:
-                _fail('saved_selection_mismatch', role)
-            continue
-        _closed(arm, _RESULT_FIELDS['ArmExtraction'], role)
-        if arm['selection'] != nomination:
-            _fail('saved_selection_mismatch', role)
-        _closed(arm['meanings'], _MEANINGS, role + '.meanings')
-        for name in _MEANINGS:
-            _saved_meaning(arm['meanings'][name], nomination[name], source_map, name, role + '.' + name)
-        _saved_interpretation(arm['protein_arrangement'], nomination['protein_arrangement'], source_map, role)
-        _closed(arm['context'], nomination['context'], role + '.context')
-        for key, record in arm['context'].items():
-            _saved_witness(record, nomination['context'][key], source_map, role + '.context.' + key)
-        _saved_witness(arm['intended_factor_level'], nomination['intended_factor_level'], source_map, role)
-        measurement = arm['measurement']
-        _closed(measurement, _RESULT_FIELDS['MeasurementExtraction'], role + '.measurement')
-        nominated = nomination['measurement']
-        if measurement['selection'] != nominated:
-            _fail('saved_selection_mismatch', role + '.measurement')
-        if nominated and nominated['kind'] == 'source_literal':
-            literal = nominated['literal']
-            if len(measurement['candidates']) != len(literal['candidates']) or len(measurement['fragments']) != len(literal['fragments']):
-                _fail('saved_selection_mismatch', role + '.measurement')
-            for record, selector in zip(measurement['candidates'], literal['candidates']):
-                _saved_number(record, selector, source_map, role)
-            for record, selector in zip(measurement['fragments'], literal['fragments']):
-                _saved_witness(record, selector, source_map, role)
-            _saved_unit(measurement['unit'], nominated['unit'], source_map, role)
-            candidate = measurement['candidates'][0] if measurement['reading_status'] == 'exact' else None
-            if measurement['canonical_display'] != _display(candidate, measurement['unit']):
-                _fail('saved_canonical_display_mismatch', role)
-        if arm['calculation_operand'] != _operand_from_arm(arm):
-            _fail('saved_operand_projection_mismatch', role)
-        uncertainty = arm['reported_uncertainty']
-        _closed(uncertainty, _RESULT_FIELDS['UncertaintyExtraction'], role + '.reported_uncertainty')
-        if uncertainty['selection'] != nomination['reported_uncertainty']:
-            _fail('saved_selection_mismatch', role + '.reported_uncertainty')
-        unc_nom = nomination['reported_uncertainty']
-        _closed(uncertainty['meanings'], ('statistic', 'unit_relationship', 'repetition_basis', 'estimate_basis'), role + '.uncertainty.meanings')
-        for key, record in uncertainty['meanings'].items():
-            _saved_interpretation(record, unc_nom[key], source_map, role + '.uncertainty.' + key)
-        if unc_nom['magnitude'] is not None:
-            _saved_number(uncertainty['magnitude'], unc_nom['magnitude'], source_map, role + '.uncertainty.magnitude')
-        elif uncertainty['magnitude'] is not None:
-            _fail('saved_selection_mismatch', role + '.uncertainty.magnitude')
-        _saved_unit(uncertainty['unit'], unc_nom['unit'], source_map, role + '.uncertainty.unit')
-        _closed(uncertainty['canonical'], _RESULT_FIELDS['UncertaintyCanonical'], role + '.uncertainty.canonical')
-        for key, type_name in (('interval', 'IntervalRecord'), ('confidence_level', 'ConfidenceRecord'), ('count', 'CountRecord')):
-            record, selected_piece = (uncertainty[key], unc_nom[key])
-            if selected_piece is None:
-                if record is not None:
-                    _fail('saved_selection_mismatch', role + '.uncertainty.' + key)
-                continue
-            _closed(record, _RESULT_FIELDS[type_name], role + '.uncertainty.' + key)
-            if record['selection'] != selected_piece:
-                _fail('saved_selection_mismatch', role + '.uncertainty.' + key)
-            _saved_witness(record['witness'], selected_piece if key == 'confidence_level' else selected_piece['witness'], source_map, role + '.uncertainty.' + key)
-            if key == 'count' and record['reading'] is not None:
-                reading = record['reading']
-                _closed(reading, ('selector', 'raw_number', 'value', 'notation', 'relation', 'approximate', 'status', 'unavailable_reason'), role + '.uncertainty.count.reading')
-                raw = selected_piece['witness']['quote'][selected_piece['number_start']:selected_piece['number_end']]
-                if reading['raw_number'] != raw:
-                    _fail('saved_count_literal_mismatch', role)
-        expected_count = uncertainty['count']['reading']['value'] if uncertainty['count'] and uncertainty['count']['reading'] and (uncertainty['count']['reading']['status'] == 'exact') else None
-        if uncertainty['canonical']['count'] != expected_count:
-            _fail('saved_count_projection_mismatch', role)
-        if uncertainty['count'] and uncertainty['count']['reading']:
-            reading = uncertainty['count']['reading']
-            raw = reading['raw_number']
-            value = int(raw.replace('−', '-')) if re.fullmatch('[-−]?[0-9]+', raw) else _cardinal_count(raw)
-            if reading['status'] in ('exact', 'qualified', 'not_positive') and reading['value'] != value:
-                _fail('saved_count_literal_mismatch', role)
-        confidence = uncertainty['confidence_level']
-        if confidence and confidence['status'] == 'parsed':
-            raw = confidence['selection']['quote'].strip()
-            try:
-                value = _finite(Fraction(raw[:-1].strip().replace('−', '-')) / 100) if raw.endswith('%') else None
-            except ValueError:
-                value = None
-            if confidence['value'] != value or value is None or (not 0 < value < 1):
-                _fail('saved_confidence_literal_mismatch', role)
-        effective_unit = uncertainty['effective_unit']
-        expected_spread = _display(uncertainty['magnitude'], effective_unit)['value']
-        if uncertainty['canonical']['magnitude'] != expected_spread:
-            _fail('saved_uncertainty_projection_mismatch', role)
-        expected_interval = None
-        interval = uncertainty['interval']
-        if interval and interval['status'] == 'parsed':
-            selection = interval['selection']
-            quote = selection['witness']['quote']
-            raw_values = [quote[selection[side + '_start']:selection[side + '_end']] for side in ('lower', 'upper')]
-            if interval['raw_values'] != raw_values or interval['values'] != [float(raw.replace('−', '-')) for raw in raw_values]:
-                _fail('saved_interval_literal_mismatch', role)
-            if effective_unit and effective_unit['status'] == 'supported':
-                exact = [Fraction(v.replace('−', '-')) * _fraction(effective_unit['exact_scale']) for v in raw_values]
-                values = [_finite(v) for v in exact]
-                if all((v is not None for v in values)) and (not (values[0] == values[1] and exact[0] != exact[1])):
-                    expected_interval = values
-        if uncertainty['canonical']['interval'] != expected_interval or uncertainty['canonical']['confidence_level'] != (confidence['value'] if confidence else None):
-            _fail('saved_uncertainty_projection_mismatch', role)
-    relationships = extraction['relationships']
-    _closed(relationships, selected['relationships'], 'relationships')
-    conflict = _cross_control_alias_conflict(extraction['arms'])
-    for key, record in relationships.items():
-        if key.endswith('_target'):
-            _saved_meaning(record, selected['relationships'][key], source_map, 'condition', key)
-        elif key == 'intended_factor':
-            _saved_witness(record, selected['relationships'][key], source_map, key)
-        else:
-            _saved_interpretation(record, selected['relationships'][key], source_map, key, control_alias=key == 'control_reference_reuse' and conflict)
-    covariance = extraction['covariance']
-    if covariance is None:
-        if selected['covariance'] is not None:
-            _fail('saved_selection_mismatch', 'covariance')
-    else:
-        _closed(covariance, _RESULT_FIELDS['CovarianceExtraction'], 'covariance')
-        if covariance['selection'] != selected['covariance'] or covariance['source_ref'] != selected['covariance']['source_ref']:
-            _fail('saved_selection_mismatch', 'covariance')
-        if covariance['raw_text'] is not None:
-            actual_hash = _hash(covariance['raw_text'].encode())
-            source = source_map[covariance['source_ref'], 'original']
-            if actual_hash != covariance['byte_sha256'] or actual_hash != source['byte_sha256'] or covariance['artifact_ref'] != source['artifact_ref']:
-                _fail('saved_covariance_source_mismatch', 'covariance')
-            parser = _JSON(covariance['raw_text'])
-            try:
-                document = parser.load()
-                _source_model_shape(document)
-            except _CovarianceError as error:
-                expected = 'unassessed' if error.code == 'unsupported_covariance_representation' else 'invalid'
-                if covariance['source_validation'] != expected or covariance['calculation_covariance'] is not None:
-                    _fail('saved_covariance_invalid_state_mismatch', 'covariance')
-            else:
-                matrix = document['covariance']
-                expected_model = {key: document[key] for key in ('origin', 'variance_status', 'model_kind')}
-                if covariance['source_model'] != expected_model or len(covariance['variables']) != len(document['variables']):
-                    _fail('saved_covariance_model_mismatch', 'covariance')
-                tokens = [[parser.tokens['covariance', i, j] for j in range(len(matrix))] for i in range(len(matrix))]
-                if covariance['matrix_tokens'] != tokens:
-                    _fail('saved_covariance_lexeme_mismatch', 'covariance')
-                if covariance['exact_matrix'] != [[_rational(v) for v in row] for row in matrix]:
-                    _fail('saved_covariance_matrix_mismatch', 'covariance')
-                valid = all((matrix[i][j] == matrix[j][i] for i in range(len(matrix)) for j in range(len(matrix)))) and _psd(matrix)
-                if covariance['source_validation'] != ('valid' if valid else 'invalid'):
-                    _fail('saved_covariance_validation_mismatch', 'covariance')
-                for i, variable in enumerate(covariance['variables']):
-                    _closed(variable, _RESULT_FIELDS['CovarianceSourceVariable'], 'covariance.variables')
-                    for name in ('label', 'unit', 'description'):
-                        if variable[name] != document['variables'][i][name]:
-                            _fail('saved_covariance_variable_mismatch', 'covariance.variables')
-                        _saved_witness(variable[name + '_witness'], _json_witness(covariance['source_ref'], parser, ('variables', i, name)), source_map, 'covariance.variables')
-                _closed(covariance['bindings'], PRIMITIVE_ORDER, 'covariance.bindings')
-                for role, binding in covariance['bindings'].items():
-                    nomination = selected['covariance']['bindings'][role]
-                    _closed(binding, _RESULT_FIELDS['CovarianceBindingExtraction'], 'covariance.bindings.' + role)
-                    if binding['selection'] != nomination:
-                        _fail('saved_selection_mismatch', 'covariance.bindings.' + role)
-                    if nomination is None:
-                        if binding['state'] != 'unknown' or binding['resolved_owner_id'] is not None:
-                            _fail('saved_owner_binding_mismatch', 'covariance.bindings.' + role)
-                        continue
-                    index = nomination['variable_index']
-                    if index >= len(matrix) or binding['source_variable_index'] != index:
-                        _fail('saved_label_index_mismatch', 'covariance.bindings.' + role)
-                    _saved_witness(binding['label_witness'], nomination['label_witness'], source_map, role)
-                    _saved_witness(binding['owner_witness'], nomination['owner_witness'], source_map, role)
-                    _saved_interpretation(binding['correspondence'], nomination['correspondence'], source_map, role)
-                    if binding['label_witness']['canonical_locator'] is not None and binding['label_witness']['canonical_locator'] != covariance['variables'][index]['label_witness']['canonical_locator']:
-                        _fail('saved_label_token_mismatch', 'covariance.bindings.' + role)
-                    arm = extraction['arms'][role]
-                    physical = arm['meanings']['physical_observation'] if arm else None
-                    known = physical and physical['resolved_state'] == 'known' and (binding['label_witness']['canonical_locator'] is not None) and (binding['owner_witness']['canonical_locator'] is not None) and (binding['correspondence']['effective_value'] == 'same')
-                    state = 'known' if known else 'conflicting' if binding['correspondence']['effective_value'] == 'conflicting' else 'unknown'
-                    if (binding['state'], binding['resolved_owner_id']) != (state, physical['canonical_id'] if known else None):
-                        _fail('saved_owner_binding_mismatch', 'covariance.bindings.' + role)
-                indices = covariance['projection_indices']
-                if indices is not None:
-                    expected_indices = [covariance['bindings'][role]['source_variable_index'] for role in PRIMITIVE_ORDER]
-                    if indices != expected_indices or covariance['projected_exact_matrix'] != [[_rational(matrix[i][j]) for j in indices] for i in indices]:
-                        _fail('saved_covariance_projection_mismatch', 'covariance')
-                finite_covariance = covariance['calculation_covariance']
-                if finite_covariance is not None:
-                    if indices is None or covariance['projection_state'] != 'available':
-                        _fail('saved_covariance_projection_mismatch', 'covariance')
-                    expected_covariance = {'primitive_order': list(PRIMITIVE_ORDER), 'physical_observation_ids': [covariance['bindings'][role]['resolved_owner_id'] for role in PRIMITIVE_ORDER], 'units': [covariance['variables'][i]['native_registry_unit'] for i in indices], 'matrix': [[_finite(matrix[i][j]) for j in indices] for i in indices]}
-                    if finite_covariance != expected_covariance:
-                        _fail('saved_covariance_finite_projection_mismatch', 'covariance')
-    for key, record in extraction['requested_model'].items():
-        _saved_interpretation(record, selected[key], source_map, key)
-    effective = _effective_model(extraction['requested_model'], covariance, extraction['arms'])
-    if extraction['effective_model'] != effective:
-        _fail('saved_effective_model_mismatch', 'effective_model')
-    parsed = _calculation_inputs(extraction['arms'], relationships, covariance, effective)
-    if extraction['calculation_inputs'] != parsed:
-        _fail('saved_calculation_projection_mismatch', 'calculation_inputs')
-    validate_controlled_response_inputs(parsed)
-    json.dumps(extraction, allow_nan=False)
-    return deepcopy(extraction)
-
-def validate_controlled_response_extraction(arguments, extraction):
-    selected = validate_controlled_response_selection(arguments)
-    return validate_controlled_response_saved_science(selected, extraction, measurement_checks=None)
-__all__ = ['VERSION', 'SELECTION_VERSION', 'COVARIANCE_VERSION', 'controlled_response_arguments_schema', 'validate_controlled_response_selection', 'read_controlled_response_inputs', 'validate_controlled_response_extraction']
+__all__ = ['COVARIANCE_VERSION']
 
 class _StageValue(dict):
 
@@ -1372,28 +953,21 @@ class SourceContext(_Context):
 
     def __init__(self, arguments, callback):
         self.arguments = deepcopy(arguments)
-        self._profile = {SELECTION_VERSION: 'v1', 'controlled_response_source_selection_v2': 'v2', 'controlled_response_source_selection_v3': 'v3'}.get(arguments['version'])
-        if self._profile is None:
+        if arguments['version'] != 'controlled_response_source_selection_v3':
             _fail('controlled_selection_schema_invalid', 'arguments')
         self.closed = False
         self._endpoints = {}
         self.visual = None
-        if self.profile == 'v3':
-            _initialize_v3_registries(self)
+        _initialize_v3_registries(self)
         try:
             super().__init__(self.arguments, callback)
             _authenticate_request(self, self.arguments, 'arguments')
             self.relationships = _relationships(self, self.arguments['relationships'])
-            if self.profile == 'v3':
-                self._v3_relationships = _frozen_json(self.relationships)
-                self.cache = MappingProxyType({key: value if isinstance(value, _Unavailable) else MappingProxyType(value) for key, value in self.cache.items()})
+            self._v3_relationships = _frozen_json(self.relationships)
+            self.cache = MappingProxyType({key: value if isinstance(value, _Unavailable) else MappingProxyType(value) for key, value in self.cache.items()})
         except BaseException:
             self.close()
             raise
-
-    @property
-    def profile(self):
-        return self._profile
 
     def read_source(self, source_ref, representation):
         self._active()
@@ -1401,15 +975,14 @@ class SourceContext(_Context):
         return dict(value)
 
     def source(self, reference, representation):
-        value = super().source(reference, representation)
-        return dict(value) if self.profile == 'v3' else value
+        return dict(super().source(reference, representation))
 
     def _active(self):
         if self.closed:
             _fail('source_context_closed', 'context')
-        if hasattr(self, '_original_v3_request') and (self._profile != 'v3' or _frozen_json(self.arguments) != self._original_v3_request):
+        if _frozen_json(self.arguments) != self._original_v3_request:
             _fail('source_context_nomination_mismatch', 'arguments')
-        if hasattr(self, '_v3_relationships') and _frozen_json(self.relationships) != self._v3_relationships:
+        if _frozen_json(self.relationships) != self._v3_relationships:
             _fail('source_context_science_mismatch', 'relationships')
 
     def close(self):
@@ -1435,12 +1008,9 @@ class SourceContext(_Context):
             self.unavailable_errors.clear()
         self._endpoints.clear()
         for name in ('_stage_records', '_document_records', '_covariance_facts'):
-            value = getattr(self, name, None)
-            if value is not None:
-                value.clear()
+            getattr(self, name).clear()
         for name in ('_reading_registry', '_scope_registry'):
-            if hasattr(self, name):
-                setattr(self, name, MappingProxyType({}))
+            setattr(self, name, MappingProxyType({}))
         self.closed = True
 
     def __enter__(self):
@@ -1461,39 +1031,20 @@ def _authenticate_request(context, value, field):
             _authenticate_request(context, item, f'{field}[{i}]')
 
 def open_controlled_response_sources(arguments, *, read_source):
-    if isinstance(arguments, dict) and arguments.get('version') == 'controlled_response_source_selection_v3':
-        from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_v3_inputs import validate_controlled_response_v3_selection
-        selected = validate_controlled_response_v3_selection(arguments)
-    elif isinstance(arguments, dict) and arguments.get('version') == 'controlled_response_source_selection_v2':
-        from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_v2_inputs import validate_controlled_response_v2_selection
-        selected = validate_controlled_response_v2_selection(arguments)
-    else:
-        selected = validate_controlled_response_selection(arguments)
-    return SourceContext(selected, read_source)
+    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_v3_inputs import validate_controlled_response_v3_selection
+    return SourceContext(validate_controlled_response_v3_selection(arguments), read_source)
 
 def _owned(context, value, field):
     context._active()
     if not isinstance(value, _StageValue) or value._context is not context:
         _fail('source_stage_context_mismatch', field)
 
-def _selected_arm_field(context, selected):
-    context._active()
-    for role, nominated in context.arguments['arms'].items():
-        if nominated is not None and nominated is selected:
-            return 'arms.' + role
-    for role, nominated in context.arguments['arms'].items():
-        if nominated is not None and nominated == selected:
-            return 'arms.' + role
-    _fail('unselected_arm_science', 'selected_arm')
-
-def read_controlled_response_arm_science(context, selected_arm, *, reading_selector=None):
+def read_controlled_response_arm_science(context, selected_arm, *, reading_selector):
     field = _reading_field(context, selected_arm, reading_selector)
     meanings = {name: _meaning(context, selected_arm[name], name, field + '.' + name) for name in _MEANINGS}
     science = _StageValue(context, {'selection': selected_arm, 'context': {name: context.witness(w, field + '.context.' + name) for name, w in selected_arm['context'].items()}, 'protein_arrangement': _interpretation(context, selected_arm['protein_arrangement'], field + '.protein_arrangement'), 'meanings': meanings, 'intended_factor_level': context.witness(selected_arm['intended_factor_level'], field + '.intended_factor_level')})
-    context._endpoints[id(science['meanings']['endpoint'])] = (science['meanings']['endpoint'], field)
-    if context.profile == 'v3':
-        _mark_reading_stage(context, science, reading_selector, kind='science')
-        context._endpoints[id(science['meanings']['endpoint'])] = (science['meanings']['endpoint'], field, _selector_key(reading_selector), science)
+    _mark_reading_stage(context, science, reading_selector, kind='science')
+    context._endpoints[id(science['meanings']['endpoint'])] = (science['meanings']['endpoint'], field, _selector_key(reading_selector), science)
     return science
 
 def _exact_response(measurement, *, graph=False):
@@ -1522,75 +1073,48 @@ def _reading_from_text(context, selected, extraction):
         operand = {'value': None, 'threshold': None, 'relation': 'none', 'approximate': False, 'unit': extraction['unit']['native_registry_unit'] if extraction['unit'] else None, 'status': 'missing', 'origin': 'reported', 'digitization_interval': None}
     return _StageValue(context, {'selection': selected, 'extraction': extraction, 'operand_projection': {k: operand[k] for k in ('value', 'threshold', 'relation', 'approximate', 'unit', 'status', 'origin', 'digitization_interval')}, 'unit_semantics': {'kind': 'text', 'record': extraction['unit']} if extraction['unit'] is not None else None, 'exact_response': _exact_response(extraction), 'source_observation_id': extraction['source_observation_id'], 'graph_details': None})
 
-def read_controlled_response_text_measurement(context, selected, *, endpoint, reading_selector=None):
+def read_controlled_response_text_measurement(context, selected, *, endpoint, reading_selector):
     context._active()
-    if context.profile == 'v3':
-        entry, field = _measurement_entry(context, reading_selector, selected, endpoint)
-        if selected is not None and selected.get('kind') != 'source_literal':
-            _fail('source_text_measurement_required', 'selected')
-        reading = _reading_from_text(context, selected, _measurement(context, selected, endpoint, field + '.measurement'))
-        return _mark_reading_stage(context, reading, reading_selector, kind='measurement', endpoint_science=context._endpoints[id(endpoint)][3])
-    if reading_selector is not None:
-        _fail('unsupported_stage_selector', 'reading_selector')
+    entry, field = _measurement_entry(context, reading_selector, selected, endpoint)
     if selected is not None and selected.get('kind') != 'source_literal':
         _fail('source_text_measurement_required', 'selected')
-    matching = [(role, arm) for role, arm in context.arguments['arms'].items() if arm is not None and arm['measurement'] == selected]
-    if not matching:
-        _fail('unselected_measurement', 'selected')
-    endpoint_binding = context._endpoints.get(id(endpoint))
-    if endpoint_binding is None or endpoint_binding[0] is not endpoint:
-        _fail('source_stage_context_mismatch', 'endpoint')
-    field = endpoint_binding[1]
-    role = field.split('.', 1)[1]
-    arm = context.arguments['arms'][role]
-    if arm['measurement'] != selected or endpoint['selection'] != arm['endpoint']:
-        _fail('source_stage_endpoint_mismatch', 'endpoint')
-    extraction = _measurement(context, selected, endpoint, 'arms.' + role + '.measurement')
-    return _reading_from_text(context, selected, extraction)
+    reading = _reading_from_text(context, selected, _measurement(context, selected, endpoint, field + '.measurement'))
+    return _mark_reading_stage(context, reading, reading_selector, kind='measurement', endpoint_science=context._endpoints[id(endpoint)][3])
 
-def finish_controlled_response_arm(context, arm_science, *, measurement, reading_selector=None):
+def finish_controlled_response_arm(context, arm_science, *, measurement, reading_selector):
     _owned(context, arm_science, 'arm_science')
     _owned(context, measurement, 'measurement')
     selected = arm_science['selection']
     field = _reading_field(context, selected, reading_selector)
-    if context.profile == 'v3':
-        _owned_reading(context, arm_science, reading_selector, 'arm_science', kind='science')
-        _owned_reading(context, measurement, reading_selector, 'measurement', kind='measurement')
-        if context._stage_records[id(measurement)][4] is not arm_science:
-            _fail('source_stage_endpoint_mismatch', 'measurement')
+    _owned_reading(context, arm_science, reading_selector, 'arm_science', kind='science')
+    _owned_reading(context, measurement, reading_selector, 'measurement', kind='measurement')
+    if context._stage_records[id(measurement)][4] is not arm_science:
+        _fail('source_stage_endpoint_mismatch', 'measurement')
     if selected['measurement'] != measurement['selection']:
         _fail('source_stage_measurement_mismatch', field)
     result = deepcopy(dict(arm_science))
     result['measurement'] = deepcopy(measurement['extraction'])
-    carrier = measurement['unit_semantics']
-    response_unit = carrier if context.profile in ('v2', 'v3') else carrier['record'] if carrier else None
-    result['reported_uncertainty'] = _uncertainty(context, selected['reported_uncertainty'], response_unit, result['meanings']['endpoint'], field + '.reported_uncertainty')
-    if context.profile == 'v1':
-        result['calculation_operand'] = _operand_from_arm(result)
-    else:
-        operand = deepcopy(measurement['operand_projection'])
-        operand.update({name + '_id': result['meanings'][name]['canonical_id'] for name in _MEANINGS})
-        operand.update(source_observation_id=measurement['source_observation_id'], protein_arrangement=result['protein_arrangement']['effective_value'], meaning_statuses={name: result['meanings'][name]['resolved_state'] for name in _MEANINGS})
-        if selected['source_kind'] == 'synthetic_fixture':
-            operand['origin'] = 'synthetic'
-        if operand['status'] != 'missing' and operand['source_observation_id'] is None:
-            candidates = [w['canonical_locator'] for w in result['measurement']['graph_witnesses'] if w['canonical_locator']]
-            image = next((i for i in context.images if selected['measurement'] and i['image_id'] == selected['measurement'].get('image_id')), None)
-            if image and image['artifact_ref'] and candidates:
-                operand['source_observation_id'] = identity('controlled_graph_nomination', {'artifact_ref': image['artifact_ref'], 'byte_sha256': image['byte_sha256'], 'nomination': selected['measurement']})
-            else:
-                operand.update(status='missing', value=None, threshold=None, relation='none', digitization_interval=None)
-        result['calculation_operand'] = operand
-        result['graph_details'] = deepcopy(measurement['graph_details'])
-    result['diagnostics'] = _unique_diagnostics([result['context'], result['meanings'], result['protein_arrangement'], result['measurement'], result['reported_uncertainty']], stable=context.profile in ('v2', 'v3'))
-    stage = _StageValue(context, result)
-    return _mark_reading_stage(context, stage, reading_selector, kind='arm') if context.profile == 'v3' else stage
+    result['reported_uncertainty'] = _uncertainty(context, selected['reported_uncertainty'], measurement['unit_semantics'], result['meanings']['endpoint'], field + '.reported_uncertainty')
+    operand = deepcopy(measurement['operand_projection'])
+    operand.update({name + '_id': result['meanings'][name]['canonical_id'] for name in _MEANINGS})
+    operand.update(source_observation_id=measurement['source_observation_id'], protein_arrangement=result['protein_arrangement']['effective_value'], meaning_statuses={name: result['meanings'][name]['resolved_state'] for name in _MEANINGS})
+    if selected['source_kind'] == 'synthetic_fixture':
+        operand['origin'] = 'synthetic'
+    if operand['status'] != 'missing' and operand['source_observation_id'] is None:
+        candidates = [w['canonical_locator'] for w in result['measurement']['graph_witnesses'] if w['canonical_locator']]
+        image = next((i for i in context.images if selected['measurement'] and i['image_id'] == selected['measurement'].get('image_id')), None)
+        if image and image['artifact_ref'] and candidates:
+            operand['source_observation_id'] = identity('controlled_graph_nomination', {'artifact_ref': image['artifact_ref'], 'byte_sha256': image['byte_sha256'], 'nomination': selected['measurement']})
+        else:
+            operand.update(status='missing', value=None, threshold=None, relation='none', digitization_interval=None)
+    result['calculation_operand'] = operand
+    result['graph_details'] = deepcopy(measurement['graph_details'])
+    result['diagnostics'] = _unique_diagnostics([result['context'], result['meanings'], result['protein_arrangement'], result['measurement'], result['reported_uncertainty']], stable=True)
+    return _mark_reading_stage(context, _StageValue(context, result), reading_selector, kind='arm')
 
 def _project_owner_covariance(result, matrix, arms, relationships):
     """Validate all supplied owners/full rows before taking any marginal."""
     from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_owner_calculations import validate_controlled_response_owner_inputs
-    result.pop('projection_indices')
-    result['provided_owner_projection'] = []
     if result['source_validation'] != 'valid':
         return result
     reference = result['source_ref']
@@ -1655,7 +1179,7 @@ def _representations(arms):
     result = []
     for group in groups:
         roles = group['roles']
-        domains = [_exact_response(arms[r]['measurement'], graph=bool(arms[r].get('graph_details'))) if arms[r] else None for r in roles]
+        domains = [_exact_response(arms[r]['measurement'], graph=bool(arms[r]['graph_details'])) if arms[r] else None for r in roles]
         readings = [{'role': r, 'source_reading_id': arms[r]['calculation_operand']['source_observation_id'] if arms[r] else None, 'exact_domain': d} for r, d in zip(roles, domains)]
         canceled = group['known_owner'] and group['coefficient'] == 0
         science = all((arms[r] and all((v['resolved_state'] == 'known' for v in arms[r]['meanings'].values())) for r in roles))
@@ -1672,7 +1196,7 @@ def _representations(arms):
         else:
             method, state = ('unresolved', 'conflicting_active_domains' if disjoint else 'unresolved_active_model')
         qualifications = []
-        if any((arms[r] and arms[r].get('graph_details') for r in roles)):
+        if any((arms[r] and arms[r]['graph_details'] for r in roles)):
             qualifications.append('conditional_digitization_not_sampling')
         if canceled:
             if any((d is None for d in domains)):
@@ -1686,115 +1210,16 @@ def _representations(arms):
         result.append({'physical_observation_id': group['physical_observation_id'], 'roles': roles, 'readings': readings, 'net_coefficient': group['coefficient'], 'method': method, 'state': state, 'canonical_source_reading_id': readings[0]['source_reading_id'] if method in ('single_reading', 'exact_equivalence') else None, 'qualifications': qualifications, 'diagnostics': []})
     return result
 
-def finish_controlled_response_inputs(context, *, arms, companion_arms=None, covariance_scopes=None):
+def finish_controlled_response_inputs(context, *, arms, companion_arms, covariance_scopes):
     context._active()
-    if context.profile == 'v3':
-        _validate_v3_finish_stages(context, arms, companion_arms, covariance_scopes)
-        from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_v3_inputs import _finish_v3
-        return _finish_v3(context, arms=arms, companion_arms=companion_arms, covariance_scopes=covariance_scopes)
-    if companion_arms is not None or covariance_scopes is not None:
-        _fail('unsupported_stage_selector', 'finish')
-    _closed(arms, PRIMITIVE_ORDER, 'arms')
-    relationships = deepcopy(context.relationships)
-    for role, arm in arms.items():
-        if (arm is None) != (context.arguments['arms'][role] is None) or (arm is not None and arm['selection'] != context.arguments['arms'][role]):
-            _fail('source_stage_arm_mismatch', 'arms.' + role)
-        if context.profile == 'v2' and arm is not None:
-            _owned(context, arm, 'arms.' + role)
-    if context.profile == 'v1':
-        _resolve_control_alias(arms, relationships)
-    requested = {name: _interpretation(context, context.arguments[name], name) for name in ('variance_status', 'model_kind')}
-    covariance = _covariance(context, context.arguments['covariance'], arms, relationships, owner_profile=context.profile == 'v2')
-    if context.profile == 'v2' and covariance is not None and ('projection_indices' in covariance):
-        covariance.pop('projection_indices')
-        covariance['provided_owner_projection'] = []
-    effective = _effective_model(requested, covariance, arms)
-    parsed = _calculation_inputs(arms, relationships, covariance, effective)
-    version, input_version = (VERSION, INPUT_VERSION)
-    if context.profile == 'v2':
-        from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_owner_calculations import validate_controlled_response_owner_inputs
-        version, input_version = ('controlled_response_source_extraction_v2', 'controlled_response_owner_inputs_v2')
-        parsed['version'] = input_version
-        validate_controlled_response_owner_inputs(parsed)
-    else:
-        validate_controlled_response_inputs(parsed)
-    result = {'version': version, 'selection': deepcopy(context.arguments), 'sources': deepcopy(context.roster), 'images': deepcopy(context.images), 'arms': {r: deepcopy(dict(a)) if a is not None else None for r, a in arms.items()}, 'relationships': relationships, 'covariance': covariance, 'requested_model': requested, 'effective_model': effective, 'calculation_inputs': parsed, 'diagnostics': [], 'implementation_dependencies': {'reader_contract_version': version, 'calculator_contract_version': input_version}}
-    if context.profile == 'v2':
-        result['representation_reconciliations'] = _representations(arms)
-    result['diagnostics'] = _unique_diagnostics(result, stable=context.profile == 'v2')
-    json.dumps(result, allow_nan=False)
-    return deepcopy(result)
-
-def validate_controlled_response_saved_science(arguments, extraction, *, measurement_checks):
-    """Single detached-science entrance; profiles retain their original contracts."""
-    if isinstance(arguments, dict) and arguments.get('version') == 'controlled_response_source_selection_v3':
-        return _validate_v3_saved_science(arguments, extraction, measurement_checks=measurement_checks)
-    if isinstance(arguments, dict) and arguments.get('version') == SELECTION_VERSION:
-        return _validate_v1_saved_science(arguments, extraction)
-    return _validate_v2_saved_science(arguments, extraction, measurement_checks=measurement_checks)
-
-class _SavedSourceContext:
-    """Retained witness algebra only. Never holds a provider or decoded frame."""
-    profile = 'v2'
-
-    def __init__(self, arguments, extraction):
-        self.arguments = arguments
-        self.images = extraction['images']
-        self.roster = extraction['sources']
-        self.sources = {(s['source_ref'], s['representation']): s for s in self.roster}
-        self.witnesses = {}
-        self.closed = False
-        self._endpoints = {}
-
-        def walk(value):
-            if isinstance(value, dict):
-                if set(value) == set(_RESULT_FIELDS['WitnessRecord']):
-                    self.witnesses.setdefault(json.dumps(value['selection'], sort_keys=True), value)
-                else:
-                    for key, item in value.items():
-                        if key != 'selection':
-                            walk(item)
-            elif isinstance(value, list):
-                for item in value:
-                    walk(item)
-        walk(extraction)
-        self.covariance = extraction['covariance']
-
-    def _active(self):
-        if self.closed:
-            _fail('source_context_closed', 'context')
-
-    def witness(self, selected, field):
-        if selected is None:
-            return None
-        nomination = selected if 'kind' in selected else {'kind': 'text', **selected}
-        key = json.dumps(nomination, sort_keys=True)
-        record = self.witnesses.get(key)
-        if record is None:
-            _fail('saved_witness_missing', field)
-        _saved_witness(record, selected, self.sources, field)
-        result = deepcopy(record)
-        for diagnostic in result['diagnostics']:
-            diagnostic['field'] = field
-        return result
-
-    def source(self, reference, representation):
-        if self.covariance is None or (reference, representation) != (self.covariance['source_ref'], 'original'):
-            _fail('unselected_source_read', 'source_ref')
-        source = self.sources[reference, representation]
-        if source['state'] == 'unavailable':
-            raise _Unavailable()
-        if self.covariance['raw_text'] is None:
-            raise _SavedUnsupportedCovariance()
-        raw = self.covariance['raw_text'].encode()
-        if _hash(raw) != source['byte_sha256'] or self.covariance['byte_sha256'] != source['byte_sha256'] or self.covariance['artifact_ref'] != source['artifact_ref']:
-            _fail('saved_covariance_source_mismatch', 'covariance')
-        return {'artifact_ref': source['artifact_ref'], 'content': raw}
+    _validate_v3_finish_stages(context, arms, companion_arms, covariance_scopes)
+    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_v3_inputs import _finish_v3
+    return _finish_v3(context, arms=arms, companion_arms=companion_arms, covariance_scopes=covariance_scopes)
 
 class _SavedUnsupportedCovariance(Exception):
     pass
 
-def _saved_uncertainty_v2(selected, record, measurement_reading, sources, field):
+def _saved_uncertainty(selected, record, measurement_reading, sources, field):
     """Validate original spread facts, then use the same arithmetic assembly."""
     if record['selection'] != selected:
         _fail('saved_selection_mismatch', field)
@@ -1874,113 +1299,12 @@ def _saved_uncertainty_v2(selected, record, measurement_reading, sources, field)
             effective = None
             if not diagnostics:
                 diagnostics.append(_diag('source_uncertainty_unit_conflicting', field, 'source_interpretation'))
-    expected = _assemble_uncertainty(selected, meanings=meanings, magnitude=magnitude, interval=record['interval'], confidence=record['confidence_level'], count=record['count'], unit=unit, effective_unit=effective, diagnostics=diagnostics, field=field, stable=True)
+    expected = _assemble_uncertainty(selected, meanings=meanings, magnitude=magnitude, interval=record['interval'], confidence=record['confidence_level'], count=record['count'], unit=unit, effective_unit=effective, diagnostics=diagnostics, field=field)
     if expected['effective_unit'] is not None:
         expected['effective_unit'] = deepcopy(carrier) if relationship == 'same_as_response' else {'kind': 'text', 'record': expected['effective_unit']}
     if record != expected:
         _fail('saved_uncertainty_projection_mismatch', field)
     return deepcopy(record)
-
-def _validate_v2_saved_science(arguments, extraction, *, measurement_checks):
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_v2_inputs as facade
-    selected = facade.validate_controlled_response_v2_selection(arguments)
-    try:
-        Draft202012Validator(facade._extraction_schema()).validate(extraction)
-        json.dumps(extraction, allow_nan=False)
-    except (ValueError, TypeError) as error:
-        raise ExperimentalContractError('saved_extraction_schema_invalid', 'extraction') from error
-    except Exception as error:
-        if error.__class__.__module__.split('.')[0] != 'jsonschema':
-            raise
-        raise ExperimentalContractError('saved_extraction_schema_invalid', 'extraction') from error
-    if extraction['selection'] != selected:
-        _fail('saved_selection_mismatch', 'extraction')
-    dependencies = {'reader_contract_version': 'controlled_response_source_extraction_v2', 'calculator_contract_version': 'controlled_response_owner_inputs_v2'}
-    if extraction['implementation_dependencies'] != dependencies:
-        _fail('saved_dependency_contract_mismatch', 'implementation_dependencies')
-    sources = facade._saved_roster(selected, extraction)
-
-    def retained_witnesses(value):
-        if isinstance(value, dict):
-            if set(value) == set(_RESULT_FIELDS['WitnessRecord']):
-                facade._check_witness(value, value['selection'], sources, extraction['images'], 'saved_witness')
-            else:
-                for key, item in value.items():
-                    if key != 'selection':
-                        retained_witnesses(item)
-        elif isinstance(value, list):
-            for item in value:
-                retained_witnesses(item)
-    retained_witnesses(extraction)
-    context = _SavedSourceContext(selected, extraction)
-    arms = {}
-    for role, arm in extraction['arms'].items():
-        nomination = selected['arms'][role]
-        if nomination is None:
-            if arm is not None:
-                _fail('saved_selection_mismatch', role)
-            arms[role] = None
-            continue
-        if arm is None or arm['selection'] != nomination:
-            _fail('saved_selection_mismatch', role)
-        for name in _MEANINGS:
-            _saved_meaning(arm['meanings'][name], nomination[name], sources, name, 'arms.' + role + '.' + name)
-        _saved_interpretation(arm['protein_arrangement'], nomination['protein_arrangement'], sources, 'arms.' + role)
-        for key, record in arm['context'].items():
-            facade._check_witness(record, nomination['context'][key], sources, extraction['images'], 'arms.' + role + '.context.' + key)
-        facade._check_witness(arm['intended_factor_level'], nomination['intended_factor_level'], sources, extraction['images'], 'arms.' + role)
-        measurement = nomination['measurement']
-        if not callable(measurement_checks):
-            _fail('saved_measurement_checks_required', 'measurement_checks')
-        reading = measurement_checks(measurement, arm['measurement'], source_records=extraction['sources'], image_records=extraction['images'])
-        if reading['graph_details'] != arm['graph_details']:
-            _fail('saved_graph_measurement_mismatch', role)
-        reading = _StageValue(context, dict(reading))
-        context.saved_uncertainty = {'selection': nomination['reported_uncertainty'], 'value': _saved_uncertainty_v2(nomination['reported_uncertainty'], arm['reported_uncertainty'], reading, sources, 'arms.' + role + '.reported_uncertainty')}
-        science = read_controlled_response_arm_science(context, nomination)
-        expected = finish_controlled_response_arm(context, science, measurement=reading)
-        if dict(expected) != arm:
-            _fail('saved_operand_projection_mismatch', role)
-        arms[role] = expected
-    relationships = _relationships(context, selected['relationships'])
-    if relationships != extraction['relationships']:
-        _fail('saved_relationships_mismatch', 'relationships')
-    requested = {name: _interpretation(context, selected[name], name) for name in ('variance_status', 'model_kind')}
-    if requested != extraction['requested_model']:
-        _fail('saved_requested_model_mismatch', 'requested_model')
-    try:
-        covariance = _covariance(context, selected['covariance'], arms, relationships, owner_profile=True)
-    except _SavedUnsupportedCovariance:
-        covariance = deepcopy(extraction['covariance'])
-        empty = _empty_covariance(selected['covariance'])
-        empty.pop('projection_indices')
-        empty['provided_owner_projection'] = []
-        for key in ('variables', 'matrix_tokens', 'exact_matrix', 'bindings', 'projected_exact_matrix', 'calculation_covariance', 'source_model', 'source_validation'):
-            if covariance[key] != empty[key]:
-                _fail('saved_covariance_invalid_state_mismatch', 'covariance')
-        if covariance['projection_state'] != 'unsupported_format':
-            _fail('saved_covariance_invalid_state_mismatch', 'covariance')
-    if covariance is not None and 'projection_indices' in covariance:
-        covariance.pop('projection_indices')
-        covariance['provided_owner_projection'] = []
-    if covariance != extraction['covariance']:
-        _fail('saved_covariance_projection_mismatch', 'covariance')
-    effective = _effective_model(requested, covariance, arms)
-    if effective != extraction['effective_model']:
-        _fail('saved_effective_model_mismatch', 'effective_model')
-    parsed = _calculation_inputs(arms, relationships, covariance, effective)
-    parsed['version'] = 'controlled_response_owner_inputs_v2'
-    if parsed != extraction['calculation_inputs']:
-        _fail('saved_calculation_projection_mismatch', 'calculation_inputs')
-    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_owner_calculations import validate_controlled_response_owner_inputs
-    validate_controlled_response_owner_inputs(parsed)
-    if _representations(arms) != extraction['representation_reconciliations']:
-        _fail('saved_representation_projection_mismatch', 'representation_reconciliations')
-    expected = deepcopy(extraction)
-    expected['diagnostics'] = []
-    if _unique_diagnostics(expected, stable=True) != extraction['diagnostics']:
-        _fail('saved_diagnostics_mismatch', 'diagnostics')
-    return deepcopy(extraction)
 
 def _response_domains_disjoint(a, b):
     for left, right in ((a, b), (b, a)):
@@ -2076,8 +1400,6 @@ def _initialize_v3_registries(context):
 
 def _reading_entry(context, selector):
     context._active()
-    if context.profile != 'v3':
-        _fail('unsupported_stage_selector', 'reading_selector')
     key = _selector_key(selector)
     entry = context._reading_registry.get(key)
     if entry is None:
@@ -2085,10 +1407,6 @@ def _reading_entry(context, selector):
     return entry
 
 def _reading_field(context, selected, selector):
-    if context.profile != 'v3':
-        if selector is not None:
-            _fail('unsupported_stage_selector', 'reading_selector')
-        return _selected_arm_field(context, selected)
     entry = _reading_entry(context, selector)
     if selected is None or _frozen_json(selected) != entry[0]:
         _fail('source_stage_arm_mismatch', 'selected_arm')
@@ -2114,7 +1432,7 @@ def _measurement_entry(context, selector, selected, endpoint):
     binding = context._endpoints.get(id(endpoint))
     if binding is None or binding[0] is not endpoint:
         _fail('source_stage_context_mismatch', 'endpoint')
-    if len(binding) != 4 or binding[2] != _selector_key(selector):
+    if binding[2] != _selector_key(selector):
         _fail('source_stage_endpoint_mismatch', 'endpoint')
     _owned_reading(context, binding[3], selector, 'endpoint', kind='science')
     return (arm, entry[1])
@@ -2127,13 +1445,11 @@ def read_controlled_response_graph_measurement(context, reading_selector, *, end
     _measurement_entry(context, reading_selector, selected, endpoint)
     if selected is None or selected['kind'] != 'linear_bar':
         _fail('source_graph_measurement_required', 'selected')
-    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_v2_inputs import _read_graph
+    from gene_annotation_episode.episodic_workflow.root.a105.library.literature_controlled_response_v3_inputs import _read_graph
     return _mark_reading_stage(context, _read_graph(context, selected), reading_selector, kind='measurement', endpoint_science=context._endpoints[id(endpoint)][3])
 
 def _scope_entry(context, scope):
     context._active()
-    if context.profile != 'v3':
-        _fail('unsupported_stage_selector', 'scope_key')
     key = _scope_key(scope)
     entry = context._scope_registry.get(key)
     if entry is None:
@@ -2270,9 +1586,6 @@ def bind_controlled_response_covariance_scope(context, scope_key, document, *, r
         if document['exact_matrix'] is not None:
             matrix = [[_fraction(v) for v in row] for row in document['exact_matrix']]
             whole = _project_owner_covariance(whole, matrix, {s['role']: a for s, a in readings}, context.relationships)
-        else:
-            whole.pop('projection_indices')
-            whole['provided_owner_projection'] = []
     result = _StageValue(context, {'scope': deepcopy(scope_key), 'document': deepcopy(dict(document)) if document is not None else None, 'bindings': bindings, 'whole_projection': whole})
     context._document_records[id(result)] = (result, _scope_key(scope_key), _frozen_json(dict(result)))
     return result
@@ -2302,11 +1615,30 @@ def _validate_v3_finish_stages(context, arms, companions, scopes):
         if record is None or record[0] is not scope or record[1] != key or (record[2] != _frozen_json(dict(scope))):
             _fail('source_covariance_scope_roster_mismatch', 'covariance_scopes')
 
-class _SavedV3SourceContext(_SavedSourceContext):
-    profile = 'v3'
+class _SavedV3SourceContext:
+    """Retained witness algebra only. Never holds a provider or decoded frame."""
 
     def __init__(self, arguments, extraction):
-        super().__init__(arguments, extraction)
+        self.arguments = arguments
+        self.images = extraction['images']
+        self.roster = extraction['sources']
+        self.sources = {(s['source_ref'], s['representation']): s for s in self.roster}
+        self.witnesses = {}
+        self.closed = False
+        self._endpoints = {}
+
+        def walk(value):
+            if isinstance(value, dict):
+                if set(value) == set(_RESULT_FIELDS['WitnessRecord']):
+                    self.witnesses.setdefault(json.dumps(value['selection'], sort_keys=True), value)
+                else:
+                    for key, item in value.items():
+                        if key != 'selection':
+                            walk(item)
+            elif isinstance(value, list):
+                for item in value:
+                    walk(item)
+        walk(extraction)
         _initialize_v3_registries(self)
         self.documents = {}
         rows = extraction['covariance_document_scopes']
@@ -2327,9 +1659,24 @@ class _SavedV3SourceContext(_SavedSourceContext):
                 self.documents[key] = document
 
     def _active(self):
-        super()._active()
-        if self.profile != 'v3' or _frozen_json(self.arguments) != self._original_v3_request:
+        if self.closed:
+            _fail('source_context_closed', 'context')
+        if _frozen_json(self.arguments) != self._original_v3_request:
             _fail('source_context_nomination_mismatch', 'arguments')
+
+    def witness(self, selected, field):
+        if selected is None:
+            return None
+        nomination = selected if 'kind' in selected else {'kind': 'text', **selected}
+        key = json.dumps(nomination, sort_keys=True)
+        record = self.witnesses.get(key)
+        if record is None:
+            _fail('saved_witness_missing', field)
+        _saved_witness(record, selected, self.sources, field)
+        result = deepcopy(record)
+        for diagnostic in result['diagnostics']:
+            diagnostic['field'] = field
+        return result
 
     def close(self):
         if self.closed:
@@ -2355,10 +1702,9 @@ class _SavedV3SourceContext(_SavedSourceContext):
             _fail('saved_covariance_source_mismatch', 'covariance')
         return {'artifact_ref': source['artifact_ref'], 'content': raw}
 
-def _validate_v3_saved_science(arguments, extraction, *, measurement_checks):
+def validate_controlled_response_saved_science(arguments, extraction, *, measurement_checks):
     """Rebuild all source science from retained facts, with no native readers."""
     from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_v3_inputs as facade
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_v2_inputs as old_facade
     selected = facade.validate_controlled_response_v3_selection(arguments)
     try:
         Draft202012Validator(facade._extraction_schema()).validate(extraction)
@@ -2372,12 +1718,12 @@ def _validate_v3_saved_science(arguments, extraction, *, measurement_checks):
     expected_dependencies = {'reader_contract_version': 'controlled_response_source_extraction_v3', 'calculator_contract_version': 'controlled_response_owner_inputs_v2'}
     if extraction['implementation_dependencies'] != expected_dependencies:
         _fail('saved_dependency_contract_mismatch', 'implementation_dependencies')
-    sources = old_facade._saved_roster(selected, extraction)
+    sources = facade._saved_roster(selected, extraction)
 
     def check_witnesses(value):
         if isinstance(value, dict):
             if set(value) == set(_RESULT_FIELDS['WitnessRecord']):
-                old_facade._check_witness(value, value['selection'], sources, extraction['images'], 'saved_witness')
+                facade._check_witness(value, value['selection'], sources, extraction['images'], 'saved_witness')
             else:
                 for key, item in value.items():
                     if key != 'selection':
@@ -2418,7 +1764,7 @@ def _validate_v3_saved_science(arguments, extraction, *, measurement_checks):
                     _fail('saved_graph_measurement_mismatch', field)
                 science = read_controlled_response_arm_science(context, nomination, reading_selector=selector)
                 reading = _mark_reading_stage(context, _StageValue(context, dict(reading)), selector, kind='measurement', endpoint_science=science)
-                context.saved_uncertainty = {'selection': nomination['reported_uncertainty'], 'value': _saved_uncertainty_v2(nomination['reported_uncertainty'], arm['reported_uncertainty'], reading, sources, field + '.reported_uncertainty')}
+                context.saved_uncertainty = {'selection': nomination['reported_uncertainty'], 'value': _saved_uncertainty(nomination['reported_uncertainty'], arm['reported_uncertainty'], reading, sources, field + '.reported_uncertainty')}
                 rebuilt = finish_controlled_response_arm(context, science, measurement=reading, reading_selector=selector)
                 if dict(rebuilt) != arm:
                     _fail('saved_operand_projection_mismatch', field)
@@ -2438,10 +1784,6 @@ def _validate_v3_saved_science(arguments, extraction, *, measurement_checks):
             _, selectors = _scope_entry(context, scope)
             scopes.append(bind_controlled_response_covariance_scope(context, scope, document, readings=[(s, readings[_selector_key(s)]) for s in selectors]))
         expected = finish_controlled_response_inputs(context, arms=arms, companion_arms=companions, covariance_scopes=scopes)
-        if 'local_pair_extractions' not in extraction:
-            expected.pop('local_pair_extractions')
-            expected['diagnostics'] = []
-            expected['diagnostics'] = _unique_diagnostics(expected, stable=True)
         if expected != extraction:
             _fail('saved_source_projection_mismatch', 'extraction')
         return deepcopy(extraction)

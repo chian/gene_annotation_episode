@@ -224,34 +224,6 @@ def test_database_selection_and_translated_restrictions():
     assert compiled(job)["argv"][4] == "/selected/db/target /selected/db/other"
 
 
-def manifest_for():
-    return {"version": "native_blast_database_producer_manifest_v1", "module_root": "/deploy",
-        "entry_module": "gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_driver",
-        "python": {"path": "/runtime/python", "sha256": "a" * 64, "size_bytes": 23},
-        "package_files": [{"relative_path": "gene_annotation_episode/" + n, "sha256": "b" * 64, "size_bytes": 10}
-            for n in ("__init__.py", "episodic_workflow/root/a101/library/native_blast_database_contracts.py",
-                "episodic_workflow/root/a101/native_blast_database_driver.py")],
-        "runtime_files": [{"path": "/runtime/lib", "sha256": "c" * 64, "size_bytes": 10}]}
-
-
-def test_producer_manifest_is_pure_defensive_and_closed(monkeypatch):
-    manifest = manifest_for()
-    with monkeypatch.context() as patch:
-        forbid_io(patch)
-        result = c.validate_native_blast_database_producer_manifest(manifest, module_root="/deploy", python_executable="/runtime/python")
-        result["python"]["size_bytes"] = 99
-        assert manifest["python"]["size_bytes"] == 23
-        for change in (lambda m: m["package_files"].pop(), lambda m: m["package_files"].append(m["package_files"][0]),
-            lambda m: m["package_files"][0].update(relative_path="../escape"),
-            lambda m: m["runtime_files"][0].update(path="/deploy/extra"),
-            lambda m: m["runtime_files"][0].update(path="/runtime/python"), lambda m: m.update(extra=True),
-            lambda m: m["python"].update(size_bytes=True), lambda m: m.update(module_root="/different")):
-            bad = deepcopy(manifest)
-            change(bad)
-            with pytest.raises(ValueError):
-                c.validate_native_blast_database_producer_manifest(bad, module_root="/deploy", python_executable="/runtime/python")
-
-
 def test_original_request_and_paired_compiler_remain_distinct():
     request = c.requested_job_from_native_blast_database(job_for())
     request["argv"][0] = "/replaced"

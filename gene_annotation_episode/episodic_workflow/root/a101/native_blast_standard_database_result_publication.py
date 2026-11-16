@@ -22,9 +22,9 @@ from .execution_contracts import canonical, digest
 from .local_jobs import LocalJobPolicy, run_local_job
 from .materials import artifact_file
 from .native_blast_standard_database_acquisition import (_attempt, _decode, _retained, _source_payload, _validate_capture)
-from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_standard_database_contracts import validate_retained_standard_blast_database_bundle
+from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_standard_database_contracts import validate_standard_blast_database_bundle
 from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_standard_database_result_views import standard_blast_database_fact_sources, project_standard_blast_database_rows, validate_standard_blast_database_selector
-from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_standard_database_worker_values import standard_blast_database_calculation_identity, standard_blast_database_implementation_identity, standard_blast_database_input_identity
+from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_standard_database_worker_values import standard_blast_database_calculation_identity, standard_blast_database_input_identity
 from gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_result_worker import STANDARD_BLAST_DATABASE_WORKER_REQUEST_SCHEMA, STANDARD_BLAST_DATABASE_WORKER_MANIFEST_SCHEMA
 from .practical_execution_state import _immutable, _read
 from .tool_grading_artifacts import retain_tool_grading
@@ -195,38 +195,6 @@ def _environment(directory):
         'XDG_CACHE_HOME': str(directory / 'cache')}
 
 
-def _implementation(directory, policy, *, execution_program):
-    """Inventory a fresh import closure, excluding unrelated parent imports."""
-    output = directory / 'implementation.json'
-    if not output.exists():
-        script = '''import hashlib, json, pathlib, sys
-from gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_result_worker import _implementation_modules, standard_blast_database_implementation_identity
-modules = _implementation_modules()
-files = []
-for name, module in modules.items():
-    path = pathlib.Path(module.__file__).resolve()
-    files.append({'module':name,'path':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
-with open(sys.argv[1], 'x') as out: out.write(json.dumps({'files':files,'manifest_sha256':standard_blast_database_implementation_identity(files)},sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False)+chr(10))
-'''
-        try:
-            result = run_local_job([sys.executable, '-B', '-c', script, str(output)],
-                cwd=directory, policy=policy, stdout_path=directory / 'implementation.stdout',
-                stderr_path=directory / 'implementation.stderr', env=_environment(directory))
-        except AcquisitionError as error:
-            _immutable(directory / 'implementation-receipt.json', _local_job_exception_receipt(error))
-            raise
-        _immutable(directory / 'implementation-receipt.json', result.metadata)
-        if result.returncode != 0:
-            raise ContractError('native_blast_standard_database_implementation_inventory_failed')
-    value = _read(output)
-    if value['manifest_sha256'] != standard_blast_database_implementation_identity(value['files']):
-        raise ContractError('standard_blast_database_implementation_identity_conflict')
-    for row in value['files']:
-        if hashlib.sha256(Path(row['path']).read_bytes()).hexdigest() != row['sha256']:
-            raise ContractError('native_blast_standard_database_implementation_changed')
-    return value
-
-
 def _snapshots(store, context, directory):
     from .native_hmmer_result_publication import _subject_chunks
     known, snapshots = _known(store, context), []
@@ -286,7 +254,7 @@ def _retained_catalog(store, selector, artifacts, snapshots):
     return retained
 
 
-def _request(store, context, target, capture, selector, directory, implementation):
+def _request(store, context, target, capture, selector, directory):
     _original_commission(store, context)
     validate_standard_blast_selected_inputs(store, context, selector)
     capture_directory = directory.parent / 'capture'
@@ -309,13 +277,12 @@ def _request(store, context, target, capture, selector, directory, implementatio
         bundle_artifact_ref=capture['bundle_artifact_ref'], bundle_capture=dict(path=str(_retained(store, capture['bundle_artifact_ref'])),
             sha256=bundle_record['sha256'], size_bytes=bundle_record['size']), authenticated_attempt=attempt,
         artifacts=artifacts, metadata_descriptors=descriptors, retained_sources=retained, subject_snapshots=snapshots,
-        implementation=implementation, sequence_model=job['grading_parameters']['sequence_database_model'], reuse=None)
+        sequence_model=job['grading_parameters']['sequence_database_model'], reuse=None)
     # Save the real invalid request before propagating a contract error; never
     # invent a valid calculation generation or replace a selected model.
     try:
         ids = standard_blast_database_calculation_identity(input_identity=standard_blast_database_input_identity(request),
-            input_implementation_sha256=implementation['manifest_sha256'], sequence_model=request['sequence_model'],
-            implementation_manifest_sha256=implementation['manifest_sha256'])
+            sequence_model=request['sequence_model'])
     except (ValueError, TypeError, KeyError) as error:
         _immutable(directory / 'invalid-request.json', request)
         failure = _failure('calculation', 'native_blast_standard_database_calculation_failed', 'calculator_contract_invalid')
@@ -332,20 +299,18 @@ def _manifest(store, reference, request, artifact_refs):
     validate_schema(request, STANDARD_BLAST_DATABASE_WORKER_REQUEST_SCHEMA)
     validate_schema(value, STANDARD_BLAST_DATABASE_WORKER_MANIFEST_SCHEMA)
     expected = {'version', 'calculation_id', 'request_sha256', 'status', 'input_identity', 'input_interpretation_id',
-        'input_implementation_sha256', 'implementation_manifest_sha256', 'sequence_model', 'artifacts', 'counts', 'failures'}
+        'sequence_model', 'artifacts', 'counts', 'failures'}
     if (type(value) is not dict or set(value) != expected or value['version'] != _MANIFEST_VERSION
             or value['status'] not in {'complete', 'partial', 'failed'} or value['calculation_id'] != request['calculation_id']
             or value['request_sha256'] != hashlib.sha256((canonical(request) + '\n').encode('utf-8')).hexdigest()
             or value['input_identity'] != standard_blast_database_input_identity(request)
-            or value['implementation_manifest_sha256'] != request['implementation']['manifest_sha256']
             or value['sequence_model'] != request['sequence_model']
             or type(value['counts']) is not dict or set(value['counts']) != {'searches', 'native_hsp_slots', 'numerical_rows'}
             or any(type(n) is not int or n < 0 for n in value['counts'].values())
             or type(value['artifacts']) is not list):
         raise ContractError('native_blast_standard_database_worker_manifest_invalid')
     ids = standard_blast_database_calculation_identity(input_identity=value['input_identity'],
-        input_implementation_sha256=value['input_implementation_sha256'], sequence_model=value['sequence_model'],
-        implementation_manifest_sha256=value['implementation_manifest_sha256'])
+        sequence_model=value['sequence_model'])
     if any(value[k] != v for k, v in ids.items()):
         raise ContractError('native_blast_standard_database_worker_manifest_identity_conflict')
     roles, seen = _ROLES, set()
@@ -412,9 +377,7 @@ def prepare_standard_blast_database_grading(store, *, context, target, capture, 
         prepared = _read(directory / 'preparation.json')
         _validate_preparation(store, context, prepared)
         return prepared
-    implementation = _implementation(directory, policy,
-        execution_program=target['assignment']['requested_job']['native_blast_standard_database']['program'])
-    request, witness = _request(store, context, target, capture, selector, directory, implementation)
+    request, witness = _request(store, context, target, capture, selector, directory)
     generation = store.path.resolve() / 'native-blast-standard-database-generations' / request['calculation_id']
     request['output_directory'] = str(generation / 'output')
     validate_schema(request, STANDARD_BLAST_DATABASE_WORKER_REQUEST_SCHEMA)
@@ -528,7 +491,7 @@ def _validate_preparation(store, context, preparation):
     witness = _json(store, grading['authenticated_attempt_artifact_ref'])
     attempt = _attempt(intent['target'], witness)
     _original_handoff(store, context, intent['target'], attempt)
-    bundle = validate_retained_standard_blast_database_bundle(_json(store, preparation['bundle_artifact_ref']),
+    bundle = validate_standard_blast_database_bundle(_json(store, preparation['bundle_artifact_ref']),
         original_job=intent['target']['assignment']['requested_job']['native_blast_standard_database'], attempt_identity=attempt)
     plan = _json(store, capture['plan_artifact_ref'])
     if bundle['plan'] != plan or digest(plan) != attempt['plan_sha256']:

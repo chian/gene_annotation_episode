@@ -56,6 +56,16 @@ def retained_snapshot(mode, action):
     return SourceSnapshot(**record, content=content)
 
 
+def wire_capture(content, filename):
+    """The submitted multipart body as the transport records it."""
+    raw = (b'--boundary\r\nContent-Disposition: form-data; name="sequence_file"; filename="'
+        + filename.encode("ascii") + b'"\r\nContent-Type: text/plain\r\n\r\n' + content + b'\r\n--boundary--\r\n')
+    return {"method": "POST", "url": BASE_URL + "/submit-job",
+        "headers": {"Content-Type": "multipart/form-data; boundary=boundary"},
+        "body_base64": base64.b64encode(raw).decode("ascii"),
+        "body_sha256": hashlib.sha256(raw).hexdigest(), "body_bytes": len(raw)}
+
+
 class RetainedSingle:
     """Transport seam returning saved bytes; calls are fixture reads, not HTTP."""
     timeout = 90
@@ -67,7 +77,8 @@ class RetainedSingle:
         self.calls.append("retained_submission")
         snapshot = retained_snapshot("single", "001-submit")
         assert hashlib.sha256(sequence.encode("ascii")).hexdigest() == snapshot.request["sequence_sha256"]
-        return snapshot
+        return replace(snapshot, transport={**snapshot.transport,
+            "request": wire_capture((sequence + "\n").encode("ascii"), "sequence.seq")})
 
     def result(self, job_id, *, representation):
         self.calls.append("retained_result:" + representation)
@@ -495,10 +506,11 @@ class SyntheticBatch:
 
     def submit_file(self, content, *, filename):
         self.calls.append("synthetic_submission")
-        return self.snapshot("submit", BASE_URL + "/submit-job", {"filename": filename,
+        value = self.snapshot("submit", BASE_URL + "/submit-job", {"filename": filename,
             "file_base64": base64.b64encode(content).decode("ascii"), "file_bytes": len(content),
             "file_sha256": hashlib.sha256(content).hexdigest()},
             canonical({"jobId": self.job, "resultURL": result_url(self.job)}).encode())
+        return replace(value, transport={**value.transport, "request": wire_capture(content, filename)})
 
     def result(self, job_id, *, representation):
         assert job_id == self.job

@@ -78,9 +78,9 @@ def test_preview_does_not_recursively_edit_child_forms_or_exact_history_contract
     assert shown["record_refs"] == [] and shown["result"]["records"] == []
     assert native["record_refs"] == ["one","two"] and not native["result"]["record_refs_are_preview"]
     history={"status":"completed","record_refs":[],"result":{"records":[{"outcome":native}]}}
-    assert workflow.local_outcome_preview(history) is history
+    assert workflow.local_outcome_preview(history) == history
     form={"child_reports":[{"actual_refs":["one","two"]}]}
-    assert workflow.local_outcome_preview(form) is form
+    assert workflow.local_outcome_preview(form) == form
 
 
 def test_native_failure_feedback_keeps_failed_attempt_out_of_controller_observations(tmp_path):

@@ -82,13 +82,11 @@ class BVBRCProteomeReturns(EpisodeReturnRecords):
             and self._equal(body['publication_inputs'].get('selector'), context.assignment.get('selector')),
             'publication_owner_conflict')
         task = body['bundle']['original_task']
-        pin = body['publication_inputs'].get('adapter_implementation_sha256')
         configuration = getattr(self.api, 'configuration', {}).get(task['resource_id'], {})
         selected = body['publication_inputs']['selector']['adapter']
         self._require(selected['adapter_id'] == _ADAPTER_ID and selected['adapter_version'] in _ADAPTER_VERSIONS,
                       'proteome_adapter_required')
-        self._require(any(self._equal(row, {'adapter_id': _ADAPTER_ID, 'adapter_version': selected['adapter_version'],
-            'implementation_sha256': pin}) for row in configuration.get('scientific_adapters', [])),
+        self._require(any(self._equal(row, {'adapter_id': _ADAPTER_ID, 'adapter_version': selected['adapter_version']}) for row in configuration.get('scientific_adapters', [])),
             'original_adapter_pin_conflict')
 
     def _possessed_sources(self, context, facts):

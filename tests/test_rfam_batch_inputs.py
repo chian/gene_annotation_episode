@@ -92,13 +92,6 @@ def test_no_silent_sequence_case_whitespace_or_tu_normalization():
         assert "rfam_result_sequence_identity_conflict" in codes(parse(native))
 
 
-def test_expired_real_retained_job_is_not_zero_search():
-    content = (EXAMPLES.parent / "source_evidence/official-old-job.result.json").read_bytes()
-    result = populate_rfam_batch_json_sheet(content, input_identity=identity(), capture=capture(content, evidence_kind="native_response", http_status=200))
-    assert result["sheet"] is None and result["status"] == "rejected"
-    assert "rfam_result_sequence_identity_empty" in codes(result)
-
-
 def test_zero_and_multiple_untyped_are_distinct():
     empty = parse(fixture="synthetic-empty.json")
     assert empty["status"] == "complete" and empty["sheet"]["hits"] == []

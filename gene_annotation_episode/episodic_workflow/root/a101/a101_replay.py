@@ -6,7 +6,6 @@ artifacts are read from the original run. This is a rescore, not a live rerun.
 """
 from __future__ import annotations
 import argparse
-import hashlib
 import json
 from pathlib import Path
 import sqlite3
@@ -54,7 +53,7 @@ def rescore_saved_run(source_run, *, work_directory):
             view = projector.read_details(store, request['message']['scope'], known_record_refs=known, details_limit=50, details_offset=0)
             last = store.db.execute('SELECT observation FROM runtime_observations WHERE episode_id=? ORDER BY unit_index DESC LIMIT 1', (row['episode_id'],)).fetchone()
             episodes.append({'episode_id': row['episode_id'], 'role': path[-1][0], 'original_recorded_credit': json.loads(last[0])['step']['credit'] if last else None, 'rescored_native_credit': view['credit'], 'projection': view})
-    return {'version': 'a101_saved_native_rescore_v1', 'source_run': str(source), 'meaning': 'current_native_sheet_projection_of_original_received_results_not_a_live_rerun', 'original_scores_rewritten': False, 'native_jobs_submitted': 0, 'model_calls': 0, 'scorer': projector.as_record(), 'implementation_sha256': {name: hashlib.sha256((Path(__file__).parent / name).read_bytes()).hexdigest() for name in ('scientific_process/native_correspondence_credit.py', 'scientific_process/scoring/native_correspondence.py', 'library/a101_scoring.py')}, 'episodes': episodes}
+    return {'version': 'a101_saved_native_rescore_v1', 'source_run': str(source), 'meaning': 'current_native_sheet_projection_of_original_received_results_not_a_live_rerun', 'original_scores_rewritten': False, 'native_jobs_submitted': 0, 'model_calls': 0, 'scorer': projector.as_record(), 'episodes': episodes}
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)

@@ -57,8 +57,7 @@ def test_category_yield_parameters_declared_caller_layout(version, wrapped):
     binding = {'factory': 'fixed_gene_policy_fixture.create_policy.<locals>.controller',
         'versions': {'requirement': 'same_caller_injected_executable'}, 'definition': definition}
     original = deepcopy(binding)
-    assert _category_yield_parameters(binding) == {
-        'window_size': 11, 'subsample_size': 5, 'uncertainty_alpha': .07}
+    assert _category_yield_parameters(binding) == {'uncertainty_alpha': .07}
     assert binding == original
 
 

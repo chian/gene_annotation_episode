@@ -357,10 +357,6 @@ def _relations(name, value, path):
     elif name == "PublicationInputs":
         _require(value["current_operation"]["name"] == "api.bvbrc_appservice.download", "publication_operation_conflict", path)
         _require(_same(value["selector"]["adapter"], value["adapter"]), "publication_adapter_conflict", path)
-        # An unavailable selected adapter has no implementation digest. Its
-        # explicit selection survives acquisition without a fabricated hash.
-        _require(value["adapter"] is not None or value["adapter_implementation_sha256"] is None,
-                 "publication_adapter_binding_conflict", path)
     elif name == "PreparedOperation":
         _require(value["mutates_remote"] == bool(value["effects"]), "prepared_effects_conflict", path)
         _require(value["request_sha256"] == value["bound_inputs"]["request_sha256"] and

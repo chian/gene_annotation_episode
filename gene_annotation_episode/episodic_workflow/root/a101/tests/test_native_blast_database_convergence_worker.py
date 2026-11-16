@@ -16,7 +16,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library import native_b
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_database_metadata as metadata
 from gene_annotation_episode.episodic_workflow.root.a101.library import blast_native_iteration_records as extractor
 from gene_annotation_episode.episodic_workflow.root.a101.tests.test_blast_native_iteration_records import make_packet, report, MARKER
-from gene_annotation_episode.episodic_workflow.root.a101.tests.test_native_blast_database_result_worker import implementation, run_request, reuse_request
+from gene_annotation_episode.episodic_workflow.root.a101.tests.test_native_blast_database_result_worker import run_request, reuse_request
 import gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_worker_values as _scientific_native_blast_database_result_worker
 
 
@@ -48,12 +48,11 @@ def request_from_packet(tmp_path, **options):
         metadata_descriptors=[dict(**d, origin="original_job_input", artifact_ref="artifact_" + r["sha256"],
             sha256=r["sha256"], size_bytes=r["size_bytes"])
             for d in packet["original_job"]["metadata_inputs"] for r in bundle["artifacts"] if r["input_key"] == d["input_key"]],
-        retained_sources=[], subject_snapshots=[], implementation=implementation(execution_program=packet["original_job"]["program"]),
+        retained_sources=[], subject_snapshots=[],
         output_directory=str(tmp_path / "generation1"), reuse=None, sequence_model=None)
     request["calculation_id"] = _scientific_native_blast_database_result_worker.native_blast_database_calculation_identity(
         input_identity=_scientific_native_blast_database_result_worker.native_blast_database_input_identity(request),
-        input_implementation_sha256=request["implementation"]["manifest_sha256"], sequence_model=None,
-        implementation_manifest_sha256=request["implementation"]["manifest_sha256"])["calculation_id"]
+        sequence_model=None)["calculation_id"]
     return request
 
 

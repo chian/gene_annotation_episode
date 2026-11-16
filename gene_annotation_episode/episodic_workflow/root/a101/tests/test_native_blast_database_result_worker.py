@@ -206,12 +206,6 @@ def test_pure_calculation_count_and_row_ports_have_no_io(monkeypatch):
     assert len(rows) > 2 and facts[0]["counts"]["reported_hit_count"]["value"] == 1
 
 
-def implementation(*, execution_program=None):
-    files = [dict(module=name, path=str(Path(module.__file__).resolve()), sha256=hashlib.sha256(Path(module.__file__).read_bytes()).hexdigest())
-        for name, module in worker._implementation_modules(execution_program=execution_program).items()]
-    return dict(files=files, manifest_sha256=_scientific_native_blast_database_result_worker.native_blast_database_implementation_identity(files))
-
-
 def request_fixture(tmp_path, program="psiblast", *, metadata_payload=None, metadata_tuples=None, native_report=None, query_bytes=None):
     """Use actual N capture of a clearly synthetic emitter, never BLAST."""
     from gene_annotation_episode.episodic_workflow.root.a101.tests import test_native_blast_database_driver as native
@@ -250,11 +244,11 @@ def request_fixture(tmp_path, program="psiblast", *, metadata_payload=None, meta
             path=str(path.parent / r["relative_path"]), sha256=r["sha256"], size_bytes=r["size_bytes"]) for r in bundle["artifacts"]],
         metadata_descriptors=[dict(**descriptor, origin="original_job_input", artifact_ref="artifact:" + artifact["artifact_key"], sha256=artifact["sha256"], size_bytes=artifact["size_bytes"])
             for descriptor in job["metadata_inputs"] for artifact in bundle["artifacts"] if artifact["input_key"] == descriptor["input_key"]],
-        retained_sources=[], subject_snapshots=[], implementation=implementation(execution_program=program),
+        retained_sources=[], subject_snapshots=[],
         output_directory=str(tmp_path / "generation1"), reuse=None, sequence_model=None)
     request["calculation_id"] = _scientific_native_blast_database_result_worker.native_blast_database_calculation_identity(
-        input_identity=_scientific_native_blast_database_result_worker.native_blast_database_input_identity(request), input_implementation_sha256=request["implementation"]["manifest_sha256"],
-        sequence_model=None, implementation_manifest_sha256=request["implementation"]["manifest_sha256"])["calculation_id"]
+        input_identity=_scientific_native_blast_database_result_worker.native_blast_database_input_identity(request),
+        sequence_model=None)["calculation_id"]
     return request
 
 
@@ -277,18 +271,13 @@ def test_identity_exact_canonical_recipe_path_invariance_and_model_changes(tmp_p
     moved = deepcopy(request)
     moved["output_directory"] = "/relocated/output"
     moved["bundle_capture"]["path"] = "/relocated/bundle"
-    for row in moved["artifacts"] + moved["implementation"]["files"]:
+    for row in moved["artifacts"]:
         row["path"] = "/relocated/" + str(len(row["path"]))
     assert _scientific_native_blast_database_result_worker.native_blast_database_input_identity(moved) == identity
-    assert _scientific_native_blast_database_result_worker.native_blast_database_implementation_identity(moved["implementation"]["files"]) == request["implementation"]["manifest_sha256"]
-    files = [{k: r[k] for k in ("module", "sha256")} for r in request["implementation"]["files"]]
-    independent = hashlib.sha256(json.dumps(dict(version="native_blast_database_implementation_identity_v1", files=sorted(files, key=lambda r: r["module"])),
-        sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode()).hexdigest()
-    assert independent == request["implementation"]["manifest_sha256"]
-    old = _scientific_native_blast_database_result_worker.native_blast_database_calculation_identity(input_identity=identity, input_implementation_sha256=independent,
-        sequence_model=None, implementation_manifest_sha256=independent)
-    new = _scientific_native_blast_database_result_worker.native_blast_database_calculation_identity(input_identity=identity, input_implementation_sha256=independent,
-        sequence_model={"temperature_bits": 2}, implementation_manifest_sha256=independent)
+    old = _scientific_native_blast_database_result_worker.native_blast_database_calculation_identity(input_identity=identity,
+        sequence_model=None)
+    new = _scientific_native_blast_database_result_worker.native_blast_database_calculation_identity(input_identity=identity,
+        sequence_model={"temperature_bits": 2})
     assert old["input_interpretation_id"] == new["input_interpretation_id"] and old["calculation_id"] != new["calculation_id"]
 
 
@@ -329,8 +318,7 @@ def reuse_request(request, manifest):
         manifest_size_bytes=len(raw), collection_path=str(old / "collection.json"), sheets_path=str(old / "sheets.json"))
     new["sequence_model"] = {"temperature_bits": 2}
     new["calculation_id"] = _scientific_native_blast_database_result_worker.native_blast_database_calculation_identity(input_identity=_scientific_native_blast_database_result_worker.native_blast_database_input_identity(new),
-        input_implementation_sha256=manifest["input_implementation_sha256"], sequence_model=new["sequence_model"],
-        implementation_manifest_sha256=new["implementation"]["manifest_sha256"])["calculation_id"]
+        sequence_model=new["sequence_model"])["calculation_id"]
     return new
 
 
@@ -503,8 +491,7 @@ def test_reuse_rejects_changed_bytes_or_input_identity_without_fallback(tmp_path
         new["metadata_descriptors"].append(dict(input_key="new", consumer="profile", schema_id="unregistered.synthetic",
             artifact_ref="artifact:new", sha256="f" * 64, size_bytes=0, origin="selected_results_input"))
         new["calculation_id"] = _scientific_native_blast_database_result_worker.native_blast_database_calculation_identity(input_identity=_scientific_native_blast_database_result_worker.native_blast_database_input_identity(new),
-            input_implementation_sha256=first["input_implementation_sha256"], sequence_model=new["sequence_model"],
-            implementation_manifest_sha256=new["implementation"]["manifest_sha256"])["calculation_id"]
+            sequence_model=new["sequence_model"])["calculation_id"]
     def forbidden(*a, **k):
         pytest.fail("changed reuse attempted reparsing")
     monkeypatch.setattr(metadata, "prepare_native_blast_database_inputs", forbidden)

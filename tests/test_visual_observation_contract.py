@@ -84,7 +84,7 @@ def test_visual_anchor_is_not_a_literal_quote_and_null_optional_does_not_duplica
         wrong = observation(target, view)
         wrong["anchor"] = literal_observation(store, target, text, "text")["anchor"]
         commit["observations"] = [wrong]
-        assert store.commit_reasoning(commit, None, "both-anchors")["errors"][0]["code"] == "visual_and_text_anchors_are_distinct"
+        assert store.commit_reasoning(commit, None, "both-anchors")["errors"][0]["code"] == "anchor_source_mismatch"
         commit["observations"] = [literal_observation(store, target, text, "text")]
         first = store.commit_reasoning(commit, None, "literal-omitted")
         commit["observations"][0]["visual_anchor"] = None

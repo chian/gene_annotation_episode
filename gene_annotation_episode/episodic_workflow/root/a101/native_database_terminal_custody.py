@@ -22,21 +22,18 @@ def _require(condition, code='native_database_terminal_custody_conflict'):
 
 def validate_native_database_resource(configuration, key):
     """Preserve the previous deployment checks without its operation dispatcher."""
-    from .domain import validate_schema
     value = configuration[key]
     _require(isinstance(value, dict) and set(value) == {'version', 'producer', 'environment', 'bindings'}
         and value['version'] == key + '_resource_v1'
-        and isinstance(value['producer'], dict) and set(value['producer']) == {'module_root', 'manifest'}
+        and isinstance(value['producer'], dict) and set(value['producer']) == {'module_root'}
         and isinstance(value['environment'], dict)
         and all(isinstance(k, str) and k and isinstance(v, str) and '\0' not in k + v
             for k, v in value['environment'].items()), key + '_resource_invalid')
-    contracts = importlib.import_module(('.library.' if key in PROFILES else '.') + key + '_contracts', __package__)
     information = importlib.import_module('.' + key + '_tool_info', __package__)
-    validate_schema(value['producer']['manifest'], contracts.FILE_IDENTITY_SCHEMA)
     function = (information.native_blast_database_tool_contracts if key == 'native_blast_database'
         else information.standard_blast_database_tool_contracts)
     function(value['bindings'], resource_kind='hpc', resource_id='configuration-validation')
-    paths = [value['producer']['module_root'], value['producer']['manifest']['path']]
+    paths = [value['producer']['module_root']]
     paths.extend(row['software']['executable'] for row in value['bindings'])
     paths.extend(item['path'] for row in value['bindings'] for item in row['database_manifests'])
     _require(all(isinstance(path, str) and PurePosixPath(path).is_absolute()
@@ -109,8 +106,7 @@ def qualify_manifest(target, receipt, raw, *, configuration=None):
                 else 'native-blast-standard-database-plan.json')))
     if configuration is not None:
         binding = configuration[key]
-        _require(plan['producer_manifest'] == binding['producer']['manifest']
-            and plan['resource_environment'] == binding['environment'])
+        _require(plan['resource_environment'] == binding['environment'])
     return {'version': 'terminal_native_database_attempt_v1',
         'authenticated_attempt': {'identity': {**plan['identity'], 'execution_id': target['execution_id']},
             'attempt_directory': plan['attempt_directory'], 'plan_sha256': digest(plan)},

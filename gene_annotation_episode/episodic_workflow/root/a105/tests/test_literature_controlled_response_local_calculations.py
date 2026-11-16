@@ -5,7 +5,7 @@ import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_controlled_response_v3_inputs import Fixture, ROLES
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_local_calculations as local
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_owner_calculations as owner
-from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_calculations as legacy
+from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_calculations as arithmetic
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
 
 def forbidden(*args, **kwargs):
@@ -18,9 +18,7 @@ def test_real_pair_magnitude_sampling_variance_graph_bounds_and_components(monke
     data = inputs()
     monkeypatch.setattr(owner, 'populate_controlled_response_owner', forbidden)
     monkeypatch.setattr(owner, 'validate_controlled_response_owner_inputs', forbidden)
-    monkeypatch.setattr(legacy, 'populate_controlled_response', forbidden)
-    monkeypatch.setattr(legacy, 'validate_controlled_response_inputs', forbidden)
-    monkeypatch.setattr(legacy, '_pair_reasons', forbidden)
+    monkeypatch.setattr(arithmetic, '_pair_reasons', forbidden)
     result = local.populate_controlled_response_local(data)
     pair = result['pairs'][0]
     assert pair['difference']['value'] == 0.00395

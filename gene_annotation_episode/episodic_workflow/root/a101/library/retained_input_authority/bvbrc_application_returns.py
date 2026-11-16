@@ -134,8 +134,6 @@ def project_application_facts(body, *, sheet, components):
     selected = selector["adapter"]
     _require(type(selected) is dict and all(selected[key] == saved[key] for key in ("adapter_id", "adapter_version"))
         and _same(inputs.get("adapter"), selected), "original_adapter_conflict")
-    pin = inputs.get("adapter_implementation_sha256")
-    _require(type(pin) is str and re.fullmatch(r"[a-f0-9]{64}", pin) is not None, "original_adapter_pin_required")
     assignment = body.get("assignment")
     _require(type(assignment) is dict and _same(assignment.get("selector"), selector), "original_selector_conflict")
     parameter_reader, form_reader, saved_reader, status_reader = {

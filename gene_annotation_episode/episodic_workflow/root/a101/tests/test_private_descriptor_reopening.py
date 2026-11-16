@@ -40,12 +40,11 @@ def test_original_api_execution_descriptors_reopen_with_explicit_own_credit(cons
     assert store.db.execute('SELECT COUNT(*) FROM tool_operations').fetchone()[0]==0
 
 
-@pytest.mark.parametrize('change',['hash','unknown_path','configuration'])
+@pytest.mark.parametrize('change',['unknown_path','configuration'])
 def test_reopen_rejects_changed_private_descriptor_without_identity_relabel(constructed,change):
     *_,literature=constructed
     descriptor=deepcopy(literature[0].as_record())
-    if change=='hash':descriptor['implementation_sha256']='0'*64
-    elif change=='unknown_path':descriptor['binding_id']='foreign/unknown_episode'
+    if change=='unknown_path':descriptor['binding_id']='foreign/unknown_episode'
     else:descriptor['configuration']['unrecognized_original_operand']=True
     with pytest.raises(module('method_loop.durable').DurableExecutionError):
         compose(constructed,[descriptor])

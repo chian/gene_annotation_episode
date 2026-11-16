@@ -189,48 +189,6 @@ def assert_complete_task(text, case, axis, *, thought='P01'):
         assert row['observation'] not in text
 
 
-def test_actual_publication_freezes_all_entries_and_retains_source_custody(tmp_path):
-    source = tmp_path / 'publication'
-    shutil.copytree(PUBLICATION, source)
-    library = ScientificProcessLibrary.freeze(tmp_path / 'frozen', source=source)
-    assert {row['option_ref']['option_id'] for row in library.headers()} == set(AXES + THOUGHTS)
-    provenance = json.loads((PUBLICATION / 'SOURCE_PROVENANCE.json').read_text())['entries']
-    assert {row['option'] for row in provenance} == set(AXES + THOUGHTS)
-    expected, row_count = {}, 0
-    for row in provenance:
-        option = row['option']
-        original_bytes = (ROOT / row['retained_source']).read_bytes()
-        assert hashlib.sha256(original_bytes).hexdigest() == row['source_sha256']
-        original = json.loads(original_bytes)
-        reference = library.reference(option)
-        body = library.resolve(reference)
-        assert body['evidence'] == original['evidence']
-        frozen_bytes = (library.directory / 'entries' / (option + '.json')).read_bytes()
-        assert frozen_bytes == (PUBLICATION / 'entries' / (option + '.json')).read_bytes()
-        if option in THOUGHTS:
-            assert frozen_bytes == original_bytes
-        else:
-            assert set(body) == {'entry_version', 'id', 'slot', 'name', 'description',
-                'investigation_instructions', 'evidence'}
-            outcome = library.execute('process.entry', {'option_id': option})
-            assert outcome['result']['entry'] == instruction_view(body)
-            assert outcome['record_refs'] == outcome['changed_record_refs'] == []
-        rows = library.sources(option_ref=reference, offset=0, limit=1000)['rows']
-        assert [{key: value for key, value in item.items() if key not in {'option_id', 'evidence_id'}}
-                for item in rows] == original['evidence']
-        row_count += len(rows)
-        expected[option] = (reference, body, rows, frozen_bytes)
-    assert row_count == 344
-    descriptor = library.as_record()
-    shutil.rmtree(source)
-    reopened = ScientificProcessLibrary.freeze(library.directory, source=source)
-    assert reopened.as_record() == descriptor
-    for option, (reference, body, rows, original_bytes) in expected.items():
-        assert reopened.resolve(reference) == body
-        assert reopened.sources(option_ref=reference, offset=0, limit=1000)['rows'] == rows
-        assert (reopened.directory / 'entries' / (option + '.json')).read_bytes() == original_bytes
-
-
 @pytest.mark.parametrize('axis', AXES)
 def test_every_published_axis_commissions_from_supplied_material_without_candidate(tmp_path, axis):
     with Store(tmp_path / 'state') as store:

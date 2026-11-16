@@ -33,8 +33,7 @@ HOMES = (
 
 
 def pin(adapter):
-    return dict(adapter_id=adapter.ADAPTER_ID, adapter_version=adapter.ADAPTER_VERSION,
-                implementation_sha256=adapter.implementation_sha256())
+    return dict(adapter_id=adapter.ADAPTER_ID, adapter_version=adapter.ADAPTER_VERSION)
 
 
 @pytest.fixture(autouse=True)
@@ -50,7 +49,7 @@ def no_external_execution(monkeypatch):
 
 def test_no_implicit_or_unknown_adapter_choice():
     assert registry.bind_adapters([]) == {}
-    assert registry.bind_adapters([dict(adapter_id='unknown_provider', adapter_version='1', implementation_sha256='0' * 64)]) == {}
+    assert registry.bind_adapters([dict(adapter_id='unknown_provider', adapter_version='1')]) == {}
 
 
 def original_parameters(kind='genome_ids'):

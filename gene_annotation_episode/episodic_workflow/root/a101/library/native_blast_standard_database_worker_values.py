@@ -37,21 +37,6 @@ def _absolute_path(value):
         raise ValueError(PREFIX + "absolute_path_required")
     return value
 
-def standard_blast_database_implementation_identity(files: list[dict]) -> str:
-    """Hash actual named implementation identities, independent of local paths."""
-    files = views._copy(files)
-    if type(files) is not list or not files:
-        raise ValueError(PREFIX + "implementation_files_required")
-    projected = []
-    for row in files:
-        if type(row) is not dict or set(row) not in ({"module", "sha256"}, {"module", "path", "sha256"}):
-            raise ValueError(PREFIX + "implementation_file_invalid")
-        projected.append(_shape({k: row[k] for k in ("module", "sha256")}, views._object(dict(module=views.TOKEN, sha256=views.SHA))))
-        if "path" in row: _absolute_path(row["path"])
-    if len({r["module"] for r in projected}) != len(projected):
-        raise ValueError(PREFIX + "implementation_module_duplicate")
-    return views._hash(dict(version=PREFIX + "implementation_identity_v1", files=sorted(projected, key=lambda r: r["module"])))
-
 def standard_blast_database_input_identity(request: dict) -> str:
     """Hash selected inputs and original attempt, without local capture paths."""
     request = views._copy(request)
@@ -69,14 +54,13 @@ def standard_blast_database_input_identity(request: dict) -> str:
     _absolute_path(value["authenticated_attempt"]["attempt_directory"])
     return views._hash(value)
 
-def standard_blast_database_calculation_identity(*, input_identity: str, input_implementation_sha256: str,
-        sequence_model: dict | None, implementation_manifest_sha256: str) -> dict:
-    for digest in (input_identity, input_implementation_sha256, implementation_manifest_sha256): _shape(digest, views.SHA)
+def standard_blast_database_calculation_identity(*, input_identity: str, sequence_model: dict | None) -> dict:
+    _shape(input_identity, views.SHA)
     model = calculators.validate_sequence_model(sequence_model)
     interpretation = views._hash(dict(version=PREFIX + "interpretation_identity_v1",
-        input_identity=input_identity, input_implementation_sha256=input_implementation_sha256))
+        input_identity=input_identity))
     return dict(input_interpretation_id=interpretation, calculation_id=views._hash(dict(version=PREFIX + "calculation_identity_v1",
-        input_interpretation_id=interpretation, sequence_model=model, implementation_manifest_sha256=implementation_manifest_sha256)))
+        input_interpretation_id=interpretation, sequence_model=model)))
 
 class _WorkerFailure(Exception):
     def __init__(self, stage, code, detail, *, pointer="", artifact_key=None, input_key=None, search_key=None):

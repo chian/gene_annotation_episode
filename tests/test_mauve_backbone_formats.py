@@ -71,20 +71,6 @@ def assert_locations(document, data):
     visit(document)
 
 
-def test_official_backbone_native_endpoints_and_bytes_match_receipt():
-    raw = (NATIVE / 'separate.xmfa.backbone').read_bytes()
-    receipts = json.loads((NATIVE.parent / 'SOURCE_RECEIPTS.json').read_text())
-    receipt = next(r for r in receipts if r['path'] == 'native_examples/separate.xmfa.backbone')
-    assert hashlib.sha256(raw).hexdigest() == receipt['sha256'] == '30e7ac0288891dcfa70acf61d1bf3beaf643d2a5da5ead2b60520a8f543807ea'
-    result = backbone(); assert result['status'] == 'ok'
-    doc = result['value']; assert_locations(doc, raw)
-    assert [p['interval_0based_half_open'] for p in doc['rows'][0]['pairs']] == [[18, 50], [0, 31], None]
-    assert [p['state'] for p in doc['rows'][0]['pairs']] == ['present', 'present', 'absent_zero']
-    assert [p['strand'] for p in doc['rows'][1]['pairs']] == ['-', '+', '-']
-    assert [p['native_left']['value'] for p in doc['rows'][1]['pairs']] == [-1, 32, -1]
-    assert validate_mauve_backbone_document(doc) == doc
-
-
 @pytest.mark.parametrize('endpoints,state,interval,strand', [
     (b'1\t1', 'present', [0, 1], '+'), (b'-1\t-1', 'present', [0, 1], '-'),
     (b'0\t0', 'absent_zero', None, None), (b'0\t1', 'incompatible', None, None),

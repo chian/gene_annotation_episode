@@ -121,7 +121,7 @@ def test_exact_source_extraction_aliases_and_partial_feedback(store):
     payload["terms"][0]["anchor"]["quote"] = "not the original text"
     bad = store.commit_reasoning(payload, scope, "action2")
     assert bad["status"] == "invalid"
-    assert bad["errors"][0]["code"] == "anchor_transcription_mismatch"
+    assert bad["errors"][0]["code"] == "representation_error"
 
 
 def test_revisions_conflict_preserved_and_current_state(store):

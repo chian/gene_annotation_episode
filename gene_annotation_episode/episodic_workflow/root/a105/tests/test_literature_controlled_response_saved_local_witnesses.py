@@ -1,8 +1,6 @@
 """Constructed source regression cases; no paper or live-model evidence.
 
 Local interpretation records must survive independently of whole-model requests.
-Legacy-shape tests exercise retained-record consistency, not migration of an old
-native implementation descriptor into a new implementation generation.
 """
 from copy import deepcopy as cp
 from PIL import Image
@@ -32,8 +30,8 @@ def unique_local_fixture(*, second_pair=False):
             pair[name] = f.interp(value, quote)
     return f
 
-def legacy_shape(extraction):
-    """Project the older shape without adding or repairing any witness record."""
+def without_local_pair_rows(extraction):
+    """Drop the local-pair rows without adding or repairing any witness record."""
     result = cp(extraction)
     result.pop('local_pair_extractions')
     result['diagnostics'] = []
@@ -122,7 +120,7 @@ def test_image_local_witnesses_keep_geometry_and_interpretation_attribution():
     assert source.validate_controlled_response_v3_extraction(f.args, result) == result
     assert population.populate_controlled_response_v3(result)['local_sheet']['pairs'][0]['variance']['value'] == 4.5e-07
 
-@pytest.mark.parametrize('mutation', ['pair_key', 'row_order', 'row_deletion', 'witness_deletion', 'witness_substitution', 'witness_identity', 'effective_value', 'selection_value', 'unexpected_field', 'legacy_missing'])
+@pytest.mark.parametrize('mutation', ['pair_key', 'row_order', 'row_deletion', 'witness_deletion', 'witness_substitution', 'witness_identity', 'effective_value', 'selection_value', 'unexpected_field', 'rows_missing'])
 def test_saved_local_associations_cannot_be_substituted_deleted_or_reordered(mutation):
     f = unique_local_fixture(second_pair=True)
     result = f.read()
@@ -146,7 +144,7 @@ def test_saved_local_associations_cannot_be_substituted_deleted_or_reordered(mut
     elif mutation == 'unexpected_field':
         rows[0]['scope']['invented'] = True
     else:
-        result = legacy_shape(result)
+        result = without_local_pair_rows(result)
     with pytest.raises(ExperimentalContractError):
         source.validate_controlled_response_v3_extraction(f.args, result)
 

@@ -1,23 +1,34 @@
 """Actual constructed text/pixels; no paper, model, or native execution claims."""
 from copy import deepcopy as cp
+import hashlib
+import json
+from pathlib import Path
+import re
 import pytest
 from jsonschema import Draft202012Validator
-from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_controlled_response_v2_inputs import Fixture as V2Fixture
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_v3_inputs as source
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_inputs as shared
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
 ROLES = shared.PRIMITIVE_ORDER
+DESIGN = Path(__file__).resolve().parent / 'fixtures/retained_reference/a105_controlled_full_source_design_069'
+CASES = json.loads((DESIGN / 'CONSTRUCTED_SOURCE_SELECTIONS.json').read_text())
 
-class Fixture(V2Fixture):
+class Fixture:
 
     def __init__(self, index=0, *, companion=False, authority=False, joints=False, local=True):
-        super().__init__(index)
-        self.args.update(version='controlled_response_source_selection_v3', companion_readings=[], joint_reading_assignments=[], joint_scopes=[], reading_reconciliations=[], local_pair_assignments=[])
+        self.case = CASES[index]
+        self.args = cp(self.case['selection'])
+        self.data = {s['source_ref']: s['content_utf8'].encode() if s['content_utf8'] is not None else (DESIGN / s['encoded_image_file']).read_bytes() for s in json.loads((DESIGN / 'CONSTRUCTED_SOURCE_ROSTER_001.json').read_text())}
+        self.cov_ref = self.args['covariance']['source_ref']
+        self.main_ref = self.args['source_ref']
+        self.data[self.cov_ref] = self.case['source_covariance_text'].encode()
+        self.doc = json.loads(self.case['source_covariance_text'])
+        self.calls = []
         if local:
             self.args['local_pair_assignments'] = [dict(pair_key='condition0-real', condition='condition0', protein=dict(role=ROLES[2], reading_key=None), control=dict(role=ROLES[3], reading_key=None), admissibility=self.interp('compatible', 'nmol/min'), scope=self.interp('same', 'nmol/min'), covariance_selection=cp(self.args['covariance']), variance_status=cp(self.args['variance_status']))]
         if companion:
             reading = cp(self.args['arms'][ROLES[0]])
-            reading['measurement'] = cp(V2Fixture(6).args['arms'][ROLES[0]]['measurement'])
+            reading['measurement'] = cp(CASES[6]['selection']['arms'][ROLES[0]]['measurement'])
             self.args['companion_readings'] = [dict(reading_key='A-display', primary_role=ROLES[0], reading=reading)]
             if authority:
                 self.append('The table reports the experimental mean; the graph displays this same mean.')
@@ -32,8 +43,55 @@ class Fixture(V2Fixture):
                     self.args['joint_reading_assignments'].append(dict(assignment={r: key if r == ROLES[0] else None for r in ROLES}, admissibility=relation('compatible')))
                     self.args['joint_scopes'].append(dict(assignment_index=i, **{k: relation('same') for k in ('normalization', 'calibration', 'revision', 'covariance_scope', 'model_scope')}, covariance_selection=cp(self.args['covariance']), variance_status=cp(self.args['variance_status']), model_kind=cp(self.args['model_kind'])))
 
+    def source(self, reference, representation):
+        self.calls.append((reference, representation))
+        raw = self.data[reference]
+        return {'artifact_ref': 'artifact_' + hashlib.sha256(raw).hexdigest(), 'content': raw}
+
     def read(self):
         return source.read_controlled_response_v3_inputs(self.args, read_source=self.source)
+
+    def witness(self, quote, ref=None, tagged=True, start=0):
+        ref = ref or self.main_ref
+        at = self.data[ref].index(quote.encode(), start)
+        w = dict(source_ref=ref, representation='original', start=at, end=at + len(quote.encode()), quote=quote)
+        return dict(kind='text', **w) if tagged else w
+
+    def interp(self, value, quote=None):
+        return dict(value=value, witnesses=[] if quote is None else [self.witness(quote)])
+
+    def number(self, quote, token):
+        at = quote.index(token)
+        return dict(witness=self.witness(quote, tagged=False), number_start=at, number_end=at + len(token))
+
+    def append(self, text):
+        self.data[self.main_ref] += ('<p>' + text + '</p>\n').encode()
+
+    def covariance(self, mapping=None):
+        self.data[self.cov_ref] = (json.dumps(self.doc, indent=2) + '\n').encode()
+        labels = list(re.finditer(b'"label":\\s*("(?:[^"\\\\]|\\\\.)*")', self.data[self.cov_ref]))
+        for role in ROLES:
+            b = self.args['covariance']['bindings'][role]
+            if mapping is not None:
+                index = mapping[ROLES.index(role)]
+                if index is None:
+                    self.args['covariance']['bindings'][role] = None
+                    continue
+                if b is None:
+                    b = dict(variable_index=index, label_witness=None, owner_witness=cp(self.args['arms'][role]['physical_observation']['canonical_witness']), correspondence=None)
+                    self.args['covariance']['bindings'][role] = b
+                b['variable_index'] = index
+            if b is None:
+                continue
+            at, end = labels[b['variable_index']].span(1)
+            b['label_witness'] = dict(source_ref=self.cov_ref, representation='original', start=at, end=end, quote=self.data[self.cov_ref][at:end].decode())
+            b['correspondence'] = dict(value='same', witnesses=[dict(kind='text', **b['label_witness'])])
+        for name in ('variance_status', 'model_kind'):
+            self.args[name] = dict(value=self.doc[name], witnesses=[self.witness(json.dumps(self.doc[name]), self.cov_ref)])
+
+    def text_measurement(self, role, text, token, unit='nmol/min'):
+        self.append(text)
+        self.args['arms'][role]['measurement'] = dict(kind='source_literal', literal=dict(status='exact', candidates=[self.number(text, token)], fragments=[]), unit=self.witness(unit, tagged=False, start=self.data[self.main_ref].index(text.encode())) if unit else None)
 
 @pytest.mark.parametrize('index', range(14))
 def test_original_source_cases_and_saved_reconstruction(index):
@@ -116,8 +174,7 @@ def test_unresolved_canceled_representations_do_not_require_favorable_reading():
     assert result['calculation_inputs']['arms'][ROLES[1]] == result['arms'][ROLES[1]]['calculation_operand']
     assert source.validate_controlled_response_v3_extraction(f.args, result) == result
 
-def test_live_closed_schema_graph_and_unchanged_v2_base():
-    from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_v2_inputs as v2
+def test_live_closed_schema_graph():
     schemas = source._schemas()
     assert len(schemas) == 7
     for schema in schemas.values():
@@ -133,10 +190,4 @@ def test_live_closed_schema_graph_and_unchanged_v2_base():
                 for item in value:
                     walk(item)
         walk(schema)
-    baseline, current = (v2.controlled_response_v2_arguments_schema(), source.controlled_response_v3_arguments_schema())
-    for key in baseline['properties']:
-        if key != 'version':
-            assert current['properties'][key] == baseline['properties'][key]
-    for key, value in baseline['$defs'].items():
-        assert current['$defs'][key] == value
     assert schemas['EXTRACTION_SCHEMA_V3_007']['$defs']['CovarianceExtraction']['properties']['raw_text'] == {'anyOf': [{'type': 'string'}, {'type': 'null'}]}

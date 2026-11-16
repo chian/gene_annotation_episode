@@ -4,7 +4,6 @@ import hashlib
 import json
 import os
 from pathlib import Path
-import shutil
 import subprocess
 import sys
 
@@ -44,15 +43,6 @@ def fixture(base, program="psiblast", query="sequence", behavior="complete", che
     base.mkdir(parents=True, exist_ok=True)
     deploy = base / "deployment"
     copy_current_driver_deployment(deploy, driver, c, parser=pssm_parser, write=write)
-    runtime = write(base / "runtime-file", b"synthetic explicit additional runtime-file identity\n")
-    python = file_identity(Path(sys.executable).resolve())
-    manifest = {"version": "native_blast_database_producer_manifest_v1", "module_root": str(deploy),
-        "entry_module": "gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_driver",
-        "python": {k: python[k] for k in ("path", "sha256", "size_bytes")},
-        "package_files": [{"relative_path": str(p.relative_to(deploy)), **{k: file_identity(p)[k] for k in ("sha256", "size_bytes")}}
-            for p in sorted(deploy.rglob("*")) if p.is_file()],
-        "runtime_files": [{k: runtime[k] for k in ("path", "sha256", "size_bytes")}]}
-    manifest_identity = save_json(base / "producer-manifest.json", manifest)
     # This small script simulates the selected process's file/exit behavior. It
     # neither reads a real database nor emits authentic scientific measurements.
     script = ("#!" + sys.executable + "\n" + '''import json, os, pathlib, sys
@@ -119,11 +109,10 @@ raise SystemExit(7 if mode == "nonzero" else 0)
     plan = {"version": "native_blast_database_run_plan_v1", "identity": owner, "requested_job": request,
         "attempt_directory": str(attempt), "input_paths": {r["input_key"]: str(attempt / "inputs" / r["input_key"]) for r in job["inputs"]},
         "database_paths": {r["database_key"]: r["native_paths"] for r in job["databases"]},
-        "output_directory": str(attempt / "outputs"), "resource_environment": {"RESOURCE_SETTING": "explicit"},
-        "producer_manifest": manifest_identity}
+        "output_directory": str(attempt / "outputs"), "resource_environment": {"RESOURCE_SETTING": "explicit"}}
     path = attempt / "selected-plan.json"
     save_json(path, plan)
-    return path, plan, manifest
+    return path, plan, deploy
 
 
 def refresh_plan(path, plan):
@@ -134,8 +123,7 @@ def refresh_plan(path, plan):
 
 
 def run_fixture(path, plan, *, shadow=None):
-    manifest = json.loads(Path(plan["producer_manifest"]["path"]).read_bytes())
-    deployment = manifest["module_root"] if shadow is None else str(shadow)
+    deployment = str(path.parent.parent / "deployment") if shadow is None else str(shadow)
     result = subprocess.run([sys.executable, "-B", "-m", "gene_annotation_episode.episodic_workflow.root.a101.native_blast_database_driver", str(path)],
         cwd=path.parent, env={"PYTHONPATH": deployment, "PYTHONDONTWRITEBYTECODE": "1", "PBS_JOBID": "313.synthetic"},
         stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
@@ -155,12 +143,10 @@ def validate_bundle(bundle, plan):
 @pytest.mark.parametrize("program,query", [(p, q) for p in c.PROGRAMS for q in
     ({"psiblast": ["sequence", "msa", "pssm"], "tblastn_vdb": ["sequence", "pssm"]}.get(p, ["sequence"]))])
 def test_exported_driver_exact_one_simulated_invocation_and_byte_retention(tmp_path, program, query):
-    path, plan, manifest = fixture(tmp_path, program, query)
+    path, plan, _ = fixture(tmp_path, program, query)
     result, bundle = run_fixture(path, plan)
     assert result.returncode == 0, result.stderr.decode()
     assert bundle["failures"] == []
-    assert bundle["producer_verification"]["status"] == "verified"
-    assert bundle["producer_verification"]["manifest"] == manifest
     assert validate_bundle(bundle, plan) == bundle
     count = (path.parent / "native-invocations.log").read_text().splitlines()
     assert len(count) == 1
@@ -220,44 +206,6 @@ def test_no_checkpoint_emission_is_not_missing_report(tmp_path):
     assert not bundle["failures"]
     assert all(r["presence"] == "not_emitted" and r["artifact_keys"] == []
         for r in bundle["output_manifest"] if r["output_key"].startswith("checkpoint_"))
-
-
-@pytest.mark.parametrize("change,code", [("package", "producer_file_identity_mismatch"), ("runtime", "producer_file_identity_mismatch"),
-    ("extra", "producer_package_inventory_mismatch"), ("missing", "producer_file_missing"),
-    ("symlink", "producer_package_inventory_mismatch"), ("manifest", "producer_manifest_invalid"),
-    ("duplicate_json", "producer_manifest_invalid"), ("shadow", "producer_runtime_path_mismatch")])
-def test_manifest_alone_cannot_certify_actual_package_or_runtime(tmp_path, change, code):
-    path, plan, manifest = fixture(tmp_path)
-    deploy = Path(manifest["module_root"])
-    shadow = None
-    if change == "package":
-        with (deploy / "gene_annotation_episode/__init__.py").open("ab") as stream:
-            stream.write(b"\n# changed after manifest\n")
-    elif change == "runtime":
-        Path(manifest["runtime_files"][0]["path"]).write_bytes(b"changed")
-    elif change == "extra":
-        write(deploy / "unexpected", b"extra")
-    elif change == "missing":
-        (deploy / deployment_module_path(pssm_parser)).unlink()
-    elif change == "symlink":
-        (deploy / "escaped-file").symlink_to(tmp_path / "outside-file")
-    elif change == "manifest":
-        with Path(plan["producer_manifest"]["path"]).open("ab") as stream:
-            stream.write(b"\n")
-    elif change == "duplicate_json":
-        raw = Path(plan["producer_manifest"]["path"]).read_bytes().rstrip()
-        raw = raw[:-1] + b',"version":"native_blast_database_producer_manifest_v1"}'
-        plan["producer_manifest"] = write(Path(plan["producer_manifest"]["path"]), raw)
-        save_json(path, plan)
-    elif change == "shadow":
-        shadow = tmp_path / "other-package"
-        shutil.copytree(deploy, shadow)
-    result, bundle = run_fixture(path, plan, shadow=shadow)
-    assert result.returncode == 1, result.stderr.decode()
-    assert code in {f["code"] for f in bundle["failures"]}
-    assert not bundle["process"]["started"]
-    assert not (path.parent / "native-invocations.log").exists()
-    assert validate_bundle(bundle, plan) == bundle
 
 
 @pytest.mark.parametrize("change,code", [("query_missing", "input_missing"), ("query_changed", "input_identity_mismatch"),
@@ -354,11 +302,9 @@ def test_bundle_validator_forbids_io_and_forged_relationships(tmp_path, monkeypa
             lambda b: b["associations"].update(master_record_ordinal=0),
             lambda b: b["database_manifest"][0]["sidecar_artifacts"].reverse(),
             lambda b: b["database_manifest"][0]["checks"].pop(),
-            lambda b: b["producer_verification"]["checks"].pop(),
             lambda b: b["output_manifest"].pop(),
             lambda b: b["artifacts"][0].update(relative_path="../escape"),
-            lambda b: b["input_manifest"][0].update(observed_sha256="f" * 64),
-            lambda b: b["producer_verification"].update(package_inventory_exact=False)):
+            lambda b: b["input_manifest"][0].update(observed_sha256="f" * 64)):
             bad = deepcopy(bundle)
             change(bad)
             with pytest.raises(ValueError):
@@ -432,20 +378,6 @@ def test_actual_input_restrictions_fail_without_guessed_master(tmp_path, query, 
     assert "input_native_incompatible" in {f["code"] for f in bundle["failures"]}
     assert bundle["associations"]["master_record_ordinal"] == ordinal
     assert any(a["input_key"] == "query" for a in bundle["artifacts"])
-
-
-def test_malformed_selected_producer_schema_seals_failure(tmp_path):
-    path, plan, manifest = fixture(tmp_path)
-    manifest["python"] = []
-    plan["producer_manifest"] = save_json(Path(plan["producer_manifest"]["path"]), manifest)
-    save_json(path, plan)
-    # run_fixture needs module_root only; no consumer derives an interpreter
-    # from malformed schema values before validation.
-    result, bundle = run_fixture(path, plan)
-    assert result.returncode == 1, result.stderr.decode()
-    assert bundle["producer_verification"]["manifest"] is None
-    assert "producer_manifest_invalid" in {f["code"] for f in bundle["failures"]}
-    assert not bundle["process"]["started"]
 
 
 def test_family_requires_initially_empty_directory(tmp_path):
@@ -560,17 +492,10 @@ def test_each_metadata_identity_survives_missing_or_equal_content(tmp_path, cond
 
 
 def test_unavailable_input_parser_is_not_malformed_scientific_input(tmp_path):
-    path, plan, manifest = fixture(tmp_path, query="pssm")
-    parser = deployment_module_path(pssm_parser)
-    (Path(manifest["module_root"]) / parser).unlink()
-    # The declared deployment contains the selected producer package closure;
-    # file verification passes but the optional parser is absent.
-    manifest["package_files"] = [r for r in manifest["package_files"] if r["relative_path"] != parser]
-    plan["producer_manifest"] = save_json(Path(plan["producer_manifest"]["path"]), manifest)
-    save_json(path, plan)
+    path, plan, deploy = fixture(tmp_path, query="pssm")
+    (deploy / deployment_module_path(pssm_parser)).unlink()
     result, bundle = run_fixture(path, plan)
     assert result.returncode == 1, result.stderr.decode()
-    assert bundle["producer_verification"]["status"] == "verified"
     assert not bundle["process"]["started"]
     assert {f["code"] for f in bundle["failures"]} == {"producer_input_parser_unavailable"}
     failure = bundle["failures"][0]

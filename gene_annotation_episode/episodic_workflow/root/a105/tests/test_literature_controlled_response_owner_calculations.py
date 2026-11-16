@@ -1,14 +1,14 @@
 """Constructed parsed inputs only; no source, image, model or episode execution."""
 from copy import deepcopy
 import pytest
-from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_calculations as old
+from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_calculations as arithmetic
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_owner_calculations as owner
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
-ROLES = old.PRIMITIVE_ORDER
-EFFECT, VARIANCE, SE, PRECISION, SCORE, INDEX = old.COMPONENTS[6:]
+ROLES = arithmetic.PRIMITIVE_ORDER
+EFFECT, VARIANCE, SE, PRECISION, SCORE, INDEX = arithmetic.COMPONENTS[6:]
 
 def arm(value, condition, physical, *, control=False):
-    return {'value': value, 'threshold': None, 'relation': 'eq', 'approximate': False, 'unit': 'nmol/min', 'status': 'point', 'endpoint_id': 'constructed_initial_rate', 'normalization_id': 'constructed_common_basis', 'subject_construct_id': 'constructed_empty' if control else 'constructed_protein', 'condition_id': condition, 'physical_observation_id': physical, 'source_observation_id': 'constructed_source_' + physical, 'origin': 'synthetic', 'digitization_interval': None, 'protein_arrangement': 'protein_free_control' if control else 'protein_present', 'meaning_statuses': dict.fromkeys(old._MEANINGS, 'known')}
+    return {'value': value, 'threshold': None, 'relation': 'eq', 'approximate': False, 'unit': 'nmol/min', 'status': 'point', 'endpoint_id': 'constructed_initial_rate', 'normalization_id': 'constructed_common_basis', 'subject_construct_id': 'constructed_empty' if control else 'constructed_protein', 'condition_id': condition, 'physical_observation_id': physical, 'source_observation_id': 'constructed_source_' + physical, 'origin': 'synthetic', 'digitization_interval': None, 'protein_arrangement': 'protein_free_control' if control else 'protein_present', 'meaning_statuses': dict.fromkeys(arithmetic._MEANINGS, 'known')}
 
 def distinct():
     arms = {role: arm(value, 'c1' if i < 2 else 'c0', role, control=i % 2 == 1) for i, (role, value) in enumerate(zip(ROLES, (12, 2, 5, 1)))}

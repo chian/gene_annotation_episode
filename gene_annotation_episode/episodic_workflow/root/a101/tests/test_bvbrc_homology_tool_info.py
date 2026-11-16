@@ -19,8 +19,7 @@ from test_public_search import Client
 def configuration(*, bound=True):
     config = deepcopy(CONFIG)
     config['scientific_adapters'] = ([{'adapter_id': adapter.ADAPTER_ID,
-        'adapter_version': adapter.ADAPTER_VERSION,
-        'implementation_sha256': adapter.implementation_sha256()}] if bound else [])
+        'adapter_version': adapter.ADAPTER_VERSION}] if bound else [])
     return config
 
 
@@ -119,8 +118,7 @@ def test_only_installed_bound_adapter_is_advertised(factory):
     create, _ = factory
     config = configuration(bound=False)
     assert scientific_rows(create({'selected-api': config})) == {}
-    config['scientific_adapters'] = [{'adapter_id': 'unknown', 'adapter_version': '1',
-        'implementation_sha256': '0' * 64}]
+    config['scientific_adapters'] = [{'adapter_id': 'unknown', 'adapter_version': '1'}]
     assert scientific_rows(create({'selected-api': config})) == {}
 
 

@@ -95,26 +95,15 @@ def fixture(program="blastp", *, query=None, kind="sequence", doc=None, options=
         operation_key="synthetic-selection", assignment_sha256="1" * 64, requested_job_sha256=sha(encoded(request)), execution_id=None)
     identity["attempt_id"] = sha(encoded(identity["operation_key"]))
     identity["submission_token"] = sha(encoded({k: identity[k] for k in ("run_id", "episode_id", "assignment_sha256", "operation_key")}))
-    manifest = dict(version="native_blast_standard_database_producer_manifest_v1", module_root="/synthetic/modules",
-        entry_module="gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_driver",
-        python=dict(path="/synthetic/bin/python", sha256="2" * 64, size_bytes=30),
-        package_files=[dict(relative_path="gene_annotation_episode/" + name, sha256="3" * 64, size_bytes=40)
-            for name in ("__init__.py", "episodic_workflow/root/a101/library/native_blast_standard_database_contracts.py",
-                "episodic_workflow/root/a101/native_blast_standard_database_driver.py",
-                "episodic_workflow/root/a101/library/blast_program_context.py")], runtime_files=[])
-    producer_raw = encoded(manifest)
     plan = dict(version="native_blast_standard_database_run_plan_v1", identity=identity,
         requested_job=request, attempt_directory="/synthetic/attempt", input_paths={r["input_key"]: "/synthetic/attempt/input/" + r["input_key"] for r in job["inputs"]},
         database_paths={"target": db["native_paths"]}, output_directory="/synthetic/attempt/output",
-        resource_environment={}, producer_manifest=dict(path="/synthetic/producer-manifest.json", sha256=sha(producer_raw),
-            size_bytes=len(producer_raw), artifact_ref=None))
+        resource_environment={})
     final_identity = {**identity, "execution_id": "synthetic-pbs-id"}
     at = "2026-10-26T00:00:00+00:00"
     bundle = dict(version="native_blast_standard_database_bundle_v1", identity=final_identity, plan=plan,
         requested_job=request, program=program, mode="database", software=dict(selected=job["software"],
             observed_sha256=job["software"]["sha256"], version_source=None),
-        producer_verification=dict(manifest=manifest, manifest_observed_sha256=sha(producer_raw),
-            package_inventory_exact=True, running_module_paths_match=True, checks=[], status="verified"),
         realized_argv=n.compile_standard_blast_database_argv(job, input_paths=plan["input_paths"],
             database_paths=plan["database_paths"], output_directory=plan["output_directory"]),
         environment={**job["environment"], **{k: "/synthetic/attempt/tmp" for k in ("TMPDIR", "TMP", "TEMP")},
@@ -122,10 +111,6 @@ def fixture(program="blastp", *, query=None, kind="sequence", doc=None, options=
         input_manifest=[], database_manifest=[], output_manifest=[], artifacts=[],
         associations=dict(query_input_key="query", selected_options=job["options"], external_manifest_keys=["manifest"]),
         process=dict(started=True, returncode=0, started_at=at, finished_at=at, native_elapsed_seconds=0.0), failures=[], sealed_at=at)
-    for kind_name, path, digest, size in [("python", manifest["python"]["path"], "2" * 64, 30),
-            *[("package", "/synthetic/modules/" + r["relative_path"], r["sha256"], r["size_bytes"]) for r in manifest["package_files"]]]:
-        bundle["producer_verification"]["checks"].append(dict(kind=kind_name, path=path,
-            observed_sha256=digest, size_bytes=size, checked_at=at, status="verified"))
     catalog = dict(bundle_source_ref="source-bundle", bundle_artifact_ref="artifact-bundle", bundle_sha256="",
                    entries=[], retained_sources=[])
     contents = {}
@@ -150,7 +135,6 @@ def fixture(program="blastp", *, query=None, kind="sequence", doc=None, options=
             observed_sha256=sha(original_raw), size_bytes=len(original_raw)))
     capture("manifest", manifest_raw, "database_manifest", "json", "custody/manifest", database_key="target")
     capture("receipt", receipt_raw, "preparation_receipt", "opaque", "custody/receipt", database_key="target")
-    capture("producer", producer_raw, "producer_manifest", "json", "custody/producer")
     bundle["database_manifest"].append(dict(database_key="target", native_paths=db["native_paths"],
         manifest_artifact_key="manifest", preparation_receipt_artifact_key="receipt", metadata_manifest_artifacts=[], sidecar_artifacts=[],
         checks=[dict(path=r["path"], expected_sha256=r["sha256"], observed_sha256=r["sha256"], size_bytes=r["size_bytes"],

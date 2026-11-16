@@ -65,6 +65,17 @@ def selector(*metrics, family="hit", rows=None, table=False, projection=True):
         if projection else None}
 
 
+def wire_capture(content, filename):
+    """The submitted multipart body as the transport records it."""
+    from gene_annotation_episode.rfam_discovery import BASE_URL
+    raw = (b'--boundary\r\nContent-Disposition: form-data; name="sequence_file"; filename="'
+        + filename.encode("ascii") + b'"\r\nContent-Type: text/plain\r\n\r\n' + content + b'\r\n--boundary--\r\n')
+    return {"method": "POST", "url": BASE_URL + "/submit-job",
+        "headers": {"Content-Type": "multipart/form-data; boundary=boundary"},
+        "body_base64": base64.b64encode(raw).decode("ascii"),
+        "body_sha256": hashlib.sha256(raw).hexdigest(), "body_bytes": len(raw)}
+
+
 class SavedClient:
     """Captured single bytes unchanged; table name variants are marked synthetic."""
     timeout = 90
@@ -78,7 +89,8 @@ class SavedClient:
         self.calls.append("submit_saved_single")
         value = snapshot("single", "001-submit")
         assert value.request["sequence_sha256"] == hashlib.sha256(sequence.encode()).hexdigest()
-        return value
+        return replace(value, transport={**value.transport,
+            "request": wire_capture((sequence + "\n").encode("ascii"), "sequence.seq")})
 
     def submit_file(self, content, *, filename):
         self.calls.append("submit_synthetic_batch")
@@ -86,7 +98,8 @@ class SavedClient:
         return replace(value, request={**value.request, "filename": filename,
             "file_base64": base64.b64encode(content).decode(),
             "file_sha256": hashlib.sha256(content).hexdigest(), "file_bytes": len(content)},
-            transport={"status": 200, "body_complete": True, "evidence_kind": "synthetic_fixture"})
+            transport={"status": 200, "body_complete": True, "evidence_kind": "synthetic_fixture",
+                "request": wire_capture(content, filename)})
 
     def result(self, job_id, *, representation):
         self.calls.append("fetch_saved:" + representation)

@@ -1,4 +1,4 @@
-"""Real configured descriptors round-trip and refuse a changed implementation digest."""
+"""Real configured descriptors round-trip; changed binding identity or configuration is refused."""
 from copy import deepcopy
 import json
 import pytest
@@ -7,19 +7,13 @@ from .test_actual_private_registry import constructed
 from .test_private_descriptor_reopening import compose
 
 
-def test_real_configured_descriptor_roundtrip_and_strict_hash_conflict(constructed,tmp_path):
+def test_real_configured_descriptor_roundtrip(constructed,tmp_path):
     _,_,_,bindings,literature = constructed
     descriptors = [b.as_record() for b in (bindings[0],*literature)]
     (tmp_path/'actual-descriptors.json').write_text(json.dumps(descriptors,sort_keys=True)+'\n')
     rebuilt = compose(constructed,descriptors)
     assert [b.as_record() for b in rebuilt.bindings] == descriptors
     assert [type(b) for b in rebuilt.bindings] == [type(b) for b in (bindings[0],*literature)]
-    saved = deepcopy(descriptors)
-    for original in descriptors:
-        changed=deepcopy(original); changed['implementation_sha256']='0'*64
-        with pytest.raises(own('method_loop.durable').DurableExecutionError):
-            compose(constructed,[changed])
-    assert descriptors == saved
 
 
 @pytest.mark.parametrize('change', ('binding_id','configuration'))

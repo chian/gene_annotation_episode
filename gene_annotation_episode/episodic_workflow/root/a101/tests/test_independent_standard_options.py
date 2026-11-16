@@ -59,7 +59,6 @@ def reconstruction(tmp_path, monkeypatch):
             self.closed = True
 
     monkeypatch.setattr(subject, 'Store', SavedSettingsStore)
-    monkeypatch.setattr(subject, 'implementation_sha256', lambda: 'a' * 64)
     options = {'project_credit': object(), 'binding_definitions': {'engineering_fixture': True}}
     def resolve(store, supplied_directory, supplied_settings):
         assert store is stores[-1] and not store.closed
@@ -79,7 +78,7 @@ def reconstruction(tmp_path, monkeypatch):
                'arguments': {'version': subject.VERSION, 'workspace': str(workspace),
                              'run_directory': str(directory), 'kind': 'standard_default',
                              'tool_configuration': settings['tool_configuration'], 'caller_binding_pins': {}},
-               'implementation_sha256': 'a' * 64, 'settings_sha256': subject.content_digest(settings)}
+               'settings_sha256': subject.content_digest(settings)}
     spec = {'version': 'episode_commission_v1', 'handle': 'engineering-child',
             'operation_key': 'engineering-operation', 'run_id': run_id,
             'parent': {'episode_id': EpisodeRef(run_id, parent_path).episode_id,

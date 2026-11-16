@@ -166,8 +166,6 @@ def _saved_facts(body, sheet_set, component_set):
     _require(type(selected) is dict
         and all(selected.get(key) == saved[key] for key in ("adapter_id", "adapter_version"))
         and _same(inputs.get("adapter"), selected), "original_adapter_conflict")
-    pin = inputs.get("adapter_implementation_sha256")
-    _require(type(pin) is str and re.fullmatch(r"[0-9a-f]{64}", pin) is not None, "original_adapter_pin_required")
     _require(_same(body.get("assignment", {}).get("selector"), selector), "original_selector_conflict")
     provider = _ADAPTERS[saved["adapter_id"]]
     parameters = validate_parameters(selected["parameters"], provider=provider)

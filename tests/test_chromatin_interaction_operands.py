@@ -18,7 +18,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root import chromatin_interaction_operands as operands
 from gene_annotation_episode.episodic_workflow.root.communication import plain
-from gene_annotation_episode.episode_bindings import BindingContext
+from gene_annotation_episode.episodic_workflow.root.episode_bindings import BindingContext
 from gene_annotation_episode.episodic_workflow.root.episode_journal import Journal
 from gene_annotation_episode.episodic_workflow.root.episode_receipts import EpisodeReceipts
 from gene_annotation_episode.execution_contracts import canonical

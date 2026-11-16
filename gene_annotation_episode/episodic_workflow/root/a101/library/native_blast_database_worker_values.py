@@ -146,23 +146,6 @@ _SNAPSHOT_ID = dict(subject_ref=_views._REF, record_type={"enum": ["input", "fea
     molecule={"enum": ["dna", "rna", "protein"]}, length={"type": "integer", "minimum": 1},
     sequence_sha256=_views._SHA, sequence_artifact_ref=_views._REF)
 
-def native_blast_database_implementation_identity(files):
-    """Identity of exact implementation bytes, independent of their paths."""
-    files = _views._copy(files)
-    if type(files) is not list or not files:
-        raise ValueError("native_blast_database_implementation_files_required")
-    projected = []
-    for row in files:
-        if type(row) is not dict or set(row) not in ({"module", "sha256"}, {"module", "path", "sha256"}):
-            raise ValueError("native_blast_database_implementation_file_invalid")
-        _shape({k: row[k] for k in ("module", "sha256")}, _views._object(dict(module=_views._TOKEN, sha256=_views._SHA)))
-        if "path" in row:
-            _absolute_path(row["path"])
-        projected.append({k: row[k] for k in ("module", "sha256")})
-    if len({r["module"] for r in projected}) != len(projected):
-        raise ValueError("native_blast_database_implementation_module_duplicate")
-    return _hash(dict(version="native_blast_database_implementation_identity_v1", files=sorted(projected, key=lambda r: r["module"])))
-
 def native_blast_database_input_identity(request):
     """Identity of selected captured inputs; no path lookup or interpretation."""
     request = _views._copy(request)
@@ -183,22 +166,21 @@ def native_blast_database_input_identity(request):
         raise ValueError("native_blast_database_input_identity_invalid") from error
     return _hash(value)
 
-def native_blast_database_calculation_identity(*, input_identity, input_implementation_sha256, sequence_model, implementation_manifest_sha256, vdb_function_model=None):
+def native_blast_database_calculation_identity(*, input_identity, sequence_model, vdb_function_model=None):
     """Separate input interpretation from the selected numerical generation."""
-    for digest in (input_identity, input_implementation_sha256, implementation_manifest_sha256):
-        _shape(digest, _views._SHA)
+    _shape(input_identity, _views._SHA)
     model = _model(sequence_model)
     interpretation = _hash(dict(version="native_blast_database_interpretation_identity_v1",
-        input_identity=input_identity, input_implementation_sha256=input_implementation_sha256))
+        input_identity=input_identity))
     if vdb_function_model is not None:
         from gene_annotation_episode.episodic_workflow.root.a101.library.blast_vdb_function_calculators import validate_blast_vdb_function_model
         function_model = validate_blast_vdb_function_model(vdb_function_model)
         return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(
             version="native_blast_vdb_function_calculation_identity_v1", input_interpretation_id=interpretation,
             base_calculation_contract=dict(schema="native_blast_database_calculations_v1", sequence_model=model),
-            model=function_model, calculator_implementation_identity=implementation_manifest_sha256)))
+            model=function_model)))
     return dict(input_interpretation_id=interpretation, calculation_id=_hash(dict(version="native_blast_database_calculation_identity_v1",
-        input_interpretation_id=interpretation, sequence_model=model, implementation_manifest_sha256=implementation_manifest_sha256)))
+        input_interpretation_id=interpretation, sequence_model=model)))
 
 def _search_binding_rows(sheet_set):
     rows = []

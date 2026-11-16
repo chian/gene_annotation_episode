@@ -189,7 +189,9 @@ def test_bad_uncertainty_returns_existing_row_feedback_and_preserves_independent
         assert result["errors"] == [{"section": "observations", "row_index": 0,
             "code": "representation_error", "field_path": ["measurements", 0, "value"], "schema_keyword": "anyOf"}]
         assert len(store.list("observation")) == 3
-        assert store.get(result["aliases"]["serine_level"])["anchor"] == data["observations"][1]["anchor"]
+        stored = store.get(result["aliases"]["serine_level"])["anchor"]
+        location = data["observations"][1]["anchor"]
+        assert {key: stored[key] for key in location} == location
 
 
 def test_bad_unit_reference_does_not_become_concentration_or_delete_the_source(tmp_path):

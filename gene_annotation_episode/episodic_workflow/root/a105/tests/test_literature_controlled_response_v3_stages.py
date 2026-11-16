@@ -1,22 +1,19 @@
 """Constructed source bytes/pixels for shared v3 stages; no paper/model run."""
 from copy import deepcopy as cp
-from pathlib import Path
-import runpy
 import pytest
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_inputs as shared
 from gene_annotation_episode.episodic_workflow.root.a105.library import literature_controlled_response_v3_inputs as v3
 from gene_annotation_episode.episodic_workflow.root.a105.domain import ContractError
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError
-Fixture = runpy.run_path(str(Path(__file__).with_name('test_literature_controlled_response_v2_inputs.py')))['Fixture']
+from gene_annotation_episode.episodic_workflow.root.a105.tests.test_literature_controlled_response_v3_inputs import Fixture
 ROLES = shared.PRIMITIVE_ORDER
 
 def forbidden(*args, **kwargs):
     raise AssertionError('unexpected source/decode/count/model/population')
 
 def fixture(index=0, *, companion=False, joint=True, local=True):
-    f = Fixture(index)
+    f = Fixture(index, local=False)
     a = f.args
-    a.update(version='controlled_response_source_selection_v3', companion_readings=[], joint_reading_assignments=[], joint_scopes=[], reading_reconciliations=[], local_pair_assignments=[])
     witness = f.witness('Only the intended factor differs.')
     scope = dict(value='same', witnesses=[cp(witness)])
     if companion:

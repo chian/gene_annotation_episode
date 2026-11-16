@@ -14,7 +14,7 @@ from pathlib import Path
 from .domain import ContractError
 from .execution_contracts import canonical, digest, validate_target
 from .materials import artifact_file, artifact_path
-from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_contracts import validate_retained_native_blast_database_bundle
+from gene_annotation_episode.episodic_workflow.root.a101.library.native_blast_database_contracts import validate_native_blast_database_bundle
 from .practical_execution_state import _immutable, _read
 
 VERSION = 'native_blast_database_capture_v1'
@@ -183,7 +183,7 @@ def _validate_capture(store, capture, *, target=None, operation_key=None, direct
         plan = _decode(_retained(store, capture['plan_artifact_ref']).read_bytes())
         if digest(plan) != attempt['plan_sha256']:
             raise ContractError('native_blast_database_original_plan_identity_conflict')
-        bundle = validate_retained_native_blast_database_bundle(
+        bundle = validate_native_blast_database_bundle(
             _decode(_retained(store, capture['bundle_artifact_ref']).read_bytes()),
             original_job=capture['target']['assignment']['requested_job']['native_blast_database'], attempt_identity=attempt)
         if bundle['plan'] != plan:
@@ -245,7 +245,7 @@ def capture_native_blast_database_bundle(store, *, target, reader, operation_key
             try:
                 ref = _transfer(store, reader, target, operation_key, str(root / 'bundle.json'), directory / 'bundle.capture')
                 result['bundle_artifact_ref'] = ref
-                bundle = validate_retained_native_blast_database_bundle(_decode(_retained(store, ref).read_bytes()),
+                bundle = validate_native_blast_database_bundle(_decode(_retained(store, ref).read_bytes()),
                     original_job=target['assignment']['requested_job']['native_blast_database'], attempt_identity=attempt)
                 if bundle['plan'] != plan:
                     raise ValueError('original_plan_mismatch')

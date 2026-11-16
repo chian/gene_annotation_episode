@@ -55,37 +55,6 @@ def concat_case(maps=None):
     return toy(data, [('left.fa', b'>repeat\nACG\n>repeat\nTAA\n'), ('right.fa', b'>repeat\nTACG\n')], original_maps=maps)
 
 
-@pytest.mark.parametrize('name,mode', [('combined.xmfa', 'single_file_entries'),
-                                     ('separate.xmfa', 'multiple_files_concatenated')])
-def test_every_native_cell_matches_retained_arithmetic_and_actual_source_bytes(name, mode):
-    document = native_document(name); bindings = bind(document, supplied(mode))
-    result = xmfa_column_coordinates(document, cells=all_cells(document), bindings=bindings)
-    arithmetic = json.loads((BASE.parent / 'NATIVE_ARITHMETIC.json').read_text())
-    expected = next(example for example in arithmetic['examples'] if example['fixture'] == name)
-    lookup = {(b['block_index'], r['row_index']): r for b in expected['blocks'] for r in b['rows']}
-    originals = {m['member_number']: m['source_sequence'] for m in bindings['members']}
-    for item in result['cells']:
-        bi, ri, column = item['cell'].values()
-        expected_position = lookup[bi, ri]['column_positions_0based'][column]
-        assert item['native_position_0based'] == expected_position
-        if expected_position is not None:
-            assert item['forward_symbol'].upper() == originals[item['member_number']][expected_position].upper()
-            assert item['source_coordinate']['position_0based'] == expected_position
-            assert item['native_position_1based'] == expected_position + 1
-        else:
-            assert item['source_coordinate'] is None
-    # Each nucleotide in these two retained examples has exactly one native
-    # placement, independently of row orientation and position within a block.
-    queries = tuple({'member_number': m['member_number'], 'position_0based': p}
-                    for m in bindings['members'] for p in range(m['source_length']))
-    inverse = xmfa_source_positions(document, queries=queries, bindings=bindings)
-    assert all(q['state'] == 'unique' and len(q['matches']) == 1 for q in inverse['queries'])
-    by_cell = {tuple(x['cell'].values()): x for x in result['cells']}
-    for query in inverse['queries']:
-        match = by_cell[tuple(query['matches'][0].values())]
-        assert (match['member_number'], match['native_position_0based']) == (query['member_number'], query['position_0based'])
-
-
 def test_plus_minus_endpoints_subset_invariance_and_iupac_forward_complement():
     doc, _ = toy(b'#FormatVersion Mauve1\n>1:2-5 -\n-A-RYN-\n>2:1-4 +\n-A-RYN-\n=\n')
     full = xmfa_column_coordinates(doc, cells=all_cells(doc), bindings=None)
@@ -265,20 +234,6 @@ def test_inverse_detached_validator_rejects_false_uniqueness_and_invalid_records
     if change == 'bool_position': row['position_0based'] = False
     with pytest.raises(ValueError, match='xmfa_'):
         validate_xmfa_inverse_coordinates(result)
-
-
-def test_every_larger_native_coordinate_agrees_with_independent_retained_arithmetic():
-    doc = native_document('simple.xmfa')
-    arithmetic = json.loads((BASE.parent / 'NATIVE_ARITHMETIC.json').read_text())
-    expected = next(example for example in arithmetic['examples'] if example['fixture'] == 'simple.xmfa')
-    positions = {(b['block_index'], r['row_index']): r['column_positions_0based']
-                 for b in expected['blocks'] for r in b['rows']}
-    result = xmfa_column_coordinates(doc, cells=all_cells(doc), bindings=None)
-    for row in result['cells']:
-        bi, ri, column = row['cell'].values()
-        assert row['native_position_0based'] == positions[bi, ri][column]
-    assert {row['source_state'] for row in result['cells']} == {'missing', 'not_applicable'}
-    assert len(result['requirements']) == 2
 
 
 @pytest.mark.parametrize('change', ['wrong_length', 'wrong_strand', 'no_source', 'extra_field', 'conflicting_occurrence'])

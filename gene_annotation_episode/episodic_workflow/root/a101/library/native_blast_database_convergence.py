@@ -283,7 +283,7 @@ def bind_native_blast_database_convergence(*, original_job, bundle, attempt_iden
         (("original_job", original_job), ("bundle", bundle), ("attempt_identity", attempt_identity))}
     # Preserve the existing producer validator's exact rejection and independent
     # attempt argument. This is qualification, never external authentication.
-    _producer.validate_retained_native_blast_database_bundle(context["bundle"], original_job=context["original_job"],
+    _producer.validate_native_blast_database_bundle(context["bundle"], original_job=context["original_job"],
         attempt_identity=context["attempt_identity"])
     collection = _copy(collection, "input", "/collection")
     _context_collection(context, collection, "input")
@@ -458,7 +458,7 @@ def validate_native_blast_database_convergence_binding(binding, *, collection):
     _shape(binding, _BINDING, "binding", "")
     context = binding["source_context"]
     try:
-        _producer.validate_retained_native_blast_database_bundle(context["bundle"], original_job=context["original_job"],
+        _producer.validate_native_blast_database_bundle(context["bundle"], original_job=context["original_job"],
             attempt_identity=context["attempt_identity"])
     except ValueError as error:
         raise ValueError(_PREFIX + "binding_invalid", "/source_context") from error

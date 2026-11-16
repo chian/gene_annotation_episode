@@ -11,7 +11,7 @@ from gene_annotation_episode.episodic_workflow.root.a101.library.retained_input_
 FACS_PROFILE = 'biomni_facs_log_548_v1'
 CYTOKINE_LOG_PROFILE = 'biomni_cytokine_log_548_v1'
 CYTOKINE_CSV_PROFILE = 'biomni_cytokine_csv_548_v1'
-PROFILE_SOURCES = {FACS_PROFILE: dict(operation='perform_facs_cell_sorting', source_file_sha256='45f8edb43c079cab4727211ae6cecbf603577b4d886cd05295fabdd561a763af', function_sha256='c400891a22aa723c1fb8d42cce9f2c7b9a8241f9a8c16467780c7c2b6e138fb7'), CYTOKINE_LOG_PROFILE: dict(operation='analyze_cytokine_production_in_cd4_tcells', source_file_sha256='ef97b6bfdd52a935078e0ea4cdd8641edb2d4c1ff7f77f206b551a293fb6bdb4', function_sha256='9d4f5b14cdd5337b4b807dfbe04790a164501ad6bad6fb270bdb6937c0a7a6ba')}
+PROFILE_SOURCES = {FACS_PROFILE: dict(operation='perform_facs_cell_sorting'), CYTOKINE_LOG_PROFILE: dict(operation='analyze_cytokine_production_in_cd4_tcells')}
 PROFILE_SOURCES[CYTOKINE_CSV_PROFILE] = deepcopy(PROFILE_SOURCES[CYTOKINE_LOG_PROFILE])
 CSV_COLUMNS = {'IFN-γ', 'IL-17', 'IFN-γ (background-subtracted)', 'IL-17 (background-subtracted)'}
 _CODE = 'invalid_native_report'

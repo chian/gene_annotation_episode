@@ -209,8 +209,6 @@ def _saved_facts(body, sheet, components):
     selected = selector['adapter']
     _require(type(selected) is dict and all(selected[key] == saved[key] for key in ('adapter_id', 'adapter_version'))
              and _same(inputs.get('adapter'), selected), 'original_adapter_conflict')
-    pin = inputs.get('adapter_implementation_sha256')
-    _require(type(pin) is str and re.fullmatch(r'[0-9a-f]{64}', pin) is not None, 'original_adapter_pin_required')
     assignment = body.get('assignment')
     _require(type(assignment) is dict and _same(assignment.get('selector'), selector)
              and bundle['requested_selector_sha256'] == digest(selector), 'original_selector_conflict')

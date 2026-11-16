@@ -14,7 +14,7 @@ import pytest
 
 from gene_annotation_episode.episodic_workflow.root.a101.library import native_blast_standard_database_contracts as c
 from gene_annotation_episode.episodic_workflow.root.a101 import native_blast_standard_database_driver as driver
-from gene_annotation_episode.episodic_workflow.root.a101.tests.current_native_driver_deployment import (copy_current_driver_deployment, deployment_module_path)
+from gene_annotation_episode.episodic_workflow.root.a101.tests.current_native_driver_deployment import copy_current_driver_deployment
 import gene_annotation_episode.episodic_workflow.root.a101.library.blast_pssm_inputs as selected_pssm_parser
 from test_native_blast_standard_database_contracts import job_for, forbid_io
 
@@ -43,16 +43,6 @@ def fixture(base, program='blastp', query='sequence', behavior='complete', fmt='
     base.mkdir(parents=True, exist_ok=True)
     deploy = base/'deployment'
     copy_current_driver_deployment(deploy, driver, c, parser=selected_pssm_parser if pssm_parser else None, write=write)
-    runtime = write(base/'runtime-file', b'explicit synthetic additional runtime identity\n')
-    python = file_identity(Path(sys.executable).resolve())
-    manifest = {'version': 'native_blast_standard_database_producer_manifest_v1', 'module_root': str(deploy),
-        'entry_module': 'gene_annotation_episode.episodic_workflow.root.a101.native_blast_standard_database_driver',
-        'python': {k: python[k] for k in ['path', 'sha256', 'size_bytes']},
-        'package_files': [{'relative_path': str(p.relative_to(deploy)),
-            **{k: file_identity(p)[k] for k in ['sha256', 'size_bytes']}}
-            for p in sorted(deploy.rglob('*')) if p.is_file()],
-        'runtime_files': [{k: runtime[k] for k in ['path', 'sha256', 'size_bytes']}]}
-    producer_manifest = save_json(base/'producer-manifest.json', manifest)
     script = ('#!'+sys.executable+'\n'+'''import json, os, pathlib, sys
 argv = sys.argv[1:]
 with open("synthetic-invocations.log", "a") as stream:
@@ -106,9 +96,9 @@ raise SystemExit(7 if behavior == "nonzero" else 0)
         'requested_job': request, 'attempt_directory': str(attempt),
         'input_paths': {r['input_key']: str(attempt/'inputs'/r['input_key']) for r in job['inputs']},
         'database_paths': {db['database_key']: db['native_paths']}, 'output_directory': str(attempt/'outputs'),
-        'resource_environment': {'RESOURCE_SETTING': 'explicit'}, 'producer_manifest': producer_manifest}
+        'resource_environment': {'RESOURCE_SETTING': 'explicit'}}
     path = attempt/driver.PLAN_NAME; save_json(path, plan)
-    return path, plan, manifest
+    return path, plan, deploy
 
 
 def refresh_plan(path, plan):
@@ -119,8 +109,6 @@ def refresh_plan(path, plan):
 
 
 def run_fixture(path, plan, *, pbs_jobid='331.synthetic', shadow=None):
-    # The test caller's deployment binding stays independent of manifest bytes;
-    # a tampered manifest must reach the producer's own preflight validator.
     deployment = str(path.parent.parent/'deployment') if shadow is None else str(shadow)
     env = {'PYTHONPATH': deployment, 'PYTHONDONTWRITEBYTECODE': '1'}
     if pbs_jobid is not None: env['PBS_JOBID'] = pbs_jobid
@@ -147,12 +135,10 @@ def validate_bundle(bundle, plan):
 @pytest.mark.parametrize('program,query', [(p,q) for p in c.PROGRAMS for q in
     (['sequence','pssm'] if p == 'tblastn' else ['sequence'])])
 def test_one_synthetic_process_all_modes_exact_retention_and_immutable_replay(tmp_path, program, query):
-    path, plan, manifest = fixture(tmp_path, program, query)
+    path, plan, _ = fixture(tmp_path, program, query)
     result, bundle = run_fixture(path, plan)
     assert result.returncode == 0, result.stderr.decode()
     assert not bundle['failures'] and validate_bundle(bundle, plan) == bundle
-    assert bundle['producer_verification']['manifest'] == manifest
-    assert bundle['producer_verification']['status'] == 'verified'
     assert bundle['process']['started'] and bundle['process']['returncode'] == 0
     assert bundle['process']['native_elapsed_seconds'] >= 0
     invocations = (path.parent/'synthetic-invocations.log').read_text().splitlines()
@@ -241,26 +227,6 @@ def test_changed_or_missing_selected_bytes_prevent_execution_keep_custody(tmp_pa
     assert bundle['input_manifest'] and bundle['database_manifest']
 
 
-@pytest.mark.parametrize('change,code', [('package','producer_file_identity_mismatch'), ('runtime','producer_file_identity_mismatch'),
-    ('extra','producer_package_inventory_mismatch'), ('manifest','producer_manifest_invalid'),
-    ('missing','producer_file_missing'), ('symlink','producer_package_inventory_mismatch')])
-def test_selected_manifest_alone_does_not_verify_actual_runtime(tmp_path, change, code):
-    path,plan,manifest=fixture(tmp_path); deploy=Path(manifest['module_root'])
-    if change=='package':
-        p=deploy/'gene_annotation_episode/__init__.py'; p.write_bytes(p.read_bytes()+b'\n# changed\n')
-    elif change=='runtime': Path(manifest['runtime_files'][0]['path']).write_bytes(b'changed')
-    elif change=='extra': write(deploy/'extra',b'unselected')
-    elif change=='manifest': Path(plan['producer_manifest']['path']).write_bytes(b'changed')
-    elif change=='missing': (deploy/deployment_module_path(selected_pssm_parser)).unlink()
-    else: (deploy/'link').symlink_to(tmp_path/'outside-file')
-    result,bundle=run_fixture(path,plan)
-    assert result.returncode==1, result.stderr.decode()
-    assert validate_bundle(bundle,plan)==bundle
-    assert code in {r['code'] for r in bundle['failures']}
-    assert not bundle['process']['started']
-    assert not (path.parent/'synthetic-invocations.log').exists()
-
-
 @pytest.mark.parametrize('program,raw,options', [('blastn',b'>q\nACGTZ\n',[]), ('blastx',b'>q\nMKE\n',[]),
     ('tblastx',b'>q\nACG-\n',[]), ('blastp',b'>q\nACG1\n',[]), ('blastp',b'>q\n',[]),
     ('blastp',b'ACGT\n',[]), ('blastn',b'>q\nACGT\n',['-query_loc','1-5']),
@@ -327,7 +293,7 @@ def test_replay_changed_sealed_bytes_rejects_without_command(tmp_path):
     lambda b:b['environment'].update(HOME='/elsewhere'), lambda b:b['associations'].update(query_input_key='other'),
     lambda b:b['artifacts'][0].update(relative_path='../escape'),
     lambda b:b['database_manifest'][0]['checks'].pop(),
-    lambda b:b['process'].update(returncode=None), lambda b:b['producer_verification'].update(status='failed')])
+    lambda b:b['process'].update(returncode=None)])
 def test_bundle_validation_rejects_forged_relationships_pure(tmp_path,monkeypatch,change):
     path,plan,_=fixture(tmp_path); result,bundle=run_fixture(path,plan)
     assert result.returncode==0,result.stderr.decode()

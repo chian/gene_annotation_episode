@@ -292,7 +292,7 @@ def extract_blast_tabular7_convergence(report_contents: bytes, *, artifact_key: 
             source_pointer=pointer, details=details))
 
     try:
-        checked = _producer.validate_retained_native_blast_database_bundle(bundle, original_job=original_job,
+        checked = _producer.validate_native_blast_database_bundle(bundle, original_job=original_job,
                                                                   attempt_identity=attempt_identity)
     except ValueError as error:
         add("bundle_contract_rejected", pointer="/source_context/bundle", error_code=error.args[0],

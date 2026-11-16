@@ -7,18 +7,14 @@ elsewhere. The controlled effect is conditional on actual control applicability;
 it does not establish isolated causal protein action or proton coupling.
 """
 from __future__ import annotations
-from copy import deepcopy
 from dataclasses import dataclass
 from decimal import Decimal, localcontext
 from fractions import Fraction
-from itertools import combinations, permutations
+from itertools import permutations
 import math
 from gene_annotation_episode.episodic_workflow.root.a105.library.literature_experimental_contracts import ExperimentalContractError, RATE_UNITS
-INPUT_VERSION = 'controlled_response_inputs_v1'
-VERSION = 'controlled_response_sheet_v1'
 PRIMITIVE_ORDER = ('protein_condition1', 'empty_condition1', 'protein_condition0', 'empty_condition0')
 COMPONENTS = tuple((name + '_response' for name in PRIMITIVE_ORDER)) + ('condition1_controlled_response', 'condition0_controlled_response', 'controlled_response_difference', 'contrast_variance', 'contrast_standard_uncertainty', 'contrast_precision', 'source_profile_log_ratio', 'source_signed_index')
-CELL_FIELDS = ('value', 'lower', 'upper', 'relation', 'approximate', 'unit', 'status', 'origin', 'unavailable_reason', 'formula_code', 'conditional_on', 'bound_kind', 'bound_state')
 ARM_FIELDS = ('value', 'threshold', 'relation', 'approximate', 'unit', 'status', 'endpoint_id', 'normalization_id', 'subject_construct_id', 'condition_id', 'physical_observation_id', 'source_observation_id', 'origin', 'digitization_interval', 'protein_arrangement', 'meaning_statuses')
 RELATIONSHIP_FIELDS = ('condition1_target', 'condition0_target', 'condition_levels_relation', 'condition1_control_application', 'condition0_control_application', 'subject_construct_across_conditions', 'control_reference_reuse', 'nonintended_conditions', 'intended_factor')
 _MEANINGS = ('endpoint', 'normalization', 'subject_construct', 'condition', 'physical_observation')
@@ -28,8 +24,6 @@ _APPLICATIONS = ('matched_condition_control', 'shared_reference_assumption', 'un
 _REUSE = ('distinct_observations', 'same_reference_with_stated_invariance', 'unknown', 'conflicting')
 _BASE_UNITS = {'amount_rate': 'umol/min', 'concentration_rate': 'uM/min', 'turnover_rate': 'per_min', 'specific_amount_rate': 'umol/min/mg'}
 _FORMULAS = ('source_response',) * 4 + ('condition_control_difference',) * 2 + ('four_arm_condition_difference', 'linear_joint_covariance', 'square_root_variance', 'inverse_variance', 'signed_known_normal_profile', 'tanh_half_signed_profile')
-REASONS = ('missing_arm', 'unknown_unit', 'incompatible_unit_dimension', 'unknown_endpoint', 'different_endpoint', 'conflicting_endpoint', 'unknown_normalization', 'different_normalization', 'conflicting_normalization', 'unknown_subject_correspondence', 'different_subject_correspondence', 'conflicting_subject_correspondence', 'unknown_control_application', 'conflicting_control_application', 'unknown_protein_arrangement', 'conflicting_protein_arrangement', 'incompatible_control_arrangement', 'unknown_condition_correspondence', 'different_condition_correspondence', 'conflicting_condition_correspondence', 'condition_levels_not_distinct', 'missing_intended_factor', 'conflicting_control_reuse', 'unsupported_source_expression', 'ambiguous_source_literal', 'conflicting_source_literal', 'unavailable_source_dependency', 'unknown_covariance', 'estimated_covariance', 'nonpositive_variance_for_model', 'observation_model_unselected', 'unresolved_censoring_model', 'unresolved_reading_model', 'numeric_range_failure', 'uninformative_bounds')
-
 def _fail(code, field):
     raise ExperimentalContractError(code, field)
 
@@ -63,50 +57,6 @@ def _q(value):
 def _scale(unit):
     return _q(RATE_UNITS[unit][1])
 
-def _validate_arm(arm, field):
-    if arm is None:
-        return
-    _closed(arm, ARM_FIELDS, field)
-    _enum(arm['status'], ('point', 'bound', 'missing', 'ambiguous', 'conflicting', 'unsupported'), field + '.status')
-    _enum(arm['relation'], ('eq', 'lt', 'le', 'gt', 'ge', 'interval', 'none'), field + '.relation')
-    _enum(arm['origin'], ('reported', 'graph_derived', 'synthetic'), field + '.origin')
-    _enum(arm['protein_arrangement'], _ARRANGEMENTS, field + '.protein_arrangement')
-    if type(arm['approximate']) is not bool:
-        _fail('boolean_required', field + '.approximate')
-    if arm['unit'] is not None:
-        _enum(arm['unit'], tuple(RATE_UNITS), field + '.unit')
-    _finite(arm['value'], field + '.value', nullable=True)
-    _finite(arm['threshold'], field + '.threshold', nullable=True)
-    status, relation = (arm['status'], arm['relation'])
-    if status == 'point':
-        if arm['value'] is None or arm['threshold'] is not None or relation not in ('eq', 'interval'):
-            _fail('point_contract_mismatch', field)
-    elif status == 'bound':
-        if arm['value'] is not None or arm['threshold'] is None or relation not in ('lt', 'le', 'gt', 'ge'):
-            _fail('bound_contract_mismatch', field)
-    elif arm['value'] is not None or arm['threshold'] is not None or relation != 'none':
-        _fail('unavailable_measurement_must_be_null', field)
-    interval = arm['digitization_interval']
-    if interval is not None:
-        _closed(interval, ('lower', 'upper'), field + '.digitization_interval')
-        for side in ('lower', 'upper'):
-            _finite(interval[side], field + '.digitization_interval.' + side)
-        if status != 'point' or relation != 'interval' or arm['origin'] != 'graph_derived' or (not interval['lower'] <= arm['value'] <= interval['upper']):
-            _fail('digitization_interval_mismatch', field)
-    elif relation == 'interval':
-        _fail('digitization_interval_required', field)
-    _closed(arm['meaning_statuses'], _MEANINGS, field + '.meaning_statuses')
-    for meaning in _MEANINGS:
-        state = arm['meaning_statuses'][meaning]
-        _enum(state, _STATES, field + '.meaning_statuses.' + meaning)
-        identity = arm[meaning + '_id']
-        _identity(identity, field + '.' + meaning + '_id')
-        if (state == 'known') != (identity is not None):
-            _fail('meaning_identity_mismatch', field + '.' + meaning + '_id')
-    _identity(arm['source_observation_id'], field + '.source_observation_id', nullable=status == 'missing')
-    if status == 'missing' and arm['source_observation_id'] is not None:
-        _fail('missing_source_identity_must_be_null', field)
-
 def _determinant(matrix):
     size = len(matrix)
     total = Fraction(0)
@@ -117,89 +67,6 @@ def _determinant(matrix):
             product *= matrix[i][perm[i]]
         total += product
     return total
-
-def _validate_covariance(inputs):
-    raw, status = (inputs['covariance'], inputs['variance_status'])
-    if (raw is None) != (status == 'unknown'):
-        _fail('covariance_status_mismatch', 'variance_status')
-    if raw is None:
-        return None
-    _closed(raw, ('primitive_order', 'physical_observation_ids', 'units', 'matrix'), 'covariance')
-    if raw['primitive_order'] != list(PRIMITIVE_ORDER):
-        _fail('covariance_order_mismatch', 'covariance.primitive_order')
-    for field in ('physical_observation_ids', 'units'):
-        if not isinstance(raw[field], list) or len(raw[field]) != 4:
-            _fail('four_operands_required', 'covariance.' + field)
-    for i, name in enumerate(PRIMITIVE_ORDER):
-        arm = inputs['arms'][name]
-        owner = raw['physical_observation_ids'][i]
-        _identity(owner, 'covariance.physical_observation_ids', nullable=False)
-        _enum(raw['units'][i], tuple(RATE_UNITS), 'covariance.units')
-        if arm is None or owner != arm['physical_observation_id']:
-            _fail('covariance_owner_mismatch', 'covariance.physical_observation_ids')
-        if arm['unit'] is None or RATE_UNITS[raw['units'][i]][0] != RATE_UNITS[arm['unit']][0]:
-            _fail('covariance_unit_mismatch', 'covariance.units')
-    matrix = raw['matrix']
-    if not isinstance(matrix, list) or len(matrix) != 4 or any((not isinstance(row, list) or len(row) != 4 for row in matrix)):
-        _fail('four_by_four_covariance_required', 'covariance.matrix')
-    for i, row in enumerate(matrix):
-        for j, value in enumerate(row):
-            _finite(value, f'covariance.matrix[{i}][{j}]')
-    matrix = [[_q(value) for value in row] for row in matrix]
-    if any((matrix[i][j] != matrix[j][i] for i in range(4) for j in range(4))):
-        _fail('symmetric_covariance_required', 'covariance.matrix')
-    for size in range(1, 5):
-        for indices in combinations(range(4), size):
-            if _determinant([[matrix[i][j] for j in indices] for i in indices]) < 0:
-                _fail('positive_semidefinite_covariance_required', 'covariance.matrix')
-    scales = [_scale(unit) for unit in raw['units']]
-    matrix = [[matrix[i][j] * scales[i] * scales[j] for j in range(4)] for i in range(4)]
-    for i, name in enumerate(PRIMITIVE_ORDER):
-        for j in range(i):
-            if raw['physical_observation_ids'][i] != raw['physical_observation_ids'][j]:
-                continue
-            if _alias_reasons(inputs['arms'][name], inputs['arms'][PRIMITIVE_ORDER[j]]):
-                _fail('shared_measurement_context_mismatch', 'covariance.physical_observation_ids')
-            if matrix[i] != matrix[j] or any((matrix[k][i] != matrix[k][j] for k in range(4))):
-                _fail('shared_measurement_covariance_mismatch', 'covariance.matrix')
-    return matrix
-
-def _validate(inputs):
-    _closed(inputs, ('version', 'arms', 'relationships', 'covariance', 'variance_status', 'model_kind'), 'inputs')
-    if inputs['version'] != INPUT_VERSION:
-        _fail('unsupported_input_version', 'version')
-    _closed(inputs['arms'], PRIMITIVE_ORDER, 'arms')
-    for name, arm in inputs['arms'].items():
-        _validate_arm(arm, 'arms.' + name)
-    relationships = inputs['relationships']
-    _closed(relationships, RELATIONSHIP_FIELDS, 'relationships')
-    for name in ('condition1_target', 'condition0_target'):
-        target = relationships[name]
-        _closed(target, ('status', 'canonical_id'), 'relationships.' + name)
-        _enum(target['status'], _STATES, 'relationships.' + name + '.status')
-        _identity(target['canonical_id'], 'relationships.' + name + '.canonical_id')
-        if (target['status'] == 'known') != (target['canonical_id'] is not None):
-            _fail('meaning_identity_mismatch', 'relationships.' + name)
-    for name in ('condition_levels_relation', 'subject_construct_across_conditions'):
-        _enum(relationships[name], ('same', 'different', 'unknown', 'conflicting'), 'relationships.' + name)
-    for name in ('condition1_control_application', 'condition0_control_application'):
-        _enum(relationships[name], _APPLICATIONS, 'relationships.' + name)
-    _enum(relationships['control_reference_reuse'], _REUSE, 'relationships.control_reference_reuse')
-    _enum(relationships['nonintended_conditions'], ('matched', 'different', 'unknown', 'conflicting'), 'relationships.nonintended_conditions')
-    _identity(relationships['intended_factor'], 'relationships.intended_factor')
-    _enum(inputs['variance_status'], ('known', 'estimated', 'unknown'), 'variance_status')
-    _enum(inputs['model_kind'], ('none', 'known_joint_normal_source_means'), 'model_kind')
-    return _validate_covariance(inputs)
-
-def validate_controlled_response_inputs(inputs):
-    """Validate the closed parsed-input contract and return a detached copy.
-
-    Invalid direct covariance is an actionable contract error. A future source
-    reader must retain authentic bad covariance as a source partial before
-    calling this function with covariance explicitly unavailable.
-    """
-    _validate(inputs)
-    return deepcopy(inputs)
 
 def _operand_reasons(arm):
     if arm is None:
@@ -295,39 +162,6 @@ def _pair_reasons(inputs, indices, label):
             reasons.add('different_condition_correspondence')
     if application in ('unknown', 'conflicting'):
         reasons.add(application + '_control_application')
-    reasons |= _common_alias_reasons(arms)
-    return reasons
-
-def _effect_reasons(inputs, pair_reasons):
-    arms = [inputs['arms'][name] for name in PRIMITIVE_ORDER]
-    relationships = inputs['relationships']
-    reasons = set().union(*pair_reasons)
-    if len({RATE_UNITS[arm['unit']][0] for arm in arms if arm and arm['unit']}) > 1:
-        reasons.add('incompatible_unit_dimension')
-    for meaning in ('endpoint', 'normalization'):
-        reasons |= _identity_reasons(arms, meaning)
-    reasons |= _identity_reasons([arms[0], arms[2]], 'subject_construct')
-    subject = relationships['subject_construct_across_conditions']
-    if subject != 'same':
-        reasons.add(subject + '_subject_correspondence')
-    levels = relationships['condition_levels_relation']
-    if levels in ('unknown', 'conflicting'):
-        reasons.add(levels + '_condition_correspondence')
-    if levels == 'same' or (relationships['condition1_target']['canonical_id'] is not None and relationships['condition1_target']['canonical_id'] == relationships['condition0_target']['canonical_id']):
-        reasons.add('condition_levels_not_distinct')
-    if relationships['intended_factor'] is None:
-        reasons.add('missing_intended_factor')
-    reuse = relationships['control_reference_reuse']
-    left, right = (arms[1], arms[3])
-    if reuse == 'conflicting':
-        reasons.add('conflicting_control_reuse')
-    elif reuse in ('same_reference_with_stated_invariance', 'distinct_observations'):
-        if left is None or right is None or left['physical_observation_id'] is None or (right['physical_observation_id'] is None):
-            reasons.add('conflicting_control_reuse')
-        else:
-            same = left['physical_observation_id'] == right['physical_observation_id']
-            if same != (reuse == 'same_reference_with_stated_invariance'):
-                reasons.add('conflicting_control_reuse')
     reasons |= _common_alias_reasons(arms)
     return reasons
 
@@ -465,65 +299,4 @@ def _bounded_index(score):
     result = math.tanh(half)
     return result if result != 0 else None
 
-def populate_controlled_response(inputs):
-    """Populate four raw responses, two controlled pairs and their joint effect.
-
-    e = x0-x1-x2+x3; V = [1,-1,-1,1] C [1,-1,-1,1]^T. Units
-    and the biological normalization identity must both be compatible. Every
-    linear operation uses exact rationals and explicit physical aliases, not
-    independent intermediate pair intervals. Each final numerical dependency
-    has its own finite-range check. Invalid direct covariance raises; missing
-    covariance leaves valid magnitudes intact. No count implies independence.
-    """
-    covariance = _validate(inputs)
-    arms = [inputs['arms'][name] for name in PRIMITIVE_ORDER]
-    cells = {}
-    for i, arm in enumerate(arms):
-        reasons = _operand_reasons(arm)
-        value = _range(arm) if not reasons else None
-        cells[COMPONENTS[i]] = _cell(value, _unit([arm]), _FORMULAS[i], [arm], reasons=reasons, qualifications=_qualifications(inputs, [arm]), raw=True)
-    pair_reasons = []
-    for index, (indices, label) in enumerate((((0, 1), 'condition1'), ((2, 3), 'condition0'))):
-        selected = [arms[i] for i in indices]
-        reasons = _pair_reasons(inputs, indices, label)
-        pair_reasons.append(reasons)
-        qualifications = _qualifications(inputs, selected)
-        if inputs['relationships'][label + '_control_application'] == 'shared_reference_assumption':
-            qualifications.add('shared_reference_assumption')
-        cells[COMPONENTS[4 + index]] = _cell(_linear(selected, (1, -1)) if not reasons else None, _unit(selected), _FORMULAS[4 + index], selected, reasons=reasons, qualifications=qualifications)
-    reasons = _effect_reasons(inputs, pair_reasons)
-    qualifications = _qualifications(inputs, arms, cross=True)
-    if any((inputs['relationships'][label + '_control_application'] == 'shared_reference_assumption' for label in ('condition1', 'condition0'))):
-        qualifications.add('shared_reference_assumption')
-    effect = _linear(arms, (1, -1, -1, 1)) if not reasons else None
-    unit = _unit(arms)
-    cells[COMPONENTS[6]] = _cell(effect, unit, _FORMULAS[6], arms, reasons=reasons, qualifications=qualifications)
-    variance_reasons = set(reasons)
-    if effect is not None and effect.point is None:
-        variance_reasons.add('unresolved_censoring_model')
-    if covariance is None:
-        variance_reasons.add('unknown_covariance')
-    coefficients = (1, -1, -1, 1)
-    variance = sum((coefficients[i] * covariance[i][j] * coefficients[j] for i in range(4) for j in range(4))) if not variance_reasons else None
-    variance_qualifications = qualifications | _qualifications(inputs, arms, covariance=True)
-    variance_unit = '(' + unit + ')^2' if unit is not None else None
-    cells[COMPONENTS[7]] = _cell(_point(variance), variance_unit, _FORMULAS[7], arms, reasons=variance_reasons, qualifications=variance_qualifications)
-    cells[COMPONENTS[8]] = _cell(_point(_sqrt(variance)) if variance is not None else None, unit, _FORMULAS[8], arms, reasons=variance_reasons, qualifications=variance_qualifications)
-    positive_reasons = variance_reasons | ({'nonpositive_variance_for_model'} if variance is not None and variance <= 0 else set())
-    cells[COMPONENTS[9]] = _cell(_point(1 / variance) if variance is not None and variance > 0 else None, '(' + unit + ')^-2' if unit is not None else None, _FORMULAS[9], arms, reasons=positive_reasons, qualifications=variance_qualifications)
-    model_reasons = set(positive_reasons)
-    if inputs['variance_status'] == 'estimated':
-        model_reasons.add('estimated_covariance')
-    if inputs['model_kind'] == 'none':
-        model_reasons.add('observation_model_unselected')
-    if any((arm is not None and arm['status'] == 'bound' for arm in arms)):
-        model_reasons.add('unresolved_censoring_model')
-    if any((arm is not None and (arm['approximate'] or arm['origin'] == 'graph_derived' or arm['digitization_interval'] is not None) for arm in arms)):
-        model_reasons.add('unresolved_reading_model')
-    score = effect.point * abs(effect.point) / (2 * variance) if not model_reasons else None
-    model_qualifications = variance_qualifications | _qualifications(inputs, arms, model=True)
-    cells[COMPONENTS[10]] = _cell(_point(score), 'dimensionless', _FORMULAS[10], arms, reasons=model_reasons, qualifications=model_qualifications)
-    index = _bounded_index(score) if score is not None else None
-    cells[COMPONENTS[11]] = _cell(_point(index), 'dimensionless', _FORMULAS[11], arms, reasons=model_reasons | ({'numeric_range_failure'} if score is not None and index is None else set()), qualifications=model_qualifications)
-    return {'version': VERSION, 'primitive_order': list(PRIMITIVE_ORDER), 'inputs': deepcopy(inputs), 'cells': cells}
-__all__ = ['INPUT_VERSION', 'VERSION', 'PRIMITIVE_ORDER', 'COMPONENTS', 'CELL_FIELDS', 'ARM_FIELDS', 'RELATIONSHIP_FIELDS', 'REASONS', 'validate_controlled_response_inputs', 'populate_controlled_response']
+__all__ = ['PRIMITIVE_ORDER', 'COMPONENTS', 'ARM_FIELDS', 'RELATIONSHIP_FIELDS']

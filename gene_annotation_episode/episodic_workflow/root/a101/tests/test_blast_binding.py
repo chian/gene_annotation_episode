@@ -306,7 +306,6 @@ def test_installed_client_observer_preserves_each_http_entity_and_actual_timing(
     assert len(calls)==3  # fetch did not secretly check SearchInfo again.
     assert calls[2][1]['params']['FORMAT_TYPE']=='JSON2'
     assert fetched.transport['representation']=='http_entity_bytes_via_installed_blast_client'
-    assert fetched.transport['script_sha256']
     assert client.blast_delay('status','FIXTURE_RID')==50
     assert json.loads((tmp_path/'access/ncbi-blast.json').read_text())['last_request']==clock[0]
 

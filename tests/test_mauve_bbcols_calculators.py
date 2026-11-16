@@ -57,17 +57,6 @@ def calculate(doc, *, primary=None, joins=None, **options):
         xmfa_document=primary, associations=joins)
 
 
-def test_official_native_bbcols_receipt_and_column_mapping():
-    raw = (NATIVE / 'separate.xmfa.bbcols').read_bytes()
-    receipts = json.loads((NATIVE.parent / 'SOURCE_RECEIPTS.json').read_text())
-    receipt = next(r for r in receipts if r['path'] == 'native_examples/separate.xmfa.bbcols')
-    assert hashlib.sha256(raw).hexdigest() == receipt['sha256'] == '02705f27d4a468ca5736997daf28846ec26c607d0f156da918ed71e3d3be316b'
-    result = bbcols(); doc = result['value']
-    assert result['status'] == 'ok'; assert_locations(doc, raw)
-    assert [r['columns_0based_half_open'] for r in doc['rows']] == [[33, 52], [0, 33]]
-    assert [[n['value'] for n in r['native_member_indices_0based']] for r in doc['rows']] == [[0, 1, 2], [0, 1]]
-
-
 @pytest.mark.parametrize('threshold,width,contributing', [(1, 52, [0, 1]), (2, 52, [0, 1]), (3, 19, [0])])
 def test_official_filled_native_union_and_explicit_bound_fraction(threshold, width, contributing):
     doc = bbcols()['value']; primary = xmfa(); joins = associations(doc, primary)

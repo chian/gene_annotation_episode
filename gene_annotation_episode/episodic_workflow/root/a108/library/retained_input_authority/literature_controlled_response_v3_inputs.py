@@ -5,33 +5,131 @@ These host functions read experimental quantities and preserve source meanings.
 from __future__ import annotations
 from copy import deepcopy as cp
 from functools import lru_cache
-from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority import literature_controlled_response_v2_inputs as v2
 from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority import literature_controlled_response_owner_calculations as owner
+from gene_annotation_episode.episodic_workflow.root.a108.library.retained_input_authority import literature_controlled_response_inputs as shared
+obj, ref, null = (shared.obj, shared.ref, shared.nullable)
+T, N, I, B = (shared.TEXT, {'type': 'number'}, shared.OFFSET, {'type': 'boolean'})
+SHA = {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}
+
+def arr(value, **kw):
+    return {'type': 'array', 'items': value, **kw}
+
+def enum(*values):
+    return {'enum': list(values)}
+
+def embed(schema, prefix, target):
+
+    def rename(value):
+        if isinstance(value, dict):
+            return {k: '#/$defs/' + prefix + v[8:] if k == '$ref' and v.startswith('#/$defs/') else rename(v) for k, v in value.items()}
+        if isinstance(value, list):
+            return [rename(v) for v in value]
+        return value
+    for key, val in schema.get('$defs', {}).items():
+        target[prefix + key] = rename(val)
+    return rename({k: v for k, v in schema.items() if k not in ('$defs', '$schema')})
+
+def _graph_schema():
+    D = cp(shared._selection_core_schema()['$defs'])
+    D['Rational'] = obj({'numerator': {'type': 'string', 'pattern': '^-?(0|[1-9][0-9]*)$'}, 'denominator': {'type': 'string', 'pattern': '^[1-9][0-9]*$'}})
+    D['Diagnostic'] = obj({'code': enum('graph_image_unavailable', 'graph_image_unsupported', 'graph_nonopaque_roi', 'graph_scale_unknown', 'graph_scale_conflicting', 'graph_scale_unsupported', 'graph_scale_literal_unsupported', 'graph_tick_ambiguous', 'graph_tick_conflicting', 'graph_tick_unreadable', 'graph_tick_literal_unsupported', 'graph_tick_literal_numeric_range', 'graph_tick_projection_rounded', 'graph_unit_ambiguous', 'graph_unit_conflicting', 'graph_unit_unreadable', 'graph_unit_unknown', 'graph_unit_unsupported', 'graph_unit_defined_bridge_unselected', 'graph_no_bar_pixels', 'graph_ambiguous_bar_runs', 'graph_terminal_edge_clipped', 'graph_axis_degenerate', 'graph_pixel_bounds_outside_image', 'graph_numerical_model_range', 'graph_canonical_display_range', 'graph_image_label_interpretation', 'graph_axis_scale_interpretation', 'graph_conditional_digitization', 'graph_ordinate_projection_rounded', 'graph_opposite_edge_clipped', 'graph_axis_multiplier_unsupported'), 'field': T, 'domain': enum('source_representation', 'source_binding', 'reader_capability', 'source_interpretation', 'dependency'), 'source_refs': arr(T)})
+    D['TextLocator'] = obj({'kind': {'const': 'text'}, 'source_ref': T, 'artifact_ref': T, 'byte_sha256': {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}, 'start': I, 'end': {'type': 'integer', 'minimum': 1}})
+    D['ImageLocator'] = obj({'kind': {'const': 'image'}, 'original_source_ref': T, 'original_artifact_ref': T, 'original_byte_sha256': {'type': 'string', 'pattern': '^[a-f0-9]{64}$'}, 'region': ref('Box')})
+    D['WitnessRecord'] = obj({'selection': ref('Witness'), 'artifact_ref': null(T), 'byte_sha256': null({'type': 'string', 'pattern': '^[a-f0-9]{64}$'}), 'canonical_locator': null({'oneOf': [ref('TextLocator'), ref('ImageLocator')]}), 'authentication': enum('exact_utf8_byte_span', 'image_bytes_and_geometry_only', 'unavailable'), 'attribution': enum('literal_source_record', 'investigating_episode_interpretation'), 'diagnostics': arr(ref('Diagnostic'))})
+    D['SourceRecord'] = obj({'source_ref': T, 'representation': enum('original', 'text'), 'artifact_ref': null(T), 'byte_sha256': null({'type': 'string', 'pattern': '^[a-f0-9]{64}$'}), 'state': enum('available', 'unavailable'), 'diagnostics': arr(ref('Diagnostic'))})
+    D['DependencyError'] = obj({'code': T, 'field': T})
+    D['ImageRecord'] = obj({'image_id': T, 'source_ref': T, 'artifact_ref': null(T), 'byte_sha256': null({'type': 'string', 'pattern': '^[a-f0-9]{64}$'}), 'original_source_ref': T, 'original_artifact_ref': null(T), 'original_byte_sha256': null({'type': 'string', 'pattern': '^[a-f0-9]{64}$'}), 'actual_format': null(T), 'actual_mode': null(T), 'width': null(I), 'height': null(I), 'frame_count': null(I), 'mapping': null(obj({'original_region': ref('Box'), 'colour_conversion': enum('preserve', 'rgb')})), 'pillow_version': T, 'error': null(ref('DependencyError'))})
+    D['AxisScaleRecord'] = obj({'selection': ref('AxisScale'), 'witnesses': arr(ref('WitnessRecord')), 'effective_kind': enum('linear', 'logarithmic', 'nonlinear', 'unknown', 'conflicting'), 'support': enum('literal_source_text', 'episode_image_interpretation', 'unavailable', 'unresolved'), 'diagnostics': arr(ref('Diagnostic'))})
+    D['AxisLiteralRecord'] = obj({'selection': ref('AxisLiteral'), 'candidates': arr(ref('WitnessRecord')), 'fragments': arr(ref('WitnessRecord')), 'raw_literal': null(T), 'exact_value': null(ref('Rational')), 'qualification': enum('source_text_literal', 'episode_image_transcription', 'unresolved'), 'status': enum('parsed', 'ambiguous', 'unreadable', 'conflicting', 'unsupported', 'dependency_unavailable'), 'diagnostics': arr(ref('Diagnostic'))})
+    D['GraphUnitRecord'] = obj({'selection': ref('AxisLiteral'), 'witness': null(ref('WitnessRecord')), 'raw_unit': null(T), 'canonical_unit': null(enum('umol/min', 'uM/min', 'per_min', 'umol/min/mg')), 'exact_scale': null(ref('Rational')), 'native_registry_unit': null(enum('umol/min', 'nmol/min', 'mmol/min', 'uM/min', 'nM/min', 'per_min', 'per_s', 'umol/min/mg', 'nmol/min/mg')), 'definition_witnesses': {'type': 'null'}, 'status': enum('supported', 'unknown', 'unsupported', 'numeric_range', 'dependency_unavailable', 'endpoint_correspondence_unknown'), 'diagnostics': arr(ref('Diagnostic'))})
+    D['ExactBounds'] = obj({'lower': ref('Rational'), 'upper': ref('Rational')})
+    D['FloatBounds'] = obj({'lower': N, 'upper': N})
+    D['Run'] = obj({'top': I, 'bottom': I})
+    D['ExactPixelEdge'] = obj({'terminal_edge': enum('upper', 'lower'), 'nominal': ref('Rational'), 'bounds': ref('ExactBounds')})
+    D['ExactAxis'] = obj({'first_pixel': ref('Rational'), 'second_pixel': ref('Rational'), 'first_value': ref('Rational'), 'second_value': ref('Rational'), 'unit': enum('umol/min', 'nmol/min', 'mmol/min', 'uM/min', 'nM/min', 'per_min', 'per_s', 'umol/min/mg', 'nmol/min/mg'), 'slope': ref('Rational')})
+    D['PixelResult'] = obj({'version': {'const': 'controlled_response_rate_pixels_v1'}, 'status': enum('measured', 'unreadable', 'ambiguous', 'unsupported', 'dependency_unavailable'), 'image_id': T, 'image_sha256': null({'type': 'string', 'pattern': '^[a-f0-9]{64}$'}), 'original_image_sha256': null({'type': 'string', 'pattern': '^[a-f0-9]{64}$'}), 'mapped_roi': null(ref('ImageLocator')), 'recipe': ref('BarSelection'), 'terminal_edge': enum('upper', 'lower'), 'image_size': null(obj({'width': I, 'height': I})), 'qualifying_runs': arr(ref('Run')), 'pixel_edge': null(ref('ExactPixelEdge')), 'axis': null(ref('ExactAxis')), 'native_ordinate': null(ref('Rational')), 'native_bounds': null(ref('ExactBounds')), 'bound_kind': {'const': 'conditional_digitization_not_confidence_interval'}, 'diagnostics': arr(ref('Diagnostic')), 'counter_version': {'const': 'controlled_response_bar_runs_v1'}})
+    D['CanonicalDisplay'] = obj({'value': null(N), 'threshold': null(N), 'unit': null(enum('umol/min', 'uM/min', 'per_min', 'umol/min/mg')), 'relation': enum('eq', 'lt', 'le', 'gt', 'ge', 'none'), 'approximate': B, 'diagnostics': arr(ref('Diagnostic'))})
+    D['NativeProjection'] = obj({'value': null(N), 'threshold': {'type': 'null'}, 'relation': enum('interval', 'none'), 'approximate': B, 'unit': null(enum('umol/min', 'nmol/min', 'mmol/min', 'uM/min', 'nM/min', 'per_min', 'per_s', 'umol/min/mg', 'nmol/min/mg')), 'status': enum('point', 'missing', 'ambiguous', 'conflicting', 'unsupported'), 'origin': {'const': 'graph_derived'}, 'digitization_interval': null(ref('FloatBounds'))})
+    D['GraphMeasurementExtraction'] = obj({'selection': ref('GraphMeasurement'), 'candidates': {'type': 'array', 'maxItems': 0}, 'fragments': arr(ref('WitnessRecord')), 'unit': null(ref('GraphUnitRecord')), 'graph_witnesses': arr(ref('WitnessRecord')), 'reading_status': enum('graph_digitized', 'ambiguous', 'unreadable', 'conflicting', 'unsupported', 'dependency_unavailable'), 'source_observation_id': null(T), 'canonical_display': ref('CanonicalDisplay'), 'pixel_result': ref('PixelResult'), 'diagnostics': arr(ref('Diagnostic'))})
+    schema = obj({'version': {'const': 'controlled_response_rate_figure_extraction_v1'}, 'selection': obj({'version': {'const': 'controlled_response_rate_figure_selection_v1'}, 'images': arr(ref('Image')), 'measurement': ref('GraphMeasurement')}), 'sources': arr(ref('SourceRecord')), 'images': arr(ref('ImageRecord')), 'axis_scale': ref('AxisScaleRecord'), 'axis_literals': obj({'first': ref('AxisLiteralRecord'), 'second': ref('AxisLiteralRecord'), 'unit': ref('AxisLiteralRecord')}), 'measurement': ref('GraphMeasurementExtraction'), 'operand_projection': ref('NativeProjection'), 'diagnostics': arr(ref('Diagnostic'))})
+    schema.update({'$defs': D, '$schema': 'https://json-schema.org/draft/2020-12/schema'})
+    return schema
+
+def _sheet_schema():
+    D = {}
+    D['OwnerInputs'] = embed(owner.controlled_response_owner_arguments_schema(), 'Input_', D)
+    D['Cell'] = obj({'value': null(N), 'lower': null(N), 'upper': null(N), 'relation': enum('none', 'eq', 'lt', 'le', 'gt', 'ge', 'interval'), 'approximate': B, 'unit': null(enum('umol/min', 'uM/min', 'per_min', 'umol/min/mg', '(umol/min)^2', '(uM/min)^2', '(per_min)^2', '(umol/min/mg)^2', '(umol/min)^-2', '(uM/min)^-2', '(per_min)^-2', '(umol/min/mg)^-2', 'dimensionless')), 'status': enum('available', 'bounded', 'partial', 'unavailable', 'unsupported', 'conflicting'), 'origin': enum('reported', 'graph_derived', 'synthetic', 'calculated'), 'unavailable_reason': null(arr(enum('missing_arm', 'unknown_unit', 'incompatible_unit_dimension', 'unknown_endpoint', 'different_endpoint', 'conflicting_endpoint', 'unknown_normalization', 'different_normalization', 'conflicting_normalization', 'unknown_subject_correspondence', 'different_subject_correspondence', 'conflicting_subject_correspondence', 'unknown_control_application', 'conflicting_control_application', 'unknown_protein_arrangement', 'conflicting_protein_arrangement', 'incompatible_control_arrangement', 'unknown_condition_correspondence', 'different_condition_correspondence', 'conflicting_condition_correspondence', 'condition_levels_not_distinct', 'missing_intended_factor', 'conflicting_control_reuse', 'unsupported_source_expression', 'ambiguous_source_literal', 'conflicting_source_literal', 'unavailable_source_dependency', 'unknown_covariance', 'estimated_covariance', 'nonpositive_variance_for_model', 'observation_model_unselected', 'unresolved_censoring_model', 'unresolved_reading_model', 'numeric_range_failure', 'uninformative_bounds', 'incomplete_active_covariance', 'unresolved_active_reading_model', 'conflicting_owner_context', 'conflicting_source_owner_binding'), minItems=1, uniqueItems=True)), 'formula_code': enum('condition_control_difference', 'four_arm_condition_difference', 'inverse_variance', 'linear_joint_covariance', 'signed_known_normal_profile', 'source_response', 'square_root_variance', 'tanh_half_signed_profile'), 'conditional_on': arr(enum('synthetic_fixture', 'approximate_source_reading', 'conditional_digitization', 'nonintended_conditions_different', 'nonintended_conditions_unknown', 'nonintended_conditions_conflicting', 'unknown_control_reuse', 'estimated_covariance', 'known_normal_source_means', 'shared_reference_assumption', 'owner_cancellation', 'canceled_reading_unavailable', 'canceled_unit_unknown', 'canceled_representation_difference', 'canceled_graph_reading', 'canceled_source_reading_conflict', 'canceled_reading_domain_conflict'), uniqueItems=True), 'bound_kind': enum('none', 'reported_limit', 'conditional_digitization', 'mixed'), 'bound_state': obj({'lower': enum('unknown', 'unbounded', 'available', 'numeric_range_failure', 'not_applicable'), 'upper': enum('unknown', 'unbounded', 'available', 'numeric_range_failure', 'not_applicable')})})
+    D['ContrastDependencies'] = obj({'coefficient_order': {'const': ['protein_condition1', 'empty_condition1', 'protein_condition0', 'empty_condition0']}, 'role_coefficients': {'const': [1, -1, -1, 1]}, 'groups': arr(obj({'physical_observation_id': null(T), 'roles': arr(enum('protein_condition1', 'empty_condition1', 'protein_condition0', 'empty_condition0'), minItems=1, maxItems=4, uniqueItems=True), 'coefficient': {'type': 'integer', 'minimum': -2, 'maximum': 2}, 'known_owner': B}), minItems=1, maxItems=4), 'active_roles': arr(enum('protein_condition1', 'empty_condition1', 'protein_condition0', 'empty_condition0'), uniqueItems=True), 'canceled_roles': arr(enum('protein_condition1', 'empty_condition1', 'protein_condition0', 'empty_condition0'), uniqueItems=True), 'scientific_reasons': arr(enum('missing_arm', 'unknown_unit', 'incompatible_unit_dimension', 'unknown_endpoint', 'different_endpoint', 'conflicting_endpoint', 'unknown_normalization', 'different_normalization', 'conflicting_normalization', 'unknown_subject_correspondence', 'different_subject_correspondence', 'conflicting_subject_correspondence', 'unknown_control_application', 'conflicting_control_application', 'unknown_protein_arrangement', 'conflicting_protein_arrangement', 'incompatible_control_arrangement', 'unknown_condition_correspondence', 'different_condition_correspondence', 'conflicting_condition_correspondence', 'condition_levels_not_distinct', 'missing_intended_factor', 'conflicting_control_reuse', 'unsupported_source_expression', 'ambiguous_source_literal', 'conflicting_source_literal', 'unavailable_source_dependency', 'unknown_covariance', 'estimated_covariance', 'nonpositive_variance_for_model', 'observation_model_unselected', 'unresolved_censoring_model', 'unresolved_reading_model', 'numeric_range_failure', 'uninformative_bounds', 'incomplete_active_covariance', 'unresolved_active_reading_model', 'conflicting_owner_context', 'conflicting_source_owner_binding'), uniqueItems=True), 'active_reading_reasons': arr(enum('missing_arm', 'unknown_unit', 'incompatible_unit_dimension', 'unknown_endpoint', 'different_endpoint', 'conflicting_endpoint', 'unknown_normalization', 'different_normalization', 'conflicting_normalization', 'unknown_subject_correspondence', 'different_subject_correspondence', 'conflicting_subject_correspondence', 'unknown_control_application', 'conflicting_control_application', 'unknown_protein_arrangement', 'conflicting_protein_arrangement', 'incompatible_control_arrangement', 'unknown_condition_correspondence', 'different_condition_correspondence', 'conflicting_condition_correspondence', 'condition_levels_not_distinct', 'missing_intended_factor', 'conflicting_control_reuse', 'unsupported_source_expression', 'ambiguous_source_literal', 'conflicting_source_literal', 'unavailable_source_dependency', 'unknown_covariance', 'estimated_covariance', 'nonpositive_variance_for_model', 'observation_model_unselected', 'unresolved_censoring_model', 'unresolved_reading_model', 'numeric_range_failure', 'uninformative_bounds', 'incomplete_active_covariance', 'unresolved_active_reading_model', 'conflicting_owner_context', 'conflicting_source_owner_binding'), uniqueItems=True), 'canceled_reading_qualifications': arr(enum('synthetic_fixture', 'approximate_source_reading', 'conditional_digitization', 'nonintended_conditions_different', 'nonintended_conditions_unknown', 'nonintended_conditions_conflicting', 'unknown_control_reuse', 'estimated_covariance', 'known_normal_source_means', 'shared_reference_assumption', 'owner_cancellation', 'canceled_reading_unavailable', 'canceled_unit_unknown', 'canceled_representation_difference', 'canceled_graph_reading', 'canceled_source_reading_conflict', 'canceled_reading_domain_conflict'), uniqueItems=True), 'reading_conflict_roles': arr(enum('protein_condition1', 'empty_condition1', 'protein_condition0', 'empty_condition0'), uniqueItems=True), 'required_covariance_owner_ids': arr(T, uniqueItems=True), 'provided_covariance_owner_ids': arr(T, uniqueItems=True), 'covariance_state': enum('unavailable', 'available', 'incomplete_active_coverage', 'scientific_blocked'), 'model_active_roles': arr(enum('protein_condition1', 'empty_condition1', 'protein_condition0', 'empty_condition0'), uniqueItems=True)})
+    schema = obj({'version': {'const': 'controlled_response_owner_sheet_v2'}, 'primitive_order': {'const': ['protein_condition1', 'empty_condition1', 'protein_condition0', 'empty_condition0']}, 'inputs': ref('OwnerInputs'), 'cells': obj({'protein_condition1_response': ref('Cell'), 'empty_condition1_response': ref('Cell'), 'protein_condition0_response': ref('Cell'), 'empty_condition0_response': ref('Cell'), 'condition1_controlled_response': ref('Cell'), 'condition0_controlled_response': ref('Cell'), 'controlled_response_difference': ref('Cell'), 'contrast_variance': ref('Cell'), 'contrast_standard_uncertainty': ref('Cell'), 'contrast_precision': ref('Cell'), 'source_profile_log_ratio': ref('Cell'), 'source_signed_index': ref('Cell')}), 'contrast_dependencies': ref('ContrastDependencies')})
+    schema.update({'$defs': D, '$schema': 'https://json-schema.org/draft/2020-12/schema'})
+    return schema
+
+def _extraction_core_schema():
+    selection = shared._selection_core_schema()
+    graph = _graph_schema()
+    owner_inputs = owner.controlled_response_owner_arguments_schema()
+    sheet = _sheet_schema()
+    D = cp(selection['$defs'])
+    D['GraphResult'] = embed(graph, 'G_', D)
+    D['OwnerInputs'] = embed(owner_inputs, 'O_', D)
+    D['OwnerSheet'] = embed(sheet, 'H_', D)
+    T = {'type': 'string', 'minLength': 1}
+    N = {'type': 'number'}
+    I = {'type': 'integer', 'minimum': 0}
+    B = {'type': 'boolean'}
+    SHA = {'type': 'string', 'pattern': '^[0-9a-f]{64}$'}
+    rate = cp(D['G_GraphUnitRecord']['properties']['native_registry_unit']['anyOf'][0])
+    canonical = cp(D['G_GraphUnitRecord']['properties']['canonical_unit']['anyOf'][0])
+    for name in ('Rational', 'TextLocator', 'ImageLocator', 'WitnessRecord', 'SourceRecord', 'ImageRecord', 'CanonicalDisplay'):
+        D[name] = cp(D['G_' + name])
+    codes = sorted(set(['measurement_not_selected', 'source_literal_unreadable', 'source_literal_ambiguous', 'source_literal_conflicting', 'unsupported_complete_source_expression', 'source_numeric_range', 'numeric_projection_rounding', 'source_rate_unit_unknown', 'source_rate_unit_unsupported', 'source_defined_unit_definition_not_selected', 'unit_endpoint_correspondence_unknown', 'custom_unit_projection_unrepresentable', 'source_dependency_unavailable', 'source_text_encoding_unsupported', 'source_image_format_unsupported', 'source_image_decode_failed', 'source_uncertainty_meaning_conflict', 'source_uncertainty_piece_unsupported', 'source_uncertainty_unit_unknown', 'source_uncertainty_unit_conflicting', 'qualified_confidence_unsupported', 'source_confidence_sentence_stop_unsupported', 'unsupported_covariance_representation', 'source_json_duplicate_key', 'source_json_nonfinite', 'source_covariance_shape_invalid', 'source_covariance_asymmetric', 'source_covariance_not_psd', 'source_covariance_origin_invalid', 'covariance_owner_unresolved', 'covariance_owner_conflicting', 'covariance_shared_rows_conflicting', 'source_covariance_unit_unsupported', 'covariance_projection_numeric_range', 'covariance_projection_precision_invalid', 'variance_status_not_selected', 'source_variance_status_unknown', 'requested_source_variance_status_conflict', 'normal_model_not_selected', 'source_normal_model_unsupported', 'source_model_witness_unavailable', 'source_model_projection_rounding', 'synthetic_covariance_with_reported_operands'] + D['G_Diagnostic']['properties']['code']['enum'] + ['covariance_owner_subset', 'covariance_incomplete_owner_binding', 'covariance_owner_dimension_conflict', 'unresolved_active_representation_model', 'canceled_source_representation_difference', 'source_reading_nomination_identity', 'source_model_active_scope_unresolved', 'source_covariance_full_scope_invalid', 'source_covariance_projection_loss']))
+    D['Diagnostic'] = obj({'code': enum(*codes), 'field': T, 'domain': enum('source_representation', 'source_binding', 'reader_capability', 'source_interpretation', 'dependency'), 'source_refs': arr(T, uniqueItems=True)})
+    AD = arr(ref('Diagnostic'))
+    for name in ('WitnessRecord', 'SourceRecord', 'CanonicalDisplay'):
+        D[name]['properties']['diagnostics'] = cp(AD)
+    interpret_values = sorted({v for name in ('Relationships', 'Arm') for p in D[name]['properties'].values() if p.get('type') == 'object' and 'value' in p.get('properties', {}) for v in p['properties']['value'].get('enum', [])} | {'known', 'estimated', 'sd', 'sem', 'ci', 'unspecified', 'unreported', 'same_as_response', 'explicit_unit', 'biological_preparations', 'technical_measurements', 'fit_to_averaged_curve', 'between_fitted_parameters', 'none', 'known_joint_normal_source_means'})
+    D['InterpretationExtraction'] = obj({'selection': obj({'value': enum(*interpret_values), 'witnesses': arr(ref('Witness'))}), 'witnesses': arr(ref('WitnessRecord')), 'effective_value': enum(*interpret_values), 'diagnostics': AD})
+    D['MeaningExtraction'] = obj({'selection': ref('Meaning'), 'witnesses': arr(ref('WitnessRecord')), 'canonical_witness': null(ref('WitnessRecord')), 'canonical_correspondence': ref('InterpretationExtraction'), 'resolved_state': enum('known', 'unknown', 'conflicting'), 'canonical_id': null(T), 'diagnostics': AD})
+    D['NumberCandidate'] = obj({'selection': ref('NumberSelector'), 'witness': ref('WitnessRecord'), 'raw_expression': null(T), 'native_value': null(N), 'relation': enum('point', 'lt', 'le', 'gt', 'ge', 'unresolved'), 'approximate': null(B), 'source_locator': null(ref('TextLocator')), 'status': enum('parsed', 'unsupported', 'numeric_range', 'dependency_unavailable'), 'diagnostics': AD})
+    D['DefinitionWitnesses'] = obj({k: ref('NumberCandidate') if k == 'amount' else ref('WitnessRecord') for k in ('bridge', 'clause', 'amount', 'amount_unit', 'time_unit', 'endpoint', 'endpoint_entity', 'definition_entity')})
+    D['TextUnitRecord'] = obj({'selection': null(ref('UnitSelection')), 'witness': null(ref('WitnessRecord')), 'raw_unit': null(T), 'canonical_unit': null(canonical), 'exact_scale': null(ref('Rational')), 'native_registry_unit': null(rate), 'definition_witnesses': null(ref('DefinitionWitnesses')), 'status': enum('supported', 'unknown', 'unsupported', 'numeric_range', 'dependency_unavailable', 'endpoint_correspondence_unknown'), 'diagnostics': AD})
+    D['UnitCarrier'] = {'oneOf': [obj({'kind': {'const': 'text'}, 'record': ref('TextUnitRecord')}), obj({'kind': {'const': 'graph'}, 'record': ref('G_GraphUnitRecord')})]}
+    D['TextMeasurementExtraction'] = obj({'selection': null(ref('TextMeasurement')), 'candidates': arr(ref('NumberCandidate')), 'fragments': arr(ref('WitnessRecord')), 'unit': null(ref('TextUnitRecord')), 'graph_witnesses': arr(ref('WitnessRecord'), maxItems=0), 'reading_status': enum('not_selected', 'exact', 'ambiguous', 'unreadable', 'conflicting', 'unsupported', 'dependency_unavailable'), 'source_observation_id': null(T), 'canonical_display': ref('CanonicalDisplay'), 'pixel_result': {'type': 'null'}, 'diagnostics': AD})
+    D['MeasurementExtraction'] = {'oneOf': [ref('TextMeasurementExtraction'), ref('G_GraphMeasurementExtraction')]}
+    piece_states = enum('parsed', 'unsupported', 'numeric_range', 'dependency_unavailable')
+    D['IntervalRecord'] = obj({'selection': ref('CISelector'), 'witness': ref('WitnessRecord'), 'raw_values': null(arr(T, minItems=2, maxItems=2)), 'values': null(arr(N, minItems=2, maxItems=2)), 'status': piece_states, 'diagnostics': AD})
+    D['ConfidenceRecord'] = obj({'selection': ref('NativeTextWitness'), 'witness': ref('WitnessRecord'), 'value': null({'type': 'number', 'exclusiveMinimum': 0, 'exclusiveMaximum': 1}), 'status': piece_states, 'diagnostics': AD})
+    D['NativeSavedWitness'] = obj({**cp(D['NativeTextWitness']['properties']), 'artifact_ref': T})
+    D['NativeSavedNumberSelector'] = obj({**cp(D['NumberSelector']['properties']), 'witness': ref('NativeSavedWitness')})
+    D['CountReading'] = obj({'selector': ref('NativeSavedNumberSelector'), 'raw_number': T, 'value': null({'type': 'integer'}), 'notation': enum('decimal_digits', 'english_cardinal', 'unsupported'), 'relation': enum('point', 'lt', 'le', 'gt', 'ge', 'unresolved'), 'approximate': null(B), 'status': enum('exact', 'qualified', 'not_positive', 'unsupported', 'range_or_alternatives'), 'unavailable_reason': null(enum('count_range_or_alternatives', 'unsupported_count_literal', 'positive_count_required', 'exact_count_qualified'))})
+    D['CountRecord'] = obj({'selection': ref('NumberSelector'), 'witness': ref('WitnessRecord'), 'reading': null(ref('CountReading')), 'diagnostics': AD})
+    D['UncertaintyCanonical'] = obj({'statistic': enum('sd', 'sem', 'ci', 'unspecified', 'unreported', 'unknown', 'conflicting'), 'magnitude': null({'type': 'number', 'minimum': 0}), 'interval': null(arr(N, minItems=2, maxItems=2)), 'confidence_level': null({'type': 'number', 'exclusiveMinimum': 0, 'exclusiveMaximum': 1}), 'count': null({'type': 'integer', 'minimum': 1}), 'repetition_basis': cp(D['Uncertainty']['properties']['repetition_basis']['properties']['value']), 'estimate_basis': cp(D['Uncertainty']['properties']['estimate_basis']['properties']['value'])})
+    D['UncertaintyExtraction'] = obj({'selection': ref('Uncertainty'), 'meanings': obj({k: ref('InterpretationExtraction') for k in ('statistic', 'unit_relationship', 'repetition_basis', 'estimate_basis')}), 'magnitude': null(ref('NumberCandidate')), 'interval': null(ref('IntervalRecord')), 'unit': null(ref('TextUnitRecord')), 'effective_unit': null(ref('UnitCarrier')), 'confidence_level': null(ref('ConfidenceRecord')), 'count': null(ref('CountRecord')), 'canonical': ref('UncertaintyCanonical'), 'diagnostics': AD})
+    roles = list(selection['properties']['arms']['properties'])
+    D['ArmScience'] = obj({'selection': ref('Arm'), 'context': obj({k: null(ref('WitnessRecord')) for k in D['Arm']['properties']['context']['properties']}), 'protein_arrangement': ref('InterpretationExtraction'), 'meanings': obj({k: ref('MeaningExtraction') for k in ('endpoint', 'normalization', 'subject_construct', 'condition', 'physical_observation')}), 'intended_factor_level': null(ref('WitnessRecord'))})
+    D['ArmExtraction'] = obj({**cp(D['ArmScience']['properties']), 'measurement': ref('MeasurementExtraction'), 'reported_uncertainty': ref('UncertaintyExtraction'), 'calculation_operand': null(ref('O_Arm')), 'graph_details': null(ref('GraphResult')), 'diagnostics': AD})
+    D['RelationshipExtraction'] = obj({k: ref('MeaningExtraction') if k.endswith('_target') else null(ref('WitnessRecord')) if k == 'intended_factor' else ref('InterpretationExtraction') for k in D['Relationships']['properties']})
+    D['CovarianceBindingExtraction'] = obj({'selection': null(ref('CovarianceBinding')), 'label_witness': null(ref('WitnessRecord')), 'owner_witness': null(ref('WitnessRecord')), 'correspondence': null(ref('InterpretationExtraction')), 'source_variable_index': null(I), 'resolved_owner_id': null(T), 'state': enum('known', 'unknown', 'conflicting'), 'diagnostics': AD})
+    D['CovarianceSourceVariable'] = obj({'index': I, 'label': T, 'unit': T, 'description': T, **{k + '_witness': ref('WitnessRecord') for k in ('label', 'unit', 'description')}, 'native_registry_unit': null(rate), 'exact_scale': null(ref('Rational')), 'diagnostics': AD})
+    D['SourceModel'] = obj({'origin': enum('reported', 'derived', 'synthetic'), 'variance_status': enum('known', 'estimated', 'unknown'), 'model_kind': enum('none', 'known_joint_normal_source_means')})
+    D['OwnerProjection'] = obj({'physical_observation_id': T, 'source_variable_index': I, 'roles': arr(enum(*roles), minItems=1, uniqueItems=True), 'native_registry_unit': rate})
+    D['CovarianceExtraction'] = obj({'selection': cp(selection['properties']['covariance']['anyOf'][0]), 'source_ref': T, 'artifact_ref': null(T), 'byte_sha256': null(SHA), 'raw_text': null(T), 'variables': arr(ref('CovarianceSourceVariable')), 'matrix_tokens': null(arr(arr(T))), 'exact_matrix': null(arr(arr(ref('Rational')))), 'source_model': null(ref('SourceModel')), 'bindings': obj({r: ref('CovarianceBindingExtraction') for r in roles}), 'provided_owner_projection': arr(ref('OwnerProjection'), maxItems=4), 'projected_exact_matrix': null(arr(arr(ref('Rational')))), 'calculation_covariance': null({'oneOf': [ref('O_RoleCovariance'), ref('O_OwnerCovariance')]}), 'source_validation': enum('valid', 'invalid', 'unassessed'), 'projection_state': enum('available', 'unavailable', 'numeric_range', 'precision_invalid', 'source_invalid', 'binding_unresolved', 'binding_conflicting', 'unsupported_format'), 'diagnostics': AD})
+    D['ExactResponse'] = obj({'point': null(ref('Rational')), 'lower': null(ref('Rational')), 'upper': null(ref('Rational')), 'relation': enum('eq', 'lt', 'le', 'gt', 'ge', 'interval', 'none'), 'approximate': B, 'unit': null(canonical)})
+    D['MeasurementReading'] = obj({'selection': null({'oneOf': [ref('TextMeasurement'), ref('GraphMeasurement')]}), 'extraction': ref('MeasurementExtraction'), 'operand_projection': obj({k: cp(D['O_Arm']['properties'][k]) for k in ('value', 'threshold', 'relation', 'approximate', 'unit', 'status', 'origin', 'digitization_interval')}), 'unit_semantics': null(ref('UnitCarrier')), 'exact_response': null(ref('ExactResponse')), 'source_observation_id': null(T), 'graph_details': null(ref('GraphResult'))})
+    D['RetainedRepresentation'] = obj({'role': enum(*roles), 'source_reading_id': null(T), 'exact_domain': null(ref('ExactResponse'))})
+    D['ReconciliationRecord'] = obj({'physical_observation_id': null(T), 'roles': arr(enum(*roles), minItems=1, uniqueItems=True), 'readings': arr(ref('RetainedRepresentation'), minItems=1), 'net_coefficient': {'type': 'integer'}, 'method': enum('single_reading', 'owner_cancellation', 'exact_equivalence', 'unresolved'), 'state': enum('single', 'exact_equivalent', 'canceled_readings_retained', 'unresolved_active_model', 'conflicting_active_domains', 'unresolved_science'), 'canonical_source_reading_id': null(T), 'qualifications': arr(enum('conditional_digitization_not_sampling', 'canceled_numeric_conflict', 'canceled_numeric_unavailable', 'canceled_unit_unknown', 'active_reconciliation_unimplemented'), uniqueItems=True), 'diagnostics': AD})
+    D['RequestedModel'] = obj({k: ref('InterpretationExtraction') for k in ('variance_status', 'model_kind')})
+    D['EffectiveModel'] = obj({'variance_status': enum('known', 'estimated', 'unknown'), 'model_kind': enum('none', 'known_joint_normal_source_means'), 'diagnostics': AD})
+    D['DependencyRecord'] = obj({'reader_contract_version': {'const': 'controlled_response_source_extraction_v3'}, 'calculator_contract_version': {'const': 'controlled_response_owner_inputs_v2'}})
+    root = obj({'version': {'const': 'controlled_response_source_extraction_v3'}, 'selection': ref('V3Selection'), 'sources': arr(ref('SourceRecord')), 'images': arr(ref('ImageRecord')), 'arms': obj({r: null(ref('ArmExtraction')) for r in roles}), 'relationships': ref('RelationshipExtraction'), 'covariance': null(ref('CovarianceExtraction')), 'requested_model': ref('RequestedModel'), 'effective_model': ref('EffectiveModel'), 'calculation_inputs': ref('OwnerInputs'), 'representation_reconciliations': arr(ref('ReconciliationRecord')), 'diagnostics': AD, 'implementation_dependencies': ref('DependencyRecord')})
+    root.update({'$defs': D, '$schema': 'https://json-schema.org/draft/2020-12/schema'})
+    return root
 
 @lru_cache(maxsize=1)
 def _schemas():
     schemas = {}
-
-    def obj(p):
-        return dict(type='object', properties=p, required=list(p), additionalProperties=False)
-
-    def ref(n):
-        return {'$ref': '#/$defs/' + n}
-
-    def arr(x, **kw):
-        return dict(type='array', items=x, **kw)
-
-    def null(x):
-        return {'anyOf': [x, {'type': 'null'}]}
-
-    def enum(*x):
-        return {'enum': list(x)}
-    T = {'type': 'string', 'minLength': 1}
-    I = {'type': 'integer', 'minimum': 0}
-    B = {'type': 'boolean'}
-    ROLES = list(v2.controlled_response_v2_arguments_schema()['properties']['arms']['properties'])
-    S = v2.controlled_response_v2_arguments_schema()
-    S['properties']['version'] = {'const': 'controlled_response_source_selection_v3'}
+    S = shared._selection_core_schema()
+    ROLES = list(S['properties']['arms']['properties'])
     D = S['$defs']
     D['ReadingSelector'] = obj({'role': enum(*ROLES), 'reading_key': null(T)})
     D['Assignment'] = obj({r: null(T) for r in ROLES})
@@ -46,12 +144,10 @@ def _schemas():
         S['properties'][name] = shape
     S['required'] += ['companion_readings', 'joint_reading_assignments', 'joint_scopes', 'reading_reconciliations', 'local_pair_assignments']
     schemas['SELECTION_SCHEMA_V3_007'] = S
-    E = v2._extraction_schema()
+    E = _extraction_core_schema()
     ED = E['$defs']
     ED['CovarianceExtraction']['properties']['raw_text'] = null({'type': 'string'})
-    ED['V3Selection'] = v2.embed(S, 'V3S_', ED)
-    E['properties']['version'] = {'const': 'controlled_response_source_extraction_v3'}
-    E['properties']['selection'] = ref('V3Selection')
+    ED['V3Selection'] = embed(S, 'V3S_', ED)
     ED['ReadingSelector'] = cp(D['ReadingSelector'])
     ED['Authority'] = cp(D['Authority'])
     ED['ScopeRelation'] = cp(D['ScopeRelation'])
@@ -66,9 +162,8 @@ def _schemas():
     E['properties']['calculation_inputs'] = null(ref('OwnerInputs'))
     for name, shape in [('companion_extractions', arr(ref('CompanionExtraction'))), ('projection_status', enum('ready', 'unresolved_active_reconciliation')), ('final_projection_basis', null(obj({'reading_assignment': ref('Assignment'), 'covariance_scope': enum('base', 'joint'), 'scope_index': null(I), 'reconciled_roles': arr(enum(*ROLES), uniqueItems=True)}))), ('reconciliation_decisions', arr(ref('ReconciliationDecision'))), ('joint_scope_extractions', arr(obj({'assignment_index': I, 'witnesses': arr(ref('WitnessRecord')), 'effective_admissibility': enum('compatible', 'unknown', 'conflicting'), 'source_covariance': null(ref('CovarianceExtraction')), 'requested_model': ref('RequestedModel'), 'effective_model': ref('EffectiveModel')}))), ('alternative_inputs', arr(ref('ConditionalInput'))), ('partial_calculation_inputs', null(ref('OwnerInputs'))), ('partial_projection_state', enum('not_required', 'ready', 'unsupported_origin_projection', 'unavailable_group_identity')), ('component_local_inputs', ref('LocalInputs'))]:
         E['properties'][name] = shape
-    E['required'] += ['companion_extractions', 'projection_status', 'final_projection_basis', 'reconciliation_decisions', 'joint_scope_extractions', 'alternative_inputs', 'partial_calculation_inputs', 'partial_projection_state', 'component_local_inputs']
-    ED['DependencyRecord']['properties']['reader_contract_version'] = {'const': 'controlled_response_source_extraction_v3'}
-    LD = cp(v2._extraction_schema()['$defs'])
+    E['required'] += ['companion_extractions', 'local_pair_extractions', 'projection_status', 'final_projection_basis', 'reconciliation_decisions', 'joint_scope_extractions', 'alternative_inputs', 'partial_calculation_inputs', 'partial_projection_state', 'component_local_inputs']
+    LD = cp(_extraction_core_schema()['$defs'])
     LD['CovarianceExtraction']['properties']['raw_text'] = null({'type': 'string'})
     LD['ReadingSelector'] = cp(D['ReadingSelector'])
     LD['CovarianceDocument'] = obj({k: cp(LD['CovarianceExtraction']['properties'][k]) for k in ['source_ref', 'artifact_ref', 'byte_sha256', 'raw_text', 'variables', 'matrix_tokens', 'exact_matrix', 'source_model', 'source_validation', 'diagnostics']})
@@ -79,9 +174,9 @@ def _schemas():
     LD['LocalPair'] = obj({'pair_key': T, 'condition': enum('condition1', 'condition0'), 'protein': ref('ReadingSelector'), 'control': ref('ReadingSelector'), 'target': cp(owner.controlled_response_owner_arguments_schema()['$defs']['Relationships']['properties']['condition1_target']), 'control_application': enum('matched_condition_control', 'shared_reference_assumption', 'unknown', 'conflicting'), 'joint_admissibility': enum('compatible', 'unknown', 'conflicting'), 'scope_state': enum('same', 'explicit_compatible', 'not_applicable', 'unknown', 'conflicting'), 'covariance_index': null(I), 'protein_binding': null(ref('CovarianceBindingExtraction')), 'control_binding': null(ref('CovarianceBindingExtraction')), 'variance_status': enum('known', 'estimated', 'unknown')})
     L = obj({'version': {'const': 'controlled_response_local_inputs_v1'}, 'readings': arr(ref('LocalReading')), 'pairs': arr(ref('LocalPair')), 'source_covariances': arr(ref('CovarianceDocument'))})
     L.update({'$defs': LD, '$schema': 'https://json-schema.org/draft/2020-12/schema'})
-    ED['LocalInputs'] = v2.embed(L, 'Local_', ED)
+    ED['LocalInputs'] = embed(L, 'Local_', ED)
     ED['ScopeKey'] = obj({'kind': enum('base', 'joint', 'local'), 'index': null(I)})
-    ED['CovarianceDocument'] = v2.embed({'$defs': LD, **ref('CovarianceDocument')}, 'Document_', ED)
+    ED['CovarianceDocument'] = embed({'$defs': LD, **ref('CovarianceDocument')}, 'Document_', ED)
     E['properties']['covariance_document_scopes'] = arr(obj({'scope': ref('ScopeKey'), 'document': null(ref('CovarianceDocument'))}))
     E['required'].append('covariance_document_scopes')
     ED['BoundCovarianceScope'] = obj({'scope': ref('ScopeKey'), 'document': null(ref('CovarianceDocument')), 'bindings': arr(obj({'reading': ref('ReadingSelector'), 'binding': ref('CovarianceBindingExtraction')})), 'whole_projection': null(ref('CovarianceExtraction'))})
@@ -93,13 +188,13 @@ def _schemas():
     RD['LocalCell']['properties']['origin'] = null(cp(RD['LocalCell']['properties']['origin']))
     RD['LocalCell']['properties']['unavailable_reason']['anyOf'][0]['items']['enum'] += ['unknown_joint_applicability', 'conflicting_joint_applicability', 'unknown_covariance_owner', 'source_full_covariance_invalid', 'source_covariance_unassessed', 'local_covariance_binding_unknown', 'local_covariance_binding_conflicting', 'local_scope_unresolved']
     RD['LocalCell']['properties']['formula_code']['enum'] += ['local_joint_covariance', 'local_square_root_variance']
-    RD['LocalPopulationInputs'] = v2.embed(L, 'Parsed_', RD)
+    RD['LocalPopulationInputs'] = embed(L, 'Parsed_', RD)
     R = obj({'version': {'const': 'controlled_response_local_sheet_v1'}, 'inputs': ref('LocalPopulationInputs'), 'raw': arr(obj({'reading': ref('ReadingSelector'), 'cell': ref('LocalCell'), 'reported_uncertainty': ref('UncertaintyCanonical'), 'dependencies': ref('Dependency')})), 'pairs': arr(obj({'pair_key': T, 'difference': ref('LocalCell'), 'variance': ref('LocalCell'), 'standard_uncertainty': ref('LocalCell'), 'dependencies': obj({k: ref('Dependency') for k in ['difference', 'variance', 'standard_uncertainty']})})), 'full_covariance_checks': arr(obj({'covariance_index': I, 'source_validation': enum('valid', 'invalid', 'unassessed'), 'document_state': enum('available', 'unavailable', 'unsupported_format')}))})
     R.update({'$defs': RD, '$schema': 'https://json-schema.org/draft/2020-12/schema'})
     schemas['LOCAL_OUTPUT_SCHEMA_007'] = R
     PD = cp(ED)
-    PD['LocalSheet'] = v2.embed(R, 'Result_', PD)
-    components = list(v2._sheet_schema()['properties']['cells']['properties'])
+    PD['LocalSheet'] = embed(R, 'Result_', PD)
+    components = list(_sheet_schema()['properties']['cells']['properties'])
     PD['ComponentDependency'] = cp(RD['Dependency'])
     P = obj({'version': {'const': 'controlled_response_conditional_population_v3'}, 'projection_status': enum('ready', 'unresolved_active_reconciliation'), 'final_sheet': null(ref('OwnerSheet')), 'partial_sheet': null(ref('OwnerSheet')), 'local_sheet': ref('LocalSheet'), 'unresolved_roles': arr(enum(*ROLES), uniqueItems=True), 'alternatives': arr(obj({'reading_assignment': ref('Assignment'), 'scope_index': I, 'sheet': ref('OwnerSheet')})), 'unaffected_components': arr(obj({'component': T, 'cell': ref('H_Cell'), 'dependencies': ref('ComponentDependency')})), 'conditional_components': arr(obj({'assignment_index': I, 'component': enum(*components), 'cell': ref('H_Cell'), 'dependencies': ref('ComponentDependency')}))})
     P.update({'$defs': PD, '$schema': 'https://json-schema.org/draft/2020-12/schema'})
