@@ -242,8 +242,7 @@ def _source_equivalent_schema():
 
 
 def _source_profile_schema():
-    return {"const": dict(callable=TOOL, module_sha256=core.SOURCE_SHA256,
-        callable_sha256=core.CALLABLE_SHA256, identity_kind="declared_not_execution_receipt",
+    return {"const": dict(callable=TOOL, identity_kind="declared_not_execution_receipt",
         algorithm_location="remote_IUPred2A_service", request=dict(url=ENDPOINT, iupred2="long", anchor2="no"),
         source_default_threshold_not_inserted=0.5)}
 

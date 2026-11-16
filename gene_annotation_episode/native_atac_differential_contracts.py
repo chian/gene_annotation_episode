@@ -119,9 +119,9 @@ _SAMPLE = _obj(sample_id=_ID, input_artifact_refs=_arr(_ID), reference_id=_ID, b
 _CONDITION = _obj(condition_id=_ID, label=_null(_TEXT), sample_ids=_arr(_ID, minItems=1, maxItems=1))
 _INPUT = _obj(input_key=_ID, condition_id=_ID, sample_id=_ID, reference_id=_ID, file={**_FILE,
     "properties": {**_FILE["properties"], "format": {"const": "bam"}}})
-_DRIVER = _obj(python_executable=_TEXT, python_sha256=_SHA, python_version=_ID, module_root=_TEXT,
-    implementation_files=_arr(_obj(module=_ID, sha256=_SHA), minItems=1),
-    dependencies=_arr(_obj(distribution=_ID, version=_TEXT, package_root=_TEXT, files=_arr(_PIN, minItems=1)), minItems=1))
+_DRIVER = _obj(python_executable=_TEXT, python_version=_ID, module_root=_TEXT,
+    implementation_files=_arr(_obj(module=_ID), minItems=1),
+    dependencies=_arr(_obj(distribution=_ID, version=_TEXT, package_root=_TEXT, files=_arr(_obj(path=_TEXT), minItems=1)), minItems=1))
 _MACS = _obj(python_executable=_TEXT, python_sha256=_SHA, python_version=_ID, macs2_script=_TEXT,
     macs2_sha256=_SHA, macs2_version={"const": "2.2.9.1"}, import_roots=_arr(_TEXT, minItems=1), files=_arr(_PIN, minItems=1))
 _SOFTWARE = _obj(driver_runtime=_DRIVER, macs2_runtime=_MACS)

@@ -187,10 +187,8 @@ def _worker_record(value, *, request, result_value=None):
     _closed(selected, 'version command cwd environment policy request python implementation_files')
     payload = dict(operation=_OPERATION, arguments=dict(request=request))
     _require(selected['version'] == 'ordinary_molecular_execution_v1' and _same(selected['request'], payload)
-        and type(selected['python']) is dict and set(selected['python']) == {'path', 'sha256'}
-        and type(selected['python']['path']) is str
-        and type(selected['python']['sha256']) is str
-        and re.fullmatch(r'[0-9a-f]{64}', selected['python']['sha256']) is not None,
+        and type(selected['python']) is dict and set(selected['python']) == {'path'}
+        and type(selected['python']['path']) is str,
         'worker_selection_conflict')
     root = PurePosixPath(selected['cwd'])
     _require(root.is_absolute() and str(root) == selected['cwd'] and '..' not in root.parts,
@@ -200,8 +198,7 @@ def _worker_record(value, *, request, result_value=None):
     _require(selected['command'] == expected_command and type(selected['environment']) is dict
         and all(type(key) is str and type(item) is str for key, item in selected['environment'].items())
         and type(selected['implementation_files']) is list and bool(selected['implementation_files'])
-        and all(type(pin) is dict and set(pin) == {'path', 'sha256'} and type(pin['path']) is str
-            and type(pin['sha256']) is str and re.fullmatch(r'[0-9a-f]{64}', pin['sha256'])
+        and all(type(pin) is dict and set(pin) == {'path'} and type(pin['path']) is str
             for pin in selected['implementation_files']), 'worker_selection_conflict')
     _require(type(handle) is dict and handle.get('version') == native.VERSION
         and handle.get('stage') in ('prepared', 'submitting', 'released')

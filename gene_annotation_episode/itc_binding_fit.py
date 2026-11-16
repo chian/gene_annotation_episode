@@ -4,7 +4,6 @@ This is an in-process numerical call record, not an installed execution profile,
 host software/manifest authentication, receipt grant, or recovery launcher.
 """
 from copy import deepcopy
-import hashlib
 import inspect
 import math
 from numbers import Real
@@ -30,9 +29,7 @@ def _observed(value):
 
 
 def _file(path):
-    path = Path(path).resolve(strict=True)
-    raw = path.read_bytes()
-    return dict(path=str(path), sha256=hashlib.sha256(raw).hexdigest(), size_bytes=len(raw))
+    return dict(path=str(Path(path).resolve(strict=True)))
 
 
 def _entered(error, code):

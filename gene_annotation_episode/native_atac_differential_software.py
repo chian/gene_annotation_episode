@@ -58,16 +58,16 @@ def _source_closure(module_root, modules):
     return paths
 
 
-def _copy_exact(source, destination):
-    identity = file_identity(source)
+def _copy_source(source, destination):
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
-        require(file_identity(destination) == identity and not destination.stat().st_mode & 0o222)
+        # A resumed preparation finds its earlier copy: accept equal bytes only.
+        with _regular(source) as original, _regular(destination) as staged:
+            require(staged.read() == original.read() and not destination.stat().st_mode & 0o222,
+                "native_dependency_unavailable")
     else:
         with _regular(source) as original, _writing(destination) as target:
             shutil.copyfileobj(original, target, length=1024 * 1024)
-    require(file_identity(destination) == identity)
-    return {"path": str(destination), **identity}
 
 
 def _dependency_bindings(*, contained_records=False, exclusions=None):
@@ -103,7 +103,7 @@ def _dependency_bindings(*, contained_records=False, exclusions=None):
                 path = Path(installed.locate_file(entry)).resolve(strict=True)
             if path.suffix in (".pyc", ".pyo") or not path.is_file():
                 continue
-            files.append({"path": str(path), **file_identity(path)})
+            files.append({"path": str(path)})
         require(bool(files), "native_dependency_unavailable")
         result.append({"distribution": distribution, "version": installed.version,
             "package_root": str(Path(module.__file__).resolve(strict=True).parent),
@@ -130,10 +130,9 @@ def freeze_driver_runtime(*, module_root, snapshot_directory, driver_modules, po
     implementation = []
     for name, source in sorted(modules.items()):
         check_scratch_budget(target, policy, additional_bytes=source.stat().st_size)
-        pin = _copy_exact(source, target / (name.replace(".", "/") + ".py"))
-        implementation.append({"module": name, "sha256": pin["sha256"]})
+        _copy_source(source, target / (name.replace(".", "/") + ".py"))
+        implementation.append({"module": name})
     return validate_driver_runtime(dict(python_executable=sys.executable,
-        python_sha256=file_identity(Path(sys.executable).resolve(strict=True))["sha256"],
         python_version=platform.python_version(), module_root=str(target), implementation_files=implementation,
         dependencies=(_dependency_bindings(contained_records=True, exclusions=dependency_exclusions)
             if contained_dependency_records else _dependency_bindings())))

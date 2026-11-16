@@ -32,7 +32,6 @@ _OBJECT_TAG = "$cd_retained_object"
 _SIGNAL_UNITS = {"mdeg", "delta_epsilon", "unknown"}
 SOURCE_METHOD = {
     "callable": "biomni.tool.biochemistry.analyze_circular_dichroism_spectra",
-    "source_function_sha256": "1e4d9fd3ae96b71c6c124b530aa4c5d8364ec641edc75bd8d20fae86ee65ab1d",
     "calculation": "source_heuristics_from_supplied_binary64_measurements",
     "native_execution": False,
 }

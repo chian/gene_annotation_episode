@@ -50,10 +50,10 @@ def make_request(store):
 
 def make_assignment(f):
     dependencies=[dict(distribution=name, version='fixture', package_root='/fixture/deps/'+name,
-        files=[dict(path='/fixture/deps/'+name+'/fixture', sha256='3'*64, size_bytes=1)])
+        files=[dict(path='/fixture/deps/'+name+'/fixture')])
         for name in sorted(REQUIRED_DEPENDENCIES)]
-    driver=dict(python_executable='/fixture/python', python_sha256='1'*64, python_version='fixture',
-        module_root='/fixture/source', implementation_files=[dict(module=name,sha256='2'*64)
+    driver=dict(python_executable='/fixture/python', python_version='fixture',
+        module_root='/fixture/source', implementation_files=[dict(module=name)
         for name in sorted(REQUIRED_MODULES)], dependencies=dependencies)
     native=dict(python_executable='/fixture/native/python',python_sha256='4'*64,python_version='fixture',
         macs2_script='/fixture/native/macs2',macs2_sha256='5'*64,macs2_version='2.2.9.1',

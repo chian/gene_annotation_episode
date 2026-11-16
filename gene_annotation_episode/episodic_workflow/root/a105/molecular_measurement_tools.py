@@ -160,8 +160,7 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             expected = {str(Path(root) / "gene_annotation_episode" / "episodic_workflow" / "root" / "a105" / path.name): path
                 for root in deployment["import_roots"] for path in implementation_files}
             for path in implementation_files:
-                matches = [pin for name, pin in index.items() if name in expected
-                    and expected[name] == path]
+                matches = [name for name in expected if expected[name] == path and Path(name).is_file()]
                 if len(matches) != 1:
                     raise ContractError("protease_kinetics_selected_driver_closure_conflict")
             implementation_files = None

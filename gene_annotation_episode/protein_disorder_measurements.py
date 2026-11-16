@@ -20,8 +20,6 @@ from .sequence_mapping import validate_mapping, map_interval
 
 SHEET_SCHEMA = "protein_disorder_sheet_v1"
 COMPONENTS_SCHEMA = "protein_disorder_components_v1"
-SOURCE_SHA256 = "7eb57d570d516ab22c089f0ff22141d3bb4f0fa73875208f32bcf375a0cb4127"
-CALLABLE_SHA256 = "2e48ec328127e36a5fbc1b7cf30b93b931baad674c12a3fb63f69457be64c260"
 _HEADER = ["Position", "Amino_Acid", "Disorder_Score", "Is_Disordered"]
 _NO_DATA = "No valid prediction data was returned from the server."
 _ASCII = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
@@ -455,8 +453,7 @@ def build_disorder_sheet(native_csv: str | None, *, protein_sequence: str | None
     if authority == "csv" and (not table["header_compatible"] or not table["parser_tail_complete"] or any(not row["source_parse_accepted"] for row in rows)):
         _issue(issues, "csv_population_incomplete", "/csv")
     return {"schema": SHEET_SCHEMA, "inputs": deepcopy(inputs),
-        "source_profile": {"callable": "predict_protein_disorder_regions", "module_sha256": SOURCE_SHA256,
-            "callable_sha256": CALLABLE_SHA256, "identity_kind": "declared_not_execution_receipt",
+        "source_profile": {"callable": "predict_protein_disorder_regions", "identity_kind": "declared_not_execution_receipt",
             "algorithm_location": "remote_IUPred2A_service", "request": {"url": "https://iupred2a.elte.hu/iupred2a", "iupred2": "long", "anchor2": "no"}, "source_default_threshold_not_inserted": 0.5},
         "cleaning": {"expression": "ASCII-letter selection preserving original case", "cleaned_sequence": cleaned,
             "original_character_indices": indices, "original_symbol_count": None if protein_sequence is None else len(protein_sequence),

@@ -126,6 +126,11 @@ def _deployment(value, *, version=DEPLOYMENT_VERSION_V3):
         _fail("ordered_import_roots_required", "/deployment/import_roots")
 
 
+def _repository_file(path, roots):
+    """A file of this repository's package inside a selected import root."""
+    return any(Path(path).is_relative_to(Path(root) / "gene_annotation_episode") for root in roots)
+
+
 def _manifest(deployment):
     actual, raw = _exact_file(deployment["software_files_file"],
         "/deployment/software_files_file")
@@ -148,6 +153,8 @@ def _manifest(deployment):
     for i, row in enumerate(rows):
         field = "/software_files/" + str(i)
         _pin_schema(row, field)
+        if _repository_file(row["path"], deployment["import_roots"]):
+            _fail("repository_file_in_manifest", field + "/path")
         if row["path"] in index:
             _fail("duplicate_manifest_path", field + "/path")
         index[row["path"]] = row
@@ -163,6 +170,8 @@ def _imports(index, roots, module_path):
         path = Path(filename).resolve(strict=True)
         if path != module_path and not any(path.is_relative_to(root) for root in roots):
             _fail("import_outside_selection", "/imports/" + name, path=str(path))
+        if _repository_file(path, roots):
+            continue
         observed.append({"module_name": name,
             "file": _selected_file(path, index, "/imports/" + name)})
     return observed
@@ -385,7 +394,7 @@ def _execute_protease_request(request):
         if Path(sys.executable).resolve(strict=True) != Path(executable["path"]) or Path(sys.prefix).resolve(strict=True) != home:
             _fail("executing_runtime_mismatch", "/deployment/runtime")
         _selected_file(executable["path"], index, "/runtime/executable")
-        helper = _selected_file(__file__, index, "/runtime/helper_file")
+        helper = {"path": str(Path(__file__).resolve(strict=True))}
         stdlib = _selected_file(json.__file__, index, "/runtime/stdlib")
         if not Path(stdlib["path"]).is_relative_to(home):
             _fail("executing_stdlib_mismatch", "/runtime/stdlib")

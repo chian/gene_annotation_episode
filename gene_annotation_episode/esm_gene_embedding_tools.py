@@ -111,18 +111,22 @@ def esm_worker_environment(request, directory):
 
 
 def esm_worker_implementation_files(request):
-    """Flatten the selected pin declarations without opening or importing them."""
+    """Flatten the selected source paths and checkpoint pins without opening or importing them."""
     request = contracts.validate_esm_worker_request(request)
-    deployment,files = request["deployment"],{}
+    deployment = request["deployment"]
     driver = deployment["driver"]
-    declared = [dict(path=str(PurePosixPath(driver["module_root"])/(r["module"].replace(".","/")+".py")),
-        sha256=r["sha256"]) for r in driver["implementation_files"]]
-    declared.extend(pin for dependency in driver["dependencies"] for pin in dependency["files"])
-    declared.extend(deployment[key] for key in ("checkpoint","regression_checkpoint"))
-    for pin in declared:
-        _require(pin["path"] not in files or files[pin["path"]] == pin["sha256"],"selected_pin_conflict")
-        files[pin["path"]] = pin["sha256"]
-    return [dict(path=path,sha256=sha) for path,sha in files.items()]
+    declared = [dict(path=str(PurePosixPath(driver["module_root"])/(r["module"].replace(".","/")+".py")))
+        for r in driver["implementation_files"]]
+    declared.extend(dict(path=pin["path"]) for dependency in driver["dependencies"] for pin in dependency["files"])
+    declared = list({row["path"]: row for row in declared}.values())
+    paths = {row["path"] for row in declared}
+    checkpoints = {}
+    for key in ("checkpoint","regression_checkpoint"):
+        pin = deployment[key]
+        _require(pin["path"] not in paths and checkpoints.get(pin["path"],pin["sha256"]) == pin["sha256"],"selected_pin_conflict")
+        checkpoints[pin["path"]] = pin["sha256"]
+    declared.extend(dict(path=path,sha256=sha) for path,sha in checkpoints.items())
+    return declared
 
 
 def _file(registry, value):
@@ -223,7 +227,7 @@ def _worker_control(worker,request,invocation):
         str(directory/"worker-request.json"),str(directory/"worker-result.json")]
     _require(selected["version"] == "ordinary_molecular_execution_v1" and _same(worker["request"],request)
         and _same(selected["request"],dict(operation=OPERATION,arguments=dict(request=request)))
-        and selected["python"] == dict(path=driver["python_executable"],sha256=driver["python_sha256"])
+        and selected["python"] == dict(path=driver["python_executable"])
         and _same(selected["implementation_files"],esm_worker_implementation_files(request))
         and selected["command"] == handle["command"] == command
         and selected["cwd"] == handle["cwd"] == str(directory)

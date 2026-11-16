@@ -19,20 +19,17 @@ from .sequence_mapping import validate_mapping, map_interval
 
 SHEET_SCHEMA = "glycosylation_measurement_sheet_v1"
 COMPONENTS_SCHEMA = "glycosylation_measurement_components_v1"
-SOURCE_SHA256 = "ed3726d318f239e98183a359f18bcd341f4159ef2e400322c6141f77dcd2aff2"
 _N = "find_n_glycosylation_motifs"
 _O = "predict_o_glycosylation_hotspots"
 _PROFILES = {
     _N: {"defaults": {"allow_overlap": False},
         "title": "# N-linked glycosylation sequon scan (N-X-[S/T], X≠P)",
         "heading": "Positions (1-based):",
-        "empty": "No canonical N-linked sequons detected.",
-        "callable_sha256": "d574294b1088dfb22b6f4242cc0c94b17de4999e86330e07620a83a0b4754c61"},
+        "empty": "No canonical N-linked sequons detected."},
     _O: {"defaults": {"window": 7, "min_st_fraction": 0.4, "disallow_proline_next": True},
         "title": "# Heuristic O-glycosylation hotspot prediction (S/T density based)",
         "heading": "Top candidates:",
-        "empty": "No candidate O-glycosylation hotspots met the heuristic threshold.",
-        "callable_sha256": "dac5fa5bd182e0f7d4154ad72289c9adae173864e07e6392ae32d1e1102b2ca6"},
+        "empty": "No candidate O-glycosylation hotspots met the heuristic threshold."},
 }
 _NOTE = "Note: For state-of-the-art O-glycosite prediction, use NetOGlyc 4.0 (web service)."
 _N_ROW = re.compile(r"- ([0-9]+): (.*)\Z")
@@ -370,8 +367,7 @@ def build_glycosylation_sheet(operation: str, native_log: str | None, *, sequenc
     if native_outcome != "completed":
         _issue(issues, "native_outcome_incomplete", "/inputs/native_outcome")
     return {"schema": SHEET_SCHEMA, "inputs": inputs,
-        "source_profile": {"module_sha256": SOURCE_SHA256, "callable": operation,
-            "callable_sha256": profile["callable_sha256"], "identity_kind": "declared_source_profile_not_observed_execution"},
+        "source_profile": {"callable": operation, "identity_kind": "declared_source_profile_not_observed_execution"},
         "parameters": parameter, "source_normalization": {"expression": "(sequence or '').upper()",
             "processed_sequence": processed, "original_operand_known": sequence is not None,
             "original_symbol_count": None if sequence is None else len(sequence),

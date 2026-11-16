@@ -155,14 +155,13 @@ def declaration(spec, directory):
 
 
 def verify_software(software):
-    """Check actual selected interpreter, source bytes and imported dependencies."""
+    """Check actual selected interpreter, source paths and imported dependencies."""
     selected = Path(software["python_executable"]).resolve(strict=True)
     require(os.path.samefile(selected, "/proc/self/exe") and
-        file_identity(selected)["sha256"] == software["python_sha256"] and
         platform.python_version() == software["python_version"], "native_dependency_unavailable")
     for row in software["implementation_files"]:
         path = confined_file(software["module_root"], row["module"].replace(".", "/") + ".py")
-        require(file_identity(path)["sha256"] == row["sha256"], "native_dependency_unavailable")
+        require(path.is_file(), "native_dependency_unavailable")
         loaded = sys.modules.get(row["module"])
         if loaded is not None:
             require(Path(loaded.__file__) == path, "native_dependency_unavailable")
@@ -172,9 +171,6 @@ def verify_software(software):
         require(importlib.metadata.version(name) == dependency["version"], "native_dependency_unavailable")
         module = importlib.import_module(module_names.get(name, name.replace("-", "_")))
         require(Path(module.__file__).parent == Path(dependency["package_root"]), "native_dependency_unavailable")
-        for pin in dependency["files"]:
-            require(file_identity(pin["path"]) == {k: pin[k] for k in ("sha256", "size_bytes")},
-                "native_dependency_unavailable")
     pinned = {pin["path"] for row in software["dependencies"] for pin in row["files"]}
     for module in list(sys.modules.values()):
         filename = getattr(module, "__file__", None)

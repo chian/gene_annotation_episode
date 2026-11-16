@@ -228,8 +228,7 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             else:
                 _native_request = current_native_request
             _native_request(selected_native)
-            native_source._deployment(selected_native["deployment"], version=native_source.DEPLOYMENT_VERSION_V3,
-                source_sha256=native_source.BIOCHEMISTRY_SOURCE_SHA256)
+            native_source._deployment(selected_native["deployment"], version=native_source.DEPLOYMENT_VERSION_V3)
             if Path(selected_native["output_workspace"]) != output.parent:
                 raise ContractError("protease_kinetics_worker_output_conflict")
 
@@ -268,8 +267,7 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             if (selected["python"] != {key: deployment["runtime"]["executable"][key] for key in ("path", "sha256")}
                     or canonical(selected["environment"]) != canonical(native_environment())):
                 raise ContractError("protease_kinetics_original_runtime_conflict")
-        if esm and (selected["python"] != dict(path=esm_driver["python_executable"],
-                    sha256=esm_driver["python_sha256"])
+        if esm and (selected["python"] != dict(path=esm_driver["python_executable"])
                 or canonical(selected["environment"]) != canonical(esm_worker_environment(esm_request, owned))
                 or canonical(selected["implementation_files"]) != canonical(esm_worker_implementation_files(esm_request))):
             raise ContractError("esm_gene_embedding_original_runtime_conflict")
@@ -295,10 +293,10 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             implementation_files = None
             esm_files = esm_worker_implementation_files(esm_request)
             environment = esm_worker_environment(esm_request, owned)
-            python = dict(path=esm_driver["python_executable"], sha256=esm_driver["python_sha256"])
+            python = dict(path=esm_driver["python_executable"])
         else:
             implementation_files = (_molecular_implementation_files(operation) if worker_ports is None else worker_ports.implementation_files(operation))
-            python = dict(path=sys.executable, sha256=hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest())
+            python = dict(path=sys.executable)
         if operation == "protease_kinetics_native":
             deployment = worker_body["selection"]["deployment"]
             index, _ = native_source._manifest(deployment)
@@ -322,8 +320,7 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             command=command(python["path"]),
             cwd=str(owned), environment=environment, policy=policy.to_dict(), request=payload,
             python=python,
-            implementation_files=[dict(path=str(p.resolve()), sha256=hashlib.sha256(p.read_bytes()).hexdigest())
-                for p in implementation_files] if implementation_files is not None else
+            implementation_files=[dict(path=str(p.resolve())) for p in implementation_files] if implementation_files is not None else
                 esm_files if esm else [*index.values(), deployment["software_files_file"]])
         selected_policy = policy
         atomic_json(selection_path, selected)
@@ -335,7 +332,16 @@ def run_owned_molecular_worker(operation, arguments, *, directory, owned_directo
             if canonical(selected["implementation_files"]) != canonical(
                     [*original_index.values(), deployment["software_files_file"]]):
                 raise ContractError("protease_kinetics_original_manifest_conflict")
+        # Repository worker sources and interpreters are named by path. The
+        # protease deployment's configured pins and the ESM checkpoints keep
+        # their configured digests.
         for file in [selected["python"], *selected["implementation_files"]]:
+            if set(file) == {"path"}:
+                if not Path(file["path"]).is_file():
+                    raise ContractError("molecular_tool_original_software_unavailable_before_dispatch")
+                continue
+            if set(file) != {"path", "sha256"}:
+                raise ContractError("molecular_tool_execution_selection_conflict")
             try:
                 matches = hashlib.sha256(Path(file["path"]).read_bytes()).hexdigest() == file["sha256"]
             except OSError:
