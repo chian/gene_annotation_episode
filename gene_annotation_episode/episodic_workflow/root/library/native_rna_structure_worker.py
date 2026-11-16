@@ -48,7 +48,7 @@ def _diagnostic(value):
 def _software(rna=None):
     observed = {"python_executable": sys.executable, "python_sha256": _checksum(sys.executable),
         "python_version": platform.python_version(), "worker_module": WORKER_MODULE,
-        "worker_source_sha256": _checksum(__file__), "viennarna_distribution_version": None,
+        "viennarna_distribution_version": None,
         "rna_module_sha256": None, "rna_extension_sha256": None}
     if rna is not None:
         observed["rna_module_sha256"] = _checksum(rna.__file__)

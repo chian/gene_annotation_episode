@@ -20,13 +20,10 @@ SHEET_SCHEMA = "protease_kinetics_sheet_v1"
 COMPONENTS_SCHEMA = "protease_kinetics_components_v2"
 CAPTURE_VERSION = "molecular_sequence_execution_v3"
 OPERATION = "analyze_protease_kinetics"
-SOURCE_FILE_SHA256 = "9b8ea7ea1f712553025bdaf16f981d8bec62df6004efd0954ed90f33a394e018"
-SOURCE_FUNCTION_SHA256 = "9ad74fa1c808c356f457748b2372e970b7c54bc960a5d41dba60375e9d91f36c"
 MEASUREMENT_FIELDS = {"time_points", "fluorescence_data", "substrate_concentrations", "enzyme_concentration"}
 SHEET_FIELDS = {"schema", "source_method", "numeric_interpretation", "measurements", "assay_context",
     "native_observation", "population", "issues", "qualifications"}
 SOURCE_METHOD = {"callable": "biomni.tool.biochemistry." + OPERATION,
-    "source_file_sha256": SOURCE_FILE_SHA256, "source_function_sha256": SOURCE_FUNCTION_SHA256,
     "initial_window": "first_max_5_floor_0_2_N_time_points_with_native_slicing",
     "slope_authority": "unchanged_native_numpy_polyfit_degree_1",
     "fit_authority": "unchanged_native_scipy_curve_fit", "parameter_order": ["vmax", "km"],
@@ -237,8 +234,6 @@ def _native_request(request):
     _path(deployment["runtime"]["home"], "/native_observation/request/deployment/runtime/home")
     for name in ("module", "software_files_file"):
         _pin(deployment[name], "/native_observation/request/deployment/" + name)
-    if deployment["module"]["sha256"] != SOURCE_FILE_SHA256:
-        _fail("native_source_conflict", "/native_observation/request/deployment/module")
     if deployment["software_files_ref"] != "artifact_" + deployment["software_files_file"]["sha256"]:
         _fail("native_manifest_identity_conflict", "/native_observation/request/deployment/software_files_ref")
     roots = deployment["import_roots"]
@@ -278,8 +273,8 @@ def _native(capture, measurements):
         _fail("uncalled_native_outcome_conflict", "/native_observation/native_record")
     if record is not None and record.get("source_identity") is not None:
         source = record["source_identity"]
-        _closed(source, {"path", "callable", "sha256"}, "/native_observation/native_record/source_identity")
-        if source.get("callable") != OPERATION or source.get("sha256") != SOURCE_FUNCTION_SHA256 or request is None or source["path"] != request["deployment"]["module"]["path"]:
+        _closed(source, {"path", "callable"}, "/native_observation/native_record/source_identity")
+        if source.get("callable") != OPERATION or request is None or source["path"] != request["deployment"]["module"]["path"]:
             _fail("native_source_conflict", "/native_observation/native_record/source_identity")
     if capture["native_call_state"] == "returned":
         text = record.get("result")

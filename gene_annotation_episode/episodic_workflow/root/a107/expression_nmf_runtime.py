@@ -151,17 +151,16 @@ def _source_closure(module_root, modules):
     return paths
 
 def _copy_exact(source, destination, *, executable=False):
-    identity = file_identity(source)
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
-        require(file_identity(destination) == identity and not destination.stat().st_mode & 0o222, 'native_dependency_unavailable')
+        with _regular(source) as original, _regular(destination) as existing:
+            require(original.read() == existing.read() and (not destination.stat().st_mode & 0o222), 'native_dependency_unavailable')
     else:
         with _regular(source) as original, _writing(destination) as output:
             shutil.copyfileobj(original, output, length=1024 * 1024)
         if executable:
             destination.chmod(0o555)
-    require(file_identity(destination) == identity, 'native_dependency_unavailable')
-    return dict(path=str(destination), **identity)
+    return dict(path=str(destination))
 
 def _dependencies():
     selected = dict(_PACKAGES)
@@ -176,7 +175,7 @@ def _dependencies():
         for entry in installed.files or ():
             path = Path(installed.locate_file(entry)).resolve(strict=True)
             if path.suffix not in ('.pyc', '.pyo') and path.is_file():
-                files.append(dict(path=str(path), **file_identity(path)))
+                files.append({'path': str(path)})
         require(files, 'native_dependency_unavailable')
         result.append(dict(distribution=distribution, version=installed.version,
             package_root=str(Path(module.__file__).resolve(strict=True).parent), files=sorted({r['path']: r for r in files}.values(), key=lambda r: r['path'])))

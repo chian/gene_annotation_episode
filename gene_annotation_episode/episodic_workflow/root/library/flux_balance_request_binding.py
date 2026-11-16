@@ -17,7 +17,7 @@ from gene_annotation_episode.episodic_workflow.root.library.flux_balance_contrac
 from gene_annotation_episode.native_file_capture import _metadata, capture_native_file, retained_native_file
 from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_bindings import validate_flux_balance_bindings
 from gene_annotation_episode.episodic_workflow.root.library.native_flux_balance_contracts import (
-    ATTEMPT_DIRECTORY_NAME, flux_balance_driver_module, RUN_PLAN_FILENAME, SOURCE_FUNCTION_SHA256,
+    ATTEMPT_DIRECTORY_NAME, flux_balance_driver_module, RUN_PLAN_FILENAME,
     flux_balance_environment,
 )
 from gene_annotation_episode.episodic_workflow.root.practical_execution_records import validate_assignment
@@ -177,8 +177,7 @@ def _materialize(store, row):
         'constraints': None if changes is None else [{'reaction_id': change['reaction_id'],
             'lower': bound(change['lower']), 'upper': bound(change['upper'])} for change in changes],
         'objective': deepcopy(request['objective']), 'solver_options': deepcopy(request['solver_options']),
-        'software': deepcopy(binding['software']), 'output_prefix': 'fba-output', 'flux_output_name': 'fluxes.csv',
-        'source_function_sha256': SOURCE_FUNCTION_SHA256}
+        'software': deepcopy(binding['software']), 'output_prefix': 'fba-output', 'flux_output_name': 'fluxes.csv'}
     software = binding['software']
     lifecycle = str(Path(row['workspace']) / '.fba-selected-runtime' / row['assignment_id'])
     environment = flux_balance_environment(software, attempt_directory=str(Path(lifecycle) / ATTEMPT_DIRECTORY_NAME),

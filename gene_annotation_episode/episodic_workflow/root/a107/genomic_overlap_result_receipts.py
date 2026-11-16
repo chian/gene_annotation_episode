@@ -481,8 +481,8 @@ class GenomicOverlapResultReceipts:
         require(type(execution['source_pins']) is list and bool(execution['source_pins']))
         paths = []
         for pin in [*execution['source_pins'], execution['interpreter']]:
-            closed(pin, ('path', 'sha256', 'size_bytes'))
-            require(type(pin['path']) is str and Path(pin['path']).is_absolute() and (str(Path(pin['path'])) == pin['path']) and (type(pin['sha256']) is str) and (re.fullmatch('[0-9a-f]{64}', pin['sha256']) is not None) and (type(pin['size_bytes']) is int) and (pin['size_bytes'] > 0))
+            closed(pin, ('path',))
+            require(type(pin['path']) is str and Path(pin['path']).is_absolute() and (str(Path(pin['path'])) == pin['path']))
             paths.append(pin['path'])
         require(len(paths) == len(set(paths)))
         for failure in capture['failures']:

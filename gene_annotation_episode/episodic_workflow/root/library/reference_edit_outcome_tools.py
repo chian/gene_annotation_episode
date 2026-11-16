@@ -8,7 +8,6 @@ from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import json
-from pathlib import Path
 import re
 
 from gene_annotation_episode.episodic_workflow.root.library import reference_edit_outcomes as core
@@ -42,7 +41,7 @@ PACKET_VERSION = "ordinary_reference_edit_outcome_packet_v1"
 CONTROL_VERSION = "ordinary_reference_edit_outcome_publication_v1"
 _REQUEST_KEYS = ("population", "gap_bins", "guide_comparisons", "template_comparisons")
 _CONTROL_KEYS = ("version arguments invocation request admission_invocation alignments comparisons source_admission "
-    "original_source envelope_ref public_packet_ref grading_ref native_call_state calculator_id implementation")
+    "original_source envelope_ref public_packet_ref grading_ref native_call_state calculator_id")
 
 
 def _require(condition, code):
@@ -263,16 +262,11 @@ def _control(registry, publication, seen):
     control = json.loads(_publication_bytes(registry.store, source["request_ref"]))
     _closed(control, _CONTROL_KEYS)
     _require(control["version"] == CONTROL_VERSION and control["native_call_state"] == "not_requested"
-        and control["calculator_id"] == core.COMPONENT_VERSION and type(control["implementation"]) is dict
+        and control["calculator_id"] == core.COMPONENT_VERSION
         and canonical(control["arguments"]) == canonical(details["arguments"])
         and canonical(control["invocation"]) == canonical(details["invocation"])
         and control["public_packet_ref"] == source["artifact_ref"] and control["envelope_ref"] == publication["envelope_ref"]
         and control["grading_ref"] == publication["grading_ref"], "control_conflict")
-    _require(set(control["implementation"]) == {"reference_edit_outcome_tools.py", "reference_edit_outcomes.py"}
-        and all(type(pin) is dict and set(pin) == {"sha256", "size_bytes"}
-            and type(pin["sha256"]) is str and re.fullmatch(r"[a-f0-9]{64}", pin["sha256"])
-            and type(pin["size_bytes"]) is int and pin["size_bytes"] > 0
-            for pin in control["implementation"].values()), "implementation_conflict")
     request = core._request(control["request"])
     _require(canonical(request) == canonical(_request_from_public(publication["public"], publication["public"]["gap_bins"])), "request_conflict")
     producer_context = _context(registry.store, control["invocation"])
@@ -418,12 +412,10 @@ def _retain_reference_edit_outcome_publication(registry, prepared):
     packet_ref = registry.store.artifact(canonical(packet), "application/json")
     grading_ref = retain_tool_grading(registry.store, provider=TOOL, native_artifact_ref=packet_ref,
         grading=dict(sheet=stored["sheet"], scores=stored["components"]))
-    paths = [Path(__file__), Path(core.__file__)]
-    implementation = {path.name: dict(sha256=hashlib.sha256(path.read_bytes()).hexdigest(), size_bytes=path.stat().st_size) for path in paths}
     control = dict(version=CONTROL_VERSION, **{key: deepcopy(prepared[key]) for key in
         ("arguments", "invocation", "request", "admission_invocation", "alignments", "comparisons", "source_admission", "original_source")},
         envelope_ref=envelope_ref, public_packet_ref=packet_ref, grading_ref=grading_ref,
-        native_call_state="not_requested", calculator_id=core.COMPONENT_VERSION, implementation=implementation)
+        native_call_state="not_requested", calculator_id=core.COMPONENT_VERSION)
     control_ref = registry.store.artifact(canonical(control), "application/json")
     parents = (list(dict.fromkeys(capture["source"]["source_ref"] for capture in stored["sheet"]["alignment_inputs"] if capture is not None))
         if prepared["arguments"]["mode"] == "analyze" else [prepared["arguments"]["result_ref"]])

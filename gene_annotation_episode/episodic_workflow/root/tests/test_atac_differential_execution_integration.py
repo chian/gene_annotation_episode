@@ -84,7 +84,7 @@ def test_only_exact_resource_mode_and_software_are_advertised(selected):
     requested = owner._request_schema('here', selected=True)['properties']['requested_job']
     assert Draft202012Validator(requested).is_valid(selected.assignment['requested_job'])
     changed = deepcopy(selected.assignment['requested_job'])
-    changed['native_atac_differential']['software']['driver_runtime']['python_sha256'] = 'f' * 64
+    changed['native_atac_differential']['software']['driver_runtime']['python_version'] = 'changed'
     assert not Draft202012Validator(requested).is_valid(changed)
     with pytest.raises(ValueError):
         atac_tool_information([selected.binding], resource_kind='hpc', resource_id='elsewhere')

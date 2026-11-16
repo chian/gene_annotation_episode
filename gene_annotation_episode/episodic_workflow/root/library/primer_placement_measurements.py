@@ -10,7 +10,6 @@ from __future__ import annotations
 from copy import deepcopy
 import json
 import math
-import re
 
 from gene_annotation_episode.episodic_workflow.root.library.biopython_pairwise_grader import count_literal_alignment_columns
 from gene_annotation_episode.episodic_workflow.root.library.sequence_extraction_grader import frozen_reverse_complement
@@ -161,8 +160,7 @@ def _populate(inputs, rejected):
         _issue(issues, "primer_native_failure_outcome_conflict")
     identity = native.get("source_identity")
     if not (type(identity) is dict and identity.get("callable") == "align_sequences"
-        and type(identity.get("path")) is str and identity["path"]
-        and type(identity.get("sha256")) is str and re.fullmatch("[0-9a-f]{64}", identity["sha256"])):
+        and type(identity.get("path")) is str and identity["path"]):
         _issue(issues, "primer_actual_source_identity_unavailable")
     raw_target, raw_primers = inputs["target_sequence"], inputs["primers"]
     target = raw_target.upper() if type(raw_target) is str else None

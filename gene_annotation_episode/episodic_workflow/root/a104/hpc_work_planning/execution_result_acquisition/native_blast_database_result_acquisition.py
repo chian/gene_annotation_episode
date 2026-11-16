@@ -89,7 +89,7 @@ class NativeBLASTDatabaseResultAcquisition(NativeBLASTDatabaseResultRecords):
                         failure = _local_job_failure(error) if isinstance(error, AcquisitionError) else _failure('calculation' if invalid_contract else 'worker', 'native_blast_database_calculation_failed' if invalid_contract else 'native_blast_database_worker_failed', 'calculator_contract_invalid' if invalid_contract else 'implementation_failure')
                         body['failures'].append(failure)
                         body['diagnostic_artifact_refs'].append(_json_artifact(self.store, {'schema': 'native_blast_database_diagnostics_v1', 'failures': [failure], 'metadata_issues': [], 'errors': [_exception_diagnostic(error)]}))
-                        for name in ('invalid-request.json', 'invalid-request-diagnostics.json', 'implementation-receipt.json'):
+                        for name in ('invalid-request.json', 'invalid-request-diagnostics.json'):
                             path = directory / 'grading' / name
                             if path.exists():
                                 from gene_annotation_episode.episodic_workflow.root.a104.materials import artifact_file

@@ -279,7 +279,7 @@ _JOB = _record("FBAJob", version=_enum("native_flux_balance_job_v1"), operation=
     model_input=_object(file=_FILE_PIN, artifact_ref=_nullable(_TEXT), format=_enum("sbml cobra_json"),
         original_loader_selection=_enum("sbml_file json_file repository_identifier"), repository_identifier=_nullable(_TEXT),
         acquisition_receipt_file=_nullable(_FILE)), constraints=_nullable(_array(_REQUESTED_CHANGE)), objective=_REQUEST,
-    solver_options=_OPTIONS, software=_SOFTWARE, output_prefix=_TEXT, flux_output_name=_TEXT, source_function_sha256=_SHA)
+    solver_options=_OPTIONS, software=_SOFTWARE, output_prefix=_TEXT, flux_output_name=_TEXT)
 _REQUESTED_JOB = _record("FBARequestedJob", argv=_array(_TEXT),
     environment={"type": "object", "propertyNames": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"},
         "additionalProperties": _RAW}, native_flux_balance=_JOB)
@@ -288,7 +288,7 @@ _MANIFEST_FILE = _record("ManifestFile", role=_enum("original_model selected_req
     relative_path=_TEXT, format=_TEXT, state=_STATE, identity=_nullable(_IDENTITY))
 _MANIFEST = _record("FBANativeManifest", version=_enum("flux_balance_native_manifest_v1"), sealed=_BOOL, attempt=_ATTEMPT,
     software_sha256=_SHA, model_identity=_IDENTITY, actual_distributions=_array(_DISTRIBUTION), actual_solver=_SOLVER,
-    source_function_sha256=_SHA, effective_problem_sha256=_nullable(_SHA), files=_array(_MANIFEST_FILE),
+    effective_problem_sha256=_nullable(_SHA), files=_array(_MANIFEST_FILE),
     solve_call_count=_UINT, execution_outcome=_OUTCOME, request_realization=_REALIZATION, issues=_array(_ISSUE))
 _optional(_MANIFEST, request_application=_nullable(_REQUEST_APPLICATION))
 _PAYLOADS = _object(**{role: _object(file=_nullable(_FILE), bytes=_nullable({"type": "bytes"}), state=_STATE)

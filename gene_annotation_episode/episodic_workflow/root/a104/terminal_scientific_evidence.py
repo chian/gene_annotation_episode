@@ -69,9 +69,9 @@ def _plan(assignment, arguments):
     _require(actual == expected)
     return (profile, path, value)
 
-def _identified_files(value, *, module_roots=()):
-    """Original purpose-specific validated file operands, including software."""
-    for file in _identified_file_values(value, module_roots=module_roots):
+def _identified_files(value):
+    """Original purpose-specific validated file operands."""
+    for file in _identified_file_values(value):
         yield file['path']
 
 def terminal_artifact_paths(assignment, arguments):
@@ -92,8 +92,7 @@ def terminal_artifact_paths(assignment, arguments):
     if selected is None:
         return {'inputs': [], 'outputs': []}
     profile, path, plan = selected
-    module_roots = arguments['env'].get('PYTHONPATH', '').split(':')
-    inputs = [str(path), *_identified_files(plan['requested_job'], module_roots=module_roots)]
+    inputs = [str(path), *_identified_files(plan['requested_job'])]
     if terminal_plan_identity(plan['identity'], attempt_directory=plan['attempt_directory']):
         inputs.append(plan['identity']['execution_id'])
     outputs = [str(path)]
@@ -167,14 +166,14 @@ def scientific_command_proof(assignment, arguments, outcome):
         _require(owner['execution_id'] in before)
         preparation = json.loads(snapshot_bytes(before[owner['execution_id']]))
         _require(preparation['assignment'] == assignment and preparation['run_id'] == owner['run_id'] and (preparation['episode_id'] == owner['episode_id']) and (preparation['operation_key'] == owner['operation_key']))
-    for original in _identified_file_values(plan['requested_job'], module_roots=arguments['env'].get('PYTHONPATH', '').split(':')):
+    for original in _identified_file_values(plan['requested_job']):
         _require(original['path'] in before)
         actual = before[original['path']]
         verified_snapshot_path(actual)
         _require(actual['sha256'] == original['sha256'] and ('size_bytes' not in original and 'size' not in original or actual['size_bytes'] == original.get('size_bytes', original.get('size'))))
     return {'version': 'terminal_scientific_command_proof_v1', 'profile': profile[0], 'original_plan': deepcopy(plan), 'plan_snapshot': deepcopy(before[str(path)]), 'execution_command': deepcopy(executed), 'command': deepcopy(command), 'input_snapshots': deepcopy(detail.get('input_snapshots', [])), 'output_snapshots': deepcopy(detail.get('output_snapshots', []))}
 
-def _identified_file_values(value, *, module_roots=()):
+def _identified_file_values(value):
     if isinstance(value, Mapping):
         if isinstance(value.get('path'), str) and value['path'].startswith('/') and isinstance(value.get('sha256'), str):
             yield value
@@ -185,22 +184,11 @@ def _identified_file_values(value, *, module_roots=()):
                 descriptor = source['file']
             if isinstance(descriptor, Mapping) and isinstance(descriptor.get('sha256'), str):
                 yield {**descriptor, 'path': value['path']}
-        if isinstance(value.get('python_executable'), str) and isinstance(value.get('python_sha256'), str):
-            yield {'path': value['python_executable'], 'sha256': value['python_sha256']}
-        module_root = value.get('module_root')
-        roots = [module_root] if isinstance(module_root, str) else module_roots
-        for file in value.get('implementation_files', []):
-            if isinstance(file, Mapping) and isinstance(file.get('module'), str) and isinstance(file.get('sha256'), str):
-                relative = file['module'].replace('.', '/')
-                candidates = [Path(root) / suffix for root in roots if root and Path(root).is_absolute() for suffix in (relative + '.py', relative + '/__init__.py')]
-                selected = next((path for path in candidates if path.is_file()), None)
-                _require(selected is not None, 'terminal_native_implementation_path_unavailable')
-                yield {'path': str(selected), 'sha256': file['sha256']}
         for child in value.values():
-            yield from _identified_file_values(child, module_roots=module_roots)
+            yield from _identified_file_values(child)
     elif isinstance(value, (list, tuple)):
         for child in value:
-            yield from _identified_file_values(child, module_roots=module_roots)
+            yield from _identified_file_values(child)
 
 def is_terminal_target(target):
     if not isinstance(target, Mapping) or target.get('resource_kind') != 'local':

@@ -36,4 +36,3 @@ def _result_progress(value):
 def _binding(callback):
     implementation = callback if hasattr(callback, '__qualname__') else type(callback)
     return implementation.__module__ + '.' + implementation.__qualname__
-from pathlib import Path

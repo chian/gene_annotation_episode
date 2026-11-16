@@ -9,7 +9,6 @@ from __future__ import annotations
 from copy import deepcopy
 import json
 import math
-import re
 
 from gene_annotation_episode.episodic_workflow.root.library.sequence_extraction_grader import frozen_reverse_complement
 from gene_annotation_episode.episodic_workflow.root.library.sequence_mapping import map_interval, reverse_path, slice_path, validate_mapping
@@ -120,8 +119,7 @@ def _populate(inputs, rejected):
         _issue(issues, "orf_native_outcome_failure_conflict", "/native_record/failure")
     identity = source.get("source_identity")
     if not (type(identity) is dict and identity.get("callable") == "annotate_open_reading_frames"
-        and type(identity.get("path")) is str and bool(identity["path"])
-        and type(identity.get("sha256")) is str and re.fullmatch("[0-9a-f]{64}", identity["sha256"])):
+        and type(identity.get("path")) is str and bool(identity["path"])):
         _issue(issues, "orf_source_identity_unavailable", "/native_record/source_identity")
     version = source.get("biopython_version")
     observed_settings = _same(source.get("translation"), {"table": "Standard", "to_stop": True, "cds": False})

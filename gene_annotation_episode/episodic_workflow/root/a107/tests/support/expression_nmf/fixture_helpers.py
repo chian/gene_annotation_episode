@@ -20,12 +20,12 @@ def prepared_software(attempt):
     runtime = {}
     for name in ('dependency_pins_before.json', 'stdlib_pins_before.json', 'native_library_pins_before.json'):
         for row in json.loads((attempt / name).read_text()):
-            runtime[row['path']] = row
-    python = file_pin(sys.executable)
+            runtime[row['path']] = {'path': row['path']}
+    python = {'path': file_pin(sys.executable)['path']}
     runtime.pop(python['path'], None)
     result = {'version': 'expression_nmf_software_v1', 'python': python, 'python_version': sys.version,
         'python_home': str(attempt / 'runtime'), 'module_root': str(source),
-        'implementation_files': [file_pin(p) for p in sorted(implementations)], 'dependency_roots': [str(deps)],
+        'implementation_files': [{'path': str(p)} for p in sorted(implementations)], 'dependency_roots': [str(deps)],
         'distributions': [{'name': d.metadata['Name'], 'version': d.version, 'requires': d.requires or []}
             for d in importlib.metadata.distributions(path=[str(deps)])], 'runtime_files': list(runtime.values())}
     return validate_expression_nmf_software(result)

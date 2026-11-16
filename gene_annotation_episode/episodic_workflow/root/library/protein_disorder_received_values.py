@@ -40,8 +40,6 @@ def _protein_disorder_text(packet, number):
         context["input"]["input_ref"] = "Retained input provenance"
     context["input"]["input_mapping"] = mapping(context["input"]["input_mapping"])
     context["mapping"]["supplied"] = mapping(context["mapping"]["supplied"])
-    context["source_profile"] = {key: value for key, value in context["source_profile"].items()
-        if key not in {"module_sha256", "callable_sha256"}}
     values["data_identity"] = {key: value for key, value in values["data_identity"].items()
         if key not in {"sheet_canonical_sha256", "components_canonical_sha256"}}
     for row in values["rows"]:

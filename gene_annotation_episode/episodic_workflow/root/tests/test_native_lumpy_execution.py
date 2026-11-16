@@ -29,12 +29,11 @@ def fake_software():
     """Deliberately invented metadata pins, never a working software witness."""
     modules = native._REQUIRED_MODULES
     dependencies = ('jsonschema', 'attrs', 'referencing', 'rpds-py', 'jsonschema-specifications')
-    return dict(driver_runtime=dict(python_executable='/fixture/python', python_sha256='0' * 64,
+    return dict(driver_runtime=dict(python_executable='/fixture/python',
         python_version='3.12.0', module_root='/fixture/source',
-        implementation_files=[dict(module=name, sha256=digest(name)) for name in modules],
+        implementation_files=[dict(module=name) for name in modules],
         dependencies=[dict(distribution=name, version='engineered-metadata',
-            package_root='/fixture/deps/' + name, files=[dict(path='/fixture/deps/' + name + '/__init__.py',
-                sha256=digest(name), size_bytes=1)]) for name in dependencies]),
+            package_root='/fixture/deps/' + name, files=[dict(path='/fixture/deps/' + name + '/__init__.py')]) for name in dependencies]),
         native_runtime=dict(executable=dict(path='/fixture/native/bin/lumpy', sha256='1' * 64, size_bytes=1),
             loader=dict(path='/fixture/native/loader', sha256='2' * 64, size_bytes=1), libraries=[
                 dict(name='libfixture.so.1', file=dict(path='/fixture/native/lib/libfixture.so.1',

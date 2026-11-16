@@ -18,7 +18,7 @@ from gene_annotation_episode.episodic_workflow.root.a107.library.flux_balance_wo
 from gene_annotation_episode.episodic_workflow.root.a107.local_jobs import LocalJobPolicy, check_scratch_budget
 from gene_annotation_episode.episodic_workflow.root.a107.native_file_capture import NativeFileCaptureError, capture_native_file, capture_declared_native_files, retained_native_file
 from gene_annotation_episode.episodic_workflow.root.a107.library.received_execution_information.historical_native_flux_balance_contracts import ATTEMPT_DIRECTORY_NAME, POLICY, flux_balance_environment, path_value, validate_flux_balance_software
-from gene_annotation_episode.episodic_workflow.root.a107.native_flux_balance_storage import _directory_fd, confined_file, decode_json, directory, file_pin, immutable_bytes, read_bytes
+from gene_annotation_episode.episodic_workflow.root.a107.native_flux_balance_storage import _directory_fd, confined_file, decode_json, directory, immutable_bytes, read_bytes
 WORKER_MODULE = 'gene_annotation_episode.flux_balance_result_worker'
 EXECUTION_VERSION = 'flux_balance_worker_execution_v1'
 CAPTURE_VERSION = 'flux_balance_worker_capture_v1'
@@ -57,9 +57,8 @@ def _file(value, format_=None):
     return value
 
 def _pin(value):
-    _require(type(value) is dict and set(value) == {'path', 'sha256', 'size_bytes'}, 'pin_invalid')
+    _require(type(value) is dict and set(value) == {'path'}, 'pin_invalid')
     path_value(value['path'], absolute=True)
-    _file({'artifact_ref': 'artifact_' + str(value['sha256']), 'sha256': value['sha256'], 'size_bytes': value['size_bytes'], 'format': 'runtime_file'})
     return value
 
 def _paths(value):
@@ -152,16 +151,14 @@ def _selected_snapshot(plan, policy, software):
     common, root, _ = _layout(plan)
     originals = [software['python'], *software['implementation_files'], *software['runtime_files'], *software['solver_runtime_files']]
     _require(not any((_overlap(common, pin['path']) for pin in originals)) and (not any((_overlap(common, path) for path in (software['python_home'], software['module_root'], *software['dependency_roots'])))), 'runtime_directory_overlap')
-    for pin in originals:
-        _require(_same(file_pin(pin['path']), pin), 'runtime_changed')
     sources = _source_closure(Path(software['module_root']), [WORKER_MODULE])
     _require({str(path) for path in sources.values()} <= {pin['path'] for pin in software['implementation_files']}, 'selected_source_closure_incomplete')
     pins = _selected_source_pins(software, root)
     for original, expected in zip(sorted(software['implementation_files'], key=lambda row: row['path']), pins):
-        check_scratch_budget(common, policy, additional_bytes=original['size_bytes'])
+        check_scratch_budget(common, policy, additional_bytes=Path(original['path']).stat().st_size)
         copied = _copy_exact(Path(original['path']), Path(expected['path']))
         _require(_same(copied, expected), 'runtime_changed')
-    check_scratch_budget(common, policy, additional_bytes=software['python']['size_bytes'])
+    check_scratch_budget(common, policy, additional_bytes=Path(software['python']['path']).stat().st_size)
     interpreter = _copy_exact(Path(software['python']['path']), root / 'runtime/python', executable=True)
     _require(_same(interpreter, {**software['python'], 'path': str(root / 'runtime/python')}), 'runtime_changed')
     directory(root / ATTEMPT_DIRECTORY_NAME / 'cache/pip', create=True)
@@ -186,7 +183,7 @@ def _snapshot(plan, policy, *, software=None):
     destination = confined_file(root, 'runtime/python', create_parents=True)
     interpreter = _copy_exact(binary, destination, executable=True)
     stdlib = home / 'lib' / ('python%d.%d' % sys.version_info[:2])
-    runtime_files = [file_pin(path) for path in sorted(stdlib.rglob('*')) if path.is_file() and (not any((part in ('site-packages', 'dist-packages', '__pycache__') for part in path.relative_to(stdlib).parts))) and (path.suffix not in ('.pyc', '.pyo'))]
+    runtime_files = [{'path': str(path)} for path in sorted(stdlib.rglob('*')) if path.is_file() and (not any((part in ('site-packages', 'dist-packages', '__pycache__') for part in path.relative_to(stdlib).parts))) and (path.suffix not in ('.pyc', '.pyo'))]
     _require(runtime_files, 'stdlib_missing')
     directory(root / 'cache/pip', create=True)
     return {'version': _CURRENT_INTENT_VERSION, 'plan': deepcopy(plan), 'execution_directory': str(root), 'policy': deepcopy(POLICY), 'command': [interpreter['path'], '-B', '-S', '-m', _CURRENT_WORKER_MODULE, str(root / 'plan.json')], 'environment': _environment(root, common, str(home), dependencies), 'source_pins': pins, 'interpreter': interpreter, 'dependencies': dependencies, 'python_version': sys.version, 'python_home': str(home), 'runtime_files': runtime_files}
@@ -233,10 +230,6 @@ def _validate_intent(value, plan, *, software=None):
     _require(all((Path(p['path']).is_relative_to(Path(value['python_home']) / 'lib') for p in value['runtime_files'])), 'runtime_invalid')
     _require(_same(value['environment'], _environment(root, common, value['python_home'], value['dependencies'])), 'environment_mismatch')
     return value
-
-def _verify_pins(intent):
-    for pin in _all_pins(intent):
-        _require(_same(file_pin(pin['path']), pin), 'runtime_changed')
 
 def _controls(body, request, intent):
     common, root, output = _layout(intent['plan'])
@@ -370,7 +363,6 @@ def prepare_flux_balance_result_worker(store, *, plan, policy, software=None):
                     directory(output)
                     _require(not any(output.iterdir()), 'unsealed_output')
                 _require(not any((path.name.startswith('.local-job-') for path in common.iterdir())), 'unsealed_native_controls')
-            _verify_pins(intent)
             if not handle.path.exists():
                 native.prepare_job(intent['command'], cwd=common, policy=policy, handle_path=handle.path, stdout_path=root / 'worker.stdout', stderr_path=root / 'worker.stderr', env=intent['environment'])
             _validate_live_controls(handle, intent)
@@ -385,7 +377,6 @@ def prepare_flux_balance_result_worker(store, *, plan, policy, software=None):
                 failure = {'code': error.code, 'phase': error.phase, 'diagnostic': error.diagnostic, 'operational': error.operational}
             view = native.status(handle)
             _require(view['terminal'] and view['quiescent'], 'worker_not_closed')
-            _verify_pins(intent)
             body, raw = _validate_live_controls(handle, intent)
             execution = {'version': EXECUTION_VERSION, 'plan_file': plan_file, 'intent': intent, 'terminal': True, 'quiescent': True, 'policy': deepcopy(POLICY), 'returncode': result.returncode if result is not None else None, 'metadata': view['metadata'], 'failure': failure, 'handle_file': _capture(store, root, 'worker.handle.json', native.VERSION), 'request_file': _capture(store, common, Path(body['paths']['request']).name, 'native_local_job_request'), 'stdout_file': _capture(store, root, 'worker.stdout', 'native_worker_stdout'), 'stderr_file': _capture(store, root, 'worker.stderr', 'native_worker_stderr'), 'handle': body, 'request': _json(raw), 'request_raw': raw.decode('utf-8')}
             validate_flux_balance_worker_execution(execution, plan=plan, plan_file=plan_file)

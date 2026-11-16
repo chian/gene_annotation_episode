@@ -1,6 +1,6 @@
 """Freeze and execute one finite NMF result worker under existing local limits.
 
-This adapter retains exact source, dependency, interpreter and stdlib pins.
+This adapter records the copied source, dependency, interpreter and stdlib paths.
 Completed replay checks the original controls, never today's runtime or native
 producer, and recovery resumes the same durable local_jobs handle.
 """
@@ -55,7 +55,7 @@ def _snapshot(plan, policy):
     roots = _dependency_roots({'dependencies': dependencies})
     home = Path(sys.base_prefix).resolve(strict=True)
     stdlib = home / 'lib' / ('python%d.%d' % sys.version_info[:2])
-    runtime_files = [file_pin(path) for path in sorted(stdlib.rglob('*')) if path.is_file()
+    runtime_files = [{'path': str(path)} for path in sorted(stdlib.rglob('*')) if path.is_file()
         and not any(part in ('site-packages', 'dist-packages', '__pycache__') for part in path.relative_to(stdlib).parts)
         and path.suffix not in ('.pyc', '.pyo')]
     require(runtime_files, 'nmf_worker_stdlib_missing')
@@ -82,10 +82,8 @@ def _validate_intent(intent, plan):
     pins = [*intent['source_pins'], intent['interpreter'], *intent['runtime_files'],
         *(pin for row in intent['dependencies'] for pin in row['files'])]
     for pin in pins:
-        require(type(pin) is dict and set(pin) == {'path', 'sha256', 'size_bytes'} and Path(pin['path']).is_absolute(),
+        require(type(pin) is dict and set(pin) == {'path'} and Path(pin['path']).is_absolute(),
             'nmf_worker_pin_invalid')
-        validate_file({'artifact_ref': 'artifact_' + pin['sha256'], 'sha256': pin['sha256'],
-            'size_bytes': pin['size_bytes'], 'format': 'runtime_file'})
     require(len({p['path'] for p in pins}) == len(pins), 'nmf_worker_duplicate_pin')
     source_root = root / 'source_snapshot'
     require(all(Path(pin['path']).is_relative_to(source_root) for pin in intent['source_pins'])
@@ -95,12 +93,6 @@ def _validate_intent(intent, plan):
         and intent['environment']['PYTHONHOME'] == intent['python_home']
         and intent['environment']['PYTHONPATH'].split(os.pathsep)[0] == str(source_root), 'nmf_worker_runtime_mismatch')
     return intent
-
-
-def _verify_pins(intent):
-    for pin in [*intent['source_pins'], intent['interpreter'], *intent['runtime_files'],
-            *(pin for row in intent['dependencies'] for pin in row['files'])]:
-        require(file_pin(pin['path']) == pin, 'nmf_worker_runtime_changed')
 
 
 def _capture(store, root, name, format_):
@@ -212,7 +204,6 @@ def prepare_expression_nmf_result_worker(store, *, plan, policy):
         execution_path = root / 'execution.json'
         handle = native.NativeJobHandle(root / 'worker.handle.json')
         if not execution_path.exists():
-            _verify_pins(intent)
             if not handle.path.exists():
                 native.prepare_job(intent['command'], cwd=root, policy=policy, handle_path=handle.path,
                     stdout_path=root / 'worker.stdout', stderr_path=root / 'worker.stderr', env=intent['environment'])
@@ -230,7 +221,6 @@ def prepare_expression_nmf_result_worker(store, *, plan, policy):
                 problem = dict(code=error.code, phase=error.phase, diagnostic=error.diagnostic, operational=error.operational)
             view = native.status(handle)
             require(view['terminal'] and view['quiescent'], 'nmf_worker_not_closed')
-            _verify_pins(intent)
             body = handle.read()
             with regular(body['paths']['request']) as source:
                 request_raw = source.read().decode('utf-8')

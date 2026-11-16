@@ -1,6 +1,5 @@
 """Private A104 Launch binding roles."""
 from __future__ import annotations
-from pathlib import Path
 VERSION = 'execution_episode_v1'
 ROLES = ('launch', 'launch_api', 'launch_local', 'launch_hpc', 'results')
 KINDS = {'local': 'local', 'pbs_ssh': 'hpc', 'hmmer_api': 'api', 'api': 'api'}

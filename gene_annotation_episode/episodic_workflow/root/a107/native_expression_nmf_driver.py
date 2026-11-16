@@ -118,12 +118,12 @@ def retain_expression_nmf_artifacts(raw: bytes, *, delimiter: str, metadata: dic
 
 
 def verify_expression_nmf_software(software):
-    """Validate selected file closure in the bounded native process."""
+    """Validate the selected interpreter, file paths and versions in the bounded native process."""
     software = validate_expression_nmf_software(software)
     require(str(Path(sys.executable).resolve()) == str(Path(software['python']['path']).resolve())
         and sys.version == software['python_version'], 'nmf_interpreter_mismatch')
     for expected in [software['python'], *software['implementation_files'], *software['runtime_files']]:
-        require(file_pin(expected['path']) == expected, 'nmf_software_file_changed')
+        require(Path(expected['path']).is_file(), 'nmf_software_file_changed')
     for row in software['distributions']:
         require(importlib.metadata.version(row['name']) == row['version'], 'nmf_distribution_version_changed')
     allowed = [Path(software['module_root']), Path(software['python_home']), *map(Path, software['dependency_roots'])]

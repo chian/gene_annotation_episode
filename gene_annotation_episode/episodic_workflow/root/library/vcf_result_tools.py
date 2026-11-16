@@ -41,7 +41,7 @@ CALCULATOR_ID = "vcf_result_measurements.calculate_vcf_components"
 _SOURCE = re.compile(r"source_[a-f0-9]{24,64}\Z")
 _ARTIFACT = re.compile(r"artifact_[a-f0-9]{64}\Z")
 _CONTROL_KEYS = ("version arguments invocation admission_invocation received_input file_admission source_admission "
-    "original_source sheet_ref components_ref public_packet_ref grading_ref native_call_state calculator_id implementation")
+    "original_source sheet_ref components_ref public_packet_ref grading_ref native_call_state calculator_id")
 
 
 def _require(condition, code):
@@ -254,11 +254,6 @@ def _control(registry, publication, seen):
         and canonical(control["invocation"]) == canonical(details["invocation"])
         and control["public_packet_ref"] == source["artifact_ref"]
         and all(control[key] == publication[key] for key in ("sheet_ref", "components_ref", "grading_ref")), "control_conflict")
-    _require(type(control["implementation"]) is dict and set(control["implementation"]) == {
-        "vcf_result_tools.py", "vcf_result_measurements.py"} and all(type(pin) is dict and set(pin) == {"sha256", "size_bytes"}
-        and type(pin["sha256"]) is str and re.fullmatch(r"[a-f0-9]{64}", pin["sha256"])
-        and type(pin["size_bytes"]) is int and pin["size_bytes"] > 0 for pin in control["implementation"].values()),
-        "implementation_conflict")
     context = _context(registry, control["invocation"])
     arguments = _arguments(control["arguments"])
     if arguments["mode"] == "analyze":
@@ -359,12 +354,10 @@ def _retain_vcf_result_publication(registry, prepared):
     packet_ref = registry.store.artifact(canonical(dict(version=PACKET_VERSION, value=components["value"])), "application/json")
     grading_ref = retain_tool_grading(registry.store, provider=TOOL, native_artifact_ref=packet_ref,
         grading=dict(sheet=sheet, scores=components))
-    implementation = {path.name: dict(sha256=hashlib.sha256(path.read_bytes()).hexdigest(), size_bytes=path.stat().st_size)
-        for path in (Path(__file__), Path(core.__file__))}
     control = dict(version=CONTROL_VERSION, **{key: deepcopy(prepared[key]) for key in
         ("arguments", "invocation", "admission_invocation", "received_input", "file_admission", "source_admission", "original_source")},
         sheet_ref=sheet_ref, components_ref=components_ref, public_packet_ref=packet_ref, grading_ref=grading_ref,
-        native_call_state="not_requested", calculator_id=CALCULATOR_ID, implementation=implementation)
+        native_call_state="not_requested", calculator_id=CALCULATOR_ID)
     control_ref = registry.store.artifact(canonical(control), "application/json")
     arguments = prepared["arguments"]
     parents = ([arguments["reference"]] if arguments["mode"] == "analyze" and arguments["namespace"] == "source" else

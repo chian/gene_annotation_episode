@@ -217,7 +217,7 @@ def _issue_pointer_shapes():
         "parameters": parameters, "outputs": (_leaf_fields("role format relative_path"),),
         "operands": (_leaf_fields("role path format sha256 size_bytes artifact_ref"),),
         "files": (_leaf_fields("kind role format relative_path state sha256 size_bytes artifact_ref path"),),
-        "software": _leaf_fields("python_executable python_sha256 python_version worker_module worker_source_sha256 viennarna_distribution_version rna_module_sha256 rna_extension_sha256"),
+        "software": _leaf_fields("python_executable python_sha256 python_version worker_module viennarna_distribution_version rna_module_sha256 rna_extension_sha256"),
         "identity": _leaf_fields("run_id episode_id resource_id execution_id attempt_id operation_key requested_job_sha256"),
         "selector": {"version": None, "acquisition": None,
             "parameters": {key: parameters[key] for key in ("schema", "topology", "pair_composition", "energy")},

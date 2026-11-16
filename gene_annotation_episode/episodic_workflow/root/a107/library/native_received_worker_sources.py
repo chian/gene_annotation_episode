@@ -1,4 +1,4 @@
-"""Current A107 worker source discovery, distinct from retained original pins."""
+"""Current A107 worker source discovery for the preparation snapshot."""
 from __future__ import annotations
 
 import ast
@@ -29,10 +29,9 @@ def _project_source(root, module):
 
 
 def current_worker_sources(worker_module, *, module_root=None):
-    """Read the actual current worker dependency bytes without importing them.
+    """Find the current worker's dependency source files without importing them.
 
-    The resulting file paths are copied and hashed by the original preparation
-    primitives. This function never returns archived bytes or an archived hash.
+    The resulting file paths are copied by the preparation primitives.
     """
     if worker_module not in CURRENT_WORKERS.values():
         raise ValueError('received_worker_source_identity_invalid')

@@ -1,6 +1,5 @@
 """Private A104 API binding record."""
 from __future__ import annotations
-from pathlib import Path
 from .binding_roles import VERSION
 from copy import deepcopy
 

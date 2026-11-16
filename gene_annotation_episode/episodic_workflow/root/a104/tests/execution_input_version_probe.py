@@ -40,7 +40,7 @@ def main():
     assert output.is_relative_to(Path(owner['run_directory']).resolve())
     output.mkdir(parents=True, exist_ok=True)
     report = {'scope': 'Actual owners/Store/validator; supplied context without an executed action.',
-        'workflow_owner': owner, 'helper_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        'workflow_owner': owner,
         'diagnostic_complete': False, 'cases': [], 'native_commands': 0, 'provider_requests': 0}
 
     def save():
@@ -85,7 +85,6 @@ def main():
                 context = BindingContext(binding.run_id, EpisodeRef(binding.run_id, path).episode_id,
                     role, path, scope, {}, {})
                 row = {'home': home, 'role': role,
-                    'source_sha256': hashlib.sha256(Path(module.__file__).read_bytes()).hexdigest(),
                     'empty': observe(lambda: binding._versions([], scope, context=context)),
                     'ordinary_nonempty': observe(lambda: binding._versions(versions, scope, context=context)),
                     'reference_callbacks': {name: callable(getattr(binding, name, None)) for name in (

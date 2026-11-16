@@ -1,7 +1,6 @@
 """Controlled protocol operands; actual session/spawn/parser/cleanup stay original."""
 import asyncio
 from contextlib import asynccontextmanager
-import hashlib
 import json
 from pathlib import Path
 import sys
